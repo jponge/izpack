@@ -75,11 +75,13 @@ import net.n3.nanoxml.XMLWriter;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.Panel;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  *  The IzPack installer frame.
@@ -170,7 +172,11 @@ public class InstallerFrame extends JFrame
     for (i = 0; i < size; i++)
     {
       // We add the panel
-      className = (String) panelsOrder.get(i);
+      Panel p = (Panel)panelsOrder.get(i);
+
+	  if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) continue;
+      
+      className = (String)p.className;
       objectClass = Class.forName("com.izforge.izpack.panels." + className);
       constructor = objectClass.getDeclaredConstructor(paramsClasses);
       object = constructor.newInstance(params);

@@ -355,6 +355,17 @@ The contents of the \texttt{<description>} tag describe the pack contents.
 This description is displayed if the user highlights the pack during 
 installation.
 
+\subsubsection{\texttt{<os>} - OS restrictions}
+
+It is possible to restrict a panel to a certain list of operating systems. This
+tag takes the following attributes:
+\begin{itemize}
+\item \texttt{family}: unix, windows or mac
+\item \texttt{name}: the exact OS name (ie Windows, Linux, ...)
+\item \texttt{version}: the exact OS version (see the JVM \texttt{os.version} property)
+\item \texttt{arch}: the machine architecture (see the JVM \texttt{os.arch} property).
+\end{itemize}
+
 \subsubsection{\label{tag:file}\texttt{<file>} - add files or directories}
 
 The \texttt{<file>} tag specifies a file (a directory is a file too) to 

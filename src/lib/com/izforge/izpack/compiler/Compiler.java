@@ -62,6 +62,7 @@ import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.PackFile;
+import com.izforge.izpack.Panel;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.installer.VariableValueMapImpl;
@@ -329,13 +330,16 @@ public class Compiler extends Thread
       packager.addJarContent((String) iter.next());
 
     // We add the panels
-    ArrayList panelsOrder = new ArrayList();
+    ArrayList panels = getPanels(data);
+
     TreeSet panelsCache = new TreeSet();
     iter = getPanels(data).iterator();
     while (iter.hasNext())
     {
+	  Panel p = (Panel)iter.next();
+      
       // We locate the panel classes directory
-      str = (String) iter.next();
+      str = p.className;
       
       // first try to get a Jar file for standalone compiler
       JarInputStream panel_is = null;
@@ -354,11 +358,7 @@ public class Compiler extends Thread
       
       if (panel_is != null)
       {        
-        // We add the panel in the order array
-        panelsOrder.add(str);
-
-        if (panelsCache.contains(str))
-          continue;
+        if (panelsCache.contains(str)) continue;
         panelsCache.add(str);
 
         // now add files
@@ -372,9 +372,6 @@ public class Compiler extends Thread
         File dir = new File(Compiler.IZPACK_HOME + "bin" + File.separator + "panels" + File.separator + str);
         if (!dir.exists())
           throw new Exception(str + " panel does not exist");
-
-        // We add the panel in the order array
-        panelsOrder.add(str);
 
         // We add each file in the panel folder
         if (panelsCache.contains(str)) continue;
@@ -392,7 +389,7 @@ public class Compiler extends Thread
     }
 
     // We set the panels order
-    packager.setPanelsOrder(panelsOrder);
+    packager.setPanelsOrder(panels);
 
     // We add the packs
     i = 0;
@@ -919,11 +916,20 @@ public class Compiler extends Thread
     {
       PackSource nf = new PackSource();
       nf.src = file.getAbsolutePath();
-      nf.setTargetDir (relPath);
+	  nf.setTargetDir (relPath);
       nf.osConstraints = osList;
       nf.override = override;
+      debug("Adding file: "+ nf.toString());
       list.add(nf);
     }
+  }
+
+  private void debug(String s)
+  {
+	if (Debug.tracing())//if you are wondering what files gets added to the installer
+	{
+	  packagerListener.packagerMsg(s);
+	}
   }
 
   /**
@@ -965,8 +971,12 @@ public class Compiler extends Thread
     Iterator iter = root.getChildrenNamed("panel").iterator();
     while (iter.hasNext())
     {
-      XMLElement panel = (XMLElement) iter.next();
-      panels.add(requireAttribute(panel,"classname"));
+      XMLElement xmlPanel = (XMLElement) iter.next();
+	  List osList = OsConstraint.getOsList (xmlPanel);
+	  Panel panel = new Panel();
+	  panel.osConstraints = osList;
+	  panel.className = xmlPanel.getAttribute("classname");
+      panels.add(panel);
     }
     if (panels.isEmpty())
       parseError (root, "<panels> requires a <panel>");
@@ -1022,7 +1032,7 @@ public class Compiler extends Thread
       catch (IOException x)
       {
         // it's a runtime exception if this can't be found
-        throw new RuntimeException ("uninstaller.jar seems to be missing: "+uninst, x);
+        throw new RuntimeException ("uninstaller.jar seems to be missing: " + uninst + x);
       }
     }
     resources.add(new Resource("IzPack.uninstaller", uninst_is));
@@ -1512,7 +1522,6 @@ public class Compiler extends Thread
     }
   }
 
-
   /**
    *  Represents a pack data source.
    *
@@ -1596,6 +1605,13 @@ public class Compiler extends Thread
       return this.targetdir;
     }
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString()
+	{
+		return "[PackSource file: '"+src+"' with path '"+targetdir+"']";
+	}
   }
 
 
@@ -1674,7 +1690,9 @@ public class Compiler extends Thread
         System.out.println("   -k (kind) : indicates the kind of installer to generate");
         System.out.println("               default is standard");
         System.out.println("   -o (out)  : indicates the output file name");
-        System.out.println("               default is the xml file name");
+        System.out.println("               default is the xml file name\n");
+        
+		System.out.println("   When using vm option -DSTACKTRACE=true there is all kind of debug info ");
         System.out.println("");
       }
       else

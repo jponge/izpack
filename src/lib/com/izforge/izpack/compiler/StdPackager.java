@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
+import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
@@ -71,7 +72,7 @@ public class StdPackager extends Packager
     // Sets up the zipped output stream
     FileOutputStream outFile = new FileOutputStream(outputFilename);
     outJar = new JarOutputStream(outFile);
-    outJar.setLevel(9);
+    outJar.setLevel(Deflater.BEST_COMPRESSION);
 
     // Copies the skeleton installer
     sendMsg("Copying the skeleton installer ...");
@@ -154,12 +155,9 @@ public class StdPackager extends Packager
     sendMsg("Setting the panels order ...");
 
     outJar.putNextEntry(new ZipEntry("panelsOrder"));
-    DataOutputStream datOut = new DataOutputStream(outJar);
-    int size = order.size();
-    datOut.writeInt(size);
-    for (int i = 0; i < size; i++)
-      datOut.writeUTF((String) order.get(i));
-    datOut.flush();
+	ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+	objOut.writeObject(order);
+	objOut.flush();
     outJar.closeEntry();
   }
 

@@ -38,7 +38,9 @@ import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.Panel;
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  *  Runs the install process in text only (no GUI) mode.
@@ -107,7 +109,11 @@ public class AutomatedInstaller extends InstallerBase
     Iterator panelsIterator = installdata.panelsOrder.iterator();
     while(panelsIterator.hasNext())
     {
-      String panelClassName = (String)panelsIterator.next();
+      Panel p = (Panel)panelsIterator.next();
+	  
+	  if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) continue;
+	  
+      String panelClassName = p.className;
       String automationHelperClassName = "com.izforge.izpack.panels."+panelClassName+"AutomationHelper";
       Class automationHelperClass = null;
       // determine if the panel supports automated install

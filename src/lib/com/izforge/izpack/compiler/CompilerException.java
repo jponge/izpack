@@ -92,7 +92,7 @@ class CompilerException extends java.io.IOException
       throw new IllegalStateException("Can't overwrite cause");
     if (cause == this)
       throw new IllegalArgumentException("Self-causation not permitted");
-    this._cause = _cause;
+    this._cause = cause;
     return this;
   }
   

@@ -159,16 +159,13 @@ public class WebPackager extends Packager
    */
   public void setPanelsOrder(ArrayList order) throws Exception
   {
-    sendMsg("Setting the panels order ...");
+	sendMsg("Setting the panels order ...");
 
-    outJar.putNextEntry(new ZipEntry("panelsOrder"));
-    DataOutputStream datOut = new DataOutputStream(outJar);
-    int size = order.size();
-    datOut.writeInt(size);
-    for (int i = 0; i < size; i++)
-      datOut.writeUTF((String) order.get(i));
-    datOut.flush();
-    outJar.closeEntry();
+	outJar.putNextEntry(new ZipEntry("panelsOrder"));
+	ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+	objOut.writeObject(order);
+	objOut.flush();
+	outJar.closeEntry();
   }
 
 

@@ -33,6 +33,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -87,12 +88,9 @@ public class InstallerBase
 
     // We read the panels order data
     in = getClass().getResourceAsStream("/panelsOrder");
-    datIn = new DataInputStream(in);
-    size = datIn.readInt();
-    ArrayList panelsOrder = new ArrayList();
-    for (i = 0; i < size; i++)
-      panelsOrder.add(datIn.readUTF());
-    datIn.close();
+	objIn = new ObjectInputStream(in);
+    List panelsOrder = (List)objIn.readObject();
+	objIn.close();
 
     String os = System.getProperty("os.name");
     // We read the packs data
