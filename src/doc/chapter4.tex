@@ -271,7 +271,7 @@ support multiple icons, this values is ignored.\\
 \textbf{initialState} \texttt{- optional}\\
 
 There are four values accepted for this attribute: \texttt{noShow},
-\texttt{normal}, \texttt{maximized} and \texttt{minimized}. If the
+\texttt{normal}, \texttt{maximized} and \texttt{minimized}. If th
 target operating system supports this feature, then this value will have
 the appropriate influence on the initial window state of the
 application. \texttt{noShow} is particularly useful when launch scripts
@@ -342,22 +342,20 @@ shortcutSpec.xml\\
 \begin{verbatim}
 <shortcuts>
   <programGroup defaultName="Name of the Program Group" location="applications/startMenu"/>
-
   <shortcut 
     name="the name"
     target="the application to launch"
     commandLine=""
-	workingDirectory="c:\MyWorkingDirectory\data"
+    workingDirectory="c:\MyWorkingDirectory\data"
     description="a description for the shortcut"
     iconFile="the file that contains an icon for the shortcut" 
     iconIndex="0"
-    initialState="noShow/normal/maximized/minimized">
-
+    initialState="noShow/normal/maximized/minimized"
     programGroup="yes/no"
     desktop="yes/no" 
     applications="yes/no" 
     startMenu="yes/no" 
-    startup="yes/no"
+    startup="yes/no">
   
     <createForPack name="a pack name"/>
     <createForPack name="another pack name"/>
