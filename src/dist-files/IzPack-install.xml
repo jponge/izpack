@@ -76,6 +76,7 @@
         <langpack iso3="hun"/>
         <langpack iso3="svk"/>
         <langpack iso3="rom"/>
+        <langpack iso3="mys"/>
     </locale>
 
     <!-- The resources needed by the various panels -->

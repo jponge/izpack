@@ -80,5 +80,6 @@ IzPack for your projects ;-)
 - Eduard Jodas Samper : for the keyboard UI blocking patch.
 - Andreas Vox : for the various patches.
 - Borje Jonsson : for the InfoPanel variables substitution patch.
+- Redhuan Daniel Oon : for the Malaysian translation.
 
 # vim: fileformat=dos
