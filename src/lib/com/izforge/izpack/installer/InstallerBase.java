@@ -26,7 +26,6 @@
  */
 package com.izforge.izpack.installer;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -42,6 +41,7 @@ import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import
@@ -70,7 +70,6 @@ public class InstallerBase
   {
     // Usefull variables
     InputStream in;
-    DataInputStream datIn;
     ObjectInputStream objIn;
     int size;
     int i;
@@ -102,7 +101,6 @@ public class InstallerBase
     List panelsOrder = (List) objIn.readObject();
     objIn.close();
 
-    String os = System.getProperty("os.name");
     // We read the packs data
     in = InstallerBase.class.getResourceAsStream("/packs.info");
     objIn = new ObjectInputStream(in);
@@ -119,24 +117,19 @@ public class InstallerBase
     objIn.close();
 
     // We determine the operating system and the initial installation path
-    String user = System.getProperty("user.name");
     String dir;
     String installPath;
-    if (os.regionMatches(true, 0, "windows", 0, 7))
+    if (OsVersion.IS_WINDOWS)
     {
       dir = buildWindowsDefaultPath();
     }
-    else if (os.regionMatches(true, 0, "mac os x", 0, 6))
+    else if (OsVersion.IS_OSX)
     {
       dir = "/Applications" + File.separator;
     }
-    else if (os.regionMatches(true, 0, "mac", 0, 3))
-    {
-      dir = "";
-    }
     else
     {
-      if (user.equals("root"))
+      if (new File("/usr/local/").canWrite())
       {
         dir = "/usr/local" + File.separator;
       }
@@ -167,8 +160,8 @@ public class InstallerBase
     if (null != variables)
     {
       Enumeration enum = variables.keys();
-      String varName = null;
-      String varValue = null;
+      String varName;
+      String varValue;
       while (enum.hasMoreElements())
       {
         varName = (String) enum.nextElement();
@@ -193,7 +186,6 @@ public class InstallerBase
     installPath = dir + inf.getAppName();
     if( inf.getInstallationSubPath() != null )
     { // A subpath was defined, use it.
-      installPath = dir + inf.getInstallationSubPath();
       installPath = IoHelper.translatePath(dir + inf.getInstallationSubPath(), 
         new VariableSubstitutor(installdata.getVariables()));
     }
@@ -271,7 +263,6 @@ public class InstallerBase
     // Usefull variables
     InputStream in;
     ObjectInputStream objIn;
-    int size;
     int i;
     // Load listeners if exist.
     String[] streamNames = AutomatedInstallData.CUSTOM_ACTION_TYPES;
@@ -290,7 +281,7 @@ public class InstallerBase
         CustomData ca = (CustomData) keys.next();
 
         if (ca.osConstraints != null
-            && !OsConstraint.oneMatchesCurrentSystem((List) ca.osConstraints))
+            && !OsConstraint.oneMatchesCurrentSystem(ca.osConstraints))
         { // OS constraint defined, but not matched; therefore ignore it.
           continue;
         }

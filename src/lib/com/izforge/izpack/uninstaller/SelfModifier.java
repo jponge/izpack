@@ -45,9 +45,10 @@ import java.text.SimpleDateFormat;
 import java.text.StringCharacterIterator;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Locale;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+
+import com.izforge.izpack.util.OsVersion;
 
 /**
  * Allows an application to modify the jar file from which it came, including
@@ -219,10 +220,6 @@ public class SelfModifier
    * system properties.
    *
    * @throws IOException for errors getting to the sandbox.
-   * @throws ClassNotFoundException if no class matching the name in
-   * CLASS_KEY is found.
-   * @throws NoSuchMethodException if no method matching the name in
-   * METHOD_KEY and the signature required is found.
    * @throws SecurityException if access to the target method is denied
    */
   private SelfModifier() throws IOException
@@ -418,7 +415,6 @@ public class SelfModifier
         "-D" + METHOD_KEY + "=" + method.getName(),
         "-D" + PHASE_KEY + "=" + nextPhase,
         getClass().getName()};
-    File workDir = new File(System.getProperty("java.io.tmpdir"));
 
     String[] entireCmd = new String[javaCmd.length + args.length];
     System.arraycopy(javaCmd, 0, entireCmd, 0, javaCmd.length);
@@ -456,7 +452,7 @@ public class SelfModifier
     // starts at "file:..." (use getPath() as of 1.3)
     path = path.substring(0, path.lastIndexOf('!'));
 
-    File file = null;
+    File file;
 
     // getSystemResource() returns a valid URL (eg. spaces are %20), but a file
     // Constructed w/ it will expect "%20" in path. URI and File(URI) properly
@@ -517,20 +513,16 @@ public class SelfModifier
         "Extracted "
           + extracted
           + " file"
-          + ((extracted > 1) ? "s" : "")
+          + (extracted > 1 ? "s" : "")
           + " into "
           + sandbox.getPath());
     } finally
     {
-      if (jar != null)
+      try
       {
-        try
-        {
-          jar.close();
-        } catch (IOException ioe)
-        {
-          ;
-        }
+        jar.close();
+      } catch (IOException ioe)
+      {
       }
       if (out != null)
       {
@@ -539,7 +531,6 @@ public class SelfModifier
           out.close();
         } catch (IOException ioe)
         {
-          ;
         }
       }
       if (in != null)
@@ -549,7 +540,6 @@ public class SelfModifier
           in.close();
         } catch (IOException ioe)
         {
-          ;
         }
       }
     }
@@ -722,7 +712,7 @@ public class SelfModifier
           pw = new PrintWriter(out);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        String line = null;
+        String line;
         while ((line = br.readLine()) != null)
         {
           if (pw != null)
@@ -749,16 +739,6 @@ public class SelfModifier
   private static final float JAVA_SPECIFICATION_VERSION =
     Float.parseFloat(System.getProperty("java.specification.version"));
   private static final String JAVA_HOME = System.getProperty("java.home");
-  private static final String JAVA_VERSION = System.getProperty("java.version");
-  private static final String PATH_SEP = System.getProperty("path.separator");
-  private static final String OS_NAME =
-    System.getProperty("os.name").toLowerCase(Locale.US);
-  private static final String OS_ARCH =
-    System.getProperty("os.arch").toLowerCase(Locale.US);
-  private static final String OS_VERSION =
-    System.getProperty("os.version").toLowerCase(Locale.US);
-  private static final boolean IS_DOS =
-    (PATH_SEP.equals(";") && OS_NAME.indexOf("netware") == -1);
 
   /**
    * Constructs a file path from a <code>file:</code> URI.
@@ -822,8 +802,9 @@ public class SelfModifier
   {
     // This is the most common extension case - exe for windows and OS/2,
     // nothing for *nix.
-    return command + (IS_DOS ? ".exe" : "");
+    return command + (OsVersion.IS_WINDOWS || OsVersion.IS_OS2 ? ".exe" : "");
   }
+  
   private static String javaCommand()
   {
     // This was stolen (and specialized from much more modular code) from the

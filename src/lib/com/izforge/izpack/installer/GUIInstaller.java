@@ -62,6 +62,7 @@ import javax.swing.plaf.metal.MetalTheme;
 
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPackMetalTheme;
 import com.izforge.izpack.gui.LabelFactory;
@@ -87,8 +88,6 @@ public class GUIInstaller extends InstallerBase
    */
   public GUIInstaller() throws Exception
   {
-    super();
-
     this.installdata = new InstallData();
 
     // Loads the installation data
@@ -230,13 +229,12 @@ public class GUIInstaller extends InstallerBase
   protected void loadLookAndFeel() throws Exception
   {
     // Do we have any preference for this OS ?
-    String sysos = System.getProperty("os.name");
     String syskey = "unix";
-    if (sysos.regionMatches(true, 0, "windows", 0, 7))
+    if (OsVersion.IS_WINDOWS)
     {
       syskey = "windows";
     }
-    else if (sysos.regionMatches(true, 0, "mac", 0, 3))
+    else if (OsVersion.IS_OSX)
     {
       syskey = "mac";
     }
