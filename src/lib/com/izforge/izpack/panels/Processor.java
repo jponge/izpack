@@ -2,9 +2,9 @@
  * $Id$
  * Copyright (C) 2002 Elmar Grom
  *
- * File :               Encryptor.java
+ * File :               Processor.java
  * Description :        This is the public interface of classes that 
- *                      provide encryption services for the UserInputPanel.
+ *                      provide processing services for the UserInputPanel.
  * Author's email :     elmar@grom.net
  * Author's Website :   http://www.izforge.com
  *
@@ -27,23 +27,25 @@ package   com.izforge.izpack.panels;
 
 /*---------------------------------------------------------------------------*/
 /**
- * Interface for classes that provide rule validation services.
+ * Interface for classes that provide input field processing services.
+ *
+ * @see      com.izforge.izpack.panels.ProcessingClient
  *
  * @version  0.0.1 / 10/26/02
  * @author   Elmar Grom
  */
 /*---------------------------------------------------------------------------*/
-public interface Encryptor
+public interface Processor
 {
  /*--------------------------------------------------------------------------*/
  /**
-  * Encrypts the contend of a <code>RuleInputField</code>. 
+  * Processes the contend of an input field. 
   *
-  * @param     client   the client object using the services of this encryptor.
+  * @param     client   the client object using the services of this processor.
   *
   * @return    The result of the encryption.
   */
  /*--------------------------------------------------------------------------*/
-  public String encrypt (RuleInputField client);
+  public String process (ProcessingClient client);
 }
 /*---------------------------------------------------------------------------*/

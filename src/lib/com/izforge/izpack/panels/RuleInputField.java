@@ -72,7 +72,8 @@ import    javax.swing.event.*;
 /*---------------------------------------------------------------------------*/
 public class RuleInputField extends JComponent implements KeyListener,
                                                           FocusListener,
-                                                          CaretListener
+                                                          CaretListener,
+                                                          ProcessingClient
 {
   /** Used to specify the retsult format. This constant specifies to return
       the contents of all fields concatenated into one long string, with
@@ -106,12 +107,12 @@ public class RuleInputField extends JComponent implements KeyListener,
   private String          separator;  
   private int             resultFormat        = DEFAULT;
 
-  /** Holds an instance of the <code>RuleValidator</code> if one was
+  /** Holds an instance of the <code>Validator</code> if one was
       specified and available */  
-  private RuleValidator   validationService;
-  /** Holds an instance of the <code>Encryptor</code> if one was specified
+  private Validator       validationService;
+  /** Holds an instance of the <code>Processor</code> if one was specified
       and available */  
-  private Encryptor       encryptionService;
+  private Processor       encryptionService;
 
  /*--------------------------------------------------------------------------*/
  /**
@@ -170,7 +171,7 @@ public class RuleInputField extends JComponent implements KeyListener,
     // ----------------------------------------------------
     try
     {
-      validationService = (RuleValidator)Class.forName (validator).newInstance ();
+      validationService = (Validator)Class.forName (validator).newInstance ();
     }
     catch (Throwable exception)
     {
@@ -182,7 +183,7 @@ public class RuleInputField extends JComponent implements KeyListener,
     // ----------------------------------------------------
     try
     {
-      encryptionService = (Encryptor)Class.forName (encryptor).newInstance ();
+      encryptionService = (Processor)Class.forName (encryptor).newInstance ();
     }
     catch (Throwable exception)
     {
@@ -261,7 +262,7 @@ public class RuleInputField extends JComponent implements KeyListener,
     {
       if (encryptionService != null)
       {
-        buffer.append (encryptionService.encrypt (this));
+        buffer.append (encryptionService.process (this));
       }
       else
       {

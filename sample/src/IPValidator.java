@@ -36,7 +36,7 @@ import    com.izforge.izpack.panels.*;
  * @author   Elmar Grom
  */
 /*---------------------------------------------------------------------------*/
-public class IPValidator implements RuleValidator
+public class IPValidator implements Validator
 {
  /*--------------------------------------------------------------------------*/
  /**
@@ -50,7 +50,7 @@ public class IPValidator implements RuleValidator
   * @return    <code>true</code> if the validation passes, otherwise <code>false</code>.
   */
  /*--------------------------------------------------------------------------*/
-  public boolean validate (RuleInputField client)
+  public boolean validate (ProcessingClient client)
   {
     // ----------------------------------------------------
     // verify that there are actually four sub-fields. A
@@ -65,7 +65,7 @@ public class IPValidator implements RuleValidator
     // ----------------------------------------------------
     // test each field to make sure it actually contains
     // an integer and the value of the integer is beween
-    // 0 and 127.
+    // 0 and 255.
     // ----------------------------------------------------
     boolean isIP = true;
     
@@ -76,7 +76,7 @@ public class IPValidator implements RuleValidator
       try
       {
         value = Integer.parseInt (client.getFieldContents (i));
-        if ((value < 0) || (value > 127))
+        if ((value < 0) || (value > 255))
         {
           isIP = false;
         }

@@ -93,6 +93,9 @@ import    net.n3.nanoxml.*;
  *--------------------------------------------------------------------------*/
 public class UserInputPanel extends IzPanel
 {
+  // ------------------------------------------------------------------------
+  // Constant Definitions
+  // ------------------------------------------------------------------------
   private static final int    POS_DISPLAYED                 = 0;
   private static final int    POS_TYPE                      = 1;
   private static final int    POS_VARIABLE                  = 2;
@@ -128,6 +131,9 @@ public class UserInputPanel extends IzPanel
   private static final String ITALICS                       = "italic";
   private static final String BOLD                          = "bold";
   private static final String SIZE                          = "size";
+  private static final String VALIDATOR                     = "validator";
+  private static final String PROCESSOR                     = "processor";
+  private static final String CLASS                         = "class";
 
   private static final String FIELD_LABEL                   = "label";
 
@@ -157,9 +163,9 @@ public class UserInputPanel extends IzPanel
   private static final String RULE_DISPLAY_FORMAT           = "displayFormat";
   private static final String RULE_SPECIAL_SEPARATOR        = "specialSeparator";
   private static final String RULE_ENCRYPTED                = "processed";
-  private static final String RULE_VALIDATOR                = "validator";
-  private static final String RULE_PROCESSOR                = "processor";
-  private static final String RULE_CLASS                    = "class";
+
+  private static final String PWD_FIELD                     = "password";
+  private static final String PWD_INPUT                     = "pwd";
 
   private static final String PACKS                         = "createForPack";
   private static final String NAME                          = "name";
@@ -187,6 +193,9 @@ public class UserInputPanel extends IzPanel
       the layout offset between fields that would otherwise occur. */
   private static final int    LEFT_FIELD_MARGIN             = 5;
 
+  // ------------------------------------------------------------------------
+  // Variable Declarations
+  // ------------------------------------------------------------------------
   private static int          instanceCount   = 0;
   private        int          instanceNumber  = 0;
   private        boolean      uiBuilt         = false;
@@ -207,6 +216,8 @@ public class UserInputPanel extends IzPanel
   private Vector              uiElements      = new Vector ();
   /** Holds the references to all radio button groups */
   private Vector              buttonGroups    = new Vector ();
+  /** Holds the references to all password field groups */
+  private Vector              passwordGroups  = new Vector ();
 
   /** Holds all user inputs for use in automated installation */
   private Vector              entries         = new Vector ();
@@ -283,7 +294,7 @@ public class UserInputPanel extends IzPanel
     // ----------------------------------------------------
     // process all field nodes. Each field node is analyzed
     // for its type, then an appropriate memeber function
-    // is called that will create the appropriate UI elements.
+    // is called that will create the correct UI elements.
     // ----------------------------------------------------
     Vector fields = spec.getChildrenNamed (FIELD_NODE_ID);
 
@@ -310,6 +321,10 @@ public class UserInputPanel extends IzPanel
         {
           addRadioButton (field);
         }
+        else if (attribute.equals (PWD_FIELD))
+        {
+          addPasswordField (field);
+        }
         else if (attribute.equals (SPACE_FIELD))
         {
           addSpace (field);
@@ -332,14 +347,6 @@ public class UserInputPanel extends IzPanel
         }
       }
     }
-  }
-
-//  public boolean panelDeactivate ()
-  public void panelDesactivate ()
-  {
-//    number.validate ();
-//    idata.getVariableValueMap ().setVariable ("serialKey", number.getText ());
-//    return (true);
   }
 
   public boolean isValidated ()
@@ -738,7 +745,7 @@ public class UserInputPanel extends IzPanel
     }
 
     // ----------------------------------------------------
-    // get the description and add it to the list UI
+    // get the description and add it to the list of UI
     // elements if it exists.
     // ----------------------------------------------------
     element = spec.getFirstChildNamed (DESCRIPTION);
@@ -747,17 +754,17 @@ public class UserInputPanel extends IzPanel
     // ----------------------------------------------------
     // get the validator and processor if they are defined
     // ----------------------------------------------------
-    element = spec.getFirstChildNamed (RULE_VALIDATOR);
+    element = spec.getFirstChildNamed (VALIDATOR);
     if (element != null)
     {
-      validator = element.getAttribute (RULE_CLASS);
+      validator = element.getAttribute (CLASS);
       message   = getText (element);
     }
 
-    element = spec.getFirstChildNamed (RULE_PROCESSOR);
+    element = spec.getFirstChildNamed (PROCESSOR);
     if (element != null)
     {
-      processor = element.getAttribute (RULE_CLASS);
+      processor = element.getAttribute (CLASS);
     }
 
     // ----------------------------------------------------
@@ -945,12 +952,12 @@ public class UserInputPanel extends IzPanel
   * This is a complete example of a valid XML specification
   * <pre>
   * <field type="combo" variable="testVariable">
-  *   <description text="Description for the combo box" key="a key for translated text"/>
-  *   <spec text="label" key="key for the label"/>
-  *     <choice text="choice 1" key="" value="combo box 1"/>
-  *     <choice text="choice 2" key="" value="combo box 2" set="true"/>
-  *     <choice text="choice 3" key="" value="combo box 3"/>
-  *     <choice text="choice 4" key="" value="combo box 4"/>
+  *   <description text="Description for the combo box" id="a key for translated text"/>
+  *   <spec text="label" id="key for the label"/>
+  *     <choice text="choice 1" id="" value="combo box 1"/>
+  *     <choice text="choice 2" id="" value="combo box 2" set="true"/>
+  *     <choice text="choice 3" id="" value="combo box 3"/>
+  *     <choice text="choice 4" id="" value="combo box 4"/>
   *   </spec>
   * </field>
   * </pre>
@@ -1068,16 +1075,17 @@ public class UserInputPanel extends IzPanel
   * This is a complete example of a valid XML specification
   * <pre>
   * <field type="radio" variable="testVariable">
-  *   <description text="Description for the radio buttons" key="a key for translated text"/>
-  *   <spec text="label" key="key for the label"/>
-  *     <choice text="radio 1" key="" value=""/>
-  *     <choice text="radio 2" key="" value="" set="true"/>
-  *     <choice text="radio 3" key="" value=""/>
-  *     <choice text="radio 4" key="" value=""/>
-  *     <choice text="radio 5" key="" value=""/>
+  *   <description text="Description for the radio buttons" id="a key for translated text"/>
+  *   <spec text="label" id="key for the label"/>
+  *     <choice text="radio 1" id="" value=""/>
+  *     <choice text="radio 2" id="" value="" set="true"/>
+  *     <choice text="radio 3" id="" value=""/>
+  *     <choice text="radio 4" id="" value=""/>
+  *     <choice text="radio 5" id="" value=""/>
   *   </spec>
   * </field>
   * </pre>
+  *
   * @param     spec  a <code>XMLElement</code> containing the specification
   *                  for the radio button set.
   */
@@ -1188,6 +1196,134 @@ public class UserInputPanel extends IzPanel
 
     idata.getVariableValueMap ().setVariable (variable, value);
     entries.add (new TextValuePair (variable, value));
+    return (true);
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Adds one or more password fields to the list of UI elements.<br>
+  * This is a complete example of a valid XML specification
+  * <pre>
+  * <field type="password" variable="testVariable">
+  *   <description align="left" txt="Please enter your password" id="a key for translated text"/>
+  *   <spec>
+  *     <pwd txt="Password" id="key for the label" size="10" set=""/>
+  *     <pwd txt="Retype password" id="another key for the label" size="10" set=""/>
+  *   </spec>
+  *   <validator class="com.izforge.sample.PWDValidator" txt="Both versions of the password must match" id="key for the error text"/>
+  *   <processor class="com.izforge.sample.PWDEncryptor"/>
+  * </field>
+  * </pre>
+  *
+  * @param     spec  a <code>XMLElement</code> containing the specification
+  *                  for the set of password fields.
+  */
+ /*--------------------------------------------------------------------------*/
+  private void addPasswordField (XMLElement spec)
+  {
+/*    Vector        forPacks  = spec.getChildrenNamed (PACKS);
+    String        variable  = spec.getAttribute (VARIABLE);
+    String        validator = null;
+    String        message   = null;
+    String        processor = null;
+    XMLElement    element   = null;
+    PasswordGroup group     = new PasswordGroup ();
+    passwordGroups.add (group);
+
+    // ----------------------------------------------------
+    // get the description and add it to the list of UI
+    // elements if it exists.
+    // ----------------------------------------------------
+    element = spec.getFirstChildNamed (DESCRIPTION);
+    addDescription (element, forPacks);
+
+    // ----------------------------------------------------
+    // get the validator and processor if they are defined
+    // ----------------------------------------------------
+    element = spec.getFirstChildNamed (VALIDATOR);
+    if (element != null)
+    {
+      validator = element.getAttribute (CLASS);
+      message   = getText (element);
+    }
+
+    element = spec.getFirstChildNamed (PROCESSOR);
+    if (element != null)
+    {
+      processor = element.getAttribute (CLASS);
+    }
+
+
+    // ----------------------------------------------------
+    // extract the specification details
+    // ----------------------------------------------------
+    element = spec.getFirstChildNamed (SPEC);
+
+    if (element != null)
+    {
+      Vector inputs = element.getChildrenNamed (PWD_INPUT);
+
+      if (inputs == null)
+      {
+        return;
+      }
+
+      // --------------------------------------------------
+      // process each input field
+      // --------------------------------------------------
+      for (int i = 0; i < inputs.size (); i++)
+      {
+//        JRadioButton choice   = new JRadioButton ();
+//        choice.setText          (getText ((XMLElement)choices.elementAt (i)));
+
+-->        group.add (choice);
+
+        String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
+
+        uiElements.add (new Object [] {null, RADIO_FIELD, variable, constraints, choice, forPacks, value});
+      }
+    }
+    
+    // ----------------------------------------------------
+    // construct the UI element and add it to the list
+    // ----------------------------------------------------
+    JTextField field = new JTextField (set, size);
+    field.setCaretPosition (0);
+
+    TwoColumnConstraints constraints = new TwoColumnConstraints ();
+    constraints.position  = constraints.WEST;
+
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
+
+    TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
+    constraints2.position  = constraints2.EAST;
+
+    uiElements.add (new Object [] {null, TEXT_FIELD, variable, constraints2, field, forPacks});*/
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Reads the content of the password field and substitutes the associated
+  * variable.
+  *
+  * @param     field  the object array that holds the details of the field.
+  *
+  * @return    <code>true</code> if there was no problem reading the data or
+  *            if there was an irrecovarable problem. If there was a problem
+  *            that can be corrected by the operator, an error dialog is
+  *            popped up and <code>false</code> is returned.
+  */
+ /*--------------------------------------------------------------------------*/
+  private boolean readPassordField (Object [] field)
+  {
+//    boolean success = ruleField.validateContent ();
+    boolean success = true;
+    if (!success)
+    {
+      JOptionPane.showMessageDialog (parent, 
+                                     (String)field [POS_MESSAGE], 
+                                     parent.langpack.getString ("UserInputPanel.error.caption"), 
+                                     JOptionPane.WARNING_MESSAGE);
+      return (false);
+    }
     return (true);
   }
  /*--------------------------------------------------------------------------*/
@@ -1537,7 +1673,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
  /**
   * Extracts the text from an <code>XMLElement</code>. The text must be
-  * defined in the resource file under the key defined in the <code>key</code>
+  * defined in the resource file under the key defined in the <code>id</code>
   * attribute or as value of the attribute <code>text</code>.
   *
   * @param     element  the <code>XMLElement</code> from which to extract

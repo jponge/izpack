@@ -1,11 +1,11 @@
 /*
  * $Id$
- * Copyright (C) 2002 Elmar Grom
+ * Copyright (C) 2003 Elmar Grom
  *
- * File :               RuleValidator.java
- * Description :        This interface defines the public interface for
- *                      classes that perform validation services for
- *                      the UsserInputPanel.
+ * File :               ProcessingClient.java
+ * Description :        This interface must be implemented by any
+ *                      class that wants to use processing or
+ *                      validation services.
  * Author's email :     elmar@grom.net
  * Author's Website :   http://www.izforge.com
  *
@@ -28,23 +28,38 @@ package   com.izforge.izpack.panels;
 
 /*---------------------------------------------------------------------------*/
 /**
- * Interface for classes that provide rule validation services.
+ * Implement this interface in any class that wants to use processing or
+ * validation services.
  *
- * @version  0.0.1 / 10/26/02
+ * @see      com.izforge.izpack.panels.Processor
+ * @see      com.izforge.izpack.panels.Validator
+ *
+ * @version  0.0.1 / 2/22/03
  * @author   Elmar Grom
  */
 /*---------------------------------------------------------------------------*/
-public interface RuleValidator
+public interface ProcessingClient
 {
  /*--------------------------------------------------------------------------*/
  /**
-  * Validates the contend of a <code>RuleInputField</code>. 
+  * Returns the number of sub-fields.
   *
-  * @param     client   the client object using the services of this validator.
-  *
-  * @return    <code>true</code> if the validation passes, otherwise <code>false</code>.
+  * @return    the number of sub-fields
   */
  /*--------------------------------------------------------------------------*/
-  public boolean validate (RuleInputField client);
+  public int getNumFields ();
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Returns the contents of the field indicated by <code>index</code>.
+  *
+  * @param     index  the index of the sub-field from which the contents
+  *                   is requested.
+  *
+  * @return    the contents of the indicated sub-field.
+  *
+  * @exception IndexOutOfBoundsException if the index is out of bounds.
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getFieldContents (int index);
 }
 /*---------------------------------------------------------------------------*/
