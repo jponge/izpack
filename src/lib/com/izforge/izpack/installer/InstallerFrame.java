@@ -313,6 +313,7 @@ public class InstallerFrame extends JFrame
             unlockNextButton();
         }
         panel.panelActivate();
+        l_panel.panelDesactivate();
         panelsContainer.setVisible(true);
     }
 

@@ -100,6 +100,12 @@ public class IzPanel extends JPanel
     public void panelActivate() { }
     
     /**
+     * This method is called when the panel gets desactivated, when the user
+     * switches to the next panel. By default it doesn't do anything.
+     */
+    public void panelDesactivate() { }
+    
+    /**
      * Asks the panel to set its own XML data that can be brought back for
      * an automated installation process. Use it as a blackbox if your panel
      * needs to do something even in automated mode.
