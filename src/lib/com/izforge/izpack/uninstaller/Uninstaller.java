@@ -24,7 +24,7 @@
  */
 package com.izforge.izpack.uninstaller;
 
-import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.UIManager;
 
 import com.izforge.izpack.gui.IzPackMetalTheme;
 import java.lang.reflect.Method;
@@ -64,7 +64,7 @@ public class Uninstaller
   {
     try
     {
-      MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       new UninstallerFrame();
     } catch (Exception err)
     {

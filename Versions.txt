@@ -1,5 +1,10 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.8.0 (build N/A)
+
+- Uninstaller: use the system Look and Feel instead of the cross-platform one
+  (feature request #470).
+
   > 3.7.0 (build 2004.01.11)
 
 - Adding custom action stuff for packaging, installation and uninstallation
