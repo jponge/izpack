@@ -39,6 +39,8 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+
+import org.apache.regexp.RE;
   
 /*---------------------------------------------------------------------------*/
 /**
@@ -190,7 +192,7 @@ public class RuleInputField extends JComponent implements KeyListener,
 			resultFormat,
 			toolkit);
 		this.validatorParams = validatorParams;
-                this.hasParams = true;
+		this.hasParams = true;
 	}
 
 	/*--------------------------------------------------------------------------*/
@@ -546,14 +548,20 @@ public class RuleInputField extends JComponent implements KeyListener,
  /*--------------------------------------------------------------------------*/
   private void setFields (String data)
   {
-    StringTokenizer tokenizer = new StringTokenizer (data);
+	StringTokenizer tokenizer = new StringTokenizer (data);
+	StringTokenizer tokenizer1 = null;
     String          token;
     String          indexString;
+    String 		   processorClass;
     int             index;
+    boolean process = false;
+    String[] vals = null;
+    int i = 0;
     
+    vals = new String[tokenizer.countTokens()];
     while (tokenizer.hasMoreTokens ())
     {
-      token       = tokenizer.nextToken ();
+      token       = tokenizer.nextToken ();      
       indexString = token.substring (0, token.indexOf (':'));
       
       try
@@ -561,12 +569,54 @@ public class RuleInputField extends JComponent implements KeyListener,
         index     = Integer.parseInt (indexString);
         if (index < inputFields.size ())
         {
-          ((JTextField)inputFields.elementAt (index)).setText (token.substring ((token.indexOf (':') + 1), token.length ()));
+        	String val = token.substring ((token.indexOf (':') + 1), token.length ());
+        	String className = "";
+        	if (val.indexOf(":")>-1){
+        		className = val.substring(val.indexOf(":")+1);
+        		val = val.substring(0, val.indexOf(":"));        		
+        	}
+        	
+        	if (!className.equals("") && !process){
+        		process = true;
+        	}
+			vals[i] = val;
+			i++;
+          ((JTextField)inputFields.elementAt (index)).setText (val);
         }
-      }
-      catch (Throwable exception)
-      {
-      }
+      }catch (Throwable exception)
+	  {
+	  	exception.printStackTrace();
+	  }
+    }
+    
+	if (process){
+		tokenizer = new StringTokenizer (data);
+		while (tokenizer.hasMoreTokens ()){
+			token = tokenizer.nextToken ();      
+			indexString = token.substring (0, token.indexOf (':'));
+      			
+      		try{
+				index     = Integer.parseInt (indexString);
+				if (index < inputFields.size ()){
+					String val = token.substring ((token.indexOf (':') + 1), token.length ());
+					String className = "";
+					String presult = "";
+					if (val.indexOf(":")>-1){
+						className = val.substring(val.indexOf(":")+1);
+						val = val.substring(0, val.indexOf(":"));        		
+					}
+        	
+				   if (!className.equals("")){
+					   Processor p = (Processor) Class.forName(className).newInstance();
+						presult = p.process(this);
+				   }
+				   	String[] td = new RE("\\*").split(presult);				   
+					((JTextField)inputFields.elementAt (index)).setText (td[index]);
+				}
+      		}catch (Throwable exception){
+      			;
+			}
+		}
     }
   }
  
