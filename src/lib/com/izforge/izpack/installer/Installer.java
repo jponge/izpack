@@ -278,7 +278,7 @@ public class Installer
     String installPath;
     if (os.regionMatches(true, 0, "windows", 0, 7))
       dir = System.getProperty("user.home").substring(0, 3) + "Program Files" + File.separator;
-    else if (os.regionMatches(true, 0, "macosx", 0, 6))
+    else if (os.regionMatches(true, 0, "mac os x", 0, 6))
       dir = "/Applications" + File.separator;
     else if (os.regionMatches(true, 0, "mac", 0, 3))
       dir = "";
