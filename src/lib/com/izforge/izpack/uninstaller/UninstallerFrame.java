@@ -272,19 +272,19 @@ public class UninstallerFrame extends JFrame
     ImageIcon img;
 
     // We load it
-    url = getClass().getResource("/img/delete.gif");
+    url = getClass().getResource("/img/trash.png");
     img = new ImageIcon(url);
     icons.put("delete", img);
 
-    url = getClass().getResource("/img/stop.gif");
+    url = getClass().getResource("/img/stop.png");
     img = new ImageIcon(url);
     icons.put("stop", img);
 
-    url = getClass().getResource("/img/warning.gif");
+    url = getClass().getResource("/img/flag.png");
     img = new ImageIcon(url);
     icons.put("warning", img);
 
-    url = getClass().getResource("/img/JFrameIcon.gif");
+    url = getClass().getResource("/img/JFrameIcon.png");
     img = new ImageIcon(url);
     icons.put("JFrameIcon", img);
   }
