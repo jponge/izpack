@@ -79,5 +79,6 @@ IzPack for your projects ;-)
 - Flavio Fonseca : for the portuguese langpack updates.
 - Eduard Jodas Samper : for the keyboard UI blocking patch.
 - Andreas Vox : for the various patches.
+- Borje Jonsson : for the InfoPanel variables substitution patch.
 
 # vim: fileformat=dos
