@@ -9,7 +9,7 @@
 - The attributes "includes" and "excludes" now are supported for filesets
   (Klaus Bartz).
 - As many sensitive clean-ups as possible have been made after a FindBugs run.
-- Support of native libraries in the uninstaller (Klaus Bartz).
+- Support of native libraries and additional jar files in the uninstaller (Klaus Bartz).
 - InfoPanel: variables substitution is now allowed (Borje Jonsson).
 - InstallPanel supports internationalized package names (Gaganis Giorgos).
 - Support for package dependencies (Gaganis Giorgos).
