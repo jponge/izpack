@@ -52,6 +52,7 @@
   'Quit', which could confuse some users (Dario Yuri).
 - Many Windows shortcuts code fixes and enhancements (Bill Wong).
 - The userInputPanel can now support i18n (Gaganis Giorgos).
+- ProcessPanel can now execute Java classes (Alex Bradley).
 
   > 3.5.4 (build 2004.06.05)
 
