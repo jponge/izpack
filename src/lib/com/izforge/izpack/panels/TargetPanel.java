@@ -197,7 +197,7 @@ public class TargetPanel extends IzPanel implements ActionListener
         File path = new File(installPath);
         installPath = path.toString();
 
-        // We put a warning if the directory exists
+        // We put a warning if the directory exists else we warn that it will be created
         if (path.exists())
         {
             int res = JOptionPane.showConfirmDialog(this, 
@@ -205,7 +205,9 @@ public class TargetPanel extends IzPanel implements ActionListener
                                                     parent.langpack.getString("installer.warning"),
                                                     JOptionPane.YES_NO_OPTION);
             ok = (res == JOptionPane.YES_OPTION);
-        }
+        } else
+            JOptionPane.showMessageDialog(this, parent.langpack.getString("TargetPanel.createdir") +
+                                          "\n" + installPath);
         
         idata.setInstallPath(installPath);
         return ok;

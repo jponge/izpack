@@ -42,6 +42,7 @@
          txt="The directory already exists ! Are you sure you want to install here and possibly overwrite existing files?"/>
     <str id="TargetPanel.empty_target"
          txt="You have not specified a target location! Is this correct?"/>
+		<str id="TargetPanel.createdir" txt="The target directory will be created :" />
     
     <str id="PacksPanel.info" txt="Select the packs you want to install :"/>
     <str id="PacksPanel.tip" txt="Note: greyed packs are required."/>

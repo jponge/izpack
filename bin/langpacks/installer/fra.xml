@@ -42,6 +42,7 @@
          txt="Le répertoire existe déjà ! Etes-vous sur de vouloir installer dans celui-ci ?"/>
     <str id="TargetPanel.empty_target"
          txt="Vous avez spécifié un nom de répertoire vide ! Voulez-vous faire ainsi ?"/>
+		<str id="TargetPanel.createdir" txt="Le répertoire de destination sera créé :" />
     
     <str id="PacksPanel.info" txt="Choisissez ici les paquetages à installer :"/>
     <str id="PacksPanel.tip" txt="Note : les paquetages grisés ne sont pas optionnels."/>

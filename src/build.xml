@@ -435,7 +435,7 @@
 
   <!-- Builds all targets -->
   <target name="all" depends="build.compiler,build.installer,build.uninstaller,
-                              build.frontend,build.panels,build.javadoc"/>
+                              build.frontend,build.panels"/>
                               
   <!-- Builds the Javadoc -->
   <target name="build.javadoc" depends="prepare">
@@ -454,7 +454,7 @@
   </target>
 
   <!-- Creates an installer for IzPack -->
-  <target name="dist" depends="all">
+  <target name="dist" depends="all,build.javadoc">
   
     <!-- Allows us to use the IzPack Ant task -->
     <taskdef name="izpack" classpath="${basedir}/lib/compiler.jar"
