@@ -289,6 +289,8 @@ public class InstallerBase
         {
         case CustomData.INSTALLER_LISTENER:
           Class clazz = Class.forName(ca.listenerName);
+          if( clazz == null )
+            throw new InstallerException("Custom action " + ca.listenerName + " not bound!");
           out[ca.type].add(clazz.newInstance());
           break;
         case CustomData.UNINSTALLER_LISTENER:
