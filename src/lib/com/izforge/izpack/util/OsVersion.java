@@ -29,6 +29,21 @@ public final class OsVersion
   public static final boolean IS_LINUX = startsWithIgnoreCase(OS_NAME, "Linux");
 
   /**
+   * True if this is HP-UX.
+   */
+  public static final boolean IS_HPUX = startsWithIgnoreCase(OS_NAME, "HP-UX");
+
+  /**
+   * True if this is AIX.
+   */
+  public static final boolean IS_AIX = startsWithIgnoreCase(OS_NAME, "AIX");
+
+  /**
+   * True if this is SunOS.
+   */
+  public static final boolean IS_SUNOS = startsWithIgnoreCase(OS_NAME, "SunOS");
+
+  /**
    * True if this is OS/2.
    */
   public static final boolean IS_OS2 = startsWith(OS_NAME, "OS/2");
