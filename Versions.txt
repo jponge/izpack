@@ -26,12 +26,17 @@
 - Custom actions for ant calls (Klaus Bartz).
 - IzPanel.setInitialFocus( Component ) stuff added (Klaus Bartz).
 - Configurable button and label icons (Klaus Bartz).
+- Configurable subpath for $INSTALL_PATH default (Klaus Bartz).
+- New base class PathInputPanle for TargetPanel; new JDKPathPanel (Klaus Bartz).
+- Common helper in IzPanel (Klaus Bartz).
 - JGoodies loading fix.
 - Unified OS detection in OsVersion (Hani Suleiman).
 - Default installation path on unix now checks for writable 'usr/local' instead
   of 'root' username (Hani Suleiman).
 - Removed incomplete and non-functional support for Mac OS9 (Hani Suleiman).
 - Fixed punctuation and some wording in English langpack (Hani Suleiman).
+- Logfile for ProcessPanel (Klaus Bartz).
+- Automatic scrolling of ProcessPanel output (Anthony Xin Chen).
 
   > 3.6.1 (build 2004.10.09)
 
