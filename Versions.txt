@@ -43,6 +43,8 @@
 - Unix (KDE/Gnome) shortcuts support (Marc Eppelmann).
 - ShortcutPanel: going to a previous panel could lead to strange situations
   (bug #2713).
+- Installers: avoid showing an empty JFrame behind the languages selection
+  dialog (observed on X11).
 
   > 3.6.1 (build 2004.10.09)
 
