@@ -28,15 +28,11 @@ import com.izforge.izpack.*;
 import com.izforge.izpack.gui.*;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import javax.swing.*;
 
 import net.n3.nanoxml.*;
-
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
 
 import com.incors.plaf.kunststoff.*;
 
@@ -88,7 +84,7 @@ public class Frontend
     // Sets the Kunststoff L&F as the right one
     KunststoffLookAndFeel klnf = new KunststoffLookAndFeel();
     UIManager.setLookAndFeel(klnf);
-    klnf.setCurrentTheme(new IzPackKMetalTheme());
+    KunststoffLookAndFeel.setCurrentTheme(new IzPackKMetalTheme());
    
     // Shows the splash window
     splashWindow = new FrontendSplashWindow();

@@ -26,11 +26,7 @@
  */
 package com.izforge.izpack.gui;
 
-import java.awt.*;
-
-import javax.swing.*;
 import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
 
 /**
  *  The IzPack Kunststoff L&F theme.

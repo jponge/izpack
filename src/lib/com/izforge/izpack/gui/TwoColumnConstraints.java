@@ -36,10 +36,14 @@ import    java.awt.*;
  */
 public class TwoColumnConstraints
 {
+  // these numbers are arbitrary - this way, there's a lower chance
+  // of somebody using the number instead of the symbolic name
   public static final int       NORTH       = 9;
   public static final int       WEST        = 15;
+  public static final int       WESTONLY    = 16;
   public static final int       EAST        = 26;
-  public static final int       BOTH        = 27;
+  public static final int       EASTONLY    = 27;
+  public static final int       BOTH        = 29;
   public static final int       LEFT        = 31;
   public static final int       CENTER      = 35;
   public static final int       RIGHT       = 47;
@@ -48,7 +52,9 @@ public class TwoColumnConstraints
       will place the component in the title margin. </code>WEST</code> will
       place the component in the left column and <code>EAST</code> will
       place it in the right column. If <code>BOTH</code> is used, the component
-      will straddle both columns. */
+      will straddle both columns. <code>WESTONLY</code> and <code>EASTONLY</code>
+      will place the element accordingly but make sure that nothing is placed
+      in the opposite column. */
   public int        position    = WEST;
   /** How to align the associated component, <code>LEFT</code>, <code>CENTER</code>
       or <code>RIGHT</code>. Note that this setting only taks effect in the

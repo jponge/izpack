@@ -124,4 +124,9 @@ public class Debug
 	{
 		return TRACE;
 	}
+  
+  public static boolean stackTracing()
+  {
+    return STACKTRACE;
+  }
 }

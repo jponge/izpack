@@ -46,8 +46,6 @@ public class PasswordGroup implements ProcessingClient
   // ------------------------------------------------------------------------
   // Variable Declarations
   // ------------------------------------------------------------------------
-  private String      variable  = null;
-  private String      message   = "";
   private Vector      fields    = new Vector ();
   private Validator   validator = null;
   private Processor   processor = null;

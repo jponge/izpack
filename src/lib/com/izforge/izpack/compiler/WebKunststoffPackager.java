@@ -29,8 +29,6 @@ import java.util.*;
 import java.util.zip.*;
 import java.util.jar.*;
 
-import com.izforge.izpack.*;
-
 /**
  *  Web installer class with the Kunststoff L&F support.
  *

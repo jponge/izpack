@@ -26,18 +26,12 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
 
 import java.awt.*;
 import java.awt.event.*;
 
-import java.io.*;
-import java.util.*;
-
 import javax.swing.*;
-import javax.swing.event.*;
 
 /**
  *  The license panel.
@@ -114,7 +108,7 @@ public class LicencePanel extends IzPanel implements ActionListener
     {
       // We read it
       String resNamePrifix = "LicencePanel.licence";
-      licence = super.getResourceManager().getTextResource(resNamePrifix);
+      licence = ResourceManager.getInstance().getTextResource(resNamePrifix);
     }
     catch (Exception err)
     {

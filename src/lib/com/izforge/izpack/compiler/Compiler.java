@@ -42,7 +42,15 @@ import com.izforge.izpack.*;
 import org.apache.tools.ant.DirectoryScanner;
 import com.izforge.izpack.installer.VariableValueMapImpl;
 import com.izforge.izpack.installer.VariableSubstitutor;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.Debug;
 
+/**
+ * @author tisc
+ *
+ * To change the template for this generated type comment go to
+ * Window>Preferences>Java>Code Generation>Code and Comments
+ */
 /**
  *  The IzPack compiler class.
  *
@@ -150,7 +158,14 @@ public class Compiler extends Thread
     }
     catch (Exception e)
     {
-      e.printStackTrace();
+      if (Debug.stackTracing ())
+      {
+         e.printStackTrace(); 
+      }
+      else
+      {
+        System.out.println (e.getMessage ()); 
+      }
     }
   }
 
@@ -300,7 +315,7 @@ public class Compiler extends Thread
     {
       Pack pack = (Pack) iter.next();
       ZipOutputStream zipOut = packager.addPack(i++, pack.name, pack.os, pack.required,
-        pack.description);
+        pack.description, pack.preselected);
       ObjectOutputStream objOut = new ObjectOutputStream(zipOut);
 
       // We write the pack data
@@ -314,11 +329,9 @@ public class Compiler extends Thread
         File f = new File(p.src);
         FileInputStream in = new FileInputStream(f);
         long nbytes = f.length();
+        long mtime = f.lastModified();
 
-        if(!p.targetdir.endsWith(File.separator)) {
-          p.targetdir = p.targetdir+File.separatorChar;
-        }        
-        String targetFilename = p.targetdir + f.getName();
+        String targetFilename = p.getTargetFilename ();
 
         // pack paths in canonical (unix) form regardless of current host o/s:
         if('/' != File.separatorChar)
@@ -327,7 +340,7 @@ public class Compiler extends Thread
         }
 
         // Writing
-        objOut.writeObject(new PackFile(targetFilename, p.os, nbytes, p.override));
+        objOut.writeObject(new PackFile(targetFilename, p.osConstraints, nbytes, mtime, p.override));
         byte[] buffer = new byte[5120];
         long bytesWritten = 0;
         int bytesInBuffer;
@@ -462,6 +475,13 @@ public class Compiler extends Thread
     // Initialisation
     ArrayList packs = new ArrayList();
     XMLElement root = data.getFirstChildNamed("packs");
+    
+    if (root == null)
+    {
+      throw new Exception ("no packs specified");
+    }
+    // dummy variable used for values from XML
+    String val;
 
     // We process each pack markup
     int npacks = root.getChildrenCount();
@@ -473,9 +493,18 @@ public class Compiler extends Thread
       Pack pack = new Pack();
       pack.number = i;
       pack.name = el.getAttribute("name");
+      if (pack.name == null)
+      {
+        throw new Exception ("missing \"name\" attribute for <pack> in line "+el.getLineNr());
+      }
       pack.os = el.getAttribute("os");
       pack.required = el.getAttribute("required").equalsIgnoreCase("yes");
       pack.description = el.getFirstChildNamed("description").getContent();
+      pack.preselected = true;
+
+      val = el.getAttribute ("preselected");
+      if ((null != val) && ("no".compareToIgnoreCase (val) == 0))
+        pack.preselected = false;
 
       // We get the parsables list
       Iterator iter = null;
@@ -486,11 +515,17 @@ public class Compiler extends Thread
         while (iter.hasNext())
         {
           XMLElement p = (XMLElement) iter.next();
-      String targetFile = p.getAttribute("targetfile");
+          String targetFile = p.getAttribute("targetfile");
+          if (targetFile == null)
+            throw new Exception ("missing \"targetfile\" attribute for <parsable> in line "+p.getLineNr());
+            
+          List osList = getOsList (p);
+          
           pack.parsables.add
             (new ParsableFile(targetFile,
-            p.getAttribute("type", "plain"),
-            p.getAttribute("encoding", null)));
+                   p.getAttribute("type", "plain"),
+                   p.getAttribute("encoding", null),
+                   osList));
         }
       }
 
@@ -505,7 +540,7 @@ public class Compiler extends Thread
 
           // when to execute this executable
           int executeOn = ExecutableFile.NEVER;
-          String val = e.getAttribute("stage", "never");
+          val = e.getAttribute("stage", "never");
           if ("postinstall".compareToIgnoreCase(val) == 0)
             executeOn = ExecutableFile.POSTINSTALL;
           else if ("uninstall".compareToIgnoreCase(val) == 0)
@@ -528,6 +563,12 @@ public class Compiler extends Thread
           else if ("warn".compareToIgnoreCase(val) == 0)
             onFailure = ExecutableFile.WARN;
 
+          // whether to keep the executable after executing it
+          boolean keepFile = false;
+          val = e.getAttribute ("keep");
+          if ((null != val) && ("true".compareToIgnoreCase(val) == 0))
+            keepFile = true;
+
           // get arguments for this executable
           ArrayList argList = new ArrayList();
           XMLElement args = e.getFirstChildNamed("args");
@@ -542,22 +583,18 @@ public class Compiler extends Thread
             }
           }
 
-          // get os info on this executable
-          ArrayList osList = new ArrayList();
-          Iterator osIterator = e.getChildrenNamed("os").iterator();
-          while (osIterator.hasNext())
+          List osList = getOsList(e);
+          
+          String targetfile_attr = e.getAttribute("targetfile");
+          
+          if (targetfile_attr == null)
           {
-            XMLElement os = (XMLElement) osIterator.next();
-            osList.add
-              (new com.izforge.izpack.util.Os(os.getAttribute("family", null),
-              os.getAttribute("name", null),
-              os.getAttribute("version", null),
-              os.getAttribute("arch", null)));
+            throw new Exception ("missing \"targetfile\" attribute for <parsable> in line "+e.getLineNr());
           }
-      String targetFile = e.getAttribute("targetfile");
-          pack.executables.add(new ExecutableFile(targetFile,
+
+          pack.executables.add(new ExecutableFile(targetfile_attr,
             executeType, executeClass,
-            executeOn, onFailure, argList, osList));
+            executeOn, onFailure, argList, osList, keepFile));
         }
       }
 
@@ -566,20 +603,78 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
+        String src_attr = f.getAttribute ("src");
+        if (src_attr == null)
+        {
+          throw new Exception ("missing \"src\" attribute for <file> in line "+f.getLineNr());
+        }
 
-	// Do not prepend basedir if already an absolute path
-	String path = f.getAttribute("src");
-	if (!new File(path).isAbsolute())
-	   path = basedir + File.separator + path;
+        String path;
+
+        if (new File(src_attr).isAbsolute())
+        {
+          path = src_attr;
+        }
+        else
+        {
+          path = basedir + File.separator + src_attr;
+        }
+
         File file = new File(path);
 
-        boolean override = true;
-        if (f.getAttribute("override") != null)
-          override = f.getAttribute("override").equalsIgnoreCase("true");
+        int override = getOverrideValue (f);
 
+        List osList = getOsList (f);
+        
+        String targetdir_attr = f.getAttribute ("targetdir");
+        if (targetdir_attr == null)
+        {
+          throw new Exception ("missing \"targetdir\" attribute for <file> in line "+f.getLineNr());
+        }
+        
         addFile(file,
-          f.getAttribute("targetdir"),
-          f.getAttribute("os"),
+          targetdir_attr,
+          osList,
+          override,
+          pack.packFiles);
+      }
+
+      // We get the singlefiles list
+      iter = el.getChildrenNamed("singlefile").iterator();
+      while (iter.hasNext())
+      {
+        XMLElement f = (XMLElement) iter.next();
+        String src_attr = f.getAttribute ("src");
+        if (src_attr == null)
+        {
+          throw new Exception ("missing \"src\" attribute for <file> in line "+f.getLineNr());
+        }
+
+        String path;
+
+        if (new File (src_attr).isAbsolute ())
+        {
+          path = src_attr;
+        }
+        else
+        {
+          path = basedir + File.separator + src_attr;
+        }
+
+        File file = new File(path);
+
+        int override = getOverrideValue (f);
+
+        List osList = getOsList (f);
+        
+        String target_attr = f.getAttribute ("target");
+        if (target_attr == null)
+        {
+          throw new Exception ("missing \"target\" attribute for <file> in line "+f.getLineNr());
+        }
+        addSingleFile(file,
+          target_attr,
+          osList,
           override,
           pack.packFiles);
       }
@@ -589,11 +684,23 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
+        String dir_attr = f.getAttribute ("dir");
+        if (dir_attr == null)
+        {
+          throw new Exception ("missing \"dir\" attribute for fileset in line "+f.getLineNr());
+        }
 
-	// Do not prepend basedir if already an absolute path
-	String path = f.getAttribute("dir");
-	if (!new File(path).isAbsolute())
-	   path = basedir + File.separator + path;
+        String path;
+
+        if (new File(dir_attr).isAbsolute())
+        {
+          path = dir_attr;
+        }
+        else
+        {
+          path = basedir + File.separator + dir_attr;
+        }
+
         String casesensitive = f.getAttribute("casesensitive");
         //  get includes and excludes
         Vector xcludesList = f.getChildrenNamed("include");
@@ -622,12 +729,22 @@ public class Compiler extends Thread
           }
         }
 
-    String targetDir = f.getAttribute("targetdir");
+        int override = getOverrideValue (f);
+
+        String targetdir_attr = f.getAttribute ("targetdir");
+        if (targetdir_attr == null)
+        {
+          throw new Exception ("missing \"targetdir\" attribute for <fileset> in line "+f.getLineNr());
+        }
+        
+        List osList = getOsList (f);
+
         addFileSet(path, includes, excludes,
-          targetDir,
-          f.getAttribute("os"),
+          targetdir_attr,
+          osList,
           pack.packFiles,
-          casesensitive);
+          casesensitive,
+          override);
       }
 
       // We add the pack
@@ -638,6 +755,40 @@ public class Compiler extends Thread
     return packs;
   }
 
+  /**
+   * Extract a list of OS constraints from given element.
+   * 
+   * @param element parent XMLElement
+   * @return List of OsConstraint (or empty List if no constraints found)
+   */
+  protected List getOsList(XMLElement element)
+  {
+    // get os info on this executable
+    ArrayList osList = new ArrayList();
+    Iterator osIterator = element.getChildrenNamed("os").iterator();
+    while (osIterator.hasNext())
+    {
+      XMLElement os = (XMLElement) osIterator.next();
+      osList.add (new OsConstraint (
+          os.getAttribute("family", null),
+          os.getAttribute("name", null),
+          os.getAttribute("version", null),
+          os.getAttribute("arch", null)
+          )
+        );
+    }
+    
+    // backward compatibility: still support os attribute
+    String osattr = element.getAttribute ("os");
+    if ((osattr != null) && (osattr.length() > 0))
+    {
+      // add the "os" attribute as a family constraint
+      osList.add (new OsConstraint (osattr, null, null, null));
+    }
+    
+    return osList;
+  }
+
 
   /**
    *  Adds a Ant fileset.
@@ -646,13 +797,15 @@ public class Compiler extends Thread
    * @param  includes       The includes rules.
    * @param  excludes       The excludes rules.
    * @param  relPath        The relative path.
-   * @param  targetOs       The target os.
+   * @param  osListr        The target os constraints.
    * @param  list           The files list.
    * @param  casesensitive  Case-sensitive stuff.
+   * @param  override       Behaviour if a file already exists during install
    * @exception  Exception  Description of the Exception
    */
   protected void addFileSet(String path, String[] includes, String[] excludes,
-                            String relPath, String targetOs, ArrayList list, String casesensitive)
+                            String relPath, List osList, ArrayList list, 
+                            String casesensitive, int override)
      throws Exception
   {
     boolean bCasesensitive = false;
@@ -706,7 +859,7 @@ public class Compiler extends Thread
           instPath = expPath.substring(0, pathLimit);
         else
           instPath = relPath;
-        addFile(file, instPath, targetOs, true, list);
+        addFile(file, instPath, osList, override, list);
       }
 
       // Empty directories are left by the previous code section, so we need to
@@ -720,7 +873,7 @@ public class Compiler extends Thread
           instPath = relPath + File.separator + dirs[i];
           pathLimit = instPath.indexOf(dir.getName());
           instPath = instPath.substring(0, pathLimit);
-          addFile(dir, instPath, targetOs, true, list);
+          addFile(dir, instPath, osList, override, list);
         }
       }
     }
@@ -734,13 +887,13 @@ public class Compiler extends Thread
    *
    * @param  file           The file to add.
    * @param  relPath        The relative path.
-   * @param  targetOs       The target OS.
+   * @param  osList         The target OS constraints.
    * @param  override       Overriding behaviour.
    * @param  list           The files list.
    * @exception  Exception  Description of the Exception
    */
-  protected void addFile(File file, String relPath, String targetOs,
-                         boolean override, ArrayList list) throws Exception
+  protected void addFile(File file, String relPath, List osList,
+                         int override, ArrayList list) throws Exception
   {
     // We check if 'file' is correct
     if (!file.exists())
@@ -760,19 +913,40 @@ public class Compiler extends Thread
       int size = files.length;
       String np = relPath + "/" + file.getName();
       for (int i = 0; i < size; i++)
-        addFile(files[i], np, targetOs, override, list);
+        addFile(files[i], np, osList, override, list);
     }
     else
     {
       PackSource nf = new PackSource();
       nf.src = file.getAbsolutePath();
-      nf.targetdir = relPath;
-      nf.os = targetOs;
+      nf.setTargetDir (relPath);
+      nf.osConstraints = osList;
       nf.override = override;
       list.add(nf);
     }
   }
 
+  /**
+   *  Method to add a single file in a pack.
+   *
+   * @param  file           The file to add.
+   * @param  targetFile     The target to add the file as.
+   * @param  osList         The target OS constraints.
+   * @param  override       Overriding behaviour.
+   * @param  list           The files list.
+   * @exception  Exception  Description of the Exception
+   */
+  protected void addSingleFile(File file, String targetFile, List osList,
+                         int override, ArrayList list) throws Exception
+  {
+    //System.out.println ("adding single file " + file.getName() + " as " + targetFile);
+    PackSource nf = new PackSource();
+    nf.src = file.getAbsolutePath();
+    nf.setTargetFile (targetFile);
+    nf.osConstraints = osList;
+    nf.override = override;
+    list.add(nf);
+  }
 
   /**
    *  Returns a list of the panels names to add.
@@ -827,8 +1001,9 @@ public class Compiler extends Thread
 
       // Do not prepend basedir if already an absolute path
       String path = res.getAttribute("src");
+
       if (!new File(path).isAbsolute())
-	 path = basedir + File.separator + path;
+        path = basedir + File.separator + path;
 
       resources.add(new Resource(res.getAttribute("id"),
         path,
@@ -996,6 +1171,39 @@ public class Compiler extends Thread
     return data;
   }
 
+  protected int getOverrideValue (XMLElement f)
+  {
+    int override = PackSource.OVERRIDE_TRUE;
+
+    if (f.getAttribute("override") != null)
+    {
+      String override_val = f.getAttribute("override");
+      
+      if (override_val.equalsIgnoreCase("true"))
+      {
+        override = PackSource.OVERRIDE_TRUE;
+      }
+      else if (override_val.equalsIgnoreCase("false"))
+      {
+        override = PackSource.OVERRIDE_FALSE;
+      }
+      else if (override_val.equalsIgnoreCase("asktrue"))
+      {
+        override = PackSource.OVERRIDE_ASK_TRUE;
+      }
+      else if (override_val.equalsIgnoreCase("askfalse"))
+      {
+        override = PackSource.OVERRIDE_ASK_FALSE;
+      }
+      else if (override_val.equalsIgnoreCase("update"))
+      {
+        override = PackSource.OVERRIDE_UPDATE;
+      }
+    }
+
+    return override;
+  }
+
 
   /**
    *  Represents a resource.
@@ -1084,9 +1292,10 @@ public class Compiler extends Thread
     /**  The executable files list. */
     public ArrayList executables;
 
-      /**  The target operation system of this file */
-      public String os;
+    /**  The target operation system of this file */
+    public String os;
 
+    public boolean preselected;
 
     /**  The constructor. */
     public Pack()
@@ -1109,14 +1318,86 @@ public class Compiler extends Thread
     /**  The source. */
     public String src;
 
-    /**  The target directory. */
-    public String targetdir;
+    public final static int OVERRIDE_TRUE = com.izforge.izpack.PackFile.OVERRIDE_TRUE;
+    public final static int OVERRIDE_FALSE = com.izforge.izpack.PackFile.OVERRIDE_FALSE;
+    public final static int OVERRIDE_ASK_TRUE = com.izforge.izpack.PackFile.OVERRIDE_ASK_TRUE;
+    public final static int OVERRIDE_ASK_FALSE = com.izforge.izpack.PackFile.OVERRIDE_ASK_FALSE;
+    public final static int OVERRIDE_UPDATE = com.izforge.izpack.PackFile.OVERRIDE_UPDATE;
 
     /**  Shall we override the file ? */
-    public boolean override = true;
+    public int override = OVERRIDE_TRUE;
 
-    /**  The target operation system of this file */
-    public String os;
+    /**  The target operating systems of this file */
+    public List osConstraints = null;
+
+    /**  The target directory. */
+    private String targetdir = null;
+
+    /**  The target file. */
+    private String targetfile = null;
+
+    public String getTargetFilename ()
+    {
+      // targetfile overrides targetdir
+      if (this.targetfile != null)
+        return this.targetfile;
+
+       File f = new File (this.src);
+
+       return this.targetdir + f.getName ();
+    }
+
+    public void setTargetFile (String targetFile) throws Exception
+    {
+      this.targetdir = null;
+      if (targetFile == null)
+      {
+        if (this.src != null)
+        {
+          throw new Exception ("target for file " + src + " missing!");
+        }
+        else
+        {
+          throw new Exception ("target for file missing!");
+        }
+      }
+      this.targetfile = targetFile;
+    }
+
+    public String getTargetFile ()
+    {
+      return this.targetfile;
+    }
+
+    public void setTargetDir (String targetDir) throws Exception
+    {
+      if (targetDir == null)
+      {
+        if (this.src != null)
+        {
+          throw new Exception ("target for file " + src + " missing!");
+        }
+        else
+        {
+          throw new Exception ("target for file missing!");
+        }
+      }
+
+      this.targetfile = null;
+      this.targetdir = targetDir;
+
+      if (! this.targetdir.endsWith (File.separator))
+      {
+        this.targetdir = this.targetdir + File.separatorChar;
+      }
+
+    }
+
+    public String getTargetDir ()
+    {
+      return this.targetdir;
+    }
+
   }
 
 

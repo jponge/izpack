@@ -28,8 +28,6 @@ import com.izforge.izpack.*;
 import com.izforge.izpack.gui.*;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
 
 import java.awt.*;
 import java.awt.event.*;

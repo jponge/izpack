@@ -24,16 +24,12 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
 
 import java.awt.*;
 import java.awt.event.*;
 
-import java.io.*;
 import java.net.*;
-import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -51,9 +47,6 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
   /**  The layout constraints. */
   private GridBagConstraints gbConstraints;
-
-  /**  The licence text. */
-  private String licence;
 
   /**  The info label. */
   private JLabel infoLabel;
@@ -150,12 +143,10 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
    */
   private URL loadLicence()
   {
-    URL retVal = null;
-
     String resNamePrifix = "HTMLLicencePanel.licence";
     try
     {
-      return super.getResourceManager().getURL(resNamePrifix);
+      return ResourceManager.getInstance().getURL(resNamePrifix);
     }
     catch (Exception ex)
     {

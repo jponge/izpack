@@ -78,6 +78,10 @@
         Fixed the UserInputPanel building process to include all the required
         files.
 
+    30.04.2003: (by Jonathan Halliday)
+        Change to panel compilation target, for panel automation
+        (silent install) support.
+
   Mini-HowTo:
 
   To compile and package the compiler.jar jar file, type:
@@ -168,8 +172,10 @@
             debug="${debug}">
       <include name="com/izforge/izpack/*.java"/>
       <include name="com/izforge/izpack/compiler/*.java"/>
-          <include name="com/izforge/izpack/ant/*.java"/>
-          <include name="net/n3/nanoxml/*.java"/>
+      <include name="com/izforge/izpack/ant/*.java"/>
+      <include name="com/izforge/izpack/util/Debug.java"/>
+      <include name="com/izforge/izpack/util/OsConstraint.java"/>
+      <include name="net/n3/nanoxml/*.java"/>
     </javac>
         <copy todir="${build.dir}/com/izforge/izpack/ant/langpacks">
             <fileset dir="${src.dir}/com/izforge/izpack/ant/langpacks"/>
@@ -190,8 +196,8 @@
             <attribute name="Implementation-Version" value="${ver}" />
             <attribute name="Implementation-Vendor" value="IzPack." />
         </section>
-      </manifest>
-    </target>
+    </manifest>
+  </target>
   <target name="build.compiler" depends="compile.compiler, compiler.manifest">
     <echo message="Build ${compiler.jar}"/>
     <delete file="${compiler.jar}" verbose="true" />
@@ -199,9 +205,10 @@
       <fileset dir="${build.dir}">
         <include name="com/izforge/izpack/*.class"/>
         <include name="com/izforge/izpack/compiler/*.class"/>
-            <include name="com/izforge/izpack/util/Os.class"/>
-            <include name="com/izforge/izpack/ant/*.class"/>
-            <include name="com/izforge/izpack/ant/langpacks/*.properties"/>
+        <include name="com/izforge/izpack/util/OsConstraint.class"/>
+        <include name="com/izforge/izpack/util/Debug.class"/>
+        <include name="com/izforge/izpack/ant/*.class"/>
+        <include name="com/izforge/izpack/ant/langpacks/*.properties"/>
         <include name="com/izforge/izpack/installer/VariableValueMap.class"/>
         <include name="com/izforge/izpack/installer/VariableValueMapImpl.class"/>
         <include name="com/izforge/izpack/installer/VariableSubstitutor.class"/>
@@ -270,7 +277,8 @@
            debug="${debug}">
       <include name="com/izforge/izpack/LocaleDatabase.java"/>
       <include name="com/izforge/izpack/gui/*.java"/>
-            <include name="com/izforge/izpack/uninstaller/*.java"/>
+      <include name="com/izforge/izpack/util/*.java"/>
+      <include name="com/izforge/izpack/uninstaller/*.java"/>
       <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java"/>
       <include name="net/n3/nanoxml/*.java"/>
     </javac>
@@ -301,6 +309,7 @@
         <include name="com/izforge/izpack/gui/*.class"/>
         <include name="com/izforge/izpack/uninstaller/*.class"/>
         <include name="com/izforge/izpack/ExecutableFile.class"/>
+        <include name="com/izforge/izpack/util/AbstractUI*.class"/>
         <include name="com/izforge/izpack/util/FileExecutor*.class"/>
         <include name="com/izforge/izpack/util/Console.class"/>
         <include name="com/izforge/izpack/util/Debug.class"/>
@@ -369,7 +378,7 @@
            optimize="on"
            deprecation="on"
            debug="${debug}">
-      <include name="com/izforge/izpack/panels/${panel}.java"/>
+      <include name="com/izforge/izpack/panels/${panel}*.java"/>
     </javac>
     <echo message="Creates bin/panels/${panel-dir} directory"/>
     <mkdir dir="${bin.dir}/panels/${panel-dir}"/>
@@ -463,6 +472,10 @@
       <param name="panel" value="PasswordGroup" />
       <param name="panel-dir" value="UserInputPanel" />
     </antcall>
+    <antcall target="compile.panel">
+      <param name="panel" value="CompilePanel" />
+      <param name="panel-dir" value="CompilePanel" />
+    </antcall>
   </target>
 
   <!-- Deletes the classes directory -->
@@ -493,10 +506,10 @@
   <!-- Builds the Javadoc -->
   <target name="build.javadoc" depends="prepare">
     <mkdir dir="${build.dir}/javadoc"/>
-    <javadoc destdir="${build.dir}/javadoc" access="private">
-      <fileset dir="${src.dir}">
-        <include name="**/*.java" />
-      </fileset>
+    <javadoc destdir="${build.dir}/javadoc" access="private" classpath="${basedir}/lib/kunststoff.jar:${basedir}/lib/ant.jar">
+      <packageset dir="${src.dir}">
+        <exclude name="**/CVS" />
+      </packageset>
     </javadoc>
     <copy todir="${doc.dir}/izpack/javadoc">
       <fileset dir="${build.dir}/javadoc">

@@ -31,7 +31,6 @@ package com.izforge.izpack.compiler;
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
-import java.util.jar.*;
 
 import com.izforge.izpack.*;
 
@@ -106,7 +105,7 @@ public abstract class Packager
    * @exception  Exception  Description of the Exception
    */
   public abstract ZipOutputStream addPack(int packNumber, String name, String targetOs,
-                                          boolean required, String description)
+                                          boolean required, String description, boolean preselected)
      throws Exception;
 
 

@@ -3,8 +3,8 @@
  *  IzPack
  *  Copyright (C) 2002 Olexij Tkatchenko
  *
- *  File :               Os.java
- *  Description :        Os class.
+ *  File :               OsConstraint.java
+ *  Description :        A constraint on the OS to perform some action on.
  *  Author's email :     ot@parcs.de
  *  Website :            http://www.izforge.com
  *
@@ -24,14 +24,19 @@
  */
 package com.izforge.izpack.util;
 
+import java.util.*;
+
 /**
- *  Performs matching of OS specified on construction time against execution
- *  platform.
+ * Encapsulates OS constraints specified on creation time and allows
+ * to check them against the current OS.
+ *
+ * For example, this is used for &lt;executable&gt;s to check whether
+ * the executable is suitable for the current OS.
  *
  * @author     Olexij Tkatchenko <ot@parcs.de>
  * @created    November 1, 2002
  */
-public class Os implements java.io.Serializable
+public class OsConstraint implements java.io.Serializable
 {
   /**  The OS family */
   private String family;
@@ -51,7 +56,7 @@ public class Os implements java.io.Serializable
    * @param  version  Description of the Parameter
    * @param  arch     Description of the Parameter
    */
-  public Os(String family, String name, String version, String arch)
+  public OsConstraint(String family, String name, String version, String arch)
   {
     this.family = (family != null) ? family.toLowerCase() : null;
     this.name = (name != null) ? name.toLowerCase() : null;
@@ -103,6 +108,46 @@ public class Os implements java.io.Serializable
       (name != null) ||
       (version != null) ||
       (arch != null));
+  }
+
+
+  /**
+   * Helper function: Scan a list of OsConstraints for a match.
+   *
+   * @param constraint_list List of OsConstraint to check
+   *
+   * @return true if one of the OsConstraints matched the current system or 
+   *       constraint_list is null (no constraints), false if none of the OsConstraints matched
+   */
+  public static boolean oneMatchesCurrentSystem (List constraint_list)
+  {
+    if (constraint_list == null)
+      return true;
+
+    Iterator constraint_it = constraint_list.iterator ();
+
+    // no constraints at all - matches!
+    if (! constraint_it.hasNext ())
+      return true;
+      
+    while (constraint_it.hasNext ())
+    {
+      OsConstraint osc = (OsConstraint)constraint_it.next();
+
+      Debug.trace ("checking if os constraints "+osc+" match current OS");
+
+      // check for match
+      if (osc.matchCurrentSystem ())
+      {
+        Debug.trace ("matched current OS.");
+        return true; // bail out on first match
+      }
+
+    }
+
+    Debug.trace ("no match with current OS!");
+    // no match found
+    return false;
   }
 
 

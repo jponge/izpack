@@ -25,8 +25,6 @@
 
 package   com.izforge.izpack.util;
 
-import    java.lang.*;
-  
 /*---------------------------------------------------------------------------*/
 /**
  * This class implements a thred that can be used to free native libraries

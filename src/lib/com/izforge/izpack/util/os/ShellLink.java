@@ -26,7 +26,6 @@
 
 package   com.izforge.izpack.util.os;
 
-import    java.lang.*;
 import    java.io.*;
 import    com.izforge.izpack.util.*;
 
@@ -464,7 +463,7 @@ public class ShellLink implements NativeLibraryClient
   * @param    name    the name of the library to free. Use only the name and
   *                   extension but not the path.
   *
-  * @see      com.izforge.izpack.NativeLibraryClient#freeLibrary
+  * @see      com.izforge.izpack.util.NativeLibraryClient#freeLibrary
   */
  /*--------------------------------------------------------------------------*/
   public void freeLibrary (String name)
@@ -498,6 +497,7 @@ public class ShellLink implements NativeLibraryClient
     // ----------------------------------------------------
     // make sure we hava a valid storage path 
     // ----------------------------------------------------
+    // TODO: handle errors
     int result = GetLinkPath (linkType); 
 
     // ----------------------------------------------------

@@ -24,20 +24,14 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
 
 import java.awt.*;
-import java.awt.event.*;
 
-import java.io.*;
 import java.net.*;
-import java.util.*;
 
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.border.*;
 
 /**
  *  The HTML info panel.
@@ -58,9 +52,6 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 
   /**  The text area. */
   private JEditorPane textArea;
-
-  /**  The antialiaser. */
-  private RenderingHints antialiaser;
 
 
   /**
@@ -119,7 +110,7 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
     String resNamePrifix = "HTMLInfoPanel.info";
     try
     {
-      return super.getResourceManager().getURL(resNamePrifix);
+      return ResourceManager.getInstance().getURL(resNamePrifix);
     }
     catch (Exception ex)
     {

@@ -478,18 +478,7 @@ public class RuleInputField extends JComponent implements KeyListener,
       }
     }
   }
- /*--------------------------------------------------------------------------*/
- /**
-  * Sets the focus to the first field.
-  */
- /*--------------------------------------------------------------------------*/
-  private void selectFirst ()
-  {
-    // set the focus to the first field
-    activeField = (RuleTextField)inputFields.elementAt (0);
-    activeField.grabFocus ();
-    activeField.selectAll ();
-  }
+ 
  /*--------------------------------------------------------------------------*/
  /**
   * This method validates the field content. Validating is performed through

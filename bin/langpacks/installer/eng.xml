@@ -52,9 +52,12 @@
     
     <str id="InstallPanel.info" txt="Click 'Install !' to begin the installation process"/>
     <str id="InstallPanel.install" txt="Install !"/>
-    <str id="InstallPanel.tip" txt="Installation progress :"/>
+    <str id="InstallPanel.tip" txt="Pack installation progress :"/>
     <str id="InstallPanel.begin" txt="[Nothing]"/>
     <str id="InstallPanel.finished" txt="[Finished]"/>
+    <str id="InstallPanel.progress" txt="Overall installation progress :"/>
+    <str id="InstallPanel.overwrite.title" txt="File already exists"/>
+    <str id="InstallPanel.overwrite.question" txt="The following file already exists. Should it be overwritten?"/>
     
     <str id="FinishPanel.success" txt="Installation has completed successfully."/>
     <str id="FinishPanel.fail" txt="Installation has failed!"/>
@@ -97,6 +100,34 @@
     <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
     
     <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+    <str id="UserInputPanel.search.autodetect"    txt="Autodetect"/>
+
+    <!-- more descriptive error message would be cool, like specifying what file we looked for -->
+    <str id="UserInputPanel.search.autodetect.failed.message"    txt="Autodetection failed."/>
+    <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Autodetection failed."/>
+    <str id="UserInputPanel.search.autodetect.tooltip"           txt="Check for the file or directory in the paths given above."/>
+    <str id="UserInputPanel.search.location"           txt="Enter location of "/>
+    <str id="UserInputPanel.search.browse"           txt="Browse..."/>
+
+    <str id="CompilePanel.heading" txt="Compilation" />
+    <str id="CompilePanel.tip" txt="Job compilation progress:" />
+    <str id="CompilePanel.browse" txt="Browse..." />
+    <str id="CompilePanel.browse.approve" txt="Use as compiler" />
+    <str id="CompilePanel.start" txt="Start" />
+    <str id="CompilePanel.progress.initial" txt="[Press Start button]" />
+    <str id="CompilePanel.progress.finished" txt="[Finished]" />
+    <str id="CompilePanel.progress.overall" txt="Overall compilation progress:" />
+    <str id="CompilePanel.error" txt="Compilation failed" />
+    <str id="CompilePanel.error.reconfigure" txt="Reconfigure" />
+    <str id="CompilePanel.error.ignore" txt="Ignore" />
+    <str id="CompilePanel.error.abort" txt="Abort" />
+    <str id="CompilePanel.error.seebelow" txt="See below for the failed command and it's output." />
+    <str id="CompilePanel.error.nofiles" txt="Error while scanning for files for compilation." />
+    <str id="CompilePanel.error.compilernotfound" txt="The compiler could not be run." />
+    <str id="CompilePanel.error.invalidarguments" txt="The compiler does not like the arguments provided to it." />
+    <str id="CompilePanel.error.noclassfile" txt="The compiler did not produce a class file for the source file " />
+    <str id="CompilePanel.choose_compiler" txt="Compiler to use:" />
+    <str id="CompilePanel.additional_arguments" txt="Additional compiler arguments:" />
 
     <!-- Add your own panels specific strings here if you need -->
 

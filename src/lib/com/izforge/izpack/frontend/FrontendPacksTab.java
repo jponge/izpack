@@ -28,7 +28,6 @@ import com.izforge.izpack.*;
 import com.izforge.izpack.gui.*;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import java.awt.*;
@@ -507,10 +506,11 @@ public class FrontendPacksTab extends FrontendTab
     for (int i = 0; i < size; i++)
     {
       XMLElement el = (XMLElement) v.get(i);
+      // TODO: add UI to alter preselection state
       Pack p = new Pack(el.getAttribute("name"),
         el.getFirstChildNamed("description").getContent(),
         el.getAttribute("os"),
-        el.getAttribute("required").equalsIgnoreCase("yes"));
+        el.getAttribute("required").equalsIgnoreCase("yes"), true);
       packs.add(p);
     }
 

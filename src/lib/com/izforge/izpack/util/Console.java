@@ -29,7 +29,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import java.util.*;
 import javax.swing.text.Document;
 import javax.swing.text.Segment;
 
@@ -45,13 +44,13 @@ public class Console
         try 
         {
 
-            /*
-              Start a new process in which to execute the
-              commands in cmd, using the environment in env
-              and use pwd as the current working directory.
-            */
-            p = rt.exec(args);//, env, pwd);
-			Console c = new Console(p);
+          /*
+            Start a new process in which to execute the
+            commands in cmd, using the environment in env
+            and use pwd as the current working directory.
+           */
+          p = rt.exec(args);//, env, pwd);
+			    Console c = new Console(p);
 	        System.exit(p.exitValue());
         }
         catch (IOException e) 

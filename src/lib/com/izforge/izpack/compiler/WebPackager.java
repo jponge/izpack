@@ -103,12 +103,12 @@ public class WebPackager extends Packager
    * @exception  Exception  Description of the Exception
    */
   public ZipOutputStream addPack(int packNumber, String name, String targetOs, boolean required,
-                                 String description) throws Exception
+                                 String description, boolean preselected) throws Exception
   {
     sendMsg("Adding pack #" + packNumber + " : " + name + " ...");
 
     // Adds it in the packs array
-    Pack pack = new Pack(name, description, targetOs, required);
+    Pack pack = new Pack(name, description, targetOs, required, preselected);
     packs.add(packNumber, pack);
 
     // Returns the suiting output stream

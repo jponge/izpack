@@ -24,20 +24,12 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
+import com.izforge.izpack.util.*;
 
 import java.awt.*;
-import java.awt.event.*;
-
-import java.io.*;
-import java.util.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import net.n3.nanoxml.*;
 
 /**
  *  The install panel class. Launches the actual installation job.
@@ -45,7 +37,7 @@ import net.n3.nanoxml.*;
  * @author     Julien Ponge
  * @created    November 1, 2002
  */
-public class InstallPanel extends IzPanel implements ActionListener, InstallListener
+public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
 {
   /**  The layout. */
   private GridBagLayout layout;
@@ -57,14 +49,22 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
   protected JLabel tipLabel;
 
   /**  The operation label . */
-  protected JLabel opLabel;
+  protected JLabel packOpLabel;
+
+  /**  The operation label . */
+  protected JLabel overallOpLabel;
+
+  /**  The pack progress bar. */
+  protected JProgressBar packProgressBar;
 
   /**  The progress bar. */
-  protected JProgressBar progressBar;
+  protected JProgressBar overallProgressBar;
 
   /**  True if the installation has been done. */
   private volatile boolean validated = false;
 
+  /**  How many packs we are going to install. */
+  private int noOfPacks = 0;
 
   /**
    *  The constructor.
@@ -81,29 +81,59 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
     gbConstraints = new GridBagConstraints();
     setLayout(layout);
 
-    tipLabel = new JLabel(parent.langpack.getString("InstallPanel.tip"),
+    int row = 1;
+
+    this.tipLabel = new JLabel(parent.langpack.getString("InstallPanel.tip"),
       parent.icons.getImageIcon("tip"), JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 0.0);
+    parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.fill = GridBagConstraints.NONE;
     gbConstraints.anchor = GridBagConstraints.NORTHWEST;
-    layout.addLayoutComponent(tipLabel, gbConstraints);
-    add(tipLabel);
+    layout.addLayoutComponent(this.tipLabel, gbConstraints);
+    add(this.tipLabel);
 
-    opLabel = new JLabel(" ", JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 2, 2, 1, 1.0, 0.0);
+    this.packOpLabel = new JLabel(" ", JLabel.TRAILING);
+    parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-    layout.addLayoutComponent(opLabel, gbConstraints);
-    add(opLabel);
+    layout.addLayoutComponent(this.packOpLabel, gbConstraints);
+    add(this.packOpLabel);
 
-    progressBar = new JProgressBar();
-    progressBar.setStringPainted(true);
-    progressBar.setString(parent.langpack.getString("InstallPanel.begin"));
-    progressBar.setValue(0);
-    parent.buildConstraints(gbConstraints, 0, 3, 2, 1, 1.0, 0.0);
+    this.packProgressBar = new JProgressBar();
+    this.packProgressBar.setStringPainted(true);
+    this.packProgressBar.setString(parent.langpack.getString("InstallPanel.begin"));
+    this.packProgressBar.setValue(0);
+    parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.NORTH;
     gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-    layout.addLayoutComponent(progressBar, gbConstraints);
-    add(progressBar);
+    layout.addLayoutComponent(this.packProgressBar, gbConstraints);
+    add(this.packProgressBar);
+
+    // make sure there is some space between the progress bars
+    JSeparator sep = new JSeparator ();
+    Dimension dim = new Dimension (0, 10);
+    sep.setPreferredSize (dim);
+    sep.setMinimumSize (dim);
+    sep.setMaximumSize (dim);
+    parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
+    layout.addLayoutComponent(sep, gbConstraints);
+    add(sep);
+
+    this.overallOpLabel = new JLabel(parent.langpack.getString ("InstallPanel.progress"), 
+      parent.icons.getImageIcon ("tip"), JLabel.TRAILING);
+    parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
+    gbConstraints.anchor = GridBagConstraints.NORTHWEST;
+    gbConstraints.fill = GridBagConstraints.NONE;
+    layout.addLayoutComponent(this.overallOpLabel, gbConstraints);
+    add(this.overallOpLabel);
+
+    this.overallProgressBar = new JProgressBar();
+    this.overallProgressBar.setStringPainted(true);
+    this.overallProgressBar.setString("");
+    this.overallProgressBar.setValue(0);
+    parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
+    gbConstraints.anchor = GridBagConstraints.NORTH;
+    gbConstraints.fill = GridBagConstraints.HORIZONTAL;
+    layout.addLayoutComponent(this.overallProgressBar, gbConstraints);
+    add(this.overallProgressBar);
   }
 
 
@@ -114,25 +144,20 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
    */
   public boolean isValidated()
   {
-    return validated;
-  }
-
-
-  /**
-   *  Actions-handling method (here it launches the installation).
-   *
-   * @param  e  The event.
-   */
-  public void actionPerformed(ActionEvent e)
-  {
-    parent.install(this);
+    return this.validated;
   }
 
 
   /**  The unpacker starts.  */
-  public void startUnpack()
+  public void startAction (String name, int noOfJobs)
   {
     parent.blockGUI();
+    // figure out how many packs there are to install
+    this.noOfPacks = noOfJobs;
+    this.overallProgressBar.setMinimum (1);
+    this.overallProgressBar.setMaximum (this.noOfPacks);
+
+    this.overallProgressBar.setString ("0 / " + Integer.toString (this.noOfPacks));
   }
 
 
@@ -143,7 +168,7 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
    */
   public void errorUnpack(String error)
   {
-    opLabel.setText(error);
+    this.packOpLabel.setText(error);
     idata.installSuccess = false;
     JOptionPane.showMessageDialog(this, error.toString(),
       parent.langpack.getString("installer.error"),
@@ -152,17 +177,20 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
 
 
   /**  The unpacker stops.  */
-  public void stopUnpack()
+  public void stopAction()
   {
     parent.releaseGUI();
     parent.lockPrevButton();
-    progressBar.setString(parent.langpack.getString("InstallPanel.finished"));
-    progressBar.setEnabled(false);
-    opLabel.setText(" ");
-    opLabel.setEnabled(false);
+    this.packProgressBar.setString(parent.langpack.getString("InstallPanel.finished"));
+    this.packProgressBar.setEnabled(false);
+    String no_of_packs = Integer.toString (this.noOfPacks);
+    this.overallProgressBar.setString (no_of_packs + " / " + no_of_packs);
+    this.overallProgressBar.setEnabled (false);
+    this.packOpLabel.setText(" ");
+    this.packOpLabel.setEnabled(false);
     idata.installSuccess = true;
     idata.canClose = true;
-    validated = true;
+    this.validated = true;
     if (idata.panels.indexOf(this) != (idata.panels.size() - 1))
       parent.unlockNextButton();
   }
@@ -174,26 +202,29 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
    * @param  val  The progression value.
    * @param  msg  The progression message.
    */
-  public void progressUnpack(int val, String msg)
+  public void progress(int val, String msg)
   {
-    progressBar.setValue(val + 1);
-    opLabel.setText(msg);
+    this.packProgressBar.setValue(val + 1);
+    packOpLabel.setText(msg);
   }
 
 
   /**
    *  Pack changing.
    *
-   * @param  min       The new mnimum progress.
-   * @param  max       The new maximum progress.
    * @param  packName  The pack name.
+   * @param  stepno    The number of the pack.
+   * @param  max       The new maximum progress.
    */
-  public void changeUnpack(int min, int max, String packName)
+  public void nextStep(String packName, int stepno, int max)
   {
-    progressBar.setValue(0);
-    progressBar.setMinimum(min);
-    progressBar.setMaximum(max);
-    progressBar.setString(packName);
+    this.packProgressBar.setValue(0);
+    this.packProgressBar.setMinimum(0);
+    this.packProgressBar.setMaximum(max);
+    this.packProgressBar.setString(packName);
+
+    this.overallProgressBar.setValue (stepno);
+    this.overallProgressBar.setString (Integer.toString (stepno) + " / " + Integer.toString (this.noOfPacks));
   }
 
 
@@ -210,20 +241,7 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
     parent.lockNextButton();
 
     parent.install(this);
-
   }
 
-
-  /**
-   *  Asks to run in the automated mode.
-   *
-   * @param  panelRoot  The panel XML tree root.
-   */
-  public void runAutomated(XMLElement panelRoot)
-  {
-    parent.install(this);
-    while (!validated)
-      Thread.yield();
-  }
 }
 

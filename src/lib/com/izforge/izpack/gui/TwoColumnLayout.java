@@ -150,7 +150,7 @@ public class TwoColumnLayout implements LayoutManager2
   *                       in % of the total container width. Values less than
   *                       0% and greater than 50% are not accepted.
   * @param     gap        the gap between the two columns.
-  * @param     indent     the indnet to use for components that have that
+  * @param     indent     the indent to use for components that have that
   *                       constraint set. This is a value in pixels.
   * @param     topBuffer  the percentage of left over vertical space to place
   *                       on top of the component cluster. Values between 0%
@@ -215,7 +215,7 @@ public class TwoColumnLayout implements LayoutManager2
     // variable, displacing any component that might have
     // been previously recorded for that location.
     // ----------------------------------------------------
-    if (component.position == component.NORTH)
+    if (component.position == TwoColumnConstraints.NORTH)
     {
       title = component;
       if (title.stretch)
@@ -248,35 +248,69 @@ public class TwoColumnLayout implements LayoutManager2
     // Unoccupied spots higher in the right column become
     // inaccessible.
     // ----------------------------------------------------
-    else if (component.position == component.BOTH)
+    else if (component.position == TwoColumnConstraints.BOTH)
     {
-      if (components [LEFT].size () < components [RIGHT].size ())
+      // first make sure that both columns have the same number of entries
+      while (components [RIGHT].size () > components [LEFT].size ())
       {
-        components [RIGHT].insertElementAt (null, components [LEFT].size ());
+        components [LEFT].add (null);
       }
-
-      components [LEFT].add (component);
 
       while (components [LEFT].size () > components [RIGHT].size ())
       {
         components [RIGHT].add (null);
       }
+
+      components [LEFT].add (component);
+      components [RIGHT].add (null);
     }
 
     // ----------------------------------------------------
     // WEST components are added to the left column
     // ----------------------------------------------------
-    else if (component.position == component.WEST)
+    else if (component.position == TwoColumnConstraints.WEST)
     {
       components [LEFT].add (component);
     }
 
     // ----------------------------------------------------
+    // WESTONLY components are added to the left column
+    // the right column has to be kept free
+    // ----------------------------------------------------
+    else if (component.position == TwoColumnConstraints.WESTONLY)
+    {
+      components [LEFT].add (component);
+
+      // fill right column to make sure nothing is placed there
+      while (components [RIGHT].size () < components [LEFT].size ())
+      {
+        components [RIGHT].add (null);
+      }
+
+    }
+
+    // ----------------------------------------------------
     // EAST components are added to the right column
     // ----------------------------------------------------
-    else if (component.position == component.EAST)
+    else if (component.position == TwoColumnConstraints.EAST)
     {
       components [RIGHT].add (component);
+    }
+
+    // ----------------------------------------------------
+    // EASTONLY components are added to the left column
+    // the right column has to be kept free
+    // ----------------------------------------------------
+    else if (component.position == TwoColumnConstraints.EASTONLY)
+    {
+      components [RIGHT].add (component);
+
+      // fill left column to make sure nothing is placed there
+      while (components [LEFT].size () < components [RIGHT].size ())
+      {
+        components [LEFT].add (null);
+      }
+
     }
 
     // ----------------------------------------------------
@@ -357,18 +391,18 @@ public class TwoColumnLayout implements LayoutManager2
           component.setBounds (leftRule, 0, width, titleHeight);
         }
 
-        else if (title.align == title.LEFT)
+        else if (title.align == TwoColumnConstraints.LEFT)
         {
           component.setBounds (leftRule, 0, width, titleHeight);
         }
 
-        else if (title.align == title.CENTER)
+        else if (title.align == TwoColumnConstraints.CENTER)
         {
           int left = centerRule - (width / 2);
           component.setBounds (left, 0, width, titleHeight);
         }
 
-        else if (title.align == title.RIGHT)
+        else if (title.align == TwoColumnConstraints.RIGHT)
         {
           int left = rightRule - width;
           component.setBounds (left, 0, width, titleHeight);
@@ -483,7 +517,7 @@ public class TwoColumnLayout implements LayoutManager2
         // set the width for stretch based on BOTH, LEFT and
         // RIGHT positionsing
         // --------------------------------------------------
-        if ((constraints.stretch) && (constraints.position == constraints.BOTH))
+        if ((constraints.stretch) && (constraints.position == TwoColumnConstraints.BOTH))
         {
           width = rightRule - leftRule;
           x     = leftRule;
@@ -503,7 +537,7 @@ public class TwoColumnLayout implements LayoutManager2
         // the width of both columns combined. Also set the x
         // position to left, just to be sure.
         // --------------------------------------------------
-        else if (constraints.position == constraints.BOTH)
+        else if (constraints.position == TwoColumnConstraints.BOTH)
         {
           if (width > (rightRule - leftRule))
           {
@@ -547,7 +581,7 @@ public class TwoColumnLayout implements LayoutManager2
       constraints = (TwoColumnConstraints)components [column].elementAt (i);
 
       if ((constraints          != null)            &&
-          (constraints.position != constraints.BOTH)   )
+          (constraints.position != TwoColumnConstraints.BOTH)   )
       {
         component = constraints.component;
         temp      = (int)component.getMinimumSize ().getWidth ();
@@ -594,7 +628,7 @@ public class TwoColumnLayout implements LayoutManager2
       constraints = (TwoColumnConstraints)components [LEFT].elementAt (i);
 
       if ((constraints          != null)            &&
-          (constraints.position == constraints.BOTH)   )
+          (constraints.position == TwoColumnConstraints.BOTH)   )
       {
         component = constraints.component;
         temp      = (int)component.getMinimumSize ().getWidth ();
@@ -699,21 +733,21 @@ public class TwoColumnLayout implements LayoutManager2
         width     = (int)component.getMinimumSize ().getWidth ();
         height    = (int)component.getMinimumSize ().getHeight ();
 
-        if (constraints.position == constraints.WEST)
+        if (constraints.position == TwoColumnConstraints.WEST)
         {
           if (width > (centerRule - leftRule))
           {
             component.setBounds (0, 0, (centerRule - leftRule), height);
           }
         }
-        else if (constraints.position == constraints.EAST)
+        else if (constraints.position == TwoColumnConstraints.EAST)
         {
           if (width > (rightRule - centerRule))
           {
             component.setBounds (0, 0, (rightRule - centerRule), height);
           }
         }
-        else if (constraints.position == constraints.BOTH)
+        else if (constraints.position == TwoColumnConstraints.BOTH)
         {
           if (width > (rightRule - leftRule))
           {
@@ -744,29 +778,6 @@ public class TwoColumnLayout implements LayoutManager2
   private int margin (Container parent)
   {
     int amount = (int)(((parent.getSize ().getWidth ()) * margin) / 100);
-
-    return (amount);
-  }
-
- /**
-  * Computes the margin value based on the width of both columns and the
-  * margin setting.
-  *
-  * @param     parent  the component which needs to be laid out.
-  */
-  private int reverseMargin (Container parent)
-  {
-    int left   = minimumColumnWidth (LEFT, parent);
-    int right  = minimumColumnWidth (RIGHT, parent);
-    int both   = minimumBothColumnsWidth (parent);
-    int total  = left + right;
-
-    if (both > total)
-    {
-      total = both;
-    }
-
-    int amount = (int)(total / (100 - (2 * margin))) * margin;
 
     return (amount);
   }

@@ -29,7 +29,6 @@ import java.util.*;
 import java.util.zip.*;
 import java.util.jar.*;
 
-import com.izforge.izpack.*;
 
 /**
  *  The standard installer class, using the Kunststoff L&F.

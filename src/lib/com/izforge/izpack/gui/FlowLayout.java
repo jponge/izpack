@@ -26,8 +26,6 @@
 package   com.izforge.izpack.gui;
 
 import    java.awt.*;
-import    java.io.ObjectInputStream;
-import    java.io.IOException;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -65,6 +63,20 @@ import    java.io.IOException;
  * <p>
  * A flow layout lets each component assume its natural (preferred) size.
  *
+ * This class is a bit different from java.awt.FlowLayout.
+ * <blockquote>
+ * java.awt.FlowLayout has a minor problem that was
+ * bugging me when I wrote the UserInputPanel. FlowLayout puts some amount of
+ * space in between each component that it lays out. In addition it adds that
+ * same amount of space to the left and to the right of the entire group.
+ * Therefore items such as the RuleInputfield that are laid out with a
+ * FlowLayout would never line up properly with the other components (it would
+ * appear to be slightly indented). Because there is no way to circumvent this
+ * behavior in FlowLayout (it's hard coded) I copied the source and modified it
+ * so that it does not add the space to the left and to the right. Now my stuff
+ * lines up properly. 
+ * (Elmar Grom)</blockquote>
+ * 
  * @version   1.39, 11/29/02
  * @author    Arthur van Hoff
  * @author    Sami Shaio
@@ -149,8 +161,8 @@ public class FlowLayout implements LayoutManager
      * specify the space between components.
      *
      * @serial
-     * @see getHgap
-     * @see setHgap
+     * @see #getHgap
+     * @see #setHgap
      */
     int hgap;
     /**
@@ -159,8 +171,8 @@ public class FlowLayout implements LayoutManager
      * specify the space between rows.
      *
      * @serial
-     * @see getVgap
-     * @see setVgap
+     * @see #getVgap
+     * @see #setVgap
      */
     int vgap;
 
@@ -262,7 +274,7 @@ public class FlowLayout implements LayoutManager
   *
   * @return     the horizontal gap between components.
   *
-  * @see        #setHgap()
+  * @see        #setHgap(int)
   */
  /*--------------------------------------------------------------------------*/
   public int getHgap ()
@@ -288,7 +300,7 @@ public class FlowLayout implements LayoutManager
   *
   * @return     the vertical gap between components.\
   *
-  * @see        #setVgap()
+  * @see        #setVgap(int)
   */
  /*--------------------------------------------------------------------------*/
   public int getVgap ()
@@ -326,7 +338,6 @@ public class FlowLayout implements LayoutManager
   *
   * @param comp the component to remove
   *
-  * @see       #removeAll()
   */
  /*--------------------------------------------------------------------------*/
   public void removeLayoutComponent (Component comp)
@@ -340,7 +351,7 @@ public class FlowLayout implements LayoutManager
   *
   * @return    the preferred dimensions to lay out the
   *            subcomponents of the specified container.
-  * @see #minimumLayoutSize()
+  * @see #minimumLayoutSize(Container)
   */
  /*--------------------------------------------------------------------------*/
   public Dimension preferredLayoutSize (Container target)
@@ -387,7 +398,7 @@ public class FlowLayout implements LayoutManager
   * @return    the minimum dimensions to lay out the
   *                    subcomponents of the specified container.
   *
-  * @see #preferredLayoutSize()
+  * @see #preferredLayoutSize(Container)
   */
  /*--------------------------------------------------------------------------*/
   public Dimension minimumLayoutSize (Container target)
@@ -485,7 +496,6 @@ public class FlowLayout implements LayoutManager
   *
   * @param target the specified component being laid out.
   *
-  * @see       #doLayout()
   */
  /*--------------------------------------------------------------------------*/
   public void layoutContainer (Container target)

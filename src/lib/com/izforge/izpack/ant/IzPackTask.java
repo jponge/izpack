@@ -24,7 +24,6 @@
 package com.izforge.izpack.ant;
 
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.EnumeratedAttribute;
 

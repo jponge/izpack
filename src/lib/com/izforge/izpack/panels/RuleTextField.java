@@ -27,11 +27,8 @@
 package   com.izforge.izpack.panels;
 
 import    java.awt.*;
-import    java.awt.event.*;
-import    java.util.*;
 
 import    javax.swing.*;
-import    javax.swing.event.*;
 import    javax.swing.text.*;
   
 /*---------------------------------------------------------------------------*/
@@ -40,7 +37,7 @@ import    javax.swing.text.*;
  * <BR><BR>
  * Enter detailed class description here.
  *
- * @see      
+ * @see UserInputPanel     
  *
  * @version  0.0.1 / 10/20/02
  * @author   Elmar Grom

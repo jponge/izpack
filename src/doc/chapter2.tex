@@ -124,6 +124,10 @@ following parse types are available:
   \item \texttt{xml} - use this type if the substitution happens in
         a XML file. Individual variables might be modified to function
         properly within the context of XML files.
+  \item \texttt{shell} - use this type if the substitution happens in
+        a shell script. Because shell scripts use \texttt{\$variable} 
+        themself, an alternative variable marker is used: 
+        \texttt{\%variable} or \texttt{\%\{variable\}}.
 \end{itemize}
 
 % The IzPack elements
@@ -321,129 +325,208 @@ Here's a sample :
 \subsection{The Packs Section \texttt{<packs>}}
 
 This is a crucial section as it is used to specify the files that need
-to be installed. It contains the following XML elements :\\
-\begin{itemize}
+to be installed. The \texttt{<packs>} section consists of several 
+\texttt{<pack>} tags.
 
-  \item \texttt{<pack>} : specifies a pack, takes the following attributes :
+The \texttt{<pack>} takes the following attributes :
   \begin{itemize}
-  
-    \item \texttt{name} : the pack name
-    \item \texttt{required} : takes \texttt{yes} or \texttt{no} and specifies
+    \item \texttt{name}: the pack name
+    \item \texttt{required}: takes \texttt{yes} or \texttt{no} and specifies
     wether the pack is optional or not.
-    \item \texttt{os} : optional attribute that lets you make the pack targeted
+    \item \texttt{os}: optional attribute that lets you make the pack targeted
     to a specific \textsl{operating system}, for instance \texttt{unix},
     \texttt{mac} and so on.
-    
-  \end{itemize}\
-  The following tags are available for a \texttt{<pack>} markup :
-  \begin{itemize}
-  
-    \item \texttt{<description>} : text describing the pack
-    \item \texttt{<file>} : specifies a file to include, takes the following
-    attributes :
-    \begin{itemize}
-    
-      \item \texttt{src} : the file location (relative path) - if this is a
-      directory its content will be added recursively
-      \item \texttt{targetdir} : the destination directory, could be something
-      like \texttt{\$INSTALL\_PATH/subdirX}
-      \item \texttt{os} : can optionally specify a target operating system
-      (\texttt{unix, windows, mac}) - this means that the file will only be
-      installed on its target operating system
-      \item \texttt{override} : if \texttt{true} then if the file is already
-      installed, it will be overwritten. By default it is set to
-      \texttt{false}.
-    
-    \end{itemize}\
-    \item \texttt{<fileset>} : supports the Jakarta Ant powerful set syntax,
-    takes the following parameters :
-    \begin{itemize}
-    
-      \item \texttt{dir} : the base directory for the fileset (relative path)
-      \item \texttt{targetdir} : the destination path, works like for
-      \texttt{<file>}
-      \item \texttt{casesensitive} : optionally lets you specify if the names
-      are case-sensitive or not - takes \texttt{yes} or \texttt{no}
-      \item \texttt{os} : specifies the operating system, works like for
-      \texttt{<file>}
-    
-    \end{itemize}\
-    You specify the files with  \texttt{<include>} and \texttt{<exclude>} tags
-    that take the \texttt{name} parameter to specify the Ant-like pattern :
-    \begin{itemize}    
-      \item \texttt{**} : means any subdirectoy
-      \item \texttt{*} : used as a wildcard.
-    \end{itemize}
-    Here are some examples of Ant patterns :
-    \begin{itemize}
-    
-      \item \texttt{<include name="lib"/>} : will include \texttt{lib} and the
-      subdirectories of \texttt{lib}
-      \item \texttt{<exclude name="**/*.java"/>} : will exclude any file in any
-      directory starting from the base path ending by \texttt{.java}
-      \item \texttt{<include name="lib/*.jar"/>} : will include all the files
-      ending by \texttt{.jar} in \texttt{lib}
-      \item \texttt{<exclude name="lib/**/*FOO*"/>} : will exclude any file in
-      any subdirectory starting from \texttt{lib} whose name contains
-      \texttt{FOO}.
-    
-    \end{itemize}\
-    \item \texttt{<parsable>} : used to specify the files for parsing by the
-    variables substitutor, here are the attributes :
-    \begin{itemize}
-    
-      \item \texttt{targetfile} : the file to parse, could be something like\\
-      \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
-      \item \texttt{type} : specifies the type (same as for the resources) -
-      the default is \texttt{plain}
-      \item \texttt{encoding} : specifies the file encoding
-    
-    \end{itemize}\
-    \item \texttt{<executable>} : a very useful thing if you need to execute
-    something during the installation process. It can also be used to set
-    the executable flag on Unix-like systems. Here are the attributes :
-    \begin{itemize}
-    
-      \item \texttt{targetfile} : the file to run, could be something like\\
-      \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
-      \item \texttt{class} : the class to run for a \Java program
-      \item \texttt{type} : \texttt{bin} or \texttt{jar} (the default is
-      \texttt{bin})
-      \item \texttt{stage} : specifies when to launch : \texttt{postinstall}
-      is just after the installation is done and the default value,
-      \texttt{never} will never launch it (useful to set the +x flag on Unix).
-      \texttt{uninstall} will launch the executable when the application
-      is uninstalled. The executable is executed before any files are deleted.
-      \item \texttt{failure} : specifies what to do when an error occurs :
-      \texttt{abort} will abort the installation process, \texttt{ask} (default)
-      will ask the user what to do and \texttt{warn} will just tell the user
-      that something's wrong
-    
-    \end{itemize}\
-    A \texttt{<args>} tag can also be specified in order to pass
-    arguments to the executable:
-    \begin{itemize}
-    
-      \item \texttt{<arg>} : passes the argument specified in the
-      \texttt{value} attribute
-    
-    \end{itemize}\
-    Finally it is possible to specify the target operating system with the
-    \texttt{<os>} tag :
-    \begin{itemize}
-    
-      \item \texttt{family} : \texttt{unix, windows, mac} to specify the
-      operating system family
-      \item \texttt{name} : the operating system name
-      \item \texttt{version} : the operating system version
-      \item \texttt{arch} : the operating system architecture (for instance the
-      Linux kernel can run on i386, sparc, and so on)
-    
-    \end{itemize}\
-  
-  \end{itemize}\
+    \item \texttt{preselected}: optional attribute that lets you choose whether
+    the pack is by default selected for installation or not. Possible values
+    are \texttt{yes} and \texttt{no}. A pack which is not preselected needs to
+    be explicitly selected by the user during installation to get installed.
+  \end{itemize}
+
+The following sections describe the tags available for a \texttt{<pack>} section.
+
+\subsubsection{\texttt{<description>} - pack description}
+
+The contents of the \texttt{<description>} tag describe the pack contents.
+This description is displayed if the user highlights the pack during 
+installation.
+
+\subsubsection{\label{tag:file}\texttt{<file>} - add files or directories}
+
+The \texttt{<file>} tag specifies a file (a directory is a file too) to 
+include into the pack. It takes the following attributes:
+
+\begin{itemize}
+
+  \item \texttt{src}: the file location (relative path) - if this is a
+  directory its content will be added recursively
+
+  \item \texttt{targetdir}: the destination directory, could be something like
+  \texttt{\$INSTALL\_PATH/subdirX}
+
+  \item \texttt{os}: can optionally specify a target operating system
+  (\texttt{unix, windows, mac}) - this means that the file will only be
+  installed on its target operating system
+
+  \item \texttt{override}: if \texttt{true} then if the file is already
+  installed, it will be overwritten. Alternative values: \texttt{asktrue} and
+  \texttt{askfalse} -- ask the user what to do and supply default value for
+  non-interactive use. Another possible values is \texttt{update}. It means
+  that the new file is only installed if it's modification time is newer than
+  the modification time of the already existing file (note that this is not a
+  reliable mechanism for updates - you cannot detect whether a file was
+  altered after installation this way.) By default it is set to \texttt{true}.
+
+\end{itemize}
+
+\subsubsection{\label{tag:singlefile}\texttt{<singlefile>} - add a single file}
+
+Specifies a single file to include. The difference to \texttt{<file>} is that
+this tag allows the file to be renamed, therefore it has a 
+\texttt{target} attribute instead of \texttt{targetdir}.
+
+\begin{itemize}
+
+  \item \texttt{src}: the file location (relative path)
+
+  \item \texttt{target}: the destination file name, could be something
+  like \texttt{\$INSTALL\_PATH/subdirX/fileY}
+
+  \item \texttt{os}: can optionally specify a target operating system
+  (\texttt{unix, windows, mac}) - this means that the file will only be
+  installed on its target operating system
+
+  \item \texttt{override}: see \texttt{<file>} (\ref{tag:file}) for description
+
+\end{itemize}
+
+\subsubsection{\label{tag:fileset}\texttt{<fileset>}: add a fileset}
+
+The \texttt{<fileset>} tag allows files to be specified using the powerful
+Jakarta Ant set syntax. It takes the following parameters:
+
+\begin{itemize}
+
+  \item \texttt{dir}: the base directory for the fileset (relative path)
+
+  \item \texttt{targetdir}: the destination path, works like for
+  \texttt{<file>}
+
+  \item \texttt{casesensitive}: optionally lets you specify if the names
+  are case-sensitive or not - takes \texttt{yes} or \texttt{no}
+
+  \item \texttt{os}: specifies the operating system, works like for
+  \texttt{<file>}
+
+  \item \texttt{override}: see \texttt{<file>} for description
+
+\end{itemize}
+
+You specify the files with  \texttt{<include>} and \texttt{<exclude>} tags
+that take the \texttt{name} parameter to specify the Ant-like pattern :
+\begin{itemize}    
+  \item \texttt{**} : means any subdirectoy
+  \item \texttt{*} : used as a wildcard.
+\end{itemize}
+Here are some examples of Ant patterns :
+\begin{itemize}
+
+  \item \texttt{<include name="lib"/>} : will include \texttt{lib} and the
+  subdirectories of \texttt{lib}
+
+  \item \texttt{<exclude name="**/*.java"/>} : will exclude any file in any
+  directory starting from the base path ending by \texttt{.java}
+
+  \item \texttt{<include name="lib/*.jar"/>} : will include all the files
+  ending by \texttt{.jar} in \texttt{lib}
+
+  \item \texttt{<exclude name="lib/**/*FOO*"/>} : will exclude any file in
+  any subdirectory starting from \texttt{lib} whose name contains
+  \texttt{FOO}.
+
+\end{itemize}
+
+\subsubsection{\texttt{<parsable>} - parse a file after installation}
+
+Files specified by \texttt{<parsable>} are parsed after installation and may
+have variables substituted.
+
+\begin{itemize}
+
+  \item \texttt{targetfile} : the file to parse, could be something like\\
+  \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
+
+  \item \texttt{type} : specifies the type (same as for the resources) -
+  the default is \texttt{plain}
+
+  \item \texttt{encoding} : specifies the file encoding
+
+  \item \texttt{os}: specifies the operating system, works like for
+  \texttt{<file>}
 
 \end{itemize}\
+
+\subsubsection{\texttt{<executable>} - mark file executable or execute it}
+
+The \texttt{<executable>} tag is a very useful thing if you need to execute
+something during the installation process. It can also be used to set the
+executable flag on Unix-like systems. Here are the attributes :
+
+\begin{itemize}
+
+  \item \texttt{targetfile} : the file to run, could be something like\\
+  \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
+
+  \item \texttt{class} : the class to run for a \Java program
+
+  \item \texttt{type} : \texttt{bin} or \texttt{jar} (the default is
+  \texttt{bin})
+
+  \item \texttt{stage} : specifies when to launch : \texttt{postinstall}
+  is just after the installation is done and the default value,
+  \texttt{never} will never launch it (useful to set the +x flag on Unix).
+  \texttt{uninstall} will launch the executable when the application
+  is uninstalled. The executable is executed before any files are deleted.
+
+  \item \texttt{failure} : specifies what to do when an error occurs :
+  \texttt{abort} will abort the installation process, \texttt{ask} (default)
+  will ask the user what to do and \texttt{warn} will just tell the user
+  that something's wrong
+
+  \item \texttt{os}: specifies the operating system, works like for
+  \texttt{<file>}
+
+  \item \texttt{keep} : specifies whether the file will be kept after
+  execution. The default is to delete the file after is has been executed.
+  This can be changed by specifying \texttt{keep="true"}.
+
+\end{itemize}
+A \texttt{<args>} tag can also be specified in order to pass
+arguments to the executable:
+\begin{itemize}
+
+  \item \texttt{<arg>}: passes the argument specified in the
+  \texttt{value} attribute
+
+\end{itemize}
+  
+\subsubsection{\texttt{<os>} - make a file OS-dependent}
+
+The \texttt{<os>} tag can be used inside the \texttt{<file>},
+\texttt{<fileset>}, \texttt{<singlefile>}, \texttt{<parsable>},
+\texttt{<executable>} tags to restrict it's effect to a specific
+operating system family, architecture or version:
+
+\begin{itemize}
+
+  \item \texttt{family}: \texttt{unix, windows, mac} to specify the
+  operating system family
+  \item \texttt{name}: the operating system name
+  \item \texttt{version}: the operating system version
+  \item \texttt{arch}: the operating system architecture (for instance the
+  Linux kernel can run on i386, sparc, and so on)
+
+\end{itemize}
+
 
 Here's an example installation file :
 \footnotesize
@@ -600,3 +683,53 @@ details see the chapter on 'Advanced Features'.\\
 
 This panel is used to create desktop shortcuts. For details on using the
 ShortcutPanel see the chapter 'Desktop Shortcuts'.
+
+\subsection{UserInputPanel}
+
+This panel allows you to prompt the user for data. What the user is prompted
+for is specified using an XML file which is included as a resource to the
+installer. See chapter \ref{chap:userinput} on page \pageref{chap:userinput}
+for a detailed explanation.
+
+\subsection{CompilePanel}
+
+This panel allows you to compile just installed Java sourcecode. The details for the compilation are specified using the resource \texttt{CompilePanel.Spec.xml}.
+The XML file has the following format:
+\begin{verbatim}
+<compilation>
+  <global>
+    <compiler>
+      <choice value="$JAVA_HOME/bin/javac" />
+      <choice value="jikes" />
+    </compiler>
+    <arguments>
+      <choice value="-O -g:none" />
+      <choice value="-O" />
+      <choice value="-g" />
+      <choice value="" />
+    </arguments>
+  </global>
+  <jobs>
+    <classpath add="$INSTALL_PATH/src/classes/" />
+    <job name="optional name">
+      <directory name="$INSTALL_PATH/src/classes/xyz" />
+    </job>
+    <job name="another job">
+      <packdepency name="some package name" />
+      <classpath sub="$INSTALL_PATH/" />
+      <directory name="$INSTALL_PATH/src/classes/abc" />
+      <file name="$INSTALL_PATH/some/file.java" />
+    </job>
+  </jobs>
+</compilation>
+\end{verbatim}
+
+In theory, jobs can be nested but this has not been tested at all. A change to
+the classpath within a job only affects this job and nested jobs. The classpath
+should be specified before any files or directories.
+
+The user can change the compiler to use and choose from some default
+compilation options before compilation is started. 
+
+\includegraphics[width=\linewidth]{img/compilePanel}
+

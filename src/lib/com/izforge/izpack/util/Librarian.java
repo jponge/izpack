@@ -26,8 +26,6 @@
 package   com.izforge.izpack.util;
 
 import    java.util.*;
-import    java.util.jar.*;
-import    java.lang.*;
 import    java.net.*;
 import    java.security.*;
 import    java.io.*;

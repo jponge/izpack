@@ -276,9 +276,9 @@ public class Shortcut
   * @param     type   The type of link desired. The following values can be set:<br>
   *                   <ul>
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
-  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#PROGRAM_MENU}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
-  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#STARTUP}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
   *                   </ul>
   *
   * @exception IllegalArgumentException if an an invalid type is passed
@@ -293,8 +293,8 @@ public class Shortcut
   *
   * @param     userType  the type of user for the link.
   * 
-  * @see       #com.izforge.izpack.util.os.Shortcut.CURRENT_USER
-  * @see       #com.izforge.izpack.util.os.Shortcut.ALL_USERS
+  * @see       #CURRENT_USER
+  * @see       #ALL_USERS
   */
  /*--------------------------------------------------------------------------*/
   public void setUserType (int type)

@@ -107,8 +107,8 @@ public class Win_Shortcut extends Shortcut
   *            represent the names of the existing program groups. It is
   *            theoretically possible that this list is empty.
   *
-  * @see       APPLICATIONS
-  * @see       START_MENU  
+  * @see       #APPLICATIONS
+  * @see       #START_MENU  
   */
  /*--------------------------------------------------------------------------*/
   public Vector getProgramGroups (int userType)
@@ -214,7 +214,7 @@ public class Win_Shortcut extends Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Signals that this flavor of <code>{@link com.izforge.izpack.util.os.Shortcut</code>
+  * Signals that this flavor of <code>{@link com.izforge.izpack.util.os.Shortcut}</code>
   * supports the creation of shortcuts.
   *
   * @return    always <code>true</code>
@@ -370,9 +370,9 @@ public class Win_Shortcut extends Shortcut
   * @param     type   The type of link desired. The following values can be set:<br>
   *                   <ul>
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
-  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#PROGRAM_MENU}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
-  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#STARTUP}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
   *                   </ul>
   *
   * @exception IllegalArgumentException if an an invalid type is passed
@@ -414,8 +414,8 @@ public class Win_Shortcut extends Shortcut
   *
   * @param     userType  the type of user for the link.
   * 
-  * @see       #com.izforge.izpack.util.os.Shortcut#CURRENT_USER
-  * @see       #com.izforge.izpack.util.os.Shortcut#ALL_USERS
+  * @see       Shortcut#CURRENT_USER
+  * @see       Shortcut#ALL_USERS
   */
  /*--------------------------------------------------------------------------*/
   public void setUserType (int type)

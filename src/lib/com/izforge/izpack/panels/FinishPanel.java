@@ -24,7 +24,6 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.*;
 import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
 
@@ -32,12 +31,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import java.io.*;
-import java.util.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import net.n3.nanoxml.*;
 
 /**
  *  The finish panel class.
@@ -108,8 +103,6 @@ public class FinishPanel extends IzPanel implements ActionListener
     if (idata.installSuccess)
     {
       // We prepare a message for the uninstaller feature
-      String home = "";
-      home = System.getProperty("user.home");
       String path = translatePath("$INSTALL_PATH") + File.separator +
         "Uninstaller";
 
@@ -148,13 +141,12 @@ public class FinishPanel extends IzPanel implements ActionListener
     fc.setCurrentDirectory(new File(idata.getInstallPath()));
     fc.setMultiSelectionEnabled(false);
     fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
-    fc.setDialogType(JFileChooser.SAVE_DIALOG);
-    fc.setCurrentDirectory(new File("."));
+    //fc.setCurrentDirectory(new File("."));
 
     // Shows it
     try
     {
-      if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+      if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
       {
         // We handle the xml data writing
         File file = fc.getSelectedFile();

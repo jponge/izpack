@@ -31,7 +31,6 @@ import    java.awt.*;
 import    java.awt.event.*;
 
 import    javax.swing.*;
-import    javax.swing.border.*;
 
 import    com.izforge.izpack.installer.*;
 import    com.izforge.izpack.util.*;
@@ -108,7 +107,7 @@ public class UserInputPanel extends IzPanel
   // - POS_TYPE
   // - POS_CONSTRAINTS
   // - POS_PACKS
-  
+
   private static final int    POS_DISPLAYED                 = 0;
   private static final int    POS_TYPE                      = 1;
   private static final int    POS_VARIABLE                  = 2;
@@ -182,31 +181,21 @@ public class UserInputPanel extends IzPanel
   private static final String PWD_INPUT                     = "pwd";
   private static final String PWD_SIZE                      = "size";
 
+  private static final String SEARCH_FIELD                  = "search";
+  // internal value for the button used to trigger autodetection
+  private static final String SEARCH_BUTTON_FIELD           = "autodetect";
+  private static final String SEARCH_CHOICE                 = "choice";
+  private static final String SEARCH_FILENAME               = "filename";
+  private static final String SEARCH_RESULT                 = "result";
+  private static final String SEARCH_VALUE                  = "value";
+  private static final String SEARCH_TYPE                   = "type";
+  private static final String SEARCH_FILE                   = "file";
+  private static final String SEARCH_DIRECTORY              = "directory";
+  private static final String SEARCH_PARENTDIR              = "parentdir";
+
   private static final String PACKS                         = "createForPack";
   private static final String NAME                          = "name";
 
-  // ------------------------------------------------------
-  // automatic script section keys
-  // ------------------------------------------------------
-  private static final String AUTO_KEY_USER_INPUT           = "userInput";
-  private static final String AUTO_KEY_ENTRY                = "entry";
-
-  // ------------------------------------------------------
-  // automatic script keys attributes
-  // ------------------------------------------------------
-  private static final String AUTO_ATTRIBUTE_KEY            = "key";
-  private static final String AUTO_ATTRIBUTE_VALUE          = "value";
-
-  /** specifies the percentage of the total panel width to use for the space
-      buffer on the right and left side. */
-  private static final int    SIDE_BUFFER_RATIO             = 5;
-  /** the margin to use to the left of all input fields, except the
-      RuleInputField. The RuleInputField has a natural margin to the left side
-      because the FlowLayout which is used for laying out the internal fields
-      uses the horizontal gap setting also at the very left and right margin.
-      The margin defined here is used with all other fields to compensate for
-      the layout offset between fields that would otherwise occur. */
-  private static final int    LEFT_FIELD_MARGIN             = 5;
 
   // ------------------------------------------------------------------------
   // Variable Declarations
@@ -236,6 +225,8 @@ public class UserInputPanel extends IzPanel
   /** used for temporary storage of references to password groups that
       have already been read in a given read cycle. */
   private Vector              passwordGroupsRead  = new Vector ();
+  /** Used to track search fields. Contains SearchField references. */
+  private Vector              searchFields = new Vector();
 
   /** Holds all user inputs for use in automated installation */
   private Vector              entries         = new Vector ();
@@ -280,10 +271,9 @@ public class UserInputPanel extends IzPanel
     // ----------------------------------------------------
     // get a locale database
     // ----------------------------------------------------
-    ResourceManager resources = new ResourceManager (installData);
     try
     {
-      langpack = new LocaleDatabase (resources.getInputStream (SPEC_FILE_NAME));
+      this.langpack = new LocaleDatabase (ResourceManager.getInstance().getInputStream (SPEC_FILE_NAME));
     }
     catch (Throwable exception)
     {}
@@ -363,6 +353,10 @@ public class UserInputPanel extends IzPanel
         {
           addTitle (field);
         }
+        else if (attribute.equals (SEARCH_FIELD))
+        {
+          addSearch (field);
+        }
       }
     }
   }
@@ -422,73 +416,17 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   public void makeXMLData (XMLElement panelRoot)
   {
-    XMLElement    userInput;
-    XMLElement    dataElement;
+		Map entryMap = new HashMap();
 
-    // ----------------------------------------------------
-    // add the item that combines all entries
-    // ----------------------------------------------------
-    userInput = new XMLElement (AUTO_KEY_USER_INPUT);
-    panelRoot.addChild (userInput);
+		for (int i = 0; i < entries.size (); i++)
+		{
+			TextValuePair pair = (TextValuePair)entries.elementAt(i);
+			entryMap.put( pair.toString(), pair.getValue() );
+		}
 
-    // ----------------------------------------------------
-    // add all entries
-    // ----------------------------------------------------
-    for (int i = 0; i < entries.size (); i++)
-    {
-      dataElement = new XMLElement (AUTO_KEY_ENTRY);
-      dataElement.setAttribute (AUTO_ATTRIBUTE_KEY, (((TextValuePair)entries.elementAt (i)).toString ()));
-      dataElement.setAttribute (AUTO_ATTRIBUTE_VALUE, (((TextValuePair)entries.elementAt (i)).getValue ()));
-      
-      userInput.addChild (dataElement);
-    }
+		new UserInputPanelAutomationHelper(entryMap).makeXMLData(idata, panelRoot);
   }
- /*--------------------------------------------------------------------------*/
- /**
-  * Makes the panel work in automated mode. Default is to do nothing, but any
-  * panel doing something 'effective' during the installation process should
-  * implement this method.
-  *
-  * @param     panelRoot    The XML root element of the panels blackbox tree.
-  */
- /*--------------------------------------------------------------------------*/
-  public void runAutomated (XMLElement panelRoot)
-  {
-    XMLElement    userInput;
-    XMLElement    dataElement;
-    String        variable;
-    String        value;
 
-    // ----------------------------------------------------
-    // get the section containing the user entries
-    // ----------------------------------------------------
-    userInput = panelRoot.getFirstChildNamed (AUTO_KEY_USER_INPUT);
-    
-    if (userInput == null)
-    {
-      return;
-    }
-    
-    Vector userEntries = userInput.getChildrenNamed (AUTO_KEY_ENTRY);
-    
-    if (userEntries == null)
-    {
-      return;
-    }
-  
-    // ----------------------------------------------------
-    // retieve each entrie and substitute the associated
-    // variable
-    // ----------------------------------------------------
-    for (int i = 0; i < userEntries.size (); i++)
-    {
-      dataElement = (XMLElement)userEntries.elementAt (i);
-      variable    = dataElement.getAttribute (AUTO_ATTRIBUTE_KEY);
-      value       = dataElement.getAttribute (AUTO_ATTRIBUTE_VALUE);
-
-      idata.getVariableValueMap ().setVariable (variable, value);
-    }
-  }
  /*--------------------------------------------------------------------------*/
  /**
   * Builds the UI and makes it ready for display
@@ -606,6 +544,14 @@ public class UserInputPanel extends IzPanel
             return (false);
           }
         }
+        else if (fieldType.equals (SEARCH_FIELD))
+        {
+          success = readSearch (field);
+          if (!success)
+          {
+            return (false);
+          }
+        }
       }
     }
 
@@ -717,7 +663,7 @@ public class UserInputPanel extends IzPanel
 
       TwoColumnConstraints constraints = new TwoColumnConstraints ();
       constraints.align     = justify;
-      constraints.position  = constraints.NORTH;
+      constraints.position  = TwoColumnConstraints.NORTH;
 
       add (label, constraints);
     }
@@ -741,7 +687,6 @@ public class UserInputPanel extends IzPanel
     String          set;
     String          separator;
     String          format;
-    String          description   = null;
     String          validator     = null;
     String          message       = null;
     String          processor     = null;
@@ -755,6 +700,14 @@ public class UserInputPanel extends IzPanel
       label     = new JLabel (getText (element));
       layout    = element.getAttribute (RULE_LAYOUT);
       set       = element.getAttribute (SET);
+
+      // retrieve value of variable if not specified
+      // (does not work here because of special format for set attribute)
+      //if (set == null)
+      //{
+      //  set = idata.getVariable (variable);
+      //}
+
       separator = element.getAttribute (RULE_SEPARATOR);
       format    = element.getAttribute (RULE_RESULT_FORMAT);
 
@@ -824,12 +777,12 @@ public class UserInputPanel extends IzPanel
                                 getToolkit ());
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
-    constraints.position              = constraints.WEST;
+    constraints.position              = TwoColumnConstraints.WEST;
 
     uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
-    constraints2.position             = constraints2.EAST;
+    constraints2.position             = TwoColumnConstraints.EAST;
 
     uiElements.add (new Object [] {null, RULE_FIELD, variable, constraints2, field, forPacks, null, null, message});
   }
@@ -867,9 +820,9 @@ public class UserInputPanel extends IzPanel
     boolean success = ruleField.validateContents ();
     if (!success)
     {
-      JOptionPane.showMessageDialog (parent, 
-                                     (String)field [POS_MESSAGE], 
-                                     parent.langpack.getString ("UserInputPanel.error.caption"), 
+      JOptionPane.showMessageDialog (parent,
+                                     (String)field [POS_MESSAGE],
+                                     parent.langpack.getString ("UserInputPanel.error.caption"),
                                      JOptionPane.WARNING_MESSAGE);
       return (false);
     }
@@ -909,7 +862,11 @@ public class UserInputPanel extends IzPanel
       set   = element.getAttribute (SET);
       if (set == null)
       {
-        set = "";
+        set = idata.getVariable (variable);
+        if (set == null)
+        {
+          set = "";
+        }
       }
       try
       {
@@ -943,12 +900,12 @@ public class UserInputPanel extends IzPanel
     field.setCaretPosition (0);
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
-    constraints.position  = constraints.WEST;
+    constraints.position  = TwoColumnConstraints.WEST;
 
     uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
-    constraints2.position  = constraints2.EAST;
+    constraints2.position  = TwoColumnConstraints.EAST;
 
     uiElements.add (new Object [] {null, TEXT_FIELD, variable, constraints2, field, forPacks});
   }
@@ -1065,12 +1022,12 @@ public class UserInputPanel extends IzPanel
     addDescription (element, forPacks);
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
-    constraints.position  = constraints.WEST;
+    constraints.position  = TwoColumnConstraints.WEST;
 
     uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
-    constraints2.position  = constraints2.EAST;
+    constraints2.position  = TwoColumnConstraints.EAST;
 
     uiElements.add (new Object [] {null, COMBO_FIELD, variable, constraints2, field, forPacks});
   }
@@ -1145,7 +1102,7 @@ public class UserInputPanel extends IzPanel
     ButtonGroup           group       = new ButtonGroup ();
 
     TwoColumnConstraints  constraints = new TwoColumnConstraints ();
-    constraints.position              = constraints.BOTH;
+    constraints.position              = TwoColumnConstraints.BOTH;
     constraints.indent                = true;
     constraints.stretch               = true;
 
@@ -1163,6 +1120,7 @@ public class UserInputPanel extends IzPanel
 
     if (element != null)
     {
+      // TODO: label is never added to the UI
       label = new JLabel (getText (element));
 
       Vector choices = element.getChildrenNamed (RADIO_CHOICE);
@@ -1269,7 +1227,7 @@ public class UserInputPanel extends IzPanel
     String        message   = null;
     String        processor = null;
     XMLElement    element   = null;
-    PasswordGroup group     = null; 
+    PasswordGroup group     = null;
     int           size      = 0;
 
     // ----------------------------------------------------
@@ -1295,7 +1253,7 @@ public class UserInputPanel extends IzPanel
       processor = element.getAttribute (CLASS);
     }
 
-    group = new PasswordGroup (validator, 
+    group = new PasswordGroup (validator,
                                processor);
 
     // ----------------------------------------------------
@@ -1337,18 +1295,18 @@ public class UserInputPanel extends IzPanel
         field.setCaretPosition (0);
 
         TwoColumnConstraints constraints = new TwoColumnConstraints ();
-        constraints.position  = constraints.WEST;
+        constraints.position  = TwoColumnConstraints.WEST;
 
         uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
-        constraints2.position  = constraints2.EAST;
+        constraints2.position  = TwoColumnConstraints.EAST;
 
         uiElements.add (new Object [] {null, PWD_FIELD, variable, constraints2, field, forPacks, null, null, message, group});
         group.addField (field);
       }
     }
-    
+
     passwordGroups.add (group);
   }
  /*--------------------------------------------------------------------------*/
@@ -1385,15 +1343,15 @@ public class UserInputPanel extends IzPanel
       return (true);
     }
     passwordGroups.add (group);
-  
+
 
     boolean success = group.validateContents ();
 
     if (!success)
     {
-      JOptionPane.showMessageDialog (parent, 
-                                     message, 
-                                     parent.langpack.getString ("UserInputPanel.error.caption"), 
+      JOptionPane.showMessageDialog (parent,
+                                     message,
+                                     parent.langpack.getString ("UserInputPanel.error.caption"),
                                      JOptionPane.WARNING_MESSAGE);
       return (false);
     }
@@ -1455,7 +1413,7 @@ public class UserInputPanel extends IzPanel
     addDescription (element, forPacks);
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
-    constraints.position  = constraints.BOTH;
+    constraints.position  = TwoColumnConstraints.BOTH;
     constraints.stretch   = true;
     constraints.indent    = true;
 
@@ -1517,6 +1475,207 @@ public class UserInputPanel extends IzPanel
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * Adds a search field to the list of UI elements.<br>
+  * This is a complete example of a valid XML specification
+  * <pre>
+  * <field type="search" variable="testVariable">
+  *   <description text="Description for the search field" id="a key for translated text"/>
+  *   <spec text="label" id="key for the label" filename="the_file_to_search" result="directory" /> <!-- values for result: directory, file -->
+  *     <choice dir="directory1" set="true" /> <!-- default value -->
+  *     <choice dir="dir2" />
+  *   </spec>
+  * </field>
+  * </pre>
+  * @param     spec  a <code>XMLElement</code> containing the specification
+  *                  for the search field
+  */
+ /*--------------------------------------------------------------------------*/
+  private void addSearch (XMLElement spec)
+  {
+    Vector        forPacks    = spec.getChildrenNamed (PACKS);
+    XMLElement    element     = spec.getFirstChildNamed (SPEC);
+    String        variable    = spec.getAttribute (VARIABLE);
+    String        filename    = null;
+    int           search_type = 0;
+    int           result_type = 0;
+    JComboBox     combobox    = new JComboBox ();
+    JLabel        label       = null;
+
+    //System.out.println ("adding search combobox, variable "+variable);
+
+    // allow the user to enter something
+    combobox.setEditable (true);
+
+    // ----------------------------------------------------
+    // extract the specification details
+    // ----------------------------------------------------
+    if (element != null)
+    {
+      label = new JLabel (getText (element));
+
+      // search type is optional (default: file)
+      search_type = SearchField.TYPE_FILE;
+
+      String search_type_str = element.getAttribute (SEARCH_TYPE);
+
+      if (search_type_str != null)
+      {
+        if (search_type_str.equals (SEARCH_FILE))
+        {
+          search_type = SearchField.TYPE_FILE;
+        }
+        else if (search_type_str.equals (SEARCH_DIRECTORY))
+        {
+          search_type = SearchField.TYPE_DIRECTORY;
+        }
+      }
+
+      // result type is mandatory too
+      String result_type_str = element.getAttribute (SEARCH_RESULT);
+
+      if (result_type_str == null)
+      {
+        return;
+      }
+      else if (result_type_str.equals (SEARCH_FILE))
+      {
+        result_type = SearchField.RESULT_FILE;
+      }
+      else if (result_type_str.equals (SEARCH_DIRECTORY))
+      {
+        result_type = SearchField.RESULT_DIRECTORY;
+      }
+      else if (result_type_str.equals (SEARCH_PARENTDIR))
+      {
+        result_type = SearchField.RESULT_PARENTDIR;
+      }
+      else
+      {
+        return;
+      }
+
+      // might be missing - null is okay
+      filename = element.getAttribute (SEARCH_FILENAME);
+
+      Vector choices = element.getChildrenNamed (SEARCH_CHOICE);
+
+      if (choices == null)
+      {
+        return;
+      }
+
+      for (int i = 0; i < choices.size (); i++)
+      {
+        String value = ((XMLElement)choices.elementAt (i)).getAttribute (SEARCH_VALUE);
+
+        combobox.addItem (value);
+
+        String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
+        if (set != null)
+        {
+          if (set.equals (TRUE))
+          {
+            combobox.setSelectedIndex (i);
+          }
+        }
+      }
+    }
+    // ----------------------------------------------------
+    // if there is no specification element, return without
+    // doing anything.
+    // ----------------------------------------------------
+    else
+    {
+      return;
+    }
+
+    // ----------------------------------------------------
+    // get the description and add it to the list of UI
+    // elements if it exists.
+    // ----------------------------------------------------
+    element = spec.getFirstChildNamed (DESCRIPTION);
+    addDescription (element, forPacks);
+
+    TwoColumnConstraints westconstraint1 = new TwoColumnConstraints ();
+    westconstraint1.position  = TwoColumnConstraints.WEST;
+
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, westconstraint1, label, forPacks});
+
+    TwoColumnConstraints eastconstraint1 = new TwoColumnConstraints ();
+    eastconstraint1.position  = TwoColumnConstraints.EAST;
+
+    combobox.setToolTipText (parent.langpack.getString ("UserInputPanel.search.location") + filename);
+
+    uiElements.add (new Object [] {null, SEARCH_FIELD, variable, eastconstraint1, combobox, forPacks});
+
+    JPanel buttonPanel = new JPanel ();
+    buttonPanel.setLayout (new com.izforge.izpack.gui.FlowLayout (com.izforge.izpack.gui.FlowLayout.LEADING));
+
+    JButton autodetectButton = ButtonFactory.createButton (parent.langpack.getString ("UserInputPanel.search.autodetect"), idata.buttonsHColor);
+
+    autodetectButton.setToolTipText (parent.langpack.getString ("UserInputPanel.search.autodetect.tooltip"));
+
+    buttonPanel.add (autodetectButton);
+
+    JButton browseButton = ButtonFactory.createButton (parent.langpack.getString ("UserInputPanel.search.browse"), idata.buttonsHColor);
+
+    buttonPanel.add (browseButton);
+
+    TwoColumnConstraints eastonlyconstraint = new TwoColumnConstraints ();
+    eastonlyconstraint.position  = TwoColumnConstraints.EASTONLY;
+
+    uiElements.add (new Object [] {null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint, buttonPanel, forPacks});
+
+    searchFields.add (new SearchField (filename, parent, combobox, autodetectButton, browseButton, search_type, result_type));
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Reads the content of the search field and substitutes the associated
+  * variable.
+  *
+  * @param     field  the object array that holds the details of the field.
+  *
+  * @return    <code>true</code> if there was no problem reading the data or
+  *            if there was an irrecovarable problem. If there was a problem
+  *            that can be corrected by the operator, an error dialog is
+  *            popped up and <code>false</code> is returned.
+  */
+ /*--------------------------------------------------------------------------*/
+  private boolean readSearch (Object [] field)
+  {
+    String variable = null;
+    String value    = null;
+    JComboBox comboBox = null;
+
+    try
+    {
+      variable  = (String)field [POS_VARIABLE];
+      comboBox  = (JComboBox)field [POS_FIELD];
+      for (int i = 0; i < this.searchFields.size(); ++i)
+      {
+        SearchField sf = (SearchField)this.searchFields.elementAt (i);
+        if (sf.belongsTo (comboBox))
+        {
+          value = sf.getResult ();
+          break;
+        }
+      }
+    }
+    catch (Throwable exception)
+    {
+      return (true);
+    }
+    if ((variable == null) || (value == null))
+    {
+      return (true);
+    }
+
+    idata.getVariableValueMap ().setVariable (variable, value);
+    entries.add (new TextValuePair (variable, value));
+    return (true);
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
   * Adds text to the list of UI elements
   *
   * @param     spec  a <code>XMLElement</code> containing the specification
@@ -1544,7 +1703,7 @@ public class UserInputPanel extends IzPanel
     JPanel panel    = new JPanel ();
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
-    constraints.position  = constraints.BOTH;
+    constraints.position  = TwoColumnConstraints.BOTH;
     constraints.stretch   = true;
 
     uiElements.add (new Object [] {null, SPACE_FIELD, null, constraints, panel, forPacks});
@@ -1580,7 +1739,7 @@ public class UserInputPanel extends IzPanel
     }
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
-    constraints.position  = constraints.BOTH;
+    constraints.position  = TwoColumnConstraints.BOTH;
     constraints.stretch   = true;
 
     uiElements.add (new Object [] {null, DIVIDER_FIELD, null, constraints, panel, forPacks});
@@ -1598,7 +1757,7 @@ public class UserInputPanel extends IzPanel
   {
     String               description;
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
-    constraints.position  = constraints.BOTH;
+    constraints.position  = TwoColumnConstraints.BOTH;
     constraints.stretch   = true;
 
     if (spec != null)
@@ -1974,5 +2133,235 @@ private class TextValuePair
 }
 
 
-}
+/*---------------------------------------------------------------------------*/
+/**
+ * This class encapsulates a lot of search field functionality.
+ *
+ * A search field supports searching directories and files on the target 
+ * system. This is a helper class to manage all data belonging to a
+ * search field.
+ */
+/*---------------------------------------------------------------------------*/
+
+private class SearchField implements ActionListener
+{
+  /** used in constructor - we search for a directory. */
+  public static final int       TYPE_DIRECTORY = 1;
+  /** used in constructor - we search for a file. */
+  public static final int       TYPE_FILE = 2;
+
+  /** used in constructor - result of search is the directory. */
+  public static final int       RESULT_DIRECTORY = 1;
+  /** used in constructor - result of search is the whole file name. */
+  public static final int       RESULT_FILE = 2;
+  /** used in constructor - result of search is the parent directory. */
+  public static final int       RESULT_PARENTDIR = 3;
+
+  private String    filename = null;
+  private JButton   autodetectButton = null;
+  private JButton   browseButton = null;
+  private JComboBox pathComboBox = null;
+  private int       searchType = TYPE_DIRECTORY;
+  private int       resultType = RESULT_DIRECTORY;
+
+  private InstallerFrame  parent = null;
+
+  /*---------------------------------------------------------------------------*/
+  /**
+   * Constructor - initializes the object, adds it as action listener to
+   * the "autodetect" button.
+   *
+   * @param filename    the name of the file to search for (might be null for
+   *                    searching directories)
+   * @param combobox    the <code>JComboBox</code> holding the list of choices;
+   *                    it should be editable and contain only Strings
+   * @param autobutton  the autodetection button for triggering autodetection
+   * @param browsebutton the browse button to look for the file
+   * @param search_type what to search for - TYPE_FILE or TYPE_DIRECTORY
+   * @param result_type what to return as the result - RESULT_FILE or 
+   *                    RESULT_DIRECTORY or RESULT_PARENTDIR
+   */
+  /*---------------------------------------------------------------------------*/
+  public SearchField (String filename, InstallerFrame parent, JComboBox combobox, JButton autobutton, JButton browsebutton, int search_type, int result_type)
+  {
+    this.filename = filename;
+    this.parent = parent;
+    this.autodetectButton = autobutton;
+    this.browseButton = browsebutton;
+    this.pathComboBox = combobox;
+    this.searchType = search_type;
+    this.resultType = result_type;
+
+    this.autodetectButton.addActionListener (this);
+    this.browseButton.addActionListener (this);
+
+    autodetect ();
+  }
+
+  /** Check whether the given combobox belongs to this searchfield. 
+   * This is used when reading the results.
+   */
+  public boolean belongsTo (JComboBox combobox)
+  {
+    return (this.pathComboBox == combobox);
+  }
+
+  /** check whether the given path matches */
+  private boolean pathMatches (String path)
+  {
+    //System.out.println ("checking path " + path);
+
+    File file = null;
+    
+    if ((this.filename == null) && (this.searchType == TYPE_DIRECTORY))
+    {
+      file = new File (path);
+    }
+    else
+    {
+      file = new File (path, this.filename);
+    }
+
+    if (file.exists ())
+    {
+
+      if ((this.searchType == TYPE_DIRECTORY) && (file.isDirectory()))
+        return true;
+      
+      if ((this.searchType == TYPE_FILE) && (file.isFile ()))
+        return true;
+
+    }
+
+    //System.out.println (path + " did not match");
+    return false;
+  }
+
+  /** perform autodetection */
+  public boolean autodetect ()
+  {
+
+    // loop through all items
+    for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
+    {
+      String path = (String)this.pathComboBox.getItemAt (i);
+
+      if (this.pathMatches (path))
+      {
+        this.pathComboBox.setSelectedIndex (i);
+        return true;
+      }
+
+    }
+
+    // if the user entered something else, it's not listed as an item
+    if (this.pathMatches ((String)this.pathComboBox.getSelectedItem()))
+    {
+      return true;
+    }
+
+    return false;
+  }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * This is called if one of the buttons has bee pressed.
+  *
+  * It checks, which button caused the action and acts accordingly.
+  */
+ /*--------------------------------------------------------------------------*/
+  public void actionPerformed (ActionEvent event)
+  {
+    //System.out.println ("autodetection button pressed.");
+
+    if (event.getSource () == this.autodetectButton)
+    {
+      if (! autodetect ())
+        JOptionPane.showMessageDialog (parent,
+                                       parent.langpack.getString ("UserInputPanel.search.autodetect.failed.message"),
+                                       parent.langpack.getString ("UserInputPanel.search.autodetect.failed.caption"),
+                                       JOptionPane.WARNING_MESSAGE);
+    }
+    else if (event.getSource () == this.browseButton)
+    {
+      JFileChooser chooser = new JFileChooser ();
+
+      if (this.searchType == TYPE_DIRECTORY)
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+      int result = chooser.showOpenDialog (this.parent);
+
+      if (result == JFileChooser.APPROVE_OPTION)
+      {
+        File f = chooser.getSelectedFile();
+
+        // use any given directory directly
+        if (f.isDirectory ())
+        {
+          this.pathComboBox.setSelectedItem (f.getAbsolutePath());
+        }
+        else
+        {
+          // the combo box only contains path names
+          this.pathComboBox.setSelectedItem (f.getAbsoluteFile().getParent ());
+        }
+      }
+
+    }
+
+    // we don't care for anything more here - getResult() does the rest
+  }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Return the result of the search according to result type.
+  *
+  * Sometimes, the whole path of the file is wanted, sometimes only the
+  * directory where the file is in, sometimes the parent directory.
+  *
+  * @return null on error
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getResult ()
+  {
+    String item = (String)this.pathComboBox.getSelectedItem ();
+    String path = item;
+
+    {
+      File f = new File (item);
+
+      if (! f.isDirectory ())
+      {
+        path = f.getParent ();
+      }
+    }
+
+    // path now contains the final content of the combo box
+    if (this.resultType == RESULT_DIRECTORY)
+    {
+      return path;
+    }
+    else if (this.resultType == RESULT_FILE)
+    {
+      if (this.filename != null)
+      {
+        return path + File.pathSeparatorChar + this.filename;
+      }
+      else
+      {
+        return path;
+      }
+    }
+    else if (this.resultType == RESULT_PARENTDIR)
+    {
+      File f = new File (path);
+      return f.getParent ();
+    }
+
+    return null;
+  }
+
+} // private class SearchFile
+
+} // public class UserInputPanel
 /*---------------------------------------------------------------------------*/

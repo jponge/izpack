@@ -24,7 +24,6 @@
  */
 package com.izforge.izpack.gui;
 
-import java.io.*;
 import java.util.*;
 
 import javax.swing.*;

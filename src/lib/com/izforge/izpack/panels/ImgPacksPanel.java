@@ -25,7 +25,6 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
 
 import java.awt.*;
@@ -56,9 +55,6 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
 
   /**  The packs label. */
   private JLabel packsLabel;
-
-  /**  The snapshot label. */
-  private JLabel snapLabel;
 
   /**  The space left label. */
   private JLabel spaceLabel;
@@ -247,7 +243,7 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     for (int i = 0; i < size; i++)
       try
       {
-        URL url = super.getResourceManager().getURL("ImgPacksPanel.img." + i);
+        URL url = ResourceManager.getInstance().getURL("ImgPacksPanel.img." + i);
         ImageIcon img = new ImageIcon(url);
         images.add(img);
       }
@@ -277,48 +273,7 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
    */
   public void makeXMLData(XMLElement panelRoot)
   {
-    // Selected packs markup
-    XMLElement sel = new XMLElement("selected");
-
-    // We add each selected pack to sel
-    int size = idata.selectedPacks.size();
-    for (int i = 0; i < size; i++)
-    {
-      XMLElement el = new XMLElement("pack");
-      Pack pack = (Pack) idata.selectedPacks.get(i);
-      Integer integer = new Integer(idata.availablePacks.indexOf(pack));
-      el.setAttribute("index", integer.toString());
-      sel.addChild(el);
-    }
-
-    // Joining
-    panelRoot.addChild(sel);
-  }
-
-
-  /**
-   *  Asks to run in the automated mode.
-   *
-   * @param  panelRoot  The root of the panel data.
-   */
-  public void runAutomated(XMLElement panelRoot)
-  {
-    // We get the selected markup
-    XMLElement sel = panelRoot.getFirstChildNamed("selected");
-
-    // We get the packs markups
-    Vector pm = sel.getChildrenNamed("pack");
-
-    // We select each of them
-    int size = pm.size();
-    idata.selectedPacks.clear();
-    for (int i = 0; i < size; i++)
-    {
-      XMLElement el = (XMLElement) pm.get(i);
-      Integer integer = new Integer(el.getAttribute("index"));
-      int index = integer.intValue();
-      idata.selectedPacks.add(idata.availablePacks.get(index));
-    }
+		new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
   }
 }
 

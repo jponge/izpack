@@ -26,19 +26,15 @@ package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.gui.*;
+import com.izforge.izpack.util.*;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
 
 /**
  *  The uninstaller frame class.
@@ -311,29 +307,32 @@ public class UninstallerFrame extends JFrame
 
 
   /**
-   *  The destroyer handler.
+   * The destroyer handler.
    *
-   * @author     julien
+   * This class also implements the InstallListener because the FileExecutor needs it.
+   * TODO: get rid of the InstallListener - implement generic Listener
+   * 
+   * @author    julien, Tino Schwarze
    * @created    November 1, 2002
    */
-  class DestroyerHandler implements DestroyerListener
+  class DestroyerHandler implements com.izforge.izpack.util.AbstractUIProgressHandler
   {
     /**
      *  The destroyer starts.
      *
-     * @param  min  The minimum value of the progress.
-     * @param  max  The maximum value of the progress.
+     * @param name The name of the overall action. Not used here. 
+     * @param max  The maximum value of the progress.
      */
-    public void destroyerStart(int min, int max)
+    public void startAction (String name, int max)
     {
-      progressBar.setMinimum(min);
+      progressBar.setMinimum(0);
       progressBar.setMaximum(max);
       blockGUI();
     }
 
 
     /**  The destroyer stops.  */
-    public void destroyerStop()
+    public void stopAction ()
     {
       progressBar.setString(langpack.getString("InstallPanel.finished"));
       targetDestroyCheckbox.setEnabled(false);
@@ -348,26 +347,105 @@ public class UninstallerFrame extends JFrame
      * @param  pos      The actual position.
      * @param  message  The message.
      */
-    public void destroyerProgress(int pos, String message)
+    public void progress(int pos, String message)
     {
       progressBar.setValue(pos);
       progressBar.setString(message);
     }
 
-
+    public void nextStep (String step_name, int step_no, int no_of_substeps)
+    {
+    }
+    
+    /**
+     *  Output a notification.
+     * 
+     * Does nothing here.
+     * 
+     * @param text
+     */
+    public void emitNotification (String text)
+    {
+    }
+  
+    /**
+     *  Output a warning.
+     * 
+     * @param text
+     */
+    public boolean emitWarning (String title, String text)
+    {
+      return (JOptionPane.showConfirmDialog(null, text, title, 
+        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION);
+    }
+  
     /**
      *  The destroyer encountered an error.
      *
      * @param  error  The error message.
      */
-    public void destroyerError(String error)
+    public boolean emitError(String title, String error)
     {
       progressBar.setString(error);
-      JOptionPane.showMessageDialog(null, error.toString(),
-        langpack.getString("installer.error"),
-        JOptionPane.ERROR_MESSAGE);
+      return (JOptionPane.showConfirmDialog(null, error, title, 
+        JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.OK_OPTION);
     }
+    
+    /**
+   * Ask the user a question.
+   * 
+   * @param title Message title.
+   * @param question The question.
+   * @param choices The set of choices to present.
+   * 
+   * @return The user's choice.
+   * 
+   * @see AbstractUIHandler#askQuestion(String, String, int)
+   */
+  public int askQuestion (String title, String question, int choices)
+  {
+    return askQuestion (title, question, choices, -1);
   }
+  
+  /**
+   * Ask the user a question.
+   * 
+   * @param title Message title.
+   * @param question The question.
+   * @param choices The set of choices to present.
+   * @param default_choice The default choice. (-1 = no default choice)
+   * 
+   * @return The user's choice.
+   * @see AbstractUIHandler#askQuestion(String, String, int, int)
+   */
+  public int askQuestion (String title, String question, int choices, int default_choice)
+  {
+    int jo_choices = 0;
+    
+    if (choices == AbstractUIHandler.CHOICES_YES_NO)
+      jo_choices = JOptionPane.YES_NO_OPTION; 
+    else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
+      jo_choices = JOptionPane.YES_NO_CANCEL_OPTION;
+    
+    int user_choice = JOptionPane.showConfirmDialog (
+        null, 
+        (Object)question,
+        title,
+        jo_choices, JOptionPane.QUESTION_MESSAGE);
+    
+    if (user_choice == JOptionPane.CANCEL_OPTION)
+      return AbstractUIHandler.ANSWER_CANCEL;
+   
+    if (user_choice == JOptionPane.YES_OPTION)
+      return AbstractUIHandler.ANSWER_YES;
+       
+    if (user_choice == JOptionPane.NO_OPTION)
+      return AbstractUIHandler.ANSWER_NO;
+       
+    return default_choice;
+  }
+
+}
 
 
   /**

@@ -73,6 +73,9 @@ public class ExecutableFile implements Serializable
   /**  List of operating systems to run on */
   public List osList = null;
 
+  /**  Delete file after executing? 
+       Default is false for backward compatibility. */
+  public boolean keepFile;
 
   /**  Constructs a new uninitialized instance.  */
   public ExecutableFile()
@@ -84,6 +87,7 @@ public class ExecutableFile implements Serializable
     onFailure = ASK;
     osList = new ArrayList();
     argList = new ArrayList();
+    keepFile = false;
   }
 
 
@@ -96,12 +100,14 @@ public class ExecutableFile implements Serializable
    * @param  osList          list of operating systems to run on
    */
   public ExecutableFile(String path, int executionStage,
-                        int onFailure, java.util.ArrayList osList)
+                        int onFailure, java.util.List osList,
+                        boolean keepFile)
   {
     this.path = path;
     this.executionStage = executionStage;
     this.onFailure = onFailure;
     this.osList = osList;
+    this.keepFile = keepFile;
   }
 
 
@@ -110,8 +116,9 @@ public class ExecutableFile implements Serializable
                         String mainClass,
                         int executionStage,
                         int onFailure,
-                        java.util.ArrayList argList,
-                        java.util.ArrayList osList)
+                        java.util.List argList,
+                        java.util.List osList,
+                        boolean keepFile)
   {
     this.path = path;
     this.mainClass = mainClass;
@@ -120,43 +127,46 @@ public class ExecutableFile implements Serializable
     this.onFailure = onFailure;
     this.argList = argList;
     this.osList = osList;
+    this.keepFile = keepFile;
   }
 
-	public String toString()
-	{
-		StringBuffer retval = new StringBuffer();
-	    retval.append("path = "+path);
-	    retval.append("\n");
-	    retval.append("mainClass = "+mainClass);
-	    retval.append("\n");
-	    retval.append("type = "+type);
-	    retval.append("\n");
-	    retval.append("executionStage = "+executionStage);
-	    retval.append("\n");
-	    retval.append("onFailure = "+onFailure);
-	    retval.append("\n");
-	    retval.append("argList: "+argList);
-	    retval.append("\n");
-	    if (argList != null)
-	    {
-	    	for (int i = 0; i < argList.size(); i++)
-			{
-			    retval.append("\targ: "+argList.get(i));
-			    retval.append("\n");
-			}
-	    }
-	    retval.append("\n");
-	    retval.append("osList = "+osList);
-	    retval.append("\n");
-	    if (osList != null)
-	    {
-	    	for (int i = 0; i < osList.size(); i++)
-			{
-			    retval.append("\tos: "+osList.get(i));
-			    retval.append("\n");
-			}
-	    }
-		return retval.toString();
-	}
+  public String toString()
+  {
+    StringBuffer retval = new StringBuffer();
+    retval.append("path = "+path);
+    retval.append("\n");
+    retval.append("mainClass = "+mainClass);
+    retval.append("\n");
+    retval.append("type = "+type);
+    retval.append("\n");
+    retval.append("executionStage = "+executionStage);
+    retval.append("\n");
+    retval.append("onFailure = "+onFailure);
+    retval.append("\n");
+    retval.append("argList: "+argList);
+    retval.append("\n");
+    if (argList != null)
+    {
+      for (int i = 0; i < argList.size(); i++)
+      {
+        retval.append("\targ: "+argList.get(i));
+        retval.append("\n");
+      }
+    }
+    retval.append("\n");
+    retval.append("osList = "+osList);
+    retval.append("\n");
+    if (osList != null)
+    {
+      for (int i = 0; i < osList.size(); i++)
+      {
+        retval.append("\tos: "+osList.get(i));
+        retval.append("\n");
+      }
+    }
+    retval.append("keepFile = "+keepFile);
+    retval.append("\n");
+    return retval.toString();
+  }
 }
 

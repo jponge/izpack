@@ -24,7 +24,6 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.*;
 import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
 
@@ -32,11 +31,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import java.io.*;
-import java.util.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.filechooser.*;
 
 import net.n3.nanoxml.*;
 
@@ -280,23 +276,7 @@ public class TargetPanel extends IzPanel implements ActionListener
    */
   public void makeXMLData(XMLElement panelRoot)
   {
-    // Installation path markup
-    XMLElement ipath = new XMLElement("installpath");
-    ipath.setContent(idata.getInstallPath());
-    panelRoot.addChild(ipath);
-  }
-
-
-  /**
-   *  Asks to run in the automated mode.
-   *
-   * @param  panelRoot  The XML tree to read the data from.
-   */
-  public void runAutomated(XMLElement panelRoot)
-  {
-    // We set the installation path
-    XMLElement ipath = panelRoot.getFirstChildNamed("installpath");
-    idata.setInstallPath(ipath.getContent());
+    new TargetPanelAutomationHelper().makeXMLData(idata, panelRoot);
   }
 }
 

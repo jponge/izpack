@@ -26,8 +26,6 @@ package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.gui.*;
 
-import javax.swing.*;
-import javax.swing.plaf.*;
 import javax.swing.plaf.metal.*;
 
 /**

@@ -33,6 +33,7 @@ import javax.swing.ImageIcon;
 
 /**
  *  With this ResourceManager you are able to get resources from the jar file.
+ *
  *  All resources are loaded language dependent as it's done in
  *  java.util.ResourceBundle. To set a language dependent resource just append
  *  '_' and the locale to the end of the Resourcename<br>
@@ -42,6 +43,9 @@ import javax.swing.ImageIcon;
  *  <li> InfoPanel.info_deu - for german value</li>
  *  <li> InfoPanel.info_eng - for english value</li> <br>
  *
+ * This class is almost a singleton. It is created once using
+ * <code>create</code> by the installer and later, the instance is retrieved
+ * using <code>getInstance</code>.
  *
  * @author     Marcus Stursberg
  * @created    October 27, 2002
@@ -51,7 +55,7 @@ public class ResourceManager
 
   /**
    *  Contains the current language of the installer The locale is taken from
-   *  InstallData#installData#getAttribute("lanpack") If there is no language
+   *  InstallData#installData#getAttribute("langpack") If there is no language
    *  set, the language is english.
    */
   private String locale = "";
@@ -60,20 +64,60 @@ public class ResourceManager
   private final String resourceBasePath = "/res/";
 
   /**  Contains the given InstallData */
-  private InstallData installData;
+  private AutomatedInstallData installData;
+
+  /**  The instance of this class. */
+  private static ResourceManager instance = null;
 
 
   /**
-   *  Crates a new ResourceManager
+   *  Constructor. Protected because this is a singleton.
    *
    * @param  data  - the current installData
    */
-  public ResourceManager(InstallData data)
+  protected ResourceManager(AutomatedInstallData data)
   {
     this.installData = data;
-    this.locale = installData.xmlData.getAttribute("langpack", "eng");
+    if (data.localeISO3 != null)
+    {
+      this.locale = data.localeISO3;
+    }
+    else
+    {
+      // try to figure out ourself
+      this.locale = installData.xmlData.getAttribute("langpack", "eng");
+    }
   }
 
+  /**
+   * Create the resource manager.
+   *
+   * This method should be called only once. If it is called a second
+   * time, the already existing instance is returned. The resource manager
+   * should be called <b>after</b> the language has been set in
+   * {@link AutomatedInstallData#localeISO3}
+   *
+   * @param data the installation information
+   * @return the created instance
+   */
+  public static ResourceManager create (AutomatedInstallData data)
+  {
+    if (ResourceManager.instance == null)
+      ResourceManager.instance = new ResourceManager (data);
+
+    return ResourceManager.instance;
+  }
+
+  /**
+   * Return the resource manager.
+   *
+   * @return the resource manager instance, null if no instance has been
+   *         created
+   */
+  public static ResourceManager getInstance ()
+  {
+    return ResourceManager.instance;
+  }
 
   /**
    *  This method is used to get the language dependent path of the given
@@ -89,14 +133,14 @@ public class ResourceManager
   private String getLanguageResourceString(String resource) throws ResourceNotFoundException
   {
     InputStream in;
-    String resourcePath = resourceBasePath + resource + "_" + locale;
+    String resourcePath = this.resourceBasePath + resource + "_" + this.locale;
     in = this.getClass().getResourceAsStream(resourcePath);
     if (in != null)
       return resourcePath;
     else
     {
-      // if there's no language dependen resource found
-      resourcePath = resourceBasePath + resource;
+      // if there's no language dependent resource found
+      resourcePath = this.resourceBasePath + resource;
       in = this.getClass().getResourceAsStream(resourcePath);
       if (in != null)
         return resourcePath;
@@ -123,7 +167,9 @@ public class ResourceManager
    */
   public InputStream getInputStream(String resource) throws ResourceNotFoundException
   {
-    return this.getClass().getResourceAsStream(this.getLanguageResourceString(resource));
+    String resourcepath = this.getLanguageResourceString(resource);
+    //System.out.println ("reading resource "+resourcepath);
+    return this.getClass().getResourceAsStream(resourcepath);
   }
 
 
@@ -204,7 +250,7 @@ public class ResourceManager
 
   /**
    *  Sets the locale for the resourcefiles. The locale is taken from
-   *  InstallData#installData#getAttribute("lanpack") If there is no language
+   *  InstallData#installData#getAttribute("langpack") If there is no language
    *  set, the default language is english.
    *
    * @param  locale  of the resourcefile
@@ -217,7 +263,7 @@ public class ResourceManager
 
   /**
    *  Returns the locale for the resourcefiles. The locale is taken from
-   *  InstallData#installData#getAttribute("lanpack") If there is no language
+   *  InstallData#installData#getAttribute("langpack") If there is no language
    *  set, the default language is english.
    *
    * @return    the current language
@@ -228,30 +274,3 @@ public class ResourceManager
   }
 }
 
-/**
- *  Describes that a resource can not be found
- *
- * @author     Marcus Stursberg
- * @created    October 27, 2002
- */
-class ResourceNotFoundException extends java.io.IOException
-{
-
-
-  /**  creates a new ResourceNotFoundException */
-  public ResourceNotFoundException()
-  {
-    super();
-  }
-
-
-  /**
-   *  creates a new ResourceNotFoundException
-   *
-   * @param  s  description of the exception
-   */
-  public ResourceNotFoundException(String s)
-  {
-    super(s);
-  }
-}

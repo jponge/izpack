@@ -24,12 +24,11 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
-
 import javax.swing.*;
 
 import net.n3.nanoxml.*;
+
+import com.izforge.izpack.util.AbstractUIHandler;
 
 /**
  *  Defines the base class for the IzPack panels. Any panel should be a subclass
@@ -39,7 +38,7 @@ import net.n3.nanoxml.*;
  * @author     Julien Ponge
  * @created    October 27, 2002
  */
-public class IzPanel extends JPanel
+public class IzPanel extends JPanel implements AbstractUIHandler
 {
   /**
    *  The installer internal data (actually a melting-pot class with all-public
@@ -66,7 +65,7 @@ public class IzPanel extends JPanel
 
     this.idata = idata;
     this.parent = parent;
-    this.resourceManager = new ResourceManager(this.idata);
+    this.resourceManager = ResourceManager.getInstance ();
   }
 
 
@@ -109,31 +108,90 @@ public class IzPanel extends JPanel
 
 
   /**
-   *  Makes the panel work in automated mode. Default is to do nothing, but any
-   *  panel doing something 'effective' during the installation process should
-   *  implement this method.
-   *
-   * @param  panelRoot  The XML root element of the panels blackbox tree.
+   * Ask the user a question.
+   * 
+   * @param title Message title.
+   * @param question The question.
+   * @param choices The set of choices to present.
+   * 
+   * @return The user's choice.
+   * 
+   * @see AbstractUIHandler#askQuestion(String, String, int)
    */
-  public void runAutomated(XMLElement panelRoot) { }
-
-
-  /**
-   *  Called when the installer works in non-GUI mode. All the panel job must be
-   *  done from here.
-   */
-  public void runNoGUI() { }
-
-
-  /**
-   *  Returns the current ResourceManager. with this ResourceManager you can
-   *  access IzPack resources easily
-   *
-   * @return    Value of property resourceManager.
-   */
-  public ResourceManager getResourceManager()
+  public int askQuestion (String title, String question, int choices)
   {
-    return resourceManager;
+    return askQuestion (title, question, choices, -1);
   }
-}
+  
+  /**
+   * Ask the user a question.
+   * 
+   * @param title Message title.
+   * @param question The question.
+   * @param choices The set of choices to present.
+   * @param default_choice The default choice. (-1 = no default choice)
+   * 
+   * @return The user's choice.
+   * @see AbstractUIHandler#askQuestion(String, String, int, int)
+   */
+  public int askQuestion (String title, String question, int choices, int default_choice)
+  {
+    int jo_choices = 0;
+    
+    if (choices == AbstractUIHandler.CHOICES_YES_NO)
+      jo_choices = JOptionPane.YES_NO_OPTION; 
+    else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
+      jo_choices = JOptionPane.YES_NO_CANCEL_OPTION;
+    
+    int user_choice = JOptionPane.showConfirmDialog (
+        this, 
+        (Object)question,
+        title,
+        jo_choices, JOptionPane.QUESTION_MESSAGE);
+    
+    if (user_choice == JOptionPane.CANCEL_OPTION)
+      return AbstractUIHandler.ANSWER_CANCEL;
+   
+    if (user_choice == JOptionPane.YES_OPTION)
+      return AbstractUIHandler.ANSWER_YES;
+       
+    if (user_choice == JOptionPane.NO_OPTION)
+      return AbstractUIHandler.ANSWER_NO;
+       
+    return default_choice;
+  }
 
+  /**
+   * Notify the user about something.
+   * 
+   * @param message The notification.
+   */
+  public void emitNotification (String message)
+  {
+    // ignore it
+  }
+  
+  /**
+   * Warn the user about something.
+   * 
+   * @param message The warning message.
+   */
+  public boolean emitWarning (String title, String message)
+  {
+    return (JOptionPane.showConfirmDialog(this, message, title, 
+      JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
+      
+  }
+  
+  /**
+   * Notify the user of some error.
+   * 
+   * @param message The error message.
+   */
+  public boolean emitError (String title, String message)
+  {
+    return (JOptionPane.showConfirmDialog(this, message, title, 
+      JOptionPane.ERROR_MESSAGE, JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
+  }
+  
+}

@@ -27,17 +27,13 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
 
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
 
 import java.util.*;
 
 import javax.swing.*;
-import javax.swing.event.*;
 
 /**
  * The Hello panel class.

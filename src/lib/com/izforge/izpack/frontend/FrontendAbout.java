@@ -26,11 +26,6 @@ package com.izforge.izpack.frontend;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.gui.*;
-import com.izforge.izpack.compiler.*;
-
-import java.io.*;
-import java.net.*;
-import java.util.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -126,43 +121,6 @@ public class FrontendAbout extends JDialog implements ActionListener
     gbConstraints.anchor = GridBagConstraints.SOUTH;
     layout.addLayoutComponent(okButton, gbConstraints);
     contentPane.add(okButton);
-  }
-
-
-  /**
-   *  Gets the license text.
-   *
-   * @return    The license text.
-   */
-  private String getLicenceText()
-  {
-    StringBuffer buffer = new StringBuffer();
-
-    // We read the file
-    try
-    {
-      FileInputStream in = new FileInputStream(Frontend.IZPACK_HOME + "legal" +
-        File.separator + "IzPack-Licence.txt");
-      BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-      int c = 0;
-      while (c != -1)
-      {
-        c = reader.read();
-        buffer.append((char) c);
-      }
-
-      in.close();
-    }
-    catch (Exception err)
-    {
-      err.printStackTrace();
-      JOptionPane.showMessageDialog(this, err.toString(),
-        langpack.getString("frontend.error"),
-        JOptionPane.ERROR_MESSAGE);
-    }
-
-    // We return it
-    return buffer.toString();
   }
 
 
