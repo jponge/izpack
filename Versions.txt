@@ -8,6 +8,7 @@
 - ImgPacksPanel has been reworked to offer some features that only PacksPanel
 had (Volker Friedritz).
 - Panels can be from any package (Chad McHenry)
+- Uninstaller not included, if it is not to be written anyway (Chad McHenry).
 
   > 3.5.3 (build 2004.xx.yy)
 
