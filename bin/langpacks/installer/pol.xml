@@ -16,9 +16,9 @@
     <str id="installer.yes" txt="Tak"/>
     <str id="installer.no" txt="Nie"/>
     <str id="installer.cancel" txt="Anuluj"/>
-     <str id="installer.error" txt="B³±d"/>
+    <str id="installer.error" txt="B³±d"/>
          
-     <!-- Uninstaller specific strings -->
+    <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Odinstalowanie aplikacji!"/>
     <str id="uninstaller.destroytarget" txt="Bezwzglêdnie usuñ"/>
     <str id="uninstaller.uninstall" txt="Odinstaluj"/>
@@ -31,7 +31,7 @@
 
     <str id="LicencePanel.info" txt="Proszê uwa¿nie przeczytaæ poni¿sza licencjê:"/>
     <str id="LicencePanel.agree" txt="Czy akceptujesz warunki licencji?"/>
-    <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>
+    <str id="LicencePanel.notagree" txt="Nie zgadzam siê na warunki licencji."/>
     <str id="LicencePanel.yes" txt="Akceptujê"/>
     <str id="LicencePanel.no" txt="Nie akceptujê"/>
 
@@ -40,14 +40,15 @@
     <str id="TargetPanel.info" txt="Wybierz katalog instalacyjny:"/>
     <str id="TargetPanel.browse" txt="Przegl±daj..."/>
     <str id="TargetPanel.warn"
-        txt="Katalog ju¿ istnieje! Czy na pewno instalowaæ? Instalator mo¿e nadpisaæ istniej±ce pliki!"/>
+         txt="Katalog ju¿ istnieje! Czy na pewno instalowaæ? Instalator mo¿e nadpisaæ istniej±ce pliki!"/>
     <str id="TargetPanel.empty_target"
-        txt="Nie podale¶ katalogu instalacyjnego? Czy ten jest prawid³owy?"/>
-
+         txt="Nie podale¶ katalogu instalacyjnego? Czy ten jest prawid³owy?"/>
+		<str id="TargetPanel.createdir" txt="Katalog docelowy zostanie utworzony:" />
+    
     <str id="PacksPanel.info" txt="Wybierz pakiety programu do instalacji:"/>
     <str id="PacksPanel.tip" txt="Uwaga: pakiety oznaczone szarym kolorem s± niezbêdne."/>
     <str id="PacksPanel.space" txt="Ca³kowite wymagane miejsce: "/>
-    <str id="PacksPanel.description" txt="Description"/>
+    <str id="PacksPanel.description" txt="Opis"/>
 
     <str id="InstallPanel.info" txt="Naci¶nij 'Instaluj', aby rozpocz±æ instalacjê"/>
     <str id="InstallPanel.install" txt="Instaluj"/>
@@ -60,7 +61,7 @@
     <str id="FinishPanel.uninst.info" txt="Program odinstalowuj±cy zosta³ utworzony w:"/>
     <str id="FinishPanel.auto" txt="Generuj skrypt automatycznej instalacji"/>
     <str id="FinishPanel.auto.tip"
-        txt="U¿yj tego skryptu, aby powtorzyæ instalacjê na innych komputerach."/>
+         txt="U¿yj tego skryptu, aby powtorzyæ instalacjê na innych komputerach."/>
 
     <str id="ImgPacksPanel.packs" txt="Dostêpne s± nastêpuj±ce pakiety:"/>
     <str id="ImgPacksPanel.snap" txt="Opis pakietu:"/>
@@ -95,7 +96,7 @@
     <str id="ShortcutPanel.location.startMenu" txt="Menu Start"/>
     <str id="ShortcutPanel.location.startup" txt="Grupa Autostart"/>
 
-    <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+    <str id="UserInputPanel.error.caption"        txt="Problem z wpisanymi danymi"/>
 
     <!-- Add your own panels specific strings here if you need -->
 
