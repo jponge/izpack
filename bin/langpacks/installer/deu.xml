@@ -37,6 +37,10 @@
          txt="Das Verzeichnis existiert bereits! Sind Sie sicher, dass Sie in diesem Verzeichnis installieren wollen?"/>
     <str id="TargetPanel.empty_target"
          txt="Sie haben ein namenloses Ziel eingegeben! Wollen Sie fortfahren?"/>
+    <str id="TargetPanel.nodir"
+         txt="Sie haben ein Ziel eingegeben, welches kein Verzeichnis ist! Bitte wählen Sie ein Verzeichnis aus!"/>
+    <str id="TargetPanel.notwritable"
+         txt="Sie haben ein Ziel eingegeben, welches nicht beschreibbar ist! Bitte wählen Sie ein anderes Verzeichnis aus!"/>
     <str id="TargetPanel.createdir"
          txt="Das folgende Verzeichnis wird erstellt:" />         
          

@@ -44,6 +44,10 @@
     <str id="TargetPanel.empty_target"
          txt="You have not specified a target location! Is this correct?"/>
 		<str id="TargetPanel.createdir" txt="The target directory will be created :" />
+    <str id="TargetPanel.nodir" 
+         txt="This file is not a directory! Please choose a directory!"/>
+    <str id="TargetPanel.notwritable" 
+         txt="This directory can not be written! Please choose another directory!"/>
     
     <str id="PacksPanel.info" txt="Select the packs you want to install :"/>
     <str id="PacksPanel.tip" txt="Note: greyed packs are required."/>
