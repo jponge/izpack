@@ -81,6 +81,9 @@
     30.04.2003: (by Jonathan Halliday)
         Change to panel compilation target, for panel automation
         (silent install) support.
+        
+    05.07.2003: (by Julien Ponge)
+        Added a target to fix the files encoding and cr/lf (fix.crlf).
 
   Mini-HowTo:
 
@@ -569,6 +572,15 @@
             basedir="${dist.dir}"
             izPackDir="${dist.dir}/"/>
 
+  </target>
+  
+  <!--
+    Fixes CR/LF by applying the Unix convention (\n for endlines).
+    It also fixes the encoding problems by moving it to UTF-8.
+  -->
+  <target name="fix.crlf">
+    <fixcrlf srcDir="${src.dir}" eol="lf" eof="remove" encoding="UTF-8"
+             includes="**/*" />
   </target>
 
   <!-- Makes everything, from compilation to generating an installer. -->

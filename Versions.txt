@@ -1,5 +1,44 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.1.0 (build 2003.xx.xx)
+
+- Added a new target to the Ant build system in order to fix the files CR/LF and
+  encodings.
+- Includes the following enhancements from Jonathan Halliday and Tino Schwarze.
+- Added overall progress bar to InstallPanel
+- Added SearchField to the UserInputPanel which allows to search for
+  files or directories at installation time
+- Added CompilePanel which allows Java classes to be compiled after
+  installation
+- Add infrastructure for automated installation - after installation,
+  the FinishPanel allows the user to save an XML file which can later be
+  used for automated installation (simply pass it to the installer as an
+  argument, for example:
+    java -jar my_super_program.jar super_program_autoinstall.xml
+  )
+- (internal) add infrastructure for GUI abstraction
+- Improved documentation:
+  o build better PDF using pdflatex (with hyperlinks and bookmarks)
+  o reorganize documentation for the <packs> section
+- Add <singlefile> tag which is useful if a file's name after
+  installation is different from the source file name
+- Add support for os attribute and <os> tag to all pack entries
+  (hopefully, the DTD is correct)
+- Allow files to be kept after execution
+- Allow packs to be preselected for installation or not
+- Allow packs to be OS dependent
+- Provide finer control when overwriting files:
+  o ask for overwriting, default yes
+  o ask for overwriting, default no
+  o update (only considers mtime - no real update)
+- Allow absolute paths in source files (might already be in 3.0.9)
+- Finer error handling - report missing attributes
+- (internal) TwoColumnLayout now supports WESTONLY and EASTONLY
+- (internal) made the ResourceManager a singleton
+- Add new kind of script parsing: shell - used %{variable} syntax to
+  avoid clashes within shell scripts
+
+
   > 3.0.9 (build 2003.06.29)
 
 - New Romanian language pack (Dani Orza).
