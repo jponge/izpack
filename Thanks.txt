@@ -84,5 +84,6 @@ IzPack for your projects ;-)
 - Mohammed Sourouri : for the Norwegian translation.
 - Xi Ping Wang : for the Chinese translation.
 - Filip Brcic : for the Serbian translation.
+- Marc Eppelmann : for the Unix shortcuts support.
 
 # vim: fileformat=dos

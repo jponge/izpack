@@ -130,7 +130,7 @@ public class TargetFactory
   {
     "Win_",
     "Mac_",
-    "UNIX_",
+    "Unix_",
     ""
   };
 
@@ -658,5 +658,76 @@ public class TargetFactory
 
     return path;
   }
+  
+  /**
+   * Gets an Prefix Alias for the current Platform.
+   * "Win_" on Windows Systems
+   * "Win_NT_" on WinNT4, 2000, XP
+   * Mac on Mac Mac_X on macosx and
+   * Unix_
+   * @return
+   */
+
+  public static String getCurrentOSPrefix()
+  {
+    String OSName      = System.getProperty ("os.name").toLowerCase (); 
+    String OSArch      = System.getProperty ("os.arch").toLowerCase ();     
+    int OS             = 0; 
+    int OSFlavor       = 0;
+    int OSarchitecture = 0;
+    // ----------------------------------------------------
+    // test for Windows
+    // ----------------------------------------------------
+    if (OSName.indexOf ("windows") > -1)
+    {
+      OS            = WINDOWS;
+      OSFlavor      = STANDARD;
+      OSarchitecture  = X86;
+
+      if (OSName.indexOf ("nt") > -1)
+      {
+        OSFlavor = NT;
+      }
+      else if (OSName.indexOf ("2000") > -1)
+      {
+        OSFlavor = NT;
+      }
+      else if (OSName.indexOf ("xp") > -1)
+      {
+        OSFlavor = NT;
+      }
+    }
+    // ----------------------------------------------------
+    // test for Mac OS
+    // ----------------------------------------------------
+    else if (OSName.indexOf ("mac") > -1)
+    {
+      OS            = GENERIC;
+      OSFlavor      = STANDARD;
+      OSarchitecture  = OTHER;
+
+      if (OSName.indexOf ("macosx") > -1)
+      {
+        OSFlavor = X;
+      }
+    }
+    // ----------------------------------------------------
+    // what's left should be unix
+    // ----------------------------------------------------
+    else
+    {
+      OS            = UNIX;
+      OSFlavor      = STANDARD;
+      OSarchitecture  = OTHER;
+
+      if( OSArch.indexOf( "86" ) > -1 )
+      {
+        OSarchitecture  = X86;
+      }
+    }
+    
+    return( CLASS_PREFIX [OS] + CLASS_FLAVOR_PREFIX [OSFlavor] );
+  }
+
 }
 /*---------------------------------------------------------------------------*/

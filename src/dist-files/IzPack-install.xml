@@ -35,6 +35,7 @@
             <author name="Xi Ping Wang (contributor)" email="xiping.wang@gmail.com" />
             <author name="David Carmona Perez (contributor)" email="dperezcar@fcc.es" />
             <author name="Filip Brcic (contributor)" email="brcha@users.sourceforge.net" />
+            <author name="Marc Eppelmann (contributor)" email="marc.eppelmann@gmx.de" />
             <author email="(see Thanks.txt)" name="Many other developers and contributors to the previous releases" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
@@ -80,6 +81,7 @@
         <res src="Licence.txt" id="LicencePanel.licence"/>
         <res src="langsel.jpg" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
+   <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0" />
         <res src="doc-html.png" id="ImgPacksPanel.img.1" />
         <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />

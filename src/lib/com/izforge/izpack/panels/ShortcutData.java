@@ -46,6 +46,15 @@ public class ShortcutData implements Cloneable
   public int      iconIndex;
   public int      initialState;
   public String   workingDirectory;
+  
+  public String   deskTopEntryLinux_MimeType;
+  public String   deskTopEntryLinux_Terminal;
+  public String   deskTopEntryLinux_TerminalOptions;
+  public String   deskTopEntryLinux_Type;
+  public String   deskTopEntryLinux_URL;
+  public String   deskTopEntryLinux_Encoding;
+  public String   deskTopEntryLinux_X_KDE_SubstituteUID;   
+  
  /*--------------------------------------------------------------------------*/
  /**
   * Returns a clone (copy) of this object.
@@ -70,7 +79,13 @@ public class ShortcutData implements Cloneable
     result.subgroup          = cloneString (subgroup);
     result.iconFile          = cloneString (iconFile);
     result.workingDirectory  = cloneString (workingDirectory);
-
+    result.deskTopEntryLinux_MimeType = cloneString( deskTopEntryLinux_MimeType );    
+    result.deskTopEntryLinux_Terminal = cloneString( deskTopEntryLinux_Terminal );
+    result.deskTopEntryLinux_TerminalOptions = cloneString( deskTopEntryLinux_TerminalOptions );
+    result.deskTopEntryLinux_Type = cloneString( deskTopEntryLinux_Type );
+    result.deskTopEntryLinux_URL = cloneString( deskTopEntryLinux_URL );
+    result.deskTopEntryLinux_Encoding = cloneString( deskTopEntryLinux_Encoding );
+    result.deskTopEntryLinux_X_KDE_SubstituteUID = cloneString( deskTopEntryLinux_X_KDE_SubstituteUID );
     return (result);
   }
  /*--------------------------------------------------------------------------*/

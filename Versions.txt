@@ -40,6 +40,7 @@
 - Fixed bug parsing some brace enclosed variables (Chad McHenry) (bug #2451).
 - New Serbian translation (Filip Brcic).
 - Bug at loading Panels from other packages fixed (Klaus Bartz).
+- Unix (KDE/Gnome) shortcuts support (Marc Eppelmann).
 
   > 3.6.1 (build 2004.10.09)
 

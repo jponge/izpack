@@ -825,6 +825,7 @@
                 <include name="Licence.txt"/>
                 <include name="IzPack-install.xml"/>
                 <include name="shortcutSpec.xml"/>
+             <include name="Unix_shortcutSpec.xml"/>
             </fileset>
         </copy>
         <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">

@@ -29,24 +29,25 @@ package com.izforge.izpack.installer;
  *
  * @author     Marcus Stursberg
  */
-class ResourceNotFoundException extends java.io.IOException
+
+public class ResourceNotFoundException extends Exception
 {
 
 
-  /**  creates a new ResourceNotFoundException */
-  public ResourceNotFoundException()
-  {
-    super();
-  }
+ /**  creates a new ResourceNotFoundException */
+ public ResourceNotFoundException()
+ {
+   super();
+ }
 
 
-  /**
-   *  creates a new ResourceNotFoundException
-   *
-   * @param  s  description of the exception
-   */
-  public ResourceNotFoundException(String s)
-  {
-    super(s);
-  }
+ /**
+  *  creates a new ResourceNotFoundException
+  *
+  * @param  s  description of the exception
+  */
+ public ResourceNotFoundException(String s)
+ {
+   super(s);
+ }
 }

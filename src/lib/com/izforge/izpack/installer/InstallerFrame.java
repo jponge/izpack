@@ -93,7 +93,7 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
-
+import com.izforge.izpack.installer.ResourceNotFoundException;
 /**
  *  The IzPack installer frame.
  *
@@ -638,21 +638,27 @@ public class InstallerFrame extends JFrame
    * @param  res            The resource id.
    * @return                The resource value, null if not found
    */
-  public InputStream getResource(String res)
+  public InputStream getResource(String res) throws Exception
   {
-        String basePath = "";
-        ResourceManager rm = null;
+    InputStream result;
+    String basePath = "";
+    ResourceManager rm = null;
 
     try
     {
-        rm =  ResourceManager.getInstance();
-                basePath = rm.resourceBasePath;
-
-                return this.getClass().getResourceAsStream(basePath+res);
-    } catch (Exception e)
-    {
-      return null;
+      rm =  ResourceManager.getInstance();
+      basePath = rm.resourceBasePath;
     }
+    catch(Exception e)
+    { e.printStackTrace(); }
+    
+    result = this.getClass().getResourceAsStream( basePath+res );
+    
+    if( result == null )
+    {
+      throw new ResourceNotFoundException( "Warning: Resource not found: " + res );
+    }
+    return result;
   }
 
 

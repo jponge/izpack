@@ -401,6 +401,64 @@ public class Shortcut
   public void setHotkey(int hotkey)
   {
   }
+  
+  /**
+   * Sets the Encoding
+   * @param string
+   **/
+  public void setEncoding(String string)
+  {
+  }
+  
+  /**
+   * This sets the Mimetype
+   * @param string
+   **/
+  public void setMimetype(String string)
+  {
+  }
+  
+  /**
+   * Sets the terminal
+   * @param string
+   **/
+  public void setTerminal(String string)
+  {
+  }
+  
+  /**
+   * This sets the terminals-options
+   * @param string
+   **/
+  public void setTerminalOptions(String string)
+  {
+  }
+  
+  /**
+   * This sets the shortcut type
+   * @param string
+   **/
+  public void setType(String string)
+  {
+  }
+  
+  /**
+   * This sets the KdeSubstUID
+   * @param string
+   **/
+  public void setKdeSubstUID(String string)
+  {    
+  }
+  
+  /**
+   * This sets the URL
+   * @param string
+   **/
+  public void setURL(String string)
+  {
+  }
+
+  
 }
 /*---------------------------------------------------------------------------*/
 
