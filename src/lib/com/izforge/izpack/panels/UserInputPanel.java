@@ -64,6 +64,7 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.MultiLineLabel;
+import com.izforge.izpack.util.OsConstraint;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -1592,7 +1593,12 @@ public class UserInputPanel extends IzPanel
 
       for (int i = 0; i < choices.size (); i++)
       {
-        String value = ((XMLElement)choices.elementAt (i)).getAttribute (SEARCH_VALUE);
+        XMLElement choice_el = (XMLElement)choices.elementAt (i);
+        
+        if (! OsConstraint.oneMatchesCurrentSystem(element))
+          continue;
+        
+        String value = choice_el.getAttribute (SEARCH_VALUE);
 
         combobox.addItem (value);
 
@@ -2239,12 +2245,12 @@ private class SearchField implements ActionListener
 
     File file = null;
     
-    if ((this.filename == null) && (this.searchType == TYPE_DIRECTORY))
+    if ((this.filename == null) || (this.searchType == TYPE_DIRECTORY))
     {
       file = new File (path);
     }
     else
-    {
+    {      
       file = new File (path, this.filename);
     }
 

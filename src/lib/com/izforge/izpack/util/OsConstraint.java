@@ -197,6 +197,19 @@ public class OsConstraint implements java.io.Serializable
     return false;
   }
 
+  /**
+   * Helper function: Check whether the given XMLElement is "suitable" for the
+   * current OS.
+   *
+   * @param el The XMLElement to check for OS constraints.
+   *
+   * @return true if there were no OS constraints or the constraints matched the current OS.  
+   *       
+   */
+  public static boolean oneMatchesCurrentSystem (XMLElement el)
+  {
+    return oneMatchesCurrentSystem(getOsList(el));
+  }
 
   public void setFamily(String f)
   {
