@@ -80,11 +80,13 @@ notice many more places where it is more powerful to use variables
 rather then hard coded values. Wherever variables can be used it will
 be explained in the documentation.\\
 
-There are two types of variables:
+There are three types of variables:
 \begin{itemize}
   \item Built-In variables. These are implemented in IzPack and are 
         all dynamic in nature. This means that the value of each
         variable depends on local conditions on the target system.
+  \item Environment variables. These are provided by the operating system the
+        installer is run on.
   \item Variables that you can define. You also define the value,
         which is fixed for a given installation file.
 \end{itemize}
@@ -110,6 +112,13 @@ The following variables are built-in :
   \item \texttt{\$APP\_VER} : the application version
   \item \texttt{\$ISO3\_LANG} : the ISO3 language code of the selected langpack.
 \end{itemize}\
+
+\subsection{Environment Variables}
+Environment variables can be accessed via the syntax \texttt{\$\{ENV[variable]\}}. 
+The curly braces are mandatory.
+Note that variable names are case-sensitive and usually in UPPER CASE.
+
+Example: To get the value of the OS environment variable "CATALINA\_HOME", use \texttt{\$\{ENV[CATALINA\_HOME]\}}.
 
 \subsection{Parse Types}
 Parse types apply only when replacing variables in text files. At places
