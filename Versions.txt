@@ -49,6 +49,9 @@
   (Michael Hagedorn).
 - A tutorial is now available.
 - New Czech langpack (Jan Pavlovic).
+- German langpack: the uninstaller checkbox string was confusing about the
+  uninstaller performing a full deletion, including the files not unpacked
+  by an IzPack installer.
 
   > 3.6.1 (build 2004.10.09)
 
