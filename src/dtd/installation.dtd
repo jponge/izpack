@@ -76,7 +76,7 @@ $Id$
 
 <!-- The packs section (indicates the packs to create) -->
 <!ELEMENT packs (pack+)>
-    <!ELEMENT pack (description, os*, file*, singlefile*, fileset*, updatecheck?, parsable*, executable*)>
+    <!ELEMENT pack (description, os*, file*, singlefile*, fileset*, updatecheck?, parsable*, executable*, depends*)>
         <!ATTLIST pack name CDATA #REQUIRED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
         <!ATTLIST pack preselected (yes|no) "yes">
@@ -130,6 +130,8 @@ $Id$
                   <!ATTLIST os version CDATA #IMPLIED>
                   <!ATTLIST os arch CDATA #IMPLIED>
       <!ELEMENT updatecheck (include*, exclude*)>
+      <!ELEMENT depends EMPTY>
+          <!ATTLIST depends packname CDATA #REQUIRED>
 
 <!-- Allows the inclusion in the installer or uninstaller of a native library -->
 <!ELEMENT native (os*)>
