@@ -429,7 +429,21 @@ The \texttt{<pack>} takes the following attributes :
     the pack is by default selected for installation or not. Possible values
     are \texttt{yes} and \texttt{no}. A pack which is not preselected needs to
     be explicitly selected by the user during installation to get installed.
+    \item \texttt{id}: this attribute is used to give a unique id to the pack to
+    be used for internationalization.
   \end{itemize}
+
+\subsubsection{Internationalization of the PacksPanel}
+In order to provide internationalization for the PacksPanel, so that your users can
+be presented with a different name and description for each languadge you support,
+ you have to create a file named \texttt{packsLang.xml\_xyz} where \texttt{xyz}
+ is the ISO3 code of the language in lowercase. Please be aware that case is significant.
+ This file has to be inserted in the resources section of \texttt{install.xml} with the
+ \texttt{id} and \texttt{src} attributes set at the name of the file. The format of
+ these files is identical with the distribution langpack files located at
+ \texttt{\$IZPACK\_HOME/install/langpacks/installer}. For the name of the panel you just
+ use the pack \texttt{id} as the txt \texttt{id}. For the description you use the pack
+ \texttt{id} suffixed with \texttt{'.description'}.
 
 The following sections describe the tags available for a \texttt{<pack>} section.
 

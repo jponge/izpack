@@ -724,6 +724,34 @@ public class InstallerFrame extends JFrame
 
     }
   }
+  /** This function moves to the next panel */
+  public void navigateNext()
+  {
+    // If the button is inactive this indicates that we cannot move
+    // so we don't do the move
+    if( !nextButton.isEnabled())
+      return;
+    if ((installdata.curPanelNumber < installdata.panels.size() - 1)
+            && ((IzPanel) installdata.panels.get(installdata.curPanelNumber))
+            .isValidated())
+    {
+      installdata.curPanelNumber++;
+      switchPanel(installdata.curPanelNumber - 1);
+    }
+  }
+  /** This function moves to the previous panel */
+  public void navigatePrevious()
+  {
+    // If the button is inactive this indicates that we cannot move
+    // so we don't do the move
+    if( !prevButton.isEnabled())
+      return;
+    if ((installdata.curPanelNumber > 0))
+    {
+      installdata.curPanelNumber--;
+      switchPanel(installdata.curPanelNumber + 1);
+    }
+  }
 
   /**
    *  Handles the events from the navigation bar elements.
@@ -742,20 +770,10 @@ public class InstallerFrame extends JFrame
       Object source = e.getSource();
       if (source == prevButton)
       {
-        if ((installdata.curPanelNumber > 0))
-        {
-          installdata.curPanelNumber--;
-          switchPanel(installdata.curPanelNumber + 1);
-        }
+        navigatePrevious();
       } else if (source == nextButton)
       {
-        if ((installdata.curPanelNumber < installdata.panels.size() - 1)
-          && ((IzPanel) installdata.panels.get(installdata.curPanelNumber))
-            .isValidated())
-        {
-          installdata.curPanelNumber++;
-          switchPanel(installdata.curPanelNumber - 1);
-        }
+        navigateNext();
       } else if (source == quitButton)
         exit();
 

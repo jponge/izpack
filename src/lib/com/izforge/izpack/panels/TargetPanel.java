@@ -73,6 +73,9 @@ public class TargetPanel extends IzPanel implements ActionListener
   /**  The layout constraints. */
   private GridBagConstraints gbConstraints;
 
+  /** The parent installerframe. */
+  private InstallerFrame parent;
+
   /**
    *  The constructor.
    *
@@ -82,6 +85,8 @@ public class TargetPanel extends IzPanel implements ActionListener
   public TargetPanel(InstallerFrame parent, InstallData idata)
   {
     super(parent, idata);
+    //Initialization
+    this.parent = parent;
 
     // We initialize our layout
     layout = new GridBagLayout();
@@ -285,6 +290,9 @@ public class TargetPanel extends IzPanel implements ActionListener
       if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
         textField.setText(fc.getSelectedFile().getAbsolutePath());
 
+    }else if(source == textField)
+    {
+      parent.navigateNext();
     }
   }
 

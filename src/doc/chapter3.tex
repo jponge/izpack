@@ -6,7 +6,7 @@
 \label{ant-integration}
 
 \IzPack can be easily integrated inside an Ant build process. To do so you
-first need to tell Ant that you would like to use \IzPack :
+first need to tell Ant that you would like to use \IzPack{}:
 \footnotesize
 \begin{verbatim}
 <!-- Allows us to use the IzPack Ant task -->
@@ -15,10 +15,21 @@ first need to tell Ant that you would like to use \IzPack :
 \end{verbatim}
 \normalsize
 
-Don't forget to add \texttt{compiler.jar} to the classpath of the Ant process.\\
+If you want to use the standalone compiler (and therefore don't need an
+IzPack installation for building), the task needs to be defined as follows:
+\footnotesize
+\begin{verbatim}
+<!-- Allows us to use the IzPack Ant task -->
+<taskdef name="izpack" classpath="${basedir}/lib/standalone-compiler.jar"
+         classname="com.izforge.izpack.ant.IzPackTask"/>
+\end{verbatim}
+\normalsize
+
+Don't forget to add \texttt{compiler.jar} or \texttt{standalone-compiler.jar} 
+to the classpath of the Ant process.
 
 Then you can invoke \IzPack with the \texttt{izpack} task which takes the
-following parameters :
+following parameters:
 \begin{itemize}
 
   \item \texttt{input} : the XML installation file
@@ -29,11 +40,12 @@ following parameters :
     section~\ref{webinstaller}). Used to force creation of a standard
     installer when the \texttt{<webdir>} attribute has been used.
   \item \texttt{baseDir} : the base directory to resolve the relative paths
-  \item \texttt{izPackDir} : the \IzPack home directory.
+  \item \texttt{izPackDir}: the \IzPack home directory. Only neccessary if
+you do not use the standalone compiler.
   
 \end{itemize}\
 
-Here is a sample of the task invocation :\\
+Here is a sample of the task invocation:\\
 \footnotesize
 \begin{verbatim}
 <!-- We call IzPack -->
@@ -57,7 +69,7 @@ environment where many computers need to be supported this can save
 
 So run once the installation on a machine and save your automatic installation
 data in \texttt{auto-install.xml} (that's just a sample). Then put this file in
-the same directory as the installer on another machine. Run it with :\\
+the same directory as the installer on another machine. Run it with:\\
 \texttt{java -jar installer.jar auto-install.xml}\\
 
 It has reproduced the same installation :-)\\
