@@ -1,7 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
   > 3.8.0 (build N/A)
-
+- Fixing bug with comboboxes. There was no text shown if you do not use a 
+  processor to generate the choices. At now you can us the id or txt attribute
+  (Thorsten Kamann)
 - Uninstaller: use the system Look and Feel instead of the cross-platform one
   (feature request #470).
 
