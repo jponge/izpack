@@ -29,7 +29,7 @@ package com.izforge.izpack.compiler;
  *
  * @author     Marcus Stursberg
  */
-class CompilerException extends java.io.IOException
+public class CompilerException extends java.io.IOException
 {
   /**
    * The throwable that caused this throwable to get thrown, or null if this
