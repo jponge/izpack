@@ -72,7 +72,7 @@ public class ScriptParser
   public final static String APP_VER = "APP_VER";
 
   /** The language IS03 code. */
-  public final static String ISO3_LANG = "IS03_LANG";
+  public final static String ISO3_LANG = "ISO3_LANG";
 
   /**  The files to parse. */
   private Collection files;

@@ -4,6 +4,8 @@
 
 - German langpack fixes once again (Klaus Bartz).
 - Slovak langpack fix (pbe@whitestein.com).
+- The variable for the ISO3 language code was IS03_LANG instead of ISO3_LANG (a
+  zero instead of a 'o'). This stupid bug is now fixed (bug report #1883).
 
   > 3.5.3 (build 2004.05.15)
 
