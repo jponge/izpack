@@ -138,7 +138,29 @@ public class IoHelper
     VariableSubstitutor vs)
     throws IOException
   {
-    FileOutputStream out = new FileOutputStream(outFile, true);
+    copyFile( inFile, outFile, permissions, vs, null);
+  }
+    
+  /**
+   * Creates an in- and output stream for the given File objects and
+   * copies all the data from the specified input  to the specified
+   * output. If the VariableSubstitutor is not null, a substition will
+   * be done during copy. If permissions is not null, a chmod will
+   * be done on the output file. If type is not null, that type is
+   * used as file type at substitution.
+   *
+   * @param  inFile               File object for input
+   * @param  outFile              File object for output
+   * @param permissions           permissions for the output file 
+   * @param vs                    substitutor which is used during copying
+   * @param type                  file type for the substitutor
+   * @exception  IOException  if an I/O error occurs
+   */
+  public static void copyFile(File inFile, File outFile, String permissions,
+    VariableSubstitutor vs, String type)
+    throws IOException
+  {
+    FileOutputStream out = new FileOutputStream(outFile);
     FileInputStream in  = new FileInputStream(inFile);
     if( vs == null )
     {
@@ -157,7 +179,7 @@ public class IoHelper
     {
       BufferedInputStream bin = new BufferedInputStream(in, 5120);
       BufferedOutputStream bout = new BufferedOutputStream(out, 5120);
-      vs.substitute(bin, bout, null, null);
+      vs.substitute(bin, bout, type, null);
       bin.close();
       bout.close();
     }
