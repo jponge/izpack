@@ -134,7 +134,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
   public void afterDeletion(List files, AbstractUIProgressHandler handler)
     throws Exception
   {
-    if( antActions.size() > 0 )
+    if( antActions != null && antActions.size() > 0 )
     { // There are actions of the order "afterdeletion".
       for (int i = 0; i < antActions.size(); i++)
       {
