@@ -119,7 +119,7 @@ public class FinishPanel extends IzPanel implements ActionListener
           JLabel.TRAILING));
       centerPanel.add(Box.createVerticalStrut(20));
 
-      if (idata.info.getWriteUninstaller())
+      if (idata.uninstallOutJar != null)
       {
         // We prepare a message for the uninstaller feature
         String path =
