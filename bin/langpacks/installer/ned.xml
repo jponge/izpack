@@ -26,8 +26,8 @@
     <!-- The strings for the 'official' IzPack plugins -->
     <str id="HelloPanel.welcome1" txt="Welkom bij de installatie van "/>
     <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="De auteur(s) van deze software is/zijn : "/>
-    <str id="HelloPanel.url" txt="De webpagina is : "/>
+    <str id="HelloPanel.authors" txt="Deze software is ontwikkeld door : "/>
+    <str id="HelloPanel.url" txt="De homepagina staat op : "/>
     
     <str id="LicencePanel.info" txt="Lees a.u.b. de volgende licentie overeenkomst :"/>
     <str id="LicencePanel.agree" txt="Ik accepteer de voorwaarden van deze licentie"/>
@@ -37,6 +37,9 @@
     
     <str id="InfoPanel.info" txt="Lees a.u.b. de volgende informatie :"/>
     
+    <str id="PathInputPanel.required" txt="De gekozen map moet reeds bestaan."/>
+    <str id="PathInputPanel.notValid" txt="De gekozen map bevat niet het vereiste product."/>
+
     <str id="TargetPanel.info" txt="Selecteer de installatiemap:"/>
     <str id="TargetPanel.browse" txt="Bladeren ..."/>
     <str id="TargetPanel.warn" 
@@ -49,13 +52,19 @@
     <str id="TargetPanel.notwritable" 
          txt="Schrijven in deze map niet mogelijk! Kies s.v.p. een andere map!"/>
     
+    <str id="JDKPathPanel.intro" txt="Het programma heeft een JDK nodig. Een Java Runtime omgeving (JRE) zal niet voldoende zijn."/>
+    <str id="JDKPathPanel.info" txt="Selecteer het JDK pad:"/>
+    <str id="JDKPathPanel.badVersion1" txt="De JDK van uw keuze heeft een verkeerde versie (beschikbaar: "/>
+    <str id="JDKPathPanel.badVersion2" txt=" vereist: "/>
+    <str id="JDKPathPanel.badVersion3" txt=") wilt u toch deze JDK gebruiken?"/>
+
     <str id="PacksPanel.info" txt="Selecteer de pakketten die u wilt installeren :"/>
-    <str id="PacksPanel.tip" txt="NB: Grijze pakketten zijn verplicht."/>
+    <str id="PacksPanel.tip" txt="NB: Uitgegrijsde pakketten zijn verplicht."/>
     <str id="PacksPanel.space" txt="Totaal benodigde ruimte: "/>
     <str id="PacksPanel.freespace" txt="Beschikbare ruimte: "/>
     <str id="PacksPanel.description" txt="Omschrijving"/>
-    <str id="PacksPanel.dependencyList" txt="De geselecteerde pakketten vereisen installatie van de pakketten"/>
-	<str id="PacksPanel.notEnoughSpace" txt="Schijfruimte nodig voor installatie overtreft beschikbare schijfruimte."/>
+    <str id="PacksPanel.dependencyList" txt="Het geselecteerde pakket vereist installatie van de volgende pakketten"/>
+    <str id="PacksPanel.notEnoughSpace" txt="Schijfruimte nodig voor installatie overtreft beschikbare schijfruimte."/>
     <str id="PacksPanel.notAscertainable" txt="niet vast te stellen"/>
     
     <str id="InstallPanel.info" txt="Klik 'Installeer' om de installatie te beginnen."/>
@@ -137,7 +146,7 @@
     <str id="CompilePanel.error.seebelow" txt="Zie onderstaande voor het mislukte commando en de uitvoer." />
     <str id="CompilePanel.error.nofiles" txt="Fout bij het zoeken naar bestanden voor compilatie." />
     <str id="CompilePanel.error.compilernotfound" txt="De compiler kon niet worden gestart." />
-    <str id="CompilePanel.error.invalidarguments" txt="De compiler accepteert de meegegeven parameters niet." />
+    <str id="CompilePanel.error.invalidarguments" txt="Ongeldige parameters meegegeven aan de compiler." />
     <str id="CompilePanel.error.noclassfile" txt="De compiler heeft geen class-bestand gemaakt voor het source-bestand " />
     <str id="CompilePanel.choose_compiler" txt="Te gebruiken compiler:" />
     <str id="CompilePanel.additional_arguments" txt="Extra compiler parameters:" />
