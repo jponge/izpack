@@ -143,7 +143,6 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
     {
         parent.releaseGUI();
         parent.lockPrevButton();
-        parent.unlockNextButton();
         installButton.setIcon(parent.icons.getImageIcon("empty"));
         installButton.setEnabled(false);
         progressBar.setString(parent.langpack.getString("InstallPanel.finished"));
@@ -153,6 +152,8 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
         idata.installSuccess = true;
         idata.canClose = true;
         validated = true;
+        if (idata.panels.indexOf(this) != (idata.panels.size() - 1))
+            parent.unlockNextButton();
     }
     
     // Normal progress indicator
