@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.6.0 (build 2004.xx.yy)
+  > 3.6.0 (build 2004.07.28)
 
 - New Danish langpack (Frank Bille Jensen).
 - Web installers can now prompt for passwords and a proxy (Chad McHenry).
