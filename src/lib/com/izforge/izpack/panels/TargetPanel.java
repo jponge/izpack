@@ -110,7 +110,8 @@ public class TargetPanel extends IzPanel implements ActionListener
 
     textField = new JTextField(idata.getInstallPath(), 40);
     textField.addActionListener(this);
-    parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 3.0, 0.0);
+    parent.buildConstraints(gbConstraints, 0, 1, 
+      GridBagConstraints.RELATIVE, 1, 1.0, 0.0);
     gbConstraints.fill = GridBagConstraints.HORIZONTAL;
     gbConstraints.anchor = GridBagConstraints.WEST;
     layout.addLayoutComponent(textField, gbConstraints);
@@ -122,7 +123,8 @@ public class TargetPanel extends IzPanel implements ActionListener
         parent.icons.getImageIcon("open"),
         idata.buttonsHColor);
     browseButton.addActionListener(this);
-    parent.buildConstraints(gbConstraints, 1, 1, 1, 1, 1.0, 0.0);
+    parent.buildConstraints(gbConstraints, 1, 1, 
+      GridBagConstraints.REMAINDER, 1, 0.0, 0.0);
     gbConstraints.fill = GridBagConstraints.HORIZONTAL;
     gbConstraints.anchor = GridBagConstraints.EAST;
     layout.addLayoutComponent(browseButton, gbConstraints);
