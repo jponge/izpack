@@ -11,6 +11,8 @@
   > 3.5.3 (build 2004.xx.yy)
 
 - German langpack punctuation fixes (jonelo).
+- TargetPanel: the target path could be written several times in the automated
+install XML descriptor (bug #1864).
 
   > 3.5.2 (build 2004.05.01)
 
