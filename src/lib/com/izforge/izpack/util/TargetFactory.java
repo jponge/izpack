@@ -1,5 +1,5 @@
 /*
- * IzPack version 3.0.0 rc2 (build 2002.07.06)
+ * IzPack version 3.0.0 pre4 (build 2002.06.15)
  * Copyright (C) 2002 by Elmar Grom
  *
  * File :               TargetFactory.java
@@ -32,7 +32,7 @@ import    java.io.*;
  * The <code>TargetFactory</code> serves as a central mechanism to instantiate
  * OS specific class flavors, provide OS specific file extension types,
  * default install directories and similar functionality. In addition it
- * provides services that are related to OS versions an d flavors. For a
+ * provides services that are related to OS versions and flavors. For a
  * tutorial on using some of the features in this class see the
  * <A HREF=doc-files/TargetFactory.html>TargetFactory Tutorial</A>.
  *
@@ -328,13 +328,13 @@ public class TargetFactory
   * <TR><TD>Microsoft Windows</TD><TD>Win_</TD></TR>
   * <TR><TD>Mac OS</TD><TD>Mac_</TD></TR>
   * <TR><TD>UNIX</TD><TD>UNIX_</TD></TR>
-    * </TABLE><br>
+	* </TABLE><br>
   * For the different OS flavors, use these prefixes:<br><br>
   * <TABLE BORDER=1>
   * <TR><TH>OS Flavor</TH><TH>Prefix</TH></TR>
   * <TR><TD>NT</TD><TD>NT_</TD></TR>
   * <TR><TD>Mac OS X</TD><TD>X_</TD></TR>
-    * </TABLE>
+	* </TABLE>
   * <br><br>
   * <b>Naming Example:</b>
   * <br><br>
@@ -583,9 +583,9 @@ public class TargetFactory
     // ----------------------------------------------------
     if (input == null)
     {
-        String key  = osName.replace (' ', '_');         // avoid spaces in file names
+  		String key  = osName.replace (' ', '_');         // avoid spaces in file names
       key         = keyFragment + key.toLowerCase ();  // for consistency among TargetPanel res files
-        input       = getClass ().getResourceAsStream (key);
+  		input       = getClass ().getResourceAsStream (key);
     }
 
     // ----------------------------------------------------
@@ -603,23 +603,23 @@ public class TargetFactory
     // ----------------------------------------------------
     if (input != null)
     {
-        InputStreamReader streamReader  = null;
+	    InputStreamReader streamReader  = null;
       BufferedReader    reader        = null;
       String            line          = null;
 
       try
       {
-          streamReader  = new InputStreamReader (input);
+	      streamReader  = new InputStreamReader (input);
         reader        = new BufferedReader (streamReader);
         line          = reader.readLine ();
 
         while (line != null)
         {
-              line = line.trim ();
-              if (!line.equals ("")) 
+    		  line = line.trim ();
+		      if (!line.equals ("")) 
           {
             break;
-              }
+		      }
           line = reader.readLine ();
         }
         path = line;

@@ -1,5 +1,5 @@
 /*
- * IzPack version 3.0.0 rc2 (build 2002.07.06)
+ * IzPack version 3.0.0 pre4 (build 2002.06.15)
  * Copyright (C) 2002 by Elmar Grom
  *
  * File :               ShellLink.java
@@ -109,6 +109,11 @@ public class ShellLink implements NativeLibraryClient
   /** Return value from native uninitialization functions if
       the save operation fort the link failed */
   private static final int      SL_NO_SAVE          = -6;
+  /** Return value if the function called had to deal with
+      unexpected data types. This might be returned by
+      registry functions if they receive an unexpected
+      data type from the registry. */
+  private static final int      SL_WRONG_DATA_TYPE  = -7;
 
   // ------------------------------------------------------
   // Miscellaneous constants
@@ -140,7 +145,7 @@ public class ShellLink implements NativeLibraryClient
   /** Contains the directory where the link file is stored after any save
       operation that needs to create that directory. Otherwise it contains
       <code>null</code>. */
-  private String  linkDirectory           = null;
+  private String  linkDirectory           = "";
 
   private String  arguments               = "";
   private String  description             = "";
@@ -233,7 +238,6 @@ public class ShellLink implements NativeLibraryClient
     linkType = type;
     
     initialize ();
-
     if (GetLinkPath (linkType) != SL_OK)
     {
       throw (new Exception ("could not get a path for this type of link"));
@@ -345,7 +349,19 @@ public class ShellLink implements NativeLibraryClient
     get ();
 
     // set the variables for path, group and name
-    GetLinkPath (linkType);
+    int result = GetLinkPath (linkType);
+    if (result != SL_OK)
+    {
+      if (result == SL_WRONG_DATA_TYPE)
+      {
+        throw (new Exception ("could not get link path, registry returned unexpected data type"));
+      }
+      else
+      {
+        throw (new Exception ("could not get link path"));
+      }
+    }
+
     if (group != null)
     {
       groupName = group;
@@ -582,10 +598,20 @@ public class ShellLink implements NativeLibraryClient
     {
       throw (new Exception ("could not get icon location"));
     }
-    if (GetLinkPath (linkType) != SL_OK)
+
+    int result = GetLinkPath (linkType);
+    if (result != SL_OK)
     {
-      throw (new Exception ("could not get link path"));
+      if (result == SL_WRONG_DATA_TYPE)
+      {
+        throw (new Exception ("could not get link path, registry returned unexpected data type"));
+      }
+      else
+      {
+        throw (new Exception ("could not get link path"));
+      }
     }
+    
     if (GetPath () != SL_OK)
     {
       throw (new Exception ("could not get target path"));
@@ -991,12 +1017,12 @@ public class ShellLink implements NativeLibraryClient
     }
     else
     {
-      linkDirectory = null;
+      linkDirectory = "";
     }
 
     // perform the save operation
     String saveTo = fullLinkName (userType);
-    result = saveLink (saveTo);
+    result        = saveLink (saveTo);
     
     if (result == SL_NO_IPERSIST)
     {

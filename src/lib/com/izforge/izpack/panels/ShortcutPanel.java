@@ -1,5 +1,5 @@
 /*
- * IzPack version 3.0.0 rc2 (build 2002.07.06)
+ * IzPack version 3.0.0 pre4 (build 2002.06.15)
  * Copyright (C) 2002 Elmar Grom
  *
  * File :               ShortcutPanel.java
@@ -229,8 +229,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
   /** This is set to true if the shortcut spec instructs to simulate running
       on an operating system that is not supported.  */
   private boolean             simulteNotSupported        = false;
-  /** Specifies wether the shortcuts creation has been done or not. */
-  private boolean             shortcutsCreationDone = false;
   
  /*--------------------------------------------------------------------------*/
  /**
@@ -326,12 +324,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       // add files and directories to the uninstaller
       addToUninstaller ();
       
-      // Disables the createButton
-      createButton.setEnabled(false);   
-      
       // when finished unlock the next button and lock
       // the previous button
-      //parent.unlockNextButton ();
+      parent.unlockNextButton ();
       parent.lockPrevButton ();
     }
     // ----------------------------------------------------
@@ -384,7 +379,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     {
       if (shortcut.supported () && !simulteNotSupported)
       {
-        //parent.lockNextButton ();
+        parent.lockNextButton ();
         buildUI (shortcut.getProgramGroups (ShellLink.CURRENT_USER), true);  // always start out with the current user
       }
       else
@@ -471,7 +466,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * This method analyzes the specifications for creating shortcuts.
+  * This method analyzes the specifications for creating shortcuts and
+  * builds a list of all the Shortcuts that need to be created.
   *
   */
  /*--------------------------------------------------------------------------*/
@@ -537,7 +533,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     {
       shortcutSpec      = (XMLElement)shortcutSpecs.elementAt (i);
       data              = new ShortcutData ();
-      data.addToGroup   = false;
 
       data.name               = shortcutSpec.getAttribute (SPEC_ATTRIBUTE_NAME);
       data.subgroup           = shortcutSpec.getAttribute (SPEC_ATTRIBUTE_SUBGROUP);
@@ -615,21 +610,25 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
         if (attributeIsTrue (shortcutSpec, SPEC_ATTRIBUTE_DESKTOP))
         {
           hasDesktopShortcuts = true;
+          data.addToGroup     = false;
           data.type           = Shortcut.DESKTOP;
           shortcuts.add (data.clone ());
         }
         if (attributeIsTrue (shortcutSpec, SPEC_ATTRIBUTE_APPLICATIONS))
         {
+          data.addToGroup     = false;
           data.type           = Shortcut.APPLICATIONS;
           shortcuts.add (data.clone ());
         }
         if (attributeIsTrue (shortcutSpec, SPEC_ATTRIBUTE_START_MENU))
         {
+          data.addToGroup     = false;
           data.type           = Shortcut.START_MENU;
           shortcuts.add (data.clone ());
         }
         if (attributeIsTrue (shortcutSpec, SPEC_ATTRIBUTE_STARTUP))
         {
+          data.addToGroup     = false;
           data.type           = Shortcut.START_UP;
           shortcuts.add (data.clone ());
         }
@@ -719,8 +718,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       }
 
     }
-    //parent.unlockNextButton();
-    shortcutsCreationDone = true;
+    parent.unlockNextButton();
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1305,7 +1303,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     // ----------------------------------------------------
     if (!shortcutsToCreate     || 
         !shortcut.supported () ||
-        !shortcutsCreationDone ||
          simulteNotSupported      )
     {
       return;

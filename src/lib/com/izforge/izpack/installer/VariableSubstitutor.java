@@ -1,5 +1,5 @@
 /*
- * IzPack Version 3.0.0 rc2 (build 2002.07.06)
+ * IzPack Version 3.0.0 rc3 (build 2002.07.28)
  * Copyright (C) 2001 Johannes Lehtinen
  *
  * File :               VariableSubstitutor.java

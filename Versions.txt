@@ -1,6 +1,14 @@
 [ The list of the different public versions of IzPack ]
 
-    > 3.0.0 rc2 (build 2002.07.06)
+    > 3.0.0 rc3 (build 2002.07.28)
+
+- The Japanese langpack has been fixed by Akky Akimoto (now Windows shortcuts
+  compliant).
+- Windows shortcuts counterpart is now fully working thanks to the big efforts
+  of Elmar Grom with the additional help of Marcus Stursberg.
+- Documentation mispelling fixes and additions by Elmar Grom.  
+
+    > 3.0.0 rc=2 (build 2002.07.06)
 
 - Added some documentation on the *LicencePanel and *InfoPanel panels.
 - Bugfix in HTMLLicencePanel.

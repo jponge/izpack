@@ -141,6 +141,7 @@ const jint  SL_NOT_INITIALIZED  = -3;     // return value from uninitialization 
 const jint  SL_OUT_OF_HANDLES   = -4;     // there are no more interface handles available
 const jint  SL_NO_IPERSIST      = -5;     // could not get a handle for the IPersist interface
 const jint  SL_NO_SAVE          = -6;     // could not save the link
+const jint  SL_WRONG_DATA_TYPE  = -7;     // an unexpected data type has been passed or received
 
 const int   MAX_TEXT_LENGTH     =  1000;  // buffer size for text buffers
 const int   ALLOC_INCREMENT     =  10;    // allocation increment for allocation of additional storage space for link references
@@ -976,30 +977,24 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_saveLink (JNIEn
   {
     return (SL_NO_IPERSIST);
   }
-  // convert from Java string type
-  const char *pathName = (env)->GetStringUTFChars (name, 0);
 
+  // ----------------------------------------------------
+  // convert from Java string type
+  // ----------------------------------------------------
+  const unsigned short *pathName = (env)->GetStringChars (name, 0);
+  
   // ----------------------------------------------------
   // Save the link
   // ----------------------------------------------------
-  // convert the path to Unicode.
-  WCHAR unicode_pathName [MAX_TEXT_LENGTH];
-  MultiByteToWideChar (CP_ACP,
-                       0,
-                       pathName,
-                       -1,
-                       unicode_pathName,
-                       MAX_TEXT_LENGTH);
-
-  hres = p_persistFile->Save (unicode_pathName, FALSE);
-  p_persistFile->SaveCompleted (unicode_pathName);
-
+  hres = p_persistFile->Save   ((wchar_t*)pathName, FALSE);
+  p_persistFile->SaveCompleted ((wchar_t*)pathName);
+  
   // ----------------------------------------------------
   // Release the pointer to IPersistFile
   // and the string object
   // ----------------------------------------------------
   p_persistFile->Release ();
-  (env)->ReleaseStringUTFChars (name, pathName);
+  (env)->ReleaseStringChars (name, pathName);
 
   // ------------------------------------------------------
   // return success code
@@ -1041,21 +1036,12 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_loadLink (JNIEn
   if (SUCCEEDED (hres))
   {
     // convert from Java string type
-    const char *pathName = (env)->GetStringUTFChars (name, 0);
+    const unsigned short *pathName = (env)->GetStringChars (name, 0);
 
     // --------------------------------------------------
     // Load the link
     // --------------------------------------------------
-    // convert the path to Unicode.
-    WCHAR unicode_pathName [MAX_TEXT_LENGTH];
-    MultiByteToWideChar (CP_ACP,
-                         0,
-                         pathName,
-                         -1,
-                         unicode_pathName,
-                         MAX_TEXT_LENGTH);
-
-    hres = p_persistFile->Load (unicode_pathName,
+    hres = p_persistFile->Load ((wchar_t *)pathName,
                                 STGM_DIRECT    |
                                 STGM_READWRITE |
                                 STGM_SHARE_EXCLUSIVE);
@@ -1064,7 +1050,7 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_loadLink (JNIEn
     // Release the pointer to IPersistFile
     // --------------------------------------------------
     p_persistFile->Release ();
-    (env)->ReleaseStringUTFChars (name, pathName);
+    (env)->ReleaseStringChars (name, pathName);
   }
 
   // ------------------------------------------------------
@@ -1134,6 +1120,11 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_GetLinkPath (JN
 
       RegCloseKey     (h_key);
     }
+    // make sure we actually received a null terminated string as expected
+    if (lp_type != REG_SZ)
+    {
+      return (SL_WRONG_DATA_TYPE);
+    }
     
     // get the path for all users
     successCode = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
@@ -1153,6 +1144,11 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_GetLinkPath (JN
                        &ul_size);
 
       RegCloseKey     (h_allKey);
+    }
+    // make sure we actually received a null terminated string as expected
+    if (lp_type != REG_SZ)
+    {
+      return (SL_WRONG_DATA_TYPE);
     }
     
     // ------------------------------------------------------
