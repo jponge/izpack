@@ -49,50 +49,13 @@ public class IoHelper
   // Constant Definitions
   // ------------------------------------------------------------------------
 
-  // Basic operating systems
-
-  /** Identifies Microsoft Windows. */
-  public static final int    WINDOWS                     = 0;
-  /** Identifies Apple Macintosh operating systems. */
-  public static final int    MAC                         = 1;
-  /** Identifies generic UNIX operating systems */
-  public static final int    UNIX                        = 2;
-  /** Used to report a non specific operating system. */
-  public static final int    GENERIC                     = 3;
-
-  // operating system favors
-
-  /** This is the basic flavor for every operating system. */
-  public static final int    STANDARD                    = 0;
-  /** Used to identify the Windows-NT class of operating
-      systems in terms of an OS flavor. It is reported for
-      Windows-NT, 2000 and XP. */
-  public static final int    NT                          = 1;
-  /** Used to identify the OS X flavor of the Mac OS */
-  public static final int    X                           = 2;
-
-  // system architecture
-
-  /** Identifies Intel X86 based processor types. */
-  public static final int    X86                         = 0;
-  /** Nonspecific processor architecture, other than X86. */
-  public static final int    OTHER                       = 1;
-
-  
-  /** The detected current OS family  as int */
-  private static int currentOSFamily = OTHER;
-
-  /** The detected current OS flavor as int */
-  private static int currentOSFlavor = OTHER;
-
   /** Placeholder during translatePath computing */
   private static final String MASKED_SLASH_PLACEHOLDER = "§&_&§";
 	/**
 	 * Default constructor
 	 */
-  public IoHelper()
+  private IoHelper()
   {
-    super();
   }
 
   /**
@@ -199,7 +162,6 @@ public class IoHelper
     {
       chmod(outFile.getAbsolutePath(), permissions );
     }
-    return;
   }
 
   /**
@@ -214,7 +176,7 @@ public class IoHelper
    */
   public static File copyToTempFile( File template, String defaultExtension) throws IOException
   {
-    return(copyToTempFile(template, defaultExtension, null ));
+    return copyToTempFile(template, defaultExtension, null);
   }
 
   /**
@@ -240,7 +202,7 @@ public class IoHelper
     File tmpFile = File.createTempFile("izpack_io", ext);
     tmpFile.deleteOnExit();
     IoHelper.copyFile(template, tmpFile, vss);
-    return( tmpFile);
+    return tmpFile;
   }
   
   
@@ -256,7 +218,7 @@ public class IoHelper
    */
   public static File copyToTempFile( String template, String defaultExtension) throws IOException
   {
-    return( copyToTempFile( new File(template),  defaultExtension));
+    return copyToTempFile(new File(template), defaultExtension);
   }
   
   
@@ -281,77 +243,31 @@ public class IoHelper
    */
   public static void chmod(String path, String permissions) throws IOException
   {
-    String pathSep = System.getProperty("path.separator");
-    String osName = System.getProperty("os.name").toLowerCase();
     // Perform UNIX
-    if (pathSep.equals(":") && (!osName.startsWith("mac") ||
-      osName.endsWith("x")))
+    if (OsVersion.IS_UNIX)
     {
       String[] params = {"chmod", permissions, path};
       String[] output = new String[2];
       FileExecutor fe = new FileExecutor();
       fe.executeCommand(params, output);
     }
-    else if( osName.startsWith("mac") )
-    {
-      throw new IOException("Sorry, chmod not supported yet on mac.");
-    }
     else
     {
-      throw new IOException("Sorry, chmod not supported yet on windows.");
+      throw new IOException("Sorry, chmod not supported yet on " + OsVersion.OS_NAME + ".");
     }
   }
   
-  /**
-   * Returns the OS family as "enum" (really as int).
-   * @return OS family as "enum" (really as int)
-   */
-  public static int getOSFamily()
-  {
-    detectOS();
-    return( IoHelper.currentOSFamily);
-  }
-  
-  /**
-   * Detects os family and flavor for later use. 
-   */
-  private static void detectOS()
-  {
-    if( IoHelper.currentOSFamily != OTHER )
-      return; // Already detected.
-    IoHelper.currentOSFlavor = STANDARD;
-    String osName  = System.getProperty ("os.name").toLowerCase ();
-    if(osName.indexOf ("windows") > -1)
-    {
-      IoHelper.currentOSFamily = WINDOWS;
-      if(osName.indexOf ("nt") > -1 || osName.indexOf ("2000") > -1 ||
-        osName.indexOf ("xp") > -1|| osName.indexOf ("2003") > -1 ) 
-      {
-        IoHelper.currentOSFlavor = NT;
-      }
-    }
-    else if(osName.indexOf ("mac") > -1)
-    {
-      IoHelper.currentOSFamily = MAC;
-      if(osName.indexOf ("macosx") > -1) 
-      IoHelper.currentOSFlavor = X;
-    }
-    else
-    {
-      IoHelper.currentOSFamily = UNIX; 
-    }
-  }
   /**
    * Returns the free (disk) space for the given path.
    * If it is not ascertainable -1 returns.
    * @param path path for which the free space should be detected
    * @return the free space for the given path
    */
-  public final static long getFreeSpace(String path)
+  public static long getFreeSpace(String path)
   {
     long retval = -1;
     int state;
-    if( IoHelper.getOSFamily() == WINDOWS )
+    if( OsVersion.IS_WINDOWS )
     {
       String[] params = {"CMD", "/C", "\"dir /D /-C \"" + path + "\"\""};
       String[] output = new String[2];
@@ -359,23 +275,14 @@ public class IoHelper
       state = fe.executeCommand(params, output);
       retval = extractLong(output[0], -3, 3, "%");
     }
-    else if( IoHelper.getOSFamily() == UNIX )
+    else if( OsVersion.IS_UNIX )
     {
       String[] params = {"df", "-Pk", path};
       String[] output = new String[2];
       FileExecutor fe = new FileExecutor();
       state = fe.executeCommand(params, output);
       retval = extractLong(output[0], -3, 3, "%") * 1024;
-    }
-    else if(IoHelper.getOSFamily() == MAC)
-    {
-      String[] params = {"df", "-k", path};
-      String[] output = new String[2];
-      FileExecutor fe = new FileExecutor();
-      state = fe.executeCommand(params, output);
-      retval = extractLong(output[0], -3, 3, "%") * 1024;
-    }
-    
+    }    
     return retval;
   }
 
@@ -388,35 +295,32 @@ public class IoHelper
    * enivronment else false
    * @throws RuntimeException if the given method name does not exist
    */
-  public static final boolean supported(String method)
+  public static boolean supported(String method)
   {
-    detectOS();
-    if( method.equals("getFreeSpace" ))
+    if(method.equals("getFreeSpace"))
     {
-      if( IoHelper.currentOSFamily == UNIX ||
-        IoHelper.currentOSFamily == WINDOWS ||
-      IoHelper.currentOSFamily == MAC )
-        return(true);
+      if( OsVersion.IS_UNIX || OsVersion.IS_WINDOWS)
+        return true;
     }
     else if(method.equals("chmod" ) ) 
     {
-      if( IoHelper.currentOSFamily == UNIX )
-        return(true);
+      if(OsVersion.IS_UNIX)
+        return true;
     }
-    else if(method.equals("copyFile" ) ) 
+    else if(method.equals("copyFile")) 
     {
-       return(true);
+       return true;
     }
-    else if(method.equals("getPrimaryGroup" ) ) 
+    else if(method.equals("getPrimaryGroup")) 
     {
-      if( IoHelper.currentOSFamily == UNIX )
-        return(true);
+      if(OsVersion.IS_UNIX)
+        return true;
     }
     else
     {
       throw new RuntimeException("method name " + method + "not supported by this method");
     }
-    return(false);
+    return false;
     
     
   }
@@ -426,7 +330,7 @@ public class IoHelper
    * @param path path which should be scanned
    * @return the first existing parent directory in a path
    */
-  public static final File existingParent(File path) 
+  public static File existingParent(File path) 
   {
     File result = path;
     while ( ! result.exists() )
@@ -452,7 +356,7 @@ public class IoHelper
    * @param useNotIdentifier string which determines tokens which should be ignored
    * @return founded long
    */
-  private static final long extractLong(String in, int assumedPlace, int halfRange, String useNotIdentifier) 
+  private static long extractLong(String in, int assumedPlace, int halfRange, String useNotIdentifier) 
   {
     long retval = -1;
     StringTokenizer st = new StringTokenizer(in);
@@ -495,7 +399,7 @@ public class IoHelper
       }
       break;
     }
-    return( retval); 
+    return retval; 
   }
   
   /**
@@ -504,7 +408,7 @@ public class IoHelper
    * other systems null returns.
    * @return the primary group of the current user
    */
-  public static final String getPrimaryGroup()
+  public static String getPrimaryGroup()
   {
     if(  supported("getPrimaryGroup"))
     {
@@ -512,10 +416,10 @@ public class IoHelper
       String[] output = new String[2];
       FileExecutor fe = new FileExecutor();
       fe.executeCommand(params, output);
-      return(output[0]);
+      return output[0];
     }
     else
-      return(null);
+      return null;
   }
 
   /**
@@ -530,7 +434,7 @@ public class IoHelper
    * @return a new String object if what was found in the given string, else
    * the given string self
    */
-  private static final String replaceString(String destination, String what, String with)
+  private static String replaceString(String destination, String what, String with)
   {
     if( destination.indexOf(what) >= 0 )
     { // what found, with (placeholder) not included in destination ->
@@ -549,9 +453,9 @@ public class IoHelper
       }
       if( destination.length() > last  )
         buf.append(destination.substring(last));
-      return( buf.toString());
+      return buf.toString();
     }
-    return(destination);
+    return destination;
   }
   /**
    *  Translates a relative path to a local system path.
@@ -559,7 +463,7 @@ public class IoHelper
    * @param  destination  The path to translate.
    * @return              The translated path.
    */
-  public static final String translatePath(String destination, VariableSubstitutor vs)
+  public static String translatePath(String destination, VariableSubstitutor vs)
   {
     // Parse for variables
     destination = vs.substitute(destination, null);
@@ -590,7 +494,7 @@ public class IoHelper
     }
     else
       destination = destination.replace('/', File.separatorChar);
-    return( destination );
+    return destination;
   }
 
 }

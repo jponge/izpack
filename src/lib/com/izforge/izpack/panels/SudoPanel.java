@@ -129,7 +129,7 @@ public class SudoPanel extends IzPanel implements ActionListener
 			vars.put("password", pass);
 
 			List oses = new ArrayList();
-			oses.add(new OsConstraint("unix",null,null,null));//"windows",System.getProperty("os.name"),System.getProperty("os.version"),System.getProperty("os.arch")));
+			oses.add(new OsConstraint("unix",null,null,null));
 			
 			ArrayList plist = new ArrayList();
 			ParsableFile pf = new ParsableFile(file.getAbsolutePath(),null,null,oses);

@@ -61,10 +61,10 @@ public class OsConstraint implements java.io.Serializable
    */
   public OsConstraint(String family, String name, String version, String arch)
   {
-    this.family = (family != null) ? family.toLowerCase() : null;
-    this.name = (name != null) ? name.toLowerCase() : null;
-    this.version = (version != null) ? version.toLowerCase() : null;
-    this.arch = (arch != null) ? arch.toLowerCase() : null;
+    this.family = family != null ? family.toLowerCase() : null;
+    this.name = name != null ? name.toLowerCase() : null;
+    this.version = version != null ? version.toLowerCase() : null;
+    this.arch = arch != null ? arch.toLowerCase() : null;
   }
 
 
@@ -78,49 +78,35 @@ public class OsConstraint implements java.io.Serializable
     boolean match = true;
     String osName = System.getProperty("os.name").toLowerCase();
 
-    if ((arch != null) && (arch.length() != 0))
+    if (arch != null && arch.length() != 0)
     {
       match = System.getProperty("os.arch").toLowerCase().equals(arch);
     }
-    if (match && (version != null) && (version.length() != 0))
+    if (match && version != null && version.length() != 0)
     {
       match = System.getProperty("os.version").toLowerCase().equals(version);
     }
-    if (match && (name != null) && (name.length() != 0))
+    if (match && name != null && name.length() != 0)
     {
       match = osName.equals(name);
     }
-    if (match && (family != null))
+    if (match && family != null)
     {
       if (family.equals("windows"))
       {
-        match = (osName.indexOf("windows") > -1);
+        match = OsVersion.IS_WINDOWS;
       }
-      else if (family.equals("mac"))
+      else if (family.equals("mac") || family.equals("osx"))
       {
-        match = ((osName.indexOf("mac") > -1));
+        match = OsVersion.IS_OSX;
       }
       else if (family.equals("unix"))
       {
-        String pathSep = System.getProperty("path.separator");
-        match = (   osName.lastIndexOf("unix")    > -1
-                 || osName.lastIndexOf("linux")   > -1
-                 || osName.lastIndexOf("solaris") > -1
-                 || osName.lastIndexOf("sunos")   > -1
-                 || osName.lastIndexOf("aix")     > -1
-                 || osName.lastIndexOf("hpux")    > -1
-                 || osName.lastIndexOf("hp-ux")   > -1
-                 || osName.lastIndexOf("irix")    > -1
-                 || osName.lastIndexOf("bsd")     > -1
-                 || ((pathSep.equals(":") && (!osName.startsWith("mac") || osName.endsWith("x"))))
-                );
+        match = OsVersion.IS_UNIX;
       }
     }
 
-    return match && ((family != null) ||
-      (name != null) ||
-      (version != null) ||
-      (arch != null));
+    return match && (family != null || name != null || version != null || arch != null);
   }
 
   /**
@@ -148,7 +134,7 @@ public class OsConstraint implements java.io.Serializable
     
     // backward compatibility: still support os attribute
     String osattr = element.getAttribute ("os");
-    if ((osattr != null) && (osattr.length() > 0))
+    if (osattr != null && osattr.length() > 0)
     {
       // add the "os" attribute as a family constraint
       osList.add (new OsConstraint (osattr, null, null, null));

@@ -24,7 +24,6 @@
 package com.izforge.izpack.panels;
 
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,10 +38,7 @@ import javax.swing.JLabel;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.MultiLineLabel;
+import com.izforge.izpack.util.*;
 
 /**
  * Base class for panels which asks for paths.
@@ -64,12 +60,6 @@ public class PathInputPanel extends IzPanel implements ActionListener
   /** The path selection sub panel */
   protected PathSelectionPanel pathSelectionPanel;
 
-  /**  The layout . */
-  private GridBagLayout layout;
-
-  /**  The layout constraints. */
-  private GridBagConstraints gbConstraints;
-  
   protected String emptyTargetMsg;
   protected String warnMsg;
 
@@ -96,16 +86,13 @@ public class PathInputPanel extends IzPanel implements ActionListener
     String introText = getI18nStringForClass( "intro", "PathInputPanel");
     if(  introText == null || introText.equals("PathInputPanel.intro"))
       introText = "";
-    if( introText != null)
-    {
-      // Intro
-      //   Create and customize constraint for it.
-      //   row 0 column 0
-      gbConstraint = getNextYGridBagConstraints();
-      //   Create component and add it to this panel.
-      MultiLineLabel introLabel = createMultiLineLabel(introText);
-      add( introLabel, gbConstraint );
-    }
+    // Intro
+    //   Create and customize constraint for it.
+    //   row 0 column 0
+    gbConstraint = getNextYGridBagConstraints();
+    //   Create component and add it to this panel.
+    MultiLineLabel introLabel = createMultiLineLabel(introText);
+    add( introLabel, gbConstraint );
     // Label for input
     //   Create and customize constraint for it.
     //   row 1 column 0; is the next Y
@@ -169,7 +156,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
       {
         emitError(parent.langpack.getString("installer.error"), 
           parent.langpack.getString("PathInputPanel.required") );
-        return( false );
+        return false;
       }
       else
       {
@@ -192,14 +179,14 @@ public class PathInputPanel extends IzPanel implements ActionListener
         emitError(parent.langpack.getString("installer.error"), 
           parent.langpack.getString(getI18nStringForClass( "required", 
           "PathInputPanel")) );
-        return( false );
+        return false;
       }
       if( !pathIsValid() )
       {
         emitError(parent.langpack.getString("installer.error"),
           parent.langpack.getString(getI18nStringForClass( "notValid",  
           "PathInputPanel")) );
-        return( false );
+        return false;
       }
     }
     else
@@ -209,7 +196,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
       {
         emitError(parent.langpack.getString("installer.error"),
           getI18nStringForClass( "notwritable", "TargetPanel"));
-        return( false );
+        return false;
       }
       // We put a warning if the directory exists else we warn 
       // that it will be created
@@ -218,7 +205,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
         int res =
           askQuestion(parent.langpack.getString("installer.warning"),
             warnMsg, AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
-        ok = (res == AbstractUIHandler.ANSWER_YES);
+        ok = res == AbstractUIHandler.ANSWER_YES;
       } else
         this.emitNotification(getI18nStringForClass( "createdir",  
           "TargetPanel")+ "\n" + chosenPath);
@@ -238,14 +225,14 @@ public class PathInputPanel extends IzPanel implements ActionListener
   protected boolean pathIsValid()
   {
     if( existFiles == null)
-      return(true);
+      return true;
     for( int i = 0; i < existFiles.length; ++i)
     {
       File path = new File(pathSelectionPanel.getPath(), existFiles[i]).getAbsoluteFile();
       if( ! path.exists())
-        return( false );
+        return false;
     }
-    return(true);
+    return true;
   }
 
 
@@ -311,20 +298,16 @@ public class PathInputPanel extends IzPanel implements ActionListener
     BufferedReader br = null;
     try
     {
-      String os = System.getProperty("os.name");
       InputStream in;
 
-      if (os.regionMatches(true, 0, "windows", 0, 7))
+      if (OsVersion.IS_WINDOWS)
         in = parentFrame.getResource("TargetPanel.dir.windows");
 
-      else if (os.regionMatches(true, 0, "mac os x", 0, 8))
+      else if (OsVersion.IS_OSX)
         in = parentFrame.getResource("TargetPanel.dir.macosx");
-
-      else if (os.regionMatches(true, 0, "mac", 0, 3))
-        in = parentFrame.getResource("TargetPanel.dir.mac");
-
       else
       {
+        String os = System.getProperty("os.name");
         // first try to look up by specific os name
         os = os.replace(' ', '_'); // avoid spaces in file names
         os = os.toLowerCase(); // for consistency among TargetPanel res files
@@ -379,15 +362,14 @@ public class PathInputPanel extends IzPanel implements ActionListener
    */
   public boolean isWriteable()
   {
-    int currentOS = IoHelper.getOSFamily();
     File existParent = IoHelper.existingParent( 
       new File(pathSelectionPanel.getPath()));
     if( existParent == null)
-      return( false );
+      return false;
     // On windows we cannot use canWrite because
     // it looks to the dos flags which are not valid
     // on NT or 2k XP or ...
-    if( currentOS == IoHelper.WINDOWS )
+    if( OsVersion.IS_WINDOWS )
     {
       File tmpFile;
       try
@@ -398,12 +380,12 @@ public class PathInputPanel extends IzPanel implements ActionListener
       catch (IOException e)
       {
         Debug.trace( e.toString() );
-        return(false);
+        return false;
       }
-      return( true );
+      return true;
     }
     else
-      return( existParent.canWrite());
+      return existParent.canWrite();
   }
 
   /**

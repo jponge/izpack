@@ -68,6 +68,7 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -1209,9 +1210,9 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private boolean readComboBox (Object [] field)
   {
-    String variable = null;
-    String value    = null;
-    JComboBox comboBox = null;
+    String variable;
+    String value;
+    JComboBox comboBox;
 
     try
     {
@@ -1221,16 +1222,16 @@ public class UserInputPanel extends IzPanel
     }
     catch (Throwable exception)
     {
-      return (true);
+      return true;
     }
     if ((variable == null) || (value == null))
     {
-      return (true);
+      return true;
     }
 
     idata.setVariable(variable, value);
     entries.add (new TextValuePair (variable, value));
-    return (true);
+    return true;
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -2202,11 +2203,9 @@ public class UserInputPanel extends IzPanel
    */
   public boolean itemRequiredForOs(Vector os)
   {  	
-  	String osName = System.getProperty("os.name");
-	
 	if (os.size () == 0)
 	{
-	  return (true);
+	  return true;
 	}
 
 	for (int i = 0; i < os.size (); i++)
@@ -2216,30 +2215,19 @@ public class UserInputPanel extends IzPanel
 		
 		if (family.equals("windows"))
 		{
-			match = (osName.indexOf("windows") > -1);
+			match = OsVersion.IS_WINDOWS;
 		}
 		else if (family.equals("mac"))
 		{
-			match = ((osName.indexOf("mac") > -1) && !(osName.endsWith("x")));
+			match = OsVersion.IS_OSX;
 		}
 		else if (family.equals("unix"))
 		{
-			String pathSep = System.getProperty("path.separator");
-			match = (   osName.lastIndexOf("unix")    > -1
-						 || osName.lastIndexOf("linux")   > -1
-						 || osName.lastIndexOf("solaris") > -1
-						 || osName.lastIndexOf("sunos")   > -1
-						 || osName.lastIndexOf("aix")     > -1
-						 || osName.lastIndexOf("hpux")    > -1
-						 || osName.lastIndexOf("hp-ux")   > -1
-						 || osName.lastIndexOf("irix")    > -1
-						 || osName.lastIndexOf("bsd")     > -1
-						 || ((pathSep.equals(":") && (!osName.startsWith("mac") || osName.endsWith("x"))))
-						);
+      match = OsVersion.IS_UNIX;
 		}
 		return match;
 	}
-	return (false);
+	return false;
   }
   
   
