@@ -134,17 +134,18 @@ const char ALL_USER_KEY [5][100] =
 };
 
 // Success Codes
-const jint  SL_OK               =  1;     // returned if a call was successful
-const jint  SL_ERROR            = -1;     // unspecific return if a call was not successful
-const jint  SL_INITIALIZED      = -2;     // return value from initialization functions if already initialized
-const jint  SL_NOT_INITIALIZED  = -3;     // return value from uninitialization functions if never initialized
-const jint  SL_OUT_OF_HANDLES   = -4;     // there are no more interface handles available
-const jint  SL_NO_IPERSIST      = -5;     // could not get a handle for the IPersist interface
-const jint  SL_NO_SAVE          = -6;     // could not save the link
-const jint  SL_WRONG_DATA_TYPE  = -7;     // an unexpected data type has been passed or received
+const jint  SL_OK                 =  1;     // returned if a call was successful
+const jint  SL_ERROR              = -1;     // unspecific return if a call was not successful
+const jint  SL_INITIALIZED        = -2;     // return value from initialization functions if already initialized
+const jint  SL_NOT_INITIALIZED    = -3;     // return value from uninitialization functions if never initialized
+const jint  SL_OUT_OF_HANDLES     = -4;     // there are no more interface handles available
+const jint  SL_NO_IPERSIST        = -5;     // could not get a handle for the IPersist interface
+const jint  SL_NO_SAVE            = -6;     // could not save the link
+const jint  SL_WRONG_DATA_TYPE    = -7;     // an unexpected data type has been passed or received
+const jint  SL_CAN_NOT_READ_PATH  = -8;     // was not able to read the link path from the Windows Registry
 
-const int   MAX_TEXT_LENGTH     =  1000;  // buffer size for text buffers
-const int   ALLOC_INCREMENT     =  10;    // allocation increment for allocation of additional storage space for link references
+const int   MAX_TEXT_LENGTH       =  1000;  // buffer size for text buffers
+const int   ALLOC_INCREMENT       =  10;    // allocation increment for allocation of additional storage space for link references
 
 // --------------------------------------------------------------------------
 // Variable Declarations
@@ -1119,11 +1120,16 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_GetLinkPath (JN
                        &ul_size);
 
       RegCloseKey     (h_key);
+      
+      // make sure we actually received a null terminated string as expected
+      if (!(lp_type == REG_SZ))
+      {
+        return (SL_WRONG_DATA_TYPE);
+      }
     }
-    // make sure we actually received a null terminated string as expected
-    if (lp_type != REG_SZ)
+    else
     {
-      return (SL_WRONG_DATA_TYPE);
+      return (SL_CAN_NOT_READ_PATH);
     }
     
     // get the path for all users
@@ -1144,11 +1150,16 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_GetLinkPath (JN
                        &ul_size);
 
       RegCloseKey     (h_allKey);
+      
+      // make sure we actually received a null terminated string as expected
+      if (!(lp_type == REG_SZ))
+      {
+          allPath[0] = 0;
+      }
     }
-    // make sure we actually received a null terminated string as expected
-    if (lp_type != REG_SZ)
+    else
     {
-      return (SL_WRONG_DATA_TYPE);
+      allPath[0] = 0;
     }
     
     // ------------------------------------------------------

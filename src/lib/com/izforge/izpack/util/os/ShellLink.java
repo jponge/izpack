@@ -133,7 +133,15 @@ public class ShellLink implements NativeLibraryClient
       modify, the variable is for exclusive use by the native side. */
   private int     nativeHandle            = UNINITIALIZED;
 
+  /** Path to the location where links for the current user are stored. The
+      exact content depends on the circumstances. It can be set during object 
+      construction or from native code. It will point to the location where 
+      links of the most recently requested type are stored. */
   private String  currentUserLinkPath     = "";
+  /** Path to the location where links for all users are stored. The exact
+      content depends on the circumstances. It can be set during object 
+      construction or from native code. It will point to the location where 
+      links of the most recently requested type are stored. */
   private String  allUsersLinkPath        = "";
   private String  groupName               = "";
   private String  linkName                = "";

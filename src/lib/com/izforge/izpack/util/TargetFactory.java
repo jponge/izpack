@@ -48,8 +48,8 @@ import    java.io.*;
  * OS                 Name            Version   Architecture  Native Report (ver)
  * ----------------------------------------------------------------------------------------------------------
  * Windows 95
- * Windows 98
- * windows-ME
+ * Windows 98         Windows 98      4.10      x86           Windows 98 [Version 4.10.1998]
+ * Windows-ME
  * Windows-NT 3.5
  * Windows-NT 4.0     Windows NT      4.0       x86           Windows NT Version 4.0
  * Windows 2000       Windows 2000    5.0       x86           Microsoft Windows 2000 [Version 5.00.2195]

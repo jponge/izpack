@@ -26,6 +26,8 @@ package   com.izforge.izpack.util.os;
 
 import    java.util.*;
 import    java.io.*;
+
+import    com.izforge.izpack.util.*;
   
 /*---------------------------------------------------------------------------*/
 /**
@@ -198,13 +200,9 @@ public class Win_Shortcut extends Shortcut
  /*--------------------------------------------------------------------------*/
   public boolean multipleUsers ()
   {
-    String path = shortcut.getLinkPath (ShellLink.ALL_USERS);
+    TargetFactory target = TargetFactory.getInstance ();
     
-    if (path == null)
-    {
-      return (false);
-    }
-    if (path.length () == 0)
+    if (target.getOSFlavor () == TargetFactory.STANDARD)
     {
       return (false);
     }
