@@ -238,7 +238,7 @@
         </section>
     </manifest>
   </target>
-  <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.uninstaller, build.panels">
+  <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.panels">
     <echo message="Build ${standalone-compiler.jar}"/>
     <delete file="${standalone-compiler.jar}" verbose="true" />
     <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
@@ -308,8 +308,8 @@
         <include name="com/izforge/izpack/*.class"/>
         <include name="com/izforge/izpack/gui/*.class"/>
         <include name="com/izforge/izpack/installer/*.class"/>
-            <include name="com/izforge/izpack/util/*.class"/>
-            <include name="com/izforge/izpack/util/os/*.class"/>
+        <include name="com/izforge/izpack/util/*.class"/>
+        <include name="com/izforge/izpack/util/os/*.class"/>
         <include name="net/n3/nanoxml/*.class"/>
       </fileset>
       <fileset dir="${src.dir}">
