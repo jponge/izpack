@@ -132,6 +132,9 @@ public class Compiler extends Thread
   /** Error code, set to true if compilation succeeded. */
   private boolean compileFailed = true;
 
+  /** Whether the uninstaller should be added to the installer jar */
+  private boolean writeUninstaller = true;
+  
   /**
    *  The constructor.
    *
@@ -265,7 +268,7 @@ public class Compiler extends Thread
     // We add the variable declaration
     packager.setVariables(getVariables(data));
 
-    // We add the info
+    // We add the info (must call before getResources for uninstaller)
     packager.setInfo(getInfo(data));
 
     // We add the GUIPrefs
@@ -1209,7 +1212,8 @@ public class Compiler extends Thread
     if (resources.isEmpty())
       parseError(root, "<resources> requires a <res>");
 
-    // Uninstaller must be added as a resource for standalone compiler
+    if (writeUninstaller)
+    {
     InputStream uninst_is =
       getClass().getResourceAsStream("/lib/uninstaller.jar");
 
@@ -1231,6 +1235,7 @@ public class Compiler extends Thread
       }
     }
     resources.add(new Resource("IzPack.uninstaller", uninst_is));
+    }
 
     // We return the ArrayList
     return resources;
@@ -1301,8 +1306,7 @@ public class Compiler extends Thread
 
     XMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
     if (uninstallInfo != null)
-      info.setWriteUninstaller(
-        validateYesNoAttribute(uninstallInfo, "write", YES));
+      writeUninstaller = validateYesNoAttribute(uninstallInfo, "write", YES);
 
     // We return the suitable Info object
     return info;
