@@ -448,17 +448,17 @@ public class Compiler extends Thread
         }
 
 
-                    // get arguments for this executable
-                    ArrayList argList = null;
-                    XMLElement args = e.getFirstChildNamed("args");
-                    if (null != args) {
-                        argList= new ArrayList();
-                        Iterator argIterator = args.getChildrenNamed("arg").iterator();
-                        while (argIterator.hasNext()) {
-                            XMLElement arg = (XMLElement) argIterator.next();
-                            argList.add(arg.getAttribute("value"));
-                        }
-                    }
+        // get arguments for this executable
+        ArrayList argList = null;
+        XMLElement args = e.getFirstChildNamed("args");
+        if (null != args) {
+            argList= new ArrayList();
+            Iterator argIterator = args.getChildrenNamed("arg").iterator();
+            while (argIterator.hasNext()) {
+                XMLElement arg = (XMLElement) argIterator.next();
+                argList.add(arg.getAttribute("value"));
+            }
+        }
 
         // get os info on this executable
         ArrayList osList = new ArrayList();
@@ -881,7 +881,7 @@ public class Compiler extends Thread
             packFiles = new ArrayList();
             parsables = new ArrayList();
             executables = new ArrayList();
-        };
+        }
     }
 
     // Represents a pack data source
