@@ -72,8 +72,10 @@ public class PacksPanelAutomationHelper implements PanelAutomation
    */
   public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
   {
+    // We first get the <selected> child (new from version 3.7.0).
+    XMLElement selectedPacks = panelRoot.getFirstChildNamed("selected");
     // We get the packs markups
-    Vector pm = panelRoot.getChildrenNamed("pack");
+    Vector pm = selectedPacks.getChildrenNamed("pack");
 
     // We figure out the selected ones
     int size = pm.size();
@@ -81,7 +83,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
     for (int i = 0; i < size; i++)
     {
       XMLElement el = (XMLElement) pm.get(i);
-      Boolean selected = Boolean.valueOf(el.getAttribute ("selected"));
+      Boolean selected = new Boolean(true); // No longer needed.
 
       if (selected.booleanValue ())
       {

@@ -88,5 +88,6 @@ IzPack for your projects ;-)
 - Michael Hagedorn : for the UserInputPanel fixes.
 - Jan Pavlovic : for the Czech translation.
 - Thomas Girard : for the uninstaller custom names patch.
+- Oscar Sierra : for the patches.
 
 # vim: fileformat=dos

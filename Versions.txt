@@ -1,12 +1,18 @@
 [ The list of the different public versions of IzPack ]
 
   > 3.8.0 (build N/A)
-- Fixing bug with comboboxes. There was no text shown if you do not use a 
+- Fixing bug with comboboxes. There was no text shown if you do not use a
   processor to generate the choices. At now you can us the id or txt attribute
   (Thorsten Kamann)
 - Uninstaller: use the system Look and Feel instead of the cross-platform one
   (feature request #470).
 - The uninstaller name can be changed (Thomas Girard).
+
+  > 3.7.1
+
+- The Danish langpack was empty by mistake in 3.7.0.
+- Silent installations fix (Oscar Sierra).
+- Free disk space bugfix on Solaris (Oscar Sierra).
 
   > 3.7.0 (build 2004.01.11)
 
@@ -53,7 +59,7 @@
   (bug #2713).
 - Installers: avoid showing an empty JFrame behind the languages selection
   dialog (observed on X11).
-- UserInputPanel: the autodetect button is hidden if not needed 
+- UserInputPanel: the autodetect button is hidden if not needed
   (Michael Hagedorn).
 - A tutorial is now available.
 - New Czech langpack (Jan Pavlovic).
