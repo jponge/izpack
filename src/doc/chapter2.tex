@@ -237,8 +237,30 @@ Here's a sample :\\
   <langpack iso3="fra"/>
   <langpack iso3="spa"/>
 </locale>
-\end{verbatim}
+\end{verbatim}\
 \normalsize
+
+The supported ISO3 codes are :
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+\textit{ISO3 code} & \textit{Language} \\ \hline
+cat & Catalunyan \\ \hline
+deu & German \\ \hline
+eng & English \\ \hline
+fin & Finnish \\ \hline
+fra & French \\ \hline
+hun & Hungarian \\ \hline
+jpn & Japanese \\ \hline
+ned & Nederlands \\ \hline
+pol & Polnish \\ \hline
+por & Portuguese (Brazilian) \\ \hline
+rus & Russian \\ \hline
+spa & Spanish \\ \hline
+swe & Swedish \\ \hline
+ukr & Ukrainian \\ \hline
+\end{tabular}\
+\end{center}
 
 \subsection{The Resources Element \texttt{<resources>}}
 
@@ -323,7 +345,8 @@ to be installed. It contains the following XML elements :\\
       \item \texttt{targetdir} : the destination directory, could be something
       like \texttt{\$INSTALL\_PATH/subdirX}
       \item \texttt{os} : can optionally specify a target operating system
-      (\texttt{unix, windows, mac})
+      (\texttt{unix, windows, mac}) - this means that the file will only be
+      installed on its target operating system
     
     \end{itemize}\
     \item \texttt{<fileset>} : supports the Jakarta Ant powerful set syntax,
@@ -340,7 +363,25 @@ to be installed. It contains the following XML elements :\\
     
     \end{itemize}\
     You specify the files with  \texttt{<include>} and \texttt{<exclude>} tags
-    that take the \texttt{name} parameter to specify the Ant-like pattern
+    that take the \texttt{name} parameter to specify the Ant-like pattern :
+    \begin{itemize}    
+      \item \texttt{**} : means any subdirectoy
+      \item \texttt{*} : used as a wildcard.
+    \end{itemize}
+    Here are some examples of Ant patterns :
+    \begin{itemize}
+    
+      \item \texttt{<include name="lib"/>} : will include \texttt{lib} and the
+      subdirectories of \texttt{lib}
+      \item \texttt{<exclude name="**/*.java"/>} : will exclude any file in any
+      directory starting from the base path ending by \texttt{.java}
+      \item \texttt{<include name="lib/*.jar"/>} : will include all the files
+      ending by \texttt{.jar} in \texttt{lib}
+      \item \texttt{<exclude name="lib/**/*FOO*"/>} : will exclude any file in
+      any subdirectory starting from \texttt{lib} whose name contains
+      \texttt{FOO}.
+    
+    \end{itemize}\
     \item \texttt{<parsable>} : used to specify the files for parsing by the
     variables substitutor, here are the attributes :
     \begin{itemize}
@@ -502,9 +543,12 @@ Allows the user to select the packs he wants to install.\\
 
 This is the same as above, but for each panel a different picture is
 shown to the user. The pictures are specified with the resources
-\texttt{ImgPacksPanel.img.x} where x stands for the pack name, the
+\texttt{ImgPacksPanel.img.x} where x stands for the pack number, the
 numbers start from 0. Of course it's up to you to specify as many images
-as needed and with correct numbers.\\
+as needed and with correct numbers. For instance if you have 2 packs
+\texttt{core} and \texttt{documentation} (in this order), then the resource for
+\texttt{core} will be \texttt{ImgPacksPanel.img.0} and the resource for
+\texttt{doc} will be \texttt{ImgPacksPanel.img.1}.\\
 
 \subsection{TargetPanel}
 
