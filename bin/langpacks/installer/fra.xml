@@ -55,6 +55,9 @@
     <str id="InstallPanel.tip" txt="Progression de l'installation :"/>
     <str id="InstallPanel.begin" txt="[Rien]"/>
     <str id="InstallPanel.finished" txt="[Terminé]"/>
+    <str id="InstallPanel.progress" txt="Progression de l'installation totale :"/>
+    <str id="InstallPanel.overwrite.title" txt="Le fichier existe déjà."/>
+    <str id="InstallPanel.overwrite.question" txt="Le fichier suivant existe déjà. Faut-il l'écraser ?"/>
     
     <str id="FinishPanel.success" txt="L'installation est réussie !"/>
     <str id="FinishPanel.fail" txt="L'installation a échouée ..."/>
@@ -102,6 +105,32 @@
     <str id="ShortcutPanel.location.startup"      txt="Groupe de démarrage"/>
 
     <str id="UserInputPanel.error.caption"        txt="Problème de saisie"/>
+    <str id="UserInputPanel.search.autodetect"    txt="Détection automatique"/>
+    <str id="UserInputPanel.search.autodetect.failed.message" txt="La détection automatique a échouée."/>
+    <str id="UserInputPanel.search.autodetect.failed.caption" txt="La détection automatique a échouée."/>
+    <str id="UserInputPanel.search.autodetect.tooltip" txt="Vérifiez le fichier ou répertoire dans les chemis suivants :"/>
+    <str id="UserInputPanel.search.location" txt="Entrez l'emplacement de "/>
+    <str id="UserInputPanel.search.browse" txt="Parcourir ..."/>
+    
+    <str id="CompilePanel.heading" txt="Compilation" />
+    <str id="CompilePanel.tip" txt="Progression de la compilation :" />
+    <str id="CompilePanel.browse" txt="Parcourir ..." />
+    <str id="CompilePanel.browse.approve" txt="Utiliser en tant que compilateur" />
+    <str id="CompilePanel.start" txt="Démarrer" />
+    <str id="CompilePanel.progress.initial" txt="[Appuyez sur le bouton de démarrage]" />
+    <str id="CompilePanel.progress.finished" txt="[Fini]" />
+    <str id="CompilePanel.progress.overall" txt="Progression de la compilation totale :" />
+    <str id="CompilePanel.error" txt="La compilation a échouée." />
+    <str id="CompilePanel.error.reconfigure" txt="Re-configurer" />
+    <str id="CompilePanel.error.ignore" txt="Ignorer" />
+    <str id="CompilePanel.error.abort" txt="Abandonner" />
+    <str id="CompilePanel.error.seebelow" txt="Voyez ci-dessous la commande qui a échouée ainsi que sa sortie." />
+    <str id="CompilePanel.error.nofiles" txt="Erreur pendant la recherche des fichiers à compiler." />
+    <str id="CompilePanel.error.compilernotfound" txt="Le compilateur n'a pas pu etre exécuté." />
+    <str id="CompilePanel.error.invalidarguments" txt="Le compilateur n'aime pas les arguments fournis." />
+    <str id="CompilePanel.error.noclassfile" txt="Le compilateur n'a pas génére de fichier .class pour le fichier source " />
+    <str id="CompilePanel.choose_compiler" txt="Compilateur à utiliser :" />
+    <str id="CompilePanel.additional_arguments" txt="Arguments supplémentaires du compilateur : " />
 
     <!-- Add your own panels specific strings here if you need -->
     
