@@ -87,6 +87,7 @@ public class ActionBase  implements Serializable
   public static final String NOTHING = "nothing";
 
   public static final String FILESET = "fileset";
+  public static final String MESSAGEID = "messageid";
   public static final String INCLUDE = "include";
   public static final String INCLUDES = "includes";
   public static final String EXCLUDE = "exclude";
@@ -109,6 +110,8 @@ public class ActionBase  implements Serializable
   protected String uninstallOrder = ActionBase.BEFOREDELETION;
 
   protected String order = null;
+  
+  protected String messageID = null;
 
   static
   {
@@ -172,5 +175,23 @@ public class ActionBase  implements Serializable
   }
     
 
+
+  /**
+   * Returns the defined message ID for this action.
+   * @return the defined message ID 
+   */
+  public String getMessageID()
+  {
+    return messageID;
+  }
+
+  /**
+   * Sets the message ID to the given string.
+   * @param string string to be used as message ID
+   */
+  public void setMessageID(String string)
+  {
+    messageID = string;
+  }
 
 }

@@ -26,10 +26,13 @@
 package com.izforge.izpack.event;
 
 import java.io.File;
+import java.util.ArrayList;
 
+import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.SpecHelper;
 
@@ -49,7 +52,16 @@ import com.izforge.izpack.util.SpecHelper;
 public class SimpleInstallerListener  implements InstallerListener
 {
 
- 
+  private static ArrayList progressBarCaller = new ArrayList();
+
+  /** The name of the XML file that specifies the panel langpack */
+  protected static final String LANG_FILE_NAME = "CustomActionsLang.xml";
+  
+  /** The packs locale database. */
+  protected static LocaleDatabase langpack = null;
+
+  protected static boolean doInformProgressBar = false;  
+  
   private AutomatedInstallData installdata = null;
   private SpecHelper  specHelper = null;
 
@@ -129,7 +141,19 @@ public class SimpleInstallerListener  implements InstallerListener
   {
     if( installdata == null )
       installdata = idata;
-    ;
+    if( installdata != null && SimpleInstallerListener.langpack == null)
+    {
+      // Load langpack.
+      try
+      {
+        String resource = LANG_FILE_NAME + "_" + installdata.localeISO3;
+        SimpleInstallerListener.langpack = 
+          new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
+      }
+      catch (Throwable exception)
+      {}
+
+    }
   }
 
   /* (non-Javadoc)
@@ -205,4 +229,65 @@ public class SimpleInstallerListener  implements InstallerListener
     installdata = data;
   }
 
+  /**
+   * Returns the count of listeners which are registered as progress bar caller.
+   * @return the count of listeners which are registered as progress bar caller
+   */
+  public static int getProgressBarCallerCount()
+  {
+    return( progressBarCaller.size());
+  }
+  
+  /**
+   * Returns the progress bar caller id of this object.
+   * @return the progress bar caller id of this object 
+   */
+  protected int getProgressBarCallerId()
+  {
+    for( int i = 0; i < progressBarCaller.size(); ++i)
+    {
+      if( progressBarCaller.get(i) == this )
+        return(i + 1);
+    }
+    return(0);
+  }
+  
+  /**
+   * Sets this object as progress bar caller.
+   */
+  protected void setProgressBarCaller()
+  {
+    progressBarCaller.add(this);
+      
+  }
+  
+  /**
+   * Returns whether this object should inform the progress bar or not.
+   * @return whether this object should inform the progress bar or not
+   */
+  protected boolean informProgressBar()
+  {
+    return( doInformProgressBar );
+  }
+  
+  /**
+   * Returns the language dependant message from the resource
+   * CustomActionsLang.xml or the common language pack for the given id.
+   * If no string will be found, the id returns.
+   * @param id string id for which the message should be resolved
+   * @return the related language dependant message
+   */
+  protected String getMsg(String id)
+  {
+    String retval = id;
+    if( SimpleInstallerListener.langpack != null )
+    {
+      retval = SimpleInstallerListener.langpack.getString(id);
+    }
+    if( retval.equals(id) && getInstalldata() != null)
+    {
+      retval = getInstalldata().langpack.getString(id);
+    }
+    return( retval);
+  }
 }

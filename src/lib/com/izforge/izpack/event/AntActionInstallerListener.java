@@ -38,6 +38,7 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.SpecHelper;
 
 
@@ -136,6 +137,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
               ((ArrayList)packActions.get(act.getOrder())).add(act);
             }
         }
+        // Set for progress bar interaction.
+        if( ((ArrayList)packActions.get(ActionBase.AFTERPACKS)).size() > 0 )
+          this.setProgressBarCaller();
       }
       
       actions.put(p.name, packActions);
@@ -144,7 +148,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     while( iter.hasNext() )
     {
       String currentPack = ((Pack)iter.next()).name;
-      performAllActions( currentPack, ActionBase.BEFOREPACKS );
+      performAllActions( currentPack, ActionBase.BEFOREPACKS, null );
     }
   }
 
@@ -157,7 +161,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     AbstractUIProgressHandler handler)
     throws Exception
   {
-    performAllActions( pack.name, ActionBase.BEFOREPACK );
+    performAllActions( pack.name, ActionBase.BEFOREPACK, handler );
   }
   
   /* (non-Javadoc)
@@ -169,7 +173,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     AbstractUIProgressHandler handler)
     throws Exception
   {
-    performAllActions( pack.name, ActionBase.AFTERPACK );
+    performAllActions( pack.name, ActionBase.AFTERPACK, handler );
   }
         
   /* (non-Javadoc)
@@ -180,11 +184,16 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     AbstractUIProgressHandler handler)
     throws Exception
   {
+    if( informProgressBar())
+    {
+      handler.nextStep( getMsg("AntAction.pack"), 
+        getProgressBarCallerId(), getActionCount(idata, ActionBase.AFTERPACKS));
+    }
     Iterator iter = idata.selectedPacks.iterator();
     while( iter.hasNext() )
     {
       String currentPack = ((Pack)iter.next()).name;
-      performAllActions( currentPack, ActionBase.AFTERPACKS );
+      performAllActions( currentPack, ActionBase.AFTERPACKS, handler );
     }
     if( uninstActions.size() > 0 )
     {
@@ -192,6 +201,19 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     }
   }
 
+  private int getActionCount(AutomatedInstallData idata, String order)
+  {
+     int retval = 0;
+    Iterator iter = idata.selectedPacks.iterator();
+    while( iter.hasNext() )
+    {
+      String currentPack = ((Pack)iter.next()).name;
+      ArrayList actList = getActions(currentPack, order);
+      if( actList != null)
+       retval += actList.size();
+    }
+    return(retval);
+  }
   /**
    * Returns the defined actions for the given pack in the
    * requested order.
@@ -222,7 +244,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener
    * @param order order to be used; valid are <i>beforepack</i> and <i>afterpack</i>
    * @throws InstallerException
    */
-  private void performAllActions( String packName, String order )
+  private void performAllActions( String packName, String order, 
+    AbstractUIProgressHandler handler )
     throws InstallerException
   {
     ArrayList actList = getActions(packName, order);
@@ -233,6 +256,15 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     for (int i = 0; i < actList.size(); i++)
     {
       AntAction act = (AntAction)actList.get(i);
+      // Inform progress bar if needed. Works only
+      // on AFTER_PACKS
+      if( informProgressBar() && handler != null &&
+        handler instanceof ExtendedUIProgressHandler 
+        && order.equals(ActionBase.AFTERPACKS))
+      {
+        ((ExtendedUIProgressHandler)handler).progress( 
+          (act.getMessageID() != null) ? getMsg(act.getMessageID()) : "");
+      }
       try
       {
         act.performInstallAction();
@@ -280,6 +312,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     {
       act.setLogFile(str);
     }
+    String msgId = el.getAttribute(ActionBase.MESSAGEID);
+    if( msgId != null && msgId.length() > 0)
+      act.setMessageID(msgId);
 
     // read propertyfiles
     Iterator iter = el.getChildrenNamed(ActionBase.PROPERTYFILE).iterator();
