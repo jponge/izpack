@@ -187,9 +187,15 @@ the default suffix added to the segments of split files.
 \begin{itemize}
   \item \texttt{Split-Jar-Secondary-Count}: The number of secondary jars
         in the set.
-  \item \texttt{Split-Entry-Suffix}: the name the suffix, appended typically
-        \texttt{.---\#.\~{}}. The \# char indicates the location of the numeric value.
-        This cannot currently be changed.
+  \item \texttt{Split-Jar-Secondary-Suffix}: the suffix template
+        inserted prior to the \texttt{.jar} suffix typical of jar
+        files, to make the names of secondary jar file in the set;
+        typically \texttt{.split\#}.
+  \item \texttt{Split-Entry-Suffix}: the suffix template appended to
+        an entry name, to name each of the entries constituent parts;
+        typically \texttt{.---\#.\~{}}. The \# char indicates the
+        location of the numeric value.  This cannot currently be
+        changed.
 \end{itemize}
 
 \subsection{Per-Entry Section Attributes}
