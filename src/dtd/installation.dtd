@@ -91,7 +91,7 @@
           <!ATTLIST parsable encoding CDATA #IMPLIED>
           <!ATTLIST file os (unix|windows|mac) #IMPLIED>
       <!ELEMENT executable (args?, os*)>
-          <!ATTLIST executable targetfile CDATA #REQUIRED>
+          <!ATTLIST executable targetfile CDATA #IMPLIED>
           <!ATTLIST executable class CDATA #IMPLIED>
           <!ATTLIST executable type (bin|jar) "bin">
           <!ATTLIST executable stage (postinstall|never|uninstall) "never">

@@ -670,9 +670,9 @@ public class Compiler extends Thread
           
           String targetfile_attr = e.getAttribute("targetfile");
           
-          if (targetfile_attr == null)
+          if ((targetfile_attr == null) && (executeClass == null))
           {
-            throw new Exception ("missing \"targetfile\" attribute for <parsable> in line "+e.getLineNr());
+            throw new Exception ("either \"targetfile\" or \"class\" attribute is required for <executable> in line "+e.getLineNr());
           }
 
           pack.executables.add(new ExecutableFile(targetfile_attr,
