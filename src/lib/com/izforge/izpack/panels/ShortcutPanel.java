@@ -77,6 +77,7 @@ import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.MultiLineLabel;
 
+import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.ShellLink;
@@ -630,6 +631,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     for (int i = 0; i < shortcutSpecs.size (); i++)
     {
       shortcutSpec      = (XMLElement)shortcutSpecs.elementAt (i);
+
+      if (! OsConstraint.oneMatchesCurrentSystem(shortcutSpec))
+        continue;
+
       data              = new ShortcutData ();
 
       data.name               = shortcutSpec.getAttribute( SPEC_ATTRIBUTE_NAME );
@@ -1510,6 +1515,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     // data. Just return.
     // ----------------------------------------------------
     if (!shortcut.supported ())
+    {
+      return;
+    }
+
+    if (! OsConstraint.oneMatchesCurrentSystem(panelRoot))
     {
       return;
     }

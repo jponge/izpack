@@ -36,6 +36,9 @@
     <str id="LicencePanel.no" txt="Ne"/>
     
     <str id="InfoPanel.info" txt="Preètìte si nasledující informace :"/>
+
+    <str id="PathInputPanel.required" txt="Vybraný adresáø by mìl existovat."/>
+    <str id="PathInputPanel.notValid" txt="Vybraný adresáø neobsahuje po¾adavaný produkt."/>
     
     <str id="TargetPanel.info" txt="Vyberte instalaèní adresáø :"/>
     <str id="TargetPanel.browse" txt="Prohledat ..."/>
@@ -44,11 +47,26 @@
     <str id="TargetPanel.empty_target"
          txt="Nevybrali jste cílový adresáø! Je to správnì?"/>
 		<str id="TargetPanel.createdir" txt="Bude vytvoøen cílový adresáø :" />
+    <str id="TargetPanel.nodir" 
+         txt="Tento soubor není adresáø! Zvolte adresáø!"/>
+    <str id="TargetPanel.notwritable" 
+         txt="Tento adresáø nelze vytvoøit! Zvolte jiný adresáø!"/>
+    
+    <str id="JDKPathPanel.intro" txt="Nainstalovaná aplikace potøebuje JDK. Java runtime environment (JRE) není postaèující."/>
+    <str id="JDKPathPanel.info" txt="Select the JDK path:"/>
+    <str id="JDKPathPanel.badVersion1" txt="Zvolena ¹patná verze JDK (dostupné: "/>
+    <str id="JDKPathPanel.badVersion2" txt=" vy¾adované: "/>
+    <str id="JDKPathPanel.badVersion3" txt=") má být toto JDK i pøesto pou¾ito?"/>
     
     <str id="PacksPanel.info" txt="Vyberte balíky ktéré budou instalované :"/>
     <str id="PacksPanel.tip" txt="Poznámka: za¹edìné balíky jsou vy¾adované."/>
     <str id="PacksPanel.space" txt="Potøebné místo na disku: "/>
+    <str id="PacksPanel.freespace" txt="Volné místo na disku: "/>
     <str id="PacksPanel.description" txt="Poznámka"/>
+    <str id="PacksPanel.dependencyList" txt="Pro instalaci zvolených balíèkù je nutné nainstalovat i následující balíèky"/>
+    <str id="ImgPacksPanel.dependencyList" txt="Dependencies"/>
+	  <str id="PacksPanel.notEnoughSpace" txt="Po¾adované místo na disku pro instalaci je vìt¹í ne¾ dostupné volné místo."/>
+    <str id="PacksPanel.notAscertainable" txt="not ascertainable"/>
     
     <str id="InstallPanel.info" txt="Kliknutím na tlaèítko 'Instalovat !' zaènete instalaci"/>
     <str id="InstallPanel.install" txt="Instalovat !"/>
@@ -58,7 +76,6 @@
     <str id="InstallPanel.progress" txt="Celkový stav instalace :"/>
     <str id="InstallPanel.overwrite.title" txt="Soubor u¾ existuje"/>
     <str id="InstallPanel.overwrite.question" txt="Soubor u¾ existuje. Pøepsat soubor?"/>
-    
     
     <str id="FinishPanel.success" txt="Instalace probìhla úspì¹nì."/>
     <str id="FinishPanel.fail" txt="Chyba instalace!"/>

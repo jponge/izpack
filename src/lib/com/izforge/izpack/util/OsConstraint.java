@@ -255,6 +255,6 @@ public class OsConstraint implements java.io.Serializable
 	  retval.append(" ]");
 	  return retval.toString();
   }
-  
+
 }
 
