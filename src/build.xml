@@ -438,6 +438,14 @@
       <param name="panel" value="RuleInputField" />
       <param name="panel-dir" value="UserInputPanel" />
     </antcall>
+    <antcall target="compile.panel">
+      <param name="panel" value="RuleValidator" />
+      <param name="panel-dir" value="UserInputPanel" />
+    </antcall>
+    <antcall target="compile.panel">
+      <param name="panel" value="Encryptor" />
+      <param name="panel-dir" value="UserInputPanel" />
+    </antcall>
   </target>
 
   <!-- Deletes the classes directory -->
