@@ -1,5 +1,3 @@
-[ The list of the different public versions of IzPack ]
-
   > 3.8.0 (build N/A)
 - Fixing bug with comboboxes. There was no text shown if you do not use a
   processor to generate the choices. At now you can us the id or txt attribute
@@ -17,6 +15,7 @@
   > 3.7.2 (build N/A)
 
 - IoHelper.getPrimaryGroup: bugfix for SunOS (Klaus Bartz).
+- Russian langpack fixes (Alexey Makhmutov).
 
   > 3.7.1 (build 2005.02.15)
 
