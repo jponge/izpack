@@ -8,6 +8,7 @@
 - New SudoPanel (Jan Blok).
 - ShortcutPanel: the action is now performed when the 'next' button is pressed
   (Jan Blok).
+- Nasty bug in AutomatedInstallData variables setting fix.
 
 
   > 3.4.0 (build 2003.12.06)

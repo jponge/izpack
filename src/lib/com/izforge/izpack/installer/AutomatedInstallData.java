@@ -65,7 +65,10 @@ public class AutomatedInstallData
 
     public void setVariable(String var, String val)
     {
-      setProperty(var, val);
+      if (var != null && val != null)
+      {
+        setProperty(var, val);
+      }
     }
   }
 
