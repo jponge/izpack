@@ -82,7 +82,7 @@
         <res src="Licence.txt" id="LicencePanel.licence"/>
         <res src="langsel.jpg" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
-   <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
+        <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0" />
         <res src="doc-html.png" id="ImgPacksPanel.img.1" />
         <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />

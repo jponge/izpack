@@ -16,11 +16,11 @@
      startup="no"
      target="$INSTALL_PATH/bin/izpack-fe.sh"
      commandLine=""
-  workingDirectory="$INSTALL_PATH/bin"
+     workingDirectory="$INSTALL_PATH/bin"
      description="Front-End for IzPack installation tool"
      iconFile="$INSTALL_PATH/bin/icons/izpack.png"
      iconIndex="0"
-  type="Application"
+     type="Application"
      encoding="UTF-8"
      terminal="true"
      KdeSubstUID="false"
@@ -88,7 +88,7 @@
      workingDirectory=""
      type="Application"
      encoding="UTF-8"
-  description="IzPack uninstaller">
+     description="IzPack uninstaller">
      <createForPack name="Core" />
    </shortcut>
    
