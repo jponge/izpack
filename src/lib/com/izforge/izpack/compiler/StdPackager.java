@@ -37,9 +37,7 @@ public class StdPackager extends Packager
     // The fields
     
     protected JarOutputStream outJar;   // The zipped output stream (the jar file here)
-    protected ArrayList packs;          // The packs informations
-    protected ArrayList langpacks;      // The langpacks iso3 names
-
+    
     //.....................................................................
 
     // The constructor

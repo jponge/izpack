@@ -34,6 +34,7 @@ public class Pack implements Serializable
     public String name;
     public String description;
     public boolean required;
+    public long nbytes;
     
     // The constructor
     public Pack(String name, String description, boolean required)
@@ -41,6 +42,7 @@ public class Pack implements Serializable
         this.name = name;
         this.description = description;
         this.required = required;
+        nbytes = 0;
     }
     
     // To a String (usefull for JLists)

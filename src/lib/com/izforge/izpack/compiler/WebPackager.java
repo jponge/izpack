@@ -39,8 +39,6 @@ public class WebPackager extends Packager
 
     protected JarOutputStream outJar;   // The zipped output stream (the jar file here)
     protected JarOutputStream webJar;   // The web jar
-    protected ArrayList packs;          // The packs informations
-    protected ArrayList langpacks;      // The langpacks iso3 names
 
     //.....................................................................
 

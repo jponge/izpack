@@ -42,6 +42,10 @@ public abstract class Packager
     // The path to the skeleton installer
     public static final String SKELETON_PATH = Compiler.IZPACK_HOME + "lib" +
                                                File.separator + "installer.jar";
+    
+    // Common Data
+    protected ArrayList packs;          // The packs informations
+    protected ArrayList langpacks;      // The langpacks iso3 names
 
     //.....................................................................
     // The packager listeners handling part
@@ -141,6 +145,18 @@ public abstract class Packager
             bytesCopied += bytesInBuffer;
         }
         return bytesCopied;
+    }
+    
+    /**
+     * Called by the Compiler when the pack content adding is done.
+     * (JP)
+     *
+     * @param number the pack number
+     * @param nbytes the number of bytes written
+     */
+    protected void packAdded(int number, long nbytes)
+    {
+        ((Pack)packs.get(number)).nbytes = nbytes;
     }
 
     //.....................................................................

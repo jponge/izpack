@@ -114,214 +114,203 @@ public class Compiler extends Thread
     public void executeCompiler(boolean silent) throws Exception
     {
 
-/** @todo
-        try
+        // Usefull variables
+        int size;
+        int i;
+        String str;
+        InputStream inStream;
+
+        // We get the XML data tree
+        XMLElement data = getXMLTree();
+
+
+        // We get the Packager
+        Packager packager = getPackager();
+
+        // We add the variable declaration
+        packager.setVariables(getVariables(data));
+
+        // We add the info
+        packager.setInfo(getInfo(data));
+        packager.setEnrollInfo(getEnrollInfo(data));
+
+        // We add the GUIPrefs
+        packager.setGUIPrefs(getGUIPrefs(data));
+
+        // We add the language packs
+        ArrayList langpacks = getLangpacksCodes(data);
+        Iterator iter = langpacks.iterator();
+        while (iter.hasNext())
         {
- */
-            // Usefull variables
-            int size;
-            int i;
-            String str;
-            InputStream inStream;
+            str = (String) iter.next();
 
-            // We get the XML data tree
-            XMLElement data = getXMLTree();
+            // The language pack
+            inStream = new FileInputStream(Compiler.IZPACK_HOME + "bin" + File.separator + "langpacks" +
+                       File.separator + "installer" + File.separator + str + ".xml");
+            packager.addLangPack(str, inStream);
 
+            // The flag
+            inStream = new FileInputStream(Compiler.IZPACK_HOME + "bin" + File.separator + "langpacks" +
+                       File.separator + "flags" + File.separator + str + ".gif");
+            packager.addResource("flag." + str, inStream);
+        }
 
-            // We get the Packager
-            Packager packager = getPackager();
+        // We add the resources
+        ArrayList resources = getResources(data);
+        iter = resources.iterator();
 
-            // We add the variable declaration
-            packager.setVariables(getVariables(data));
-
-            // We add the info
-            packager.setInfo(getInfo(data));
-            packager.setEnrollInfo(getEnrollInfo(data));
-
-            // We add the GUIPrefs
-            packager.setGUIPrefs(getGUIPrefs(data));
-
-            // We add the language packs
-            ArrayList langpacks = getLangpacksCodes(data);
-            Iterator iter = langpacks.iterator();
-            while (iter.hasNext())
+        while (iter.hasNext())
+        {
+            Resource res = (Resource) iter.next();
+            if (res.parse ) 
             {
-                str = (String) iter.next();
+                if (null != varMap) 
+                {
+                    File resFile = new File(res.src);
+                    FileInputStream inFile = new FileInputStream(resFile);
+                    BufferedInputStream bin = new BufferedInputStream(inFile, 5120);
 
-                // The language pack
-                inStream = new FileInputStream(Compiler.IZPACK_HOME + "bin" + File.separator + "langpacks" +
-                           File.separator + "installer" + File.separator + str + ".xml");
-                packager.addLangPack(str, inStream);
+                    File parsedFile = File.createTempFile("izpp", null, resFile.getParentFile());
+                    FileOutputStream outFile = new FileOutputStream(parsedFile);
+                    BufferedOutputStream bout = new BufferedOutputStream(outFile, 5120);
 
-                // The flag
-                inStream = new FileInputStream(Compiler.IZPACK_HOME + "bin" + File.separator + "langpacks" +
-                           File.separator + "flags" + File.separator + str + ".gif");
-                packager.addResource("flag." + str, inStream);
-            }
-
-            // We add the resources
-            ArrayList resources = getResources(data);
-            iter = resources.iterator();
-
-            while (iter.hasNext())
-            {
-                Resource res = (Resource) iter.next();
-                if (res.parse ) {
-                    if (null != varMap) {
-                        File resFile = new File(res.src);
-                        FileInputStream inFile = new FileInputStream(resFile);
-                        BufferedInputStream bin = new BufferedInputStream(inFile, 5120);
-
-                        File parsedFile = File.createTempFile("izpp", null, resFile.getParentFile());
-                        FileOutputStream outFile = new FileOutputStream(parsedFile);
-                        BufferedOutputStream bout = new BufferedOutputStream(outFile, 5120);
-
-                        VariableSubstitutor vs = new VariableSubstitutor(varMap);
-                        vs.substitute(bin, bout, res.type, res.encoding);
-                        bin.close();
-                        bout.close();
-                        inFile = new FileInputStream(parsedFile);
-                        packager.addResource(res.id, inFile);
-                        inFile.close();
-                        parsedFile.delete();
-                    }
-                    else {
-                        System.err.println("ERROR: no variable is defined. " + res.src + " is not parsed.");
-                        inStream = new FileInputStream(res.src);
-                        packager.addResource(res.id, inStream);
-                    }
+                    VariableSubstitutor vs = new VariableSubstitutor(varMap);
+                    vs.substitute(bin, bout, res.type, res.encoding);
+                    bin.close();
+                    bout.close();
+                    inFile = new FileInputStream(parsedFile);
+                    packager.addResource(res.id, inFile);
+                    inFile.close();
+                    parsedFile.delete();
                 }
-                else {
+                else 
+                {
+                    System.err.println("ERROR: no variable is defined. " + res.src + " is not parsed.");
                     inStream = new FileInputStream(res.src);
                     packager.addResource(res.id, inStream);
                 }
             }
-
-
-            // We add the native libraries
-            ArrayList natives = getNativeLibraries(data);
-            iter = natives.iterator();
-            while (iter.hasNext())
+            else 
             {
-                NativeLibrary nat = (NativeLibrary) iter.next();
-                inStream = new FileInputStream(nat.path);
-                packager.addNativeLibrary(nat.name, inStream);
+                inStream = new FileInputStream(res.src);
+                packager.addResource(res.id, inStream);
             }
-
-            // We add the additionnal jar files content
-            ArrayList jars = getJars(data);
-            iter = jars.iterator();
-            while (iter.hasNext())
-            {
-              packager.addJarContent((String) iter.next());
-            }
-
-            // We add the panels
-            ArrayList panels = getPanels(data);
-            ArrayList panelsOrder = new ArrayList(panels.size());
-            iter = panels.iterator();
-            while (iter.hasNext())
-            {
-                // We locate the panel classes directory
-                str = (String) iter.next();
-                File dir = new File(Compiler.IZPACK_HOME + "bin" + File.separator + "panels" + File.separator + str);
-                if (!dir.exists()) throw new Exception(str + " panel does not exist");
-
-                // We add the panel in the order array
-                panelsOrder.add(str);
-
-                // We add each file in the panel folder
-                File[] files = dir.listFiles();
-                int nf = files.length;
-                for (int j = 0; j < nf; j++)
-                {
-                    if (files[j].isDirectory()) continue;
-                    FileInputStream inClass = new FileInputStream(files[j]);
-                    packager.addPanelClass(files[j].getName(), inClass);
-                }
-            }
-
-            // We set the panels order
-            packager.setPanelsOrder(panelsOrder);
-
-            // We add the packs
-            i = 0;
-            ArrayList packs = getPacks(data);
-            iter = packs.iterator();
-            while (iter.hasNext())
-            {
-                Pack pack = (Pack) iter.next();
-                ZipOutputStream zipOut = packager.addPack(i++, pack.name, pack.required,
-                                                          pack.description);
-                ObjectOutputStream objOut = new ObjectOutputStream(zipOut);
-
-                // We write the pack data
-                objOut.writeInt(pack.packFiles.size());
-                Iterator iter2 = pack.packFiles.iterator();
-                while (iter2.hasNext())
-                {
-                    // Initialisations
-                    PackSource p = (PackSource) iter2.next();
-                    File f = new File(p.src);
-                    FileInputStream in = new FileInputStream(f);
-                    long nbytes = f.length();
-                    String targetFilename = p.targetdir + "/" + f.getName();
-
-                    // Writing
-                    objOut.writeObject(new PackFile(targetFilename,p.os, nbytes));
-                    byte[] buffer = new byte[5120];
-                    long bytesWritten = 0;
-                    int bytesInBuffer;
-                    while ((bytesInBuffer = in.read(buffer)) != -1)
-                    {
-                        objOut.write(buffer, 0, bytesInBuffer);
-                        bytesWritten += bytesInBuffer;
-                    }
-                    if (bytesWritten != nbytes)
-                    {
-                        throw new IOException
-                            ("File size mismatch when reading " + f);
-                    }
-                    in.close();
-                }
-
-//              Write out information about parsable files
-                objOut.writeInt(pack.parsables.size());
-                iter2 = pack.parsables.iterator();
-                while (iter2.hasNext())
-                {
-                    objOut.writeObject(iter2.next());
-                }
-
-                // Write out information about executable files
-                objOut.writeInt(pack.executables.size());
-                iter2 = pack.executables.iterator();
-                while (iter2.hasNext())
-                {
-                    objOut.writeObject(iter2.next());
-                }
-
-                // Cleanup
-                objOut.flush();
-                zipOut.closeEntry();
-            }
-
-            // We ask the packager to finish
-            packager.finish();
-/** @todo
         }
-        catch (Exception err)
+
+
+        // We add the native libraries
+        ArrayList natives = getNativeLibraries(data);
+        iter = natives.iterator();
+        while (iter.hasNext())
         {
-            if (!silent)
-            {
-                err.printStackTrace();
-            }
-            packagerListener.packagerMsg("[ Error ]");
-            packagerListener.packagerMsg(err.toString());
-            packagerListener.packagerStop();
-            throw new Exception(err.toString());
+            NativeLibrary nat = (NativeLibrary) iter.next();
+            inStream = new FileInputStream(nat.path);
+            packager.addNativeLibrary(nat.name, inStream);
         }
- */
+
+        // We add the additionnal jar files content
+        ArrayList jars = getJars(data);
+        iter = jars.iterator();
+        while (iter.hasNext())
+        {
+          packager.addJarContent((String) iter.next());
+        }
+
+        // We add the panels
+        ArrayList panels = getPanels(data);
+        ArrayList panelsOrder = new ArrayList(panels.size());
+        iter = panels.iterator();
+        while (iter.hasNext())
+        {
+            // We locate the panel classes directory
+            str = (String) iter.next();
+            File dir = new File(Compiler.IZPACK_HOME + "bin" + File.separator + "panels" + File.separator + str);
+            if (!dir.exists()) throw new Exception(str + " panel does not exist");
+
+            // We add the panel in the order array
+            panelsOrder.add(str);
+
+            // We add each file in the panel folder
+            File[] files = dir.listFiles();
+            int nf = files.length;
+            for (int j = 0; j < nf; j++)
+            {
+                if (files[j].isDirectory()) continue;
+                FileInputStream inClass = new FileInputStream(files[j]);
+                packager.addPanelClass(files[j].getName(), inClass);
+            }
+        }
+
+        // We set the panels order
+        packager.setPanelsOrder(panelsOrder);
+
+        // We add the packs
+        i = 0;
+        ArrayList packs = getPacks(data);
+        iter = packs.iterator();
+        while (iter.hasNext())
+        {
+            Pack pack = (Pack) iter.next();
+            ZipOutputStream zipOut = packager.addPack(i++, pack.name, pack.required,
+                                                      pack.description);
+            ObjectOutputStream objOut = new ObjectOutputStream(zipOut);
+
+            // We write the pack data
+            objOut.writeInt(pack.packFiles.size());
+            Iterator iter2 = pack.packFiles.iterator();
+            long packageBytes = 0;
+            while (iter2.hasNext())
+            {
+                // Initialisations
+                PackSource p = (PackSource) iter2.next();
+                File f = new File(p.src);
+                FileInputStream in = new FileInputStream(f);
+                long nbytes = f.length();
+                String targetFilename = p.targetdir + "/" + f.getName();
+
+                // Writing
+                objOut.writeObject(new PackFile(targetFilename,p.os, nbytes));
+                byte[] buffer = new byte[5120];
+                long bytesWritten = 0;
+                int bytesInBuffer;
+                while ((bytesInBuffer = in.read(buffer)) != -1)
+                {
+                    objOut.write(buffer, 0, bytesInBuffer);
+                    bytesWritten += bytesInBuffer;
+                }
+                if (bytesWritten != nbytes)
+                {
+                    throw new IOException
+                        ("File size mismatch when reading " + f);
+                }
+                packageBytes += bytesWritten;
+                in.close();
+            }
+            packager.packAdded(i-1, packageBytes);
+
+            // Write out information about parsable files
+            objOut.writeInt(pack.parsables.size());
+            iter2 = pack.parsables.iterator();
+            while (iter2.hasNext())
+            {
+                objOut.writeObject(iter2.next());
+            }
+
+            // Write out information about executable files
+            objOut.writeInt(pack.executables.size());
+            iter2 = pack.executables.iterator();
+            while (iter2.hasNext())
+            {
+                objOut.writeObject(iter2.next());
+            }
+
+            // Cleanup
+            objOut.flush();
+            zipOut.closeEntry();
+        }
+
+        // We ask the packager to finish
+        packager.finish();
     }
 
     // Returns the GUIPrefs
