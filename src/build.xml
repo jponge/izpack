@@ -534,9 +534,35 @@
             <param name="panel" value="HTMLInfoPanel"/>
             <param name="panel-dir" value="HTMLInfoPanel"/>
         </antcall>
-        <antcall target="compile.panel.simple">
+        <antcall target="compile.panel">
             <param name="panel" value="TargetPanel"/>
             <param name="panel-dir" value="TargetPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="PathInputPanel"/>
+            <param name="panel-dir" value="TargetPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="PathSelectionPanel"/>
+            <param name="panel-dir" value="TargetPanel"/>
+        </antcall>
+        <antcall target="compile.panel.finish">
+            <param name="panel" value="TargetPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="JDKPathPanel"/>
+            <param name="panel-dir" value="JDKPathPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="PathInputPanel"/>
+            <param name="panel-dir" value="JDKPathPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="PathSelectionPanel"/>
+            <param name="panel-dir" value="JDKPathPanel"/>
+        </antcall>
+        <antcall target="compile.panel.finish">
+            <param name="panel" value="JDKPathPanel"/>
         </antcall>
         <antcall target="compile.panel.simple">
             <param name="panel" value="XInfoPanel"/>
