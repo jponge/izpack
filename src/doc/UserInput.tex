@@ -605,7 +605,69 @@ take the following values:\\
 
 \subsection{Validating the Field Content}
 
-This feature needs to be documented.
+You can provide runtime validation for user input into a rule field via the 
+\texttt{validator} element (which is a child of the \texttt{field} element.  
+There are two types of built-in validators already provided: a 
+\texttt{NotEmptyValidator} and a \texttt{RegularExpressionValidator}.  You can
+ also easily create your own validator.  In all cases, if the chosen validator
+ returns \texttt{false}, a messagebox will display the contents of the 
+\texttt{txt} attribute and the user will be unable to continue to the next panel.\\
+
+\subsubsection{\textbf{NotEmptyValidator}}
+
+The \texttt{NotEmptyValidator} simply checks that the user entered a non-null 
+value into each subfield, and returns \texttt{false} otherwise.\\
+
+\subsubsection{\textbf{RegularExpressionValidator}}
+
+The \texttt{RegularExpressionValidator} checks that the user entered a 
+value which matches a specified regular expression, as accepted by the Jakarta
+Regexp library 
+(\url{http://jakarta.apache.org/regexp/}).  The syntax of this implementation
+is described in the javadoc of the \texttt{RE} class 
+(\url{http://jakarta.apache.org/regexp/apidocs/org/apache/regexp/RE.html}).
+
+You can specify the regular 
+expression to be tested by passing a parameter with a name of \texttt{pattern} 
+to the validator (via the \texttt{param} element), with the regular expression
+as the \texttt{value} attribute.  For example, the following would validate 
+an e-mail address:\\
+
+\footnotesize
+\begin{verbatim}
+<field type="rule" variable="EMAILADDRESS"> 
+  <spec 
+      txt="Your Email Address:" layout="O:12:U @ O:8:40 . A:4:4" 
+      set="0: 1:domain 2:com" resultFormat="displayFormat"
+  />
+  <validator class="com.izforge.izpack.util.RegularExpressionValidator" 
+      txt="Invalid email address!">
+    <param 
+        name="pattern" 
+        value="[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9._-]+([.][a-zA-Z0-9_-]+)*[.][a-zA-Z0-9._-]{2,4}"
+    />
+  </validator> 
+</field>
+\end{verbatim}
+\normalsize
+
+You can test your own regular expressions using the handy applet at 
+\url{http://jakarta.apache.org/regexp/applet.html} . \\
+
+\subsubsection{Creation Your Own Custom Validator}
+
+You can create your own custom Validator implementation simply by creating a 
+new class which implements the \texttt{com.izforge.izpack.panels.Validator} 
+interface.  This interface specifies a single method: 
+\texttt{validate(ProcessingClient client)} , which returns a \texttt{boolean}
+value.  You can retrieve the value entered by the user by casting the input
+ProcessingClient as a \texttt{RuleInputField} and calling the \\
+\texttt{RuleInputField.getText()} method.  You can also retrieve any  
+parameters to your custom \texttt{Validator} by calling the \\
+\texttt{RuleInputField.getValidatorParams()} which returns a \texttt{java.util.Map}
+object containing parameter names mapped to parameter values.  For an example, take a
+look at \\
+\texttt{com.izforge.izpack.util.RegularExpressionValidator}.\\
 
 \subsection{Processing the Field Content}
 
