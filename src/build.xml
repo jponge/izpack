@@ -650,6 +650,7 @@
             <include name="com/izforge/izpack/event/Simple*nstallerListener.java"/>
             <include name="com/izforge/izpack/event/InstallerListener.java"/>
             <include name="com/izforge/izpack/event/UninstallerListener.java"/>
+            <include name="com/izforge/izpack/util/IoHelper.java"/>
         </javac>
     </target>
     <!-- Package izevent.jar  -->
@@ -658,6 +659,7 @@
         <jar jarfile="${izevent.jar}" >
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/event/*.class"/>
+            	<include name="com/izforge/izpack/util/IoHelper.class"/>
                 <exclude name="com/izforge/izpack/event/*Compiler*.class"/>
             </fileset>
         </jar>
