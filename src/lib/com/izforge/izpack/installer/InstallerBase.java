@@ -186,11 +186,11 @@ public class InstallerBase
 
   /**
    * Builds the default path for Windows (i.e Program Files/...).
-   * @ return The Windows default installation path.
+   * @return The Windows default installation path.
    */
   private String buildWindowsDefaultPath()
   {
-    String dpath = "";
+    StringBuffer dpath = new StringBuffer("");
     try
     {
       // We load the properties
@@ -203,15 +203,32 @@ public class InstallerBase
       if (drive.length() > 3) drive = drive.substring(0, 3);
 
       // Now we have it :-)
+      dpath.append(drive);
+
       String language = Locale.getDefault().getLanguage();
-      dpath = drive
-            + props.getProperty(language, props.getProperty("en")) + "\\";
+      String country = Locale.getDefault().getCountry();
+      String language_country = language + "_" + country;
+
+      // Try the most specific combination first
+      if (null != props.getProperty(language_country))
+      {
+        dpath.append(props.getProperty(language_country));
+      }
+      else if (null != props.getProperty(language))
+      {
+        dpath.append(props.getProperty(language));
+      }
+      else
+      {
+        dpath.append(props.getProperty(Locale.ENGLISH.getLanguage()));
+      }
+      dpath.append("\\");
     }
     catch (Exception err)
     {
-      dpath = "C:\\Program Files\\";
+      dpath = new StringBuffer("C:\\Program Files\\");
     }
 
-    return dpath;
+    return dpath.toString();
   }
 }
