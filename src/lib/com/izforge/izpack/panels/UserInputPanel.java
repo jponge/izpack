@@ -32,10 +32,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -2386,7 +2386,7 @@ private static class TextValuePair
  */
 /*---------------------------------------------------------------------------*/
 
-private static class SearchField implements ActionListener
+private class SearchField implements ActionListener
 {
   /** used in constructor - we search for a directory. */
   public static final int       TYPE_DIRECTORY = 1;
@@ -2497,68 +2497,67 @@ private static class SearchField implements ActionListener
   /** perform autodetection */
   public boolean autodetect ()
   {
+      Vector items = new Vector();
 
-	//Checks whether a placeholder item is in the combobox
-	//and resolve the pathes automatically:
-	///usr/lib/* searches all folders in usr/lib to find /usr/lib/*/lib/tools.jar
-	for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
-	{
-		String path = (String)this.pathComboBox.getItemAt (i);
-
-		if (path.endsWith("*"))
-		{
-			path = path.substring(0,path.length()-1);
-			File dir = new File(path);
-
-			if (dir.isDirectory())
-			{
-				File[] subdirs = dir.listFiles();
-				for (int x=0;x<subdirs.length;x++)
-				{
-					String search = subdirs[x].getAbsolutePath();
-					if (this.pathMatches (search))
-					{
-						items.add(search);
-					}
-				}
-			}
-		}
-		else
-		{
-			items.add(path);
-		}
-	}
-
-	//Now clear the combobox and add the items out of the newly
-	//generated vector
-	this.pathComboBox.removeAllItems();
-    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-	for (int i=0;i<items.size();i++)
-	{
-		this.pathComboBox.addItem(vs.substitute((String)items.get(i), "plain"));
-	}
-
-    // loop through all items
-    for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
-    {
-      String path = (String)this.pathComboBox.getItemAt (i);
-
-      if (this.pathMatches (path))
+      //Checks whether a placeholder item is in the combobox
+      //and resolve the pathes automatically:
+      ///usr/lib/* searches all folders in usr/lib to find
+      // /usr/lib/*/lib/tools.jar
+      for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
       {
-        this.pathComboBox.setSelectedIndex (i);
-        return true;
+        String path = (String) this.pathComboBox.getItemAt(i);
+
+        if (path.endsWith("*"))
+        {
+          path = path.substring(0, path.length() - 1);
+          File dir = new File(path);
+
+          if (dir.isDirectory())
+          {
+            File[] subdirs = dir.listFiles();
+            for (int x = 0; x < subdirs.length; x++)
+            {
+              String search = subdirs[x].getAbsolutePath();
+              if (this.pathMatches(search))
+              {
+                items.add(search);
+              }
+            }
+          }
+        }
+        else
+        {
+          items.add(path);
+        }
       }
 
-    }
+      //Now clear the combobox and add the items out of the newly
+      //generated vector
+      this.pathComboBox.removeAllItems();
+      VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+      for (int i = 0; i < items.size(); i++)
+      {
+        this.pathComboBox.addItem(vs.substitute((String) items.get(i), "plain"));
+      }
 
-    // if the user entered something else, it's not listed as an item
-    if (this.pathMatches ((String)this.pathComboBox.getSelectedItem()))
-    {
-      return true;
-    }
+      // loop through all items
+      for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
+      {
+        String path = (String) this.pathComboBox.getItemAt(i);
 
-    return false;
-  }
+        if (this.pathMatches(path))
+        {
+          this.pathComboBox.setSelectedIndex(i);
+          return true;
+        }
+
+      }
+
+      // if the user entered something else, it's not listed as an item
+      if (this.pathMatches((String) this.pathComboBox.getSelectedItem())) { return true; }
+
+      return false;
+    }
 
  /*--------------------------------------------------------------------------*/
  /**
