@@ -23,10 +23,14 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.5.4 (build 2004.06.05)</appversion>
+        <appversion>3.6.0 (build 2004.xx.yy)</appversion>
         <authors>
-            <author email="julien@izforge.com" name="Julien PONGE (maintainer)"/>
-            <author email="(see Thanks.txt)" name="Many other nice contributors" />
+            <author email="julien@izforge.com" name="Julien Ponge (maintainer, original developer)" />
+            <author email="rockclimberred@yahoo.fr" name="Chadwick McHenry (developer)" />
+            <author email="thorsten.kamann@planetes.de" name="Thorsten Kamann (developer)" />
+            <author email="mike.cunneen@screwfix.com" name="Mike Cunneen (contributor)" />
+            <author email="izpack@frank-bille.de" name="Frank Bille Jensen (contributor)" />
+            <author email="(see Thanks.txt)" name="Many other contributors to the previous releases" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
         <javaversion>1.4</javaversion>
