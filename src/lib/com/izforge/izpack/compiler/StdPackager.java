@@ -1,9 +1,12 @@
 /*
- * $Id$ IzPack
+ * $Id$
+ * IzPack
  * Copyright (C) 2001-2004 Julien Ponge
  * 
- * File : StdPackager.java Description : The standard installer packager class.
- * Author's email : julien@izforge.com Author's Website : http://www.izforge.com
+ * File : StdPackager.java
+ * Description : The standard installer packager class.
+ * Author's email : julien@izforge.com
+ * Author's Website : http://www.izforge.com
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
