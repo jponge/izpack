@@ -73,6 +73,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.text.JTextComponent;
 
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;
@@ -101,6 +102,9 @@ import com.izforge.izpack.util.OsConstraint;
  */
 public class InstallerFrame extends JFrame
 {
+  /** VM version to use version dependent methods calls */
+  private static final float JAVA_SPECIFICATION_VERSION =
+    Float.parseFloat(System.getProperty("java.specification.version"));
   /**  The language pack. */
   public LocaleDatabase langpack;
 
@@ -426,7 +430,28 @@ public class InstallerFrame extends JFrame
       unlockNextButton();
     }
     l_panel.panelDeactivate();
-    panel.panelActivate();
+    if( panel.getInitialFocus() != null )
+    { // Give a hint for the initial focus to the system.
+      Component inFoc = panel.getInitialFocus();
+      if( JAVA_SPECIFICATION_VERSION < 1.4)
+        inFoc.requestFocus();
+      else
+        inFoc.requestFocusInWindow();
+      // Call the IzPanel specific method.
+      panel.panelActivate();
+      // On editable text components positionite the caret to the end
+      // of the cust existent text.
+      if( inFoc instanceof JTextComponent )
+      {
+        JTextComponent inText = (JTextComponent) inFoc;
+        if( inText.isEditable() && inText.getDocument() != null)
+        {
+          inText.setCaretPosition( inText.getDocument().getLength());
+        }
+      }
+    }
+    else
+      panel.panelActivate();
     panelsContainer.setVisible(true);
         loadImage(installdata.curPanelNumber);
     isBack = false;

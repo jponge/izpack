@@ -24,6 +24,8 @@
  */
 package com.izforge.izpack.installer;
 
+import java.awt.Component;
+
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -40,6 +42,8 @@ import com.izforge.izpack.util.AbstractUIHandler;
  */
 public class IzPanel extends JPanel implements AbstractUIHandler
 {
+  /** The component which should get the focus at activation */
+  protected Component initialFocus = null;
   /**
    *  The installer internal data (actually a melting-pot class with all-public
    *  fields.
@@ -203,6 +207,28 @@ public class IzPanel extends JPanel implements AbstractUIHandler
       message,
       title,
       JOptionPane.ERROR_MESSAGE);
+  }
+
+  /**
+   * Returns the component which should be get the
+   * focus at activation of this panel.
+   * @return the component which should be get the
+   * focus at activation of this panel
+   */
+  public Component getInitialFocus()
+  {
+    return initialFocus;
+  }
+
+  /**
+   * Sets the component which should be get the
+   * focus at activation of this panel.
+   * @param component which should be get the
+   * focus at activation of this panel
+   */
+  public void setInitialFocus(Component component)
+  {
+    initialFocus = component;
   }
 
 }
