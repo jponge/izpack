@@ -76,7 +76,7 @@
     <str id="ShortcutPanel.regular.allUsers" txt="все пользователи"/>
 
     <str id="ShortcutPanel.alternate.apology" txt="К сожалению, IzPack не поддерживает создание ярлыков в этой операционной системе.  Чтобы создать ярлыки, обратитесь к руководству по Вашей операционной системе."/>
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="Список объектов, к которым Вам потребуется обращаться для использования приложения:"
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Список объектов, к которым Вам потребуется обращаться для использования приложения:"/>
     <str id="ShortcutPanel.alternate.textFileExplanation" txt="Вы можете сохранить подробную информацию об объектах, на которые указывают ярлыки, в текстовом файле для справки."/>
     <str id="ShortcutPanel.alternate.saveButton" txt="Сохранить текстовый файл"/>
     
@@ -94,7 +94,7 @@
 
     <str id="ShortcutPanel.location.desktop"      txt="Рабочий стол"/>
     <str id="ShortcutPanel.location.applications" txt="Меню приложений"/>
-    <str id="ShortcutPanel.location.startMenu"    txt="Меню кнопки \"Пуск\""/>
+    <str id="ShortcutPanel.location.startMenu"    txt='Меню кнопки "Пуск"'/>
     <str id="ShortcutPanel.location.startup"      txt="Группа автозапуска"/>
 
     <str id="UserInputPanel.error.caption"        txt="Ошибка ввода"/>
