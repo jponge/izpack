@@ -58,7 +58,7 @@
 
 <!-- The packs section (indicates the packs to create) -->
 <!ELEMENT packs (pack+)>
-    <!ELEMENT pack (description, file*, fileset*, parsable*, executable*,)>
+    <!ELEMENT pack (description, file*, fileset*, parsable*, executable*)>
         <!ATTLIST pack name CDATA #REQUIRED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
         <!ATTLIST pack os CDATA #IMPLIED>
