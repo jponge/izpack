@@ -50,9 +50,6 @@ import com.izforge.izpack.Pack;
  */
 public class StdPackager extends Packager
 {
-  /**  The zipped output stream. */
-  protected JarOutputStream outJar;
-
   /**
    *  The constructor.
    *
@@ -76,7 +73,6 @@ public class StdPackager extends Packager
 
     // Copies the skeleton installer
     sendMsg("Copying the skeleton installer ...");
-
     writeSkeletonInstaller(outJar);
   }
 
@@ -117,173 +113,6 @@ public class StdPackager extends Packager
     ZipEntry entry = new ZipEntry(entryName);
     outJar.putNextEntry(entry);
     return outJar;
-  }
-
-  /**
-   *  Sets the GUI preferences.
-   *
-   * @param  prefs          The new gUIPrefs value
-   * @exception  Exception  Description of the Exception
-   */
-  public void setGUIPrefs(GUIPrefs prefs) throws Exception
-  {
-    sendMsg("Setting the GUI preferences ...");
-
-    outJar.putNextEntry(new ZipEntry("GUIPrefs"));
-    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-    objOut.writeObject(prefs);
-    objOut.flush();
-    outJar.closeEntry();
-  }
-
-  /**
-   *  Adds a panel.
-   *
-   * @param  classFilename  The class filename.
-   * @param  input          The stream to get the file data from.
-   * @exception  Exception  Description of the Exception
-   */
-  public void addPanelClass(String classFilename, InputStream input)
-    throws Exception
-  {
-    sendMsg("Adding the (sub)classes for " + classFilename + " ...");
-
-    outJar.putNextEntry(
-      new ZipEntry("com/izforge/izpack/panels/" + classFilename));
-    copyStream(input, outJar);
-    outJar.closeEntry();
-  }
-
-  /**
-   *  Sets the panels order.
-   *
-   * @param  order          The ordered list of the panels.
-   * @exception  Exception  Description of the Exception
-   */
-  public void setPanelsOrder(ArrayList order) throws Exception
-  {
-    sendMsg("Setting the panels order ...");
-
-    outJar.putNextEntry(new ZipEntry("panelsOrder"));
-    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-    objOut.writeObject(order);
-    objOut.flush();
-    outJar.closeEntry();
-  }
-
-  /**
-   *  Sets the informations related to this installation.
-   *
-   * @param  info           The info section.
-   * @exception  Exception  Description of the Exception
-   */
-  public void setInfo(Info info) throws Exception
-  {
-    sendMsg("Setting the installer informations ...");
-
-    outJar.putNextEntry(new ZipEntry("info"));
-    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-    objOut.writeObject(info);
-    objOut.flush();
-    outJar.closeEntry();
-  }
-
-  /**
-   *  Adds Variable Declaration.
-   *
-   * @param  varDef         The variables definitions.
-   * @exception  Exception  Description of the Exception
-   */
-  public void setVariables(Properties varDef) throws Exception
-  {
-    sendMsg("Setting  the variables ...");
-    outJar.putNextEntry(new ZipEntry("vars"));
-    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-    objOut.writeObject(varDef);
-    objOut.flush();
-    outJar.closeEntry();
-  }
-
-  /**
-   *  Adds a resource.
-   *
-   * @param  resId          The resource Id.
-   * @param  input          The stream to get the data from.
-   * @exception  Exception  Description of the Exception
-   */
-  public void addResource(String resId, InputStream input) throws Exception
-  {
-    sendMsg("Adding resource : " + resId + " ...");
-
-    outJar.putNextEntry(new ZipEntry("res/" + resId));
-    copyStream(input, outJar);
-    outJar.closeEntry();
-  }
-
-  /**
-   *  Adds a native library.
-   *
-   * @param  name           The native library name.
-   * @param  input          The stream to get the data from.
-   * @exception  Exception  Description of the Exception
-   */
-  public void addNativeLibrary(String name, InputStream input) throws Exception
-  {
-    sendMsg("Adding native library : " + name + " ...");
-
-    outJar.putNextEntry(new ZipEntry("native/" + name));
-    copyStream(input, outJar);
-    outJar.closeEntry();
-    input.close();
-  }
-
-  /**
-   *  Adds a language pack.
-   *
-   * @param  iso3           The ISO3 code.
-   * @param  input          The stream to get the data from.
-   * @exception  Exception  Description of the Exception
-   */
-  public void addLangPack(String iso3, InputStream input) throws Exception
-  {
-    sendMsg("Adding langpack : " + iso3 + " ...");
-
-    langpacks.add(iso3);
-
-    outJar.putNextEntry(new ZipEntry("langpacks/" + iso3 + ".xml"));
-    copyStream(input, outJar);
-    outJar.closeEntry();
-    input.close();
-  }
-
-  /**
-   *  Adds a jar file content to the installer.
-   *
-   * @param  file           The jar filename.
-   * @exception  Exception  Description of the Exception
-   */
-  public void addJarContent(String file) throws Exception
-  {
-    sendMsg("Adding a jar file content ...");
-    JarFile jar = new JarFile(file);
-    Enumeration entries = jar.entries();
-    while (entries.hasMoreElements())
-    {
-      // Puts a new entry
-      ZipEntry zentry = (ZipEntry) entries.nextElement();
-      try
-      {
-        InputStream zin = jar.getInputStream(zentry);
-        outJar.putNextEntry(new ZipEntry(zentry.getName()));
-
-        // Copy the data
-        copyStream(zin, outJar);
-        outJar.closeEntry();
-        zin.close();
-      } catch (ZipException zerr)
-      {
-      }
-    }
   }
 
   /**

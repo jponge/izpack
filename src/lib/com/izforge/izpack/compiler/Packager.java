@@ -32,12 +32,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -53,6 +57,9 @@ import com.izforge.izpack.Pack;
  */
 public abstract class Packager
 {
+  /**  The zipped output stream, instantiated by subclass. */
+  protected JarOutputStream outJar;
+
   /**  The path to the skeleton installer. */
   public final static String SKELETON_SUBPATH =
     "lib" + File.separator + "installer.jar";
@@ -165,8 +172,16 @@ public abstract class Packager
    * @param  input          The stream to get the file data from.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void addPanelClass(String classFilename, InputStream input)
-    throws Exception;
+  public void addPanelClass(String classFilename, InputStream input)
+    throws Exception
+  {
+    sendMsg("Adding the (sub)classes for " + classFilename + " ...");
+
+    outJar.putNextEntry(
+      new ZipEntry("com/izforge/izpack/panels/" + classFilename));
+    copyStream(input, outJar);
+    outJar.closeEntry();
+  }
 
   /**
    *  Sets the GUI preferences.
@@ -174,7 +189,16 @@ public abstract class Packager
    * @param  prefs          The new gUIPrefs value
    * @exception  Exception  Description of the Exception
    */
-  public abstract void setGUIPrefs(GUIPrefs prefs) throws Exception;
+  public void setGUIPrefs(GUIPrefs prefs) throws Exception
+  {
+    sendMsg("Setting the GUI preferences ...");
+
+    outJar.putNextEntry(new ZipEntry("GUIPrefs"));
+    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+    objOut.writeObject(prefs);
+    objOut.flush();
+    outJar.closeEntry();
+  }
 
   /**
    *  Check if backrefs are allowed.
@@ -188,7 +212,16 @@ public abstract class Packager
    * @param  order          The ordered list of the panels.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void setPanelsOrder(ArrayList order) throws Exception;
+  public void setPanelsOrder(ArrayList order) throws Exception
+  {
+    sendMsg("Setting the panels order ...");
+
+    outJar.putNextEntry(new ZipEntry("panelsOrder"));
+    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+    objOut.writeObject(order);
+    objOut.flush();
+    outJar.closeEntry();
+  }
 
   /**
    *  Sets the informations related to this installation.
@@ -196,7 +229,16 @@ public abstract class Packager
    * @param  info           The info section.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void setInfo(Info info) throws Exception;
+  public void setInfo(Info info) throws Exception
+  {
+    sendMsg("Setting the installer informations ...");
+
+    outJar.putNextEntry(new ZipEntry("info"));
+    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+    objOut.writeObject(info);
+    objOut.flush();
+    outJar.closeEntry();
+  }
 
   /**
    *  Adds Variable Declaration.
@@ -204,7 +246,15 @@ public abstract class Packager
    * @param  varDef         The variables definitions.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void setVariables(Properties varDef) throws Exception;
+  public void setVariables(Properties varDef) throws Exception
+  {
+    sendMsg("Setting  the variables ...");
+    outJar.putNextEntry(new ZipEntry("vars"));
+    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+    objOut.writeObject(varDef);
+    objOut.flush();
+    outJar.closeEntry();
+  }
 
   /**
    *  Adds a resource.
@@ -213,8 +263,14 @@ public abstract class Packager
    * @param  input          The stream to get the data from.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void addResource(String resId, InputStream input)
-    throws Exception;
+  public void addResource(String resId, InputStream input) throws Exception
+  {
+    sendMsg("Adding resource : " + resId + " ...");
+
+    outJar.putNextEntry(new ZipEntry("res/" + resId));
+    copyStream(input, outJar);
+    outJar.closeEntry();
+  }
 
   /**
    *  Adds a language pack.
@@ -223,8 +279,16 @@ public abstract class Packager
    * @param  input          The stream to get the data from.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void addLangPack(String iso3, InputStream input)
-    throws Exception;
+  public void addLangPack(String iso3, InputStream input) throws Exception
+  {
+    sendMsg("Adding langpack : " + iso3 + " ...");
+
+    langpacks.add(iso3);
+    outJar.putNextEntry(new ZipEntry("langpacks/" + iso3 + ".xml"));
+    copyStream(input, outJar);
+    outJar.closeEntry();
+    input.close();
+  }
 
   /**
    *  Adds a native library.
@@ -233,8 +297,15 @@ public abstract class Packager
    * @param  input          The stream to get the data from.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void addNativeLibrary(String name, InputStream input)
-    throws Exception;
+  public void addNativeLibrary(String name, InputStream input) throws Exception
+  {
+    sendMsg("Adding native library : " + name + " ...");
+
+    outJar.putNextEntry(new ZipEntry("native/" + name));
+    copyStream(input, outJar);
+    outJar.closeEntry();
+    input.close();
+  }
 
   /**
    *  Adds a jar file content to the installer.
@@ -242,7 +313,29 @@ public abstract class Packager
    * @param  file           The jar filename.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void addJarContent(String file) throws Exception;
+  public void addJarContent(String file) throws Exception
+  {
+    sendMsg("Adding a jar file content ...");
+    JarFile jar = new JarFile(file);
+    Enumeration entries = jar.entries();
+    while (entries.hasMoreElements())
+    {
+      // Puts a new entry
+      ZipEntry zentry = (ZipEntry) entries.nextElement();
+      try
+      {
+        InputStream zin = jar.getInputStream(zentry);
+        outJar.putNextEntry(new ZipEntry(zentry.getName()));
+
+        // Copy the data
+        copyStream(zin, outJar);
+        outJar.closeEntry();
+        zin.close();
+      } catch (ZipException zerr)
+      {
+      }
+    }
+  }
 
   /**
    *  Tells the packager to finish the job (misc writings, cleanups, closings ,
