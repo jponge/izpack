@@ -122,8 +122,7 @@ public class XInfoPanel extends IzPanel
     try
     {
       // Initialize the variable substitutor
-      VariableSubstitutor vs =
-        new VariableSubstitutor(idata.getVariableValueMap());
+      VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
 
       // Parses the info text
       info = vs.substitute(info, null);

@@ -105,7 +105,7 @@ public class Unpacker extends Thread
     this.handler = handler;
 
     // Initialize the variable substitutor
-    vs = new VariableSubstitutor(idata.getVariableValueMap());
+    vs = new VariableSubstitutor(idata.getVariables());
   }
 
   /**

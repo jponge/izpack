@@ -30,6 +30,8 @@ import java.util.Map;
  *  Maps variable names to a variable value.
  *
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
+ * @deprecated Use a Properties object instead. Methods in IzPack which accept or return
+ * VariableValueMap have been deprecated in favor of versions which use Properties.
  */
 public interface VariableValueMap extends Map
 {

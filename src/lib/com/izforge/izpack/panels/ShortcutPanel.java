@@ -578,7 +578,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     // create a list of all shortcuts that need to be
     // created, containing all details about each shortcut 
     // ----------------------------------------------------
-    VariableSubstitutor substitutor   = new VariableSubstitutor (idata.getVariableValueMap ());
+    VariableSubstitutor substitutor   = new VariableSubstitutor (idata.getVariables());
     String              temp;
     Vector              shortcutSpecs = spec.getChildrenNamed (SPEC_KEY_SHORTCUT);
     XMLElement          shortcutSpec;

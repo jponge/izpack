@@ -76,7 +76,7 @@ public class FinishPanel extends IzPanel implements ActionListener
   {
     super(parent, idata);
 
-    vs = new VariableSubstitutor(idata.getVariableValueMap());
+    vs = new VariableSubstitutor(idata.getVariables());
 
     // The 'super' layout
     GridBagLayout superLayout = new GridBagLayout();

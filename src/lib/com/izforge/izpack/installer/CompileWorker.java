@@ -102,7 +102,7 @@ public class CompileWorker implements Runnable
   {
     this.idata = idata;
     this.handler = handler;
-    this.vs = new VariableSubstitutor(idata.getVariableValueMap());
+    this.vs = new VariableSubstitutor(idata.getVariables());
 
     this.compilationThread = null;
 

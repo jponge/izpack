@@ -48,13 +48,15 @@ public class AutomatedInstallData
   //--- Static members -------------------------------------------------
 
   /**
-   *  A Properties based implementation for VariableValueMap interface.
+   *  A Properties based implementation for VariableValueMap
+   * interface.<p>
+   *
+   * TODO: this can be removed as once the deprecated VariableValueMap is gone
+   * (IzPack v1.7?).
    *
    * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
-   * @version    $Revision$
    */
-  private final static class VariableValueMapImpl
-    extends Properties
+  private final static class VariableValueMapImpl extends Properties
     implements VariableValueMap
   {
 
@@ -116,8 +118,13 @@ public class AutomatedInstallData
   /**  The xmlData for automated installers. */
   public XMLElement xmlData;
 
-  /**  Maps the variable names to their values */
-  protected VariableValueMap variableValueMap;
+  /**
+   * Maps the variable names to their values
+   * @deprecated this will change to a simple Properties object as once the
+   * deprecated VariableValueMap is gone (IzPack v1.7?).
+   */
+  protected VariableValueMapImpl variableValueMap;
+  // TODO: protected Properties variables;
 
   /**  The attributes used by the panels */
   protected Map attributes;
@@ -131,6 +138,7 @@ public class AutomatedInstallData
     panelsOrder = new ArrayList();
     xmlData = new XMLElement("AutomatedInstallation");
     variableValueMap = new VariableValueMapImpl();
+    // TODO: variables = new Properties();
     attributes = new HashMap();
   }
 
@@ -139,6 +147,7 @@ public class AutomatedInstallData
    *  affect the current value of variables.
    *
    * @return    the map of variable values
+   * @deprecated use {@link #getVariables}
    */
   public VariableValueMap getVariableValueMap()
   {
@@ -146,8 +155,20 @@ public class AutomatedInstallData
   }
 
   /**
-   *  Sets a variable to the specified value. This is short hand for <code>getVariableValueMap().setVariable(var, val)</code>
-   *  .
+   *  Returns the map of variable values. Modifying this will directly affect
+   *  the current value of variables.
+   *
+   * @return    the map of variable values
+   */
+  public Properties getVariables()
+  {
+    return variableValueMap;
+    // TODO: return variables;
+  }
+
+  /**
+   *  Sets a variable to the specified value. This is short hand for
+   *  <code>getVariables().setProperty(var, val)</code>.
    *
    * @param  var  the name of the variable
    * @param  val  the new value of the variable
@@ -156,11 +177,12 @@ public class AutomatedInstallData
   public void setVariable(String var, String val)
   {
     variableValueMap.setVariable(var, val);
+    // TODO: variables.setProperty(var, val);
   }
 
   /**
    *  Returns the current value of the specified variable. This is short hand
-   *  for <code>getVariableValueMap().getVariable(var)</code>.
+   *  for <code>getVariables().getProperty(var)</code>.
    *
    * @param  var  the name of the variable
    * @return      the value of the variable or null if not set
@@ -169,6 +191,7 @@ public class AutomatedInstallData
   public String getVariable(String var)
   {
     return variableValueMap.getVariable(var);
+    // TODO: return variables.getProperty(var);
   }
 
   /**

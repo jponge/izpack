@@ -69,7 +69,6 @@ import com.izforge.izpack.Panel;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.installer.VariableSubstitutor;
-import com.izforge.izpack.installer.VariableValueMapImpl;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 
@@ -122,9 +121,6 @@ public class Compiler extends Thread
 
   /**  The packager listener. */
   protected PackagerListener packagerListener;
-
-  /**  The variables map. */
-  protected VariableValueMapImpl varMap;
 
   /** The directory-keeping special file. */
   protected File keepDirFile;
@@ -266,7 +262,8 @@ public class Compiler extends Thread
     Packager packager = getPackager();
 
     // We add the variable declaration
-    packager.setVariables(getVariables(data));
+    Properties varMap = getVariables(data);
+    packager.setVariables(varMap);
 
     // We add the info (must call before getResources for uninstaller)
     packager.setInfo(getInfo(data));
@@ -553,7 +550,7 @@ public class Compiler extends Thread
         objOut.writeObject(iter2.next());
       }
 
-      // Write out information about executable files
+      // Write out information about updatecheck files
       objOut.writeInt(pack.updatechecks.size());
       iter2 = pack.updatechecks.iterator();
       while (iter2.hasNext())
@@ -741,10 +738,8 @@ public class Compiler extends Thread
           onFailure = ExecutableFile.WARN;
 
         // whether to keep the executable after executing it
-        boolean keepFile = false;
         val = e.getAttribute("keep");
-        if ("true".equalsIgnoreCase(val))
-          keepFile = true;
+        boolean keepFile = "true".equalsIgnoreCase(val);
 
         // get arguments for this executable
         ArrayList argList = new ArrayList();
@@ -1343,24 +1338,18 @@ public class Compiler extends Thread
    */
   protected Properties getVariables(XMLElement data) throws Exception
   {
-    this.varMap = new VariableValueMapImpl();
-
-    Properties retVal = null;
+    Properties retVal = new Properties();
 
     // We get the varible list
     XMLElement root = data.getFirstChildNamed("variables");
     if (root == null)
       return retVal;
 
-    retVal = new Properties();
     Iterator iter = root.getChildrenNamed("variable").iterator();
     while (iter.hasNext())
     {
       XMLElement var = (XMLElement) iter.next();
       retVal.setProperty(
-        requireAttribute(var, "name"),
-        requireAttribute(var, "value"));
-      varMap.setVariable(
         requireAttribute(var, "name"),
         requireAttribute(var, "value"));
     }

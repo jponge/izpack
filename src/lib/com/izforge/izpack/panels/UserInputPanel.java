@@ -864,7 +864,7 @@ public class UserInputPanel extends IzPanel
       return (false);
     }
 
-    idata.getVariableValueMap ().setVariable (variable, ruleField.getText ());
+    idata.setVariable (variable, ruleField.getText ());
     entries.add (new TextValuePair (variable, ruleField.getText ()));
     return (true);
   }
@@ -979,7 +979,7 @@ public class UserInputPanel extends IzPanel
       return (true);
     }
 
-    idata.getVariableValueMap ().setVariable (variable, value);
+    idata.setVariable(variable, value);
     entries.add (new TextValuePair (variable, value));
     return (true);
   }
@@ -1102,7 +1102,7 @@ public class UserInputPanel extends IzPanel
       return (true);
     }
 
-    idata.getVariableValueMap ().setVariable (variable, value);
+    idata.setVariable(variable, value);
     entries.add (new TextValuePair (variable, value));
     return (true);
   }
@@ -1228,7 +1228,7 @@ public class UserInputPanel extends IzPanel
       return (true);
     }
 
-    idata.getVariableValueMap ().setVariable (variable, value);
+    idata.setVariable (variable, value);
     entries.add (new TextValuePair (variable, value));
     return (true);
   }
@@ -1389,7 +1389,7 @@ public class UserInputPanel extends IzPanel
       return (false);
     }
 
-    idata.getVariableValueMap ().setVariable (variable, group.getPassword ());
+    idata.setVariable(variable, group.getPassword ());
     entries.add (new TextValuePair (variable, group.getPassword ()));
     return (true);
   }
@@ -1495,12 +1495,12 @@ public class UserInputPanel extends IzPanel
 
     if (box.isSelected ())
     {
-      idata.getVariableValueMap ().setVariable (variable, trueValue);
+      idata.setVariable (variable, trueValue);
       entries.add (new TextValuePair (variable, trueValue));
     }
     else
     {
-      idata.getVariableValueMap ().setVariable (variable, falseValue);
+      idata.setVariable(variable, falseValue);
       entries.add (new TextValuePair (variable, falseValue));
     }
 
@@ -1728,7 +1728,7 @@ public class UserInputPanel extends IzPanel
       return (true);
     }
 
-    idata.getVariableValueMap ().setVariable (variable, value);
+    idata.setVariable(variable, value);
     entries.add (new TextValuePair (variable, value));
     return (true);
   }

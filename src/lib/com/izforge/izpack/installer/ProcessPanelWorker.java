@@ -83,7 +83,7 @@ public class ProcessPanelWorker implements Runnable
   {
     this.idata = idata;
     this.handler = handler;
-    this.vs = new VariableSubstitutor(idata.getVariableValueMap());
+    this.vs = new VariableSubstitutor(idata.getVariables());
 
     if (!readSpec())
       throw new IOException("Error reading processing specification");

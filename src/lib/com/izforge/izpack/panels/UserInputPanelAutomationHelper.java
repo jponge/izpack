@@ -148,7 +148,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
       value = dataElement.getAttribute(AUTO_ATTRIBUTE_VALUE);
 
       Debug.trace ("UserInputPanel: setting variable "+variable+" to "+value);
-      idata.getVariableValueMap().setVariable(variable, value);
+      idata.setVariable(variable, value);
     }
   }
 }
