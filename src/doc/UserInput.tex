@@ -480,9 +480,9 @@ The following specification will produce a pre formatted input field to
 accept a US phone number with in-house extension. Even though the
 pattern is formatted into number groups as customary, complete with
 parentheses '(' and dash '-', entering the number is as simple as typing
-all he digits. There is no need to advance using the tab key or to enter
-formatting characters. Because the field only allow numeric entry, there
-is a much reduced chance fro entering erroneous information.
+all the digits. There is no need to advance using the tab key or to enter
+formatting characters. Because the fields only allow numeric entry, there
+is a much reduced chance for entering erroneous information.
 \texttt{"( N:3:3 ) N:3:3 - N:4:4 x N:5:5"}. Each of the fields uses the
 'N' key, indicating that only numerals will be accepted. Also, each of
 the fields only accepts strings of the same length as the physical width
@@ -588,10 +588,10 @@ take the following values:\\
 \begin{center}
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline \textit{Value} & \textit{Meaning}\\
-\hline texttt{plainString} & The content of all subfields is simply concatenated into one long string.\\
-\hline texttt{displayFormat} & The content of all subfields and all lables -as displayed- is concatenated into one long string.\\
-\hline texttt{specialSeparator} & The content of all subfields is concatenated into one string, using the string specified withe the \texttt{separator} attribute to separate the content of the subfields.\\
-\hline texttt{processed} & The contnet is processed by Java code that you supply before replacing the variable. How to do this is discribed below.\\
+\hline \texttt{plainString} & The content of all subfields is simply concatenated into one long string.\\
+\hline \texttt{displayFormat} & The content of all subfields and all lables -as displayed- is concatenated into one long string.\\
+\hline \texttt{specialSeparator} & The content of all subfields is concatenated into one string, using the string specified withe the \texttt{separator} attribute to separate the content of the subfields.\\
+\hline \texttt{processed} & The contnet is processed by Java code that you supply before replacing the variable. How to do this is discribed below.\\
 \hline
 \end{tabularx}\
 \end{center}

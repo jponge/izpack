@@ -842,13 +842,12 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addComboBox (XMLElement spec)
   {
-    Vector      forPacks  = spec.getChildrenNamed (PACKS);
-    XMLElement  element   = spec.getFirstChildNamed (SPEC);
-    String      variable  = spec.getAttribute (VARIABLE);
-    String      value     = null;
-    String      text      = null;
-    JComboBox   field     = new JComboBox ();
-    JLabel      label;
+    Vector        forPacks  = spec.getChildrenNamed (PACKS);
+    XMLElement    element   = spec.getFirstChildNamed (SPEC);
+    String        variable  = spec.getAttribute (VARIABLE);
+    TextValuePair listItem  = null;
+    JComboBox     field     = new JComboBox ();
+    JLabel        label;
 
     // ----------------------------------------------------
     // extract the specification details
@@ -866,10 +865,10 @@ public class UserInputPanel extends IzPanel
 
       for (int i = 0; i < choices.size (); i++)
       {
-        text   = getText ((XMLElement)choices.elementAt (i));
-        value  = ((XMLElement)choices.elementAt (i)).getAttribute (COMBO_VALUE);
+        listItem = new TextValuePair (getText ((XMLElement)choices.elementAt (i)), 
+                                      ((XMLElement)choices.elementAt (i)).getAttribute (COMBO_VALUE));
 
-        field.addItem (text);
+        field.addItem (listItem);
 
         String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
         if (set != null)
@@ -905,7 +904,8 @@ public class UserInputPanel extends IzPanel
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
     constraints2.position  = constraints2.EAST;
 
-    uiElements.add (new Object [] {COMBO_FIELD, variable, constraints2, field, forPacks, value});
+//    uiElements.add (new Object [] {COMBO_FIELD, variable, constraints2, field, forPacks, value});
+    uiElements.add (new Object [] {COMBO_FIELD, variable, constraints2, field, forPacks});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -924,11 +924,13 @@ public class UserInputPanel extends IzPanel
   {
     String variable = null;
     String value    = null;
+    JComboBox comboBox = null;
 
     try
     {
-      variable = (String)field [POS_VARIABLE];
-      value    = (String)field [POS_TRUE];
+      variable  = (String)field [POS_VARIABLE];
+      comboBox  = (JComboBox)field [POS_FIELD];
+      value     = ((TextValuePair)comboBox.getSelectedItem ()).getValue ();
     }
     catch (Throwable exception)
     {
@@ -1563,5 +1565,59 @@ public class UserInputPanel extends IzPanel
 
     return (false);
   }
+
+// --------------------------------------------------------------------------
+// Inner Classes
+// --------------------------------------------------------------------------
+
+/*---------------------------------------------------------------------------*/
+/**
+ * This class can be used to associate a text string and a (text) value.
+ */
+/*---------------------------------------------------------------------------*/
+private class TextValuePair
+{
+  private String text   = "";
+  private String value  = "";
+  
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Constructs a new Text/Value pair, initialized with the text and a value.
+  *
+  * @param     text   the text that this object should represent
+  * @param     value  the value that should be associated with this object
+  */
+ /*--------------------------------------------------------------------------*/
+  public TextValuePair  (String text, 
+                         String value)
+  {
+    this.text   = text;
+    this.value  = value;
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * This method returns the text that was set for the object
+  *
+  * @return    the object's text
+  */
+ /*--------------------------------------------------------------------------*/
+  public String toString ()
+  {
+    return (text);
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * This method returns the value that was associated with this object
+  *
+  * @return    the object's value
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getValue ()
+  {
+    return (value);
+  }
+}
+
+
 }
 /*---------------------------------------------------------------------------*/
