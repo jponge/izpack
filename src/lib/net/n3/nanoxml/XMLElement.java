@@ -311,8 +311,9 @@ public class XMLElement
         
         while (enum.hasMoreElements()) {
             XMLElement child = (XMLElement) enum.nextElement();
+            String cName = child.getName();
             
-            if (child.getName().equals(name)) {
+            if (cName != null && cName.equals(name)) {
                 return child;
             }
         }
@@ -335,8 +336,9 @@ public class XMLElement
         
         while (enum.hasMoreElements()) {
             XMLElement child = (XMLElement) enum.nextElement();
+            String cName = child.getName();
             
-            if (child.getName().equals(name)) {
+            if (cName != null && cName.equals(name)) {
                 result.addElement(child);
             }
         }
