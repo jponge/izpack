@@ -36,6 +36,8 @@
          txt="Das Verzeichnis existiert bereits ! Sind Sie sicher, dass Sie in diesem Verzeichnis installieren wollen ?"/>
     <str id="TargetPanel.empty_target"
          txt="Sie haben ein namenloses Ziel eingegeben ! Wollen Sie fortfahren ?"/>
+    <str id="TargetPanel.createdir"
+         txt="Das folgende Verzeichnis wird erstellt :" />         
          
     <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus :"/>
     <str id="PacksPanel.tip" txt="Hinweis : die grau markierten Pakete können nicht optional ausgewählt werden."/>

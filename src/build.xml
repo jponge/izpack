@@ -98,7 +98,7 @@
   -->
 
   <!-- Compiler to use put your own here (jikes, modern, gcj, ...) -->
-  <property name="build.compiler" value="jikes" />
+  <!-- <property name="build.compiler" value="jikes" /> -->
   
   <!-- Define directories -->
   <property file="src/ant.properties"/>
