@@ -164,7 +164,7 @@ public class TargetPanel extends IzPanel implements ActionListener
       else
       {
         // first try to look up by specific os name
-        os.replace(' ', '_'); // avoid spaces in file names
+        os = os.replace(' ', '_'); // avoid spaces in file names
         os = os.toLowerCase(); // for consistency among TargetPanel res files
         in = parent.getResource("TargetPanel.dir.".concat(os));
         // if not specific os, try getting generic 'unix' resource file

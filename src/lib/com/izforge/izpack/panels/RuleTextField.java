@@ -79,6 +79,7 @@ public class RuleTextField extends JTextField
     this.type           = type;
     this.editLength     = editLength;
     this.unlimitedEdit  = unlimitedEdit;
+    rule = new Rule();
     rule.setRuleType (type, editLength, unlimitedEdit);
   }
 
