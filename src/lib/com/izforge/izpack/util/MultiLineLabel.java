@@ -353,7 +353,7 @@ public class MultiLineLabel extends JComponent
         // character if the substring definition ends at the very last character
         // we have to call a different substring function than normal.
         // ----------------------------------------------------------------
-        if (currentPos == endPos)
+        if (currentPos == endPos && width <= maxAllowed)
         {
           lastPos = currentPos;
           String s = labelText.substring (startPos);
