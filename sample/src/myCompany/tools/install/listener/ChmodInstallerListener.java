@@ -90,7 +90,7 @@ public class ChmodInstallerListener extends SimpleInstallerListener
   private void chmod(File path, int permissions) throws IOException
   {
     String pathSep = System.getProperty("path.separator");
-    if(OSVersion.IS_WINDOWS)
+    if(OsVersion.IS_WINDOWS)
     {
       throw new IOException("Sorry, chmod not supported yet on windows; use this class OS dependant.");
     }
