@@ -10,6 +10,7 @@
   mouse events. It now works with the keyboard ones too (Eduard Jodas Samper).
 - TargetPanel: refuse selecting read-only directories.
 - Documentation fixes.
+- TargetPanel: more sanity checks (Andreas Vox).
 
   > 3.6.0 (build 2004.07.28)
 
