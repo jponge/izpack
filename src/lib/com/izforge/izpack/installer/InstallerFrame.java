@@ -41,6 +41,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
@@ -51,6 +52,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -467,6 +469,51 @@ public class InstallerFrame extends JFrame
       }
       execStream.flush();
       outJar.closeEntry();
+
+      // Write out additional uninstall data
+      Map additionalData = udata.getAdditionalData();
+      if( additionalData  != null && ! additionalData.isEmpty())
+      {
+        Iterator keys = additionalData.keySet().iterator();
+        while( keys != null && keys.hasNext())
+        {
+          String key = (String) keys.next();
+          Object contents = additionalData.get(key);
+          if(  key.equals("__uninstallLibs__"))
+          {
+            Iterator nativeLibIter = ((List) contents).iterator();
+            while( nativeLibIter != null && nativeLibIter.hasNext() )
+            {
+              String nativeLibName = (String) nativeLibIter.next();
+              byte[] buffer = new byte[5120];
+              long bytesCopied = 0;
+              int bytesInBuffer;
+              outJar.putNextEntry(new ZipEntry( "native/" + nativeLibName));
+              InputStream in = getClass().getResourceAsStream("/native/" + nativeLibName);
+              while ((bytesInBuffer = in.read(buffer)) != -1)
+              {
+                outJar.write(buffer, 0, bytesInBuffer);
+                bytesCopied += bytesInBuffer;
+              }
+             }
+          }
+          else
+          {
+            outJar.putNextEntry(new ZipEntry(key));
+            if( contents instanceof ByteArrayOutputStream )
+            {
+              ((ByteArrayOutputStream) contents).writeTo(outJar);
+            }
+            else
+            {
+              ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+              objOut.writeObject(contents);
+              objOut.flush();
+            }
+            outJar.closeEntry();
+          }
+        }
+      }
 
       // Cleanup
       outJar.flush();

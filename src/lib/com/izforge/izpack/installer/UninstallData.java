@@ -25,7 +25,9 @@
 package com.izforge.izpack.installer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.izforge.izpack.ExecutableFile;
 
@@ -52,11 +54,15 @@ public class UninstallData
   /**  The uninstaller path. */
   private String uninstallerPath;
 
+  /**  Additional uninstall data like uninstaller listener list. */
+  private Map additionalData;
+  
   /**  The constructor.  */
   private UninstallData()
   {
     filesList = new ArrayList();
     executablesList = new ArrayList();
+    additionalData  = new HashMap();
   }
 
   /**
@@ -150,4 +156,24 @@ public class UninstallData
   {
     uninstallerPath = path;
   }
+  
+  /**
+   * Returns  additional uninstall data like uninstaller listener list.
+   * @return additional uninstall data
+   */
+  public Map getAdditionalData()
+  {
+    return additionalData;
+  }
+ 
+  /**
+   * Sets additional uninstall data like uninstaller listener list. 
+   * @param name key for the additional uninstall data
+   * @param value the additional uninstall data
+   */
+  public void addAdditionalData(String name, Object value)
+  {
+    additionalData.put(name, value);
+  }
+ 
 }

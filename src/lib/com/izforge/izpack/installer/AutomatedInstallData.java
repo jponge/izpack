@@ -47,6 +47,21 @@ public class AutomatedInstallData
 {
   //--- Static members -------------------------------------------------
 
+  /** Names of the custom actions types with which they are stored in the
+   * installer jar file. These names are also used to identify the type of
+   * custom action in the customActionData map. Slashes as first char 
+   * are needed to use the names as "file" name in the installer jar.
+   */
+  // Attention !! Do not change the existent names and the order.
+  // Add a / as first char at new types. Add new type handling in
+  // Unpacker.
+  public static final String [] CUSTOM_ACTION_TYPES = new String[] 
+          {"/installerListeners","/uninstallerListeners", "/uninstallerLibs" };
+          
+  public static final int INSTALLER_LISTENER_INDEX = 0;
+  public static final int UNINSTALLER_LISTENER_INDEX = 1;
+  public static final int UNINSTALLER_LIBS_INDEX = 2;
+  
   /**
    *  A Properties based implementation for VariableValueMap
    * interface.<p>
@@ -114,6 +129,9 @@ public class AutomatedInstallData
 
   /**  The xmlData for automated installers. */
   public XMLElement xmlData;
+  
+  /** Custom action related data. */
+  public Map customActionData;
 
   /**
    * Maps the variable names to their values
@@ -137,6 +155,7 @@ public class AutomatedInstallData
     variableValueMap = new VariableValueMapImpl();
     // TODO: variables = new Properties();
     attributes = new HashMap();
+    customActionData = new HashMap();
   }
 
   /**
