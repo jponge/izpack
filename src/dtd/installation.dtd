@@ -15,7 +15,7 @@ $Id$
     <!ATTLIST installation version CDATA #REQUIRED>
 
 <!-- The info section (general information on an installation) -->
-<!ELEMENT info (appname, appversion, appsubpath?, authors?, url?, javaversion?, uninstaller?, webdir?)>
+<!ELEMENT info (appname, appversion, appsubpath?, authors?, url?, javaversion?, uninstaller?, webdir?, summarylogfilepath?)>
     <!ELEMENT appname (#PCDATA)>
     <!ELEMENT appversion (#PCDATA)>
     <!ELEMENT appsubpath (#PCDATA)>
@@ -29,6 +29,7 @@ $Id$
         <!ATTLIST uninstaller write (yes|no) "yes">
         <!ATTLIST uninstaller name CDATA "uninstaller.jar">
     <!ELEMENT webdir (#PCDATA)>
+    <!ELEMENT summarylogfilepath (#PCDATA)>
 
 <!-- The variables markup (variable declarations ) -->    
 <!ELEMENT variables (variable*)>
