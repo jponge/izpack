@@ -3,6 +3,8 @@
   > 3.6.0 (build 2004.xx.yy)
 
 - New Danish langpack (Frank Bille Jensen).
+- Web installers can now prompt for passwords and a proxy (Chad McHenry).
+- Fixed all javadoc warnings and errors (Chad McHenry).
 
   > 3.5.2 (build 2004.xx.yy)
 
@@ -12,6 +14,8 @@
 - A new mailing-list izpack-changes@lists.berlios.de has been set up to receive
   various development-related notifications.
 - German langpack fix (bug #1828).
+- Web installer fix: wrong jar was getting izpack classes
+- RuleTextField input bug fix (bug #1618)
 
   > 3.5.1 (build 2004.03.16)
 
