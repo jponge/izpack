@@ -88,10 +88,11 @@ public class PacksPanel
   /**  The packs table. */
   private JTable packsTable;
   
-  private LocaleDatabase      langpack        = null;
+  /** The packs locale database. */
+  private LocaleDatabase langpack = null;
   
   /** The name of the XML file that specifies the panel langpack */
-  private static final String PACK_FILE_NAME                = "PacksPanel";
+  private static final String LANG_FILE_NAME = "packsLang.xml";
 
   /**
    *  The constructor.
@@ -102,14 +103,15 @@ public class PacksPanel
   public PacksPanel(InstallerFrame parent, InstallData idata)
   {
     super(parent, idata);
-
-	try
-	{
-	  this.langpack = new LocaleDatabase (ResourceManager.getInstance().getInputStream (PACK_FILE_NAME));
-	}
-	catch (Throwable exception)
-	{}
-
+  
+    try
+    {
+      String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
+      this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
+    }
+    catch (Throwable exception)
+    {}
+  
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
     JLabel infoLabel =
@@ -394,10 +396,12 @@ public class PacksPanel
     {
       Pack pack = (Pack) idata.availablePacks.get(i);
       String desc = "";
-      if (pack.id != null && !pack.id.equals("")){
-		desc = langpack.getString(pack.id+".description");
+      if (pack.id != null && !pack.id.equals(""))
+      {
+        desc = langpack.getString(pack.id+".description");
       }
-      if (desc.equals("")){
+      if (desc.equals(""))
+      {
       	desc = pack.description;
       }
       descriptionArea.setText(desc);

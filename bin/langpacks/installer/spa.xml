@@ -57,6 +57,7 @@
     <str id="InstallPanel.finished" txt="[Instalación completada]"/>
 
     <str id="FinishPanel.success" txt="¡Instalación completada exitosamente!"/>
+    <str id="FinishPanel.done" txt="Hecho"/>
     <str id="FinishPanel.fail" txt="La instalación ha fallado!"/>
     <str id="FinishPanel.uninst.info" txt="Se ha puesto un programa de desinstalación en:"/>
     <str id="FinishPanel.auto" txt="Generar un guión para replicar esta misma instalación"/>

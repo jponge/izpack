@@ -28,6 +28,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -165,7 +167,27 @@ public class ProcessPanelWorker implements Runnable
           ef_list.add(new ExecutableFile(ef_name, args));
         }
 
-        this.jobs.add(new ProcessingJob(job_name, ef_list));
+        for (Iterator ef_it = job_el.getChildrenNamed("executeclass").iterator(); ef_it.hasNext();)
+        {
+            XMLElement ef = (XMLElement) ef_it.next();
+            String ef_name = ef.getAttribute("name");
+            if ((ef_name == null) || (ef_name.length() == 0))
+            {
+                System.err.println("missing \"name\" attribute for <executeclass>");
+                return false;
+            }
+
+            List args = new ArrayList();
+            for (Iterator arg_it = ef.getChildrenNamed("arg").iterator(); arg_it.hasNext();)
+            {
+                XMLElement arg_el = (XMLElement) arg_it.next();
+                String arg_val = arg_el.getContent();
+                args.add(arg_val);
+            }
+
+            ef_list.add(new ExecutableClass(ef_name, args));
+        }
+         this.jobs.add(new ProcessingJob(job_name, ef_list));
       }
 
     }
@@ -400,5 +422,76 @@ public class ProcessPanelWorker implements Runnable
     }
 
   }
+
+
+  /**
+   * Tries to create a class that has an empty contstructor and
+   * a method run(AbstractUIProcessHandler, String[])
+   * If found, it calls the method and processes all returned exceptions
+   */
+  class ExecutableClass implements Processable
+  {
+      final private String myClassName;
+      final private List myArguments;
+      protected AbstractUIProcessHandler myHandler;
+
+      public ExecutableClass(String className, List args)
+      {
+          myClassName = className;
+          myArguments = args;
+      }
+
+    public boolean run( AbstractUIProcessHandler aHandler,  VariableSubstitutor varSubstitutor)
+    {
+        boolean result = false;
+        myHandler = aHandler;
+
+      String params[] = new String[myArguments.size()];
+
+       int i = 0;
+      for (Iterator arg_it = myArguments.iterator(); arg_it.hasNext();)
+        params[i++] = varSubstitutor.substitute((String) arg_it.next(), "plain");
+
+        try {
+            ClassLoader loader = this.getClass().getClassLoader();
+            Class procClass = loader.loadClass(myClassName);
+
+            Object o = procClass.newInstance();
+            Method m = procClass.getMethod("run",   new Class[] {AbstractUIProcessHandler.class, String[].class});
+
+            m.invoke(o, new Object[] {myHandler, params});
+            result = true;
+          }
+          catch (SecurityException e) {
+              myHandler.emitError("Post Processing Error", "Security exception thrown when processing class: " + myClassName);
+          }
+          catch (ClassNotFoundException e) {
+              myHandler.emitError("Post Processing Error", "Cannot find processing class: " + myClassName);
+          }
+          catch (NoSuchMethodException e) {
+              myHandler.emitError("Post Processing Error", "Processing class does not have 'run' method: " + myClassName);
+          }
+          catch (IllegalAccessException e) {
+              myHandler.emitError("Post Processing Error", "Error accessing processing class: " + myClassName);
+          }
+          catch (InvocationTargetException e) {
+              myHandler.emitError("Post Processing Error", "Invocation Problem calling : " + myClassName + ", " + e.getCause().getMessage());
+          }
+          catch (Exception e) {
+              myHandler.emitError("Post Processing Error", "Exception when running processing class: " + myClassName + ", " + e.getMessage());
+          }
+          catch( Error e)
+          {
+              myHandler.emitError("Post Processing Error", "Error when running processing class: " + myClassName + ", " + e.getMessage());
+         }
+          catch( Throwable e)
+          {
+              myHandler.emitError("Post Processing Error", "Error when running processing class: " + myClassName + ", " + e.getMessage());
+         }
+      return result;
+    }
+  }
+
+
 
 }

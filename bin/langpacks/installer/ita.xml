@@ -57,6 +57,7 @@
     <str id="InstallPanel.finished" txt="[Concluso]"/>
     
     <str id="FinishPanel.success" txt="L'installazione si è conclusa con successo."/>
+    <str id="FinishPanel.done" txt="Fatto"/>
     <str id="FinishPanel.fail" txt="L'installazione NON é andata a buon fine!"/>
     <str id="FinishPanel.uninst.info" txt="Un programma di disinstallazione é stato creato in:"/>
     <str id="FinishPanel.auto" txt="Genera uno script di installazione automatica"/>
