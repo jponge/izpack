@@ -177,6 +177,11 @@ public abstract class Packager
    */
   public abstract void setGUIPrefs(GUIPrefs prefs) throws Exception;
 
+  /**
+   *  Check if backrefs are allowed.
+   *
+   */
+  public abstract boolean allowPackFileBackReferences();
 
   /**
    *  Sets the panels order.

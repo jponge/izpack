@@ -53,7 +53,6 @@ public class StdPackager extends Packager
   /**  The zipped output stream. */
   protected JarOutputStream outJar;
 
-
   /**
    *  The constructor.
    *
@@ -80,7 +79,11 @@ public class StdPackager extends Packager
     writeSkeletonInstaller (outJar);
   }
 
-
+  public boolean allowPackFileBackReferences()
+  {
+  	return true;
+  }
+  
   /**
    *  Adds a pack (the compiler sends the merged data).
    *

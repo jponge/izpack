@@ -224,22 +224,30 @@ public class Unpacker extends Thread
 
               if (! overwritefile)
               {
-                objIn.skip(pf.length);
+				if (!pf.isBackReference()) objIn.skip(pf.length);
                 continue;
               }
 
             }
 
-            // We copy the file
-            out = new FileOutputStream(pathFile);
-            byte[] buffer = new byte[5120];
-            long bytesCopied = 0;
+			// We copy the file
+			out = new FileOutputStream(pathFile);
+			byte[] buffer = new byte[5120];
+			long bytesCopied = 0;
+			ObjectInputStream pis = objIn;
+			if (pf.isBackReference())
+			{
+				InputStream is = getPackAsStream(pf.previousPackNumber);
+				pis = new ObjectInputStream(is);//must wrap for blockdata use by objectstream (otherwise strange result)
+				//skip on underlaying stream (for some reason not possible on ObjectStream)
+				is.skip(pf.offsetInPreviousPack - 4);  //but the stream header is now already read (== 4 bytes)
+			}
             while (bytesCopied < pf.length)
             {
               int maxBytes =
                 (pf.length - bytesCopied < buffer.length ?
                 (int) (pf.length - bytesCopied) : buffer.length);
-              int bytesInBuffer = objIn.read(buffer, 0, maxBytes);
+              int bytesInBuffer = pis.read(buffer, 0, maxBytes);
               if (bytesInBuffer == -1)
                 throw new IOException("Unexpected end of stream");
 
@@ -249,6 +257,7 @@ public class Unpacker extends Thread
             }
             // Cleanings
             out.close();
+			if (pis != objIn) pis.close();
 
             // Set file modification time if specified
             if (pf.mtime >= 0)
@@ -261,8 +270,9 @@ public class Unpacker extends Thread
 
           }
           else
-            objIn.skip(pf.length);
-
+          {
+          	if (!pf.isBackReference()) objIn.skip(pf.length);
+          }
         }
 
         // Load information about parsable files

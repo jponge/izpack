@@ -87,6 +87,10 @@ public class WebPackager extends Packager
     writeSkeletonInstaller(webJar);
   }
 
+  public boolean allowPackFileBackReferences()
+  {
+	return false;
+  }
 
   /**
    *  Adds a pack (the compiler sends the merged data).

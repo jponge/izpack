@@ -56,11 +56,9 @@ public class PackFile implements Serializable
   /**  Whether or not this file is going to override any existing ones */
   public int override = OVERRIDE_FALSE;
 
-
-  /**  Constructs a new uninitialized instance. */
-  public PackFile() { }
-
-
+  public int previousPackNumber = -1;
+  public long offsetInPreviousPack = -1;
+  
   /**
    *  Constructs and initializes a new instance.
    *
@@ -92,5 +90,16 @@ public class PackFile implements Serializable
     this.mtime = mtime;
     this.override = override;
   }
+
+	public void setPreviousPackFileRef(int previousPackNumber,long offsetInPreviousPack)
+	{
+		this.previousPackNumber = previousPackNumber;
+		this.offsetInPreviousPack = offsetInPreviousPack;
+	}
+	
+	public boolean isBackReference()
+	{
+		return (previousPackNumber >= 0);
+	}
 }
 

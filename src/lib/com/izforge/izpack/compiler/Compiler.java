@@ -39,10 +39,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -200,6 +203,48 @@ public class Compiler extends Thread
     }
   }
 
+	private static class ByteCountingOutputStream extends OutputStream
+	{
+		private long count;
+		private OutputStream os;
+		public ByteCountingOutputStream(OutputStream os)
+		{
+			this.os = os;
+		}
+
+		public void write(byte[] b, int off, int len) throws IOException
+		{
+			os.write(b, off, len);
+			count += len;
+		}
+
+		public void write(byte[] b) throws IOException
+		{
+			os.write(b);
+			count += b.length;
+		}
+
+		public void write(int b) throws IOException
+		{
+			os.write(b);
+			count++;
+		}
+
+		public void close() throws IOException
+		{
+			os.close();
+		}
+
+		public void flush() throws IOException
+		{
+			os.flush();
+		}
+
+		public long getByteCount()
+		{
+			return count;
+		}
+	}
 
   /**
    *  Compiles the installation.
@@ -392,15 +437,17 @@ public class Compiler extends Thread
     // We set the panels order
     packager.setPanelsOrder(panels);
 
+	Map storedFiles = new HashMap(); 
     // We add the packs
-    i = 0;
+    i = 0; //pack counter
     iter = getPacks(data).iterator();
     while (iter.hasNext())
     {
       Pack pack = (Pack) iter.next();
-      ZipOutputStream zipOut = packager.addPack(i++, pack.name, pack.osConstraints, pack.required,
-        pack.description, pack.preselected);
-      ObjectOutputStream objOut = new ObjectOutputStream(zipOut);
+      ZipOutputStream zipOut = packager.addPack(i, pack.name, pack.osConstraints, pack.required, pack.description, pack.preselected);
+	  zipOut.flush();//make sure buffers are flushed before we start counting  
+	  ByteCountingOutputStream dos = new ByteCountingOutputStream(zipOut);//stream with byte counter
+      ObjectOutputStream objOut = new ObjectOutputStream(dos);
 
       // We write the pack data
       objOut.writeInt(pack.packFiles.size());
@@ -424,22 +471,36 @@ public class Compiler extends Thread
         }
 
         // Writing
-        objOut.writeObject(new PackFile(targetFilename, p.osConstraints, nbytes, mtime, p.override));
-        byte[] buffer = new byte[5120];
-        long bytesWritten = 0;
-        int bytesInBuffer;
-        while ((bytesInBuffer = in.read(buffer)) != -1)
-        {
-          objOut.write(buffer, 0, bytesInBuffer);
-          bytesWritten += bytesInBuffer;
-        }
-        if (bytesWritten != nbytes)
-          throw new IOException
-            ("File size mismatch when reading " + f);
-        packageBytes += bytesWritten;
-        in.close();
+		PackFile pf = new PackFile(targetFilename, p.osConstraints, nbytes, mtime, p.override);
+		long[] info = (long[])storedFiles.get(p.src);
+		boolean addFile = true;
+		if (info != null && packager.allowPackFileBackReferences())
+		{
+			pf.setPreviousPackFileRef((int)info[0],info[1]);
+			addFile = false;
+		}
+        objOut.writeObject(pf);
+		objOut.flush();//make sure it is written
+        long pos = dos.getByteCount();//get the position
+		if (addFile)
+		{
+	        byte[] buffer = new byte[5120];
+	        long bytesWritten = 0;
+	        int bytesInBuffer;
+	        while ((bytesInBuffer = in.read(buffer)) != -1)
+	        {
+	          objOut.write(buffer, 0, bytesInBuffer);
+	          bytesWritten += bytesInBuffer;
+	        }
+	        if (bytesWritten != nbytes)
+	          throw new IOException
+	            ("File size mismatch when reading " + f);
+			storedFiles.put(p.src,new long[]{i,pos});
+		}
+		packageBytes += nbytes;//aldo could be not really written we still want to know size.
+		in.close();
       }
-      packager.packAdded(i - 1, packageBytes);
+      packager.packAdded(i, packageBytes);
 
       // Write out information about parsable files
       objOut.writeInt(pack.parsables.size());
@@ -466,6 +527,8 @@ public class Compiler extends Thread
       // Cleanup
       objOut.flush();
       zipOut.closeEntry();
+      
+      i++;
     }
 
     // We ask the packager to finish
