@@ -31,6 +31,7 @@
 - Web install location specified in xml, not resource. (Chad McHenry)
 - Web installer packs are in separate jars to minimize downloads. (Chad McHenry)
 - fix bug so <fileset> uses same default excludes as ant. (Chad McHenry)
+- added 'defaultexcludes' attribute to <fileset> (Chad McHenry)
 - More elements in dtd are optional, fixed bugs causing errors if certain
   optional elements were omitted. (Chad McHenry)
 - It is now possible to have a specific picture for a specific panel by using 
@@ -45,6 +46,11 @@
 - The choices of a combo box can be generated throug a processor class
   (Thorsten Kamann).
 - The message of a validator can be a i18n message (Thorsten Kamann).
+- If a translation string value cannot be found, then the key will be returned
+  instead of null, avoiding null exceptions when new strings are added.
+- The finish panels are now setting the quit button text to 'Finish' instead of
+  'Quit', which could confuse some users (Dario Yuri).
+- Many Windows shortcuts code fixes and enhancements (Bill Wong).
 
   > 3.5.4 (build 2004.06.05)
 

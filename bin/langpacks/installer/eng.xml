@@ -60,6 +60,7 @@
     <str id="InstallPanel.overwrite.question" txt="The following file already exists. Should it be overwritten?"/>
     
     <str id="FinishPanel.success" txt="Installation has completed successfully."/>
+    <str id="FinishPanel.done" txt="Done"/>
     <str id="FinishPanel.fail" txt="Installation has failed!"/>
     <str id="FinishPanel.uninst.info" txt="An uninstaller program has been created in:"/>
     <str id="FinishPanel.auto" txt="Generate an automatic installation script"/>

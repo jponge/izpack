@@ -83,7 +83,7 @@ public class Compiler extends Thread
   public final static String VERSION = "1.0";
 
   /**  The IzPack version. */
-  public final static String IZPACK_VERSION = "3.5.4 (build 2004.06.05)";
+  public final static String IZPACK_VERSION = "3.6.0-RC2 (build 2004.07.03)";
 
   /**  Standard installer. */
   public final static String STANDARD = "standard";
@@ -284,7 +284,7 @@ public class Compiler extends Thread
         if (lafJarName == null)
           parseError(gp, "Unrecognized Look and Feel: " + lafName);
 
-        URL lafJarURL = findProjectResource("lib/" + lafJarName,
+        URL lafJarURL = findIzPackResource("lib/" + lafJarName,
                                             "Look and Feel Jar file", gp);
         packager.addJarContent(lafJarURL);
       }
@@ -350,7 +350,7 @@ public class Compiler extends Thread
 
       // Trivial initialisations
       String name = requireAttribute(el, "name");
-	  String id = el.getAttribute("id");
+      String id = el.getAttribute("id");
       String description = requireChildNamed(el, "description").getContent();
       boolean required = requireYesNoAttribute(el, "required");
 
@@ -484,6 +484,7 @@ public class Compiler extends Thread
           parseError(f, "Invalid directory 'dir': " + dir_attr);
 
         boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
+        boolean defexcludes = validateYesNoAttribute(f, "defaultexcludes", YES);
         String targetdir = requireAttribute(f, "targetdir");
         List osList = OsConstraint.getOsList(f); // TODO: unverified
         int override = getOverrideValue(f);
@@ -517,7 +518,8 @@ public class Compiler extends Thread
         DirectoryScanner ds = new DirectoryScanner();
         ds.setIncludes(includes);
         ds.setExcludes(excludes);
-        ds.addDefaultExcludes();
+        if (defexcludes)
+          ds.addDefaultExcludes();
         ds.setBasedir(dir);
         ds.setCaseSensitive(casesensitive);
         ds.scan();
@@ -892,6 +894,7 @@ public class Compiler extends Thread
   }
 
   protected int getOverrideValue(XMLElement f)
+    throws CompilerException
   {
     int override = PackFile.OVERRIDE_UPDATE;
 
@@ -914,6 +917,8 @@ public class Compiler extends Thread
       {
         override = PackFile.OVERRIDE_UPDATE;
       }
+      else
+        parseError(f, "invalid value for attribute \"override\"");
     }
 
     return override;
@@ -941,14 +946,14 @@ public class Compiler extends Thread
       resource = new File(basedir, path);
 
     if (! resource.exists()) // fatal
-      parseError(parent, path + " not found");
+      parseError(parent, desc + " not found: " + resource);
 
     try
     {
       url = resource.toURL();
     } catch(MalformedURLException how)
     {
-      parseError(parent, resource + " " + how.getMessage(), how);
+      parseError(parent, desc + "(" + resource + ")", how);
     }
 
     return url;
@@ -978,14 +983,14 @@ public class Compiler extends Thread
         resource = new File(IZPACK_HOME, path);
 
       if (! resource.exists()) // fatal
-        parseError(parent, path + " not found");
+        parseError(parent, desc + " not found: " + resource);
 
       try
       {
         url = resource.toURL();
       } catch(MalformedURLException how)
       {
-        parseError(parent, resource + " " + how.getMessage(), how);
+        parseError(parent, desc + "(" + resource + ")", how);
       }
     }
 

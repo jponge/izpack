@@ -655,6 +655,17 @@ public class InstallerFrame extends JFrame
     writer.write(root);
   }
 
+  /**
+   * Changes the quit button text. If <tt>text</tt> is null, the default quit
+   * text is used.
+   */
+  public void setQuitButtonText(String text)
+  {
+    if (text == null)
+      text = langpack.getString("installer.quit");
+    quitButton.setText(text);
+  }
+
   /**  Blocks GUI interaction.  */
   public void blockGUI()
   {

@@ -84,10 +84,12 @@ public class LocaleDatabase extends TreeMap
    *  Convenience method to retrieve an element.
    *
    * @param  key  The key of the element to retrieve.
-   * @return      The element value.
+   * @return      The element value or the key if not found.
    */
   public String getString(String key)
   {
-    return (String) get(key);
+    String val = (String)get(key);
+    if (val == null) val = key;
+    return val;
   }
 }
