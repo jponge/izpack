@@ -1499,11 +1499,45 @@ public class Compiler extends Thread
     String fullName = getFullClassName(url, className);
     if( url != null )
     {
+      if(getClass().getResource("/" + jarPath) != null )
+      { // Oops, standalone, URLClassLoader will not work ...
+        // Write the jar to a temp file.
+        InputStream in = null;
+        FileOutputStream outFile = null;
+        byte[] buffer = new byte[5120];
+        File tf = null;
+        try
+        {
+          tf = File. createTempFile("izpj", ".jar");
+          tf.deleteOnExit();
+          outFile = new FileOutputStream(tf);
+          in = getClass().getResourceAsStream("/" + jarPath);
+          long bytesCopied = 0;
+          int bytesInBuffer;
+          while ((bytesInBuffer = in.read(buffer)) != -1)
+          {
+            outFile.write(buffer, 0, bytesInBuffer);
+            bytesCopied += bytesInBuffer;
+          }
+        }
+        finally
+        {
+          if( in != null )
+            in.close();
+          if( outFile != null )
+          outFile.close();
+       }
+       url = tf.toURL();
+       
+      }
       URLClassLoader ucl = new URLClassLoader( new URL[] {url} );
       listener = ucl.loadClass(fullName);
       
     }
-    instance = listener.newInstance();
+    if( listener != null )
+      instance = listener.newInstance();
+    else
+      parseError(var, "Cannot find defined compiler listener " + className);
     if( !  CompilerListener.class.isInstance(instance) )
       parseError(var, "'" + className + "' must be implemented " + CompilerListener.class.toString());
     List constraints = OsConstraint.getOsList(var);
