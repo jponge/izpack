@@ -1,5 +1,5 @@
 /*
- * IzPack version 3.1.0 pre1 (build 2002.09.21)
+ * $Id$
  * Copyright (C) 2002 Elmar Grom
  *
  * File :               SerialNumberField.java
