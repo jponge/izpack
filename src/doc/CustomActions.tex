@@ -293,6 +293,7 @@ all occurrences of "CompilerListener" with "InstallerListener" and
 "CompilerListener" with "UninstallerListener"and "compiler" with
 "uninstaller".
 
+
 \section{Example}
 Let us say, we want to set access rights for files and directories
 on Unix. The Java sources are placed in the directory \\
@@ -326,3 +327,184 @@ java -jar install.jar
 \end{verbatim}
 \normalsize
 \end{itemize}\
+
+
+\section{Ant Actions (InstallerListener and UninstallerListener)}
+In this section the common ant task custom actions are described
+in detail. It is only for developers who are not acquainted 
+with \texttt{IzPack} or it's custom actions. In addition to the
+basics there are some recapitulations of the common custom
+action techniques and some hints for pitfalls.\\
+In the package \texttt{com.izforge.izpack.event} there are the ant
+related custom actions \texttt{AntActionInstallerListener} and
+\texttt{AntActionUninstallerListener}. As recapitulation, to add
+any custom action a
+reference in install.xml will be needed, as example:\\
+\footnotesize
+\begin{verbatim}
+<listeners>
+    <listener installer="AntActionInstallerListener"
+        uninstaller="AntActionUninstallerListener" />
+</listeners>
+\end{verbatim}
+\normalsize
+
+For all referenced listeners a jar file with the same name must
+exist in \texttt{[IzPackRoot]/bin/customActions}. If compilation
+(packaging) fails with a "not found" error, first
+verify, that the jar file exists. If not, create it.\\
+With this custom action it is possible to perform ant calls at
+installation and/or uninstallation time. It is not only a wrapper
+for a comand-line ant call, but also an intersected description file
+defining what target of the ant build file should be performed at
+what time of (un)installation and specifies which properties for what IzPack
+\texttt{pack} are to be used. The intersected description file is written as XML, 
+the corresponding dtd is placed in
+src/dtd/event/antaction.dtd. The description file should be declared as a
+resource in the install.xml with the id \texttt{AntActionsSpec.xml} e.g.\\
+
+\footnotesize
+\begin{verbatim}
+<resorces>
+    ...
+    <res id="AntActionsSpec.xml" src="myInstallSpecs/MyAntActionsSpec.xml" />
+    ...
+</resorces>
+\end{verbatim}
+\normalsize
+
+The precise spelling of the id is important. The base path of \texttt{src}
+is the installation project path. If you want to use ant, you have to specify it here. 
+IzPack is designed for running without dependencies on external software or libraries.
+Therefore it is necessary to include everything needed, in this case ant self. 
+The field \texttt{<jar>} in
+installation.xml is predestinated for such cases, e.g.\\
+\begin{verbatim}
+<jar src="jar/ant/ant.jar" stage="both" />
+\end{verbatim}
+\normalsize
+
+Be aware, that an "extended" ant use needs more than one jar, for
+example often \texttt{xercesImpl.jar}. If an obscure "class not
+found" exception is raised during testing, check first for missing
+jar files.\\
+For supporting uninstallation the jar field was extended by the
+attribute \texttt{stage}. If an ant uninstaller custom action is
+used, the uninstaller also needs the jar files. If \texttt{stage}
+is "both" or "uninstall", the contents of the referenced jar file
+will be packed into uninstaller.jar. Be aware that not the jar file
+itself, but the contents of it are required. This implies, that the paths of the
+contained files are unique and the information in
+\texttt{meta-inf/Manifest.mf} will be lost.\\
+\subsection{The Basic XML Struture}
+An ant action will be defined in the resource with the id
+"AntActionsSpec.xml". Sometimes it will help to lock into
+\texttt{[IzPackRoot]/src/dtd/event/antaction.dtd} or validate a
+written xml file with the dtd.\\
+On this xml file a substitution will be performed using all
+defined \texttt{IzPack} variables. It is performed just before
+processing the packs. This is a common way of loading spec files
+into custom actions. For more information see method
+\texttt{com.izforge.izpack.util.SpecHelper.readSpec}.
+If you want to substitute some custom item, simply add a variable
+via idata.setVariable in a custom panel before \texttt{InstallPanel}.
+The given variable name (id) should be written into the xml file
+in the common variable notation.\\
+
+The top level XML section is called \texttt{<antactions>}. Only
+one is possible. The \texttt{<antactions>} are segregated in one or more
+\texttt{<pack>} elements. The single attribute \texttt{<name>} of
+the \texttt{<pack>} corresponds to the same structure in
+install.xml (for more information see also installation.dtd). Only the 
+"things" included in the \texttt{<pack>} are performed, if a
+pack with the same name was chosen to be installed. The "things"
+to be done to self are defined by the element \texttt{<antcall>} (without
+ssss).\\
+The \texttt{<antcall>} takes the following attributes:
+\begin{itemize}
+    \item \texttt{order}: required. Determine at what point of installation the antcalls
+    defined by element \texttt{target} should be
+    performed. Possible are
+    \texttt{beforepack}, \texttt{afterpack}, \texttt{beforepacks} or \texttt{afterpacks}. Be aware that 
+    with beforepack(s) there are no installed files and also no installed
+    build file. With this order only preexistent build files are
+    useable.
+
+    \item \texttt{uninstall\_order}: optional. Determine at what point of uninstallation
+                 the antcalls defined by element \texttt{uninstall\_target}
+                 should be performed. Possible are \texttt{beforedeletion}
+                 and \texttt{afterdeletion}. As opposed to the
+                 behaviour of \texttt{order} the referenced files
+                 are also accessible in the order
+                 \texttt{afterdeletion}. The
+                 uninstaller action copies the files into
+                 tempfiles  before deletion which are marked as deleteOnExit.
+    \item \texttt{quiet}: optional. To quit or not. Possible are yes or
+    no. Default is no.
+    \item \texttt{verbose}: optional. To output verbose information or not. Possible are yes
+    or no. Default is no.
+    \item \texttt{logfile}: optional. Path of the file for logging should
+    be performed. The logfile should be not marked for
+    uninstallation otherwise it will be deleted too.
+    \item \texttt{buildfile}: required. Path of the file which contains the
+    antcall. This is the file you normally use as \texttt{-buildfile} during an ant call via the command
+    line. In this file variables are not substituted. For
+    substitution there are properties in ant which can be used.
+    Never write an \texttt{IzPack} variable in an ant buildfile.
+    \item \texttt{messageid}: optional. A string ID which refers to \\
+    \texttt{bin/langpacks/installer/<lang>.xml}. If it is defined, the message
+    will be displayed in the InstallPanel whilst performing the ant call.
+\end{itemize}
+In addition to the possible attributes there are some elements. All
+elements can be defined more than one time in one
+\texttt{<antcall>}. All are optional, but with no
+\texttt{<target>} element the \texttt{<antcall>} makes no sense.
+Do not confuse the following: "required"s are related to the
+attributes of the elements, not to the elements themselfs.
+\subsubsection{\label{tag:antproperty}\texttt{<property>}: define a property}
+Property to be used with all \texttt{target}s and
+\texttt{uninstall\_target}s which are defined for this antcall.
+\begin{itemize}
+    \item \texttt{name}: required. The name (id) of the property.
+    \item \texttt{value}: required. The value of the property.
+\end{itemize}
+\subsubsection{\label{tag:antpropertyfile}\texttt{<propertyfile>}: define properties in a file}
+Properties to be used with all targets and uninstall\_targets which
+are defined for this antcall given by the path of a properties
+file.
+\begin{itemize}
+    \item \texttt{path}: required. Path of a file which contains
+    properties in the syntax which is used by ant. Some ant calls
+    need properties files. For these this element is used. One
+    way to fill specific data into it is to create a new file in
+    a custom panel and fill it with values given by input fields.
+    The file path can be set at installation time, if there is a
+    variable in AntActionSpec.xml and an IzPack variable was
+    defined before InstallPanel. That file can be only created
+    with deleteOnExit, if no \texttt{<uninstall\_target>} was defined in
+    this \texttt{<antcall>}. This implies, that other \texttt{<antcall>}s can
+    have a \texttt{<uninstall\_target>}.
+\end{itemize}
+
+\subsubsection{\label{tag:anttarget}\texttt{<target>}: target to call at installation}
+Targets to perform with this antcall at installation time. The
+targets should be defined in the given buildfile or else an ant
+exception will be raised. This is that what you use, if you don't want
+to perform the default target. e.g. cleaning the \texttt{IzPack} project with 
+\texttt{ant clean}
+
+
+\begin{itemize}
+    \item \texttt{name}: required. The name of the target.
+\end{itemize}
+
+\subsubsection{\label{tag:antuninsttarget}\texttt{<uninstall\_target>}: target to call on uninstallation}
+Targets to perform with this antcall at uninstallation time. The
+targets should be defined in the given buildfile otherwise an ant
+exception will be raised. With this target it will be possible
+to undo the things done at installation time.
+\begin{itemize}
+    \item \texttt{name}: required. The name of the uninstall target.
+\end{itemize}
+
+
