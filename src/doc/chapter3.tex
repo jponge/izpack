@@ -3,6 +3,7 @@
 
 % Ant Integration
 \section{Ant Integration}
+\label{ant-integration}
 
 \IzPack can be easily integrated inside an Ant build process. To do so you
 first need to tell Ant that you would like to use \IzPack :
@@ -22,7 +23,11 @@ following parameters :
 
   \item \texttt{input} : the XML installation file
   \item \texttt{output} : the output jar installer file
-  \item \texttt{installerType} : the installer type
+  \item \texttt{installerType} : optional. \texttt{standard} or
+    \texttt{web}. If \texttt{web}, the \texttt{<webdir>} attribute
+    must be specified in the input file (see
+    section~\ref{webinstaller}). Used to force creation of a standard
+    installer when the \texttt{<webdir>} attribute has been used.
   \item \texttt{baseDir} : the base directory to resolve the relative paths
   \item \texttt{izPackDir} : the \IzPack home directory.
   
@@ -35,7 +40,7 @@ Here is a sample of the task invocation :\\
 <echo message="Makes the installer using IzPack"/>
 <izpack input="${dist.dir}/IzPack-install.xml"
         output="${dist.dir}/IzPack-install.jar"
-        installerType="standard-kunststoff"
+        installerType="standard"
         basedir="${dist.dir}"
         izPackDir="${dist.dir}/"/>
 \end{verbatim}
@@ -84,34 +89,44 @@ instance if you want a specific picture for the third panel, use
 
 % Web Installers
 \section{Web Installers}
+\label{webinstaller}
 
-The web installers allow your users to download a small installer that does not
-contain the files to install. These files will be downloaded from a HTTP server
-such as \textit{Apache HTTPD}. If you have many optional packs, this can save
-people's resources. It's really easy : people download a small Jar
-file containing the installer, they launch it and choose their
-packages. Then the installer will get the files from another Jar file
-located on a server. It's that simple.\\
+The web installers allow your users to download a small installer that
+does not contain the files to install. These files will be downloaded
+from an HTTP server such as \textit{Apache HTTPD}. If you have many
+optional packs, this can save people's resources. Its very easy:
+people download a small Jar file containing the installer, they launch
+it and choose their packages. Then the installer will get the required
+packages from individual Jar files located on a server, only
+downloading those required. It's that simple.\\
 
-Now suppose that you want to make an installer for your application
-that you want to be named \texttt{install.jar}.
-\begin{enumerate}
-  \item open your favorite text editor and make a plain text file
-  containing on the first line the URL to where you want to put the
-  Jar file containing your packs, let's say for instance
-  \url{http://www.mywebsite/myapp/install_web.jar}
-  \item add this text file as a resource named
-  \texttt{WebInstallers.url}
-  \item compile your installer : you get \texttt{install.jar} and
-  \texttt{install\_web.jar}
-  \item copy \texttt{install\_web.jar} to
-  \url{http://www.mywebsite/myapp/install_web.jar} and give your
-  users \texttt{install.jar} for download.
-\end{enumerate}\
+To create a web installer, add the \texttt{<webdir>} element to the
+\texttt{<info> element (see section~\ref{info-element}). The text must
+be a valid, fully qualified URL for a directly on the web server.\\
 
-That's all you need to make web installers.
-Please note that the installation can look like frozen while the installer
-grabs the server part.\\
+\footnotesize
+\begin{verbatim}
+<info>
+  <appname>Super extractor</appname>
+  <appversion>2.1 beta 6</appversion>
+  <url>http://www.superextractor.com/</url>
+  <webdir>http://www.superextractor.com/download</url>
+</info>
+\end{verbatim}
+\normalsize
+
+You can force creation of a standard installer even if \texttt{webdir}
+is specified, by specifically creating a \texttt{standard} installer
+from the command line invocation or ant task (see
+\label{ant-integration}).
+
+When installing, if the user is behind a firewall, attempting download
+the jar files may fail. If this happens, the user will be prompted to
+enter the name hostname and port of their firewall.
+
+You may password protect the files using mechanisms provided by your
+web server, IzPack will prompt for a password at install time, when
+required.
 
 % More Internationalization
 \section{More Internationalization}
