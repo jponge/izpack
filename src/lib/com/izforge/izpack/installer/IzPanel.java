@@ -371,7 +371,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     return( getLAF() != null ? MetalLookAndFeel.getControlTextFont() : getFont() );
   }
 
-  private static MetalLookAndFeel getLAF()
+  protected static MetalLookAndFeel getLAF()
   {
     LookAndFeel laf = UIManager.getLookAndFeel();
     if( laf instanceof MetalLookAndFeel)

@@ -434,7 +434,7 @@ public class IoHelper
    * @return a new String object if what was found in the given string, else
    * the given string self
    */
-  private static String replaceString(String destination, String what, String with)
+  public static String replaceString(String destination, String what, String with)
   {
     if( destination.indexOf(what) >= 0 )
     { // what found, with (placeholder) not included in destination ->
