@@ -12,6 +12,7 @@
 - Documentation fixes.
 - TargetPanel: more sanity checks (Andreas Vox).
 - InstallPanel: register errors as failures (Andreas Vox).
+- Polish translation updates (Bronek Truzkowski).
 
   > 3.6.0 (build 2004.07.28)
 
