@@ -6,7 +6,7 @@
 
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - In¹talácia "/>
-    <str id="installer.next" txt="Ïaµ¹í"/>
+    <str id="installer.next" txt="Ïal¹í"/>
     <str id="installer.prev" txt="Predchádzajúci"/>
     <str id="installer.quit" txt="Koniec"/>
     <str id="installer.madewith" txt="(Vytvorené pomocou IzPack - http://www.izforge.com/)"/>
