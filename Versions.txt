@@ -52,6 +52,7 @@
 - German langpack: the uninstaller checkbox string was confusing about the
   uninstaller performing a full deletion, including the files not unpacked
   by an IzPack installer.
+- Liquid LnF: version bump (0.2.9-alpha5).
 
   > 3.6.1 (build 2004.10.09)
 
