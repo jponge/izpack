@@ -452,6 +452,11 @@ public class GUIInstaller extends InstallerBase
     /**  Grayed icons cache. */
     private TreeMap grayIcons = new TreeMap();
 
+    public FlagRenderer()
+    {
+      setOpaque(true);
+    }
+    
     /**
      *  Returns a suitable cell.
      *
@@ -469,25 +474,15 @@ public class GUIInstaller extends InstallerBase
       boolean isSelected,
       boolean cellHasFocus)
     {
-      // We avoid that the icon is gray while the combo isn't deployed
-      if (index == -1)
-        isSelected = true;
-
       // We put the label
       String iso3 = (String) value;
       setText(iso3);
       if (isSelected)
       {
-        if (lnf.equalsIgnoreCase("swing"))
-          setOpaque(true);
-        else if (index == -1)
-          setOpaque(false);
-        else
-          setOpaque(true);
         setForeground(list.getSelectionForeground());
         setBackground(list.getSelectionBackground());
-      } else {
-        setOpaque(false);
+      } else
+      {
         setForeground(list.getForeground());
         setBackground(list.getBackground());
       }
@@ -500,7 +495,7 @@ public class GUIInstaller extends InstallerBase
         icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
         grayIcons.put(iso3, icon);
       }
-      if (isSelected)
+      if (isSelected || index == -1)
         setIcon((ImageIcon) icons.get(iso3));
       else
         setIcon((ImageIcon) grayIcons.get(iso3));
