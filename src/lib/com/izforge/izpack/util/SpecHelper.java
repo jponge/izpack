@@ -55,6 +55,8 @@ public class SpecHelper
   private XMLElement spec;
   private boolean _haveSpec;
 
+  public static final String YES = "yes";
+  public static final String NO = "no";
   private static final String PACK_KEY  = "pack";
   private static final String PACK_NAME = "name";
 
@@ -172,6 +174,11 @@ public class SpecHelper
     }
   }
 
+  /**
+   * Returns a XML element which represents the pack for the given name.
+   * @param packDestName name of the pack which should be returned
+   * @return a XML element which represents the pack for the given name
+   */
   public XMLElement getPackForName(String packDestName )
   {
     Vector packs = getSpec().getChildrenNamed(PACK_KEY);
@@ -206,7 +213,8 @@ public class SpecHelper
   }
 
   /**
-   * @return
+   * Returns true if a specification exist, else false.
+   * @return true if a specification exist, else false
    */
   public boolean haveSpec()
   {
@@ -214,7 +222,8 @@ public class SpecHelper
   }
 
   /**
-   * @return
+   * Returns the specification.
+   * @return the specification
    */
   public XMLElement getSpec()
   {
@@ -222,23 +231,12 @@ public class SpecHelper
   }
 
   /**
+   * Sets the specifaction to the given XML element.
    * @param element
    */
   public void setSpec(XMLElement element)
   {
     spec = element;
-  }
-
-  public String getRequiredStringAttribute(XMLElement element,String attrName ) throws Exception
-  {
-    String attr = element.getAttribute(attrName);
-    if( attr == null )
-    {
-      // Oops, this is an error.
-      // throw, or throw not, that is the question ...
-      parseError(element, "Missing required key '" + attrName + "'.");
-    }
-    return( attr );
   }
 
   /**
@@ -255,6 +253,16 @@ public class SpecHelper
     return( getSubChildren( root, childdef, 0 ));
   }
 
+  /**
+   * Returns a Vector with all leafs of the tree which is described
+   * with childdef beginning at the given depth.
+   * 
+   * @param root the XMLElement which is the current root for the search
+   * @param childdef a String array which describes the tree; the last element
+   * contains the leaf name
+   * @param depth depth to start in childdef
+   * @return a Vector of XMLElements of all leafs founded under root
+   */
   private Vector getSubChildren( XMLElement root, String [] childdef, int depth)
   {
     Vector retval = null;
@@ -282,14 +290,77 @@ public class SpecHelper
   }
 
 
+  /**
+   * Creates an temp file in to the substitutor the
+   * substituted contents of input writes; close it and
+   * (re)open it as FileInputStream.
+   * The file will be deleted on exit.
+   * @param input the opened input stream which contents should be substituted
+   * @param substitutor substitutor which should substitute the contents of input
+   * @return a file input stream of the created temporary file
+   * @throws Exception
+   */
   public InputStream substituteVariables( InputStream input, VariableSubstitutor substitutor)
     throws Exception
   {
     File tempFile = File.createTempFile("izpacksubs", "");
+    FileOutputStream fos = null;
     tempFile.deleteOnExit();
-    FileOutputStream fos = new FileOutputStream( tempFile );
-    substitutor.substitute(input,fos,null,null);
-    fos.close();
+    try
+    {
+      fos = new FileOutputStream( tempFile );
+      substitutor.substitute(input,fos,null,null);
+    }
+    finally
+    {
+      if( fos != null )
+        fos.close();
+    }
     return new FileInputStream( tempFile );
+  }
+
+  /**
+   * Returns whether the value to the given attribute is
+   * "yes" or not. If the attribute does not exist, or the
+   * value is not "yes" and not "no", the default value is
+   * returned.
+   * @param element the XML element which contains the attribute
+   * @param attribute the name of the attribute
+   * @param defaultValue the default value
+   * @return whether the value to the given attribute is
+   * "yes" or not
+   */
+  public boolean isAttributeYes( XMLElement element,
+    String attribute, boolean defaultValue )
+  {
+    String value =
+      element.getAttribute(attribute, (defaultValue ? YES : NO));
+    if (value.equalsIgnoreCase(YES))
+      return true;
+    if (value.equalsIgnoreCase(NO))
+      return false;
+
+    return defaultValue;
+  }
+
+  /**
+   * Returns the attribute for the given attribute name.
+   * If no attribute exist, an InstallerException with
+   * a detail message is thrown.
+   * @param element XML element which should contain the attribute
+   * @param attrName key of the attribute
+   * @return the attribute as string 
+   * @throws Exception
+   */
+  public String getRequiredAttribute(XMLElement element,String attrName ) 
+    throws InstallerException
+  {
+    String attr = element.getAttribute(attrName);
+    if( attr == null )
+    {
+      parseError(element, "<" + element.getName() + 
+        "> requires attribute '" + attrName + "'.");
+    }
+    return( attr );
   }
 }
