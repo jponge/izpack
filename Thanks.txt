@@ -59,5 +59,7 @@ IzPack for your projects ;-)
 - Dani Orza : for the Romanian langpack.
 - Tom Moore : for the absolute files path patch.
 - Tino Schwarze : for the great enhancements.
+- Dennis Lundberg : for the Swedish i18n contributions.
+- Alex Carlos Braga Antao : for the portuguese i18 contributions.
 
 # vim: fileformat=dos 

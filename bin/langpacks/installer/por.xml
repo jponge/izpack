@@ -9,7 +9,7 @@
     <str id="installer.next" txt="Próximo"/>
     <str id="installer.prev" txt="Anterior"/>
     <str id="installer.quit" txt="Sair"/>
-    <str id="installer.madewith" txt="(Criado com IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="(Criado com IzPack - http://wwwizforge.com/)"/>
     <str id="installer.quit.title" txt="Tem certeza de que deseja sair ?"/>
     <str id="installer.quit.message" txt="Você quer concelar a instalação?"/>
     <str id="installer.warning" txt="Aviso !"/>
@@ -42,6 +42,8 @@
          txt="O diretório já existe ! Tem certeza de que quer instalar neste diretório e possivelmente sobrescrever arquivos existentes?"/>
     <str id="TargetPanel.empty_target"
          txt="Você não especificou um local! Isto está correto?"/>
+	  <str id="TargetPanel.createdir" txt="O diretório especificado será criado :" />
+
     
     <str id="PacksPanel.info" txt="Selecione os pacotes que deseja instalar :"/>
     <str id="PacksPanel.tip" txt="Nota: pacotes cinzas são requeridos."/>
