@@ -105,7 +105,6 @@ public class ImgPacksPanel extends PacksPanelBase
     // Create constraint for first component as standard constraint.
     parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 0.25, 0.0);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
-    gbConstraints.fill = GridBagConstraints.BOTH;
     gbConstraints.anchor = GridBagConstraints.WEST;
     // Create the info label.
     createLabel( "PacksPanel.info", "preferences", layout, gbConstraints);
@@ -117,6 +116,7 @@ public class ImgPacksPanel extends PacksPanelBase
     // Create packs table with a scroller.
     tableScroller = new JScrollPane();
     parent.buildConstraints(gbConstraints, 0, 1, 1, 2, 0.50, 0.0);
+    gbConstraints.fill = GridBagConstraints.BOTH;
     packsTable = createPacksTable(250, tableScroller, layout, gbConstraints );
     
     // Create the image label with a scroller.

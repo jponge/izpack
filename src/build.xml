@@ -153,7 +153,7 @@
     <!-- Define directories -->
     <property file="src/ant.properties"/>
     <property name="ver" value="3.7"/>
-    <property name="rel" value="0-RC1"/>
+    <property name="rel" value="0"/>
 
     <property name="src.dir" value="${basedir}/src/lib"/>
     <property name="img.dir" value="${basedir}/src/img"/>
@@ -213,7 +213,7 @@
     <!-- Compiles the compiler src files -->
     <target name="compile.compiler" depends="prepare">
         <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
-        	deprecation="on" debug="${debug}" debuglevel="${debuglevel}" >
+         source="${source}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}" >
             <include name="com/izforge/izpack/*.java"/>
             <include name="com/izforge/izpack/compiler/*.java"/>
             <include name="com/izforge/izpack/ant/*.java"/>
@@ -308,7 +308,7 @@
     <!-- Compiles the installer src files -->
     <target name="compile.installer" depends="prepare">
         <javac srcdir="${src.dir}" classpath="${basedir}/lib/jakarta-regexp-1.3.jar" destdir="${build.dir}" optimize="on" 
-        deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
+         source="${source}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/*.java"/>
             <include name="com/izforge/izpack/gui/*.java"/>
             <include name="com/izforge/izpack/installer/*.java"/>
@@ -359,7 +359,7 @@
     <!-- Compiles the uninstaller src files -->
     <target name="compile.uninstaller" depends="prepare">
         <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
-        deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
+         source="${source}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/LocaleDatabase.java"/>
             <include name="com/izforge/izpack/gui/*.java"/>
             <include name="com/izforge/izpack/util/*.java"/>
@@ -408,7 +408,7 @@
     <!-- Compiles the extended uninstaller src files -->
     <target name="compile.uninstaller-ext" depends="prepare">
         <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
-        deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
+         source="${source}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/util/os/*.java"/>
             <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java"/>
             <include name="net/n3/nanoxml/*.java"/>
@@ -441,6 +441,7 @@
                optimize="on" 
                deprecation="on" 
                debug="${debug}"
+	       source="${source}"
                debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/panels/${panel}*.java"/>
         </javac>
@@ -632,7 +633,7 @@
          izevent.jar  -->
     <target name="compile.listener_base" >
         <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
-        deprecation="on" debug="${debug}" debuglevel="${debuglevel}"
+         source="${source}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}"
         classpath="${installer.jar};${compiler.jar}">
             <include name="com/izforge/izpack/event/ActionBase.java"/>
             <include name="com/izforge/izpack/event/Simple*nstallerListener.java"/>
@@ -660,6 +661,7 @@
                optimize="on" 
                deprecation="on" 
                debug="${debug}"
+	       source="${source}"
                debuglevel="${debuglevel}">
             <include name="${listener-include}/${listener}*.java"/>
         </javac>

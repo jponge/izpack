@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.7.0 (build 2004.xx.yy))
+  > 3.7.0 (build 2004.01.11)
 
 - Adding custom action stuff for packaging, installation and uninstallation
   (Klaus Bartz).
@@ -49,6 +49,10 @@
   (Michael Hagedorn).
 - A tutorial is now available.
 - New Czech langpack (Jan Pavlovic).
+- German langpack: the uninstaller checkbox string was confusing about the
+  uninstaller performing a full deletion, including the files not unpacked
+  by an IzPack installer.
+- Liquid LnF: version bump (0.2.9-alpha5).
 
   > 3.6.1 (build 2004.10.09)
 
