@@ -58,6 +58,9 @@ public class VariableSubstitutor implements Serializable
   /**  The variable value mappings */
   protected transient Map environment;
 
+  /**  Whether braces are required for substitution. */
+  protected boolean bracesRequired = false;
+
   /**  A constant for file type. Plain file. */
   protected final static int TYPE_PLAIN = 0;
 
@@ -69,6 +72,9 @@ public class VariableSubstitutor implements Serializable
 
   /**  A constant for file type. Shell file. */
   protected final static int TYPE_SHELL = 3;
+
+  /**  A constant for file type. Plain file with '@' start char. */
+  protected final static int TYPE_AT = 4;
 
   /**  A mapping of file type names to corresponding integer constants. */
   protected final static Map typeNameToConstantMap;
@@ -82,18 +88,34 @@ public class VariableSubstitutor implements Serializable
       new Integer(TYPE_JAVA_PROPERTIES));
     typeNameToConstantMap.put("xml", new Integer(TYPE_XML));
     typeNameToConstantMap.put("shell", new Integer(TYPE_SHELL));
+    typeNameToConstantMap.put("at", new Integer(TYPE_AT));
   }
 
 
   /**
    *  Constructs a new substitutor using the specified variable value mappings.
-   *  The environment hashtable is copied by reference.
+   *  The environment hashtable is copied by reference. Braces are not required
+   *  by default
    *
    * @param  environment  the environment with variable value mappings
    */
   public VariableSubstitutor(Map environment)
   {
     this.environment = environment;
+  }
+
+  /**
+   * Get whether this substitutor requires braces.
+   */
+  public boolean areBracesRequired() {
+    return bracesRequired;
+  }
+
+  /**
+   * Specify whether this substitutor requires braces.
+   */
+  public void setBracesRequired(boolean braces) {
+    bracesRequired = braces;
   }
 
 
@@ -200,7 +222,11 @@ public class VariableSubstitutor implements Serializable
     int t = getTypeConstant(type);
 
     // determine character which starts a variable
-    char variable_start = (t == TYPE_SHELL ? '%' : '$');
+    char variable_start = '$';
+    if (t == TYPE_SHELL)
+      variable_start = '%';
+    else if (t == TYPE_AT)
+      variable_start = '@';
 
     // Copy data and substitute variables
     int c = reader.read();
@@ -215,13 +241,18 @@ public class VariableSubstitutor implements Serializable
       if (c == -1)
         return;
 
-      // Check if braces used
+      // Check if braces used or start char escaped
       boolean braces = false;
       c = reader.read();
       if (c == '{')
       {
         braces = true;
         c = reader.read();
+      }
+      else if (bracesRequired)
+      {
+        writer.write(variable_start);
+        continue;
       }
       else if (c == -1)
       {
@@ -231,10 +262,11 @@ public class VariableSubstitutor implements Serializable
 
       // Read the variable name
       StringBuffer nameBuffer = new StringBuffer();
-      while ((c >= 'a' && c <= 'z') ||
-        (c >= 'A' && c <= 'Z') ||
-        (((c >= '0' && c <= '9') || c == '_') &&
-        nameBuffer.length() > 0))
+      while (c != -1 &&
+             (braces && c != '}') ||
+             (c >= 'a' && c <= 'z') ||
+             (c >= 'A' && c <= 'Z') ||
+             (((c >= '0' && c <= '9') || c == '_') && nameBuffer.length() > 0))
       {
         nameBuffer.append((char) c);
         c = reader.read();
@@ -302,6 +334,7 @@ public class VariableSubstitutor implements Serializable
     {
         case TYPE_PLAIN:
         case TYPE_SHELL:
+        case TYPE_AT:
           return str;
         case TYPE_JAVA_PROPERTIES:
           buffer = new StringBuffer(str);
