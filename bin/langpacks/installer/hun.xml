@@ -41,7 +41,9 @@
     <str id="TargetPanel.warn" 
          txt="A mappa már létezik ! Akarja az ott esetleg létezõ állományok felülírását ?"/>
     <str id="TargetPanel.empty_target"
-         txt="Nem adott meg cél mappét! Megfelelõ ez így?"/>
+         txt="Nem adott meg cél mappát! Megfelelõ ez így?"/>
+    <str id="TargetPanel.createdir" txt="A cél mappát a tetelepítõ létrehozza :" />
+         
     
     <str id="PacksPanel.info" txt="Válassza ki az instalálandó csomagokat :"/>
     <str id="PacksPanel.tip" txt="Megjegyzés: a szürke csomagok telepítése elengedhetetlen."/>
