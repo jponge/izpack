@@ -48,6 +48,7 @@ public class Installer
     // The fields
     private LocaleDatabase langpack;        // Contains the language pack
     private InstallData installdata;        // The installation data
+    private String lnf;
 
     // The constructor (normal mode)
     public Installer() throws Exception
@@ -282,6 +283,7 @@ public class Installer
         {
             // We simply put our nice theme
             MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
+            lnf = "swing";
         }
         else
         if (installdata.kind.equalsIgnoreCase("standard-kunststoff") ||
@@ -303,6 +305,8 @@ public class Installer
             Object[] kparams = { ktheme };
             UIManager.setLookAndFeel(kunststoff);
             setCurrentThemeMethod.invoke(kunststoff, kparams);
+            
+            lnf = "kunststoff";
         }
     }
 
@@ -480,7 +484,12 @@ public class Installer
             setText(iso3);
             if (isSelected)
             {
-                setOpaque(true);
+                if (lnf.equalsIgnoreCase("swing"))
+                    setOpaque(true);
+                else if (index == -1)
+                    setOpaque(false);
+                else
+                    setOpaque(true);
                 setForeground(list.getSelectionForeground());
                 setBackground(list.getSelectionBackground());
             }
