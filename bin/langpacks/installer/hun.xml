@@ -45,6 +45,7 @@
     
     <str id="PacksPanel.info" txt="Válassza ki az instalálandó csomagokat :"/>
     <str id="PacksPanel.tip" txt="Megjegyzés: a szürke csomagok telepítése elengedhetetlen."/>
+    <str id="PacksPanel.space" txt="Összesen szükséges hely a lemezen: "/>
     
     <str id="InstallPanel.info" txt="Kattintson az 'Telepítés !' gombra a telepítés megkezdéséhez!"/>
     <str id="InstallPanel.install" txt="Telepítés !"/>
