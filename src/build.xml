@@ -223,7 +223,6 @@
         </manifest>
     </target>
     <target name="build.compiler" depends="compile.compiler, compiler.manifest">
-        <echo message="Build ${compiler.jar}"/>
         <delete file="${compiler.jar}" verbose="true"/>
         <jar jarfile="${compiler.jar}" manifest="${compiler.manifest}">
             <fileset dir="${build.dir}">
@@ -259,7 +258,6 @@
         </manifest>
     </target>
     <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.panels">
-        <echo message="Build ${standalone-compiler.jar}"/>
         <delete file="${standalone-compiler.jar}" verbose="true"/>
         <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
             <fileset dir="${build.dir}">
@@ -318,7 +316,6 @@
         </manifest>
     </target>
     <target name="build.installer" depends="compile.installer, installer.manifest">
-        <echo message="Build ${installer.jar}"/>
         <delete file="${installer.jar}" verbose="true"/>
         <jar jarfile="${installer.jar}" manifest="${installer.manifest}">
             <fileset dir="${build.dir}">
@@ -369,7 +366,6 @@
         </manifest>
     </target>
     <target name="build.uninstaller" depends="compile.uninstaller, uninstaller.manifest">
-        <echo message="Build ${uninstaller.jar}"/>
         <delete file="${uninstaller.jar}" verbose="true"/>
         <jar jarfile="${uninstaller.jar}" manifest="${uninstaller.manifest}">
             <fileset dir="${build.dir}">
@@ -405,7 +401,6 @@
 
     <!-- Make JAR for a panel -->
     <target name="compile.panel.finish">
-        <echo message="Making JAR for panel ${panel}"/>
         <jar jarfile="${bin.dir}/panels/${panel}.jar">
             <fileset dir="${bin.dir}/panels/${panel}">
                 <include name="**/*.class"/>
@@ -575,7 +570,6 @@
         <taskdef name="izpack" classpath="${basedir}/lib/compiler.jar" classname="com.izforge.izpack.ant.IzPackTask"/>
 
         <!-- Copies the files to the dist directory -->
-        <echo message="Copies the image of the distribution to ${dist.dir}"/>
         <copy todir="${dist.dir}" includeEmptyDirs="yes">
             <fileset dir="${basedir}">
                 <include name="bin/**"/>
@@ -610,7 +604,7 @@
         </copy>
 
         <!-- We call IzPack -->
-        <echo message="Makes the installer using IzPack"/>
+        <echo message="Makes the installer using IzPack" level="verbose"/>
         <izpack input="${dist.dir}/IzPack-install.xml"
                 output="${dist.dir}/IzPack-install-${ver}.${rel}.jar"
                 installerType="standard" basedir="${dist.dir}"
