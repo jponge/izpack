@@ -48,3 +48,5 @@ IzPack for your projects ;-)
 - Hiroki Akimoto for the Japanes language pack.
 - Gareth Cronin : for the Ant task fixes.
 - Jan Blok : for the very great improvements on the installer GUI.
+
+[ vim: fileformat=dos ]
