@@ -30,6 +30,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -219,6 +220,7 @@ public class UserInputPanel extends IzPanel
   private static final String SEARCH_FILE                   = "file";
   private static final String SEARCH_DIRECTORY              = "directory";
   private static final String SEARCH_PARENTDIR              = "parentdir";
+  private static final String SEARCH_CHECKFILENAME          = "checkfilename";
 
   private static final String PACKS                         = "createForPack";
   private static final String NAME                          = "name";
@@ -1523,6 +1525,7 @@ public class UserInputPanel extends IzPanel
     XMLElement    element     = spec.getFirstChildNamed (SPEC);
     String        variable    = spec.getAttribute (VARIABLE);
     String        filename    = null;
+    String        check_filename = null;
     int           search_type = 0;
     int           result_type = 0;
     JComboBox     combobox    = new JComboBox ();
@@ -1584,6 +1587,8 @@ public class UserInputPanel extends IzPanel
       // might be missing - null is okay
       filename = element.getAttribute (SEARCH_FILENAME);
 
+      check_filename = element.getAttribute (SEARCH_CHECKFILENAME);
+      
       Vector choices = element.getChildrenNamed (SEARCH_CHOICE);
 
       if (choices == null)
@@ -1636,7 +1641,24 @@ public class UserInputPanel extends IzPanel
     TwoColumnConstraints eastconstraint1 = new TwoColumnConstraints ();
     eastconstraint1.position  = TwoColumnConstraints.EAST;
 
-    combobox.setToolTipText (parent.langpack.getString ("UserInputPanel.search.location") + filename);
+    StringBuffer tooltiptext = new StringBuffer ();
+    
+    if ((filename != null) && (filename.length() > 0))
+    {
+      tooltiptext.append (
+        MessageFormat.format (parent.langpack.getString ("UserInputPanel.search.location"), 
+            new String[] { filename} ));
+    }
+    
+    if ((check_filename != null) && (check_filename.length() > 0))
+    {
+      tooltiptext.append (          
+        MessageFormat.format (parent.langpack.getString ("UserInputPanel.search.location.checkedfile"), 
+          new String[] { check_filename } ));
+    }
+    
+    if (tooltiptext.length() > 0)
+      combobox.setToolTipText (tooltiptext.toString());
 
     uiElements.add (new Object [] {null, SEARCH_FIELD, variable, eastconstraint1, combobox, forPacks});
 
@@ -1658,7 +1680,7 @@ public class UserInputPanel extends IzPanel
 
     uiElements.add (new Object [] {null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint, buttonPanel, forPacks});
 
-    searchFields.add (new SearchField (filename, parent, combobox, autodetectButton, browseButton, search_type, result_type));
+    searchFields.add (new SearchField (filename, check_filename, parent, combobox, autodetectButton, browseButton, search_type, result_type));
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -2190,6 +2212,7 @@ private class SearchField implements ActionListener
   public static final int       RESULT_PARENTDIR = 3;
 
   private String    filename = null;
+  private String    checkFilename = null;
   private JButton   autodetectButton = null;
   private JButton   browseButton = null;
   private JComboBox pathComboBox = null;
@@ -2205,6 +2228,9 @@ private class SearchField implements ActionListener
    *
    * @param filename    the name of the file to search for (might be null for
    *                    searching directories)
+   * @param checkFilename the name of the file to check when searching for directories
+   *                    (the checkFilename is appended to a found directory to figure out
+   *                     whether it is the right directory)
    * @param combobox    the <code>JComboBox</code> holding the list of choices;
    *                    it should be editable and contain only Strings
    * @param autobutton  the autodetection button for triggering autodetection
@@ -2214,9 +2240,13 @@ private class SearchField implements ActionListener
    *                    RESULT_DIRECTORY or RESULT_PARENTDIR
    */
   /*---------------------------------------------------------------------------*/
-  public SearchField (String filename, InstallerFrame parent, JComboBox combobox, JButton autobutton, JButton browsebutton, int search_type, int result_type)
+  public SearchField (String filename, String checkFilename,
+                      InstallerFrame parent, JComboBox combobox, 
+                      JButton autobutton, JButton browsebutton, 
+                      int search_type, int result_type)
   {
     this.filename = filename;
+    this.checkFilename = checkFilename;
     this.parent = parent;
     this.autodetectButton = autobutton;
     this.browseButton = browsebutton;
@@ -2258,7 +2288,15 @@ private class SearchField implements ActionListener
     {
 
       if ((this.searchType == TYPE_DIRECTORY) && (file.isDirectory()))
-        return true;
+      {
+        // no file to check for
+        if (this.checkFilename == null)
+          return true;
+        
+        file = new File (file, this.checkFilename);
+        
+        return file.exists();
+      }
       
       if ((this.searchType == TYPE_FILE) && (file.isFile ()))
         return true;
@@ -2327,15 +2365,15 @@ private class SearchField implements ActionListener
       {
         File f = chooser.getSelectedFile();
 
+        this.pathComboBox.setSelectedItem (f.getAbsolutePath());
+        
         // use any given directory directly
-        if (f.isDirectory ())
+        if (! this.pathMatches(f.getAbsolutePath()))
         {
-          this.pathComboBox.setSelectedItem (f.getAbsolutePath());
-        }
-        else
-        {
-          // the combo box only contains path names
-          this.pathComboBox.setSelectedItem (f.getAbsoluteFile().getParent ());
+          JOptionPane.showMessageDialog (parent,
+                                         parent.langpack.getString ("UserInputPanel.search.wrongselection.message"),
+                                         parent.langpack.getString ("UserInputPanel.search.wrongselection.caption"),
+                                         JOptionPane.WARNING_MESSAGE);          
         }
       }
 
