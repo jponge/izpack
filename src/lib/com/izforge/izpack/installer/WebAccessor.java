@@ -29,17 +29,15 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-
 import java.io.InputStream;
-import java.io.IOException;
 import java.net.Authenticator;
 import java.net.ConnectException;
-import java.net.PasswordAuthentication;
 import java.net.InetAddress;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
-  
+
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
