@@ -4,18 +4,18 @@
 % Overview
 \section{Overview}
 
-To begin with, you should know what \IzPack is composed of if you want to use
+To begin with, you should know what \IzPack is organized if you want to use
 it. Let's go into the directory where you have installed \IzPack on your
-machine. There are actually 3 text files and a set of directories. The most
-importants for the moment are \texttt{bin/ doc/ sample/}. If you are reading this,
+machine. There are 3 text files and a set of directories. The most
+important for the moment are \texttt{bin/ doc/ sample/}. If you are reading this,
 you already know that \texttt{doc} contains this documentation :-)\\
 
 So let's go into \texttt{bin/}. The \texttt{icons/} directory contains some
 directories for your system, in case you would like an icon to launch a
-component of \IzPack. But the most important stuff you can see in \texttt{bin}
+component of \IzPack. But the most important things you can see in \texttt{bin}
 are the \texttt{izpack-fe} and \texttt{compile} scripts (in both Unix* and
-Windows formats). \texttt{izpack-fe} will launch the GUI based frontend to
-\IzPack that will give you the ability to prepare an installation XML file and
+Windows formats). \texttt{izpack-fe} will launch the GUI based frontend of
+\IzPack. It gives you the ability to prepare an installation XML file and
 compile it to generate your installer. \texttt{compile} is used to compile a
 ready-to-go XML installation file from a command-line context or from an
 external tool.\\
@@ -25,43 +25,42 @@ external tool.\\
 installer has customized these scripts so that they can inform \IzPack of where
 it is located.}\\
 
-% First compilations
-\section{First compilations}
+% First Compilation
+\section{First Compilation}
 
-Now I feel that you can't wait making your first installer so open a
-command-line shell and go into \texttt{sample/}. The following thing should work
-on both Unix* and Windows system. For the last one, just change the path
-separator (slash '/') to a backslash. So type (\$ means your shell prompt !) :
+Now you probably can't wait to build your first installer. So go on open a
+command-line shell and navigate to \texttt{sample/}. The following should work
+on both Unix* and Windows systems. For the latter, just change the path
+separator (slash '/') to a backslash. So type (\$ is your shell prompt !) :
 \begin{verbatim}
 $ ../bin/compile install.xml -b . -o install.jar -k standard
  (installer generation text output here)
 $ java -jar install.jar
 \end{verbatim}
 
-Here you are ! The first command has produced the installer and the second one
-did launch it to give it a try ... can it be simpler ?
-... maybe, it depends of how you like it. You can do the same thing by using the
-frontend, so first launch it with the \texttt{izpack-fe} script located in
+There you are! The first command has produced the installer and the
+second one did launch it. You can do the same thing by using the
+frontend. You launch it with the \texttt{izpack-fe} script located in
 \texttt{bin/}.\\
 
-\parpic{\fbox{\includegraphics[scale=0.30]{img/ch1-import.eps}}}
-Like on the picture, import the file by selecting it from the \texttt{sample/}
-directory. Then you will be asked for a base path, just go one directory back
-and select \texttt{sample/}. The different fields of the frontend should be
-filled properly. To compile the installer, just go into the \textit{compile}
-menu and select a \textit{standard} kind of installer. It will ask you for an
-output file name, just enter install.jar. The building process should work as
-fine as in the command-line mode.\\
+\parpic{\fbox{\includegraphics[scale=0.30]{img/ch1-import.eps}}} Like on
+the picture, import the file by selecting it from the \texttt{sample/}
+directory. Then you will be asked for a base path, just go one directory
+back and select \texttt{sample/}. The different fields of the frontend
+should be filled properly. To compile the installer, just go into the
+\textit{compile} menu and select a \textit{standard} kind of installer.
+It will ask you for an output file name, just enter install.jar. The
+building process should work just as smooth as in command-line mode.\\
 
-% The IzPack architecture
-\section{The \IzPack architecture}
+% The IzPack Architecture
+\section{The \IzPack Architecture}
 
 Now that you have packaged your first installer, it's time for you to understand
-how the whole thing work.\\
+how the whole thing works.\\
 
-\subsection{The compilation system}
+\subsection{The Compilation System}
 
-The compilation system (see on the figure \ref{comparch}) is quite modular. 
+The compilation system (see figure \ref{comparch}) is quite modular. 
 Indeed, you can use the compiler in 3 ways :
 \begin{itemize}
 	\item from a command-line
@@ -77,24 +76,25 @@ Indeed, you can use the compiler in 3 ways :
 \end{center}
 \end{figure}
 
-The compiler takes as its input an XML installation file that describes (at a
-relatively high-level) the installation. This file contains many informations
-such as the application name, the authors, the files to install and many stuffs
-like the panels to use and the resources to give them (see on figure
-\ref{archinstaller}).\\
+The compiler takes as its input an XML installation file that describes
+(at a relatively high-level) the installation. This file contains
+detailed information such as the application name, the authors, the
+files to install, the panels to use, which resources to load and much
+more (see figure \ref{archinstaller}).\\
 
-The compiler can generate different kind of installers, but this information is
+The compiler can generate different kinds of installers, but this information is
 not located inside the XML file as it is not were it should be. On the contrary,
 this is a compiler parameter.\\
 
-\subsection{How an installer works}
+\subsection{How an Installer Works}
 
-An installer prompts its panels to the end-user. For instance, there is one to
-select the packages, on to prompt for the license agreement, one to select the
-installation path and so on. By the way, you can pick the ones you like to put
-them in the installer. For example, you can choose between a plain text or a
-HTML text panel for the license agreement. Also, if you don't want of the
-\textit{HelloPanel}, you just have to not include it.\\ 
+An installer presents its panels to the end-user. For instance, there is
+one to select the packages, one to prompt for the license agreement, one
+to select the installation path and so on. You have a choice from a
+variety of panels to place in the installer. For example, you can choose
+between a plain text and a HTML text panel for the license agreement.
+Also, if you don't want of the \textit{HelloPanel}, you just don't
+include it.\\ 
 
 \begin{figure}[h]
 \caption{\label{archinstaller}
@@ -104,25 +104,25 @@ HTML text panel for the license agreement. Also, if you don't want of the
 \end{center}
 \end{figure}
 
-It's very important to understand that the panels can need some extra data. For
-instance, the license agreement panel needs the license text. A trivial approach
-to specify such a data would have been to add as many XML tags as needed for
+It is very important to understand that some of the panels may need extra data. For
+instance, the license agreement panel needs the license text. A simple approach
+to specify such data would have been to add as many XML tags as needed for
 each panel. However, this makes the XML file too specific and not easy to
-maintain. The approach that has been choosen is to put the data in files and we
+maintain. The approach that has been chosen is to put the data in files and we
 call these files \textit{resource files}. They are specified with a unique XML
 tag. This is a much cleaner approach.\\
 
-You might wonder how the files are packaged. The files can be grouped in
+You might wonder how your files are packaged. They can be grouped in
 \textit{packs}. For instance, you can have one pack for the core files, one for
-the documentation, one for the source code and so one. This way, your end-users
+the documentation, one for the source code and so one. In this way, your end-users
 will have the choice to install a pack or not (provided that the pack they don't
 want to install is not mandatory). Inside the jar file (which is a zip file), a
-subdirectory contains the pack files. Each pack file contains the files that are
+sub directory contains the pack files. Each pack file contains the files that are
 part of it. Could we do it simpler ? :-)\\
 
-\subsection{The different kind of installers}
+\subsection{The Different Kinds of Installers}
 
-There are for the moment 4 kind of installers available :
+There are for the moment 4 kinds of installers available :
 \begin{itemize}
 
   \item \texttt{standard} : a single-file ready-to-run installer

@@ -1,10 +1,10 @@
 % Chapter 3
-\chapter{Advanced features}
+\chapter{Advanced Features}
 
-% Ant integration
-\section{Ant integration}
+% Ant Integration
+\section{Ant Integration}
 
-\IzPack can be easily integrated inside a Ant building process. To do so you
+\IzPack can be easily integrated inside an Ant build process. To do so you
 first need to tell Ant that you would like to use \IzPack :
 \footnotesize
 \begin{verbatim}
@@ -16,7 +16,7 @@ first need to tell Ant that you would like to use \IzPack :
 
 Don't forget to add \texttt{compiler.jar} to the classpath of the Ant process.\\
 
-Then you can invoke \IzPack with the \texttt{izpack} taks that takes the
+Then you can invoke \IzPack with the \texttt{izpack} task which takes the
 following parameters :
 \begin{itemize}
 
@@ -28,7 +28,7 @@ following parameters :
   
 \end{itemize}\
 
-Here's a sample of the task invocation :\\
+Here is a sample of the task invocation :\\
 \footnotesize
 \begin{verbatim}
 <!-- We call IzPack -->
@@ -41,58 +41,59 @@ Here's a sample of the task invocation :\\
 \end{verbatim}
 \normalsize
 
-% Automated installers
-\section{Automated installers}
+% Automated Installers
+\section{Automated Installers}
 
-When you finish your installation with a FinishPanel, you can save the data for
-an automatic installation. With this data, you'll be able to run the same
-installation on another similar machine. On a wide range of computers, it can
-save \textsl{a lot} of time.\\
+When you conclude your installation with a FinishPanel, the user can
+save the data for an automatic installation. With this data, he will be
+able to run the same installation on another similar machine. In an
+environment where many computers need to be supported this can save
+\textsl{a lot} of time.\\
 
 So run once the installation on a machine and save your automatic installation
 data in \texttt{auto-install.xml} (that's just a sample). Then put this file in
-the same directory as the installer on another machine. Run it by :\\
+the same directory as the installer on another machine. Run it with :\\
 \texttt{java -jar installer.jar auto-install.xml}\\
 
 It has reproduced the same installation :-)\\
 
-% Picture on the language selection dialog
-\section{Picture on the language selection dialog}
+% Picture on the Language Selection Dialog
+\section{Picture on the Language Selection Dialog}
 
 You can add a picture on the language selection dialog by adding the following
 resource : \texttt{installer.langsel.img}.\\
 
-% Web installers
-\section{Web installers}
+% Web Installers
+\section{Web Installers}
 
 The web installers allow your users to download a small installer that does not
 contain the files to install. These files will be downloaded from a HTTP server
 such as \textit{Apache HTTPD}. If you have many optional packs, this can save
 people's resources.\\
 
-So you'll get two files at the installer compilation time. The one to put on the
-server ends by '\texttt{\_web}'. The location of this file must be in a resource
-named \texttt{WebInstallers.url}. Just make a text file containing on the first
-line the URL to the file. And that's it.\\
+When building a web installer you get two files at the installer
+compilation time. The one to put on the server ends with '\texttt{\_web}'.
+The location of this file must be in a resource named
+\texttt{WebInstallers.url}. Just make a text file containing on the
+first line the URL to the file. And that's it.\\
 
-Please note that the installation can look like freezed while the installer
+Please note that the installation can look like frozen while the installer
 grabs the server part.\\
 
-% More internationalization
-\section{More internationalization}
+% More Internationalization
+\section{More Internationalization}
 
 IzPack is available in several languages. However you might want to
-internationalize a little more some parts of your installers. In particular you
-could want this for the *InfoPanel and *LicencePanel. This is actually pretty
-easy to do. You just have to add one resource per localization suffixed with the
-ISO3 language code. At runtime these panels will try to load a localized version
-if possible.\\
+internationalize some additional parts of your installer. In particular you
+might want this for the *InfoPanel and *LicencePanel. This is actually pretty
+easy to do. You just have to add one resource per localization, suffixed with the
+ISO3 language code. At runtime these panels will try to load a localized version.\\
 
 For instance let's suppose that we use a HTMLInfoPanel. Suppose that we have it
 in English, French and German. We want to have a French text for french users.
 Here we add a resource pointing to the French text whose name is
 \texttt{HTMLInfoPanel.info\_fra}. And that's it ! English and German users (or
-anywhere else that in France) will get the default text (denoted by 
+anywhere other than in France) will get the default text (denoted by 
 \texttt{HTMLInfoPanel.info}) and the French users will get the French version.
 Same thing for the other Licence and Info panels.\\
 

@@ -2,8 +2,8 @@
 
 % Shortcut definition
 
-\chapter{Desktop Shortcuts \\
-         (by Elmar \textsc{Grom})}
+\chapter{Desktop Shortcuts} \\
+         (by Elmar \textsc{Grom})\\
 
 \section{Defining Shortcuts}
 
@@ -67,21 +67,23 @@ required and for what reason.\\
 First, I would like to discuss items that are supplied with IzPack and
 only need to be added to the installer. After that, I move on to the
 things you have to prepare yourself before you can add them. The way in
-which shortcuts are actually created varies widely among operating
-systems. In some cases it is actually possible to do this with pure Java
-code, while other systems -such as MS-Windows- require native code to
-accomplish this task. The native libraries required for the supported
-operating systems are supplied with IzPack but they are not
-automatically added to your installer file. You need to list them
-yourself in the XML file for the installer. I'll describe later how to
-do this. At the time of this writing (for IzPack version 3.0) only
-MS-Windows is supported. The native library required for this operating
-system is called \texttt{ShellLink.dll}.\\
+which shortcuts are created varies widely among operating systems. In
+some cases it is actually possible to do this with pure Java code, while
+other systems -such as MS-Windows- require native code to accomplish
+this task. The native libraries required for the supported operating
+systems are supplied with IzPack but they are not automatically added to
+your installer file. You need to list them yourself in the XML file for
+the installer. I'll describe later how to do this. At the time of this
+writing (for IzPack version 3.0) only MS-Windows is supported. The
+native library required for this operating system is called
+\texttt{ShellLink.dll}.\\
 
 Native libraries can be added to the installer by using the
 \texttt{<native>} tag. To add the DLL for Windows for example, you just
 have to add the following line to the installer XML file:\\
 \texttt{<native type="izpack" name="ShellLink.dll"/>}\\
+For more details about the use of the \texttt{<native>} tag see the
+cahpter about the format of the XML file.\\
 
 You have to supply an extra specification file for the shortcuts that
 you want to be  created on the target system. This file is required by

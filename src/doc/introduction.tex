@@ -51,32 +51,32 @@ a choice from multiple panel versions for the same task. You can also
 choose the order in which panels appear during the installation process.
 \IzPack can be used in a number of different ways:
 \begin{itemize}
-  \item by writing the XML installation file "by hand" and compiling
-  it with the command line compiler
-  \item by invoking the compiler from the great \textsc{Apache Jakarta
-  Ant} tool (see \url{http://jakarta.apache.org/}) as \IzPack can be
-  used as a task for \textsc{Ant}
-  \item by using the GUI based frontend. The frontend can be used to
-  both generate the XML file and to initiate the compilation process.
+	\item by writing the XML installation file "by hand" and compiling
+	it with the	command line compiler
+	\item by invoking the compiler from the great \textsc{Apache Jakarta
+	Ant} tool (see \url{http://jakarta.apache.org/}) as \IzPack can be
+	used as a task for \textsc{Ant}
+	\item by using the GUI based frontend. The frontend can be used to
+	both generate the XML file and to initiate the compilation process.
 \end{itemize}\
 
 Here is a brief (and certainly incomplete !) list of the main \IzPack features :
 \begin{itemize}
-  \item XML based installation files
-  \item easy internationalization using XML files (10 translations are already
-  available)
-  \item Ant integration, command-line compiler and GUI frontend
-  \item easy customization with the panels and a rich API (even an XML parser is
-  included !)
-  \item powerful variable substitution system that you can use to customize
-  scripts and more generally any text-based file
-  \item different kinds of installers (standard, web-based, ...)
-  \item launching of external executables during the installation process and Unix
-  executable flag support (useful for the scripts for instance)
-  \item layout of the installation files in packs (some can be optional)
-  \item native code integration facilities
-  \item jar files nesting support
-  \item ... \textsl{more things to discover and create !}.
+	\item XML based installation files
+	\item easy internationalization using XML files (10 translations are already
+	available)
+	\item Ant integration, command-line compiler and GUI frontend
+	\item easy customization with the panels and a rich API (even an XML parser is
+	included !)
+	\item powerful variable substitution system that you can use to customize
+	scripts and more generally any text-based file
+	\item different kinds of installers (standard, web-based, ...)
+	\item launching of external executables during the installation process and Unix
+	executable flag support (useful for the scripts for instance)
+	\item layout of the installation files in packs (some can be optional)
+	\item native code integration facilities
+	\item jar files nesting support
+	\item ... \textsl{more things to discover and create !}.
 \end{itemize}\
 
 % Development
@@ -90,11 +90,11 @@ as I'm concerned, I'm a french student and I rather see this as a fun activity
 in my free time where I can learn a lot of great things. The contributors to the
 project are both individuals and companies. Help can take any form :
 \begin{itemize}
-  \item translations
-  \item new features and various fixes
-  \item bug fixes
-  \item writing manuals
-  \item ... anything else you like :-)
+	\item translations
+	\item new features and various fixes
+	\item bug fixes
+	\item writing manuals
+	\item ... anything else you like :-)
 \end{itemize}\
 
 The official \IzPack homepage is located at
@@ -106,9 +106,9 @@ IzPack and for submitting new ideas and contributions.\\
 
 There are two types of releases for \IzPack :
 \begin{itemize}
-  \item a \textit{stable} release that is ready for production use
-  \item an \textit{unstable} release that may contain bugs and incomplete
-  features. This is the result of regular CVS snapshots.
+	\item a \textit{stable} release that is ready for production use
+	\item an \textit{unstable} release that may contain bugs and incomplete
+	features. This is the result of regular CVS snapshots.
 \end{itemize}\
 
 To access CVS, please use this \texttt{CVSROOT} :\\
@@ -118,10 +118,10 @@ read/write access to contribute to \IzPack, then ask me at
 \url{julien@izforge.com}. Of course don't forget to replace \texttt{'anonymous'}
 for your login. There are two modules in CVS :
 \begin{itemize}
-  \item \texttt{langpacks} : contains the translations (same as
-  \texttt{bin/langpacks} in your \IzPack installation directory
-  \item \texttt{src} : contains the source code (same as \texttt{src/} in your
-  \IzPack installation directory.
+	\item \texttt{langpacks} : contains the translations (same as
+	\texttt{bin/langpacks} in your \IzPack installation directory
+	\item \texttt{src} : contains the source code (same as \texttt{src/} in your
+	\IzPack installation directory.
 \end{itemize}\
 
 % 3rd party used
@@ -130,18 +130,18 @@ for your login. There are two modules in CVS :
 \IzPack uses several 3rd party libraries and I would like to mention them in
 respect for their respective authors work :
 \begin{itemize}
-  \item \textit{NanoXML} by Marc \textsc{De Scheemaecker} : the XML parser used
-  inside \IzPack and released under a \textit{zlib/png}-style license - see\\
-  \url{http://nanoxml.sourceforge.net/} -
-  \item \textit{Kunststoff Look and Feel} by Incors Gmbh : a Swing\texttrademark 
-  \ Look and Feel
-  that can be used for installers. It \textbf{really} looks good and
-  is released under the \textsc{GNU Lesser General Public License (LGPL)} - see
-  \url{http://www.incors.org/} -
-  \item \textit{Swing Connection Icons} : the icons used in \IzPack come from
-  the \Java section of the Sun website - see \url{http://java.sun.com/} -
-  \item \textit{Jakarta Ant DirectoryScanner class} : allows the use of Ant
-  filesets syntax support. 
+	\item \textit{NanoXML} by Marc \textsc{De Scheemaecker} : the XML parser used
+	inside \IzPack and released under a \textit{zlib/png}-style license - see\\
+	\url{http://nanoxml.sourceforge.net/} -
+	\item \textit{Kunststoff Look and Feel} by Incors Gmbh : a Swing\texttrademark 
+	\ Look and Feel
+	that can be used for installers. It \textbf{really} looks good and
+	is released under the \textsc{GNU Lesser General Public License (LGPL)} - see
+	\url{http://www.incors.org/} -
+	\item \textit{Swing Connection Icons} : the icons used in \IzPack come from
+	the \Java section of the Sun website - see \url{http://java.sun.com/} -
+	\item \textit{Jakarta Ant DirectoryScanner class} : allows the use of Ant
+	filesets syntax support. 
 \end{itemize}\
 
 So, now let's dive into understanding how \IzPack works. You'll be
