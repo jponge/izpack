@@ -56,10 +56,12 @@ import javax.swing.table.TableCellRenderer;
 
 import net.n3.nanoxml.XMLElement;
 
+import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.ResourceManager;
 
 /**
  *  The packs selection panel class.
@@ -85,6 +87,11 @@ public class PacksPanel
 
   /**  The packs table. */
   private JTable packsTable;
+  
+  private LocaleDatabase      langpack        = null;
+  
+  /** The name of the XML file that specifies the panel langpack */
+  private static final String PACK_FILE_NAME                = "PacksPanel";
 
   /**
    *  The constructor.
@@ -95,6 +102,13 @@ public class PacksPanel
   public PacksPanel(InstallerFrame parent, InstallData idata)
   {
     super(parent, idata);
+
+	try
+	{
+	  this.langpack = new LocaleDatabase (ResourceManager.getInstance().getInputStream (PACK_FILE_NAME));
+	}
+	catch (Throwable exception)
+	{}
 
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -332,7 +346,11 @@ public class PacksPanel
           return new Integer(val);
 
         case 1 :
-          return pack.name;
+        	if (pack.id == null || pack.id.equals("")){
+        		return pack.name;
+        	}else{
+        		return langpack.getString(pack.id);
+        	}
 
         case 2 :
           return Pack.toByteUnitsString((int) pack.nbytes);
@@ -375,7 +393,14 @@ public class PacksPanel
     if (i >= 0)
     {
       Pack pack = (Pack) idata.availablePacks.get(i);
-      descriptionArea.setText(pack.description);
+      String desc = "";
+      if (pack.id != null && !pack.id.equals("")){
+		desc = langpack.getString(pack.id+".description");
+      }
+      if (desc.equals("")){
+      	desc = pack.description;
+      }
+      descriptionArea.setText(desc);
     }
   }
 
