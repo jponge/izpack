@@ -7,6 +7,7 @@
 - Uninstaller: use the system Look and Feel instead of the cross-platform one
   (feature request #470).
 - The uninstaller name can be changed (Thomas Girard).
+- Documentation on the panels creation updates (Elmar Grom).
 
   > 3.7.1 (build 2005.02.15)
 
