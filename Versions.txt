@@ -9,6 +9,7 @@ install XML descriptor (bug #1864).
 problems in variables substitutions). (bug #1866).
 - Target Panel: the path input field could be a bit short if a picture was used.
 Fixed by Klaus Bartz (bug #1875).
+- German langpack: spelling correction (Dustin Sacks)
 
   > 3.5.2 (build 2004.05.01)
 
