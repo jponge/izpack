@@ -10,7 +10,7 @@ $Id$
 -->
 
 <!-- The root element -->
-<!ELEMENT installation (preinstall?, info, variables?, guiprefs?, locale, resources, panels,
+<!ELEMENT installation (preinstall?, info, variables?, guiprefs?, locale, resources?, panels,
                         packs, jar*, native*, postinstall?)>
     <!ATTLIST installation version CDATA #REQUIRED>
 
@@ -53,7 +53,7 @@ $Id$
         <!ATTLIST langpack iso3 CDATA #REQUIRED>
 
 <!-- The resources section (resources for the panel's usings) -->
-<!ELEMENT resources (res+)>
+<!ELEMENT resources (res*)>
     <!ELEMENT res EMPTY>
         <!ATTLIST res src CDATA #REQUIRED>
         <!ATTLIST res id CDATA #REQUIRED>
