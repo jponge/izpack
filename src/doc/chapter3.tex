@@ -69,14 +69,28 @@ resource : \texttt{installer.langsel.img}.\\
 The web installers allow your users to download a small installer that does not
 contain the files to install. These files will be downloaded from a HTTP server
 such as \textit{Apache HTTPD}. If you have many optional packs, this can save
-people's resources.\\
+people's resources. It's really easy : people download a small Jar
+file containing the installer, they launch it and choose their
+packages. Then the installer will get the files from another Jar file
+located on a server. It's that simple.\\
 
-When building a web installer you get two files at the installer
-compilation time. The one to put on the server ends with '\texttt{\_web}'.
-The location of this file must be in a resource named
-\texttt{WebInstallers.url}. Just make a text file containing on the
-first line the URL to the file. And that's it.\\
+Now suppose that you want to make an installer for your application
+that you want to be named \texttt{install.jar}.
+\begin{enumerate}
+  \item open your favorite text editor and make a plain text file
+  containing on the first line the URL to where you want to put the
+  Jar file containing your packs, let's say for instance
+  \url{http://www.mywebsite/myapp/install\_web.jar}
+  \item add this text file as a resource named
+  \texttt{WebInstallers.url}
+  \item compile your installer : you get \texttt{install.jar} and
+  \texttt{install\_web.jar}
+  \item copy \texttt{install\_web.jar} to
+  \url{http://www.mywebsite/myapp/install\_web.jar} and give your
+  users \texttt{install.jar} for download.
+\end{enumerate}\
 
+That's all you need to make web installers.
 Please note that the installation can look like frozen while the installer
 grabs the server part.\\
 
