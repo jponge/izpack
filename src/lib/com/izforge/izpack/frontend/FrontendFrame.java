@@ -140,6 +140,10 @@ public class FrontendFrame extends JFrame
    */
   private void buildGUI() throws Exception
   {
+    // We initialize the buttons factory
+    ButtonFactory.useButtonIcons();
+    ButtonFactory.useHighlightButtons();
+  
     // Window events handler
     addWindowListener(new WindowHandler());
 

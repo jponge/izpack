@@ -71,6 +71,9 @@
         Separated the installer generation from the dist target so that it is
         much cleaner.
 
+    13.01.2003: (by Julien Ponge)
+        Enhanced the clean target.
+
   Mini-HowTo:
 
   To compile and package the compiler.jar jar file, type:
@@ -445,6 +448,12 @@
       <fileset dir="${dist.dir}"/>
       <fileset dir="${basedir}/src/">
         <include name="*.manifest"/>
+      </fileset>
+      <fileset dir="${basedir}/lib/">
+        <include name="compiler.jar" />
+        <include name="frontend.jar" />
+        <include name="installer.jar" />
+        <include name="uninstaller.jar" />
       </fileset>
     </delete> 
   </target>
