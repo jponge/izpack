@@ -23,26 +23,14 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.6.1-RC1 (build 2004.09.11)</appversion>
+        <appversion>3.7.0-M1 (build 2004.10.02)</appversion>
         <authors>
-            <author email="julien@izforge.com" name="Julien Ponge (maintainer, original developer)" />
-            <author email="rockclimberred@yahoo.com" name="Chadwick McHenry (developer)" />
-            <author email="thorsten.kamann@planetes.de" name="Thorsten Kamann (developer)" />
-            <author email="berlios.de@tisc.de" name="Tino Schwarze (developer)"/>
-            <author email="mino@wing.sk" name="Milan Madzia (developer)" />
-            <author email="mike.cunneen@screwfix.com" name="Mike Cunneen (contributor)" />
-            <author email="izpack@frank-bille.de" name="Frank Bille Jensen (contributor)" />
-            <author email="peter.mikula@digital-artefacts.fi" name="Peter Mikula (contributor)" />
-            <author email="mc6530@mclink.it" name="Dario Yuri (contributor)" />
-            <author email="bgwong@pacbell.net" name="Bill Wong (contributor)" />
-            <author email="gaganis@users.berlios.de" name="Gaganis Giorgos (contributor)" />
-            <author email="alex@kinesissoftware.com" name="Alex Bradley (contributor)" />
-            <author email="bronislaw@hands.com.pl" name="Bronek Truszkowski (contributor)" />
-            <author email="ekartzmark@ticom-geo.com" name="Erik Artzmark (contributor)" />
-            <author email="flaviotf@uai.com.br" name="Flavio Torres da Fonseca (contributor)" />
-            <author email="eduardj@eresmas.net" name="Eduard Jodas Samper (contributor)" />
-            <author email="vox@isp.uni-luebeck.de" name="Andreas Vox (contributor)" />
-            <author email="bronek@potul.afraid.org" name="Bronek Truskowski (contributor)" />
+            <author name="Julien Ponge (maintainer, original developer)" email="julien@izforge.com" />
+            <author name="Klaus Bartz (developer)" email="klaus.bartz@coi.de" />
+            <author name="Gaganis Giorgos (developer)" email="geogka@it.teithe.gr" />
+            <author name="Erik Artzmark (contributor)" email="ekartzmark@ticom-geo.com" />
+            <author name="Borje Jonsson (contributor)" email="borje.jonsson@pa-konsult.se" />
+            <author name="Redhuan Daniel Oon (contributor)" email="redhuanoon@yahoo.com" />
             <author email="(see Thanks.txt)" name="Many other developers and contributors to the previous releases" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
