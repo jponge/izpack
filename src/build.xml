@@ -392,17 +392,15 @@
     <!-- Compile a panel -->
     <target name="compile.panel">
         <echo message="Compiles panel ${panel}"/>
-        <javac srcdir="${src.dir}" destdir="${build.dir}" classpath="${installer.jar}" optimize="on" deprecation="on" debug="${debug}">
+        <mkdir dir="${bin.dir}/panels/${panel-dir}"/>
+        <javac srcdir="${src.dir}" 
+               destdir="${bin.dir}/panels/${panel-dir}" 
+               classpath="${installer.jar}" 
+               optimize="on" 
+               deprecation="on" 
+               debug="${debug}">
             <include name="com/izforge/izpack/panels/${panel}*.java"/>
         </javac>
-        <echo message="Creates bin/panels/${panel-dir} directory"/>
-        <mkdir dir="${bin.dir}/panels/${panel-dir}"/>
-        <echo message="Moves ${panel}.class into bin/panels/${panel-dir}"/>
-        <move todir="${bin.dir}/panels/${panel-dir}">
-            <fileset dir="${build.dir}/com/izforge/izpack/panels">
-                <include name="${panel}*"/>
-            </fileset>
-        </move>
     </target>
 
     <!-- Make JAR for a panel -->
@@ -410,7 +408,7 @@
         <echo message="Making JAR for panel ${panel}"/>
         <jar jarfile="${bin.dir}/panels/${panel}.jar">
             <fileset dir="${bin.dir}/panels/${panel}">
-                <include name="*.class"/>
+                <include name="**/*.class"/>
             </fileset>
         </jar>
     </target>

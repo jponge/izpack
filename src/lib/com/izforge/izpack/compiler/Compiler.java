@@ -426,31 +426,30 @@ public class Compiler extends Thread
 
         while ((entry = panel_is.getNextEntry()) != null)
           packager.addPanelClass(entry.getName(), panel_is);
+
       } else
       {
-        File dir =
-          new File(
-            Compiler.IZPACK_HOME
-              + "bin"
-              + File.separator
-              + "panels"
-              + File.separator
-              + str);
+        File dir = new File(Compiler.IZPACK_HOME, "bin/panels/" + str);
         if (!dir.exists())
           throw new Exception(str + " panel does not exist");
 
-        // We add each file in the panel folder
         if (panelsCache.contains(str))
           continue;
         panelsCache.add(str);
-        File[] files = dir.listFiles();
-        int nf = files.length;
-        for (int j = 0; j < nf; j++)
+
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.setBasedir(dir);
+        ds.scan();
+
+        String[] files = ds.getIncludedFiles();
+        for (int j = 0; j < files.length; j++)
         {
-          if (files[j].isDirectory())
-            continue;
-          FileInputStream inClass = new FileInputStream(files[j]);
-          packager.addPanelClass(files[j].getName(), inClass);
+          File f = new File(dir, files[j]);
+          FileInputStream inClass = new FileInputStream(f);
+          // file names must be in cononical (unix) form
+          if ('/' != File.separatorChar)
+            files[j] = files[j].replace(File.separatorChar, '/');
+          packager.addPanelClass(files[j], inClass);
         }
       }
     }

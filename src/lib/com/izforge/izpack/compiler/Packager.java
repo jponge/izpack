@@ -168,7 +168,8 @@ public abstract class Packager
   /**
    *  Adds a panel.
    *
-   * @param  classFilename  The class filename.
+   * @param  classFilename  The class filename as a path using '/' as the
+   *                        fileseparator
    * @param  input          The stream to get the file data from.
    * @exception  Exception  Description of the Exception
    */
@@ -177,8 +178,7 @@ public abstract class Packager
   {
     sendMsg("Adding the (sub)classes for " + classFilename + " ...");
 
-    outJar.putNextEntry(
-      new ZipEntry("com/izforge/izpack/panels/" + classFilename));
+    outJar.putNextEntry(new ZipEntry(classFilename));
     copyStream(input, outJar);
     outJar.closeEntry();
   }

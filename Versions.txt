@@ -5,16 +5,9 @@
 - New Danish langpack (Frank Bille Jensen).
 - Web installers can now prompt for passwords and a proxy (Chad McHenry).
 - Fixed all javadoc warnings and errors (Chad McHenry).
-- ImgPacksPanel has been reworked to offer some features that only PacksPanel
-  had (Volker Friedritz).
+- Panels can be from any package (Chad McHenry)
 
-  > 3.5.3 (build 2004.xx.yy)
-
-- German langpack punctuation fixes (jonelo).
-- TargetPanel: the target path could be written several times in the automated
-install XML descriptor (bug #1864).
-
-  > 3.5.2 (build 2004.05.01)
+  > 3.5.2 (build 2004.xx.yy)
 
 - Fixed moving empty directory to root (pbe@whitestein.com).
 - UserInputPanel getResult() fix (bug #1769).
