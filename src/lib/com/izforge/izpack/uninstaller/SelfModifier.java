@@ -121,7 +121,8 @@ import java.util.zip.ZipEntry;
  *       <td>phase of operation to run</tr>
  * </table>
  *
- * @author <a href="mailto:mchenryc@acm.org">Chadwick A. McHenry</a>
+ * @author Chadwick McHenry
+ * @version 1.0
  */
 public class SelfModifier
 {
