@@ -1797,9 +1797,11 @@ public class Compiler extends Thread
        url = tf.toURL();
        
       }
-      URLClassLoader ucl = new URLClassLoader( new URL[] {url} );
+      // Use the class loader of the interface as parent, else
+      // compile will fail at using it via an Ant task.
+      URLClassLoader ucl = new URLClassLoader( new URL[] {url}, 
+        CompilerListener.class.getClassLoader() );
       listener = ucl.loadClass(fullName);
-      
     }
     if( listener != null )
       instance = listener.newInstance();
