@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<icons>
+    
+    <icon res="/img/JFrameIcon.gif" id="JFrameIcon"/>
+    <icon res="/img/empty.gif" id="empty"/>
+    <icon res="/img/new.gif" id="new"/>
+    <icon res="/img/open.gif" id="open"/>
+    <icon res="/img/save.gif" id="save"/>
+    <icon res="/img/save_as.gif" id="save_as"/>
+    <icon res="/img/stop.gif" id="stop"/>
+    <icon res="/img/jar.gif" id="jar"/>
+    <icon res="/img/web.gif" id="web"/>
+    <icon res="/img/history.gif" id="history"/>
+    <icon res="/img/about.gif" id="about"/>
+    <icon res="/img/information.gif" id="information"/>
+    <icon res="/img/delete.gif" id="delete"/>
+    <icon res="/img/search.gif" id="search"/>
+    <icon res="/img/forward.gif" id="forward"/>
+    <icon res="/img/back.gif" id="back"/>
+    <icon res="/img/properties.gif" id="properties"/>
+    <icon res="/img/preferences.gif" id="preferences"/>
+    <icon res="/img/paste.gif" id="paste"/>
+    <icon res="/img/up.gif" id="up"/>
+    <icon res="/img/down.gif" id="down"/>
+    <icon res="/img/tip.gif" id="tip"/>
+    <icon res="/img/import.gif" id="import"/>
+    <icon res="/img/bookmarks.gif" id="bookmarks"/>
+    
+    <icon res="/img/about_0.jpg" id="about_0"/>
+    <icon res="/img/about_1.jpg" id="about_1"/>
+    <icon res="/img/about_2.jpg" id="about_2"/>
+    <icon res="/img/about_3.jpg" id="about_3"/>
+    <icon res="/img/about_4.jpg" id="about_4"/>
+    <icon res="/img/about_5.jpg" id="about_5"/>
+    <icon res="/img/about_6.jpg" id="about_6"/>
+    <icon res="/img/about_7.jpg" id="about_7"/>
+        
+</icons>

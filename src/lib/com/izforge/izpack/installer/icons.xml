@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<icons>
+
+    <icon res="/img/stepback.gif" id="stepback"/>
+    <icon res="/img/stepforward.gif" id="stepforward"/>
+    <icon res="/img/stop.gif" id="stop"/>
+    <icon res="/img/host.gif" id="host"/>
+    <icon res="/img/information.gif" id="information"/>
+    <icon res="/img/history.gif" id="history"/>
+    <icon res="/img/bookmark.gif" id="bookmark"/>
+    <icon res="/img/edit.gif" id="edit"/>
+    <icon res="/img/empty.gif" id="empty"/>
+    <icon res="/img/help.gif" id="help"/>
+    <icon res="/img/open.gif" id="open"/>
+    <icon res="/img/home.gif" id="home"/>
+    <icon res="/img/preferences.gif" id="preferences"/>
+    <icon res="/img/tip.gif" id="tip"/>
+    <icon res="/img/import.gif" id="import"/>
+    <icon res="/img/refresh_cycle.gif" id="refresh_cycle"/>
+    <icon res="/img/JFrameIcon.gif" id="JFrameIcon"/>
+        
+</icons>

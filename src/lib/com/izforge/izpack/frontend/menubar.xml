@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<menubar>
+
+    <menu name="menu.files" mn="menu.files.mn">
+        <item name="menu.new" action="files" mn="menu.new.mn" img="new" toolbar="yes"/>
+        <item name="menu.open" action="files" mn="menu.open.mn" img="open" toolbar="yes"/>
+        <item name="menu.save" action="files" mn="menu.save.mn" img="save" toolbar="yes"/>
+        <item name="menu.save_as" action="files" mn="menu.save_as.mn" img="save_as" toolbar="yes"/>
+        <separator/>
+        <item name="menu.import" action="files" mn="menu.import.mn" img="import" toolbar="yes"/>
+        <bookmarks/>
+        <separator/>
+        <item name="menu.exit" action="files" mn="menu.exit.mn" img="stop" toolbar="no"/>
+    </menu>
+
+    <menu name="menu.compile" mn="menu.compile.mn">
+        <item name="menu.comp.standard" action="compiler" mn="menu.comp.standard.mn" img="jar" toolbar="no"/>
+        <item name="menu.comp.web" action="compiler" mn="menu.comp.web.mn" img="web" toolbar="no"/>
+        <separator/>
+        <item name="menu.comp.standardk" action="compiler" mn="menu.comp.standardk.mn" img="jar" toolbar="yes"/>
+        <item name="menu.comp.webk" action="compiler" mn="menu.comp.webk.mn" img="web" toolbar="yes"/>
+    </menu>
+    
+    <menu name="menu.izpack" mn="menu.izpack.mn">
+        <item name="menu.about" action="others" mn="menu.about.mn" img="about" toolbar="yes"/>
+        <item name="menu.licence" action="others" mn="menu.licence.mn" img="history" toolbar="yes"/>
+        <separator/>
+        <langpacks/>
+    </menu>
+
+</menubar>
