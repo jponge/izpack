@@ -106,8 +106,11 @@
     <str id="UserInputPanel.search.autodetect.failed.message"    txt="Autodetection failed."/>
     <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Autodetection failed."/>
     <str id="UserInputPanel.search.autodetect.tooltip"           txt="Check for the file or directory in the paths given above."/>
-    <str id="UserInputPanel.search.location"           txt="Enter location of "/>
+    <str id="UserInputPanel.search.location"           txt="Enter location of {0}."/>
+    <str id="UserInputPanel.search.location.checkedfile" txt="The existence of {0} is checked."/>
     <str id="UserInputPanel.search.browse"           txt="Browse..."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="The file or directory you choose either does not exist or is not appropiate."/>
+    <str id="UserInputPanel.search.wrongselection.caption"   txt="Invalid selection."/>
 
     <str id="CompilePanel.heading" txt="Compilation" />
     <str id="CompilePanel.tip" txt="Job compilation progress:" />
@@ -128,6 +131,8 @@
     <str id="CompilePanel.error.noclassfile" txt="The compiler did not produce a class file for the source file " />
     <str id="CompilePanel.choose_compiler" txt="Compiler to use:" />
     <str id="CompilePanel.additional_arguments" txt="Additional compiler arguments:" />
+
+    <str id="ProcessPanel.heading" txt="Processing" />
 
     <!-- Add your own panels specific strings here if you need -->
 

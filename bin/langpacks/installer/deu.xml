@@ -95,12 +95,15 @@
     <str id="UserInputPanel.search.autodetect.failed.message"    txt="Automatische Erkennung fehlgeschlagen."/>
     <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Automatische Erkennung fehlgeschlagen."/>
     <str id="UserInputPanel.search.autodetect.tooltip"           txt="In den verfügbaren Pfaden nach der Datei oder dem Verzeichnis suchen."/>
-    <str id="UserInputPanel.search.location"           txt="Position eingeben von "/>
+    <str id="UserInputPanel.search.location"           txt="Position von {0} eingeben."/>
+    <str id="UserInputPanel.search.location.checkedfile" txt="Die Existenz von {0} wird geprüft."/>
     <str id="UserInputPanel.search.browse"           txt="Durchsuchen..."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="Die gewählte Datei oder das Verzeichnis existiert nicht oder is unpassend."/>
+    <str id="UserInputPanel.search.wrongselection.caption"   txt="Ungültige Auswahl."/>
 
     <str id="CompilePanel.heading" txt="Kompilierung" />
     <str id="CompilePanel.tip" txt="Job-Fortschritt:" />
-    <str id="CompilePanel.browse" txt="Durchsuchen..." />
+    <str id="CompilePanel.browse" txt="Auswählen..." />
     <str id="CompilePanel.browse.approve" txt="Als Kompiler verwenden" />
     <str id="CompilePanel.start" txt="Start" />
     <str id="CompilePanel.progress.initial" txt="[Start-Knopf drücken]" />
@@ -117,6 +120,8 @@
     <str id="CompilePanel.error.compilernotfound" txt="Der Kompiler konnte nicht gefunden werden." />
     <str id="CompilePanel.choose_compiler" txt="Zu verwendender Kompiler:" />
     <str id="CompilePanel.additional_arguments" txt="Zusätzliche Kompilerparameter:" />
+
+    <str id="ProcessPanel.heading" txt="Prozesse" />
 
     <!-- Add your own panels specific strings here if you need -->
 
