@@ -69,8 +69,8 @@
     <str id="ShortcutPanel.textFile.description"  txt="Beschreibung         : "/>
     <str id="ShortcutPanel.textFile.target"       txt="Ausführen            : "/>
     <str id="ShortcutPanel.textFile.command"      txt="Kommandozeile        : "/>
-    <str id="ShortcutPanel.textFile.iconName"     txt="Ikonen Datei         : "/>
-    <str id="ShortcutPanel.textFile.iconIndex"    txt="Ikonen Index         : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Bilddatei            : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Bildindex            : "/>
     <str id="ShortcutPanel.textFile.work"         txt="Arbeitsverzeichnis   : "/>
     <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
     <str id="ShortcutPanel.location.applications" txt="Programm Menü"/>
