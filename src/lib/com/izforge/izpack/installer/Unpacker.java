@@ -94,6 +94,8 @@ public class Unpacker extends Thread
   /** The name of the XML file that specifies the panel langpack */
   private static final String LANG_FILE_NAME = "packsLang.xml";
 
+  /** Placeholder during translatePath computing */
+  private static final String MASKED_SLASH_PLACEHOLDER = "§&_&§";
   /**
    *  The constructor.
    *
@@ -791,6 +793,41 @@ public class Unpacker extends Thread
   }
 
   /**
+   * Returns a  string resulting from replacing all occurrences of what
+   * in this string with with. In opposite to the String.replaceAll method
+   * this method do not use regular expression or other methods which are
+   * only available in JRE 1.4 and later. This method was special made to
+   * mask masked slashes to avert a conversion during path translation.
+   * @param destination string for which the replacing should be performed
+   * @param what what string should be replaced
+   * @param with with what string what should be replaced
+   * @return a new String object if what was found in the given string, else
+   * the given string self
+   */
+  private String replaceString(String destination, String what, String with)
+  {
+    if( destination.indexOf(what) >= 0 )
+    { // what found, with (placeholder) not included in destination ->
+      // perform changing.
+      StringBuffer buf = new StringBuffer();
+      int last = 0;
+      int current =  destination.indexOf(what);
+      int whatLength = what.length(); 
+      while( current >= 0 )
+      { // Do not use Methods from JRE 1.4 and higher ...
+        if( current > 0 )
+          buf.append(destination.substring(last, current));
+        buf.append(with);
+        last = current + whatLength;
+        current = destination.indexOf(what, last);
+      }
+      if( destination.length() > last  )
+        buf.append(destination.substring(last));
+      return( buf.toString());
+    }
+    return(destination);
+  }
+  /**
    *  Translates a relative path to a local system path.
    *
    * @param  destination  The path to translate.
@@ -802,7 +839,32 @@ public class Unpacker extends Thread
     destination = vs.substitute(destination, null);
 
     // Convert the file separator characters
-    return destination.replace('/', File.separatorChar);
+    
+    //destination = destination.replace('/', File.separatorChar);
+    // Undo the conversion if the slashes was masked with 
+    // a backslash
+
+    // Not all occurencies of slashes are path separators. To differ
+    // between it we allow to mask a slash with a backslash infront.
+    // Unfortunately we cannot use String.replaceAll because it
+    // handles backslashes in the replacement string in a special way
+    // and the method exist only beginning with JRE 1.4.
+    // Therefore the little bit crude way following ...
+    if( destination.indexOf("\\/") >= 0 && 
+      destination.indexOf(MASKED_SLASH_PLACEHOLDER) < 0)
+    { // Masked slash found, placeholder not included in destination ->
+      // perform masking.
+      destination = replaceString(destination, "\\/",MASKED_SLASH_PLACEHOLDER);
+      // Masked slashes changed to MASKED_SLASH_PLACEHOLDER.
+      // Replace unmasked slashes.
+      destination = destination.replace('/', File.separatorChar);
+      // Replace the MASKED_SLASH_PLACEHOLDER to slashes; masking backslashes will 
+      // be removed.
+      destination = replaceString(destination, MASKED_SLASH_PLACEHOLDER, "/");
+    }
+    else
+      destination = destination.replace('/', File.separatorChar);
+    return( destination );
   }
 
   // CUSTOM ACTION STUFF -------------- start -----------------
