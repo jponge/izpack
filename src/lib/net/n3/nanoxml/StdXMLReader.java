@@ -411,12 +411,15 @@ public class StdXMLReader
         }
         
         if (ch == 0x0D) { // CR
-            ch = this.read();
-            
-            if (ch != 0x0A) {
+            // using recursion could convert "\r\r\n" to "\n" (wrong),
+            // newline combo "\r\n" isn't normalized if it spans streams
+            // next 'read()' will pop pbreaders stack appropriately
+            ch = this.currentPbReader.read();
+
+            if (ch != 0x0A && ch > 0) { // LF
                 this.currentPbReader.unread(ch);
-                return (char) 0x0A;
             }
+            return (char) 0x0A; // normalized: always LF
         }
 
         return (char) ch;
