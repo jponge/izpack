@@ -45,6 +45,8 @@
 - The choices of a combo box can be generated throug a processor class
   (Thorsten Kamann).
 - The message of a validator can be a i18n message (Thorsten Kamann).
+- If a translation string value cannot be found, then the key will be returned
+  instead of null, avoiding null exceptions when new strings are added.
 
   > 3.5.4 (build 2004.06.05)
 
