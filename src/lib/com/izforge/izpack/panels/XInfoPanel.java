@@ -87,7 +87,7 @@ public class XInfoPanel extends IzPanel
       parent.icons.getImageIcon("edit"), JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
-    gbConstraints.fill = GridBagConstraints.NONE;
+    gbConstraints.fill = GridBagConstraints.BOTH;
     gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
     layout.addLayoutComponent(infoLabel, gbConstraints);
     add(infoLabel);
