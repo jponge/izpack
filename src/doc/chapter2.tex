@@ -510,7 +510,7 @@ arguments to the executable:
 
 \end{itemize}
   
-\subsubsection{\texttt{<os>} - make a file OS-dependent}
+\subsubsection{\label{tag:os}\texttt{<os>} - make a file OS-dependent}
 
 The \texttt{<os>} tag can be used inside the \texttt{<file>},
 \texttt{<fileset>}, \texttt{<singlefile>}, \texttt{<parsable>},
@@ -694,7 +694,8 @@ for a detailed explanation.
 
 \subsection{CompilePanel}
 
-This panel allows you to compile just installed Java sourcecode. The details for the compilation are specified using the resource \texttt{CompilePanel.Spec.xml}.
+This panel allows you to compile just installed Java sourcecode. 
+The details for the compilation are specified using the resource \texttt{CompilePanel.Spec.xml}.
 The XML file has the following format:
 \begin{verbatim}
 <compilation>
@@ -734,3 +735,27 @@ compilation options before compilation is started.
 
 \includegraphics[width=\linewidth]{img/compilePanel}
 
+\subsection{ProcessPanel}
+
+This panel allows you to execute arbitrary files after installation.
+The details for the compilation are specified using the resource \texttt{ProcessPanel.Spec.xml}.
+
+The XML file has the following format:
+\begin{verbatim}
+<processing>
+  <job name="do xyz">
+    <os family="windows" />
+    <executefile name="$INSTALL_PATH/scripts/xyz.bat">
+      <arg>doit</arg><arg>$variable</arg>
+    </executefile>
+  </job>
+  <job name="do xyz">
+    <os family="unix" />
+    <executefile name="$INSTALL_PATH/scripts/xyz.sh">
+      <arg>doit</arg><arg>$variable</arg>
+    </executefile>
+  </job>
+</processing>
+\end{verbatim}
+
+Each job may have an \texttt{<os>} attribute -- see \ref{tag:os} for details.
