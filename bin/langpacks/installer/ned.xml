@@ -11,7 +11,7 @@
     <str id="installer.quit" txt="Afsluiten"/>
     <str id="installer.madewith" txt="(Installatie gemaakt met IzPack - http://www.izforge.com/)"/>
     <str id="installer.quit.title" txt="Weet u zeker dat u wilt afsluiten?"/>
-    <str id="installer.quit.message" txt="Dit zal de installatie wilt afbreken"/>
+    <str id="installer.quit.message" txt="Dit zal de installatie afbreken"/>
     <str id="installer.warning" txt="Waarschuwing !"/>
     <str id="installer.yes" txt="Ja"/>
     <str id="installer.no" txt="Nee"/>
@@ -40,7 +40,7 @@
     <str id="TargetPanel.info" txt="Selecteer de installatiemap:"/>
     <str id="TargetPanel.browse" txt="Bladeren ..."/>
     <str id="TargetPanel.warn" 
-         txt="Deze map bestaat al. Wilt u doorgaan en het risico lopen dat bestanden worden overgeschreven?"/>
+         txt="Deze map bestaat al. Wilt u doorgaan en het risico lopen dat bestanden worden overschreven?"/>
     <str id="TargetPanel.empty_target"
          txt="U heeft geen installatiemap ingevuld. Wilt u toch doorgaan?"/>
     <str id="TargetPanel.createdir" txt="de installatiemap zal worden aangemaakt :" />
