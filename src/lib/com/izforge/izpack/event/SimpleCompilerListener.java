@@ -23,9 +23,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.event;
 
 import java.util.Map;
+
+import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.compiler.PackInfo;
+import com.izforge.izpack.compiler.Packager;
 
 import net.n3.nanoxml.XMLElement;
 

@@ -50,7 +50,13 @@ import org.apache.regexp.RE;
 import org.apache.regexp.RECompiler;
 import org.apache.regexp.RESyntaxException;
 
-import com.izforge.izpack.*;
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.PackFile;
+import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.FileExecutor;

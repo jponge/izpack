@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.event.UninstallerListener;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.FileExecutor;
 

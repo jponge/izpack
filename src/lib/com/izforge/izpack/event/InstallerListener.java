@@ -23,12 +23,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.event;
 
 import java.io.File;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
+import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
