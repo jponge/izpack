@@ -91,54 +91,6 @@ public class Unpacker extends Thread
     return instances;
   }
 
-  private static String actualOS = System.getProperty ("os.name").toLowerCase ();
-
-  /**
-   *  Check whether the given OS matches the current OS.
-   *
-   * Currently supported:
-   * <ul>
-   * <li>unix: linux, solaris, sunos, aix, bsd, hpux, hp-ux, irix, bsd</li>
-   * <li>windows</li>
-   * <li>mac</li>
-   * </ul>
-   * The matching is performed very fuzzy - it only checks for some
-   * substrings within the current OS's name.
-   *
-   * @param targetOS OS name
-   *
-   * @return true if targetOS somehow matches the current OS
-   */
-  public static boolean matchOS(String targetOS)
-  {
-
-    if(targetOS.equalsIgnoreCase("unix"))
-    {
-      return
-        (actualOS.lastIndexOf("unix")    > -1 ||
-         actualOS.lastIndexOf("linux")   > -1 ||
-         actualOS.lastIndexOf("solaris") > -1 ||
-         actualOS.lastIndexOf("sunos")   > -1 ||
-         actualOS.lastIndexOf("aix")     > -1 ||
-         actualOS.lastIndexOf("hpux")     > -1 ||
-         actualOS.lastIndexOf("hp-ux")     > -1 ||
-         actualOS.lastIndexOf("irix")     > -1 ||
-         actualOS.lastIndexOf("bsd")     > -1 );
-    }
-    else if (targetOS.equalsIgnoreCase("windows"))
-    {
-      return(actualOS.lastIndexOf("windows") > -1);
-    }
-    else if (targetOS.equalsIgnoreCase("mac"))
-    {
-      return(actualOS.lastIndexOf("mac") > -1);
-    }
-    else
-    {
-      return actualOS.equalsIgnoreCase(targetOS);
-    }
-  }
-
   /**  The run method.  */
   public void run()
   {
@@ -399,7 +351,6 @@ public class Unpacker extends Thread
       read = in.read();
     }
     outJar.closeEntry();
-    outJar.close();
   }
 
 

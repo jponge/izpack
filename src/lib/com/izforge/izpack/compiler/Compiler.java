@@ -314,7 +314,7 @@ public class Compiler extends Thread
     while (iter.hasNext())
     {
       Pack pack = (Pack) iter.next();
-      ZipOutputStream zipOut = packager.addPack(i++, pack.name, pack.os, pack.required,
+      ZipOutputStream zipOut = packager.addPack(i++, pack.name, pack.osConstraints, pack.required,
         pack.description, pack.preselected);
       ObjectOutputStream objOut = new ObjectOutputStream(zipOut);
 
@@ -497,7 +497,7 @@ public class Compiler extends Thread
       {
         throw new Exception ("missing \"name\" attribute for <pack> in line "+el.getLineNr());
       }
-      pack.os = el.getAttribute("os");
+      pack.osConstraints = OsConstraint.getOsList (el);
       pack.required = el.getAttribute("required").equalsIgnoreCase("yes");
       pack.description = el.getFirstChildNamed("description").getContent();
       pack.preselected = true;
@@ -519,7 +519,7 @@ public class Compiler extends Thread
           if (targetFile == null)
             throw new Exception ("missing \"targetfile\" attribute for <parsable> in line "+p.getLineNr());
             
-          List osList = getOsList (p);
+          List osList = OsConstraint.getOsList (p);
           
           pack.parsables.add
             (new ParsableFile(targetFile,
@@ -583,7 +583,7 @@ public class Compiler extends Thread
             }
           }
 
-          List osList = getOsList(e);
+          List osList = OsConstraint.getOsList(e);
           
           String targetfile_attr = e.getAttribute("targetfile");
           
@@ -624,7 +624,7 @@ public class Compiler extends Thread
 
         int override = getOverrideValue (f);
 
-        List osList = getOsList (f);
+        List osList = OsConstraint.getOsList (f);
         
         String targetdir_attr = f.getAttribute ("targetdir");
         if (targetdir_attr == null)
@@ -665,7 +665,7 @@ public class Compiler extends Thread
 
         int override = getOverrideValue (f);
 
-        List osList = getOsList (f);
+        List osList = OsConstraint.getOsList (f);
         
         String target_attr = f.getAttribute ("target");
         if (target_attr == null)
@@ -737,7 +737,7 @@ public class Compiler extends Thread
           throw new Exception ("missing \"targetdir\" attribute for <fileset> in line "+f.getLineNr());
         }
         
-        List osList = getOsList (f);
+        List osList = OsConstraint.getOsList (f);
 
         addFileSet(path, includes, excludes,
           targetdir_attr,
@@ -754,41 +754,6 @@ public class Compiler extends Thread
     // We return the ArrayList
     return packs;
   }
-
-  /**
-   * Extract a list of OS constraints from given element.
-   * 
-   * @param element parent XMLElement
-   * @return List of OsConstraint (or empty List if no constraints found)
-   */
-  protected List getOsList(XMLElement element)
-  {
-    // get os info on this executable
-    ArrayList osList = new ArrayList();
-    Iterator osIterator = element.getChildrenNamed("os").iterator();
-    while (osIterator.hasNext())
-    {
-      XMLElement os = (XMLElement) osIterator.next();
-      osList.add (new OsConstraint (
-          os.getAttribute("family", null),
-          os.getAttribute("name", null),
-          os.getAttribute("version", null),
-          os.getAttribute("arch", null)
-          )
-        );
-    }
-    
-    // backward compatibility: still support os attribute
-    String osattr = element.getAttribute ("os");
-    if ((osattr != null) && (osattr.length() > 0))
-    {
-      // add the "os" attribute as a family constraint
-      osList.add (new OsConstraint (osattr, null, null, null));
-    }
-    
-    return osList;
-  }
-
 
   /**
    *  Adds a Ant fileset.
@@ -1293,7 +1258,7 @@ public class Compiler extends Thread
     public ArrayList executables;
 
     /**  The target operation system of this file */
-    public String os;
+    public List osConstraints = null;
 
     public boolean preselected;
 

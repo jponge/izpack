@@ -96,19 +96,19 @@ public class WebPackager extends Packager
    *
    * @param  packNumber     The pack number.
    * @param  name           The pack name.
-   * @param  targetOs       The target operation system of this pack.
+   * @param  osConstraints  The target operation system(s) of this pack.
    * @param  required       Is the pack required ?
    * @param  description    The pack description.
    * @return                Description of the Return Value
    * @exception  Exception  Description of the Exception
    */
-  public ZipOutputStream addPack(int packNumber, String name, String targetOs, boolean required,
+  public ZipOutputStream addPack(int packNumber, String name, List osConstraints, boolean required,
                                  String description, boolean preselected) throws Exception
   {
     sendMsg("Adding pack #" + packNumber + " : " + name + " ...");
 
     // Adds it in the packs array
-    Pack pack = new Pack(name, description, targetOs, required, preselected);
+    Pack pack = new Pack(name, description, osConstraints, required, preselected);
     packs.add(packNumber, pack);
 
     // Returns the suiting output stream

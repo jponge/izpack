@@ -24,7 +24,11 @@
  */
 package com.izforge.izpack.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import net.n3.nanoxml.XMLElement;
 
 /**
  * Encapsulates OS constraints specified on creation time and allows
@@ -49,12 +53,12 @@ public class OsConstraint implements java.io.Serializable
 
 
   /**
-   *  Constructs a new instance. Please remember, MacOSX belongs to Unix family.
+   * Constructs a new instance. Please remember, MacOSX belongs to Unix family.
    *
-   * @param  family   Description of the Parameter
-   * @param  name     Description of the Parameter
-   * @param  version  Description of the Parameter
-   * @param  arch     Description of the Parameter
+   * @param  family   The OS family (unix, windows or mac).
+   * @param  name     The exact OS name.
+   * @param  version  The exact OS version (check property <code>os.version</code> for values).
+   * @param  arch     The machine architecture (check property <code>os.arch</code> for values).
    */
   public OsConstraint(String family, String name, String version, String arch)
   {
@@ -100,7 +104,17 @@ public class OsConstraint implements java.io.Serializable
       else if (family.equals("unix"))
       {
         String pathSep = System.getProperty("path.separator");
-        match = (pathSep.equals(":") && (!osName.startsWith("mac") || osName.endsWith("x")));
+        match = (   osName.lastIndexOf("unix")    > -1
+                 || osName.lastIndexOf("linux")   > -1
+                 || osName.lastIndexOf("solaris") > -1
+                 || osName.lastIndexOf("sunos")   > -1
+                 || osName.lastIndexOf("aix")     > -1
+                 || osName.lastIndexOf("hpux")    > -1
+                 || osName.lastIndexOf("hp-ux")   > -1
+                 || osName.lastIndexOf("irix")    > -1
+                 || osName.lastIndexOf("bsd")     > -1
+                 || ((pathSep.equals(":") && (!osName.startsWith("mac") || osName.endsWith("x"))))
+                );
       }
     }
 
@@ -108,6 +122,40 @@ public class OsConstraint implements java.io.Serializable
       (name != null) ||
       (version != null) ||
       (arch != null));
+  }
+
+  /**
+   * Extract a list of OS constraints from given element.
+   * 
+   * @param element parent XMLElement
+   * @return List of OsConstraint (or empty List if no constraints found)
+   */
+  static public List getOsList(XMLElement element)
+  {
+    // get os info on this executable
+    ArrayList osList = new ArrayList();
+    Iterator osIterator = element.getChildrenNamed("os").iterator();
+    while (osIterator.hasNext())
+    {
+      XMLElement os = (XMLElement) osIterator.next();
+      osList.add (new OsConstraint (
+          os.getAttribute("family", null),
+          os.getAttribute("name", null),
+          os.getAttribute("version", null),
+          os.getAttribute("arch", null)
+          )
+        );
+    }
+    
+    // backward compatibility: still support os attribute
+    String osattr = element.getAttribute ("os");
+    if ((osattr != null) && (osattr.length() > 0))
+    {
+      // add the "os" attribute as a family constraint
+      osList.add (new OsConstraint (osattr, null, null, null));
+    }
+    
+    return osList;
   }
 
 

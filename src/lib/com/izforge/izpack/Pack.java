@@ -26,6 +26,7 @@ package com.izforge.izpack;
 
 import java.io.*;
 import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  *  Represents a Pack.
@@ -42,7 +43,7 @@ public class Pack implements Serializable
   public String description;
 
   /**  The target operation system of this pack */
-  public String os = null;
+  public List osConstraints = null;
 
   /**  True if the pack is required. */
   public boolean required;
@@ -61,11 +62,11 @@ public class Pack implements Serializable
    * @param  targetOs    Description of the Parameter
    * @param  required     Indicates wether the pack is required or not.
    */
-  public Pack(String name, String description, String targetOs, boolean required, boolean preselected)
+  public Pack(String name, String description, List osConstraints, boolean required, boolean preselected)
   {
     this.name = name;
     this.description = description;
-    this.os = targetOs;
+    this.osConstraints = osConstraints;
     this.required = required;
     this.preselected = preselected;
     nbytes = 0;

@@ -26,14 +26,18 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.Info;
-import com.izforge.izpack.Pack;
-
-import java.io.*;
-import java.util.Properties;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Properties;
+
+import com.izforge.izpack.Info;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  * Common utility functions for the GUI and text installers.
@@ -94,7 +98,7 @@ public class InstallerBase
     {
       Pack pk = (Pack) objIn.readObject();
       allPacks.add(pk);
-      if (null == pk.os || os.toLowerCase().indexOf(pk.os.toLowerCase()) > -1)
+      if (OsConstraint.oneMatchesCurrentSystem(pk.osConstraints))
         availablePacks.add(pk);
     }
     objIn.close();

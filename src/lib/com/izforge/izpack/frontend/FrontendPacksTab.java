@@ -509,7 +509,7 @@ public class FrontendPacksTab extends FrontendTab
       // TODO: add UI to alter preselection state
       Pack p = new Pack(el.getAttribute("name"),
         el.getFirstChildNamed("description").getContent(),
-        el.getAttribute("os"),
+        com.izforge.izpack.util.OsConstraint.getOsList(el),
         el.getAttribute("required").equalsIgnoreCase("yes"), true);
       packs.add(p);
     }
