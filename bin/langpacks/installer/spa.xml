@@ -39,9 +39,10 @@
     <str id="TargetPanel.info" txt="Seleccione la ruta de instalación:"/>
     <str id="TargetPanel.browse" txt="Escoger ..."/>
     <str id="TargetPanel.warn"
-         txt="¡El directorio ya existe! ¿Confirma su deseo de hacer la instalación ahí?"/>
+         txt="¡El directorio ya existe! ¿Confirma su deseo de hacer la instalación ahí y sobreescribir posibles ficheros existentes?"/>
     <str id="TargetPanel.empty_target"
          txt="¡Ha hecho una designación sin nombre! ¿Desea hacerlo así?"/>
+		<str id="TargetPanel.createdir" txt="El directorio será creado:" />
 
     <str id="PacksPanel.info" txt="Seleccione los paquetes que desea instalar:"/>
     <str id="PacksPanel.tip" txt="Nota: los paquetes en gris no son opcionales."/>
@@ -53,12 +54,12 @@
     <str id="InstallPanel.begin" txt="[Sin iniciar]"/>
     <str id="InstallPanel.finished" txt="[Instalación completada]"/>
 
-    <str id="FinishPanel.success" txt="¡Instalación finalizada exitosamente!"/>
-    <str id="FinishPanel.fail" txt="La instalación ha fallado ..."/>
-    <str id="FinishPanel.uninst.info" txt="Se ha puesto un programa de desinstalación:"/>
+    <str id="FinishPanel.success" txt="¡Instalación completada exitosamente!"/>
+    <str id="FinishPanel.fail" txt="La instalación ha fallado!"/>
+    <str id="FinishPanel.uninst.info" txt="Se ha puesto un programa de desinstalación en:"/>
     <str id="FinishPanel.auto" txt="Generar un guión para replicar esta misma instalación"/>
     <str id="FinishPanel.auto.tip"
-         txt="Genera un fichero que puede usarse para hacer automáticamente la misma instalación en otra máquina."/>
+         txt="Use este guión para hacer automáticamente la misma instalación en otras máquinas."/>
 
     <str id="ImgPacksPanel.packs" txt="Paquetes disponibles:"/>
     <str id="ImgPacksPanel.snap" txt="Captura de pantalla asociada:"/>
