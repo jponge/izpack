@@ -64,6 +64,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;
@@ -207,7 +208,7 @@ public class InstallerFrame extends JFrame
     XMLElement data = (XMLElement) parser.parse();
 
     // We load the icons
-    Vector children = data.getChildren();
+    Vector children = data.getChildrenNamed("icon");
     int size = children.size();
     for (int i = 0; i < size; i++)
     {
@@ -216,6 +217,17 @@ public class InstallerFrame extends JFrame
       img = new ImageIcon(url);
       icons.put(icon.getAttribute("id"), img);
     }
+    
+    // We load the Swing-specific icons
+    children = data.getChildrenNamed("sysicon");
+    size = children.size();
+    for (int i = 0; i < size; i++)
+    {
+      icon = (XMLElement) children.get(i);
+      url = getClass().getResource(icon.getAttribute("res"));
+      img = new ImageIcon(url);
+      UIManager.put(icon.getAttribute("id"), img);
+    }    
   }
 
 

@@ -90,7 +90,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     int row = 1;
 
     this.tipLabel = new JLabel(parent.langpack.getString("InstallPanel.tip"),
-      parent.icons.getImageIcon("tip"), JLabel.TRAILING);
+      parent.icons.getImageIcon("information"), JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.fill = GridBagConstraints.NONE;
     gbConstraints.anchor = GridBagConstraints.NORTHWEST;
@@ -124,7 +124,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     add(sep);
 
     this.overallOpLabel = new JLabel(parent.langpack.getString ("InstallPanel.progress"), 
-      parent.icons.getImageIcon ("tip"), JLabel.TRAILING);
+      parent.icons.getImageIcon ("information"), JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.NORTHWEST;
     gbConstraints.fill = GridBagConstraints.NONE;

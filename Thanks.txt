@@ -64,5 +64,6 @@ IzPack for your projects ;-)
 - Alex Carlos Braga Antao : for the portuguese i18 contributions.
 - Cristian Ghezzi : for the Italian i18n contributions.
 - Chad McHenry : for the compiler warnings generation patch.
+- Everaldo & the KDE crew : for the first-class Crystal icons theme.
 
 # vim: fileformat=dos 
