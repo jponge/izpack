@@ -65,7 +65,6 @@ public class Win_Shortcut extends Shortcut
   *                   </ul>
   * @param     name   the name of the shortcut.
   */
- /*--------------------------------------------------------------------------*/
   public void initialize (int    type,
                           String name) throws Exception
   {
@@ -98,6 +97,7 @@ public class Win_Shortcut extends Shortcut
         }
     }
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Returns the base path of the shortcut depending on type. The base path is
@@ -111,7 +111,6 @@ public class Win_Shortcut extends Shortcut
   *
   * translates from ShellLink-UserTypes to Shortcut-UserTypes.
   */
- /*--------------------------------------------------------------------------*/
   public String getBasePath () throws Exception
   {
     return shortcut.getLinkPath (shortcut.getUserType());
@@ -133,7 +132,6 @@ public class Win_Shortcut extends Shortcut
   * @see       #APPLICATIONS
   * @see       #START_MENU  
   */
- /*--------------------------------------------------------------------------*/
   public Vector getProgramGroups (int userType)
   {
     // ----------------------------------------------------
@@ -186,6 +184,7 @@ public class Win_Shortcut extends Shortcut
     
     return (groups);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Returns the fully qualified file name under which the link is saved on
@@ -194,11 +193,11 @@ public class Win_Shortcut extends Shortcut
   *
   * @return    the fully qualified file name for the shell link
   */
- /*--------------------------------------------------------------------------*/
   public String getFileName ()
   {
     return (shortcut.getFileName ());
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Returns the path of the directory where the link file is stored, if it
@@ -212,11 +211,11 @@ public class Win_Shortcut extends Shortcut
   *            there was no need to create a directory during the previous
   *            save operation.
   */
- /*--------------------------------------------------------------------------*/
   public String getDirectoryCreated ()
   {
     return (shortcut.getDirectoryCreated ());
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Returns <code>true</code> if the target OS supports current user and
@@ -224,7 +223,6 @@ public class Win_Shortcut extends Shortcut
   *
   * @return    <code>true</code> if the target OS supports current and all users.
   */
- /*--------------------------------------------------------------------------*/
   public boolean multipleUsers ()
   {
 	// Win NT4 won't have PROGRAMS for CURRENT_USER.
@@ -237,6 +235,7 @@ public class Win_Shortcut extends Shortcut
 
 	return ( au.length() > 0 && cu.length() > 0 );
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Signals that this flavor of <code>{@link com.izforge.izpack.util.os.Shortcut}</code>
@@ -244,11 +243,11 @@ public class Win_Shortcut extends Shortcut
   *
   * @return    always <code>true</code>
   */
- /*--------------------------------------------------------------------------*/
   public boolean supported ()
   {
     return (true);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the command line arguments that will be passed to the target when
@@ -256,11 +255,11 @@ public class Win_Shortcut extends Shortcut
   *
   * @param     arguments    the command line arguments
   */
- /*--------------------------------------------------------------------------*/
   public void setArguments (String arguments)
   {
     shortcut.setArguments (arguments);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the description string that is used to identify the link in a menu
@@ -268,11 +267,11 @@ public class Win_Shortcut extends Shortcut
   *
   * @param     description  the descriptiojn string
   */
- /*--------------------------------------------------------------------------*/
   public void setDescription (String description)
   {
     shortcut.setDescription (description);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the location of the icon that is shown for the shortcut on the
@@ -284,34 +283,34 @@ public class Win_Shortcut extends Shortcut
   *                   If there is only one icon in the file, use an index
   *                   of 0.
   */
- /*--------------------------------------------------------------------------*/
   public void setIconLocation (String path,
                                int    index)
   {
     shortcut.setIconLocation (path, index);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * returns icon Location
   *
-  * @ return iconLocation
+  * @return iconLocation
   */
- /*--------------------------------------------------------------------------*/
   public String getIconLocation()
   {
       return shortcut.getIconLocation();
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the name of the program group this ShellLinbk should be placed in.
   *
   * @param     groupName    the name of the program group
   */
- /*--------------------------------------------------------------------------*/
   public void setProgramGroup (String groupName)
   {
     shortcut.setProgramGroup (groupName);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the show command that is passed to the target application when the
@@ -336,7 +335,6 @@ public class Win_Shortcut extends Shortcut
   * @see       #getShowCommand
   * internally maps from Shortcut.XXX to ShellLink.XXX
   */
- /*--------------------------------------------------------------------------*/
   public void setShowCommand (int show) throws IllegalArgumentException
   {
 
@@ -403,33 +401,33 @@ public class Win_Shortcut extends Shortcut
   *
   * @param     path     the fully qualified file name of the target
   */
- /*--------------------------------------------------------------------------*/
   public void setTargetPath (String path)
   {
     shortcut.setTargetPath (path);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the working directory for the link target.
   *
   * @param     dir    the working directory
   */
- /*--------------------------------------------------------------------------*/
   public void setWorkingDirectory (String dir)
   {
     shortcut.setWorkingDirectory (dir);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Gets the working directory for the link target.
   *
   * @return the working directory.
   */
- /*--------------------------------------------------------------------------*/
   public String getWorkingDirectory ()
   {
     return shortcut.getWorkingDirectory ();
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the name shown in a menu or on the desktop for the link.
@@ -437,11 +435,11 @@ public class Win_Shortcut extends Shortcut
   * @param     name   The name that the link should display on a menu or on
   *                   the desktop. Do not include a file extension.
   */
- /*--------------------------------------------------------------------------*/
   public void setLinkName (String name)
   {
     shortcut.setLinkName (name);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Gets the type of link
@@ -495,7 +493,6 @@ public class Win_Shortcut extends Shortcut
   *
   * @exception IllegalArgumentException if an an invalid type is passed
   */
- /*--------------------------------------------------------------------------*/
   public void setLinkType (int type) throws IllegalArgumentException
   {
     switch (type)
@@ -526,6 +523,7 @@ public class Win_Shortcut extends Shortcut
         }
     }
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Gets the user type for the link
@@ -534,7 +532,6 @@ public class Win_Shortcut extends Shortcut
   * @see       #CURRENT_USER
   * @see       #ALL_USERS
   */
- /*--------------------------------------------------------------------------*/
   public int getUserType()
   {
   	int utype = shortcut.getUserType();
@@ -557,7 +554,7 @@ public class Win_Shortcut extends Shortcut
  /**
   * Sets the user type for the link
   *
-  * @param     userType  the type of user for the link.
+  * @param     type  the type of user for the link.
   * 
   * @see       Shortcut#CURRENT_USER
   * @see       Shortcut#ALL_USERS
@@ -582,18 +579,17 @@ public class Win_Shortcut extends Shortcut
 	  }
     }
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Saves this link.
   *
   * @exception Exception if problems are encountered
   */
- /*--------------------------------------------------------------------------*/
   public void save () throws Exception
   {
     shortcut.save ();
   }
-
 
  /*--------------------------------------------------------------------------*/
  /**
@@ -601,7 +597,6 @@ public class Win_Shortcut extends Shortcut
   *
   * @return  int hotKey
   */
- /*--------------------------------------------------------------------------*/
   public int getHotkey()
   {
   	return shortcut.getHotkey();
@@ -624,7 +619,6 @@ public class Win_Shortcut extends Shortcut
   *  ie 0x0278 represents CTRL+x
   *     0x068a represents CTRL+ALT+z
   */
- /*--------------------------------------------------------------------------*/
   public void setHotkey(int hotkey)
   {
   	shortcut.setHotkey(hotkey);
