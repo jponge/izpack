@@ -201,10 +201,6 @@ public class Unpacker extends Thread
     private void putUninstaller() throws Exception
     {
         // Me make the .uninstaller directory
-        /*
-        String dest = translatePath("$USER_HOME") + File.separator + "." +
-                      idata.info.getAppName() + "-uninstaller";
-        */
         String dest = translatePath("$INSTALL_PATH") + File.separator + 
                       "Uninstaller";
         String jar = dest + File.separator + "uninstaller.jar";

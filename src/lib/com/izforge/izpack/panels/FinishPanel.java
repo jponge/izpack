@@ -48,11 +48,14 @@ public class FinishPanel extends IzPanel implements ActionListener
     private JLabel infoLabel;
     private HighlightJButton autoButton;
     private JPanel centerPanel;
+    private VariableSubstitutor vs;
     
     // The constructor
     public FinishPanel(InstallerFrame parent, InstallData idata)
     {
         super(parent, idata);
+        
+        vs = new VariableSubstitutor(idata.getVariableValueMap());
         
         // The 'super' layout
         GridBagLayout superLayout = new GridBagLayout();
@@ -96,8 +99,8 @@ public class FinishPanel extends IzPanel implements ActionListener
             // We prepare a message for the uninstaller feature
             String home = "";
             home = System.getProperty("user.home");
-            String path = home + File.separator +  "." + idata.info.getAppName() + "-uninstaller" +
-                          File.separator + "uninstaller.jar";
+            String path = translatePath("$INSTALL_PATH") + File.separator + 
+                          "Uninstaller";
             
             // We set the information
             infoLabel.setText(parent.langpack.getString("FinishPanel.success"));
@@ -153,6 +156,16 @@ public class FinishPanel extends IzPanel implements ActionListener
                                           parent.langpack.getString("installer.error"),
                                           JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    // Translates a relative path to a local system path
+    private String translatePath(String destination)
+    {
+        // Parse for variables
+        destination = vs.substitute(destination, null);
+
+        // Convert the file separator characters
+        return destination.replace('/', File.separatorChar);
     }
     
     //.....................................................................
