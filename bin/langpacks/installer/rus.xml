@@ -1,103 +1,155 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
-<!-- The English langpack -->
+<!-- The Russian langpack -->
+<!-- Last edited by Alexey Makhmutov (aka Lerm) at 05.05.2005 -->
 
 <langpack>
 
     <!-- General installer strings -->
-    <str id="installer.title" txt="IzPack - Установка "/>
-    <str id="installer.next" txt="Далее"/>
-    <str id="installer.prev" txt="Назад"/>
-    <str id="installer.quit" txt="Выход"/>
-    <str id="installer.madewith" txt="(Программа установки сделана при помощи IzPack - http://www.izforge.com/)"/>
-    <str id="installer.quit.title" txt="Закончить работу?"/>
-    <str id="installer.quit.message" txt="Установка будет отменена!"/>
-    <str id="installer.warning" txt="Предупреждение!"/>
-    <str id="installer.yes" txt="Да"/>
-    <str id="installer.no" txt="Нет"/>
-    <str id="installer.cancel" txt="Отказ"/>
-    <str id="installer.error" txt="Ошибка"/>
+    <str id="installer.title"        txt="IzPack - Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° "/>
+    <str id="installer.next"         txt="Ð”Ð°Ð»ÐµÐµ"/>
+    <str id="installer.prev"         txt="ÐÐ°Ð·Ð°Ð´"/>
+    <str id="installer.quit"         txt="Ð’Ñ‹Ñ…Ð¾Ð´"/>
+    <str id="installer.madewith"     txt="(ÐŸÑ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð° ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸ ÑÐ´ÐµÐ»Ð°Ð½Ð° Ð¿Ñ€Ð¸ Ð¿Ð¾Ð¼Ð¾Ñ‰Ð¸ IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title"   txt="Ð—Ð°ÐºÐ¾Ð½Ñ‡Ð¸Ñ‚ÑŒ Ñ€Ð°Ð±Ð¾Ñ‚Ñƒ?"/>
+    <str id="installer.quit.message" txt="Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð±ÑƒÐ´ÐµÑ‚ Ð¾Ñ‚Ð¼ÐµÐ½ÐµÐ½Ð°!"/>
+    <str id="installer.warning"      txt="ÐŸÑ€ÐµÐ´ÑƒÐ¿Ñ€ÐµÐ¶Ð´ÐµÐ½Ð¸Ðµ!"/>
+    <str id="installer.yes"          txt="Ð”Ð°"/>
+    <str id="installer.no"           txt="ÐÐµÑ‚"/>
+    <str id="installer.cancel"       txt="ÐžÑ‚ÐºÐ°Ð·"/>
+    <str id="installer.error"        txt="ÐžÑˆÐ¸Ð±ÐºÐ°"/>
 
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="Установленные программы будут удалены!"/>
-    <str id="uninstaller.destroytarget" txt=" Удалить "/>
-    <str id="uninstaller.uninstall" txt="Удалить установленные программы"/>
+    <str id="uninstaller.warning"       txt="Ð£ÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ‹Ðµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ð±ÑƒÐ´ÑƒÑ‚ ÑƒÐ´Ð°Ð»ÐµÐ½Ñ‹!"/>
+    <str id="uninstaller.destroytarget" txt=" Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ "/>
+    <str id="uninstaller.uninstall"     txt="Ð£Ð´Ð°Ð»Ð¸Ñ‚ÑŒ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð½Ñ‹Ðµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹"/>
 
     <!-- The strings for the 'official' IzPack plugins -->
-    <str id="HelloPanel.welcome1" txt="Добро пожаловать в программу установки "/>
-    <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="Авторы программы: "/>
-    <str id="HelloPanel.url" txt="Домашняя страница программы: "/>
+    <str id="HelloPanel.welcome1"       txt="Ð”Ð¾Ð±Ñ€Ð¾ Ð¿Ð¾Ð¶Ð°Ð»Ð¾Ð²Ð°Ñ‚ÑŒ Ð² Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñƒ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸ "/>
+    <str id="HelloPanel.welcome2"       txt=" !"/>
+    <str id="HelloPanel.authors"        txt="ÐÐ²Ñ‚Ð¾Ñ€Ñ‹ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹: "/>
+    <str id="HelloPanel.url"            txt="Ð”Ð¾Ð¼Ð°ÑˆÐ½ÑÑ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ð° Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹: "/>
 
-    <str id="LicencePanel.info" txt="Пожалуйста внимательно прочитайте лицензию:"/>
-    <str id="LicencePanel.agree" txt="Я согласен с условиями лицензии."/>
-    <str id="LicencePanel.notagree" txt="Я не согласен с условиями лицензии."/>
-    <str id="LicencePanel.yes" txt="Да"/>
-    <str id="LicencePanel.no" txt="Нет"/>
+    <str id="LicencePanel.info"     txt="ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð²Ð½Ð¸Ð¼Ð°Ñ‚ÐµÐ»ÑŒÐ½Ð¾ Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð¹Ñ‚Ðµ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸ÑŽ:"/>
+    <str id="LicencePanel.agree"    txt="Ð¯ ÑÐ¾Ð³Ð»Ð°ÑÐµÐ½ Ñ ÑƒÑÐ»Ð¾Ð²Ð¸ÑÐ¼Ð¸ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¸."/>
+    <str id="LicencePanel.notagree" txt="Ð¯ Ð½Ðµ ÑÐ¾Ð³Ð»Ð°ÑÐµÐ½ Ñ ÑƒÑÐ»Ð¾Ð²Ð¸ÑÐ¼Ð¸ Ð»Ð¸Ñ†ÐµÐ½Ð·Ð¸Ð¸."/>
+    <str id="LicencePanel.yes"      txt="Ð”Ð°"/>
+    <str id="LicencePanel.no"       txt="ÐÐµÑ‚"/>
 
-    <str id="InfoPanel.info" txt="Пожалуйста прочитайте следующую информацию:"/>
+    <str id="InfoPanel.info" txt="ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð¿Ñ€Ð¾Ñ‡Ð¸Ñ‚Ð°Ð¹Ñ‚Ðµ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰ÑƒÑŽ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ:"/>
 
-    <str id="TargetPanel.info" txt="Выберите каталог установки:"/>
-    <str id="TargetPanel.browse" txt="Указать ..."/>
-    <str id="TargetPanel.warn"
-         txt="Каталог уже существует! Вы желаете установить программу в него?"/>
-    <str id="TargetPanel.empty_target"
-         txt="Вы не указали каталог для установки.  Продолжать?"/>
-    <str id="TargetPanel.createdir" txt="Будет создан каталог для установки:" />
+    <str id="PathInputPanel.required" txt="Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ð¹ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³ Ð´Ð¾Ð»Ð¶ÐµÐ½ ÑÑƒÑ‰ÐµÑÑ‚Ð²Ð¾Ð²Ð°Ñ‚ÑŒ."/>
+    <str id="PathInputPanel.notValid" txt="Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ð¹ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³ Ð½Ðµ ÑÐ¾Ð´ÐµÑ€Ð¶Ð¸Ñ‚ Ñ‚Ñ€ÐµÐ±ÐµÐ¼Ð¾Ð³Ð¾ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ."/>
 
-    <str id="PacksPanel.info" txt="Выберите наборы для установки:"/>
-    <str id="PacksPanel.tip" txt="Примечание: неактивные наборы обязательны к установке."/>
-    <str id="PacksPanel.space" txt="Требуется места: "/>
-    <str id="PacksPanel.description" txt="Описание"/>
+    <str id="TargetPanel.info"         txt="Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸:"/>
+    <str id="TargetPanel.browse"       txt="ÐžÐ±Ð·Ð¾Ñ€..."/>
+    <str id="TargetPanel.warn"         txt="ÐšÐ°Ñ‚Ð°Ð»Ð¾Ð³ ÑƒÐ¶Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚! Ð’Ñ‹ Ð¶ÐµÐ»Ð°ÐµÑ‚Ðµ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñƒ Ð² Ð½ÐµÐ³Ð¾?"/>
+    <str id="TargetPanel.empty_target" txt="Ð’Ñ‹ Ð½Ðµ ÑƒÐºÐ°Ð·Ð°Ð»Ð¸ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³ Ð´Ð»Ñ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸.  ÐŸÑ€Ð¾Ð´Ð¾Ð»Ð¶Ð°Ñ‚ÑŒ?"/>
+    <str id="TargetPanel.createdir"    txt="Ð‘ÑƒÐ´ÐµÑ‚ ÑÐ¾Ð·Ð´Ð°Ð½ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³ Ð´Ð»Ñ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸:" />
+    <str id="TargetPanel.nodir"        txt="Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ð¹ Ñ„Ð°Ð¹Ð» Ð½Ðµ ÑÐ²Ð»ÑÐµÑ‚ÑÑ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³Ð¾Ð¼! ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð²Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³."/>
+    <str id="TargetPanel.notwritable"  txt="ÐšÐ°Ñ‚Ð°Ð»Ð¾Ð³ Ð·Ð°Ñ‰Ð¸Ñ‰ÐµÐ½ Ð¾Ñ‚ Ð·Ð°Ð¿Ð¸ÑÐ¸! ÐŸÐ¾Ð¶Ð°Ð»ÑƒÐ¹ÑÑ‚Ð°, Ð²Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð´Ñ€ÑƒÐ³Ð¾Ð¹ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³."/>
+
+    <str id="JDKPathPanel.intro"       txt="Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼Ð¾Ðµ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ Ð½ÑƒÐ¶Ð´Ð°ÐµÑ‚ÑÑ Ð² JDK. Ð¡Ñ€ÐµÐ´Ñ‹ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Java (JRE) Ð½ÐµÐ´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ð¾."/>
+    <str id="JDKPathPanel.info"        txt="Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¿ÑƒÑ‚ÑŒ Ðº JDK:"/>
+    <str id="JDKPathPanel.badVersion1" txt="Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ð¹ JDK Ð¸Ð¼ÐµÐµÑ‚ Ð½ÐµÐ¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½ÑƒÑŽ Ð²ÐµÑ€ÑÐ¸ÑŽ (Ñ‚ÐµÐºÑƒÑ‰Ð°Ñ Ð²ÐµÑ€ÑÐ¸Ñ: "/>
+    <str id="JDKPathPanel.badVersion2" txt=" Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ: "/>
+    <str id="JDKPathPanel.badVersion3" txt="), Ð²ÑÑ‘ Ñ€Ð°Ð²Ð½Ð¾ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ ÑÑ‚Ð¾Ñ‚ JDK?"/>
+
+    <str id="PacksPanel.info"              txt="Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð½Ð°Ð±Ð¾Ñ€Ñ‹ Ð´Ð»Ñ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸:"/>
+    <str id="PacksPanel.tip"               txt="ÐŸÑ€Ð¸Ð¼ÐµÑ‡Ð°Ð½Ð¸Ðµ: Ð½ÐµÐ°ÐºÑ‚Ð¸Ð²Ð½Ñ‹Ðµ Ð½Ð°Ð±Ð¾Ñ€Ñ‹ Ð¾Ð±ÑÐ·Ð°Ñ‚ÐµÐ»ÑŒÐ½Ñ‹ Ðº ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐµ."/>
+    <str id="PacksPanel.space"             txt="Ð¢Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ Ð¼ÐµÑÑ‚Ð°: "/>
+    <str id="PacksPanel.freespace"         txt="Ð”Ð¾ÑÑ‚ÑƒÐ¿Ð½Ð¾ Ð¼ÐµÑÑ‚Ð°: "/>
+    <str id="PacksPanel.description"       txt="ÐžÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ"/>
+    <str id="PacksPanel.dependencyList"    txt="Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ð¹ Ð½Ð°Ð±Ð¾Ñ€ Ð·Ð°Ð²Ð¸ÑÐ¸Ñ‚ Ð¾Ñ‚ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ñ… Ð½Ð°Ð±Ð¾Ñ€Ð¾Ð²"/>
+    <str id="ImgPacksPanel.dependencyList" txt="Ð—Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚Ð¸"/>
+	<str id="PacksPanel.notEnoughSpace"    txt="ÐÐµÐ´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ð¾ Ð¼ÐµÑÑ‚Ð° Ð´Ð»Ñ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ."/>
+    <str id="PacksPanel.notAscertainable"  txt="Ð½Ðµ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²Ð»ÐµÐ½Ð¾"/>
     
-    <str id="InstallPanel.info" txt="Подготовка к установке программы завершена:"/>
-    <str id="InstallPanel.install" txt="Установить!"/>
-    <str id="InstallPanel.tip" txt="Ход установки:"/>
-    <str id="InstallPanel.begin" txt="[Пусто]"/>
-    <str id="InstallPanel.finished" txt="[Закончен]"/>
+    <str id="InstallPanel.info"               txt="ÐŸÐ¾Ð´Ð³Ð¾Ñ‚Ð¾Ð²ÐºÐ° Ðº ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð°:"/>
+    <str id="InstallPanel.install"            txt="Ð£ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ!"/>
+    <str id="InstallPanel.tip"                txt="Ð¥Ð¾Ð´ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸:"/>
+    <str id="InstallPanel.begin"              txt="[ÐŸÑƒÑÑ‚Ð¾]"/>
+    <str id="InstallPanel.finished"           txt="[Ð—Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¾]"/>
+    <str id="InstallPanel.progress"           txt="ÐžÐ±Ñ‰Ð¸Ð¹ Ñ…Ð¾Ð´ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸:"/>
+    <str id="InstallPanel.overwrite.title"    txt="Ð¤Ð°Ð¹Ð» ÑƒÐ¶Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚"/>
+    <str id="InstallPanel.overwrite.question" txt="Ð¡Ð»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ð¹ Ñ„Ð°Ð¹Ð» ÑƒÐ¶Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚. ÐŸÐµÑ€ÐµÐ·Ð°Ð¿Ð¸ÑÐ°Ñ‚ÑŒ?"/>
     
-    <str id="FinishPanel.success" txt="Установка успешно завершена!"/>
-    <str id="FinishPanel.fail" txt="Установка прервана аварийно ..."/>
-    <str id="FinishPanel.uninst.info" txt="Программа удаления установки помещена:"/>
-    <str id="FinishPanel.auto" txt="Создать сценарий автоматической установки"/>
-    <str id="FinishPanel.auto.tip"
-         txt="Будет создан файл, позволяющий автоматически провести такую же инсталляцию программы на другом компьютере."/>
+    <str id="FinishPanel.success"     txt="Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ Ð·Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð°!"/>
+    <str id="FinishPanel.done"        txt="Ð—Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¾"/>
+    <str id="FinishPanel.fail"        txt="Ð£ÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ° Ð¿Ñ€ÐµÑ€Ð²Ð°Ð½Ð° Ð°Ð²Ð°Ñ€Ð¸Ð¹Ð½Ð¾ ..."/>
+    <str id="FinishPanel.uninst.info" txt="ÐŸÑ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð° ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ñ Ð´Ð°Ð½Ð½Ð¾Ð³Ð¾ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ Ð¿Ð¾Ð¼ÐµÑ‰ÐµÐ½Ð°:"/>
+    <str id="FinishPanel.auto"        txt="Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ ÑÑ†ÐµÐ½Ð°Ñ€Ð¸Ð¹ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¾Ð¹ ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸"/>
+    <str id="FinishPanel.auto.tip"    txt="Ð‘ÑƒÐ´ÐµÑ‚ ÑÐ¾Ð·Ð´Ð°Ð½ Ñ„Ð°Ð¹Ð», Ð¿Ð¾Ð·Ð²Ð¾Ð»ÑÑŽÑ‰Ð¸Ð¹ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸ Ð¿Ñ€Ð¾Ð²ÐµÑÑ‚Ð¸ Ñ‚Ð°ÐºÑƒÑŽ Ð¶Ðµ Ð¸Ð½ÑÑ‚Ð°Ð»Ð»ÑÑ†Ð¸ÑŽ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ð½Ð° Ð´Ñ€ÑƒÐ³Ð¾Ð¼ ÐºÐ¾Ð¼Ð¿ÑŒÑŽÑ‚ÐµÑ€Ðµ."/>
 
-    <str id="ImgPacksPanel.packs" txt="Доступны следующие наборы:"/>
-    <str id="ImgPacksPanel.snap" txt="Снимок экрана:"/>
-    <str id="ImgPacksPanel.checkbox" txt=" Установить набор"/>
+    <str id="ImgPacksPanel.packs"    txt="Ð”Ð¾ÑÑ‚ÑƒÐ¿Ð½Ñ‹ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ðµ Ð½Ð°Ð±Ð¾Ñ€Ñ‹:"/>
+    <str id="ImgPacksPanel.snap"     txt="Ð¡Ð½Ð¸Ð¼Ð¾Ðº ÑÐºÑ€Ð°Ð½Ð°:"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Ð£ÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ Ð½Ð°Ð±Ð¾Ñ€"/>
 
-    <str id="ShortcutPanel.regular.list" txt="Выберите программную группу для ярлыков:"/>
-    <str id="ShortcutPanel.regular.default" txt="Сбросить"/>
-    <str id="ShortcutPanel.regular.desktop" txt="Создать ярлыки на рабочем столе"/>
-    <str id="ShortcutPanel.regular.create" txt="Создать ярлыки"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="создать ярлык для:"/>
-    <str id="ShortcutPanel.regular.currentUser" txt="текущий пользователь"/>
-    <str id="ShortcutPanel.regular.allUsers" txt="все пользователи"/>
+    <str id="ShortcutPanel.regular.list"        txt="Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð½ÑƒÑŽ Ð³Ñ€ÑƒÐ¿Ð¿Ñƒ Ð´Ð»Ñ ÑÑ€Ð»Ñ‹ÐºÐ¾Ð²:"/>
+    <str id="ShortcutPanel.regular.default"     txt="Ð¡Ð±Ñ€Ð¾ÑÐ¸Ñ‚ÑŒ"/>
+    <str id="ShortcutPanel.regular.desktop"     txt="Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ ÑÑ€Ð»Ñ‹ÐºÐ¸ Ð½Ð° Ñ€Ð°Ð±Ð¾Ñ‡ÐµÐ¼ ÑÑ‚Ð¾Ð»Ðµ"/>
+    <str id="ShortcutPanel.regular.create"      txt="Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÑŒ ÑÑ€Ð»Ñ‹ÐºÐ¸"/>
+    <str id="ShortcutPanel.regular.userIntro"   txt="ÑÐ¾Ð·Ð´Ð°Ñ‚ÑŒ ÑÑ€Ð»Ñ‹Ðº Ð´Ð»Ñ:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="Ñ‚ÐµÐºÑƒÑ‰Ð¸Ð¹ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»ÑŒ"/>
+    <str id="ShortcutPanel.regular.allUsers"    txt="Ð²ÑÐµ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ð¸"/>
 
-    <str id="ShortcutPanel.alternate.apology" txt="К сожалению, IzPack не поддерживает создание ярлыков в этой операционной системе.  Чтобы создать ярлыки, обратитесь к руководству по Вашей операционной системе."/>
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="Список объектов, к которым Вам потребуется обращаться для использования приложения:"/>
-    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Вы можете сохранить подробную информацию об объектах, на которые указывают ярлыки, в текстовом файле для справки."/>
-    <str id="ShortcutPanel.alternate.saveButton" txt="Сохранить текстовый файл"/>
+    <str id="ShortcutPanel.alternate.apology"             txt="Ðš ÑÐ¾Ð¶Ð°Ð»ÐµÐ½Ð¸ÑŽ, Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð° ÑƒÑÑ‚Ð°Ð½Ð¾Ð²ÐºÐ¸ Ð½Ðµ Ð¿Ð¾Ð´Ð´ÐµÑ€Ð¶Ð¸Ð²Ð°ÐµÑ‚ ÑÐ¾Ð·Ð´Ð°Ð½Ð¸Ðµ ÑÑ€Ð»Ñ‹ÐºÐ¾Ð² Ð² ÑÑ‚Ð¾Ð¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð¹ ÑÐ¸ÑÑ‚ÐµÐ¼Ðµ.  Ð§Ñ‚Ð¾Ð±Ñ‹ ÑÐ¾Ð·Ð´Ð°Ñ‚ÑŒ ÑÑ€Ð»Ñ‹ÐºÐ¸, Ð¾Ð±Ñ€Ð°Ñ‚Ð¸Ñ‚ÐµÑÑŒ Ðº Ñ€ÑƒÐºÐ¾Ð²Ð¾Ð´ÑÑ‚Ð²Ñƒ Ð¿Ð¾ Ð²Ð°ÑˆÐµÐ¹ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¾Ð½Ð½Ð¾Ð¹ ÑÐ¸ÑÑ‚ÐµÐ¼Ðµ."/>
+    <str id="ShortcutPanel.alternate.targetsLabel"        txt="Ð¡Ð¿Ð¸ÑÐ¾Ðº Ð¾Ð±ÑŠÐµÐºÑ‚Ð¾Ð², Ðº ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¼ Ð²Ð°Ð¼ Ð¿Ð¾Ñ‚Ñ€ÐµÐ±ÑƒÐµÑ‚ÑÑ Ð¾Ð±Ñ€Ð°Ñ‰Ð°Ñ‚ÑŒÑÑ Ð´Ð»Ñ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ñ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ:"/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Ð’Ñ‹ Ð¼Ð¾Ð¶ÐµÑ‚Ðµ ÑÐ¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ð¿Ð¾Ð´Ñ€Ð¾Ð±Ð½ÑƒÑŽ Ð¸Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸ÑŽ Ð¾Ð± Ð¾Ð±ÑŠÐµÐºÑ‚Ð°Ñ…, Ð½Ð° ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ðµ ÑƒÐºÐ°Ð·Ñ‹Ð²Ð°ÑŽÑ‚ ÑÑ€Ð»Ñ‹ÐºÐ¸, Ð² Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ð¾Ð¼ Ñ„Ð°Ð¹Ð»Ðµ Ð´Ð»Ñ ÑÐ¿Ñ€Ð°Ð²ÐºÐ¸."/>
+    <str id="ShortcutPanel.alternate.saveButton"          txt="Ð¡Ð¾Ñ…Ñ€Ð°Ð½Ð¸Ñ‚ÑŒ Ñ‚ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ð¹ Ñ„Ð°Ð¹Ð»"/>
 
-    <str id="ShortcutPanel.textFile.header" txt="Информация о ярлыке\n====================\n\nНиже приведены все необходимые сведения о создаваемых ярлыках.\nИх достаточно, чтобы Вы могли создать нужные ярлыки самостоятельно.\n"/>
+    <str id="ShortcutPanel.textFile.header" txt="Ð˜Ð½Ñ„Ð¾Ñ€Ð¼Ð°Ñ†Ð¸Ñ Ð¾ ÑÑ€Ð»Ñ‹ÐºÐµ\n====================\n\nÐÐ¸Ð¶Ðµ Ð¿Ñ€Ð¸Ð²ÐµÐ´ÐµÐ½Ñ‹ Ð²ÑÐµ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ñ‹Ðµ ÑÐ²ÐµÐ´ÐµÐ½Ð¸Ñ Ð¾ ÑÐ¾Ð·Ð´Ð°Ð²Ð°ÐµÐ¼Ñ‹Ñ… ÑÑ€Ð»Ñ‹ÐºÐ°Ñ….\nÐ˜Ñ… Ð´Ð¾ÑÑ‚Ð°Ñ‚Ð¾Ñ‡Ð½Ð¾, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð²Ñ‹ Ð¼Ð¾Ð³Ð»Ð¸ ÑÐ¾Ð·Ð´Ð°Ñ‚ÑŒ Ð½ÑƒÐ¶Ð½Ñ‹Ðµ ÑÑ€Ð»Ñ‹ÐºÐ¸ ÑÐ°Ð¼Ð¾ÑÑ‚Ð¾ÑÑ‚ÐµÐ»ÑŒÐ½Ð¾.\n"/>
     
-    <str id="ShortcutPanel.textFile.name"         txt="Ярлык                        : "/>
-    <str id="ShortcutPanel.textFile.location"     txt="Расположение ярлыка          : "/>
-    <str id="ShortcutPanel.textFile.description"  txt="Описание                     : "/>
-    <str id="ShortcutPanel.textFile.target"       txt="Объект, на который указывает ярлык : "/>
-    <str id="ShortcutPanel.textFile.command"      txt="Командная строка             : "/>
-    <str id="ShortcutPanel.textFile.iconName"     txt="Пиктограмма                  : "/>
-    <str id="ShortcutPanel.textFile.iconIndex"    txt="Номер пиктограммы в файле    : "/>
-    <str id="ShortcutPanel.textFile.work"         txt="Рабочий каталог              : "/>
+    <str id="ShortcutPanel.textFile.name"         txt="Ð¯Ñ€Ð»Ñ‹Ðº                        : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Ð Ð°ÑÐ¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ ÑÑ€Ð»Ñ‹ÐºÐ°          : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="ÐžÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ                     : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="ÐžÐ±ÑŠÐµÐºÑ‚, Ð½Ð° ÐºÐ¾Ñ‚Ð¾Ñ€Ñ‹Ð¹ ÑƒÐºÐ°Ð·Ñ‹Ð²Ð°ÐµÑ‚ ÑÑ€Ð»Ñ‹Ðº : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="ÐšÐ¾Ð¼Ð°Ð½Ð´Ð½Ð°Ñ ÑÑ‚Ñ€Ð¾ÐºÐ°             : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="ÐŸÐ¸ÐºÑ‚Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ð°                  : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="ÐÐ¾Ð¼ÐµÑ€ Ð¿Ð¸ÐºÑ‚Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñ‹ Ð² Ñ„Ð°Ð¹Ð»Ðµ    : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Ð Ð°Ð±Ð¾Ñ‡Ð¸Ð¹ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³              : "/>
 
-    <str id="ShortcutPanel.location.desktop"      txt="Рабочий стол"/>
-    <str id="ShortcutPanel.location.applications" txt="Меню приложений"/>
-    <str id="ShortcutPanel.location.startMenu"    txt='Меню кнопки "Пуск"'/>
-    <str id="ShortcutPanel.location.startup"      txt="Группа автозапуска"/>
+    <str id="ShortcutPanel.location.desktop"      txt="Ð Ð°Ð±Ð¾Ñ‡Ð¸Ð¹ ÑÑ‚Ð¾Ð»"/>
+    <str id="ShortcutPanel.location.applications" txt="ÐœÐµÐ½ÑŽ Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ð¹"/>
+    <str id="ShortcutPanel.location.startMenu"    txt='ÐœÐµÐ½ÑŽ ÐºÐ½Ð¾Ð¿ÐºÐ¸ "ÐŸÑƒÑÐº"'/>
+    <str id="ShortcutPanel.location.startup"      txt="Ð“Ñ€ÑƒÐ¿Ð¿Ð° Ð°Ð²Ñ‚Ð¾Ð·Ð°Ð¿ÑƒÑÐºÐ°"/>
 
-    <str id="UserInputPanel.error.caption"        txt="Ошибка ввода"/>
+    <str id="UserInputPanel.error.caption"        txt="ÐžÑˆÐ¸Ð±ÐºÐ° Ð²Ð²Ð¾Ð´Ð°"/>
+    <str id="UserInputPanel.search.autodetect"    txt="ÐÐ²Ñ‚Ð¾Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð¸Ðµ"/>
+
+    <!-- more descriptive error message would be cool, like specifying what file we looked for -->
+    <str id="UserInputPanel.search.autodetect.failed.message" txt="ÐÐ²Ñ‚Ð¾Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð½Ðµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ."/>
+    <str id="UserInputPanel.search.autodetect.failed.caption" txt="ÐÐ²Ñ‚Ð¾Ð¾Ð¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð¸Ðµ Ð½Ðµ ÑƒÐ´Ð°Ð»Ð¾ÑÑŒ."/>
+    <str id="UserInputPanel.search.autodetect.tooltip"        txt="ÐŸÑ€Ð¾Ð²ÐµÑ€Ð¸Ñ‚ÑŒ Ð½Ð°Ð»Ð¸Ñ‡Ð¸Ðµ Ñ„Ð°Ð¹Ð»Ð° Ð¸Ð»Ð¸ Ð´Ð¸Ñ€ÐµÐºÑ‚Ð¾Ñ€Ð¸Ð¸ Ð¿Ð¾ Ð¿ÑƒÑ‚ÑÐ¼ ÑƒÐºÐ°Ð·Ð°Ð½Ð½Ñ‹Ð¼ Ð²Ñ‹ÑˆÐµ."/>
+    <str id="UserInputPanel.search.location"                  txt="Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ€Ð°ÑÐ¿Ð¾Ð»Ð¾Ð¶ÐµÐ½Ð¸Ðµ {0}."/>
+    <str id="UserInputPanel.search.location.checkedfile"      txt="ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÑƒÑ‰ÐµÑÑ‚Ð²Ð¾Ð²Ð°Ð½Ð¸Ñ {0} Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð°."/>
+    <str id="UserInputPanel.search.browse"                    txt="ÐžÐ±Ð·Ð¾Ñ€..."/>
+    <str id="UserInputPanel.search.wrongselection.message"    txt="Ð’Ñ‹Ð±Ñ€Ð°Ð½Ð½Ñ‹Ð¹ Ñ„Ð°Ð¹Ð» Ð¸Ð»Ð¸ ÐºÐ°Ñ‚Ð°Ð»Ð¾Ð³ Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚ Ð¸Ð»Ð¸ Ð½Ðµ Ð¿Ð¾Ð´Ñ…Ð¾Ð´Ð¸Ñ‚."/>
+    <str id="UserInputPanel.search.wrongselection.caption"    txt="ÐÐµÐ¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ñ‹Ð¹ Ð²Ñ‹Ð±Ð¾Ñ€."/>
+
+    <str id="CompilePanel.heading"                txt="ÐšÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ†Ð¸Ñ" />
+    <str id="CompilePanel.tip"                    txt="ÐŸÑ€Ð¾Ð³Ñ€ÐµÑÑ Ð·Ð°Ð´Ð°Ñ‡Ð¸ ÐºÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ†Ð¸Ð¸:" />
+    <str id="CompilePanel.browse"                 txt="ÐžÐ±Ð·Ð¾Ñ€..." />
+    <str id="CompilePanel.browse.approve"         txt="Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ ÐºÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ‚Ð¾Ñ€" />
+    <str id="CompilePanel.start"                  txt="Ð¡Ñ‚Ð°Ñ€Ñ‚" />
+    <str id="CompilePanel.progress.initial"       txt="[ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ ÐºÐ½Ð¾Ð¿ÐºÑƒ Ð¡Ñ‚Ð°Ñ€Ñ‚]" />
+    <str id="CompilePanel.progress.finished"      txt="[Ð—Ð°Ð²ÐµÑ€ÑˆÐµÐ½Ð¾]" />
+    <str id="CompilePanel.progress.overall"       txt="ÐžÐ±ÑˆÐ¸Ð¹ Ð¿Ñ€Ð¾Ð³Ñ€ÐµÑÑ ÐºÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ†Ð¸Ð¸:" />
+    <str id="CompilePanel.error"                  txt="ÐšÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ†Ð¸Ñ Ð½Ðµ ÑƒÐ´Ð°Ð»Ð°ÑÑŒ" />
+    <str id="CompilePanel.error.reconfigure"      txt="ÐŸÐµÑ€ÐµÐ½Ð°ÑÑ‚Ñ€Ð¾Ð¸Ñ‚ÑŒ" />
+    <str id="CompilePanel.error.ignore"           txt="Ð˜Ð³Ð½Ð¾Ñ€Ð¸Ñ€Ð¾Ð²Ð°Ñ‚ÑŒ" />
+    <str id="CompilePanel.error.abort"            txt="ÐŸÑ€ÐµÑ€Ð²Ð°Ñ‚ÑŒ" />
+    <str id="CompilePanel.error.seebelow"         txt="ÐÐ¸Ð¶Ðµ Ð¿Ñ€Ð¸Ð²ÐµÐ´ÐµÐ½Ð° Ð½ÐµÑƒÐ´Ð°Ð²ÑˆÐ°ÑÑÑ ÐºÐ¾Ð¼Ð°Ð½Ð´Ð° Ð¸ ÐµÑ‘ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ." />
+    <str id="CompilePanel.error.nofiles"          txt="ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ Ð¿Ð¾Ð¸ÑÐºÐµ Ñ„Ð°Ð¹Ð»Ð¾Ð² Ð´Ð»Ñ ÐºÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ†Ð¸Ð¸." />
+    <str id="CompilePanel.error.compilernotfound" txt="ÐÐµÐ²Ð¾Ð·Ð¼Ð¾Ð¶Ð½Ð¾ Ð²Ñ‹Ð·Ð²Ð°Ñ‚ÑŒ ÐºÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ‚Ð¾Ñ€." />
+    <str id="CompilePanel.error.invalidarguments" txt="ÐÐµÐ²ÐµÑ€Ð½Ñ‹Ð¹ Ð°Ñ€Ð³ÑƒÐ¼ÐµÐ½Ñ‚ ÐºÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ‚Ð¾Ñ€Ð°." />
+    <str id="CompilePanel.error.noclassfile"      txt="ÐšÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ‚Ð¾Ñ€ Ð½Ðµ ÑÐ¾Ð·Ð´Ð°Ð» class-Ñ„Ð°Ð¹Ð» Ð´Ð»Ñ Ð¸ÑÑ…Ð¾Ð´Ð½Ð¾Ð³Ð¾ Ñ„Ð°Ð¹Ð»Ð° " />
+    <str id="CompilePanel.choose_compiler"        txt="Ð˜ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒ ÑÐ»ÐµÐ´ÑƒÑŽÑ‰Ð¸Ð¹ ÐºÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ‚Ð¾Ñ€:" />
+    <str id="CompilePanel.additional_arguments"   txt="Ð”Ð¾Ð¿Ð¾Ð»Ð½Ð¸Ñ‚ÐµÐ»ÑŒÐ½Ñ‹Ðµ Ð°Ñ€Ð³ÑƒÐ¼ÐµÐ½Ñ‚Ñ‹ ÐºÐ¾Ð¼Ð¿Ð¸Ð»ÑÑ‚Ð¾Ñ€Ð°:" />
+
+    <str id="ProcessPanel.heading" txt="Ð’Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ðµ" />
 
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>
+

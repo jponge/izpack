@@ -13,8 +13,11 @@
 - The Danish langpack was empty by mistake in 3.7.0.
 - Silent installations fix (Oscar Sierra).
 - Free disk space bugfix on Solaris (Oscar Sierra).
-- Installation runable with VM versions < 1.4 again (Klaus Bartz) 
+- Installation runable with VM versions < 1.4 again (Klaus Bartz)
   (implementation for bug #2268 changed).
+- Italian langpack fixes (Fabrice Mirabille).
+- UserInputPanel: bug fixes by Per Abich (bugs #3233 and #3283).
+- Russian langpack fixes (Alexey Makhmutov).
 
   > 3.7.0 (build 2004.01.11)
 

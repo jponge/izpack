@@ -89,5 +89,7 @@ IzPack for your projects ;-)
 - Jan Pavlovic : for the Czech translation.
 - Thomas Girard : for the uninstaller custom names patch.
 - Oscar Sierra : for the patches.
+- Per Abich : for the patches.
+- Alexey Makhmutov : Russian langpack updates.
 
 # vim: fileformat=dos
