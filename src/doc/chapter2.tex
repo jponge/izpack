@@ -659,7 +659,9 @@ have variables substituted.
 \begin{itemize}
 
   \item \texttt{targetfile} : the file to parse, could be something like\\
-  \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
+  \texttt{\$INSTALL\_PATH/bin/launch-script.sh}\\
+  \label{tag:slashMasking}A slash will be changed to the system dependant path separator (e.g. to
+  a backslash on Windows) only if no backslash masks the slash.
 
   \item \texttt{type} : specifies the type (same as for the resources) -
   the default is \texttt{plain}
@@ -680,7 +682,9 @@ executable flag on Unix-like systems. Here are the attributes :
 \begin{itemize}
 
   \item \texttt{targetfile} : the file to run, could be something like\\
-  \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
+  \texttt{\$INSTALL\_PATH/bin/launch-script.sh}\\
+  Slashes are handled special (see attribute 
+  \texttt{targetfile} of tag \texttt{<parsable>}\ref{tag:slashMasking}).
 
   \item \texttt{class} : If the executable is a jar file, this is the
   class to run for a \Java program
@@ -712,7 +716,8 @@ arguments to the executable:
 \begin{itemize}
 
   \item \texttt{<arg>}: passes the argument specified in the
-  \texttt{value} attribute
+  \texttt{value} attribute.   Slashes are handled special (see attribute 
+  \texttt{targetfile} of tag \texttt{<parsable>}\ref{tag:slashMasking}).
 
 \end{itemize}
   
