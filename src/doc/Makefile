@@ -1,7 +1,7 @@
 # Variables
 TEX  = latex
 PS   = dvips
-PDF  = dvipdf
+PDF  = dvipdfm
 MAIN = izpack-doc
 HTML = latex2html
 
@@ -21,7 +21,7 @@ ps: dvi
 # Makes the PDF(tm) version
 pdf: dvi
 	mkdir pdf
-	${PDF} ${MAIN}.dvi pdf/${MAIN}.pdf
+	${PDF} -o pdf/${MAIN}.pdf ${MAIN}.dvi
 
 # Makes the HTML version
 html:
