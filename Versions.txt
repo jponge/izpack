@@ -48,6 +48,7 @@
 - UserInputPanel: the autodetect button is hidden if not needed 
   (Michael Hagedorn).
 - A tutorial is now available.
+- New Czech langpack (Jan Pavlovic).
 
   > 3.6.1 (build 2004.10.09)
 

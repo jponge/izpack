@@ -37,6 +37,7 @@
             <author name="Filip Brcic (contributor)" email="brcha@users.sourceforge.net" />
             <author name="Marc Eppelmann (contributor)" email="marc.eppelmann@gmx.de" />
             <author name="Michael Hagedorn (contributor)" email="michael.hagedorn@gmx.de" />
+            <author name="Jan Pavlovic (contributor)" email="xpavlov@fi.muni.cz" />
             <author email="(see Thanks.txt)" name="Many other developers and contributors to the previous releases" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
@@ -74,6 +75,7 @@
         <langpack iso3="nor"/>
         <langpack iso3="chn"/>
         <langpack iso3="scg"/>
+        <langpack iso3="cze"/>
     </locale>
 
     <!-- The resources needed by the various panels -->
