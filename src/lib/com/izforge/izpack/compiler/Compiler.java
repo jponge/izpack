@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001,2002 Julien Ponge
+ *  Copyright (C) 2001-2003 Julien Ponge
  *
  *  File :               Compiler.java
  *  Description :        The IzPack compiler.
@@ -1075,7 +1075,7 @@ public class Compiler extends Thread
     System.out.println("");
     System.out.println("< compiler specifications version : " + VERSION + " >");
     System.out.println("");
-    System.out.println("- Copyright (C) 2001,2002 Julien PONGE");
+    System.out.println("- Copyright (C) 2001-2003 Julien Ponge");
     System.out.println("- Visit http://www.izforge.com/ for the latests releases");
     System.out.println("- Released under the terms of the GNU GPL either version 2");
     System.out.println("  of the licence, or any later version.");

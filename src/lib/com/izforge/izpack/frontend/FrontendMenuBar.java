@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001,2002 Julien Ponge
+ *  Copyright (C) 2001-2003 Julien Ponge
  *
  *  File :               FrontendMenuBar.java
  *  Description :        The Frontend menu bar class.
