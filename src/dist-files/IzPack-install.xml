@@ -98,12 +98,9 @@
               <include name="lib/**/*" />
               <include name="legal/**/*" />
             </fileset>
-            <parsable targetfile="$INSTALL_PATH/bin/izpack-fe"/>
-            <parsable targetfile="$INSTALL_PATH/bin/izpack-fe.bat"/>
             <parsable targetfile="$INSTALL_PATH/bin/compile"/>
             <parsable targetfile="$INSTALL_PATH/bin/compile.bat"/>
             <executable targetfile="$INSTALL_PATH/bin/compile" stage="never"/>
-            <executable targetfile="$INSTALL_PATH/bin/izpack-fe" stage="never"/>
         </pack>
 	
 	      <!-- The documentation -->
