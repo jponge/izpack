@@ -638,6 +638,7 @@ public class InstallerFrame extends JFrame
   public void unlockNextButton()
   {
     nextButton.setEnabled(true);
+    nextButton.requestFocus();
   }
 
 

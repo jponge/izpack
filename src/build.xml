@@ -516,7 +516,7 @@
     <!-- Performs some cleanups -->
     <target name="clean">
         <echo message="Cleaning-up"/>
-        <delete includeEmptyDirs="true">
+        <delete includeEmptyDirs="true" quiet="true">
             <fileset dir="${build.dir}"/>
             <fileset dir="${dist.dir}"/>
             <fileset dir="${basedir}/src/">

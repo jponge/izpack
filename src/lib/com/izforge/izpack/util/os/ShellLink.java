@@ -828,6 +828,17 @@ public class ShellLink implements NativeLibraryClient
       throw (new IllegalArgumentException (type + " is not a recognized user type"));
     }
   }
+ /**
+  * Returns the user type for the link. Either {@link #CURRENT_USER} or
+  * {@link #ALL_USERS}
+  *
+  * @see #setUserType
+  */
+ /*--------------------------------------------------------------------------*/
+  public int getUserType ()
+  {
+    return userType;
+  }
  /*--------------------------------------------------------------------------*/
  /**
   * Returns the path where the links of the selected type are stroed. This

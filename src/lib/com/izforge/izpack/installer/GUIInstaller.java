@@ -349,6 +349,7 @@ public class GUIInstaller extends InstallerBase
       gbConstraints.anchor = GridBagConstraints.CENTER;
       layout.addLayoutComponent(okButton, gbConstraints);
       contentPane.add(okButton);
+      getRootPane().setDefaultButton(okButton);
 
       // Packs and centers
       // Fix for bug "Installer won't show anything on OSX"

@@ -9,6 +9,11 @@
 - ShortcutPanel: the action is now performed when the 'next' button is pressed
   (Jan Blok).
 - Nasty bug in AutomatedInstallData variables setting fix.
+- Ant build: 'clean' target fix (Chad McHenry).
+- Language selection dialog: the 'ok' button gains the focus by default (Chad
+  Mchenry).
+- Uninstaller: various fixes (Chad McHenry).
+- Installer: the 'next' button requests focus whenever it is available.
 
 
   > 3.4.0 (build 2003.12.06)

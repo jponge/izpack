@@ -38,6 +38,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
@@ -753,12 +754,22 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
 
             // add the file and directory name to the file list
             String fileName       = shortcut.getFileName ();
-            String directoryName  = shortcut.getDirectoryCreated ();
             files.add (0, fileName);
 
-            if (!(directoryName == null))
+            File file = new File(fileName);
+            File base = new File(shortcut.getBasePath());
+            Vector intermediates = new Vector();
+            
+            while ( (file = file.getParentFile()) != null)
             {
-              files.add (directoryName);
+              if (file.equals(base))
+                break;
+              intermediates.add(file);
+            }
+            if (file != null)
+            {
+              for (Iterator iter = intermediates.iterator(); iter.hasNext(); )
+                files.add (0, iter.next().toString());
             }
           }
         }

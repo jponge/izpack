@@ -81,6 +81,22 @@ public class Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * Returns the base path of the shortcut depending on type. The base path is
+  * the directory that the short cut, (or its program group) will be created
+  * in. For instance, on Windows NT, a shortcut with user-type ALL_USERS, and
+  * link-type DESKTOP might have the base path
+  * "C:\Program&nbsp;Files\All&nbsp;Users\Desktop"
+  *
+  * @see #setLinkType(int)
+  * @see #setUserType(int)
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getBasePath () throws Exception
+  {
+    return ("");
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
   * Returns a list of currently existing program groups, based on the
   * requested type. For example if the type is <code>APPLICATIONS</code> then
   * all the names of the program groups in the applications menu would be

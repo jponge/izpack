@@ -30,6 +30,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.TreeSet;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
@@ -88,15 +90,13 @@ public class Destroyer extends Thread
       for (int i = 0; i < size; i++)
       {
         File file = (File) files.get(i);
-        if (file.exists())
-          file.delete();
+        file.delete();
         handler.progress(i, file.getAbsolutePath());
       }
 
       // We make a complementary cleanup
       handler.progress(size, "[ cleanups ]");
       cleanup(new File(installPath));
-      askUninstallerRemoval();
 
       handler.stopAction ();
     }
@@ -140,7 +140,7 @@ public class Destroyer extends Thread
   private ArrayList getFilesList() throws Exception
   {
     // Initialisations
-    ArrayList files = new ArrayList();
+    TreeSet files = new TreeSet(Collections.reverseOrder());
     InputStream in = getClass().getResourceAsStream("/install.log");
     InputStreamReader inReader = new InputStreamReader(in);
     BufferedReader reader = new BufferedReader(inReader);
@@ -157,7 +157,7 @@ public class Destroyer extends Thread
     }
 
     // We return it
-    return files;
+    return new ArrayList(files);
   }
 
   private ArrayList getExecutablesList() throws Exception
