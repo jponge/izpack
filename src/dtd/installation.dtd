@@ -142,3 +142,4 @@ $Id$
 <!-- Allows the inclusion in the installer of an additional jar file content -->
 <!ELEMENT jar EMPTY>
     <!ATTLIST jar src CDATA #REQUIRED>
+    <!ATTLIST jar stage (install|uninstall|both) "install">

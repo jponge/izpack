@@ -888,7 +888,7 @@ public class Unpacker extends Thread
     int i;
     for( i = 0; i < listenerNames.length; ++i)
     {
-      retval[i] = (List) idata.customActionData.get(listenerNames[i]);
+      retval[i] = (List) idata.customData.get(listenerNames[i]);
       if( retval[i] == null)
         //    Make a dummy list, then iterator is ever callable.
         retval[i] = new ArrayList(); 
@@ -919,14 +919,17 @@ public class Unpacker extends Thread
    * @param udata unistall data 
    * @param customActions array of lists of custom action data like uninstaller listeners
    */
-  private void handleAdditionalUninstallData(UninstallData udata, List[] customActions)
+  private void handleAdditionalUninstallData(UninstallData udata, List[] customData)
   {
     // Handle uninstall libs
     udata.addAdditionalData("__uninstallLibs__",
-      customActions[AutomatedInstallData.UNINSTALLER_LIBS_INDEX]);
+      customData[AutomatedInstallData.UNINSTALLER_LIBS_INDEX]);
     // Handle uninstaller listeners
     udata.addAdditionalData("uninstallerListeners",
-      customActions[AutomatedInstallData.UNINSTALLER_LISTENER_INDEX]);
+      customData[AutomatedInstallData.UNINSTALLER_LISTENER_INDEX]);
+    // Handle uninstaller jars
+    udata.addAdditionalData("uninstallerJars",
+      customData[AutomatedInstallData.UNINSTALLER_JARS_INDEX]);
   }
 
   

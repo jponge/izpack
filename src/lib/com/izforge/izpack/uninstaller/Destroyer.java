@@ -257,27 +257,35 @@ public class Destroyer extends Thread
 
   private void informListeners(List listeners, int action, 
     Object param, AbstractUIProgressHandler handler)
-    throws Exception
   {
     // Iterate the action list.
     Iterator iter = listeners.iterator();
+    UninstallerListener il = null;
     while( iter.hasNext())
     {
-      UninstallerListener il = (UninstallerListener) iter.next();
-      switch( action )
+      try
       {
-        case UninstallerListener.BEFORE_DELETION:
-          il.beforeDeletion(  (List) param, handler );
-          break;
-        case UninstallerListener.AFTER_DELETION:
-          il.afterDeletion(  (List) param, handler );
-          break;
-        case UninstallerListener.BEFORE_DELETE:
-          il.beforeDelete(  (File) param, handler );
-          break;
-        case UninstallerListener.AFTER_DELETE:
-          il.afterDelete(  (File) param, handler );
-          break;
+        il = (UninstallerListener) iter.next();
+        switch( action )
+        {
+          case UninstallerListener.BEFORE_DELETION:
+            il.beforeDeletion(  (List) param, handler );
+            break;
+          case UninstallerListener.AFTER_DELETION:
+            il.afterDeletion(  (List) param, handler );
+            break;
+          case UninstallerListener.BEFORE_DELETE:
+            il.beforeDelete(  (File) param, handler );
+            break;
+          case UninstallerListener.AFTER_DELETE:
+            il.afterDelete(  (File) param, handler );
+            break;
+        }
+      }
+      catch(Throwable e)
+      { // Catch it to prevent for a block of uninstallation.
+        handler.emitError("Skipping custom action because exception caught during " 
+          + il.getClass().getName(), e.toString());
       }
     }
   }

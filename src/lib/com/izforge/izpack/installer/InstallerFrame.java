@@ -81,6 +81,7 @@ import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
 import net.n3.nanoxml.XMLWriter;
 
+import com.izforge.izpack.CustomData;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Panel;
@@ -88,6 +89,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
 
@@ -479,7 +481,10 @@ public class InstallerFrame extends JFrame
       execStream.flush();
       outJar.closeEntry();
 
-      // Write out additional uninstall data
+       // Write out additional uninstall data
+       // Do not "kill" the installation if there is a problem
+       // with custom uninstall data. Therefore log it to Debug,
+       // but do not throw.
        Map additionalData = udata.getAdditionalData();
        if( additionalData  != null && ! additionalData.isEmpty())
        {
@@ -508,7 +513,8 @@ public class InstallerFrame extends JFrame
                outJar.closeEntry();
               }
            }
-           else if( key.equals("uninstallerListeners"))
+           else if( key.equals("uninstallerListeners") ||
+            key.equals("uninstallerJars"))
            { // It is a ArrayList of ArrayLists which contains the full 
              // package paths of all needed class files. 
              // First we create a new ArrayList which contains only
@@ -523,34 +529,39 @@ public class InstallerFrame extends JFrame
                byte[] buffer = new byte[5120];
                long bytesCopied = 0;
                int bytesInBuffer;
-               List listenerClasses = (List) listenerIter.next();
+               CustomData customData = (CustomData) listenerIter.next();
                // First element of the list contains the listener class path;
                // remind it for later.
-               subContents.add(listenerClasses.get(0));
-               Iterator liClaIter = listenerClasses.iterator();
+               if(customData.listenerName != null )
+                subContents.add(customData.listenerName);
+               Iterator liClaIter = customData.contents.iterator();
                while( liClaIter.hasNext() )
                {
-                 String listenerName = (String) liClaIter.next();
-                 listenerName = listenerName.replace('.', '/');
-                 listenerName = listenerName + ".class";
-                 if( exist.contains(listenerName ))
+                 String contentPath = (String) liClaIter.next();
+                 if( exist.contains(contentPath ))
                    continue;
-                 exist.add(listenerName);
+                 exist.add(contentPath);
                  try
                  {
-                   outJar.putNextEntry(new ZipEntry( listenerName));
+                   outJar.putNextEntry(new ZipEntry( contentPath));
                  }
                  catch(ZipException ze )
                  { // Ignore, or ignore not ?? May be it is a exception because
                    // a doubled entry was tried, then we should ignore ...
+                   Debug.trace("ZipException in writing custom data: " + ze.getMessage() );
                    continue;
                  }
-                 InputStream in = getClass().getResourceAsStream("/" + listenerName);
-                 while ((bytesInBuffer = in.read(buffer)) != -1)
+                 InputStream in = getClass().getResourceAsStream("/" + contentPath);
+                 if( in != null )
                  {
-                   outJar.write(buffer, 0, bytesInBuffer);
-                   bytesCopied += bytesInBuffer;
+                   while ((bytesInBuffer = in.read(buffer)) != -1)
+                   {
+                     outJar.write(buffer, 0, bytesInBuffer);
+                     bytesCopied += bytesInBuffer;
+                   }
                  }
+                 else
+                   Debug.trace("custom data not found: " + contentPath );
                  outJar.closeEntry();
           
                }

@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
-import com.izforge.izpack.CustomActionData;
+import com.izforge.izpack.CustomData;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.util.OsConstraint;
@@ -193,7 +193,7 @@ public class InstallerBase
       if (pack.preselected) installdata.selectedPacks.add(pack);
     }
     // Load custom action data.
-    loadCustomActionData(installdata);
+    loadCustomData(installdata);
 
   }
 
@@ -252,14 +252,14 @@ public class InstallerBase
   }
 
   /**
-   * Loads custom action data like listener and lib references if exist and
+   * Loads custom data like listener and lib references if exist and
    * fills the installdata.
    * 
    * @param installdata installdata into which the custom action data should be
    * stored
    * @throws Exception
    */
-  private void loadCustomActionData(AutomatedInstallData installdata)
+  private void loadCustomData(AutomatedInstallData installdata)
       throws Exception
   {
     // Usefull variables
@@ -272,7 +272,7 @@ public class InstallerBase
     List[] out = new List[streamNames.length];
     for (i = 0; i < streamNames.length; ++i)
       out[i] = new ArrayList();
-    in = InstallerBase.class.getResourceAsStream("/customActions");
+    in = InstallerBase.class.getResourceAsStream("/customData");
     if (in != null)
     {
       objIn = new ObjectInputStream(in);
@@ -281,7 +281,7 @@ public class InstallerBase
       Iterator keys = ((List) listeners).iterator();
       while (keys != null && keys.hasNext())
       {
-        CustomActionData ca = (CustomActionData) keys.next();
+        CustomData ca = (CustomData) keys.next();
 
         if (ca.osConstraints != null
             && !OsConstraint.oneMatchesCurrentSystem((List) ca.osConstraints))
@@ -290,23 +290,25 @@ public class InstallerBase
         }
         switch (ca.type)
         {
-        case CustomActionData.INSTALLER_LISTENER:
-          Class clazz = Class.forName((String) ca.names.get(0));
+        case CustomData.INSTALLER_LISTENER:
+          Class clazz = Class.forName(ca.listenerName);
           out[ca.type].add(clazz.newInstance());
           break;
-        case CustomActionData.UNINSTALLER_LISTENER:
-        case CustomActionData.UNINSTALLER_LIB:
-          out[ca.type].add(ca.names);
+        case CustomData.UNINSTALLER_LISTENER:
+        case CustomData.UNINSTALLER_JAR:
+          out[ca.type].add(ca);
+          break;
+        case CustomData.UNINSTALLER_LIB:
+          out[ca.type].add(ca.contents);
           break;
         }
 
       }
       // Add the current custem action data to the installdata hash map.
       for (i = 0; i < streamNames.length; ++i)
-        installdata.customActionData.put(streamNames[i], out[i]);
+        installdata.customData.put(streamNames[i], out[i]);
     }
     // uninstallerLib list if exist
 
   }
-
 }

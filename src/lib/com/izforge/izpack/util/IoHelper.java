@@ -4,7 +4,7 @@
  *  Copyright (C) 2004 Klaus Bartz
  *
  *  File :               IoHelper.java
- *  Description :        Helper for XML specifications.
+ *  Description :        Helper for IO related stuff.
  *  Author's email :     bartzkau@users.berlios.de
  *
  *  This program is free software; you can redistribute it and/or
@@ -188,6 +188,47 @@ public class IoHelper
     return;
   }
 
+  /**
+   * Creates a temp file with delete on exit rule. The extension
+   * is extracted from the template if possible, else the
+   * default extension is used. The contents of template will be
+   * copied into the temporary file.
+   * @param template file to copy from and define file extension
+   * @param defaultExtension file extension if no is contained in template
+   * @return newly created and filled temporary file
+   * @throws IOException
+   */
+  public static File copyToTempFile( File template, String defaultExtension) throws IOException
+  {
+    String path = template.getCanonicalPath();
+    int pos = path.lastIndexOf('.');
+    String ext = path.substring(pos);
+    if( ext == null )
+      ext = defaultExtension;
+    File tmpFile = File.createTempFile("izpack_ant", ext);
+    tmpFile.deleteOnExit();
+    IoHelper.copyFile(template, tmpFile);
+    return( tmpFile);
+  }
+  
+  
+  /**
+   * Creates a temp file with delete on exit rule. The extension
+   * is extracted from the template if possible, else the
+   * default extension is used. The contents of template will be
+   * copied into the temporary file.
+   * @param template file to copy from and define file extension
+   * @param defaultExtension file extension if no is contained in template
+   * @return newly created and filled temporary file
+   * @throws IOException
+   */
+  public static File copyToTempFile( String template, String defaultExtension) throws IOException
+  {
+    return( copyToTempFile( new File(template),  defaultExtension));
+  }
+  
+  
+  
   /**
    * Changes the permissions of the given file to the given POSIX permissions.
    * @param file the file for which the permissions should be changed
