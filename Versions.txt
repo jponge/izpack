@@ -1,6 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
   > 3.7.0 (build 2004.xx.yy)
+  
+- Adding custom action stuff for packaging, installation and uninstallation
+  (Klaus Bartz)
 
   > 3.6.0 (build 2004.07.28)
 
