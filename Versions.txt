@@ -15,6 +15,7 @@
 - Uninstaller: various fixes (Chad McHenry).
 - Installer: the 'next' button requests focus whenever it is available.
 - Switched to the Crystal icons from KDE 3.2.
+- Uninstaller: proper use of the ButtonFactory.
 
 
   > 3.4.0 (build 2003.12.06)

@@ -158,6 +158,10 @@ public class UninstallerFrame extends JFrame
       new KeyAdapter()
       {
       });
+      
+    // We set-up the buttons factory
+    ButtonFactory.useButtonIcons();
+    ButtonFactory.useHighlightButtons();
 
     // We put our components
 
