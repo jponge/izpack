@@ -23,6 +23,7 @@
 - The language selection box will now appear in the Windows tasks list (Harald
   Süpfle).
 - Spanish langpack update (David Perez Carmona).
+- Fix that prevented the correct detection of OS X.
 
   > 3.6.1 (build 2004.xx.yy)
 

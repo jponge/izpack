@@ -98,7 +98,7 @@ public class OsConstraint implements java.io.Serializable
       }
       else if (family.equals("mac"))
       {
-        match = ((osName.indexOf("mac") > -1) && !(osName.endsWith("x")));
+        match = ((osName.indexOf("mac") > -1));
       }
       else if (family.equals("unix"))
       {
