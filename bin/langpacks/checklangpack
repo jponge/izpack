@@ -6,7 +6,10 @@ tmpfile="stringids.tmp"
 # rather use English as the authoritative source for string IDs?
 reference_file="*.xml"
 
-idfilter='/^.*id="\([^"]*\)".*$/{s//\1/;p}'
+idfilter='/^.*id="\([^"]*\)".*$/{
+  s//\1/
+  p
+  }'
 
 checkfiles="*.xml"
 
@@ -31,7 +34,7 @@ for i in $checkfiles ; do
 		continue
         fi
 
-	echo "differences to $i"
+	echo "report of $i (- = missing, + = probably superfluous)"
 	sed -n -e "$idfilter" $i | sort | diff -U 0 $tmpfile - | sed -n -e '/^[-+][^-+]/p'
 done
 
