@@ -1,5 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.5.4 (build 2004.xx.yy)
+
+- German langpack fixes once again (Klaus Bartz).
+
   > 3.5.3 (build 2004.05.15)
 
 - German langpack punctuation fixes (jonelo).
