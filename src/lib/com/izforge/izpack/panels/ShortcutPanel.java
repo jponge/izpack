@@ -386,6 +386,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     {
       if (shortcut.supported () && !simulteNotSupported)
       {
+        parent.lockPrevButton ();
         parent.lockNextButton ();
         buildUI (shortcut.getProgramGroups (ShellLink.CURRENT_USER), true);  // always start out with the current user
       }
