@@ -53,12 +53,13 @@ import java.util.zip.ZipEntry;
  *
  * <b>Requirements</b>
  * <ul>
- *   <ll>The target method, and all it's required classes must be in a jar file.
+ *   <li>The target method, and all it's required classes must be in a jar file.
  *   <li>The Self Modifier, and its inner classes must also be in the jar file.
  * </ul>
  *
  * There are three system processes (or "phases") involved, the first invoked
  * by the user, the second and third by the SelfModifier.
+ * <p>
  *
  * <b>Phase 1:</b>
  * <ol>
@@ -78,6 +79,7 @@ import java.util.zip.ZipEntry;
  *   <li>Initializes from system properties.
  *   <li>Spawn phase 3 exactly as phase 2 except the self.modifier.phase system
  *       properties set to 3.
+ *   <li>Wait for phase 3 to die
  *   <li>Delete the temporary sandbox
  * </ol>
  *
@@ -87,18 +89,24 @@ import java.util.zip.ZipEntry;
  *   <li>Redirect std err stream to the log
  *   <li>Invoke the target method with arguments we were given
  *   <li>The target method is expected to call exit(), or to not start any
- *       looping threads (such as the AWT thread)
+ *       looping threads (e.g. AWT thread). In other words, the target is the
+ *       new "main" method.
  * </ol>
  *
  * <a name="selfmodsysprops"><b>SelfModifier system properties</b></a> used to
  * pass information between processes.
- * <table>
+ * <table border="1">
  *   <tr><th>Constant   <th>System property  <th>description</tr>
- *   <tr><td>BASE_KEY   <td>self.mod.jar     <td>base path to log file and sandbox dir</tr>
- *   <tr><td>JAR_KEY    <td>self.mod.class   <td>path to original jar file</tr>
- *   <tr><td>CLASS_KEY  <td>self.mod.method  <td>class of target method</tr>
- *   <tr><td>METHOD_KEY <td>self.mod.phase   <td>name of method to be invoked in sandbox</tr>
- *   <tr><td>PHASE_KEY  <td>self.mod.base    <td>phase of operation to run</tr>
+ *   <tr><td><a href="#BASE_KEY">BASE_KEY</a>     <td>self.mod.jar
+ *       <td>base path to log file and sandbox dir</tr>
+ *   <tr><td><a href="#JAR_KEY">JAR_KEY</a>       <td>self.mod.class
+ *       <td>path to original jar file</tr>
+ *   <tr><td><a href="#CLASS_KEY">CLASS_KEY</a>   <td>self.mod.method
+ *       <td>class of target method</tr>
+ *   <tr><td><a href="#METHOD_KEY">METHOD_KEY</a> <td>self.mod.phase
+ *       <td>name of method to be invoked in sandbox</tr>
+ *   <tr><td><a href="#PHASE_KEY">PHASE_KEY</a>   <td>self.mod.base
+ *       <td>phase of operation to run</tr>
  * </table>
  *
  * @author <a href="mailto:mchenryc@acm.org">Chadwick A. McHenry</a>
@@ -509,7 +517,7 @@ public class SelfModifier {
 
     int retVal = -1;
     try {
-      // TODO: in jre 1.2, Phse1 consistently needs more time to unlock the
+      // TODO: in jre 1.2, Phs1 consistently needs more time to unlock the
       // original jar. Phs2 should wait to invoke Phs3 until it knows its
       // parent (Phs1) has died, but Process.waitFor() only works on
       // children. Can we see when a parent dies, or /this/ Process becomes
