@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The English langpack -->
+
+<langpack>
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - Installazione di "/>
+    <str id="installer.next" txt="Prossimo"/>
+    <str id="installer.prev" txt="Precedente"/>
+    <str id="installer.quit" txt="Esci"/>
+    <str id="installer.madewith" txt="(Creato con IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Sei sicuro di volere uscire ?"/>
+    <str id="installer.quit.message" txt="Questo cancella l'installazione !"/>
+    <str id="installer.warning" txt="Avvertenza !"/>
+    <str id="installer.yes" txt="Si"/>
+    <str id="installer.no" txt="No"/>
+    <str id="installer.cancel" txt="Cancella"/> 
+    <str id="installer.error" txt="Errore"/>
+    
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="Questo eliminerà la(e) applicazione(i) installate !"/>
+    <str id="uninstaller.destroytarget" txt=" Forza l' eliminazione di "/>
+    <str id="uninstaller.uninstall" txt="Disinstalla"/>
+    
+    <!-- The strings for the 'official' IzPack plugins -->
+    <str id="HelloPanel.welcome1" txt="Benvenuto alla installazione di "/>
+    <str id="HelloPanel.welcome2" txt=" !"/>
+    <str id="HelloPanel.authors" txt="Gli autori di questo software sono : "/>
+    <str id="HelloPanel.url" txt="La homepage di questo software è : "/>
+    
+    <str id="LicencePanel.info" txt="Leggi, per piacere, questo accordo di licenza :"/>
+    <str id="LicencePanel.agree" txt="Sei d'accordo con questo accordo ?"/>
+    <str id="LicencePanel.yes" txt="Si"/>
+    <str id="LicencePanel.no" txt="No"/>
+    
+    <str id="InfoPanel.info" txt="Leggi, per piacere, le seguenti informazioni :"/>
+    
+    <str id="TargetPanel.info" txt="Seleziona la path di installazione :"/>
+    <str id="TargetPanel.browse" txt="Browse ..."/>
+    <str id="TargetPanel.warn" 
+         txt="Questa directory esiste già ! Sei sicuro di volere usarla e eventualmente sostituire i files esistenti?"/>
+    <str id="TargetPanel.empty_target"
+         txt="Non hai specificato il destino! Sei sicuro?"/>
+    
+    <str id="PacksPanel.info" txt="Seleziona i pacchetti che desideri installare :"/>
+    <str id="PacksPanel.tip" txt="Nota: i pacchetti grigi sono obbligatori."/>
+    <str id="PacksPanel.space" txt="Spazio Totale Necessario: "/>
+    
+    <str id="InstallPanel.info" txt="Clicca 'Installa !' per iniziare il processo di installazione"/>
+    <str id="InstallPanel.install" txt="Installa !"/>
+    <str id="InstallPanel.tip" txt="Progresso di installazione :"/>
+    <str id="InstallPanel.begin" txt="[Nulla]"/>
+    <str id="InstallPanel.finished" txt="[Concluso]"/>
+    
+    <str id="FinishPanel.success" txt="L'installazione si è conclusa con successo."/>
+    <str id="FinishPanel.fail" txt="L'installazione NON é andata a buon fine!"/>
+    <str id="FinishPanel.uninst.info" txt="Un programma di disinstallazione é stato creato in:"/>
+    <str id="FinishPanel.auto" txt="Genera uno script di installazione automatica"/>
+    <str id="FinishPanel.auto.tip" 
+         txt="Usa questo script per ripetere l'installazione in altri computers."/>
+    
+    <str id="ImgPacksPanel.packs" txt="Sono disponibili questi pacchetti :"/>
+    <str id="ImgPacksPanel.snap" txt="Contenuto sommario  :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Installa questo pacchetto"/>
+    
+    <str id="ShortcutPanel.regular.list" txt="Seleziona un Program Group per la Scorciatoia:"/>
+    <str id="ShortcutPanel.regular.default" txt="Ristabilisce"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Crea una Scorciatoia sul desktop"/>
+    <str id="ShortcutPanel.regular.create" txt="Crea Scorciatoia"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="crea Scorciatoia per:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="questo utente"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="tutti gli utenti"/>
+
+    <str id="ShortcutPanel.alternate.apology" txt="Spiacanti ma IzPack non sopporta la creazione di Scorciatoie nel tuo Sistema Operativo. Lo potrai fare manualmente usando il manuale del Sistema Operativo."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Questa è una lista di 'targets' che lo sviluppatore di software voleva metterti a disposizione."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Puoi salvare la lista per futuro riferimento in un file testo."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Salva file testo"/>
+    
+    <str id="ShortcutPanel.textFile.header" txt="Informazioni Scorciatoie\n====================\n\nQuesta è la lista di tutte le informazioni sulle Scorciatoie originalmente\nidealizzate. Con questa informazione è possibile crearli manualmente.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="Scorciatoia       : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Localizzazione    : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Descrizione       : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Target Scorciatoia: "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Riga Comando      : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="File di Icon      : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Indice Icon       : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Directory Lavoro  : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
+    <str id="ShortcutPanel.location.applications" txt="Menu Applicazioni"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Menu Iniziale"/>
+    <str id="ShortcutPanel.location.startup"      txt="Gruppo Startup"/>
+
+    <!-- Add your own panels specific strings here if you need -->
+
+</langpack>

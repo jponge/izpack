@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The English langpack -->
+
+<langpack>
+
+    <!-- General frontend strings -->
+    <str id="frontend.title" txt="IzPack - Frontend GUI"/>
+    <str id="frontend.untitled" txt="Senza Nome"/>
+    <str id="frontend.error" txt="Errore"/>
+    <str id="frontend.save_first" txt="Per piacere, salva prima il tuo file di installazione."/>
+    <str id="frontend.comp_dlg.title" txt="Compilazione"/>
+    <str id="frontend.comp_dlg.msg" txt="Messaggio di compilazione :"/>
+    <str id="frontend.comp_dlg.ok" txt="Ok"/>
+    <str id="frontend.basepath" txt="Seleziona una path di base"/>
+    <str id="frontend.licence.msg" txt="Licenza Publica Generale GNU versione 2:"/>
+    <str id="frontend.licence.ok" txt="Ok"/>
+    <str id="frontend.about.copyright" txt="Copyright (c) 2001,2002 Julien PONGE"/>
+    <str id="frontend.about.url" txt="http://www.izforge.com/"/>
+    <str id="frontend.lpswitch" txt="Scelta linguaggio"/>
+    <str id="frontend.nexttime" txt="I cambiamenti saranno visibili alla prossima esecuzione."/>
+    
+    <!-- Menu specific strings -->
+
+    <str id="menu.langpack" txt="Linguaggio"/>
+    <str id="menu.langpack.mn" txt="g"/>
+    
+    <str id="menu.bookmarks" txt="Files recenti"/>
+    <str id="menu.bookmarks.mn" txt="R"/>
+    
+    <str id="menu.files" txt="File"/>
+    <str id="menu.files.mn" txt="F"/>
+    <str id="menu.new" txt="Nuovo"/>
+    <str id="menu.new.mn" txt="N"/>
+    <str id="menu.open" txt="Apre (O)"/>
+    <str id="menu.open.mn" txt="O"/>
+    <str id="menu.save" txt="Salva"/>
+    <str id="menu.save.mn" txt="S"/>
+    <str id="menu.save_as" txt="Salva come (A)"/>
+    <str id="menu.save_as.mn" txt="a"/>
+    <str id="menu.exit" txt="Esce"/>
+    <str id="menu.exit.mn" txt="E"/>
+    <str id="menu.import" txt="Importa un file con path relativo"/>
+    <str id="menu.import.mn" txt="I"/>
+    
+    <str id="menu.compile" txt="Compila"/>
+    <str id="menu.compile.mn" txt="C"/>
+    <str id="menu.comp.standard" txt="Installatore Standard"/>
+    <str id="menu.comp.standard.mn" txt="S"/>
+    <str id="menu.comp.standardk" txt="Installatore Standard Kunststoff"/>
+    <str id="menu.comp.standardk.mn" txt="a"/>
+    <str id="menu.comp.web" txt="Installatore Web"/>
+    <str id="menu.comp.web.mn" txt="W"/>
+    <str id="menu.comp.webk" txt="Installatore Web Kunststoff"/>
+    <str id="menu.comp.webk.mn" txt="e"/>
+    
+    <str id="menu.izpack" txt="IzPack"/>
+    <str id="menu.izpack.mn" txt="I"/>
+    <str id="menu.about" txt="Su IzPack ...(A)"/>
+    <str id="menu.about.mn" txt="A"/>
+    <str id="menu.licence" txt="Licenza IzPack ..."/>
+    <str id="menu.licence.mn" txt="L"/>
+    
+    <!-- Tabs specific strings -->
+    
+    <str id="tabs.info.title" txt="Informazioni Generali"/>
+    <str id="tabs.info.appname" txt="Nome dell'Applicativo :"/>
+    <str id="tabs.info.appversion" txt="Versione dell'Applicativo :"/>
+    <str id="tabs.info.appurl" txt="Homepage dell'applicativo :"/>
+    <str id="tabs.info.authorslist" txt="Lista degli autori :"/>
+    <str id="tabs.info.author" txt="Nome dell'autore :"/>
+    <str id="tabs.info.email" txt="Email dell'autore :"/>
+    <str id="tabs.info.add" txt="Aggiunge un autore"/>
+    <str id="tabs.info.del" txt="Elimina questo autore"/>
+    <str id="tabs.info.width" txt=" Larghezza window :"/>
+    <str id="tabs.info.height" txt=" Altezza window :"/>
+    <str id="tabs.info.resizable" txt=" Crea la window ridimensionabile"/>
+    
+    <str id="tabs.loc.title" txt="Locali"/>
+    <str id="tabs.loc.available" txt="Pacchetti delle locali disponibili :"/>
+    <str id="tabs.loc.selected" txt="Selezionate i pacchetti :"/>
+    <str id="tabs.loc.include" txt="Aggiunge"/>
+    <str id="tabs.loc.remove" txt="Elimina"/>
+    
+    <str id="tabs.res.title" txt="Risorse"/>
+    <str id="tabs.res.list" txt="Lista risorse :"/>
+    <str id="tabs.res.add" txt="Aggiunge una risorsa"/>
+    <str id="tabs.res.remove" txt="Elimina la risorsa"/>
+    <str id="tabs.res.input" txt="ID Risorsa :"/>
+    
+    <str id="tabs.pan.title" txt="Pannelli"/>
+    <str id="tabs.pan.available" txt="Pannelli disponibili :"/>
+    <str id="tabs.pan.selected" txt="Pannelli selezionati :"/>
+    <str id="tabs.pan.include" txt="Aggiunge"/>
+    <str id="tabs.pan.remove" txt="Elimina"/>
+    <str id="tabs.pan.tip" txt="Alcuni pannelli possono richiedere risorse specifiche. Riferisciti alla documentazione."/>
+    
+    <str id="tabs.packs.title" txt="Pacchetti"/>
+    <str id="tabs.packs.packs" txt="Pacchetti :"/>
+    <str id="tabs.packs.files" txt="Files nel pacchetto selezionato :"/>
+    <str id="tabs.packs.addpack" txt="Aggiunge un pacchetto"/>
+    <str id="tabs.packs.delpack" txt="Elimina il pacchetto"/>
+    <str id="tabs.packs.required" txt=" Questo pacchetto è obbligatorio"/>
+    <str id="tabs.packs.addfile" txt="Aggiunge un file o directory"/>
+    <str id="tabs.packs.delfile" txt="Elimina il file o directory"/>
+    <str id="tabs.packs.parsable" txt=" Questo file è soggetto a parsing"/>
+    <str id="tabs.packs.pack_name" txt="Nome del pacchetto :"/>
+    <str id="tabs.packs.pack_desc" txt="Descrizione del pacchetto :"/>
+    <str id="tabs.packs.target" txt="Directory destino :"/>
+    <str id="tabs.packs.scriptProps" txt="Parametri del parser ..."/>
+    <str id="tabs.packs.f_type" txt="Tipo di file ? (bianco se default)"/>
+    <str id="tabs.packs.f_enc" txt="Encoding del file ? (bianco se default)"/>
+
+</langpack>

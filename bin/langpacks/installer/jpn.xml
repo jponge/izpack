@@ -44,6 +44,7 @@
     <str id="TargetPanel.empty_target"
          txt="正しいインストール先を指定してください! このパスは本当に存在していますか?"/>
     <str id="PacksPanel.info" txt="インストールしたい項目を選択してください :"/>    <str id="PacksPanel.tip" txt="注意: 灰色で表示されている項目は、必須項目です。"/>
+    <str id="PacksPanel.space" txt="必要なディスク容量: "/>
     
     <str id="InstallPanel.info" txt="インストールを開始するには、'インストール!'を押してください"/>
     <str id="InstallPanel.install" txt="インストール!"/>
