@@ -1157,21 +1157,18 @@ public class Compiler extends Thread
     info.setAppURL(requireContent(requireChildNamed(root, "url")));
 
     // We get the authors list
-    XMLElement authors = requireChildNamed(root, "authors");
-
-    Iterator iter = authors.getChildren().iterator();
-    while (iter.hasNext())
+    XMLElement authors = root.getFirstChildNamed("authors");
+    if (authors != null)
     {
-      XMLElement author = (XMLElement) iter.next();
-      if (author.getName().equals("author"))
+      Iterator iter = authors.getChildrenNamed("author").iterator();
+      while (iter.hasNext())
       {
+        XMLElement author = (XMLElement) iter.next();
         String name = requireAttribute(author, "name");
         String email = requireAttribute(author, "email");
         info.addAuthor(new Info.Author(name, email));
       }
     }
-    if (info.getAuthors().isEmpty())
-      parseError (authors, "<authors> requires an <author>");
 
     // We get the java version required
     XMLElement javaVersion = root.getFirstChildNamed("javaversion");

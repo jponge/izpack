@@ -15,10 +15,10 @@ $Id$
     <!ATTLIST installation version CDATA #REQUIRED>
 
 <!-- The info section (general information on an installation) -->
-<!ELEMENT info (appname, appversion, authors, url, javaversion?, uninstaller?)>
+<!ELEMENT info (appname, appversion, authors?, url, javaversion?, uninstaller?)>
     <!ELEMENT appname (#PCDATA)>
     <!ELEMENT appversion (#PCDATA)>
-    <!ELEMENT authors (author+)>
+    <!ELEMENT authors (author*)>
     <!ELEMENT author EMPTY>
         <!ATTLIST author name CDATA #REQUIRED>
         <!ATTLIST author email CDATA #REQUIRED>
