@@ -49,6 +49,12 @@ public class Pack implements Serializable
   /**  The target operation system of this pack */
   public List osConstraints = null;
 
+  /**  The list of packs this pack depends on */
+  public List dependencies = null;
+
+  /** Reverse dependencies(childs) */
+  public List revDependencies = null;
+
   /**  True if the pack is required. */
   public boolean required;
 
@@ -72,6 +78,7 @@ public class Pack implements Serializable
     String id, 
     String description,
     List osConstraints,
+    List dependencies,
     boolean required,
     boolean preselected,
     boolean loose)
@@ -80,6 +87,7 @@ public class Pack implements Serializable
     this.id = id;
     this.description = description;
     this.osConstraints = osConstraints;
+    this.dependencies = dependencies;
     this.required = required;
     this.preselected = preselected;
     this.loose = loose;
@@ -91,9 +99,29 @@ public class Pack implements Serializable
    *
    * @return    The String representation of the pack.
    */
-  public String toString()
+    public String toString()
   {
     return name + " (" + description + ")";
+  }
+  /**
+   * Creates a text list of all the packs it depend on
+   * @return
+   */
+  public String depString()
+  {
+    String text ="";
+    if (dependencies==null)
+      return text;
+    String name = null;
+    for (int i = 0; i < dependencies.size()-1; i++)
+    {
+      name = (String) dependencies.get(i);
+      text += name+",";
+    }
+    name=(String) dependencies.get(dependencies.size()-1);
+    text += name;
+    return text;
+
   }
 
   /**  Used of conversions. */
