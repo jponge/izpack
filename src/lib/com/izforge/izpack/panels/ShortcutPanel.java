@@ -128,6 +128,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
   // ------------------------------------------------------
   // spec file section keys
   // ------------------------------------------------------
+  private static final String SPEC_KEY_SKIP_IFNOT_SUPPORTED = "skipIfNotSupported";
   private static final String SPEC_KEY_NOT_SUPPORTED        = "notSupported";
   private static final String SPEC_KEY_PROGRAM_GROUP        = "programGroup";
   private static final String SPEC_KEY_SHORTCUT             = "shortcut";
@@ -254,6 +255,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
    *  are any desktop shortcuts to create.
    */
   private boolean hasDesktopShortcuts = false;
+  
+  /** Tells wether to skip if the platform is not supported. */
+  private boolean skipIfNotSupported = false;
 
   /**  the one shortcut instance for reuse in many locations */
   private Shortcut shortcut;
@@ -439,9 +443,16 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       }
       else
       {
-        buildAlternateUI ();
-        parent.unlockNextButton ();
-        parent.lockPrevButton ();
+        if (skipIfNotSupported)
+        {
+          parent.skipPanel();
+        }
+        else
+        {
+          buildAlternateUI ();
+          parent.unlockNextButton();
+          parent.lockPrevButton ();
+        }
       }
     }
     else
@@ -533,6 +544,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       shortcutsToCreate = false;
       return;
     }
+    
+    XMLElement skipper = spec.getFirstChildNamed(SPEC_KEY_SKIP_IFNOT_SUPPORTED);
+    skipIfNotSupported = (skipper != null);
     
     // ----------------------------------------------------
     // find out if we should simulate a not supported

@@ -13,6 +13,7 @@
 - InfoPanel: variables substitution is now allowed (Borje Jonsson).
 - InstallPanel supports internationalized package names (Gaganis Giorgos).
 - Support for package dependencies (Gaganis Giorgos).
+- ShortcutPanel: can be optionally skipped on non-supported platforms.
 
   > 3.6.1 (build 2004.xx.yy)
 

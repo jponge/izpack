@@ -163,8 +163,12 @@ installation. At the beginning you might want to experiment with that
 file.\\
 
 The specification file has only one major section called \texttt{<shortcuts>}.
-In this section, two different tags are recognized: \texttt{<programGroup>} and
-\texttt{<shortcut>}.\\
+In this section, 3 different tags are recognized: \texttt{<programGroup>},
+\texttt{skipIfNotSupported} and \texttt{<shortcut>}. \texttt{skipIfNotSupported}
+can be used to avoid the panel to show an alternative UI to show the shortcuts
+that would have been created on a system that supports it. To make it short,
+using this tag will make the panel be silent on non-supported systems. The
+default is to show the alternative UI.\\
 
 The \texttt{<programGroup>} tag allows you to specify the name of the
 menu under which the shortcuts will be grouped. The exact location and
@@ -369,6 +373,7 @@ need it I would advise to be very careful about changing pack names.\\
 \footnotesize
 \begin{verbatim}
 <shortcuts>
+  <skipIfNotSupported/>
   <programGroup defaultName="Name of the Program Group" 
                 location="applications/startMenu"/>
   <shortcut 

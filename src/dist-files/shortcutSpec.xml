@@ -2,6 +2,8 @@
 
 <shortcuts>
 
+  <skipIfNotSupported />
+
   <programGroup defaultName="IzPack" location="applications"/>
 
 <!--  
