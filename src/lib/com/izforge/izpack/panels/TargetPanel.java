@@ -235,7 +235,7 @@ public class TargetPanel extends IzPanel implements ActionListener
       return ok;
 
     // Normalize the path
-    File path = new File(installPath);
+    File path = new File(installPath).getAbsolutePath();
     installPath = path.toString();
 
     // We put a warning if the directory exists else we warn that it will be created
