@@ -27,7 +27,11 @@
 - IzPanel.setInitialFocus( Component ) stuff added (Klaus Bartz).
 - Configurable button and label icons (Klaus Bartz).
 - JGoodies loading fix.
-
+- Unified OS detection in OsVersion (Hani Suleiman).
+- Default installation path on unix now checks for writable 'usr/local' instead
+  of 'root' username (Hani Suleiman).
+- Removed incomplete and non-functional support for Mac OS9 (Hani Suleiman).
+- Fixed punctuation and some wording in English langpack (Hani Suleiman).
 
   > 3.6.1 (build 2004.10.09)
 
