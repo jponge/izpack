@@ -15,7 +15,10 @@ EPSPICTURES=\
 
 PNGPICTURES=\
 	userInput-search.png \
-	compilePanel.png
+	compilePanel.png \
+  CompilerListener.png \
+  InstallerListener.png \
+  UninstallerListener.png
 
 DESTFILES=\
 	$(EPSPICTURES:.eps=.png) \
