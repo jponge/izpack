@@ -38,6 +38,8 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.izforge.izpack.util.EnvironmentVariables;
+
 /**
  *  Substitutes variables occurring in an input stream or a string. This
  *  implementation supports a generic variable value mapping and escapes the
@@ -56,7 +58,7 @@ public class VariableSubstitutor implements Serializable
 {
 
   /**  The variable value mappings */
-  protected transient Map environment;
+  protected transient Map variables;
 
   /**  Whether braces are required for substitution. */
   protected boolean bracesRequired = false;
@@ -97,11 +99,11 @@ public class VariableSubstitutor implements Serializable
    *  The environment hashtable is copied by reference. Braces are not required
    *  by default
    *
-   * @param  environment  the environment with variable value mappings
+   * @param  variables  the map with variable value mappings
    */
-  public VariableSubstitutor(Map environment)
+  public VariableSubstitutor(Map variables)
   {
-    this.environment = environment;
+    this.variables = variables;
   }
 
   /**
@@ -266,6 +268,7 @@ public class VariableSubstitutor implements Serializable
              (braces && c != '}') ||
              (c >= 'a' && c <= 'z') ||
              (c >= 'A' && c <= 'Z') ||
+             (braces && (c == '[') || (c == ']')) ||
              (((c >= '0' && c <= '9') || c == '_') && nameBuffer.length() > 0))
       {
         nameBuffer.append((char) c);
@@ -274,15 +277,24 @@ public class VariableSubstitutor implements Serializable
       String name = nameBuffer.toString();
 
       // Check if a legal and defined variable found
-      boolean found = ((!braces || c == '}') &&
-        name.length() > 0 &&
-        environment.containsKey(name));
+      String varvalue = null;
+      
+      if ((!braces || c == '}') && name.length() > 0)
+      {
+        // check for environment variables
+        if (braces && name.startsWith("ENV[") && (name.lastIndexOf(']') == name.length()-1))
+        {
+          varvalue = EnvironmentVariables.getInstance().getProperty(name.substring(4, name.length()-1));
+        }
+        else
+          varvalue = (String)variables.get(name);
+      }
 
       // Substitute the variable...
-      if (found)
+      if (varvalue != null)
       {
         writer.write
-          (escapeSpecialChars((String) environment.get(name), t));
+          (escapeSpecialChars(varvalue, t));
         if (braces)
           c = reader.read();
       }
