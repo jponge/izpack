@@ -101,7 +101,7 @@
     <str id="ShortcutPanel.location.startMenu"    txt="Menu démarrer"/>
     <str id="ShortcutPanel.location.startup"      txt="Groupe de démarrage"/>
 
-    <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+    <str id="UserInputPanel.error.caption"        txt="Problème de saisie"/>
 
     <!-- Add your own panels specific strings here if you need -->
     
