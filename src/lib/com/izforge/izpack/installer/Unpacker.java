@@ -139,7 +139,14 @@ public class Unpacker extends Thread
             File pathFile = new File(path);
             File dest = pathFile.getParentFile();
             if (!dest.exists())
-              dest.mkdirs();
+            {
+              if (! dest.mkdirs())
+              {
+                handler.emitError("Error creating directories", "Could not create directory\n"+dest.getPath());
+                handler.stopAction ();
+                return;
+              }
+            }
 
             // We add the path to the log,
             udata.addFile(path);
@@ -285,10 +292,13 @@ public class Unpacker extends Thread
     {
       // TODO: finer grained error handling with useful error messages
       handler.stopAction();
-      handler.emitError ("An exception was caught", err.toString());
+      handler.emitError ("An error occured", err.toString());
       err.printStackTrace ();
     }
-    instances.remove(instances.indexOf(this));
+    finally
+    {
+      instances.remove(instances.indexOf(this));      
+    }
   }
 
 
