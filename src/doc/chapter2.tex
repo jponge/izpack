@@ -165,6 +165,7 @@ contains the following elements :
     \item \texttt{email} : the author's email
   \end{itemize}
   \item \texttt{<uninstaller>} : specifies whether to create an uninstaller after installation, it has only the \texttt{write} attribute, with default value \texttt{yes}. If this tag is not specified, the uninstaller will still be written.
+  \item \texttt{<javaversion>} : specifies the minimum version of Java required to install your program. Values can be \texttt{1.2}, \texttt{1.2.2}, \texttt{1.4}, etc. The test is a lexical comparison against the \texttt{java.version} System property on the install machine.
 
 \end{itemize}\
 
@@ -179,6 +180,7 @@ Here is an example of a typical \texttt{<info>} section :\\
     <author name="John John Doo" email="jjd@jjd-mail.com"/>
     <author name="El Goyo" email="goyoman@mymail.org"/>
   </authors>
+  <javaversion>1.2</javaversion>
 </info>
 \end{verbatim}
 \normalsize
