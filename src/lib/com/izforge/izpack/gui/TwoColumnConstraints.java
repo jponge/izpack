@@ -35,7 +35,6 @@ import    java.awt.*;
  * @version  0.0.1 / 11/15/02
  * @author   Elmar Grom
  */
-/*---------------------------------------------------------------------------*/
 public class TwoColumnConstraints
 {
   public static final int       NORTH       = 9;
@@ -64,24 +63,22 @@ public class TwoColumnConstraints
 
   /** for private use by the layout manager */
   Component         component   = null;
-  
- /*--------------------------------------------------------------------------*/
+
  /**
   * Creates a copy of this two column constraint.
   *
   * @return    a copy of this <code>TwoColumnConstraints</code>
   */
- /*--------------------------------------------------------------------------*/
   public Object clone ()
   {
     TwoColumnConstraints newObject = new TwoColumnConstraints ();
-    
+
     newObject.position  = position;
     newObject.align     = align;
     newObject.indent    = indent;
     newObject.stretch   = stretch;
     newObject.component = component;
-    
+
     return (newObject);
   }
 }
