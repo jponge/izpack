@@ -8,20 +8,20 @@
 -->
 
 <!-- The root element -->
-<!ELEMENT installation (preinstall?, info, variables*, locale, resources, panels,
-                        packs, screen, jar*, native*, postinstall?)>
+<!ELEMENT installation (preinstall?, info, variables*, guiprefs?, locale, resources, panels,
+                        packs, screen?, jar*, native*, postinstall?)>
     <!ATTLIST installation version CDATA #REQUIRED>
 
 <!-- The info section (general information on an installation) -->
 <!ELEMENT info (appname, appversion, authors, url, javaversion?)>
-    <!ELEMENT appname (CDATA)>
-    <!ELEMENT appversion (CDATA)>
+    <!ELEMENT appname (#PCDATA)>
+    <!ELEMENT appversion (#PCDATA)>
     <!ELEMENT authors (author+)>
     <!ELEMENT author EMPTY>
         <!ATTLIST author name CDATA #REQUIRED>
         <!ATTLIST author email CDATA #REQUIRED>
-    <!ELEMENT url (CDATA)>
-		<!ELEMENT javaversion (CDATA)>
+    <!ELEMENT url (#PCDATA)>
+		<!ELEMENT javaversion (#PCDATA)>
 
 
 <!-- The variables markup (variable declarations ) -->    
@@ -49,7 +49,7 @@
         <!ATTLIST res id CDATA #REQUIRED>
         <!ATTLIST  res parse  (yes|no) "no">
         <!ATTLIST  res type CDATA "plain">
-        <!ATTLIST  res encoding CDATA>        
+        <!ATTLIST  res encoding CDATA #IMPLIED>        
 
 <!-- The panels section (indicates the panels to use) -->
 <!ELEMENT panels (panel+)>
@@ -60,7 +60,7 @@
 <!ELEMENT enrollinfo (enrollitems) >
 	<!ATTLIST enrollinfo url CDATA #REQUIRED>
 	<!ELEMENT enrollitems (item+) >
-		<!ELEMENT item  >
+		<!ELEMENT item EMPTY>
 		<!ATTLIST item name CDATA #REQUIRED>
 		<!ATTLIST item required (yes|no) "no">
 
@@ -69,17 +69,17 @@
     <!ELEMENT pack (preinstall?, description, file*, fileset*, parsable*, executable*, postinstall?)>
         <!ATTLIST pack name CDATA #REQUIRED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
-        <!ELEMENT description (CDATA)>
+        <!ELEMENT description (#PCDATA)>
         <!ELEMENT file EMPTY>
             <!ATTLIST file src CDATA #REQUIRED>
             <!ATTLIST file targetdir CDATA #REQUIRED>
-            <!ATTLIST file os (unix|windows|mac)>
+            <!ATTLIST file os (unix|windows|mac) #IMPLIED>
 						<!ATTLIST file override (true|false) "true">
 		<!ELEMENT fileset (include*, exclude*)>
 	        <!ATTLIST fileset dir CDATA #REQUIRED>
 	        <!ATTLIST fileset targetdir CDATA #REQUIRED>	
-	    	<!ATTLIST fileset casesensitive (yes|no)>	
-            <!ATTLIST fileset os (unix|windows|mac)>
+	    	<!ATTLIST fileset casesensitive (yes|no) #IMPLIED>	
+            <!ATTLIST fileset os (unix|windows|mac) #IMPLIED>
 	    <!ELEMENT include EMPTY>
            	<!ATTLIST include name CDATA #REQUIRED>
 	    <!ELEMENT exclude EMPTY>
@@ -88,15 +88,15 @@
 			<!ELEMENT parsable EMPTY>
 					<!ATTLIST parsable targetfile CDATA #REQUIRED>
 					<!ATTLIST parsable type CDATA "plain">
-					<!ATTLIST parsable encoding CDATA>
+					<!ATTLIST parsable encoding CDATA #IMPLIED>
 			<!ELEMENT executable (args?, os*)>
 					<!ATTLIST executable targetfile CDATA #REQUIRED>
-					<!ATTLIST executable class CDATA >
+					<!ATTLIST executable class CDATA #IMPLIED>
 					<!ATTLIST executable type (bin|jar) "bin">
 					<!ATTLIST executable stage (postinstall|never) "never">
 					<!ATTLIST executable failure (abort|warn|ask) "ask">
 					<!ELEMENT args (arg+)>
-							<!ELEMENT arg >
+							<!ELEMENT arg EMPTY>
 									<!ATTLIST arg value CDATA #REQUIRED>
 					<!ELEMENT os EMPTY>
 									<!ATTLIST os family (unix|windows|mac) #REQUIRED>
