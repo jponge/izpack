@@ -1,5 +1,7 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.7.0 (build 2004.xx.yy)
+
   > 3.6.0 (build 2004.07.28)
 
 - New Danish langpack (Frank Bille Jensen).
