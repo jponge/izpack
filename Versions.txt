@@ -2,15 +2,6 @@
 
   > 3.6.0 (build 2004.xx.yy)
 
-- Adding support for i18n to the pack panel (Thorsten Kamann)
-- Removing limtation the going backward is disabled if a pack not selected and 
-   the pack using a panel (Thorsten Kamann)
-- Adding support for floating text in a langpack file (Thorsten Kamann)
-- At now you can specify a processor class to pre process the set value of a 
-   RuleInputField (Thorsten Kamann)
-- The choices of a combo box can be generated throug a processor class 
-   (Thorsten Kamann)
-- The message of a validator can be a i18n message (Thorsten Kamann) 
 - New Danish langpack (Frank Bille Jensen).
 - Web installers can now prompt for passwords and a proxy (Chad McHenry).
 - Fixed all javadoc warnings and errors (Chad McHenry).
@@ -45,6 +36,15 @@
 - It is now possible to have a specific picture for a specific panel by using 
   the Installer.image.n resources where n is the panel 0-based index.
   (Peter Mikula).
+- Adding support for i18n to the pack panel (Thorsten Kamann)
+- Removing limtation the going backward is disabled if a pack not selected and 
+  the pack using a panel (Thorsten Kamann)
+- Adding support for floating text in a langpack file (Thorsten Kamann).
+- At now you can specify a processor class to pre process the set value of a 
+  RuleInputField (Thorsten Kamann).
+- The choices of a combo box can be generated throug a processor class
+  (Thorsten Kamann).
+- The message of a validator can be a i18n message (Thorsten Kamann).
 
   > 3.5.4 (build 2004.06.05)
 
