@@ -8,7 +8,7 @@
   of Elmar Grom with the additional help of Marcus Stursberg.
 - Documentation mispelling fixes and additions by Elmar Grom.  
 
-    > 3.0.0 rc=2 (build 2002.07.06)
+    > 3.0.0 rc2 (build 2002.07.06)
 
 - Added some documentation on the *LicencePanel and *InfoPanel panels.
 - Bugfix in HTMLLicencePanel.
