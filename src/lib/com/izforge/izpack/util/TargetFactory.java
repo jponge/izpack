@@ -43,21 +43,22 @@ import    java.io.*;
 /*$
  * @design
  *
- * Example reports from various platforms:
+ * Reports actually observed on some systems:
  *
- * OS                 Name            Version   Architecture  Native Report (ver)
+ * OS                 OS Name         Version     Architecture  Native Report (ver)
  * ----------------------------------------------------------------------------------------------------------
  * Windows 95
- * Windows 98         Windows 98      4.10      x86           Windows 98 [Version 4.10.1998]
- * Windows-ME
+ * Windows 98         Windows 98      4.10        x86           Windows 98 [Version 4.10.1998]
+ * Windows-ME         Windows Me      4.90        x86           Windows Millennium [Version 4.90.3000]
  * Windows-NT 3.5
- * Windows-NT 4.0     Windows NT      4.0       x86           Windows NT Version 4.0
- * Windows 2000       Windows 2000    5.0       x86           Microsoft Windows 2000 [Version 5.00.2195]
- * Windows-XP         Windows 2000    5.1       x86           Microsoft Windows XP [Version 5.1.2600]
- * Windows-XP         Windows XP      5.1       x86
+ * Windows-NT 4.0     Windows NT      4.0         x86           Windows NT Version 4.0
+ * Windows 2000       Windows 2000    5.0         x86           Microsoft Windows 2000 [Version 5.00.2195]
+ * Windows-XP         Windows 2000    5.1         x86           Microsoft Windows XP [Version 5.1.2600]
+ * Windows-XP         Windows XP      5.1         x86
  * Mac
  * Mac OS-X
- * Linux              Linux           2.4.7-10  i386
+ * Linux              Linux           2.4.7-10    i386
+ * Linux              Linux           2.4.18-4GB  i386
  * Solaris
  *
  *---------------------------------------------------------------------------*/
