@@ -54,7 +54,6 @@ public class Shortcut
   /** Show the window 'normal' when starting. Usually restores the window
       properties at the last shut-down. */
   public static final int       NORMAL          = 1;
-  /** Show the window minimized when starting. */
   public static final int       MINIMIZED       = 2;
   /** Show the window maximized when starting. */
   public static final int       MAXIMIZED       = 3;
@@ -99,10 +98,12 @@ public class Shortcut
  /**
   * Returns a list of currently existing program groups, based on the
   * requested type. For example if the type is <code>APPLICATIONS</code> then
-  * all the names of the program groups in the applications menu would be
+  * all the names of the program groups in the Start Menu\Programs menu would be
   * returned.
   *
   * @param     userType   the type of user for the program group set.
+  *
+  * @param     type   the type or classification of the program group.
   *
   * @return    a <code>Vector</code> of <code>String</code> objects that
   *            represent the names of the existing program groups. It is
@@ -218,6 +219,17 @@ public class Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * returns icon Location
+  *
+  * @ return iconLocation
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getIconLocation()
+  {
+      return "";
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
   * Sets the name of the program group this ShellLinbk should be placed in.
   *
   * @param     groupName    the name of the program group
@@ -245,11 +257,21 @@ public class Shortcut
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
   *                   </ul>
+  *
+  * @see       #getShowCommand
   */
  /*--------------------------------------------------------------------------*/
   public void setShowCommand (int show)
   {
   }
+
+ /* retrieves showCommand from the OS.  Translates it into Shortcut.XXX terms.
+  */
+  public int getShowCommand()
+  {
+  	return Shortcut.NORMAL;
+  }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the absolute path to the shortcut target.
@@ -272,6 +294,17 @@ public class Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * Gets the working directory for the link target.
+  *
+  * @return the working directory.
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getWorkingDirectory ()
+  {
+    return "";
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
   * Sets the name shown in a menu or on the desktop for the link.
   *
   * @param     name   The name that the link should display on a menu or on
@@ -281,6 +314,23 @@ public class Shortcut
   public void setLinkName (String name)
   {
   }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Gets the type of link
+  *  types are: <br>
+  *                   <ul>
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
+  *                   </ul>
+  */
+  public int getLinkType()
+  {
+	// fake default.
+  	return Shortcut.DESKTOP;
+  }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the type of link
@@ -303,7 +353,7 @@ public class Shortcut
  /**
   * Sets the user type for the link
   *
-  * @param     type  the type of user for the link.
+  * @param     userType  the type of user for the link.
   * 
   * @see       #CURRENT_USER
   * @see       #ALL_USERS
@@ -314,12 +364,46 @@ public class Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * Gets the user type for the link
+  *
+  * @return  userType 
+  * @see       #CURRENT_USER
+  * @see       #ALL_USERS
+  */
+ /*--------------------------------------------------------------------------*/
+  public int getUserType()
+  {
+  	return CURRENT_USER;
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
   * Saves this link.
   *
   * @exception Exception if problems are encountered
   */
  /*--------------------------------------------------------------------------*/
   public void save () throws Exception
+  {
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Gets the link hotKey
+  *
+  * @return  int hotKey
+  */
+ /*--------------------------------------------------------------------------*/
+  public int getHotkey()
+  {
+  	return 0;
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Sets the link hotKey
+  *
+  * @param hotkey
+  */
+ /*--------------------------------------------------------------------------*/
+  public void setHotkey(int hotkey)
   {
   }
 }

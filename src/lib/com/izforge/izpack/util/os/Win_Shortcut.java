@@ -41,6 +41,10 @@ import com.izforge.izpack.util.TargetFactory;
 public class Win_Shortcut extends Shortcut
 {
   // ------------------------------------------------------------------------
+  // Constant Definitions
+  // ------------------------------------------------------------------------
+
+  // ------------------------------------------------------------------------
   // Variable Declarations
   // ------------------------------------------------------------------------
   private ShellLink   shortcut;
@@ -104,19 +108,23 @@ public class Win_Shortcut extends Shortcut
   *
   * @see #setLinkType(int)
   * @see #setUserType(int)
+  *
+  * translates from ShellLink-UserTypes to Shortcut-UserTypes.
   */
  /*--------------------------------------------------------------------------*/
   public String getBasePath () throws Exception
   {
     return shortcut.getLinkPath (shortcut.getUserType());
   }
+
  /**
   * Returns a list of currently existing program groups, based on the
   * requested type. For example if the type is <code>APPLICATIONS</code> then
-  * all the names of the program groups in the applications menu would be
+  * all the names of the program groups in the Start Menu\Programs menu would be
   * returned.
   *
   * @param     userType   the type of user for the program group set.
+  *                       (as Shortcut.utype)
   *
   * @return    a <code>Vector</code> of <code>String</code> objects that
   *            represent the names of the existing program groups. It is
@@ -157,21 +165,24 @@ public class Win_Shortcut extends Shortcut
     }
     
     File    path      = new File (linkPath);
-    File [] file      = path.listFiles ();
+	File [] file      = path.listFiles ();
     
-    // ----------------------------------------------------
-    // build a vector that contains only the names of
-    // the directories.
-    // ----------------------------------------------------
-    Vector  groups    = new Vector ();
+	// ----------------------------------------------------
+	// build a vector that contains only the names of
+	// the directories.
+	// ----------------------------------------------------
+	Vector  groups    = new Vector ();
     
-    for (int i = 0; i < file.length; i++)
-    {
-      if (file [i].isDirectory ())
-      {
-        groups.add (file [i].getName ());
-      }
-    }    
+	if ( file != null )
+	{
+		for (int i = 0; i < file.length; i++)
+		{
+		  if (file [i].isDirectory ())
+		  {
+			groups.add (file [i].getName ());
+		  }
+		}    
+	}
     
     return (groups);
   }
@@ -216,16 +227,15 @@ public class Win_Shortcut extends Shortcut
  /*--------------------------------------------------------------------------*/
   public boolean multipleUsers ()
   {
-    TargetFactory target = TargetFactory.getInstance ();
-    
-    if (target.getOSFlavor () == TargetFactory.STANDARD)
-    {
-      return (false);
-    }
-    else
-    {
-      return (true);
-    }
+	// Win NT4 won't have PROGRAMS for CURRENT_USER.
+	// Win 98 may not have 'Start Menu\Programs' for ALL_USERS
+	String au = shortcut.getallUsersLinkPath();
+	String cu = shortcut.getcurrentUserLinkPath();
+
+	if ( au == null || cu == null )
+		return false;
+
+	return ( au.length() > 0 && cu.length() > 0 );
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -282,6 +292,17 @@ public class Win_Shortcut extends Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * returns icon Location
+  *
+  * @ return iconLocation
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getIconLocation()
+  {
+      return shortcut.getIconLocation();
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
   * Sets the name of the program group this ShellLinbk should be placed in.
   *
   * @param     groupName    the name of the program group
@@ -303,6 +324,7 @@ public class Win_Shortcut extends Shortcut
   * setting when batch files are used to launch a Java application as it
   * will then appear to run just like any native Windows application.<br>
   *
+  *
   * @param     show   the show command. Valid settings are: <br>
   *                   <ul>
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#HIDE}
@@ -310,15 +332,19 @@ public class Win_Shortcut extends Shortcut
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
   *                   </ul>
+  *
+  * @see       #getShowCommand
+  * internally maps from Shortcut.XXX to ShellLink.XXX
   */
  /*--------------------------------------------------------------------------*/
   public void setShowCommand (int show) throws IllegalArgumentException
   {
+
     switch (show)
     {
       case HIDE : 
         {
-          shortcut.setShowCommand (ShellLink.HIDE);
+          shortcut.setShowCommand (ShellLink.MINNOACTIVE);
           break;
         }
       case NORMAL : 
@@ -328,7 +354,7 @@ public class Win_Shortcut extends Shortcut
         }
       case MINIMIZED : 
         {
-          shortcut.setShowCommand (ShellLink.MINIMIZED);
+          shortcut.setShowCommand (ShellLink.MINNOACTIVE);
           break;
         }
       case MAXIMIZED : 
@@ -342,6 +368,35 @@ public class Win_Shortcut extends Shortcut
         }
     }
   }
+
+ /* returns current showCommand. 
+  * internally maps from ShellLink.XXX to Shortcut.XXX
+  *
+  */
+  public int getShowCommand ()
+  {
+  	int showCommand = shortcut.getShowCommand();
+
+	switch( showCommand )
+	{
+		case ShellLink.NORMAL :
+			showCommand = NORMAL;
+			break;
+		// both MINNOACTIVE and MINIMIZED map to Shortcut.MINIMIZED
+		case ShellLink.MINNOACTIVE :
+		case ShellLink.MINIMIZED :
+			showCommand = MINIMIZED;
+			break;
+		case ShellLink.MAXIMIZED:
+			showCommand = MAXIMIZED;
+			break;
+		default:
+			break;
+	}
+
+	return showCommand;
+  }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the absolute path to the shortcut target.
@@ -366,6 +421,17 @@ public class Win_Shortcut extends Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * Gets the working directory for the link target.
+  *
+  * @return the working directory.
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getWorkingDirectory ()
+  {
+    return shortcut.getWorkingDirectory ();
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
   * Sets the name shown in a menu or on the desktop for the link.
   *
   * @param     name   The name that the link should display on a menu or on
@@ -378,9 +444,48 @@ public class Win_Shortcut extends Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * Gets the type of link
+  *  types are: <br>
+  *                   <ul>
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
+  *                   </ul>
+  * maps from ShellLink-types to Shortcut-types.
+  */
+  public int getLinkType()
+  {
+  	int typ = shortcut.getLinkType();
+
+	switch(typ)
+	{
+		case ShellLink.DESKTOP:
+			typ = DESKTOP;
+			break;
+		case ShellLink.PROGRAM_MENU :
+			typ = APPLICATIONS;
+			break;
+		case ShellLink.START_MENU :
+			typ = START_MENU;
+			break;
+		case ShellLink.STARTUP :
+			typ = START_UP;
+			break;
+		default:
+			break;
+	}
+
+	return typ;
+  }
+
+ /*--------------------------------------------------------------------------*/
+ /**
   * Sets the type of link
   *
   * @param     type   The type of link desired. The following values can be set:<br>
+  *  (note APPLICATION on Windows is 'Start Menu\Programs')
+  *  APPLICATION is a Mac term.
   *                   <ul>
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
@@ -423,23 +528,58 @@ public class Win_Shortcut extends Shortcut
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * Gets the user type for the link
+  *
+  * @return  userType 
+  * @see       #CURRENT_USER
+  * @see       #ALL_USERS
+  */
+ /*--------------------------------------------------------------------------*/
+  public int getUserType()
+  {
+  	int utype = shortcut.getUserType();
+
+	switch(utype)
+	{
+		case ShellLink.ALL_USERS :
+		utype = ALL_USERS;
+		break;
+
+		case ShellLink.CURRENT_USER :
+		utype = CURRENT_USER;
+		break;
+	}
+
+  	return utype;
+  }
+
+ /*--------------------------------------------------------------------------*/
+ /**
   * Sets the user type for the link
   *
-  * @param     type  the type of user for the link.
+  * @param     userType  the type of user for the link.
   * 
   * @see       Shortcut#CURRENT_USER
   * @see       Shortcut#ALL_USERS
+  *
+  * if the linkPath for that type is empty, refuse to set.
   */
  /*--------------------------------------------------------------------------*/
   public void setUserType (int type)
   {
     if (type == CURRENT_USER)
     {
-      shortcut.setUserType (ShellLink.CURRENT_USER);
+	  if ( shortcut.getcurrentUserLinkPath().length() > 0 )
+	  {
+		  shortcut.setUserType (ShellLink.CURRENT_USER);
+	  }
     }
     else if (type == ALL_USERS)
     {
-      shortcut.setUserType (ShellLink.ALL_USERS);
+	  if ( shortcut.getallUsersLinkPath().length() > 0 )
+	  {
+		  shortcut.setUserType (ShellLink.ALL_USERS);
+	  }
     }
   }
  /*--------------------------------------------------------------------------*/
@@ -452,6 +592,42 @@ public class Win_Shortcut extends Shortcut
   public void save () throws Exception
   {
     shortcut.save ();
+  }
+
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Gets the link hotKey
+  *
+  * @return  int hotKey
+  */
+ /*--------------------------------------------------------------------------*/
+  public int getHotkey()
+  {
+  	return shortcut.getHotkey();
+  }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Sets the link hotKey
+  *
+  * @param hotkey
+  *
+  * incoming 2 byte hotkey is:
+  *  high byte modifier:
+  *  SHIFT	= 0x01
+  *  CONTROL= 0x02
+  *  ALT	= 0x04
+  *  EXT	= 0x08
+  *
+  *  lower byte contains ascii letter.
+  *  ie 0x0278 represents CTRL+x
+  *     0x068a represents CTRL+ALT+z
+  */
+ /*--------------------------------------------------------------------------*/
+  public void setHotkey(int hotkey)
+  {
+  	shortcut.setHotkey(hotkey);
   }
 }
 /*---------------------------------------------------------------------------*/

@@ -49,6 +49,7 @@
   instead of null, avoiding null exceptions when new strings are added.
 - The finish panels are now setting the quit button text to 'Finish' instead of
   'Quit', which could confuse some users (Dario Yuri).
+- Many Windows shortcuts code fixes and enhancements (Bill Wong).
 
   > 3.5.4 (build 2004.06.05)
 
