@@ -101,7 +101,7 @@ public class InstallerBase
     size = objIn.readInt();
     ArrayList availablePacks = new ArrayList();
     ArrayList allPacks = new ArrayList();
-    for (i = 0; i < size; i++) 
+    for (i = 0; i < size; i++)
     {
       Pack pk = (Pack) objIn.readObject();
       allPacks.add(pk);
@@ -163,7 +163,7 @@ public class InstallerBase
       while (enum.hasMoreElements())
       {
         varName = (String) enum.nextElement();
-        varValue = (String) variables.getProperty(varName);
+        varValue = variables.getProperty(varName);
         installdata.setVariable(varName, varValue);
       }
     }
@@ -172,7 +172,7 @@ public class InstallerBase
     installdata.panelsOrder = panelsOrder;
     installdata.availablePacks = availablePacks;
     installdata.allPacks = allPacks;
-    
+
     // get list of preselected packs
     Iterator pack_it = availablePacks.iterator();
     while (pack_it.hasNext())
@@ -197,15 +197,15 @@ public class InstallerBase
       Properties props = new Properties();
       props.load(InstallerBase.class.getResourceAsStream(
         "/com/izforge/izpack/installer/win32-defaultpaths.properties"));
-      
+
       // We look for the drive mapping
       String drive = System.getProperty("user.home");
       if (drive.length() > 3) drive = drive.substring(0, 3);
 
       // Now we have it :-)
-      String locale = Locale.getDefault().getCountry();
+      String language = Locale.getDefault().getLanguage();
       dpath = drive
-            + props.getProperty(locale, props.getProperty("EN")) + "\\";
+            + props.getProperty(language, props.getProperty("en")) + "\\";
     }
     catch (Exception err)
     {
