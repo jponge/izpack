@@ -9,7 +9,7 @@
   had (Volker Friedritz).
 - Panels can be from any package (Chad McHenry)
 - Uninstaller not included, if it is not to be written anyway (Chad McHenry).
-- Packagers refactorings.
+- Packager and Compiler refactored.
 - Changed the JFrame icon shown in the installers and uninstallers.
 - New SimpleFinishPanel that don't have the automated installers feature.
 - Heavy refactorings on the look and feels side. The Kunststoff packagers have
@@ -28,6 +28,11 @@
 - 1 new UserInputPanel processor that checks checks whether the combination of
   host:port is available. If not the port will be arised until it is available.
   (Thorsten Kamann)
+- Web install location specified in xml, not resource. (Chad McHenry)
+- Web installer packs are in separate jars to minimize downloads. (Chad McHenry)
+- fix bug so <fileset> uses same default excludes as ant. (Chad McHenry)
+- More elements in dtd are optional, fixed bugs causing errors if certain
+  optional elements were omitted. (Chad McHenry)
 
   > 3.5.4 (build 2004.06.05)
 
