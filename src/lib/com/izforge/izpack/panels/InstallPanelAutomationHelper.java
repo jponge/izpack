@@ -40,34 +40,34 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
 public class InstallPanelAutomationHelper extends PanelAutomationHelper 
                                             implements PanelAutomation, AbstractUIProgressHandler
 {
-	// state var for thread sync.
-	private boolean done = false;
+  // state var for thread sync.
+  private boolean done = false;
 
   private int noOfPacks = 0;
   
-	/**
-	 * Null op - this panel type has no state to serialize.
-	 *
-	 * @param installData unused.
-	 * @param panelRoot unused.
-	 */
-	public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
-	{
-		// do nothing.
-	}
+  /**
+   * Null op - this panel type has no state to serialize.
+   *
+   * @param installData unused.
+   * @param panelRoot unused.
+   */
+  public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
+  {
+    // do nothing.
+  }
 
-	/**
-	 *  Perform the installation actions.
-	 *
-	 * @param panelRoot The panel XML tree root.
-	 */
-	public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
-	{
-		Unpacker unpacker = new Unpacker(idata, this);
-		unpacker.start();
-		done = false;
-		while (!done && unpacker.isAlive())
-		{
+  /**
+   *  Perform the installation actions.
+   *
+   * @param panelRoot The panel XML tree root.
+   */
+  public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+  {
+    Unpacker unpacker = new Unpacker(idata, this);
+    unpacker.start();
+    done = false;
+    while (!done && unpacker.isAlive())
+    {
       try
       {
 			  Thread.sleep(100);
@@ -76,58 +76,58 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper
       {
         // ignore it, we're waiting for the unpacker to finish...
       }
-		}
-	}
+    }
+  }
 
-	/**
-	 * Reports progress on System.out
-	 *
-	 * @see AbstractUIProgressHandler#startAction(String, int)
-	 */
-	public void startAction (String name, int no_of_steps)
-	{
-		System.out.println("[ Starting to unpack ]");
+  /**
+   * Reports progress on System.out
+   *
+   * @see AbstractUIProgressHandler#startAction(String, int)
+   */
+  public void startAction (String name, int no_of_steps)
+  {
+    System.out.println("[ Starting to unpack ]");
     this.noOfPacks = no_of_steps;
-	}
+  }
 
-	/**
-	 * Sets state variable for thread sync.
-	 *
-	 * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
-	 */
-	public void stopAction()
-	{
-		System.out.println("[ Unpacking finished. ]");
-		done = true;
-	}
+  /**
+   * Sets state variable for thread sync.
+   *
+   * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
+   */
+  public void stopAction()
+  {
+    System.out.println("[ Unpacking finished. ]");
+    done = true;
+  }
 
-	/**
-	 * Null op.
-	 *
-	 * @param val
-	 * @param msg
+  /**
+   * Null op.
+   *
+   * @param val
+   * @param msg
    * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
-	 */
-	public void progress(int val, String msg)
-	{
-		// silent for now. should log individual files here, if we had a verbose mode?
-	}
+   */
+  public void progress(int val, String msg)
+  {
+    // silent for now. should log individual files here, if we had a verbose mode?
+  }
 
-	/**
-	 * Reports progress to System.out
-	 *
+  /**
+   * Reports progress to System.out
+   *
    * @param packName The currently installing pack.
-	 * @param stepno The number of the pack
-	 * @param max unused
+   * @param stepno The number of the pack
+   * @param stepsize unused
    * @see com.izforge.izpack.util.AbstractUIProgressHandler#nextStep(String, int, int)
-	 */
-	public void nextStep (String packName, int stepno, int stepsize)
-	{
-		System.out.print("[ Processing package: " + packName +" (");
+   */
+  public void nextStep (String packName, int stepno, int stepsize)
+  {
+    System.out.print("[ Processing package: " + packName +" (");
     System.out.print (stepno);
     System.out.print ('/');
     System.out.print (this.noOfPacks);
     System.out.println (") ]");
-	}
+  }
 
 }
