@@ -45,18 +45,33 @@ import com.izforge.izpack.util.SpecHelper;
  * @author  Klaus Bartz
  *
  */
-public class SimpleInstallerListener extends SpecHelper  implements InstallerListener
+public class SimpleInstallerListener  implements InstallerListener
 {
 
  
-  AutomatedInstallData installdata = null;
+  private AutomatedInstallData installdata = null;
+  private SpecHelper  specHelper = null;
 
   /**
    *  The default constructor.
    */
   public SimpleInstallerListener()
   {
+    this(false);
+  }
+
+  /**
+   * Constructs a simple installer listener.
+   * If useSpecHelper is true, a specification helper will be
+   * created.
+   * @param useSpecHelper
+   *  
+   */
+  public SimpleInstallerListener(boolean useSpecHelper)
+  {
     super();
+    if( useSpecHelper )
+      setSpecHelper( new SpecHelper() );
   }
 
   /* (non-Javadoc)
@@ -151,6 +166,42 @@ public class SimpleInstallerListener extends SpecHelper  implements InstallerLis
   {
     // Do nothing
     ;
+  }
+
+  /**
+   * Returns current specification helper.
+   * @return current specification helper
+   */
+  public SpecHelper getSpecHelper()
+  {
+    return specHelper;
+  }
+
+  /**
+   * Sets the given specification helper to the current used helper.
+   * @param helper specification helper which should be used
+   */
+  public void setSpecHelper(SpecHelper helper)
+  {
+    specHelper = helper;
+  }
+
+  /**
+   * Returns the current installdata object.
+   * @return current installdata object
+   */
+  public AutomatedInstallData getInstalldata()
+  {
+    return installdata;
+  }
+
+  /**
+   * Sets the installdata object.
+   * @param data installdata object which should be set to current
+   */
+  public void setInstalldata(AutomatedInstallData data)
+  {
+    installdata = data;
   }
 
 }
