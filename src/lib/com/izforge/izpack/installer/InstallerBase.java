@@ -131,19 +131,21 @@ public class InstallerBase
     }
     else if (OsVersion.IS_OSX)
     {
-      dir = "/Applications" + File.separator;
+      dir = "/Applications";
     }
     else
     {
       if (new File("/usr/local/").canWrite())
       {
-        dir = "/usr/local" + File.separator;
+        dir = "/usr/local";
       }
       else
       {
-        dir = System.getProperty("user.home") + File.separator;
+        dir = System.getProperty("user.home");
       }
     }
+    installdata.setVariable( "APPLICATIONS_DEFAULT_ROOT", dir);
+    dir = dir + File.separator;
     installdata.setVariable(ScriptParser.JAVA_HOME, System
         .getProperty("java.home"));
     installdata.setVariable(ScriptParser.USER_HOME, System
@@ -267,11 +269,10 @@ public class InstallerBase
       {
         dpath.append(props.getProperty(Locale.ENGLISH.getLanguage()));
       }
-      dpath.append("\\");
     }
     catch (Exception err)
     {
-      dpath = new StringBuffer("C:\\Program Files\\");
+      dpath = new StringBuffer("C:\\Program Files");
     }
 
     return dpath.toString();
