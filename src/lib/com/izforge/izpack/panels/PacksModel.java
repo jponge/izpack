@@ -1,4 +1,4 @@
-/*
+ /*
  *  IzPack
  *  Copyright (C) 2001-2004 Julien Ponge
  *
@@ -9,7 +9,7 @@
  *
  *  Portions are Copyright (C) 2002 Marcus Wolschon
  *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
- *  Portions are Copyright (C) 2004 Gaganis Giorgos (geogka@it.teithe.gr)
+ *  Portions are Copyright (C) 2004 Gaganis Giorgos (gaganis@users.berlios.de)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ class PacksModel extends AbstractTableModel
     reverseDeps();
     initvalues();
   }
-   /**
+  /**
    * Creates the reverse dependency graph
    */
   private void reverseDeps()
@@ -208,7 +208,7 @@ class PacksModel extends AbstractTableModel
   */
   public Object getValueAt(int rowIndex, int columnIndex)
   {
-    
+
     Pack pack = (Pack) packs.get(rowIndex);
     switch (columnIndex)
     {
@@ -268,6 +268,7 @@ class PacksModel extends AbstractTableModel
 
   private void refreshPacksToInstall()
   {
+
     packsToInstall.clear();
     for (int i = 0; i < packs.size(); i++)
     {
@@ -278,12 +279,17 @@ class PacksModel extends AbstractTableModel
     }
 
   }
+  /**
+   * This function updates the checkboxes after a change by disabling packs
+   * that cannot be installed anymore and enabling those that can after the
+   * change. This is accomplished by running a search that pinpoints the packs
+   * that must be disabled by a non-fullfiled dependency.
+   */
   private void updateDeps()
   {
     int[] statusArray = new int[packs.size()];
     for (int i = 0; i < statusArray.length; i++)
     {
-     ((Pack)packs.get(i)).color = Pack.WHITE;
       statusArray[i] = 0;
     }
     dfs(statusArray);
@@ -296,7 +302,7 @@ class PacksModel extends AbstractTableModel
 
 
     }
-     // The required ones must propagate their required status to all the ones
+    // The required ones must propagate their required status to all the ones
     // that they depend on
     for (int i = 0; i < packs.size(); i++)
     {
@@ -307,8 +313,7 @@ class PacksModel extends AbstractTableModel
 
 
   }
-  /** We use the dfs graph search algorithm to check whether the graph
-   * is acyclic as described in:
+  /** We use a modified dfs graph search algorithm as described in:
    * Thomas H. Cormen, Charles Leiserson, Ronald Rivest and Clifford Stein. Introduction
    * to algorithms 2nd Edition 540-549,MIT Press, 2001
    * @return
@@ -317,18 +322,15 @@ class PacksModel extends AbstractTableModel
   {
     for (int i = 0; i < packs.size(); i++)
     {
+      for (int j = 0; j < packs.size(); j++)
+      {
+        ((Pack)packs.get(j)).color = Pack.WHITE;
+      }
       Pack pack = (Pack) packs.get(i);
-      int check = checkValues[getPos(pack.name)];
       boolean wipe = false;
-      if(Math.abs(check) !=1)
-      {
-        wipe = true;
-      }
-      if(pack.color == Pack.WHITE)
-      {
-        if(dfsVisit(pack,status,wipe)!=0)
-          return -1;
-      }
+
+      if(dfsVisit(pack,status,wipe)!=0)
+        return -1;
 
     }
     return 0;
@@ -336,6 +338,12 @@ class PacksModel extends AbstractTableModel
   private int dfsVisit(Pack u,int[] status,boolean wipe)
   {
     u.color = Pack.GREY;
+    int check = checkValues[getPos(u.name)];
+
+    if(Math.abs(check) !=1)
+    {
+      wipe = true;
+    }
     List deps = u.revDependencies;
     if (deps != null)
     {
@@ -347,15 +355,6 @@ class PacksModel extends AbstractTableModel
         {
           status[getPos(v.name)] =1;
         }
-
-          int check = checkValues[getPos(v.name)];
-
-          if(Math.abs(check) !=1)
-          {
-            wipe = true;
-          }
-
-
         if(v.color == Pack.WHITE)
         {
 
