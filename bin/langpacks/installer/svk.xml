@@ -26,7 +26,7 @@
     <!-- The strings for the 'official' IzPack plugins -->
     <str id="HelloPanel.welcome1" txt="Vitajte v in¹talácii "/>
     <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="Autor(i) tochto softvéru je(sú) : "/>
+    <str id="HelloPanel.authors" txt="Autor(i) tohto softvéru je(sú) : "/>
     <str id="HelloPanel.url" txt="Domovská stránka projektu je : "/>
     
     <str id="LicencePanel.info" txt="Preèítajte si nasledovné licenèné podmienky pozorne:"/>

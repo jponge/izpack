@@ -2397,16 +2397,16 @@ private class SearchField implements ActionListener
   public String getResult ()
   {
     String item = (String)this.pathComboBox.getSelectedItem ();
+    if (item != null) item.trim();
     String path = item;
+    
+    File f = new File (item);
 
+    if (! f.isDirectory ())
     {
-      File f = new File (item);
-
-      if (! f.isDirectory ())
-      {
-        path = f.getParent ();
-      }
+      path = f.getParent ();
     }
+    
 
     // path now contains the final content of the combo box
     if (this.resultType == RESULT_DIRECTORY)
@@ -2417,17 +2417,17 @@ private class SearchField implements ActionListener
     {
       if (this.filename != null)
       {
-        return path + File.pathSeparatorChar + this.filename;
+        return path + File.separatorChar + this.filename;
       }
       else
       {
-        return path;
+        return item;
       }
     }
     else if (this.resultType == RESULT_PARENTDIR)
     {
-      File f = new File (path);
-      return f.getParent ();
+      File dir = new File (path);
+      return dir.getParent (); 
     }
 
     return null;

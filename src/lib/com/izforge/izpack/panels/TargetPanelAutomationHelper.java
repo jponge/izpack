@@ -50,7 +50,12 @@ public class TargetPanelAutomationHelper implements PanelAutomation
 		// check this writes even if value is the default,
 		// because without the constructor, default does not get set.
 		ipath.setContent(idata.getInstallPath());
-		panelRoot.addChild(ipath);
+		
+                // Checkings to fix bug #1864
+                XMLElement prev = panelRoot.getFirstChildNamed("installpath");
+                if (prev != null) panelRoot.removeChild(prev);
+                
+                panelRoot.addChild(ipath);
 	}
 
 	/**
