@@ -37,6 +37,9 @@ public class Pack implements Serializable
 {
   /**  The pack name. */
   public String name;
+  
+  /** The langpack id */
+  public String id;
 
   /**  The pack description. */
   public String description;
@@ -64,12 +67,14 @@ public class Pack implements Serializable
    */
   public Pack(
     String name,
+    String id, 
     String description,
     List osConstraints,
     boolean required,
     boolean preselected)
   {
     this.name = name;
+    this.id = id;
     this.description = description;
     this.osConstraints = osConstraints;
     this.required = required;
