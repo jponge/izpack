@@ -10,24 +10,24 @@
     <str id="installer.prev" txt="Previous"/>
     <str id="installer.quit" txt="Quit"/>
     <str id="installer.madewith" txt="(Made with IzPack - http://www.izforge.com/)"/>
-    <str id="installer.quit.title" txt="Are you sure you want to quit ?"/>
-    <str id="installer.quit.message" txt="This will cancel the installation !"/>
-    <str id="installer.warning" txt="Warning !"/>
+    <str id="installer.quit.title" txt="Are you sure you want to quit?"/>
+    <str id="installer.quit.message" txt="This will cancel the installation!"/>
+    <str id="installer.warning" txt="Warning!"/>
     <str id="installer.yes" txt="Yes"/>
     <str id="installer.no" txt="No"/>
     <str id="installer.cancel" txt="Cancel"/> 
     <str id="installer.error" txt="Error"/>
     
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="This will remove the installed application(s) !"/>
+    <str id="uninstaller.warning" txt="This will remove the installed application(s)!"/>
     <str id="uninstaller.destroytarget" txt=" Force the deletion of "/>
     <str id="uninstaller.uninstall" txt="Uninstall"/>
     
     <!-- The strings for the 'official' IzPack plugins -->
     <str id="HelloPanel.welcome1" txt="Welcome to the installation of "/>
-    <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="The author(s) of this software is(are) : "/>
-    <str id="HelloPanel.url" txt="The homepage is : "/>
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <str id="HelloPanel.authors" txt="This software is developed by: "/>
+    <str id="HelloPanel.url" txt="The homepage is at: "/>
     
     <str id="LicencePanel.info" txt="Please read the following license agreement carefully:"/>
     <str id="LicencePanel.agree" txt="I accept the terms of this license agreement."/>
@@ -35,18 +35,18 @@
     <str id="LicencePanel.yes" txt="Yes"/>
     <str id="LicencePanel.no" txt="No"/>
     
-    <str id="InfoPanel.info" txt="Please read the following information :"/>
+    <str id="InfoPanel.info" txt="Please read the following information: "/>
     
-    <str id="PathInputPanel.required" txt="The chosen directory should be exist."/>
+    <str id="PathInputPanel.required" txt="The chosen directory should exist."/>
     <str id="PathInputPanel.notValid" txt="The chosen directory does not contain the required product."/>
 
-    <str id="TargetPanel.info" txt="Select the installation path:"/>
+    <str id="TargetPanel.info" txt="Select the installation path: "/>
     <str id="TargetPanel.browse" txt="Browse..."/>
     <str id="TargetPanel.warn" 
-         txt="The directory already exists ! Are you sure you want to install here and possibly overwrite existing files?"/>
+         txt="The directory already exists! Are you sure you want to install here and possibly overwrite existing files?"/>
     <str id="TargetPanel.empty_target"
          txt="You have not specified a target location! Is this correct?"/>
-	<str id="TargetPanel.createdir" txt="The target directory will be created:" />
+	<str id="TargetPanel.createdir" txt="The target directory will be created: " />
     <str id="TargetPanel.nodir" 
          txt="This file is not a directory! Please choose a directory!"/>
     <str id="TargetPanel.notwritable" 
@@ -56,37 +56,37 @@
     <str id="JDKPathPanel.info" txt="Select the JDK path:"/>
     <str id="JDKPathPanel.badVersion1" txt="The chosen JDK has the wrong version (available: "/>
     <str id="JDKPathPanel.badVersion2" txt=" required: "/>
-    <str id="JDKPathPanel.badVersion3" txt=") should the JDK anyway be used?"/>
+    <str id="JDKPathPanel.badVersion3" txt=") should this JDK be used anyway?"/>
 
-    <str id="PacksPanel.info" txt="Select the packs you want to install :"/>
-    <str id="PacksPanel.tip" txt="Note: greyed packs are required."/>
+    <str id="PacksPanel.info" txt="Select the packs you want to install:"/>
+    <str id="PacksPanel.tip" txt="Note: greyed out packs are required."/>
     <str id="PacksPanel.space" txt="Total space Required: "/>
-    <str id="PacksPanel.freespace" txt="Available  space: "/>
+    <str id="PacksPanel.freespace" txt="Available space: "/>
     <str id="PacksPanel.description" txt="Description"/>
     <str id="PacksPanel.dependencyList" txt="The selected package requires the following packs to be installed"/>
     <str id="ImgPacksPanel.dependencyList" txt="Dependencies"/>
 	<str id="PacksPanel.notEnoughSpace" txt="Disk space required for the installation exceeds available disk space."/>
     <str id="PacksPanel.notAscertainable" txt="not ascertainable"/>
     
-    <str id="InstallPanel.info" txt="Click 'Install !' to begin the installation process"/>
-    <str id="InstallPanel.install" txt="Install !"/>
-    <str id="InstallPanel.tip" txt="Pack installation progress :"/>
+    <str id="InstallPanel.info" txt="Click 'Install!' to begin the installation process"/>
+    <str id="InstallPanel.install" txt="Install!"/>
+    <str id="InstallPanel.tip" txt="Pack installation progress:"/>
     <str id="InstallPanel.begin" txt="[Nothing]"/>
     <str id="InstallPanel.finished" txt="[Finished]"/>
-    <str id="InstallPanel.progress" txt="Overall installation progress :"/>
+    <str id="InstallPanel.progress" txt="Overall installation progress:"/>
     <str id="InstallPanel.overwrite.title" txt="File already exists"/>
     <str id="InstallPanel.overwrite.question" txt="The following file already exists. Should it be overwritten?"/>
     
     <str id="FinishPanel.success" txt="Installation has completed successfully."/>
     <str id="FinishPanel.done" txt="Done"/>
     <str id="FinishPanel.fail" txt="Installation has failed!"/>
-    <str id="FinishPanel.uninst.info" txt="An uninstaller program has been created in:"/>
+    <str id="FinishPanel.uninst.info" txt="An uninstaller program has been created in: "/>
     <str id="FinishPanel.auto" txt="Generate an automatic installation script"/>
     <str id="FinishPanel.auto.tip" 
          txt="Use this script to repeat this installation on other computers."/>
     
-    <str id="ImgPacksPanel.packs" txt="The following packs are available :"/>
-    <str id="ImgPacksPanel.snap" txt="Package snapshot  :"/>
+    <str id="ImgPacksPanel.packs" txt="The following packs are available:"/>
+    <str id="ImgPacksPanel.snap" txt="Package snapshot:"/>
     <str id="ImgPacksPanel.checkbox" txt=" Install this pack"/>
     
     <str id="ShortcutPanel.regular.list" txt="Select a Program Group for the Shortcuts:"/>
@@ -143,10 +143,10 @@
     <str id="CompilePanel.error.reconfigure" txt="Reconfigure" />
     <str id="CompilePanel.error.ignore" txt="Ignore" />
     <str id="CompilePanel.error.abort" txt="Abort" />
-    <str id="CompilePanel.error.seebelow" txt="See below for the failed command and it's output." />
+    <str id="CompilePanel.error.seebelow" txt="See below for the failed command and its output." />
     <str id="CompilePanel.error.nofiles" txt="Error while scanning for files for compilation." />
     <str id="CompilePanel.error.compilernotfound" txt="The compiler could not be run." />
-    <str id="CompilePanel.error.invalidarguments" txt="The compiler does not like the arguments provided to it." />
+    <str id="CompilePanel.error.invalidarguments" txt="Invalid arguments provided to the compiler." />
     <str id="CompilePanel.error.noclassfile" txt="The compiler did not produce a class file for the source file " />
     <str id="CompilePanel.choose_compiler" txt="Compiler to use:" />
     <str id="CompilePanel.additional_arguments" txt="Additional compiler arguments:" />
