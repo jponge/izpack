@@ -2,7 +2,7 @@
 
 % Shortcut definition
 
-\chapter{Desktop Shortcuts} (by Elmar \textsc{Grom})\\
+\chapter{Desktop Shortcuts} (by Elmar \textsc{Grom} and Marc \textsc{Eppelmann})\\
 
 \section{Defining Shortcuts}
 
@@ -12,7 +12,7 @@ On todays GUI oriented operating systems, users are used to launching
 applications, view web sites, look at documentation and perform a
 variety of other tasks, by simply clicking on an icon on the desktop or
 in a menu system located on the desktop. Depending on the operating
-system these icons have different names. In this context I will refer to
+system these icons have different names. In this context we will refer to
 them collectively as shortcuts.\\
 
 Apart from actually placing an application on the target system, users
@@ -28,14 +28,21 @@ operating system specific issues to observe. Fortunately, you only need
 to worry about operating system specifics if you want to deploy your
 application to multiple different operating systems. In any case, it
 will pay off to spend some time to study this documentation and the
-example spec file before you start to implement your own shortcuts.\\
+example spec files before you start to implement your own shortcuts.\\
 
-At the time of this writing (for IzPack version 3.0) IzPack is only
-capable of creating shortcuts on the Microsoft Windows operating systems
-[Win95 and higher and Win-NT 4.0 and higher]. Other operating systems,
-such as Mac and UNIX flavors are not directly supported. However, there
-is a special UI that automatically pops up on unsupported systems. It
-informs the user about the intended targets of your shortcuts and allows
+At the time of writing this Chapter the current IzPack Version 3.7.0-M3 is only
+capable to creating shortcuts on
+\begin{enumerate}
+\item Microsoft Windows\\
+ and
+\item Unix and Unix-based operating systems (like Linux), which use the \href{http://www.x11.org/}{X11} GUI-System and \href{http://www.freedesktop.org/}{FreeDesktop.org}
+based shortcut handling (such as \href{http://www.kde.org/}{KDE} and \href{http://www.gnome.org/}{Gnome}).
+
+\end{enumerate}
+
+Other operating or GUI systems, such as MacOS \texttt{<} MacOS-X are
+not supported. However, there is a special UI-variant that automatically pops up
+on unsupported systems. It informs the user about the intended targets of your shortcuts and allows
 the user to save this information to a text file. While this is not an
 elegant solution, at least it aids the user in the manual creation of
 the shortcuts.\\
@@ -49,61 +56,77 @@ before getting your application ready for shipment.\\
 
 We expect other operating systems to be supported in the near future and
 as always, contributions are very welcome. At present someone is
-actively working on Mac support and  Julien wanted to implement a
-solution for KDE.\\
+actively working on Mac support.
 
 \subsection{What to Add to the Installer}
 
-There are a number of things that you must add to the installer to make
-it ready for creating shortcuts. Obviously you need to add the panel
+There are some things that you have to add to your installer to enable
+shortcut creation. Obviously you need to add the panel
 responsible for creating shortcuts. This panel is aptly enough called
-ShortcutPanel. However, in order for the ShortcutPanel to function
+ShortcutPanel. However, in order for the ShortcutPanel to work
 properly a number of additional items are required. These must be added
-manually to the installer, because the front-end does not support this
-feature yet. In this chapter I will explain which of these items are
+manually to the installer, as all other resourcs, since the front-end will be rewritten.
+In this chapter we will explain which of these items are
 required and for what reason.\\
 
-First, I would like to discuss items that are supplied with IzPack and
-only need to be added to the installer. After that, I move on to the
+First, we would like to discuss items that are supplied with IzPack and
+only need to be added to the installer. After that, we move on to the
 things you have to prepare yourself before you can add them. The way in
 which shortcuts are created varies widely among operating systems. In
-some cases it is actually possible to do this with pure Java code, while
+some cases it is possible to do this with pure Java code, while
 other systems -such as MS-Windows- require native code to accomplish
-this task. The native libraries required for the supported operating
-systems are supplied with IzPack but they are not automatically added to
-your installer file. You need to list them yourself in the XML file for
-the installer. I'll describe later how to do this. At the time of this
-writing (for IzPack version 3.0) only MS-Windows is supported. The
-native library required for this operating system is called
-\texttt{ShellLink.dll}.\\
+this task. On the other side, the current implementation, which creates shortcuts on
+Unix based systems needs no native library at all, since it works with 'these' pure Java code.
+The native library required for the Windows operating
+systems are supplied with IzPack is called \texttt{ShellLink.dll}.
+Note: They will not be automatically added to your installer file.
+You need to list them yourself in the XML file for
+the installer. A describtion how to do this follows in the next section.\\
 
 Native libraries can be added to the installer by using the
-\texttt{<native>} tag. To add the DLL for Windows for example, you just
+\texttt{<native>} tag. To add the \texttt{ShellLink.dll}, you just
 have to add the following line to the installer XML file:\\
 \texttt{<native type="izpack" name="ShellLink.dll"/>}\\
 For more details about the use of the \texttt{<native>} tag see the
 chapter about the format of the XML file.\\
 
-You have to supply an extra specification file for the shortcuts that
-you want to be  created on the target system. This file is required by
-the shortcut panel. The format for this spec file is XML. It must be
+You have also to add an extra specification file for each platform family to enable shortcut creation on these platforms.
+At least one (the default file) is required by the shortcut panel. The format of all spec files is XML and they must be
 added to the installer as a resource. The source name of this
-specification does not matter, however its name when added to the
-installer must be \texttt{shortcutSpec.xml}. This is the name the
-ShortcutPanel looks for, do not use a different name and do not a path
-to the name! If the specification file can not be found, the
-ShortcutPanel will not show at all.\\
+specification does not matter, however its resource name (also called id or alias) when added to the
+installer must be \texttt{(prefix)+shortcutSpec.xml}.\\
+At this release, there are only two prefixes supported: "Win\_" for the Windows family and "Unix\_" for all Unixes.
+If the prefix is ommited the shortcut panel searches for a named resource: \texttt{shortcutSpec.xml}. This is the default resource name.
+As the default resource name will be used on Windows platforms, the \texttt{"Win\_shortcutSpec.xml"} can be ommited.\\
+Hint: If the shortcut panel does not find one of these named resources, it will never appears.
+So, do not use different resource names and do not add a path to these.\\
 
 \textbf{Example}\\
 
 \footnotesize
 \begin{verbatim}
-<res src="C:\MyDocuments\Installer\MyShortcutSpec.xml" 
+<res src="C:\MyDocuments\Installer\default_shortcut_specification.xml"
      id="shortcutSpec.xml"/>
+<res src="C:\MyDocuments\Installer\unix_shortcut_specification.xml"
+     id="Unix_shortcutSpec.xml"/>
 \end{verbatim}
 \normalsize
 
-\subsection{Why Native Code to do the Job?}
+Why use different shortcut spec files?\\
+
+\begin{enumerate}
+\item The Target filenames are most different.(batch files on Windows vs. shell scripts on Unix.)
+\item The Icon file formats are different. ICOs on Windows-, PNGs on Unix-platforms.
+\item The Target locations can be different.
+\end{enumerate}
+
+This is the simple reason.\\
+
+
+
+\subsection{Why Native Code to do the Job on Windows?}
+
+by Elmar\\
 
 This little chapter is not strictly part of the documentation but I have
 been asked this question sufficiently often that I think it's worth
@@ -147,34 +170,31 @@ used native code to create shortcuts on MS-Windows.\\
 
 As I am writing this I am at work with a friend to replicate this work
 for the Mac and it looks very much like we need to take the same
-approach there as well. The various UNIX GUI surfaces on the other hand
-seem promising. It might turn out that we can do the job without native
-libraries, we will see...\\
+approach there as well. On the various Unix GUIs on the other hand, we are lucky that we
+can do the job without native libraries.\\
 
 \subsection{The Shortcut Specification}
 
-The specification for shortcuts is provided to the ShortcutPanel in the
-form of a XML file. At the time of this writing (for IzPack version 3.0)
-the front-end has no support for generating this specification. Until a
-later version provides front-end support you will have to write the
-specification manually. For your convenience, an annotated sample
-specification is located in the sample subdirectory of your IzPack
-installation. At the beginning you might want to experiment with that
-file.\\
+As we say above, the specification for shortcuts is provided to the ShortcutPanel in the
+XML fileformat. At the time of this writing (for IzPack version 3.7.0-M3)
+the front-end will be rewritten. Until these work is in progress
+you have to write the specification files manually. For your convenience, there are two annotated sample
+specification files in the sample subdirectory of your IzPack installation. At the beginning you might want to experiment with these files.\\
 
-The specification file has only one major section called \texttt{<shortcuts>}.
-In this section, 3 different tags are recognized: \texttt{<programGroup>},
-\texttt{skipIfNotSupported} and \texttt{<shortcut>}. \texttt{skipIfNotSupported}
-can be used to avoid the panel to show an alternative UI to show the shortcuts
-that would have been created on a system that supports it. To make it short,
+Both specification files have one root element called \texttt{<shortcuts>}.
+This root elements recognizes 3 different child elements:\\
+\texttt{<programGroup>}, \texttt{<skipIfNotSupported/>} and \texttt{<shortcut>}.\\
+
+\texttt{<skipIfNotSupported/>} can be used to avoid the panel to show the alternative UI which shows the shortcut information
+that would have been created on a system that supports it. In other words,
 using this tag will make the panel be silent on non-supported systems. The
 default is to show the alternative UI.\\
 
 The \texttt{<programGroup>} tag allows you to specify the name of the
-menu under which the shortcuts will be grouped. The exact location and
+menu, or more precise, the folder in which the shortcuts will be grouped. The exact location and
 appearance of the program group depends on the specific target system on
-which the application will be installed, however you have some influence
-on this. Please note that \texttt{<programGroup>} may only appear once
+which the application will be installed, however you can partially control it.
+Please note that \texttt{<programGroup>} may only appear once
 in the specification. If more than one instance occurs, only the first
 one will be used. This tag requires two attributes: \texttt{defaultName}
 and \texttt{location}. \texttt{defaultName} specifies the name that the
@@ -186,14 +206,14 @@ on the target system is identical with your specification.
 \texttt{location} specifies where the group menu should show up. There
 are two choices: \texttt{applications} and \texttt{startMenu}. If you
 use \texttt{applications}, then the menu will be placed in the menu that
-is ordinarily used for application shortcuts. If you use
-\texttt{startMenu}, the group menu will be placed at the top most menu
+is ordinarily used for application shortcuts. \texttt{applications} is recommended for Unix shortcuts.
+If you use \texttt{startMenu}, the group menu will be placed at the top most menu
 level available on the target system. Depending on the target system, it
 might not be possible to honor this specification exactly. In such
 cases, the ShortcutPanel will map the choice to the location that most
-closely resembles your choice.\\
+closely resembles your choice. Unix shortcuts do not need to support the \texttt{startMenu}, because the \texttt{applications} menu is already on the highest level. This means this has no affect on thess platform.\\
 
-For each shortcut you want to create, add one \texttt{<shortcut>} tag.
+For each shortcut you want to create, you have to add one \texttt{<shortcut>} tag.
 Most details about the shortcut are listed as attributes with this tag.
 The following sections describe what each attribute does, which
 attributes are optional and which ones are required and what the values
@@ -281,7 +301,8 @@ translated through the variable substitutor and consequently can contain
 variables such as \$INSTALL\_PATH. If this attribute is omitted, no icon
 will be specified for the shortcut. Usually this causes the OS to
 display an OS supplied default icon. \textbf{The use of this attribute
-is also likely to change once other operating systems are supported}.\\
+is also likely to change once other operating systems are supported.
+Read the Section about Icons below, for more information.}\\
 
 \textbf{iconIndex} \texttt{- optional}\\
 
@@ -294,7 +315,7 @@ support multiple icons, this values is ignored.\\
 \textbf{initialState} \texttt{- optional}\\
 
 There are four values accepted for this attribute: \texttt{noShow},
-\texttt{normal}, \texttt{maximized} and \texttt{minimized}. If th
+\texttt{normal}, \texttt{maximized} and \texttt{minimized}. If the
 target operating system supports this feature, then this value will have
 the appropriate influence on the initial window state of the
 application. \texttt{noShow} is particularly useful when launch scripts
@@ -305,42 +326,110 @@ pretty side effect that two windows show: the DOS command prompt and the
 Java application window. Even if the shortcut is configured to show
 minimized, there are buttons for both windows in the task bar. Using
 \texttt{noShow} will completely eliminate this effect, only the Java
-application window will be visible.\\
+application window will be visible.  \textit{On Unix use } \texttt{normal}
+\textit{, because this is not supported}.\\
 
 \textbf{programGroup} \texttt{- semi-optional}\\
 
 The value for this attribute can be either yes or no. Any other value
 will be interpreted as no. If the value is yes, then a copy of this
-shortcut will be placed in the group menu.\\
+shortcut will be placed in the group menu.
+\textit{On Unix (KDE) this will always be placed on the top level.}\\
 
 \textbf{desktop} \texttt{- semi-optional}\\
 
 For this attribute the value should also be yes or no. If the value is
-yes, then a copy of the shortcut is placed on the desktop.\\
+yes, then a copy of the shortcut is placed on the desktop.
+\textit{On Unix the shortcuts will only be placed on the (KDE-) desktop
+of the user, who currently runs the installer. For Gnome the user can
+simply copy the *.desktop files from } \texttt{\~/Desktop} \textit{ to }
+\texttt{\~/gnome-desktop}.
+(This is already a TODO for the Unix-shortcut implementation.)\\
 
 \textbf{applications} \texttt{- semi-optional}\\
 
 This is also a yes/no attribute. If the value is yes, then a copy of the
 shortcut is placed in the applications menu (if the target operating
 system supports this). This is the same location as the applications
-choice for the program group.\\
+choice for the program group.
+\textit{This makes no sense on Unix.}\\
 
 \textbf{startMenu} \texttt{- semi-optional}\\
 
 This is a yes/no attribute as well. If the value is yes, then a copy of
 the shortcut is placed directly in the top most menu that is available
-for placing application shortcuts.\\
+for placing application shortcuts.
+\textit{This is not supported on Unix. see above.}\\
 
 \textbf{startup} \texttt{- semi-optional}\\
 
 This is also a yes/no attribute. If the value is yes, then a copy of the
 shortcut is placed in a location where all applications get automatically
-started at OS launch time, if this is available on the target OS.\\
+started at OS launch time, if this is available on the target OS.
+\textit{This is also not supported on Unix.}\\
+
+\subsubsection{Unix specific shortcut attributes }
+
+This extension was programmed by \textsc{Marc Eppelmann}.
+This is still in development and may be changed in
+one of the next releases of IzPack.\\
+
+\textbf{type} \texttt{- required}\\
+
+This must be one of \texttt{Application} or \texttt{Link}\\
+
+\begin{itemize}
+
+\item Application: To start any application, native, Java or shell-script based,
+the \textbf{type} has to be \texttt{Application}. The GUI-System will launch
+this Application, so as is, thru their native shell or application launcher.
+In this case, note that the right \texttt{workingDirectory}
+is always important on Unix platforms. If the users PATH environment
+variable does not contain the path, where the application is located,
+this can never be run, until the \texttt{workingDirectory} does not contain
+these path. The needed current path: ".", this is the case on most
+systems, should be in the users PATH environment variable.
+Consult the Unix manuals for more details.
+
+\item Link: If you want to open a URL in the users default Webbrowser,
+you have to set the \textbf{type} to \texttt{Link}. Note: The \texttt{url} attribute
+must be set to work properly.
+
+\item Other: There are more supported types on KDE, like FSDevice,
+but these types makes no sense for IzPack, in my opinion.
+\end{itemize}
+
+Without the type the Unix shortcut does not work.\\
+
+\textbf{url} \texttt{- semi-optional}\\
+
+If you want to create a shortcut as type \textit{Link}, then you have
+to set the \texttt{url} attribute. The value can be a locally installed
+html or another document, with a known MIME type, like plain text,
+or a WWW Url i.e. 'http://www.izforge.com/izpack'.\\
+
+A local document can be referenced by i.e. "\$INSTALL\_PATH/doc/index.html".\\
+
+The IzPack variable substitution system is supported by the \textbf{url}.\\
+
+\textbf{encoding} \texttt{- required}\\
+
+This should always set to \textbf{UTF-8}.\\
+
+\textbf{terminal} \texttt{- optional}\\
+
+If you want, the user can see the console output of a program
+(in Java applications "System.outs"), set the \texttt{terminal} attribute to \textbf{true}.\\
+
+\textbf{KdeSubstUID} \texttt{- unused}\\
+
+This is not fully implemented by IzPack.
+I the future this is the sudo option for a shortcut.\\
 
 \subsection{Selective Creation of Shortcuts}
 
 Usually all shortcuts that are listed will be created when the user
-clicks the 'Create Shortcuts' button. However it is possible to
+clicks the 'Next' button. However it is possible to
 control to some degree if specific shortcuts should be created or
 not. This is based on install conditions. By including one or more
 \texttt{<createForPack name=''a pack name'' />} tags in the
@@ -363,40 +452,45 @@ need it I would advise to be very careful about changing pack names.\\
 
 \textbf{Native Libraries}
 \begin{itemize}
-\item ShellLink.dll \texttt{- Microsoft Windows}
+\item ShellLink.dll \texttt{- required by Microsoft Windows}
+\item 'Nothing' \texttt{- for KDE/Gnome shortcuts}
 \end{itemize}\
 
-\textbf{Name of Specification File}\\
-\texttt{shortcutSpec.xml}\\
+\textbf{Names of the Specification Files}\\
+\texttt{shortcutSpec.xml} for Windows and as default.\\
+\texttt{Unix\_shortcutSpec.xml} for Unix.\\
 
-\textbf{Specification File Layout}
+\textbf{Specification File Layout - Windows}
 \footnotesize
+
 \begin{verbatim}
 <shortcuts>
   <skipIfNotSupported/>
-  <programGroup defaultName="Name of the Program Group" 
-                location="applications/startMenu"/>
-  <shortcut 
-    name="the name"
-    target="the application to launch"
+  <programGroup defaultName="MyOrganization\MyApplication"
+                location="applications||startMenu"/>
+  <shortcut
+    name="Start MyApplication"
+    target="$INSTALL_PATH\Path\to\MyApplication\launcher.bat"
     commandLine=""
-    workingDirectory="c:\MyWorkingDirectory\data"
-    description="a description for the shortcut"
-    iconFile="the file that contains an icon for the shortcut" 
+    workingDirectory="$INSTALL_PATH\Path\to\MyApplication"
+    description="This starts MyApplication"
+    iconFile="$INSTALL_PATH\Path\to\MyApplication\Icons\start.ico"
     iconIndex="0"
-    initialState="noShow/normal/maximized/minimized"
-    programGroup="yes/no"
-    desktop="yes/no" 
-    applications="yes/no" 
-    startMenu="yes/no" 
-    startup="yes/no">
-  
-    <createForPack name="a pack name"/>
-    <createForPack name="another pack name"/>
+    initialState="noShow||normal||maximized||minimized"
+    programGroup="yes||no"
+    desktop="yes||no"
+    applications="yes||no"
+    startMenu="yes||no"
+    startup="yes||no">
+
+    <createForPack name="MyApplication Binaries"/>
+    <createForPack name="MyApplication Batchfiles"/>
   </shortcut>
 </shortcuts>
-\end{verbatim}\
+\end{verbatim}
 \normalsize
+
+\textbf{A sample Specification File for Unix is at the end of this chapter}
 
 \section{Shortcut Tips}
 
@@ -423,7 +517,10 @@ one. Accordingly, placing more shortcut icons there than they feel they
 will use on a regular basis and especially doing this without asking for
 permission might trigger some bad temper.\\
 
-It is common practice to create a program group on the application menu
+Annotation: But even the experienced user should be able to organize their Desktop.
+On Linux the users desktop is the only place, which supports any kind of shortcuts.\\
+
+It is common practice to create a program group in the application menu
 system of the OS and place all shortcuts that go with an application in
 that program group. In addition, only one shortcut to the key access
 point of the application is placed directly on the desktop. Many
@@ -432,7 +529,7 @@ in IzPack.\\
 
 I would like to recommend that you always create a shortcut in the menu
 system, even if your application has only one access point and you are
-placing this on the desktop. Note that shortcuts can be placed directly
+placing this on the desktop. Note that shortcuts can also be placed directly
 in the menu, they don't need to be in a program group. There are two
 reasons for doing so.\\
 
@@ -443,7 +540,7 @@ reasons for doing so.\\
       desktop. They might later find that they accidentally deleted the
       only access point to your application. For the less technology
       savvy users, recreating the shortcut might be a rough experience.
-\end{itemize}\
+\end{itemize}
 
 \subsection{Icons}
 
@@ -460,19 +557,38 @@ icons themselves are created.\\
 \textbf{Microsoft Windows}\\
 
 Windows prefers to use its native icon file format. Files of this type
-usually use the extension *.ico. Icon files can hold multiple icons in
-one file, which can be useful if the same icon is to be provided in a
-number of sizes. The iconIndex attribute in the spec file allows you to
-specify which of the icons to use.\\
+usually use the extension *.ico. These so called ICO files can hold
+multiple icons in one file, which can be useful if the same icon is
+to be provided in a number of sizes and color-depths.
 
-Windows also supports the use of bitmap files in the *.bmp format as
+Windows itself selects the icon with the most matching dimensions and displays it.
+While the Start menu displays the icon with 16x16 pixel if available, the desktop displays
+the 32x32 pixel resolution of the same ICO if this is in.
+
+In other words, a ICO file has embedded one or more dimensions of the same Icon.
+We recommend to play with \href{http://www.microangelo.us}{microangelo}.
+
+Dlls and Exe files on the other side, can store, amongst other things, a collection of different Icons.
+You can select your desired Icon by its index. The lowest index is 0.
+Use the iconIndex attribute in the spec file to specify this index.\\
+
+As a sample look into
+\begin{verbatim}
+%SystemRoot%\system32\shell32.dll
+\end{verbatim}
+These contains a lot of Windows own icons.
+You can use the \href{http://www.heaventools.com}{PE Explorer}
+or another Resource Editor to extract or modify
+Icons in dlls or exe  files. But be warned. You can also destroy a working
+application with these kind of tools.
+
+At least Windows also supports the use of bitmap files in the *.bmp format as
 icons. Note that this format does not support multiple icons.\\
 
-I am not a total expert in this area and might have overlooked other file
-formats that are supported by Windows. However, I would suggest to test
-other formats for compatibility as they might not work all the way back
-to Windows 95 or on the NT/non-NT strain. Sticking with one of these two
-formats should keep you out of trouble.\\
+We might have overlooked other file formats that are supported by Windows.
+However, we suggest to test other formats for compatibility as they
+might not work all the way back to Windows 95 or on the NT/non-NT strain.
+Sticking with one of these two formats should keep you out of trouble.\\
 
 \textbf{Apple}\\
 
@@ -487,9 +603,16 @@ several dozen different file formats.\\
 
 \textbf{UNIX flavors}\\
 
-Sorry folks at this time I have no information available on icon file
-formats for the various UNIX GUI frontends. If anyone can provide
-additional information the would be most welcome.\\
+by Marc Eppelmann\\
+
+As my knowledge, all X based Unix Window systems supports
+the (ASCII-) XBM (X-Bitmap ) and the better XPM (X-PixMap) format.
+The modern GUI systems like KDE and Gnome can display additionally
+a lot of other ImageIcon formats, such as GIF, JPG, and PNG.\\
+
+I suggest to use PNG, because this can lossless compress like the GIF format,
+however this format is absolutely free. And not least, this can store true
+transparency informations (It has an alpha channel).
 
 \subsection{Targets}
 
@@ -517,15 +640,17 @@ with sophisticated command lines is practically impossible.\\
 
 Another method is less commonly used but just as possible. Implement a
 native executable that launches the VM with your Java application. The
-VM comes as DLL and is used by java.exe in just the same way.\\
+VM comes as DLL and is used by java.exe in just the same way.
+As a sample look at the exlipse.exe provided by the \href{http://www.eclipse.org}{Eclipse-IDE}\\
 
 Clearly, even though the first option is a bit ugly and has some
-drawbacks, it is the most portable solution among the three.\\
+restrictionss, it is the most portable solution among the three.\\
 
 \textbf{Apple}\\
 
-I am currently researching the details for the Mac environment. Expect
-an updated chapter with the next release.\\
+We hope, there is a IzPack developer currently researching
+for the details for the Mac environment. We expect
+an updated chapter in one of the next releases.\\
 
 \textbf{UNIX}\\
 
@@ -542,22 +667,24 @@ So, after all this rather discouraging news, there is actually a
 portable way to launch Java applications? You bet! although I have to
 admit that it is not necessarily the most pretty way of doing things.\\
 
-This approach is actually used by IzPack. Package your application in a
-*.jar file if you don't already do so and make it executable. I am not
+This approach is currently used by IzPack. Package your application in a
+*.jar file if you don't already do so and make it executable by including the
+necessary METAINF/MANIFEST.MF information file. I am not
 going into all the details on how exactly to do this, the Java
 documentation will have to do. You might have noticed that even though
 the instructions to install IzPack say to type :
 \begin{verbatim}
 java -jar IzPack-install.jar
-\end{verbatim}\\
+\end{verbatim}
 
 You can just as well double click on IzPack-install.jar and it will
-start up. This procedure will work on all Java supported operating
+start up. This procedure will work on all GUI based Java supported operating
 systems -though you might have to replace double clicking with dropping
 the file on the VM. In just the same way, you can make the *.jar file
-itself the target of a shortcut.\\
+itself the target of a shortcut. Note: This works only, if jars are registered
+as files, which have to launch by the installed JRE (with: javaw.exe -jar *)\\
 
-The one drawback with this approach is that a *.jar file can only have
+The one restriction with this approach is that a *.jar file can only have
 one main file. So, if you have multiple targets, they need to be
 packaged each into a different *.jar file. They can be in one *.jar file
 but then you have to start them explicitly, which gets you back to the
@@ -584,8 +711,8 @@ don't care for running your application on a Mac, then you might not
 worry about his at all. If you are interested to support the Mac as
 well, read on.\\
 
-In fact the Mac supports command line parameters in a way. More to the
-point, it supports a single parameter that your application should
+In fact the Mac lower than MacOSX supports command line parameters in a way.
+More to the point, it supports a single parameter that your application should
 interpret as the name of a data file to open. You have no way of
 supplying this to your application through the command line attribute.
 The operating system generates this when the user drops the file on your
@@ -595,12 +722,14 @@ should therefore be an ok implementation.\\
 
 So what to do if you want to modify program behavior based on runtime
 switches? For one thing, you could set system properties accordingly.
-The drawback here is the same as with the command line parameters: the
+The disadvantage here is the same as with the command line parameters: the
 way of setting these might vary between operating systems. The best way
 seems to be using a property file that contains the configuration
 data.\\
 
 \section{Trouble Shooting}
+
+by Elmar
 
 It has been some time since I wrote this chapter during which a good
 number of users had a chance to gather experience. Unfortunately I
@@ -623,37 +752,38 @@ Most other problems cause the ShortcutPanel not to show at all during
 the installation process. The reason is simply that the ShortcutPanel
 skips if it does not know what to do or if it has nothing to do (no
 point showing then and confusing the user). The problem is that this is
-not always what you intended. In the most simple but not so uncommon
-case the ShortcutPanel cannot find the spec file. This can be caused by
+not always what you intended. The most simple but not so uncommon
+case is, that the ShortcutPanel cannot find their spec file. This can be caused by
 a number of reasons. The associated resource tag might be missing in the
-installer specification, the target file name might be misspelled (the
+installer specification file, the target file name might be misspelled (the
 name you specify for the \texttt{id} attribute) or the target file name
-has a path or package name pre-pended. Just use
-\texttt{shortcutSpec.xml} and nothing else, just as described in 'What
-to Add to the Installer'. You can always verify if this part is ok by
+has a path or package name pre-pended. You have only to use
+\texttt{shortcutSpec.xml} or \texttt{Unix\_shortcutSpec.xml} and nothing else,
+just as described in 'What to Add to the Installer'.
+You can always verify if this part is ok by
 inspecting the content of the installer *.jar file. The file
 shortcutSpec.xml should be located in the directory \texttt{res}. This
 inspection can be performed with any zip tool. If the file is not there,
 first correct this before proceeding.\\
 
-If the file is there and the panel does not show you have a problem
+If the file is there and the panel does not appear, you have a problem
 within the specification file. In most cases that I have seen, it comes
 down to a spelling mistake of an attribute or tag name. You just have to
 carefully make sure that everything is spelled correctly. Don't forget
-that all names are case sensitive! In a few cases it has also turned out
+that all names are case sensitive! In a few cases it is also happend,
 that required or semi-optional attributes are omitted, so you might want
 to verify if all attributes that you need are actually supplied.\\
 
 If everything is correct up to this point the problem becomes more
-elusive.  Most likely the panel does not show because it is instructed
-not to show. There are be several possible reasons for this. The simple
+elusive.  Most likely the panel will not be displayed, because it is instructed
+not to show. There are be several reasons for this. The simple
 case is that no location has been specified for the shortcuts in your
 installation. This can happen if all five location attributes are
 omitted or if all the ones that are listed are set to \texttt{no}.
-Remember, you must specify at least one location for every shortcut. If
-this is also correct, you might have used the <creatForPack> tag. Review
+Remember, you have to specify at least one location for every shortcut. If
+this is also correct, you might have used the \texttt{<createForPack>} tag. Review
 the details in 'Selective Creation of Shortcuts'. One possibility for
-the panel not to show is that based on the packs that are actually
+the panel not to show is that based on the packs that are currently
 selected for installation no shortcut qualifies for creation. In this
 case the panel will not show, this is perfectly normal behavior. More
 likely this condition is true because of some accident and not because
@@ -679,46 +809,15 @@ installed, but fails if a version from IBM happens to be installed. So
 far I have no solution for this problem but I am trying to find a
 workaround the problem.\\
 
-\section{FreeDesktop.org shortcuts}
-
-\textit{(by Julien Ponge, needs to be reworked in the future...)}
-
-\subsection{Foreword}
-
-Starting from the IzPack 3.7 branch, it is possible to define shortcuts
-for the \href{http://www.freedesktop.org/}{FreeDesktop.org} compliant X11
-environments and window managers. This notably includes the famous
-\href{http://www.kde.org/}{KDE} and \href{http://www.gnome.org/}{Gnome}
-environments. This contribution has been offered by Marc Eppelmann. I am
-presenting hereafter how to use such shortcuts. Please note that this section
-will have to be merged in some way with the rest of the chapter since it
-counterdicts some of Elmar's previous statements.
-
-\subsection{The specification file}
-
-Basically, you can \textsl{copy and paste} your Windows shortcuts specification
-file to create the one for the Unix platforms. The resource can be included to
-an installer in the obvious manner:
-\begin{verbatim}
-(...)
-<res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
-(...)
-
-\end{verbatim}
-
-Examples always speak more than words, so here is the specification file used
-for the IzPack installer and provided by Marc. Let's hope that some day he will
-provide us with a complete documentation (or at least someone will do) :-)
+\subsection{A sample shortcut specification file for Unix}
 
 \footnotesize
 \begin{verbatim}
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
-
 <shortcuts>
 
   <programGroup defaultName="IzForge/IzPack" location="applications"/>
-
 
     <!-- Disabled since there is no Frontend
   shortcut
@@ -738,8 +837,8 @@ provide us with a complete documentation (or at least someone will do) :-)
      encoding="UTF-8"
      terminal="true"
      KdeSubstUID="false"
-     initialState="normal">   
-     <createForPack name="Core"/>     
+     initialState="normal">
+     <createForPack name="Core"/>
    </shortcut -->
 
    <shortcut
@@ -754,15 +853,14 @@ provide us with a complete documentation (or at least someone will do) :-)
      commandLine=""
      initialState="noShow"
      iconFile="help"
-     iconIndex="0" 
-     url="$INSTALL_PATH/doc/izpack/html/izpack-doc.html"                                
+     iconIndex="0"
+     url="$INSTALL_PATH/doc/izpack/html/izpack-doc.html"
      type="Link"
-     encoding="UTF-8"   
+     encoding="UTF-8"
      description="IzPack user documentation (HTML format)">
-     
+
      <createForPack name="Documentation-HTML"/>
    </shortcut>
-
 
    <shortcut
      name="Documentation"
@@ -776,16 +874,15 @@ provide us with a complete documentation (or at least someone will do) :-)
      commandLine="$INSTALL_PATH/doc/izpack/pdf/izpack-doc.pdf"
      initialState="noShow"
      iconFile="acroread"
-     iconIndex="0" 
-     url="$INSTALL_PATH/doc/izpack/pdf/izpack-doc.pdf"                                
+     iconIndex="0"
+     url="$INSTALL_PATH/doc/izpack/pdf/izpack-doc.pdf"
      type="Application"
-     encoding="UTF-8"   
+     encoding="UTF-8"
      description="IzPack user documentation (PDF format)">
-     
+
      <createForPack name="Documentation-PDF"/>
    </shortcut>
-   
-      
+
    <shortcut
      name="Uninstaller"
      programGroup="yes"
@@ -795,18 +892,16 @@ provide us with a complete documentation (or at least someone will do) :-)
      startup="no"
      target="/usr/lib/java/bin/java"
      commandLine="-jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
-     
      initialState="noShow"
      iconFile="trashcan_full"
-     iconIndex="0" 
+     iconIndex="0"
      workingDirectory=""
      type="Application"
      encoding="UTF-8"
      description="IzPack uninstaller">
      <createForPack name="Core" />
    </shortcut>
-   
-   
+
 </shortcuts>
 
 \end{verbatim}
