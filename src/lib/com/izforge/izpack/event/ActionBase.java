@@ -35,10 +35,10 @@ import java.util.HashSet;
  */
 public class ActionBase  implements Serializable
 {
-  // --------String constants for parsing the XML specification  ------------
-  // --- Because these const strings are used by more than one   ------------
-  // --- InstallerListener and UninstallerListener, the definitions  --------
-  // --- are placed in this class.  -----------------------------------------
+  // --- String constants for parsing the XML specification  -----------------
+  // --- These definitions are placed here because the const strings are -----
+  // --- used by more than one InstallerListener and UninstallerListener -----
+  // --- class. --------------------------------------------------------------
   
   public static final String PACK = "pack";
   public static final String NAME = "name";
@@ -127,7 +127,8 @@ public class ActionBase  implements Serializable
   {
     super();
   }
-   /**
+  
+  /**
    * Returns the order.
    * @return the order
    */
@@ -138,7 +139,7 @@ public class ActionBase  implements Serializable
     
   /**
    * Sets the order to the given string.
-   * Valid are "beforepacks","beforepack",
+   * Valid values are "beforepacks", "beforepack",
    * "afterpack" and "afterpacks".
    * @param order order to be set
    */
@@ -159,8 +160,8 @@ public class ActionBase  implements Serializable
   }
     
   /**
-   * Sets the order to the given string for uninstalling.
-   * Valid are "beforedeletion" and "afterdeletion".
+   * Sets the order to the given string for uninstallation.
+   * Valid values are "beforedeletion" and "afterdeletion".
    * @param order order to be set
    */
   public void setUninstallOrder( String order ) throws Exception
