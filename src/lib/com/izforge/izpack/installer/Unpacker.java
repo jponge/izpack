@@ -60,6 +60,7 @@ import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
@@ -94,8 +95,6 @@ public class Unpacker extends Thread
   /** The name of the XML file that specifies the panel langpack */
   private static final String LANG_FILE_NAME = "packsLang.xml";
 
-  /** Placeholder during translatePath computing */
-  private static final String MASKED_SLASH_PLACEHOLDER = "§&_&§";
   /**
    *  The constructor.
    *
@@ -189,7 +188,7 @@ public class Unpacker extends Thread
           if (OsConstraint.oneMatchesCurrentSystem(pf.osConstraints()))
           {
             // We translate & build the path
-            String path = translatePath(pf.getTargetPath());
+            String path = IoHelper.translatePath(pf.getTargetPath(), vs);
             File pathFile = new File(path);
             File dest = pathFile;
             if (! pf.isDirectory())
@@ -333,7 +332,7 @@ public class Unpacker extends Thread
         for (int k = 0; k < numParsables; k++)
         {
           ParsableFile pf = (ParsableFile) objIn.readObject();
-          pf.path = translatePath(pf.path);
+          pf.path = IoHelper.translatePath(pf.path, vs);
           parsables.add(pf);
         }
 
@@ -342,14 +341,14 @@ public class Unpacker extends Thread
         for (int k = 0; k < numExecutables; k++)
         {
           ExecutableFile ef = (ExecutableFile) objIn.readObject();
-          ef.path = translatePath(ef.path);
+          ef.path = IoHelper.translatePath(ef.path, vs);
           if (null != ef.argList && !ef.argList.isEmpty())
           {
             String arg = null;
             for (int j = 0; j < ef.argList.size(); j++)
             {
               arg = (String) ef.argList.get(j);
-              arg = translatePath(arg);
+              arg = IoHelper.translatePath(arg, vs);
               ef.argList.set(j, arg);
             }
           }
@@ -692,7 +691,7 @@ public class Unpacker extends Thread
 
     // Me make the .uninstaller directory
     String dest =
-      translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
+      IoHelper.translatePath("$INSTALL_PATH", vs) + File.separator + "Uninstaller";
     String jar = dest + File.separator + "uninstaller.jar";
     File pathMaker = new File(dest);
     pathMaker.mkdirs();
@@ -790,81 +789,6 @@ public class Unpacker extends Thread
         throw new FileNotFoundException(url.toString());
     }
     return in;
-  }
-
-  /**
-   * Returns a  string resulting from replacing all occurrences of what
-   * in this string with with. In opposite to the String.replaceAll method
-   * this method do not use regular expression or other methods which are
-   * only available in JRE 1.4 and later. This method was special made to
-   * mask masked slashes to avert a conversion during path translation.
-   * @param destination string for which the replacing should be performed
-   * @param what what string should be replaced
-   * @param with with what string what should be replaced
-   * @return a new String object if what was found in the given string, else
-   * the given string self
-   */
-  private String replaceString(String destination, String what, String with)
-  {
-    if( destination.indexOf(what) >= 0 )
-    { // what found, with (placeholder) not included in destination ->
-      // perform changing.
-      StringBuffer buf = new StringBuffer();
-      int last = 0;
-      int current =  destination.indexOf(what);
-      int whatLength = what.length(); 
-      while( current >= 0 )
-      { // Do not use Methods from JRE 1.4 and higher ...
-        if( current > 0 )
-          buf.append(destination.substring(last, current));
-        buf.append(with);
-        last = current + whatLength;
-        current = destination.indexOf(what, last);
-      }
-      if( destination.length() > last  )
-        buf.append(destination.substring(last));
-      return( buf.toString());
-    }
-    return(destination);
-  }
-  /**
-   *  Translates a relative path to a local system path.
-   *
-   * @param  destination  The path to translate.
-   * @return              The translated path.
-   */
-  private String translatePath(String destination)
-  {
-    // Parse for variables
-    destination = vs.substitute(destination, null);
-
-    // Convert the file separator characters
-    
-    //destination = destination.replace('/', File.separatorChar);
-    // Undo the conversion if the slashes was masked with 
-    // a backslash
-
-    // Not all occurencies of slashes are path separators. To differ
-    // between it we allow to mask a slash with a backslash infront.
-    // Unfortunately we cannot use String.replaceAll because it
-    // handles backslashes in the replacement string in a special way
-    // and the method exist only beginning with JRE 1.4.
-    // Therefore the little bit crude way following ...
-    if( destination.indexOf("\\/") >= 0 && 
-      destination.indexOf(MASKED_SLASH_PLACEHOLDER) < 0)
-    { // Masked slash found, placeholder not included in destination ->
-      // perform masking.
-      destination = replaceString(destination, "\\/",MASKED_SLASH_PLACEHOLDER);
-      // Masked slashes changed to MASKED_SLASH_PLACEHOLDER.
-      // Replace unmasked slashes.
-      destination = destination.replace('/', File.separatorChar);
-      // Replace the MASKED_SLASH_PLACEHOLDER to slashes; masking backslashes will 
-      // be removed.
-      destination = replaceString(destination, MASKED_SLASH_PLACEHOLDER, "/");
-    }
-    else
-      destination = destination.replace('/', File.separatorChar);
-    return( destination );
   }
 
   // CUSTOM ACTION STUFF -------------- start -----------------
