@@ -267,6 +267,10 @@ public class FileExecutor
       File file = new File(efile.path);
       Debug.trace("handeling executable file "+efile);
 
+      // skip file if not for current OS (it might not have been installed at all)
+      if (! OsConstraint.oneMatchesCurrentSystem (efile.osList))
+        continue;
+      
       if(currentStage!=ExecutableFile.UNINSTALL)
       {
         // fix executable permission for unix systems
@@ -279,77 +283,68 @@ public class FileExecutor
         }
       }
 
-      // loop through all operating systems
-      Iterator osIterator = efile.osList.iterator();
-      if (!efile.osList.iterator().hasNext())
+      // execute command in POSTINSTALL stage
+      if ((exitStatus == 0) &&
+          ((currentStage == ExecutableFile.POSTINSTALL && efile.executionStage == ExecutableFile.POSTINSTALL)
+           || (currentStage==ExecutableFile.UNINSTALL && efile.executionStage == ExecutableFile.UNINSTALL)))
       {
-        Debug.trace("no os to install the file on!");
-      }
+        List paramList = new ArrayList();
+        if (ExecutableFile.BIN == efile.type)
+          paramList.add(file.toString());
 
-      if (OsConstraint.oneMatchesCurrentSystem (efile.osList))
-      {
-        // execute command in POSTINSTALL stage
-        if ((exitStatus == 0) &&
-            ((currentStage == ExecutableFile.POSTINSTALL && efile.executionStage == ExecutableFile.POSTINSTALL)
-             || (currentStage==ExecutableFile.UNINSTALL && efile.executionStage == ExecutableFile.UNINSTALL)))
+        else if (ExecutableFile.JAR == efile.type && null == efile.mainClass)
         {
-          List paramList = new ArrayList();
-          if (ExecutableFile.BIN == efile.type)
-            paramList.add(file.toString());
+          paramList.add(System.getProperty("java.home") + "/bin/java");
+          paramList.add("-jar");
+          paramList.add(file.toString());
+        }
+        else if (ExecutableFile.JAR == efile.type && null != efile.mainClass)
+        {
+          paramList.add(System.getProperty("java.home") + "/bin/java");
+          paramList.add("-cp=" + file.toString());
+          paramList.add(efile.mainClass);
+        }
 
-          else if (ExecutableFile.JAR == efile.type && null == efile.mainClass)
-          {
-            paramList.add(System.getProperty("java.home") + "/bin/java");
-            paramList.add("-jar");
-            paramList.add(file.toString());
-          }
-          else if (ExecutableFile.JAR == efile.type && null != efile.mainClass)
-          {
-            paramList.add(System.getProperty("java.home") + "/bin/java");
-            paramList.add("-cp=" + file.toString());
-            paramList.add(efile.mainClass);
-          }
+        if (null != efile.argList && !efile.argList.isEmpty())
+          paramList.addAll(efile.argList);
 
-          if (null != efile.argList && !efile.argList.isEmpty())
-            paramList.addAll(efile.argList);
+        String[] params = new String[paramList.size()];
+        for (int i = 0; i < paramList.size(); i++)
+          params[i] = (String) paramList.get(i);
 
-          String[] params = new String[paramList.size()];
-          for (int i = 0; i < paramList.size(); i++)
-            params[i] = (String) paramList.get(i);
-
-          exitStatus = executeCommand(params, output);
+        exitStatus = executeCommand(params, output);
           
-          // bring a dialog depending on return code and failure handling
-          if (exitStatus != 0)
+        // bring a dialog depending on return code and failure handling
+        if (exitStatus != 0)
+        {
+          deleteAfterwards = false;
+          String message = output[0] + "\n" + output[1];
+          if (message.length() == 1)
+            message = new String("Failed to execute " + file.toString() + ".");
+
+          if (efile.onFailure == ExecutableFile.ABORT)
           {
-            deleteAfterwards = false;
-            String message = output[0] + "\n" + output[1];
-            if (message.length() == 1)
-              message = new String("Failed to execute " + file.toString() + ".");
-
-            if (efile.onFailure == ExecutableFile.ABORT)
-            {
-              // CHECKME: let the user decide or abort anyway?
-              handler.emitError("file execution error", message);
-            }
-            else if (efile.onFailure == ExecutableFile.WARN)
-            {
-              // CHECKME: let the user decide or abort anyway?
-              handler.emitWarning ("file execution error", message);
+            // CHECKME: let the user decide or abort anyway?
+            handler.emitError("file execution error", message);
+          }
+          else if (efile.onFailure == ExecutableFile.WARN)
+          {
+            // CHECKME: let the user decide or abort anyway?
+            handler.emitWarning ("file execution error", message);
+            exitStatus = 0;
+          }
+          else
+          {
+            if (handler.askQuestion (null, "Continue?", AbstractUIHandler.CHOICES_YES_NO) 
+                == AbstractUIHandler.ANSWER_YES)
               exitStatus = 0;
-            }
-            else
-            {
-              if (handler.askQuestion (null, "Continue?", AbstractUIHandler.CHOICES_YES_NO) 
-                  == AbstractUIHandler.ANSWER_YES)
-                exitStatus = 0;
-            }
-
           }
 
         }
 
       }
+
+      
 
       // POSTINSTALL executables will be deleted
       if (efile.executionStage == ExecutableFile.POSTINSTALL && deleteAfterwards)
