@@ -255,15 +255,6 @@ public class OsConstraint implements java.io.Serializable
 	  retval.append(" ]");
 	  return retval.toString();
   }
-  /** 
-   * This simply checks if the current OS is menber of the MS-Windows-family.
-   *
-   * @return true if so.
-   */
-  public static boolean isWindows(  )
-  {
-    return ( System.getProperty( "os.name" ).toLowerCase(  ).indexOf( "windows" ) > -1 );
-  }
-
+  
 }
 

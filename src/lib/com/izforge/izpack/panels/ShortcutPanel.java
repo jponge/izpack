@@ -77,7 +77,7 @@ import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.MultiLineLabel;
 
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.ShellLink;
 import com.izforge.izpack.util.os.Shortcut;
@@ -1047,7 +1047,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       usersGroup.add (currentUser);
       usersPanel.add (currentUser);
       allUsers                 = new JRadioButton (parent.langpack.getString ("ShortcutPanel.regular.allUsers"), !currentUserList);
-      if( ! OsConstraint.isWindows() )
+      if( ! OsVersion.IS_WINDOWS )
         allUsers.setEnabled( false );
       allUsers.addActionListener (this);
       usersGroup.add (allUsers);
