@@ -91,5 +91,6 @@ IzPack for your projects ;-)
 - Oscar Sierra : for the patches.
 - Per Abich : for the patches.
 - Alexey Makhmutov : Russian langpack updates.
+- Anthony Xin Chen : for the ProcessPanel patch.
 
 # vim: fileformat=dos
