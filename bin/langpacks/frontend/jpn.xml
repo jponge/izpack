@@ -1,114 +1,114 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="Shift_JIS" standalone="yes" ?>
 
 <!-- The Japanese langpack -->
 
 <langpack>
 
     <!-- General frontend strings -->
-    <str id="frontend.title" txt="IzPack - GUIãƒ•ãƒ­ãƒ³ãƒˆã‚¨ãƒ³ãƒ‰"/>
-    <str id="frontend.untitled" txt="ã‚¿ã‚¤ãƒˆãƒ«æœªå®š"/>
-    <str id="frontend.error" txt="ã‚¨ãƒ©ãƒ¼"/>
-    <str id="frontend.save_first" txt="ã¾ãšã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¿å­˜ã—ã¦ãã ã•ã„ã€‚"/>
-    <str id="frontend.comp_dlg.title" txt="ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«"/>
-    <str id="frontend.comp_dlg.msg" txt="ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã®å‡ºåŠ› :"/>
+    <str id="frontend.title" txt="IzPack - GUIƒtƒƒ“ƒgƒGƒ“ƒh"/>
+    <str id="frontend.untitled" txt="ƒ^ƒCƒgƒ‹–¢’è"/>
+    <str id="frontend.error" txt="ƒGƒ‰["/>
+    <str id="frontend.save_first" txt="‚Ü‚¸ƒCƒ“ƒXƒg[ƒ‹ƒtƒ@ƒCƒ‹‚ð•Û‘¶‚µ‚Ä‚­‚¾‚³‚¢B"/>
+    <str id="frontend.comp_dlg.title" txt="ƒRƒ“ƒpƒCƒ‹"/>
+    <str id="frontend.comp_dlg.msg" txt="ƒRƒ“ƒpƒCƒ‰‚Ìo—Í :"/>
     <str id="frontend.comp_dlg.ok" txt="Ok"/>
-    <str id="frontend.basepath" txt="ãƒ™ãƒ¼ã‚¹ãƒ‘ã‚¹ã‚’é¸æŠžã—ã¦ãã ã•ã„"/>
-    <str id="frontend.licence.msg" txt="GNU ä¸€èˆ¬å…¬å…±ä½¿ç”¨è¨±è«¾å¥‘ç´„æ›¸ç¬¬äºŒç‰ˆ :"/>
+    <str id="frontend.basepath" txt="ƒx[ƒXƒpƒX‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢"/>
+    <str id="frontend.licence.msg" txt="GNU ˆê”ÊŒö‹¤Žg—p‹–‘øŒ_–ñ‘‘æ“ñ”Å :"/>
     <str id="frontend.licence.ok" txt="Ok"/>
     <str id="frontend.about.copyright" txt="Copyright (c) 2001,2002 Julien PONGE"/>
     <str id="frontend.about.url" txt="http://www.izforge.com/"/>
-    <str id="frontend.lpswitch" txt="è¨€èªžã®åˆ‡ã‚Šæ›¿ãˆ"/>
-    <str id="frontend.nexttime" txt="è¨€èªžã®åˆ‡ã‚Šæ›¿ãˆã¯ã€æ¬¡å›žèµ·å‹•æ™‚ã«æœ‰åŠ¹ã«ãªã‚Šã¾ã™ã€‚"/>
+    <str id="frontend.lpswitch" txt="Œ¾Œê‚ÌØ‚è‘Ö‚¦"/>
+    <str id="frontend.nexttime" txt="Œ¾Œê‚ÌØ‚è‘Ö‚¦‚ÍAŽŸ‰ñ‹N“®Žž‚É—LŒø‚É‚È‚è‚Ü‚·B"/>
     
     <!-- Menu specific strings -->
 
-    <str id="menu.langpack" txt="è¨€èªž"/>
+    <str id="menu.langpack" txt="Œ¾Œê"/>
     <str id="menu.langpack.mn" txt="g"/>
     
-    <str id="menu.bookmarks" txt="æœ€è¿‘ä½¿ã£ãŸãƒ•ã‚¡ã‚¤ãƒ«"/>
+    <str id="menu.bookmarks" txt="Å‹ßŽg‚Á‚½ƒtƒ@ƒCƒ‹"/>
     <str id="menu.bookmarks.mn" txt="R"/>
     
-    <str id="menu.files" txt="ãƒ•ã‚¡ã‚¤ãƒ«"/>
+    <str id="menu.files" txt="ƒtƒ@ƒCƒ‹"/>
     <str id="menu.files.mn" txt="F"/>
-    <str id="menu.new" txt="æ–°è¦ä½œæˆ"/>
+    <str id="menu.new" txt="V‹Kì¬"/>
     <str id="menu.new.mn" txt="N"/>
-    <str id="menu.open" txt="é–‹ã"/>
+    <str id="menu.open" txt="ŠJ‚­"/>
     <str id="menu.open.mn" txt="O"/>
-    <str id="menu.save" txt="ä¿å­˜"/>
+    <str id="menu.save" txt="•Û‘¶"/>
     <str id="menu.save.mn" txt="S"/>
-    <str id="menu.save_as" txt="åå‰ã‚’ä»˜ã‘ã¦ä¿å­˜"/>
+    <str id="menu.save_as" txt="–¼‘O‚ð•t‚¯‚Ä•Û‘¶"/>
     <str id="menu.save_as.mn" txt="a"/>
-    <str id="menu.exit" txt="çµ‚äº†"/>
+    <str id="menu.exit" txt="I—¹"/>
     <str id="menu.exit.mn" txt="E"/>
-    <str id="menu.import" txt="ç›¸å¯¾ãƒ‘ã‚¹ã‚’ä½¿ã£ã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¤ãƒ³ãƒãƒ¼ãƒˆ"/>
+    <str id="menu.import" txt="‘Š‘ÎƒpƒX‚ðŽg‚Á‚Ä‚¢‚éƒtƒ@ƒCƒ‹‚ðƒCƒ“ƒ|[ƒg"/>
     <str id="menu.import.mn" txt="I"/>
     
-    <str id="menu.compile" txt="ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«"/>
+    <str id="menu.compile" txt="ƒRƒ“ƒpƒCƒ‹"/>
     <str id="menu.compile.mn" txt="C"/>
-    <str id="menu.comp.standard" txt="æ¨™æº–ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ©"/>
+    <str id="menu.comp.standard" txt="•W€ƒCƒ“ƒXƒg[ƒ‰"/>
     <str id="menu.comp.standard.mn" txt="S"/>
-    <str id="menu.comp.standardk" txt="æ¨™æº– Kunststoff ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ©"/>
+    <str id="menu.comp.standardk" txt="•W€ Kunststoff ƒCƒ“ƒXƒg[ƒ‰"/>
     <str id="menu.comp.standardk.mn" txt="a"/>
-    <str id="menu.comp.web" txt="ã‚¦ã‚§ãƒ– ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ©"/>
+    <str id="menu.comp.web" txt="ƒEƒFƒu ƒCƒ“ƒXƒg[ƒ‰"/>
     <str id="menu.comp.web.mn" txt="W"/>
-    <str id="menu.comp.webk" txt="ã‚¦ã‚§ãƒ– Kunststoff ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ©"/>
+    <str id="menu.comp.webk" txt="ƒEƒFƒu Kunststoff ƒCƒ“ƒXƒg[ƒ‰"/>
     <str id="menu.comp.webk.mn" txt="e"/>
     
     <str id="menu.izpack" txt="IzPack"/>
     <str id="menu.izpack.mn" txt="I"/>
-    <str id="menu.about" txt="IzPack ã«ã¤ã„ã¦..."/>
+    <str id="menu.about" txt="IzPack ‚É‚Â‚¢‚Ä..."/>
     <str id="menu.about.mn" txt="A"/>
-    <str id="menu.licence" txt="IzPack ãƒ©ã‚¤ã‚»ãƒ³ã‚¹ ..."/>
+    <str id="menu.licence" txt="IzPack ƒ‰ƒCƒZƒ“ƒX ..."/>
     <str id="menu.licence.mn" txt="L"/>
     
     <!-- Tabs specific strings -->
     
-    <str id="tabs.info.title" txt="ä¸€èˆ¬"/>
-    <str id="tabs.info.appname" txt="ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³å :"/>
-    <str id="tabs.info.appversion" txt="ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ ãƒãƒ¼ã‚¸ãƒ§ãƒ³ :"/>
-    <str id="tabs.info.appurl" txt="ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®ã‚¦ã‚§ãƒ–ã‚µã‚¤ãƒˆ URL :"/>
-    <str id="tabs.info.authorslist" txt="è‘—è€…ä¸€è¦§ :"/>
-    <str id="tabs.info.author" txt="è‘—è€…å :"/>
-    <str id="tabs.info.email" txt="è‘—è€… eãƒ¡ãƒ¼ãƒ« :"/>
-    <str id="tabs.info.add" txt="è‘—è€…ã‚’è¿½åŠ "/>
-    <str id="tabs.info.del" txt="è‘—è€…ã‚’å‰Šé™¤"/>
-    <str id="tabs.info.width" txt=" ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å¹… :"/>
-    <str id="tabs.info.height" txt=" ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é«˜ã• :"/>
-    <str id="tabs.info.resizable" txt=" ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºã‚’å¯å¤‰ã«ã™ã‚‹"/>
+    <str id="tabs.info.title" txt="ˆê”Ê"/>
+    <str id="tabs.info.appname" txt="ƒAƒvƒŠƒP[ƒVƒ‡ƒ“–¼ :"/>
+    <str id="tabs.info.appversion" txt="ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ ƒo[ƒWƒ‡ƒ“ :"/>
+    <str id="tabs.info.appurl" txt="ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌƒEƒFƒuƒTƒCƒg URL :"/>
+    <str id="tabs.info.authorslist" txt="’˜ŽÒˆê—— :"/>
+    <str id="tabs.info.author" txt="’˜ŽÒ–¼ :"/>
+    <str id="tabs.info.email" txt="’˜ŽÒ eƒ[ƒ‹ :"/>
+    <str id="tabs.info.add" txt="’˜ŽÒ‚ð’Ç‰Á"/>
+    <str id="tabs.info.del" txt="’˜ŽÒ‚ðíœ"/>
+    <str id="tabs.info.width" txt=" ƒEƒBƒ“ƒhƒE• :"/>
+    <str id="tabs.info.height" txt=" ƒEƒBƒ“ƒhƒE‚‚³ :"/>
+    <str id="tabs.info.resizable" txt=" ƒEƒBƒ“ƒhƒEƒTƒCƒY‚ð‰Â•Ï‚É‚·‚é"/>
     
-    <str id="tabs.loc.title" txt="ãƒ­ã‚±ãƒ¼ãƒ«"/>
-    <str id="tabs.loc.available" txt="åˆ©ç”¨å¯èƒ½ãªè¨€èªžãƒ‘ãƒƒã‚¯ :"/>
-    <str id="tabs.loc.selected" txt="çµ„ã¿è¾¼ã¾ã‚Œã‚‹è¨€èªžãƒ‘ãƒƒã‚¯ :"/>
-    <str id="tabs.loc.include" txt="çµ„ã¿è¾¼ã¿"/>
-    <str id="tabs.loc.remove" txt="å–ã‚Šå¤–ã—"/>
+    <str id="tabs.loc.title" txt="ƒƒP[ƒ‹"/>
+    <str id="tabs.loc.available" txt="—˜—p‰Â”\‚ÈŒ¾ŒêƒpƒbƒN :"/>
+    <str id="tabs.loc.selected" txt="‘g‚Ýž‚Ü‚ê‚éŒ¾ŒêƒpƒbƒN :"/>
+    <str id="tabs.loc.include" txt="‘g‚Ýž‚Ý"/>
+    <str id="tabs.loc.remove" txt="Žæ‚èŠO‚µ"/>
     
-    <str id="tabs.res.title" txt="ãƒªã‚½ãƒ¼ã‚¹"/>
-    <str id="tabs.res.list" txt="ãƒªã‚½ãƒ¼ã‚¹ä¸€è¦§ :"/>
-    <str id="tabs.res.add" txt="ãƒªã‚½ãƒ¼ã‚¹ã®è¿½åŠ "/>
-    <str id="tabs.res.remove" txt="ãƒªã‚½ãƒ¼ã‚¹ã®å‰Šé™¤"/>
-    <str id="tabs.res.input" txt="ãƒªã‚½ãƒ¼ã‚¹ID :"/>
+    <str id="tabs.res.title" txt="ƒŠƒ\[ƒX"/>
+    <str id="tabs.res.list" txt="ƒŠƒ\[ƒXˆê—— :"/>
+    <str id="tabs.res.add" txt="ƒŠƒ\[ƒX‚Ì’Ç‰Á"/>
+    <str id="tabs.res.remove" txt="ƒŠƒ\[ƒX‚Ìíœ"/>
+    <str id="tabs.res.input" txt="ƒŠƒ\[ƒXID :"/>
     
-    <str id="tabs.pan.title" txt="ãƒ‘ãƒãƒ«"/>
-    <str id="tabs.pan.available" txt="åˆ©ç”¨å¯èƒ½ãªãƒ‘ãƒãƒ« :"/>
-    <str id="tabs.pan.selected" txt="çµ„ã¿è¾¼ã¾ã‚Œã‚‹ãƒ‘ãƒãƒ« :"/>
-    <str id="tabs.pan.include" txt="çµ„ã¿è¾¼ã¿"/>
-    <str id="tabs.pan.remove" txt="å–ã‚Šå¤–ã—"/>
-    <str id="tabs.pan.tip" txt="ãƒ‘ãƒãƒ«ã«ã‚ˆã£ã¦ã¯ã€ãƒªã‚½ãƒ¼ã‚¹ã®è¨­å®šãŒå¿…è¦ã«ãªã‚Šã¾ã™ã€‚è©³ç´°ã¯ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚"/>
+    <str id="tabs.pan.title" txt="ƒpƒlƒ‹"/>
+    <str id="tabs.pan.available" txt="—˜—p‰Â”\‚Èƒpƒlƒ‹ :"/>
+    <str id="tabs.pan.selected" txt="‘g‚Ýž‚Ü‚ê‚éƒpƒlƒ‹ :"/>
+    <str id="tabs.pan.include" txt="‘g‚Ýž‚Ý"/>
+    <str id="tabs.pan.remove" txt="Žæ‚èŠO‚µ"/>
+    <str id="tabs.pan.tip" txt="ƒpƒlƒ‹‚É‚æ‚Á‚Ä‚ÍAƒŠƒ\[ƒX‚ÌÝ’è‚ª•K—v‚É‚È‚è‚Ü‚·BÚ×‚ÍƒhƒLƒ…ƒƒ“ƒg‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B"/>
     
-    <str id="tabs.packs.title" txt="ãƒ‘ãƒƒã‚¯"/>
-    <str id="tabs.packs.packs" txt="ãƒ‘ãƒƒã‚¯ :"/>
-    <str id="tabs.packs.files" txt="çµ„ã¿è¾¼ã¾ã‚Œã‚‹ãƒ‘ãƒƒã‚¯ :"/>
-    <str id="tabs.packs.addpack" txt="ãƒ‘ãƒƒã‚¯ã®è¿½åŠ "/>
-    <str id="tabs.packs.delpack" txt="ãƒ‘ãƒƒã‚¯ã®å‰Šé™¤"/>
-    <str id="tabs.packs.required" txt=" ã“ã®ãƒ‘ãƒƒã‚¯ã‚’å¿…é ˆã¨ã™ã‚‹"/>
-    <str id="tabs.packs.addfile" txt="ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®è¿½åŠ "/>
-    <str id="tabs.packs.delfile" txt="ãƒ•ã‚¡ã‚¤ãƒ«/ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å‰Šé™¤"/>
-    <str id="tabs.packs.parsable" txt=" ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ‘ãƒ¼ã‚ºã™ã‚‹"/>
-    <str id="tabs.packs.pack_name" txt="ãƒ‘ãƒƒã‚¯å :"/>
-    <str id="tabs.packs.pack_desc" txt="ãƒ‘ãƒƒã‚¯ã®èª¬æ˜Ž :"/>
-    <str id="tabs.packs.target" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«å…ˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª :"/>
-    <str id="tabs.packs.scriptProps" txt="ãƒ‘ãƒ¼ã‚¶è¨­å®š ..."/>
-    <str id="tabs.packs.f_type" txt="ãƒ•ã‚¡ã‚¤ãƒ«ç¨®åˆ¥? (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯ç©º)"/>
-    <str id="tabs.packs.f_enc" txt="ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°? (ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯ç©º)"/>
+    <str id="tabs.packs.title" txt="ƒpƒbƒN"/>
+    <str id="tabs.packs.packs" txt="ƒpƒbƒN :"/>
+    <str id="tabs.packs.files" txt="‘g‚Ýž‚Ü‚ê‚éƒpƒbƒN :"/>
+    <str id="tabs.packs.addpack" txt="ƒpƒbƒN‚Ì’Ç‰Á"/>
+    <str id="tabs.packs.delpack" txt="ƒpƒbƒN‚Ìíœ"/>
+    <str id="tabs.packs.required" txt=" ‚±‚ÌƒpƒbƒN‚ð•K{‚Æ‚·‚é"/>
+    <str id="tabs.packs.addfile" txt="ƒtƒ@ƒCƒ‹/ƒfƒBƒŒƒNƒgƒŠ‚Ì’Ç‰Á"/>
+    <str id="tabs.packs.delfile" txt="ƒtƒ@ƒCƒ‹/ƒfƒBƒŒƒNƒgƒŠ‚Ìíœ"/>
+    <str id="tabs.packs.parsable" txt=" ƒtƒ@ƒCƒ‹‚ðƒp[ƒY‚·‚é"/>
+    <str id="tabs.packs.pack_name" txt="ƒpƒbƒN–¼ :"/>
+    <str id="tabs.packs.pack_desc" txt="ƒpƒbƒN‚Ìà–¾ :"/>
+    <str id="tabs.packs.target" txt="ƒCƒ“ƒXƒg[ƒ‹æƒfƒBƒŒƒNƒgƒŠ :"/>
+    <str id="tabs.packs.scriptProps" txt="ƒp[ƒUÝ’è ..."/>
+    <str id="tabs.packs.f_type" txt="ƒtƒ@ƒCƒ‹Ží•Ê? (ƒfƒtƒHƒ‹ƒg‚Í‹ó)"/>
+    <str id="tabs.packs.f_enc" txt="ƒtƒ@ƒCƒ‹‚ÌƒGƒ“ƒR[ƒfƒBƒ“ƒO? (ƒfƒtƒHƒ‹ƒg‚Í‹ó)"/>
 
 </langpack>

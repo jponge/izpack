@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="Shift_JIS" standalone="yes" ?>
 
 <!-- The Japanese langpack -->
 
@@ -6,98 +6,98 @@
 
     <!-- General installer strings -->
     <!-- Notice! more natural Japanese requires string after product name -->
-   <str id="installer.title" txt="IzPack - ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ« - "/>
-    <str id="installer.next" txt="æ¬¡ã¸"/>
-    <str id="installer.prev" txt="å‰ã¸"/>
-    <str id="installer.quit" txt="çµ‚äº†"/>
-    <str id="installer.madewith" txt="(IzPackã«ã¦ä½œæˆã•ã‚Œã¾ã—ãŸ - http://www.izforge.com/)"/>
-    <str id="installer.quit.title" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã®ä¸­æ­¢"/>
-    <str id="installer.quit.message" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã‚’ä¸­æ–­ã—ã€ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ©ã‚’çµ‚äº†ã—ã¾ã™!"/>
-    <str id="installer.warning" txt="è­¦å‘Š !"/>
-    <str id="installer.yes" txt="ã¯ã„"/>
-    <str id="installer.no" txt="ã„ã„ãˆ"/>
-    <str id="installer.cancel" txt="ã‚­ãƒ£ãƒ³ã‚»ãƒ«"/> 
-    <str id="installer.error" txt="ã‚¨ãƒ©ãƒ¼"/>
+   <str id="installer.title" txt="IzPack - ƒCƒ“ƒXƒg[ƒ‹ - "/>
+    <str id="installer.next" txt="ŽŸ‚Ö"/>
+    <str id="installer.prev" txt="‘O‚Ö"/>
+    <str id="installer.quit" txt="I—¹"/>
+    <str id="installer.madewith" txt="(IzPack‚É‚Äì¬‚³‚ê‚Ü‚µ‚½ - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="ƒCƒ“ƒXƒg[ƒ‹‚Ì’†Ž~"/>
+    <str id="installer.quit.message" txt="ƒCƒ“ƒXƒg[ƒ‹‚ð’†’f‚µAƒCƒ“ƒXƒg[ƒ‰‚ðI—¹‚µ‚Ü‚·!"/>
+    <str id="installer.warning" txt="Œx !"/>
+    <str id="installer.yes" txt="‚Í‚¢"/>
+    <str id="installer.no" txt="‚¢‚¢‚¦"/>
+    <str id="installer.cancel" txt="ƒLƒƒƒ“ƒZƒ‹"/> 
+    <str id="installer.error" txt="ƒGƒ‰["/>
     
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="ã“ã®æ“ä½œã¯ã€ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«æ¸ˆã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å‰Šé™¤ã—ã¾ã™!"/>
-    <str id="uninstaller.destroytarget" txt=" å¼·åˆ¶å‰Šé™¤ - "/>
-    <str id="uninstaller.uninstall" txt="ã‚¢ãƒ³ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«"/>
+    <str id="uninstaller.warning" txt="‚±‚Ì‘€ì‚ÍAƒCƒ“ƒXƒg[ƒ‹Ï‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ðíœ‚µ‚Ü‚·!"/>
+    <str id="uninstaller.destroytarget" txt=" ‹­§íœ - "/>
+    <str id="uninstaller.uninstall" txt="ƒAƒ“ƒCƒ“ƒXƒg[ƒ‹"/>
     
     <!-- The strings for the 'official' IzPack plugins -->
     <str id="HelloPanel.welcome1" txt=""/>
-    <str id="HelloPanel.welcome2" txt="ã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã¸ã‚ˆã†ã“ã !"/>
-    <str id="HelloPanel.authors" txt="ã“ã®ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã®è‘—è€… : "/>
-    <str id="HelloPanel.url" txt="ã“ã®ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã®ã‚¦ã‚§ãƒ–ã‚µã‚¤ãƒˆ : "/>
+    <str id="HelloPanel.welcome2" txt="‚ÌƒCƒ“ƒXƒg[ƒ‹‚Ö‚æ‚¤‚±‚» !"/>
+    <str id="HelloPanel.authors" txt="‚±‚Ìƒ\ƒtƒgƒEƒFƒA‚Ì’˜ŽÒ : "/>
+    <str id="HelloPanel.url" txt="‚±‚Ìƒ\ƒtƒgƒEƒFƒA‚ÌƒEƒFƒuƒTƒCƒg : "/>
     
-    <str id="LicencePanel.info" txt="ä»¥ä¸‹ã®ãƒ©ã‚¤ã‚»ãƒ³ã‚¹åˆ©ç”¨è¨±è«¾ã‚’ãŠèª­ã¿ãã ã•ã„ :"/>
-    <str id="LicencePanel.agree" txt="ãƒ©ã‚¤ã‚»ãƒ³ã‚¹åˆ©ç”¨è¨±è«¾ã«åŒæ„ã—ã¾ã™ã‹?"/>
-    <str id="LicencePanel.yes" txt="ã¯ã„"/>
-    <str id="LicencePanel.no" txt="ã„ã„ãˆ"/>
+    <str id="LicencePanel.info" txt="ˆÈ‰º‚Ìƒ‰ƒCƒZƒ“ƒX—˜—p‹–‘ø‚ð‚¨“Ç‚Ý‚­‚¾‚³‚¢ :"/>
+    <str id="LicencePanel.agree" txt="ƒ‰ƒCƒZƒ“ƒX—˜—p‹–‘ø‚É“¯ˆÓ‚µ‚Ü‚·‚©?"/>
+    <str id="LicencePanel.yes" txt="‚Í‚¢"/>
+    <str id="LicencePanel.no" txt="‚¢‚¢‚¦"/>
     
-    <str id="InfoPanel.info" txt="ä»¥ä¸‹ã®æƒ…å ±ã‚’ãŠèª­ã¿ãã ã•ã„ :"/>
+    <str id="InfoPanel.info" txt="ˆÈ‰º‚Ìî•ñ‚ð‚¨“Ç‚Ý‚­‚¾‚³‚¢ :"/>
     
-    <str id="TargetPanel.info" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ãƒ‘ã‚¹ã‚’é¸æŠžã—ã¦ãã ã•ã„ :"/>
-    <str id="TargetPanel.browse" txt="å‚ç…§ ..."/>
+    <str id="TargetPanel.info" txt="ƒCƒ“ƒXƒg[ƒ‹‚·‚éƒpƒX‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢ :"/>
+    <str id="TargetPanel.browse" txt="ŽQÆ ..."/>
     <str id="TargetPanel.warn" 
-         txt="æŒ‡å®šã•ã‚ŒãŸãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯æ—¢ã«å­˜åœ¨ã—ã¾ã™! ã“ã®ã¾ã¾ç¶šã‘ã‚‹ã¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸Šæ›¸ãã™ã‚‹ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“ãŒã„ã„ã§ã™ã‹?"/>
+         txt="Žw’è‚³‚ê‚½ƒfƒBƒŒƒNƒgƒŠ‚ÍŠù‚É‘¶Ý‚µ‚Ü‚·! ‚±‚Ì‚Ü‚Ü‘±‚¯‚é‚Æƒtƒ@ƒCƒ‹‚ðã‘‚«‚·‚é‚©‚à‚µ‚ê‚Ü‚¹‚ñ‚ª‚¢‚¢‚Å‚·‚©?"/>
     <str id="TargetPanel.empty_target"
-         txt="æ­£ã—ã„ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«å…ˆã‚’æŒ‡å®šã—ã¦ãã ã•ã„! ã“ã®ãƒ‘ã‚¹ã¯æœ¬å½“ã«å­˜åœ¨ã—ã¦ã„ã¾ã™ã‹?"/>
-    <str id="PacksPanel.info" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ãŸã„é …ç›®ã‚’é¸æŠžã—ã¦ãã ã•ã„ :"/>    <str id="PacksPanel.tip" txt="æ³¨æ„: ç°è‰²ã§è¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹é …ç›®ã¯ã€å¿…é ˆé …ç›®ã§ã™ã€‚"/>
+         txt="³‚µ‚¢ƒCƒ“ƒXƒg[ƒ‹æ‚ðŽw’è‚µ‚Ä‚­‚¾‚³‚¢! ‚±‚ÌƒpƒX‚Í–{“–‚É‘¶Ý‚µ‚Ä‚¢‚Ü‚·‚©?"/>
+    <str id="PacksPanel.info" txt="ƒCƒ“ƒXƒg[ƒ‹‚µ‚½‚¢€–Ú‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢ :"/>    <str id="PacksPanel.tip" txt="’ˆÓ: ŠDF‚Å•\Ž¦‚³‚ê‚Ä‚¢‚é€–Ú‚ÍA•K{€–Ú‚Å‚·B"/>
     
-    <str id="InstallPanel.info" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã‚’é–‹å§‹ã™ã‚‹ã«ã¯ã€'ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«!'ã‚’æŠ¼ã—ã¦ãã ã•ã„"/>
-    <str id="InstallPanel.install" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«!"/>
-    <str id="InstallPanel.tip" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«çŠ¶æ³ :"/>
-    <str id="InstallPanel.begin" txt="[æœªã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«]"/>
-    <str id="InstallPanel.finished" txt="[å®Œäº†]"/>
+    <str id="InstallPanel.info" txt="ƒCƒ“ƒXƒg[ƒ‹‚ðŠJŽn‚·‚é‚É‚ÍA'ƒCƒ“ƒXƒg[ƒ‹!'‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢"/>
+    <str id="InstallPanel.install" txt="ƒCƒ“ƒXƒg[ƒ‹!"/>
+    <str id="InstallPanel.tip" txt="ƒCƒ“ƒXƒg[ƒ‹ó‹µ :"/>
+    <str id="InstallPanel.begin" txt="[–¢ƒCƒ“ƒXƒg[ƒ‹]"/>
+    <str id="InstallPanel.finished" txt="[Š®—¹]"/>
     
-    <str id="FinishPanel.success" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã¯æ­£å¸¸ã«çµ‚äº†ã—ã¾ã—ãŸã€‚"/>
-    <str id="FinishPanel.fail" txt="ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã«å¤±æ•—ã—ã¾ã—ãŸ!"/>
-    <str id="FinishPanel.uninst.info" txt="ã‚¢ãƒ³ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ©ãŒä»¥ä¸‹ã®å ´æ‰€ã«ä½œæˆã•ã‚Œã¾ã—ãŸ:"/>
-    <str id="FinishPanel.auto" txt="è‡ªå‹•ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç”Ÿæˆã—ã¾ã™"/>
+    <str id="FinishPanel.success" txt="ƒCƒ“ƒXƒg[ƒ‹‚Í³í‚ÉI—¹‚µ‚Ü‚µ‚½B"/>
+    <str id="FinishPanel.fail" txt="ƒCƒ“ƒXƒg[ƒ‹‚ÉŽ¸”s‚µ‚Ü‚µ‚½!"/>
+    <str id="FinishPanel.uninst.info" txt="ƒAƒ“ƒCƒ“ƒXƒg[ƒ‰‚ªˆÈ‰º‚ÌêŠ‚Éì¬‚³‚ê‚Ü‚µ‚½:"/>
+    <str id="FinishPanel.auto" txt="Ž©“®ƒCƒ“ƒXƒg[ƒ‹ƒXƒNƒŠƒvƒg‚ð¶¬‚µ‚Ü‚·"/>
     <str id="FinishPanel.auto.tip" 
-         txt="åŒã˜å†…å®¹ã®ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã‚’ä»–ã®ã‚³ãƒ³ãƒ”ãƒ¥ãƒ¼ã‚¿ã§ç¹°ã‚Šè¿”ã—ãŸã„ã¨ãã«ã€ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆãŒä½¿ãˆã¾ã™ã€‚"/>
+         txt="“¯‚¶“à—e‚ÌƒCƒ“ƒXƒg[ƒ‹‚ð‘¼‚ÌƒRƒ“ƒsƒ…[ƒ^‚ÅŒJ‚è•Ô‚µ‚½‚¢‚Æ‚«‚ÉA‚±‚ÌƒXƒNƒŠƒvƒg‚ªŽg‚¦‚Ü‚·B"/>
     
-    <str id="ImgPacksPanel.packs" txt="ä»¥ä¸‹ã®é …ç›®ã‚’é¸æŠžã§ãã¾ã™ :"/>
-    <str id="ImgPacksPanel.snap" txt="ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã®ã‚¹ãƒŠãƒƒãƒ—ã‚·ãƒ§ãƒƒãƒˆ  :"/>
-    <str id="ImgPacksPanel.checkbox" txt=" ã“ã®é …ç›®ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«"/>
+    <str id="ImgPacksPanel.packs" txt="ˆÈ‰º‚Ì€–Ú‚ð‘I‘ð‚Å‚«‚Ü‚· :"/>
+    <str id="ImgPacksPanel.snap" txt="ƒpƒbƒP[ƒW‚ÌƒXƒiƒbƒvƒVƒ‡ƒbƒg  :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" ‚±‚Ì€–Ú‚ðƒCƒ“ƒXƒg[ƒ‹"/>
     
-    <str id="ShortcutPanel.list" txt="ã‚¹ã‚¿ãƒ¼ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠžã—ã¦ãã ã•ã„:"/>
-    <str id="ShortcutPanel.default" txt="ãƒªã‚»ãƒƒãƒˆ"/>
-    <str id="ShortcutPanel.desktop" txt="ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã«ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’ä½œæˆã—ã¾ã™"/>
-    <str id="ShortcutPanel.create" txt="ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®ä½œæˆ"/>
-    <str id="ShortcutPanel.userIntro" txt="ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ãƒ¦ãƒ¼ã‚¶:"/>
-    <str id="ShortcutPanel.currentUser" txt="ç¾åœ¨ã®ãƒ¦ãƒ¼ã‚¶                  "/>
-    <str id="ShortcutPanel.allUsers" txt="ã™ã¹ã¦ã®ãƒ¦ãƒ¼ã‚¶                "/>
+    <str id="ShortcutPanel.list" txt="ƒXƒ^[ƒgƒƒjƒ…[‚ÌƒtƒHƒ‹ƒ_‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢:"/>
+    <str id="ShortcutPanel.default" txt="ƒŠƒZƒbƒg"/>
+    <str id="ShortcutPanel.desktop" txt="ƒfƒXƒNƒgƒbƒv‚ÉƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚µ‚Ü‚·"/>
+    <str id="ShortcutPanel.create" txt="ƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬"/>
+    <str id="ShortcutPanel.userIntro" txt="ƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚·‚éƒ†[ƒU:"/>
+    <str id="ShortcutPanel.currentUser" txt="Œ»Ý‚Ìƒ†[ƒU                  "/>
+    <str id="ShortcutPanel.allUsers" txt="‚·‚×‚Ä‚Ìƒ†[ƒU                "/>
     
-    <str id="ShortcutPanel.regular.list" txt="ã‚¹ã‚¿ãƒ¼ãƒˆãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠžã—ã¦ãã ã•ã„:"/>
-    <str id="ShortcutPanel.regular.default" txt="ãƒªã‚»ãƒƒãƒˆ"/>
-    <str id="ShortcutPanel.regular.desktop" txt="ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã«ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’ä½œæˆã—ã¾ã™"/>
-    <str id="ShortcutPanel.regular.create" txt="ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®ä½œæˆ"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ãƒ¦ãƒ¼ã‚¶:"/>
-    <str id="ShortcutPanel.regular.currentUser" txt="ç¾åœ¨ã®ãƒ¦ãƒ¼ã‚¶"/>
-    <str id="ShortcutPanel.regular.allUsers" txt="ã™ã¹ã¦ã®ãƒ¦ãƒ¼ã‚¶"/>
+    <str id="ShortcutPanel.regular.list" txt="ƒXƒ^[ƒgƒƒjƒ…[‚ÌƒtƒHƒ‹ƒ_‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢:"/>
+    <str id="ShortcutPanel.regular.default" txt="ƒŠƒZƒbƒg"/>
+    <str id="ShortcutPanel.regular.desktop" txt="ƒfƒXƒNƒgƒbƒv‚ÉƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚µ‚Ü‚·"/>
+    <str id="ShortcutPanel.regular.create" txt="ƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="ƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚·‚éƒ†[ƒU:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="Œ»Ý‚Ìƒ†[ƒU"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="‚·‚×‚Ä‚Ìƒ†[ƒU"/>
 
-    <str id="ShortcutPanel.alternate.apology" txt="IzPackã§ã¯ã€ãŠä½¿ã„ã®ã‚ªãƒšãƒ¬ãƒ¼ãƒ†ã‚£ãƒ³ã‚°ã‚·ã‚¹ãƒ†ãƒ ã§ã®ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã®ä½œæˆã‚’ã‚µãƒãƒ¼ãƒˆã—ã¦ã„ã¾ã›ã‚“ã€‚ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ã«ã¯ã€ãŠä½¿ã„ã®ã‚ªãƒšãƒ¬ãƒ¼ãƒ†ã‚£ãƒ³ã‚°ã‚·ã‚¹ãƒ†ãƒ ã®ãƒžãƒ‹ãƒ¥ã‚¢ãƒ«ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚"/>
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="ä»¥ä¸‹ã¯ã€ã“ã®ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ã®è£½é€ å…ƒãŒã€ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ãŒå‹•ä½œã™ã‚‹ãŸã‚ã«å¿…è¦ãªãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ã‚¢ã‚¯ã‚»ã‚¹ã‚’åˆ—æŒ™ã—ãŸã‚‚ã®ã§ã™ã€‚"/>
-    <str id="ShortcutPanel.alternate.textFileExplanation" txt="ã‚ã¨ã§å‚ç…§ã™ã‚‹ãŸã‚ã«ã€ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®è©³ç´°æƒ…å ±ã‚’ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚"/>
-    <str id="ShortcutPanel.alternate.saveButton" txt="ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜"/>
+    <str id="ShortcutPanel.alternate.apology" txt="IzPack‚Å‚ÍA‚¨Žg‚¢‚ÌƒIƒyƒŒ[ƒeƒBƒ“ƒOƒVƒXƒeƒ€‚Å‚ÌƒVƒ‡[ƒgƒJƒbƒg‚Ìì¬‚ðƒTƒ|[ƒg‚µ‚Ä‚¢‚Ü‚¹‚ñBƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚·‚é‚É‚ÍA‚¨Žg‚¢‚ÌƒIƒyƒŒ[ƒeƒBƒ“ƒOƒVƒXƒeƒ€‚Ìƒ}ƒjƒ…ƒAƒ‹‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B"/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="ˆÈ‰º‚ÍA‚±‚Ìƒ\ƒtƒgƒEƒFƒA‚Ì»‘¢Œ³‚ªAƒ\ƒtƒgƒEƒFƒA‚ª“®ì‚·‚é‚½‚ß‚É•K—v‚Èƒtƒ@ƒCƒ‹‚Ö‚ÌƒAƒNƒZƒX‚ð—ñ‹“‚µ‚½‚à‚Ì‚Å‚·B"/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="‚ ‚Æ‚ÅŽQÆ‚·‚é‚½‚ß‚ÉAƒ^[ƒQƒbƒgƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌÚ×î•ñ‚ðƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚É•Û‘¶‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B"/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="ƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚É•Û‘¶"/>
     
-    <str id="ShortcutPanel.textFile.header" txt="ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆæƒ…å ±\n====================\n\nä»¥ä¸‹ã¯ã€ä»¥ä¸‹ã¯ã€ä½œæˆã•ã‚Œã‚‹ã¹ãã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã«é–¢ã™ã‚‹æƒ…å ±ã§ã™ã€‚\nã“ã®æƒ…å ±ã«ã‚ˆã£ã¦ã€æ‰‹å‹•ã§ç›¸å½“ã™ã‚‹ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆã‚’ä½œæˆã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚\n"/>
+    <str id="ShortcutPanel.textFile.header" txt="ƒVƒ‡[ƒgƒJƒbƒgî•ñ\n====================\n\nˆÈ‰º‚ÍAˆÈ‰º‚ÍAì¬‚³‚ê‚é‚×‚«ƒVƒ‡[ƒgƒJƒbƒg‚ÉŠÖ‚·‚éî•ñ‚Å‚·B\n‚±‚Ìî•ñ‚É‚æ‚Á‚ÄAŽè“®‚Å‘Š“–‚·‚éƒVƒ‡[ƒgƒJƒbƒg‚ðì¬‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B\n"/>
     
-    <str id="ShortcutPanel.textFile.name"         txt="ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆ    : "/>
-    <str id="ShortcutPanel.textFile.location"     txt="ç›®çš„ã®ãƒ‘ã‚¹        : "/>
-    <str id="ShortcutPanel.textFile.description"  txt="èª¬æ˜Ž              : "/>
-    <str id="ShortcutPanel.textFile.target"       txt="ã‚·ãƒ§ãƒ¼ãƒˆã‚«ãƒƒãƒˆå…ˆ  : "/>
-    <str id="ShortcutPanel.textFile.command"      txt="ã‚³ãƒžãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³    : "/>
-    <str id="ShortcutPanel.textFile.iconName"     txt="ã‚¢ã‚¤ã‚³ãƒ³ãƒ•ã‚¡ã‚¤ãƒ«  : "/>
-    <str id="ShortcutPanel.textFile.iconIndex"    txt="ã‚¢ã‚¤ã‚³ãƒ³ã‚¤ãƒ³ãƒ‡ã‚¯ã‚¹: "/>
-    <str id="ShortcutPanel.textFile.work"         txt="ä½œæ¥­ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª  : "/>
+    <str id="ShortcutPanel.textFile.name"         txt="ƒVƒ‡[ƒgƒJƒbƒg    : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="–Ú“I‚ÌƒpƒX        : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="à–¾              : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="ƒVƒ‡[ƒgƒJƒbƒgæ  : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“    : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="ƒAƒCƒRƒ“ƒtƒ@ƒCƒ‹  : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="ƒAƒCƒRƒ“ƒCƒ“ƒfƒNƒX: "/>
+    <str id="ShortcutPanel.textFile.work"         txt="ì‹ÆƒfƒBƒŒƒNƒgƒŠ  : "/>
 
-    <str id="ShortcutPanel.location.desktop"      txt="ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—"/>
-    <str id="ShortcutPanel.location.applications" txt="ãƒ—ãƒ­ã‚°ãƒ©ãƒ "/>
-    <str id="ShortcutPanel.location.startMenu"    txt="ã‚¹ã‚¿ãƒ¼ãƒˆ ãƒ¡ãƒ‹ãƒ¥ãƒ¼"/>
-    <str id="ShortcutPanel.location.startup"      txt="ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—"/>
+    <str id="ShortcutPanel.location.desktop"      txt="ƒfƒXƒNƒgƒbƒv"/>
+    <str id="ShortcutPanel.location.applications" txt="ƒvƒƒOƒ‰ƒ€"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="ƒXƒ^[ƒg ƒƒjƒ…["/>
+    <str id="ShortcutPanel.location.startup"      txt="ƒXƒ^[ƒgƒAƒbƒv"/>
 
     <!-- Add your own panels specific strings here if you need -->
 
