@@ -193,7 +193,18 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
   {
     parent.releaseGUI();
     parent.lockPrevButton();
-    this.overallProgressBar.setValue(this.overallProgressBar.getValue() + 1);
+    // With custom actions it is possible, that the current value
+    // is not max - 1. Therefore we use always max for both
+    // progress bars to signal finish state.
+    this.overallProgressBar.setValue(this.overallProgressBar.getMaximum());
+    int ppbMax = packProgressBar.getMaximum();
+    if( ppbMax < 1 )
+    {
+      ppbMax = 1;
+      packProgressBar.setMaximum(ppbMax);
+    }
+    this.packProgressBar.setValue(ppbMax);
+    
     this.packProgressBar.setString(
       parent.langpack.getString("InstallPanel.finished"));
     this.packProgressBar.setEnabled(false);
