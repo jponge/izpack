@@ -41,6 +41,7 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
 
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -201,6 +202,18 @@ public class ImgPacksPanel extends PacksPanelBase
     maxHeight = Math.min(maxHeight + 20, idata.guiPrefs.height - 150);
     
     return new Dimension(maxWidth, maxHeight);
+  }
+  
+  /* (non-Javadoc)
+   * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+   */
+  public void valueChanged(ListSelectionEvent e)
+  {
+    super.valueChanged(e);
+    int i = packsTable.getSelectedRow();
+    if( i >= 0 )
+      imgLabel.setIcon((ImageIcon) images.get(i));
+    
   }
   
   
