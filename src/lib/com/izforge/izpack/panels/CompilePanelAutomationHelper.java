@@ -50,25 +50,25 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper
   private String job_name = null;
   private int last_line_len = 0;
 
-	/**
-	 * Save data for running automated.
-	 *
-	 * @param installData installation parameters
-	 * @param panelRoot unused.
-	 */
-	public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
-	{
+  /**
+   * Save data for running automated.
+   *
+   * @param installData installation parameters
+   * @param panelRoot unused.
+   */
+  public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
+  {
     // not used here - during automatic installation, no automatic
     // installation information is generated
-	}
+  }
 
-	/**
-	 *  Perform the installation actions.
-	 *
-	 * @param panelRoot The panel XML tree root.
-	 */
-	public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
-	{
+  /**
+   *  Perform the installation actions.
+   *
+   * @param panelRoot The panel XML tree root.
+   */
+  public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+  {
     XMLElement compiler_xml = panelRoot.getFirstChildNamed ("compiler");
 
     String compiler = null;
@@ -102,33 +102,31 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper
       this.worker.setCompilerArguments (args);
 
       this.worker.run ();
-    }
-    catch (IOException e)
+    } catch (IOException e)
     {
       e.printStackTrace ();
     }
+  }
 
-	}
-
-	/**
-	 * Reports progress on System.out
-	 *
+  /**
+   * Reports progress on System.out
+   *
    * @see com.izforge.izpack.util.AbstractUIProgressHandler#startAction(String, int)
-	 */
-	public void startAction (String name, int noOfJobs)
-	{
+   */
+  public void startAction (String name, int noOfJobs)
+  {
     System.out.println ("[ Starting compilation ]");
     this.job_name = "";
-	}
+  }
 
-	/**
-	 * Reports the error to System.err
-	 *
-	 * @param error the error
-	 * @see CompileHandler#handleCompileError(CompileResult)
-	 */
-	public void handleCompileError (CompileResult error)
-	{
+  /**
+   * Reports the error to System.err
+   *
+   * @param error the error
+   * @see CompileHandler#handleCompileError(CompileResult)
+   */
+  public void handleCompileError (CompileResult error)
+  {
     System.out.println ();
     System.out.println ("[ Compilation failed ]");
     System.err.println ("Command line: "+error.getCmdline());
@@ -139,15 +137,15 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper
     System.err.println (error.getStderr());
     // do not abort compilation, just continue
     error.setAction (CompileResult.ACTION_CONTINUE);
-	}
+  }
 
-	/**
-	 * Sets state variable for thread sync.
-	 *
-	 * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
-	 */
-	public void stopAction ()
-	{
+  /**
+   * Sets state variable for thread sync.
+   *
+   * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
+   */
+  public void stopAction ()
+  {
     if ((this.job_name != null) && (this.last_line_len > 0))
     {
       String line = this.job_name + ": done.";
@@ -158,21 +156,18 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper
     }
 
     if (this.worker.getResult().isSuccess())
-    {
       System.out.println ("[ Compilation successful ]");
-    }
-
-	}
-
-	/**
-	 * Tell about progress.
-	 *
-	 * @param val
-	 * @param msg
-	 * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
-	 */
-	public void progress(int val, String msg)
-	{
+  }
+  
+  /**
+   * Tell about progress.
+   *
+   * @param val
+   * @param msg
+   * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
+   */
+  public void progress(int val, String msg)
+  {
     float percentage = ((float)val)*100.0f/(float)this.job_max;
 
     String percent = (new Integer ((int)percentage)).toString()+'%';
@@ -185,18 +180,18 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper
       System.out.print (' ');
 
     this.last_line_len = line_len;
-	}
+  }
 
-	/**
-	 * Reports progress to System.out
-	 *
+  /**
+   * Reports progress to System.out
+   *
    * @param jobName The next job's name.
-	 * @param max unused
-	 * @param jobNo The next job's number.
+   * @param max unused
+   * @param jobNo The next job's number.
    * @see com.izforge.izpack.util.AbstractUIProgressHandler#nextStep(String, int, int)
-	 */
-	public void nextStep (String jobName, int max, int jobNo)
-	{
+   */
+  public void nextStep (String jobName, int max, int jobNo)
+  {
     if ((this.job_name != null) && (this.last_line_len > 0))
     {
       String line = this.job_name + ": done.";
@@ -209,5 +204,5 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper
     this.job_max = max;
     this.job_name = jobName;
     this.last_line_len = 0;
-	}
+  }
 }
