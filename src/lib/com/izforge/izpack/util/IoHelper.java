@@ -405,6 +405,11 @@ public class IoHelper
     {
        return(true);
     }
+    else if(method.equals("getPrimaryGroup" ) ) 
+    {
+      if( IoHelper.currentOSFamily == UNIX )
+        return(true);
+    }
     else
     {
       throw new RuntimeException("method name " + method + "not supported by this method");
@@ -489,5 +494,25 @@ public class IoHelper
       break;
     }
     return( retval); 
+  }
+  
+  /**
+   * Returns the primary group of the current user.
+   * This feature will be supported only on Unix. On
+   * other systems null returns.
+   * @return the primary group of the current user
+   */
+  public static final String getPrimaryGroup()
+  {
+    if(  supported("getPrimaryGroup"))
+    {
+      String[] params = {"id", "-gn"};
+      String[] output = new String[2];
+      FileExecutor fe = new FileExecutor();
+      fe.executeCommand(params, output);
+      return(output[0]);
+    }
+    else
+      return(null);
   }
 }

@@ -231,4 +231,39 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     initialFocus = component;
   }
 
+  /**
+   * Calls the langpack of parent InstallerFrame for the String 
+   * <tt>RuntimeClassName.subkey</tt>. Do not add a point infront
+   * of subkey, it is always added in this method.
+   * @param subkey the subkey for the string which should be returned
+   * @param alternateClass the short name of the class which should be used 
+   * if no string is present with the runtime class name 
+   * @return the founded string
+   */
+  public String getI18nStringForClass(String subkey, String alternateClass )
+  {
+    String curClassName = this.getClass().getName();
+    int     nameStart     = curClassName.lastIndexOf ('.') + 1;
+    curClassName          = curClassName.substring (nameStart, curClassName.length ());
+    StringBuffer buf = new StringBuffer();
+    buf.append(curClassName).append(".").append(subkey);
+    String fullkey = buf.toString();
+    String retval = parent.langpack.getString( fullkey);
+    if( retval == null || retval.equals(fullkey) )
+    {
+      buf.delete(0, buf.length());
+      buf.append(alternateClass).append(".").append(subkey);
+      retval = parent.langpack.getString( buf.toString());
+    }
+    return( retval);
+  }
+
+  /**
+   * Returns the parent of this IzPanel (which is a InstallerFrame).
+   * @return the parent of this IzPanel
+   */
+  public InstallerFrame getInstallerFrame()
+  {
+    return(parent);
+  }
 }
