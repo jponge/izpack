@@ -46,5 +46,8 @@ public class GUIPrefs implements Serializable
   public int height;
   
   /** Specifies the OS Look and Feels mappings. */
-  public Map lookAndFeelMapping = new TreeMap(); 
+  public Map lookAndFeelMapping = new TreeMap();
+  
+  /** Specifies the OS Look and Feels optionnal parameters. */
+  public Map lookAndFeelParams = new TreeMap();
 }

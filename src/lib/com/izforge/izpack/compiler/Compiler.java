@@ -1,5 +1,5 @@
 /*
- *  $Id
+ *  $Id$
  *  IzPack
  *  Copyright (C) 2001-2004 Julien Ponge
  *
@@ -47,6 +47,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 import java.util.jar.JarInputStream;
@@ -594,6 +595,7 @@ public class Compiler extends Thread
       XMLElement laf = (XMLElement)it.next();
       String lafName = requireAttribute(laf, "name");
       requireChildNamed(laf, "os");
+
       Iterator oit = laf.getChildrenNamed("os").iterator();
       while (oit.hasNext())
       {
@@ -601,6 +603,17 @@ public class Compiler extends Thread
         String osName = requireAttribute(os, "family");
         p.lookAndFeelMapping.put(osName, lafName);
       }
+      
+      Iterator pit = laf.getChildrenNamed("param").iterator();
+      Map params = new TreeMap();
+      while (pit.hasNext())
+      {
+        XMLElement param = (XMLElement)pit.next();
+        String name  = requireAttribute(param, "name");
+        String value = requireAttribute(param, "value");
+        params.put(name, value);
+      }
+      p.lookAndFeelParams.put(lafName, params);
     }
 
     // We return the GUIPrefs

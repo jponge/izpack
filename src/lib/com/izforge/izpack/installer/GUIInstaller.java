@@ -41,6 +41,7 @@ import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.GrayFilter;
@@ -48,6 +49,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -280,6 +282,25 @@ public class GUIInstaller extends InstallerBase
     {
       UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
       lnf = "liquid";
+      
+      Map params = (Map)installdata.guiPrefs.lookAndFeelParams.get(laf);
+      if (params.containsKey("decorate.frames"))
+      {
+        String value = (String)params.get("decorate.frames");
+        if (value.equals("yes"))
+        {
+          JFrame.setDefaultLookAndFeelDecorated(true);
+        }
+      }
+      if (params.containsKey("decorate.dialogs"))
+      {
+        String value = (String)params.get("decorate.dialogs");
+        if (value.equals("yes"))
+        {
+          JDialog.setDefaultLookAndFeelDecorated(true);
+        }
+      }
+      
       return;
     }
     

@@ -39,8 +39,12 @@ $Id$
     <!ATTLIST guiprefs resizable (yes|no) #REQUIRED>
     <!ATTLIST guiprefs width CDATA #REQUIRED>
     <!ATTLIST guiprefs height CDATA #REQUIRED>
-    <!ELEMENT laf (os+)>
+    <!ELEMENT laf (os+, lafparam*)>
     <!ATTLIST laf name CDATA #REQUIRED>
+    <!ELEMENT param EMPTY>
+    <!ATTLIST param
+        name  CDATA #REQUIRED
+        value CDATA #REQUIRED>
                   
 
 <!-- The locale section (indicates which langpacks to include) -->
