@@ -81,7 +81,7 @@ $Id$
         <!ATTLIST pack required (yes|no) #REQUIRED>
         <!ATTLIST pack preselected (yes|no) "yes">
         <!ATTLIST pack os CDATA #IMPLIED>
-        <!ATTLIST pack loose CDATA (true|false) "false">
+        <!ATTLIST pack loose (true|false) "false">
         <!ELEMENT description (#PCDATA)>
         <!ELEMENT file (os*, additionaldata*)>
             <!ATTLIST file src CDATA #REQUIRED>
