@@ -2287,7 +2287,8 @@ private class SearchField implements ActionListener
     if (file.exists ())
     {
 
-      if ((this.searchType == TYPE_DIRECTORY) && (file.isDirectory()))
+      if (((this.searchType == TYPE_DIRECTORY) && (file.isDirectory()))
+          || ((this.searchType == TYPE_FILE) && (file.isFile ())))
       {
         // no file to check for
         if (this.checkFilename == null)
@@ -2298,9 +2299,6 @@ private class SearchField implements ActionListener
         return file.exists();
       }
       
-      if ((this.searchType == TYPE_FILE) && (file.isFile ()))
-        return true;
-
     }
 
     //System.out.println (path + " did not match");
