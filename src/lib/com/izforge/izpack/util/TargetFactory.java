@@ -1,5 +1,5 @@
 /*
- * IzPack version 3.0.0 pre4 (build 2002.06.15)
+ * IzPack version 3.0.0 (build 2002.08.13)
  * Copyright (C) 2002 by Elmar Grom
  *
  * File :               TargetFactory.java
