@@ -111,7 +111,12 @@ public abstract class Packager
   public void writeSkeletonInstaller (JarOutputStream out)
     throws Exception
   {
-    ZipInputStream skeleton_is = new ZipInputStream (getClass().getResourceAsStream("/lib/installer.jar"));
+    InputStream is = getClass().getResourceAsStream("lib/installer.jar");
+    ZipInputStream skeleton_is = null;
+    if (is != null)
+    {
+      skeleton_is = new ZipInputStream (is);
+    }
 
     if (skeleton_is == null)
     {

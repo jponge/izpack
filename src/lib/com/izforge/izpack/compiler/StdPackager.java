@@ -203,7 +203,6 @@ public class StdPackager extends Packager
     outJar.putNextEntry(new ZipEntry("res/" + resId));
     copyStream(input, outJar);
     outJar.closeEntry();
-    input.close();
   }
 
 

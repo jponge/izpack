@@ -245,6 +245,7 @@ public class Compiler extends Thread
           File.separator + "flags" + File.separator + str + ".gif");
       }
       packager.addResource("flag." + str, inStream);
+      inStream.close ();
     }
 
     // We add the resources
@@ -286,6 +287,7 @@ public class Compiler extends Thread
           System.err.println("ERROR: no variable is defined. " + res.src + " is not parsed.");
           inStream = new FileInputStream(res.src);
           packager.addResource(res.id, inStream);
+          inStream.close ();
         }
       }
       else
@@ -299,6 +301,8 @@ public class Compiler extends Thread
           inStream = res.src_is;
         }
         packager.addResource(res.id, inStream);
+        if (res.src != null)
+          inStream.close ();
       }
     }
 
