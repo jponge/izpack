@@ -360,6 +360,7 @@
         <include name="com/izforge/izpack/*.class"/>
               <include name="com/izforge/izpack/gui/*.class"/>
               <include name="com/izforge/izpack/frontend/*.class"/>
+              <include name="com/izforge/izpack/util/OsConstraint.class"/>
               <include name="net/n3/nanoxml/*.class"/>
       </fileset>
             <fileset dir="${src.dir}">
