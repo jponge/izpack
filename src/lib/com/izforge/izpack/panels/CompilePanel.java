@@ -133,7 +133,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     this.argumentsComboBox = new JComboBox();
     this.startButton = ButtonFactory.createButton (parent.langpack.getString ("CompilePanel.start"), idata.buttonsHColor);
     this.tipLabel = new JLabel(parent.langpack.getString ("CompilePanel.tip"),
-        parent.icons.getImageIcon ("tip"), JLabel.TRAILING);
+        parent.icons.getImageIcon ("tip"), SwingConstants.TRAILING);
     this.opLabel = new JLabel();
     packProgressBar = new JProgressBar();
     this.overallLabel = new JLabel();
@@ -468,6 +468,14 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
   /**  Called when the panel becomes active.  */
   public void panelActivate()
   {
+    // get compilers again (because they might contain variables from former panels)
+    Iterator it = this.worker.getAvailableCompilers().iterator();
+
+    compilerComboBox.removeAllItems();
+    
+    while (it.hasNext())
+      compilerComboBox.addItem ((String)it.next());
+    
     // We clip the panel
     Dimension dim = parent.getPanelsContainerSize();
     dim.width = dim.width - (dim.width / 4);
@@ -618,7 +626,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     }
 
     /** Closes the dialog */
-    private void closeDialog(java.awt.event.WindowEvent evt) 
+    protected void closeDialog(java.awt.event.WindowEvent evt) 
     {
       setVisible(false);
       dispose();
