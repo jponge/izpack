@@ -350,7 +350,7 @@ public class Compiler extends Thread
 
       // Trivial initialisations
       String name = requireAttribute(el, "name");
-	  String id = el.getAttribute("id");
+      String id = el.getAttribute("id");
       String description = requireChildNamed(el, "description").getContent();
       boolean required = requireYesNoAttribute(el, "required");
 
@@ -892,6 +892,7 @@ public class Compiler extends Thread
   }
 
   protected int getOverrideValue(XMLElement f)
+    throws CompilerException
   {
     int override = PackFile.OVERRIDE_UPDATE;
 
@@ -914,6 +915,8 @@ public class Compiler extends Thread
       {
         override = PackFile.OVERRIDE_UPDATE;
       }
+      else
+        parseError(f, "invalid value for attribute \"override\"");
     }
 
     return override;
