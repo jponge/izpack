@@ -2,8 +2,8 @@
 
   > x.y.z (build xxxx.yy.zz)
 
-- CompilePanel: disable Start button after successful compilation
-- improve search field of the UserInputPanel: add checkfilename
+- CompilePanel: disable Start button after successful compilation (T.Schwarze).
+- improve search field of the UserInputPanel: add checkfilename (T.Schwarze).
 - XInfoPanel: UI fix.
 
   > 3.2.1 (build 2003.09.19)
