@@ -252,7 +252,6 @@ public class Compiler extends Thread
       throw new CompilerException("Invalid base directory: " + base);
 
     // Usefull variables
-    int i;
     String str;
     Iterator iter;
     InputStream inStream;
@@ -461,14 +460,13 @@ public class Compiler extends Thread
 
     Map storedFiles = new HashMap();
     // We add the packs
-    i = 0; //pack counter
     iter = getPacks(data).iterator();
     while (iter.hasNext())
     {
       Pack pack = (Pack) iter.next();
       ZipOutputStream zipOut =
         packager.addPack(
-          i,
+          pack.number,
           pack.name,
           pack.osConstraints,
           pack.required,
@@ -531,13 +529,13 @@ public class Compiler extends Thread
           }
           if (bytesWritten != nbytes)
             throw new IOException("File size mismatch when reading " + f);
-          storedFiles.put(p.src, new long[] { i, pos });
+          storedFiles.put(p.src, new long[] { pack.number, pos });
         }
         packageBytes += nbytes;
         //aldo could be not really written we still want to know size.
         in.close();
       }
-      packager.packAdded(i, packageBytes);
+      packager.packAdded(pack.number, packageBytes);
 
       // Write out information about parsable files
       objOut.writeInt(pack.parsables.size());
@@ -564,8 +562,6 @@ public class Compiler extends Thread
       // Cleanup
       objOut.flush();
       zipOut.closeEntry();
-
-      i++;
     }
 
     // We ask the packager to finish
@@ -910,9 +906,8 @@ public class Compiler extends Thread
 
         if (includesElementList != null)
         {
-          for (Iterator include_it = includesElementList.iterator();
-            include_it.hasNext();
-            )
+          Iterator include_it = includesElementList.iterator();
+          while (include_it.hasNext())
           {
             XMLElement inc_el = (XMLElement) include_it.next();
 
@@ -936,9 +931,8 @@ public class Compiler extends Thread
 
         if (excludesElementList != null)
         {
-          for (Iterator exclude_it = excludesElementList.iterator();
-            exclude_it.hasNext();
-            )
+          Iterator exclude_it = excludesElementList.iterator();
+          while (exclude_it.hasNext())
           {
             XMLElement excl_el = (XMLElement) exclude_it.next();
 
