@@ -100,6 +100,8 @@ $Id$
           <!ATTLIST fileset defaultexcludes (yes|no) "yes">  
           <!ATTLIST fileset os (unix|windows|mac) #IMPLIED>
           <!ATTLIST fileset override (true|false|asktrue|askfalse|update) "true">
+          <!ATTLIST fileset includes CDATA #IMPLIED>
+          <!ATTLIST fileset excludes CDATA #IMPLIED>
       <!ELEMENT include EMPTY>
             <!ATTLIST include name CDATA #REQUIRED>
       <!ELEMENT exclude EMPTY>

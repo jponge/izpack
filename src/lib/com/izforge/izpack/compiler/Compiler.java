@@ -49,6 +49,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.Vector;
 import java.util.jar.JarInputStream;
@@ -534,6 +535,40 @@ public class Compiler extends Thread
             excludes[j] = requireAttribute(xclude, "name");
           }
         }
+
+        // parse additional fileset attributes "includes" and "excludes" 
+        String [] toDo = new String[] {"includes", "excludes" };
+        // use the existing containers filled from include and exclude 
+        // and add the includes and excludes to it
+        String [][] containers =  new String[][] { includes, excludes };
+        for( int j = 0; j < toDo.length; ++j )
+        {
+          String inex = f.getAttribute(toDo[j]);
+          if( inex != null && inex.length() > 0  )
+          { // This is the same "splitting" as ant PatternSet do ...
+            StringTokenizer tok = new StringTokenizer(inex, ", ", false);
+            int newSize = tok.countTokens();
+            int k = 0;
+            String [] nCont = null;
+            if(containers[j] != null && containers[j].length > 0 )
+            { // old container exist; create a new which can hold all values 
+              // and copy the old stuff to the front
+              newSize += containers[j].length;
+              nCont = new String[newSize];
+              for(; k < containers[j].length; ++k)
+                nCont[k] = containers[j][k];
+            }
+            if( nCont == null ) // No container for old values created,
+              // create a new one.
+              nCont = new String[newSize];
+            for( ; k < newSize; ++k) 
+              // Fill the new one or expand the existent container
+              nCont[k] = tok.nextToken();
+            containers[j] = nCont;
+          }
+        }
+        includes = containers[0]; // push the new includes to the local var
+        excludes = containers[1]; // push the new excludes to the local var
 
         // scan and add fileset
         DirectoryScanner ds = new DirectoryScanner();

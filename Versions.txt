@@ -6,7 +6,8 @@
   (Klaus Bartz).
 - The packs files can now be located on disk if needed, for instance to install
   an application located on a live cd (Erik Artzmark).
-
+- The attributes "includes" and "excludes" now are supported for filesets
+  (Klaus Bartz).
   > 3.6.1 (build 2004.xx.yy)
 
 - Slovak translation updates (Milan Madzia).
