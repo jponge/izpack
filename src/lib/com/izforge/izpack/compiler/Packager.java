@@ -105,6 +105,9 @@ public abstract class Packager
   
   /**
    * Write the skeleton installer to the output JAR. 
+   * 
+   * @param out
+   * @throws Exception
    */
   public void writeSkeletonInstaller (JarOutputStream out)
     throws Exception
@@ -143,9 +146,10 @@ public abstract class Packager
    *
    * @param  packNumber     The pack number.
    * @param  name           The pack name.
-   * @param  required       Is the pack required ?
+   * @param  required       Is the pack required?
    * @param  osConstraints  The target operation system(s) of this pack.
    * @param  description    The pack description.
+   * @param  preselected    Is the pack selected by default?
    * @return                Description of the Return Value
    * @exception  Exception  Description of the Exception
    */

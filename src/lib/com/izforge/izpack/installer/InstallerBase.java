@@ -54,6 +54,8 @@ public class InstallerBase
   /**
    *  Loads the installation data.
    *
+   * @param installdata Where to store the installation data.
+   * 
    * @exception  Exception  Description of the Exception
    */
   public void loadInstallData(AutomatedInstallData installdata) throws Exception

@@ -50,13 +50,13 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.tools.ant.DirectoryScanner;
-
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
+
+import org.apache.tools.ant.DirectoryScanner;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.GUIPrefs;
@@ -64,6 +64,7 @@ import com.izforge.izpack.Info;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.installer.VariableValueMapImpl;
 import com.izforge.izpack.util.Debug;
@@ -454,6 +455,14 @@ public class Compiler extends Thread
         objOut.writeObject(iter2.next());
       }
 
+      // Write out information about executable files
+      objOut.writeInt(pack.updatechecks.size());
+      iter2 = pack.updatechecks.iterator();
+      while (iter2.hasNext())
+      {
+        objOut.writeObject(iter2.next());
+      }
+
       // Cleanup
       objOut.flush();
       zipOut.closeEntry();
@@ -782,6 +791,65 @@ public class Compiler extends Thread
         }
       }
 
+      // get the updatechecks list
+      // We get the fileset list
+      iter = el.getChildrenNamed("updatecheck").iterator();
+      while (iter.hasNext())
+      {
+        XMLElement f = (XMLElement) iter.next();
+        
+        String casesensitive = f.getAttribute("casesensitive");
+        //  get includes and excludes
+        
+        ArrayList includesList = new ArrayList ();
+                
+        Vector includesElementList = f.getChildrenNamed("include");
+        
+        if (includesElementList != null)
+        {
+          for (Iterator include_it = includesElementList.iterator(); include_it.hasNext();)
+          {
+            XMLElement inc_el = (XMLElement)include_it.next();
+            
+            String name = inc_el.getAttribute("name");
+            
+            if (name != null)
+            {  
+              includesList.add (name);
+            }
+            else
+            {
+              parseError(inc_el, "missing \"name\" attribute for <include> in <updatecheck>");              
+            }
+          }
+        }
+        
+        ArrayList excludesList = new ArrayList ();
+        
+        Vector excludesElementList = f.getChildrenNamed("exclude");
+        
+        if (excludesElementList != null)
+        {
+          for (Iterator exclude_it = excludesElementList.iterator(); exclude_it.hasNext();)
+          {
+            XMLElement excl_el = (XMLElement)exclude_it.next();
+            
+            String name = excl_el.getAttribute("name");
+            
+            if (name != null)
+            {  
+              excludesList.add (name);
+            }
+            else
+            {
+              parseError(excl_el, "missing \"name\" attribute for <exclude> in <updatecheck>");              
+            }
+          }
+        }
+        
+        pack.updatechecks.add (new UpdateCheck (includesList, excludesList, casesensitive));
+      }
+        
       // We add the pack
       packs.add(pack);
     }
@@ -799,7 +867,7 @@ public class Compiler extends Thread
    * @param  includes       The includes rules.
    * @param  excludes       The excludes rules.
    * @param  relPath        The relative path.
-   * @param  osListr        The target os constraints.
+   * @param  osList         The target os constraints.
    * @param  list           The files list.
    * @param  casesensitive  Case-sensitive stuff.
    * @param  override       Behaviour if a file already exists during install
@@ -997,7 +1065,9 @@ public class Compiler extends Thread
   {
     // Initialisation
     ArrayList resources = new ArrayList();
-    XMLElement root = requireChildNamed(data, "resources");
+    XMLElement root = data.getFirstChildNamed("resources");
+    
+    if (root == null) return resources;
 
     // We process each res markup
     Iterator iter = root.getChildrenNamed("res").iterator();
@@ -1032,7 +1102,7 @@ public class Compiler extends Thread
       catch (IOException x)
       {
         // it's a runtime exception if this can't be found
-        throw new RuntimeException ("uninstaller.jar seems to be missing: " + uninst + x);
+        throw new RuntimeException ("The uninstaller ("+uninst+") seems to be missing: "+x.toString());
       }
     }
     resources.add(new Resource("IzPack.uninstaller", uninst_is));
@@ -1152,6 +1222,8 @@ public class Compiler extends Thread
    */
   protected Properties getVariables(XMLElement data) throws Exception
   {
+    this.varMap = new VariableValueMapImpl ();
+    
     Properties retVal = null;
 
     // We get the varible list
@@ -1210,7 +1282,7 @@ public class Compiler extends Thread
 
   protected int getOverrideValue (XMLElement f)
   {
-    int override = PackSource.OVERRIDE_TRUE;
+    int override = PackSource.OVERRIDE_UPDATE;
 
     String override_val = f.getAttribute("override");
     if (override_val != null)
@@ -1251,6 +1323,7 @@ public class Compiler extends Thread
   protected void parseError (XMLElement parent, String message)
     throws CompilerException
   {
+    this.compileFailed = true;
     throw new CompilerException(filename+":"+parent.getLineNr()+": "+message);
   }
 
@@ -1264,6 +1337,7 @@ public class Compiler extends Thread
   protected void parseError (XMLElement parent, String message, Throwable cause)
     throws CompilerException
   {
+    this.compileFailed = true;
     throw new CompilerException(filename+":"+parent.getLineNr()+": "+message, cause);
   }
   
@@ -1449,7 +1523,7 @@ public class Compiler extends Thread
      *  The constructor.
      *
      * @param  id   The Id.
-     * @param  src  The source.
+     * @param  is   The source.
      */
     public Resource(String id, InputStream is)
     {
@@ -1500,26 +1574,22 @@ public class Compiler extends Thread
     public String description;
 
     /**  The files list. */
-    public ArrayList packFiles;
+    public ArrayList packFiles = new ArrayList();
 
     /**  The parsable files list. */
-    public ArrayList parsables;
+    public ArrayList parsables = new ArrayList ();
 
     /**  The executable files list. */
-    public ArrayList executables;
+    public ArrayList executables = new ArrayList ();
 
+    /**  The list of update checks. */
+    public ArrayList updatechecks = new ArrayList ();
+    
     /**  The target operation system of this file */
     public List osConstraints = null;
 
     public boolean preselected;
 
-    /**  The constructor. */
-    public Pack()
-    {
-      packFiles = new ArrayList();
-      parsables = new ArrayList();
-      executables = new ArrayList();
-    }
   }
 
   /**
@@ -1759,7 +1829,7 @@ public class Compiler extends Thread
 
         // Waits
         while (compiler.isAlive())
-          Thread.yield();
+          Thread.sleep(100);
         
         if (compiler.wasSuccessful())
           exitCode = 0;

@@ -38,15 +38,23 @@ import java.io.ObjectInputStream;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
+import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+
+import org.apache.regexp.RE;
+import org.apache.regexp.RECompiler;
+import org.apache.regexp.RESyntaxException;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.FileExecutor;
@@ -77,6 +85,9 @@ public class Unpacker extends Thread
 
   /**  The instances of the unpacker objects. */
   private static ArrayList instances = new ArrayList();
+
+  /**  The absolute path of the installation. (NOT the canonical!) */
+  private File absolute_installpath;
 
 
   /**
@@ -118,6 +129,7 @@ public class Unpacker extends Thread
       FileOutputStream out = null;
       ArrayList parsables = new ArrayList();
       ArrayList executables = new ArrayList();
+      ArrayList updatechecks = new ArrayList();
       List packs = idata.selectedPacks;
       int npacks = packs.size();
       handler.startAction ("Unpacking", npacks);
@@ -255,8 +267,7 @@ public class Unpacker extends Thread
 
         // Load information about parsable files
         int numParsables = objIn.readInt();
-        int k;
-        for (k = 0; k < numParsables; k++)
+        for (int k = 0; k < numParsables; k++)
         {
           ParsableFile pf = (ParsableFile) objIn.readObject();
           pf.path = translatePath(pf.path);
@@ -265,7 +276,7 @@ public class Unpacker extends Thread
 
         // Load information about executable files
         int numExecutables = objIn.readInt();
-        for (k = 0; k < numExecutables; k++)
+        for (int k = 0; k < numExecutables; k++)
         {
           ExecutableFile ef = (ExecutableFile) objIn.readObject();
           ef.path = translatePath(ef.path);
@@ -285,6 +296,17 @@ public class Unpacker extends Thread
             udata.addExecutable(ef);
           }
         }
+        
+        // Load information about updatechecks
+        int numUpdateChecks = objIn.readInt();
+        
+        for (int k = 0; k < numUpdateChecks; k++)
+        {
+          UpdateCheck uc = (UpdateCheck) objIn.readObject();
+          
+          updatechecks.add (uc);
+        }
+        
         objIn.close();
       }
 
@@ -297,10 +319,13 @@ public class Unpacker extends Thread
       if (executor.executeFiles(ExecutableFile.POSTINSTALL, handler) != 0)
         handler.emitError ("File execution failed", "The installation was not completed");
 
-      // We put the uninstaller
+      // We put the uninstaller (it's not yet complete...)
       if (idata.info.getWriteUninstaller())
         putUninstaller();
 
+      // update checks _after_ uninstaller was put, so we don't delete it
+      performUpdateChecks (updatechecks);
+      
       // The end :-)
       handler.stopAction();
     }
@@ -319,6 +344,263 @@ public class Unpacker extends Thread
 
 
   /**
+   * @param updatechecks
+   */
+  private void performUpdateChecks(ArrayList updatechecks)
+  {
+    ArrayList include_patterns = new ArrayList();
+    ArrayList exclude_patterns = new ArrayList ();
+
+    RECompiler recompiler = new RECompiler ();
+    
+    this.absolute_installpath = new File (idata.getInstallPath()).getAbsoluteFile();
+    
+    // at first, collect all patterns
+    for (Iterator iter = updatechecks.iterator(); iter.hasNext();)
+    {
+      UpdateCheck uc = (UpdateCheck)iter.next();
+      
+      if (uc.includesList != null)
+        include_patterns.addAll(preparePatterns (uc.includesList, recompiler));
+      
+      if (uc.excludesList != null)
+        exclude_patterns.addAll(preparePatterns (uc.excludesList, recompiler));      
+    }
+    
+    // do nothing if no update checks were specified
+    if (include_patterns.size() == 0)
+      return;
+    
+    // now collect all files in the installation directory and figure
+    // out files to check for deletion
+    
+    // use a treeset for fast access
+    TreeSet installed_files = new TreeSet ();
+    
+    for (Iterator if_it = this.udata.getFilesList().iterator(); if_it.hasNext();)
+    {
+      String fname = (String)if_it.next();
+      
+      File f = new File (fname);
+      
+      if (! f.isAbsolute())
+      {
+        f = new File (this.absolute_installpath, fname);
+      }
+      
+      installed_files.add(f.getAbsolutePath());
+    }
+    
+    // now scan installation directory (breadth first), contains Files of directories to scan
+    // (note: we'll recurse infinitely if there are circular links or similar nasty things)
+    Stack scanstack = new Stack ();
+    
+    // contains File objects determined for deletion
+    ArrayList files_to_delete = new ArrayList ();
+    
+    try
+    {
+      scanstack.add (absolute_installpath);
+      
+      while (! scanstack.empty ())
+      {
+        File f = (File)scanstack.pop ();
+     
+        File[] files = f.listFiles();
+        
+        if (files == null)
+        {
+          throw new IOException(f.getPath()+"is not a directory!");
+        }
+        
+        for (int i = 0; i < files.length; i++)
+        {  
+          File newf = files[i];
+
+          String newfname = newf.getPath ();
+     
+          // skip files we just installed
+          if (installed_files.contains(newfname))
+            continue;
+          
+          if (fileMatchesOnePattern(newfname, include_patterns) &&
+               (! fileMatchesOnePattern(newfname, exclude_patterns)))
+          {
+            files_to_delete.add (newf);
+          }
+            
+          if (newf.isDirectory())
+          {
+            scanstack.push (newf);
+          }
+
+        }
+      }
+    }
+    catch (IOException e)
+    {
+      this.handler.emitError("error while performing update checks", e.toString());
+    }
+    
+    for (Iterator f_it = files_to_delete.iterator(); f_it.hasNext();)
+    {
+      File f = (File)f_it.next();
+      
+      if (! f.isDirectory()) // skip directories - they cannot be removed safely yet
+      {  
+        this.handler.emitNotification("deleting "+f.getPath());
+        f.delete();
+      }
+      
+    }
+    
+  }
+
+
+  /**
+   * @param filename
+   * @param patterns
+   * 
+   * @return true if the file matched one pattern, false if it did not
+   */
+  private boolean fileMatchesOnePattern(String filename, ArrayList patterns)
+  {
+    // first check whether any include matches
+    for (Iterator inc_it = patterns.iterator(); inc_it.hasNext();)
+    {
+      RE pattern = (RE)inc_it.next();
+      
+      if (pattern.match(filename))
+      {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+
+  /**
+   * @param list A list of file name patterns (in ant fileset syntax)
+   * @param recompiler The regular expression compiler (used to speed up RE compiling).
+   * 
+   * @return List of org.apache.regexp.RE
+   */
+  private List preparePatterns(ArrayList list, 
+      RECompiler recompiler)
+  {
+    ArrayList result = new ArrayList();
+    
+    for (Iterator iter = list.iterator(); iter.hasNext();)
+    {
+      String element = (String)iter.next();
+      
+      if ((element != null) && (element.length()>0))
+      {
+        // substitute variables in the pattern
+        element = this.vs.substitute(element, "plain");
+        
+        // check whether the pattern is absolute or relative
+        File f = new File (element);
+        
+        // if it is relative, make it absolute and prepend the installation path
+        // (this is a bit dangerous...)
+        if (! f.isAbsolute())
+        {
+          element = new File (this.absolute_installpath, element).toString();        
+        }
+        
+        // now parse the element and construct a regular expression from it
+        // (we have to parse it one character after the next because every
+        // character should only be processed once - it's not possible to get this
+        // correct using regular expression replacing)
+        StringBuffer element_re = new StringBuffer ();
+        
+        int lookahead = -1;
+
+        int pos = 0;
+        
+        while (pos < element.length())
+        {
+          char c;
+          
+          if (lookahead != -1)
+          {  
+            c = (char)lookahead;
+            lookahead = -1;
+          }
+          else
+            c = element.charAt(pos++);
+          
+          switch (c)
+          {
+            case '/':
+            {
+              element_re.append (File.separator);
+              break;
+            }
+            // escape backslash and dot
+            case '\\':
+            case '.':
+            {
+              element_re.append ("\\");
+              element_re.append (c);
+              break;
+            }
+            case '*':
+            {
+              if (pos == element.length())
+              {
+                element_re.append ("[^"+File.separator+"]*");
+                break;
+              }
+              
+              lookahead = element.charAt(pos++);
+              
+              // check for "**"
+              if (lookahead == '*')
+              {
+                element_re.append (".*");
+                // consume second star
+                lookahead = -1;
+              }
+              else
+              {
+                element_re.append ("[^"+File.separator+"]*");
+                // lookahead stays there
+              }
+              break;
+            }
+            default:
+            {
+              element_re.append (c);
+              break;
+            }
+          } // switch
+          
+        }
+        
+        // make sure that the whole expression is matched
+        element_re.append ('$');
+        
+        // replace \ by \\ and create a RE from the result
+        try
+        {
+          result.add (new RE(recompiler.compile (element_re.toString())));         
+        }
+        catch (RESyntaxException e)
+        {
+          this.handler.emitNotification("internal error: pattern \""+element+"\" produced invalid RE \""+f.getPath()+"\"");
+        }
+        
+      }
+    }
+    
+    return result;
+  }
+
+
+  /**
    *  Puts the uninstaller.
    *
    * @exception  Exception  Description of the Exception
@@ -333,7 +615,6 @@ public class Unpacker extends Thread
     pathMaker.mkdirs();
 
     // We log the uninstaller deletion information
-    UninstallData udata = UninstallData.getInstance();
     udata.setUninstallerJarFilename(jar);
     udata.setUninstallerPath(dest);
 

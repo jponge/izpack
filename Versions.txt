@@ -2,6 +2,9 @@
 
   > 3.x.x (build.2004.xx.yy)
 
+- Upate Checking: The installer is now able to "update" an already installed
+  package, therefore removing superfluous files after installation.
+  TODO: Documentation. (Tino Schwarze)
 - Dutch langpack update (Hans Aikema).
 - The compiler now emits some warnings when processing an incorrect installation
   file (Chad McHenry / Marcus Stursberg).

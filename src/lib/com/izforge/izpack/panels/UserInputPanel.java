@@ -410,6 +410,14 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   public void panelActivate ()
   {
+    if (spec == null)
+    {
+      // TODO: translate
+      emitError("User input specification could not be found.", 
+          "The specification for the user input panel could not be found. Please contact the packager.");
+      parent.skipPanel();
+    }
+    
     Vector forPacks = spec.getChildrenNamed (PACKS);
     if (!itemRequiredFor (forPacks))
     {

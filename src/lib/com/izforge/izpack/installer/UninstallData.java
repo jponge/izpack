@@ -66,7 +66,7 @@ public class UninstallData
    *
    * @return    The instance.
    */
-  public static UninstallData getInstance()
+  public synchronized static UninstallData getInstance()
   {
     if (instance == null)
       instance = new UninstallData();
@@ -79,7 +79,7 @@ public class UninstallData
    *
    * @param  path  The file to add.
    */
-  public void addFile(String path)
+  public synchronized void addFile(String path)
   {
     filesList.add(path);
   }
@@ -101,7 +101,7 @@ public class UninstallData
    *
    * @param file The executable file.
    */
-  public void addExecutable(ExecutableFile file)
+  public synchronized void addExecutable(ExecutableFile file)
   {
     executablesList.add(file);
   }
@@ -134,7 +134,7 @@ public class UninstallData
    *
    * @param  name  The uninstaller jar filename.
    */
-  public void setUninstallerJarFilename(String name)
+  public synchronized void setUninstallerJarFilename(String name)
   {
     uninstallerJarFilename = name;
   }

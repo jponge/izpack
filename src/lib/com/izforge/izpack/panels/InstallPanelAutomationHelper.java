@@ -66,9 +66,16 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper
 		Unpacker unpacker = new Unpacker(idata, this);
 		unpacker.start();
 		done = false;
-		while (!done)
+		while (!done && unpacker.isAlive())
 		{
-			Thread.yield();
+      try
+      {
+			  Thread.sleep(100);
+      }
+      catch (InterruptedException e)
+      {
+        // ignore it, we're waiting for the unpacker to finish...
+      }
 		}
 	}
 
