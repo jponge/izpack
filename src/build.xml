@@ -168,6 +168,7 @@
     <property name="uninstaller.manifest" value="${basedir}/src/uninstaller.manifest"/>
 
     <property name="debug" value="off"/>
+    <property name="debuglevel" value=""/>
 
     <!-- paths -->
     <path id="classpath">
@@ -195,7 +196,8 @@
 
     <!-- Compiles the compiler src files -->
     <target name="compile.compiler" depends="prepare">
-        <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" deprecation="on" debug="${debug}">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
+        	deprecation="on" debug="${debug}" debuglevel="${debuglevel}" >
             <include name="com/izforge/izpack/*.java"/>
             <include name="com/izforge/izpack/compiler/*.java"/>
             <include name="com/izforge/izpack/ant/*.java"/>
@@ -260,7 +262,7 @@
             </section>
         </manifest>
     </target>
-    <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.panels">
+    <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.panels, build.listener">
         <delete file="${standalone-compiler.jar}" verbose="true"/>
         <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
             <zipfileset src="${installer.jar}"/>
@@ -271,6 +273,7 @@
                 <include name="bin/langpacks/installer/*"/>
                 <include name="bin/native/izpack/*"/>
                 <include name="bin/panels/*Panel.jar"/>
+                <include name="bin/customActions/*.jar"/>
                 <include name="lib/uninstaller.jar"/>
                 <include name="lib/installer.jar"/>
                 <include name="lib/kunststoff.jar"/>
@@ -284,7 +287,8 @@
 
     <!-- Compiles the installer src files -->
     <target name="compile.installer" depends="prepare">
-        <javac srcdir="${src.dir}" classpath="${basedir}/lib/jakarta-regexp-1.3.jar" destdir="${build.dir}" optimize="on" deprecation="on" debug="${debug}">
+        <javac srcdir="${src.dir}" classpath="${basedir}/lib/jakarta-regexp-1.3.jar" destdir="${build.dir}" optimize="on" 
+        deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/*.java"/>
             <include name="com/izforge/izpack/gui/*.java"/>
             <include name="com/izforge/izpack/installer/*.java"/>
@@ -334,7 +338,8 @@
 
     <!-- Compiles the uninstaller src files -->
     <target name="compile.uninstaller" depends="prepare">
-        <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" deprecation="on" debug="${debug}">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
+        deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/LocaleDatabase.java"/>
             <include name="com/izforge/izpack/gui/*.java"/>
             <include name="com/izforge/izpack/util/*.java"/>
@@ -389,7 +394,8 @@
                classpath="${installer.jar}" 
                optimize="on" 
                deprecation="on" 
-               debug="${debug}">
+               debug="${debug}"
+               debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/panels/${panel}*.java"/>
         </javac>
     </target>
@@ -520,6 +526,57 @@
         </antcall>
     </target>
 
+    <!-- Compile a listener -->
+    <target name="compile.listener">
+        <echo message="Compiles listener ${listener}"/>
+        <mkdir dir="${bin.dir}/customActions/${listener-dir}"/>
+        <javac srcdir="${src.dir}" 
+               destdir="${bin.dir}/customActions/${listener-dir}" 
+               classpath="${installer.jar}" 
+               optimize="on" 
+               deprecation="on" 
+               debug="${debug}"
+               debuglevel="${debuglevel}">
+            <include name="${listener-include}/${listener}*.java"/>
+        </javac>
+    </target>
+
+    <!-- Make JAR for a listener -->
+    <target name="compile.listener.finish">
+        <jar jarfile="${bin.dir}/customActions/${listener}.jar">
+            <fileset dir="${bin.dir}/customActions/${listener}">
+                <include name="**/*.class"/>
+            </fileset>
+        </jar>
+    </target>
+    <!-- convenience: compile simple listener and finish it -->
+    <target name="compile.listener.simple">
+        <antcall target="compile.listener">
+            <param name="listener" value="${listener}"/>
+            <param name="listener-dir" value="${listener-dir}"/>
+            <param name="listener-include" value="${listener-include}"/>
+        </antcall>
+        <antcall target="compile.listener.finish">
+            <param name="listener" value="${listener}"/>
+        </antcall>
+    </target>
+
+    <!-- Compile all custom actions (listener) and put them at the right location -->
+    <!-- CUSTOM ACTION test START
+    <target name="build.listener" depends="build.installer">
+        <antcall target="compile.listener.simple">
+            <param name="listener" value="ChmodCompilerListener"/>
+            <param name="listener-dir" value="ChmodCompilerListener"/>
+            <param name="listener-include" value="com/myCompany/tools/install/listener"/>
+        </antcall>
+        <antcall target="compile.listener.simple">
+            <param name="listener" value="ChmodInstallerListener"/>
+            <param name="listener-dir" value="ChmodInstallerListener"/>
+            <param name="listener-include" value="com/myCompany/tools/install/listener"/>
+        </antcall>
+    </target>
+    COSTOM ACTION test END -->
+
     <!-- Performs some cleanups -->
     <target name="clean">
         <echo message="Cleaning-up"/>
@@ -543,7 +600,7 @@
     </target>
 
     <!-- Builds all compilation targets -->
-    <target name="all" depends="build.compiler,build.installer,build.uninstaller,build.panels,build.standalone-compiler"/>
+    <target name="all" depends="build.compiler,build.installer,build.uninstaller,build.panels,build.listener,build.standalone-compiler"/>
 
     <!-- Builds the Javadoc -->
     <target name="build.javadoc" depends="prepare">

@@ -11,7 +11,7 @@ $Id$
 
 <!-- The root element -->
 <!ELEMENT installation (preinstall?, info, variables?, guiprefs?, locale, resources?, panels,
-                        packs, jar*, native*, postinstall?)>
+                        listeners?, packs, jar*, native*, postinstall?)>
     <!ATTLIST installation version CDATA #REQUIRED>
 
 <!-- The info section (general information on an installation) -->
@@ -67,6 +67,13 @@ $Id$
     <!ELEMENT panel EMPTY>
         <!ATTLIST panel classname CDATA #REQUIRED>
 
+<!-- The listener section (indicates which listener where to use) -->
+<!ELEMENT listeners (listener*)>
+    <!ELEMENT listener ( os*)>
+        <!ATTLIST listener compiler CDATA #IMPLIED>
+        <!ATTLIST listener installer CDATA #IMPLIED>
+        <!ATTLIST listener uninstaller CDATA #IMPLIED>
+
 <!-- The packs section (indicates the packs to create) -->
 <!ELEMENT packs (pack+)>
     <!ELEMENT pack (description, os*, file*, singlefile*, fileset*, updatecheck?, parsable*, executable*)>
@@ -75,17 +82,17 @@ $Id$
         <!ATTLIST pack preselected (yes|no) "yes">
         <!ATTLIST pack os CDATA #IMPLIED>
         <!ELEMENT description (#PCDATA)>
-        <!ELEMENT file (os*)>
+        <!ELEMENT file (os*, additionaldata*)>
             <!ATTLIST file src CDATA #REQUIRED>
             <!ATTLIST file targetdir CDATA #REQUIRED>
             <!ATTLIST file os (unix|windows|mac) #IMPLIED>
             <!ATTLIST file override (true|false|asktrue|askfalse|update) "true">
-        <!ELEMENT singlefile (os*)>
+        <!ELEMENT singlefile (os*, additionaldata*)>
             <!ATTLIST singlefile src CDATA #REQUIRED>
             <!ATTLIST singlefile target CDATA #REQUIRED>
             <!ATTLIST singlefile os (unix|windows|mac) #IMPLIED>
             <!ATTLIST singlefile override (true|false|asktrue|askfalse|update) "true">
-    <!ELEMENT fileset (include*, exclude*, os*)>
+    <!ELEMENT fileset (include*, exclude*, os*, additionaldata*)>
           <!ATTLIST fileset dir CDATA #REQUIRED>
           <!ATTLIST fileset targetdir CDATA #REQUIRED>  
           <!ATTLIST fileset casesensitive (yes|no) "yes">  
@@ -95,7 +102,10 @@ $Id$
       <!ELEMENT include EMPTY>
             <!ATTLIST include name CDATA #REQUIRED>
       <!ELEMENT exclude EMPTY>
-            <!ATTLIST exclude name CDATA #REQUIRED>                         
+            <!ATTLIST exclude name CDATA #REQUIRED>
+      <!ELEMENT additionaldata EMPTY>
+            <!ATTLIST additionaldata key CDATA #REQUIRED>
+            <!ATTLIST additionaldata value CDATA #REQUIRED>
       <!ELEMENT parsable (os*)>
           <!ATTLIST parsable targetfile CDATA #REQUIRED>
           <!ATTLIST parsable type CDATA "plain">
@@ -118,7 +128,7 @@ $Id$
                   <!ATTLIST os arch CDATA #IMPLIED>
       <!ELEMENT updatecheck (include*, exclude*)>
 
-<!-- Allows the inclusion in the installer of a native library -->
+<!-- Allows the inclusion in the installer or uninstaller of a native library -->
 <!ELEMENT native EMPTY>
     <!ATTLIST native type (izpack|3rdparty) #REQUIRED>
     <!ATTLIST native name CDATA #REQUIRED>
