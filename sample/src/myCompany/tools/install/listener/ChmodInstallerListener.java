@@ -90,32 +90,17 @@ public class ChmodInstallerListener extends SimpleInstallerListener
   private void chmod(File path, int permissions) throws IOException
   {
     String pathSep = System.getProperty("path.separator");
-    String osName = System.getProperty("os.name").toLowerCase();
-    String permStr = Integer.toOctalString(permissions);
-    // Perform UNIX
-    if( path == null )
-    // Oops this is an error, but in this example we ignore it ...
-      return;
-    if (pathSep.equals(":") && (!osName.startsWith("mac") ||
-      osName.endsWith("x")))
-    {
-      String[] params = {"chmod", permStr, path.getAbsolutePath()};
-      String[] output = new String[2];
-      FileExecutor fe = new FileExecutor();
-      fe.executeCommand(params, output);
-    }
-    else if( osName.startsWith("mac") )
-    {
-      throw new IOException("Sorry, chmod not supported yet on mac; use this class OS dependant.");
-    }
-    else
+    if(OSVersion.IS_WINDOWS)
     {
       throw new IOException("Sorry, chmod not supported yet on windows; use this class OS dependant.");
     }
+    if( path == null )
+    // Oops this is an error, but in this example we ignore it ...
+      return;
+    String permStr = Integer.toOctalString(permissions);
+    String[] params = {"chmod", permStr, path.getAbsolutePath()};
+    String[] output = new String[2];
+    FileExecutor fe = new FileExecutor();
+    fe.executeCommand(params, output);
   }
-
-
-
-
-
 }
