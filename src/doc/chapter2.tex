@@ -336,8 +336,26 @@ not affected.
 If it is set to "no", all labels which are created via the LabelFactory
 contains no icon also a icon id was submitted. Directly created labels are
 not affected.
+\item \texttt{useFlags}: possible are "yes" or "no". Default is "yes".
+If it is set to "no", no flag will be displayed in the language selection
+dialog. For "no" it is recomanded to define also langDisplayType other then
+"iso3".
+\item \texttt{langDisplayType}: possible are "iso3", "native" and "default".
+Default is "iso3". With "iso3" the text for a language will be displayed as
+ISO 639-2:1998 code. With "native" the notation of the language will be used
+if possible, else the notation of the default locale. Using "default" will
+be presented the language in the notation of the default locale of the VM.
 \end{itemize}\
 
+Here is a small sample:
+\begin{verbatim}
+<guiprefs width="640" height="480" resizable="no">
+    <modifier key="useButtonIcons" value="no"/>
+    <modifier key="useLabelIcons" value="no"/>
+    <modifier key="useFlags" value="no"/>
+    <modifier key="langDisplayType" value="native"/>
+</guiprefs>
+\end{verbatim}
 
 \subsection{The Localization Element \texttt{<locale>}}
 \label{localization-element}

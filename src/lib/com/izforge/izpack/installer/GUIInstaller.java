@@ -27,6 +27,7 @@ package com.izforge.izpack.installer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -38,6 +39,8 @@ import java.awt.event.WindowEvent;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -62,6 +65,7 @@ import javax.swing.plaf.metal.MetalTheme;
 
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPackMetalTheme;
@@ -81,7 +85,19 @@ public class GUIInstaller extends InstallerBase
   /**  The L&F. */
   protected String lnf;
 
-  /**
+  /** defined modifier for language display type. */
+  private static final String [] LANGUAGE_DISPLAY_TYPES = 
+    { "iso3", "native", "default"};
+
+  private static final String [][] LANG_CODES =
+  { {"cat", "ca"}, {"chn", "zh"}, {"cze", "cs"}, {"dan", "da"}, 
+    {"deu", "de"}, {"eng", "en"}, {"fin", "fi"}, {"fra", "fr"}, 
+    {"hun", "hu"}, {"ita", "it"}, {"jpn", "ja"}, {"mys", "ms"},
+    {"ned", "nl"}, {"nor", "no"}, {"pol", "pl"}, {"por", "pt"}, 
+    {"rom", "or"}, {"rus", "ru"}, {"spa", "es"}, {"svk", "sk"}, 
+    {"swe", "sv"}, {"tur", "tr"}, {"ukr", "uk"} 
+  };
+/**
    *  The constructor.
    *
    * @exception  Exception  Description of the Exception
@@ -385,9 +401,48 @@ public class GUIInstaller extends InstallerBase
   }
 
   /**
+   * Returns whether flags should be used in the language selection 
+   * dialog or not.
+   * @return whether flags should be used in the language selection dialog 
+   * or not
+   */
+  protected boolean useFlags()
+  {
+    if(installdata.guiPrefs.modifier.containsKey("useFlags") &&
+        ((String)installdata.guiPrefs.modifier.
+        get("useFlags")).equalsIgnoreCase("no") )
+      return(false);
+    return(true);
+  }
+  /**
+   * Returns the type in which the language should be displayed in
+   * the language selction dialog. Possible are "iso3", "native"
+   * and "usingDefault".
+   * @return language display type
+   */
+  protected String getLangType()
+  {
+    if(installdata.guiPrefs.modifier.containsKey("langDisplayType"))
+    {
+      String val = (String)installdata.guiPrefs.modifier.get("langDisplayType");
+      val = val.toLowerCase();
+      // Verify that the value is valid, else return the default.
+      for( int i = 0; i < LANGUAGE_DISPLAY_TYPES.length; ++i )
+        if( val.equalsIgnoreCase(LANGUAGE_DISPLAY_TYPES[i]))
+          return( val );
+      Debug.trace( "Value for language display type not valid; value: " + val);
+    }
+    return(LANGUAGE_DISPLAY_TYPES[0]);
+  }
+  /**
    *  Used to prompt the user for the language.
+   *  Languages can be displayed in iso3 or the native notation or
+   *  the notation of the default locale. Revising to native notation
+   *  is based on code from Christian Murphy (patch #395).
    *
    * @author     Julien Ponge
+   * @author     Christian Murphy
+   * @author     Klaus Bartz
    */
   private final class LanguageDialog extends JDialog implements ActionListener
   {
@@ -398,6 +453,14 @@ public class GUIInstaller extends InstallerBase
     /**  The ok button. */
     private JButton okButton;
 
+    /** The ISO3 to ISO2 HashMap */
+    private HashMap iso3Toiso2 = null;
+    
+    /** iso3Toiso2 expanded ? */
+    private boolean isoMapExpanded = false;
+    
+    /** holds language to ISO-3 language code translation */
+    private HashMap isoTable;
     /**
      *  The constructor.
      *
@@ -405,8 +468,8 @@ public class GUIInstaller extends InstallerBase
      */
     public LanguageDialog(JFrame frame, Object[] items)
     {
-	  super(frame);
-	  
+      super(frame);
+
       try
       {
         loadLookAndFeel();
@@ -436,7 +499,12 @@ public class GUIInstaller extends InstallerBase
       contentPane.add(imgLabel);
 
       gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-      JLabel label1 = new JLabel("Please select your language (ISO3 code)",
+      String firstMessage = "Please select your language";
+      if( getLangType().equals(LANGUAGE_DISPLAY_TYPES[0]))
+        // iso3
+        firstMessage = "Please select your language (ISO3 code)";
+
+      JLabel label1 = new JLabel(firstMessage,
           SwingConstants.CENTER);
       gbConstraints.gridy = 1;
       gbConstraints.insets = new Insets(5, 5, 0, 5);
@@ -449,15 +517,18 @@ public class GUIInstaller extends InstallerBase
       layout.addLayoutComponent(label2, gbConstraints);
       contentPane.add(label2);
       gbConstraints.insets = new Insets(5, 5, 5, 5);
+      
+      items = reviseItems(items);
 
       comboBox = new JComboBox(items);
-      comboBox.setRenderer(new FlagRenderer());
+      if( useFlags())
+        comboBox.setRenderer(new FlagRenderer());
       gbConstraints.fill = GridBagConstraints.HORIZONTAL;
       gbConstraints.gridy = 3;
       layout.addLayoutComponent(comboBox, gbConstraints);
       contentPane.add(comboBox);
 
-      okButton = new JButton("Ok");
+      okButton = new JButton("OK");
       okButton.addActionListener(this);
       gbConstraints.fill = GridBagConstraints.NONE;
       gbConstraints.gridy = 4;
@@ -478,6 +549,97 @@ public class GUIInstaller extends InstallerBase
       setLocation((screenSize.width - frameSize.width) / 2,
           (screenSize.height - frameSize.height) / 2 - 10);
       setResizable(true);
+    }
+
+    /**
+     * Revises iso3 language items depending on the language
+     * display type.
+     * @param items item array to be revised
+     * @return the revised array
+     */
+    private Object[] reviseItems(Object[] items)
+    {
+      String langType = getLangType();
+      // iso3: nothing todo.
+      if( langType.equals(LANGUAGE_DISPLAY_TYPES[0]))
+        return(items);
+      // native: get the names as they are written in that language.
+      if( langType.equals(LANGUAGE_DISPLAY_TYPES[1]))
+        return(expandItems(items, (new JComboBox()).getFont()));
+        // default: get the names as they are written in the default language.
+      if( langType.equals(LANGUAGE_DISPLAY_TYPES[2]))
+        return(expandItems(items, null));
+      // Should never be.
+      return(items);
+    }
+
+    /**
+     * Expands the given iso3 codes to language names.
+     * If a testFont is given, the codes are tested whether
+     * they can displayed or not. If not, or no font given, 
+     * the language name will be returned as written in the default
+     * language of this VM.
+     * @param items item array to be expanded to the language name
+     * @param testFont font to test wheter a name is displayable
+     * @return aray of expanded items
+     */
+    private Object[] expandItems(Object[] items, Font testFont)
+    {
+      int i;
+      if( iso3Toiso2 == null )
+      { // Loasd predefined langs into HashMap.
+        iso3Toiso2 = new HashMap(32);
+        isoTable = new HashMap();
+        for( i = 0; i < LANG_CODES.length; ++i)
+          iso3Toiso2.put(LANG_CODES[i][0], LANG_CODES[i][1]);
+      }
+      for (i = 0; i < items.length; i++)
+      {
+        Object it = expandItem(items[i], testFont);
+        isoTable.put(it, items[i]);
+        items[i] = it;
+      }
+      return items;
+    }
+
+
+    /**
+     * Expands the given iso3 code to a language name.
+     * If a testFont is given, the code will be tested whether
+     * it is displayable or not. If not, or no font given, 
+     * the language name will be returned as written in the default
+     * language of this VM.
+     * @param item item to be expanded to the language name
+     * @param testFont font to test wheter the name is displayable
+     * @return expanded item
+     */
+    private Object expandItem(Object item, Font testFont)
+    {
+      Object iso2Str = iso3Toiso2.get(item);
+      int i;
+      if(  iso2Str == null && ! isoMapExpanded)
+      { // Expand iso3toiso2 only if needed because it needs some time.
+        isoMapExpanded = true;
+        Locale [] loc = Locale.getAvailableLocales();
+        for( i = 0; i < loc.length; ++i )
+          iso3Toiso2.put(loc[i].getISO3Language(),loc[i].getLanguage());
+        iso2Str = iso3Toiso2.get(item);
+      }
+      if(iso2Str == null )
+        // Unknown item, return it self.
+        return(item);
+      Locale locale = new Locale((String) iso2Str);
+      if( testFont == null)
+        // Return the language name in the spelling of the default locale.
+        return(locale.getDisplayLanguage());
+      // Get the language name in the spelling of that language.
+      String str = locale.getDisplayLanguage(locale);
+      int cdut = testFont.canDisplayUpTo(str);
+      if( cdut > -1)
+        // Test font cannot render it; 
+        // use language name in the spelling of the default locale.
+        str = locale.getDisplayLanguage();
+      return(str);
     }
 
     /**
@@ -507,7 +669,10 @@ public class GUIInstaller extends InstallerBase
      */
     public Object getSelection()
     {
-      return comboBox.getSelectedItem();
+      Object retval = null;
+      if( isoTable != null )
+        retval = isoTable.get(comboBox.getSelectedItem());
+      return (retval != null ) ? retval : comboBox.getSelectedItem();
     }
 
     /**
@@ -517,7 +682,23 @@ public class GUIInstaller extends InstallerBase
      */
     public void setSelection(Object item)
     {
-      comboBox.setSelectedItem(item);
+      Object mapped = null;
+      if( isoTable != null )
+      {
+        Iterator iter = isoTable.keySet().iterator();
+        while( iter.hasNext())
+        {
+          Object key = iter.next();
+          if(isoTable.get(key).equals(item) )
+          {
+            mapped = key;
+            break;
+          }
+        }
+      }
+      if( mapped == null )
+        mapped = item;
+      comboBox.setSelectedItem(mapped);
     }
 
     /**

@@ -92,5 +92,6 @@ IzPack for your projects ;-)
 - Per Abich : for the patches.
 - Alexey Makhmutov : Russian langpack updates.
 - Anthony Xin Chen : for the ProcessPanel patch.
+- Christian Murphy : for native language notation support.
 
 # vim: fileformat=dos
