@@ -104,8 +104,7 @@ public class IzPackTask extends org.apache.tools.ant.Task
     if (output == null)
       throw new BuildException(java.util.ResourceBundle.getBundle("com/izforge/izpack/ant/langpacks/messages").getString("output_must_be_specified"));
 
-    if (installerType == null)
-      throw new BuildException(java.util.ResourceBundle.getBundle("com/izforge/izpack/ant/langpacks/messages").getString("installerType_must_be_specified"));
+    // if (installerType == null) now optional
 
     if (basedir == null)
       throw new BuildException(java.util.ResourceBundle.getBundle("com/izforge/izpack/ant/langpacks/messages").getString("basedir_must_be_specified"));
@@ -113,7 +112,8 @@ public class IzPackTask extends org.apache.tools.ant.Task
     if (izPackDir == null)
       throw new BuildException(java.util.ResourceBundle.getBundle("com/izforge/izpack/ant/langpacks/messages").getString("izPackDir_must_be_specified"));
 
-    Compiler c = new Compiler(input, basedir, installerType.getValue(), output);// Create the compiler
+    String kind = (installerType == null ? null : installerType.getValue());
+    Compiler c = new Compiler(input, basedir, kind, output);// Create the compiler
     Compiler.IZPACK_HOME = izPackDir;
 
     c.setPackagerListener(this);// Listen to the compiler messages
