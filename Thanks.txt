@@ -72,5 +72,7 @@ IzPack for your projects ;-)
 - Peter Mikula : for the installer images patch.
 - Dario Yuri : for the finish panels patch.
 - Bill Wong : for the Windows shortcuts contributions.
+- Gaganis Giorgos : for the userInputPanel i18n code.
+- Alex Bradley : for the ProcessPanel contributions.
 
 # vim: fileformat=dos
