@@ -1,5 +1,10 @@
 [ The list of the different public versions of IzPack ]
 
+  > x.y.z. (build x.y.z)
+
+- The files executor has been fixed when dealing with classpath arguments
+  passing.
+
   > 3.3.0 (build 2003.11.15)
 
 - Various bugs fixed (taken from the bugs database).

@@ -313,7 +313,8 @@ public class FileExecutor
         else if (ExecutableFile.JAR == efile.type && null != efile.mainClass)
         {
           paramList.add(System.getProperty("java.home") + "/bin/java");
-          paramList.add("-cp " + file.toString());
+          paramList.add("-cp");
+          paramList.add(file.toString());
           paramList.add(efile.mainClass);
         }
 
