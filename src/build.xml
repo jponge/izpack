@@ -532,6 +532,7 @@
     </copy>
     <copy todir="${dist.dir}" includeEmptyDirs="yes">
       <fileset dir="${dist-files.dir}">
+        <include name="useNativeLAF" />
         <include name="*.jpg"/>
         <include name="*.html"/>
         <include name="Licence.txt"/>
@@ -550,7 +551,7 @@
     <echo message="Makes the installer using IzPack"/>
     <izpack input="${dist.dir}/IzPack-install.xml"
             output="${dist.dir}/IzPack-install.jar"
-            installerType="standard-kunststoff"
+            installerType="standard"
             basedir="${dist.dir}"
             izPackDir="${dist.dir}/"/>
 

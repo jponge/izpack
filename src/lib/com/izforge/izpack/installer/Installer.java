@@ -344,6 +344,11 @@ public class Installer
     if (installdata.kind.equalsIgnoreCase("standard") ||
       installdata.kind.equalsIgnoreCase("web"))
     {
+      if (getClass().getResourceAsStream("/res/useNativeLAF") != null)
+      {
+        String nlaf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(nlaf);
+      }
     	if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
     	{
 		      // We simply put our nice theme

@@ -66,6 +66,7 @@
         -->
         <res src="langsel.jpg" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
+        <res src="useNativeLAF" id="useNativeLAF" />
     </resources>
 
     <!-- The panels in a classic order -->
