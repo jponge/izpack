@@ -1,8 +1,9 @@
 [ Description ]
 
-    IzPack is Copyright (c) 2001-2003 Julien PONGE.
+    IzPack is Copyright (c) 2001-2005 Julien PONGE.
     http://www.izforge.com/
     julien@izforge.com
+    julien.ponge@gmail.com
 
     IzPack is a powerfull Java installer builder released under the terms of
 the GNU GPL version 2 of the licence, or any later version.

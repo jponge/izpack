@@ -9,22 +9,8 @@ IzPack is totally independant from the Operating System which runs it. It is
 also very modular so that you can easely create and integrate your own panels
 (installation steps).
 
-    Making installers can be made through 2 ways :
-- by using a GUI-based frontend that avoids you of typing the XML files and 
-submitting them to the command-line based compiler
-- by making the XML files yourself and submitting them to the command-line
-based compiler (usefull to integrate IzPack with another building process or
-development environment).
-
     The IzPack homepage is http://www.izforge.com/izpack/ . You can contact the
-author : julien@izforge.com. A mailing-list is also available : 
-izpack.ml@izforge.com (send a email with 'subscribe' as the subject to 
-izpack.ml_request@izforge.com).
-
-    You can also get the latest development version (Unstable branch) from the
-CVS server. You can log in as 'anonymous'. The CVSROOT is :
-:pserver:login@cvs.tuxfamily.org:/cvsroot/izpack2 where 'login' can be replaced
-by your CVS login (ask one if you want to contribute) or 'anonymous'.
+author : julien@izforge.com. 
 
     > 2 - The documentation <
     
