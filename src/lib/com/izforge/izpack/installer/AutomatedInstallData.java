@@ -82,9 +82,6 @@ public class AutomatedInstallData
   /**  The language pack. */
   public LocaleDatabase langpack;
 
-  /**  The installer kind. */
-  public String kind;
-
   /**  The uninstaller jar stream. */
   public ZipOutputStream uninstallOutJar;
 
