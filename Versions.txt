@@ -12,6 +12,7 @@
 - Support of native libraries in the uninstaller (Klaus Bartz).
 - InfoPanel: variables substitution is now allowed (Borje Jonsson).
 - InstallPanel supports internationalized package names (Gaganis Giorgos).
+- Support for package dependencies (Gaganis Giorgos).
 
   > 3.6.1 (build 2004.xx.yy)
 
