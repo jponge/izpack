@@ -69,16 +69,10 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
- * @author tisc
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
-/**
  *  The IzPack compiler class.
  *
  * @author     Julien Ponge
- * created    October 26, 2002
+ * @author     Tino Schwarze
  */
 public class Compiler extends Thread
 {
@@ -86,7 +80,7 @@ public class Compiler extends Thread
   public final static String VERSION = "1.0";
 
   /**  The IzPack version. */
-  public final static String IZPACK_VERSION = "3.1.0b (build 2003.08.22)";
+  public final static String IZPACK_VERSION = "3.2.0 (build 2003.09.18)";
 
   /**  Standard installer. */
   public final static String STANDARD = "standard";

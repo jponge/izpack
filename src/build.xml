@@ -123,7 +123,7 @@
 
     <!-- Define directories -->
     <property file="src/ant.properties"/>
-    <property name="ver" value="3.1"/>
+    <property name="ver" value="3.2"/>
     <property name="rel" value="0"/>
 
     <property name="src.dir" value="${basedir}/src/lib"/>
