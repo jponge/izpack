@@ -81,5 +81,7 @@ IzPack for your projects ;-)
 - Andreas Vox : for the various patches.
 - Borje Jonsson : for the InfoPanel variables substitution patch.
 - Redhuan Daniel Oon : for the Malaysian translation.
+- ??? : for the Norwegian translation.
+- Xi Ping Wang : for the Chinese translation.
 
 # vim: fileformat=dos

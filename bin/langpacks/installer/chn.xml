@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="GB2312" standalone="yes" ?>
+
+<!-- The Simplified Chinese langpack -->
+
+<langpack>
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - °²×° "/>
+    <str id="installer.next" txt="ÏÂÒ»²½"/>
+    <str id="installer.prev" txt="ÉÏÒ»²½"/>
+    <str id="installer.quit" txt="ÍË³ö"/>
+    <str id="installer.madewith" txt="(ÓÉIzPackÖÆ×÷Éú³É - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="ÊÇ·ñÈ·¶¨ÍË³ö?"/>
+    <str id="installer.quit.message" txt="½«È¡Ïû¸Ã°²×°¹ý³Ì !"/>
+    <str id="installer.warning" txt="¾¯¸æ !"/>
+    <str id="installer.yes" txt="ÊÇ"/>
+    <str id="installer.no" txt="·ñ"/>
+    <str id="installer.cancel" txt="È¡Ïû"/> 
+    <str id="installer.error" txt="´íÎó"/>
+    
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="½«Ð¶ÔØÒÑ°²×°µÄÓ¦ÓÃ³ÌÐò !"/>
+    <str id="uninstaller.destroytarget" txt=" Ç¿ÖÆÉ¾³ý "/>
+    <str id="uninstaller.uninstall" txt="Ð¶ÔØ"/>
+    
+    <!-- The strings for the 'official' IzPack plugins -->
+    <str id="HelloPanel.welcome1" txt="»¶Ó­°²×°"/>
+    <str id="HelloPanel.welcome2" txt=" !"/>
+    <str id="HelloPanel.authors" txt="¸ÃÈí¼þ×÷Õß : "/>
+    <str id="HelloPanel.url" txt="Ö÷Ò³ : "/>
+    
+    <str id="LicencePanel.info" txt="Çë×ÐÏ¸ÔÄ¶ÁÒÔÏÂÐí¿ÉÐ­Òé:"/>
+    <str id="LicencePanel.agree" txt="ÎÒ½ÓÊÜ¸ÃÐí¿ÉÐ­ÒéµÄÌõ¿î."/>
+    <str id="LicencePanel.notagree" txt="ÎÒ²»½ÓÊÜ¸ÃÐí¿ÉÐ­ÒéµÄÌõ¿î."/>
+    <str id="LicencePanel.yes" txt="ÊÇ"/>
+    <str id="LicencePanel.no" txt="·ñ"/>
+    
+    <str id="InfoPanel.info" txt="ÇëÔÄ¶ÁÒÔÏÂÐÅÏ¢ :"/>
+    
+    <str id="TargetPanel.info" txt="Ñ¡Ôñ°²×°Â·¾¶ :"/>
+    <str id="TargetPanel.browse" txt="ä¯ÀÀ ..."/>
+    <str id="TargetPanel.warn" 
+         txt="Ä¿Â¼ÒÑ¾­´æÔÚ ! ¿ÉÄÜ¸²¸ÇÏÖ´æÎÄ¼þ£¬ÊÇ·ñÈ·¶¨ÔÚ´Ë°²×°?"/>
+    <str id="TargetPanel.empty_target"
+         txt="ÄãÃ»ÓÐÖ¸¶¨Ä¿±êÂ·¾¶! ÊÇ·ñÕýÈ·?"/>
+	<str id="TargetPanel.createdir" txt="Ä¿±êÄ¿Â¼½«´´½¨ÔÚ :" />
+    <str id="TargetPanel.nodir" 
+         txt="¸ÃÎÄ¼þ²»ÊÇÄ¿Â¼! ÇëÑ¡ÔñÒ»¸öÄ¿Â¼!"/>
+    <str id="TargetPanel.notwritable" 
+         txt="Ä¿Â¼ÎÞ·¨Ð´Èë! ÇëÑ¡ÔñÆäËûÄ¿Â¼!"/>
+    
+    <str id="PacksPanel.info" txt="Ñ¡ÔñÄãÒª°²×°µÄ°ü :"/>
+    <str id="PacksPanel.tip" txt="×¢Òâ: »ÒÉ«Ñ¡ÏîÊÇ±ØÑ¡µÄ."/>
+    <str id="PacksPanel.space" txt="×ÜÐèÇó¿Õ¼ä: "/>
+    <str id="PacksPanel.freespace" txt="ÓÐÐ§¿Õ¼ä: "/>
+    <str id="PacksPanel.description" txt="ÃèÊö"/>
+    <str id="PacksPanel.dependencyList" txt="ËùÑ¡°üÐèÒª°²×°ÒÔÏÂ°ü"/>
+    <str id="ImgPacksPanel.dependencyList" txt="ÒÀÀµ"/>
+	<str id="PacksPanel.notEnoughSpace" txt="°²×°ÒªÇóµÄ´ÅÅÌ¿Õ¼ä³¬³öÁË¿ÉÓÃµÄ´ÅÅÌ¿Õ¼ä."/>
+    <str id="PacksPanel.notAscertainable" txt="not ascertainable"/>
+    
+    <str id="InstallPanel.info" txt="µã»÷ '°²×° !' ¿ªÊ¼°²×°½ø³Ì"/>
+    <str id="InstallPanel.install" txt="°²×° !"/>
+    <str id="InstallPanel.tip" txt="°ü°²×°¹ý³Ì :"/>
+    <str id="InstallPanel.begin" txt="[Nothing]"/>
+    <str id="InstallPanel.finished" txt="[Íê³É]"/>
+    <str id="InstallPanel.progress" txt="Overall installation progress :"/>
+    <str id="InstallPanel.overwrite.title" txt="ÎÄ¼þÒÑ¾­´æÔÚ"/>
+    <str id="InstallPanel.overwrite.question" txt="ÒÔÏÂÎÄ¼þÒÑ¾­´æÔÚ. ÊÇ·ñ½øÐÐ¸²¸Ç?"/>
+    
+    <str id="FinishPanel.success" txt="°²×°³É¹¦."/>
+    <str id="FinishPanel.done" txt="Íê³É"/>
+    <str id="FinishPanel.fail" txt="°²×°Ê§°Ü!"/>
+    <str id="FinishPanel.uninst.info" txt="Ð¶ÔØ³ÌÐòÒÑ¾­´´½¨ÔÚ:"/>
+    <str id="FinishPanel.auto" txt="Éú³É×Ô¶¯°²×°½Å±¾"/>
+    <str id="FinishPanel.auto.tip" 
+         txt="Ê¹ÓÃ¸Ã½Å±¾¿ÉÒÔÔÚÆäËû¼ÆËã»úÉÏ·´¸´±¾´Î°²×°."/>
+    
+    <str id="ImgPacksPanel.packs" txt="µ±Ç°¿ÉÑ¡°üÈçÏÂ :"/>
+    <str id="ImgPacksPanel.snap" txt="°ü¿ìÕÕ  :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" °²×°¸Ã°ü"/>
+    
+    <str id="ShortcutPanel.regular.list" txt="Ñ¡Ôñ¿ì½Ý·½Ê½µÄ³ÌÐò×é:"/>
+    <str id="ShortcutPanel.regular.default" txt="ÖØÖÃ"/>
+    <str id="ShortcutPanel.regular.desktop" txt="ÔÚ×ÀÃæ´´½¨¿ì½Ý·½Ê½"/>
+    <str id="ShortcutPanel.regular.create" txt="´´½¨¿ì½Ý·½Ê½"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="´´½¨¿ì½Ý·½Ê½:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="µ±Ç°ÓÃ»§"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="ËùÓÐÓÃ»§"/>
+
+    <str id="ShortcutPanel.alternate.apology" txt="ºÜÒÅº¶IzPack²»Ö§³ÖÔÚµ±Ç°²Ù×÷ÏµÍ³ÉÏ´´½¨¿ì½Ý·½Ê½. ´´½¨¿ì½Ý·½Ê½£¬Çë²Î¿¼²Ù×÷ÏµÍ³ÊÖ²á."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="ÎªÁËÒÔºó²Î¿¼£¬Äã¿ÉÒÔ°ÑÓ¦ÓÃ³ÌÐòÄ¿±êµÄÏêÏ¸ÐÅÏ¢±£´æÔÚÎÄ±¾ÎÄ¼þ."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="±£´æÎÄ±¾ÎÄ¼þ"/>
+    
+    <str id="ShortcutPanel.textFile.header" txt="¿ì½Ý·½Ê½ÐÅÏ¢\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. ¸ÃÐÅÏ¢ÈÃÊÖ¶¯´´½¨¿ì½Ý·½Ê½³ÉÎª¿ÉÄÜ.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="¿ì½Ý·½Ê½          : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="ÃèÊö              : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="¿ì½ÝÄ¿±ê          : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="ÃüÁîÐÐ            : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Í¼±êÎÄ¼þ          : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Í¼±êË÷Òý          : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="¹¤×÷Ä¿Â¼          : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="×ÀÃæ"/>
+    <str id="ShortcutPanel.location.applications" txt="Ó¦ÓÃ³ÌÐò²Ëµ¥"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="¿ªÊ¼²Ëµ¥"/>
+    <str id="ShortcutPanel.location.startup"      txt="Æô¶¯³ÌÐò×é"/>
+    
+    <str id="UserInputPanel.error.caption"        txt="Â¼ÈëÎÊÌâ"/>
+    <str id="UserInputPanel.search.autodetect"    txt="×Ô¶¯¼ì²â"/>
+
+    <!-- more descriptive error message would be cool, like specifying what file we looked for -->
+    <str id="UserInputPanel.search.autodetect.failed.message"    txt="×Ô¶¯¼ì²âÊ§°Ü."/>
+    <str id="UserInputPanel.search.autodetect.failed.caption"    txt="×Ô¶¯¼ì²âÊ§°Ü."/>
+    <str id="UserInputPanel.search.autodetect.tooltip"           txt="ÔÚ¸ø¶¨Â·¾¶ÖÐ¼ì²éÎÄ¼þ»òÄ¿Â¼."/>
+    <str id="UserInputPanel.search.location"           txt="ÊäÈë{0}µÄÂ·¾¶."/>
+    <str id="UserInputPanel.search.location.checkedfile" txt="The existence of {0} is checked."/>
+    <str id="UserInputPanel.search.browse"           txt="ä¯ÀÀ..."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="ÄãÑ¡ÔñµÄÎÄ¼þ»òÄ¿Â¼²»´æÔÚ»òÕß²»ÕýÈ·."/>
+    <str id="UserInputPanel.search.wrongselection.caption"   txt="ÎÞÐ§Ñ¡Ïî."/>
+
+    <str id="CompilePanel.heading" txt="±àÒë" />
+    <str id="CompilePanel.tip" txt="ÈÎÎñ±àÒë½ø³Ì:" />
+    <str id="CompilePanel.browse" txt="ä¯ÀÀ..." />
+    <str id="CompilePanel.browse.approve" txt="×÷Îª±àÒëÆ÷Ê¹ÓÃ" />
+    <str id="CompilePanel.start" txt="¿ªÊ¼" />
+    <str id="CompilePanel.progress.initial" txt="[°´¿ªÊ¼°´Å¥]" />
+    <str id="CompilePanel.progress.finished" txt="[Íê³É]" />
+    <str id="CompilePanel.progress.overall" txt="Overall compilation progress:" />
+    <str id="CompilePanel.error" txt="±àÒëÊ§°Ü" />
+    <str id="CompilePanel.error.reconfigure" txt="ÖØÐÂÉèÖÃ" />
+    <str id="CompilePanel.error.ignore" txt="ºöÂÔ" />
+    <str id="CompilePanel.error.abort" txt="ÖÕÖ¹" />
+    <str id="CompilePanel.error.seebelow" txt="ÒÔÏÂ²é¿´³ö´íÃüÁîºÍÏà¹ØÊä³ö." />
+    <str id="CompilePanel.error.nofiles" txt="²éÑ¯±àÒëÎÄ¼þÊ±³öÏÖ´íÎó." />
+    <str id="CompilePanel.error.compilernotfound" txt="±àÒëÆ÷²»ÄÜÔËÐÐ." />
+    <str id="CompilePanel.error.invalidarguments" txt="±àÒëÆ÷²»ÄÜ´¦ÀíÌá¹©µÄ²ÎÊý." />
+    <str id="CompilePanel.error.noclassfile" txt="±àÒëÆ÷Ã»ÓÐÎªÔ´´úÂëÎÄ¼þÉú³ÉÏà¹ØÀàÎÄ¼þ " />
+    <str id="CompilePanel.choose_compiler" txt="Ê¹ÓÃµÄ±àÒëÆ÷:" />
+    <str id="CompilePanel.additional_arguments" txt="¶îÍâµÄ±àÒëÆ÷²ÎÊý:" />
+
+    <str id="ProcessPanel.heading" txt="´¦ÀíÖÐ" />
+
+    <!-- Add your own panels specific strings here if you need -->
+
+</langpack>
+

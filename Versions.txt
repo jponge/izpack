@@ -18,6 +18,8 @@
 - New Malaysian langpack (Redhuan Daniel Oon).
 - Various other translations updates.
 - System properties can now be used as variables (Borje Jonsson).
+- New Norwegian langpack (?).
+- New Chinese langpack (Xi Ping Wang).
 
   > 3.6.1 (build 2004.xx.yy)
 
