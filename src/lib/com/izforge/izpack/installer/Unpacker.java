@@ -704,8 +704,9 @@ public class Unpacker extends Thread
         || idata.kind.equalsIgnoreCase("web-kunststoff"))
     {
       URL url = new URL("jar:" + jarLocation + "!/packs/pack" + n);
-      JarURLConnection jarConnection = (JarURLConnection) url.openConnection();
-      in = jarConnection.getInputStream();
+      //JarURLConnection jarConnection = (JarURLConnection) url.openConnection();
+      // TODO: what happens when using an automated installer?
+      in = new WebAccessor(null).openInputStream(url);
     }
     return in;
   }
