@@ -31,6 +31,8 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.TreeSet;
 
 import com.izforge.izpack.ExecutableFile;
@@ -77,13 +79,21 @@ public class Destroyer extends Thread
   {
     try
     {
+      // We get the list of uninstaller listeners
+      List [] listeners = getListenerLists(); 
       // We get the list of the files to delete
       ArrayList executables = getExecutablesList();
+
+
       FileExecutor executor = new FileExecutor(executables);
       executor.executeFiles(ExecutableFile.UNINSTALL, this.handler);
 
       ArrayList files = getFilesList();
       int size = files.size();
+
+      // Custem action listener stuff --- beforeDeletion ----
+      informListeners(listeners[0], UninstallerListener.BEFORE_DELETION,
+        files, handler);
 
       handler.startAction("destroy", size);
 
@@ -91,9 +101,22 @@ public class Destroyer extends Thread
       for (int i = 0; i < size; i++)
       {
         File file = (File) files.get(i);
+        // Custem action listener stuff --- beforeDelete ----
+        informListeners(listeners[1], UninstallerListener.BEFORE_DELETE,
+          file, handler);
+
         file.delete();
-        handler.progress(i, file.getAbsolutePath());
+
+        // Custem action listener stuff --- afterDelete ----
+        informListeners(listeners[1], UninstallerListener.AFTER_DELETE,
+          file, handler);
+
+       handler.progress(i, file.getAbsolutePath());
       }
+
+      // Custem action listener stuff --- afterDeletion ----
+      informListeners(listeners[0], UninstallerListener.AFTER_DELETION,
+        files, handler);
 
       // We make a complementary cleanup
       handler.progress(size, "[ cleanups ]");
@@ -191,4 +214,74 @@ public class Destroyer extends Thread
       file.delete();
 
   }
+
+  // CUSTOM ACTION STUFF -------------- start -----------------
+
+  /**
+   * Load the defined uninstall listener objects.
+   * @return a list with the defined uninstall listeners
+   * @throws Exception
+   */
+  private List [] getListenerLists() throws Exception
+  {
+    ArrayList [] uninstaller = new ArrayList[] {new ArrayList(),new ArrayList()};
+    // Load listeners if exist
+    InputStream in;
+    ObjectInputStream objIn;
+    in = getClass().getResourceAsStream("/uninstallerListeners");
+    if( in != null )
+    {
+      objIn = new ObjectInputStream(in);
+      List listeners = (List)objIn.readObject();
+      objIn.close();
+      Iterator iter = listeners.iterator();
+      while( iter != null && iter.hasNext())
+      {
+        Class clazz = Class.forName(((String) iter.next()));
+        UninstallerListener ul = (UninstallerListener) clazz.newInstance();
+        if( ul.isFileListener())
+          uninstaller[1].add( ul );
+        else
+          uninstaller[0].add( ul );
+     }
+    }
+    return uninstaller;
+  }
+  /**
+   * Informs all listeners.
+   * @param listeners list with the listener objects
+   * @param action identifier which callback should be called
+   * @param param parameter for the call
+   * @param handler the current progress handler
+   */
+
+  private void informListeners(List listeners, int action, 
+    Object param, AbstractUIProgressHandler handler)
+    throws Exception
+  {
+    // Iterate the action list.
+    Iterator iter = listeners.iterator();
+    while( iter.hasNext())
+    {
+      UninstallerListener il = (UninstallerListener) iter.next();
+      switch( action )
+      {
+        case UninstallerListener.BEFORE_DELETION:
+          il.beforeDeletion(  (List) param, handler );
+          break;
+        case UninstallerListener.AFTER_DELETION:
+          il.afterDeletion(  (List) param, handler );
+          break;
+        case UninstallerListener.BEFORE_DELETE:
+          il.beforeDelete(  (File) param, handler );
+          break;
+        case UninstallerListener.AFTER_DELETE:
+          il.afterDelete(  (File) param, handler );
+          break;
+      }
+    }
+  }
+
+  // CUSTOM ACTION STUFF -------------- end -----------------
+
 }
