@@ -121,7 +121,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
    * components under the path input
    * components.
    */
-  private void createLayoutBottom()
+  public void createLayoutBottom()
   {
   }
 
