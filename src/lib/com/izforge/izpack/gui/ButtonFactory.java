@@ -88,7 +88,11 @@ public class ButtonFactory
 	{
 		if (useHighlightButtons)
 		{
-			return new HighlightJButton(icon, color);
+      if (useButtonIcons)     
+        return new HighlightJButton(icon, color);
+      else
+        return new HighlightJButton("", color);
+       
 		}
 		else
 		{
@@ -119,7 +123,10 @@ public class ButtonFactory
 	{
 		if (useHighlightButtons)
 		{
-			return new HighlightJButton(text,icon, color);
+      if (useButtonIcons)     
+        return new HighlightJButton(text,icon, color);
+      else
+        return new HighlightJButton(text, color);
 		}
 		else
 		{

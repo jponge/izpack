@@ -284,6 +284,9 @@ public class GUIInstaller extends InstallerBase
     if (laf.equals("kunststoff"))
     {
       ButtonFactory.useHighlightButtons();
+      // Reset the use button icons state because useHighlightButtons
+      // make it always true. 
+      ButtonFactory.useButtonIcons(useButtonIcons);
       installdata.buttonsHColor = new Color(255, 255, 255);
       Class lafClass = Class
           .forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
