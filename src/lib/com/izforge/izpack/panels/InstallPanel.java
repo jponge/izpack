@@ -54,13 +54,13 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
   private GridBagConstraints gbConstraints;
 
   /**  The tip label. */
-  private JLabel tipLabel;
+  protected JLabel tipLabel;
 
   /**  The operation label . */
-  private JLabel opLabel;
+  protected JLabel opLabel;
 
   /**  The progress bar. */
-  private JProgressBar progressBar;
+  protected JProgressBar progressBar;
 
   /**  True if the installation has been done. */
   private volatile boolean validated = false;
@@ -208,7 +208,7 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
     setMaximumSize(dim);
     setPreferredSize(dim);
     parent.lockNextButton();
-    
+
     parent.install(this);
 
   }
