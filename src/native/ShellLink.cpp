@@ -24,12 +24,13 @@
  */
 
 #include "com_izforge_izpack_util_os_ShellLink.h"
-#include <windows.h>
 #include <winerror.h>
 #include <objbase.h>
 #include <basetyps.h>
 #include <shlobj.h>
 #include <objidl.h>
+#include <windows.h>
+#include <tchar.h>
 
 // --------------------------------------------------------------------------
 // Gound rules used for the implementation of this native interface
@@ -796,7 +797,7 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_SetHotkey	(JNIE
   jfieldID    hotkeyID  = (env)->GetFieldID      (cls, "hotkey", "I");
   jint        hotkey    = (env)->GetIntField     (obj, hotkeyID);
 
-  hres = p_shellLink [handle]->SetHotkey (hotkey);
+  hres = p_shellLink [handle]->SetHotkey ((unsigned short)hotkey);
   if (SUCCEEDED (hres))
   {
     return (SL_OK);
@@ -1067,9 +1068,74 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_loadLink (JNIEn
   }
 }
 
+
+// --------------------------------------------------------------------------
+// resolves a Windows Standard path using SHGetPathFromIDList
+// inputs:
+//  inc iCsidl - one of the CSIDL
+//    valid  	CSIDL_COMMON_DESKTOPDIRECTORY
+//				CSIDL_COMMON_STARTMENU	
+//				CSIDL_COMMON_PROGRAMS
+//				CSIDL_COMMON_STARTUP
+//           	CSIDL_DESKTOPDIRECTORY
+//				CSIDL_STARTMENU	
+//				CSIDL_PROGRAMS
+//				CSIDL_STARTUP
+// returns:
+//   the Windows Standard Path in szPath.
+// --------------------------------------------------------------------------
+LONG GetLinkPath( int iCsidl, LPTSTR szPath )
+{
+    HRESULT hr;
+
+    // Allocate a pointer to an Item ID list
+    LPITEMIDLIST pidl;
+
+    // Get a pointer to an item ID list that
+    // represents the path of a special folder
+    hr = SHGetSpecialFolderLocation(NULL, iCsidl, &pidl);
+
+    if ( SUCCEEDED(hr) )
+    {
+        // Convert the item ID list's binary
+        // representation into a file system path
+        BOOL f = SHGetPathFromIDList(pidl, szPath);
+
+        // Allocate a pointer to an IMalloc interface
+        LPMALLOC pMalloc;
+
+        // Get the address of our task allocator's IMalloc interface
+        hr = SHGetMalloc(&pMalloc);
+
+        // Free the item ID list allocated by SHGetSpecialFolderLocation
+        pMalloc->Free(pidl);
+
+        // Free our task allocator
+        pMalloc->Release();
+
+		if ( f == FALSE )
+		{
+		    *szPath = TCHAR('\0');
+			return E_FAIL;
+		}
+
+        // return the special folder's path (contained in szPath)
+        return S_OK;
+    }
+	else
+	{
+		// null path for error return.
+		*szPath = TCHAR('\0');
+	}
+
+	return E_FAIL;
+}
+
 // --------------------------------------------------------------------------
 // This function retrieves the location of the folders that hold shortcuts.
-// The information comes from the Windows registry.
+// The information comes from SHGetSpecialFolderLocation, 
+// since it's more accurate.
+//  SHGetSpecialFolderLocation (since shell32.dll ver 4.0 - win 95, IE 3).
 //
 // target   - where the path should point. The following are legal values
 //            to use
@@ -1090,97 +1156,116 @@ JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_loadLink (JNIEn
 // Results are deposited in 'currentUserLinkPath' and 'allUsersLinkPath' 
 // respectively
 // --------------------------------------------------------------------------
-JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_GetLinkPath (JNIEnv  *env,
-                                                                              jobject  obj,
-                                                                              jint     target)
+// --------------------------------------------------------------------------
+JNIEXPORT jint JNICALL Java_com_izforge_izpack_util_os_ShellLink_GetFullLinkPath
+  (JNIEnv *env, jobject obj, jint utype, jint ltype)
 {
   ULONG   ul_size = MAX_PATH;       // buffer size
-  char    currentPath [MAX_PATH];   // the current user path we are looking for 
-  char    allPath [MAX_PATH];       // the all users path we are looking for 
-  HKEY    h_key;                    // handle for the open key
-  HKEY    h_allKey;                 // handle for the open key
-  DWORD   lp_type;                  // data type, this is expected to be REG_SZ (null terminated string)
+  TCHAR   szPath [MAX_PATH];        // path we are looking for 
+  int	  csidl;
+  jclass	cls;
+  jfieldID  pathID;
+  jstring   j_path;
+  LONG 		successCode;
   
-  if ((target > MIN_KEY) && (target < MAX_KEY))
+  if ((ltype > MIN_KEY) && (ltype < MAX_KEY))
   {
-    // get the path for the current user
-    LONG  successCode = RegOpenKeyEx (HKEY_CURRENT_USER,
-                                      CURRENT_USER_KEY [ACCESS],
-                                      0,
-                                      KEY_QUERY_VALUE,
-                                      &h_key);
+	//translate request into a CSIDL, based on user-type and link-type
 
-    if (SUCCEEDED (successCode))
-    {
-      RegQueryValueEx (h_key,
-                       CURRENT_USER_KEY [target],
-                       NULL,
-                       &lp_type,
-                       (unsigned char *)&currentPath,
-                       &ul_size);
+	// user type
+	if ( utype == com_izforge_izpack_util_os_ShellLink_ALL_USERS )
+	{
+		switch ( ltype )		// link type
+		{
+			case ( com_izforge_izpack_util_os_ShellLink_DESKTOP ) :
+			csidl = CSIDL_COMMON_DESKTOPDIRECTORY;
+			break;
 
-      RegCloseKey     (h_key);
-      
-      // make sure we actually received a null terminated string as expected
-      if (!(lp_type == REG_SZ))
-      {
-        return (SL_WRONG_DATA_TYPE);
-      }
-    }
-    else
-    {
-      return (SL_CAN_NOT_READ_PATH);
-    }
-    
-    // get the path for all users
-    successCode = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
-                                ALL_USER_KEY [ACCESS],
-                                0,
-                                KEY_QUERY_VALUE,
-                                &h_allKey);
+			case ( com_izforge_izpack_util_os_ShellLink_START_MENU ) :
+			csidl = CSIDL_COMMON_STARTMENU;
+			break;
 
-    if (SUCCEEDED (successCode))
-    {
-      ul_size = MAX_PATH;
-      RegQueryValueEx (h_allKey,
-                       ALL_USER_KEY [target],
-                       NULL,
-                       &lp_type,
-                       (unsigned char *)&allPath,
-                       &ul_size);
+			case ( com_izforge_izpack_util_os_ShellLink_PROGRAM_MENU ) :
+			csidl = CSIDL_COMMON_PROGRAMS;
+			break;
 
-      RegCloseKey     (h_allKey);
-      
-      // make sure we actually received a null terminated string as expected
-      if (!(lp_type == REG_SZ))
-      {
-          allPath[0] = 0;
-      }
-    }
-    else
-    {
-      allPath[0] = 0;
-    }
-    
-    // ------------------------------------------------------
-    // set the member variables
-    // ------------------------------------------------------
-    jclass    cls    = (env)->GetObjectClass (obj);
-    jfieldID  pathID = (env)->GetFieldID     (cls, "currentUserLinkPath", "Ljava/lang/String;");
-    jstring   j_path = (env)->NewStringUTF   (currentPath);
+			case ( com_izforge_izpack_util_os_ShellLink_STARTUP ) :
+			csidl = CSIDL_COMMON_STARTUP;
+			break;
 
-    (env)->SetObjectField (obj, pathID, j_path);
+			default :
+			break;
+		}
 
-    pathID = (env)->GetFieldID     (cls, "allUsersLinkPath", "Ljava/lang/String;");
-    j_path = (env)->NewStringUTF   (allPath);
+		successCode = GetLinkPath( csidl, szPath );
 
-    (env)->SetObjectField (obj, pathID, j_path);
+		if ( SUCCEEDED(successCode) )
+		{
 
-    return (SL_OK);
+			// ------------------------------------------------------
+			// set the member variables
+			// ------------------------------------------------------
+			cls    = (env)->GetObjectClass (obj);
+			pathID = (env)->GetFieldID     (cls, "allUsersLinkPath", "Ljava/lang/String;");
+			j_path = (env)->NewStringUTF   (szPath);
+
+			(env)->SetObjectField (obj, pathID, j_path);
+			return (SL_OK);
+		}
+		else
+		{
+			// failure code from GetLinkPath()
+			return successCode;
+		}
+	}
+	else if ( utype == com_izforge_izpack_util_os_ShellLink_CURRENT_USER )
+	{
+		switch ( ltype )		// link type
+		{
+			case ( com_izforge_izpack_util_os_ShellLink_DESKTOP ) :
+			csidl = CSIDL_DESKTOPDIRECTORY;
+			break;
+
+			case ( com_izforge_izpack_util_os_ShellLink_START_MENU ) :
+			csidl = CSIDL_STARTMENU;
+			break;
+
+			case ( com_izforge_izpack_util_os_ShellLink_PROGRAM_MENU ) :
+			csidl = CSIDL_PROGRAMS;
+			break;
+
+			case ( com_izforge_izpack_util_os_ShellLink_STARTUP ) :
+			csidl = CSIDL_STARTUP;
+			break;
+
+			default :
+			break;
+		}
+
+		successCode = GetLinkPath( csidl, szPath );
+
+		if ( SUCCEEDED(successCode) )
+		{
+			// ------------------------------------------------------
+			// set the member variables
+			// ------------------------------------------------------
+			cls    = (env)->GetObjectClass (obj);
+			pathID = (env)->GetFieldID     (cls, "currentUserLinkPath", "Ljava/lang/String;");
+			j_path = (env)->NewStringUTF   (szPath);
+
+			(env)->SetObjectField (obj, pathID, j_path);
+
+			return (SL_OK);
+		}
+		else
+		{
+			// failure code from GetLinkPath()
+			return successCode;
+		}
+	}
+
   }
-  else
-  {
-    return (SL_ERROR);
-  }
+
+  return SL_CAN_NOT_READ_PATH;
 }
-// --------------------------------------------------------------------------
+
