@@ -183,8 +183,8 @@
     <property name="uninstaller-ext.jar" value="${basedir}/lib/uninstaller-ext.jar"/>
     <property name="izevent.jar" value="${basedir}/lib/izevent.jar"/>
 
-    <property name="debug" value="off"/>
-    <property name="debuglevel" value=""/>
+    <property name="debug" value="true"/>
+    <property name="debuglevel" value="lines,vars,source"/>
 
     <!-- paths -->
     <path id="classpath">
