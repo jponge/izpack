@@ -30,7 +30,7 @@
     <str id="HelloPanel.url" txt="Strona internetowa programu: "/>
 
     <str id="LicencePanel.info" txt="Proszê uwa¿nie przeczytaæ poni¿sza licencjê:"/>
-    <str id="LicencePanel.agree" txt="Zgadzam siê na warunki licencji?"/>
+    <str id="LicencePanel.agree" txt="Zgadzam siê na warunki licencji."/>
     <str id="LicencePanel.notagree" txt="Nie zgadzam siê na warunki licencji."/>
     <str id="LicencePanel.yes" txt="Akceptujê"/>
     <str id="LicencePanel.no" txt="Nie akceptujê"/>
