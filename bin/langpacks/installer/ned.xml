@@ -55,6 +55,9 @@
     <str id="InstallPanel.tip" txt="Installatie :"/>
     <str id="InstallPanel.begin" txt="[Niks]"/>
     <str id="InstallPanel.finished" txt="[Klaar]"/>
+    <str id="InstallPanel.progress" txt="Voortgang installatieprocedure:"/>
+    <str id="InstallPanel.overwrite.title" txt="Bestand bestaat al"/>
+    <str id="InstallPanel.overwrite.question" txt="Het volgende bestand bestaat al. Moet het worden overschreven?"/>
     
     <str id="FinishPanel.success" txt="Installatie is geslaagd."/>
     <str id="FinishPanel.fail" txt="Installatie is mislukt!"/>
@@ -97,6 +100,34 @@
     <str id="ShortcutPanel.location.startup"      txt="Opstart Groep"/>
 
     <str id="UserInputPanel.error.caption"        txt="Invoer Probleem"/>
+    <str id="UserInputPanel.search.autodetect"    txt="Automatisch zoeken"/>
+
+    <!-- more descriptive error message would be cool, like specifying what file we looked for -->
+    <str id="UserInputPanel.search.autodetect.failed.message"    txt="Het automatisch zoeken is mislukt."/>
+    <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Automatisch zoeken mislukt"/>
+    <str id="UserInputPanel.search.autodetect.tooltip"           txt="Zoek naar het bestand of de map in de hierboven aangegeven paden."/>
+    <str id="UserInputPanel.search.location"           txt="Geef de locatie van "/>
+    <str id="UserInputPanel.search.browse"           txt="Bladeren..."/>
+
+    <str id="CompilePanel.heading" txt="Compilatie" />
+    <str id="CompilePanel.tip" txt="Voortgang compilatie taak:" />
+    <str id="CompilePanel.browse" txt="Bladeren..." />
+    <str id="CompilePanel.browse.approve" txt="Gebruik als compiler" />
+    <str id="CompilePanel.start" txt="Start" />
+    <str id="CompilePanel.progress.initial" txt="[Druk op de start knop]" />
+    <str id="CompilePanel.progress.finished" txt="[gereed]" />
+    <str id="CompilePanel.progress.overall" txt="Voortgang compilatie:" />
+    <str id="CompilePanel.error" txt="Compilatie mislukt" />
+    <str id="CompilePanel.error.reconfigure" txt="Herconfigureer" />
+    <str id="CompilePanel.error.ignore" txt="Negeren" />
+    <str id="CompilePanel.error.abort" txt="Afbreken" />
+    <str id="CompilePanel.error.seebelow" txt="Zie onderstaande voor het mislukte commando en de uitvoer." />
+    <str id="CompilePanel.error.nofiles" txt="Fout bij het zoeken naar bestanden voor compilatie." />
+    <str id="CompilePanel.error.compilernotfound" txt="De compiler kon niet worden gestart." />
+    <str id="CompilePanel.error.invalidarguments" txt="De compiler accepteert de meegegeven parameters niet." />
+    <str id="CompilePanel.error.noclassfile" txt="De compiler heeft geen class-bestand gemaakt voor het source-bestand " />
+    <str id="CompilePanel.choose_compiler" txt="Te gebruiken compiler:" />
+    <str id="CompilePanel.additional_arguments" txt="Extra compiler parameters:" />
 
     <!-- Add your own panels specific strings here if you need -->
 
