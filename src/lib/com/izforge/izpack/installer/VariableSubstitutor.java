@@ -168,8 +168,10 @@ public class VariableSubstitutor implements Serializable
    * @exception  IllegalArgumentException      if unknown file type specified
    * @exception  UnsupportedEncodingException  if encoding not supported
    * @exception  IOException                   if an I/O error occurs
+   *
+   * @return the number of substitutions made
    */
-  public void substitute(InputStream in, OutputStream out,
+  public int substitute(InputStream in, OutputStream out,
                          String type, String encoding)
      throws IllegalArgumentException, UnsupportedEncodingException,
     IOException
@@ -199,10 +201,12 @@ public class VariableSubstitutor implements Serializable
       new OutputStreamWriter(out));
 
     // Copy the data and substitute variables
-    substitute(reader, writer, type);
+    int subs = substitute(reader, writer, type);
 
     // Flush the writer so that everything gets written out
     writer.flush();
+
+    return subs;
   }
 
 
@@ -216,8 +220,10 @@ public class VariableSubstitutor implements Serializable
    * @param  type                          the file type or null for plain
    * @exception  IllegalArgumentException  if unknown file type specified
    * @exception  IOException               if an I/O error occurs
+   *
+   * @return the number of substitutions made
    */
-  public void substitute(Reader reader, Writer writer, String type)
+  public int substitute(Reader reader, Writer writer, String type)
      throws IllegalArgumentException, IOException
   {
     // Check the file type
@@ -230,6 +236,8 @@ public class VariableSubstitutor implements Serializable
     else if (t == TYPE_AT)
       variable_start = '@';
 
+    int subs = 0;
+
     // Copy data and substitute variables
     int c = reader.read();
     while (true)
@@ -241,7 +249,7 @@ public class VariableSubstitutor implements Serializable
         c = reader.read();
       }
       if (c == -1)
-        return;
+        return subs;
 
       // Check if braces used or start char escaped
       boolean braces = false;
@@ -259,7 +267,7 @@ public class VariableSubstitutor implements Serializable
       else if (c == -1)
       {
         writer.write(variable_start);
-        return;
+        return subs;
       }
 
       // Read the variable name
@@ -288,6 +296,8 @@ public class VariableSubstitutor implements Serializable
         }
         else
           varvalue = (String)variables.get(name);
+        
+        subs++;
       }
 
       // Substitute the variable...
@@ -308,7 +318,6 @@ public class VariableSubstitutor implements Serializable
       }
     }
   }
-
 
   /**
    *  Returns the internal constant for the specified file type.
