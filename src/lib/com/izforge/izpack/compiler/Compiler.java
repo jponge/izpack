@@ -127,6 +127,12 @@ public class Compiler extends Thread
   /** Error code, set to true if compilation succeeded. */
   private boolean compileFailed = true;
 
+  /** Key/values which are substituted at compile time in the install data */
+  private Properties properties;
+
+  /** Replaces the properties in the install.xml file prior to compiling */
+  private VariableSubstitutor propertySubstitutor;
+  
   /**
    *  The constructor.
    *
@@ -142,6 +148,13 @@ public class Compiler extends Thread
     this.basedir = basedir;
     this.kind = kind;
     this.output = output;
+
+    // initialize backed by system properties
+    properties = new Properties(System.getProperties());
+    propertySubstitutor = new VariableSubstitutor(properties);
+
+    // add izpack built in property
+    setProperty("izpack.version", IZPACK_VERSION);
   }
 
   /**
@@ -152,6 +165,16 @@ public class Compiler extends Thread
   public void setPackagerListener(PackagerListener listener)
   {
     packagerListener = listener;
+  }
+
+  /**
+   *  Retrieves the packager listener
+   *
+   * @param  listener  The listener.
+   */
+  public PackagerListener getPackagerListener()
+  {
+    return packagerListener;
   }
 
   /**  Compiles. */
@@ -193,6 +216,9 @@ public class Compiler extends Thread
     if (!base.canRead() || !base.isDirectory())
       throw new CompilerException("Invalid base directory: " + base);
 
+    // add izpack built in property
+    setProperty("basedir", base.toString());
+    
     // We get the XML data tree
     XMLElement data = getXMLTree();
 
@@ -200,8 +226,13 @@ public class Compiler extends Thread
     packager = new Packager();
     packager.setPackagerListener(packagerListener);
 
-    // We add all the information
+    // Listeners to various events
     addCustomListeners(data);
+
+    // Read the properties and perform replacement on the rest of the tree
+    substituteProperties(data);
+
+    // We add all the information
     addVariables(data);
     addInfo(data);
     addGUIPrefs(data);
@@ -222,12 +253,62 @@ public class Compiler extends Thread
     return !this.compileFailed;
   }
 
+  public String replaceProperties(String value)
+    throws CompilerException {
+    return propertySubstitutor.substitute(value, "at");
+  }
 
+  /**
+   * Get the properties currently known to the compileer.
+   */
+  public Properties getProperties() {
+    return properties;
+  }
+
+  /**
+   * Get the value of a property currerntly known to izpack.
+   * @param name the name of the property
+   * @return the value of the property, or null
+   */
+  public String getProperty(String name) {
+    return properties.getProperty(name);
+  }
+
+  /**
+   * Add a name value pair to the project property set. Overwriting any
+   * existing value.
+   * @param name the name of the property
+   * @param value the value to set
+   * @return true
+   */
+  public boolean setProperty(String name, String value) {
+    // TODO: don't allow overwriting of system properties
+    properties.put(name, value);
+    return true;
+  }
+
+  /**
+   * Add a name value pair to the project property set. It is <i>not</i>
+   * replaced it is already in the set of properties.
+   * @param name the name of the property
+   * @param value the value to set
+   * @return true if the property was not already set
+   */
+  public boolean addProperty(String name, String value) {
+    String old = properties.getProperty(name);
+    if (old == null)
+    {
+      properties.put(name, value);
+      return true;
+    }
+    return false;
+  }
+  
   /**
    *  Returns the GUIPrefs.
    *
    * @param  data           The XML data.
-   * return                The GUIPrefs.
+   * @return                The GUIPrefs.
    * @exception  CompilerException  Description of the Exception
    */
   protected void addGUIPrefs(XMLElement data) throws CompilerException
@@ -1128,6 +1209,83 @@ public class Compiler extends Thread
     notifyCompilerListener("addVariables", CompilerListener.END, data);
   }
 
+
+  /**
+   *  Properties declaration is a fragment of the xml file.  For example:
+   *  <pre>
+   *    &lt;properties&gt;
+   *      &lt;property name="app.name" value="Property Laden Installer"/&gt;
+   *      &lt;!-- Ant styles 'location' and 'refid' are not yet supported --&gt;
+   *      &lt;property file="filename-relative-to-install?"/&gt;
+   *      &lt;property file="filename-relative-to-install?" prefix="prefix"/&gt;
+   *      &lt;!-- Ant style 'url' and 'resource' are not yet supported --&gt;
+   *      &lt;property environment="prefix"/&gt;
+   *    &lt;/properties&gt;
+   *  </pre>
+   *  variable declared in this can be referred to in parsable files.
+   *
+   * @param  data           The XML data.
+   * @exception  CompilerException  Description of the Exception
+   */
+  protected void substituteProperties(XMLElement data) throws CompilerException
+  {
+    notifyCompilerListener("substituteProperties", CompilerListener.BEGIN, data);
+
+    XMLElement root = data.getFirstChildNamed("properties");
+    if (root != null)
+    {
+      // add individual properties
+      Iterator iter = root.getChildrenNamed("property").iterator();
+      while (iter.hasNext())
+      {
+        XMLElement prop = (XMLElement) iter.next();
+        Property property = new Property(prop, this);
+        property.execute();
+      }
+    }
+
+    // temporarily remove the 'properties' branch, replace all properties in
+    // the remaining DOM, and replace properties branch.
+    // TODO: enhance XMLElement with an "indexOf(XMLElement)" method
+    //   and addChild(XMLElement, int) so returns to the same place.
+    if (root != null)
+      data.removeChild(root);
+
+    substituteAllProperties(data);
+    if (root != null)
+      data.addChild(root);
+    
+    notifyCompilerListener("substituteProperties", CompilerListener.END, data);
+  }
+
+  /**
+   * Perform recursive substitution on all properties
+   */
+  protected void substituteAllProperties(XMLElement element)
+    throws CompilerException
+  {
+    Enumeration attributes = element.enumerateAttributeNames();
+    while (attributes.hasMoreElements())
+    {
+      String name = (String) attributes.nextElement();
+      String value = replaceProperties(element.getAttribute(name));
+      element.setAttribute(name, value);
+    }
+
+    String content = element.getContent();
+    if (content != null)
+    {
+      element.setContent(replaceProperties(content));
+    }
+
+    Enumeration children = element.enumerateChildren();
+    while (children.hasMoreElements())
+    {
+      XMLElement child = (XMLElement) children.nextElement();
+      substituteAllProperties(child);
+    }
+  }
+  
   /**
    *  Returns the XMLElement representing the installation XML file.
    *
@@ -1138,6 +1296,13 @@ public class Compiler extends Thread
   protected XMLElement getXMLTree() throws CompilerException, IOException
   {
     // Initialises the parser
+    File file = new File(filename).getAbsoluteFile();
+    if (!file.canRead())
+      throw new CompilerException("Invalid file: " + file);
+
+    // add izpack built in property
+    setProperty("izpack.file", file.toString());
+
     StdXMLParser parser = new StdXMLParser();
     parser.setBuilder(new StdXMLBuilder());
     parser.setReader(new StdXMLReader(new FileInputStream(filename)));
@@ -1645,8 +1810,8 @@ public class Compiler extends Thread
   //------------- Listener stuff ------------------------- START ------------
 
   /**
-   * This method parses install.xml for defined listeners and put they
-   * to the right position. If posible, the listeners will be validated.
+   * This method parses install.xml for defined listeners and put them
+   * in the right position. If posible, the listeners will be validated.
    * Listener declaration is a fragmention in install.xml like : <listeners>
    * <listener compiler="PermissionCompilerListener" installer="PermissionInstallerListener"/> 
    * </<listeners>
@@ -1664,7 +1829,6 @@ public class Compiler extends Thread
     Iterator iter = root.getChildrenNamed("listener").iterator();
     while (iter.hasNext())
     {
-      
       XMLElement xmlAction = (XMLElement) iter.next();
       Object [] listener = getCompilerListenerInstance( xmlAction);
       if( listener != null)
