@@ -341,10 +341,10 @@ public class Installer
     	if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
     	{
 		      // We simply put our nice theme
-		      MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
-	 		  ButtonFactory.useButtonIcons();
+          MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
+          ButtonFactory.useButtonIcons();
     	}
-        lnf = "swing";
+      lnf = "swing";
     }
     else
       if (installdata.kind.equalsIgnoreCase("standard-kunststoff") ||
@@ -441,6 +441,12 @@ public class Installer
     public LanguageDialog(Object[] items)
     {
       super();
+
+      try
+      {
+        loadLookAndFeel();
+      }
+      catch (Exception err) { }
 
       // We build the GUI
       addWindowListener(new WindowHandler());

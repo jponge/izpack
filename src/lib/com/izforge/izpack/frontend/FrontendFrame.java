@@ -102,13 +102,18 @@ public class FrontendFrame extends JFrame
     super(title);
     this.langpack = langpack;
     contentPane = (JPanel) getContentPane();
-
+   
     // Loaders
     installation = Frontend.createBlankInstallation();
     Frontend.splashWindow.update(3, "Loading the actions ...");
     loadActions();
     Frontend.splashWindow.update(4, "Loading the icons ...");
     loadIcons();
+    
+    // Sets the Kunststoff L&F as the right one
+    KunststoffLookAndFeel klnf = new KunststoffLookAndFeel();
+    UIManager.setLookAndFeel(klnf);
+    klnf.setCurrentTheme(new IzPackKMetalTheme());
 
     // Builds the GUI
     Frontend.splashWindow.update(5, "Building the GUI ...");
@@ -119,6 +124,7 @@ public class FrontendFrame extends JFrame
     centerFrame(this);
     Frontend.splashWindow.stop();
     setVisible(true);
+    
   }
 
 

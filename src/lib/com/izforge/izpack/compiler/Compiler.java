@@ -91,6 +91,9 @@ public class Compiler extends Thread
   /**  The variables map. */
   protected VariableValueMapImpl varMap;
 
+  /** The directory-keeping special file. */
+  protected File keepDirFile;
+
 
   /**
    *  The constructor.
@@ -107,6 +110,17 @@ public class Compiler extends Thread
     this.basedir = basedir;
     this.kind = kind;
     this.output = output;
+
+    // Creates a temporary temp file for keeping empty directories
+    try
+    {
+      keepDirFile = File.createTempFile("izpack-keepme", ".tmp");
+      keepDirFile.deleteOnExit();
+    }
+    catch (Exception err)
+    {
+      err.printStackTrace();
+    }    
   }
 
 
@@ -483,9 +497,6 @@ public class Compiler extends Thread
           String val = e.getAttribute("stage", "never");
           if ("postinstall".compareToIgnoreCase(val) == 0)
             executeOn = ExecutableFile.POSTINSTALL;
-          else
-          {
-          }
 
           // main class  of this executable
           String executeClass = e.getAttribute("class");
@@ -495,9 +506,6 @@ public class Compiler extends Thread
           val = e.getAttribute("type", "bin");
           if ("jar".compareToIgnoreCase(val) == 0)
             executeType = ExecutableFile.JAR;
-          else
-          {
-          }
 
           // what to do if execution fails
           int onFailure = ExecutableFile.ASK;
@@ -506,9 +514,6 @@ public class Compiler extends Thread
             onFailure = ExecutableFile.ABORT;
           else if ("warn".compareToIgnoreCase(val) == 0)
             onFailure = ExecutableFile.WARN;
-          else
-          {
-          }
 
           // get arguments for this executable
           ArrayList argList = null;
@@ -568,9 +573,7 @@ public class Compiler extends Thread
         XMLElement f = (XMLElement) iter.next();
         String path = basedir + File.separator + f.getAttribute("dir");
         String casesensitive = f.getAttribute("casesensitive");
-        /*
-         *  get includes and excludes
-         */
+        //  get includes and excludes
         Vector xcludesList = f.getChildrenNamed("include");
         String[] includes = null;
         XMLElement xclude = null;
@@ -644,10 +647,13 @@ public class Compiler extends Thread
       ds.setCaseSensitive(bCasesensitive);
       ds.scan();
 
-      String[] files = ds.getIncludedFiles();
+      String[] files = ds.getIncludedFiles();  
+      String[] dirs = ds.getIncludedDirectories();
+
+      /* Old buggy code
       String newRelativePath = null;
 
-      String absolutBasePath = test.getParent();
+      String absolutBasePath = test.getParentFile().getAbsolutePath();
       String absolutPath = test.getAbsolutePath();
       String absolutFilePath = null;
       int copyPathFrom = absolutBasePath.length() + 1;
@@ -656,15 +662,48 @@ public class Compiler extends Thread
       {
         File file = new File(absolutPath + File.separator + (String) files[i]);
 
-        absolutFilePath = file.getParent();
+        absolutFilePath = file.getParentFile().getAbsolutePath();
 
         newRelativePath = relPath + File.separator + absolutFilePath.substring(copyPathFrom);
         //FIX ME: the override for fileset is by default true, needs to be changed
         addFile(file, newRelativePath, targetOs, true, list);
       }
+      */
+      
+      // New working code (for files)
+      String filePath, instPath, expPath;
+      int pathLimit;
+      File file;
+      for (int i = 0; i < files.length; ++i)
+      {
+        filePath = path + File.separator + files[i];
+        expPath = relPath + File.separator + files[i];
+        file = new File(filePath);
+        pathLimit = expPath.indexOf(file.getName());
+        if (pathLimit > 0)
+          instPath = expPath.substring(0, pathLimit);
+        else
+          instPath = relPath;
+        addFile(file, instPath, targetOs, true, list);
+      }
+
+      // Empty directories are left by the previous code section, so we need to
+      // take care of them
+      for (int i = 0; i < dirs.length; ++i)
+      {
+        expPath = path + File.separator + dirs[i];
+        File dir = new File(expPath);
+        if (dir.list().length == 0)
+        {
+          instPath = relPath + File.separator + dirs[i];
+          pathLimit = instPath.indexOf(dir.getName());
+          instPath = instPath.substring(0, pathLimit);
+          addFile(dir, instPath, targetOs, true, list);
+        }
+      }
     }
     else
-      throw new Exception("\"dir\" attribute of fileset is not valide :" + path);
+      throw new Exception("\"dir\" attribute of fileset is not valid: " + path);
   }
 
 
@@ -689,8 +728,13 @@ public class Compiler extends Thread
     if (file.isDirectory())
     {
       File[] files = file.listFiles();
-      if (files == null)
-        return;
+      if (files.length == 0) // The directory is empty
+      {
+        // We add a special file so that the empty directory will be written
+        // anyway
+        files = new File[1];
+        files[0] = keepDirFile;
+      }
       int size = files.length;
       String np = relPath + "/" + file.getName();
       for (int i = 0; i < size; i++)

@@ -176,6 +176,12 @@ public class Unpacker extends Thread
             }
             // Cleanings
             out.close();
+            
+            // Empty dirs restoring
+            String _n = pathFile.getName();
+            if (_n.startsWith("izpack-keepme") && _n.endsWith(".tmp"))
+              pathFile.delete();
+
           }
           else
             objIn.skip(pf.length);

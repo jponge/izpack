@@ -60,11 +60,11 @@ public class IzPackMetalTheme extends DefaultMetalTheme
 		monospacedFont = new FontUIResource(font1);
 	}
 
-	private Font createFont(String name, int style, int size)
-	{
-		Font font = new Font(name, style, size);
-		return ((font == null) ? new Font("Dialog", style, size) : font);
-	}
+  private Font createFont(String name, int style, int size)
+  {
+    Font font = new Font(name, style, size);
+    return ((font == null) ? new Font("Dialog", style, size) : font);
+  }
 
 	/**
 	 *  Returns the color.
@@ -106,43 +106,44 @@ public class IzPackMetalTheme extends DefaultMetalTheme
 		return color;
 	}
 
-    /**
-     * The Font of Labels in many cases
-     */
-    public FontUIResource getControlTextFont()
-    {
-        return controlFont;
-    }
+  /**
+   * The Font of Labels in many cases
+   */
+  public FontUIResource getControlTextFont()
+  {
+    return controlFont;
+  }
 
-    /**
-     * The Font of Menus and MenuItems
-     */
-    public FontUIResource getMenuTextFont()
-    {
-        return menuFont;
-    }
+  /**
+   * The Font of Menus and MenuItems
+   */
+  public FontUIResource getMenuTextFont()
+  {
+    return menuFont;
+  }
 
-    /**
-     * The Font of Nodes in JTrees
-     */
-    public FontUIResource getSystemTextFont()
-    {
-        return controlFont;
-    }
+  /**
+   * The Font of Nodes in JTrees
+   */
+  public FontUIResource getSystemTextFont()
+  {
+    return controlFont;
+  }
 
-    /**
-     * The Font in TextFields, EditorPanes, etc.
-     */
-    public FontUIResource getUserTextFont()
-    {
-        return controlFont;
-    }
+  /**
+   * The Font in TextFields, EditorPanes, etc.
+   */
+  public FontUIResource getUserTextFont()
+  {
+    return controlFont;
+  }
 
-    /**
-     * The Font of the Title of JInternalFrames
-     */
-    public FontUIResource getWindowTitleFont()
-    {
-        return windowTitleFont;
-    }
+  /**
+   * The Font of the Title of JInternalFrames
+   */
+  public FontUIResource getWindowTitleFont()
+  {
+    return windowTitleFont;
+  }
+
 }

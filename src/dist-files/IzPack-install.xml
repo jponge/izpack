@@ -88,12 +88,12 @@
         <!-- The core files -->
         <pack name="Core" required="yes">
             <description>The IzPack core files.</description>
-            <file targetdir="$INSTALL_PATH" src="bin"/>
-            <file targetdir="$INSTALL_PATH" src="lib"/>
-            <file targetdir="$INSTALL_PATH" src="legal"/>
-            <file targetdir="$INSTALL_PATH" src="Readme.txt"/>
-            <file targetdir="$INSTALL_PATH" src="Versions.txt"/>
-            <file targetdir="$INSTALL_PATH" src="Thanks.txt"/>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+              <include name="*.txt" />
+              <include name="bin/**/*" />
+              <include name="lib/**/*" />
+              <include name="legal/**/*" />
+            </fileset>
             <parsable targetfile="$INSTALL_PATH/bin/izpack-fe"/>
             <parsable targetfile="$INSTALL_PATH/bin/izpack-fe.bat"/>
             <parsable targetfile="$INSTALL_PATH/bin/compile"/>
@@ -102,22 +102,48 @@
             <executable targetfile="$INSTALL_PATH/bin/izpack-fe" stage="never"/>
         </pack>
 	
-	      <!-- The documentation (1 directory) -->
-        <pack name="Documentation" required="no">
-            <description>The IzPack documentation (HTML and PDF).</description>
-            <file targetdir="$INSTALL_PATH" src="doc"/>
+	      <!-- The documentation -->
+        <pack name="Documentation-HTML" required="no">
+            <description>The IzPack documentation (HTML version) + Javadoc.</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+              <include name="doc/izpack/html/**/*" />
+              <include name="doc/izpack/javadoc/**/*" />
+            </fileset>
+        </pack>
+        <pack name="Documentation-PDF" required="no">
+            <description>The IzPack documentation (PDF version).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+              <include name="doc/izpack/pdf/**/*" />
+            </fileset>
+        </pack>
+        <pack name="Documentation-PS" required="no">
+            <description>The IzPack documentation (PS version).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+              <include name="doc/izpack/ps/**/*" />
+            </fileset>
+        </pack>
+        <pack name="Documentation-NanoXML" required="no">
+            <description>The NanoXML documentation (PDF-only).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+              <include name="doc/nanoxml**/*" />
+            </fileset>
         </pack>
 
-        <!-- A trivial sample to get started (1 directory) -->
+        <!-- A trivial sample to get started -->
         <pack name="Sample" required="no">
             <description>A sample installation.</description>
-            <file targetdir="$INSTALL_PATH" src="sample"/>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+              <include name="sample/**/*" />
+            </fileset>
         </pack>
 
-        <!-- The source code of this version (1 directory) -->
+        <!-- The source code of this version -->
         <pack name="Sources" required="no">
             <description>The full IzPack source code.</description>
-            <file targetdir="$INSTALL_PATH" src="src"/>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+              <include name="src/**/*" />
+              <exclude name="src/*.manifest" />
+            </fileset>
         </pack>
 
     </packs>

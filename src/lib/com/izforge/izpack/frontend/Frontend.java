@@ -84,12 +84,12 @@ public class Frontend
   public Frontend() throws Exception
   {
     super();
-
+   
     // Sets the Kunststoff L&F as the right one
     KunststoffLookAndFeel klnf = new KunststoffLookAndFeel();
     UIManager.setLookAndFeel(klnf);
     klnf.setCurrentTheme(new IzPackKMetalTheme());
-
+   
     // Shows the splash window
     splashWindow = new FrontendSplashWindow();
 
