@@ -1,5 +1,11 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.2.1 (build 2003.09.xx)
+
+- Added a new built-in variable ISO3_LANG that contains the selected language
+  ISO3 code (Elmar's idea).
+- Added a new 'run.installer' target to the Ant build file.
+
   > 3.2.0 (build 2003.09.18)
 
 - Added 3 built-in variables that you can use with the variables substitutor:
