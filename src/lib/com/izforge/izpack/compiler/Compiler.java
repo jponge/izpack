@@ -269,7 +269,16 @@ public class Compiler extends Thread
         }
         prefs.lookAndFeelParams.put(lafName, params);
       }
-
+      // Load modifier
+      it = gp.getChildrenNamed("modifier").iterator();
+      while (it.hasNext())
+      {
+        XMLElement curentModifier = (XMLElement)it.next();
+        String key  = requireAttribute(curentModifier, "key");
+        String value = requireAttribute(curentModifier, "value");
+        prefs.modifier.put(key, value);
+       
+      }
       // make sure jar contents of each are available in installer
       // map is easier to read/modify than if tree
       HashMap lafMap = new HashMap();

@@ -45,11 +45,21 @@ public class ButtonFactory
    */
 	public static void useButtonIcons()
 	{
+    useButtonIcons(true);
+	}
+
+  /**
+   * Enable or disable icons for buttons
+   * This setting has no effect on OSX
+   * @param useit flag which determines the behavior
+   */
+  public static void useButtonIcons(boolean useit)
+  {
     if(System.getProperty("mrj.version")==null)
     {
-  		useButtonIcons = true;
+      useButtonIcons = useit;
     }
-	}
+  }
 
   /**
    * Enable highlight buttons
@@ -57,12 +67,22 @@ public class ButtonFactory
    */
 	public static void useHighlightButtons()
 	{
+    useHighlightButtons(true);
+	}
+
+  /**
+   * Enable or disable highlight buttons
+   * This setting has no effect on OSX
+   * @param useit flag which determines the behavior
+  */
+  public static void useHighlightButtons(boolean useit)
+  {
     if(System.getProperty("mrj.version")==null)
     {
-  		useHighlightButtons = true;
-  		useButtonIcons = true;
+      useHighlightButtons = useit;
     }
-	}
+    useButtonIcons(useit);
+  }
 
 	public static JButton createButton(Icon icon, Color color)
 	{

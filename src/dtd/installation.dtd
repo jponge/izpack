@@ -36,16 +36,23 @@ $Id$
         
         
 <!-- The guiprefs markup (customizes the installer in GUI mode) -->
-<!ELEMENT guiprefs (laf*)>
+<!ELEMENT guiprefs (laf*, modifier*)>
     <!ATTLIST guiprefs resizable (yes|no) #REQUIRED>
     <!ATTLIST guiprefs width CDATA #REQUIRED>
     <!ATTLIST guiprefs height CDATA #REQUIRED>
     <!ELEMENT laf (os+, param*)>
     <!ATTLIST laf name CDATA #REQUIRED>
     <!ELEMENT param EMPTY>
-    <!ATTLIST param
-        name  CDATA #REQUIRED
-        value CDATA #REQUIRED>
+        <!ATTLIST param
+            name  CDATA #REQUIRED
+            value CDATA #REQUIRED>
+    <!-- Well defined modifier for gui characteristics.
+         Possible keys are "useButtonIcons" and
+         "useLabelIcons" both with value "yes" or "no".
+    -->
+    <!ELEMENT modifier EMPTY>
+        <!ATTLIST modifier key CDATA #REQUIRED>
+        <!ATTLIST modifier value CDATA #REQUIRED>
                   
 
 <!-- The locale section (indicates which langpacks to include) -->

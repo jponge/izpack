@@ -50,4 +50,7 @@ public class GUIPrefs implements Serializable
   
   /** Specifies the OS Look and Feels optionnal parameters. */
   public Map lookAndFeelParams = new TreeMap();
+
+  /** Specifies the modifier. */
+  public Map modifier = new TreeMap();
 }

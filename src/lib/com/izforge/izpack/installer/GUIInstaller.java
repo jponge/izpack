@@ -64,6 +64,7 @@ import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPackMetalTheme;
+import com.izforge.izpack.gui.LabelFactory;
 
 /**
  *  The IzPack graphical installer class.
@@ -246,7 +247,19 @@ public class GUIInstaller extends InstallerBase
     }
 
     // Let's use the system LAF
-    ButtonFactory.useButtonIcons();
+    // Resolve whether button icons should be used or not. 
+    boolean useButtonIcons = true;
+    if(installdata.guiPrefs.modifier.containsKey("useButtonIcons") &&
+      ((String)installdata.guiPrefs.modifier.
+      get("useButtonIcons")).equalsIgnoreCase("no") )
+      useButtonIcons = false;
+    ButtonFactory.useButtonIcons(useButtonIcons);
+    boolean useLabelIcons = true;
+    if(installdata.guiPrefs.modifier.containsKey("useLabelIcons") &&
+      ((String)installdata.guiPrefs.modifier.
+      get("useLabelIcons")).equalsIgnoreCase("no") )
+      useLabelIcons = false;
+    LabelFactory.setUseLabelIcons(useLabelIcons);
     if (laf == null)
     {
       if (!syskey.equals("mac"))
@@ -257,6 +270,9 @@ public class GUIInstaller extends InstallerBase
         {
           MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
           ButtonFactory.useHighlightButtons();
+          // Reset the use button icons state because useHighlightButtons
+          // make it always true. 
+          ButtonFactory.useButtonIcons(useButtonIcons);
           installdata.buttonsHColor = new Color(182, 182, 204);
         }
       }

@@ -25,6 +25,9 @@
 - Spanish langpack update (David Perez Carmona).
 - Fix that prevented the correct detection of OS X.
 - Custom actions for ant calls (Klaus Bartz).
+- IzPanel.setInitialFocus( Component ) stuff added (Klaus Bartz).
+- Configurable button and label icons (Klaus Bartz).
+
 
   > 3.6.1 (build 2004.xx.yy)
 

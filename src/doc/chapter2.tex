@@ -302,6 +302,27 @@ Here is a small sample:
 </guiprefs>
 \end{verbatim}
 
+Starting from IzPack 3.7, some characteristics can be customized with the 
+\texttt{<modifier>} tag which contains following attributes:
+\begin{itemize}
+
+  \item \texttt{key}: a well defined key of the characteristic which should
+  be changed.
+  \item \texttt{value} the value for the key.
+\end{itemize}\
+Following key value pairs are defined:
+\begin{itemize}
+\item \texttt{useButtonIcons}: possible are "yes" or "no". Default is "yes".
+If it is set to "no", all buttons which are created via the ButtonFactory
+contains no icon also a icon id was submitted. Directly created buttons are
+not affected.
+\item \texttt{useLabelIcons}: possible are "yes" or "no". Default is "yes".
+If it is set to "no", all labels which are created via the LabelFactory
+contains no icon also a icon id was submitted. Directly created labels are
+not affected.
+\end{itemize}\
+
+
 \subsection{The Localization Element \texttt{<locale>}}
 \label{localization-element}
 
