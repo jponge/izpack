@@ -185,13 +185,16 @@ public class AutomatedInstaller extends InstallerBase
     while (panelsIterator.hasNext())
     {
       Panel p = (Panel) panelsIterator.next();
-
+      String praefix = "com.izforge.izpack.panels.";
+      if( p.className.compareTo(".") > -1 )
+        // Full qualified class name
+        praefix = "";
       if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
         continue;
 
       String panelClassName = p.className;
       String automationHelperClassName =
-        "com.izforge.izpack.panels." + panelClassName + "AutomationHelper";
+        praefix + panelClassName + "AutomationHelper";
       Class automationHelperClass = null;
       // determine if the panel supports automated install
       try

@@ -872,12 +872,24 @@ public class Compiler extends Thread
       // create the serialized Panel data
       Panel panel = new Panel();
       panel.osConstraints = OsConstraint.getOsList(xmlPanel);
-      panel.className = xmlPanel.getAttribute("classname");
+      String className = xmlPanel.getAttribute("classname");
 
       // Panel files come in jars packaged w/ IzPack
-      String jarPath = "bin/panels/" + panel.className + ".jar";
+      String jarPath = "bin/panels/" + className + ".jar";
       URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel);
-
+      String fullClassName = null;
+      try
+      {
+        fullClassName = getFullClassName(url, className);
+      }
+      catch (Exception e)
+      {
+        ;
+      }
+      if( fullClassName != null)
+        panel.className = fullClassName;
+      else
+        panel.className = className;
       // insert into the packager
       packager.addPanelJar(panel, url);
     }
@@ -1718,8 +1730,11 @@ public class Compiler extends Thread
       {
         pos = name.indexOf(className);
       }
-      if( pos > 0 ) // "Main" class found
+      if( name.length()  == pos + className.length() + 6 ) // "Main" class found
+      {
+        jis.close();
         return(name.substring(0, lastPos));
+      }
     }
     jis.close();
     return( null );

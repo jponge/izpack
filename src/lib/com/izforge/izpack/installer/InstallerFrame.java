@@ -193,9 +193,12 @@ public class InstallerFrame extends JFrame
 
       if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
         continue;
-
       className = (String) p.className;
-      objectClass = Class.forName("com.izforge.izpack.panels." + className);
+      String praefix = "com.izforge.izpack.panels.";
+      if( className.compareTo(".") > -1 )
+        // Full qualified class name
+        praefix = "";
+      objectClass = Class.forName(praefix + className);
       constructor = objectClass.getDeclaredConstructor(paramsClasses);
       object = constructor.newInstance(params);
       panel = (IzPanel) object;

@@ -38,6 +38,7 @@
 - Logfile for ProcessPanel (Klaus Bartz).
 - Automatic scrolling of ProcessPanel output (Anthony Xin Chen).
 - Fixed bug parsing some brace enclosed variables (Chad McHenry) (bug #2451).
+- Bug at loading Panels from other packages fixed (Klaus Bartz).
 
   > 3.6.1 (build 2004.10.09)
 
