@@ -52,30 +52,6 @@ public class SimpleUninstallerListener implements UninstallerListener
   }
 
   /* (non-Javadoc)
-   * @see com.izforge.izpack.uninstaller.UninstallerListener#beforeExecutes(java.util.List, com.izforge.izpack.util.AbstractUIProgressHandler)
-   */
-  public void beforeExecutables(
-    List executables,
-    AbstractUIProgressHandler handler)
-    throws Exception
-  {
-    // Do nothing
-    ;
-  }
-
-  /* (non-Javadoc)
-   * @see com.izforge.izpack.uninstaller.UninstallerListener#afterExecutes(java.util.List, com.izforge.izpack.util.AbstractUIProgressHandler)
-   */
-  public void afterExecutables(
-    List executables,
-    AbstractUIProgressHandler handler)
-    throws Exception
-  {
-    // Do nothing
-    ;
-  }
-
-  /* (non-Javadoc)
    * @see com.izforge.izpack.uninstaller.UninstallerListener#beforeDeletion(java.util.List, com.izforge.izpack.util.AbstractUIProgressHandler)
    */
   public void beforeDeletion(List files, AbstractUIProgressHandler handler)
