@@ -522,7 +522,6 @@ public class TwoColumnLayout implements LayoutManager2
         }
 
         component.setBounds (x, y, width, height);
-        System.out.println("component bounds=" + component.getBounds());
       }
     }
   }
