@@ -33,7 +33,7 @@
     <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen:"/>
     
     <str id="PathInputPanel.required" txt="Das gewählte Verzeichnis muss existieren."/>
-    <str id="PathInputPanel.notValid" txt="Das gewählte Verzeichnis enthällt nicht das benötigte Produkt."/>
+    <str id="PathInputPanel.notValid" txt="Das gewählte Verzeichnis enthält nicht das benötigte Produkt."/>
 
     <str id="TargetPanel.info" txt="Wählen Sie den Installationspfad:"/>
     <str id="TargetPanel.browse" txt="Auswählen..."/>
