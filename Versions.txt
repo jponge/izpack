@@ -47,6 +47,7 @@
   dialog (observed on X11).
 - UserInputPanel: the autodetect button is hidden if not needed 
   (Michael Hagedorn).
+- A tutorial is now available.
 
   > 3.6.1 (build 2004.10.09)
 

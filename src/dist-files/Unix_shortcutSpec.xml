@@ -79,7 +79,7 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="/usr/lib/java/bin/java"
+     target="java"
      commandLine="-jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
      
      initialState="noShow"
