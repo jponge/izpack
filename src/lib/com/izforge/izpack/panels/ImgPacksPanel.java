@@ -177,7 +177,7 @@ public class ImgPacksPanel extends IzPanel
     JScrollPane imgScroller = new JScrollPane(imgLabel);
     imgScroller.setPreferredSize(getPreferredSizeFromImages());
 
-    parent.buildConstraints(gbConstraints, 1, 1, 1, 1, 0.50, 0.50);
+    parent.buildConstraints(gbConstraints, 1, 1, 1, 1, 0.5, 1.0);
     layout.addLayoutComponent(imgScroller, gbConstraints);
     add(imgScroller);
     
@@ -212,14 +212,14 @@ public class ImgPacksPanel extends IzPanel
         parent.icons.getImageIcon("tip"),
         JLabel.LEFT);
     
-    parent.buildConstraints(gbConstraints, 0, 4, 2, 1, 1.0, 0.0);
+    parent.buildConstraints(gbConstraints, 0, 4, 2, 1, 0.0, 0.0);
     layout.addLayoutComponent(tipLabel, gbConstraints);
     add(tipLabel);
     
-    strut = Box.createVerticalStrut(20);
-    parent.buildConstraints(gbConstraints, 0, 5, 1, 1, 0.0, 0.0);
-    layout.addLayoutComponent(strut, gbConstraints);
-    add(strut);    
+//    strut = Box.createVerticalStrut(20);
+//    parent.buildConstraints(gbConstraints, 0, 5, 1, 1, 0.0, 0.0);
+//    layout.addLayoutComponent(strut, gbConstraints);
+//    add(strut);    
 
     
     JPanel spacePanel = new JPanel();
@@ -231,7 +231,7 @@ public class ImgPacksPanel extends IzPanel
     //    spaceLabel.setFont(new Font("Monospaced",Font.PLAIN,11));
     spacePanel.add(spaceLabel);
     
-    parent.buildConstraints(gbConstraints, 0, 6, 2, 1, 0.25, 0.0);
+    parent.buildConstraints(gbConstraints, 0, 6, 2, 1, 0.0, 0.0);
     layout.addLayoutComponent(spacePanel, gbConstraints);
     add(spacePanel);
   }

@@ -597,6 +597,7 @@
             <fileset dir="${dist-files.dir}">
                 <include name="useNativeLAF"/>
                 <include name="*.jpg"/>
+                <include name="*.png"/>
                 <include name="*.html"/>
                 <include name="Licence.txt"/>
                 <include name="IzPack-install.xml"/>

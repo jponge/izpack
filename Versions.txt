@@ -16,6 +16,8 @@
   been removed. The look and feels can now be specified on a per-OS basis. If
   no look and feel is specified for a particular OS, then the platform default
   one will be used.
+- The IzPack own installer uses the ImgPacksPanel again with some refreshed
+  packages pictures.
 
   > 3.5.4 (build 2004.xx.yy)
 
