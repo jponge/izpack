@@ -556,9 +556,9 @@
     </antcall>
   </target>
 
-  <!-- Deletes the classes directory -->
+  <!-- Performs some cleanups -->
   <target name="clean">
-    <echo message="Deletes ${build.dir} and ${dist.dir} directory"/>
+    <echo message="Cleaning-up"/>
     <delete includeEmptyDirs="true">
       <fileset dir="${build.dir}"/>
       <fileset dir="${dist.dir}"/>

@@ -23,9 +23,10 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.0.9 (build 2003.06.29)</appversion>
+        <appversion>3.1.0 (build 2003.08.11)</appversion>
         <authors>
-            <author email="julien@izforge.com" name="Julien PONGE"/>
+            <author email="julien@izforge.com" name="Julien PONGE (maintainer)"/>
+            <author email="(see Thanks.txt)" name="Many other nice contributors" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
 				<javaversion>1.2</javaversion>
