@@ -442,7 +442,7 @@
     <mkdir dir="${build.dir}/javadoc"/>
     <javadoc destdir="${build.dir}/javadoc" access="private">
       <fileset dir="${src.dir}">
-				<include name="**/*.java" />
+        <include name="**/*.java" />
       </fileset>
     </javadoc>
     <copy todir="${doc.dir}/izpack/javadoc">
