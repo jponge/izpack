@@ -24,42 +24,18 @@
 package com.izforge.izpack.compiler;
 
 import java.io.File;
-import java.io.DataOutputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
-import java.util.jar.JarFile;
-import java.util.jar.JarOutputStream;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.GUIPrefs;
-import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
-import com.izforge.izpack.Panel;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
-import com.izforge.izpack.util.OsConstraint;
 
 /**
  * Temporary holding place for Pack information as the Packager is built. The

@@ -24,8 +24,6 @@
 package com.izforge.izpack.compiler;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,16 +32,13 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
