@@ -1,6 +1,20 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.0.5 (release 2003.02.14)
+  > 3.0.6 (build 2003.02.27)
+
+- Updated the French and German langpacks.
+- Fixed the building process to take care of all classes related to the InputPanel.
+- Made some fixes on the installers DTD.
+- Elmar Grom / UserInputPanel:
+  o Fixed a bug with the drop down box that always return the value for the last
+    option in it, regardless of what had been selected during installation.
+  o Implemented the automated installer mode.
+  o RuleInputTextField can now be validated and processed with custom code
+    (documentation to come soon).
+  o A password field is now available and can also be validated and processed
+    with custom code (documentation to come soon).
+
+  > 3.0.5 (build 2003.02.14)
 
 - This release becomes the new stable version, waiting for the 3.1 release which
   is not yet ready. The stable/unstable versions separation is suspended.
@@ -398,3 +412,5 @@ _______________________________________________________________________________
 - The first public release :-)
 - There are a lot of features to add and enhance in the next releases, of 
   course.
+
+[ vim: fileformat=dos ]
