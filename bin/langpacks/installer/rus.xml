@@ -9,89 +9,95 @@
     <str id="installer.next" txt="Далее"/>
     <str id="installer.prev" txt="Назад"/>
     <str id="installer.quit" txt="Выход"/>
-    <str id="installer.madewith" txt="(Инсталлятор сделан IzPack - http://www.izforge.com/)"/>
-    <str id="installer.quit.title" txt="Закончить работу ?"/>
-    <str id="installer.quit.message" txt="Установка будет отменена !"/>
-    <str id="installer.warning" txt="Предупреждение !"/>
+    <str id="installer.madewith" txt="(Программа установки сделана при помощи IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Закончить работу?"/>
+    <str id="installer.quit.message" txt="Установка будет отменена!"/>
+    <str id="installer.warning" txt="Предупреждение!"/>
     <str id="installer.yes" txt="Да"/>
     <str id="installer.no" txt="Нет"/>
     <str id="installer.cancel" txt="Отказ"/> 
+    <str id="installer.error" txt="Ошибка"/>
     
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="Установленные программы будут удалены !"/>
+    <str id="uninstaller.warning" txt="Установленные программы будут удалены!"/>
     <str id="uninstaller.destroytarget" txt=" Удалить "/>
     <str id="uninstaller.uninstall" txt="Удалить установленные программы"/>
     
     <!-- The strings for the 'official' IzPack plugins -->
     <str id="HelloPanel.welcome1" txt="Добро пожаловать в программу установки "/>
     <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="Авторы программы : "/>
-    <str id="HelloPanel.url" txt="Домашняя страница программы : "/>
+    <str id="HelloPanel.authors" txt="Авторы программы: "/>
+    <str id="HelloPanel.url" txt="Домашняя страница программы: "/>
     
-    <str id="LicencePanel.info" txt="Пожалуйста внимательно прочитайте лицензию :"/>
-    <str id="LicencePanel.agree" txt="Вы согласны с лицензией ?"/>
-    <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>
+    <str id="LicencePanel.info" txt="Пожалуйста внимательно прочитайте лицензию:"/>
+    <str id="LicencePanel.agree" txt="Я согласен с условиями лицензии."/>
+    <str id="LicencePanel.notagree" txt="Я не согласен с условиями лицензии."/>
     <str id="LicencePanel.yes" txt="Да"/>
     <str id="LicencePanel.no" txt="Нет"/>
     
-    <str id="InfoPanel.info" txt="Пожалуйста прочитайте следующую информацию :"/>
+    <str id="InfoPanel.info" txt="Пожалуйста прочитайте следующую информацию:"/>
     
-    <str id="TargetPanel.info" txt="Выберите каталог установки :"/>
+    <str id="TargetPanel.info" txt="Выберите каталог установки:"/>
     <str id="TargetPanel.browse" txt="Указать ..."/>
     <str id="TargetPanel.warn" 
-         txt="Каталог уже существует ! Вы желаете установить программу в него ?"/>
+         txt="Каталог уже существует! Вы желаете установить программу в него?"/>
+    <str id="TargetPanel.empty_target"
+         txt="Вы не указали каталог для установки.  Продолжать?"/>
+    <str id="TargetPanel.createdir" txt="Будет создан каталог для установки:" />
+
+    <str id="PacksPanel.info" txt="Выберите наборы для установки:"/>
+    <str id="PacksPanel.tip" txt="Примечание: неактивные наборы обязательны к установке."/>
+    <str id="PacksPanel.space" txt="Требуется места: "/>
+    <str id="PacksPanel.description" txt="Описание"/>
     
-    <str id="PacksPanel.info" txt="Выберите наборы для установки :"/>
-    <str id="PacksPanel.tip" txt="Примечание: серые наборы обязательны к установке."/>
-    <str id="PacksPanel.description" txt="Description"/>
-    
-    <str id="InstallPanel.info" txt="Подготовка к установке программы завершена :"/>
-    <str id="InstallPanel.install" txt="Установить !"/>
-    <str id="InstallPanel.tip" txt="Ход установки :"/>
+    <str id="InstallPanel.info" txt="Подготовка к установке программы завершена:"/>
+    <str id="InstallPanel.install" txt="Установить!"/>
+    <str id="InstallPanel.tip" txt="Ход установки:"/>
     <str id="InstallPanel.begin" txt="[Пусто]"/>
     <str id="InstallPanel.finished" txt="[Закончен]"/>
     
-    <str id="FinishPanel.success" txt="Установка успешно завершена !"/>
+    <str id="FinishPanel.success" txt="Установка успешно завершена!"/>
     <str id="FinishPanel.fail" txt="Установка прервана аварийно ..."/>
-    <str id="FinishPanel.uninst.info" txt="Программа удаления установки помещена :"/>
+    <str id="FinishPanel.uninst.info" txt="Программа удаления установки помещена:"/>
     <str id="FinishPanel.auto" txt="Создать сценарий автоматической установки"/>
     <str id="FinishPanel.auto.tip" 
          txt="Будет создан файл, позволяющий автоматически провести такую же инсталляцию программы на другом компьютере."/>
     
-    <str id="ImgPacksPanel.packs" txt="Доступны следующие наборы :"/>
-    <str id="ImgPacksPanel.snap" txt="Снимок помещен :"/>
+    <str id="ImgPacksPanel.packs" txt="Доступны следующие наборы:"/>
+    <str id="ImgPacksPanel.snap" txt="Снимок экрана:"/>
     <str id="ImgPacksPanel.checkbox" txt=" Установить набор"/>
     
-    <str id="ShortcutPanel.regular.list" txt="Select a Program Group for the Shortcuts:"/>
-    <str id="ShortcutPanel.regular.default" txt="Reset"/>
-    <str id="ShortcutPanel.regular.desktop" txt="Create shortcut on the desktop"/>
-    <str id="ShortcutPanel.regular.create" txt="Create Shortcuts"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
-    <str id="ShortcutPanel.regular.currentUser" txt="current user"/>
-    <str id="ShortcutPanel.regular.allUsers" txt="all users"/>
+    <str id="ShortcutPanel.regular.list" txt="Выберите программную группу для ярлыков:"/>
+    <str id="ShortcutPanel.regular.default" txt="Сбросить"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Создать ярлыки на рабочем столе"/>
+    <str id="ShortcutPanel.regular.create" txt="Создать ярлыки"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="создать ярлык для:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="текущий пользователь"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="все пользователи"/>
 
-    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
-    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
-    <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
+    <str id="ShortcutPanel.alternate.apology" txt="К сожалению, IzPack не поддерживает создание ярлыков в этой операционной системе.  Чтобы создать ярлыки, обратитесь к руководству по Вашей операционной системе."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Список объектов, к которым Вам потребуется обращаться для использования приложения:"
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Вы можете сохранить подробную информацию об объектах, на которые указывают ярлыки, в текстовом файле для справки."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Сохранить текстовый файл"/>
     
-    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
+    <str id="ShortcutPanel.textFile.header" txt="Информация о ярлыке\n====================\n\nНиже приведены все необходимые сведения о создаваемых ярлыках.\nИх достаточно, чтобы Вы могли создать нужные ярлыки самостоятельно.\n"/>
+    <!--str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/-->
     
-    <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
-    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
-    <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
-    <str id="ShortcutPanel.textFile.target"       txt="Shortcut Target   : "/>
-    <str id="ShortcutPanel.textFile.command"      txt="Command Line      : "/>
-    <str id="ShortcutPanel.textFile.iconName"     txt="Icon File         : "/>
-    <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
-    <str id="ShortcutPanel.textFile.work"         txt="Working Directory : "/>
+    <str id="ShortcutPanel.textFile.name"         txt="Ярлык                        : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Расположение ярлыка          : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Описание                     : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Объект, на который указывает ярлык : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Командная строка             : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Пиктограмма                  : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Номер пиктограммы в файле    : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Рабочий каталог              : "/>
 
-    <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
-    <str id="ShortcutPanel.location.applications" txt="Applications Menu"/>
-    <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
-    <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
+    <str id="ShortcutPanel.location.desktop"      txt="Рабочий стол"/>
+    <str id="ShortcutPanel.location.applications" txt="Меню приложений"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Меню кнопки \"Пуск\""/>
+    <str id="ShortcutPanel.location.startup"      txt="Группа автозапуска"/>
 
-    <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+    <str id="UserInputPanel.error.caption"        txt="Ошибка ввода"/>
 
     <!-- Add your own panels specific strings here if you need -->
 
