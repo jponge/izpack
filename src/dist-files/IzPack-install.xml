@@ -51,6 +51,7 @@
         <langpack iso3="rus"/>
         <langpack iso3="ukr"/>
         <langpack iso3="hun"/>
+        <langpack iso3="svk"/>
     </locale>
 
     <!-- The resources needed by the various panels -->
