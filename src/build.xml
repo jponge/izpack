@@ -18,22 +18,22 @@
     28.8.2001: (by Pierre Dittgen)
   Added compile.uninstaller and build.uninstaller targets to create the
   uninstaller.jar jar file.
-        
+
     02.9.2001: (by Julien Ponge)
         Improved compilation options (optimizations, deprecation warnings) and
         changed the build dir to src/build. Fixed the compiling/building of the
         uninstaller.
-        
+
     12.9.2001: (by Julien Ponge)
         Added creation/compilation of the frontend and its associated jar file.
-        
+
     22.9.2001: (by Julien Ponge)
         Small fix in the all target that caused an error if the build dir was
         not yet created.
-    
+
     14.10.2001: (by Julien Ponge)
         Added the XPanel compilation call.
-        
+
     12.12.2001: (by Julien Ponge)
         Removed the 'clean' dependency for the 'all' target.
 
@@ -42,28 +42,28 @@
         files moving scripts).
         Added a markup to specify IBM Jikes as the compiler (just comment out to
         use another one).
-    
+
     21.02.2002: (by Paul Wilkinson)
         Added tasks to compiler.compiler and build.compiler to build ant task class.
 
     02.03.2002: (by Julien Ponge)
         Modified the building of the panels so that the inner classes can be copied
         too.
-        
+
     18.04.2002: (by Julien Ponge)
         Added the new com.izforge.izpack.util & com.izforge.izpack.util.os
         packages to the installer.jar build process.
 
     19.04.2002: (by Olexij Tkatchenko & Julien Ponge)
         Added "dist" target for bootstrapped IzPack package creation.
-    
+
     01.06.2002: (by Julien Ponge)
         Changed the panels building process in order to enable the ShortcutData
         classes to be move in the same directory as the ShortcutPanel classes.
-        
+
     15.06.2002: (by Julien Ponge)
         Added the ant-generated manifests in the clean target scope.
-    
+
     03.07.2002: (by Julien Ponge)
         Added a target to generate some javadoc.
 
@@ -91,7 +91,7 @@
 
   To compile the panels and put them in the bin/panels directory, type:
     ant build.panels
-        
+
     To compile and package the frontend.jar jar file, type:
         ant build.frontend
 
@@ -110,20 +110,20 @@
 
   <!-- Compiler to use put your own here (jikes, modern, gcj, ...) -->
   <!--<property name="build.compiler" value="jikes" />-->
-  
+
   <!-- Define directories -->
   <property file="src/ant.properties"/>
   <property name="ver" value="3.0" />
   <property name="rel" value="6" />
-  
+
   <property name="src.dir" value="${basedir}/src/lib" />
   <property name="img.dir" value="${basedir}/src/img" />
   <property name="bin.dir" value="${basedir}/bin" />
   <property name="doc.dir" value="${basedir}/doc" />
-  
+
   <property name="langpacks.subdir" value="langpacks" />
   <property name="langpacks.dir" value="${basedir}/bin/${langpacks.subdir}" />
-  
+
   <property name="build.subdir" value="_build" />
   <property name="build.dir" value="${basedir}/${build.subdir}" />
 
@@ -143,14 +143,14 @@
   <property name="frontend.manifest" value="${basedir}/src/frontend.manifest" />
 
   <property name="debug" value="off"/>
-  
+
   <target name="check">
       <echo message="basedir=${basedir}"/>
       <echo message="dist.dir=${dist.dir}"/>
       <echo message="build.dir=${build.dir}"/>
       <echo message="debug=${debug}"/>
   </target>
-    
+
   <!-- Creates the classes directory -->
   <target name="prepare">
     <mkdir dir="${build.dir}"/>
@@ -161,7 +161,7 @@
 
   <!-- Compiles the compiler src files -->
   <target name="compile.compiler" depends="prepare">
-    <javac  srcdir="${src.dir}" 
+    <javac  srcdir="${src.dir}"
             destdir="${build.dir}"
             optimize="on"
             deprecation="on"
@@ -187,7 +187,7 @@
             <attribute name="Specification-Version" value="${rel}" />
             <attribute name="Specification-Vendor" value="IzPack." />
             <attribute name="Implementation-Title" value="IzPack compiler" />
-            <attribute name="Implementation-Version" value="${ver}" /> 
+            <attribute name="Implementation-Version" value="${ver}" />
             <attribute name="Implementation-Vendor" value="IzPack." />
         </section>
       </manifest>
@@ -206,13 +206,13 @@
         <include name="com/izforge/izpack/installer/VariableValueMapImpl.class"/>
         <include name="com/izforge/izpack/installer/VariableSubstitutor.class"/>
         <include name="net/n3/nanoxml/*.class"/>
-      </fileset>  
+      </fileset>
     </jar>
   </target>
 
   <!-- Compiles the installer src files -->
   <target name="compile.installer" depends="prepare">
-    <javac srcdir="${src.dir}" 
+    <javac srcdir="${src.dir}"
            destdir="${build.dir}"
            optimize="on"
            deprecation="on"
@@ -237,7 +237,7 @@
             <attribute name="Specification-Version" value="${rel}" />
             <attribute name="Specification-Vendor" value="IzPack." />
             <attribute name="Implementation-Title" value="IzPack installer" />
-            <attribute name="Implementation-Version" value="${ver}" /> 
+            <attribute name="Implementation-Version" value="${ver}" />
             <attribute name="Implementation-Vendor" value="IzPack." />
         </section>
       </manifest>
@@ -263,7 +263,7 @@
 
   <!-- Compiles the uninstaller src files -->
   <target name="compile.uninstaller" depends="prepare">
-    <javac srcdir="${src.dir}" 
+    <javac srcdir="${src.dir}"
            destdir="${build.dir}"
            optimize="on"
            deprecation="on"
@@ -287,7 +287,7 @@
             <attribute name="Specification-Version" value="${rel}" />
             <attribute name="Specification-Vendor" value="IzPack." />
             <attribute name="Implementation-Title" value="IzPack uninstaller" />
-            <attribute name="Implementation-Version" value="${ver}" /> 
+            <attribute name="Implementation-Version" value="${ver}" />
             <attribute name="Implementation-Vendor" value="IzPack." />
         </section>
       </manifest>
@@ -306,10 +306,10 @@
       <fileset dir="${img.dir}/uninstaller" />
     </jar>
   </target>
-    
+
     <!-- Compiles the frontend src files -->
   <target name="compile.frontend" depends="prepare">
-    <javac srcdir="${src.dir}" 
+    <javac srcdir="${src.dir}"
            destdir="${build.dir}"
            classpath="${basedir}/lib/kunststoff.jar:${basedir}/lib/compiler.jar"
            optimize="on"
@@ -333,7 +333,7 @@
             <attribute name="Specification-Version" value="${rel}" />
             <attribute name="Specification-Vendor" value="IzPack." />
             <attribute name="Implementation-Title" value="IzPack frontend" />
-            <attribute name="Implementation-Version" value="${ver}" /> 
+            <attribute name="Implementation-Version" value="${ver}" />
             <attribute name="Implementation-Vendor" value="IzPack." />
         </section>
       </manifest>
@@ -478,13 +478,13 @@
         <include name="installer.jar" />
         <include name="uninstaller.jar" />
       </fileset>
-    </delete> 
+    </delete>
   </target>
 
   <!-- Builds all compilation targets -->
   <target name="all" depends="build.compiler,build.installer,build.uninstaller,
                               build.frontend,build.panels"/>
-                              
+
   <!-- Builds the Javadoc -->
   <target name="build.javadoc" depends="prepare">
     <mkdir dir="${build.dir}/javadoc"/>
@@ -501,12 +501,12 @@
   </target>
 
   <!-- Creates an installer for IzPack -->
-  <target name="generate.installer"> 
-  
+  <target name="generate.installer">
+
     <!-- Allows us to use the IzPack Ant task -->
     <taskdef name="izpack" classpath="${basedir}/lib/compiler.jar"
              classname="com.izforge.izpack.ant.IzPackTask"/>
-    
+
     <!-- Copies the files to the dist directory -->
     <echo message="Copies the image of the distribution to ${dist.dir}"/>
     <copy todir="${dist.dir}" includeEmptyDirs="yes">
@@ -540,7 +540,7 @@
         <include name="compile*"/>
       </fileset>
     </copy>
-    
+
     <!-- We call IzPack -->
     <echo message="Makes the installer using IzPack"/>
     <izpack input="${dist.dir}/IzPack-install.xml"
@@ -548,7 +548,7 @@
             installerType="standard-kunststoff"
             basedir="${dist.dir}"
             izPackDir="${dist.dir}/"/>
-            
+
   </target>
 
   <!-- Makes everything, from compilation to generating an installer. -->
