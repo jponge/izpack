@@ -59,7 +59,8 @@ IzPack for your projects ;-)
 - Dani Orza : for the Romanian langpack.
 - Tom Moore : for the absolute files path patch.
 - Tino Schwarze : for the great enhancements.
-- Dennis Lundberg : for the Swedish i18n contributions.
+- Dennis Lundberg : for the Swedish and Windows "Program Files" i18n
+  improvements.
 - Alex Carlos Braga Antao : for the portuguese i18 contributions.
 - Cristian Ghezzi : for the Italian i18n contributions.
 
