@@ -92,9 +92,6 @@
         <panel classname="SimpleFinishPanel"/>
     </panels>
 
-    <!-- The native libraries to add -->
-    <native type="izpack" name="ShellLink.dll"/>
-
     <!-- The packs section -->
     <packs>
 
@@ -151,5 +148,9 @@
         </pack>
 
     </packs>
+    
+     <!-- The native libraries to add -->
+    <native type="izpack" name="ShellLink.dll"/>
+
 
 </installation>
