@@ -2,6 +2,9 @@
 
   > x.y.z (build xxxx.yy.zz)
 
+- Various bugs fixed (taken from the bugs database).
+- The current GUI frontend is deprecated. The project is looking for people to
+  take over the development of a new one.
 - The compiler now returns a sensible exit code on error. This way, it can be
   used in scripts.
 - Italian localization updates by Cristian Ghezzi.

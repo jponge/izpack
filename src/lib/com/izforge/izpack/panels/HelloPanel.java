@@ -110,7 +110,8 @@ public class HelloPanel extends IzPanel
 	    for (int i = 0; i < size; i++)
 	    {
 	      Info.Author a = (Info.Author) authors.get(i);
-	      label = new JLabel(" - " + a.getName() + " <" + a.getEmail() + ">",
+        String email = (a.getEmail() != null) ? (" <" + a.getEmail() + ">") : "";
+	      label = new JLabel(" - " + a.getName() + email,
 	        parent.icons.getImageIcon("empty"), JLabel.TRAILING);
 	      centerPanel.add(label);
 	    }
@@ -118,9 +119,14 @@ public class HelloPanel extends IzPanel
 	    centerPanel.add(Box.createVerticalStrut(20));
     }
 
-    str = parent.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
-    appURLLabel = new JLabel(str, parent.icons.getImageIcon("bookmark"), JLabel.TRAILING);
-    centerPanel.add(appURLLabel);
+    if (idata.info.getAppURL() != null)
+    {
+      str = parent.langpack.getString("HelloPanel.url") +
+            idata.info.getAppURL();
+      appURLLabel = new JLabel(str, parent.icons.getImageIcon("bookmark"),
+                               JLabel.TRAILING);
+      centerPanel.add(appURLLabel);
+    }
   }
 
 

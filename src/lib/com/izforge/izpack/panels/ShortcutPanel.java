@@ -769,7 +769,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
             // add the file and directory name to the file list
             String fileName       = shortcut.getFileName ();
             String directoryName  = shortcut.getDirectoryCreated ();
-            files.add (fileName);
+            files.add (0, fileName);
 
             if (!(directoryName == null))
             {
