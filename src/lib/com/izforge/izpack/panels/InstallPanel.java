@@ -176,7 +176,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
    *
    * @param  error  The error text.
    */
-  public void errorUnpack(String error)
+  public void emitError(String title, String error)
   {
     this.packOpLabel.setText(error);
     idata.installSuccess = false;
@@ -201,7 +201,6 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     this.overallProgressBar.setEnabled(false);
     this.packOpLabel.setText(" ");
     this.packOpLabel.setEnabled(false);
-    idata.installSuccess = true;
     idata.canClose = true;
     this.validated = true;
     if (idata.panels.indexOf(this) != (idata.panels.size() - 1))

@@ -78,5 +78,6 @@ IzPack for your projects ;-)
 - Erik Artzmark : for the bug fixes and the "files on disk" feature.
 - Flavio Fonseca : for the portuguese langpack updates.
 - Eduard Jodas Samper : for the keyboard UI blocking patch.
+- Andreas Vox : for the various patches.
 
 # vim: fileformat=dos

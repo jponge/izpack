@@ -246,7 +246,17 @@ public class TargetPanel extends IzPanel implements ActionListener
     installPath = path.toString();
 
     // We put a warning if the directory exists else we warn that it will be created
-    if (path.exists())
+    // We signal an error if the selected file is no directory or if it is not writable 
+    if (path.exists() && ! path.isDirectory())
+    {
+        JOptionPane.showMessageDialog(
+          this,
+          parent.langpack.getString("TargetPanel.nodir"),
+          parent.langpack.getString("installer.error"),
+          JOptionPane.ERROR_MESSAGE);
+        ok = false;
+    }
+    else if (path.exists() && path.canWrite())
     {
       int res =
         JOptionPane.showConfirmDialog(
@@ -255,16 +265,42 @@ public class TargetPanel extends IzPanel implements ActionListener
           parentFrame.langpack.getString("installer.warning"),
           JOptionPane.YES_NO_OPTION);
       ok = (res == JOptionPane.YES_OPTION);
-    } else
+    } 
+    else if ( ! existingParent(path).canWrite()) 
+    {
+      JOptionPane.showMessageDialog(
+          this,
+          parent.langpack.getString("TargetPanel.notwritable"),
+          parent.langpack.getString("installer.error"),
+          JOptionPane.ERROR_MESSAGE);
+        ok = false;
+    }
+    else
+    {
       JOptionPane.showMessageDialog(
         this,
         parentFrame.langpack.getString("TargetPanel.createdir")
           + "\n"
           + installPath);
-
+    }
     idata.setInstallPath(installPath);
     return ok;
   }
+
+  /**
+    * Finds the first existing parentdirectory in a path
+    */
+  private static File existingParent(File path) {
+    File result = path;
+    while ( ! result.exists() )
+    {
+      if (result.getParent() == null)
+        return result;
+      result = result.getParentFile();
+    }
+    return result;
+  }
+
 
   /**
    *  Actions-handling method.
