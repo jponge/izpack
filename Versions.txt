@@ -11,6 +11,7 @@
 - UserInputPanel: bug fixes by Per Abich (bugs #3233 and #3283).
 - Russian langpack fixes (Alexey Makhmutov).
 - ProcessPanel log file creation fix on Win32 (Anthony Xin Chen).
+- IoHelper.getenv: on Windows keys are not case sensitive (Klaus Bartz)
 
   > 3.7.0 (build 2004.01.11)
 
