@@ -479,13 +479,35 @@
             <param name="panel" value="LicencePanel"/>
             <param name="panel-dir" value="LicencePanel"/>
         </antcall>
-        <antcall target="compile.panel.simple">
+        <antcall target="compile.panel">
+            <param name="panel" value="PacksPanelInterface"/>
+            <param name="panel-dir" value="PacksPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="PacksModel"/>
+            <param name="panel-dir" value="PacksPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
             <param name="panel" value="PacksPanel"/>
             <param name="panel-dir" value="PacksPanel"/>
         </antcall>
-        <antcall target="compile.panel.simple">
+        <antcall target="compile.panel.finish">
+            <param name="panel" value="PacksPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="PacksPanelInterface"/>
+            <param name="panel-dir" value="ImgPacksPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="PacksModel"/>
+            <param name="panel-dir" value="ImgPacksPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
             <param name="panel" value="ImgPacksPanel"/>
             <param name="panel-dir" value="ImgPacksPanel"/>
+        </antcall>
+        <antcall target="compile.panel.finish">
+            <param name="panel" value="ImgPacksPanel"/>
         </antcall>
         <antcall target="compile.panel.simple">
             <param name="panel" value="HTMLLicencePanel"/>
