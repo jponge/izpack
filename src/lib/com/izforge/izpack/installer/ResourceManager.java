@@ -60,7 +60,7 @@ public class ResourceManager
   private String locale = "";
 
   /**  The base path where to find the resources */
-  private final String resourceBasePath = "/res/";
+  protected final String resourceBasePath = "/res/";
 
   /**  Contains the given InstallData */
   private AutomatedInstallData installData;
