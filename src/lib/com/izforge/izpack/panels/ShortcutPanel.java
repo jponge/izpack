@@ -229,6 +229,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
   /** This is set to true if the shortcut spec instructs to simulate running
       on an operating system that is not supported.  */
   private boolean             simulteNotSupported        = false;
+  /** Specifies wether the shortcuts creation has been done or not. */
+  private boolean             shortcutsCreationDone = false;
   
  /*--------------------------------------------------------------------------*/
  /**
@@ -717,7 +719,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       }
 
     }
-    parent.unlockNextButton();
+    //parent.unlockNextButton();
+    shortcutsCreationDone = true;
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1302,6 +1305,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     // ----------------------------------------------------
     if (!shortcutsToCreate     || 
         !shortcut.supported () ||
+        !shortcutsCreationDone ||
          simulteNotSupported      )
     {
       return;
