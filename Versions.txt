@@ -1,5 +1,13 @@
 [ The list of the different public versions of IzPack ]
 
+    > 3.1.0 pre3 (build 2002.11.24)
+
+- Restyled, cleaned, javadoc'ed the whole IzPack source code.
+- The full IzPack source code Javadocs are generated when making a release.
+- Wiped the Enroll* classes that were polluting IzPack.
+- Added the creation of shortcuts for the IzPack documentation and the 
+uninstaller.
+
     > 3.1.0 pre2 (build 2002.10.19)
 
 - New (and clean) ResourceManager thanks to Marcus Stursberg.
@@ -135,7 +143,8 @@
   IzPack has a GUI frontend :-)
 - Updated the installer english langpack file so that 'installer.quit.message'
   is not wrong anymore.
-- Added a complete Javadoc comments set to com.izforge.izpack.installer.IzPanel .
+- Added a complete Javadoc comments set to com.izforge.izpack.installer.IzPanel 
+.
 - Inclusion of the IzPack installer XML file in the source directory.
 - The compiler and the frontend can now be invoked outside of the bin/ directory
   without any problem. This provide a *noticeable* improvement ;-)
@@ -148,7 +157,8 @@
 
 - Pre-versions modifications have been validated.
 - Improved documentation HTML version.
-- IzPack's own installer : use the ImgPacksPanel instead of the classic PacksPanel.
+- IzPack's own installer : use the ImgPacksPanel instead of the classic 
+PacksPanel.
 - 2 new frontend splash screens thanks to Nicolas Deschaume.
 - HelloPanel : displays the email adresses enclosed by '<' and '>'.
 - This version is compiled with IBM Jikes.
@@ -198,7 +208,8 @@
 - Installer : centered labels at the language selection prompt.
 - LicencePanel : now locks the 'next' button if the 'yes' radio is not selected.
 - TargetPanel : now warns if the specified target is an empty string.
-- InstallPanel : now removes the last processed file path when the installation is over.
+- InstallPanel : now removes the last processed file path when the installation 
+is over.
 
 
     > 2.9.0 (build 2001.10.26)
