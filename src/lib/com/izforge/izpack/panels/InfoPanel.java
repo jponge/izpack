@@ -113,20 +113,7 @@ public class InfoPanel extends IzPanel
     private void loadInfo()    {
         try  {
             String resNamePrifix = "InfoPanel.info";
-            String resName = resNamePrifix + "_" + idata.localeISO3;
-
-            InputStream in = parent.getResource(resName);
-            if (null == in ) {
-                in = parent.getResource(resNamePrifix);
-            }
-
-            ByteArrayOutputStream infoData = new ByteArrayOutputStream();
-            byte[] buffer = new byte[5120];
-            int bytesInBuffer;
-            while ((bytesInBuffer = in.read(buffer)) != -1) {
-                infoData.write(buffer, 0, bytesInBuffer);
-            }
-            info = infoData.toString();
+            info = super.getResourceManager().getTextResource(resNamePrifix);
         }
         catch (Exception err) {
             info = "Error : could not load the info text !";

@@ -124,20 +124,7 @@ public class LicencePanel extends IzPanel implements ActionListener
         {
             // We read it
             String resNamePrifix = "LicencePanel.licence";
-            String resName = resNamePrifix + "_" + idata.localeISO3;
-            InputStream in = parent.getResource(resName);
-            if (null == in ) {
-                in = parent.getResource(resNamePrifix);
-            }
-
-            ByteArrayOutputStream licenceData = new ByteArrayOutputStream();
-            byte[] buffer = new byte[5120];
-            int bytesInBuffer;
-            while ((bytesInBuffer = in.read(buffer)) != -1)
-            {
-                licenceData.write(buffer, 0, bytesInBuffer);
-            }
-            licence = licenceData.toString();
+            licence = super.getResourceManager().getTextResource(resNamePrifix);
         }
         catch (Exception err)
         {

@@ -91,15 +91,7 @@ public class XInfoPanel extends IzPanel
         try
         {
             // We read it
-            InputStream in = parent.getResource("XInfoPanel.info");
-            ByteArrayOutputStream infoData = new ByteArrayOutputStream();
-            byte[] buffer = new byte[5120];
-            int bytesInBuffer;
-            while ((bytesInBuffer = in.read(buffer)) != -1)
-            {
-                infoData.write(buffer, 0, bytesInBuffer);
-            }
-            info = infoData.toString();
+            info = super.getResourceManager().getTextResource("XInfoPanel.info");
         }
         catch (Exception err)
         {

@@ -102,17 +102,13 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 
     private URL loadInfo()
     {
-        URL retVal = null;
-
-        String resNamePrifix = "/res/HTMLInfoPanel.info";
-        String resName = resNamePrifix + "_" + idata.localeISO3;
-
-        retVal = getClass().getResource(resName);
-
-        if (null == retVal ) {
-            retVal =  getClass().getResource(resNamePrifix);
-        }
-        return retVal;
+        String resNamePrifix = "HTMLInfoPanel.info";
+        try {
+            return super.getResourceManager().getURL(resNamePrifix);
+	}catch(Exception ex) {
+            ex.printStackTrace();
+	}
+        return null;
     }
 
     // Indicates wether the panel has been validated or not
