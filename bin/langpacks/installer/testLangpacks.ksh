@@ -28,7 +28,7 @@ for lp in $langpacks; do
     count=0
     for i in `awk '{print $2}' eng.xml | grep 'id="'`; do
         MATCH=`grep "$i" $lp`;
-        if [ "${MATCH}" == "" ]; then
+        if [ "${MATCH}" = "" ]; then
             result[count]=$i
             count=count+1
         fi;
