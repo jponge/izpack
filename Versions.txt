@@ -1,5 +1,11 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.0.9 (build 2003.06.29)
+
+- New Romanian language pack (Dani Orza).
+- Absolute paths problems patch (Tom Moore).
+- DTD, documentation fixes.
+
   > 3.0.8a (build 2003.05.02)
 
 - A bug had been introduced in 3.0.8 during the files extraction. Fixed.
