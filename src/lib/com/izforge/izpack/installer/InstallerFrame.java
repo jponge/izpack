@@ -436,8 +436,15 @@ public class InstallerFrame extends JFrame
             unlockNextButton();
         }
 
+        // Change panels container to the current one.
+        panelsContainer.remove(l_panel);
+        l_panel.panelDeactivate();
+        panelsContainer.add(panel);
+
         if(panel.getInitialFocus() != null)
-        {
+        { // Initial focus hint should be performed after current panel
+          // was added to the panels container, else the focus hint will
+          // be ignored.
             // Give a hint for the initial focus to the system.
             Component inFoc = panel.getInitialFocus();
             if( JAVA_SPECIFICATION_VERSION < 1.4)
@@ -460,12 +467,7 @@ public class InstallerFrame extends JFrame
                 }
             }
         }
-
-        panelsContainer.remove(l_panel);
-        l_panel.panelDeactivate();
-        panelsContainer.add(panel);
         panel.panelActivate();
-
         panelsContainer.setVisible(true);
         loadImage(installdata.curPanelNumber);
         isBack = false;
