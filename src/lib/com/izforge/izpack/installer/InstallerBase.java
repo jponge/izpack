@@ -30,7 +30,6 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -207,7 +206,7 @@ public class InstallerBase
       dpath = drive
             + props.getProperty(locale, props.getProperty("EN")) + "\\";
     }
-    catch (IOException ioErr)
+    catch (Exception err)
     {
       dpath = "C:\\Program Files\\";
     }
