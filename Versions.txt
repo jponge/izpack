@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.0.8 (build 2003.xx.xx)
+  > 3.0.8 (build 2003.04.26)
 
 - Packs OS-targeting (Fran Taylor).
 - OS selection improved accuracy (Sanjay Linganna).
