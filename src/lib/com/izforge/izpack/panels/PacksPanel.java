@@ -34,6 +34,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
@@ -78,7 +80,11 @@ public class PacksPanel
 
   /**  The tip label. */
   private JTextArea descriptionArea;
+  /**  The dependencies label. */
+  private JTextArea dependencyArea;
 
+  /** Map that connects names with pack objects */
+  private Map names;
   /**  The tablescroll. */
   private JScrollPane tableScroller;
 
@@ -89,7 +95,7 @@ public class PacksPanel
   private JTable packsTable;
   
   /** The packs locale database. */
-  private LocaleDatabase langpack = null;
+  protected LocaleDatabase langpack = null;
   
   /** The name of the XML file that specifies the panel langpack */
   private static final String LANG_FILE_NAME = "packsLang.xml";
@@ -111,7 +117,7 @@ public class PacksPanel
     }
     catch (Throwable exception)
     {}
-  
+
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
     JLabel infoLabel =
@@ -145,6 +151,20 @@ public class PacksPanel
       new Dimension(300, (idata.guiPrefs.height / 3 + 30)));
     add(tableScroller);
 
+    dependencyArea = new JTextArea();
+    dependencyArea.setMargin(new Insets(2, 2, 2, 2));
+    dependencyArea.setAlignmentX(LEFT_ALIGNMENT);
+    dependencyArea.setCaretPosition(0);
+    dependencyArea.setEditable(false);
+    dependencyArea.setEditable(false);
+    dependencyArea.setOpaque(false);
+    dependencyArea.setLineWrap(true);
+    dependencyArea.setWrapStyleWord(true);
+    dependencyArea.setBorder(
+            BorderFactory.createTitledBorder(
+                    parent.langpack.getString("PacksPanel.dependencyList")));
+    add(dependencyArea);
+
     descriptionArea = new JTextArea();
     descriptionArea.setMargin(new Insets(2, 2, 2, 2));
     descriptionArea.setAlignmentX(LEFT_ALIGNMENT);
@@ -159,6 +179,8 @@ public class PacksPanel
         parent.langpack.getString("PacksPanel.description")));
     add(descriptionArea);
 
+
+
     JPanel spacePanel = new JPanel();
     spacePanel.setAlignmentX(LEFT_ALIGNMENT);
     spacePanel.setLayout(new BoxLayout(spacePanel, BoxLayout.X_AXIS));
@@ -169,10 +191,21 @@ public class PacksPanel
     spacePanel.add(spaceLabel);
     add(spacePanel);
   }
+  public void createMap(List packs)
+  {
+    names = new HashMap();
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      names.put(pack.name,pack);
+    }
+  }
 
   /**  Called when the panel becomes active.  */
   public void panelActivate()
   {
+    //init the map
+    createMap(idata.availablePacks);
     try
     {
       packsTable.setModel(
@@ -288,19 +321,49 @@ public class PacksPanel
   public void valueChanged(ListSelectionEvent e)
   {
     int i = packsTable.getSelectedRow();
+    //Operations for the description
     if (i >= 0)
     {
       Pack pack = (Pack) idata.availablePacks.get(i);
       String desc = "";
+      String key = pack.id+".description";
       if (langpack != null && pack.id != null && !pack.id.equals(""))
       {
-        desc = langpack.getString(pack.id+".description");
+        desc = langpack.getString(key);
       }
-      if (desc.equals(""))
+      if (desc.equals("") || key.equals(desc))
       {
       	desc = pack.description;
       }
       descriptionArea.setText(desc);
+    }
+    //Operation for the dependency listing
+    if(i >=0)
+    {
+      Pack pack = (Pack) idata.availablePacks.get(i);
+      List dep = pack.dependencies;
+      String list="";
+      for (int j = 0; dep != null && j < dep.size(); j++)
+      {
+        String name = (String)dep.get(j);
+        //Internationalization code
+        Pack childPack = (Pack)names.get(name);
+        String childName = "";
+        String key = childPack.id;
+        if (langpack != null && childPack.id != null && !childPack.id.equals(""))
+        {
+          childName = langpack.getString(key);
+        }
+        if  (childName.equals("") || key.equals(childName))
+        {
+          childName = childPack.name;
+        }
+        //End internationalization
+        list += childName;
+        if(j != dep.size()-1)
+          list +=", ";
+      }
+      dependencyArea.setText(list);
     }
   }
 

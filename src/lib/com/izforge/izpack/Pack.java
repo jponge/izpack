@@ -24,9 +24,13 @@
  */
 package com.izforge.izpack;
 
+import com.izforge.izpack.compiler.PackInfo;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  *  Represents a Pack.
@@ -64,6 +68,15 @@ public class Pack implements Serializable
   /**  Whether this pack is suggested (preselected for installation). */
   public boolean preselected;
 
+  /** The color of the node. This is used for the dependency graph algorithms */
+  public int color;
+
+  /** white colour*/
+  public final static int WHITE = 0;
+  /** grey colour*/
+  public final static int GREY  = 1;
+  /** black colour*/
+  public final static int BLACK = 2;
   /**
    *  The constructor.
    *
@@ -92,6 +105,7 @@ public class Pack implements Serializable
     this.preselected = preselected;
     this.loose = loose;
     nbytes = 0;
+    color = PackInfo.WHITE;
   }
 
   /**
@@ -99,9 +113,28 @@ public class Pack implements Serializable
    *
    * @return    The String representation of the pack.
    */
-    public String toString()
+  public String toString()
   {
     return name + " (" + description + ")";
+  }
+
+  /** getter method */
+  public List getDependencies()
+  {
+    return dependencies;
+  }
+
+  /**
+   * This adds a reverse dependency. With a reverse dependency we imply a child
+   * dependency or the dependents on this pack
+   *
+   * @param name The name of the pack that depents to this pack
+   */
+  public void addRevDep(String name)
+  {
+    if(revDependencies == null)
+      revDependencies = new ArrayList();
+    revDependencies.add(name);
   }
   /**
    * Creates a text list of all the packs it depend on

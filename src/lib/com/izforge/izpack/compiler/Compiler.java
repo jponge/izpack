@@ -1,5 +1,5 @@
 /*
- *  $Id$ 
+ *  $Id$
  *  IzPack
  *  Copyright (C) 2001-2004 Julien Ponge
  *
@@ -14,6 +14,8 @@
  *
  *  Portions are Copyright (c) 2002 Paul Wilkinson
  *  paulw@wilko.com
+ *
+ *  Portions are Copyright (C) 2004 Gaganis Giorgos (geogka@it.teithe.gr)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License

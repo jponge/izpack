@@ -1,3 +1,30 @@
+/*
+ *  IzPack
+ *  Copyright (C) 2001-2004 Julien Ponge
+ *
+ *  File :               PacksModel.java
+ *  Description :        A table model for packs.
+ *  Author's email :     julien@izforge.com
+ *  Author's Website :   http://www.izforge.com
+ *
+ *  Portions are Copyright (C) 2002 Marcus Wolschon
+ *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
+ *  Portions are Copyright (C) 2004 Gaganis Giorgos (geogka@it.teithe.gr)
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation; either version 2
+ *  of the License, or any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.Pack;
@@ -5,6 +32,8 @@ import com.izforge.izpack.LocaleDatabase;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * User: Gaganis Giorgos
@@ -17,6 +46,13 @@ class PacksModel extends AbstractTableModel
   private List packsToInstall;
   private PacksPanelInterface panel;
   private LocaleDatabase langpack;
+  //This is used to represent the status of the checkbox
+  private int[] checkValues;
+  //Map to hold the object name relationship
+  Map namesObj;
+  //Map to hold the object name relationship
+  Map namesPos;
+
   public PacksModel(List packs, List packsToInstall,PacksPanelInterface panel)
   {
 
@@ -24,6 +60,99 @@ class PacksModel extends AbstractTableModel
     this.packsToInstall = packsToInstall;
     this.panel = panel;
     langpack = panel.getLangpack();
+    checkValues = new int[packs.size()];
+    reverseDeps();
+    initvalues();
+  }
+   /**
+   * Creates the reverse dependency graph
+   */
+  private void reverseDeps()
+  {
+    //name to pack map
+    namesObj = new HashMap();
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      namesObj.put(pack.name,pack);
+    }
+    //process each pack
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      List deps = pack.dependencies;
+      for (int j = 0; deps != null && j < deps.size(); j++)
+      {
+        String name = (String) deps.get(j);
+        Pack parent = (Pack) namesObj.get(name);
+        parent.addRevDep(pack.name);
+      }
+    }
+
+  }
+  private void initvalues()
+  {
+    //name to pack position map
+    namesPos = new HashMap();
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      namesPos.put(pack.name,new Integer(i));
+    }
+    //Init to the first values
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      if(packsToInstall.contains(pack));
+      checkValues[i] =1;
+    }
+    //Check out and disable the ones that are excluded by non fullfiled deps
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      if(checkValues[i] ==0)
+      {
+        List deps = pack.revDependencies;
+        for (int j = 0;deps != null && j < deps.size(); j++)
+        {
+          String name = (String) deps.get(j);
+          int pos = getPos(name);
+          checkValues[pos] = -2;
+        }
+      }
+    }
+    // The required ones must propagate their required status to all the ones
+    // that they depend on
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      if(pack.required ==true)
+        propRequirement(pack.name);
+    }
+  }
+  private void propRequirement(String name)
+  {
+
+    final int pos = getPos(name);
+    checkValues[pos]=-1;
+    List deps = ((Pack)packs.get(pos)).dependencies;
+    for (int i = 0; deps != null && i < deps.size(); i++)
+    {
+      String s = (String) deps.get(i);
+      propRequirement(s);
+    }
+
+
+  }
+  /**
+   * Given a map of names  and Integer for position and a name it return
+   * the position of this name as an int
+   *
+   * @return
+   */
+  private int getPos(String name)
+  {
+    return ((Integer)namesPos.get(name)).intValue();
   }
 
   /*
@@ -62,11 +191,10 @@ class PacksModel extends AbstractTableModel
   */
   public boolean isCellEditable(int rowIndex, int columnIndex)
   {
-    Pack pack = (Pack) packs.get(rowIndex);
-    if (pack.required)
+    if (checkValues[rowIndex] <0)
     {
       return false;
-    } else if (columnIndex == 0)
+    }else if (columnIndex == 0)
     {
       return true;
     } else
@@ -85,15 +213,8 @@ class PacksModel extends AbstractTableModel
     switch (columnIndex)
     {
       case 0 :
-        int val = 0;
-        if (pack.required)
-        {
-          val = -1;
-        } else
-        {
-          val = (packsToInstall.contains(pack) ? 1 : 0);
-        }
-        return new Integer(val);
+
+        return new Integer(checkValues[rowIndex]);
 
       case 1 :
 
@@ -123,21 +244,128 @@ class PacksModel extends AbstractTableModel
         Pack pack = (Pack) packs.get(rowIndex);
         if (((Integer) aValue).intValue() == 1)
         {
-          packsToInstall.add(pack);
+          checkValues[rowIndex] = 1;
+          updateDeps();
 
           int bytes = panel.getBytes();
           bytes += pack.nbytes;
           panel.setBytes(bytes);
         } else
         {
-          packsToInstall.remove(pack);
+          checkValues[rowIndex] = 0;
+          updateDeps();
 
           int bytes = panel.getBytes();
           bytes -= pack.nbytes;
           panel.setBytes(bytes);
         }
+        fireTableDataChanged();
+        refreshPacksToInstall();
         panel.showSpaceRequired();
       }
     }
+  }
+
+  private void refreshPacksToInstall()
+  {
+    packsToInstall.clear();
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Object pack = packs.get(i);
+      if(Math.abs(checkValues[i]) == 1)
+        packsToInstall.add(pack);
+
+    }
+
+  }
+  private void updateDeps()
+  {
+    int[] statusArray = new int[packs.size()];
+    for (int i = 0; i < statusArray.length; i++)
+    {
+     ((Pack)packs.get(i)).color = Pack.WHITE;
+      statusArray[i] = 0;
+    }
+    dfs(statusArray);
+    for (int i = 0; i < statusArray.length; i++)
+    {
+      if (statusArray[i] ==0 && checkValues[i] <0)
+        checkValues[i] += 2;
+      if (statusArray[i] ==1 && checkValues[i] >=0)
+        checkValues[i] = -2;
+
+
+    }
+     // The required ones must propagate their required status to all the ones
+    // that they depend on
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      if(pack.required ==true)
+        propRequirement(pack.name);
+    }
+
+
+  }
+  /** We use the dfs graph search algorithm to check whether the graph
+   * is acyclic as described in:
+   * Thomas H. Cormen, Charles Leiserson, Ronald Rivest and Clifford Stein. Introduction
+   * to algorithms 2nd Edition 540-549,MIT Press, 2001
+   * @return
+   */
+  private int dfs(int[] status)
+  {
+    for (int i = 0; i < packs.size(); i++)
+    {
+      Pack pack = (Pack) packs.get(i);
+      int check = checkValues[getPos(pack.name)];
+      boolean wipe = false;
+      if(Math.abs(check) !=1)
+      {
+        wipe = true;
+      }
+      if(pack.color == Pack.WHITE)
+      {
+        if(dfsVisit(pack,status,wipe)!=0)
+          return -1;
+      }
+
+    }
+    return 0;
+  }
+  private int dfsVisit(Pack u,int[] status,boolean wipe)
+  {
+    u.color = Pack.GREY;
+    List deps = u.revDependencies;
+    if (deps != null)
+    {
+      for (int i = 0; i < deps.size(); i++)
+      {
+        String name = (String) deps.get(i);
+        Pack v = (Pack)namesObj.get(name);
+        if(wipe)
+        {
+          status[getPos(v.name)] =1;
+        }
+
+          int check = checkValues[getPos(v.name)];
+
+          if(Math.abs(check) !=1)
+          {
+            wipe = true;
+          }
+
+
+        if(v.color == Pack.WHITE)
+        {
+
+          final int result = dfsVisit(v,status,wipe);
+          if(result != 0)
+            return result;
+        }
+      }
+    }
+    u.color = Pack.BLACK;
+    return 0;
   }
 }
