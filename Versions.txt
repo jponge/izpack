@@ -1,5 +1,15 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.x.x (build.2004.xx.yy)
+
+- Dutch langpack update (Hans Aikema).
+- The compiler now emits some warnings when processing an incorrect installation
+  file (Chad McHenry / Marcus Stursberg).
+- New SudoPanel (Jan Blok).
+- ShortcutPanel: the action is now performed when the 'next' button is pressed
+  (Jan Blok).
+
+
   > 3.4.0 (build 2003.12.06)
 
 - The frontend which had been deprecated in 3.3.0 has been removed. There won't

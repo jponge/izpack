@@ -97,6 +97,12 @@ public class Compiler extends Thread
   /**  The IzPack home directory. */
   public static String IZPACK_HOME = ".";
 
+  /** Constant for checking attributes. */
+  private static boolean YES = true;
+
+  /** Constant for checking attributes. */
+  private static boolean NO = false;
+
   /**  The XML filename. */
   protected String filename;
 
@@ -175,6 +181,10 @@ public class Compiler extends Thread
     {
       executeCompiler();// Execute the compiler - may send info to System.out
     }
+    catch (CompilerException ce)
+    {
+      System.out.println(ce.getMessage()+"\n");
+    }
     catch (Exception e)
     {
       if (Debug.stackTracing ())
@@ -183,7 +193,7 @@ public class Compiler extends Thread
       }
       else
       {
-        System.out.println (e.getMessage ()); 
+        System.out.println ("ERROR: "+e.getMessage ()); 
       }
     }
   }
@@ -196,10 +206,15 @@ public class Compiler extends Thread
    */
   public void executeCompiler() throws Exception
   {
-
+    // normalize and test: TODO: may allow failure if we require write access
+    File base = new File(basedir).getAbsoluteFile();
+    if (! base.canRead() || ! base.isDirectory())
+      throw new CompilerException("Invalid base directory: "+base);
+    
     // Usefull variables
     int i;
     String str;
+    Iterator iter;
     InputStream inStream;
 
     // We get the XML data tree
@@ -218,8 +233,7 @@ public class Compiler extends Thread
     packager.setGUIPrefs(getGUIPrefs(data));
 
     // We add the language packs
-    ArrayList langpacks = getLangpacksCodes(data);
-    Iterator iter = langpacks.iterator();
+    iter = getLangpacksCodes(data).iterator();
     while (iter.hasNext())
     {
       str = (String) iter.next();
@@ -245,9 +259,7 @@ public class Compiler extends Thread
     }
 
     // We add the resources
-    ArrayList resources = getResources(data);
-    iter = resources.iterator();
-
+    iter = getResources(data).iterator();
     while (iter.hasNext())
     {
       Resource res = (Resource) iter.next();
@@ -303,8 +315,7 @@ public class Compiler extends Thread
     }
 
     // We add the native libraries
-    ArrayList natives = getNativeLibraries(data);
-    iter = natives.iterator();
+    iter = getNativeLibraries(data).iterator();
     while (iter.hasNext())
     {
       NativeLibrary nat = (NativeLibrary) iter.next();
@@ -313,16 +324,14 @@ public class Compiler extends Thread
     }
 
     // We add the additionnal jar files content
-    ArrayList jars = getJars(data);
-    iter = jars.iterator();
+    iter = getJars(data).iterator();
     while (iter.hasNext())
       packager.addJarContent((String) iter.next());
 
     // We add the panels
-    ArrayList panels = getPanels(data);
-    ArrayList panelsOrder = new ArrayList(panels.size());
+    ArrayList panelsOrder = new ArrayList();
     TreeSet panelsCache = new TreeSet();
-    iter = panels.iterator();
+    iter = getPanels(data).iterator();
     while (iter.hasNext())
     {
       // We locate the panel classes directory
@@ -348,16 +357,15 @@ public class Compiler extends Thread
         // We add the panel in the order array
         panelsOrder.add(str);
 
-        if (panelsCache.contains(str)) continue;
+        if (panelsCache.contains(str))
+          continue;
         panelsCache.add(str);
 
         // now add files
         ZipEntry entry = null;
         
         while ((entry = panel_is.getNextEntry()) != null)
-        {
           packager.addPanelClass(entry.getName(), panel_is);        
-        }
       }
       else
       {
@@ -388,8 +396,7 @@ public class Compiler extends Thread
 
     // We add the packs
     i = 0;
-    ArrayList packs = getPacks(data);
-    iter = packs.iterator();
+    iter = getPacks(data).iterator();
     while (iter.hasNext())
     {
       Pack pack = (Pack) iter.next();
@@ -472,18 +479,19 @@ public class Compiler extends Thread
    * @return                The GUIPrefs.
    * @exception  Exception  Description of the Exception
    */
-  protected GUIPrefs getGUIPrefs(XMLElement data) throws Exception
+  protected GUIPrefs getGUIPrefs(XMLElement data) throws CompilerException
   {
     // We get the XMLElement & the values
     XMLElement gp = data.getFirstChildNamed("guiprefs");
     Integer integer;
     GUIPrefs p = new GUIPrefs();
-    p.resizable = gp.getAttribute("resizable").equalsIgnoreCase("yes");
-    integer = new Integer(gp.getAttribute("width"));
-    p.width = integer.intValue();
-    integer = new Integer(gp.getAttribute("height"));
-    p.height = integer.intValue();
-
+    if (gp == null)
+      return p;
+    
+    p.resizable = requireYesNoAttribute(gp, "resizable");
+    p.width = requireIntAttribute(gp, "width");
+    p.height = requireIntAttribute(gp, "height");
+    
     // We return the GUIPrefs
     return p;
   }
@@ -507,7 +515,7 @@ public class Compiler extends Thread
     while (iter.hasNext())
     {
       XMLElement el = (XMLElement) iter.next();
-      jars.add(basedir + File.separator + el.getAttribute("src"));
+      jars.add(basedir + File.separator + requireAttribute(el, "src"));
     }
 
     // We return
@@ -554,80 +562,58 @@ public class Compiler extends Thread
    * @return                The packs to add list.
    * @exception  Exception  Description of the Exception
    */
-  protected ArrayList getPacks(XMLElement data) throws Exception
+  protected ArrayList getPacks(XMLElement data) throws CompilerException
   {
     // Initialisation
     ArrayList packs = new ArrayList();
-    XMLElement root = data.getFirstChildNamed("packs");
-    
-    if (root == null)
-    {
-      throw new Exception ("no packs specified");
-    }
+    XMLElement root = requireChildNamed(data, "packs");
+
     // dummy variable used for values from XML
     String val;
 
     // We process each pack markup
-    int npacks = root.getChildrenCount();
-    for (int i = 0; i < npacks; i++)
+    int packCounter = 0;
+    Iterator packIter = root.getChildrenNamed("pack").iterator();
+    while (packIter.hasNext())
     {
-      XMLElement el = root.getChildAtIndex(i);
+      XMLElement el = (XMLElement) packIter.next();
 
       // Trivial initialisations
       Pack pack = new Pack();
-      pack.number = i;
-      pack.name = el.getAttribute("name");
-      if (pack.name == null)
-      {
-        throw new Exception ("missing \"name\" attribute for <pack> in line "+el.getLineNr());
-      }
-      pack.osConstraints = OsConstraint.getOsList (el);
-      pack.required = el.getAttribute("required").equalsIgnoreCase("yes");
-      pack.description = el.getFirstChildNamed("description").getContent();
-      pack.preselected = true;
-
-      val = el.getAttribute ("preselected");
-      if ((null != val) && ("no".compareToIgnoreCase (val) == 0))
-        pack.preselected = false;
+      pack.number = packCounter++;
+      pack.name = requireAttribute(el, "name");
+      pack.osConstraints = OsConstraint.getOsList (el); // TODO: unverified
+      pack.required = requireYesNoAttribute(el, "required");
+      pack.description = requireChildNamed(el, "description").getContent();
+      pack.preselected = validateYesNoAttribute(el, "preselected", YES);
 
       // We get the parsables list
-      Iterator iter = null;
-      Vector children = el.getChildrenNamed("parsable");
-      if (null != children && !children.isEmpty())
+      Iterator iter = el.getChildrenNamed("parsable").iterator();
+      while (iter.hasNext())
       {
-        iter = children.iterator();
-        while (iter.hasNext())
-        {
           XMLElement p = (XMLElement) iter.next();
-          String targetFile = p.getAttribute("targetfile");
-          if (targetFile == null)
-            throw new Exception ("missing \"targetfile\" attribute for <parsable> in line "+p.getLineNr());
-            
-          List osList = OsConstraint.getOsList (p);
+          String targetFile = requireAttribute(p, "targetfile");
+          List osList = OsConstraint.getOsList (p); // TODO: unverified
           
           pack.parsables.add
             (new ParsableFile(targetFile,
                    p.getAttribute("type", "plain"),
                    p.getAttribute("encoding", null),
                    osList));
-        }
       }
 
       // We get the executables list
-      children = el.getChildrenNamed("executable");
-      if (null != children && !children.isEmpty())
+      iter = el.getChildrenNamed("executable").iterator();
+      while (iter.hasNext())
       {
-        iter = children.iterator();
-        while (iter.hasNext())
-        {
           XMLElement e = (XMLElement) iter.next();
 
           // when to execute this executable
           int executeOn = ExecutableFile.NEVER;
           val = e.getAttribute("stage", "never");
-          if ("postinstall".compareToIgnoreCase(val) == 0)
+          if ("postinstall".equalsIgnoreCase(val))
             executeOn = ExecutableFile.POSTINSTALL;
-          else if ("uninstall".compareToIgnoreCase(val) == 0)
+          else if ("uninstall".equalsIgnoreCase(val))
             executeOn = ExecutableFile.UNINSTALL;
 
           // main class  of this executable
@@ -636,21 +622,21 @@ public class Compiler extends Thread
           // type of this executable
           int executeType = ExecutableFile.BIN;
           val = e.getAttribute("type", "bin");
-          if ("jar".compareToIgnoreCase(val) == 0)
+          if ("jar".equalsIgnoreCase(val))
             executeType = ExecutableFile.JAR;
 
           // what to do if execution fails
           int onFailure = ExecutableFile.ASK;
           val = e.getAttribute("failure", "ask");
-          if ("abort".compareToIgnoreCase(val) == 0)
+          if ("abort".equalsIgnoreCase(val))
             onFailure = ExecutableFile.ABORT;
-          else if ("warn".compareToIgnoreCase(val) == 0)
+          else if ("warn".equalsIgnoreCase(val))
             onFailure = ExecutableFile.WARN;
 
           // whether to keep the executable after executing it
           boolean keepFile = false;
           val = e.getAttribute ("keep");
-          if ((null != val) && ("true".compareToIgnoreCase(val) == 0))
+          if ("true".equalsIgnoreCase(val))
             keepFile = true;
 
           // get arguments for this executable
@@ -663,23 +649,17 @@ public class Compiler extends Thread
             while (argIterator.hasNext())
             {
               XMLElement arg = (XMLElement) argIterator.next();
-              argList.add(arg.getAttribute("value"));
+              argList.add(requireAttribute(arg, "value"));
             }
           }
 
-          List osList = OsConstraint.getOsList(e);
+          List osList = OsConstraint.getOsList(e); // TODO: unverified
           
-          String targetfile_attr = e.getAttribute("targetfile");
-          
-          if ((targetfile_attr == null) && (executeClass == null))
-          {
-            throw new Exception ("either \"targetfile\" or \"class\" attribute is required for <executable> in line "+e.getLineNr());
-          }
+          String targetfile_attr = requireAttribute(e, "targetfile");
 
           pack.executables.add(new ExecutableFile(targetfile_attr,
             executeType, executeClass,
             executeOn, onFailure, argList, osList, keepFile));
-        }
       }
 
       // We get the files list
@@ -687,40 +667,31 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
-        String src_attr = f.getAttribute ("src");
-        if (src_attr == null)
-        {
-          throw new Exception ("missing \"src\" attribute for <file> in line "+f.getLineNr());
-        }
-
+        String src_attr = requireAttribute(f, "src");
         String path;
 
         if (new File(src_attr).isAbsolute())
-        {
           path = src_attr;
-        }
         else
-        {
           path = basedir + File.separator + src_attr;
-        }
 
         File file = new File(path);
-
         int override = getOverrideValue (f);
-
-        List osList = OsConstraint.getOsList (f);
+        List osList = OsConstraint.getOsList (f); // TODO: unverified
+        String targetdir_attr = requireAttribute (f, "targetdir");
         
-        String targetdir_attr = f.getAttribute ("targetdir");
-        if (targetdir_attr == null)
+        try
         {
-          throw new Exception ("missing \"targetdir\" attribute for <file> in line "+f.getLineNr());
+          addFile(file,
+            targetdir_attr,
+            osList,
+            override,
+            pack.packFiles);
         }
-        
-        addFile(file,
-          targetdir_attr,
-          osList,
-          override,
-          pack.packFiles);
+        catch (CompilerException x)
+        {
+          parseError(f, x.getMessage(), x);
+        }
       }
 
       // We get the singlefiles list
@@ -728,39 +699,31 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
-        String src_attr = f.getAttribute ("src");
-        if (src_attr == null)
-        {
-          throw new Exception ("missing \"src\" attribute for <singlefile> in line "+f.getLineNr());
-        }
-
+        String src_attr = requireAttribute (f, "src");
         String path;
 
         if (new File (src_attr).isAbsolute ())
-        {
           path = src_attr;
-        }
         else
-        {
           path = basedir + File.separator + src_attr;
-        }
 
         File file = new File(path);
-
         int override = getOverrideValue (f);
+        List osList = OsConstraint.getOsList (f); // TODO: unverified
+        String target_attr = requireAttribute (f, "target");
 
-        List osList = OsConstraint.getOsList (f);
-        
-        String target_attr = f.getAttribute ("target");
-        if (target_attr == null)
+        try
         {
-          throw new Exception ("missing \"target\" attribute for <file> in line "+f.getLineNr());
+          addSingleFile(file,
+            target_attr,
+            osList,
+            override,
+            pack.packFiles);
         }
-        addSingleFile(file,
-          target_attr,
-          osList,
-          override,
-          pack.packFiles);
+        catch (CompilerException x)
+        {
+          parseError(f, x.getMessage(), x);
+        }
       }
 
       // We get the fileset list
@@ -768,24 +731,15 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
-        String dir_attr = f.getAttribute ("dir");
-        if (dir_attr == null)
-        {
-          throw new Exception ("missing \"dir\" attribute for fileset in line "+f.getLineNr());
-        }
-
+        String dir_attr = requireAttribute (f, "dir");
         String path;
 
         if (new File(dir_attr).isAbsolute())
-        {
           path = dir_attr;
-        }
         else
-        {
           path = basedir + File.separator + dir_attr;
-        }
 
-        String casesensitive = f.getAttribute("casesensitive");
+        boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
         //  get includes and excludes
         Vector xcludesList = f.getChildrenNamed("include");
         String[] includes = null;
@@ -796,7 +750,7 @@ public class Compiler extends Thread
           for (int j = 0; j < xcludesList.size(); j++)
           {
             xclude = (XMLElement) xcludesList.get(j);
-            includes[j] = xclude.getAttribute("name");
+            includes[j] = requireAttribute(xclude, "name");
           }
         }
 
@@ -809,31 +763,33 @@ public class Compiler extends Thread
           for (int j = 0; j < xcludesList.size(); j++)
           {
             xclude = (XMLElement) xcludesList.get(j);
-            excludes[j] = xclude.getAttribute("name");
+            excludes[j] = requireAttribute(xclude, "name");
           }
         }
 
         int override = getOverrideValue (f);
+        String targetdir_attr = requireAttribute(f, "targetdir");
+        List osList = OsConstraint.getOsList (f); // TODO: unverified
 
-        String targetdir_attr = f.getAttribute ("targetdir");
-        if (targetdir_attr == null)
-        {
-          throw new Exception ("missing \"targetdir\" attribute for <fileset> in line "+f.getLineNr());
+        try {
+          addFileSet(path, includes, excludes,
+            targetdir_attr,
+            osList,
+            pack.packFiles,
+            casesensitive,
+            override);
         }
-        
-        List osList = OsConstraint.getOsList (f);
-
-        addFileSet(path, includes, excludes,
-          targetdir_attr,
-          osList,
-          pack.packFiles,
-          casesensitive,
-          override);
+        catch (CompilerException x)
+        {
+          parseError(f, x.getMessage(), x);
+        }
       }
 
       // We add the pack
       packs.add(pack);
     }
+    if (packs.isEmpty())
+      parseError (root, "<packs> requires a <pack>");
 
     // We return the ArrayList
     return packs;
@@ -854,22 +810,17 @@ public class Compiler extends Thread
    */
   protected void addFileSet(String path, String[] includes, String[] excludes,
                             String relPath, List osList, ArrayList list, 
-                            String casesensitive, int override)
-     throws Exception
+                            boolean casesensitive, int override)
+     throws CompilerException
   {
-    boolean bCasesensitive = false;
-
     File test = new File(path);
     if (test.isDirectory())
     {
-      if (casesensitive != null)
-        bCasesensitive = casesensitive.equalsIgnoreCase("Yes");
-
       DirectoryScanner ds = new DirectoryScanner();
       ds.setIncludes(includes);
       ds.setExcludes(excludes);
       ds.setBasedir(new File(path));
-      ds.setCaseSensitive(bCasesensitive);
+      ds.setCaseSensitive(casesensitive);
       ds.scan();
 
       String[] files = ds.getIncludedFiles();
@@ -927,7 +878,7 @@ public class Compiler extends Thread
       }
     }
     else
-      throw new Exception("\"dir\" attribute of fileset is not valid: " + path);
+      throw new CompilerException("\"dir\" attribute of fileset is not valid: " + path);
   }
 
 
@@ -942,11 +893,11 @@ public class Compiler extends Thread
    * @exception  Exception  Description of the Exception
    */
   protected void addFile(File file, String relPath, List osList,
-                         int override, ArrayList list) throws Exception
+                         int override, ArrayList list) throws CompilerException
   {
     // We check if 'file' is correct
     if (!file.exists())
-      throw new Exception(file.toString() + " does not exist");
+      throw new CompilerException(file.toString() + " does not exist");
 
     // Recursive part
     if (file.isDirectory())
@@ -986,7 +937,7 @@ public class Compiler extends Thread
    * @exception  Exception  Description of the Exception
    */
   protected void addSingleFile(File file, String targetFile, List osList,
-                         int override, ArrayList list) throws Exception
+                         int override, ArrayList list) throws CompilerException
   {
     //System.out.println ("adding single file " + file.getName() + " as " + targetFile);
     PackSource nf = new PackSource();
@@ -1004,19 +955,21 @@ public class Compiler extends Thread
    * @return                The panels list.
    * @exception  Exception  Description of the Exception
    */
-  protected ArrayList getPanels(XMLElement data) throws Exception
+  protected ArrayList getPanels(XMLElement data) throws CompilerException
   {
     // Initialisation
     ArrayList panels = new ArrayList();
-    XMLElement root = data.getFirstChildNamed("panels");
+    XMLElement root = requireChildNamed(data, "panels");
 
     // We process each langpack markup
-    Iterator iter = root.getChildren().iterator();
+    Iterator iter = root.getChildrenNamed("panel").iterator();
     while (iter.hasNext())
     {
       XMLElement panel = (XMLElement) iter.next();
-      panels.add(panel.getAttribute("classname"));
+      panels.add(requireAttribute(panel,"classname"));
     }
+    if (panels.isEmpty())
+      parseError (root, "<panels> requires a <panel>");
 
     // We return the ArrayList
     return panels;
@@ -1030,49 +983,49 @@ public class Compiler extends Thread
    * @return                The resources list.
    * @exception  Exception  Description of the Exception
    */
-  protected ArrayList getResources(XMLElement data) throws Exception
+  protected ArrayList getResources(XMLElement data) throws CompilerException
   {
     // Initialisation
     ArrayList resources = new ArrayList();
-    XMLElement root = data.getFirstChildNamed("resources");
+    XMLElement root = requireChildNamed(data, "resources");
 
     // We process each res markup
-    Iterator iter = root.getChildren().iterator();
-    String parse = null;
-    boolean blParse = false;
+    Iterator iter = root.getChildrenNamed("res").iterator();
     while (iter.hasNext())
     {
       XMLElement res = (XMLElement) iter.next();
-      blParse = false;
-      parse = res.getAttribute("parse");
-      if (null != parse)
-        blParse = parse.equalsIgnoreCase("yes");
 
-      // Do not prepend basedir if already an absolute path
-      String path = res.getAttribute("src");
+      // Do not prepend basedir if src is already an absolute path
+      File src = new File(requireAttribute(res, "src"));
+      if (! src.isAbsolute())
+        src = new File(basedir, src.getPath());
 
-      if (!new File(path).isAbsolute())
-        path = basedir + File.separator + path;
-
-      resources.add(new Resource(res.getAttribute("id"),
-        path,
-        blParse,
+      resources.add(new Resource(requireAttribute(res, "id"),
+        src.getPath(),
+        validateYesNoAttribute(res, "parse", NO),
         res.getAttribute("type"),
         res.getAttribute("encoding")));
     }
+    if (resources.isEmpty())
+      parseError (root, "<resources> requires a <res>");
 
-    // We add the uninstaller as a resource
+    // Uninstaller must be added as a resource for standalone compiler
+    InputStream uninst_is = getClass().getResourceAsStream("/lib/uninstaller.jar");
+
+    if (uninst_is == null)
     {
-      // neccessary for standalone compiler
-      InputStream uninst_is = getClass().getResourceAsStream("/lib/uninstaller.jar");
-      
-      if (uninst_is == null)
+      String uninst = Compiler.IZPACK_HOME + "lib" + File.separator + "uninstaller.jar";
+      try
       {
-        uninst_is = new FileInputStream (Compiler.IZPACK_HOME + "lib" + File.separator + "uninstaller.jar");
+        uninst_is = new FileInputStream (uninst);
       }
-      
-      resources.add(new Resource("IzPack.uninstaller", uninst_is));
+      catch (IOException x)
+      {
+        // it's a runtime exception if this can't be found
+        throw new RuntimeException ("uninstaller.jar seems to be missing: "+uninst, x);
+      }
     }
+    resources.add(new Resource("IzPack.uninstaller", uninst_is));
     
     // We return the ArrayList
     return resources;
@@ -1084,22 +1037,23 @@ public class Compiler extends Thread
    *
    * @param  data           The XML data.
    * @return                The ISO 3 codes list.
-   * @exception  Exception  Description of the Exception
    */
-  protected ArrayList getLangpacksCodes(XMLElement data) throws Exception
+  protected ArrayList getLangpacksCodes(XMLElement data) throws CompilerException
   {
     // Initialisation
     ArrayList langpacks = new ArrayList();
-    XMLElement root = data.getFirstChildNamed("locale");
+    XMLElement locals = requireChildNamed(data, "locale");
 
     // We process each langpack markup
-    Iterator iter = root.getChildren().iterator();
+    Iterator iter = locals.getChildrenNamed("langpack").iterator();
     while (iter.hasNext())
     {
       XMLElement pack = (XMLElement) iter.next();
-      langpacks.add(pack.getAttribute("iso3"));
+      langpacks.add(requireAttribute(pack, "iso3"));
     }
-
+    if (langpacks.isEmpty())
+      parseError (locals, "<locale> requires a <langpack>");
+  
     // We return the ArrayList
     return langpacks;
   }
@@ -1116,23 +1070,28 @@ public class Compiler extends Thread
   {
     // Initialisation
     Info info = new Info();
-    XMLElement root = data.getFirstChildNamed("info");
+    XMLElement root = requireChildNamed(data, "info");
 
-    // We get the name, version and URL
-    info.setAppName(root.getFirstChildNamed("appname").getContent());
-    info.setAppVersion(root.getFirstChildNamed("appversion").getContent());
-    info.setAppURL(root.getFirstChildNamed("url").getContent());
+    info.setAppName(requireContent(requireChildNamed(root, "appname")));
+    info.setAppVersion(requireContent(requireChildNamed(root, "appversion")));
+    info.setAppURL(requireContent(requireChildNamed(root, "url")));
 
     // We get the authors list
-    XMLElement authors = root.getFirstChildNamed("authors");
-    int size = authors.getChildrenCount();
-    for (int i = 0; i < size; i++)
+    XMLElement authors = requireChildNamed(root, "authors");
+
+    Iterator iter = authors.getChildren().iterator();
+    while (iter.hasNext())
     {
-      XMLElement author = authors.getChildAtIndex(i);
-      Info.Author newAuthor = new Info.Author(author.getAttribute("name"),
-        author.getAttribute("email"));
-      info.addAuthor(newAuthor);
+      XMLElement author = (XMLElement) iter.next();
+      if (author.getName().equals("author"))
+      {
+        String name = requireAttribute(author, "name");
+        String email = requireAttribute(author, "email");
+        info.addAuthor(new Info.Author(name, email));
+      }
     }
+    if (info.getAuthors().isEmpty())
+      parseError (authors, "<authors> requires an <author>");
 
     // We get the java version required
     XMLElement javaVersion = root.getFirstChildNamed("javaversion");
@@ -1141,23 +1100,7 @@ public class Compiler extends Thread
 
     XMLElement uninstallInfo = root.getFirstChildNamed ("uninstaller");
     if (uninstallInfo != null)
-    {
-      String value = uninstallInfo.getAttribute("write", "yes");
-      boolean result = info.getWriteUninstaller ();
-      if (value.equals ("yes"))
-      {
-        result = true;
-      }
-      else if (value.equals ("no"))
-      {
-        result = false;
-      }
-      else 
-      {
-        System.out.println ("invalid value for <uninstaller> attribute \"write\": Expected \"yes\" or \"no\"");
-      }
-      info.setWriteUninstaller (result);
-    }
+      info.setWriteUninstaller(validateYesNoAttribute(uninstallInfo, "write", YES));
     
     // We return the suitable Info object
     return info;
@@ -1207,15 +1150,12 @@ public class Compiler extends Thread
       return retVal;
 
     retVal = new Properties();
-    List variables = root.getChildrenNamed("variable");
-
-    int size = variables.size();
-    varMap = new VariableValueMapImpl();
-    for (int i = 0; i < size; i++)
+    Iterator iter = root.getChildrenNamed("variable").iterator();
+    while (iter.hasNext())
     {
-      XMLElement var = (XMLElement) variables.get(i);
-      retVal.setProperty(var.getAttribute("name"), var.getAttribute("value"));
-      varMap.setVariable(var.getAttribute("name"), var.getAttribute("value"));
+      XMLElement var = (XMLElement) iter.next();
+      retVal.setProperty(requireAttribute(var, "name"), requireAttribute(var, "value"));
+      varMap.setVariable(requireAttribute(var, "name"), requireAttribute(var, "value"));
     }
 
     return retVal;
@@ -1226,9 +1166,10 @@ public class Compiler extends Thread
    *  Returns the XMLElement representing the installation XML file.
    *
    * @return                The XML tree.
-   * @exception  Exception  Description of the Exception
+   * @exception  CompilerException  For problems with the installation file
+   * @exception  IOException  for errors reading the installation file
    */
-  protected XMLElement getXMLTree() throws Exception
+  protected XMLElement getXMLTree() throws CompilerException, IOException
   {
     // Initialises the parser
     StdXMLParser parser = new StdXMLParser();
@@ -1237,13 +1178,21 @@ public class Compiler extends Thread
     parser.setValidator(new NonValidator());
 
     // We get it
-    XMLElement data = (XMLElement) parser.parse();
+    XMLElement data = null;
+    try
+    {
+      data = (XMLElement) parser.parse();
+    }
+    catch (Exception x)
+    {
+      throw new CompilerException("Error parsing installation file", x);
+    }
 
     // We check it
-    if (!data.getName().equalsIgnoreCase("installation"))
-      throw new Exception("this is not an IzPack XML installation file");
-    if (!data.getAttribute("version").equalsIgnoreCase(VERSION))
-      throw new Exception("the file version is different from the compiler version");
+    if (!"installation".equalsIgnoreCase(data.getName()))
+      parseError(data, "this is not an IzPack XML installation file");
+    if (!requireAttribute(data, "version").equalsIgnoreCase(VERSION))
+      parseError(data, "the file version is different from the compiler version");
 
     // We finally return the tree
     return data;
@@ -1253,10 +1202,9 @@ public class Compiler extends Thread
   {
     int override = PackSource.OVERRIDE_TRUE;
 
-    if (f.getAttribute("override") != null)
+    String override_val = f.getAttribute("override");
+    if (override_val != null)
     {
-      String override_val = f.getAttribute("override");
-      
       if (override_val.equalsIgnoreCase("true"))
       {
         override = PackSource.OVERRIDE_TRUE;
@@ -1280,6 +1228,170 @@ public class Compiler extends Thread
     }
 
     return override;
+  }
+
+
+  /**
+   * Create parse error with consistent messages. Includes file name and line #
+   * of parent. It is an error for 'parent' to be null.
+   *
+   * @param parent  The element in which the error occured
+   * @param message Brief message explaining error
+   */
+  protected void parseError (XMLElement parent, String message)
+    throws CompilerException
+  {
+    throw new CompilerException(filename+":"+parent.getLineNr()+": "+message);
+  }
+
+  /**
+   * Create a chained parse error with consistent messages. Includes file name
+   * and line # of parent. It is an error for 'parent' to be null.
+   *
+   * @param parent  The element in which the error occured
+   * @param message Brief message explaining error
+   */
+  protected void parseError (XMLElement parent, String message, Throwable cause)
+    throws CompilerException
+  {
+    throw new CompilerException(filename+":"+parent.getLineNr()+": "+message, cause);
+  }
+  
+  /**
+   * Create a parse warning with consistent messages. Includes file name
+   * and line # of parent. It is an error for 'parent' to be null.
+   *
+   * @param parent  The element in which the warning occured
+   * @param message Warning message
+   */
+  protected void parseWarn (XMLElement parent, String message)
+  {
+    System.out.println (filename+":"+parent.getLineNr()+": "+message);
+  }
+
+
+  /**
+   * Call getFirstChildNamed on the parent, producing a meaningful error
+   * message on failure. It is an error for 'parent' to be null.
+   *
+   * @param parent  The element to search for a child
+   * @param child   Name of the child element to get
+   */
+  protected XMLElement requireChildNamed (XMLElement parent, String name)
+    throws CompilerException
+  {
+    XMLElement child = parent.getFirstChildNamed(name);
+    if (child == null)
+      parseError(parent, "<"+parent.getName()+"> requires child <"+name+">");
+    return child;
+  }
+
+
+  /**
+   * Call getContent on an element, producing a meaningful error message if not
+   * present, or empty. It is an error for 'element' to be null.
+   *
+   * @param element   The element to get content of
+   */
+  protected String requireContent (XMLElement element)
+    throws CompilerException
+  {
+    String content = element.getContent();
+    if (content == null || content.length() == 0)
+      parseError(element, "<"+element.getName()+"> requires content");
+    return content;
+  }
+
+
+  /**
+   * Call getAttribute on an element, producing a meaningful error message if
+   * not present, or empty. It is an error for 'element' or 'attribute' to be null.
+   *
+   * @param element   The element to get the attribute value of
+   * @param attribute The name of the attribute to get
+   */
+  protected String requireAttribute (XMLElement element, String attribute)
+    throws CompilerException
+  {
+    String value = element.getAttribute(attribute);
+    if (value == null)
+      parseError(element, "<"+element.getName()+"> requires attribute '"+attribute+"'");
+    return value;
+  }
+
+  /**
+   * Get a required attribute of an element, ensuring it is an integer.  A
+   * meaningful error message is generated as a CompilerException if not
+   * present or parseable as an int. It is an error for 'element' or
+   * 'attribute' to be null.
+   *
+   * @param element   The element to get the attribute value of
+   * @param attribute The name of the attribute to get
+   */
+  protected int requireIntAttribute (XMLElement element, String attribute)
+    throws CompilerException
+  {
+    String value = element.getAttribute(attribute);
+    if (value == null || value.length() == 0)
+      parseError(element, "<"+element.getName()+"> requires attribute '"+attribute+"'");
+    try
+    {
+      return Integer.parseInt(value);
+    }
+    catch (NumberFormatException x)
+    {
+      parseError(element, "'"+attribute+"' must be an integer");
+    }
+    return 0; // never happens
+  }
+
+
+  /**
+   * Call getAttribute on an element, producing a meaningful error message if
+   * not present, or one of "yes" or "no". It is an error for 'element' or
+   * 'attribute' to be null.
+   *
+   * @param element        The element to get the attribute value of
+   * @param attribute      The name of the attribute to get
+   */
+  protected boolean requireYesNoAttribute(XMLElement element, String attribute)
+    throws CompilerException
+  {
+    String value = requireAttribute(element,attribute);
+    if (value.equalsIgnoreCase("yes"))
+      return true;
+    if (value.equalsIgnoreCase("no"))
+      return false;
+    
+    parseError(element, "<"+element.getName()+"> invalid attribute '"+
+               attribute+"': Expected (yes|no)");
+    
+    return false; // never happens
+  }
+
+
+  /**
+   * Call getAttribute on an element, producing a meaningful warning if not
+   * "yes" or "no". It is an error for 'element' or 'attribute' to be null.
+   *
+   * @param element        The element to get the attribute value of
+   * @param attribute      The name of the attribute to get
+   * @param defaultValue   Value returned if attribute not present or invalid
+   */
+  protected boolean validateYesNoAttribute(XMLElement element, String attribute,
+                                           boolean defaultValue)
+  {
+    String value = element.getAttribute(attribute, (defaultValue ? "yes" : "no"));
+    if (value.equalsIgnoreCase("yes"))
+      return true;
+    if (value.equalsIgnoreCase("no"))
+      return false;
+
+    // TODO: should this be an error if it's present but "none of the above"?
+    parseWarn(element, "<"+element.getName()+"> invalid attribute '"+
+              attribute+"': Expected (yes|no) if present");
+
+    return defaultValue;
   }
 
 
@@ -1441,19 +1553,15 @@ public class Compiler extends Thread
        return this.targetdir + f.getName ();
     }
 
-    public void setTargetFile (String targetFile) throws Exception
+    public void setTargetFile (String targetFile) throws CompilerException
     {
       this.targetdir = null;
       if (targetFile == null)
       {
         if (this.src != null)
-        {
-          throw new Exception ("target for file " + src + " missing!");
-        }
+          throw new CompilerException ("target for file " + src + " missing!");
         else
-        {
-          throw new Exception ("target for file missing!");
-        }
+          throw new CompilerException ("target for file missing!");
       }
       this.targetfile = targetFile;
     }
@@ -1463,18 +1571,14 @@ public class Compiler extends Thread
       return this.targetfile;
     }
 
-    public void setTargetDir (String targetDir) throws Exception
+    public void setTargetDir (String targetDir) throws CompilerException
     {
       if (targetDir == null)
       {
         if (this.src != null)
-        {
-          throw new Exception ("target for file " + src + " missing!");
-        }
+          throw new CompilerException ("target for file " + src + " missing!");
         else
-        {
-          throw new Exception ("target for file missing!");
-        }
+          throw new CompilerException ("target for file missing!");
       }
 
       this.targetfile = null;

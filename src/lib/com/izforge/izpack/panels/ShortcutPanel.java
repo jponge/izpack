@@ -203,8 +203,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
    *  group
    */
   private JButton defaultButton;
-  /**  UI element to start the process of creating shortcuts */
-  private JButton createButton;
   /**
    *  UI element to allow the user to save a text file with the shortcut
    *  information
@@ -368,31 +366,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       shortcut.setUserType  (Shortcut.ALL_USERS);
     }
     // ----------------------------------------------------
-    // The create button was pressed.
-    // go ahead and create the shortcut(s)
-    // ----------------------------------------------------
-    else if (eventSource.equals (createButton))
-    {
-      try
-      {
-        groupName = programGroup.getText ();
-      }
-      catch (Throwable exception)
-      {
-        groupName = "";
-      }
-
-      createShortcuts ();
-      
-      // add files and directories to the uninstaller
-      addToUninstaller ();
-      
-      // when finished unlock the next button and lock
-      // the previous button
-      parent.unlockNextButton ();
-      parent.lockPrevButton ();
-    }
-    // ----------------------------------------------------
     // The reset button was pressed.
     // - clear the selection in the list box, because the
     //   selection is no longer valid
@@ -427,6 +400,20 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
  /*--------------------------------------------------------------------------*/
   public boolean isValidated ()
   {
+	try
+	{
+	  groupName = programGroup.getText ();
+	}
+	catch (Throwable exception)
+	{
+	  groupName = "";
+	}
+
+	createShortcuts ();
+      
+	// add files and directories to the uninstaller
+	addToUninstaller ();
+      
     return (true);
   }
  /*--------------------------------------------------------------------------*/
@@ -447,8 +434,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     {
       if (shortcut.supported () && !simulteNotSupported)
       {
-        parent.lockPrevButton ();
-        parent.lockNextButton ();
         buildUI (shortcut.getProgramGroups (ShellLink.CURRENT_USER), true);  // always start out with the current user
       }
       else
@@ -1035,21 +1020,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       layout.addLayoutComponent (allowDesktopShortcut, constraints);
       add (allowDesktopShortcut);
     }
-    
-    // ----------------------------------------------------
-    // button to initiate the creation of the shortcuts
-    // ----------------------------------------------------
-    createButton = ButtonFactory.createButton(
-      parent.langpack.getString("ShortcutPanel.regular.create"),
-      idata.buttonsHColor);
-    createButton.addActionListener(this);
-
-    constraints.gridx = 0;
-    constraints.gridy = 4;
-    constraints.gridwidth = 1;
-    constraints.gridheight = 1;
-    layout.addLayoutComponent(createButton, constraints);
-    add(createButton);
   }
  /*--------------------------------------------------------------------------*/
  /**

@@ -94,6 +94,9 @@
     06.12.2003: (by Julien Ponge)
         Removed the frontend-related sections.
 
+    16.12.2004: (by Julien Ponge)
+        Added the SudoPanel building call.
+
   Mini-HowTo:
 
   To compile and package the compiler.jar jar file, type:
@@ -503,6 +506,10 @@
         <antcall target="compile.panel.simple">
             <param name="panel" value="ProcessPanel"/>
             <param name="panel-dir" value="ProcessPanel"/>
+        </antcall>
+        <antcall target="compile.panel.simple">
+            <param name="panel" value="SudoPanel" />
+            <param name="panel-dir" value="SudoPanel" />
         </antcall>
     </target>
 
