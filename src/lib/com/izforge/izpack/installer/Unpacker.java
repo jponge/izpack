@@ -84,6 +84,8 @@ public class Unpacker extends Thread
   /**  The absolute path of the installation. (NOT the canonical!) */
   private File absolute_installpath;
 
+  /** Placeholder during translatePath computing */
+  private static final String MASKED_SLASH_PLACEHOLDER = "§&_&§";
   /**
    *  The constructor.
    *
