@@ -40,7 +40,7 @@ import com.izforge.izpack.util.SummaryProcessor;
 /**
  * Installer listener which writes the summary of all panels
  * into the logfile which is defined by info.summarylogfilepath. 
- * Default is $INSTALL_PATH/uninstaller/InstallSummary.htm
+ * Default is $INSTALL_PATH/Uninstaller/InstallSummary.htm
  *
  * @author  Klaus Bartz
  *

@@ -59,7 +59,7 @@ public class Info implements Serializable
   private String uninstallerName = "uninstaller.jar";
 
   /** The path of the summary log file */
-  private String summaryLogFilePath = "$INSTALL_PATH/uninstaller/InstallSummary.htm";
+  private String summaryLogFilePath = "$INSTALL_PATH/Uninstaller/InstallSummary.htm";
 
   /**  The constructor, deliberatly void.  */
   public Info()
