@@ -291,8 +291,7 @@ Pathological example showing name conflict resolution.  Includes
         requiring manifest to know the difference (\texttt{zig...}).
 \end{itemize}
 
-% TODO: format for tex
-TODO: format for TeX
+\begin{verbatim}
 
 Jar to Create
 -------------
@@ -301,67 +300,68 @@ Jar to Create
 Files to Compress
 -----------------
     foo.dat
-    foo.dat.---0.\~{} .... Extremely unlikely that these would exist,
+    foo.dat.---0.~{} .... Extremely unlikely that these would exist,
                         much less need to be archived. Provided as an
                         example.
     bar.dat
-    bar.dat.---555.\~{} .. Another unlikely case which would not conflict
+    bar.dat.---555.~{} .. Another unlikely case which would not conflict
                         (assume bar.dat is split into only 2 segments)
                         except for the suffix template.
     yin.dat
-    yin.dat.---2.\~{} .... Yet another template only conflict
+    yin.dat.---2.~{} .... Yet another template only conflict
                         conflicting file needs to be split.
     chi.dat
-    chi.dat.---0.\~{}\~{} ... No potential conflict.
-    zig.dat.---0.\~{} .... Files to be archived as they are, but not
-    zig.dat.---1.\~{}      intended to be spliced back together.
+    chi.dat.---0.~{}~{} ... No potential conflict.
+    zig.dat.---0.~{} .... Files to be archived as they are, but not
+    zig.dat.---1.~{}      intended to be spliced back together.
 
 Entries in Jars
 ---------------
-    example.jar           foo.dat.---0.\~{}
-                          foo.dat.---0.\~{}\~{}
-                          bar.dat.---555.\~{}
-                          bar.dat.---0.\~{}\~{}
-                          yin.dat.---0.\~{}\~{}
-                          yin.dat.---2.\~{}.---0.\~{}
-                          chi.dat.---0.\~{}
-                          chi.dat.---2.\~{}\~{}
-                          zig.dat.---0.\~{}
-                          zig.dat.---1.\~{}
+    example.jar           foo.dat.---0.~{}
+                          foo.dat.---0.~{}~{}
+                          bar.dat.---555.~{}
+                          bar.dat.---0.~{}~{}
+                          yin.dat.---0.~{}~{}
+                          yin.dat.---2.~{}.---0.~{}
+                          chi.dat.---0.~{}
+                          chi.dat.---2.~{}~{}
+                          zig.dat.---0.~{}
+                          zig.dat.---1.~{}
     
-    example.split1.jar    foo.dat.---1.\~{}\~{}
-                          bar.dat.---1.\~{}\~{}
-                          yin.dat.---1.\~{}\~{}
-                          yin.dat.---2.\~{}.---1.\~{}
-                          chi.dat.---1.\~{}
+    example.split1.jar    foo.dat.---1.~{}~{}
+                          bar.dat.---1.~{}~{}
+                          yin.dat.---1.~{}~{}
+                          yin.dat.---2.~{}.---1.~{}
+                          chi.dat.---1.~{}
 
 MANIFEST (primary jar only)
 ---------------------------
     Manifest-Version: 1.0
     IzPack-Version: X.X.X
-    Created-By: 1.4.2\_04-b05 (Sun Microsystems Inc.)
+    Created-By: 1.4.2_04-b05 (Sun Microsystems Inc.)
     Built-By: IzPack
     Class-Path: 
     Main-Class: com.izforge.izpack.installer.Installer
     Split-Jar-Secondary-Count: 2
-    Split-Entry-Suffix: .---\#.\~{}
+    Split-Entry-Suffix: .---#.~{}
 
     foo.dat
     Split-Entry-Jar-IDs: 0 1
-    Split-Entry-Suffix: .---\#.\~{}\~{}
+    Split-Entry-Suffix: .---#.~{}~{}
 
     bar.dat
     Split-Entry-Jar-IDs: 0 1
-    Split-Entry-Suffix: .---\#.\~{}\~{}
+    Split-Entry-Suffix: .---#.~{}~{}
 
     fig.dat
     Split-Entry-Jar-IDs: 0 1
-    Split-Entry-Suffix: .---\#.\~{}\~{}
+    Split-Entry-Suffix: .---#.~{}~{}
 
-    fig.dat.---2.\~{}
+    fig.dat.---2.~{}
     Split-Entry-Jar-IDs: 0 1
 
     moa.dat
     Split-Entry-Jar-IDs: 0 1 
+\end{verbatim}
 
 \end{document}
