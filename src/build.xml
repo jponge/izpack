@@ -445,7 +445,7 @@
     </delete> 
   </target>
 
-  <!-- Builds all targets -->
+  <!-- Builds all compilation targets -->
   <target name="all" depends="build.compiler,build.installer,build.uninstaller,
                               build.frontend,build.panels"/>
                               
@@ -465,7 +465,7 @@
   </target>
 
   <!-- Creates an installer for IzPack -->
-  <target name="dist" depends="all,build.javadoc">
+  <target name="generate.installer"> 
   
     <!-- Allows us to use the IzPack Ant task -->
     <taskdef name="izpack" classpath="${basedir}/lib/compiler.jar"
@@ -512,7 +512,10 @@
             installerType="standard-kunststoff"
             basedir="${dist.dir}"
             izPackDir="${dist.dir}/"/>
-  
+            
   </target>
+
+  <!-- Makes everything, from compilation to generating an installer. -->
+  <target name="dist" depends="all,build.javadoc,generate.installer" />
 
 </project>
