@@ -44,6 +44,8 @@ public class PackFile implements Serializable
   public static final int OVERRIDE_ASK_TRUE = 3;
   public static final int OVERRIDE_UPDATE = 4;
 
+  public String sourcePath = null;
+
   /**  The full path name of the target file */
   private String targetPath = null;
 
@@ -89,6 +91,7 @@ public class PackFile implements Serializable
     if (target.endsWith("/"))
       target = target.substring(0, target.length()-1);
 
+    this.sourcePath = src.getPath();
     this.targetPath = target;
     this.osConstraints = osList;
     this.override = override;

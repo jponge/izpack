@@ -4,6 +4,8 @@
 
 - Adding custom action stuff for packaging, installation and uninstallation
   (Klaus Bartz).
+- The packs files can now be located on disk if needed, for instance to install
+  an application located on a live cd (Erik Artzmark).
 
   > 3.6.1 (build 2004.xx.yy)
 

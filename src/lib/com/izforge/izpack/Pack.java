@@ -35,6 +35,8 @@ import java.util.List;
  */
 public class Pack implements Serializable
 {
+  public boolean loose;
+
   /**  The pack name. */
   public String name;
   
@@ -71,7 +73,8 @@ public class Pack implements Serializable
     String description,
     List osConstraints,
     boolean required,
-    boolean preselected)
+    boolean preselected,
+    boolean loose)
   {
     this.name = name;
     this.id = id;
@@ -79,6 +82,7 @@ public class Pack implements Serializable
     this.osConstraints = osConstraints;
     this.required = required;
     this.preselected = preselected;
+    this.loose = loose;
     nbytes = 0;
   }
 

@@ -440,7 +440,7 @@ public class Packager
       Iterator iter = packInfo.getPackFiles().iterator();
       while (iter.hasNext())
       {
-        boolean addFile = true;
+        boolean addFile = !pack.loose;
         PackFile pf = (PackFile) iter.next();
         File file = packInfo.getFile(pf);
 

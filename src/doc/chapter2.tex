@@ -429,6 +429,14 @@ The \texttt{<pack>} takes the following attributes :
     the pack is by default selected for installation or not. Possible values
     are \texttt{yes} and \texttt{no}. A pack which is not preselected needs to
     be explicitly selected by the user during installation to get installed.
+    \item \texttt{loose}: can be used so that the files are not located in the
+    installer Jar. The possible values are \texttt{true} or \texttt{false}, the
+    default beeing \texttt{false}. The author of this feature needed to put his
+    application on a CD so that the users could run it directly from this media.
+    However, he also wanted to offer them the possibility to install the
+    software localy. Enabling this feature will make IzPack take the files on
+    disk instead of from the installer. \textit{Please make sure that your relative
+    files paths are correct !}
     \item \texttt{id}: this attribute is used to give a unique id to the pack to
     be used for internationalization.
   \end{itemize}

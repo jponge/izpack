@@ -29,6 +29,7 @@
 package com.izforge.izpack.installer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -240,7 +241,7 @@ public class Unpacker extends Thread
 
               if (!overwritefile)
               {
-                if (!pf.isBackReference())
+                if (!pf.isBackReference() && !((Pack)packs.get(i)).loose)
                   objIn.skip(pf.length());
                 continue;
               }
@@ -251,7 +252,7 @@ public class Unpacker extends Thread
             out = new FileOutputStream(pathFile);
             byte[] buffer = new byte[5120];
             long bytesCopied = 0;
-            ObjectInputStream pis = objIn;
+            InputStream pis = objIn;
             if (pf.isBackReference())
             {
               InputStream is = getPackAsStream(pf.previousPackNumber);
@@ -261,12 +262,13 @@ public class Unpacker extends Thread
               is.skip(pf.offsetInPreviousPack - 4);
               //but the stream header is now already read (== 4 bytes)
             }
+            else if(((Pack)packs.get(i)).loose)
+            {
+              pis = new FileInputStream(pf.sourcePath);
+            }
             while (bytesCopied < pf.length())
             {
-              int maxBytes =
-                (pf.length() - bytesCopied < buffer.length
-                  ? (int) (pf.length() - bytesCopied)
-                  : buffer.length);
+              int maxBytes = (int)Math.min(pf.length() - bytesCopied, buffer.length);
               int bytesInBuffer = pis.read(buffer, 0, maxBytes);
               if (bytesInBuffer == -1)
                 throw new IOException("Unexpected end of stream");
