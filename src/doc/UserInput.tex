@@ -5,8 +5,8 @@
 \chapter{\label{chap:userinput}User Input} (by Elmar \textsc{Grom})\\
 
 Most of the panels that come with IzPack take user input in some form.
-In some panels this is through a simple user acknowledgement in others
-the user can enter text or select a directory thorugh a file open
+In some panels this is through a simple user acknowledgment in others
+the user can enter text or select a directory through a file open
 dialog. In all of those cases the user input is used for the specific
 purpose  needed by the panel that takes the input. However, if you need
 user input during installation that will later on be available  to your
@@ -32,7 +32,7 @@ The following types of user input elements are supported:
 \item Search Field
 \end{itemize}\
 
-The way in which this panel conveyes the user input to your application
+The way in which this panel conveys the user input to your application
 is through the variable substitution system. User input is not directly
 inserted into your configuration files but the variables that you
 specify for this panel are set in the variable substitution system.
@@ -43,7 +43,7 @@ number of implications that you should be aware of.\\
 First, not only can you set additional variables in this way but you can
 also modify variables that are defined elsewhere -even built in
 variables. For this reason you should be careful to avoid overlaps when
-chosng variable names. Although there might be cases when it seems
+choosing variable names. Although there might be cases when it seems
 useful to modify the value of other variables, it is generally not a
 good idea to do so. Because you might not exactly know when other
 variables are set and when and where they are used throughout the
@@ -69,7 +69,7 @@ are not selected. For this to work you must place this panel after the
 packs panel. One side effect of using this feature is that it is not
 possible to step back once the user input panel is displayed. This is
 because the user might make changes in the packs selection that would
-require a complete rebuild of the UI. Unfortunatly, building the UI is
+require a complete rebuild of the UI. Unfortunately, building the UI is
 an irreversible process, therefore the user can not be allowed to go
 back to the packs panel.\\
 
@@ -105,7 +105,7 @@ see which you like best. The default is \texttt{left}.\\
 
 Before I dive into the details of defining the various UI elements I
 would like to present XML elements and general concepts that apply
-thoughout. This saves me a lot of work in writing and you a lot of
+throughout. This saves me a lot of work in writing and you a lot of
 repetitive reading and maybe a tree or two.\\
 
 The UI elements are generally laid out top to bottom in the order they
@@ -113,7 +113,7 @@ appear in the XML file. The only exception to this rule is the title,
 which always appears at the very top. The layout pattern for the input
 fields is as follows: If a description is defined, it appears first,
 using the full available layout width. The input field is placed beneath
-the description. With fileds such as the text filed or the combo box,
+the description. With fields such as the text field or the combo box,
 the label is placed to the left and the input field to the right. Fields
 such as radio buttons and check boxes are somewhat indented and have the
 label text appear to their right.\\
@@ -153,19 +153,19 @@ The following example illustrates the general pattern for field specification:\\
 \normalsize
 
 A very frequently used pattern is for the definition of text. Where ever
-text is needed (lables, descriptions, static text, choices etc.) it can
+text is needed (labels, descriptions, static text, choices etc.) it can
 be specified in place using the \texttt{txt} attribute. This is
-conveninet if you are only supporting a single language. However, if you
+convenient if you are only supporting a single language. However, if you
 would like to separate your text definitions from the panel
 specification or if you need to support multiple languages you might
 want to use the \texttt{id} attribute instead to only specify an
 identifier. You can then add multiple XML files with the same name as
-this spec file (UserInputSpec.xml) appended with an unserscore '\_' and
+this spec file (UserInputSpec.xml) appended with an underscore '\_' and
 the the appropriate three letter ISO3 language code. The content of
 those files must conform to the specification for IzPack language
 packages. For more details on this topic see the chapter on language
 packages under advanced features. \texttt{id} defines an identifier that
-is also defined in the language package, toghether with the localized
+is also defined in the language package, together with the localized
 text to use. It is possible to use both the \texttt{txt} and the
 \texttt{id} attribute. In this case the text from the language package
 is used. If for some reason the language package is not available or the
@@ -214,7 +214,7 @@ With a value of \texttt{true} specifies that the title font should be bold.\\
 \textbf{size} \texttt{- optional}\\
 
 This attribute specifies the size of the title font. Please note that
-the size is not sprcified in points but as a relative size multiplier
+the size is not specified in points but as a relative size multiplier
 compared to the body font on the panel. The default value is 2.\\
 
 \section{Static Text}
@@ -245,8 +245,8 @@ The following example inserts some static text in the panel.
 Sometimes it is desirable to separate different entities visually. This
 can be accomplished by inserting a space or a divider. A space simply
 inserts a vertical separation of the average height of a single line
-lentity, such as a line of text or a an input field. A divider inserts
-the same amout of space but also draws a division line which can be
+entity, such as a line of text or a an input field. A divider inserts
+the same amount of space but also draws a division line which can be
 either aligned at the top or bottom of the separation.
 \texttt{<space>}, \texttt{<divider>}
 
@@ -255,11 +255,11 @@ either aligned at the top or bottom of the separation.
 \section{Text Input}
 
 A text input field allows the user to enter and edit a single line of
-text, without lenght restriction. The input field can have a label,
+text, without length restriction. The input field can have a label,
 which will show to the left of the input field and a description, which
 can span multiple lines. The description is placed above the input field
 and uses the entire available layout width. The width of the input field
-must be explicitly set, otherwise it will only accomodate a single
+must be explicitly set, otherwise it will only accommodate a single
 character. To specify a text input field create a \texttt{<field>} tag
 and use the \texttt{type} attribute with a value of \texttt{text}. The
 \texttt{txt} and \texttt{id} attributes are not supported here. The
@@ -305,7 +305,7 @@ arbitrary number of mutually exclusive buttons, each with its own label.
 The placement of the buttons and labels is different form other fields.
 First, the button is placed to the left and the label text to the right.
 Second, the buttons are not lined up all the way to the left as other
-lables are but they are indented from that location. As with other
+labels are but they are indented from that location. As with other
 fields, the description is placed above the list of radio buttons and
 uses the entire available layout width. To specify a set of radio
 buttons create a \texttt{<field>} tag and use the \texttt{type}
@@ -336,7 +336,7 @@ are used, the value is always the same for a given selection.\\
 \textbf{set} \texttt{- optional}\\
 
 The \texttt{set} attribute accepts the values \texttt{true} and
-\texttt{flase}. Since the attribute is optional it can also be omitted,
+\texttt{false}. Since the attribute is optional it can also be omitted,
 which is interpreted as \texttt{false}. If a value of \texttt{true} is
 used, the associated radio button will be selected when the UI is first
 presented. Obviously, only one of the buttons in a set should be set to
@@ -412,7 +412,7 @@ when the box is not selected.\\
 \textbf{set} \texttt{- optional}\\
 
 The \texttt{set} attribute accepts the values \texttt{true} and
-\texttt{flase}. Since the attribute is optional it can also be omitted,
+\texttt{false}. Since the attribute is optional it can also be omitted,
 which is interpreted as \texttt{false}. If a value of \texttt{true} is
 used, the check box will be selected when the UI is first presented.\\
 
@@ -420,7 +420,7 @@ used, the check box will be selected when the UI is first presented.\\
 
 The following example creates a check box with description. The check
 box will not be selected when the UI is first presented. This could also
-be accomplished by ommitting the \texttt{set} attribute.\\
+be accomplished by omitting the \texttt{set} attribute.\\
 
 \footnotesize
 \begin{verbatim}
@@ -436,12 +436,12 @@ be accomplished by ommitting the \texttt{set} attribute.\\
 \section{Rule Input}
 
 The rule input field is the most powerful and complex one of all the
-input fields offerd by this panel. In its most simple incarnation it
+input fields offered by this panel. In its most simple incarnation it
 looks and works like a regular text input field. There is also only an
 incremental increase of the complexity in the specification for this
 case. However, it is unlikely that you would use it for such a purpose.
 The real power of this input field comes from the fact that rules can be
-apllied to it that control many aspects of its look as well as overt and
+applied to it that control many aspects of its look as well as overt and
 covert operation.\\
 
 \subsection{Layout and Input Rules}
@@ -454,11 +454,11 @@ text input fields, adorned with multiple labels. Further more, each of
 these fields can be instructed to restrict the type of input that will
 be accepted. Now you might ask what this could be useful for. As an
 answer, let me present a few examples that show how this feature can be
-used. Before I do this howerver, I would like to describe the
+used. Before I do this however, I would like to describe the
 specification syntax, so that the examples can be presented together
-with the specifactions that make them work in a meaningful way.\\
+with the specifications that make them work in a meaningful way.\\
 
-The actual specification of the layout, the lables and the type of input
+The actual specification of the layout, the labels and the type of input
 each field accepts all happens in a single string with the
 \texttt{layout} attribute. First let us have a look at the specification
 format for a single field. This format consists of a triplet of
@@ -498,14 +498,14 @@ of the field.\\
 \fbox{\includegraphics[scale=1.0]{img/userInput-phone}}
 \end{center}
 
-\textbf{E-Mail Adress}
+\textbf{E-Mail Address}
 
 This specification creates a pattern that is useful for entering an
 e-mail address \texttt{"AN:15:U @ AN:10:40 . A:4:4"}. Even though the
 first field is only fifteen characters wide it will accept a string of
 unlimited length, because the 'U' identifier is used for the edit
 length. The second field is a bit more restrictive by only accepting a
-string up to fourty characters long.\\
+string up to forty characters long.\\
 
 \begin{center}
 \fbox{\includegraphics[scale=1.0]{img/userInput-email}}
@@ -525,9 +525,9 @@ All fields are the same, allowing just three digits of numerical entry.
 \textbf{Serial Number or Key Code}
 
 If you ship your product with a CD key code or serial number and require
-this information for registration, you might want to ask the cutomer to
-trasncribe that number from the CD label, so that it is later on
-accessible to your appication. As this is always an error prone
+this information for registration, you might want to ask the customer to
+transcribe that number from the CD label, so that it is later on
+accessible to your application. As this is always an error prone
 operation, the predefined pattern with the easy editing support and
 restriction of accepted data helps to reduce transcription errors
 \texttt{"H:4:4 - N:6:6 - N:3:3"}. This particular specification will
@@ -540,13 +540,13 @@ six numerical and the third three numerical digits.\\
 
 \textbf{Limitations}
 
-Even though the above examples all use single character lables between
-fields, there is no restriction on the length of these lables. In
+Even though the above examples all use single character labels between
+fields, there is no restriction on the length of these labels. In
 addition, it is possible to place label text in front of the first field
 and after the last field and the text can even contain spaces. The only
 limitation in this regard is the fact that all white space in the text
 will be reduced to a single space on the display. This means that it is
-not possible to use multiple spaces ot tabs in the text.\\
+not possible to use multiple spaces or tabs in the text.\\
 
 The following table lists and describes all the keys that can be used in
 the specification string.\\
@@ -554,8 +554,8 @@ the specification string.\\
 \begin{center}
 \begin{tabularx}{\textwidth}{|l|l|X|}
 \hline \textit{Key} & \textit{Meaning} & \textit{Description} \\
-\hline N & numeric & The field will acept only numerals.\\
-\hline H & hexadecimal & The field will accept only hexa-decimal numerals, that is all numbers from 0-F.\\
+\hline N & numeric & The field will accept only numerals.\\
+\hline H & hexadecimal & The field will accept only hexadecimal numerals, that is all numbers from 0-F.\\
 \hline A & alphabetic & The field will accept only alphabetic characters. Numerals and punctuation marks will not be accepted.\\
 \hline AN & alpha-numeric & The field will accept alphabetic characters and numerals but no punctuation marks.\\
 \hline O & open & The filed will accept any input, without restriction.\\
@@ -575,12 +575,12 @@ The \texttt{set} specification for all sub fields is given in a single
 string. Each field is addressed by its index number, with the count
 starting at 0. The index is followed by a colon ':' and then by the
 content of the field. The string "0:1234 1:af415 3:awer" would fill the
-first subfield with \texttt{1234}, the scond one with \texttt{af415} and
+first subfield with \texttt{1234}, the second one with \texttt{af415} and
 the fourth with \texttt{awer}. The third subfield would stay blank
 and so would any additional fields that might follow.\\
 
 The individual field specs must be separated with spaces. Spaces within
-the prefill values are not allowed, otherwise the result is undefined.\\
+the pre-fill values are not allowed, otherwise the result is undefined.\\
 
 \subsection{The Output Format}
 
@@ -595,9 +595,9 @@ take the following values:\\
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline \textit{Value} & \textit{Meaning}\\
 \hline \texttt{plainString} & The content of all subfields is simply concatenated into one long string.\\
-\hline \texttt{displayFormat} & The content of all subfields and all lables -as displayed- is concatenated into one long string.\\
+\hline \texttt{displayFormat} & The content of all subfields and all labels -as displayed- is concatenated into one long string.\\
 \hline \texttt{specialSeparator} & The content of all subfields is concatenated into one string, using the string specified withe the \texttt{separator} attribute to separate the content of the subfields.\\
-\hline \texttt{processed} & The contnet is processed by Java code that you supply before replacing the variable. How to do this is discribed below.\\
+\hline \texttt{processed} & The content is processed by Java code that you supply before replacing the variable. How to do this is described below.\\
 \hline
 \end{tabularx}\
 \end{center}
@@ -630,9 +630,9 @@ This feature needs to be documented.
 \section{Search}
 
 The search input field allows the user to choose the location of files or
-directories. It also supports autodetection of the location using a list of 
+directories. It also supports auto-detection of the location using a list of 
 suggestions. The field is basically a combobox with an extra button to
-trigger autodetection (again).
+trigger auto-detection (again).
 
 \begin{center}
 \fbox{\includegraphics[scale=0.8]{img/userInput-search}}
