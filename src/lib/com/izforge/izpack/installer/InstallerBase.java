@@ -264,7 +264,6 @@ public class InstallerBase
       while (keys != null && keys.hasNext())
       {
         CustomActionData ca = (CustomActionData) keys.next();
-        List osconstraint = (List) ca.osConstraints;
 
         if (ca.osConstraints != null
             && !OsConstraint.oneMatchesCurrentSystem((List) ca.osConstraints))
@@ -274,12 +273,12 @@ public class InstallerBase
         switch (ca.type)
         {
         case CustomActionData.INSTALLER_LISTENER:
-          Class clazz = Class.forName(ca.name);
+          Class clazz = Class.forName((String) ca.names.get(0));
           out[ca.type].add(clazz.newInstance());
           break;
         case CustomActionData.UNINSTALLER_LISTENER:
         case CustomActionData.UNINSTALLER_LIB:
-          out[ca.type].add(ca.name);
+          out[ca.type].add(ca.names);
           break;
         }
 

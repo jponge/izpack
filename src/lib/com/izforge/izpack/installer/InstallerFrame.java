@@ -54,11 +54,13 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
 import javax.swing.BorderFactory;
@@ -478,80 +480,107 @@ public class InstallerFrame extends JFrame
       outJar.closeEntry();
 
       // Write out additional uninstall data
-      Map additionalData = udata.getAdditionalData();
-      if( additionalData  != null && ! additionalData.isEmpty())
-      {
-        Iterator keys = additionalData.keySet().iterator();
-        while( keys != null && keys.hasNext())
-        {
-          String key = (String) keys.next();
-          Object contents = additionalData.get(key);
-          if(  key.equals("__uninstallLibs__"))
-          {
-            Iterator nativeLibIter = ((List) contents).iterator();
-            while( nativeLibIter != null && nativeLibIter.hasNext() )
-            {
-              String nativeLibName = (String) nativeLibIter.next();
-              byte[] buffer = new byte[5120];
-              long bytesCopied = 0;
-              int bytesInBuffer;
-              outJar.putNextEntry(new ZipEntry( "native/" + nativeLibName));
-              InputStream in = getClass().getResourceAsStream("/native/" + nativeLibName);
-              while ((bytesInBuffer = in.read(buffer)) != -1)
-              {
-                outJar.write(buffer, 0, bytesInBuffer);
-                bytesCopied += bytesInBuffer;
+       Map additionalData = udata.getAdditionalData();
+       if( additionalData  != null && ! additionalData.isEmpty())
+       {
+         Iterator keys = additionalData.keySet().iterator();
+         HashSet exist = new HashSet();
+         while( keys != null && keys.hasNext())
+         {
+           String key = (String) keys.next();
+           Object contents = additionalData.get(key);
+           if(  key.equals("__uninstallLibs__"))
+           {
+             Iterator nativeLibIter = ((List) contents).iterator();
+             while( nativeLibIter != null && nativeLibIter.hasNext() )
+             {
+               String nativeLibName = (String) ((List) nativeLibIter.next()).get(0);
+               byte[] buffer = new byte[5120];
+               long bytesCopied = 0;
+               int bytesInBuffer;
+               outJar.putNextEntry(new ZipEntry( "native/" + nativeLibName));
+               InputStream in = getClass().getResourceAsStream("/native/" + nativeLibName);
+               while ((bytesInBuffer = in.read(buffer)) != -1)
+               {
+                 outJar.write(buffer, 0, bytesInBuffer);
+                 bytesCopied += bytesInBuffer;
+               }
+               outJar.closeEntry();
               }
-              outJar.closeEntry();
-             }
-          }
-          else if( key.equals("uninstallerListeners"))
-          { // It is a ArrayList which contains the full 
-            // package paths. First we write the list into the 
-            // uninstaller.jar 
-            outJar.putNextEntry(new ZipEntry(key));
-            ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-            objOut.writeObject(contents);
-            objOut.flush();
-            outJar.closeEntry();
-            // Secound put the class into  uninstaller.jar
-            Iterator listenerIter = ((List) contents).iterator();
-            while( listenerIter.hasNext() )
-            {
-              byte[] buffer = new byte[5120];
-              long bytesCopied = 0;
-              int bytesInBuffer;
-              String listenerName = (String) listenerIter.next();
-              listenerName = listenerName.replace('.', '/');
-              listenerName = listenerName + ".class"; 
-              outJar.putNextEntry(new ZipEntry( listenerName));
-              InputStream in = getClass().getResourceAsStream("/" + listenerName);
-              while ((bytesInBuffer = in.read(buffer)) != -1)
-              {
-                outJar.write(buffer, 0, bytesInBuffer);
-                bytesCopied += bytesInBuffer;
-              }
-              outJar.closeEntry();
+           }
+           else if( key.equals("uninstallerListeners"))
+           { // It is a ArrayList of ArrayLists which contains the full 
+             // package paths of all needed class files. 
+             // First we create a new ArrayList which contains only
+             // the full paths for the uninstall listener self; thats
+             // the first entry of each sub ArrayList.
+             ArrayList subContents = new ArrayList();
+            
+             // Secound put the class into  uninstaller.jar
+             Iterator listenerIter = ((List) contents).iterator();
+             while( listenerIter.hasNext() )
+             {
+               byte[] buffer = new byte[5120];
+               long bytesCopied = 0;
+               int bytesInBuffer;
+               List listenerClasses = (List) listenerIter.next();
+               // First element of the list contains the listener class path;
+               // remind it for later.
+               subContents.add(listenerClasses.get(0));
+               Iterator liClaIter = listenerClasses.iterator();
+               while( liClaIter.hasNext() )
+               {
+                 String listenerName = (String) liClaIter.next();
+                 listenerName = listenerName.replace('.', '/');
+                 listenerName = listenerName + ".class";
+                 if( exist.contains(listenerName ))
+                   continue;
+                 exist.add(listenerName);
+                 try
+                 {
+                   outJar.putNextEntry(new ZipEntry( listenerName));
+                 }
+                 catch(ZipException ze )
+                 { // Ignore, or ignore not ?? May be it is a exception because
+                   // a doubled entry was tried, then we should ignore ...
+                   continue;
+                 }
+                 InputStream in = getClass().getResourceAsStream("/" + listenerName);
+                 while ((bytesInBuffer = in.read(buffer)) != -1)
+                 {
+                   outJar.write(buffer, 0, bytesInBuffer);
+                   bytesCopied += bytesInBuffer;
+                 }
+                 outJar.closeEntry();
           
-            }
-          }
-          else
-          {
-            outJar.putNextEntry(new ZipEntry(key));
-            if( contents instanceof ByteArrayOutputStream )
-            {
-              ((ByteArrayOutputStream) contents).writeTo(outJar);
-            }
-            else
-            {
-              ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-              objOut.writeObject(contents);
-              objOut.flush();
-            }
-            outJar.closeEntry();
-          }
-        }
-      }
+               }
+             }
+             // Third we write the list into the 
+             // uninstaller.jar 
+             outJar.putNextEntry(new ZipEntry(key));
+             ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+             objOut.writeObject(subContents);
+             objOut.flush();
+             outJar.closeEntry();
+
+           }
+           else
+           {
+             outJar.putNextEntry(new ZipEntry(key));
+             if( contents instanceof ByteArrayOutputStream )
+             {
+               ((ByteArrayOutputStream) contents).writeTo(outJar);
+             }
+             else
+             {
+               ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+               objOut.writeObject(contents);
+               objOut.flush();
+             }
+             outJar.closeEntry();
+           }
+         }
+       }
 
       // Cleanup
       outJar.flush();
