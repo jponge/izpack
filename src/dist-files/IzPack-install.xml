@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.7.0 (build 2005.01.11)</appversion>
+        <appversion>3.7.1 (build 2005.02.15)</appversion>
         <authors>
             <author name="Julien Ponge (maintainer, original developer)" email="julien@izforge.com" />
             <author name="Klaus Bartz (developer)" email="klaus.bartz@coi.de" />
@@ -42,6 +42,7 @@
             <author name="Per Abich (contributor)" email="perabich@users.berlios.de" />
             <author name="Alexey Makhmutov (contributor)" email="alexmach@mail.ru" />
             <author name="Anthony Xin Chen (contributor)" email="mail@4techie.net" />
+            <author name="Fabrice Mirabile (contributor)" email="miraodb@users.berlios.de" />
             <author email="(see Thanks.txt)" name="Many other developers and contributors to the previous releases" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
