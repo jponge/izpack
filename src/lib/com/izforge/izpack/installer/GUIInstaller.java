@@ -41,6 +41,7 @@ import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -161,7 +162,7 @@ public class GUIInstaller extends InstallerBase
   private void loadLangPack() throws Exception
   {
     // Initialisations
-    ArrayList availableLangPacks = getAvailableLangPacks();
+    List availableLangPacks = getAvailableLangPacks();
     int npacks = availableLangPacks.size();
     if (npacks == 0) throw new Exception("no language pack available");
     String selectedPack;
@@ -197,16 +198,13 @@ public class GUIInstaller extends InstallerBase
    * @return                The available langpacks list.
    * @exception  Exception  Description of the Exception
    */
-  private ArrayList getAvailableLangPacks() throws Exception
+  private List getAvailableLangPacks() throws Exception
   {
     // We read from the langpacks file in the jar
-    ArrayList available = new ArrayList();
     InputStream in = getClass().getResourceAsStream("/langpacks.info");
-    DataInputStream datIn = new DataInputStream(in);
-    int size = datIn.readInt();
-    for (int i = 0; i < size; i++)
-      available.add(datIn.readUTF());
-    datIn.close();
+    ObjectInputStream objIn = new ObjectInputStream(in);
+    List available = (List) objIn.readObject();
+    objIn.close();
 
     return available;
   }
