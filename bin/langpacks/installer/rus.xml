@@ -5,63 +5,63 @@
 <langpack>
 
     <!-- General installer strings -->
-    <str id="installer.title" txt="IzPack - Óñòàíîâêà "/>
-    <str id="installer.next" txt="Äàëåå"/>
-    <str id="installer.prev" txt="Íàçàä"/>
-    <str id="installer.quit" txt="Âûõîä"/>
-    <str id="installer.madewith" txt="(Ïðîãðàììà óñòàíîâêè ñäåëàíà ïðè ïîìîùè IzPack - http://www.izforge.com/)"/>
-    <str id="installer.quit.title" txt="Çàêîí÷èòü ðàáîòó?"/>
-    <str id="installer.quit.message" txt="Óñòàíîâêà áóäåò îòìåíåíà!"/>
-    <str id="installer.warning" txt="Ïðåäóïðåæäåíèå!"/>
-    <str id="installer.yes" txt="Äà"/>
-    <str id="installer.no" txt="Íåò"/>
-    <str id="installer.cancel" txt="Îòêàç"/> 
-    <str id="installer.error" txt="Îøèáêà"/>
+    <str id="installer.title" txt="IzPack - ñßÐÞÌÍÁÉÞ "/>
+    <str id="installer.next" txt="äÞÊÅÅ"/>
+    <str id="installer.prev" txt="ìÞÃÞÄ"/>
+    <str id="installer.quit" txt="áØÓÍÄ"/>
+    <str id="installer.madewith" txt="(îÏÍÖÏÞËËÞ ÑßÐÞÌÍÁÉÕ ßÄÅÊÞÌÞ ÎÏÕ ÎÍËÍÛÕ IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="ãÞÉÍÌÂÕÐÝ ÏÞÀÍÐÑ?"/>
+    <str id="installer.quit.message" txt="ñßÐÞÌÍÁÉÞ ÀÑÄÅÐ ÍÐËÅÌÅÌÞ!"/>
+    <str id="installer.warning" txt="îÏÅÄÑÎÏÅÔÄÅÌÕÅ!"/>
+    <str id="installer.yes" txt="äÞ"/>
+    <str id="installer.no" txt="ìÅÐ"/>
+    <str id="installer.cancel" txt="íÐÉÞÃ"/> 
+    <str id="installer.error" txt="íÜÕÀÉÞ"/>
     
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="Óñòàíîâëåííûå ïðîãðàììû áóäóò óäàëåíû!"/>
-    <str id="uninstaller.destroytarget" txt=" Óäàëèòü "/>
-    <str id="uninstaller.uninstall" txt="Óäàëèòü óñòàíîâëåííûå ïðîãðàììû"/>
+    <str id="uninstaller.warning" txt="ñßÐÞÌÍÁÊÅÌÌØÅ ÎÏÍÖÏÞËËØ ÀÑÄÑÐ ÑÄÞÊÅÌØ!"/>
+    <str id="uninstaller.destroytarget" txt=" ñÄÞÊÕÐÝ "/>
+    <str id="uninstaller.uninstall" txt="ñÄÞÊÕÐÝ ÑßÐÞÌÍÁÊÅÌÌØÅ ÎÏÍÖÏÞËËØ"/>
     
     <!-- The strings for the 'official' IzPack plugins -->
-    <str id="HelloPanel.welcome1" txt="Äîáðî ïîæàëîâàòü â ïðîãðàììó óñòàíîâêè "/>
+    <str id="HelloPanel.welcome1" txt="äÍÀÏÍ ÎÍÔÞÊÍÁÞÐÝ Á ÎÏÍÖÏÞËËÑ ÑßÐÞÌÍÁÉÕ "/>
     <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="Àâòîðû ïðîãðàììû: "/>
-    <str id="HelloPanel.url" txt="Äîìàøíÿÿ ñòðàíèöà ïðîãðàììû: "/>
+    <str id="HelloPanel.authors" txt="þÁÐÍÏØ ÎÏÍÖÏÞËËØ: "/>
+    <str id="HelloPanel.url" txt="äÍËÞÜÌÚÚ ßÐÏÞÌÕÆÞ ÎÏÍÖÏÞËËØ: "/>
     
-    <str id="LicencePanel.info" txt="Ïîæàëóéñòà âíèìàòåëüíî ïðî÷èòàéòå ëèöåíçèþ:"/>
-    <str id="LicencePanel.agree" txt="ß ñîãëàñåí ñ óñëîâèÿìè ëèöåíçèè."/>
-    <str id="LicencePanel.notagree" txt="ß íå ñîãëàñåí ñ óñëîâèÿìè ëèöåíçèè."/>
-    <str id="LicencePanel.yes" txt="Äà"/>
-    <str id="LicencePanel.no" txt="Íåò"/>
+    <str id="LicencePanel.info" txt="îÍÔÞÊÑÈßÐÞ ÁÌÕËÞÐÅÊÝÌÍ ÎÏÍÂÕÐÞÈÐÅ ÊÕÆÅÌÃÕ×:"/>
+    <str id="LicencePanel.agree" txt="ú ßÍÖÊÞßÅÌ ß ÑßÊÍÁÕÚËÕ ÊÕÆÅÌÃÕÕ."/>
+    <str id="LicencePanel.notagree" txt="ú ÌÅ ßÍÖÊÞßÅÌ ß ÑßÊÍÁÕÚËÕ ÊÕÆÅÌÃÕÕ."/>
+    <str id="LicencePanel.yes" txt="äÞ"/>
+    <str id="LicencePanel.no" txt="ìÅÐ"/>
     
-    <str id="InfoPanel.info" txt="Ïîæàëóéñòà ïðî÷èòàéòå ñëåäóþùóþ èíôîðìàöèþ:"/>
+    <str id="InfoPanel.info" txt="îÍÔÞÊÑÈßÐÞ ÎÏÍÂÕÐÞÈÐÅ ßÊÅÄÑ×ÛÑ× ÕÌÒÍÏËÞÆÕ×:"/>
     
-    <str id="TargetPanel.info" txt="Âûáåðèòå êàòàëîã óñòàíîâêè:"/>
-    <str id="TargetPanel.browse" txt="Óêàçàòü ..."/>
+    <str id="TargetPanel.info" txt="áØÀÅÏÕÐÅ ÉÞÐÞÊÍÖ ÑßÐÞÌÍÁÉÕ:"/>
+    <str id="TargetPanel.browse" txt="ñÉÞÃÞÐÝ ..."/>
     <str id="TargetPanel.warn" 
-         txt="Êàòàëîã óæå ñóùåñòâóåò! Âû æåëàåòå óñòàíîâèòü ïðîãðàììó â íåãî?"/>
+         txt="éÞÐÞÊÍÖ ÑÔÅ ßÑÛÅßÐÁÑÅÐ! áØ ÔÅÊÞÅÐÅ ÑßÐÞÌÍÁÕÐÝ ÎÏÍÖÏÞËËÑ Á ÌÅÖÍ?"/>
     <str id="TargetPanel.empty_target"
-         txt="Âû íå óêàçàëè êàòàëîã äëÿ óñòàíîâêè.  Ïðîäîëæàòü?"/>
-    <str id="TargetPanel.createdir" txt="Áóäåò ñîçäàí êàòàëîã äëÿ óñòàíîâêè:" />
+         txt="áØ ÌÅ ÑÉÞÃÞÊÕ ÉÞÐÞÊÍÖ ÄÊÚ ÑßÐÞÌÍÁÉÕ.  îÏÍÄÍÊÔÞÐÝ?"/>
+    <str id="TargetPanel.createdir" txt="àÑÄÅÐ ßÍÃÄÞÌ ÉÞÐÞÊÍÖ ÄÊÚ ÑßÐÞÌÍÁÉÕ:" />
 
-    <str id="PacksPanel.info" txt="Âûáåðèòå íàáîðû äëÿ óñòàíîâêè:"/>
-    <str id="PacksPanel.tip" txt="Ïðèìå÷àíèå: íåàêòèâíûå íàáîðû îáÿçàòåëüíû ê óñòàíîâêå."/>
-    <str id="PacksPanel.space" txt="Òðåáóåòñÿ ìåñòà: "/>
-    <str id="PacksPanel.description" txt="Îïèñàíèå"/>
+    <str id="PacksPanel.info" txt="áØÀÅÏÕÐÅ ÌÞÀÍÏØ ÄÊÚ ÑßÐÞÌÍÁÉÕ:"/>
+    <str id="PacksPanel.tip" txt="îÏÕËÅÂÞÌÕÅ: ÌÅÞÉÐÕÁÌØÅ ÌÞÀÍÏØ ÍÀÚÃÞÐÅÊÝÌØ É ÑßÐÞÌÍÁÉÅ."/>
+    <str id="PacksPanel.space" txt="ðÏÅÀÑÅÐßÚ ËÅßÐÞ: "/>
+    <str id="PacksPanel.description" txt="íÎÕßÞÌÕÅ"/>
     
-    <str id="InstallPanel.info" txt="Ïîäãîòîâêà ê óñòàíîâêå ïðîãðàììû çàâåðøåíà:"/>
-    <str id="InstallPanel.install" txt="Óñòàíîâèòü!"/>
-    <str id="InstallPanel.tip" txt="Õîä óñòàíîâêè:"/>
-    <str id="InstallPanel.begin" txt="[Ïóñòî]"/>
-    <str id="InstallPanel.finished" txt="[Çàêîí÷åí]"/>
+    <str id="InstallPanel.info" txt="îÍÄÖÍÐÍÁÉÞ É ÑßÐÞÌÍÁÉÅ ÎÏÍÖÏÞËËØ ÃÞÁÅÏÜÅÌÞ:"/>
+    <str id="InstallPanel.install" txt="ñßÐÞÌÍÁÕÐÝ!"/>
+    <str id="InstallPanel.tip" txt="óÍÄ ÑßÐÞÌÍÁÉÕ:"/>
+    <str id="InstallPanel.begin" txt="[îÑßÐÍ]"/>
+    <str id="InstallPanel.finished" txt="[ãÞÉÍÌÂÅÌ]"/>
     
-    <str id="FinishPanel.success" txt="Óñòàíîâêà óñïåøíî çàâåðøåíà!"/>
-    <str id="FinishPanel.fail" txt="Óñòàíîâêà ïðåðâàíà àâàðèéíî ..."/>
-    <str id="FinishPanel.uninst.info" txt="Ïðîãðàììà óäàëåíèÿ óñòàíîâêè ïîìåùåíà:"/>
-    <str id="FinishPanel.auto" txt="Ñîçäàòü ñöåíàðèé àâòîìàòè÷åñêîé óñòàíîâêè"/>
+    <str id="FinishPanel.success" txt="ñßÐÞÌÍÁÉÞ ÑßÎÅÜÌÍ ÃÞÁÅÏÜÅÌÞ!"/>
+    <str id="FinishPanel.fail" txt="ñßÐÞÌÍÁÉÞ ÎÏÅÏÁÞÌÞ ÞÁÞÏÕÈÌÍ ..."/>
+    <str id="FinishPanel.uninst.info" txt="îÏÍÖÏÞËËÞ ÑÄÞÊÅÌÕÚ ÑßÐÞÌÍÁÉÕ ÎÍËÅÛÅÌÞ:"/>
+    <str id="FinishPanel.auto" txt="ÿÍÃÄÞÐÝ ßÆÅÌÞÏÕÈ ÞÁÐÍËÞÐÕÂÅßÉÍÈ ÑßÐÞÌÍÁÉÕ"/>
     <str id="FinishPanel.auto.tip" 
-         txt="Áóäåò ñîçäàí ôàéë, ïîçâîëÿþùèé àâòîìàòè÷åñêè ïðîâåñòè òàêóþ æå èíñòàëëÿöèþ ïðîãðàììû íà äðóãîì êîìïüþòåðå."/>
+         txt="àÑÄÅÐ ßÍÃÄÞÌ ÒÞÈÊ, ÎÍÃÁÍÊÚ×ÛÕÈ ÞÁÐÍËÞÐÕÂÅßÉÕ ÎÏÍÁÅßÐÕ ÐÞÉÑ× ÔÅ ÕÌßÐÞÊÊÚÆÕ× ÎÏÍÖÏÞËËØ ÌÞ ÄÏÑÖÍË ÉÍËÎÝ×ÐÅÏÅ."/>
     
     <str id="ImgPacksPanel.packs" txt="Äîñòóïíû ñëåäóþùèå íàáîðû:"/>
     <str id="ImgPacksPanel.snap" txt="Ñíèìîê ýêðàíà:"/>
@@ -81,7 +81,6 @@
     <str id="ShortcutPanel.alternate.saveButton" txt="Ñîõðàíèòü òåêñòîâûé ôàéë"/>
     
     <str id="ShortcutPanel.textFile.header" txt="Èíôîðìàöèÿ î ÿðëûêå\n====================\n\nÍèæå ïðèâåäåíû âñå íåîáõîäèìûå ñâåäåíèÿ î ñîçäàâàåìûõ ÿðëûêàõ.\nÈõ äîñòàòî÷íî, ÷òîáû Âû ìîãëè ñîçäàòü íóæíûå ÿðëûêè ñàìîñòîÿòåëüíî.\n"/>
-    <!--str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/-->
     
     <str id="ShortcutPanel.textFile.name"         txt="ßðëûê                        : "/>
     <str id="ShortcutPanel.textFile.location"     txt="Ðàñïîëîæåíèå ÿðëûêà          : "/>
@@ -97,7 +96,7 @@
     <str id="ShortcutPanel.location.startMenu"    txt='Ìåíþ êíîïêè "Ïóñê"'/>
     <str id="ShortcutPanel.location.startup"      txt="Ãðóïïà àâòîçàïóñêà"/>
 
-    <str id="UserInputPanel.error.caption"        txt="Îøèáêà ââîäà"/>
+    <str id="UserInputPanel.error.caption"        txt="íÜÕÀÉÞ ÁÁÍÄÞ"/>
 
     <!-- Add your own panels specific strings here if you need -->
 
