@@ -66,9 +66,6 @@ public class HTMLLicencePanel
   /**  The text area. */
   private JEditorPane textArea;
 
-  /**  The agreement label. */
-  private JLabel agreeLabel;
-
   /**  The radio buttons. */
   private JRadioButton yesRadio, noRadio;
 
@@ -121,36 +118,32 @@ public class HTMLLicencePanel
       err.printStackTrace();
     }
 
-    agreeLabel =
-      LabelFactory.create(
-        parent.langpack.getString("LicencePanel.agree"),
-        parent.icons.getImageIcon("help"),
-        JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 2, 2, 1, 1.0, 0.0);
-    gbConstraints.anchor = GridBagConstraints.WEST;
-    gbConstraints.fill = GridBagConstraints.NONE;
-    layout.addLayoutComponent(agreeLabel, gbConstraints);
-    add(agreeLabel);
 
     ButtonGroup group = new ButtonGroup();
 
     yesRadio =
-      new JRadioButton(parent.langpack.getString("LicencePanel.yes"), false);
+      new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
     group.add(yesRadio);
-    parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 0.5, 0.0);
+    parent.buildConstraints(gbConstraints, 0, 2, 1, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.WEST;
+    gbConstraints.fill = GridBagConstraints.NONE;
     layout.addLayoutComponent(yesRadio, gbConstraints);
     add(yesRadio);
     yesRadio.addActionListener(this);
 
     noRadio =
-      new JRadioButton(parent.langpack.getString("LicencePanel.no"), false);
+      new JRadioButton(
+      parent.langpack.getString("LicencePanel.notagree"), 
+      true);
     group.add(noRadio);
-    parent.buildConstraints(gbConstraints, 1, 3, 1, 1, 0.5, 0.0);
-    gbConstraints.anchor = GridBagConstraints.EAST;
+    parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 1.0, 0.0);
+    gbConstraints.anchor = GridBagConstraints.WEST;
+    gbConstraints.fill = GridBagConstraints.NONE;
+    gbConstraints.insets = new Insets(0, 5, 5, 5);
     layout.addLayoutComponent(noRadio, gbConstraints);
     add(noRadio);
     noRadio.addActionListener(this);
+    setInitialFocus(textArea);
   }
 
   /**
