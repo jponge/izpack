@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               Info.java
  *  Description :        The information class for an installation.
@@ -49,10 +49,11 @@ public class Info implements Serializable
 
   /**  Whether to write the uninstaller */
   private boolean writeUninstaller = true;
-  
-  /**  The constructor, deliberatly void.  */
-  public Info() { }
 
+  /**  The constructor, deliberatly void.  */
+  public Info()
+  {
+  }
 
   /**
    *  Sets the application name.
@@ -64,7 +65,6 @@ public class Info implements Serializable
     this.appName = appName;
   }
 
-
   /**
    *  Gets the application name.
    *
@@ -74,7 +74,6 @@ public class Info implements Serializable
   {
     return appName;
   }
-
 
   /**
    *  Sets the version.
@@ -86,7 +85,6 @@ public class Info implements Serializable
     this.appVersion = appVersion;
   }
 
-
   /**
    *  Gets the version.
    *
@@ -96,7 +94,6 @@ public class Info implements Serializable
   {
     return appVersion;
   }
-
 
   /**
    *  Adds an author to the authors list.
@@ -108,7 +105,6 @@ public class Info implements Serializable
     authors.add(author);
   }
 
-
   /**
    *  Gets the authors list.
    *
@@ -118,7 +114,6 @@ public class Info implements Serializable
   {
     return authors;
   }
-
 
   /**
    *  Sets the application URL.
@@ -130,7 +125,6 @@ public class Info implements Serializable
     this.appURL = appURL;
   }
 
-
   /**
    *  Gets the application URL.
    *
@@ -141,7 +135,6 @@ public class Info implements Serializable
     return appURL;
   }
 
-
   /**
    *  Sets the minimum Java version required.
    *
@@ -151,7 +144,6 @@ public class Info implements Serializable
   {
     this.javaVersion = javaVersion;
   }
-
 
   /**
    *  Gets the Java version required.
@@ -171,7 +163,6 @@ public class Info implements Serializable
     return writeUninstaller;
   }
 
-
   public void setWriteUninstaller(boolean b)
   {
     writeUninstaller = b;
@@ -190,7 +181,6 @@ public class Info implements Serializable
     /**  The author email */
     private String email;
 
-
     /**
      *  Gets the author name.
      *
@@ -201,7 +191,6 @@ public class Info implements Serializable
       return name;
     }
 
-
     /**
      *  Gets the author email.
      *
@@ -211,7 +200,6 @@ public class Info implements Serializable
     {
       return email;
     }
-
 
     /**
      *  The constructor.
@@ -224,7 +212,6 @@ public class Info implements Serializable
       this.name = name;
       this.email = email;
     }
-
 
     /**
      *  Gets a String representation of the author.
@@ -239,4 +226,3 @@ public class Info implements Serializable
 
   }
 }
-

@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               UninstallerFrame.java
  *  Description :        The uninstaller frame class.
@@ -99,7 +99,6 @@ public class UninstallerFrame extends JFrame
   /**  The installation path. */
   protected String installPath;
 
-
   /**
    *  The constructor.
    *
@@ -110,13 +109,20 @@ public class UninstallerFrame extends JFrame
     super("IzPack - Uninstaller");
 
     // Initializations
-    langpack = new LocaleDatabase(getClass().getResourceAsStream("/langpack.xml"));
+    langpack =
+      new LocaleDatabase(getClass().getResourceAsStream("/langpack.xml"));
     getInstallPath();
     icons = new IconsDatabase();
     loadIcons();
-    UIManager.put("OptionPane.yesButtonText", langpack.getString("installer.yes"));
-    UIManager.put("OptionPane.noButtonText", langpack.getString("installer.no"));
-    UIManager.put("OptionPane.cancelButtonText", langpack.getString("installer.cancel"));
+    UIManager.put(
+      "OptionPane.yesButtonText",
+      langpack.getString("installer.yes"));
+    UIManager.put(
+      "OptionPane.noButtonText",
+      langpack.getString("installer.no"));
+    UIManager.put(
+      "OptionPane.cancelButtonText",
+      langpack.getString("installer.cancel"));
 
     // Sets the frame icon
     setIconImage(icons.getImageIcon("JFrameIcon").getImage());
@@ -129,7 +135,6 @@ public class UninstallerFrame extends JFrame
     setResizable(false);
     setVisible(true);
   }
-
 
   /**  Builds the GUI.  */
   private void buildGUI()
@@ -146,37 +151,37 @@ public class UninstallerFrame extends JFrame
 
     // Prepares the glass pane to block gui interaction when needed
     JPanel glassPane = (JPanel) getGlassPane();
-    glassPane.addMouseListener(
-      new MouseAdapter()
-      {
-      });
-    glassPane.addMouseMotionListener(
-      new MouseMotionAdapter()
-      {
-      });
-    glassPane.addKeyListener(
-      new KeyAdapter()
-      {
-      });
-      
+    glassPane.addMouseListener(new MouseAdapter()
+    {
+    });
+    glassPane.addMouseMotionListener(new MouseMotionAdapter()
+    {
+    });
+    glassPane.addKeyListener(new KeyAdapter()
+    {
+    });
+
     // We set-up the buttons factory
     ButtonFactory.useButtonIcons();
     ButtonFactory.useHighlightButtons();
 
     // We put our components
 
-    warningLabel = new JLabel(langpack.getString("uninstaller.warning"),
-      icons.getImageIcon("warning"),
-      JLabel.TRAILING);
+    warningLabel =
+      new JLabel(
+        langpack.getString("uninstaller.warning"),
+        icons.getImageIcon("warning"),
+        JLabel.TRAILING);
     buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.WEST;
     gbConstraints.fill = GridBagConstraints.NONE;
     layout.addLayoutComponent(warningLabel, gbConstraints);
     contentPane.add(warningLabel);
 
-    targetDestroyCheckbox = new JCheckBox(langpack.getString("uninstaller.destroytarget")
-       + installPath,
-      false);
+    targetDestroyCheckbox =
+      new JCheckBox(
+        langpack.getString("uninstaller.destroytarget") + installPath,
+        false);
     buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 0.0);
     layout.addLayoutComponent(targetDestroyCheckbox, gbConstraints);
     contentPane.add(targetDestroyCheckbox);
@@ -189,9 +194,11 @@ public class UninstallerFrame extends JFrame
     layout.addLayoutComponent(progressBar, gbConstraints);
     contentPane.add(progressBar);
 
-    destroyButton = ButtonFactory.createButton(langpack.getString("uninstaller.uninstall"),
-      icons.getImageIcon("delete"),
-      buttonsHColor);
+    destroyButton =
+      ButtonFactory.createButton(
+        langpack.getString("uninstaller.uninstall"),
+        icons.getImageIcon("delete"),
+        buttonsHColor);
     destroyButton.addActionListener(handler);
     buildConstraints(gbConstraints, 0, 3, 1, 1, 0.5, 0.0);
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -199,9 +206,11 @@ public class UninstallerFrame extends JFrame
     layout.addLayoutComponent(destroyButton, gbConstraints);
     contentPane.add(destroyButton);
 
-    quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"),
-      icons.getImageIcon("stop"),
-      buttonsHColor);
+    quitButton =
+      ButtonFactory.createButton(
+        langpack.getString("installer.quit"),
+        icons.getImageIcon("stop"),
+        buttonsHColor);
     quitButton.addActionListener(handler);
     buildConstraints(gbConstraints, 1, 3, 1, 1, 0.5, 0.0);
     gbConstraints.anchor = GridBagConstraints.EAST;
@@ -209,7 +218,6 @@ public class UninstallerFrame extends JFrame
     contentPane.add(quitButton);
 
   }
-
 
   /**
    *  Centers a window on screen.
@@ -220,10 +228,10 @@ public class UninstallerFrame extends JFrame
   {
     Dimension frameSize = frame.getSize();
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    frame.setLocation((screenSize.width - frameSize.width) / 2,
+    frame.setLocation(
+      (screenSize.width - frameSize.width) / 2,
       (screenSize.height - frameSize.height) / 2 - 10);
   }
-
 
   /**
    *  Sets the parameters of a GridBagConstraints object.
@@ -236,8 +244,14 @@ public class UninstallerFrame extends JFrame
    * @param  wy   The y wheight.
    * @param  gh   Description of the Parameter
    */
-  private void buildConstraints(GridBagConstraints gbc,
-                                int gx, int gy, int gw, int gh, double wx, double wy)
+  private void buildConstraints(
+    GridBagConstraints gbc,
+    int gx,
+    int gy,
+    int gw,
+    int gh,
+    double wx,
+    double wy)
   {
     gbc.gridx = gx;
     gbc.gridy = gy;
@@ -246,7 +260,6 @@ public class UninstallerFrame extends JFrame
     gbc.weightx = wx;
     gbc.weighty = wy;
   }
-
 
   /**
    *  Gets the installation path from the log file.
@@ -261,7 +274,6 @@ public class UninstallerFrame extends JFrame
     installPath = reader.readLine();
     reader.close();
   }
-
 
   /**
    *  Loads the icons.
@@ -293,7 +305,6 @@ public class UninstallerFrame extends JFrame
     icons.put("JFrameIcon", img);
   }
 
-
   /**  Blocks GUI interaction.  */
   public void blockGUI()
   {
@@ -302,7 +313,6 @@ public class UninstallerFrame extends JFrame
     getGlassPane().setEnabled(true);
   }
 
-
   /**  Releases GUI interaction.  */
   public void releaseGUI()
   {
@@ -310,7 +320,6 @@ public class UninstallerFrame extends JFrame
     getGlassPane().setVisible(false);
     setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
   }
-
 
   /**
    *  The window events handler.
@@ -330,7 +339,6 @@ public class UninstallerFrame extends JFrame
     }
   }
 
-
   /**
    * The destroyer handler.
    *
@@ -340,7 +348,8 @@ public class UninstallerFrame extends JFrame
    * @author     Julien Ponge
    * @author     Tino Schwarze
    */
-  class DestroyerHandler implements com.izforge.izpack.util.AbstractUIProgressHandler
+  class DestroyerHandler
+    implements com.izforge.izpack.util.AbstractUIProgressHandler
   {
     /**
      *  The destroyer starts.
@@ -348,23 +357,21 @@ public class UninstallerFrame extends JFrame
      * @param name The name of the overall action. Not used here. 
      * @param max  The maximum value of the progress.
      */
-    public void startAction (String name, int max)
+    public void startAction(String name, int max)
     {
       progressBar.setMinimum(0);
       progressBar.setMaximum(max);
       blockGUI();
     }
 
-
     /**  The destroyer stops.  */
-    public void stopAction ()
+    public void stopAction()
     {
       progressBar.setString(langpack.getString("InstallPanel.finished"));
       targetDestroyCheckbox.setEnabled(false);
       destroyButton.setEnabled(false);
       releaseGUI();
     }
-
 
     /**
      *  The destroyer progresses.
@@ -378,10 +385,10 @@ public class UninstallerFrame extends JFrame
       progressBar.setString(message);
     }
 
-    public void nextStep (String step_name, int step_no, int no_of_substeps)
+    public void nextStep(String step_name, int step_no, int no_of_substeps)
     {
     }
-    
+
     /**
      *  Output a notification.
      * 
@@ -389,21 +396,27 @@ public class UninstallerFrame extends JFrame
      * 
      * @param text
      */
-    public void emitNotification (String text)
+    public void emitNotification(String text)
     {
     }
-  
+
     /**
      *  Output a warning.
      * 
      * @param text
      */
-    public boolean emitWarning (String title, String text)
+    public boolean emitWarning(String title, String text)
     {
-      return (JOptionPane.showConfirmDialog(null, text, title, 
-        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION);
+      return (
+        JOptionPane.showConfirmDialog(
+          null,
+          text,
+          title,
+          JOptionPane.OK_CANCEL_OPTION,
+          JOptionPane.WARNING_MESSAGE)
+          == JOptionPane.OK_OPTION);
     }
-  
+
     /**
      *  The destroyer encountered an error.
      *
@@ -412,65 +425,74 @@ public class UninstallerFrame extends JFrame
     public void emitError(String title, String error)
     {
       progressBar.setString(error);
-      JOptionPane.showMessageDialog(null, error, title, JOptionPane.OK_CANCEL_OPTION);
-    }
-    
-    /**
-   * Ask the user a question.
-   * 
-   * @param title Message title.
-   * @param question The question.
-   * @param choices The set of choices to present.
-   * 
-   * @return The user's choice.
-   * 
-   * @see AbstractUIHandler#askQuestion(String, String, int)
-   */
-  public int askQuestion (String title, String question, int choices)
-  {
-    return askQuestion (title, question, choices, -1);
-  }
-  
-  /**
-   * Ask the user a question.
-   * 
-   * @param title Message title.
-   * @param question The question.
-   * @param choices The set of choices to present.
-   * @param default_choice The default choice. (-1 = no default choice)
-   * 
-   * @return The user's choice.
-   * @see AbstractUIHandler#askQuestion(String, String, int, int)
-   */
-  public int askQuestion (String title, String question, int choices, int default_choice)
-  {
-    int jo_choices = 0;
-    
-    if (choices == AbstractUIHandler.CHOICES_YES_NO)
-      jo_choices = JOptionPane.YES_NO_OPTION; 
-    else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
-      jo_choices = JOptionPane.YES_NO_CANCEL_OPTION;
-    
-    int user_choice = JOptionPane.showConfirmDialog (
-        null, 
-        (Object)question,
+      JOptionPane.showMessageDialog(
+        null,
+        error,
         title,
-        jo_choices, JOptionPane.QUESTION_MESSAGE);
-    
-    if (user_choice == JOptionPane.CANCEL_OPTION)
-      return AbstractUIHandler.ANSWER_CANCEL;
-   
-    if (user_choice == JOptionPane.YES_OPTION)
-      return AbstractUIHandler.ANSWER_YES;
-       
-    if (user_choice == JOptionPane.NO_OPTION)
-      return AbstractUIHandler.ANSWER_NO;
-       
-    return default_choice;
+        JOptionPane.OK_CANCEL_OPTION);
+    }
+
+    /**
+    * Ask the user a question.
+    * 
+    * @param title Message title.
+    * @param question The question.
+    * @param choices The set of choices to present.
+    * 
+    * @return The user's choice.
+    * 
+    * @see AbstractUIHandler#askQuestion(String, String, int)
+    */
+    public int askQuestion(String title, String question, int choices)
+    {
+      return askQuestion(title, question, choices, -1);
+    }
+
+    /**
+     * Ask the user a question.
+     * 
+     * @param title Message title.
+     * @param question The question.
+     * @param choices The set of choices to present.
+     * @param default_choice The default choice. (-1 = no default choice)
+     * 
+     * @return The user's choice.
+     * @see AbstractUIHandler#askQuestion(String, String, int, int)
+     */
+    public int askQuestion(
+      String title,
+      String question,
+      int choices,
+      int default_choice)
+    {
+      int jo_choices = 0;
+
+      if (choices == AbstractUIHandler.CHOICES_YES_NO)
+        jo_choices = JOptionPane.YES_NO_OPTION;
+      else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
+        jo_choices = JOptionPane.YES_NO_CANCEL_OPTION;
+
+      int user_choice =
+        JOptionPane.showConfirmDialog(
+          null,
+          (Object) question,
+          title,
+          jo_choices,
+          JOptionPane.QUESTION_MESSAGE);
+
+      if (user_choice == JOptionPane.CANCEL_OPTION)
+        return AbstractUIHandler.ANSWER_CANCEL;
+
+      if (user_choice == JOptionPane.YES_OPTION)
+        return AbstractUIHandler.ANSWER_YES;
+
+      if (user_choice == JOptionPane.NO_OPTION)
+        return AbstractUIHandler.ANSWER_NO;
+
+      return default_choice;
+    }
+
   }
-
-}
-
 
   /**
    *  The actions events handler.
@@ -489,15 +511,15 @@ public class UninstallerFrame extends JFrame
       Object src = e.getSource();
       if (src == quitButton)
         System.exit(0);
-      else
-        if (src == destroyButton)
+      else if (src == destroyButton)
       {
-        Destroyer destroyer = new Destroyer(installPath,
-          targetDestroyCheckbox.isSelected(),
-          new DestroyerHandler());
+        Destroyer destroyer =
+          new Destroyer(
+            installPath,
+            targetDestroyCheckbox.isSelected(),
+            new DestroyerHandler());
         destroyer.start();
       }
     }
   }
 }
-

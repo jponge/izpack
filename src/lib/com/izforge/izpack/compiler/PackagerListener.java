@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               PackagerListener.java
  *  Description :        Interface for Packagers listeners.
@@ -38,12 +38,9 @@ public interface PackagerListener
    */
   public void packagerMsg(String info);
 
-
   /**  Called when the packager starts.  */
   public void packagerStart();
-
 
   /**  Called when the packager stops.  */
   public void packagerStop();
 }
-

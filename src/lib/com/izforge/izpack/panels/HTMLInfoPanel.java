@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               HTMLInfoPanel.java
  *  Description :        A panel to show some HTML information.
@@ -59,7 +59,6 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
   /**  The text area. */
   private JEditorPane textArea;
 
-
   /**
    *  The constructor.
    *
@@ -77,8 +76,11 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 
     // We add the components
 
-    infoLabel = new JLabel(parent.langpack.getString("InfoPanel.info"),
-      parent.icons.getImageIcon("edit"), JLabel.TRAILING);
+    infoLabel =
+      new JLabel(
+        parent.langpack.getString("InfoPanel.info"),
+        parent.icons.getImageIcon("edit"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -98,13 +100,11 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
       gbConstraints.fill = GridBagConstraints.BOTH;
       layout.addLayoutComponent(scroller, gbConstraints);
       add(scroller);
-    }
-    catch (Exception err)
+    } catch (Exception err)
     {
       err.printStackTrace();
     }
   }
-
 
   /**
    *  Loads the info.
@@ -117,14 +117,12 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
     try
     {
       return ResourceManager.getInstance().getURL(resNamePrifix);
-    }
-    catch (Exception ex)
+    } catch (Exception ex)
     {
       ex.printStackTrace();
     }
     return null;
   }
-
 
   /**
    *  Indicates wether the panel has been validated or not.
@@ -135,7 +133,6 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
   {
     return true;
   }
-
 
   /**
    *  Hyperlink events handler.
@@ -148,9 +145,8 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
     {
       if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
         textArea.setPage(e.getURL());
+    } catch (Exception err)
+    {
     }
-    catch (Exception err)
-    {}
   }
 }
-

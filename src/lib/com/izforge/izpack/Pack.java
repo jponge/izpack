@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               Pack.java
  *  Description :        Contains informations about a pack.
@@ -61,7 +61,12 @@ public class Pack implements Serializable
    * @param  targetOs    Description of the Parameter
    * @param  required     Indicates wether the pack is required or not.
    */
-  public Pack(String name, String description, List osConstraints, boolean required, boolean preselected)
+  public Pack(
+    String name,
+    String description,
+    List osConstraints,
+    boolean required,
+    boolean preselected)
   {
     this.name = name;
     this.description = description;
@@ -70,7 +75,6 @@ public class Pack implements Serializable
     this.preselected = preselected;
     nbytes = 0;
   }
-
 
   /**
    *  To a String (usefull for JLists).
@@ -81,7 +85,6 @@ public class Pack implements Serializable
   {
     return name + " (" + description + ")";
   }
-
 
   /**  Used of conversions. */
   private final static double KILOBYTES = 1024.0;
@@ -109,17 +112,14 @@ public class Pack implements Serializable
     {
       double value = bytes / KILOBYTES;
       return formatter.format(value) + " KB";
-    }
-    else if (bytes < (GIGABYTES))
+    } else if (bytes < (GIGABYTES))
     {
       double value = bytes / MEGABYTES;
       return formatter.format(value) + " MB";
-    }
-    else
+    } else
     {
       double value = bytes / GIGABYTES;
       return formatter.format(value) + " GB";
     }
   }
 }
-

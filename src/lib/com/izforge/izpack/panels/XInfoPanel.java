@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               XInfoPanel.java
  *  Description :        A panel to show some adaptative textual information.
@@ -65,7 +65,6 @@ public class XInfoPanel extends IzPanel
   /**  The info to display. */
   private String info;
 
-
   /**
    *  The constructor.
    *
@@ -83,8 +82,11 @@ public class XInfoPanel extends IzPanel
 
     // We add the components
 
-    infoLabel = new JLabel(parent.langpack.getString("InfoPanel.info"),
-      parent.icons.getImageIcon("edit"), JLabel.TRAILING);
+    infoLabel =
+      new JLabel(
+        parent.langpack.getString("InfoPanel.info"),
+        parent.icons.getImageIcon("edit"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
     gbConstraints.fill = GridBagConstraints.BOTH;
@@ -101,7 +103,6 @@ public class XInfoPanel extends IzPanel
     add(scroller);
   }
 
-
   /**  Loads the info text.  */
   private void loadInfo()
   {
@@ -109,13 +110,11 @@ public class XInfoPanel extends IzPanel
     {
       // We read it
       info = ResourceManager.getInstance().getTextResource("XInfoPanel.info");
-    }
-    catch (Exception err)
+    } catch (Exception err)
     {
       info = "Error : could not load the info text !";
     }
   }
-
 
   /**  Parses the text for special variables.  */
   private void parseText()
@@ -123,18 +122,16 @@ public class XInfoPanel extends IzPanel
     try
     {
       // Initialize the variable substitutor
-      VariableSubstitutor vs = new VariableSubstitutor
-        (idata.getVariableValueMap());
+      VariableSubstitutor vs =
+        new VariableSubstitutor(idata.getVariableValueMap());
 
       // Parses the info text
       info = vs.substitute(info, null);
-    }
-    catch (Exception err)
+    } catch (Exception err)
     {
       err.printStackTrace();
     }
   }
-
 
   /**  Called when the panel becomes active.  */
   public void panelActivate()
@@ -148,7 +145,6 @@ public class XInfoPanel extends IzPanel
     textArea.setCaretPosition(0);
   }
 
-
   /**
    *  Indicates wether the panel has been validated or not.
    *
@@ -159,4 +155,3 @@ public class XInfoPanel extends IzPanel
     return true;
   }
 }
-

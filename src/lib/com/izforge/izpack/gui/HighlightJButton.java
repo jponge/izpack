@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               HighlightJButton.java
  *  Description :        A button that highlights when the mouse passes over.
@@ -51,7 +51,6 @@ public class HighlightJButton extends JButton
     initButton(color);
   }
 
-
   /**
    *  The constructor (use ButtonFactory to create button).
    *
@@ -63,7 +62,6 @@ public class HighlightJButton extends JButton
     super(text);
     initButton(color);
   }
-
 
   /**
    *  The constructor (use ButtonFactory to create button).
@@ -78,7 +76,6 @@ public class HighlightJButton extends JButton
     initButton(color);
   }
 
-
   /**
    *  The constructor (use ButtonFactory to create button).
    *
@@ -90,7 +87,6 @@ public class HighlightJButton extends JButton
     super(a);
     initButton(color);
   }
-
 
   /**
    *  Does the extra initialisations.
@@ -105,7 +101,6 @@ public class HighlightJButton extends JButton
     addMouseListener(new MouseHandler());
   }
 
-
   /**
    *  Overriden to ensure that the button won't stay highlighted if it had the
    *  mouse over it.
@@ -118,20 +113,17 @@ public class HighlightJButton extends JButton
     super.setEnabled(b);
   }
 
-
   /**  Forces the button to unhighlight.  */
   protected void reset()
   {
     setBackground(defaultColor);
   }
 
-
   /**  The highlighted color. */
   protected Color highlightColor;
 
   /**  The default color. */
   protected Color defaultColor;
-
 
   /**
    *  The mouse handler which makes the highlighting.
@@ -151,7 +143,6 @@ public class HighlightJButton extends JButton
         setBackground(highlightColor);
     }
 
-
     /**
      *  When the mouse passes out of the button.
      *
@@ -164,4 +155,3 @@ public class HighlightJButton extends JButton
     }
   }
 }
-

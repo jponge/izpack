@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               WebKunststoffPackager.java
  *  Description :        The web installer packager class with the Kunststoff L&F support.
@@ -47,23 +47,28 @@ public class WebKunststoffPackager extends WebPackager
    * @param  plistener       The packager listener.
    * @exception  Exception   Description of the Exception
    */
-  public WebKunststoffPackager(String outputFilename, PackagerListener plistener)
-     throws Exception
+  public WebKunststoffPackager(
+    String outputFilename,
+    PackagerListener plistener)
+    throws Exception
   {
     super(outputFilename, plistener);
 
     // Copies the Kunststoff library
     sendMsg("Copying the Kunststoff library ...");
-    ZipInputStream skeleton_is = new ZipInputStream (getClass().getResourceAsStream("/lib/kunststoff.jar"));
+    ZipInputStream skeleton_is =
+      new ZipInputStream(getClass().getResourceAsStream("/lib/kunststoff.jar"));
 
     if (skeleton_is == null)
     {
-      skeleton_is = new JarInputStream (new FileInputStream (
-        Compiler.IZPACK_HOME + "lib" + File.separator + "kunststoff.jar"));    
+      skeleton_is =
+        new JarInputStream(
+          new FileInputStream(
+            Compiler.IZPACK_HOME + "lib" + File.separator + "kunststoff.jar"));
     }
-    
+
     ZipEntry zentry;
-       
+
     while ((zentry = skeleton_is.getNextEntry()) != null)
     {
       // Puts a new entry
@@ -75,9 +80,8 @@ public class WebKunststoffPackager extends WebPackager
       outJar.closeEntry();
       skeleton_is.closeEntry();
     }
-    
-  }
 
+  }
 
   /**
    *  Tells the packager to finish the job (misc writings, cleanups, closings ,
@@ -131,4 +135,3 @@ public class WebKunststoffPackager extends WebPackager
     sendStop();
   }
 }
-

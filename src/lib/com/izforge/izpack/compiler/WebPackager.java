@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               WebPackager.java
  *  Description :        The web installer packager class.
@@ -55,7 +55,6 @@ public class WebPackager extends Packager
   /**  The web jar file output stream. */
   protected JarOutputStream webJar;
 
-
   /**
    *  The constructor.
    *
@@ -63,7 +62,8 @@ public class WebPackager extends Packager
    * @param  plistener       The packager listener.
    * @exception  Exception   Description of the Exception
    */
-  public WebPackager(String outputFilename, PackagerListener plistener) throws Exception
+  public WebPackager(String outputFilename, PackagerListener plistener)
+    throws Exception
   {
     packs = new ArrayList();
     langpacks = new ArrayList();
@@ -77,7 +77,8 @@ public class WebPackager extends Packager
     outJar.setLevel(9);
 
     // Sets up the web output jar stream
-    outputFilename = outputFilename.substring(0, outputFilename.length() - 4) + "_web.jar";
+    outputFilename =
+      outputFilename.substring(0, outputFilename.length() - 4) + "_web.jar";
     outFile = new FileOutputStream(outputFilename);
     webJar = new JarOutputStream(outFile);
     webJar.setLevel(9);
@@ -89,7 +90,7 @@ public class WebPackager extends Packager
 
   public boolean allowPackFileBackReferences()
   {
-	return false;
+    return false;
   }
 
   /**
@@ -103,13 +104,20 @@ public class WebPackager extends Packager
    * @return                Description of the Return Value
    * @exception  Exception  Description of the Exception
    */
-  public ZipOutputStream addPack(int packNumber, String name, List osConstraints, boolean required,
-                                 String description, boolean preselected) throws Exception
+  public ZipOutputStream addPack(
+    int packNumber,
+    String name,
+    List osConstraints,
+    boolean required,
+    String description,
+    boolean preselected)
+    throws Exception
   {
     sendMsg("Adding pack #" + packNumber + " : " + name + " ...");
 
     // Adds it in the packs array
-    Pack pack = new Pack(name, description, osConstraints, required, preselected);
+    Pack pack =
+      new Pack(name, description, osConstraints, required, preselected);
     packs.add(packNumber, pack);
 
     // Returns the suiting output stream
@@ -118,7 +126,6 @@ public class WebPackager extends Packager
     webJar.putNextEntry(entry);
     return webJar;
   }
-
 
   /**
    *  Sets the GUI preferences.
@@ -137,7 +144,6 @@ public class WebPackager extends Packager
     outJar.closeEntry();
   }
 
-
   /**
    *  Adds a panel.
    *
@@ -145,15 +151,16 @@ public class WebPackager extends Packager
    * @param  input          The stream to get the file data from.
    * @exception  Exception  Description of the Exception
    */
-  public void addPanelClass(String classFilename, InputStream input) throws Exception
+  public void addPanelClass(String classFilename, InputStream input)
+    throws Exception
   {
     sendMsg("Adding the (sub)classes for " + classFilename + " ...");
 
-    outJar.putNextEntry(new ZipEntry("com/izforge/izpack/panels/" + classFilename));
+    outJar.putNextEntry(
+      new ZipEntry("com/izforge/izpack/panels/" + classFilename));
     copyStream(input, outJar);
     outJar.closeEntry();
   }
-
 
   /**
    *  Sets the panels order.
@@ -163,15 +170,14 @@ public class WebPackager extends Packager
    */
   public void setPanelsOrder(ArrayList order) throws Exception
   {
-	sendMsg("Setting the panels order ...");
+    sendMsg("Setting the panels order ...");
 
-	outJar.putNextEntry(new ZipEntry("panelsOrder"));
-	ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-	objOut.writeObject(order);
-	objOut.flush();
-	outJar.closeEntry();
+    outJar.putNextEntry(new ZipEntry("panelsOrder"));
+    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+    objOut.writeObject(order);
+    objOut.flush();
+    outJar.closeEntry();
   }
-
 
   /**
    *  Sets the informations related to this installation.
@@ -190,7 +196,6 @@ public class WebPackager extends Packager
     outJar.closeEntry();
   }
 
-
   /**
    *  Adds Variable Declaration.
    *
@@ -206,7 +211,6 @@ public class WebPackager extends Packager
     objOut.flush();
     outJar.closeEntry();
   }
-
 
   /**
    *  Adds a resource.
@@ -225,7 +229,6 @@ public class WebPackager extends Packager
     input.close();
   }
 
-
   /**
    *  Adds a native library.
    *
@@ -242,7 +245,6 @@ public class WebPackager extends Packager
     outJar.closeEntry();
     input.close();
   }
-
 
   /**
    *  Adds a language pack.
@@ -261,8 +263,6 @@ public class WebPackager extends Packager
     outJar.closeEntry();
     input.close();
   }
-
-
 
   /**
    *  Adds a jar file content to the installer.
@@ -289,13 +289,11 @@ public class WebPackager extends Packager
         copyStream(zin, outJar);
         outJar.closeEntry();
         zin.close();
-      }
-      catch (ZipException zerr)
+      } catch (ZipException zerr)
       {
       }
     }
   }
-
 
   /**
    *  Tells the packager to finish the job (misc writings, cleanups, closings ,
@@ -349,4 +347,3 @@ public class WebPackager extends Packager
     sendStop();
   }
 }
-

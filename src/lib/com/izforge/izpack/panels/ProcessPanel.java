@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge, Tino Schwarze
+ *  Copyright (C) 2001-2004 Julien Ponge, Tino Schwarze
  *
  *  File :               ProcessPanel.java
  *  Description :        A panel to execute processes during installation.
@@ -74,60 +74,59 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
   private int noOfJobs;
 
   private int currentJob;
-  
+
   /**  Where the output is displayed */
   private JTextArea outputPane;
-  
+
   private JScrollPane outputScrollPane;
-  
+
   /**
    *  The constructor.
    *
    * @param  parent  The parent window.
    * @param  idata   The installation data.
    */
-  public ProcessPanel(InstallerFrame parent, InstallData idata) 
+  public ProcessPanel(InstallerFrame parent, InstallData idata)
     throws IOException
   {
     super(parent, idata);
 
-    this.worker = new ProcessPanelWorker (idata, this);
+    this.worker = new ProcessPanelWorker(idata, this);
 
     JLabel heading = new JLabel();
-    Font font = heading.getFont ();
-    font = font.deriveFont (Font.BOLD, font.getSize()*2.0f);
+    Font font = heading.getFont();
+    font = font.deriveFont(Font.BOLD, font.getSize() * 2.0f);
     heading.setFont(font);
     heading.setHorizontalAlignment(SwingConstants.CENTER);
-    heading.setText(parent.langpack.getString ("ProcessPanel.heading"));
-    heading.setVerticalAlignment(SwingConstants.TOP);    
-    setLayout (new BorderLayout ());
-    add (heading, BorderLayout.NORTH);
-    
+    heading.setText(parent.langpack.getString("ProcessPanel.heading"));
+    heading.setVerticalAlignment(SwingConstants.TOP);
+    setLayout(new BorderLayout());
+    add(heading, BorderLayout.NORTH);
+
     // put everything but the heading into it's own panel
     // (to center it vertically)
-    JPanel subpanel = new JPanel ();
-    
+    JPanel subpanel = new JPanel();
+
     subpanel.setAlignmentX(0.5f);
-    subpanel.setLayout(new BoxLayout (subpanel, BoxLayout.Y_AXIS));
-    
-    this.processLabel = new JLabel ();
+    subpanel.setLayout(new BoxLayout(subpanel, BoxLayout.Y_AXIS));
+
+    this.processLabel = new JLabel();
     this.processLabel.setAlignmentX(0.5f);
-    this.processLabel.setText (" ");
-    subpanel.add (this.processLabel);
-    
-    this.overallProgressBar = new JProgressBar ();
+    this.processLabel.setText(" ");
+    subpanel.add(this.processLabel);
+
+    this.overallProgressBar = new JProgressBar();
     this.overallProgressBar.setAlignmentX(0.5f);
     this.overallProgressBar.setStringPainted(true);
-    subpanel.add (this.overallProgressBar);
-  
-    this.outputPane = new JTextArea ();    
-    this.outputPane.setEditable(false);
-    this.outputScrollPane = new JScrollPane (this.outputPane); 
-    subpanel.add (this.outputScrollPane);
-    
-    add (subpanel, BorderLayout.CENTER);    
-  }
+    subpanel.add(this.overallProgressBar);
 
+    this.outputPane = new JTextArea();
+    this.outputPane.setEditable(false);
+    this.outputScrollPane = new JScrollPane(this.outputPane);
+    subpanel.add(this.outputScrollPane);
+
+    add(subpanel, BorderLayout.CENTER);
+  }
 
   /**
    *  Indicates wether the panel has been validated or not.
@@ -140,21 +139,20 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
   }
 
   /**  The compiler starts.  */
-  public void startProcessing (int no_of_jobs)
+  public void startProcessing(int no_of_jobs)
   {
     this.noOfJobs = no_of_jobs;
-    overallProgressBar.setMaximum (noOfJobs);
+    overallProgressBar.setMaximum(noOfJobs);
     parent.lockPrevButton();
   }
 
-
   /**  The compiler stops.  */
-  public void finishProcessing ()
+  public void finishProcessing()
   {
-    overallProgressBar.setValue (this.noOfJobs);
-    String no_of_jobs = Integer.toString (this.noOfJobs);
-    overallProgressBar.setString (no_of_jobs + " / " + no_of_jobs);
-    overallProgressBar.setEnabled (false);
+    overallProgressBar.setValue(this.noOfJobs);
+    String no_of_jobs = Integer.toString(this.noOfJobs);
+    overallProgressBar.setString(no_of_jobs + " / " + no_of_jobs);
+    overallProgressBar.setEnabled(false);
 
     processLabel.setText(" ");
     processLabel.setEnabled(false);
@@ -171,10 +169,10 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
    * @param message The message.
    * @param stderr Whether the message came from stderr or stdout.
    */
-  public void logOutput (String message, boolean stderr)
+  public void logOutput(String message, boolean stderr)
   {
     // TODO: make it colored
-    this.outputPane.append(message+'\n');
+    this.outputPane.append(message + '\n');
   }
 
   /**
@@ -182,20 +180,22 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
    *
    * @param  jobName   The job name.
    */
-  public void startProcess (String jobName)
+  public void startProcess(String jobName)
   {
-    processLabel.setText (jobName);
-    
+    processLabel.setText(jobName);
+
     this.currentJob++;
     overallProgressBar.setValue(this.currentJob);
-    overallProgressBar.setString (Integer.toString (this.currentJob) + " / " + Integer.toString (this.noOfJobs));
+    overallProgressBar.setString(
+      Integer.toString(this.currentJob)
+        + " / "
+        + Integer.toString(this.noOfJobs));
   }
 
-
-  public void finishProcess ()
+  public void finishProcess()
   {
   }
-  
+
   /**  Called when the panel becomes active.  */
   public void panelActivate()
   {
@@ -206,17 +206,16 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     setMinimumSize(dim);
     setMaximumSize(dim);
     setPreferredSize(dim);
-    
+
     parent.lockNextButton();
-    
+
     this.worker.startThread();
   }
 
   /** Create XML data for automated installation. */
-  public void makeXMLData (XMLElement panelRoot)
+  public void makeXMLData(XMLElement panelRoot)
   {
     // does nothing (no state to save)
   }
 
 }
-

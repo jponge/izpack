@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               StdKunststoffPackager.java
  *  Description :        The standard Kunststoff installer packager class.
@@ -33,7 +33,6 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-
 /**
  *  The standard installer class, using the Kunststoff L&F.
  *
@@ -49,8 +48,10 @@ public class StdKunststoffPackager extends StdPackager
    * @param  plistener       The packager listener.
    * @exception  Exception   Description of the Exception
    */
-  public StdKunststoffPackager(String outputFilename, PackagerListener plistener)
-     throws Exception
+  public StdKunststoffPackager(
+    String outputFilename,
+    PackagerListener plistener)
+    throws Exception
   {
     super(outputFilename, plistener);
 
@@ -61,20 +62,22 @@ public class StdKunststoffPackager extends StdPackager
     if (istream != null)
     {
       skeleton_is = new ZipInputStream(istream);
-    }
-    else
+    } else
     {
-      skeleton_is = new JarInputStream (new FileInputStream (
-        Compiler.IZPACK_HOME + "lib" + File.separator + "kunststoff.jar"));    
+      skeleton_is =
+        new JarInputStream(
+          new FileInputStream(
+            Compiler.IZPACK_HOME + "lib" + File.separator + "kunststoff.jar"));
     }
-    
+
     ZipEntry zentry;
-       
+
     while ((zentry = skeleton_is.getNextEntry()) != null)
     {
       // ugly hack: may not add a directory twice, therefore add no directories
-      if (zentry.isDirectory()) continue;
-      
+      if (zentry.isDirectory())
+        continue;
+
       // Puts a new entry
       outJar.putNextEntry(new ZipEntry(zentry.getName()));
 
@@ -84,9 +87,8 @@ public class StdKunststoffPackager extends StdPackager
       outJar.closeEntry();
       skeleton_is.closeEntry();
     }
-    
-  }
 
+  }
 
   /**
    *  Tells the packager to finish the job.
@@ -137,4 +139,3 @@ public class StdKunststoffPackager extends StdPackager
     sendStop();
   }
 }
-

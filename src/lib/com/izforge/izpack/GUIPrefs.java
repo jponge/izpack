@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               GUIPrefs.java
  *  Description :        The GUI preferences for an installation.
@@ -42,4 +42,3 @@ public class GUIPrefs implements Serializable
   /**  Specifies the starting window height, in pixels. */
   public int height;
 }
-

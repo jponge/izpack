@@ -1228,10 +1228,6 @@ public class UserInputPanel extends IzPanel
       return (true);
     }
 
-    if ((variable == null) || (value == null))
-    {
-    }
-
     idata.getVariableValueMap ().setVariable (variable, value);
     entries.add (new TextValuePair (variable, value));
     return (true);

@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               ScriptParser.java
  *  Description :        Parses the scripts files for special variables.
@@ -70,7 +70,7 @@ public class ScriptParser
 
   /** The application version. */
   public final static String APP_VER = "APP_VER";
-  
+
   /** The language IS03 code. */
   public final static String ISO3_LANG = "IS03_LANG";
 
@@ -79,7 +79,6 @@ public class ScriptParser
 
   /**  The variables substituror. */
   private VariableSubstitutor vs;
-
 
   /**
    *  Constructs a new parser. The parsable files specified must have
@@ -94,7 +93,6 @@ public class ScriptParser
     this.files = files;
     this.vs = vs;
   }
-
 
   /**
    *  Parses the files.
@@ -112,14 +110,13 @@ public class ScriptParser
       ParsableFile pfile = (ParsableFile) iter.next();
 
       // check whether the OS matches
-      if (! OsConstraint.oneMatchesCurrentSystem (pfile.osConstraints))
+      if (!OsConstraint.oneMatchesCurrentSystem(pfile.osConstraints))
       {
         continue;
       }
 
       File file = new File(pfile.path);
-      File parsedFile
-         = File.createTempFile("izpp", null, file.getParentFile());
+      File parsedFile = File.createTempFile("izpp", null, file.getParentFile());
 
       // Parses the file
       // (Use buffering because substitutor processes byte at a time)
@@ -134,9 +131,8 @@ public class ScriptParser
       // Replace the original file with the parsed one
       file.delete();
       if (!parsedFile.renameTo(file))
-        throw new IOException
-          ("Could not rename file " + parsedFile + " to " + file);
+        throw new IOException(
+          "Could not rename file " + parsedFile + " to " + file);
     }
   }
 }
-

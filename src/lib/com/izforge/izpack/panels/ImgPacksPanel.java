@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               ImgPacksPanel.java
  *  Description :        A panel to select the packs to install.
@@ -55,7 +55,9 @@ import com.izforge.izpack.installer.ResourceManager;
  *
  * @author     Julien Ponge
  */
-public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelectionListener
+public class ImgPacksPanel
+  extends IzPanel
+  implements ActionListener, ListSelectionListener
 {
   /**  The layout. */
   private GridBagLayout layout;
@@ -90,7 +92,6 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
   /**  The current image index. */
   private int index = 0;
 
-
   /**
    *  The constructor.
    *
@@ -108,8 +109,11 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
 
     preLoadImages();
 
-    packsLabel = new JLabel(parent.langpack.getString("ImgPacksPanel.packs"),
-      parent.icons.getImageIcon("preferences"), JLabel.TRAILING);
+    packsLabel =
+      new JLabel(
+        parent.langpack.getString("ImgPacksPanel.packs"),
+        parent.icons.getImageIcon("preferences"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 0.25, 0.0);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -117,8 +121,11 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     layout.addLayoutComponent(packsLabel, gbConstraints);
     add(packsLabel);
 
-    packsLabel = new JLabel(parent.langpack.getString("ImgPacksPanel.snap"),
-      parent.icons.getImageIcon("tip"), JLabel.TRAILING);
+    packsLabel =
+      new JLabel(
+        parent.langpack.getString("ImgPacksPanel.snap"),
+        parent.icons.getImageIcon("tip"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 1, 0, 1, 1, 0.75, 0.0);
     layout.addLayoutComponent(packsLabel, gbConstraints);
     add(packsLabel);
@@ -139,7 +146,8 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     layout.addLayoutComponent(scroller2, gbConstraints);
     add(scroller2);
 
-    checkBox = new JCheckBox(parent.langpack.getString("ImgPacksPanel.checkbox"));
+    checkBox =
+      new JCheckBox(parent.langpack.getString("ImgPacksPanel.checkbox"));
     checkBox.addActionListener(this);
     parent.buildConstraints(gbConstraints, 0, 2, 1, 1, 0.0, 0.0);
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -171,15 +179,14 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
 
   }
 
-
   /**  Sets the label text of space requiered for installation/  */
   private void showSpaceRequired()
   {
-    StringBuffer result = new StringBuffer(parent.langpack.getString("PacksPanel.space"));
+    StringBuffer result =
+      new StringBuffer(parent.langpack.getString("PacksPanel.space"));
     result.append(Pack.toByteUnitsString(bytes));
     spaceLabel.setText(result.toString());
   }
-
 
   /**  Called when the panel becomes active.  */
   public void panelActivate()
@@ -198,7 +205,6 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     showSpaceRequired();
   }
 
-
   /**
    *  Actions-handling method.
    *
@@ -212,15 +218,13 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     {
       idata.selectedPacks.add(pack);
       bytes += pack.nbytes;
-    }
-    else
+    } else
     {
       idata.selectedPacks.remove(idata.selectedPacks.indexOf(pack));
       bytes -= pack.nbytes;
     }
     showSpaceRequired();
   }
-
 
   /**
    *  Called when the list selection changes.
@@ -244,7 +248,6 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     descLabel.setText(pack.description);
   }
 
-
   /**  Pre-loads the images.  */
   private void preLoadImages()
   {
@@ -253,17 +256,16 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     for (int i = 0; i < size; i++)
       try
       {
-        URL url = ResourceManager.getInstance().getURL("ImgPacksPanel.img." + i);
+        URL url =
+          ResourceManager.getInstance().getURL("ImgPacksPanel.img." + i);
         ImageIcon img = new ImageIcon(url);
         images.add(img);
-      }
-      catch (Exception err)
+      } catch (Exception err)
       {
         err.printStackTrace();
       }
 
   }
-
 
   /**
    *  Indicates wether the panel has been validated or not.
@@ -275,7 +277,6 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     return true;
   }
 
-
   /**
    *  Asks to make the XML panel data.
    *
@@ -283,7 +284,6 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
    */
   public void makeXMLData(XMLElement panelRoot)
   {
-		new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
+    new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
   }
 }
-

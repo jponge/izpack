@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               UninstallData.java
  *  Description :        Uninstaller data.
@@ -52,14 +52,12 @@ public class UninstallData
   /**  The uninstaller path. */
   private String uninstallerPath;
 
-
   /**  The constructor.  */
   private UninstallData()
   {
     filesList = new ArrayList();
     executablesList = new ArrayList();
   }
-
 
   /**
    *  Returns the instance (it is a singleton).
@@ -73,7 +71,6 @@ public class UninstallData
     return instance;
   }
 
-
   /**
    *  Adds a file to the data.
    *
@@ -83,7 +80,6 @@ public class UninstallData
   {
     filesList.add(path);
   }
-
 
   /**
    *  Returns the files list.
@@ -95,7 +91,6 @@ public class UninstallData
     return filesList;
   }
 
-
   /**
    *  Adds an executable to the data.
    *
@@ -105,7 +100,6 @@ public class UninstallData
   {
     executablesList.add(file);
   }
-
 
   /**
    *  Returns the executables list.
@@ -117,7 +111,6 @@ public class UninstallData
     return executablesList;
   }
 
-
   /**
    *  Returns the uninstaller jar filename.
    *
@@ -127,7 +120,6 @@ public class UninstallData
   {
     return uninstallerJarFilename;
   }
-
 
   /**
    *  Sets the uninstaller jar filename.
@@ -139,7 +131,6 @@ public class UninstallData
     uninstallerJarFilename = name;
   }
 
-
   /**
    *  Returns the path to the uninstaller.
    *
@@ -149,7 +140,6 @@ public class UninstallData
   {
     return uninstallerPath;
   }
-
 
   /**
    *  Sets the uninstaller path.
@@ -161,4 +151,3 @@ public class UninstallData
     uninstallerPath = path;
   }
 }
-

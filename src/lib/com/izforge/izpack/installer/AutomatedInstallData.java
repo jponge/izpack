@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               AutomatedInstallData.java
  *  Description :        Installer internal data.
@@ -54,14 +54,14 @@ public class AutomatedInstallData
    * @version    $Revision$
    */
   private final static class VariableValueMapImpl
-     extends Properties implements VariableValueMap
+    extends Properties
+    implements VariableValueMap
   {
 
     public String getVariable(String var)
     {
       return getProperty(var);
     }
-
 
     public void setVariable(String var, String val)
     {
@@ -122,7 +122,6 @@ public class AutomatedInstallData
   /**  The attributes used by the panels */
   protected Map attributes;
 
-
   /**  Constructs a new instance of this class.  */
   public AutomatedInstallData()
   {
@@ -135,7 +134,6 @@ public class AutomatedInstallData
     attributes = new HashMap();
   }
 
-
   /**
    *  Returns the map of variable values. Modifying this map will directly
    *  affect the current value of variables.
@@ -146,7 +144,6 @@ public class AutomatedInstallData
   {
     return variableValueMap;
   }
-
 
   /**
    *  Sets a variable to the specified value. This is short hand for <code>getVariableValueMap().setVariable(var, val)</code>
@@ -161,7 +158,6 @@ public class AutomatedInstallData
     variableValueMap.setVariable(var, val);
   }
 
-
   /**
    *  Returns the current value of the specified variable. This is short hand
    *  for <code>getVariableValueMap().getVariable(var)</code>.
@@ -175,7 +171,6 @@ public class AutomatedInstallData
     return variableValueMap.getVariable(var);
   }
 
-
   /**
    *  Sets the install path.
    *
@@ -186,7 +181,6 @@ public class AutomatedInstallData
   {
     setVariable(ScriptParser.INSTALL_PATH, path);
   }
-
 
   /**
    *  Returns the install path.
@@ -199,7 +193,6 @@ public class AutomatedInstallData
     return getVariable(ScriptParser.INSTALL_PATH);
   }
 
-
   /**
    *  Returns the value of the named attribute.
    *
@@ -211,7 +204,6 @@ public class AutomatedInstallData
   {
     return attributes.get(attr);
   }
-
 
   /**
    *  Sets a named attribute. The panels and other IzPack components can attach
@@ -234,4 +226,3 @@ public class AutomatedInstallData
 
   }
 }
-

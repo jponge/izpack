@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               InstallPanel.java
  *  Description :        A panel to launch the installation process.
@@ -89,8 +89,11 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
 
     int row = 1;
 
-    this.tipLabel = new JLabel(parent.langpack.getString("InstallPanel.tip"),
-      parent.icons.getImageIcon("information"), JLabel.TRAILING);
+    this.tipLabel =
+      new JLabel(
+        parent.langpack.getString("InstallPanel.tip"),
+        parent.icons.getImageIcon("information"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.fill = GridBagConstraints.NONE;
     gbConstraints.anchor = GridBagConstraints.NORTHWEST;
@@ -105,7 +108,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
 
     this.packProgressBar = new JProgressBar();
     this.packProgressBar.setStringPainted(true);
-    this.packProgressBar.setString(parent.langpack.getString("InstallPanel.begin"));
+    this.packProgressBar.setString(
+      parent.langpack.getString("InstallPanel.begin"));
     this.packProgressBar.setValue(0);
     parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.NORTH;
@@ -114,17 +118,20 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     add(this.packProgressBar);
 
     // make sure there is some space between the progress bars
-    JSeparator sep = new JSeparator ();
-    Dimension dim = new Dimension (0, 10);
-    sep.setPreferredSize (dim);
-    sep.setMinimumSize (dim);
-    sep.setMaximumSize (dim);
+    JSeparator sep = new JSeparator();
+    Dimension dim = new Dimension(0, 10);
+    sep.setPreferredSize(dim);
+    sep.setMinimumSize(dim);
+    sep.setMaximumSize(dim);
     parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     layout.addLayoutComponent(sep, gbConstraints);
     add(sep);
 
-    this.overallOpLabel = new JLabel(parent.langpack.getString ("InstallPanel.progress"), 
-      parent.icons.getImageIcon ("information"), JLabel.TRAILING);
+    this.overallOpLabel =
+      new JLabel(
+        parent.langpack.getString("InstallPanel.progress"),
+        parent.icons.getImageIcon("information"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.NORTHWEST;
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -142,7 +149,6 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     add(this.overallProgressBar);
   }
 
-
   /**
    *  Indicates wether the panel has been validated or not.
    *
@@ -153,18 +159,17 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     return this.validated;
   }
 
-
   /**  The unpacker starts.  */
-  public void startAction (String name, int noOfJobs)
+  public void startAction(String name, int noOfJobs)
   {
     parent.blockGUI();
     // figure out how many packs there are to install
     this.noOfPacks = noOfJobs;
-    this.overallProgressBar.setMinimum (0);
-    this.overallProgressBar.setMaximum (this.noOfPacks);
-    this.overallProgressBar.setString ("0 / " + Integer.toString (this.noOfPacks));
+    this.overallProgressBar.setMinimum(0);
+    this.overallProgressBar.setMaximum(this.noOfPacks);
+    this.overallProgressBar.setString(
+      "0 / " + Integer.toString(this.noOfPacks));
   }
-
 
   /**
    *  An error was encountered.
@@ -175,11 +180,12 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
   {
     this.packOpLabel.setText(error);
     idata.installSuccess = false;
-    JOptionPane.showMessageDialog(this, error.toString(),
+    JOptionPane.showMessageDialog(
+      this,
+      error.toString(),
       parent.langpack.getString("installer.error"),
       JOptionPane.ERROR_MESSAGE);
   }
-
 
   /**  The unpacker stops.  */
   public void stopAction()
@@ -187,11 +193,12 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     parent.releaseGUI();
     parent.lockPrevButton();
     this.overallProgressBar.setValue(this.overallProgressBar.getValue() + 1);
-    this.packProgressBar.setString(parent.langpack.getString("InstallPanel.finished"));
+    this.packProgressBar.setString(
+      parent.langpack.getString("InstallPanel.finished"));
     this.packProgressBar.setEnabled(false);
-    String no_of_packs = Integer.toString (this.noOfPacks);
-    this.overallProgressBar.setString (no_of_packs + " / " + no_of_packs);
-    this.overallProgressBar.setEnabled (false);
+    String no_of_packs = Integer.toString(this.noOfPacks);
+    this.overallProgressBar.setString(no_of_packs + " / " + no_of_packs);
+    this.overallProgressBar.setEnabled(false);
     this.packOpLabel.setText(" ");
     this.packOpLabel.setEnabled(false);
     idata.installSuccess = true;
@@ -200,7 +207,6 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     if (idata.panels.indexOf(this) != (idata.panels.size() - 1))
       parent.unlockNextButton();
   }
-
 
   /**
    *  Normal progress indicator.
@@ -213,7 +219,6 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     this.packProgressBar.setValue(val + 1);
     packOpLabel.setText(msg);
   }
-
 
   /**
    *  Pack changing.
@@ -229,9 +234,9 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     this.packProgressBar.setMaximum(max);
     this.packProgressBar.setString(packName);
     this.overallProgressBar.setValue(stepno - 1);
-    this.overallProgressBar.setString(Integer.toString (stepno) + " / " + Integer.toString (this.noOfPacks));
+    this.overallProgressBar.setString(
+      Integer.toString(stepno) + " / " + Integer.toString(this.noOfPacks));
   }
-
 
   /**  Called when the panel becomes active.  */
   public void panelActivate()
@@ -249,4 +254,3 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
   }
 
 }
-

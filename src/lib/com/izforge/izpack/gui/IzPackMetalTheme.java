@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               IzPackMetalTheme.java
  *  Description :        The metal theme for IzPack.
@@ -37,27 +37,27 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  */
 public class IzPackMetalTheme extends DefaultMetalTheme
 {
-	/**  The fonts color. */
-	private ColorUIResource color;
+  /**  The fonts color. */
+  private ColorUIResource color;
 
-	private FontUIResource controlFont;
-	private FontUIResource menuFont;
-	private FontUIResource windowTitleFont;
-	private FontUIResource monospacedFont;
+  private FontUIResource controlFont;
+  private FontUIResource menuFont;
+  private FontUIResource windowTitleFont;
+  private FontUIResource monospacedFont;
 
-	/**  The constructor.  */
-	public IzPackMetalTheme()
-	{
-		color = new ColorUIResource(0, 0, 0);
+  /**  The constructor.  */
+  public IzPackMetalTheme()
+  {
+    color = new ColorUIResource(0, 0, 0);
 
-		Font font1 = createFont("Tahoma", Font.PLAIN, 11);
-		Font font2 = createFont("Tahoma", Font.BOLD, 11);
+    Font font1 = createFont("Tahoma", Font.PLAIN, 11);
+    Font font2 = createFont("Tahoma", Font.BOLD, 11);
 
-		menuFont = new FontUIResource(font1);
-		controlFont = new FontUIResource(font1);
-		windowTitleFont = new FontUIResource(font2);
-		monospacedFont = new FontUIResource(font1);
-	}
+    menuFont = new FontUIResource(font1);
+    controlFont = new FontUIResource(font1);
+    windowTitleFont = new FontUIResource(font2);
+    monospacedFont = new FontUIResource(font1);
+  }
 
   private Font createFont(String name, int style, int size)
   {
@@ -65,45 +65,45 @@ public class IzPackMetalTheme extends DefaultMetalTheme
     return ((font == null) ? new Font("Dialog", style, size) : font);
   }
 
-	/**
-	 *  Returns the color.
-	 *
-	 * @return    The color.
-	 */
-	public ColorUIResource getControlTextColor()
-	{
-		return color;
-	}
+  /**
+   *  Returns the color.
+   *
+   * @return    The color.
+   */
+  public ColorUIResource getControlTextColor()
+  {
+    return color;
+  }
 
-	/**
-	 *  Returns the color.
-	 *
-	 * @return    The color.
-	 */
-	public ColorUIResource getMenuTextColor()
-	{
-		return color;
-	}
+  /**
+   *  Returns the color.
+   *
+   * @return    The color.
+   */
+  public ColorUIResource getMenuTextColor()
+  {
+    return color;
+  }
 
-	/**
-	 *  Returns the color.
-	 *
-	 * @return    The color.
-	 */
-	public ColorUIResource getSystemTextColor()
-	{
-		return color;
-	}
+  /**
+   *  Returns the color.
+   *
+   * @return    The color.
+   */
+  public ColorUIResource getSystemTextColor()
+  {
+    return color;
+  }
 
-	/**
-	 *  Returns the color.
-	 *
-	 * @return    The color.
-	 */
-	public ColorUIResource getUserTextColor()
-	{
-		return color;
-	}
+  /**
+   *  Returns the color.
+   *
+   * @return    The color.
+   */
+  public ColorUIResource getUserTextColor()
+  {
+    return color;
+  }
 
   /**
    * The Font of Labels in many cases

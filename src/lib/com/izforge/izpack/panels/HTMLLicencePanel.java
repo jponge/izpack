@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               HTMLLicencePanel.java
  *  Description :        A panel to prompt the user for a licence agreement.
@@ -49,7 +49,9 @@ import com.izforge.izpack.installer.ResourceManager;
  *
  * @author     Julien Ponge
  */
-public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, ActionListener
+public class HTMLLicencePanel
+  extends IzPanel
+  implements HyperlinkListener, ActionListener
 {
   /**  The layout. */
   private GridBagLayout layout;
@@ -68,7 +70,6 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
   /**  The radio buttons. */
   private JRadioButton yesRadio, noRadio;
-
 
   /**
    *  The constructor.
@@ -90,8 +91,11 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
     // We put our components
 
-    infoLabel = new JLabel(parent.langpack.getString("LicencePanel.info"),
-      parent.icons.getImageIcon("history"), JLabel.TRAILING);
+    infoLabel =
+      new JLabel(
+        parent.langpack.getString("LicencePanel.info"),
+        parent.icons.getImageIcon("history"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -111,14 +115,16 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
       gbConstraints.fill = GridBagConstraints.BOTH;
       layout.addLayoutComponent(scroller, gbConstraints);
       add(scroller);
-    }
-    catch (Exception err)
+    } catch (Exception err)
     {
       err.printStackTrace();
     }
 
-    agreeLabel = new JLabel(parent.langpack.getString("LicencePanel.agree"),
-      parent.icons.getImageIcon("help"), JLabel.TRAILING);
+    agreeLabel =
+      new JLabel(
+        parent.langpack.getString("LicencePanel.agree"),
+        parent.icons.getImageIcon("help"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, 2, 2, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.WEST;
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -127,7 +133,8 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
     ButtonGroup group = new ButtonGroup();
 
-    yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.yes"), false);
+    yesRadio =
+      new JRadioButton(parent.langpack.getString("LicencePanel.yes"), false);
     group.add(yesRadio);
     parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 0.5, 0.0);
     gbConstraints.anchor = GridBagConstraints.WEST;
@@ -135,7 +142,8 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     add(yesRadio);
     yesRadio.addActionListener(this);
 
-    noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.no"), false);
+    noRadio =
+      new JRadioButton(parent.langpack.getString("LicencePanel.no"), false);
     group.add(noRadio);
     parent.buildConstraints(gbConstraints, 1, 3, 1, 1, 0.5, 0.0);
     gbConstraints.anchor = GridBagConstraints.EAST;
@@ -143,7 +151,6 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     add(noRadio);
     noRadio.addActionListener(this);
   }
-
 
   /**
    *  Loads the license text.
@@ -156,14 +163,12 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     try
     {
       return ResourceManager.getInstance().getURL(resNamePrifix);
-    }
-    catch (Exception ex)
+    } catch (Exception ex)
     {
       ex.printStackTrace();
     }
     return null;
   }
-
 
   /**
    *  Actions-handling method (here it launches the installation).
@@ -178,7 +183,6 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
       parent.lockNextButton();
   }
 
-
   /**
    *  Indicates wether the panel has been validated or not.
    *
@@ -190,11 +194,9 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     {
       parent.exit();
       return false;
-    }
-    else
+    } else
       return (yesRadio.isSelected());
   }
-
 
   /**
    *  Hyperlink events handler.
@@ -207,11 +209,10 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     {
       if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
         textArea.setPage(e.getURL());
+    } catch (Exception err)
+    {
     }
-    catch (Exception err)
-    {}
   }
-
 
   /**  Called when the panel becomes active.  */
   public void panelActivate()
@@ -220,4 +221,3 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
       parent.lockNextButton();
   }
 }
-

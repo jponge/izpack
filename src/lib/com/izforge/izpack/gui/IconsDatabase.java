@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               IconsDatabase.java
  *  Description :        Represents an icons database.
@@ -42,7 +42,6 @@ public class IconsDatabase extends TreeMap
     super();
   }
 
-
   /**
    *  Convenience method to retrieve an element.
    *
@@ -54,4 +53,3 @@ public class IconsDatabase extends TreeMap
     return (ImageIcon) get(key);
   }
 }
-

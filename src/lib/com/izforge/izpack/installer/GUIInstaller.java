@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               GUIInstaller.java
  *  Description :        The graphical installer class.
@@ -76,7 +76,6 @@ public class GUIInstaller extends InstallerBase
   /**  The L&F. */
   protected String lnf;
 
-
   /**
    *  The constructor.
    *
@@ -86,13 +85,13 @@ public class GUIInstaller extends InstallerBase
   {
     super();
 
-		this.installdata = new InstallData();
+    this.installdata = new InstallData();
 
     // Loads the installation data
     loadInstallData(installdata);
 
-		// add the GUI install data
-		loadGUIInstallData();
+    // add the GUI install data
+    loadGUIInstallData();
 
     // Checks the Java version
     checkJavaVersion();
@@ -104,25 +103,24 @@ public class GUIInstaller extends InstallerBase
     loadLangPack();
 
     // create the resource manager (after the language selection!)
-    ResourceManager.create (this.installdata);
+    ResourceManager.create(this.installdata);
 
     // We launch the installer GUI
     loadGUI();
   }
 
   /**
-	 * Load GUI preference information.
-	 *
-	 * @throws Exception
-	 */
-  public void loadGUIInstallData() throws Exception 
+   * Load GUI preference information.
+   *
+   * @throws Exception
+   */
+  public void loadGUIInstallData() throws Exception
   {
-		InputStream in = getClass().getResourceAsStream("/GUIPrefs");
-		ObjectInputStream objIn = new ObjectInputStream(in);
-		this.installdata.guiPrefs = (GUIPrefs) objIn.readObject();
-		objIn.close();
-	}
-
+    InputStream in = getClass().getResourceAsStream("/GUIPrefs");
+    ObjectInputStream objIn = new ObjectInputStream(in);
+    this.installdata.guiPrefs = (GUIPrefs) objIn.readObject();
+    objIn.close();
+  }
 
   /**
    *  Checks the Java version.
@@ -136,14 +134,12 @@ public class GUIInstaller extends InstallerBase
     if (version.compareTo(required) < 0)
     {
       System.out.println("Can't install !");
-      System.out.println("> The minimum Java version required is " +
-        required);
+      System.out.println("> The minimum Java version required is " + required);
       System.out.println("> Your version is " + version);
       System.out.println("Please upgrade to the minimum version.");
       System.exit(1);
     }
   }
-
 
   /**
    *  Loads the suitable langpack.
@@ -170,8 +166,7 @@ public class GUIInstaller extends InstallerBase
       selectedPack = (String) picker.getSelection();
       if (selectedPack == null)
         throw new Exception("installation canceled");
-    }
-    else
+    } else
       selectedPack = (String) availableLangPacks.get(0);
 
     // We add an xml data information
@@ -180,10 +175,10 @@ public class GUIInstaller extends InstallerBase
     // We load the langpack
     installdata.localeISO3 = selectedPack;
     installdata.setVariable(ScriptParser.ISO3_LANG, installdata.localeISO3);
-    InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
+    InputStream in =
+      getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
     this.installdata.langpack = new LocaleDatabase(in);
   }
-
 
   /**
    *  Returns an ArrayList of the available langpacks ISO3 codes.
@@ -205,7 +200,6 @@ public class GUIInstaller extends InstallerBase
     return available;
   }
 
-
   /**
    *  Loads the suitable L&F.
    *
@@ -213,42 +207,42 @@ public class GUIInstaller extends InstallerBase
    */
   protected void loadLookAndFeel() throws Exception
   {
-    if (this.installdata.kind.equalsIgnoreCase("standard") ||
-      this.installdata.kind.equalsIgnoreCase("web"))
+    if (this.installdata.kind.equalsIgnoreCase("standard")
+      || this.installdata.kind.equalsIgnoreCase("web"))
     {
       if (getClass().getResourceAsStream("/res/useNativeLAF") != null)
       {
         String nlaf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(nlaf);
       }
-    	if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
-    	{
-		      // We simply put our nice theme
-          MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
-          ButtonFactory.useHighlightButtons();
-          this.installdata.buttonsHColor = new Color(182, 182, 204);
+      if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+      {
+        // We simply put our nice theme
+        MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
+        ButtonFactory.useHighlightButtons();
+        this.installdata.buttonsHColor = new Color(182, 182, 204);
       }
       lnf = "swing";
-    }
-    else
-      if (this.installdata.kind.equalsIgnoreCase("standard-kunststoff") ||
-      this.installdata.kind.equalsIgnoreCase("web-kunststoff"))
+    } else if (
+      this.installdata.kind.equalsIgnoreCase("standard-kunststoff")
+        || this.installdata.kind.equalsIgnoreCase("web-kunststoff"))
     {
-    	ButtonFactory.useHighlightButtons();
+      ButtonFactory.useHighlightButtons();
       // We change the highlight color for the buttons
       this.installdata.buttonsHColor = new Color(255, 255, 255);
 
       // Some reflection ...
-      Class laf = Class.forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
+      Class laf =
+        Class.forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
       Class mtheme = Class.forName("javax.swing.plaf.metal.MetalTheme");
-      Class[] params = {mtheme};
+      Class[] params = { mtheme };
       Class theme = Class.forName("com.izforge.izpack.gui.IzPackKMetalTheme");
       Method setCurrentThemeMethod = laf.getMethod("setCurrentTheme", params);
 
       // We invoke and place Kunststoff as our L&F
       LookAndFeel kunststoff = (LookAndFeel) laf.newInstance();
       MetalTheme ktheme = (MetalTheme) theme.newInstance();
-      Object[] kparams = {ktheme};
+      Object[] kparams = { ktheme };
       UIManager.setLookAndFeel(kunststoff);
       setCurrentThemeMethod.invoke(kunststoff, kparams);
 
@@ -257,7 +251,6 @@ public class GUIInstaller extends InstallerBase
     ButtonFactory.useButtonIcons();
   }
 
-
   /**
    *  Loads the GUI.
    *
@@ -265,14 +258,21 @@ public class GUIInstaller extends InstallerBase
    */
   private void loadGUI() throws Exception
   {
-    UIManager.put("OptionPane.yesButtonText", installdata.langpack.getString("installer.yes"));
-    UIManager.put("OptionPane.noButtonText", installdata.langpack.getString("installer.no"));
-    UIManager.put("OptionPane.cancelButtonText", installdata.langpack.getString("installer.cancel"));
+    UIManager.put(
+      "OptionPane.yesButtonText",
+      installdata.langpack.getString("installer.yes"));
+    UIManager.put(
+      "OptionPane.noButtonText",
+      installdata.langpack.getString("installer.no"));
+    UIManager.put(
+      "OptionPane.cancelButtonText",
+      installdata.langpack.getString("installer.cancel"));
 
-    String title = installdata.langpack.getString("installer.title") + this.installdata.info.getAppName();
+    String title =
+      installdata.langpack.getString("installer.title")
+        + this.installdata.info.getAppName();
     new InstallerFrame(title, this.installdata);
   }
-
 
   /**
    *  Used to prompt the user for the language.
@@ -287,7 +287,6 @@ public class GUIInstaller extends InstallerBase
     /**  The ok button. */
     private JButton okButton;
 
-
     /**
      *  The constructor.
      *
@@ -300,8 +299,9 @@ public class GUIInstaller extends InstallerBase
       try
       {
         loadLookAndFeel();
+      } catch (Exception err)
+      {
       }
-      catch (Exception err) { }
 
       // We build the GUI
       addWindowListener(new WindowHandler());
@@ -323,12 +323,16 @@ public class GUIInstaller extends InstallerBase
       contentPane.add(imgLabel);
 
       gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-      JLabel label1 = new JLabel("Please select your language (ISO3 code)", SwingConstants.CENTER);
+      JLabel label1 =
+        new JLabel(
+          "Please select your language (ISO3 code)",
+          SwingConstants.CENTER);
       gbConstraints.gridy = 1;
       gbConstraints.insets = new Insets(5, 5, 0, 5);
       layout.addLayoutComponent(label1, gbConstraints);
       contentPane.add(label1);
-      JLabel label2 = new JLabel("for install instructions:", SwingConstants.CENTER);
+      JLabel label2 =
+        new JLabel("for install instructions:", SwingConstants.CENTER);
       gbConstraints.gridy = 2;
       gbConstraints.insets = new Insets(0, 5, 5, 5);
       layout.addLayoutComponent(label2, gbConstraints);
@@ -360,11 +364,11 @@ public class GUIInstaller extends InstallerBase
 
       Dimension frameSize = getSize();
       Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setLocation((screenSize.width - frameSize.width) / 2,
+      setLocation(
+        (screenSize.width - frameSize.width) / 2,
         (screenSize.height - frameSize.height) / 2 - 10);
       setResizable(true);
     }
-
 
     /**
      *  Loads an image.
@@ -376,16 +380,15 @@ public class GUIInstaller extends InstallerBase
       ImageIcon img;
       try
       {
-        img = new ImageIcon(this.getClass().getResource(
-          "/res/installer.langsel.img"));
-      }
-      catch (NullPointerException err)
+        img =
+          new ImageIcon(
+            this.getClass().getResource("/res/installer.langsel.img"));
+      } catch (NullPointerException err)
       {
         img = null;
       }
       return img;
     }
-
 
     /**
      *  Gets the selected object.
@@ -397,7 +400,6 @@ public class GUIInstaller extends InstallerBase
       return comboBox.getSelectedItem();
     }
 
-
     /**
      *  Sets the selection.
      *
@@ -408,7 +410,6 @@ public class GUIInstaller extends InstallerBase
       comboBox.setSelectedItem(item);
     }
 
-
     /**
      *  Closer.
      *
@@ -418,7 +419,6 @@ public class GUIInstaller extends InstallerBase
     {
       dispose();
     }
-
 
     /**
      *  The window events handler.
@@ -439,7 +439,6 @@ public class GUIInstaller extends InstallerBase
     }
   }
 
-
   /**
    *  A list cell renderer that adds the flags on the display.
    *
@@ -453,7 +452,6 @@ public class GUIInstaller extends InstallerBase
     /**  Grayed icons cache. */
     private TreeMap grayIcons = new TreeMap();
 
-
     /**
      *  Returns a suitable cell.
      *
@@ -464,11 +462,12 @@ public class GUIInstaller extends InstallerBase
      * @param  cellHasFocus  Description of the Parameter
      * @return               The cell.
      */
-    public Component getListCellRendererComponent(JList list,
-                                                  Object value,
-                                                  int index,
-                                                  boolean isSelected,
-                                                  boolean cellHasFocus)
+    public Component getListCellRendererComponent(
+      JList list,
+      Object value,
+      int index,
+      boolean isSelected,
+      boolean cellHasFocus)
     {
       // We avoid that the icon is gray while the combo isn't deployed
       if (index == -1)
@@ -487,16 +486,18 @@ public class GUIInstaller extends InstallerBase
           setOpaque(true);
         setForeground(list.getSelectionForeground());
         setBackground(list.getSelectionBackground());
-      }
-      else
+      } else
         setOpaque(false);
 
       // We put the icon
       if (!icons.containsKey(iso3))
       {
-        ImageIcon icon = new ImageIcon(this.getClass().getResource("/res/flag." + iso3));
+        ImageIcon icon =
+          new ImageIcon(this.getClass().getResource("/res/flag." + iso3));
         icons.put(iso3, icon);
-        grayIcons.put(iso3, new ImageIcon(GrayFilter.createDisabledImage(icon.getImage())));
+        grayIcons.put(
+          iso3,
+          new ImageIcon(GrayFilter.createDisabledImage(icon.getImage())));
       }
       if (isSelected)
         setIcon((ImageIcon) icons.get(iso3));
@@ -508,4 +509,3 @@ public class GUIInstaller extends InstallerBase
     }
   }
 }
-

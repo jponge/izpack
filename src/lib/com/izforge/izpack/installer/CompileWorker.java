@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge, Tino Schwarze
+ *  Copyright (C) 2001-2004 Julien Ponge, Tino Schwarze
  *
  *  File :               CompilePanel.java
  *  Description :        A panel to compile files after installation
@@ -61,10 +61,10 @@ import com.izforge.izpack.util.OsConstraint;
 public class CompileWorker implements Runnable
 {
   /**  Compilation jobs */
-  private ArrayList  jobs;
+  private ArrayList jobs;
 
   /**  Name of resource for specifying compilation parameters. */
-  private static final String SPEC_RESOURCE_NAME  = "CompilePanel.Spec.xml";
+  private static final String SPEC_RESOURCE_NAME = "CompilePanel.Spec.xml";
 
   private VariableSubstitutor vs;
 
@@ -84,7 +84,7 @@ public class CompileWorker implements Runnable
   private String compilerToUse;
 
   private XMLElement compilerArgumentsSpec;
-  
+
   private ArrayList compilerArgumentsList;
 
   private String compilerArgumentsToUse;
@@ -97,7 +97,8 @@ public class CompileWorker implements Runnable
    * @param  idata    The installation data.
    * @param  handler The handler to notify of progress.
    */
-  public CompileWorker(AutomatedInstallData idata, CompileHandler handler) throws IOException
+  public CompileWorker(AutomatedInstallData idata, CompileHandler handler)
+    throws IOException
   {
     this.idata = idata;
     this.handler = handler;
@@ -105,17 +106,17 @@ public class CompileWorker implements Runnable
 
     this.compilationThread = null;
 
-    if (! readSpec ())
-      throw new IOException ("Error reading compilation specification");
+    if (!readSpec())
+      throw new IOException("Error reading compilation specification");
   }
 
   /** Return list of compilers to choose from. 
    *
    * @return ArrayList of String
    */
-  public ArrayList getAvailableCompilers ()
+  public ArrayList getAvailableCompilers()
   {
-    readChoices (this.compilerSpec, this.compilerList);
+    readChoices(this.compilerSpec, this.compilerList);
     return this.compilerList;
   }
 
@@ -125,13 +126,13 @@ public class CompileWorker implements Runnable
    *
    * @param compiler compiler to use (not checked)
    */
-  public void setCompiler (String compiler)
+  public void setCompiler(String compiler)
   {
     this.compilerToUse = compiler;
   }
 
   /** Get the compiler used. */
-  public String getCompiler ()
+  public String getCompiler()
   {
     return this.compilerToUse;
   }
@@ -140,34 +141,34 @@ public class CompileWorker implements Runnable
    *
    * @return ArrayList of String
    */
-  public ArrayList getAvailableArguments ()
+  public ArrayList getAvailableArguments()
   {
-    readChoices (this.compilerArgumentsSpec, this.compilerArgumentsList);
+    readChoices(this.compilerArgumentsSpec, this.compilerArgumentsList);
     return this.compilerArgumentsList;
   }
 
   /** Set the compiler arguments to use. */
-  public void setCompilerArguments (String arguments)
+  public void setCompilerArguments(String arguments)
   {
     this.compilerArgumentsToUse = arguments;
   }
 
   /** Get the compiler arguments used. */
-  public String getCompilerArguments ()
+  public String getCompilerArguments()
   {
     return this.compilerArgumentsToUse;
   }
 
   /** Get the result of the compilation. */
-  public CompileResult getResult ()
+  public CompileResult getResult()
   {
     return this.result;
   }
 
   /** Start the compilation in a separate thread. */
-  public void startThread ()
+  public void startThread()
   {
-    this.compilationThread = new Thread (this, "compilation thread");
+    this.compilationThread = new Thread(this, "compilation thread");
     //will call this.run()
     this.compilationThread.start();
   }
@@ -177,88 +178,89 @@ public class CompileWorker implements Runnable
    * Can also be called directly if asynchronous processing is not
    * desired.
    */
-  public void run ()
+  public void run()
   {
     try
     {
-      if (! collectJobs ())
+      if (!collectJobs())
       {
         String[] dummy_command = { "no command" };
 
-        this.result = new CompileResult (this.idata.langpack.getString ("CompilePanel.worker.nofiles"), dummy_command, "", "");
-      }
-      else
+        this.result =
+          new CompileResult(
+            this.idata.langpack.getString("CompilePanel.worker.nofiles"),
+            dummy_command,
+            "",
+            "");
+      } else
       {
-        this.result = compileJobs ();
-      }      
-    }
-    catch (Exception e)
+        this.result = compileJobs();
+      }
+    } catch (Exception e)
     {
-      this.result = new CompileResult ();
-      this.result.setStatus (CompileResult.FAILED);
-      this.result.setAction (CompileResult.ACTION_ABORT);
+      this.result = new CompileResult();
+      this.result.setStatus(CompileResult.FAILED);
+      this.result.setAction(CompileResult.ACTION_ABORT);
     }
 
-    this.handler.stopAction ();
+    this.handler.stopAction();
   }
 
-  private boolean readSpec ()
+  private boolean readSpec()
   {
-		InputStream input;
-		try
-		{
-			input = ResourceManager.getInstance().getInputStream (SPEC_RESOURCE_NAME);
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
+    InputStream input;
+    try
+    {
+      input = ResourceManager.getInstance().getInputStream(SPEC_RESOURCE_NAME);
+    } catch (Exception e)
+    {
+      e.printStackTrace();
       return false;
-		}
+    }
 
-    StdXMLParser parser = new StdXMLParser ();
-    parser.setBuilder (new StdXMLBuilder ());
-    parser.setValidator (new NonValidator ());
-    
-		try
-		{
-			parser.setReader (new StdXMLReader (input));
-			
-			this.spec = (XMLElement) parser.parse();
-		}
-		catch (Exception e)
-		{
+    StdXMLParser parser = new StdXMLParser();
+    parser.setBuilder(new StdXMLBuilder());
+    parser.setValidator(new NonValidator());
+
+    try
+    {
+      parser.setReader(new StdXMLReader(input));
+
+      this.spec = (XMLElement) parser.parse();
+    } catch (Exception e)
+    {
       System.out.println("Error parsing XML specification for compilation.");
-			e.printStackTrace();
+      e.printStackTrace();
       return false;
-		}
+    }
 
-    if (! this.spec.hasChildren ())
+    if (!this.spec.hasChildren())
       return false;
 
-    this.compilerArgumentsList = new ArrayList ();
-    this.compilerList = new ArrayList ();
+    this.compilerArgumentsList = new ArrayList();
+    this.compilerList = new ArrayList();
 
     // read <global> information
-    XMLElement global = this.spec.getFirstChildNamed ("global");
+    XMLElement global = this.spec.getFirstChildNamed("global");
 
     // use some default values if no <global> section found
     if (global != null)
     {
 
       // get list of compilers
-      this.compilerSpec = global.getFirstChildNamed ("compiler");
+      this.compilerSpec = global.getFirstChildNamed("compiler");
 
       if (this.compilerSpec != null)
       {
-        readChoices (this.compilerSpec, this.compilerList);
+        readChoices(this.compilerSpec, this.compilerList);
       }
 
-      this.compilerArgumentsSpec = global.getFirstChildNamed ("arguments");
+      this.compilerArgumentsSpec = global.getFirstChildNamed("arguments");
 
       if (this.compilerArgumentsSpec != null)
       {
         // basicly perform sanity check
-        readChoices (this.compilerArgumentsSpec, this.compilerArgumentsList);
+        readChoices(this.compilerArgumentsSpec, this.compilerArgumentsList);
       }
 
     }
@@ -266,62 +268,59 @@ public class CompileWorker implements Runnable
     // supply default values if no useful ones where found
     if (this.compilerList.size() == 0)
     {
-      this.compilerList.add ("javac");
-      this.compilerList.add ("jikes");
+      this.compilerList.add("javac");
+      this.compilerList.add("jikes");
     }
 
-    if (this.compilerArgumentsList.size () == 0)
+    if (this.compilerArgumentsList.size() == 0)
     {
-      this.compilerArgumentsList.add ("-O -g:none");
-      this.compilerArgumentsList.add ("-O");
-      this.compilerArgumentsList.add ("-g");
-      this.compilerArgumentsList.add ("");
+      this.compilerArgumentsList.add("-O -g:none");
+      this.compilerArgumentsList.add("-O");
+      this.compilerArgumentsList.add("-g");
+      this.compilerArgumentsList.add("");
     }
 
     return true;
   }
 
- 
   // helper function
-  private void readChoices (XMLElement element, ArrayList result)
+  private void readChoices(XMLElement element, ArrayList result)
   {
-    Vector choices = element.getChildrenNamed ("choice");
+    Vector choices = element.getChildrenNamed("choice");
 
     if (choices == null)
       return;
 
-    result.clear ();
-    
+    result.clear();
+
     Iterator choice_it = choices.iterator();
 
-    while (choice_it.hasNext ())
+    while (choice_it.hasNext())
     {
-      XMLElement choice = (XMLElement)choice_it.next();
+      XMLElement choice = (XMLElement) choice_it.next();
 
-      String value = choice.getAttribute ("value");
+      String value = choice.getAttribute("value");
 
       if (value != null)
       {
         List osconstraints = OsConstraint.getOsList(choice);
-      
+
         if (OsConstraint.oneMatchesCurrentSystem(osconstraints))
         {
-          result.add (this.vs.substitute (value, "plain"));
+          result.add(this.vs.substitute(value, "plain"));
         }
       }
-      
+
     }
 
   }
 
-
   /**
    * Parse the compilation specification file and create jobs.
    */
-  private boolean collectJobs ()
-    throws Exception
+  private boolean collectJobs() throws Exception
   {
-    XMLElement data = this.spec.getFirstChildNamed ("jobs");
+    XMLElement data = this.spec.getFirstChildNamed("jobs");
 
     if (data == null)
       return false;
@@ -333,34 +332,35 @@ public class CompileWorker implements Runnable
 
     // we throw away the toplevel compilation job
     // (all jobs are collected in this.jobs)
-    collectJobsRecursive (data, classpath);
-    
+    collectJobsRecursive(data, classpath);
+
     return true;
   }
 
-
   /** perform the actual compilation */
-  private CompileResult compileJobs ()
+  private CompileResult compileJobs()
   {
     ArrayList args = new ArrayList();
-    StringTokenizer tokenizer = new StringTokenizer (this.compilerArgumentsToUse);
+    StringTokenizer tokenizer =
+      new StringTokenizer(this.compilerArgumentsToUse);
 
-    while (tokenizer.hasMoreTokens ())
+    while (tokenizer.hasMoreTokens())
     {
-      args.add (tokenizer.nextToken());
+      args.add(tokenizer.nextToken());
     }
 
     Iterator job_it = this.jobs.iterator();
 
-    this.handler.startAction ("Compilation", this.jobs.size());
+    this.handler.startAction("Compilation", this.jobs.size());
 
     // check whether compiler is valid (but only if there are jobs)
     if (job_it.hasNext())
     {
-      CompilationJob first_job = (CompilationJob)this.jobs.get (0);
+      CompilationJob first_job = (CompilationJob) this.jobs.get(0);
 
-      CompileResult check_result = first_job.checkCompiler (this.compilerToUse, args);
-      if (! check_result.isContinue ())
+      CompileResult check_result =
+        first_job.checkCompiler(this.compilerToUse, args);
+      if (!check_result.isContinue())
       {
         return check_result;
       }
@@ -372,74 +372,72 @@ public class CompileWorker implements Runnable
     while (job_it.hasNext())
     {
       CompilationJob job = (CompilationJob) job_it.next();
-      
-      this.handler.nextStep (job.getName(), job.getSize(), job_no++);
 
-      CompileResult result = job.perform (this.compilerToUse, args);
+      this.handler.nextStep(job.getName(), job.getSize(), job_no++);
 
-      if (! result.isContinue())
+      CompileResult result = job.perform(this.compilerToUse, args);
+
+      if (!result.isContinue())
         return result;
     }
 
-    Debug.trace ("compilation finished.");
-    return new CompileResult ();
+    Debug.trace("compilation finished.");
+    return new CompileResult();
   }
 
-  
-  private CompilationJob collectJobsRecursive (XMLElement node, ArrayList classpath)
+  private CompilationJob collectJobsRecursive(
+    XMLElement node,
+    ArrayList classpath)
     throws Exception
   {
-    Enumeration toplevel_tags = node.enumerateChildren ();
-    ArrayList ourclasspath = (ArrayList)classpath.clone ();
+    Enumeration toplevel_tags = node.enumerateChildren();
+    ArrayList ourclasspath = (ArrayList) classpath.clone();
     ArrayList files = new ArrayList();
 
-    while (toplevel_tags.hasMoreElements ())
+    while (toplevel_tags.hasMoreElements())
     {
-      XMLElement child = (XMLElement)toplevel_tags.nextElement ();
+      XMLElement child = (XMLElement) toplevel_tags.nextElement();
 
-      if (child.getName ().equals ("classpath"))
+      if (child.getName().equals("classpath"))
       {
-        changeClassPath (ourclasspath, child);
-      }
-      else if (child.getName ().equals ("job"))
+        changeClassPath(ourclasspath, child);
+      } else if (child.getName().equals("job"))
       {
-        CompilationJob subjob = collectJobsRecursive (child, ourclasspath);
+        CompilationJob subjob = collectJobsRecursive(child, ourclasspath);
         if (subjob != null)
-          this.jobs.add (subjob);
-      }
-      else if (child.getName().equals ("directory"))
+          this.jobs.add(subjob);
+      } else if (child.getName().equals("directory"))
       {
-        String name = child.getAttribute ("name");
+        String name = child.getAttribute("name");
 
         if (name != null)
         {
           // substitute variables
-          String finalname = this.vs.substitute (name, "plain");
+          String finalname = this.vs.substitute(name, "plain");
 
-          files.addAll (scanDirectory (new File (finalname)));
+          files.addAll(scanDirectory(new File(finalname)));
         }
 
-      }
-      else if (child.getName().equals ("file"))
+      } else if (child.getName().equals("file"))
       {
-        String name = child.getAttribute ("name");
+        String name = child.getAttribute("name");
 
         if (name != null)
         {
           // substitute variables
-          String finalname = this.vs.substitute (name, "plain");
+          String finalname = this.vs.substitute(name, "plain");
 
-          files.add (new File (finalname));
+          files.add(new File(finalname));
         }
 
-      }
-      else if (child.getName().equals ("packdepency"))
+      } else if (child.getName().equals("packdepency"))
       {
-        String name = child.getAttribute ("name");
+        String name = child.getAttribute("name");
 
         if (name == null)
         {
-          System.out.println ("invalid compilation spec: <packdepency> without name attribute");
+          System.out.println(
+            "invalid compilation spec: <packdepency> without name attribute");
           return null;
         }
 
@@ -449,18 +447,20 @@ public class CompileWorker implements Runnable
 
         while (pack_it.hasNext())
         {
-          com.izforge.izpack.Pack pack = (com.izforge.izpack.Pack)pack_it.next();
+          com.izforge.izpack.Pack pack =
+            (com.izforge.izpack.Pack) pack_it.next();
 
-          if (pack.name.equals (name))
+          if (pack.name.equals(name))
           {
             found = true;
             break;
           }
         }
 
-        if (! found)
+        if (!found)
         {
-          Debug.trace ("skipping job because pack " + name + " was not selected.");
+          Debug.trace(
+            "skipping job because pack " + name + " was not selected.");
           return null;
         }
 
@@ -469,77 +469,83 @@ public class CompileWorker implements Runnable
     }
 
     if (files.size() > 0)
-      return new CompilationJob (this.handler, this.idata.langpack, (String)node.getAttribute ("name"), files, ourclasspath);
+      return new CompilationJob(
+        this.handler,
+        this.idata.langpack,
+        (String) node.getAttribute("name"),
+        files,
+        ourclasspath);
 
     return null;
   }
 
   /** helper: process a <code>&lt;classpath&gt;</code> tag. */
-  private void changeClassPath (ArrayList classpath, XMLElement child)
+  private void changeClassPath(ArrayList classpath, XMLElement child)
     throws Exception
   {
-    String add = child.getAttribute ("add");
+    String add = child.getAttribute("add");
     if (add != null)
     {
-      add = this.vs.substitute (add, "plain");
-      if (! new File (add).exists ())
+      add = this.vs.substitute(add, "plain");
+      if (!new File(add).exists())
       {
-        if (! this.handler.emitWarning("Invalid classpath", 
-          "The path "+add+" could not be found.\nCompilation may fail."))
-          throw new Exception ("Classpath "+add+" does not exist.");
-      }
-      else
+        if (!this
+          .handler
+          .emitWarning(
+            "Invalid classpath",
+            "The path " + add + " could not be found.\nCompilation may fail."))
+          throw new Exception("Classpath " + add + " does not exist.");
+      } else
       {
-        classpath.add (this.vs.substitute (add, "plain"));        
+        classpath.add(this.vs.substitute(add, "plain"));
       }
-      
+
     }
 
-    String sub = child.getAttribute ("sub");
+    String sub = child.getAttribute("sub");
     if (sub != null)
     {
       int cpidx = -1;
-      sub = this.vs.substitute (sub, "plain");
+      sub = this.vs.substitute(sub, "plain");
 
       do
       {
-        cpidx = classpath.indexOf (sub);
-        classpath.remove (cpidx);
-      } 
-      while (cpidx >= 0);
+        cpidx = classpath.indexOf(sub);
+        classpath.remove(cpidx);
+      } while (cpidx >= 0);
 
     }
-    
+
   }
 
   /** helper: recursively scan given directory.
    * 
    * @return list of files found (might be empty)
    */
-  private ArrayList scanDirectory (File path)
+  private ArrayList scanDirectory(File path)
   {
-    Debug.trace ("scanning directory " + path.getAbsolutePath());
+    Debug.trace("scanning directory " + path.getAbsolutePath());
 
-    ArrayList result = new ArrayList ();
+    ArrayList result = new ArrayList();
 
-    if (! path.isDirectory ())
+    if (!path.isDirectory())
       return result;
 
-    File[] entries = path.listFiles ();
+    File[] entries = path.listFiles();
 
     for (int i = 0; i < entries.length; i++)
     {
       File f = entries[i];
 
-      if (f == null) continue;
-      
-      if (f.isDirectory ())
+      if (f == null)
+        continue;
+
+      if (f.isDirectory())
       {
-        result.addAll (scanDirectory (f));
-      }
-      else if ((f.isFile()) && (f.getName().toLowerCase().endsWith (".java")))
+        result.addAll(scanDirectory(f));
+      } else if ((f.isFile()) && (f.getName().toLowerCase().endsWith(".java")))
       {
-        result.add (f);
+        result.add(f);
       }
 
     }
@@ -551,7 +557,7 @@ public class CompileWorker implements Runnable
   private class CompilationJob
   {
     private CompileHandler listener;
-    private String    name;
+    private String name;
     private ArrayList files;
     private ArrayList classpath;
 
@@ -560,7 +566,11 @@ public class CompileWorker implements Runnable
     // XXX: figure that out (on runtime?)
     private static final int MAX_CMDLINE_SIZE = 4096;
 
-    public CompilationJob (CompileHandler listener, LocaleDatabase langpack, ArrayList files, ArrayList classpath)
+    public CompilationJob(
+      CompileHandler listener,
+      LocaleDatabase langpack,
+      ArrayList files,
+      ArrayList classpath)
     {
       this.listener = listener;
       this.langpack = langpack;
@@ -569,7 +579,12 @@ public class CompileWorker implements Runnable
       this.classpath = classpath;
     }
 
-    public CompilationJob (CompileHandler listener, LocaleDatabase langpack, String name, ArrayList files, ArrayList classpath)
+    public CompilationJob(
+      CompileHandler listener,
+      LocaleDatabase langpack,
+      String name,
+      ArrayList files,
+      ArrayList classpath)
     {
       this.listener = listener;
       this.langpack = langpack;
@@ -578,7 +593,7 @@ public class CompileWorker implements Runnable
       this.classpath = classpath;
     }
 
-    public String getName ()
+    public String getName()
     {
       if (this.name != null)
         return this.name;
@@ -586,14 +601,14 @@ public class CompileWorker implements Runnable
       return "";
     }
 
-    public int getSize ()
+    public int getSize()
     {
       return this.files.size();
     }
 
-    public CompileResult perform (String compiler, ArrayList arguments)
+    public CompileResult perform(String compiler, ArrayList arguments)
     {
-      Debug.trace ("starting job " + this.name);
+      Debug.trace("starting job " + this.name);
       // we have some maximum command line length - need to count
       int cmdline_len = 0;
 
@@ -602,35 +617,35 @@ public class CompileWorker implements Runnable
 
       {
         Iterator arg_it = args.iterator();
-        while (arg_it.hasNext ())
-          cmdline_len += ((String)arg_it.next()).length()+1;
+        while (arg_it.hasNext())
+          cmdline_len += ((String) arg_it.next()).length() + 1;
       }
 
       // add compiler in front of arguments
-      args.add (0, compiler);
-      cmdline_len += compiler.length()+1;
+      args.add(0, compiler);
+      cmdline_len += compiler.length() + 1;
 
       // construct classpath argument for compiler
       // - collect all classpaths
       StringBuffer classpath_sb = new StringBuffer();
       Iterator cp_it = this.classpath.iterator();
-      while (cp_it.hasNext ())
+      while (cp_it.hasNext())
       {
-        String cp = (String)cp_it.next();
+        String cp = (String) cp_it.next();
         if (classpath_sb.length() > 0)
-          classpath_sb.append (File.pathSeparatorChar);
-        classpath_sb.append (new File (cp).getAbsolutePath());
+          classpath_sb.append(File.pathSeparatorChar);
+        classpath_sb.append(new File(cp).getAbsolutePath());
       }
 
-      String classpath_str = classpath_sb.toString ();
+      String classpath_str = classpath_sb.toString();
 
       // - add classpath argument to command line
       if (classpath_str.length() > 0)
       {
-        args.add ("-classpath");
+        args.add("-classpath");
         cmdline_len = cmdline_len + 11;
-        args.add (classpath_str);
-        cmdline_len += classpath_str.length()+1;
+        args.add(classpath_str);
+        cmdline_len += classpath_str.length() + 1;
       }
 
       // remember how many arguments we have which don't change for the job
@@ -639,7 +654,7 @@ public class CompileWorker implements Runnable
       int common_args_len = cmdline_len;
 
       // used for execution
-      FileExecutor executor = new FileExecutor ();
+      FileExecutor executor = new FileExecutor();
       String output[] = new String[2];
 
       // used for displaying the progress bar
@@ -652,64 +667,74 @@ public class CompileWorker implements Runnable
 
       while (file_it.hasNext())
       {
-        File f = (File)file_it.next();
+        File f = (File) file_it.next();
 
         String fpath = f.getAbsolutePath();
 
-        Debug.trace ("processing "+fpath);
-        
+        Debug.trace("processing " + fpath);
+
         // we add the file _first_ to the arguments to have a better
         // chance to get something done if the command line is almost
         // MAX_CMDLINE_SIZE or even above
         fileno++;
         jobfiles += f.getName() + " ";
-        args.add (fpath);
+        args.add(fpath);
         cmdline_len += fpath.length();
 
         // start compilation if maximum command line length reached
         if (cmdline_len >= MAX_CMDLINE_SIZE)
         {
-          Debug.trace ("compiling " + jobfiles);
+          Debug.trace("compiling " + jobfiles);
 
           // display useful progress bar (avoid showing 100% while still
           // compiling a lot)
-          this.listener.progress (last_fileno, jobfiles);
+          this.listener.progress(last_fileno, jobfiles);
           last_fileno = fileno;
 
-          String[] full_cmdline = (String[])args.toArray (output);
+          String[] full_cmdline = (String[]) args.toArray(output);
 
-          int retval = executor.executeCommand (full_cmdline, output);
+          int retval = executor.executeCommand(full_cmdline, output);
 
           // update progress bar: compilation of fileno files done
-          this.listener.progress (fileno, jobfiles);
+          this.listener.progress(fileno, jobfiles);
 
           if (retval != 0)
           {
-            CompileResult result = new CompileResult (this.langpack.getString ("CompilePanel.error"), full_cmdline, output[0], output[1]);
-            this.listener.handleCompileError (result);
-            if (! result.isContinue())
+            CompileResult result =
+              new CompileResult(
+                this.langpack.getString("CompilePanel.error"),
+                full_cmdline,
+                output[0],
+                output[1]);
+            this.listener.handleCompileError(result);
+            if (!result.isContinue())
               return result;
-          }
-          else 
+          } else
           {
             // verify that all files have been compiled successfully
             // I found that sometimes, no error code is returned although
             // compilation failed.
-            Iterator arg_it = args.listIterator (common_args_no);
+            Iterator arg_it = args.listIterator(common_args_no);
             while (arg_it.hasNext())
             {
-              File java_file = new File ((String)arg_it.next());
+              File java_file = new File((String) arg_it.next());
 
               String basename = java_file.getName();
-              int dotpos = basename.lastIndexOf ('.');
-              basename = basename.substring (0, dotpos) + ".class";
-              File class_file = new File (java_file.getParentFile(), basename);
+              int dotpos = basename.lastIndexOf('.');
+              basename = basename.substring(0, dotpos) + ".class";
+              File class_file = new File(java_file.getParentFile(), basename);
 
-              if (! class_file.exists ())
+              if (!class_file.exists())
               {
-                CompileResult result = new CompileResult (this.langpack.getString ("CompilePanel.error.noclassfile")+java_file.getAbsolutePath(), full_cmdline, output[0], output[1]);
-                this.listener.handleCompileError (result);
-                if (! result.isContinue())
+                CompileResult result =
+                  new CompileResult(
+                    this.langpack.getString("CompilePanel.error.noclassfile")
+                      + java_file.getAbsolutePath(),
+                    full_cmdline,
+                    output[0],
+                    output[1]);
+                this.listener.handleCompileError(result);
+                if (!result.isContinue())
                   return result;
                 // don't continue any further
                 break;
@@ -720,9 +745,9 @@ public class CompileWorker implements Runnable
           }
 
           // clean command line: remove files we just compiled
-          for (int i = args.size()-1; i >= common_args_no; i--)
+          for (int i = args.size() - 1; i >= common_args_no; i--)
           {
-            args.removeLast ();
+            args.removeLast();
           }
 
           cmdline_len = common_args_len;
@@ -733,25 +758,30 @@ public class CompileWorker implements Runnable
 
       if (cmdline_len > common_args_len)
       {
-        this.listener.progress (last_fileno, jobfiles);
+        this.listener.progress(last_fileno, jobfiles);
 
-        String[] full_cmdline = (String[])args.toArray (output);
+        String[] full_cmdline = (String[]) args.toArray(output);
 
-        int retval = executor.executeCommand (full_cmdline, output);
+        int retval = executor.executeCommand(full_cmdline, output);
 
-        this.listener.progress (fileno, jobfiles);
+        this.listener.progress(fileno, jobfiles);
 
         if (retval != 0)
         {
-          CompileResult result = new CompileResult (this.langpack.getString ("CompilePanel.error"), full_cmdline, output[0], output[1]);
-          this.listener.handleCompileError (result);
-          if (! result.isContinue())
+          CompileResult result =
+            new CompileResult(
+              this.langpack.getString("CompilePanel.error"),
+              full_cmdline,
+              output[0],
+              output[1]);
+          this.listener.handleCompileError(result);
+          if (!result.isContinue())
             return result;
         }
 
       }
 
-      Debug.trace ("job "+this.name+" done (" + fileno + " files compiled)");
+      Debug.trace("job " + this.name + " done (" + fileno + " files compiled)");
 
       return new CompileResult();
     }
@@ -772,69 +802,80 @@ public class CompileWorker implements Runnable
      * @param arguments additional arguments to pass to the compiler
      * @return false on error
      */
-    public CompileResult checkCompiler (String compiler, ArrayList arguments)
+    public CompileResult checkCompiler(String compiler, ArrayList arguments)
     {
       int retval = 0;
-      FileExecutor executor = new FileExecutor ();
+      FileExecutor executor = new FileExecutor();
       String[] output = new String[2];
 
-      Debug.trace ("checking whether \"" + compiler + " -help\" works");
+      Debug.trace("checking whether \"" + compiler + " -help\" works");
 
       {
         String[] args = { compiler, "-help" };
 
-        retval = executor.executeCommand (args, output);
+        retval = executor.executeCommand(args, output);
 
         if (retval != 0)
         {
-          CompileResult result = new CompileResult (this.langpack.getString ("CompilePanel.error.compilernotfound"), args, output[0], output[1]);
-          this.listener.handleCompileError (result);
-          if (! result.isContinue ())
+          CompileResult result =
+            new CompileResult(
+              this.langpack.getString("CompilePanel.error.compilernotfound"),
+              args,
+              output[0],
+              output[1]);
+          this.listener.handleCompileError(result);
+          if (!result.isContinue())
             return result;
         }
       }
 
-      Debug.trace ("checking whether \"" + compiler + " -help +arguments\" works");
+      Debug.trace(
+        "checking whether \"" + compiler + " -help +arguments\" works");
 
       // used to collect the arguments for executing the compiler
       LinkedList args = new LinkedList(arguments);
 
       // add -help argument to prevent the compiler from doing anything
-      args.add (0, "-help");
+      args.add(0, "-help");
 
       // add compiler in front of arguments
-      args.add (0, compiler);
+      args.add(0, compiler);
 
       // construct classpath argument for compiler
       // - collect all classpaths
       StringBuffer classpath_sb = new StringBuffer();
       Iterator cp_it = this.classpath.iterator();
-      while (cp_it.hasNext ())
+      while (cp_it.hasNext())
       {
-        String cp = (String)cp_it.next();
+        String cp = (String) cp_it.next();
         if (classpath_sb.length() > 0)
-          classpath_sb.append (File.pathSeparatorChar);
-        classpath_sb.append (new File (cp).getAbsolutePath());
+          classpath_sb.append(File.pathSeparatorChar);
+        classpath_sb.append(new File(cp).getAbsolutePath());
       }
 
-      String classpath_str = classpath_sb.toString ();
+      String classpath_str = classpath_sb.toString();
 
       // - add classpath argument to command line
       if (classpath_str.length() > 0)
       {
-        args.add ("-classpath");
-        args.add (classpath_str);
+        args.add("-classpath");
+        args.add(classpath_str);
       }
 
-      String[] args_arr = (String[])args.toArray(output);
+      String[] args_arr = (String[]) args.toArray(output);
 
-      retval = executor.executeCommand (args_arr, output);
+      retval = executor.executeCommand(args_arr, output);
 
       if (retval != 0)
       {
-        CompileResult result = new CompileResult (this.langpack.getString ("CompilePanel.error.invalidarguments"), args_arr, output[0], output[1]);
-        this.listener.handleCompileError (result);
-        if (! result.isContinue ())
+        CompileResult result =
+          new CompileResult(
+            this.langpack.getString("CompilePanel.error.invalidarguments"),
+            args_arr,
+            output[0],
+            output[1]);
+        this.listener.handleCompileError(result);
+        if (!result.isContinue())
           return result;
       }
 
@@ -844,4 +885,3 @@ public class CompileWorker implements Runnable
   }
 
 }
-

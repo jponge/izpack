@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               IzPackKMetalTheme.java
  *  Description :        The metal theme for IzPack with the Kunststoff L&F.
@@ -53,13 +53,11 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
   /**  Secondary color. */
   private final ColorUIResource secondary3 = new ColorUIResource(224, 224, 224);
 
-
   /**  The constructor.  */
   public IzPackKMetalTheme()
   {
     super();
   }
-
 
   /**
    *  Returns the wished color.
@@ -71,7 +69,6 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
     return primary1;
   }
 
-
   /**
    *  Returns the wished color.
    *
@@ -81,7 +78,6 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
   {
     return primary2;
   }
-
 
   /**
    *  Returns the wished color.
@@ -93,7 +89,6 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
     return primary3;
   }
 
-
   /**
    *  Returns the wished color.
    *
@@ -103,7 +98,6 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
   {
     return secondary1;
   }
-
 
   /**
    *  Returns the wished color.
@@ -115,7 +109,6 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
     return secondary2;
   }
 
-
   /**
    *  Returns the wished color.
    *
@@ -126,4 +119,3 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
     return secondary3;
   }
 }
-

@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               TargetPanel.java
  *  Description :        A panel to select the installation path.
@@ -73,7 +73,6 @@ public class TargetPanel extends IzPanel implements ActionListener
   /**  The layout constraints. */
   private GridBagConstraints gbConstraints;
 
-
   /**
    *  The constructor.
    *
@@ -97,8 +96,11 @@ public class TargetPanel extends IzPanel implements ActionListener
 
     // We create and put the components
 
-    infoLabel = new JLabel(parent.langpack.getString("TargetPanel.info"),
-      parent.icons.getImageIcon("home"), JLabel.TRAILING);
+    infoLabel =
+      new JLabel(
+        parent.langpack.getString("TargetPanel.info"),
+        parent.icons.getImageIcon("home"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, 0, 2, 1, 3.0, 0.0);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -114,9 +116,11 @@ public class TargetPanel extends IzPanel implements ActionListener
     layout.addLayoutComponent(textField, gbConstraints);
     add(textField);
 
-    browseButton = ButtonFactory.createButton(parent.langpack.getString("TargetPanel.browse"),
-      parent.icons.getImageIcon("open"),
-      idata.buttonsHColor);
+    browseButton =
+      ButtonFactory.createButton(
+        parent.langpack.getString("TargetPanel.browse"),
+        parent.icons.getImageIcon("open"),
+        idata.buttonsHColor);
     browseButton.addActionListener(this);
     parent.buildConstraints(gbConstraints, 1, 1, 1, 1, 1.0, 0.0);
     gbConstraints.fill = GridBagConstraints.HORIZONTAL;
@@ -124,7 +128,6 @@ public class TargetPanel extends IzPanel implements ActionListener
     layout.addLayoutComponent(browseButton, gbConstraints);
     add(browseButton);
   }
-
 
   /**
    *  Loads up the "dir" resource associated with TargetPanel. Acceptable dir
@@ -161,8 +164,8 @@ public class TargetPanel extends IzPanel implements ActionListener
       else
       {
         // first try to look up by specific os name
-        os.replace(' ', '_');// avoid spaces in file names
-        os = os.toLowerCase();// for consistency among TargetPanel res files
+        os.replace(' ', '_'); // avoid spaces in file names
+        os = os.toLowerCase(); // for consistency among TargetPanel res files
         in = parent.getResource("TargetPanel.dir.".concat(os));
         // if not specific os, try getting generic 'unix' resource file
         if (in == null)
@@ -191,23 +194,21 @@ public class TargetPanel extends IzPanel implements ActionListener
           break;
       }
       defaultDir = line;
-    }
-    catch (Exception e)
+    } catch (Exception e)
     {
-      defaultDir = null;// leave unset to take the system default set by Installer class
-    }
-    finally
+      defaultDir = null;
+      // leave unset to take the system default set by Installer class
+    } finally
     {
       try
       {
         if (br != null)
           br.close();
+      } catch (IOException ignored)
+      {
       }
-      catch (IOException ignored)
-      {}
     }
   }
-
 
   /**
    *  Indicates wether the panel has been validated or not.
@@ -222,13 +223,16 @@ public class TargetPanel extends IzPanel implements ActionListener
     // We put a warning if the specified target is nameless
     if (installPath.length() == 0)
     {
-      int res = JOptionPane.showConfirmDialog(this,
-        parent.langpack.getString("TargetPanel.empty_target"),
-        parent.langpack.getString("installer.warning"),
-        JOptionPane.YES_NO_OPTION);
+      int res =
+        JOptionPane.showConfirmDialog(
+          this,
+          parent.langpack.getString("TargetPanel.empty_target"),
+          parent.langpack.getString("installer.warning"),
+          JOptionPane.YES_NO_OPTION);
       ok = (res == JOptionPane.YES_OPTION);
     }
-    if (!ok) return ok;
+    if (!ok)
+      return ok;
 
     // Normalize the path
     File path = new File(installPath);
@@ -237,20 +241,23 @@ public class TargetPanel extends IzPanel implements ActionListener
     // We put a warning if the directory exists else we warn that it will be created
     if (path.exists())
     {
-      int res = JOptionPane.showConfirmDialog(this,
-        parent.langpack.getString("TargetPanel.warn"),
-        parent.langpack.getString("installer.warning"),
-        JOptionPane.YES_NO_OPTION);
+      int res =
+        JOptionPane.showConfirmDialog(
+          this,
+          parent.langpack.getString("TargetPanel.warn"),
+          parent.langpack.getString("installer.warning"),
+          JOptionPane.YES_NO_OPTION);
       ok = (res == JOptionPane.YES_OPTION);
-    }
-    else
-      JOptionPane.showMessageDialog(this, parent.langpack.getString("TargetPanel.createdir") +
-        "\n" + installPath);
+    } else
+      JOptionPane.showMessageDialog(
+        this,
+        parent.langpack.getString("TargetPanel.createdir")
+          + "\n"
+          + installPath);
 
     idata.setInstallPath(installPath);
     return ok;
   }
-
 
   /**
    *  Actions-handling method.
@@ -279,7 +286,6 @@ public class TargetPanel extends IzPanel implements ActionListener
     }
   }
 
-
   /**
    *  Asks to make the XML panel data.
    *
@@ -290,4 +296,3 @@ public class TargetPanel extends IzPanel implements ActionListener
     new TargetPanelAutomationHelper().makeXMLData(idata, panelRoot);
   }
 }
-

@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               StdPackager.java
  *  Description :        The standard installer packager class.
@@ -60,7 +60,8 @@ public class StdPackager extends Packager
    * @param  plistener       The packager listener.
    * @exception  Exception   Description of the Exception
    */
-  public StdPackager(String outputFilename, PackagerListener plistener) throws Exception
+  public StdPackager(String outputFilename, PackagerListener plistener)
+    throws Exception
   {
     packs = new ArrayList();
     langpacks = new ArrayList();
@@ -75,15 +76,15 @@ public class StdPackager extends Packager
 
     // Copies the skeleton installer
     sendMsg("Copying the skeleton installer ...");
-    
-    writeSkeletonInstaller (outJar);
+
+    writeSkeletonInstaller(outJar);
   }
 
   public boolean allowPackFileBackReferences()
   {
-  	return true;
+    return true;
   }
-  
+
   /**
    *  Adds a pack (the compiler sends the merged data).
    *
@@ -95,13 +96,20 @@ public class StdPackager extends Packager
    * @return                Description of the Return Value
    * @exception  Exception  Description of the Exception
    */
-  public ZipOutputStream addPack(int packNumber, String name, List osConstraints, boolean required,
-                                 String description, boolean preselected) throws Exception
+  public ZipOutputStream addPack(
+    int packNumber,
+    String name,
+    List osConstraints,
+    boolean required,
+    String description,
+    boolean preselected)
+    throws Exception
   {
     sendMsg("Adding pack #" + packNumber + " : " + name + " ...");
 
     // Adds it in the packs array
-    Pack pack = new Pack(name, description, osConstraints, required, preselected);
+    Pack pack =
+      new Pack(name, description, osConstraints, required, preselected);
     packs.add(packNumber, pack);
 
     // Returns the suiting output stream
@@ -110,7 +118,6 @@ public class StdPackager extends Packager
     outJar.putNextEntry(entry);
     return outJar;
   }
-
 
   /**
    *  Sets the GUI preferences.
@@ -129,7 +136,6 @@ public class StdPackager extends Packager
     outJar.closeEntry();
   }
 
-
   /**
    *  Adds a panel.
    *
@@ -137,15 +143,16 @@ public class StdPackager extends Packager
    * @param  input          The stream to get the file data from.
    * @exception  Exception  Description of the Exception
    */
-  public void addPanelClass(String classFilename, InputStream input) throws Exception
+  public void addPanelClass(String classFilename, InputStream input)
+    throws Exception
   {
     sendMsg("Adding the (sub)classes for " + classFilename + " ...");
 
-    outJar.putNextEntry(new ZipEntry("com/izforge/izpack/panels/" + classFilename));
+    outJar.putNextEntry(
+      new ZipEntry("com/izforge/izpack/panels/" + classFilename));
     copyStream(input, outJar);
     outJar.closeEntry();
   }
-
 
   /**
    *  Sets the panels order.
@@ -158,12 +165,11 @@ public class StdPackager extends Packager
     sendMsg("Setting the panels order ...");
 
     outJar.putNextEntry(new ZipEntry("panelsOrder"));
-	ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-	objOut.writeObject(order);
-	objOut.flush();
+    ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+    objOut.writeObject(order);
+    objOut.flush();
     outJar.closeEntry();
   }
-
 
   /**
    *  Sets the informations related to this installation.
@@ -182,7 +188,6 @@ public class StdPackager extends Packager
     outJar.closeEntry();
   }
 
-
   /**
    *  Adds Variable Declaration.
    *
@@ -198,7 +203,6 @@ public class StdPackager extends Packager
     objOut.flush();
     outJar.closeEntry();
   }
-
 
   /**
    *  Adds a resource.
@@ -216,7 +220,6 @@ public class StdPackager extends Packager
     outJar.closeEntry();
   }
 
-
   /**
    *  Adds a native library.
    *
@@ -233,7 +236,6 @@ public class StdPackager extends Packager
     outJar.closeEntry();
     input.close();
   }
-
 
   /**
    *  Adds a language pack.
@@ -253,7 +255,6 @@ public class StdPackager extends Packager
     outJar.closeEntry();
     input.close();
   }
-
 
   /**
    *  Adds a jar file content to the installer.
@@ -279,13 +280,11 @@ public class StdPackager extends Packager
         copyStream(zin, outJar);
         outJar.closeEntry();
         zin.close();
-      }
-      catch (ZipException zerr)
+      } catch (ZipException zerr)
       {
       }
     }
   }
-
 
   /**
    *  Tells the packager to finish the job (misc writings, cleanups, closings ,
@@ -337,4 +336,3 @@ public class StdPackager extends Packager
     sendStop();
   }
 }
-

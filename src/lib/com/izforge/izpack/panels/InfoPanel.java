@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               InfoPanel.java
  *  Description :        A panel to show some textual information.
@@ -62,7 +62,6 @@ public class InfoPanel extends IzPanel
   /**  The info string. */
   private String info;
 
-
   /**
    *  The constructor.
    *
@@ -83,8 +82,11 @@ public class InfoPanel extends IzPanel
 
     // We add the components
 
-    infoLabel = new JLabel(parent.langpack.getString("InfoPanel.info"),
-      parent.icons.getImageIcon("edit"), JLabel.TRAILING);
+    infoLabel =
+      new JLabel(
+        parent.langpack.getString("InfoPanel.info"),
+        parent.icons.getImageIcon("edit"),
+        JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.1);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
     gbConstraints.fill = GridBagConstraints.NONE;
@@ -103,7 +105,6 @@ public class InfoPanel extends IzPanel
     add(scroller);
   }
 
-
   /**  Loads the info text.  */
   private void loadInfo()
   {
@@ -111,13 +112,11 @@ public class InfoPanel extends IzPanel
     {
       String resNamePrifix = "InfoPanel.info";
       info = ResourceManager.getInstance().getTextResource(resNamePrifix);
-    }
-    catch (Exception err)
+    } catch (Exception err)
     {
       info = "Error : could not load the info text !";
     }
   }
-
 
   /**
    *  Indicates wether the panel has been validated or not.
@@ -129,4 +128,3 @@ public class InfoPanel extends IzPanel
     return true;
   }
 }
-

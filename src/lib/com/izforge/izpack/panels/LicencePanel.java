@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               LicencePanel.java
  *  Description :        A panel to prompt the user for a licence agreement.
@@ -63,7 +63,6 @@ public class LicencePanel extends IzPanel implements ActionListener
   /**  The scrolling container. */
   private JScrollPane scroller;
 
-
   /**
    *  The constructor.
    *
@@ -82,13 +81,17 @@ public class LicencePanel extends IzPanel implements ActionListener
 
     // We put our components
 
-    JLabel infoLabel = new JLabel(parent.langpack.getString("LicencePanel.info"), parent.icons.getImageIcon("history"), JLabel.TRAILING);
+    JLabel infoLabel =
+      new JLabel(
+        parent.langpack.getString("LicencePanel.info"),
+        parent.icons.getImageIcon("history"),
+        JLabel.TRAILING);
     add(infoLabel);
 
     add(Box.createRigidArea(new Dimension(0, 3)));
 
     textArea = new JTextArea(licence);
-    textArea.setMargin(new Insets(2,2,2,2));
+    textArea.setMargin(new Insets(2, 2, 2, 2));
     textArea.setCaretPosition(0);
     textArea.setEditable(false);
     textArea.setLineWrap(true);
@@ -99,17 +102,20 @@ public class LicencePanel extends IzPanel implements ActionListener
 
     ButtonGroup group = new ButtonGroup();
 
-    yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
+    yesRadio =
+      new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
     group.add(yesRadio);
     add(yesRadio);
     yesRadio.addActionListener(this);
 
-    noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.notagree"), true);
+    noRadio =
+      new JRadioButton(
+        parent.langpack.getString("LicencePanel.notagree"),
+        true);
     group.add(noRadio);
     add(noRadio);
     noRadio.addActionListener(this);
   }
-
 
   /**  Loads the licence text.  */
   private void loadLicence()
@@ -119,13 +125,11 @@ public class LicencePanel extends IzPanel implements ActionListener
       // We read it
       String resNamePrifix = "LicencePanel.licence";
       licence = ResourceManager.getInstance().getTextResource(resNamePrifix);
-    }
-    catch (Exception err)
+    } catch (Exception err)
     {
       licence = "Error : could not load the licence text !";
     }
   }
-
 
   /**
    *  Actions-handling method (here it allows the installation).
@@ -140,7 +144,6 @@ public class LicencePanel extends IzPanel implements ActionListener
       parent.lockNextButton();
   }
 
-
   /**
    *  Indicates wether the panel has been validated or not.
    *
@@ -152,11 +155,9 @@ public class LicencePanel extends IzPanel implements ActionListener
     {
       parent.exit();
       return false;
-    }
-    else
+    } else
       return (yesRadio.isSelected());
   }
-
 
   /**  Called when the panel becomes active.  */
   public void panelActivate()
@@ -165,4 +166,3 @@ public class LicencePanel extends IzPanel implements ActionListener
       parent.lockNextButton();
   }
 }
-

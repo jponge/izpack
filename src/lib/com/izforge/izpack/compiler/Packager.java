@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               Packager.java
  *  Description :        The abstract class for the packagers.
@@ -54,8 +54,8 @@ import com.izforge.izpack.Pack;
 public abstract class Packager
 {
   /**  The path to the skeleton installer. */
-  public final static String SKELETON_SUBPATH = "lib" +
-    File.separator + "installer.jar";
+  public final static String SKELETON_SUBPATH =
+    "lib" + File.separator + "installer.jar";
 
   /**  The packs informations. */
   protected ArrayList packs;
@@ -65,7 +65,6 @@ public abstract class Packager
 
   /**  The listeners. */
   protected PackagerListener listener;
-
 
   /**
    *  Adds a listener.
@@ -77,7 +76,6 @@ public abstract class Packager
     this.listener = listener;
   }
 
-
   /**
    *  Dispatches a message to the listeners.
    *
@@ -88,13 +86,11 @@ public abstract class Packager
     listener.packagerMsg(job);
   }
 
-
   /**  Dispatches a start event to the listeners.  */
   protected void sendStart()
   {
     listener.packagerStart();
   }
-
 
   /**  Dispatches a stop event to the listeners.  */
   protected void sendStop()
@@ -102,31 +98,31 @@ public abstract class Packager
     listener.packagerStop();
   }
 
-  
   /**
    * Write the skeleton installer to the output JAR. 
    * 
    * @param out
    * @throws Exception
    */
-  public void writeSkeletonInstaller (JarOutputStream out)
-    throws Exception
+  public void writeSkeletonInstaller(JarOutputStream out) throws Exception
   {
     InputStream is = getClass().getResourceAsStream("/lib/installer.jar");
     ZipInputStream skeleton_is = null;
     if (is != null)
     {
-      skeleton_is = new ZipInputStream (is);
+      skeleton_is = new ZipInputStream(is);
     }
 
     if (skeleton_is == null)
     {
-      skeleton_is = new ZipInputStream (new FileInputStream (
-        Compiler.IZPACK_HOME + "lib" + File.separator + "installer.jar"));    
+      skeleton_is =
+        new ZipInputStream(
+          new FileInputStream(
+            Compiler.IZPACK_HOME + "lib" + File.separator + "installer.jar"));
     }
-    
+
     ZipEntry zentry;
-       
+
     while ((zentry = skeleton_is.getNextEntry()) != null)
     {
       // Puts a new entry
@@ -138,9 +134,9 @@ public abstract class Packager
       out.closeEntry();
       skeleton_is.closeEntry();
     }
-    
+
   }
-  
+
   /**
    *  Adds a pack (the compiler sends the merged data).
    *
@@ -153,10 +149,14 @@ public abstract class Packager
    * @return                Description of the Return Value
    * @exception  Exception  Description of the Exception
    */
-  public abstract ZipOutputStream addPack(int packNumber, String name, List osConstraints,
-                                          boolean required, String description, boolean preselected)
-     throws Exception;
-
+  public abstract ZipOutputStream addPack(
+    int packNumber,
+    String name,
+    List osConstraints,
+    boolean required,
+    String description,
+    boolean preselected)
+    throws Exception;
 
   /**
    *  Adds a panel.
@@ -166,8 +166,7 @@ public abstract class Packager
    * @exception  Exception  Description of the Exception
    */
   public abstract void addPanelClass(String classFilename, InputStream input)
-     throws Exception;
-
+    throws Exception;
 
   /**
    *  Sets the GUI preferences.
@@ -191,7 +190,6 @@ public abstract class Packager
    */
   public abstract void setPanelsOrder(ArrayList order) throws Exception;
 
-
   /**
    *  Sets the informations related to this installation.
    *
@@ -208,7 +206,6 @@ public abstract class Packager
    */
   public abstract void setVariables(Properties varDef) throws Exception;
 
-
   /**
    *  Adds a resource.
    *
@@ -216,8 +213,8 @@ public abstract class Packager
    * @param  input          The stream to get the data from.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void addResource(String resId, InputStream input) throws Exception;
-
+  public abstract void addResource(String resId, InputStream input)
+    throws Exception;
 
   /**
    *  Adds a language pack.
@@ -226,8 +223,8 @@ public abstract class Packager
    * @param  input          The stream to get the data from.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void addLangPack(String iso3, InputStream input) throws Exception;
-
+  public abstract void addLangPack(String iso3, InputStream input)
+    throws Exception;
 
   /**
    *  Adds a native library.
@@ -236,8 +233,8 @@ public abstract class Packager
    * @param  input          The stream to get the data from.
    * @exception  Exception  Description of the Exception
    */
-  public abstract void addNativeLibrary(String name, InputStream input) throws Exception;
-
+  public abstract void addNativeLibrary(String name, InputStream input)
+    throws Exception;
 
   /**
    *  Adds a jar file content to the installer.
@@ -247,7 +244,6 @@ public abstract class Packager
    */
   public abstract void addJarContent(String file) throws Exception;
 
-
   /**
    *  Tells the packager to finish the job (misc writings, cleanups, closings ,
    *  ...).
@@ -255,7 +251,6 @@ public abstract class Packager
    * @exception  Exception  Description of the Exception
    */
   public abstract void finish() throws Exception;
-
 
   /**
    *  Copies all the data from the specified input stream to the specified
@@ -268,7 +263,7 @@ public abstract class Packager
    * @exception  IOException  if an I/O error occurs
    */
   protected long copyStream(InputStream in, OutputStream out)
-     throws IOException
+    throws IOException
   {
     byte[] buffer = new byte[5120];
     long bytesCopied = 0;
@@ -281,7 +276,6 @@ public abstract class Packager
     return bytesCopied;
   }
 
-
   /**
    *  Called by the Compiler when the pack content adding is done. (JP)
    *
@@ -293,4 +287,3 @@ public abstract class Packager
     ((Pack) packs.get(number)).nbytes = nbytes;
   }
 }
-

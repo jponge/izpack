@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               Destroyer.java
  *  Description :        The destroyer.
@@ -53,7 +53,6 @@ public class Destroyer extends Thread
   /**  the destroyer listener. */
   private AbstractUIProgressHandler handler;
 
-
   /**
    *  The constructor.
    *
@@ -61,7 +60,10 @@ public class Destroyer extends Thread
    * @param  forceDestroy  Shall we force the recursive deletion.
    * @param  handler       The destroyer listener.
    */
-  public Destroyer(String installPath, boolean forceDestroy, AbstractUIProgressHandler handler)
+  public Destroyer(
+    String installPath,
+    boolean forceDestroy,
+    AbstractUIProgressHandler handler)
   {
     super("IzPack - Destroyer");
 
@@ -69,7 +71,6 @@ public class Destroyer extends Thread
     this.forceDestroy = forceDestroy;
     this.handler = handler;
   }
-
 
   /**  The run method.  */
   public void run()
@@ -84,7 +85,7 @@ public class Destroyer extends Thread
       ArrayList files = getFilesList();
       int size = files.size();
 
-      handler.startAction ("destroy", size);
+      handler.startAction("destroy", size);
 
       // We destroy the files
       for (int i = 0; i < size; i++)
@@ -98,16 +99,14 @@ public class Destroyer extends Thread
       handler.progress(size, "[ cleanups ]");
       cleanup(new File(installPath));
 
-      handler.stopAction ();
-    }
-    catch (Exception err)
+      handler.stopAction();
+    } catch (Exception err)
     {
-      handler.stopAction ();
+      handler.stopAction();
       err.printStackTrace();
       handler.emitError("exception caught", err.toString());
     }
   }
-
 
   /**
    *  Asks the JVM for the uninstaller deletion.
@@ -129,7 +128,6 @@ public class Destroyer extends Thread
     path.deleteOnExit();
     inst.deleteOnExit();
   }
-
 
   /**
    *  Returns an ArrayList of the files to delete.
@@ -163,11 +161,12 @@ public class Destroyer extends Thread
   private ArrayList getExecutablesList() throws Exception
   {
     ArrayList executables = new ArrayList();
-    ObjectInputStream in = new ObjectInputStream(getClass().getResourceAsStream("/executables"));
+    ObjectInputStream in =
+      new ObjectInputStream(getClass().getResourceAsStream("/executables"));
     int num = in.readInt();
-    for(int i=0;i<num;i++)
+    for (int i = 0; i < num; i++)
     {
-      ExecutableFile file = (ExecutableFile)in.readObject();
+      ExecutableFile file = (ExecutableFile) in.readObject();
       executables.add(file);
     }
     return executables;
@@ -188,11 +187,8 @@ public class Destroyer extends Thread
       for (int i = 0; i < size; i++)
         cleanup(files[i]);
       file.delete();
-    }
-    else
-      if (forceDestroy)
-        file.delete();
+    } else if (forceDestroy)
+      file.delete();
 
   }
 }
-

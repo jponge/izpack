@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               Uninstaller.java
  *  Description :        The uninstaller class.
@@ -47,11 +47,10 @@ public class Uninstaller
     try
     {
       Class clazz = Uninstaller.class;
-      Method target = clazz.getMethod("uninstall",
-                                      new Class[] {String[].class});
+      Method target =
+        clazz.getMethod("uninstall", new Class[] { String[].class });
       new SelfModifier(target).invoke(args);
-    }
-    catch (Exception ioeOrTypo)
+    } catch (Exception ioeOrTypo)
     {
       System.err.println(ioeOrTypo.getMessage());
       ioeOrTypo.printStackTrace();
@@ -60,15 +59,14 @@ public class Uninstaller
       uninstall(args);
     }
   }
-  
+
   public static void uninstall(String[] args)
   {
     try
     {
       MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
       new UninstallerFrame();
-    }
-    catch (Exception err)
+    } catch (Exception err)
     {
       System.err.println("- Error -");
       err.printStackTrace();
@@ -76,4 +74,3 @@ public class Uninstaller
     }
   }
 }
-

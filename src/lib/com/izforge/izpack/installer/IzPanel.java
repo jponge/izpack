@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               IzPanel.java
  *  Description :        The class for the panels.
@@ -49,7 +49,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler
   /**  The parent IzPack installer frame. */
   protected InstallerFrame parent;
 
-
   /**
    *  The constructor.
    *
@@ -64,7 +63,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     this.parent = parent;
   }
 
-
   /**
    *  Indicates wether the panel has been validated or not. The installer won't
    *  let the user go further through the installation process until the panel
@@ -77,21 +75,22 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     return true;
   }
 
-
   /**
    *  This method is called when the panel becomes active. Default is to do
    *  nothing : feel free to implement what you need in your subclasses. A panel
    *  becomes active when the user reaches it during the installation process.
    */
-  public void panelActivate() { }
-
+  public void panelActivate()
+  {
+  }
 
   /**
    *  This method is called when the panel gets desactivated, when the user
    *  switches to the next panel. By default it doesn't do anything.
    */
-  public void panelDeactivate() { }
-
+  public void panelDeactivate()
+  {
+  }
 
   /**
    *  Asks the panel to set its own XML data that can be brought back for an
@@ -100,8 +99,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
    *
    * @param  panelRoot  The XML root element of the panels blackbox tree.
    */
-  public void makeXMLData(XMLElement panelRoot) { }
-
+  public void makeXMLData(XMLElement panelRoot)
+  {
+  }
 
   /**
    * Ask the user a question.
@@ -114,11 +114,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
    * 
    * @see AbstractUIHandler#askQuestion(String, String, int)
    */
-  public int askQuestion (String title, String question, int choices)
+  public int askQuestion(String title, String question, int choices)
   {
-    return askQuestion (title, question, choices, -1);
+    return askQuestion(title, question, choices, -1);
   }
-  
+
   /**
    * Ask the user a question.
    * 
@@ -130,30 +130,36 @@ public class IzPanel extends JPanel implements AbstractUIHandler
    * @return The user's choice.
    * @see AbstractUIHandler#askQuestion(String, String, int, int)
    */
-  public int askQuestion (String title, String question, int choices, int default_choice)
+  public int askQuestion(
+    String title,
+    String question,
+    int choices,
+    int default_choice)
   {
     int jo_choices = 0;
-    
+
     if (choices == AbstractUIHandler.CHOICES_YES_NO)
-      jo_choices = JOptionPane.YES_NO_OPTION; 
+      jo_choices = JOptionPane.YES_NO_OPTION;
     else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
       jo_choices = JOptionPane.YES_NO_CANCEL_OPTION;
-    
-    int user_choice = JOptionPane.showConfirmDialog (
-        this, 
-        (Object)question,
+
+    int user_choice =
+      JOptionPane.showConfirmDialog(
+        this,
+        (Object) question,
         title,
-        jo_choices, JOptionPane.QUESTION_MESSAGE);
-    
+        jo_choices,
+        JOptionPane.QUESTION_MESSAGE);
+
     if (user_choice == JOptionPane.CANCEL_OPTION)
       return AbstractUIHandler.ANSWER_CANCEL;
-   
+
     if (user_choice == JOptionPane.YES_OPTION)
       return AbstractUIHandler.ANSWER_YES;
-       
+
     if (user_choice == JOptionPane.NO_OPTION)
       return AbstractUIHandler.ANSWER_NO;
-       
+
     return default_choice;
   }
 
@@ -162,31 +168,41 @@ public class IzPanel extends JPanel implements AbstractUIHandler
    * 
    * @param message The notification.
    */
-  public void emitNotification (String message)
+  public void emitNotification(String message)
   {
     // ignore it
   }
-  
+
   /**
    * Warn the user about something.
    * 
    * @param message The warning message.
    */
-  public boolean emitWarning (String title, String message)
+  public boolean emitWarning(String title, String message)
   {
-    return (JOptionPane.showConfirmDialog(this, message, title, 
-      JOptionPane.WARNING_MESSAGE, JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
-      
+    return (
+      JOptionPane.showConfirmDialog(
+        this,
+        message,
+        title,
+        JOptionPane.WARNING_MESSAGE,
+        JOptionPane.OK_CANCEL_OPTION)
+        == JOptionPane.OK_OPTION);
+
   }
-  
+
   /**
    * Notify the user of some error.
    * 
    * @param message The error message.
    */
-  public void emitError (String title, String message)
+  public void emitError(String title, String message)
   {
-    JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
+    JOptionPane.showMessageDialog(
+      this,
+      message,
+      title,
+      JOptionPane.ERROR_MESSAGE);
   }
-  
+
 }

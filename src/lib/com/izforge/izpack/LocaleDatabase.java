@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               LocaleDatabase.java
  *  Description :        Represents a langpack database.
@@ -75,7 +75,6 @@ public class LocaleDatabase extends TreeMap
     }
   }
 
-
   /**
    *  Convenience method to retrieve an element.
    *
@@ -87,4 +86,3 @@ public class LocaleDatabase extends TreeMap
     return (String) get(key);
   }
 }
-

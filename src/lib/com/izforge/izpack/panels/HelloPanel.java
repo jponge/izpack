@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               HelloPanel.java
  *  Description :        A panel to welcome the user.
@@ -59,7 +59,6 @@ public class HelloPanel extends IzPanel
   /**  The application URL label. */
   private JLabel appURLLabel;
 
-
   /**
    *  The constructor.
    *
@@ -90,9 +89,14 @@ public class HelloPanel extends IzPanel
 
     centerPanel.add(Box.createVerticalStrut(10));
 
-    str = parent.langpack.getString("HelloPanel.welcome1") + idata.info.getAppName() +
-      " " + idata.info.getAppVersion() + parent.langpack.getString("HelloPanel.welcome2");
-    welcomeLabel = new JLabel(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
+    str =
+      parent.langpack.getString("HelloPanel.welcome1")
+        + idata.info.getAppName()
+        + " "
+        + idata.info.getAppVersion()
+        + parent.langpack.getString("HelloPanel.welcome2");
+    welcomeLabel =
+      new JLabel(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
     centerPanel.add(welcomeLabel);
 
     centerPanel.add(Box.createVerticalStrut(20));
@@ -101,34 +105,40 @@ public class HelloPanel extends IzPanel
     int size = authors.size();
     if (size > 0)
     {
-	    str = parent.langpack.getString("HelloPanel.authors");
-	    appAuthorsLabel = new JLabel(str, parent.icons.getImageIcon("information"),
-	      JLabel.TRAILING);
-	    centerPanel.add(appAuthorsLabel);
-	
-	    JLabel label;
-	    for (int i = 0; i < size; i++)
-	    {
-	      Info.Author a = (Info.Author) authors.get(i);
-        String email = (a.getEmail() != null) ? (" <" + a.getEmail() + ">") : "";
-	      label = new JLabel(" - " + a.getName() + email,
-	        parent.icons.getImageIcon("empty"), JLabel.TRAILING);
-	      centerPanel.add(label);
-	    }
+      str = parent.langpack.getString("HelloPanel.authors");
+      appAuthorsLabel =
+        new JLabel(
+          str,
+          parent.icons.getImageIcon("information"),
+          JLabel.TRAILING);
+      centerPanel.add(appAuthorsLabel);
 
-	    centerPanel.add(Box.createVerticalStrut(20));
+      JLabel label;
+      for (int i = 0; i < size; i++)
+      {
+        Info.Author a = (Info.Author) authors.get(i);
+        String email =
+          (a.getEmail() != null) ? (" <" + a.getEmail() + ">") : "";
+        label =
+          new JLabel(
+            " - " + a.getName() + email,
+            parent.icons.getImageIcon("empty"),
+            JLabel.TRAILING);
+        centerPanel.add(label);
+      }
+
+      centerPanel.add(Box.createVerticalStrut(20));
     }
 
     if (idata.info.getAppURL() != null)
     {
-      str = parent.langpack.getString("HelloPanel.url") +
-            idata.info.getAppURL();
-      appURLLabel = new JLabel(str, parent.icons.getImageIcon("bookmark"),
-                               JLabel.TRAILING);
+      str =
+        parent.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
+      appURLLabel =
+        new JLabel(str, parent.icons.getImageIcon("bookmark"), JLabel.TRAILING);
       centerPanel.add(appURLLabel);
     }
   }
-
 
   /**
    *  Indicates wether the panel has been validated or not.
@@ -140,4 +150,3 @@ public class HelloPanel extends IzPanel
     return true;
   }
 }
-

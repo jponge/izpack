@@ -1,7 +1,7 @@
 /*
  *  $Id$
  *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge
+ *  Copyright (C) 2001-2004 Julien Ponge
  *
  *  File :               FinishPanel.java
  *  Description :        A panel to end with the installation.
@@ -66,7 +66,6 @@ public class FinishPanel extends IzPanel implements ActionListener
   /**  The variables substitutor. */
   private VariableSubstitutor vs;
 
-
   /**
    *  The constructor.
    *
@@ -95,7 +94,6 @@ public class FinishPanel extends IzPanel implements ActionListener
     add(centerPanel);
   }
 
-
   /**
    *  Indicates wether the panel has been validated or not.
    *
@@ -106,7 +104,6 @@ public class FinishPanel extends IzPanel implements ActionListener
     return true;
   }
 
-
   /**  Called when the panel becomes active.  */
   public void panelActivate()
   {
@@ -115,35 +112,49 @@ public class FinishPanel extends IzPanel implements ActionListener
     if (idata.installSuccess)
     {
       // We set the information
-      centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.success"),
-        parent.icons.getImageIcon("information"), JLabel.TRAILING));
+      centerPanel.add(
+        new JLabel(
+          parent.langpack.getString("FinishPanel.success"),
+          parent.icons.getImageIcon("information"),
+          JLabel.TRAILING));
       centerPanel.add(Box.createVerticalStrut(20));
-      
+
       if (idata.info.getWriteUninstaller())
       {
         // We prepare a message for the uninstaller feature
-        String path = translatePath("$INSTALL_PATH") + File.separator +
-          "Uninstaller";
+        String path =
+          translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
-        centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.uninst.info"),
-          parent.icons.getImageIcon("information"), JLabel.TRAILING));
-        centerPanel.add(new JLabel(path, parent.icons.getImageIcon("empty"), JLabel.TRAILING));
+        centerPanel.add(
+          new JLabel(
+            parent.langpack.getString("FinishPanel.uninst.info"),
+            parent.icons.getImageIcon("information"),
+            JLabel.TRAILING));
+        centerPanel.add(
+          new JLabel(
+            path,
+            parent.icons.getImageIcon("empty"),
+            JLabel.TRAILING));
       }
 
       // We add the autoButton
       centerPanel.add(Box.createVerticalStrut(20));
-      autoButton = ButtonFactory.createButton(parent.langpack.getString("FinishPanel.auto"),
-        parent.icons.getImageIcon("edit"),
-        idata.buttonsHColor);
-      autoButton.setToolTipText(parent.langpack.getString("FinishPanel.auto.tip"));
+      autoButton =
+        ButtonFactory.createButton(
+          parent.langpack.getString("FinishPanel.auto"),
+          parent.icons.getImageIcon("edit"),
+          idata.buttonsHColor);
+      autoButton.setToolTipText(
+        parent.langpack.getString("FinishPanel.auto.tip"));
       autoButton.addActionListener(this);
       centerPanel.add(autoButton);
-    }
-    else
-      centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.fail"),
-        parent.icons.getImageIcon("information"), JLabel.TRAILING));
+    } else
+      centerPanel.add(
+        new JLabel(
+          parent.langpack.getString("FinishPanel.fail"),
+          parent.icons.getImageIcon("information"),
+          JLabel.TRAILING));
   }
-
 
   /**
    *  Actions-handling method.
@@ -174,16 +185,16 @@ public class FinishPanel extends IzPanel implements ActionListener
 
         autoButton.setEnabled(false);
       }
-    }
-    catch (Exception err)
+    } catch (Exception err)
     {
       err.printStackTrace();
-      JOptionPane.showMessageDialog(this, err.toString(),
+      JOptionPane.showMessageDialog(
+        this,
+        err.toString(),
         parent.langpack.getString("installer.error"),
         JOptionPane.ERROR_MESSAGE);
     }
   }
-
 
   /**
    *  Translates a relative path to a local system path.
@@ -200,4 +211,3 @@ public class FinishPanel extends IzPanel implements ActionListener
     return destination.replace('/', File.separatorChar);
   }
 }
-
