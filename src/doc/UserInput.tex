@@ -613,6 +613,13 @@ There are two types of built-in validators already provided: a
  returns \texttt{false}, a messagebox will display the contents of the 
 \texttt{txt} attribute and the user will be unable to continue to the next panel.\\
 
+You can specify a processor for a combobox:
+\begin{verbatim}
+<choice processor="fully.qualified.class.name"
+        set="selectedValue"/>
+\end{verbatim}
+so that you can fill a combobox with data on a simple way.
+
 \subsubsection{NotEmptyValidator}
 
 The \texttt{NotEmptyValidator} simply checks that the user entered a non-null 
@@ -668,6 +675,15 @@ parameters to your custom \texttt{Validator} by calling the \\
 object containing parameter names mapped to parameter values.  For an example, take a
 look at \\
 \texttt{com.izforge.izpack.util.RegularExpressionValidator}.\\
+
+Set values in the RuleInputField can be preprocessed. At now you can specify a
+processor class to pre process a value to be set at initial value of a
+RuleInputField. Syntax:
+\begin{verbatim}
+<spec set="0:defaultVal:classname" .../>
+\end{verbatim}
+The class name is an optional value. The class must implement the
+\texttt{Processor} interface.\\
 
 \subsection{Processing the Field Content}
 

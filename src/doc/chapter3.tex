@@ -116,6 +116,8 @@ grabs the server part.\\
 % More Internationalization
 \section{More Internationalization}
 
+\subsection{Special resources}
+
 IzPack is available in several languages. However you might want to
 internationalize some additional parts of your installer. In particular you
 might want this for the *InfoPanel and *LicencePanel. This is actually pretty
@@ -134,3 +136,20 @@ Same thing for the other Licence and Info panels.\\
 \textit{To sum up :} add \texttt{\_<iso3 code>} to the resource name for
 \texttt{InfoPanel}, \texttt{HTMLInfoPanel}, \texttt{LicencePanel} and
 \texttt{HTMLLicencePanel}.\\
+
+\subsection{Packs}
+
+Thanks to Thorsten Kamann, it is possible to translate the packs names and
+descriptions. To do that, you have to define a special identifier in the
+elements of the XML installation file and add the related entries in the
+suitable langpacks. For instance if you have the following XML snippet:
+\begin{verbatim}
+<pack name="core" id="core.package" ...>
+  <description/>
+</pack>
+\end{verbatim}
+then the related entries of the langpacks will look like this:
+\begin{verbatim}
+<str id="core.package" txt="Core Package"/>
+<str id="core.package.description" txt="The core package provides
+\end{verbatim}

@@ -4,16 +4,12 @@
         ==================================
         The DTD for IzPack Languages Packs 
         ==================================
-        
-        - DTD version : 1.0
-        - author :      Julien PONGE
-        - date :        July, 4th 2001
 -->
 
 <!-- The root element -->
 <!ELEMENT langpack (str+)>
 
 <!-- A String definition -->
-<!ELEMENT str EMPTY>
+<!ELEMENT str (#PCDATA)>
     <!ATTLIST str id CDATA #REQUIRED>
     <!ATTLIST str txt CDATA #REQUIRED>
