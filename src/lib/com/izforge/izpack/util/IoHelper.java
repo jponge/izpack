@@ -543,6 +543,7 @@ public class IoHelper
    * do not support getenv in an other way.
    * At the first call all environment variables will be loaded via
    * an exec.  
+   * On Windows keys are not case sensitive.
    * @param key variable name for which the value should be resolved
    * @return the value of the environment variable given
    * by key
@@ -553,6 +554,8 @@ public class IoHelper
       loadEnv();
     if( envVars == null)
       return( null );
+    if( OsVersion.IS_WINDOWS )
+      key = key.toUpperCase();
     return(String) ( envVars.get(key));
   }
   
@@ -603,18 +606,31 @@ public class IoHelper
       }
       else
       { // New var, perform the previous one.
-        if( var != null )
-        {
-          index = var.indexOf('=');
-          envVars.setProperty(var.substring(0, index), var.substring(index + 1));
-        }
+        setEnvVar(var);
         var = line;
       }
     }
-    if( var != null )
-    { // Add last env var.
-      index = var.indexOf('=');
-      envVars.setProperty(var.substring(0, index), var.substring(index + 1));
-    }
+    setEnvVar(var);
+  }
+  
+  /**
+   * Extracts key and value from the given string var.
+   * The key should be separated from the value by a sign.
+   * On Windows all chars of the key are translated to upper case.
+   * @param var
+   */
+  private static void setEnvVar( String var )
+  {
+    if( var == null)
+      return;
+    int index = var.indexOf('=');
+    if( index < 0 )
+      return;
+    String key = var.substring(0, index);
+    // On windows change all key chars to upper.
+    if( OsVersion.IS_WINDOWS )
+      key = key.toUpperCase();
+    envVars.setProperty(key, var.substring(index + 1));
+    
   }
 }

@@ -18,6 +18,7 @@
 - Italian langpack fixes (Fabrice Mirabille).
 - UserInputPanel: bug fixes by Per Abich (bugs #3233 and #3283).
 - Russian langpack fixes (Alexey Makhmutov).
+- IoHelper.getenv: on Windows keys are not case sensitive (Klaus Bartz)
 
   > 3.7.0 (build 2004.01.11)
 
