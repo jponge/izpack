@@ -97,43 +97,21 @@ public class Unpacker extends Thread
 
     if(targetOS.equalsIgnoreCase("unix")) 
     {
-
-      if(actualOS.lastIndexOf("unix")    > -1 ||
+      return
+        (actualOS.lastIndexOf("unix")    > -1 ||
          actualOS.lastIndexOf("linux")   > -1 ||
          actualOS.lastIndexOf("solaris") > -1 ||
          actualOS.lastIndexOf("sunos")   > -1 ||
          actualOS.lastIndexOf("aix")     > -1 ||
-         actualOS.lastIndexOf("bsd")     > -1 )
-      {
-                
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+         actualOS.lastIndexOf("bsd")     > -1 );
     }
     else if (targetOS.equalsIgnoreCase("windows"))
     {
-      if(actualOS.lastIndexOf("windows") > -1)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+      return(actualOS.lastIndexOf("windows") > -1);
     }
     else if (targetOS.equalsIgnoreCase("mac"))
     {
-      if(actualOS.lastIndexOf("mac") > -1)
-      {
-        return true;
-      }
-      else
-      {
-        return false;
-      }
+      return(actualOS.lastIndexOf("mac") > -1);
     }
     else
     {
