@@ -142,6 +142,7 @@ following parse types are available:
 at the \IzPack installation DTD}.\\
 
 \subsection{The Root Element \texttt{<installation>}}
+\label{root-element}
 
 The root element of an installation is \texttt{<installation>}. It takes
 one required attribute : \texttt{version}. The attribute defines the
@@ -150,6 +151,7 @@ if it is compatible with the XML file. This should be set to $1.0$ for
 the moment.\\
 
 \subsection{The Information Element \texttt{<info>}}
+\label{info-element}
 
 This element is used to specify some general information for the installer. It
 contains the following elements :
@@ -166,6 +168,7 @@ contains the following elements :
   \end{itemize}
   \item \texttt{<uninstaller>} : specifies whether to create an uninstaller after installation, it has only the \texttt{write} attribute, with default value \texttt{yes}. If this tag is not specified, the uninstaller will still be written.
   \item \texttt{<javaversion>} : specifies the minimum version of Java required to install your program. Values can be \texttt{1.2}, \texttt{1.2.2}, \texttt{1.4}, etc. The test is a lexical comparison against the \texttt{java.version} System property on the install machine.
+  \item \texttt{<webdir>} : Causes a ``web installer'' to be created, and specifies the URL packages are retrieved from at install time. The content of the tag must be a properly formed URL. See section~\ref{webinstaller} for more details.
 
 \end{itemize}\
 
@@ -174,7 +177,7 @@ Here is an example of a typical \texttt{<info>} section :\\
 \begin{verbatim}
 <info>
   <appname>Super extractor</appname>
-  <appversion>2.1 beta 666</appversion>
+  <appversion>2.1 beta 6</appversion>
   <url>http://www.superextractor.com/</url>
   <authors>
     <author name="John John Doo" email="jjd@jjd-mail.com"/>
@@ -186,6 +189,7 @@ Here is an example of a typical \texttt{<info>} section :\\
 \normalsize
 
 \subsection{The Variables Element \texttt{<variables>}}
+\label{variables-element}
 
 This element allows you to define variables for the variables
 substitution system. Some variables are built-in, such as
@@ -213,6 +217,7 @@ Here's a sample \texttt{<variables>} section :\\
 \normalsize
 
 \subsection{The GUI Preferences Element \texttt{<guiprefs>}}
+\label{guiprefs-element}
 
 This element allows you to set the behavior of your installer GUI. This
 information will not have any effect on the command-line installers that will be
@@ -298,6 +303,7 @@ Here is a small sample:
 \end{verbatim}
 
 \subsection{The Localization Element \texttt{<locale>}}
+\label{localization-element}
 
 This element is used to specify the language packs (langpacks) that you want to
 use for your installer. You must set one \texttt{<langpack>} markup per
@@ -342,6 +348,7 @@ ukr & Ukrainian \\ \hline
 \end{center}
 
 \subsection{The Resources Element \texttt{<resources>}}
+\label{resources-element}
 
 Several panels, such as the license panel and the shortcut panel,
 require additional data to perform their task. This data is supplied
@@ -382,6 +389,7 @@ Here's a sample :
 \normalsize
 
 \subsection{The Panels Element \texttt{<panels>}}
+\label{panels-element}
 
 Here you tell the compiler which panels you want to use. They will
 appear in the installer in the order in which they are listed in your
@@ -402,7 +410,8 @@ Here's a sample :
 \end{verbatim}
 \normalsize
 
-\subsection{The Packs Section \texttt{<packs>}}
+\subsection{The Packs Element \texttt{<packs>}}
+\label{packs-element}
 
 This is a crucial section as it is used to specify the files that need
 to be installed. The \texttt{<packs>} section consists of several 
@@ -699,6 +708,7 @@ Here's an example installation file :
 \normalsize
 
 \subsection{The Native Element \texttt{<native>}}
+\label{native-element}
 
 Use this if you want to use a feature that requires a native library.
 The native libraries are placed under \texttt{bin/native/..}. There are 2
@@ -720,7 +730,8 @@ Here's a sample :
 \end{verbatim}
 \normalsize
 
-\subsection{The jar Merging Element \texttt{<jar>}}
+\subsection{The Jar Merging Element \texttt{<jar>}}
+\label{jar-element}
 
 If you adapt \IzPack for your own needs, you might need to merge the
 content of another jar file into the jar installer. For instance, this
