@@ -89,18 +89,12 @@ public class Compiler extends Thread
   /**  Standard installer. */
   public final static String STANDARD = "standard";
 
-  /**  Standard-Kunststoff installer. */
-  public final static String STANDARD_KUNSTSTOFF = "standard-kunststoff";
-
   /**  Web installer. */
   public final static String WEB = "web";
 
-  /**  Web-Kunsstoff installer. */
-  public final static String WEB_KUNSTSTOFF = "web-kunststoff";
-
   /**  The IzPack home directory. */
   public static String IZPACK_HOME = ".";
-
+  
   /** Constant for checking attributes. */
   private static boolean YES = true;
 
@@ -582,7 +576,7 @@ public class Compiler extends Thread
    */
   protected GUIPrefs getGUIPrefs(XMLElement data) throws CompilerException
   {
-    // We get the XMLElement & the values
+    // We get the XMLElement & the attributes
     XMLElement gp = data.getFirstChildNamed("guiprefs");
     Integer integer;
     GUIPrefs p = new GUIPrefs();
@@ -592,6 +586,22 @@ public class Compiler extends Thread
     p.resizable = requireYesNoAttribute(gp, "resizable");
     p.width = requireIntAttribute(gp, "width");
     p.height = requireIntAttribute(gp, "height");
+    
+    // Look and feel mappings
+    Iterator it = gp.getChildrenNamed("laf").iterator();
+    while (it.hasNext())
+    {
+      XMLElement laf = (XMLElement)it.next();
+      String lafName = requireAttribute(laf, "name");
+      requireChildNamed(laf, "os");
+      Iterator oit = laf.getChildrenNamed("os").iterator();
+      while (oit.hasNext())
+      {
+        XMLElement os = (XMLElement)oit.next(); 
+        String osName = requireAttribute(os, "family");
+        p.lookAndFeelMapping.put(osName, lafName);
+      }
+    }
 
     // We return the GUIPrefs
     return p;
@@ -1317,12 +1327,8 @@ public class Compiler extends Thread
   {
     if (kind.equalsIgnoreCase(STANDARD))
       return new StdPackager(output, packagerListener);
-    else if (kind.equalsIgnoreCase(STANDARD_KUNSTSTOFF))
-      return new StdKunststoffPackager(output, packagerListener);
     else if (kind.equalsIgnoreCase(WEB))
       return new WebPackager(output, packagerListener);
-    else if (kind.equalsIgnoreCase(WEB_KUNSTSTOFF))
-      return new WebKunststoffPackager(output, packagerListener);
     else
       throw new Exception("unknown installer kind");
   }

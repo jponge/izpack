@@ -35,10 +35,13 @@ $Id$
         
         
 <!-- The guiprefs markup (customizes the installer in GUI mode) -->
-<!ELEMENT guiprefs EMPTY>
+<!ELEMENT guiprefs (laf*)>
     <!ATTLIST guiprefs resizable (yes|no) #REQUIRED>
     <!ATTLIST guiprefs width CDATA #REQUIRED>
     <!ATTLIST guiprefs height CDATA #REQUIRED>
+    <!ELEMENT laf (os+)>
+    <!ATTLIST laf name CDATA #REQUIRED>
+                  
 
 <!-- The locale section (indicates which langpacks to include) -->
 <!ELEMENT locale (langpack+)>

@@ -36,6 +36,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarFile;
@@ -193,6 +194,30 @@ public abstract class Packager
   {
     sendMsg("Setting the GUI preferences ...");
 
+    // We merge the required Jar files
+    Iterator kit = prefs.lookAndFeelMapping.keySet().iterator();
+    while (kit.hasNext())
+    {
+      String lafName = (String)prefs.lookAndFeelMapping.get(kit.next());
+      if (lafName.equals("liquid"))
+      {
+        addJarContent(Compiler.IZPACK_HOME + "lib" + File.separator + "liquidlnf.jar");
+      }
+      else if (lafName.equals("kunststoff"))
+      {
+        addJarContent(Compiler.IZPACK_HOME + "lib" + File.separator + "kunststoff.jar");
+      }
+      else if (lafName.equals("metouia"))
+      {
+        addJarContent(Compiler.IZPACK_HOME + "lib" + File.separator + "metouia.jar");
+      }
+      else
+      {
+        throw new Exception("The look and feel " + lafName + " does not exist");
+      }
+    }
+    
+    // Data serialization
     outJar.putNextEntry(new ZipEntry("GUIPrefs"));
     ObjectOutputStream objOut = new ObjectOutputStream(outJar);
     objOut.writeObject(prefs);
@@ -315,7 +340,7 @@ public abstract class Packager
    */
   public void addJarContent(String file) throws Exception
   {
-    sendMsg("Adding a jar file content ...");
+    sendMsg("Adding a jar file content (" + file + ") ...");
     JarFile jar = new JarFile(file);
     Enumeration entries = jar.entries();
     while (entries.hasMoreElements())
@@ -333,6 +358,7 @@ public abstract class Packager
         zin.close();
       } catch (ZipException zerr)
       {
+        // This avoids any problem that can occur with duplicate directories.
       }
     }
   }

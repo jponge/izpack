@@ -195,7 +195,7 @@ public class IzPackTask extends org.apache.tools.ant.Task
   {
     public String[] getValues()
     {
-      return new String[]{Compiler.STANDARD, Compiler.STANDARD_KUNSTSTOFF, Compiler.WEB, Compiler.WEB_KUNSTSTOFF};
+      return new String[]{Compiler.STANDARD, Compiler.WEB};
     }
   }
 }

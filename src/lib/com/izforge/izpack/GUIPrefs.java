@@ -24,6 +24,9 @@
  */
 package com.izforge.izpack;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import java.io.Serializable;
 
 /**
@@ -41,4 +44,7 @@ public class GUIPrefs implements Serializable
 
   /**  Specifies the starting window height, in pixels. */
   public int height;
+  
+  /** Specifies the OS Look and Feels mappings. */
+  public Map lookAndFeelMapping = new TreeMap(); 
 }

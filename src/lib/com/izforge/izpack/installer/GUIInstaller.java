@@ -39,7 +39,6 @@ import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
-import java.lang.StringBuffer;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TreeMap;
@@ -51,8 +50,8 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
@@ -72,6 +71,7 @@ import com.izforge.izpack.gui.IzPackMetalTheme;
  */
 public class GUIInstaller extends InstallerBase
 {
+
   /**  The installation data. */
   private InstallData installdata;
 
@@ -146,7 +146,7 @@ public class GUIInstaller extends InstallerBase
 
       System.out.println(msg.toString());
       JOptionPane.showMessageDialog(null, msg.toString(), "Error",
-                                    JOptionPane.ERROR_MESSAGE);
+          JOptionPane.ERROR_MESSAGE);
       System.exit(1);
     }
   }
@@ -161,8 +161,7 @@ public class GUIInstaller extends InstallerBase
     // Initialisations
     ArrayList availableLangPacks = getAvailableLangPacks();
     int npacks = availableLangPacks.size();
-    if (npacks == 0)
-      throw new Exception("no language pack available");
+    if (npacks == 0) throw new Exception("no language pack available");
     String selectedPack;
 
     // We get the langpack name
@@ -174,9 +173,9 @@ public class GUIInstaller extends InstallerBase
       picker.show();
 
       selectedPack = (String) picker.getSelection();
-      if (selectedPack == null)
-        throw new Exception("installation canceled");
-    } else
+      if (selectedPack == null) throw new Exception("installation canceled");
+    }
+    else
       selectedPack = (String) availableLangPacks.get(0);
 
     // We add an xml data information
@@ -185,8 +184,8 @@ public class GUIInstaller extends InstallerBase
     // We load the langpack
     installdata.localeISO3 = selectedPack;
     installdata.setVariable(ScriptParser.ISO3_LANG, installdata.localeISO3);
-    InputStream in =
-      getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
+    InputStream in = getClass().getResourceAsStream(
+        "/langpacks/" + selectedPack + ".xml");
     this.installdata.langpack = new LocaleDatabase(in);
   }
 
@@ -217,54 +216,80 @@ public class GUIInstaller extends InstallerBase
    */
   protected void loadLookAndFeel() throws Exception
   {
-    // Macs don't like our other LnF so only allow the default
-    boolean onMac = (System.getProperty("mrj.version") != null);
-
-    if (this.installdata.kind.equalsIgnoreCase("standard")
-      || this.installdata.kind.equalsIgnoreCase("web")
-      || onMac)
+    // Do we have any preference for this OS ?
+    String sysos = System.getProperty("os.name");
+    String syskey = "unix";
+    if (sysos.regionMatches(true, 0, "windows", 0, 7))
     {
-      if (getClass().getResourceAsStream("/res/useNativeLAF") != null
-        && !onMac)
+      syskey = "windows";
+    }
+    else if (sysos.regionMatches(true, 0, "mac", 0, 3))
+    {
+      syskey = "mac";
+    }
+    String laf = null;
+    if (installdata.guiPrefs.lookAndFeelMapping.containsKey(syskey))
+    {
+      laf = (String) installdata.guiPrefs.lookAndFeelMapping.get(syskey);
+    }
+
+    // Let's use the system LAF
+    ButtonFactory.useButtonIcons();
+    if (laf == null)
+    {
+      if (!syskey.equals("mac"))
       {
-        String nlaf = UIManager.getSystemLookAndFeelClassName();
-        UIManager.setLookAndFeel(nlaf);
-      }
-      if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel
-        && !onMac)
-      {
-        // We simply put our nice theme
-        MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
-        ButtonFactory.useHighlightButtons();
-        this.installdata.buttonsHColor = new Color(182, 182, 204);
+        String syslaf = UIManager.getSystemLookAndFeelClassName();
+        UIManager.setLookAndFeel(syslaf);
+        if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+        {
+          MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
+          ButtonFactory.useHighlightButtons();
+          installdata.buttonsHColor = new Color(182, 182, 204);
+        }
       }
       lnf = "swing";
-    } else if (
-      this.installdata.kind.equalsIgnoreCase("standard-kunststoff")
-        || this.installdata.kind.equalsIgnoreCase("web-kunststoff"))
+      return;
+    }
+
+    // Kunststoff (http://www.incors.org/)
+    if (laf.equals("kunststoff"))
     {
       ButtonFactory.useHighlightButtons();
-      // We change the highlight color for the buttons
-      this.installdata.buttonsHColor = new Color(255, 255, 255);
-
-      // Some reflection ...
-      Class laf =
-        Class.forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
+      installdata.buttonsHColor = new Color(255, 255, 255);
+      Class lafClass = Class
+          .forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
       Class mtheme = Class.forName("javax.swing.plaf.metal.MetalTheme");
-      Class[] params = { mtheme };
+      Class[] params = { mtheme};
       Class theme = Class.forName("com.izforge.izpack.gui.IzPackKMetalTheme");
-      Method setCurrentThemeMethod = laf.getMethod("setCurrentTheme", params);
+      Method setCurrentThemeMethod = lafClass.getMethod("setCurrentTheme", params);
 
       // We invoke and place Kunststoff as our L&F
-      LookAndFeel kunststoff = (LookAndFeel) laf.newInstance();
+      LookAndFeel kunststoff = (LookAndFeel) lafClass.newInstance();
       MetalTheme ktheme = (MetalTheme) theme.newInstance();
-      Object[] kparams = { ktheme };
+      Object[] kparams = { ktheme};
       UIManager.setLookAndFeel(kunststoff);
       setCurrentThemeMethod.invoke(kunststoff, kparams);
 
       lnf = "kunststoff";
+      return;
     }
-    ButtonFactory.useButtonIcons();
+    
+    // Liquid (http://liquidlnf.sourceforge.net/)
+    if (laf.equals("liquid"))
+    {
+      UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
+      lnf = "liquid";
+      return;
+    }
+    
+    // Metouia (http://mlf.sourceforge.net/)
+    if (laf.equals("metouia"))
+    {
+      UIManager.setLookAndFeel("net.sourceforge.mlf.metouia.MetouiaLookAndFeel");
+      lnf = "metouia";
+      return;
+    }
   }
 
   /**
@@ -274,18 +299,14 @@ public class GUIInstaller extends InstallerBase
    */
   private void loadGUI() throws Exception
   {
-    UIManager.put(
-      "OptionPane.yesButtonText",
-      installdata.langpack.getString("installer.yes"));
-    UIManager.put(
-      "OptionPane.noButtonText",
-      installdata.langpack.getString("installer.no"));
-    UIManager.put(
-      "OptionPane.cancelButtonText",
-      installdata.langpack.getString("installer.cancel"));
+    UIManager.put("OptionPane.yesButtonText", installdata.langpack
+        .getString("installer.yes"));
+    UIManager.put("OptionPane.noButtonText", installdata.langpack
+        .getString("installer.no"));
+    UIManager.put("OptionPane.cancelButtonText", installdata.langpack
+        .getString("installer.cancel"));
 
-    String title =
-      installdata.langpack.getString("installer.title")
+    String title = installdata.langpack.getString("installer.title")
         + this.installdata.info.getAppName();
     new InstallerFrame(title, this.installdata);
   }
@@ -297,6 +318,7 @@ public class GUIInstaller extends InstallerBase
    */
   class LanguageDialog extends JDialog implements ActionListener
   {
+
     /**  The combo box. */
     private JComboBox comboBox;
 
@@ -315,9 +337,9 @@ public class GUIInstaller extends InstallerBase
       try
       {
         loadLookAndFeel();
-      } catch (Exception err)
-      {
       }
+      catch (Exception err)
+      {}
 
       // We build the GUI
       addWindowListener(new WindowHandler());
@@ -339,16 +361,14 @@ public class GUIInstaller extends InstallerBase
       contentPane.add(imgLabel);
 
       gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-      JLabel label1 =
-        new JLabel(
-          "Please select your language (ISO3 code)",
+      JLabel label1 = new JLabel("Please select your language (ISO3 code)",
           SwingConstants.CENTER);
       gbConstraints.gridy = 1;
       gbConstraints.insets = new Insets(5, 5, 0, 5);
       layout.addLayoutComponent(label1, gbConstraints);
       contentPane.add(label1);
-      JLabel label2 =
-        new JLabel("for install instructions:", SwingConstants.CENTER);
+      JLabel label2 = new JLabel("for install instructions:",
+          SwingConstants.CENTER);
       gbConstraints.gridy = 2;
       gbConstraints.insets = new Insets(0, 5, 5, 5);
       layout.addLayoutComponent(label2, gbConstraints);
@@ -380,9 +400,8 @@ public class GUIInstaller extends InstallerBase
 
       Dimension frameSize = getSize();
       Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-      setLocation(
-        (screenSize.width - frameSize.width) / 2,
-        (screenSize.height - frameSize.height) / 2 - 10);
+      setLocation((screenSize.width - frameSize.width) / 2,
+          (screenSize.height - frameSize.height) / 2 - 10);
       setResizable(true);
     }
 
@@ -396,10 +415,10 @@ public class GUIInstaller extends InstallerBase
       ImageIcon img;
       try
       {
-        img =
-          new ImageIcon(
-            this.getClass().getResource("/res/installer.langsel.img"));
-      } catch (NullPointerException err)
+        img = new ImageIcon(this.getClass().getResource(
+            "/res/installer.langsel.img"));
+      }
+      catch (NullPointerException err)
       {
         img = null;
       }
@@ -443,6 +462,7 @@ public class GUIInstaller extends InstallerBase
      */
     class WindowHandler extends WindowAdapter
     {
+
       /**
        *  We can't avoid the exit here, so don't call exit anywhere else.
        *
@@ -462,6 +482,7 @@ public class GUIInstaller extends InstallerBase
    */
   class FlagRenderer extends JLabel implements ListCellRenderer
   {
+
     /**  Icons cache. */
     private TreeMap icons = new TreeMap();
 
@@ -483,12 +504,8 @@ public class GUIInstaller extends InstallerBase
      * @param  cellHasFocus  Description of the Parameter
      * @return               The cell.
      */
-    public Component getListCellRendererComponent(
-      JList list,
-      Object value,
-      int index,
-      boolean isSelected,
-      boolean cellHasFocus)
+    public Component getListCellRendererComponent(JList list, Object value,
+        int index, boolean isSelected, boolean cellHasFocus)
     {
       // We put the label
       String iso3 = (String) value;
@@ -497,7 +514,8 @@ public class GUIInstaller extends InstallerBase
       {
         setForeground(list.getSelectionForeground());
         setBackground(list.getSelectionBackground());
-      } else
+      }
+      else
       {
         setForeground(list.getForeground());
         setBackground(list.getBackground());

@@ -12,6 +12,10 @@
 - Packagers refactorings.
 - Changed the JFrame icon shown in the installers and uninstallers.
 - New SimpleFinishPanel that don't have the automated installers feature.
+- Heavy refactorings on the look and feels side. The Kunststoff packagers have 
+  been removed. The look and feels can now be specified on a per-OS basis. If
+  no look and feel is specified for a particular OS, then the platform default
+  one will be used.
 
   > 3.5.4 (build 2004.xx.yy)
 
