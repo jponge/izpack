@@ -25,13 +25,25 @@
 package com.izforge.izpack.installer;
 
 import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import net.n3.nanoxml.XMLElement;
 
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.MultiLineLabel;
 
 /**
  *  Defines the base class for the IzPack panels. Any panel should be a subclass
@@ -42,6 +54,9 @@ import com.izforge.izpack.util.AbstractUIHandler;
  */
 public class IzPanel extends JPanel implements AbstractUIHandler
 {
+  /** Indicates whether grid bag layout was started or not */
+  protected boolean gridBagLayoutStarted = false;
+  
   /** The component which should get the focus at activation */
   protected Component initialFocus = null;
   /**
@@ -53,6 +68,15 @@ public class IzPanel extends JPanel implements AbstractUIHandler
   /**  The parent IzPack installer frame. */
   protected InstallerFrame parent;
 
+  /** The default grid bag constraint. */
+  protected GridBagConstraints defaultGridBagConstraints = new GridBagConstraints ();
+
+  /** Current x position of grid. */
+  protected int gridxCounter = -1;
+  
+  /** Current y position of grid. */
+  protected int gridyCounter = -1;
+  
   /**
    *  The constructor.
    *
@@ -174,7 +198,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler
    */
   public void emitNotification(String message)
   {
-    // ignore it
+     JOptionPane.showMessageDialog(
+      this,message);
   }
 
   /**
@@ -266,4 +291,285 @@ public class IzPanel extends JPanel implements AbstractUIHandler
   {
     return(parent);
   }
+
+  //------------- Helper for common used components ----- START ---
+
+  /**
+   * Creates  a label via LabelFactory with the given ids and
+   * the given horizontal alignment. If the icon id is null, the
+   * label will be created also. The strings are the ids for the text
+   * in langpack and the icon in icons of the installer frame.
+   * @param textId id string for the text
+   * @param iconId id string for the icon
+   * @param pos horizontal alignment
+   * @return the newly created label
+   */
+  public JLabel createLabel(String textId, String iconId, int pos)
+  {
+    ImageIcon ii = ( iconId != null ) ? parent.icons.getImageIcon(iconId) : null;
+    JLabel label = LabelFactory.create(
+      parent.langpack.getString(textId),
+      ii, 
+      pos);
+    if(label != null)
+      label.setFont(getControlTextFont() );
+    return(label);
+    
+  }
+
+  /**
+   * Creates a multi line label with the language dependent text
+   * given by the text id. The strings is the id for the text
+   * in langpack of the installer frame. The horizontal alignment
+   * will be LEFT.
+   * @param textId id string for the text
+   * @return the newly created multi line label
+   */
+  public MultiLineLabel createMultiLineLabelLang(String textId)
+  {
+    return( createMultiLineLabel(
+      parent.langpack.getString( textId)  ));
+  }
+
+  /**
+   * Creates a multi line label with the given text. 
+   * The horizontal alignment will be LEFT.
+   * @param text text to be used in the label
+   * @return the newly created multi line label
+   */
+  public MultiLineLabel createMultiLineLabel(String text)
+  {
+    return( createMultiLineLabel(
+      text, null , JLabel.LEFT ));
+  }
+  /**
+   * Creates  a label via LabelFactory with the given text, the
+   * given icon id  and the given horizontal alignment. 
+   * If the icon id is null, the
+   * label will be created also. The strings are the ids for the text
+   * in langpack and the icon in icons of the installer frame.
+   * @param text text to be used in the label
+   * @param iconId id string for the icon
+   * @param pos horizontal alignment
+   * @return
+   */
+  public MultiLineLabel createMultiLineLabel(String text, 
+    String iconId, int pos)
+  {
+    MultiLineLabel mll = null;
+    mll = new MultiLineLabel( text, 0, 0);
+    if( mll != null)
+      mll.setFont(getControlTextFont() );
+    return( mll );
+  }
+
+  /**
+   * The Font of Labels in many cases
+   */
+  public Font getControlTextFont()
+  {
+    return( getLAF() != null ? MetalLookAndFeel.getControlTextFont() : getFont() );
+  }
+
+  private static MetalLookAndFeel getLAF()
+  {
+    LookAndFeel laf = UIManager.getLookAndFeel();
+    if( laf instanceof MetalLookAndFeel)
+      return( (MetalLookAndFeel) laf);
+    return( null );
+  }
+
+  //------------- Helper for common used components ----- END ---
+  //------------------- Layout stuff -------------------- START ---
+  /**
+   * Returns the default GridBagConstraints of this panel.
+   * @return the default GridBagConstraints of this panel
+   */
+  public GridBagConstraints getDefaultGridBagConstraints()
+  {
+    startGridBagLayout();
+    return defaultGridBagConstraints;
+  }
+
+  /**
+   * Sets the default GridBagConstraints of this panel to the given object.
+   * @param constraints which should be set as default for this object
+   */
+  public void setDefaultGridBagConstraints(GridBagConstraints constraints)
+  {
+    startGridBagLayout();
+    defaultGridBagConstraints = constraints;
+  }
+  /**
+   * Resets the grid counters which are used at getNextXGridBagConstraints
+   * and getNextYGridBagConstraints.
+   */
+  public void resetGridCounter()
+  {
+    gridxCounter = -1;
+    gridyCounter = -1;
+  }
+
+  /**
+   * Returns a newly created GridBagConstraints with the given values
+   * and the values from the defaultGridBagConstraints for the other parameters.
+   * @param gridx  value to be used for the new constraint
+   * @param gridy  value to be used for the new constraint
+   * @return newly created GridBagConstraints with the given values
+   * and the values from the defaultGridBagConstraints for the other parameters
+   */
+  public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy)
+  {
+    GridBagConstraints retval = (GridBagConstraints) getDefaultGridBagConstraints().clone();
+    retval.gridx = gridx;
+    retval.gridy = gridy;
+    return(retval);
+    
+  }
+  
+  /**
+   * Returns a newly created GridBagConstraints with the given values
+   * and the values from the defaultGridBagConstraints for the other parameters.
+   * @param gridx  value to be used for the new constraint
+   * @param gridy  value to be used for the new constraint
+   * @param gridwidth value to be used for the new constraint
+   * @param gridheight value to be used for the new constraint
+   * @return newly created GridBagConstraints with the given values
+   * and the values from the defaultGridBagConstraints for the other parameters
+   */
+  public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy,
+    int gridwidth, int gridheight)
+  {
+    GridBagConstraints retval = getNewGridBagConstraints( gridx, gridy );
+    retval.gridwidth = gridwidth;
+    retval.gridheight = gridheight;
+    return(retval);
+  }
+  
+  /**
+   * Returns a newly created GridBagConstraints for the next column 
+   * of the current layout row.
+   * @return a newly created GridBagConstraints for the next column 
+   * of the current layout row
+   * 
+   */
+  public GridBagConstraints getNextXGridBagConstraints()
+  {
+    gridxCounter++;
+    GridBagConstraints retval = getNewGridBagConstraints(gridxCounter,gridyCounter);
+    return(retval);
+  }
+  
+  /**
+   * Returns a newly created GridBagConstraints for the next column 
+   * of the current layout row using the given parameters.
+   * @param gridwidth width for this constraint
+   * @param gridheight height for this constraint
+   * @return a newly created GridBagConstraints for the next column 
+   * of the current layout row using the given parameters
+   */
+  private GridBagConstraints getNextXGridBagConstraints( int gridwidth, int gridheight)
+  {
+    GridBagConstraints retval = getNextXGridBagConstraints();
+    retval.gridwidth = gridwidth;
+    retval.gridheight = gridheight;
+    return( retval );
+  }
+  /**
+   * Returns a newly created GridBagConstraints with column 0 
+   * for the next row.
+   * @return a newly created GridBagConstraints with column 0 
+   * for the next row
+   * 
+   */
+  public GridBagConstraints getNextYGridBagConstraints()
+  {
+    gridyCounter++;
+    gridxCounter = 0;
+    GridBagConstraints retval = getNewGridBagConstraints(0,gridyCounter);
+    return(retval);
+  }
+  
+  /**
+   * Returns a newly created GridBagConstraints with column 0 
+   * for the next row using the given parameters.
+   * @param gridwidth width for this constraint
+   * @param gridheight height for this constraint
+   * @return a newly created GridBagConstraints with column 0 
+   * for the next row using the given parameters
+   */
+  public GridBagConstraints getNextYGridBagConstraints( int gridwidth, int gridheight)
+  {
+    startGridBagLayout();
+    GridBagConstraints retval = getNextYGridBagConstraints();
+    retval.gridwidth = gridwidth;
+    retval.gridheight = gridheight;
+    return( retval );
+  }
+  
+  /**
+   * Start layout determining. If it is needed, a dummy component 
+   * will be created as first row. This will be done,
+   * if the IzPack variable <code>IzPanel.LayoutType</code> has
+   * the value "BOTTOM".
+   */
+  public void startGridBagLayout()
+  {
+    if( gridBagLayoutStarted  )
+      return;
+    gridBagLayoutStarted = true;
+    GridBagLayout layout = new GridBagLayout();
+    defaultGridBagConstraints.insets = new Insets( 0, 0, 20, 0);
+    defaultGridBagConstraints.anchor = GridBagConstraints.WEST;   
+    setLayout(layout);
+    String todo = idata.getVariable("IzPanel.LayoutType");
+    if( todo == null )  // No command, no work.
+      return;
+    if( todo.equals("BOTTOM"))
+    { // Make a header to push the rest to the bottom.
+      Filler dummy = new Filler();
+      GridBagConstraints gbConstraint = getNextYGridBagConstraints();
+      gbConstraint.weighty = 1.0;
+      gbConstraint.fill = GridBagConstraints.BOTH;
+      gbConstraint.anchor = GridBagConstraints.WEST;        
+      this.add(dummy, gbConstraint );
+    }
+  
+    // TODO: impl for layout type CENTER,  ...
+  }
+  
+
+  /**
+   * Complete layout determining. If it is needed, a dummy component 
+   * will be created as last row. This will be done,
+   * if the IzPack variable <code>IzPanel.LayoutType</code> has
+   * the value "TOP".
+   */
+  public void completeGridBagLayout()
+  {
+    String todo = idata.getVariable("IzPanel.LayoutType");
+    if( todo == null )  // No command, no work.
+      return;
+    if( todo.equals("TOP"))
+    { // Make a footer to push the rest to the top.
+       Filler dummy = new Filler();
+      GridBagConstraints gbConstraint = getNextYGridBagConstraints();
+      gbConstraint.weighty = 1.0;
+      gbConstraint.fill = GridBagConstraints.BOTH;
+      gbConstraint.anchor = GridBagConstraints.WEST;        
+      this.add(dummy, gbConstraint );
+    }
+  }
+    
+  //------------------- Layout stuff -------------------- END ---
+
+
+  //------------------- Inner classes ------------------- START ---
+  public static class Filler extends JComponent 
+  {
+    
+  }
+  //------------------- Inner classes ------------------- END ---
+
+
 }
