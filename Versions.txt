@@ -14,12 +14,14 @@
   New variable APPLICATIONS_DEFAULT_ROOT (Klaus Bartz).
   Bugfix in MultiLineLabel; now a line break will be performed also
   it is needed at the last word of the line (Klaus Bartz).
+- Bugfix in JDKPathPanel: now it is possible to select an out-of-version
+  JDK (Klaus Bartz).
+
 
   > 3.7.2 (build N/A)
 
 - IoHelper.getPrimaryGroup: bugfix for SunOS (Klaus Bartz).
 - Russian langpack fixes (Alexey Makhmutov).
-
   > 3.7.1 (build 2005.02.15)
 
 - The Danish langpack was empty by mistake in 3.7.0.

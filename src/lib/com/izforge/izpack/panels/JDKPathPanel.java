@@ -93,7 +93,10 @@ public class JDKPathPanel extends PathInputPanel
       if( askQuestion(parent.langpack.getString("installer.warning"),message.toString(),
         AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO  ) 
         == AbstractUIHandler.ANSWER_YES)
+      {
+        idata.setVariable(getVariableName(),pathSelectionPanel.getPath());
         return( true);
+      }
     }
     return( false );
   }
