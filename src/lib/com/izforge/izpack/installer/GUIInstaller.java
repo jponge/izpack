@@ -404,7 +404,7 @@ public class GUIInstaller extends InstallerBase
           (screenSize.height - frameSize.height) / 2 - 10);
       setResizable(true);
     }
-
+    
     /**
      *  Loads an image.
      *

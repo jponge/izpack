@@ -67,5 +67,6 @@ IzPack for your projects ;-)
 - Everaldo & the KDE crew : for the first-class Crystal icons theme.
 - Frank Bille Jensen : for the Danish translation.
 - Volker Friedritz : for the ImgPacksPanel redesign.
+- Mike Cunneen : for the UserPanel enhancements.
 
 # vim: fileformat=dos 

@@ -239,6 +239,7 @@
                 <include name="com/izforge/izpack/installer/VariableValueMap.class"/>
                 <include name="com/izforge/izpack/installer/VariableValueMapImpl.class"/>
                 <include name="com/izforge/izpack/installer/VariableSubstitutor.class"/>
+                <include name="com/izforge/izpack/util/RegularExpressionValidator.class"/>
                 <include name="net/n3/nanoxml/*.class"/>
             </fileset>
         </jar>
@@ -275,6 +276,7 @@
                 <include name="com/izforge/izpack/installer/VariableValueMapImpl.class"/>
                 <include name="com/izforge/izpack/installer/VariableSubstitutor.class"/>
                 <include name="net/n3/nanoxml/*.class"/>
+                <include name="com/izforge/izpack/util/RegularExpressionValidator.class"/>
             </fileset>
             <zipfileset src="${basedir}/lib/ant.jar"/>
             <fileset dir="${basedir}">

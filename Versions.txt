@@ -18,6 +18,8 @@
   one will be used.
 - The IzPack own installer uses the ImgPacksPanel again with some refreshed
   packages pictures.
+- UserInputPanel: more parameters and a regular expressions validator have been
+  added (Mike Cunneen).
 
   > 3.5.4 (build 2004.xx.yy)
 

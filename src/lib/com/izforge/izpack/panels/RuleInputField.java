@@ -32,6 +32,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -108,6 +109,8 @@ public class RuleInputField extends JComponent implements KeyListener,
   /** This <code>Vector</code> holds a reference to each input field, in the
       order in which they appear on the screen. */
   private Vector          inputFields = new Vector ();
+  private boolean         hasParams   = false;
+  private Map             validatorParams;
   private RuleTextField   activeField;
   private boolean         backstep = false;
   private Toolkit         toolkit;
@@ -120,6 +123,15 @@ public class RuleInputField extends JComponent implements KeyListener,
   /** Holds an instance of the <code>Processor</code> if one was specified
       and available */  
   private Processor       encryptionService;
+
+  /**
+   * @return true if this instance has any parameters to 
+   * pass to the Validator instance.
+   */
+  public boolean hasParams()
+  {
+    return hasParams;
+  }
 
  /*--------------------------------------------------------------------------*/
  /**
@@ -138,6 +150,8 @@ public class RuleInputField extends JComponent implements KeyListener,
   *                          The class must implement the <code>RuleValidator</code>
   *                          interface. If an attempt to instantiate this class
   *                          fails, no validation will be performed.
+  * @param     validatorParams     A <code>java.util.Map</code> containing name/
+  *                          value pairs, which will be forwarded to the validator. 
   * @param     processor     A string that specifies a class to perform
   *                          processing services. The string must completely
   *                          identify the class, so that it can be instantiated.
@@ -157,6 +171,63 @@ public class RuleInputField extends JComponent implements KeyListener,
   * @param     toolkit       needed to gain access to <code>beep()</code>
   */
  /*--------------------------------------------------------------------------*/
+	public RuleInputField(
+		String format,
+		String preset,
+		String separator,
+		String validator,
+		Map validatorParams,
+		String processor,
+		int resultFormat,
+		Toolkit toolkit)
+	{
+		this(
+			format,
+			preset,
+			separator,
+			validator,
+			processor,
+			resultFormat,
+			toolkit);
+		this.validatorParams = validatorParams;
+	}
+
+	/*--------------------------------------------------------------------------*/
+	/**
+	 * Constructs a rule input field.
+	 *
+	 * @param     format        a string that specifies the formatting and to a 
+	 *                          limited degree the behavior of this field.
+	 * @param     preset        a string that specifies preset values for specific
+	 *                          sub-fields.
+	 * @param     separator     a string to be used for separating the contents
+	 *                          of individual fields in the string returned by
+	 *                          <code>getText()</code>
+	 * @param     validator     A string that specifies a class to perform
+	 *                          validation services. The string must completely
+	 *                          identify the class, so that it can be instantiated.
+	 *                          The class must implement the <code>RuleValidator</code>
+	 *                          interface. If an attempt to instantiate this class
+	 *                          fails, no validation will be performed.
+	 * @param     processor     A string that specifies a class to perform
+	 *                          processing services. The string must completely
+	 *                          identify the class, so that it can be instantiated.
+	 *                          The class must implement the <code>Processor</code>
+	 *                          interface. If an attempt to instantiate this class
+	 *                          fails, no processing will be performed. Instead,
+	 *                          the text is returned in the default formatting.
+	 * @param     resultFormat  specifies in which format the resulting text
+	 *                          should be returned, wehn <code>getText()</code>
+	 *                          is called. The following values are legal:<br>
+	 *                          <ul>
+	 *                          <li>PLAIN_STRING     
+	 *                          <li>DISPLAY_FORMAT   
+	 *                          <li>SPECIAL_SEPARATOR
+	 *                          <li>ENCRYPTED        
+	 *                          </ul>
+	 * @param     toolkit       needed to gain access to <code>beep()</code>
+	 */
+	/*--------------------------------------------------------------------------*/
   public RuleInputField (String   format,
                          String   preset,
                          String   separator,
@@ -246,6 +317,18 @@ public class RuleInputField extends JComponent implements KeyListener,
     return (((JTextField)inputFields.elementAt (index)).getText ());
   }
  /*--------------------------------------------------------------------------*/
+ /**
+  * Returns the validator parameters, if any.  The caller should
+  * check for the existence of validator parameters via the 
+  * <code>hasParams()</code> method prior to invoking this method.
+  * @return a java.util.Map containing the validator parameters.
+  */
+  public Map getValidatorParams()
+  {
+    return validatorParams;
+  }
+
+ /*---------------------------------------------------------------------------*/
  /**
   * Returns the field contents, assembled acording to the encryption and
   * separator rules.

@@ -34,6 +34,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -204,6 +205,9 @@ public class UserInputPanel extends IzPanel
   private static final String RULE_DISPLAY_FORMAT           = "displayFormat";
   private static final String RULE_SPECIAL_SEPARATOR        = "specialSeparator";
   private static final String RULE_ENCRYPTED                = "processed";
+  private static final String RULE_PARAM_NAME               = "name";
+  private static final String RULE_PARAM_VALUE              = "value";
+  private static final String RULE_PARAM                    = "param";
 
   private static final String PWD_FIELD                     = "password";
   private static final String PWD_INPUT                     = "pwd";
@@ -726,6 +730,11 @@ public class UserInputPanel extends IzPanel
     String          format;
     String          validator     = null;
     String          message       = null;
+	boolean         hasParams        = false;
+	String          paramName        = null;
+	String          paramValue       = null;
+	HashMap         validateParamMap = null;
+	Vector          validateParams   = null;
     String          processor     = null;
     int             resultFormat  = RuleInputField.DISPLAY_FORMAT;
 
@@ -792,6 +801,28 @@ public class UserInputPanel extends IzPanel
     {
       validator = element.getAttribute (CLASS);
       message   = getText (element);
+      // ----------------------------------------------------------
+      // check and see if we have any parameters for this validator.
+      // If so, then add them to validateParamMap.
+      // ----------------------------------------------------------
+      validateParams = element.getChildrenNamed(RULE_PARAM);
+      if (validateParams != null
+          && validateParams.size() > 0
+          && validateParamMap == null)
+      {
+
+        validateParamMap = new HashMap();
+        hasParams = true;
+
+      }
+
+      for (Iterator it = validateParams.iterator(); it.hasNext();)
+      {
+        element = (XMLElement) it.next();
+        paramName = element.getAttribute(RULE_PARAM_NAME);
+        paramValue = element.getAttribute(RULE_PARAM_VALUE);
+        validateParamMap.put(paramName, paramValue);
+      }
     }
 
     element = spec.getFirstChildNamed (PROCESSOR);
@@ -805,14 +836,32 @@ public class UserInputPanel extends IzPanel
     // extracted specifications, then add it to the list
     // of UI elements.
     // ----------------------------------------------------
-    field = new RuleInputField (layout,
-                                set,
-                                separator,
-                                validator,
-                                processor,
-                                resultFormat,
-                                getToolkit ());
+    if (hasParams)
+    {
+      field =
+        new RuleInputField(
+          layout,
+          set,
+          separator,
+          validator,
+          validateParamMap,
+          processor,
+          resultFormat,
+          getToolkit());
+    }
+    else
+    {
+      field =
+        new RuleInputField(
+          layout,
+          set,
+          separator,
+          validator,
+          processor,
+          resultFormat,
+          getToolkit ());
 
+    }
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position              = TwoColumnConstraints.WEST;
 

@@ -143,7 +143,7 @@ public class InstallerFrame extends JFrame
     showFrame();
     switchPanel(0);
   }
-
+  
   /**
    *  Loads the panels.
    *
