@@ -74,7 +74,7 @@ class CompilerException extends java.io.IOException
    * once.
    *
    * @param  cause the cause (which is saved for later retrieval by the
-   *         {@link #getCause()} method).  (A <tt>null</tt> value is
+   *         {@link #getCause()} method).  (A <code>null</code> value is
    *         permitted, and indicates that the cause is nonexistent or
    *         unknown.)
    * @return  a reference to this <code>Throwable</code> instance.
@@ -99,16 +99,16 @@ class CompilerException extends java.io.IOException
    * cause is nonexistent or unknown.  (The cause is the throwable that
    * caused this throwable to get thrown.)
    *
-   * <p>This implementation returns the cause that was supplied via one of
-   * the constructors requiring a <tt>Throwable</tt>, or that was set after
+   * <p>This implementation returns the cause that was supplied via one of the
+   * constructors requiring a <code>Throwable</code>, or that was set after
    * creation with the {@link #initCause(Throwable)} method.  While it is
-   * typically unnecessary to override this method, a subclass can override
-   * it to return a cause set by some other means.  This is appropriate for
-   * a "legacy chained throwable" that predates the addition of chained
-   * exceptions to <tt>Throwable</tt>.  Note that it is <i>not</i>
-   * necessary to override any of the <tt>PrintStackTrace</tt> methods,
-   * all of which invoke the <tt>getCause</tt> method to determine the
-   * cause of a throwable.
+   * typically unnecessary to override this method, a subclass can override it
+   * to return a cause set by some other means.  This is appropriate for a
+   * "legacy chained throwable" that predates the addition of chained
+   * exceptions to <code>Throwable</code>.  Note that it is <i>not</i>
+   * necessary to override any of the <code>PrintStackTrace</code> methods, all
+   * of which invoke the <code>getCause</code> method to determine the cause of
+   * a throwable.
    *
    * @return  the cause of this throwable or <code>null</code> if the
    *          cause is nonexistent or unknown.
