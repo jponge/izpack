@@ -27,6 +27,7 @@
 - Custom actions for ant calls (Klaus Bartz).
 - IzPanel.setInitialFocus( Component ) stuff added (Klaus Bartz).
 - Configurable button and label icons (Klaus Bartz).
+- JGoodies loading fix.
 
 
   > 3.6.1 (build 2004.xx.yy)

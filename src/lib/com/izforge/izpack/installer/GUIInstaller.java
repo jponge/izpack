@@ -247,7 +247,7 @@ public class GUIInstaller extends InstallerBase
     }
 
     // Let's use the system LAF
-    // Resolve whether button icons should be used or not. 
+    // Resolve whether button icons should be used or not.
     boolean useButtonIcons = true;
     if(installdata.guiPrefs.modifier.containsKey("useButtonIcons") &&
       ((String)installdata.guiPrefs.modifier.
@@ -271,7 +271,7 @@ public class GUIInstaller extends InstallerBase
           MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
           ButtonFactory.useHighlightButtons();
           // Reset the use button icons state because useHighlightButtons
-          // make it always true. 
+          // make it always true.
           ButtonFactory.useButtonIcons(useButtonIcons);
           installdata.buttonsHColor = new Color(182, 182, 204);
         }
@@ -285,7 +285,7 @@ public class GUIInstaller extends InstallerBase
     {
       ButtonFactory.useHighlightButtons();
       // Reset the use button icons state because useHighlightButtons
-      // make it always true. 
+      // make it always true.
       ButtonFactory.useButtonIcons(useButtonIcons);
       installdata.buttonsHColor = new Color(255, 255, 255);
       Class lafClass = Class
@@ -305,13 +305,13 @@ public class GUIInstaller extends InstallerBase
       lnf = "kunststoff";
       return;
     }
-    
+
     // Liquid (http://liquidlnf.sourceforge.net/)
     if (laf.equals("liquid"))
     {
       UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
       lnf = "liquid";
-      
+
       Map params = (Map)installdata.guiPrefs.lookAndFeelParams.get(laf);
       if (params.containsKey("decorate.frames"))
       {
@@ -329,10 +329,10 @@ public class GUIInstaller extends InstallerBase
           JDialog.setDefaultLookAndFeelDecorated(true);
         }
       }
-      
+
       return;
     }
-    
+
     // Metouia (http://mlf.sourceforge.net/)
     if (laf.equals("metouia"))
     {
@@ -340,17 +340,17 @@ public class GUIInstaller extends InstallerBase
       lnf = "metouia";
       return;
     }
-    
+
     // JGoodies Looks (http://looks.dev.java.net/)
     if (laf.equals("looks"))
     {
       Map variants = new TreeMap();
-      variants.put("extwin", "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel ");
+      variants.put("extwin", "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel");
       variants.put("plastic", "com.jgoodies.plaf.plastic.PlasticLookAndFeel");
       variants.put("plastic3D", "com.jgoodies.plaf.plastic.Plastic3DLookAndFeel");
       variants.put("plasticXP", "com.jgoodies.plaf.plastic.PlasticXPLookAndFeel");
       String variant = (String)variants.get("plasticXP");
-      
+
       Map params = (Map)installdata.guiPrefs.lookAndFeelParams.get(laf);
       if (params.containsKey("variant"))
       {
@@ -360,7 +360,7 @@ public class GUIInstaller extends InstallerBase
           variant = (String)variants.get(param);
         }
       }
-      
+
       UIManager.setLookAndFeel(variant);
     }
   }
@@ -479,7 +479,7 @@ public class GUIInstaller extends InstallerBase
           (screenSize.height - frameSize.height) / 2 - 10);
       setResizable(true);
     }
-    
+
     /**
      *  Loads an image.
      *
