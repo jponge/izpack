@@ -70,5 +70,6 @@ IzPack for your projects ;-)
 - Mike Cunneen : for the UserPanel enhancements.
 - Thorsten Kamann : for the various contributions.
 - Peter Mikula : for the installer images patch.
+- Dario Yuri : for the finish panels patch.
 
 # vim: fileformat=dos
