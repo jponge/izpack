@@ -944,14 +944,14 @@ public class Compiler extends Thread
       resource = new File(basedir, path);
 
     if (! resource.exists()) // fatal
-      parseError(parent, path + " not found");
+      parseError(parent, desc + " not found: " + resource);
 
     try
     {
       url = resource.toURL();
     } catch(MalformedURLException how)
     {
-      parseError(parent, resource + " " + how.getMessage(), how);
+      parseError(parent, desc + "(" + resource + ")", how);
     }
 
     return url;
@@ -981,14 +981,14 @@ public class Compiler extends Thread
         resource = new File(IZPACK_HOME, path);
 
       if (! resource.exists()) // fatal
-        parseError(parent, path + " not found");
+        parseError(parent, desc + " not found: " + resource);
 
       try
       {
         url = resource.toURL();
       } catch(MalformedURLException how)
       {
-        parseError(parent, resource + " " + how.getMessage(), how);
+        parseError(parent, desc + "(" + resource + ")", how);
       }
     }
 
