@@ -311,6 +311,29 @@ public class GUIInstaller extends InstallerBase
       lnf = "metouia";
       return;
     }
+    
+    // JGoodies Looks (http://looks.dev.java.net/)
+    if (laf.equals("looks"))
+    {
+      Map variants = new TreeMap();
+      variants.put("extwin", "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel ");
+      variants.put("plastic", "com.jgoodies.plaf.plastic.PlasticLookAndFeel");
+      variants.put("plastic3D", "com.jgoodies.plaf.plastic.Plastic3DLookAndFeel");
+      variants.put("plasticXP", "com.jgoodies.plaf.plastic.PlasticXPLookAndFeel");
+      String variant = (String)variants.get("plasticXP");
+      
+      Map params = (Map)installdata.guiPrefs.lookAndFeelParams.get(laf);
+      if (params.containsKey("variant"))
+      {
+        String param = (String)params.get("variant");
+        if (variants.containsKey(param))
+        {
+          variant = (String)variants.get(param);
+        }
+      }
+      
+      UIManager.setLookAndFeel(variant);
+    }
   }
 
   /**

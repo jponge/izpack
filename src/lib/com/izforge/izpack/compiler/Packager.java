@@ -211,6 +211,10 @@ public abstract class Packager
       {
         addJarContent(Compiler.IZPACK_HOME + "lib" + File.separator + "metouia.jar");
       }
+      else if (lafName.equals("looks"))
+      {
+        addJarContent(Compiler.IZPACK_HOME + "lib" + File.separator + "looks.jar");
+      }
       else
       {
         throw new Exception("The look and feel " + lafName + " does not exist");
