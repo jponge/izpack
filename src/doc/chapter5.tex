@@ -210,8 +210,41 @@ The methods have the following functionality :\\
   \item \texttt{getInitialFocus} returns the component which should be get the
   focos at activation of the panel. If no component was set, null returns.\\
 
+  \item \texttt{getSummaryBody} this method will be called from the 
+  SummaryPanel to get the summary of this class which should be placed in the
+  SummaryPanel. The returned text should not contain a caption of this item. 
+  The caption will be requested from the method getCaption. If null returns, 
+  no summary for this panel will be enerated. Default behaviour is to return 
+  null.\\
+  \item \texttt{getSummaryCaption} this method will be called from the 
+  SummaryPanel to get the caption for this class which should be placed in the
+  SummaryPanel. Default behaviour is to return the string given by langpack
+  for the key ClassName.summaryCaption.\\
+  
+
 \end{itemize}\
 
 Additionally, there are some helper methods to simplify grid bag layout handling
 and creation of some common used components.
+
+\section{The \texttt{Internationalization} of custom panels}
+A common way to define language dependant messages for custom panels is to
+add entries into the common langpacks which are stored in the directory
+\begin{verbatim}
+[IzPackRoot]/bin/langpacks/installer
+\end{verbatim}
+New with version 3.8 is the possibility to define a resource for custom
+langpacks. Define e.g.
+\begin{verbatim}
+<resources>
+    ...
+    <res id="CustomLangpack.xml_deu" 
+        src="myConfigSubPath/CustomLangpack_deu.xml"/>
+    ...
+</resources>
+\end{verbatim}
+in the install.xml file.The id should be written as shown, the file sub path
+and name can be other than in the example. This file should be use the 
+same DTD as the common langpack. For each language a separate file with
+the ISO3 extension in the id should be used.
 
