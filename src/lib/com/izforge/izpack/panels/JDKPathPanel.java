@@ -43,6 +43,9 @@ public class JDKPathPanel extends PathInputPanel
     {"lib" + File.separator + "tools.jar"};
 
   private String detectedVersion;
+  private String minVersion = null;
+  private String maxVersion = null;
+  private String variableName;
   /**
    *  The constructor.
    *
@@ -54,7 +57,9 @@ public class JDKPathPanel extends PathInputPanel
     super(parent, idata);
     setMustExist(true);
     setExistFiles(JDKPathPanel.testFiles);
-
+    setMinVersion(idata.getVariable("JDKPathPanel.minVersion"));
+    setMaxVersion(idata.getVariable("JDKPathPanel.maxVersion"));
+    setVariableName("JDKPath");
   }
   /**
    *  Indicates wether the panel has been validated or not.
@@ -67,15 +72,15 @@ public class JDKPathPanel extends PathInputPanel
     {
       if(  verifyVersion() )
       {
-        idata.setVariable("JDKPath",pathSelectionPanel.getPath());
+        idata.setVariable(getVariableName(),pathSelectionPanel.getPath());
         return( true );
       }
       // Bad version detected.
-      String min = idata.getVariable("JDKPathPanel.minVersion");
-      String max = idata.getVariable("JDKPathPanel.maxVersion");
+      String min = getMinVersion();
+      String max = getMaxVersion();
       StringBuffer message = new StringBuffer();
         message.append(parent.langpack.getString("JDKPathPanel.badVersion1")).
-          append(detectedVersion).
+          append(getDetectedVersion()).
         append(parent.langpack.getString("JDKPathPanel.badVersion2"));
       if( min != null&& max != null )
         message.append( min ).append(" - ").append( max );
@@ -126,8 +131,8 @@ public class JDKPathPanel extends PathInputPanel
   
   private final boolean verifyVersion()
   {
-    String min = idata.getVariable("JDKPathPanel.minVersion");
-    String max = idata.getVariable("JDKPathPanel.maxVersion");
+    String min = getMinVersion();
+    String max = getMaxVersion();
     // No min and max, version always ok.
     if( min == null && max == null)
       return( true );
@@ -210,6 +215,78 @@ public class JDKPathPanel extends PathInputPanel
         return( false );
     }
     return(true); 
+  }
+
+  /**
+   * Returns the current detected version.
+   * @return the current detected version
+   */
+  public String getDetectedVersion()
+  {
+    return detectedVersion;
+  }
+
+  /**
+   * Returns the current used maximum version.
+   * @return the current used maximum version
+   */
+  public String getMaxVersion()
+  {
+    return maxVersion;
+  }
+
+  /**
+   * Returns the current used minimum version.
+   * @return the current used minimum version
+   */
+  public String getMinVersion()
+  {
+    return minVersion;
+  }
+
+  /**
+   * Sets the given value as current detected version.
+   * @param string version string to be used as detected version
+   */
+  protected void setDetectedVersion(String string)
+  {
+    detectedVersion = string;
+  }
+
+  /**
+   * Sets the given value as maximum for version control.
+   * @param string version string to be used as maximum
+   */
+  protected void setMaxVersion(String string)
+  {
+    maxVersion = string;
+  }
+
+  /**
+   * Sets the given value as minimum for version control.
+   * @param string version string to be used as minimum
+   */
+  protected void setMinVersion(String string)
+  {
+    minVersion = string;
+  }
+
+  /**
+   * Returns the name of the variable which should be used for the path.
+   * @return the name of the variable which should be used for the path
+   */
+  public String getVariableName()
+  {
+    return variableName;
+  }
+
+  /**
+   * Sets the name for the variable which should be set with the path.
+   * @param string variable name to be used
+   */
+  public void setVariableName(String string)
+  {
+    variableName = string;
   }
 
 }
