@@ -109,6 +109,7 @@ public class FinishPanel extends IzPanel implements ActionListener
   {
     parent.lockNextButton();
     parent.lockPrevButton();
+    parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
     if (idata.installSuccess)
     {
       // We set the information
