@@ -146,6 +146,14 @@
     <str id="CompilePanel.additional_arguments" txt="Arguments supplémentaires du compilateur : " />
     
     <str id="ProcessPanel.heading" txt="En cours de traitement" />
+	
+	<!-- Strings for the summary of panels --- START -->
+    <str id="SummaryPanel.info" txt="Prêt à installer. Les données importantes sont listées ci-dessous. Appuyez sur &quot;Suivant&quot; pour commencer l'installation, "/>
+    <str id="TargetPanel.summaryCaption" txt="Chemin de l'installation"/>
+    <str id="JDKPathPanel.summaryCaption" txt="Chemin du JDK"/>
+    <str id="PacksPanel.summaryCaption" txt="Paquet(s) d'installation choisis"/>
+    <str id="ImgPacksPanel.summaryCaption" txt="Paquet(s) d'installation choisis"/>
+    <!-- Strings for the summary of panels --- END -->
 
     <!-- Add your own panels specific strings here if you need -->
     
