@@ -1,7 +1,8 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.5.0 (build.2004.xx.yy) [TBA]
+  > 3.5.0 (build.2004.02.26)
 
+- The developer services have moved to BerliOS (http://developer.berlios.de/).
 - Uninstaller is now able to delete itself and the install directory
   (Chad McHenry)
 - Upate Checking: The installer is now able to "update" an already installed
