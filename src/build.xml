@@ -94,8 +94,11 @@
     06.12.2003: (by Julien Ponge)
         Removed the frontend-related sections.
 
-    16.12.2004: (by Julien Ponge)
+    16.12.2003: (by Julien Ponge)
         Added the SudoPanel building call.
+    
+    18.02.2004: (by Julien Ponge)
+        New installer naming scheme (IzPack-install-{version}.jar).
 
   Mini-HowTo:
 
@@ -133,7 +136,7 @@
     <!-- Define directories -->
     <property file="src/ant.properties"/>
     <property name="ver" value="3.5"/>
-    <property name="rel" value="0"/>
+    <property name="rel" value="0-RC1"/>
 
     <property name="src.dir" value="${basedir}/src/lib"/>
     <property name="img.dir" value="${basedir}/src/img"/>
@@ -599,7 +602,10 @@
 
         <!-- We call IzPack -->
         <echo message="Makes the installer using IzPack"/>
-        <izpack input="${dist.dir}/IzPack-install.xml" output="${dist.dir}/IzPack-install.jar" installerType="standard" basedir="${dist.dir}" izPackDir="${dist.dir}/"/>
+        <izpack input="${dist.dir}/IzPack-install.xml"
+                output="${dist.dir}/IzPack-install-${ver}.${rel}.jar"
+                installerType="standard" basedir="${dist.dir}"
+                izPackDir="${dist.dir}/"/>
 
     </target>
   
