@@ -86,6 +86,17 @@ The compiler can generate different kinds of installers, but this information is
 not located inside the XML file as it is not were it should be. On the contrary,
 this is a compiler parameter.\\
 
+The compilation options for a command-line installer are the following:
+\begin{itemize}
+\item \texttt{-?}: gives a list of the available options.
+\item \texttt{-b}: specifies the base path, \textsl{ie} the one that will be
+used to resolve the relative paths. If your XML file contains absolute paths,
+specify it to an empty string (\texttt{-b ""}).
+\item \texttt{-k}: specifies the installer kind, for instance most users will
+want \texttt{standard} here.
+\item \texttt{-o}: specifies the resulting installer Jar file name.
+\end{itemize}\
+
 \subsection{How an Installer Works}
 
 An installer presents its panels to the end-user. For instance, there is
@@ -114,7 +125,7 @@ tag. This is a much cleaner approach.\\
 
 You might wonder how your files are packaged. They can be grouped in
 \textit{packs}. For instance, you can have one pack for the core files, one for
-the documentation, one for the source code and so one. In this way, your end-users
+the documentation, one for the source code and so on. In this way, your end-users
 will have the choice to install a pack or not (provided that the pack they don't
 want to install is not mandatory). Inside the jar file (which is a zip file), a
 sub directory contains the pack files. Each pack file contains the files that are
