@@ -201,6 +201,53 @@ To provide internationalization you can create a file named
 in lowercase. Please be aware that case is significant. This file has to be inserted in the resources section
 of \texttt{install.xml} with the \texttt{id} and \texttt{src} attributes
 set at the name of the file.
+\\\\
+Example:\\
+\\
+If you have the following userInputSpec.xml 
+and you want to internationalize \texttt{input.comment}, \texttt{input.proxy}, \texttt{input.port} for 
+english and french you have to create two files named userInputLang.xml\_eng and userInputLang.xml\_fra:
+\begin{verbatim}
+<userInput>
+<panel order="0">
+  <field type="staticText" align="left" txt="My comment is here." id="input.comment"/>
+  <field type="text" variable="proxyAddress">
+        <spec txt="Proxy Host:" id="input.proxy" size="25" set=""/>
+  </field>
+  <field type="text" variable="proxyPort">
+       <spec txt="Proxy Port:" id="input.port" size="6" set=""/>
+  </field>
+</panel>
+</userInput>
+\end{verbatim}
+\\
+userInputLang.xml\_eng file contains:
+\begin{verbatim}
+<langpack>
+  <str id="input.comment" txt="English:My comment is here."/>
+  <str id="input.proxy" txt="English:Proxy Host:"/>
+  <str id="input.port" txt="English:Proxy Port:"/>
+</langpack>
+\end{verbatim}
+userInputLang.xml\_fra file contains:
+\begin{verbatim}
+<langpack>
+  <str id="input.comment" txt="French:My comment is here."/>
+  <str id="input.proxy" txt="French:Proxy Host:"/>
+  <str id="input.port" txt="French:Proxy Port:"/>
+</langpack>
+\end{verbatim}
+
+you will also have to add the following to the install.xml file
+\begin{verbatim}
+<resources>
+  ...
+  <res id="userInputSpec.xml" src="userInputSpec.xml"/>
+  <res id="userInputLang.xml_eng" src="userInputLang.xml_eng" />
+  <res id="userInputLang.xml_fra" src="userInputLang.xml_fra" />
+  ...
+</resources>
+\end{verbatim}
 
 \section{Panel Title}
 
