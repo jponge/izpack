@@ -20,6 +20,8 @@
 - Switched to the Crystal icons from KDE 3.2.
 - Uninstaller: proper use of the ButtonFactory.
 - Packs can now be restricted to a certain OS list (Jan Blok).
+- Fixed a bug that caused the automated installers to produce broken installers
+  (bug #1472).
 
 
   > 3.4.0 (build 2003.12.06)
