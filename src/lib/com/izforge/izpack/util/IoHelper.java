@@ -452,11 +452,34 @@ public class IoHelper
   {
     if(  supported("getPrimaryGroup"))
     {
-      String[] params = {"id", "-gn"};
-      String[] output = new String[2];
-      FileExecutor fe = new FileExecutor();
-      fe.executeCommand(params, output);
-      return output[0];
+      if( OsVersion.IS_SUNOS )
+      { // Standard id of SOLARIS do not support -gn.
+        String[] params = {"id"};
+        String[] output = new String[2];
+        FileExecutor fe = new FileExecutor();
+        fe.executeCommand(params, output);
+        // No we have "uid=%u(%s) gid=%u(%s)"
+        if( output[0] != null)
+        {
+          StringTokenizer st = new StringTokenizer(output[0], "()");
+          int length = st.countTokens();
+          if( length >= 4)
+          {
+            for(int i =0; i < 3; ++i)
+              st.nextToken();
+            return( st.nextToken());
+          }
+        }
+        return( null);
+      }
+      else
+      {
+        String[] params = {"id", "-gn"};
+        String[] output = new String[2];
+        FileExecutor fe = new FileExecutor();
+        fe.executeCommand(params, output);
+        return output[0];
+      }
     }
     else
       return null;

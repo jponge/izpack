@@ -1,5 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.7.2 (build N/A)
+
+- IoHelper.getPrimaryGroup: bugfix for SunOS (Klaus Bartz).
+
   > 3.7.1 (build 2005.02.15)
 
 - The Danish langpack was empty by mistake in 3.7.0.
