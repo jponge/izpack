@@ -53,12 +53,6 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
   /**  The layout constraints. */
   private GridBagConstraints gbConstraints;
 
-  /**  The info label. */
-  private JLabel infoLabel;
-
-  /**  The install button. */
-  private HighlightJButton installButton;
-
   /**  The tip label. */
   private JLabel tipLabel;
 
@@ -86,25 +80,6 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
     layout = new GridBagLayout();
     gbConstraints = new GridBagConstraints();
     setLayout(layout);
-
-    infoLabel = new JLabel(parent.langpack.getString("InstallPanel.info"),
-      parent.icons.getImageIcon("host"), JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 0.50, 0.0);
-    gbConstraints.insets = new Insets(5, 5, 5, 5);
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-    layout.addLayoutComponent(infoLabel, gbConstraints);
-    add(infoLabel);
-
-    installButton = new HighlightJButton(parent.langpack.getString("InstallPanel.install"),
-      parent.icons.getImageIcon("refresh_cycle"),
-      idata.buttonsHColor);
-    installButton.addActionListener(this);
-    parent.buildConstraints(gbConstraints, 1, 0, 1, 1, 0.50, 0.0);
-    gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-    gbConstraints.anchor = GridBagConstraints.SOUTHEAST;
-    layout.addLayoutComponent(installButton, gbConstraints);
-    add(installButton);
 
     tipLabel = new JLabel(parent.langpack.getString("InstallPanel.tip"),
       parent.icons.getImageIcon("tip"), JLabel.TRAILING);
@@ -181,8 +156,6 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
   {
     parent.releaseGUI();
     parent.lockPrevButton();
-    installButton.setIcon(parent.icons.getImageIcon("empty"));
-    installButton.setEnabled(false);
     progressBar.setString(parent.langpack.getString("InstallPanel.finished"));
     progressBar.setEnabled(false);
     opLabel.setText(" ");
@@ -235,6 +208,9 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
     setMaximumSize(dim);
     setPreferredSize(dim);
     parent.lockNextButton();
+    
+    parent.install(this);
+
   }
 
 

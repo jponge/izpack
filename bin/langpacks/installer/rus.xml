@@ -30,6 +30,7 @@
     
     <str id="LicencePanel.info" txt="Пожалуйста внимательно прочитайте лицензию :"/>
     <str id="LicencePanel.agree" txt="Вы согласны с лицензией ?"/>
+    <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>
     <str id="LicencePanel.yes" txt="Да"/>
     <str id="LicencePanel.no" txt="Нет"/>
     
@@ -42,6 +43,7 @@
     
     <str id="PacksPanel.info" txt="Выберите наборы для установки :"/>
     <str id="PacksPanel.tip" txt="Примечание: серые наборы обязательны к установке."/>
+    <str id="PacksPanel.description" txt="Description"/>
     
     <str id="InstallPanel.info" txt="Подготовка к установке программы завершена :"/>
     <str id="InstallPanel.install" txt="Установить !"/>

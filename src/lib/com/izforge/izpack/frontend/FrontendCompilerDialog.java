@@ -64,7 +64,7 @@ public class FrontendCompilerDialog extends JDialog implements ActionListener, P
   private GridBagConstraints gbConstraints;
 
   /**  The 'ok' button. */
-  private HighlightJButton okButton;
+  private JButton okButton;
 
   /**  The text area. */
   private JTextArea textArea;
@@ -139,7 +139,7 @@ public class FrontendCompilerDialog extends JDialog implements ActionListener, P
     contentPane.add(scroller);
     vertScrollBar = scroller.getVerticalScrollBar();
 
-    okButton = new HighlightJButton(langpack.getString("frontend.comp_dlg.ok"),
+    okButton = ButtonFactory.createButton(langpack.getString("frontend.comp_dlg.ok"),
       icons.getImageIcon("forward"),
       FrontendFrame.buttonsHColor);
     okButton.addActionListener(this);

@@ -31,6 +31,7 @@
 
     <str id="LicencePanel.info" txt="Por favor, lea atentamente el convenio de licencia:"/>
     <str id="LicencePanel.agree" txt="¿Acepta los términos de este convenio de licencia?"/>
+    <str id="LicencePanel.notagree" txt="Yo no acepto los términos de este convenio de licencia."/>
     <str id="LicencePanel.yes" txt="Sí"/>
     <str id="LicencePanel.no" txt="No"/>
 
@@ -47,6 +48,7 @@
     <str id="PacksPanel.info" txt="Seleccione los paquetes que desea instalar:"/>
     <str id="PacksPanel.tip" txt="Nota: los paquetes en gris no son opcionales."/>
     <str id="PacksPanel.space" txt="Espacio total requerido: "/>
+    <str id="PacksPanel.description" txt="Description"/>
 
     <str id="InstallPanel.info" txt="Haga clic en ¡Instalar! para iniciar el proceso de instalación"/>
     <str id="InstallPanel.install" txt="¡Instalar!"/>

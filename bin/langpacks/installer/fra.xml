@@ -9,7 +9,7 @@
     <str id="installer.next" txt="Suivant"/>
     <str id="installer.prev" txt="Précédent"/>
     <str id="installer.quit" txt="Quitter"/>
-    <str id="installer.madewith" txt="(Crée avec IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="(Créé avec IzPack - http://www.izforge.com/)"/>
     <str id="installer.quit.title" txt="Voulez vous vraiment quitter ?"/>
     <str id="installer.quit.message" txt="Ceci va cesser l'installation !"/>
     <str id="installer.warning" txt="Attention !"/>
@@ -30,7 +30,8 @@
     <str id="HelloPanel.url" txt="La page d'accueil de ce logiciel est : "/>
     
     <str id="LicencePanel.info" txt="Veuillez lire attentivement l'accord de licence suivant :"/>
-    <str id="LicencePanel.agree" txt="Etes-vous d'accord avec les termes de l'accord de licence ?"/>
+    <str id="LicencePanel.agree" txt="J'accepte les termes de cet accord de licence"/>
+    <str id="LicencePanel.notagree" txt="Je n'accepte pas les termes de cet accord de licence"/>
     <str id="LicencePanel.yes" txt="Oui"/>
     <str id="LicencePanel.no" txt="Non"/>
     
@@ -47,6 +48,7 @@
     <str id="PacksPanel.info" txt="Choisissez ici les paquetages à installer :"/>
     <str id="PacksPanel.tip" txt="Note : les paquetages grisés ne sont pas optionnels."/>
     <str id="PacksPanel.space" txt="Espace total requis :" />
+    <str id="PacksPanel.description" txt="Description"/>
     
     <str id="InstallPanel.info" txt="Vous pouvez lancer le processus d'installation ici :"/>
     <str id="InstallPanel.install" txt="Installer !"/>

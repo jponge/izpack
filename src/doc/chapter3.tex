@@ -63,6 +63,18 @@ It has reproduced the same installation :-)\\
 You can add a picture on the language selection dialog by adding the following
 resource : \texttt{installer.langsel.img}.\\
 
+% Installer picture
+\section{Picture in the installer}
+
+It is possible to specify an optional picture to display on the left side of the
+installer. To do this, you just have to define a resource whose id is
+\texttt{Installer.image}. For instance,
+\begin{verbatim}
+<res id="Installer.image" src="nice-image.png" />
+\end{verbatim}
+will do that. If the resource isn't specified, no picture will be displayed at
+all.\\
+
 % Web Installers
 \section{Web Installers}
 

@@ -60,10 +60,10 @@ public class FrontendLocTab extends FrontendTab implements ActionListener
   private JList selectedList;
 
   /**  The include button. */
-  private HighlightJButton includeButton;
+  private JButton includeButton;
 
   /**  The remove button. */
-  private HighlightJButton removeButton;
+  private JButton removeButton;
 
   /**  The available packs. */
   private Vector avPacks;
@@ -143,7 +143,7 @@ public class FrontendLocTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(scroller, gbConstraints);
     add(scroller);
 
-    includeButton = new HighlightJButton(langpack.getString("tabs.loc.include"),
+    includeButton = ButtonFactory.createButton(langpack.getString("tabs.loc.include"),
       icons.getImageIcon("forward"),
       FrontendFrame.buttonsHColor);
     includeButton.addActionListener(this);
@@ -153,7 +153,7 @@ public class FrontendLocTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(includeButton, gbConstraints);
     add(includeButton);
 
-    removeButton = new HighlightJButton(langpack.getString("tabs.loc.remove"),
+    removeButton = ButtonFactory.createButton(langpack.getString("tabs.loc.remove"),
       icons.getImageIcon("back"),
       FrontendFrame.buttonsHColor);
     removeButton.addActionListener(this);

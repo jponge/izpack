@@ -8,6 +8,8 @@
  *  Author's email :     julien@izforge.com
  *  Author's Website :   http://www.izforge.com
  *
+ *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
+ * 
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
  *  as published by the Free Software Foundation; either version 2
@@ -39,6 +41,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
 import javax.swing.event.*;
 
 import net.n3.nanoxml.*;
@@ -60,12 +63,6 @@ public class InstallerFrame extends JFrame
   /**  The icons database. */
   public IconsDatabase icons;
 
-  /**  The layout. */
-  private GridBagLayout layout;
-
-  /**  The layout constraints. */
-  private GridBagConstraints gbConstraints;
-
   /**  The panels container. */
   private JPanel panelsContainer;
 
@@ -73,13 +70,13 @@ public class InstallerFrame extends JFrame
   private JPanel contentPane;
 
   /**  The previous button. */
-  private HighlightJButton prevButton;
+  private JButton prevButton;
 
   /**  The next button. */
-  private HighlightJButton nextButton;
+  private JButton nextButton;
 
   /**  The quit button. */
-  private HighlightJButton quitButton;
+  private JButton quitButton;
 
   /**  The 'made with izpack' label, please KEEP IT THERE. */
   private JLabel madewithLabel;
@@ -270,21 +267,13 @@ public class InstallerFrame extends JFrame
 
     // We set the layout & prepare the constraint object
     contentPane = (JPanel) getContentPane();
-    layout = new GridBagLayout();
-    contentPane.setLayout(layout);
-    gbConstraints = new GridBagConstraints();
-    gbConstraints.insets = new Insets(5, 5, 5, 5);
+    contentPane.setLayout(new BorderLayout());//layout);
 
     // We add the panels container
     panelsContainer = new JPanel();
-    panelsContainer.setBorder(BorderFactory.createMatteBorder(
-      0, 0, 1, 0, Color.gray));
+    panelsContainer.setBorder(BorderFactory.createEmptyBorder(10,10,0,10));
     panelsContainer.setLayout(new GridLayout(1, 1));
-    buildConstraints(gbConstraints, 0, 0, 4, 1, 1.0, 1.0);
-    gbConstraints.anchor = GridBagConstraints.CENTER;
-    gbConstraints.fill = GridBagConstraints.BOTH;
-    layout.addLayoutComponent(panelsContainer, gbConstraints);
-    contentPane.add(panelsContainer);
+    contentPane.add(panelsContainer,BorderLayout.CENTER);
 
     // We put the first panel
     installdata.curPanelNumber = 0;
@@ -295,40 +284,56 @@ public class InstallerFrame extends JFrame
 
     NavigationHandler navHandler = new NavigationHandler();
 
-    prevButton = new HighlightJButton(langpack.getString("installer.prev"),
+	JPanel navPanel = new JPanel();
+    navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.X_AXIS));
+    navPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(8,8,8,8), BorderFactory.createTitledBorder(new EtchedLineBorder(), langpack.getString("installer.madewith")+" ")));
+    navPanel.add(Box.createHorizontalGlue());
+	
+    prevButton = ButtonFactory.createButton(langpack.getString("installer.prev"),
       icons.getImageIcon("stepback"),
       installdata.buttonsHColor);
-    buildConstraints(gbConstraints, 0, 1, 1, 1, 0.25, 0.0);
-    gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-    gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-    layout.addLayoutComponent(prevButton, gbConstraints);
-    contentPane.add(prevButton);
+    navPanel.add(prevButton);
     prevButton.addActionListener(navHandler);
 
-    madewithLabel = new JLabel(langpack.getString("installer.madewith"));
-    buildConstraints(gbConstraints, 1, 1, 1, 1, 0.25, 0.0);
-    gbConstraints.anchor = GridBagConstraints.SOUTH;
-    gbConstraints.fill = GridBagConstraints.NONE;
-    layout.addLayoutComponent(madewithLabel, gbConstraints);
-    contentPane.add(madewithLabel);
+    navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
-    nextButton = new HighlightJButton(langpack.getString("installer.next"),
+    nextButton = ButtonFactory.createButton(langpack.getString("installer.next"),
       icons.getImageIcon("stepforward"),
       installdata.buttonsHColor);
-    buildConstraints(gbConstraints, 2, 1, 1, 1, 0.25, 0.0);
-    gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-    layout.addLayoutComponent(nextButton, gbConstraints);
-    contentPane.add(nextButton);
+    navPanel.add(nextButton);
     nextButton.addActionListener(navHandler);
 
-    quitButton = new HighlightJButton(langpack.getString("installer.quit"),
+
+    navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+
+    quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"),
       icons.getImageIcon("stop"),
       installdata.buttonsHColor);
-    buildConstraints(gbConstraints, 3, 1, 1, 1, 0.25, 0.0);
-    gbConstraints.anchor = GridBagConstraints.SOUTHEAST;
-    layout.addLayoutComponent(quitButton, gbConstraints);
-    contentPane.add(quitButton);
+    navPanel.add(quitButton);
     quitButton.addActionListener(navHandler);
+    contentPane.add(navPanel,BorderLayout.SOUTH);
+
+	try
+	{
+		ResourceManager rm = new ResourceManager(installdata);
+		ImageIcon icon = rm.getImageIconResource("Installer.image");
+		if (icon != null)
+		{
+			JPanel imgPanel = new JPanel();
+			imgPanel.setLayout(new BorderLayout());
+			imgPanel.setBorder(BorderFactory.createEmptyBorder(10,10,0,0));
+			JLabel label = new JLabel(icon);
+			label.setBorder(BorderFactory.createLoweredBevelBorder());
+			imgPanel.add(label,BorderLayout.CENTER);
+			contentPane.add(imgPanel,BorderLayout.WEST);
+		}
+	}
+	catch (Exception e)
+	{
+		//ignore
+	}
+
+     getRootPane().setDefaultButton(nextButton);
   }
 
 
@@ -358,13 +363,20 @@ public class InstallerFrame extends JFrame
     panelsContainer.add((JPanel) panel);
     if (installdata.curPanelNumber == 0)
     {
+      prevButton.setVisible(false);
       lockPrevButton();
       unlockNextButton();// if we push the button back at the license panel
     }
     else if (installdata.curPanelNumber == installdata.panels.size() - 1)
+    {
+      prevButton.setVisible(false);
+      nextButton.setVisible(false);
       lockNextButton();
+    }
     else
     {
+      prevButton.setVisible(true);
+      nextButton.setVisible(true);
       unlockPrevButton();
       unlockNextButton();
     }

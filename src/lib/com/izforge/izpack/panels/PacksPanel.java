@@ -9,6 +9,7 @@
  *  Author's Website :   http://www.izforge.com
  *
  *  Portions are Copyright (C) 2002 Marcus Wolschon
+ *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -30,48 +31,47 @@ import com.izforge.izpack.*;
 import com.izforge.izpack.gui.*;
 import com.izforge.izpack.installer.*;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
 import java.awt.event.*;
 
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.event.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 import net.n3.nanoxml.*;
 
 /**
  *  The packs selection panel class.
  *
- * @author     Julien Ponge
+ * @author     Julien Ponge,Jan Blok
  * @created    November 1, 2002
  */
-public class PacksPanel extends IzPanel implements ActionListener
+public class PacksPanel extends IzPanel implements ActionListener,ListSelectionListener
 {
-  /**  The layout. */
-  private BoxLayout layout;
-
-  /**  The info label. */
-  private JLabel infoLabel;
-
-  /**  The tip label. */
-  private JLabel tipLabel;
-
   /**  The space label. */
   private JLabel spaceLabel;
+
+  /**  The tip label. */
+  private JTextArea descriptionArea;
+
+  /**  The tablescroll. */
+  private JScrollPane tableScroller;
 
   /**  The bytes of the current pack. */
   private int bytes = 0;
 
-  /**  The checkboxes. */
-  private HashMap checkBoxes = new HashMap();
-
-  /**  The checkboxes. */
-  private HashMap packsforBoxes = new HashMap();
-
-  /**  The installation data. */
-  protected InstallData idata;
-
+  /**  The packs table. */
+  private JTable packsTable;
 
   /**
    *  The constructor.
@@ -82,108 +82,118 @@ public class PacksPanel extends IzPanel implements ActionListener
   public PacksPanel(InstallerFrame parent, InstallData idata)
   {
     super(parent, idata);
-    this.idata = idata;
 
-    // The 'super' layout
-    GridBagLayout superLayout = new GridBagLayout();
-    setLayout(superLayout);
-    GridBagConstraints gbConstraints = new GridBagConstraints();
-    gbConstraints.insets = new Insets(0, 0, 0, 0);
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.anchor = GridBagConstraints.CENTER;
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-    // We initialize our 'real' layout
-    JPanel centerPanel = new JPanel();
-    layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
-    centerPanel.setLayout(layout);
-    superLayout.addLayoutComponent(centerPanel, gbConstraints);
-    add(centerPanel);
+    JLabel infoLabel = new JLabel(parent.langpack.getString("PacksPanel.info"), parent.icons.getImageIcon("preferences"), JLabel.TRAILING);
+    add(infoLabel);
 
-    // We create and put the labels
+    add(Box.createRigidArea(new Dimension(0, 3)));
 
-    centerPanel.add(Box.createVerticalStrut(10));
+    JLabel tipLabel = new JLabel(parent.langpack.getString("PacksPanel.tip"), parent.icons.getImageIcon("tip"), JLabel.TRAILING);
+    add(tipLabel);
 
-    infoLabel = new JLabel(parent.langpack.getString("PacksPanel.info"),
-      parent.icons.getImageIcon("preferences"), JLabel.TRAILING);
-    centerPanel.add(infoLabel);
+    add(Box.createRigidArea(new Dimension(0, 5)));
 
-    centerPanel.add(Box.createVerticalStrut(10));
+	packsTable = new JTable();
+	packsTable.setIntercellSpacing(new Dimension(0,0));
+    packsTable.setBackground(Color.white);
+    packsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	packsTable.getSelectionModel().addListSelectionListener(this);
+	packsTable.setShowGrid(false);
+	tableScroller = new JScrollPane(packsTable);
+    tableScroller.setAlignmentX(LEFT_ALIGNMENT);
+    tableScroller.getViewport().setBackground(Color.white);
+    tableScroller.setPreferredSize(new Dimension(300,(idata.guiPrefs.height/3+30)));
+	add(tableScroller);
 
-    tipLabel = new JLabel(parent.langpack.getString("PacksPanel.tip"),
-      parent.icons.getImageIcon("tip"), JLabel.TRAILING);
-    centerPanel.add(tipLabel);
+	descriptionArea = new JTextArea();
+    descriptionArea.setMargin(new Insets(2,2,2,2));
+    descriptionArea.setAlignmentX(LEFT_ALIGNMENT);
+    descriptionArea.setCaretPosition(0);
+    descriptionArea.setEditable(false);
+    descriptionArea.setEditable(false);
+    descriptionArea.setOpaque(false);
+    descriptionArea.setLineWrap(true);
+    descriptionArea.setWrapStyleWord(true);
+	descriptionArea.setBorder(BorderFactory.createTitledBorder(parent.langpack.getString("PacksPanel.description")));
+    add(descriptionArea);
 
-    centerPanel.add(Box.createVerticalStrut(20));
-
-    // Adds each pack checkbox
-    int size = idata.availablePacks.size();
-    Pack pack;
-    JCheckBox checkBox;
-    for (int i = 0; i < size; i++)
-    {
-      pack = (Pack) idata.availablePacks.get(i);
-      String caption = (pack.description != null) ? " " + pack.name + " : " + pack.description
-         : " " + pack.name;
-      checkBox = new JCheckBox(caption, true);
-      checkBox.addActionListener(this);
-      if (pack.required)
-        checkBox.setEnabled(false);
-      checkBoxes.put(pack, checkBox);
-      packsforBoxes.put(checkBox, pack);
-      centerPanel.add(checkBox);
-    }
-
-    centerPanel.add(Box.createVerticalStrut(20));
-
-    spaceLabel = new JLabel(parent.langpack.getString("PacksPanel.space"));
-    centerPanel.add(spaceLabel);
-
+	JPanel spacePanel = new JPanel();
+    spacePanel.setAlignmentX(LEFT_ALIGNMENT);
+	spacePanel.setLayout(new BoxLayout(spacePanel, BoxLayout.X_AXIS));
+	spacePanel.add(new JLabel(parent.langpack.getString("PacksPanel.space")));
+	spacePanel.add(Box.createHorizontalGlue());
+    spaceLabel = new JLabel("");
+//    spaceLabel.setFont(new Font("Monospaced",Font.PLAIN,11));
+    spacePanel.add(spaceLabel);
+    add(spacePanel);
   }
 
 
   /**  Called when the panel becomes active.  */
   public void panelActivate()
   {
-    try
-    {
-      // set the JCheckBoxes to the currently selected panels. The selection meight have changes in another panel
-      java.util.Iterator iter = idata.availablePacks.iterator();
-      bytes = 0;
-      while (iter.hasNext())
-      {
-        Pack p = (Pack) iter.next();
-        JCheckBox check = (JCheckBox) checkBoxes.get(p);
-        if (check == null)
-        {
-          System.err.println("ERROR[PacksPanel]: internal error, no checkbox for Pack. ignoring");
-          continue;
-        }
-        if (p.required)
-        {
-          check.setSelected(true);
-          bytes += p.nbytes;
-          continue;
-        }
-        if (idata.selectedPacks.contains(p))
-          bytes += p.nbytes;
+	try
+	{
+		packsTable.setModel(new PacksModel(idata.availablePacks, idata.selectedPacks));
+		CheckBoxEditorRenderer packSelectedRenderer = new CheckBoxEditorRenderer(false);
+		packsTable.getColumnModel().getColumn(0).setCellRenderer(packSelectedRenderer);
+		CheckBoxEditorRenderer packSelectedEditor = new CheckBoxEditorRenderer(true);
+		packsTable.getColumnModel().getColumn(0).setCellEditor(packSelectedEditor);
+		packsTable.getColumnModel().getColumn(0).setMaxWidth(40);
+		DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer(){
+			public void setBorder(Border b)
+			{
+			}
+		};
+		packsTable.getColumnModel().getColumn(1).setCellRenderer(renderer1);
+		DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer(){
+			public void setBorder(Border b)
+			{
+			}
+			
+//			public void setFont(Font f)
+//			{
+//				super.setFont(new Font("Monospaced",Font.PLAIN,11));
+//			}
+		};
+		renderer2.setHorizontalAlignment(JLabel.RIGHT);
+		packsTable.getColumnModel().getColumn(2).setCellRenderer(renderer2);
+		packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
 
-        check.setSelected(idata.selectedPacks.contains(p));
-      }
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    showSpaceRequired();
+		//remove header,so we don't need more strings
+	    tableScroller.remove(packsTable.getTableHeader());
+	    tableScroller.setColumnHeaderView(null); 
+	    tableScroller.setColumnHeader(null); 
+		
+		// set the JCheckBoxes to the currently selected panels. The selection meight have changes in another panel
+		java.util.Iterator iter = idata.availablePacks.iterator();
+		bytes = 0;
+		while (iter.hasNext())
+		{
+			Pack p = (Pack) iter.next();
+			if (p.required)
+			{
+				bytes += p.nbytes;
+				continue;
+			}
+			if (idata.selectedPacks.contains(p))
+				bytes += p.nbytes;
+		}
+	}
+	catch (Exception e)
+	{
+		e.printStackTrace();
+	}
+	showSpaceRequired();
   }
 
 
   /**  Sets the label text of space requiered for installation.  */
   private void showSpaceRequired()
   {
-    StringBuffer result = new StringBuffer(parent.langpack.getString("PacksPanel.space"));
-    result.append(Pack.toByteUnitsString(bytes));
-    spaceLabel.setText(result.toString());
+    spaceLabel.setText(Pack.toByteUnitsString(bytes));
   }
 
 
@@ -194,23 +204,6 @@ public class PacksPanel extends IzPanel implements ActionListener
    */
   public void actionPerformed(ActionEvent e)
   {
-    // Initialisations
-    Object source = e.getSource();
-    JCheckBox checkBox = (JCheckBox) source;
-    Pack pack = (Pack) packsforBoxes.get(checkBox);
-
-    // We act depending of the user's choice
-    if (checkBox.isSelected())
-    {
-      idata.selectedPacks.add(pack);
-      bytes += pack.nbytes;
-    }
-    else
-    {
-      idata.selectedPacks.remove(idata.selectedPacks.indexOf(pack));
-      bytes -= pack.nbytes;
-    }
-    showSpaceRequired();
   }
 
 
@@ -275,5 +268,185 @@ public class PacksPanel extends IzPanel implements ActionListener
       idata.selectedPacks.add(idata.availablePacks.get(index));
     }
   }
-}
 
+	private class PacksModel extends AbstractTableModel
+	{
+		private List packs;
+		private List packsToInstall;
+		public PacksModel(List packs,List packsToInstall)
+		{
+			this.packs = packs;
+			this.packsToInstall = packsToInstall;
+		}
+		
+			/*
+		 * @see TableModel#getRowCount()
+		 */
+		public int getRowCount()
+		{
+			return packs.size();
+		}
+	
+		/*
+		 * @see TableModel#getColumnCount()
+		 */
+		public int getColumnCount()
+		{
+			return 3;
+		}
+	
+		/*
+		 * @see TableModel#getColumnClass(int)
+		 */
+		public Class getColumnClass(int columnIndex)
+		{
+			switch(columnIndex)
+			{
+				case 0:
+					return Integer.class;
+
+				default :
+					return String.class;
+			}
+		}
+	
+		/*
+		 * @see TableModel#isCellEditable(int, int)
+		 */
+		public boolean isCellEditable(int rowIndex, int columnIndex)
+		{
+		    Pack pack = (Pack) packs.get(rowIndex);
+		    if (pack.required)
+		    {
+		    	return false;
+		    }
+		    else if (columnIndex == 0)
+		    {
+		    	return true;
+		    }
+		    else
+		    {
+				return false;
+		    }
+		}
+	
+		/*
+		 * @see TableModel#getValueAt(int, int)
+		 */
+		public Object getValueAt(int rowIndex, int columnIndex)
+		{
+		    Pack pack = (Pack) packs.get(rowIndex);
+			switch(columnIndex)
+			{
+				case 0:
+					int val = 0;
+					if (pack.required)
+					{
+						val = -1;
+					}
+					else
+					{
+						val = (packsToInstall.contains(pack) ? 1 : 0 ); 
+					}
+					return new Integer( val );
+
+				case 1:
+					return pack.name;
+
+				case 2:
+					return Pack.toByteUnitsString((int)pack.nbytes);
+
+				default :
+					return null;
+			}
+		}
+	
+		/*
+		 * @see TableModel#setValueAt(Object, int, int)
+		 */
+		public void setValueAt(Object aValue, int rowIndex, int columnIndex)
+		{
+			if (columnIndex == 0)
+			{
+				if (aValue instanceof Integer)
+				{
+				    Pack pack = (Pack) packs.get(rowIndex);
+					if (((Integer)aValue).intValue() == 1)
+					{
+				      packsToInstall.add(pack);
+				      bytes += pack.nbytes;
+				    }
+				    else
+				    {
+				      packsToInstall.remove(pack);
+				      bytes -= pack.nbytes;
+				    }
+				    showSpaceRequired();
+				}
+			}
+		}
+	}
+	/**
+	 * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
+	 */
+	public void valueChanged(ListSelectionEvent e)
+	{
+		int i = packsTable.getSelectedRow();
+		if (i >= 0)
+		{
+			Pack pack = (Pack) idata.availablePacks.get(i);
+			descriptionArea.setText(pack.description);
+		}
+	}
+
+    static class CheckBoxEditorRenderer extends AbstractCellEditor implements TableCellRenderer,TableCellEditor,ActionListener
+    {
+    	private JCheckBox display;
+		public CheckBoxEditorRenderer(boolean useAsEditor) 
+		{
+		    display = new JCheckBox();
+		    display.setHorizontalAlignment(JLabel.CENTER);
+		    if (useAsEditor) display.addActionListener(this);
+
+		}
+
+        public Component getTableCellRendererComponent(JTable table, Object value,
+						       boolean isSelected, boolean hasFocus, int row, int column) {
+	    if (isSelected) {
+	        display.setForeground(table.getSelectionForeground());
+	        display.setBackground(table.getSelectionBackground());
+	    }
+	    else {
+	        display.setForeground(table.getForeground());
+	        display.setBackground(table.getBackground());
+	    }
+	    	int state = ((Integer)value).intValue();
+            display.setSelected((value != null && Math.abs(state) == 1));
+            display.setEnabled(state >= 0);
+            return display;
+        }
+		/**
+		 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
+		 */
+		public Component getTableCellEditorComponent(
+			JTable table,
+			Object value,
+			boolean isSelected,
+			int row,
+			int column)
+		{
+			return getTableCellRendererComponent(table, value, isSelected, false, row, column);
+        }
+
+		public Object getCellEditorValue()
+		{
+			return new Integer(display.isSelected() ? 1 : 0);
+		}
+	
+		
+		public void actionPerformed(ActionEvent e)
+		{
+			stopCellEditing();
+		}
+    }
+}

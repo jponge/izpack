@@ -119,5 +119,41 @@ public class ExecutableFile implements Serializable
     this.osList = osList;
   }
 
+	public String toString()
+	{
+		StringBuffer retval = new StringBuffer();
+	    retval.append("path = "+path);
+	    retval.append("\n");
+	    retval.append("mainClass = "+mainClass);
+	    retval.append("\n");
+	    retval.append("type = "+type);
+	    retval.append("\n");
+	    retval.append("executionStage = "+executionStage);
+	    retval.append("\n");
+	    retval.append("onFailure = "+onFailure);
+	    retval.append("\n");
+	    retval.append("argList: "+argList);
+	    retval.append("\n");
+	    if (argList != null)
+	    {
+	    	for (int i = 0; i < argList.size(); i++)
+			{
+			    retval.append("\targ: "+argList.get(i));
+			    retval.append("\n");
+			}
+	    }
+	    retval.append("\n");
+	    retval.append("osList = "+osList);
+	    retval.append("\n");
+	    if (osList != null)
+	    {
+	    	for (int i = 0; i < osList.size(); i++)
+			{
+			    retval.append("\tos: "+osList.get(i));
+			    retval.append("\n");
+			}
+	    }
+		return retval.toString();
+	}
 }
 

@@ -64,10 +64,10 @@ public class UninstallerFrame extends JFrame
   private JProgressBar progressBar;
 
   /**  The destroy button. */
-  private HighlightJButton destroyButton;
+  private JButton destroyButton;
 
   /**  The quit button. */
-  private HighlightJButton quitButton;
+  private JButton quitButton;
 
   /**  The layout. */
   private GridBagLayout layout;
@@ -167,7 +167,7 @@ public class UninstallerFrame extends JFrame
     layout.addLayoutComponent(progressBar, gbConstraints);
     contentPane.add(progressBar);
 
-    destroyButton = new HighlightJButton(langpack.getString("uninstaller.uninstall"),
+    destroyButton = ButtonFactory.createButton(langpack.getString("uninstaller.uninstall"),
       icons.getImageIcon("delete"),
       buttonsHColor);
     destroyButton.addActionListener(handler);
@@ -177,7 +177,7 @@ public class UninstallerFrame extends JFrame
     layout.addLayoutComponent(destroyButton, gbConstraints);
     contentPane.add(destroyButton);
 
-    quitButton = new HighlightJButton(langpack.getString("installer.quit"),
+    quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"),
       icons.getImageIcon("stop"),
       buttonsHColor);
     quitButton.addActionListener(handler);

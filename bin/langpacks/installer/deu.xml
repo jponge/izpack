@@ -27,6 +27,7 @@
     <str id="HelloPanel.url" txt="Die Homepage für diese Software : "/>
     <str id="LicencePanel.info" txt="Bitte lesen Sie die folgenden Lizenzvereinbarungen durch :"/>
     <str id="LicencePanel.agree" txt="Stimmen Sie diesen Lizenzvereinbarungen zu ?"/>
+    <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>
     <str id="LicencePanel.yes" txt="Ja"/>
     <str id="LicencePanel.no" txt="Nein"/>
     <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen :"/>
@@ -42,6 +43,7 @@
     <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus :"/>
     <str id="PacksPanel.tip" txt="Hinweis : die grau markierten Pakete können nicht optional ausgewählt werden."/>
     <str id="PacksPanel.space" txt="Erforderlicher Speicherplatz : "/>
+    <str id="PacksPanel.description" txt="Description"/>
     
     <str id="InstallPanel.info" txt="Starten Sie hier die Installation :"/>
     <str id="InstallPanel.install" txt="Installieren !"/>

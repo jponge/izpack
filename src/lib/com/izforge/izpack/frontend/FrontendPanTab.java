@@ -60,16 +60,16 @@ public class FrontendPanTab extends FrontendTab implements ActionListener
   private JList selectedList;
 
   /**  The include button. */
-  private HighlightJButton includeButton;
+  private JButton includeButton;
 
   /**  The remove button. */
-  private HighlightJButton removeButton;
+  private JButton removeButton;
 
   /**  The up button. */
-  private HighlightJButton upButton;
+  private JButton upButton;
 
   /**  The down button. */
-  private HighlightJButton downButton;
+  private JButton downButton;
 
   /**  The available panels. */
   private Vector avPans;
@@ -148,7 +148,7 @@ public class FrontendPanTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(scroller, gbConstraints);
     add(scroller);
 
-    includeButton = new HighlightJButton(langpack.getString("tabs.pan.include"),
+    includeButton = ButtonFactory.createButton(langpack.getString("tabs.pan.include"),
       icons.getImageIcon("forward"),
       FrontendFrame.buttonsHColor);
     includeButton.addActionListener(this);
@@ -158,7 +158,7 @@ public class FrontendPanTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(includeButton, gbConstraints);
     add(includeButton);
 
-    removeButton = new HighlightJButton(langpack.getString("tabs.pan.remove"),
+    removeButton = ButtonFactory.createButton(langpack.getString("tabs.pan.remove"),
       icons.getImageIcon("back"),
       FrontendFrame.buttonsHColor);
     removeButton.addActionListener(this);
@@ -167,7 +167,7 @@ public class FrontendPanTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(removeButton, gbConstraints);
     add(removeButton);
 
-    upButton = new HighlightJButton("",
+    upButton = ButtonFactory.createButton("",
       icons.getImageIcon("up"),
       FrontendFrame.buttonsHColor);
     upButton.addActionListener(this);
@@ -177,7 +177,7 @@ public class FrontendPanTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(upButton, gbConstraints);
     add(upButton);
 
-    downButton = new HighlightJButton("",
+    downButton = ButtonFactory.createButton("",
       icons.getImageIcon("down"),
       FrontendFrame.buttonsHColor);
     downButton.addActionListener(this);

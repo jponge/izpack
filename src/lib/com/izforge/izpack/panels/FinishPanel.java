@@ -51,7 +51,7 @@ public class FinishPanel extends IzPanel implements ActionListener
   private BoxLayout layout;
 
   /**  The automated installers generation button. */
-  private HighlightJButton autoButton;
+  private JButton autoButton;
 
   /**  The center panel. */
   private JPanel centerPanel;
@@ -123,7 +123,7 @@ public class FinishPanel extends IzPanel implements ActionListener
 
       // We add the autoButton
       centerPanel.add(Box.createVerticalStrut(20));
-      autoButton = new HighlightJButton(parent.langpack.getString("FinishPanel.auto"),
+      autoButton = ButtonFactory.createButton(parent.langpack.getString("FinishPanel.auto"),
         parent.icons.getImageIcon("edit"),
         idata.buttonsHColor);
       autoButton.setToolTipText(parent.langpack.getString("FinishPanel.auto.tip"));

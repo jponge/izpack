@@ -9,7 +9,7 @@
     <str id="installer.next" txt="Verder"/>
     <str id="installer.prev" txt="Terug"/>
     <str id="installer.quit" txt="Afsluiten"/>
-    <str id="installer.madewith" txt="(Gemaakt met IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="IzPack - izforge.com"/>
     <str id="installer.quit.title" txt="Weet u zeker dat u wilt afsluiten?"/>
     <str id="installer.quit.message" txt="Weet u zeker dat u de installatie wilt afbreken?"/>
     <str id="installer.warning" txt="Waarschuwing !"/>
@@ -27,10 +27,11 @@
     <str id="HelloPanel.welcome1" txt="Welkom bij de installatie van "/>
     <str id="HelloPanel.welcome2" txt=" !"/>
     <str id="HelloPanel.authors" txt="De auteur(s) van deze software is/zijn : "/>
-    <str id="HelloPanel.url" txt="De software homepage is : "/>
+    <str id="HelloPanel.url" txt="De homepage is : "/>
     
     <str id="LicencePanel.info" txt="Lees a.u.b. de volgende licentie overeenkomst :"/>
-    <str id="LicencePanel.agree" txt="Accepteert u de voorwaarden van deze licentie ?"/>
+    <str id="LicencePanel.agree" txt="Ik accepteer de voorwaarden van deze licentie"/>
+    <str id="LicencePanel.notagree" txt="Ik accepteer de voorwaarden van deze licentie niet"/>
     <str id="LicencePanel.yes" txt="Ja"/>
     <str id="LicencePanel.no" txt="Nee"/>
     
@@ -47,6 +48,7 @@
     <str id="PacksPanel.info" txt="Selecteer de pakketten die u wilt installeren :"/>
     <str id="PacksPanel.tip" txt="NB: Grijze pakketten zijn verplicht."/>
     <str id="PacksPanel.space" txt="Totaal benodigde ruimte: "/>
+    <str id="PacksPanel.description" txt="Omschrijving"/>
     
     <str id="InstallPanel.info" txt="Klik 'Installeer' om de installatie te beginnen."/>
     <str id="InstallPanel.install" txt="Installeer !"/>

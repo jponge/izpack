@@ -57,10 +57,10 @@ public class FrontendResTab extends FrontendTab implements ActionListener
   private JList resList;
 
   /**  The add button. */
-  private HighlightJButton addButton;
+  private JButton addButton;
 
   /**  The delete button. */
-  private HighlightJButton delButton;
+  private JButton delButton;
 
   /**  The resources. */
   private Vector resources;
@@ -113,7 +113,7 @@ public class FrontendResTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(scroller, gbConstraints);
     add(scroller);
 
-    addButton = new HighlightJButton(langpack.getString("tabs.res.add"),
+    addButton = ButtonFactory.createButton(langpack.getString("tabs.res.add"),
       icons.getImageIcon("new"),
       FrontendFrame.buttonsHColor);
     addButton.addActionListener(this);
@@ -123,7 +123,7 @@ public class FrontendResTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(addButton, gbConstraints);
     add(addButton);
 
-    delButton = new HighlightJButton(langpack.getString("tabs.res.remove"),
+    delButton = ButtonFactory.createButton(langpack.getString("tabs.res.remove"),
       icons.getImageIcon("delete"),
       FrontendFrame.buttonsHColor);
     delButton.addActionListener(this);

@@ -1,6 +1,8 @@
 /*
- * IzPack version 3.1.0 pre2 (build 2002.10.19)
- * Copyright (C) 2002 Elmar Grom
+ * $Id$
+ *
+ * IzPack
+ * File is Copyright (C) 2002 Elmar Grom
  *
  * File :               ShortcutPanel.java
  * Description :        A panel to prompt the user to select a program group
@@ -156,92 +158,123 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
   // ------------------------------------------------------------------------
   // Variable Declarations
   // ------------------------------------------------------------------------
-  /** UI element to label the list of existing program groups */
-  private JLabel              listLabel;
-  /** UI element to present the list of existing program groups for selection */
-  private JList               groupList;
-  /** UI element for listing the intended shortcut targets */
-  private JList               targetList;
-  /** UI element to present the default name for the program group and to
-      support editing of this name. */
-  private JTextField          programGroup;
-  /** UI element to allow the user to revert to the default name of the
-      program group */
-  private HighlightJButton    defaultButton;
-  /** UI element to start the process of creating shortcuts */
-  private HighlightJButton    createButton;
-  /** UI element to allow the user to save a text file with the shortcut
-      information */
-  private HighlightJButton    saveButton;
-  /** UI element to allow the user to decide if shortcuts should be placed
-      on the desktop or not. */
-  private JCheckBox           allowDesktopShortcut;
-  /** UI element instruct this panel to create shortcuts for the current
-      user only */
-  private JRadioButton        currentUser; 
-  /** UI element instruct this panel to create shortcuts for all users */
-  private JRadioButton        allUsers;
-  /** The layout for this panel */  
-  private GridBagLayout       layout;
-  /** The contraints object to use whan creating the layout */
-  private GridBagConstraints  constraints;
+
+  /**  UI element to label the list of existing program groups */
+  private JLabel listLabel;
+  /**  UI element to present the list of existing program groups for selection */
+  private JList groupList;
+  /**  UI element for listing the intended shortcut targets */
+  private JList targetList;
+  /**
+   *  UI element to present the default name for the program group and to
+   *  support editing of this name.
+   */
+  private JTextField programGroup;
+  /**
+   *  UI element to allow the user to revert to the default name of the program
+   *  group
+   */
+  private JButton defaultButton;
+  /**  UI element to start the process of creating shortcuts */
+  private JButton createButton;
+  /**
+   *  UI element to allow the user to save a text file with the shortcut
+   *  information
+   */
+  private JButton saveButton;
+  /**
+   *  UI element to allow the user to decide if shortcuts should be placed on
+   *  the desktop or not.
+   */
+  private JCheckBox allowDesktopShortcut;
+  /**
+   *  UI element instruct this panel to create shortcuts for the current user
+   *  only
+   */
+  private JRadioButton currentUser;
+  /**  UI element instruct this panel to create shortcuts for all users */
+  private JRadioButton allUsers;
+  /**  The layout for this panel */
+  private GridBagLayout layout;
+  /**  The contraints object to use whan creating the layout */
+  private GridBagConstraints constraints;
+
+  /**
+   *  The default name to use for the program group. This comes from the XML
+   *  specification.
+   */
+  private String suggestedProgramGroup;
+  /**  The name chosen by the user for the program group, */
+  private String groupName;
+  /**
+   *  The location for placign the program group. This is the same as the
+   *  location (type) of a shortcut, only that it applies to the program group.
+   *  Note that there are only two locations that make sense as location for a
+   *  program group: <br>
+   *
+   *  <ul>
+   *    <li> applications
+   *    <li> start manu
+   *  </ul>
+   *
+   */
+  private int groupLocation;
+
+  /**  The parsed result from reading the XML specification from the file */
+  private XMLElement spec;
+  /**
+   *  Set to <code>true</code> by <code>analyzeShortcutSpec()</code> if there
+   *  are any desktop shortcuts to create.
+   */
+  private boolean hasDesktopShortcuts = false;
+
+  /**  the one shortcut instance for reuse in many locations */
+  private Shortcut shortcut;
+  /**
+   *  A list of <code>ShortcutData</code> objects. Each object is the complete
+   *  specification for one shortcut that must be created.
+   */
+  private Vector shortcuts = new Vector();
+  /**
+   *  Holds a list of all the shortcut files that have been created. <b>Note:
+   *  </b> this variable contains valid data only after <code>createShortcuts()</code>
+   *  has been called. This list is created so that the files can be added to
+   *  the uninstaller.
+   */
+  private Vector files = new Vector();
+  /**
+   *  If <code>true</code> it indicates that there are shortcuts to create. The
+   *  value is set by <code>analyzeShortcutSpec()</code>
+   */
+  private boolean shortcutsToCreate = false;
+  /**
+   *  If <code>true</code> it indicates that the spec file is existing and could
+   *  be read.
+   */
+  private boolean haveShortcutSpec = false;
+  /**
+   *  This is set to true if the shortcut spec instructs to simulate running on
+   *  an operating system that is not supported.
+   */
+  private boolean simulteNotSupported = false;
+  /**  Avoids bogus behaviour when the user goes back then returns to this panel. */
+  private boolean firstTime = true;
 
 
-  /** The default name to use for the program group. This comes from the
-      XML specification. */
-  private String              suggestedProgramGroup;
-  /** The name chosen by the user for the program group,  */
-  private String              groupName;
-  /** The location for placign the program group. This is the same as the
-      location (type) of a shortcut, only that it applies to the program
-      group. Note that there are only two locations that make sense as
-      location for a program group: <br>
-      <ul>
-      <li>applications
-      <li>start manu
-      </ul> */
-  private int                 groupLocation;
-
-
-  /** The parsed result from reading the XML specification from the file */  
-  private XMLElement          spec;
-  /** Set to <code>true</code> by <code>analyzeShortcutSpec()</code> if
-      there are any desktop shortcuts to create.*/
-  private boolean             hasDesktopShortcuts       = false;
-
-
-  /** the one shortcut instance for reuse in many locations */
-  private Shortcut            shortcut;
-  /** A list of <code>ShortcutData</code> objects. Each object is the complete
-      specification for one shortcut that must be created. */
-  private Vector              shortcuts                 = new Vector ();
-  /** Holds a list of all the shortcut files that have been created.
-      <b>Note:</b> this variable contains valid data only after
-      <code>createShortcuts()</code> has been called. This list is
-      created so that the files can be added to the uninstaller. */
-  private Vector              files                     = new Vector ();
-  /** If <code>true</code> it indicates that there are shortcuts to create.
-      The value is set by <code>analyzeShortcutSpec()</code> */
-  private boolean             shortcutsToCreate         = false;
-  /** If <code>true</code> it indicates that the spec file is existing
-      and could be read. */
-  private boolean             haveShortcutSpec          = false;
-  /** This is set to true if the shortcut spec instructs to simulate running
-      on an operating system that is not supported.  */
-  private boolean             simulteNotSupported        = false;
-  /** Avoids bogus behaviour when the user goes back then returns to this panel.*/
-  private boolean             firstTime = true;
-  
- /*--------------------------------------------------------------------------*/
- /**
-  * Constructor.
-  *
-  * @param     parent       reference to the application frame
-  * @param     installData  shared information about the installation 
-  */
- /*--------------------------------------------------------------------------*/
-  public ShortcutPanel (InstallerFrame parent, 
-                        InstallData    installData)
+  /*
+   *  --------------------------------------------------------------------------
+   */
+  /**
+   *  Constructor.
+   *
+   * @param  parent       reference to the application frame
+   * @param  installData  shared information about the installation
+   */
+  /*
+   *  --------------------------------------------------------------------------
+   */
+  public ShortcutPanel(InstallerFrame parent,
+                       InstallData installData)
   {
     super (parent, installData);
     
@@ -943,18 +976,18 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     // reset button that allows the user to revert to the
     // original suggestion for the program group
     // ----------------------------------------------------
-    defaultButton = new HighlightJButton (
-                                 parent.langpack.getString ("ShortcutPanel.regular.default"),
-                                 idata.buttonsHColor);
-    defaultButton.addActionListener (this);
+    defaultButton = ButtonFactory.createButton(
+      parent.langpack.getString("ShortcutPanel.regular.default"),
+      idata.buttonsHColor);
+    defaultButton.addActionListener(this);
 
-    constraints.gridx       = 1;
-    constraints.gridy       = 2;
-    constraints.gridwidth   = 1;
-    constraints.gridheight  = 1;
-    constraints.fill        = GridBagConstraints.NONE;
-    layout.addLayoutComponent (defaultButton, constraints);
-    add (defaultButton);
+    constraints.gridx = 1;
+    constraints.gridy = 2;
+    constraints.gridwidth = 1;
+    constraints.gridheight = 1;
+    constraints.fill = GridBagConstraints.NONE;
+    layout.addLayoutComponent(defaultButton, constraints);
+    add(defaultButton);
 
     // ----------------------------------------------------
     // check box to allow the user to decide if a desktop
@@ -978,17 +1011,17 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     // ----------------------------------------------------
     // button to initiate the creation of the shortcuts
     // ----------------------------------------------------
-    createButton = new HighlightJButton (
-                    parent.langpack.getString ("ShortcutPanel.regular.create"),
-                    idata.buttonsHColor);
-    createButton.addActionListener (this);
-    
-    constraints.gridx       = 0;
-    constraints.gridy       = 4;
-    constraints.gridwidth   = 1;
-    constraints.gridheight  = 1;
-    layout.addLayoutComponent (createButton, constraints);
-    add (createButton);
+    createButton = ButtonFactory.createButton(
+      parent.langpack.getString("ShortcutPanel.regular.create"),
+      idata.buttonsHColor);
+    createButton.addActionListener(this);
+
+    constraints.gridx = 0;
+    constraints.gridy = 4;
+    constraints.gridwidth = 1;
+    constraints.gridheight = 1;
+    layout.addLayoutComponent(createButton, constraints);
+    add(createButton);
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1075,19 +1108,19 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     // ----------------------------------------------------
     // button to save the text file
     // ----------------------------------------------------
-    saveButton = new HighlightJButton(
-                    parent.langpack.getString ("ShortcutPanel.alternate.saveButton"),
-                    idata.buttonsHColor);
-    saveButton.addActionListener (this);
-    
-    constraints.gridx       = 0;
-    constraints.gridy       = 4;
-    constraints.gridwidth   = 1;
-    constraints.gridheight  = 1;
-    constraints.fill        = GridBagConstraints.NONE;
-    constraints.anchor      = GridBagConstraints.CENTER;
-    layout.addLayoutComponent (saveButton, constraints);
-    add (saveButton);
+    saveButton = ButtonFactory.createButton(
+      parent.langpack.getString("ShortcutPanel.alternate.saveButton"),
+      idata.buttonsHColor);
+    saveButton.addActionListener(this);
+
+    constraints.gridx = 0;
+    constraints.gridy = 4;
+    constraints.gridwidth = 1;
+    constraints.gridheight = 1;
+    constraints.fill = GridBagConstraints.NONE;
+    constraints.anchor = GridBagConstraints.CENTER;
+    layout.addLayoutComponent(saveButton, constraints);
+    add(saveButton);
   }
  /*--------------------------------------------------------------------------*/
  /**

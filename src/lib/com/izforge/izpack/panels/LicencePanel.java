@@ -8,6 +8,8 @@
  *  Author's email :     julien@izforge.com
  *  Author's Website :   http://www.izforge.com
  *
+ *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
+ * 
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
  *  as published by the Free Software Foundation; either version 2
@@ -45,23 +47,11 @@ import javax.swing.event.*;
  */
 public class LicencePanel extends IzPanel implements ActionListener
 {
-  /**  The layout. */
-  private GridBagLayout layout;
-
-  /**  The layout constraints. */
-  private GridBagConstraints gbConstraints;
-
   /**  The license text. */
   private String licence;
 
-  /**  The info label. */
-  private JLabel infoLabel;
-
   /**  The text area. */
   private JTextArea textArea;
-
-  /**  The agreement label. */
-  private JLabel agreeLabel;
 
   /**  The radio buttons. */
   private JRadioButton yesRadio, noRadio;
@@ -81,59 +71,37 @@ public class LicencePanel extends IzPanel implements ActionListener
     super(parent, idata);
 
     // We initialize our layout
-    layout = new GridBagLayout();
-    gbConstraints = new GridBagConstraints();
-    setLayout(layout);
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
     // We load the licence
     loadLicence();
 
     // We put our components
 
-    infoLabel = new JLabel(parent.langpack.getString("LicencePanel.info"),
-      parent.icons.getImageIcon("history"), JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
-    gbConstraints.insets = new Insets(5, 5, 5, 5);
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-    layout.addLayoutComponent(infoLabel, gbConstraints);
+    JLabel infoLabel = new JLabel(parent.langpack.getString("LicencePanel.info"), parent.icons.getImageIcon("history"), JLabel.TRAILING);
     add(infoLabel);
 
+    add(Box.createRigidArea(new Dimension(0, 3)));
+
     textArea = new JTextArea(licence);
+    textArea.setMargin(new Insets(2,2,2,2));
     textArea.setCaretPosition(0);
     textArea.setEditable(false);
     textArea.setLineWrap(true);
     textArea.setWrapStyleWord(true);
     scroller = new JScrollPane(textArea);
-    parent.buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 1.0);
-    gbConstraints.anchor = GridBagConstraints.CENTER;
-    gbConstraints.fill = GridBagConstraints.BOTH;
-    layout.addLayoutComponent(scroller, gbConstraints);
+    scroller.setAlignmentX(LEFT_ALIGNMENT);
     add(scroller);
-
-    agreeLabel = new JLabel(parent.langpack.getString("LicencePanel.agree"),
-      parent.icons.getImageIcon("help"), JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 2, 2, 1, 1.0, 0.0);
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-    layout.addLayoutComponent(agreeLabel, gbConstraints);
-    add(agreeLabel);
 
     ButtonGroup group = new ButtonGroup();
 
-    yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.yes"), false);
+    yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
     group.add(yesRadio);
-    parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 0.5, 0.0);
-    gbConstraints.anchor = GridBagConstraints.NORTHWEST;
-    layout.addLayoutComponent(yesRadio, gbConstraints);
     add(yesRadio);
     yesRadio.addActionListener(this);
 
-    noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.no"), false);
+    noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.notagree"), true);
     group.add(noRadio);
-    parent.buildConstraints(gbConstraints, 1, 3, 1, 1, 0.5, 0.0);
-    gbConstraints.anchor = GridBagConstraints.NORTHEAST;
-    layout.addLayoutComponent(noRadio, gbConstraints);
     add(noRadio);
     noRadio.addActionListener(this);
   }

@@ -1,4 +1,6 @@
 <!-- 
+    $Id$
+    
     IzPack installer XML file
 
     By Julien PONGE
@@ -55,10 +57,12 @@
     <resources>
         <res src="install-readme.html" id="HTMLInfoPanel.info"/>
         <res src="Licence.txt" id="LicencePanel.licence"/>
+        <!--
         <res src="core.jpg" id="ImgPacksPanel.img.0"/>
         <res src="doc.jpg" id="ImgPacksPanel.img.1"/>
         <res src="sample.jpg" id="ImgPacksPanel.img.2"/>
         <res src="src.jpg" id="ImgPacksPanel.img.3"/>
+        -->
         <res src="langsel.jpg" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
     </resources>
@@ -68,7 +72,7 @@
         <panel classname="HelloPanel"/>
         <panel classname="HTMLInfoPanel"/>
         <panel classname="LicencePanel"/>
-        <panel classname="ImgPacksPanel"/>
+        <panel classname="PacksPanel"/>
         <panel classname="TargetPanel"/>
         <panel classname="InstallPanel"/>
         <panel classname="ShortcutPanel"/>

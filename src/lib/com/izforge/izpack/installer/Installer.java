@@ -338,14 +338,19 @@ public class Installer
     if (installdata.kind.equalsIgnoreCase("standard") ||
       installdata.kind.equalsIgnoreCase("web"))
     {
-      // We simply put our nice theme
-      MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
-      lnf = "swing";
+    	if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+    	{
+		      // We simply put our nice theme
+		      MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
+	 		  ButtonFactory.useButtonIcons();
+    	}
+        lnf = "swing";
     }
     else
       if (installdata.kind.equalsIgnoreCase("standard-kunststoff") ||
       installdata.kind.equalsIgnoreCase("web-kunststoff"))
     {
+    	ButtonFactory.useHighlightButtons();
       // We change the highlight color for the buttons
       installdata.buttonsHColor = new Color(255, 255, 255);
 

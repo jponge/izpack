@@ -8,6 +8,8 @@
  *  Author's email :     julien@izforge.com
  *  Author's Website :   http://www.izforge.com
  *
+ *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
+ * 
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
  *  as published by the Free Software Foundation; either version 2
@@ -93,23 +95,26 @@ public class HelloPanel extends IzPanel
 
     centerPanel.add(Box.createVerticalStrut(20));
 
-    str = parent.langpack.getString("HelloPanel.authors");
-    appAuthorsLabel = new JLabel(str, parent.icons.getImageIcon("information"),
-      JLabel.TRAILING);
-    centerPanel.add(appAuthorsLabel);
-
     ArrayList authors = idata.info.getAuthors();
     int size = authors.size();
-    JLabel label;
-    for (int i = 0; i < size; i++)
+    if (size > 0)
     {
-      Info.Author a = (Info.Author) authors.get(i);
-      label = new JLabel(" - " + a.getName() + " <" + a.getEmail() + ">",
-        parent.icons.getImageIcon("empty"), JLabel.TRAILING);
-      centerPanel.add(label);
-    }
+	    str = parent.langpack.getString("HelloPanel.authors");
+	    appAuthorsLabel = new JLabel(str, parent.icons.getImageIcon("information"),
+	      JLabel.TRAILING);
+	    centerPanel.add(appAuthorsLabel);
+	
+	    JLabel label;
+	    for (int i = 0; i < size; i++)
+	    {
+	      Info.Author a = (Info.Author) authors.get(i);
+	      label = new JLabel(" - " + a.getName() + " <" + a.getEmail() + ">",
+	        parent.icons.getImageIcon("empty"), JLabel.TRAILING);
+	      centerPanel.add(label);
+	    }
 
-    centerPanel.add(Box.createVerticalStrut(20));
+	    centerPanel.add(Box.createVerticalStrut(20));
+    }
 
     str = parent.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
     appURLLabel = new JLabel(str, parent.icons.getImageIcon("bookmark"), JLabel.TRAILING);

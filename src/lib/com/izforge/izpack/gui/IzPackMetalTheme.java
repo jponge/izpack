@@ -38,123 +38,111 @@ import javax.swing.plaf.metal.*;
  */
 public class IzPackMetalTheme extends DefaultMetalTheme
 {
-  /**  The fonts color. */
-  private ColorUIResource color;
+	/**  The fonts color. */
+	private ColorUIResource color;
 
-  /**  The dialog font. */
-  private FontUIResource font1;
+	private FontUIResource controlFont;
+	private FontUIResource menuFont;
+	private FontUIResource windowTitleFont;
+	private FontUIResource monospacedFont;
 
-  /**  The monospaced font. */
-  private FontUIResource font2;
+	/**  The constructor.  */
+	public IzPackMetalTheme()
+	{
+		color = new ColorUIResource(0, 0, 0);
 
+		Font font1 = createFont("Tahoma", Font.PLAIN, 11);
+		Font font2 = createFont("Tahoma", Font.BOLD, 11);
 
-  /**  The constructor.  */
-  public IzPackMetalTheme()
-  {
-    super();
+		menuFont = new FontUIResource(font1);
+		controlFont = new FontUIResource(font1);
+		windowTitleFont = new FontUIResource(font2);
+		monospacedFont = new FontUIResource(font1);
+	}
 
-    color = new ColorUIResource(0, 0, 0);
-    font1 = new FontUIResource(new Font("Dialog", Font.PLAIN, 12));
-    font2 = new FontUIResource(new Font("Monospaced", Font.PLAIN, 12));
-  }
+	private Font createFont(String name, int style, int size)
+	{
+		Font font = new Font(name, style, size);
+		return ((font == null) ? new Font("Dialog", style, size) : font);
+	}
 
+	/**
+	 *  Returns the color.
+	 *
+	 * @return    The color.
+	 */
+	public ColorUIResource getControlTextColor()
+	{
+		return color;
+	}
 
-  /**
-   *  Returns the color.
-   *
-   * @return    The color.
-   */
-  public ColorUIResource getControlTextColor()
-  {
-    return color;
-  }
+	/**
+	 *  Returns the color.
+	 *
+	 * @return    The color.
+	 */
+	public ColorUIResource getMenuTextColor()
+	{
+		return color;
+	}
 
+	/**
+	 *  Returns the color.
+	 *
+	 * @return    The color.
+	 */
+	public ColorUIResource getSystemTextColor()
+	{
+		return color;
+	}
 
-  /**
-   *  Returns the color.
-   *
-   * @return    The color.
-   */
-  public ColorUIResource getMenuTextColor()
-  {
-    return color;
-  }
+	/**
+	 *  Returns the color.
+	 *
+	 * @return    The color.
+	 */
+	public ColorUIResource getUserTextColor()
+	{
+		return color;
+	}
 
+    /**
+     * The Font of Labels in many cases
+     */
+    public FontUIResource getControlTextFont()
+    {
+        return controlFont;
+    }
 
-  /**
-   *  Returns the color.
-   *
-   * @return    The color.
-   */
-  public ColorUIResource getSystemTextColor()
-  {
-    return color;
-  }
+    /**
+     * The Font of Menus and MenuItems
+     */
+    public FontUIResource getMenuTextFont()
+    {
+        return menuFont;
+    }
 
+    /**
+     * The Font of Nodes in JTrees
+     */
+    public FontUIResource getSystemTextFont()
+    {
+        return controlFont;
+    }
 
-  /**
-   *  Returns the color.
-   *
-   * @return    The color.
-   */
-  public ColorUIResource getUserTextColor()
-  {
-    return color;
-  }
+    /**
+     * The Font in TextFields, EditorPanes, etc.
+     */
+    public FontUIResource getUserTextFont()
+    {
+        return controlFont;
+    }
 
-
-  /**
-   *  Returns the font.
-   *
-   * @return    The font.
-   */
-  public FontUIResource getControlTextFont()
-  {
-    return font1;
-  }
-
-
-  /**
-   *  Returns the font.
-   *
-   * @return    The font.
-   */
-  public FontUIResource getMenuTextFont()
-  {
-    return font1;
-  }
-
-
-  /**
-   *  Returns the font.
-   *
-   * @return    The font.
-   */
-  public FontUIResource getSystemTextFont()
-  {
-    return font1;
-  }
-
-
-  /**
-   *  Returns the font.
-   *
-   * @return    The font.
-   */
-  public FontUIResource getUserTextFont()
-  {
-    return font2;
-  }
-
-
-  /**
-   *  Returns the font.
-   *
-   * @return    The font.
-   */
-  public FontUIResource getWindowTitleFont()
-  {
-    return font1;
-  }
+    /**
+     * The Font of the Title of JInternalFrames
+     */
+    public FontUIResource getWindowTitleFont()
+    {
+        return windowTitleFont;
+    }
 }
-

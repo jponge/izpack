@@ -38,12 +38,12 @@ import java.awt.event.*;
 public class HighlightJButton extends JButton
 {
   /**
-   *  The constructor.
+   *  The constructor (use ButtonFactory to create button).
    *
    * @param  icon   The icon to display.
    * @param  color  The highlight color.
    */
-  public HighlightJButton(Icon icon, Color color)
+  HighlightJButton(Icon icon, Color color)
   {
     super(icon);
     initButton(color);
@@ -51,12 +51,12 @@ public class HighlightJButton extends JButton
 
 
   /**
-   *  The constructor.
+   *  The constructor (use ButtonFactory to create button).
    *
    * @param  text   The text to display.
    * @param  color  The highlight color.
    */
-  public HighlightJButton(String text, Color color)
+  HighlightJButton(String text, Color color)
   {
     super(text);
     initButton(color);
@@ -64,13 +64,13 @@ public class HighlightJButton extends JButton
 
 
   /**
-   *  The constructor.
+   *  The constructor (use ButtonFactory to create button).
    *
    * @param  text   The text to display.
    * @param  icon   The icon to display.
    * @param  color  The highlight color.
    */
-  public HighlightJButton(String text, Icon icon, Color color)
+  HighlightJButton(String text, Icon icon, Color color)
   {
     super(text, icon);
     initButton(color);
@@ -78,12 +78,12 @@ public class HighlightJButton extends JButton
 
 
   /**
-   *  The constructor.
+   *  The constructor (use ButtonFactory to create button).
    *
    * @param  a      The action.
    * @param  color  The highlight color.
    */
-  public HighlightJButton(Action a, Color color)
+  HighlightJButton(Action a, Color color)
   {
     super(a);
     initButton(color);
@@ -118,7 +118,7 @@ public class HighlightJButton extends JButton
 
 
   /**  Forces the button to unhighlight.  */
-  public void reset()
+  protected void reset()
   {
     setBackground(defaultColor);
   }

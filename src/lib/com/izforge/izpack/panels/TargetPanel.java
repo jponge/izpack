@@ -58,7 +58,7 @@ public class TargetPanel extends IzPanel implements ActionListener
   private JTextField textField;
 
   /**  The 'browse' button. */
-  private HighlightJButton browseButton;
+  private JButton browseButton;
 
   /**  The layout . */
   private GridBagLayout layout;
@@ -107,7 +107,7 @@ public class TargetPanel extends IzPanel implements ActionListener
     layout.addLayoutComponent(textField, gbConstraints);
     add(textField);
 
-    browseButton = new HighlightJButton(parent.langpack.getString("TargetPanel.browse"),
+    browseButton = ButtonFactory.createButton(parent.langpack.getString("TargetPanel.browse"),
       parent.icons.getImageIcon("open"),
       idata.buttonsHColor);
     browseButton.addActionListener(this);

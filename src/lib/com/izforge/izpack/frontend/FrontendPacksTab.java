@@ -61,22 +61,22 @@ public class FrontendPacksTab extends FrontendTab
   private JList filesList;
 
   /**  The 'add pack' button. */
-  private HighlightJButton addPackButton;
+  private JButton addPackButton;
 
   /**  The 'del pack' button. */
-  private HighlightJButton delPackButton;
+  private JButton delPackButton;
 
   /**  The 'required' checkbox. */
   private JCheckBox requiredCheckBox;
 
   /**  The 'add file' button . */
-  private HighlightJButton addFileButton;
+  private JButton addFileButton;
 
   /**  The 'del file' button. */
-  private HighlightJButton delFileButton;
+  private JButton delFileButton;
 
   /**  The 'script properties' button. */
-  private HighlightJButton scriptPropsButton;
+  private JButton scriptPropsButton;
 
   /**  The 'parsable' checkbox. */
   private JCheckBox parsableCheckBox;
@@ -161,7 +161,7 @@ public class FrontendPacksTab extends FrontendTab
     layout.addLayoutComponent(scroller, gbConstraints);
     add(scroller);
 
-    addPackButton = new HighlightJButton(langpack.getString("tabs.packs.addpack"),
+    addPackButton = ButtonFactory.createButton(langpack.getString("tabs.packs.addpack"),
       icons.getImageIcon("new"),
       FrontendFrame.buttonsHColor);
     addPackButton.addActionListener(this);
@@ -171,7 +171,7 @@ public class FrontendPacksTab extends FrontendTab
     layout.addLayoutComponent(addPackButton, gbConstraints);
     add(addPackButton);
 
-    delPackButton = new HighlightJButton(langpack.getString("tabs.packs.delpack"),
+    delPackButton = ButtonFactory.createButton(langpack.getString("tabs.packs.delpack"),
       icons.getImageIcon("delete"),
       FrontendFrame.buttonsHColor);
     delPackButton.addActionListener(this);
@@ -187,7 +187,7 @@ public class FrontendPacksTab extends FrontendTab
     layout.addLayoutComponent(requiredCheckBox, gbConstraints);
     add(requiredCheckBox);
 
-    addFileButton = new HighlightJButton(langpack.getString("tabs.packs.addfile"),
+    addFileButton = ButtonFactory.createButton(langpack.getString("tabs.packs.addfile"),
       icons.getImageIcon("new"),
       FrontendFrame.buttonsHColor);
     addFileButton.addActionListener(this);
@@ -197,7 +197,7 @@ public class FrontendPacksTab extends FrontendTab
     layout.addLayoutComponent(addFileButton, gbConstraints);
     add(addFileButton);
 
-    delFileButton = new HighlightJButton(langpack.getString("tabs.packs.delfile"),
+    delFileButton = ButtonFactory.createButton(langpack.getString("tabs.packs.delfile"),
       icons.getImageIcon("delete"),
       FrontendFrame.buttonsHColor);
     delFileButton.addActionListener(this);
@@ -206,7 +206,7 @@ public class FrontendPacksTab extends FrontendTab
     layout.addLayoutComponent(delFileButton, gbConstraints);
     add(delFileButton);
 
-    scriptPropsButton = new HighlightJButton(langpack.getString("tabs.packs.scriptProps"),
+    scriptPropsButton = ButtonFactory.createButton(langpack.getString("tabs.packs.scriptProps"),
       icons.getImageIcon("properties"),
       FrontendFrame.buttonsHColor);
     scriptPropsButton.addActionListener(this);

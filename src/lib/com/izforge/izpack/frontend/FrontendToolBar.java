@@ -96,7 +96,7 @@ public class FrontendToolBar extends JToolBar
   private void createButtons(XMLElement root)
   {
     // Our variables
-    HighlightJButton button;
+    JButton button;
     Vector items = root.getChildrenNamed("item");
     XMLElement item;
     String action;
@@ -118,7 +118,7 @@ public class FrontendToolBar extends JToolBar
         action = item.getAttribute("action");
 
         // We create the button
-        button = new HighlightJButton(icons.getImageIcon(img),
+        button = ButtonFactory.createButton(icons.getImageIcon(img),
           FrontendFrame.buttonsHColor);
         button.setToolTipText(langpack.getString(name));
         button.addActionListener((ActionListener) actions.get(action));

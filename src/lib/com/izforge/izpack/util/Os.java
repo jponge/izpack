@@ -71,26 +71,31 @@ public class Os implements java.io.Serializable
     String osName = System.getProperty("os.name").toLowerCase();
 
     if ((arch != null) && (arch.length() != 0))
+    {
       match = System.getProperty("os.arch").toLowerCase().equals(arch);
-
+    }
     if (match && (version != null) && (version.length() != 0))
+    {
       match = System.getProperty("os.version").toLowerCase().equals(version);
-
+    }
     if (match && (name != null) && (name.length() != 0))
+    {
       match = osName.equals(name);
-
+    }
     if (match && (family != null))
     {
       if (family.equals("windows"))
+      {
         match = (osName.indexOf("windows") > -1);
+      }
       else if (family.equals("mac"))
-        match = ((osName.indexOf("mac") > -1)
-           && !(osName.endsWith("x")));
+      {
+        match = ((osName.indexOf("mac") > -1) && !(osName.endsWith("x")));
+      }
       else if (family.equals("unix"))
       {
         String pathSep = System.getProperty("path.separator");
-        match = (pathSep.equals(":") && (!osName.startsWith("mac") ||
-          osName.endsWith("x")));
+        match = (pathSep.equals(":") && (!osName.startsWith("mac") || osName.endsWith("x")));
       }
     }
 
@@ -146,6 +151,18 @@ public class Os implements java.io.Serializable
   public String getArch()
   {
     return arch;
+  }
+  
+  public String toString()
+  {
+	  StringBuffer retval = new StringBuffer();
+	  retval.append("[Os ");
+	  retval.append(" family "+family);
+	  retval.append(" name "+name);
+	  retval.append(" version "+version);
+	  retval.append(" arch "+arch);
+	  retval.append(" ]");
+	  return retval.toString();
   }
 }
 

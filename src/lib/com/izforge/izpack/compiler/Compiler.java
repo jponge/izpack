@@ -1195,6 +1195,7 @@ public class Compiler extends Thread
       System.err.println("(tip : use -? to get the commmand line parameters)");
     }
 
+    System.out.println("Build time: "+new Date());
     // Closes the JVM
     System.exit(0);
   }

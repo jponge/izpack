@@ -72,10 +72,10 @@ public class FrontendInfoTab extends FrontendTab implements ActionListener
   private JTextField heightTextField;
 
   /**  The add button. */
-  private HighlightJButton addButton;
+  private JButton addButton;
 
   /**  The delete button. */
-  private HighlightJButton delButton;
+  private JButton delButton;
 
   /**  The resizable checkbox. */
   private JCheckBox resizeCheckBox;
@@ -212,11 +212,11 @@ public class FrontendInfoTab extends FrontendTab implements ActionListener
     layout.addLayoutComponent(scroller, gbConstraints);
     add(scroller);
 
-    addButton = new HighlightJButton(langpack.getString("tabs.info.add"),
+    addButton = ButtonFactory.createButton(langpack.getString("tabs.info.add"),
       icons.getImageIcon("new"),
       FrontendFrame.buttonsHColor);
     addButton.addActionListener(this);
-    delButton = new HighlightJButton(langpack.getString("tabs.info.del"),
+    delButton = ButtonFactory.createButton(langpack.getString("tabs.info.del"),
       icons.getImageIcon("delete"),
       FrontendFrame.buttonsHColor);
     delButton.addActionListener(this);

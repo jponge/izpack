@@ -9,7 +9,7 @@
     <str id="installer.next" txt="Next"/>
     <str id="installer.prev" txt="Previous"/>
     <str id="installer.quit" txt="Quit"/>
-    <str id="installer.madewith" txt="(Created with IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="(Made with IzPack - http://www.izforge.com/)"/>
     <str id="installer.quit.title" txt="Are you sure you want to quit ?"/>
     <str id="installer.quit.message" txt="This will cancel the installation !"/>
     <str id="installer.warning" txt="Warning !"/>
@@ -27,10 +27,11 @@
     <str id="HelloPanel.welcome1" txt="Welcome to the installation of "/>
     <str id="HelloPanel.welcome2" txt=" !"/>
     <str id="HelloPanel.authors" txt="The author(s) of this software is(are) : "/>
-    <str id="HelloPanel.url" txt="The software homepage is : "/>
+    <str id="HelloPanel.url" txt="The homepage is : "/>
     
-    <str id="LicencePanel.info" txt="Please read the following license agreement :"/>
-    <str id="LicencePanel.agree" txt="Do you agree with this license agreement ?"/>
+    <str id="LicencePanel.info" txt="Please read the following license agreement carefully:"/>
+    <str id="LicencePanel.agree" txt="I accept the terms of this license agreement."/>
+    <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>
     <str id="LicencePanel.yes" txt="Yes"/>
     <str id="LicencePanel.no" txt="No"/>
     
@@ -47,6 +48,7 @@
     <str id="PacksPanel.info" txt="Select the packs you want to install :"/>
     <str id="PacksPanel.tip" txt="Note: greyed packs are required."/>
     <str id="PacksPanel.space" txt="Total space Required: "/>
+    <str id="PacksPanel.description" txt="Description"/>
     
     <str id="InstallPanel.info" txt="Click 'Install !' to begin the installation process"/>
     <str id="InstallPanel.install" txt="Install !"/>

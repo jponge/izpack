@@ -45,6 +45,7 @@
     
     <str id="PacksPanel.info" txt="Selecione os pacotes que deseja instalar :"/>
     <str id="PacksPanel.tip" txt="Nota: pacotes cinzas são requeridos."/>
+    <str id="PacksPanel.space" txt="Espaço total requerido: "/>
     
     <str id="InstallPanel.info" txt="Clique 'Instalar !' para iniciar o processo de instalação"/>
     <str id="InstallPanel.install" txt="Instalar !"/>
@@ -63,34 +64,34 @@
     <str id="ImgPacksPanel.snap" txt="Visualização da tela do pacote  :"/>
     <str id="ImgPacksPanel.checkbox" txt=" Instalar este pacote"/>
     
-    <str id="ShortcutPanel.regular.list" txt="Select a Program Group for the Shortcuts:"/>
-    <str id="ShortcutPanel.regular.default" txt="Reset"/>
-    <str id="ShortcutPanel.regular.desktop" txt="Create shortcut on the desktop"/>
-    <str id="ShortcutPanel.regular.create" txt="Create Shortcuts"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
-    <str id="ShortcutPanel.regular.currentUser" txt="current user"/>
-    <str id="ShortcutPanel.regular.allUsers" txt="all users"/>
+    <str id="ShortcutPanel.regular.list" txt="Selecione uma Categoria de Programas para os Atalhos:"/>
+    <str id="ShortcutPanel.regular.default" txt="Limpar"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Criar os atalhos no desktop"/>
+    <str id="ShortcutPanel.regular.create" txt="Criar Atalhos"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="criar atalho para:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="usuário atual"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="todos usuários"/>
 
-    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
-    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
-    <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
+    <str id="ShortcutPanel.alternate.apology" txt="Desculpe, mas IzPack não pode criar atalhos neste sistema operacional. Para criar os atalhos, favor consultar o manual de seu sistema operacional."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Esta é a lista de executáveis aos quais o produtor deste programa lhe deu acesso."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Você pode salvar informações detalhadas sobre os arquivos executáveis em um arquivo de texto para referência futura."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Salvar Arquivo de Texto"/>
+
+    <str id="ShortcutPanel.textFile.header" txt="Informação Sobre Atalhos\n====================\n\nA seguinte é uma listagem de toda informação relevante sobre os atalhos\ndesejados. Esta informação deve possibilitar a criação manual de atalhos.\n"/>
     
-    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
-    
-    <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
-    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
-    <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
-    <str id="ShortcutPanel.textFile.target"       txt="Shortcut Target   : "/>
-    <str id="ShortcutPanel.textFile.command"      txt="Command Line      : "/>
-    <str id="ShortcutPanel.textFile.iconName"     txt="Icon File         : "/>
-    <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
-    <str id="ShortcutPanel.textFile.work"         txt="Working Directory : "/>
+    <str id="ShortcutPanel.textFile.name"         txt="Atalho                : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Local Desejado        : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Descrição             : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Arquivo Executável    : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Linha de Comando      : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Arquivo do Ícone      : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Índice do Ícone       : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Diretório de Trabalho : "/>
 
     <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
-    <str id="ShortcutPanel.location.applications" txt="Applications Menu"/>
-    <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
-    <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
+    <str id="ShortcutPanel.location.applications" txt="Menu de Aplicativos"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Menu Iniciar"/>
+    <str id="ShortcutPanel.location.startup"      txt="Grupo Iniciar"/>
 
     <!-- Add your own panels specific strings here if you need -->
 

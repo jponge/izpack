@@ -31,6 +31,7 @@
 
     <str id="LicencePanel.info" txt="Si us plau, llegiu atentament el conveni de la llicència:"/>
     <str id="LicencePanel.agree" txt="Accepta els tèrmes d'aquest conveni de llicència?"/>
+    <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>
     <str id="LicencePanel.yes" txt="Sí"/>
     <str id="LicencePanel.no" txt="No"/>
 
@@ -45,6 +46,7 @@
 
     <str id="PacksPanel.info" txt="Seleccioni els paquets que desitja instal.lar:"/>
     <str id="PacksPanel.tip" txt="Nota: els paquets en gris no són opcionals."/>
+    <str id="PacksPanel.description" txt="Description"/>
 
     <str id="InstallPanel.info" txt="Faigi clic en Instal.lar! per iniciar el procés de la instal.lació"/>
     <str id="InstallPanel.install" txt="Instal.lar!"/>

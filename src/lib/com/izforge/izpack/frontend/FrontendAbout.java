@@ -58,7 +58,7 @@ public class FrontendAbout extends JDialog implements ActionListener
   private GridBagConstraints gbConstraints;
 
   /**  The 'ok' button. */
-  private HighlightJButton okButton;
+  private JButton okButton;
 
 
   /**
@@ -117,7 +117,7 @@ public class FrontendAbout extends JDialog implements ActionListener
     layout.addLayoutComponent(label, gbConstraints);
     contentPane.add(label);
 
-    okButton = new HighlightJButton(langpack.getString("frontend.licence.ok"),
+    okButton = ButtonFactory.createButton(langpack.getString("frontend.licence.ok"),
       icons.getImageIcon("forward"),
       FrontendFrame.buttonsHColor);
     okButton.addActionListener(this);
