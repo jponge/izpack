@@ -106,7 +106,7 @@ public class AutomatedInstaller extends InstallerBase
    * <code>AutomatedInstaller</code> and <code>InstallerFrame</code> can't
    * share this code ... :-/
    * 
-   * @TODO: We should try to fix this in the future. 
+   * TODO: We should try to fix this in the future. 
    */
   private void writeUninstallData()
   {

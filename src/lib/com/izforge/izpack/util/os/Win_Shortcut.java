@@ -310,8 +310,6 @@ public class Win_Shortcut extends Shortcut
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
   *                   </ul>
-  *
-  * @see       #getShowCommand
   */
  /*--------------------------------------------------------------------------*/
   public void setShowCommand (int show) throws IllegalArgumentException
@@ -427,7 +425,7 @@ public class Win_Shortcut extends Shortcut
  /**
   * Sets the user type for the link
   *
-  * @param     userType  the type of user for the link.
+  * @param     type  the type of user for the link.
   * 
   * @see       Shortcut#CURRENT_USER
   * @see       Shortcut#ALL_USERS

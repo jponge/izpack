@@ -104,8 +104,6 @@ public class Shortcut
   *
   * @param     userType   the type of user for the program group set.
   *
-  * @param     type   the type or classification of the program group.
-  *
   * @return    a <code>Vector</code> of <code>String</code> objects that
   *            represent the names of the existing program groups. It is
   *            theoretically possible that this list is empty.
@@ -247,8 +245,6 @@ public class Shortcut
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
   *                   </ul>
-  *
-  * @see       #getShowCommand
   */
  /*--------------------------------------------------------------------------*/
   public void setShowCommand (int show)
@@ -307,7 +303,7 @@ public class Shortcut
  /**
   * Sets the user type for the link
   *
-  * @param     userType  the type of user for the link.
+  * @param     type  the type of user for the link.
   * 
   * @see       #CURRENT_USER
   * @see       #ALL_USERS

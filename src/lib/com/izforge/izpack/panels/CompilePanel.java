@@ -447,9 +447,8 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
   /**
    *  Job changing.
    *
-   * @param  min       The new mnimum progress.
-   * @param  max       The new maximum progress.
    * @param  jobName   The job name.
+   * @param  max       The new maximum progress.
    * @param  jobNo     The job number.
    */
   public void nextStep (String jobName, int max, int jobNo)

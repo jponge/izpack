@@ -444,7 +444,7 @@ public class GUIInstaller extends InstallerBase
     class WindowHandler extends WindowAdapter
     {
       /**
-       *  We can't avoid the exit here ... so don't call exit.
+       *  We can't avoid the exit here, so don't call exit anywhere else.
        *
        * @param  e  the event.
        */

@@ -224,7 +224,7 @@ public class StdXMLReader
     
     
     /**
-     * Scans the encoding from an &lt;?xml...?&gt; tag.
+     * Scans the encoding from an &lt;&#x3f;xml&#x3f;&gt; tag.
      *
      * @param str the first tag in the XML data.
      *

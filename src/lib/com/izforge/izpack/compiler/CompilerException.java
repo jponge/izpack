@@ -67,12 +67,11 @@ class CompilerException extends java.io.IOException
    * Initializes the <i>cause</i> of this throwable to the specified value.
    * (The cause is the throwable that caused this throwable to get thrown.) 
    *
-   * <p>This method can be called at most once.  It is generally called from 
-   * within the constructor, or immediately after creating the
-   * throwable.  If this throwable was created
-   * with {@link Throwable(Throwable)} or
-   * {@link Throwable(String,Throwable)}, this method cannot be called
-   * even once.
+   * <p>This method can be called at most once.  It is generally called from
+   * within the constructor, or immediately after creating the throwable.  If
+   * this throwable was created with {@link
+   * #CompilerException(String,Throwable)}, this method cannot be called even
+   * once.
    *
    * @param  cause the cause (which is saved for later retrieval by the
    *         {@link #getCause()} method).  (A <tt>null</tt> value is
@@ -81,9 +80,8 @@ class CompilerException extends java.io.IOException
    * @return  a reference to this <code>Throwable</code> instance.
    * @throws IllegalArgumentException if <code>cause</code> is this
    *         throwable.  (A throwable cannot be its own cause.)
-   * @throws IllegalStateException if this throwable was
-   *         created with {@link Throwable(Throwable)} or
-   *         {@link Throwable(String,Throwable)}, or this method has already
+   * @throws IllegalStateException if this throwable was created with {@link
+   *         #CompilerException(String,Throwable)}, or this method has already
    *         been called on this throwable.
    */
   public synchronized Throwable initCause(Throwable cause)

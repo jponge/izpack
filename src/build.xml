@@ -166,6 +166,15 @@
 
     <property name="debug" value="off"/>
 
+    <!-- paths -->
+    <path id="classpath">
+        <fileset id="ext.libs" dir="${basedir}/lib">
+            <include name="ant.jar" />
+            <include name="jakarta-regexp-1.3.jar" />
+            <include name="kunststoff.jar" />
+        </fileset>
+    </path>
+
     <!-- Checking target -->
     <target name="check">
         <echo message="basedir=${basedir}"/>
@@ -547,7 +556,9 @@
     <!-- Builds the Javadoc -->
     <target name="build.javadoc" depends="prepare">
         <mkdir dir="${build.dir}/javadoc"/>
-        <javadoc destdir="${build.dir}/javadoc" access="private" classpath="${basedir}/lib/kunststoff.jar:${basedir}/lib/ant.jar">
+        <javadoc destdir="${build.dir}/javadoc" 
+                 access="private" 
+                 classpathref="classpath">
             <packageset dir="${src.dir}">
                 <exclude name="**/CVS"/>
             </packageset>

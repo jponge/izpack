@@ -446,7 +446,9 @@ class XMLUtil
      * Throws an XMLParseException to indicate that an expected string is not
      * encountered.
      *
-     * @param reader         the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
      * @param expectedString the string that is expected
      */
     static void errorExpectedInput(String systemID,
@@ -463,7 +465,9 @@ class XMLUtil
      * Throws an XMLParseException to indicate that an entity could not be
      * resolved.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
      * @param key    the name of the entity
      */
     static void errorInvalidEntity(String systemID,
@@ -480,7 +484,9 @@ class XMLUtil
      * Throws an XMLParseException to indicate that a string is not expected
      * at this point.
      *
-     * @param reader           the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
      * @param unexpectedString the string that is unexpected
      */
     static void errorInvalidInput(String systemID,
@@ -497,7 +503,9 @@ class XMLUtil
      * Throws an XMLParseException to indicate that the closing tag of an
      * element does not match the opening tag.
      *
-     * @param reader       the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
      * @param expectedName the name of the opening tag
      * @param wrongName    the name of the closing tag
      */
@@ -518,7 +526,9 @@ class XMLUtil
      * Throws an XMLParseException to indicate that extra data is encountered
      * in a closing tag.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
      */
     static void errorClosingTagNotEmpty(String systemID,
                                         int    lineNr)
@@ -532,7 +542,11 @@ class XMLUtil
     /**
      * Throws an XMLValidationException to indicate that an element is missing.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
+     * @param parentElementName  the name of the offending element
+     * @param missingElementName the name of the offending attribute
      */
     static void errorMissingElement(String systemID,
                                     int    lineNr,
@@ -555,7 +569,11 @@ class XMLUtil
      * Throws an XMLValidationException to indicate that an element is
      * unexpected.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
+     * @param parentElementName     the name of the parent attribute
+     * @param unexpectedElementName the name of the offending attribute
      */
     static void errorUnexpectedElement(String systemID,
                                        int    lineNr,
@@ -578,7 +596,11 @@ class XMLUtil
      * Throws an XMLValidationException to indicate that an attribute is
      * missing.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
+     * @param elementName    the name of the offending element
+     * @param attributeName  the name of the offending attribute
      */
     static void errorMissingAttribute(String systemID,
                                       int    lineNr,
@@ -601,7 +623,11 @@ class XMLUtil
      * Throws an XMLValidationException to indicate that an attribute is
      * unexpected.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
+     * @param elementName    the name of the offending element
+     * @param attributeName  the name of the offending attribute
      */
     static void errorUnexpectedAttribute(String systemID,
                                          int    lineNr,
@@ -624,7 +650,12 @@ class XMLUtil
      * Throws an XMLValidationException to indicate that an attribute has an
      * invalid value.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
+     * @param elementName    the name of the offending element
+     * @param attributeName  the name of the offending attribute
+     * @param attributeValue the value of the offending attribute
      */
     static void errorInvalidAttributeValue(String systemID,
                                            int    lineNr,
@@ -647,7 +678,10 @@ class XMLUtil
      * Throws an XMLValidationException to indicate that a #PCDATA element was
      * missing.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
+     * @param parentElementName the name of the offending element
      */
     static void errorMissingPCData(String systemID,
                                          int    lineNr,
@@ -668,7 +702,10 @@ class XMLUtil
      * Throws an XMLValidationException to indicate that a #PCDATA element was
      * unexpected.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
+     * @param parentElementName the name of the offending element
      */
     static void errorUnexpectedPCData(String systemID,
                                       int    lineNr,
@@ -688,7 +725,13 @@ class XMLUtil
     /**
      * Throws an XMLValidationException.
      *
-     * @param reader the reader
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the
+     *                       exception occurred.
+     * @param message        the message of the exception.
+     * @param elementName    the name of the offending element
+     * @param attributeName  the name of the offending attribute
+     * @param attributeValue the value of the offending attribute
      */
     static void validationError(String systemID,
                                 int    lineNr,

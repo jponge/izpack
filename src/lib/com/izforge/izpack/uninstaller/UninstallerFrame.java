@@ -329,7 +329,7 @@ public class UninstallerFrame extends JFrame
   class WindowHandler extends WindowAdapter
   {
     /**
-     *  We can't avoid the exit here ... so don't call exit.
+     *  We can't avoid the exit here, so don't call exit elsewhere.
      *
      * @param  e  The event.
      */

@@ -344,7 +344,7 @@ public class SelfModifier
    * it's own jar file. This method does not normally return. After spawning
    * the secondary process, the current process must die before the jar file is
    * unlocked, therefore calling this method is akin to calling
-   * {@link System.exit(int)}.<p>
+   * {@link System#exit(int)}.<p>
    *
    * The contents of the current jar file are extracted copied to a 'sandbox'
    * directory from which the method is invoked. The path to the original jar
@@ -438,7 +438,9 @@ public class SelfModifier
   }
 
   /**
-   * @returns null if file was not loaded from a jar file
+   * Retrieve the jar file the specified class was loaded from.
+   *
+   * @return null if file was not loaded from a jar file
    * @throws SecurityException if access to is denied by SecurityManager
    */
   public static File findJarFile(Class clazz)

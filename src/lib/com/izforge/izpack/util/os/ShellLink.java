@@ -809,7 +809,7 @@ public class ShellLink implements NativeLibraryClient
  /**
   * Sets the user type for link
   *
-  * @param     userType  the type of user for the link.
+  * @param     type  the type of user for the link.
   * 
   * @see       #CURRENT_USER
   * @see       #ALL_USERS

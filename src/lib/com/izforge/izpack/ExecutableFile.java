@@ -72,8 +72,8 @@ public class ExecutableFile implements Serializable
   /**  List of operating systems to run on */
   public List osList = null;
 
-  /**  Delete file after executing? 
-       Default is false for backward compatibility. */
+  /**  Indicates the file should be kept after executing.
+   *  Default is false for backward compatibility. */
   public boolean keepFile;
 
   /**  Constructs a new uninitialized instance.  */

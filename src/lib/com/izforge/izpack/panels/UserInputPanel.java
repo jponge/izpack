@@ -985,7 +985,7 @@ public class UserInputPanel extends IzPanel
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Adds a combo box to the list of UI elements.<br>
+  * Adds a combo box to the list of UI elements. <br>
   * This is a complete example of a valid XML specification
   * <pre>
   * <field type="combo" variable="testVariable">
@@ -1108,7 +1108,7 @@ public class UserInputPanel extends IzPanel
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Adds a radio button set to the list of UI elements.<br>
+  * Adds a radio button set to the list of UI elements. <br>
   * This is a complete example of a valid XML specification
   * <pre>
   * <field type="radio" variable="testVariable">
@@ -1234,7 +1234,7 @@ public class UserInputPanel extends IzPanel
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Adds one or more password fields to the list of UI elements.<br>
+  * Adds one or more password fields to the list of UI elements. <br>
   * This is a complete example of a valid XML specification
   * <pre>
   * <field type="password" variable="testVariable">
@@ -1508,7 +1508,7 @@ public class UserInputPanel extends IzPanel
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Adds a search field to the list of UI elements.<br>
+  * Adds a search field to the list of UI elements. <p>
   * This is a complete example of a valid XML specification
   * <pre>
   * <field type="search" variable="testVariable">

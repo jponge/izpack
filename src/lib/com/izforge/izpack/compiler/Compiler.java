@@ -1478,7 +1478,7 @@ public class Compiler extends Thread
    * message on failure. It is an error for 'parent' to be null.
    *
    * @param parent  The element to search for a child
-   * @param child   Name of the child element to get
+   * @param name    Name of the child element to get
    */
   protected XMLElement requireChildNamed(XMLElement parent, String name)
     throws CompilerException

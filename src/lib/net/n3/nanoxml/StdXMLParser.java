@@ -316,7 +316,8 @@ public class StdXMLParser
     
     
     /**
-     * Processes a tag that starts with a bang (&lt;!...&gt;).
+     * Processes a tag that starts with a bang
+     * (&lt;&#x21;&#x2e;&#x2e;&#x2e;&gt;).
      *
      * @param allowCDATA true if CDATA sections are allowed at this point
      *

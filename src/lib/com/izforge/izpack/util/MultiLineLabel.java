@@ -307,8 +307,6 @@ public class MultiLineLabel extends JComponent
     * A new line is started whenever a line break is encountered, even
     * if the permissible length is not yet reached. Words are broken
     * only if a single word happens to be longer than one line.
-    *
-    * @param label  the text to be displayed
     */
    /*-------------------------------------------------------------------*/
     private void divideLabel ()

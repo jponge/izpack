@@ -184,12 +184,12 @@ public class ValidatorPlugin
     /**
      * Indicates that an attribute has been added to the current element.
      *
-     * @param key        the name of the attribute.
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemId the system ID associated with the namespace
-     * @param value      the value of the attribute.
-     * @param systemId   the system ID of the XML data of the element.
-     * @param lineNr     the line number in the XML data of the element.
+     * @param name            the name of the element.
+     * @param nsPrefix        the prefix used to identify the namespace
+     * @param nsSystemId      the system ID associated with the namespace
+     * @param extraAttributes where to put extra attributes.
+     * @param systemId        the system ID of the XML data of the element.
+     * @param lineNr          the line number in the XML data of the element.
      *
      * @throws java.lang.Exception
      *     if the attribute could not be validated.
@@ -214,12 +214,12 @@ public class ValidatorPlugin
      * If there are attributes with a default value which have not been
      * specified yet, they have to be put into <I>extraAttributes</I>.
      *
-     * @param name            the name of the element.
-     * @param nsPrefix        the prefix used to identify the namespace
-     * @param nsSystemId      the system ID associated with the namespace
-     * @param extraAttributes where to put extra attributes.
-     * @param systemId        the system ID of the XML data of the element.
-     * @param lineNr          the line number in the XML data of the element.
+     * @param key        the name of the attribute.
+     * @param nsPrefix   the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param value      the value of the attribute.
+     * @param systemId   the system ID of the XML data of the element.
+     * @param lineNr     the line number in the XML data of the element.
      *
      * @throws java.lang.Exception
      *     if the element could not be validated.

@@ -44,7 +44,7 @@ import javax.swing.*;
  *  The packs selection panel class.
  *
  * @author     Jan Blok
- * @created    November 27, 2003
+ * @since      November 27, 2003
  */
 public class SudoPanel extends IzPanel implements ActionListener
 {

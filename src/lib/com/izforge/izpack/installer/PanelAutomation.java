@@ -28,7 +28,7 @@ import net.n3.nanoxml.XMLElement;
 
 /**
  *  Defines the Interface that must be implemented for running
- *  Panels in automated (a.k.a. silent, headless) install mode.
+ *  Panels in automated (or "silent", "headless") install mode.
  *
  *  Implementing classes MUST NOT link against awt/swing classes.
  *  Thus the Panels cannot implement this interface directly,

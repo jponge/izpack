@@ -58,8 +58,9 @@ public class Pack implements Serializable
    *
    * @param  name         The pack name.
    * @param  description  The pack description.
-   * @param  targetOs    Description of the Parameter
+   * @param  osConstraints the OS constraint (or null for any OS)
    * @param  required     Indicates wether the pack is required or not.
+   * @param  preselected  This pack will be selected automatically.
    */
   public Pack(
     String name,

@@ -134,7 +134,7 @@ public class PasswordGroup implements ProcessingClient
   * Adds a <code>JPasswordField</code> to the group of fields being managed
   * by this object.
   *
-  * @param     the <code>JPasswordField</code> to add
+  * @param     field <code>JPasswordField</code> to add
   */
  /*--------------------------------------------------------------------------*/
   public void addField (JPasswordField field)

@@ -56,7 +56,6 @@ public class XMLParserFactory
      * Creates a default parser.
      *
      * @see #DEFAULT_CLASS
-     * @see #VALIDATOR_CLASS
      * @see #CLASS_KEY
      *
      * @return the non-null parser.

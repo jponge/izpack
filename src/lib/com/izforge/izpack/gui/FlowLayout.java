@@ -111,7 +111,7 @@ public class FlowLayout implements LayoutManager
     /**
      * This value indicates that each row of components
      * should be justified to the leading edge of the container's
-     * orientation, e.g. to the left in left-to-right orientations.
+     * orientation, for example, to the left in left-to-right orientations.
      *
      * @see     java.awt.Component#getComponentOrientation
      * @see     java.awt.ComponentOrientation
@@ -123,7 +123,7 @@ public class FlowLayout implements LayoutManager
     /**
      * This value indicates that each row of components
      * should be justified to the leading edge of the container's
-     * orientation, e.g. to the right in left-to-right orientations.
+     * orientation, for example, to the right in left-to-right orientations.
      *
      * @see     java.awt.Component#getComponentOrientation
      * @see     java.awt.ComponentOrientation

@@ -122,7 +122,6 @@ public class InstallerFrame extends JFrame
    *  The constructor (normal mode).
    *
    * @param  title          The window title.
-   * @param  langpack       The language pack.
    * @param  installdata    The installation data.
    * @exception  Exception  Description of the Exception
    */
@@ -710,7 +709,7 @@ public class InstallerFrame extends JFrame
   class WindowHandler extends WindowAdapter
   {
     /**
-     *  We can't avoid the exit here ... so don't call exit.
+     *  We can't avoid the exit here, so don't call exit anywhere else.
      *
      * @param  e  The event.
      */

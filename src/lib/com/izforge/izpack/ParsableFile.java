@@ -54,7 +54,7 @@ public class ParsableFile implements Serializable
    * @param  path      the file path
    * @param  type      the file type (or null for default)
    * @param  encoding  the file encoding (or null for default)
-   * @param  os        the OS constraint (or null for any OS)
+   * @param  osConstraints the OS constraint (or null for any OS)
    */
   public ParsableFile(String path, String type, String encoding, List osConstraints)
   {
