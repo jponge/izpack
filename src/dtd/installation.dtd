@@ -56,14 +56,6 @@
     <!ELEMENT panel EMPTY>
         <!ATTLIST panel classname CDATA #REQUIRED>
 
-
-<!ELEMENT enrollinfo (enrollitems) >
-	<!ATTLIST enrollinfo url CDATA #REQUIRED>
-	<!ELEMENT enrollitems (item+) >
-		<!ELEMENT item EMPTY>
-		<!ATTLIST item name CDATA #REQUIRED>
-		<!ATTLIST item required (yes|no) "no">
-
 <!-- The packs section (indicates the packs to create) -->
 <!ELEMENT packs (pack+)>
     <!ELEMENT pack (preinstall?, description, file*, fileset*, parsable*, executable*, postinstall?)>

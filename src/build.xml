@@ -440,10 +440,9 @@
   <!-- Builds the Javadoc -->
   <target name="build.javadoc" depends="prepare">
     <mkdir dir="${build.dir}/javadoc"/>
-    <javadoc destdir="${build.dir}/javadoc">
+    <javadoc destdir="${build.dir}/javadoc" access="private">
       <fileset dir="${src.dir}">
-        <include name="com/izforge/izpack/installer/IzPanel.java"/>
-        <include name="com/izforge/izpack/installer/InstallData.java"/>
+				<include name="**/*.java" />
       </fileset>
     </javadoc>
     <copy todir="${doc.dir}/izpack/javadoc">

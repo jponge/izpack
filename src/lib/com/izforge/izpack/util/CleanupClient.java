@@ -1,5 +1,6 @@
 /*
- * IzPack version 3.1.0 pre2 (build 2002.10.19)
+ * $Id$
+ * IzPack 
  * Copyright (C) 2002 by Elmar Grom
  *
  * File :               CleanupClient.java

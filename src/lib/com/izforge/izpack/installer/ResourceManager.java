@@ -1,28 +1,28 @@
-package com.izforge.izpack.installer;
-
 /*
- * IzPack Version ? (build ?)
- * Copyright (C) 2001,2002 Marcus Stursberg
+ *  $Id$
+ *  IzPack
+ *  Copyright (C) 2001,2002 Marcus Stursberg
  *
- * File :               ResourceManager.java
- * Description :        Class to get resources from the installer
- * Author's email :     marcus@emsty.de
- * Author's Website :   http://www.emasty.de
+ *  File :               ResourceManager.java
+ *  Description :        Class to get resources from the installer
+ *  Author's email :     marcus@emsty.de
+ *  Author's Website :   http://www.emasty.de
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation; either version 2
+ *  of the License, or any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
+package com.izforge.izpack.installer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,168 +32,226 @@ import java.net.URL;
 import javax.swing.ImageIcon;
 
 /**
- * With this ResourceManager you are able to get resources from the jar
- * file. All resources are loaded language dependent as it's done in
- * java.util.ResourceBundle. To set a language dependent resource just append
- * '_' and the locale to the end of the Resourcename<br>
- * <br>
- * Example:
- * <li>InfoPanel.info - for default value</li>
- * <li>InfoPanel.info_deu - for german value</li>
- * <li>InfoPanel.info_eng - for english value</li>
- * <br>
- * @author Marcus Stursberg
+ *  With this ResourceManager you are able to get resources from the jar file.
+ *  All resources are loaded language dependent as it's done in
+ *  java.util.ResourceBundle. To set a language dependent resource just append
+ *  '_' and the locale to the end of the Resourcename<br>
+ *  <br>
+ *  Example:
+ *  <li> InfoPanel.info - for default value</li>
+ *  <li> InfoPanel.info_deu - for german value</li>
+ *  <li> InfoPanel.info_eng - for english value</li> <br>
+ *
+ *
+ * @author     Marcus Stursberg
+ * @created    October 27, 2002
  */
-public class ResourceManager {
-    
-    /**
-     * Contains the current language of the installer
-     * The locale is taken from InstallData#installData#getAttribute("lanpack")
-     * If there is no language set, the language is english.
-     */
-    private String locale = "";
-    
-    /**  The base path where to find the resources */    
-    private final String resourceBasePath = "/res/";
-    
-    /** Contains the given InstallData */
-    private InstallData installData;
-    
-    /** 
-     * Crates a new ResourceManager
-     * @param data - the current installData
-     */
-    public ResourceManager(InstallData data) {
-        this.installData = data;
-        this.locale = installData.xmlData.getAttribute("langpack", "eng");
-    }    
-    
-    /** 
-     * This method is used to get the language dependent path of the given
-     * resource.
-     * If there is a resource for the current language the path of the
-     * language dependen resource is returnd. If there's no resource for the current
-     * lanuage the default path is returned.
-     * @param resource Resource to load language dependen
-     * @throws ResourceNotFoundException If the resource is not found
-     * @return the language dependent path of the given resource
-     */    
-    private String getLanguageResourceString(String resource) throws ResourceNotFoundException{
-        InputStream in;
-        String resourcePath = resourceBasePath + resource + "_" + locale;
-        in = this.getClass().getResourceAsStream(resourcePath);
-        if (in != null) {
-            return resourcePath;
-        } else {
-            // if there's no language dependen resource found
-            resourcePath = resourceBasePath + resource;
-            in = this.getClass().getResourceAsStream(resourcePath);
-            if (in != null) {
-                return resourcePath;
-            } else
-                throw new ResourceNotFoundException("Can not find Resource " +
-                resource + " for language " + this.locale);
-        }
+public class ResourceManager
+{
+
+  /**
+   *  Contains the current language of the installer The locale is taken from
+   *  InstallData#installData#getAttribute("lanpack") If there is no language
+   *  set, the language is english.
+   */
+  private String locale = "";
+
+  /**  The base path where to find the resources */
+  private final String resourceBasePath = "/res/";
+
+  /**  Contains the given InstallData */
+  private InstallData installData;
+
+
+  /**
+   *  Crates a new ResourceManager
+   *
+   * @param  data  - the current installData
+   */
+  public ResourceManager(InstallData data)
+  {
+    this.installData = data;
+    this.locale = installData.xmlData.getAttribute("langpack", "eng");
+  }
+
+
+  /**
+   *  This method is used to get the language dependent path of the given
+   *  resource. If there is a resource for the current language the path of the
+   *  language dependen resource is returnd. If there's no resource for the
+   *  current lanuage the default path is returned.
+   *
+   * @param  resource                    Resource to load language dependen
+   * @return                             the language dependent path of the
+   *      given resource
+   * @throws  ResourceNotFoundException  If the resource is not found
+   */
+  private String getLanguageResourceString(String resource) throws ResourceNotFoundException
+  {
+    InputStream in;
+    String resourcePath = resourceBasePath + resource + "_" + locale;
+    in = this.getClass().getResourceAsStream(resourcePath);
+    if (in != null)
+      return resourcePath;
+    else
+    {
+      // if there's no language dependen resource found
+      resourcePath = resourceBasePath + resource;
+      in = this.getClass().getResourceAsStream(resourcePath);
+      if (in != null)
+        return resourcePath;
+      else
+        throw new ResourceNotFoundException("Can not find Resource " +
+          resource + " for language " + this.locale);
     }
-    
-    /** 
-     * Returns an InputStream contains the given Resource
-     * The Resource is loaded language dependen by the informations from <code>this.locale</code>
-     * If there is no Resource for the current language found, the default Resource is given.
-     * @return an InputStream contains the requested resource
-     * @param resource The resource to load
-     * @throws ResourceManager.ResourceNotFoundException thrown if there is no resource found
-     */
-    public InputStream getInputStream(String resource) throws ResourceNotFoundException {
-        return this.getClass().getResourceAsStream(this.getLanguageResourceString(resource));
+  }
+
+
+  /**
+   *  Returns an InputStream contains the given Resource The Resource is loaded
+   *  language dependen by the informations from <code>this.locale</code> If
+   *  there is no Resource for the current language found, the default Resource
+   *  is given.
+   *
+   * @param  resource                                    The resource to load
+   * @return                                             an InputStream contains
+   *      the requested resource
+   * @exception  ResourceNotFoundException               Description of the
+   *      Exception
+   * @throws  ResourceManager.ResourceNotFoundException  thrown if there is no
+   *      resource found
+   */
+  public InputStream getInputStream(String resource) throws ResourceNotFoundException
+  {
+    return this.getClass().getResourceAsStream(this.getLanguageResourceString(resource));
+  }
+
+
+  /**
+   *  Returns a URL refers to the given Resource
+   *
+   * @param  resource                                    the resource to load
+   * @return                                             A languagedependen URL
+   *      spezifies the requested resource
+   * @exception  ResourceNotFoundException               Description of the
+   *      Exception
+   * @throws  ResourceManager.ResourceNotFoundException  thrown if there is no
+   *      resource found
+   */
+  public URL getURL(String resource) throws ResourceNotFoundException
+  {
+    try
+    {
+      return this.getClass().getResource(this.getLanguageResourceString(resource + "_" + installData.localeISO3));
     }
-    
-    /** 
-     * Returns a URL refers to the given Resource
-     * @param resource the resource to load
-     * @throws ResourceManager.ResourceNotFoundException thrown if there is no resource found
-     * @return A languagedependen URL spezifies the requested resource
-     */    
-    public URL getURL(String resource) throws ResourceNotFoundException {
-        try {
-            return this.getClass().getResource(this.getLanguageResourceString(resource + "_" + installData.localeISO3));
-        }catch(Exception ex) {
-            return this.getClass().getResource(this.getLanguageResourceString(resource));
-        }        
+    catch (Exception ex)
+    {
+      return this.getClass().getResource(this.getLanguageResourceString(resource));
     }
-    
-    /** 
-     * Returns a text resource from the jar file.
-     * The resource is loaded by ResourceManager#getResource and then
-     * converted into text.
-     * @return a String contains the text of the resource
-     * @param resource - a text resource to load
-     * @throws ResourceNotFoundException if the resource can not be found
-     * @throws IOException if the resource can not be loaded
-     */
-    //Maybe we can add a text parser for this method
-    public String getTextResource(String resource) throws ResourceNotFoundException,
-    IOException {
-        InputStream in = null;
-        try {
-            in = this.getInputStream(resource + "_" + this.installData.localeISO3);
-        }catch(Exception ex) {
-            in = this.getInputStream(resource);
-        }
-        
-        ByteArrayOutputStream infoData = new ByteArrayOutputStream();
-        byte[] buffer = new byte[5120];
-        int bytesInBuffer;
-        while ((bytesInBuffer = in.read(buffer)) != -1) {
-            infoData.write(buffer, 0, bytesInBuffer);
-        }
-        return infoData.toString();
+  }
+
+
+  /**
+   *  Returns a text resource from the jar file. The resource is loaded by
+   *  ResourceManager#getResource and then converted into text.
+   *
+   * @param  resource                    - a text resource to load
+   * @return                             a String contains the text of the
+   *      resource
+   * @throws  ResourceNotFoundException  if the resource can not be found
+   * @throws  IOException                if the resource can not be loaded
+   */
+  //Maybe we can add a text parser for this method
+  public String getTextResource(String resource) throws ResourceNotFoundException,
+    IOException
+  {
+    InputStream in = null;
+    try
+    {
+      in = this.getInputStream(resource + "_" + this.installData.localeISO3);
     }
-    
-    /** Returns a laguage dependent ImageIcon for the given Resource
-     * @return a ImageIcon loaded from the given Resource
-     * @param resource resrouce of the Icon
-     * @throws ResourceNotFoundException thrown when the resource can not be found
-     * @throws IOException if the resource can not be loaded
-     */
-    public ImageIcon getImageIconResource(String resource) throws ResourceNotFoundException,
-            IOException {
-        return new ImageIcon(this.getURL(resource));
+    catch (Exception ex)
+    {
+      in = this.getInputStream(resource);
     }
-    
-    /**
-     * Sets the locale for the resourcefiles.
-     * The locale is taken from InstallData#installData#getAttribute("lanpack")
-     * If there is no language set, the default language is english.
-     *
-     * @param locale of the resourcefile     
-     */
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
-    
-    /** Returns the locale for the resourcefiles.
-     * The locale is taken from InstallData#installData#getAttribute("lanpack")
-     * If there is no language set, the default language is english.
-     * @return the current language
-     */    
-    public String getLocale() {
-        return this.locale;
-    }
+
+    ByteArrayOutputStream infoData = new ByteArrayOutputStream();
+    byte[] buffer = new byte[5120];
+    int bytesInBuffer;
+    while ((bytesInBuffer = in.read(buffer)) != -1)
+      infoData.write(buffer, 0, bytesInBuffer);
+
+    return infoData.toString();
+  }
+
+
+  /**
+   *  Returns a laguage dependent ImageIcon for the given Resource
+   *
+   * @param  resource                    resrouce of the Icon
+   * @return                             a ImageIcon loaded from the given
+   *      Resource
+   * @throws  ResourceNotFoundException  thrown when the resource can not be
+   *      found
+   * @throws  IOException                if the resource can not be loaded
+   */
+  public ImageIcon getImageIconResource(String resource) throws ResourceNotFoundException,
+    IOException
+  {
+    return new ImageIcon(this.getURL(resource));
+  }
+
+
+  /**
+   *  Sets the locale for the resourcefiles. The locale is taken from
+   *  InstallData#installData#getAttribute("lanpack") If there is no language
+   *  set, the default language is english.
+   *
+   * @param  locale  of the resourcefile
+   */
+  public void setLocale(String locale)
+  {
+    this.locale = locale;
+  }
+
+
+  /**
+   *  Returns the locale for the resourcefiles. The locale is taken from
+   *  InstallData#installData#getAttribute("lanpack") If there is no language
+   *  set, the default language is english.
+   *
+   * @return    the current language
+   */
+  public String getLocale()
+  {
+    return this.locale;
+  }
 }
 
-/**  Describes that a resource can not be found */
-class ResourceNotFoundException extends java.io.IOException {
-    
-    /** creates a new ResourceNotFoundException */    
-    public ResourceNotFoundException() {
-        super();
-    }
-    
-    /** creates a new ResourceNotFoundException
-     * @param s description of the exception
-     */    
-    public ResourceNotFoundException(String s) {
-        super(s);
-    }
+/**
+ *  Describes that a resource can not be found
+ *
+ * @author     Marcus Stursberg
+ * @created    October 27, 2002
+ */
+class ResourceNotFoundException extends java.io.IOException
+{
+
+
+  /**  creates a new ResourceNotFoundException */
+  public ResourceNotFoundException()
+  {
+    super();
+  }
+
+
+  /**
+   *  creates a new ResourceNotFoundException
+   *
+   * @param  s  description of the exception
+   */
+  public ResourceNotFoundException(String s)
+  {
+    super(s);
+  }
 }

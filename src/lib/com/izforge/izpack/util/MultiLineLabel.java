@@ -1,5 +1,6 @@
 /*
- * IzPack version 3.1.0 pre2 (build 2002.10.19)
+ * $Id$
+ * IzPack version
  * Copyright (C) 1997 - 2002 Elmar Grom
  *
  * File :               MultiLineLabel.java
