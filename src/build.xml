@@ -138,8 +138,8 @@
 
     <!-- Define directories -->
     <property file="src/ant.properties"/>
-    <property name="ver" value="3.5"/>
-    <property name="rel" value="4"/>
+    <property name="ver" value="3.6"/>
+    <property name="rel" value="0"/>
 
     <property name="src.dir" value="${basedir}/src/lib"/>
     <property name="img.dir" value="${basedir}/src/img"/>
@@ -174,7 +174,6 @@
         <fileset id="ext.libs" dir="${basedir}/lib">
             <include name="ant.jar" />
             <include name="jakarta-regexp-1.3.jar" />
-            <include name="kunststoff.jar" />
         </fileset>
     </path>
 

@@ -539,7 +539,7 @@ public class Packager
     {
       try
       {
-        out.putNextEntry(zentry);
+        out.putNextEntry(new ZipEntry(zentry.getName()));
         copyStream(zin, out);
         out.closeEntry();
         zin.closeEntry();
