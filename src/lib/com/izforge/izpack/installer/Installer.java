@@ -42,12 +42,12 @@ public class Installer
     try
     {
       if(args.length == 0) {
-				// can't load the GUIInstaller class on headless machines,
-				// so we use Class.forName to force lazy loading. 
-				Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
-			} else {
-				new AutomatedInstaller(args[0]);
-			}
+        // can't load the GUIInstaller class on headless machines,
+        // so we use Class.forName to force lazy loading. 
+        Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
+      } else {
+        new AutomatedInstaller(args[0]);
+      }
     }
     catch (Exception e)
     {
