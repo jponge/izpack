@@ -6,6 +6,8 @@
 - A message box is now raised when the installer detects that the Java version
   it is running on is lower than the one required by the package provider.
 - The Win32 documentation shortcuts are now back again.
+- If 'user.home' is set to something like 'C:' on Windows, it will be changed to
+  'C:\'.
 
   > 3.5.0 (build.2004.02.26)
 
