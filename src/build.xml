@@ -485,6 +485,17 @@
             <param name="panel" value="InstallPanel"/>
             <param name="panel-dir" value="InstallPanel"/>
         </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="InstallPanel"/>
+            <param name="panel-dir" value="ExtendedInstallPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="ExtendedInstallPanel"/>
+            <param name="panel-dir" value="ExtendedInstallPanel"/>
+        </antcall>
+        <antcall target="compile.panel.finish">
+            <param name="panel" value="ExtendedInstallPanel"/>
+        </antcall>
         <antcall target="compile.panel.simple">
             <param name="panel" value="LicencePanel"/>
             <param name="panel-dir" value="LicencePanel"/>
