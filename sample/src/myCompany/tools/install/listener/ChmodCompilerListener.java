@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import net.n3.nanoxml.XMLElement;
-import com.izforge.izpack.compiler.SimpleCompilerListener;
 import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.event.SimpleCompilerListener;
 
 
 /**

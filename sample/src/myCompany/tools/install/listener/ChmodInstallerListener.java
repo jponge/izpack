@@ -30,8 +30,8 @@ import java.io.IOException;
 
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.event.SimpleInstallerListener;
 import com.izforge.izpack.installer.InstallerException;
-import com.izforge.izpack.installer.SimpleInstallerListener;
 
 /**
  * <p>InstallerListener for file and directory permissions
