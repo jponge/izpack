@@ -75,10 +75,14 @@ public class CompileWorker implements Runnable
 
   private CompileHandler handler;
 
+  private XMLElement compilerSpec;
+
   private ArrayList compilerList;
 
   private String compilerToUse;
 
+  private XMLElement compilerArgumentsSpec;
+  
   private ArrayList compilerArgumentsList;
 
   private String compilerArgumentsToUse;
@@ -109,6 +113,7 @@ public class CompileWorker implements Runnable
    */
   public ArrayList getAvailableCompilers ()
   {
+    readChoices (this.compilerSpec, this.compilerList);
     return this.compilerList;
   }
 
@@ -135,6 +140,7 @@ public class CompileWorker implements Runnable
    */
   public ArrayList getAvailableArguments ()
   {
+    readChoices (this.compilerArgumentsSpec, this.compilerArgumentsList);
     return this.compilerArgumentsList;
   }
 
@@ -229,18 +235,19 @@ public class CompileWorker implements Runnable
     {
 
       // get list of compilers
-      XMLElement compilers = global.getFirstChildNamed ("compiler");
+      this.compilerSpec = global.getFirstChildNamed ("compiler");
 
-      if (compilers != null)
+      if (this.compilerSpec != null)
       {
-        readChoices (compilers, this.compilerList);
+        readChoices (this.compilerSpec, this.compilerList);
       }
 
-      XMLElement arguments = global.getFirstChildNamed ("arguments");
+      this.compilerArgumentsSpec = global.getFirstChildNamed ("arguments");
 
-      if (arguments == null)
+      if (this.compilerArgumentsSpec != null)
       {
-        readChoices (arguments, this.compilerArgumentsList);
+        // basicly perform sanity check
+        readChoices (this.compilerArgumentsSpec, this.compilerArgumentsList);
       }
 
     }
@@ -272,6 +279,8 @@ public class CompileWorker implements Runnable
     if (choices == null)
       return;
 
+    result.clear ();
+    
     Iterator choice_it = choices.iterator();
 
     while (choice_it.hasNext ())
