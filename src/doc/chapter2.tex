@@ -1048,3 +1048,40 @@ process extension and still be able to provide feedback to the user through
 the feedback panel, and to add new functionality to the installer, after its
 been built.
 \end{quotation}
+
+\subsection{JDKPathPanel}
+This panel allows the user to select a JDK path. The variable JAVA\_HOME does
+not point to a JDK, else to a JRE also the environment variable points to a JDK.
+This is not a bug, this is the behavior of the VM. But some products needs a JDK,
+for that this panel can be used. There is not only a selection of the path else 
+a validation. The validation will be done with the file JDKPath/lib/tools.jar.
+If JAVA\_HOME points to the VM which is placed in the JDK, the directory will 
+be used as default (JAVA\_HOME/..). If there is the variable
+\begin{verbatim}
+JDKPathPanel.skipIfValid
+\end{verbatim}
+defined with the value "yes", the panel will be skiped if the path is valid.
+Additional it is possible to make a version control. If one or both variables
+\begin{verbatim}
+JDKPathPanel.minVersion
+JDKPathPanel.maxVersion
+\end{verbatim}
+are defined, only a JDK will be accepted which has a version in the
+range of it. The detection is a little bit pragmatically, therefor it is 
+possible, that the detection can fail at some VMs. 
+The values in the install.xml should be like 
+\begin{verbatim}
+<variables>
+  <variable name="JDKPathPanel.minVersion" value="1.4.1" />
+  <variable name="JDKPathPanel.maxVersion" value="1.4.99" />
+  <variable name="JDKPathPanel.skipIfValid" value="yes" />
+</variables>
+\end{verbatim}
+
+If all is valid, the panels isValidated method sets the variable
+\begin{verbatim}
+JDKPath
+\end{verbatim}
+to the chosen path. Be aware, this variable exist not until the JDKPanel
+was quitted once. At a secound activation, the default will be the
+last selection.

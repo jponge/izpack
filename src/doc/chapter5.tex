@@ -36,8 +36,10 @@ build your own panels. In this way you'll be able to focus on your code
 
 \subsection{Description}
 
-The two data members are : the install data (refer to the \texttt{InstallData}
-Javadoc reference) and a reference to the parent installer frame.\\
+The data members are : the install data (refer to the \texttt{InstallData}
+Javadoc reference) and a reference to the parent installer frame.
+Additional there are the initialFocus Component and some members for
+handling the grid bag constraint.\\
 
 The methods have the following functionality :\\
 \begin{itemize}
@@ -70,4 +72,16 @@ The methods have the following functionality :\\
   data collected during a previous installation as saved in
   \texttt{panelRoot} by \texttt{makeXMLData}.\\
 
+  \item \texttt{setInitialFocus} with this method it is possible to set
+  a hint which component should be get the focus at activation of the
+  panel. It is only a hint. Not all components are supported. For more
+  information see java.awt.Component.requestFocusInWindow or 
+  java.awt.Component.requestFocus if the VM version is less than 1.4.\\
+  
+  \item \texttt{getInitialFocus} returns the component which should be get the
+  focos at activation of the panel. If no component was set, null returns.\\
+
 \end{itemize}\
+Additional there are some helper methods to simplify grid bag layout handling
+and creation of some common used components.
+
