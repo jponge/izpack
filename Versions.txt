@@ -9,7 +9,7 @@
 - The attributes "includes" and "excludes" now are supported for filesets
   (Klaus Bartz).
 - As many sensitive clean-ups as possible have been made after a FindBugs run.
-
+- Support of native libraries in the uninstaller (Klaus Bartz).
   > 3.6.1 (build 2004.xx.yy)
 
 - Slovak translation updates (Milan Madzia).
