@@ -521,6 +521,18 @@ include into the pack. It takes the following attributes:
   altered after installation this way.) By default it is set to \texttt{true}.
 
 \end{itemize}
+\paragraph{\label{tag:additionaldata}\texttt{<additionaldata>}}
+
+This tag can also be specified in order to pass additional data
+related to a file tag for customizing.
+
+\begin{itemize}
+
+  \item \texttt{<key>}: key to identify the data
+  \item \texttt{<value>}: value which can be used by a custom
+  action
+
+\end{itemize}
 
 \subsubsection{\label{tag:singlefile}\texttt{<singlefile>} - add a single file}
 
@@ -542,6 +554,8 @@ this tag allows the file to be renamed, therefore it has a
   \item \texttt{override}: see \texttt{<file>} (\ref{tag:file}) for description
 
 \end{itemize}
+A \texttt{<additionaldata>} (\ref{tag:additionaldata}) tag can
+also be specified for customizing.
 
 \subsubsection{\label{tag:fileset}\texttt{<fileset>}: add a fileset}
 
@@ -565,6 +579,14 @@ Jakarta Ant set syntax. It takes the following parameters:
   \texttt{<file>}
 
   \item \texttt{override}: see \texttt{<file>} for description
+
+  \item \texttt{includes}: comma- or space-separated list of patterns of
+  files that must be included; all files are included when omitted.
+  This is an alternative for multiple include tags.
+
+  \item \texttt{excludes}: comma- or space-separated list of patterns of
+  files that must be excluded; no files (except default excludes) are
+  excluded when omitted. This is an alternative for multiple exclude tags.
 
 \end{itemize}
 
@@ -614,6 +636,8 @@ task. Default excludes are:
      **/.DS\_Store
 \end{verbatim}
 \normalsize
+A \texttt{<additionaldata>} (\ref{tag:additionaldata})
+tag can also be specified for customizing.
 
 \subsubsection{\texttt{<parsable>} - parse a file after installation}
 
