@@ -336,15 +336,16 @@ started at OS launch time, if this is available on the target OS.\\
 \subsection{Selective Creation of Shortcuts}
 
 Usually all shortcuts that are listed will be created when the user
-clicks the 'Create Shortcuts' button. However it is possible to control
-to some degree if specific shortcuts should be created or not. This is
-based on install conditions. By including one or more \texttt{<createForPack>}
-tags in the specification for a shortcut, you can direct the
-ShortcutPanel to create the shortcut only if any of the listed packs are
-actually installed. The 'name' attribute is used to define the name of
-one of the packs for which the shortcut should be created. You do not
-need to list all packs if a shortcut should always be created. In this
-case simply omit this tag altogether.\\
+clicks the 'Create Shortcuts' button. However it is possible to
+control to some degree if specific shortcuts should be created or
+not. This is based on install conditions. By including one or more
+\texttt{<createForPack name=''a pack name'' />} tags in the
+specification for a shortcut, you can direct the ShortcutPanel to
+create the shortcut only if any of the listed packs are actually
+installed. The 'name' attribute is used to define the name of one of
+the packs for which the shortcut should be created. You do not need to
+list all packs if a shortcut should always be created. In this case
+simply omit this tag altogether.\\
 
 \textbf{A word of caution}\\
 
