@@ -527,6 +527,9 @@ Jakarta Ant set syntax. It takes the following parameters:
   \item \texttt{casesensitive}: optionally lets you specify if the names
   are case-sensitive or not - takes \texttt{yes} or \texttt{no}
 
+  \item \texttt{defaultexcludes}: optionally lets you specify if the default
+  excludes will be used - takes \texttt{yes} or \texttt{no}.
+
   \item \texttt{os}: specifies the operating system, works like for
   \texttt{<file>}
 
@@ -557,6 +560,29 @@ Here are some examples of Ant patterns :
   \texttt{FOO}.
 
 \end{itemize}
+
+There area set of definitions that are excluded by default file-sets,
+just as in Ant. IzPack defaults to the Ant list of default
+excludes. There is currently no equivalent to the <defaultexcludes>
+task. Default excludes are:
+\footnotesize
+\begin{verbatim}
+     **/*\~{}
+     **/\#*\#
+     **/.\#*
+     **/%*%
+     **/.\_*
+     **/CVS
+     **/CVS/**
+     **/.cvsignore
+     **/SCCS
+     **/SCCS/**
+     **/vssver.scc
+     **/.svn
+     **/.svn/**
+     **/.DS\_Store
+\end{verbatim}
+\normalsize
 
 \subsubsection{\texttt{<parsable>} - parse a file after installation}
 

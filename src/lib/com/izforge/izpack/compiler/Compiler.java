@@ -484,6 +484,7 @@ public class Compiler extends Thread
           parseError(f, "Invalid directory 'dir': " + dir_attr);
 
         boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
+        boolean defexcludes = validateYesNoAttribute(f, "defaultexcludes", YES);
         String targetdir = requireAttribute(f, "targetdir");
         List osList = OsConstraint.getOsList(f); // TODO: unverified
         int override = getOverrideValue(f);
@@ -517,7 +518,8 @@ public class Compiler extends Thread
         DirectoryScanner ds = new DirectoryScanner();
         ds.setIncludes(includes);
         ds.setExcludes(excludes);
-        ds.addDefaultExcludes();
+        if (defexcludes)
+          ds.addDefaultExcludes();
         ds.setBasedir(dir);
         ds.setCaseSensitive(casesensitive);
         ds.scan();
