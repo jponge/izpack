@@ -9,6 +9,7 @@
 - If 'user.home' is set to something like 'C:' on Windows, it will be changed to
   'C:\'.
 - German langpack: minor fix on 'LicencePanel.agree' translation.
+- UserInputPanel.getResult(): path construction fix (bug #1634).
 
   > 3.5.0 (build.2004.02.26)
 
