@@ -53,19 +53,12 @@
 % get deeper TOC (so we have nice bookmarks in PDF)
 \setcounter{tocdepth}{4}
 
-% Headers
-\title{\Huge{\textbf{IzPack documentation}}}
-\author{Julien \textsc{Ponge} \href{mailto:julien@izforge.com}{\texttt{<julien@izforge.com>}} \\
-        Elmar \textsc{Grom} \href{mailto:elmar@grom.net}{\texttt{<elmar@grom.net>}} \\
-        Tino \textsc{Schwarze} \href{mailto:tino.schwarze@informatik.tu-chemnitz.de}{\texttt{
-                               <tino.schwarze@informatik.tu-chemnitz.de>}}
-       }
-
 % We start here
 \begin{document}
 
   % First pages
-  \maketitle
+  %\maketitle
+  \include{cover}
   \tableofcontents
 
   % The chapters
@@ -83,5 +76,13 @@
   \footnotesize
   \verbatiminput{GPL}
   \normalsize
-
+  \chapter{The Commons Creative Attribution-NonCommercial-ShareAlike License}
+  \label{CC-license}
+  A friendly summary of the license terms is available at
+  \href{http://creativecommons.org/licenses/by-nc-sa/1.0/}
+    {\url{http://creativecommons.org/licenses/by-nc-sa/1.0/}}. The following are
+  the full legal terms which govern this documentation.\\
+  \footnotesize
+  \verbatiminput{CC-Attribution-NonCommercial-ShareAlike-1.0}
+  \normalsize
 \end{document}
