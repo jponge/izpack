@@ -121,18 +121,20 @@ public class Unpacker extends Thread
                             File dest = pathFile.getParentFile();
                             if (!dest.exists()) dest.mkdirs();
                             
-                            //check to see whether or not this file should be written out
-                            boolean write = !((pf.override == false) && (pathFile.exists()));
-                            // UPDATE ME: Need to implement the conditional overwriting of files
-                            
                             // We add the path to the log,
                             udata.addFile(path);
                             
-
-                            // We copy the file
-                            
-                            out = new FileOutputStream(path);
                             listener.progressUnpack(j, path);
+                            
+                            //if this file exists and shouldnot override skip this file
+                            if(((pf.override == false) && (pathFile.exists())))
+                            {
+                                objIn.skip(pf.length);
+                                continue;
+                            }
+                            
+                            // We copy the file
+                            out = new FileOutputStream(path);
                             byte[] buffer = new byte[5120];
                             long bytesCopied = 0;
                             while (bytesCopied < pf.length)
