@@ -8,6 +8,8 @@
 - A new mailing-list izpack-changes@lists.berlios.de has been set up to receive
   various development-related notifications.
 - German langpack fix (bug #1828).
+- Web installer fix: wrong jar was getting izpack classes
+- RuleTextField input bug fix (bug #1618)
 
   > 3.5.1 (build 2004.03.16)
 
