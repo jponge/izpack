@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
 
-<project name="IzPack" default="all" basedir="..">
+<project name="IzPack" default="dist" basedir="..">
 
 <!--
 

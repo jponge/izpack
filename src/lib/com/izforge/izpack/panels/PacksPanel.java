@@ -48,6 +48,8 @@ public class PacksPanel extends IzPanel implements ActionListener
     private BoxLayout layout;
     private JLabel infoLabel;
     private JLabel tipLabel;
+    private JLabel spaceLabel;
+    private int bytes = 0;
     private HashMap checkBoxes = new HashMap();
     private HashMap packsforBoxes = new HashMap();
     protected InstallData idata;
@@ -86,7 +88,7 @@ public class PacksPanel extends IzPanel implements ActionListener
         tipLabel = new JLabel(parent.langpack.getString("PacksPanel.tip"),
                               parent.icons.getImageIcon("tip"), JLabel.TRAILING);
         centerPanel.add(tipLabel);
-
+        
         centerPanel.add(Box.createVerticalStrut(20));
 
         // Adds each pack checkbox
@@ -105,6 +107,12 @@ public class PacksPanel extends IzPanel implements ActionListener
             packsforBoxes.put(checkBox, pack);
             centerPanel.add(checkBox);
         }
+        
+        centerPanel.add(Box.createVerticalStrut(20));
+        
+        spaceLabel = new JLabel(parent.langpack.getString("PacksPanel.space"));
+        centerPanel.add(spaceLabel);
+        
     }
 
     // Called when the panel becomes active 
@@ -114,6 +122,7 @@ public class PacksPanel extends IzPanel implements ActionListener
         {
             // set the JCheckBoxes to the currently selected panels. The selection meight have changes in another panel
             java.util.Iterator iter = idata.availablePacks.iterator();
+            bytes = 0;
             while(iter.hasNext())
             {
                 Pack p  = (Pack)iter.next();
@@ -126,7 +135,12 @@ public class PacksPanel extends IzPanel implements ActionListener
                 if(p.required)
                 {
                     check.setSelected(true);
+                    bytes += p.nbytes;
                     continue;
+                }
+                if(idata.selectedPacks.contains(p)) 
+                {
+                    bytes += p.nbytes;
                 }
                 check.setSelected(idata.selectedPacks.contains(p));
             }
@@ -135,10 +149,19 @@ public class PacksPanel extends IzPanel implements ActionListener
         {
             e.printStackTrace();
         }
+        showSpaceRequired();
     }
 
     //.....................................................................
     // The methods
+    
+    //sets the label text of space requiered for installation
+    private void showSpaceRequired()
+    {
+        StringBuffer result = new StringBuffer(parent.langpack.getString("PacksPanel.space"));
+        result.append(Pack.toByteUnitsString(bytes));
+        spaceLabel.setText(result.toString());            
+    }
 
     // Actions-handling method
     public void actionPerformed(ActionEvent e)
@@ -150,9 +173,16 @@ public class PacksPanel extends IzPanel implements ActionListener
 
         // We act depending of the user's choice
         if (checkBox.isSelected())
+        {
             idata.selectedPacks.add(pack);
+            bytes += pack.nbytes;
+        }
         else
+        {
             idata.selectedPacks.remove(idata.selectedPacks.indexOf(pack));
+            bytes -= pack.nbytes;
+        }
+        showSpaceRequired();    
     }
 
     // Indicates wether the panel has been validated or not

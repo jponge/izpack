@@ -67,7 +67,7 @@
         <panel classname="HelloPanel"/>
         <panel classname="HTMLInfoPanel"/>
         <panel classname="LicencePanel"/>
-        <panel classname="ImgPacksPanel"/>
+        <panel classname="PacksPanel"/>
         <panel classname="TargetPanel"/>
         <panel classname="InstallPanel"/>
         <panel classname="ShortcutPanel"/>

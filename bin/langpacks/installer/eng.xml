@@ -45,6 +45,7 @@
     
     <str id="PacksPanel.info" txt="Select the packs you want to install :"/>
     <str id="PacksPanel.tip" txt="Note: greyed packs are required."/>
+    <str id="PacksPanel.space" txt="Space Required: "/>
     
     <str id="InstallPanel.info" txt="Click 'Install !' to begin the installation process"/>
     <str id="InstallPanel.install" txt="Install !"/>

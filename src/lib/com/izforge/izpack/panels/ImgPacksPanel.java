@@ -48,6 +48,8 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
     private GridBagConstraints gbConstraints;
     private JLabel packsLabel;
     private JLabel snapLabel;
+    private JLabel spaceLabel;
+    private int bytes = 0;
     private JList packsList;
     private JLabel imgLabel;
     private JCheckBox checkBox;
@@ -106,6 +108,13 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
         layout.addLayoutComponent(checkBox, gbConstraints);
         add(checkBox);
         
+        spaceLabel = new JLabel(parent.langpack.getString("PacksPanel.space"));
+        parent.buildConstraints(gbConstraints, 0, 2, 1, 1, 0.0, 0.0);
+        gbConstraints.fill = GridBagConstraints.NONE;
+        gbConstraints.anchor = GridBagConstraints.EAST;
+        layout.addLayoutComponent(spaceLabel, gbConstraints);
+        add(spaceLabel);
+        
         descLabel = new JLabel("");
         parent.buildConstraints(gbConstraints, 1, 2, 1, 1, 0.0, 0.0);
         gbConstraints.fill = GridBagConstraints.NONE;
@@ -120,10 +129,37 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
         checkBox.setEnabled(!pack.required);
         checkBox.setSelected(idata.selectedPacks.contains(pack));
         descLabel.setText(pack.description);
+        
     }
     
     //.....................................................................
     // The methods
+
+    //sets the label text of space requiered for installation
+    private void showSpaceRequired()
+    {
+        StringBuffer result = new StringBuffer(parent.langpack.getString("PacksPanel.space"));
+        result.append(Pack.toByteUnitsString(bytes));
+        spaceLabel.setText(result.toString());
+    }  
+    
+    // Called when the panel becomes active 
+    public void panelActivate()
+    {
+            //calculate the bytes required by selected panels
+            java.util.Iterator iter = idata.availablePacks.iterator();
+            bytes = 0;
+            while(iter.hasNext())
+            {
+                Pack p = (Pack)iter.next();
+                if(idata.selectedPacks.contains(p)) 
+                {
+                    bytes += p.nbytes;
+                }
+            }
+                
+        showSpaceRequired();
+    }
     
     // Actions-handling method
     public void actionPerformed(ActionEvent e)
@@ -131,9 +167,16 @@ public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelect
         // We select or not the current pack
         Pack pack = (Pack) idata.availablePacks.get(index);
         if (checkBox.isSelected())
+        {
             idata.selectedPacks.add(pack);
+            bytes += pack.nbytes;
+        }
         else
-            idata.selectedPacks.remove(idata.selectedPacks.indexOf(pack));        
+        {
+            idata.selectedPacks.remove(idata.selectedPacks.indexOf(pack));   
+            bytes -= pack.nbytes;
+        }
+        showSpaceRequired();
     }
     
     public void valueChanged(ListSelectionEvent e)

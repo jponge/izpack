@@ -25,6 +25,7 @@
 package com.izforge.izpack;
 
 import java.io.*;
+import java.text.DecimalFormat;
 
 public class Pack implements Serializable
 {
@@ -50,6 +51,34 @@ public class Pack implements Serializable
     {
         return name + " (" + description + ")";
     }
+    
+    //values used for converting byte units
+     private static final double KILOBYTES = 1024.0;
+     private static final double MEGABYTES = 1024.0 * 1024.0;
+     private static final double GIGABYTES = 1024.0 * 1024.0 * 1024.0;
+     private static final DecimalFormat formatter = new DecimalFormat("#,###.##"); 
+     
+     //convert bytes into appropiate mesaurements
+     public static String toByteUnitsString(int bytes) 
+     {
+         if (bytes < KILOBYTES)
+         {    
+             return String.valueOf(bytes) + "bytes";  
+         } else if (bytes < (MEGABYTES)) 
+         {  
+             double value = bytes / KILOBYTES;  
+             return formatter.format(value) + "KB";  
+         } else if (bytes < (GIGABYTES)) 
+         {
+             double value = bytes / MEGABYTES; 
+             return formatter.format(value) + "MB";   
+         } else 
+         { 
+            double value = bytes / GIGABYTES;   
+            return formatter.format(value) + "GB";   
+         }
+     }
+
     
     //.....................................................................
 }
