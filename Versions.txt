@@ -1,5 +1,17 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.0.5 (release 2003.02.14)
+
+- This release becomes the new stable version, waiting for the 3.1 release which
+  is not yet ready. The stable/unstable versions separation is suspended.
+- Fixed a TargetPanel inconsistency when the target directory is empty.
+- Fixed Ant filesets-related problems.
+- UI fonts fixes for Linux/Sun JDK-1.4.
+- Empty directories can now be included.
+- IzPack's own installer now makes uses of the Ant-style filesets.
+- Splitted the documentation pack into several ones.
+- MacOS X UI fixes (Hani Suleiman).
+
   > 3.1.0 pre5 (build 2003.01.12)
 
 - Included Elmar's new UserInputPanel documentation.
