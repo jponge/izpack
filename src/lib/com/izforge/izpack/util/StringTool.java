@@ -79,7 +79,7 @@ public class StringTool
    * @param value original String 
    * @param from Search Pattern
    * @param to Replace with this
-   * @param If set to true be case sensitive.
+   * @param aCaseSensitiveFlag set to true be case sensitive.
    *
    * @return the replaced String
    */
@@ -134,9 +134,9 @@ public class StringTool
    * TODO: implement support for MAC < MacOSX
    *
    * @param destination
-   * @param Force a target-system fileseparator
+   * @param fileSeparator a target-system fileseparator
    *
-   * @return
+   * @return the normalized path
    */
   public static String normalizePath( String destination, String fileSeparator )
   {
@@ -172,7 +172,7 @@ public class StringTool
    * Reason: Java.File accepts / or \ for Pathes.
    * Batches or ShellScripts does it not!
    * 
-   * @param A accepted mixed form by java.File like "C:/a/mixed\path\accepted/by\Java"
+   * @param destination accepted mixed form by java.File like "C:/a/mixed\path\accepted/by\Java"
    *
    * @return the normalized Path
    */

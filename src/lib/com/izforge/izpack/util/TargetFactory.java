@@ -660,12 +660,12 @@ public class TargetFactory
   }
   
   /**
-   * Gets an Prefix Alias for the current Platform.
+   * Gets a prefix alias for the current platform.
    * "Win_" on Windows Systems
    * "Win_NT_" on WinNT4, 2000, XP
    * Mac on Mac Mac_X on macosx and
    * Unix_
-   * @return
+   * @return a prefix alias for the current platform
    */
 
   public static String getCurrentOSPrefix()

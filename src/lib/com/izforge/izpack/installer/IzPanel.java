@@ -351,7 +351,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
    * @param text text to be used in the label
    * @param iconId id string for the icon
    * @param pos horizontal alignment
-   * @return
+   * @return the created multi line label
    */
   public MultiLineLabel createMultiLineLabel(String text, 
     String iconId, int pos)

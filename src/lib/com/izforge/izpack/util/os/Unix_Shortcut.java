@@ -432,7 +432,7 @@ public String toString()
 
 /**
  * Creates the Shortcut String which will be stored as File.
- * @return
+ * @return the replaced String
  */
 public String replace()
 {
@@ -452,7 +452,7 @@ public String replace()
 
 /**
  * Test Method 
- * @param Commnandline-Args
+ * @param args Commnandline-Args
  */
 public static void main(String[] args) 
 {
