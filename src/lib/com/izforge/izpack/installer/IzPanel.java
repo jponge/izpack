@@ -56,6 +56,11 @@ public class IzPanel extends JPanel
     protected InstallerFrame parent;
     
     /**
+     * ResourceManager for easy access to resources
+     */
+    private ResourceManager resourceManager;
+    
+    /**
      * The constructor.
      *
      * @param parent The parent IzPack installer frame.
@@ -67,6 +72,7 @@ public class IzPanel extends JPanel
         
         this.idata = idata;
         this.parent = parent;
+        this.resourceManager = new ResourceManager(this.idata);
     }
     
     //.....................................................................
@@ -118,5 +124,14 @@ public class IzPanel extends JPanel
      */
     public void runNoGUI() { }
         
+    /**
+     * Returns the current ResourceManager.
+     * with this ResourceManager you can access IzPack resources easily
+     * @return Value of property resourceManager.
+     */
+    public ResourceManager getResourceManager() {
+        return resourceManager;
+    }
+    
     //.....................................................................
 }
