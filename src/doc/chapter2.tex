@@ -461,6 +461,17 @@ The contents of the \texttt{<description>} tag describe the pack contents.
 This description is displayed if the user highlights the pack during 
 installation.
 
+\subsubsection{\texttt{<depends>} - pack dependencies}
+This can be used to make this pack selectable only to be installed only if some other is 
+selected to be installed. The pack can depend on more than one by specifying more than one
+\texttt{<depends>} elements.\\ 
+Circular depedencies are not supported and the compiler reports an error if one occurs.
+
+This tag takes the following attribute:
+\begin{itemize}
+\item \texttt{packname}: The name of the pack that it depends on
+\end{itemize}
+
 \subsubsection{\texttt{<os>} - OS restrictions}
 
 It is possible to restrict a panel to a certain list of operating systems. This
