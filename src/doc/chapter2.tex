@@ -340,9 +340,14 @@ ukr & Ukrainian \\ \hline
 \subsection{The Resources Element \texttt{<resources>}}
 
 Several panels, such as the license panel and the shortcut panel,
-require additional data to perform their task. This data is supplied in
-the form of resources. This section describes how to specify them. Take
-a look at each panel description to see if it might need any resources.
+require additional data to perform their task. This data is supplied
+in the form of resources. This section describes how to specify
+them. Take a look at each panel description to see if it might need
+any resources. Currently, no checks are made to ensure resources
+needed by any panel have been included. The \texttt{<resources>}
+element is not required, and no \texttt{<res>} elements are required
+within.\\
+
 You have to set one \texttt{<res>} markup for each resource. Here are
 the attributes to specify :
 \begin{itemize}
