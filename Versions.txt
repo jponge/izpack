@@ -2,6 +2,9 @@
 
   > x.y.z (build xxxx.yy.zz)
 
+- InstallPanel: the overall progress bar makes steps forward only after a pack
+  has been fully processed. The previous behaviour was to step forward at the
+  beginning of a pack extraction.
 - CompilePanel: disable Start button after successful compilation (T.Schwarze).
 - improve search field of the UserInputPanel: add checkfilename (T.Schwarze).
 - XInfoPanel: UI fix.

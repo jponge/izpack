@@ -160,9 +160,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     parent.blockGUI();
     // figure out how many packs there are to install
     this.noOfPacks = noOfJobs;
-    this.overallProgressBar.setMinimum (1);
+    this.overallProgressBar.setMinimum (0);
     this.overallProgressBar.setMaximum (this.noOfPacks);
-
     this.overallProgressBar.setString ("0 / " + Integer.toString (this.noOfPacks));
   }
 
@@ -187,6 +186,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
   {
     parent.releaseGUI();
     parent.lockPrevButton();
+    this.overallProgressBar.setValue(this.overallProgressBar.getValue() + 1);
     this.packProgressBar.setString(parent.langpack.getString("InstallPanel.finished"));
     this.packProgressBar.setEnabled(false);
     String no_of_packs = Integer.toString (this.noOfPacks);
@@ -228,9 +228,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     this.packProgressBar.setMinimum(0);
     this.packProgressBar.setMaximum(max);
     this.packProgressBar.setString(packName);
-
-    this.overallProgressBar.setValue (stepno);
-    this.overallProgressBar.setString (Integer.toString (stepno) + " / " + Integer.toString (this.noOfPacks));
+    this.overallProgressBar.setValue(stepno - 1);
+    this.overallProgressBar.setString(Integer.toString (stepno) + " / " + Integer.toString (this.noOfPacks));
   }
 
 
