@@ -1,7 +1,30 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.5.0 (build.2004.xx.yy) [TBA]
+  > 3.5.2 (build 2004.05.01)
 
+- Fixed moving empty directory to root (pbe@whitestein.com).
+- UserInputPanel getResult() fix (bug #1769).
+- Slovak langpack fix (patch #88).
+- A new mailing-list izpack-changes@lists.berlios.de has been set up to receive
+  various development-related notifications.
+- German langpack fix (bug #1828).
+- Web installer fix: wrong jar was getting izpack classes
+- RuleTextField input bug fix (bug #1618)
+
+  > 3.5.1 (build 2004.03.16)
+
+- No custom look and feel will be applied on Mac platforms (Chad McHenry).
+- A message box is now raised when the installer detects that the Java version
+  it is running on is lower than the one required by the package provider.
+- The Win32 documentation shortcuts are now back again.
+- If 'user.home' is set to something like 'C:' on Windows, it will be changed to
+  'C:\'.
+- German langpack: minor fix on 'LicencePanel.agree' translation.
+- UserInputPanel.getResult(): path construction fix (bug #1634).
+
+  > 3.5.0 (build.2004.02.26)
+
+- The developer services have moved to BerliOS (http://developer.berlios.de/).
 - Uninstaller is now able to delete itself and the install directory
   (Chad McHenry)
 - Upate Checking: The installer is now able to "update" an already installed

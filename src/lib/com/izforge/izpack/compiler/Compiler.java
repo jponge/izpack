@@ -85,7 +85,7 @@ public class Compiler extends Thread
   public final static String VERSION = "1.0";
 
   /**  The IzPack version. */
-  public final static String IZPACK_VERSION = "3.5.0-RC1 (build 2004.xx.yy)";
+  public final static String IZPACK_VERSION = "3.5.2 (build 2004.05.01)";
 
   /**  Standard installer. */
   public final static String STANDARD = "standard";
@@ -1052,7 +1052,7 @@ public class Compiler extends Thread
         if (dir.list().length == 0)
         {
           instPath = relPath + File.separator + dirs[i];
-          pathLimit = instPath.indexOf(dir.getName());
+          pathLimit = instPath.lastIndexOf(dir.getName());
           instPath = instPath.substring(0, pathLimit);
           addFile(dir, instPath, osList, override, list);
         }

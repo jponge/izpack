@@ -85,7 +85,7 @@ public class WebPackager extends Packager
 
     // Copies the skeleton installer
     sendMsg("Copying the skeleton installer ...");
-    writeSkeletonInstaller(webJar);
+    writeSkeletonInstaller(outJar);
   }
 
   public boolean allowPackFileBackReferences()
