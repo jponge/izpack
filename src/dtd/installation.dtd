@@ -9,7 +9,7 @@
 
 <!-- The root element -->
 <!ELEMENT installation (preinstall?, info, variables*, guiprefs?, locale, resources, panels,
-                        packs, screen?, jar*, native*, postinstall?)>
+                        packs, jar*, native*, postinstall?)>
     <!ATTLIST installation version CDATA #REQUIRED>
 
 <!-- The info section (general information on an installation) -->
@@ -58,7 +58,7 @@
 
 <!-- The packs section (indicates the packs to create) -->
 <!ELEMENT packs (pack+)>
-    <!ELEMENT pack (preinstall?, description, file*, fileset*, parsable*, executable*, postinstall?)>
+    <!ELEMENT pack (description, file*, fileset*, parsable*, executable*,)>
         <!ATTLIST pack name CDATA #REQUIRED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
         <!ELEMENT description (#PCDATA)>
