@@ -1,5 +1,5 @@
 /*
- * IzPack version 3.1.0 pre1 (build 2002.09.21)
+ * IzPack version 3.1.0 pre2 (build 2002.10.19)
  * Copyright (C) 2002 by Elmar Grom
  *
  * File :               FreeThread.java

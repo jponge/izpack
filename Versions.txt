@@ -1,5 +1,10 @@
 [ The list of the different public versions of IzPack ]
 
+    > 3.1.0 pre2 (build 2002.10.19)
+
+- New (and clean) ResourceManager thanks to Marcus Stursberg.
+- Shorcut fixes by Elmar Grom.
+
     > 3.1.0 pre1 (build 2002.09.21)
 
 - When InstallPanel was the last panel, it unlocked the next button and this was

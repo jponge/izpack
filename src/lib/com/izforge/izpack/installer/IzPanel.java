@@ -1,5 +1,5 @@
 /*
- * IzPack Version 3.1.0 pre1 (build 2002.09.21)
+ * IzPack Version 3.1.0 pre2 (build 2002.10.19)
  * Copyright (C) 2001,2002 Julien Ponge
  *
  * File :               IzPanel.java
@@ -36,7 +36,7 @@ import net.n3.nanoxml.*;
  * it and should belong to the <code>com.izforge.izpack.panels</code> package.
  *
  * @author Julien PONGE
- * @version 3.1.0 pre1 (build 2002.09.21)
+ * @version 3.1.0 pre2 (build 2002.10.19)
  * @see javax.swing.JPanel
  */
 public class IzPanel extends JPanel

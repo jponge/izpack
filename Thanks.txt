@@ -33,10 +33,12 @@ IzPack for your projects ;-)
 - Joao Marcelo Pereira Alves : for the Brazilian-Portuguese langpack.
 - Serge Sivkov : for the fixes and the Russian langpack.
 - Marcus Wolschon : for the fix in PacksPanel.
+- Marcus Stursberg : for the clean ResourceManager.
 - Fridjof Jansen : for the Dutch language packs support.
 - Stefan Norman : for the Swedish language packs support.
 - Elmar Grom : for the huge job on giving IzPack the ability to add shortcuts to
-  the Windows operating system in a very elegant and portable way.
+  the Windows operating system in a very elegant and portable way as well as
+  some great work on the documentation.
 - Olexij Tkatchenko : for the Ukrainian language pack as well as the job on
   making IzPack able to execute some external executables scripts.
 - Piotr Bzdyl for the Polish language pack support.
@@ -45,7 +47,3 @@ IzPack for your projects ;-)
 - Harsan Peter for the Hungarian language pack.
 - Hiroki Akimoto for the Japanes language pack.
 - Gareth Cronin : for the Ant task fixes.
-- Hani Suleiman : for the MacOSX fixes.
-- Andrew De Torres : for the GUI frontend fixes.
-- Adam Barclay : for the improvements.
-- Franco Graziosi : for the Italian language pack.
