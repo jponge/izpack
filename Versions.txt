@@ -1,5 +1,15 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.0.8 (build 2003.xx.xx)
+
+- Packs OS-targeting (Fran Taylor).
+- OS selection improved accuracy (?).
+- The standard installers can now use the native look and feel if the
+  'useNativeLAF' resource is specified (nice feature especially with the
+  incoming JDK 1.4.2).
+- The standard installers get back the button icons and highlighting effects.
+
+
   > 3.0.7 (build 2003.04.04)
 
 - Slovakian langpack thanks to Milan Madzia.
