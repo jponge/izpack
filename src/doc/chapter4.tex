@@ -90,8 +90,15 @@ the shortcut panel. The format for this spec file is XML. It must be
 added to the installer as a resource. The source name of this
 specification does not matter, however its name when added to the
 installer must be \texttt{shortcutSpec.xml}. This is the name the
-ShortcutPanel looks for. If the specification file can not be found, the
+ShortcutPanel looks for, do not use a different name and do not a path
+to the name! If the specification file can not be found, the
 ShortcutPanel will not show at all.\\
+
+\textbf{Example}\\
+
+\footnotesize
+    <res src="C:\MyDocuments\Installer\MyShortcutSpec.xml" id="shortcutSpec.xml"/>
+\normalsize
 
 \subsection{Why Native Code to do the Job?}
 
@@ -205,6 +212,16 @@ The following attributes are used to define location:
 
 \subsection{Shortcut Attributes}
 
+There are three classes of attributes. Some are required, most are
+completely optional and some are semi-optional. The set of semi-optional
+attributes are all the attributes used to define the location of a
+shortcut. These are semi-optional because for any individual one it is
+your choice if you want to include it or not. However they are not
+completely optional. You must specify at least one location. If all were
+omitted, the instruction would essentially tell the panel that a copy of
+this shortcut is to be placed at no location. In other words no copy is
+to be placed anywhere.
+
 \textbf{name} \texttt{- required}\\
 
 The value of this attribute defines the name that the shortcut will
@@ -283,31 +300,31 @@ minimized, there are buttons for both windows in the task bar. Using
 \texttt{noShow} will completely eliminate this effect, only the Java
 application window will be visible.\\
 
-\textbf{programGroup} \texttt{- optional}\\
+\textbf{programGroup} \texttt{- semi-optional}\\
 
 The value for this attribute can be either yes or no. Any other value
 will be interpreted as no. If the value is yes, then a copy of this
 shortcut will be placed in the group menu.\\
 
-\textbf{desktop} \texttt{- optional}\\
+\textbf{desktop} \texttt{- semi-optional}\\
 
 For this attribute the value should also be yes or no. If the value is
 yes, then a copy of the shortcut is placed on the desktop.\\
 
-\textbf{applications} \texttt{- optional}\\
+\textbf{applications} \texttt{- semi-optional}\\
 
 This is also a yes/no attribute. If the value is yes, then a copy of the
 shortcut is placed in the applications menu (if the target operating
 system supports this). This is the same location as the applications
 choice for the program group.\\
 
-\textbf{startMenu} \texttt{- optional}\\
+\textbf{startMenu} \texttt{- semi-optional}\\
 
 This is a yes/no attribute as well. If the value is yes, then a copy of
 the shortcut is placed directly in the top most menu that is available
 for placing application shortcuts.\\
 
-\textbf{startup} \texttt{- optional}\\
+\textbf{startup} \texttt{- semi-optional}\\
 
 This is also a yes/no attribute. If the value is yes, then a copy of the
 shortcut is placed in a location where all applications get automatically
@@ -326,6 +343,14 @@ one of the packs for which the shortcut should be created. You do not
 need to list all packs if a shortcut should always be created. In this
 case simply omit this tag altogether.\\
 
+\textbf{A word of caution}\\
+
+For any shortcut that is always created, I would recommend to omit this
+tag, since I have seen a number of problems related to changing pack
+names. You can save yourself some troubleshooting and some Aspirin by
+not using this feature if it's not required. On the other hand if you
+need it I would advise to be very careful about changing pack names.\\
+
 \subsection{Summary}
 
 \textbf{Native Libraries}
@@ -334,7 +359,7 @@ case simply omit this tag altogether.\\
 \end{itemize}\
 
 \textbf{Name of Specification File}\\
-shortcutSpec.xml\\
+\texttt{shortcutSpec.xml}\\
 
 \textbf{Specification File Layout}
 \footnotesize
@@ -564,3 +589,82 @@ The drawback here is the same as with the command line parameters: the
 way of setting these might vary between operating systems. The best way
 seems to be using a property file that contains the configuration
 data.\\
+
+\section{Trouble Shooting}
+
+It has been some time since I wrote this chapter during which a good
+number of users had a chance to gather experience. Unfortunately I
+never know how many have used it successfully without much difficulty. I
+only hear from those that have encountered one problem or another. The
+type of problems that I have seen prompted me to write this section,
+because I think it will help you in locating most problems that you might
+encounter or at least give you some idea where the problem might be
+located.\\
+
+\subsection{Problems You Can Solve}
+
+If you see an exception that essentially says that a library can not be
+loaded (ShellLink.dll) you have an easy problem to deal with. Your
+installer file is probably missing the native tag that adds the Windows
+dll to the installer or something with this tag is no quite right. Read
+'What to Add to the Installer' for all details on this topic.\\
+
+Most other problems cause the ShortcutPanel not to show at all during
+the installation process. The reason is simply that the ShortcutPanel
+skips if it does not know what to do or if it has nothing to do (no
+point showing then and confusing the user). The problem is that this is
+not always what you intended. In the most simple but not so uncommon
+case the ShortcutPanel cannot find the spec file. This can be caused by
+a number of reasons. The associated resource tag might be missing in the
+installer specification, the target file name might be misspelled (the
+name you specify for the \texttt{id} attribute) or the target file name
+has a path or package name prepended. Just use
+\\texttt{shortcutSpec.xml} and nothing else, just as described in 'What
+to Add to the Installer'. You can always verify if this part is ok by
+inspecting the content of the installer *.jar file. The file
+shortcutSpec.xml should be located in the directory \texttt{res}. This
+inspection can be performed with any zip tool. If the file is not there,
+first correct this before proceeding.\\
+
+If the file is there and the panel does not show you have a problem
+within the specification file. In most cases that I have seen, it comes
+down to a spelling mistake of an attribute or tag name. You just have to
+carefully make sure that everything is spelled correctly. Don't forget
+that all names are case sensitive! In a few cases it has also turned out
+that required or semi-optional attributes are omitted, so you might want
+to verify if all attributes that you need are actually supplied.\\
+
+If everything is correct up to this point the problem becomes more
+elusive.  Most likely the panel does not show because it is instructed
+not to show. There are be several possible reasons for this. The simple
+case is that no location has been specified for the shortcuts in your
+installation. This can happen if all five location attributes are
+omitted or if all the ones that are listed are set to \texttt{no}.
+Remember, you must specify at least one location for every shortcut. If
+this is also correct, you might have used the <creatForPack> tag. Review
+the details in 'Selective Creation of Shortcuts'. One possibility for
+the panel not to show is that based on the packs that are actually
+selected for installation no shortcut qualifies for creation. In this
+case the panel will not show, this is perfectly normal behavior. More
+likely this condition is true because of some accident and not because
+it's intended. Make sure the packs that you list for the shortcut are
+actually defined in your installation and verify that they are all
+spelled correctly. Remember: case matters! Did the ShortcutPanel use to
+work in your installation and all of a sudden stopped working? Very
+likely you are dealing with the last problem. A package name might have
+been modified and the shortcut spec was not adjusted to stay in synch.\\
+
+\subsection{Problems That Have No Solution (yet)}
+
+Unfortunately one problem has been very persistent and only recently one
+user found the reason. The problem occurs when installing on some target
+systems where non-English characters are used in the storage path for
+the shortcuts. The problem is that these characters don't seem to be
+properly translated across the Java Native Interface. This leads to a
+situation where the proper path can not be located and the shortcut
+creation fails. I write 'some target systems' because it does not fail
+everywhere. After much agonizing over this problem, one user found the
+solution: The shortcut creation works fine if a Sun virtual machine is
+installed, but fails if a version from IBM happens to be installed. So
+far I have no solution for this problem but I am trying to find a
+workaround the problem.\\
