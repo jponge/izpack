@@ -36,6 +36,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import net.n3.nanoxml.XMLElement;
 
@@ -173,6 +174,15 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
   {
     // TODO: make it colored
     this.outputPane.append(message + '\n');
+    
+    SwingUtilities.invokeLater(new Runnable() 
+      {
+        public void run()
+        {
+          outputPane.setCaretPosition(outputPane.getText().length());
+        }
+      }
+    );
   }
 
   /**
