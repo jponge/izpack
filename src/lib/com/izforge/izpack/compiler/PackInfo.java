@@ -62,9 +62,9 @@ public class PackInfo
   private List updateChecks = new ArrayList();
 
   /** Constructor with required info. */
-  protected PackInfo(String name, String description, boolean required)
+  protected PackInfo(String name, String id, String description, boolean required)
   {
-    pack = new Pack(name, description, null, required, true);
+    pack = new Pack( name, id, description, null, required, true);
   }
   
   /* **********************************************************************

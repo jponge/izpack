@@ -350,10 +350,11 @@ public class Compiler extends Thread
 
       // Trivial initialisations
       String name = requireAttribute(el, "name");
+	  String id = el.getAttribute("id");
       String description = requireChildNamed(el, "description").getContent();
       boolean required = requireYesNoAttribute(el, "required");
 
-      PackInfo pack = new PackInfo(name, description, required);
+      PackInfo pack = new PackInfo(name, id, description, required);
       pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO: unverified
       pack.setPreselected(validateYesNoAttribute(el, "preselected", YES));
 
