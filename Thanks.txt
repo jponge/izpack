@@ -45,3 +45,7 @@ IzPack for your projects ;-)
 - Harsan Peter for the Hungarian language pack.
 - Hiroki Akimoto for the Japanes language pack.
 - Gareth Cronin : for the Ant task fixes.
+- Hani Suleiman : for the MacOSX fixes.
+- Andrew De Torres : for the GUI frontend fixes.
+- Adam Barclay : for the improvements.
+- Franco Graziosi : for the Italian language pack.

@@ -1,5 +1,17 @@
 [ The list of the different public versions of IzPack ]
 
+    > 3.1.0 pre1 (build 2002.09.21)
+
+- When InstallPanel was the last panel, it unlocked the next button and this was
+  of course not the desired behaviour.
+- ImgPacksPanel and PacksPanel can now display the total disk space required 
+  (Adam Barclay for this task).
+- MacOSX GUI fix thanks to Hani Suleiman.
+- GUI Frontend fixes by Andrew De Torres.
+- Support for files overriding behaviour (override or keep old version if 
+  present) by Adam Barclay.
+- New Italian langpack thanks to Franco Graziosi.
+
     > 3.0.0 (build 2002.08.13)
 
 - First stable release of the 3.x series ;-)
