@@ -45,6 +45,7 @@
 
     <str id="PacksPanel.info" txt="Seleccione los paquetes que desea instalar:"/>
     <str id="PacksPanel.tip" txt="Nota: los paquetes en gris no son opcionales."/>
+    <str id="PacksPanel.space" txt="Espacio total requerido: "/>
 
     <str id="InstallPanel.info" txt="Haga clic en ¡Instalar! para iniciar el proceso de instalación"/>
     <str id="InstallPanel.install" txt="¡Instalar!"/>
@@ -95,4 +96,3 @@
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>
-

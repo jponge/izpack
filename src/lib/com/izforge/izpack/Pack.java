@@ -63,19 +63,19 @@ public class Pack implements Serializable
      {
          if (bytes < KILOBYTES)
          {    
-             return String.valueOf(bytes) + "bytes";  
+             return String.valueOf(bytes) + " bytes";  
          } else if (bytes < (MEGABYTES)) 
          {  
              double value = bytes / KILOBYTES;  
-             return formatter.format(value) + "KB";  
+             return formatter.format(value) + " KB";  
          } else if (bytes < (GIGABYTES)) 
          {
              double value = bytes / MEGABYTES; 
-             return formatter.format(value) + "MB";   
+             return formatter.format(value) + " MB";   
          } else 
          { 
             double value = bytes / GIGABYTES;   
-            return formatter.format(value) + "GB";   
+            return formatter.format(value) + " GB";   
          }
      }
 

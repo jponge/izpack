@@ -98,7 +98,7 @@
   -->
 
   <!-- Compiler to use put your own here (jikes, modern, gcj, ...) -->
-  <property name="build.compiler" value="jikes" />
+  <!-- <property name="build.compiler" value="jikes" /> -->
   
   <!-- Define directories -->
   <property file="src/ant.properties"/>
@@ -439,7 +439,7 @@
                               
   <!-- Builds the Javadoc -->
   <target name="build.javadoc" depends="prepare">
-	<mkdir dir="${build.dir}/javadoc"/>
+    <mkdir dir="${build.dir}/javadoc"/>
     <javadoc destdir="${build.dir}/javadoc">
       <fileset dir="${src.dir}">
         <include name="com/izforge/izpack/installer/IzPanel.java"/>
