@@ -10,6 +10,7 @@
 - Italian langpack fixes (Fabrice Mirabille).
 - UserInputPanel: bug fixes by Per Abich (bugs #3233 and #3283).
 - Russian langpack fixes (Alexey Makhmutov).
+- ProcessPanel log file creation fix on Win32 (Anthony Xin Chen).
 
   > 3.7.0 (build 2004.01.11)
 

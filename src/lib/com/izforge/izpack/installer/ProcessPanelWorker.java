@@ -78,7 +78,7 @@ public class ProcessPanelWorker implements Runnable
   private Thread processingThread = null;
 
   private static PrintWriter logfile = null;
-  
+
   private String logfiledir = null;
 
   protected AutomatedInstallData idata;
@@ -132,15 +132,15 @@ public class ProcessPanelWorker implements Runnable
 
     if (!this.spec.hasChildren())
       return false;
-    
+
     // Handle logfile
     XMLElement lfd = spec.getFirstChildNamed("logfiledir");
     if( lfd != null)
     {
       logfiledir = lfd.getContent();
     }
-    
-    
+
+
     for (Iterator job_it = this.spec.getChildrenNamed("job").iterator();
       job_it.hasNext();
       )
@@ -214,7 +214,7 @@ public class ProcessPanelWorker implements Runnable
     return true;
   }
 
-  /** This is called when the processing thread is activated. 
+  /** This is called when the processing thread is activated.
    *
    * Can also be called directly if asynchronous processing is not
    * desired.
@@ -226,23 +226,23 @@ public class ProcessPanelWorker implements Runnable
     if( logfiledir != null )
     {
       logfiledir = IoHelper.translatePath(logfiledir,new VariableSubstitutor(idata.getVariables()));
-      
+
       File lf;
-      
+
       String appVersion = idata.getVariable("APP_VER");
-      
+
       if (appVersion != null)
-      	appVersion = "V"+appVersion;
+        appVersion = "V"+appVersion;
       else
-      	appVersion = "undef";
-      
+        appVersion = "undef";
+
       String identifier = DateFormat.getDateTimeInstance().format(new Date());
-      
-      identifier = identifier.replace('.', '-').replace(' ', '_').replace(':', '-');
-      
+
+      identifier = (appVersion + "_" + identifier).replace('.', '-').replace(' ', '_').replace(':', '-');
+
       try
       {
-        lf = File.createTempFile("Install_"+appVersion+"_"+identifier+"_", ".log", new File(logfiledir));
+        lf = File.createTempFile("Install_"+identifier+"_", ".log", new File(logfiledir));
         logfile = new PrintWriter(new FileOutputStream( lf ), true);
       }
       catch (IOException e)
@@ -451,7 +451,7 @@ public class ProcessPanelWorker implements Runnable
             this.handler.logOutput(line, stderr);
 
             // log output also to file given in ProcessPanelSpec
-            
+
             if( logfile != null )
               logfile.println( line);
 
@@ -466,7 +466,7 @@ public class ProcessPanelWorker implements Runnable
           this.handler.logOutput(ioe.toString(), true);
 
           // log errors also to file given in ProcessPanelSpec
-          
+
           if( logfile != null )
             logfile.println( ioe.toString());
 
