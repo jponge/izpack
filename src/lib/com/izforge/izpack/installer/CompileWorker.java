@@ -177,15 +177,24 @@ public class CompileWorker implements Runnable
    */
   public void run ()
   {
-    if (! collectJobs ())
+    try
     {
-      String[] dummy_command = { "no command" };
+      if (! collectJobs ())
+      {
+        String[] dummy_command = { "no command" };
 
-      this.result = new CompileResult (this.idata.langpack.getString ("CompilePanel.worker.nofiles"), dummy_command, "", "");
+        this.result = new CompileResult (this.idata.langpack.getString ("CompilePanel.worker.nofiles"), dummy_command, "", "");
+      }
+      else
+      {
+        this.result = compileJobs ();
+      }      
     }
-    else
+    catch (Exception e)
     {
-      this.result = compileJobs ();
+      this.result = new CompileResult ();
+      this.result.setStatus (CompileResult.FAILED);
+      this.result.setAction (CompileResult.ACTION_ABORT);
     }
 
     this.handler.stopAction ();
@@ -300,6 +309,7 @@ public class CompileWorker implements Runnable
    * Parse the compilation specification file and create jobs.
    */
   private boolean collectJobs ()
+    throws Exception
   {
     XMLElement data = this.spec.getFirstChildNamed ("jobs");
 
@@ -367,6 +377,7 @@ public class CompileWorker implements Runnable
 
   
   private CompilationJob collectJobsRecursive (XMLElement node, ArrayList classpath)
+    throws Exception
   {
     Enumeration toplevel_tags = node.enumerateChildren ();
     ArrayList ourclasspath = (ArrayList)classpath.clone ();
@@ -455,10 +466,24 @@ public class CompileWorker implements Runnable
 
   /** helper: process a <code>&lt;classpath&gt;</code> tag. */
   private void changeClassPath (ArrayList classpath, XMLElement child)
+    throws Exception
   {
     String add = child.getAttribute ("add");
     if (add != null)
-      classpath.add (this.vs.substitute (add, "plain"));
+    {
+      add = this.vs.substitute (add, "plain");
+      if (! new File (add).exists ())
+      {
+        if (! this.handler.emitWarning("Invalid classpath", 
+          "The path "+add+" could not be found.\nCompilation may fail."))
+          throw new Exception ("Classpath "+add+" does not exist.");
+      }
+      else
+      {
+        classpath.add (this.vs.substitute (add, "plain"));        
+      }
+      
+    }
 
     String sub = child.getAttribute ("sub");
     if (sub != null)
@@ -474,6 +499,7 @@ public class CompileWorker implements Runnable
       while (cpidx >= 0);
 
     }
+    
   }
 
   /** helper: recursively scan given directory.
