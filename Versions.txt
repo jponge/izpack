@@ -18,10 +18,11 @@
 - New Malaysian langpack (Redhuan Daniel Oon).
 - Various other translations updates.
 - System properties can now be used as variables (Borje Jonsson).
-- New Norwegian langpack (?).
+- New Norwegian langpack (Mohammed Sourouri).
 - New Chinese langpack (Xi Ping Wang).
 - The language selection box will now appear in the Windows tasks list (Harald
-  Süpfle)
+  Süpfle).
+- Spanish langpack update (David Perez Carmona).
 
   > 3.6.1 (build 2004.xx.yy)
 
