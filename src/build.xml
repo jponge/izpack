@@ -120,8 +120,8 @@
 
   <!-- Define directories -->
   <property file="src/ant.properties"/>
-  <property name="ver" value="3.0" />
-  <property name="rel" value="9" />
+  <property name="ver" value="3.1" />
+  <property name="rel" value="0" />
 
   <property name="src.dir" value="${basedir}/src/lib" />
   <property name="img.dir" value="${basedir}/src/img" />
@@ -286,19 +286,19 @@
   <!-- Package installer.jar -->
   <target name="installer.manifest">
     <manifest file="${installer.manifest}">
-        <attribute name="Built-By" value="IzPack"/>
-        <attribute name="Class-Path" value=""/>
-        <attribute name="Main-Class" value="com.izforge.izpack.installer.Installer"/>
-        <section name="com/izforge/izpack/installer/">
-            <attribute name="Specification-Title" value="IzPack installer" />
-            <attribute name="Specification-Version" value="${rel}" />
-            <attribute name="Specification-Vendor" value="IzPack." />
-            <attribute name="Implementation-Title" value="IzPack installer" />
-            <attribute name="Implementation-Version" value="${ver}" />
-            <attribute name="Implementation-Vendor" value="IzPack." />
-        </section>
-      </manifest>
-    </target>
+      <attribute name="Built-By" value="IzPack"/>
+      <attribute name="Class-Path" value=""/>
+      <attribute name="Main-Class" value="com.izforge.izpack.installer.Installer"/>
+      <section name="com/izforge/izpack/installer/">
+          <attribute name="Specification-Title" value="IzPack installer" />
+          <attribute name="Specification-Version" value="${rel}" />
+          <attribute name="Specification-Vendor" value="IzPack." />
+          <attribute name="Implementation-Title" value="IzPack installer" />
+          <attribute name="Implementation-Version" value="${ver}" />
+          <attribute name="Implementation-Vendor" value="IzPack." />
+      </section>
+    </manifest>
+  </target>
   <target name="build.installer" depends="compile.installer, installer.manifest">
     <echo message="Build ${installer.jar}"/>
     <delete file="${installer.jar}" verbose="true" />
@@ -579,8 +579,8 @@
   </target>
 
   <!-- Builds all compilation targets -->
-  <target name="all" depends="build.compiler,build.standalone-compiler,
-        build.installer,build.uninstaller,build.frontend,build.panels"/>
+  <target name="all" depends="build.compiler,build.installer,build.uninstaller,
+          build.frontend,build.panels,build.standalone-compiler"/>
 
   <!-- Builds the Javadoc -->
   <target name="build.javadoc" depends="prepare">

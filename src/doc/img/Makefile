@@ -27,7 +27,7 @@ all:	$(DESTFILES)
 
 .PHONY: clean
 clean:
-	rm $(DESTFILES)
+	rm -f $(DESTFILES)
 
 %.png:	%.eps
 	convert $< $@

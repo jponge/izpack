@@ -120,7 +120,7 @@ public abstract class Packager
 
     if (skeleton_is == null)
     {
-      skeleton_is = new JarInputStream (new FileInputStream (
+      skeleton_is = new ZipInputStream (new FileInputStream (
         Compiler.IZPACK_HOME + "lib" + File.separator + "installer.jar"));    
     }
     
