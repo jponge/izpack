@@ -39,11 +39,19 @@ public class Installer
    */
   public static void main(String[] args)
   {
+	// OS X tweakings
+	if (System.getProperty("mrj.version") != null)
+	{
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "IzPack");
+		System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
+		System.setProperty("com.apple.mrj.application.live-resize", "true");
+	}
+  
     try
     {
       if(args.length == 0) {
         // can't load the GUIInstaller class on headless machines,
-        // so we use Class.forName to force lazy loading. 
+        // so we use Class.forName to force lazy loading.
         Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
       } else {
         new AutomatedInstaller(args[0]);

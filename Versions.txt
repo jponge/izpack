@@ -20,7 +20,7 @@
 - Properties can be substituted at compile time from the environment,
   command line, java properties, ant, or <property> tag (Chad McHenry).
 - New Turkish langpack (Levent Bayindir).
-
+- Mac OS X: better Swing integration.
 
   > 3.7.2 (build N/A)
 

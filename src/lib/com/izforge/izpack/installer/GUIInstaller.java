@@ -405,8 +405,8 @@ public class GUIInstaller extends InstallerBase
      */
     public LanguageDialog(JFrame frame, Object[] items)
     {
-      super(frame);
-
+	  super(frame);
+	  
       try
       {
         loadLookAndFeel();
