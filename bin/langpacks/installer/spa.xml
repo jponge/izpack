@@ -37,6 +37,9 @@
 
     <str id="InfoPanel.info" txt="Por favor, lea la siguiente información:"/>
 
+    <str id="PathInputPanel.required" txt="El directorio seleccionado debe existir."/>
+    <str id="PathInputPanel.notValid" txt="El directorio seleccionado no contiene el producto requerido."/>
+
     <str id="TargetPanel.info" txt="Seleccione la ruta de instalación:"/>
     <str id="TargetPanel.browse" txt="Escoger ..."/>
     <str id="TargetPanel.warn"
@@ -44,11 +47,26 @@
     <str id="TargetPanel.empty_target"
          txt="¡Ha hecho una designación sin nombre! ¿Desea hacerlo así?"/>
 	<str id="TargetPanel.createdir" txt="El directorio será creado:" />
+    <str id="TargetPanel.nodir"
+         txt="¡No ha seleccionado un directorio! Por favor, seleccione un directorio."/>
+    <str id="TargetPanel.notwritable"
+         txt="¡El directorio no tiene permisos de escritura! Por favor, seleccione otro directorio."/>
+
+    <str id="JDKPathPanel.intro" txt="Esta aplicación necesita una JDK. No es suficiente con un entorno de ejecución de java (JRE)."/>
+    <str id="JDKPathPanel.info" txt="Seleccione la ruta a la JDK:"/>
+    <str id="JDKPathPanel.badVersion1" txt="La versión de la JDK seleccionada es incorrecta (disponible: "/>
+    <str id="JDKPathPanel.badVersion2" txt=" requerida: "/>
+    <str id="JDKPathPanel.badVersion3" txt="). ¿Desea usar esta JDK de todos modos?"/>
 
     <str id="PacksPanel.info" txt="Seleccione los paquetes que desea instalar:"/>
     <str id="PacksPanel.tip" txt="Nota: los paquetes en gris no son opcionales."/>
     <str id="PacksPanel.space" txt="Espacio total requerido: "/>
+    <str id="PacksPanel.freespace" txt="Espacio disponible: "/>
     <str id="PacksPanel.description" txt="Description"/>
+    <str id="PacksPanel.dependencyList" txt="El paquete seleccionado requiere la instalación de los siguientes paquetes"/>
+    <str id="ImgPacksPanel.dependencyList" txt="Dependencias"/>
+        <str id="PacksPanel.notEnoughSpace" txt="El espacio de disco requerido por la instalación excede el espacio disponible."/>
+    <str id="PacksPanel.notAscertainable" txt="no averiguable"/>
 
     <str id="InstallPanel.info" txt="Haga clic en ¡Instalar! para iniciar el proceso de instalación"/>
     <str id="InstallPanel.install" txt="¡Instalar!"/>
@@ -99,6 +117,9 @@
     <str id="ShortcutPanel.location.applications" txt="Menú de aplicaciones"/>
     <str id="ShortcutPanel.location.startMenu"    txt="Menú de inicio"/>
     <str id="ShortcutPanel.location.startup"      txt="Grupo de inicio"/>
+
+    <str id="UserInputPanel.error.caption"        txt="Problema en los valores de entrada"/>
+    <str id="UserInputPanel.search.autodetect"    txt="Detectar automáticamente"/>
 
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
     <str id="UserInputPanel.search.autodetect.failed.message"    txt="Autodetección ha fallado."/>
