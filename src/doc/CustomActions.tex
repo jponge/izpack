@@ -83,11 +83,11 @@ and at uninstallation time. The interfaces are:
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline \textit{Custom action type} & \textit{Interface name} \\
-\hline Packaging & com.izforge.izpack.compiler.CompilerListener \\
+\hline Packaging & com.izforge.izpack.event.CompilerListener \\
 \hline
-\hline Installation & com.izforge.izpack.installer.InstallerListener \\
+\hline Installation & com.izforge.izpack.event.InstallerListener \\
 \hline
-\hline Uninstallation & com.izforge.izpack.uninstaller.UninstallerListener \\
+\hline Uninstallation & com.izforge.izpack.event.UninstallerListener \\
 \hline
 \end{tabular}\
 \end{center}
@@ -243,8 +243,8 @@ using Ant. Of course, it works also with the standalone compiler.
 \subsection{\label{sec:caPackaging}Custom Actions at Packaging (CompilerListener)}
 
 \begin{itemize}
-  \item Implement \texttt{com.izforge.izpack.compiler.CompilerListener} or
-  extend \texttt{com.izforge.izpack.compiler.SimpleCompilerListener}.
+  \item Implement \texttt{com.izforge.izpack.event.CompilerListener} or
+  extend \texttt{com.izforge.izpack.event.SimpleCompilerListener}.
   Place it as \texttt{[IzPackRoot]/src/lib/[MyPackagePath]/MyCompilerListener.java}.
 
   \item Add a "compile.simple" antcall in to \texttt{[IzPackRoot]/src/build.xml}.
