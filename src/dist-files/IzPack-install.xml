@@ -78,6 +78,14 @@
         <res src="doc-nanoxml.png" id="ImgPacksPanel.img.3" />
         <res src="sample.png" id="ImgPacksPanel.img.4" />
         <res src="src.png" id="ImgPacksPanel.img.5" />
+        <res src="border1.png" id="Installer.image.0"/>
+        <res src="border2.png" id="Installer.image.1"/>
+        <res src="border3.png" id="Installer.image.2"/>
+        <res src="border4.png" id="Installer.image.3"/>
+        <res src="border5.png" id="Installer.image.4"/>
+        <res src="border6.png" id="Installer.image.5"/>
+        <res src="border7.png" id="Installer.image.6"/>
+        <res src="border8.png" id="Installer.image.7"/>
     </resources>
 
     <!-- The panels in a classic order -->
