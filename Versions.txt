@@ -45,6 +45,8 @@
   (bug #2713).
 - Installers: avoid showing an empty JFrame behind the languages selection
   dialog (observed on X11).
+- UserInputPanel: the autodetect button is hidden if not needed 
+  (Michael Hagedorn).
 
   > 3.6.1 (build 2004.10.09)
 

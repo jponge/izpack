@@ -85,5 +85,6 @@ IzPack for your projects ;-)
 - Xi Ping Wang : for the Chinese translation.
 - Filip Brcic : for the Serbian translation.
 - Marc Eppelmann : for the Unix shortcuts support.
+- Michael Hagedorn : for the UserInputPanel fixes.
 
 # vim: fileformat=dos

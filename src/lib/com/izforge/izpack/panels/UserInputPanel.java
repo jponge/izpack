@@ -233,7 +233,7 @@ public class UserInputPanel extends IzPanel
 
   private static final String PACKS                         = "createForPack";
   private static final String NAME                          = "name";
-  
+
   private static final String OS = "os";
   private static final String FAMILY = "family";
 
@@ -428,14 +428,14 @@ public class UserInputPanel extends IzPanel
     if (spec == null)
     {
       // TODO: translate
-      emitError("User input specification could not be found.", 
+      emitError("User input specification could not be found.",
           "The specification for the user input panel could not be found. Please contact the packager.");
       parentFrame.skipPanel();
     }
-    
+
     Vector forPacks = spec.getChildrenNamed (PACKS);
     Vector forOs = spec.getChildrenNamed(OS);
-    
+
     if (!itemRequiredFor (forPacks) || !itemRequiredForOs(forOs))
     {
       parentFrame.skipPanel ();
@@ -470,15 +470,15 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   public void makeXMLData (XMLElement panelRoot)
   {
-		Map entryMap = new HashMap();
+                Map entryMap = new HashMap();
 
-		for (int i = 0; i < entries.size (); i++)
-		{
-			TextValuePair pair = (TextValuePair)entries.elementAt(i);
-			entryMap.put( pair.toString(), pair.getValue() );
-		}
+                for (int i = 0; i < entries.size (); i++)
+                {
+                        TextValuePair pair = (TextValuePair)entries.elementAt(i);
+                        entryMap.put( pair.toString(), pair.getValue() );
+                }
 
-		new UserInputPanelAutomationHelper(entryMap).makeXMLData(idata, panelRoot);
+                new UserInputPanelAutomationHelper(entryMap).makeXMLData(idata, panelRoot);
   }
 
  /*--------------------------------------------------------------------------*/
@@ -498,14 +498,14 @@ public class UserInputPanel extends IzPanel
       {
         try
         {
-        	if (uiElement [POS_DISPLAYED] == null || uiElement [POS_DISPLAYED].toString().equals("false"))
-        	{
-				add ((JComponent)uiElement [POS_FIELD], uiElement [POS_CONSTRAINTS]);
-        	}
-			uiElement [POS_DISPLAYED] = Boolean.valueOf(true);
-			uiElements.remove(i);
-			uiElements.add(i, uiElement);
-          
+                if (uiElement [POS_DISPLAYED] == null || uiElement [POS_DISPLAYED].toString().equals("false"))
+                {
+                                add ((JComponent)uiElement [POS_FIELD], uiElement [POS_CONSTRAINTS]);
+                }
+                        uiElement [POS_DISPLAYED] = Boolean.valueOf(true);
+                        uiElements.remove(i);
+                        uiElements.add(i, uiElement);
+
         }
         catch (Throwable exception)
         {
@@ -514,20 +514,20 @@ public class UserInputPanel extends IzPanel
       }
       else
       {
-      	try
-      	{
-			if (uiElement [POS_DISPLAYED] != null && uiElement [POS_DISPLAYED].toString().equals("true"))
-			{
-				remove((JComponent)uiElement [POS_FIELD]);				
-			}
-      	}
-		catch (Throwable exception)
-		{
-			System.out.println ("Internal format error in field: " + uiElement [POS_TYPE].toString ());  // !!! logging
-		}
+        try
+        {
+                        if (uiElement [POS_DISPLAYED] != null && uiElement [POS_DISPLAYED].toString().equals("true"))
+                        {
+                                remove((JComponent)uiElement [POS_FIELD]);
+                        }
+        }
+                catch (Throwable exception)
+                {
+                        System.out.println ("Internal format error in field: " + uiElement [POS_TYPE].toString ());  // !!! logging
+                }
         uiElement [POS_DISPLAYED] = Boolean.valueOf(false);
-		uiElements.remove(i);
-		uiElements.add(i, uiElement);
+                uiElements.remove(i);
+                uiElements.add(i, uiElement);
       }
     }
   }
@@ -752,7 +752,7 @@ public class UserInputPanel extends IzPanel
   private void addRuleField (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     XMLElement      element       = spec.getFirstChildNamed (SPEC);
     String          variable      = spec.getAttribute (VARIABLE);
     RuleInputField  field         = null;
@@ -763,11 +763,11 @@ public class UserInputPanel extends IzPanel
     String          format;
     String          validator     = null;
     String          message       = null;
-	boolean         hasParams        = false;
-	String          paramName        = null;
-	String          paramValue       = null;
-	HashMap         validateParamMap = null;
-	Vector          validateParams   = null;
+        boolean         hasParams        = false;
+        String          paramName        = null;
+        String          paramValue       = null;
+        HashMap         validateParamMap = null;
+        Vector          validateParams   = null;
     String          processor     = null;
     int             resultFormat  = RuleInputField.DISPLAY_FORMAT;
 
@@ -935,19 +935,19 @@ public class UserInputPanel extends IzPanel
     {
       return (true);
     }
-	
+
     boolean success = ruleField.validateContents ();
     if (!success)
     {
-    	String message = "";
-    	try{
-    		message = langpack.getString( (String)field [POS_MESSAGE]);
-    		if (message.equals("")){
-    			message = (String)field [POS_MESSAGE];
-    		}
-    	}catch (Throwable t){
-			message = (String)field [POS_MESSAGE];
-    	}
+        String message = "";
+        try{
+                message = langpack.getString( (String)field [POS_MESSAGE]);
+                if (message.equals("")){
+                        message = (String)field [POS_MESSAGE];
+                }
+        }catch (Throwable t){
+                        message = (String)field [POS_MESSAGE];
+        }
       JOptionPane.showMessageDialog (parentFrame,
                                      message,
                                      parentFrame.langpack.getString ("UserInputPanel.error.caption"),
@@ -970,7 +970,7 @@ public class UserInputPanel extends IzPanel
   private void addTextField (XMLElement spec)
   {
     Vector      forPacks = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     XMLElement  element  = spec.getFirstChildNamed (SPEC);
     JLabel      label;
     String      set;
@@ -1097,7 +1097,7 @@ public class UserInputPanel extends IzPanel
   private void addComboBox (XMLElement spec)
   {
     Vector        forPacks  = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     XMLElement    element   = spec.getFirstChildNamed (SPEC);
     String        variable  = spec.getAttribute (VARIABLE);
     TextValuePair listItem  = null;
@@ -1120,51 +1120,51 @@ public class UserInputPanel extends IzPanel
 
       for (int i = 0; i < choices.size (); i++)
       {
-      	String processorClass = ((XMLElement)choices.elementAt (i)).getAttribute("processor");
-      	
-      	if (!"".equals(processorClass))
-      	{
-			String choiceValues = "";
-      		try
-      		{
-				choiceValues = ((Processor) Class.forName(processorClass).newInstance()).process(null);
-      		}
-      		catch (Throwable t)
-      		{
-      			t.printStackTrace();
-      		}
-			String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
-			if (set == null)
-			{
-				set = "";
-			}
-      		StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");  
-      		int counter = 0;    		
-      		while (tokenizer.hasMoreTokens()){
-      			String token = tokenizer.nextToken();
-      			listItem = new TextValuePair(token, token);
-      			field.addItem(listItem);
-				if (set.equals(token)){
-					field.setSelectedIndex (field.getItemCount()-1);
-				}
-      			counter++;
-      		}      		
-      	}
-      	else
-      	{
-        	listItem = new TextValuePair (getText ((XMLElement)choices.elementAt (i)),
-            	                          ((XMLElement)choices.elementAt (i)).getAttribute (COMBO_VALUE));
-			field.addItem (listItem);
-			String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
-			if (set != null)
-			{
-			  if (set.equals (TRUE))
-			  {
-				field.setSelectedIndex (i);
-			  }
-			}
-      	}
-        
+        String processorClass = ((XMLElement)choices.elementAt (i)).getAttribute("processor");
+
+        if (!"".equals(processorClass))
+        {
+                        String choiceValues = "";
+                try
+                {
+                                choiceValues = ((Processor) Class.forName(processorClass).newInstance()).process(null);
+                }
+                catch (Throwable t)
+                {
+                        t.printStackTrace();
+                }
+                        String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
+                        if (set == null)
+                        {
+                                set = "";
+                        }
+                StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
+                int counter = 0;
+                while (tokenizer.hasMoreTokens()){
+                        String token = tokenizer.nextToken();
+                        listItem = new TextValuePair(token, token);
+                        field.addItem(listItem);
+                                if (set.equals(token)){
+                                        field.setSelectedIndex (field.getItemCount()-1);
+                                }
+                        counter++;
+                }
+        }
+        else
+        {
+                listItem = new TextValuePair (getText ((XMLElement)choices.elementAt (i)),
+                                          ((XMLElement)choices.elementAt (i)).getAttribute (COMBO_VALUE));
+                        field.addItem (listItem);
+                        String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
+                        if (set != null)
+                        {
+                          if (set.equals (TRUE))
+                          {
+                                field.setSelectedIndex (i);
+                          }
+                        }
+        }
+
 
 
       }
@@ -1257,7 +1257,7 @@ public class UserInputPanel extends IzPanel
   private void addRadioButton (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     String                variable    = spec.getAttribute (VARIABLE);
     String                value       = null;
 
@@ -1383,7 +1383,7 @@ public class UserInputPanel extends IzPanel
   private void addPasswordField (XMLElement spec)
   {
     Vector        forPacks  = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     String        variable  = spec.getAttribute (VARIABLE);
     String        validator = null;
     String        message   = null;
@@ -1533,7 +1533,7 @@ public class UserInputPanel extends IzPanel
   private void addCheckBox (XMLElement spec)
   {
     Vector      forPacks    = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     String      label       = "";
     String      set         = null;
     String      trueValue   = null;
@@ -1656,7 +1656,7 @@ public class UserInputPanel extends IzPanel
   private void addSearch (XMLElement spec)
   {
     Vector        forPacks    = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     XMLElement    element     = spec.getFirstChildNamed (SPEC);
     String        variable    = spec.getAttribute (VARIABLE);
     String        filename    = null;
@@ -1723,7 +1723,7 @@ public class UserInputPanel extends IzPanel
       filename = element.getAttribute (SEARCH_FILENAME);
 
       check_filename = element.getAttribute (SEARCH_CHECKFILENAME);
-      
+
       Vector choices = element.getChildrenNamed (SEARCH_CHOICE);
 
       if (choices == null)
@@ -1734,10 +1734,10 @@ public class UserInputPanel extends IzPanel
       for (int i = 0; i < choices.size (); i++)
       {
         XMLElement choice_el = (XMLElement)choices.elementAt (i);
-        
-        if (! OsConstraint.oneMatchesCurrentSystem(element))
+
+        if (! OsConstraint.oneMatchesCurrentSystem(choice_el))
           continue;
-        
+
         String value = choice_el.getAttribute (SEARCH_VALUE);
 
         combobox.addItem (value);
@@ -1777,21 +1777,22 @@ public class UserInputPanel extends IzPanel
     eastconstraint1.position  = TwoColumnConstraints.EAST;
 
     StringBuffer tooltiptext = new StringBuffer ();
-    
+
     if ((filename != null) && (filename.length() > 0))
     {
       tooltiptext.append (
-        MessageFormat.format (parentFrame.langpack.getString ("UserInputPanel.search.location"), 
+        MessageFormat.format (parentFrame.langpack.getString ("UserInputPanel.search.location"),
             new String[] { filename} ));
     }
-    
-    if ((check_filename != null) && (check_filename.length() > 0))
+
+    boolean showAutodetect = (check_filename != null) && (check_filename.length() > 0);
+    if (showAutodetect)
     {
-      tooltiptext.append (          
-        MessageFormat.format (parentFrame.langpack.getString ("UserInputPanel.search.location.checkedfile"), 
+      tooltiptext.append (
+        MessageFormat.format (parentFrame.langpack.getString ("UserInputPanel.search.location.checkedfile"),
           new String[] { check_filename } ));
     }
-    
+
     if (tooltiptext.length() > 0)
       combobox.setToolTipText (tooltiptext.toString());
 
@@ -1801,6 +1802,7 @@ public class UserInputPanel extends IzPanel
     buttonPanel.setLayout (new com.izforge.izpack.gui.FlowLayout (com.izforge.izpack.gui.FlowLayout.LEADING));
 
     JButton autodetectButton = ButtonFactory.createButton (parentFrame.langpack.getString ("UserInputPanel.search.autodetect"), idata.buttonsHColor);
+    autodetectButton.setVisible(showAutodetect);
 
     autodetectButton.setToolTipText (parentFrame.langpack.getString ("UserInputPanel.search.autodetect.tooltip"));
 
@@ -1874,7 +1876,7 @@ public class UserInputPanel extends IzPanel
   private void addText (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
 
     addDescription (spec, forPacks, forOs);
   }
@@ -1890,7 +1892,7 @@ public class UserInputPanel extends IzPanel
   private void addSpace (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     JPanel panel    = new JPanel ();
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
@@ -1910,7 +1912,7 @@ public class UserInputPanel extends IzPanel
   private void addDivider (XMLElement spec)
   {
     Vector forPacks   = spec.getChildrenNamed (PACKS);
-	Vector forOs = spec.getChildrenNamed(OS);
+        Vector forOs = spec.getChildrenNamed(OS);
     JPanel panel      = new JPanel ();
     String alignment  = spec.getAttribute (ALIGNMENT);
 
@@ -2184,7 +2186,7 @@ public class UserInputPanel extends IzPanel
 
     return (result);
   }
-  
+
   /**
    * Verifies if an item is required for the operating system the installer executed.
    * The configuration for this feature is:
@@ -2193,44 +2195,44 @@ public class UserInputPanel extends IzPanel
   * <br><br>
   * <b>Note:</b><br>
   * If the list of the os is empty then <code>true</code> is always
-  * returnd. 
+  * returnd.
   *
-  * @param os The <code>Vector</code> of <code>String</code>s. containing 
+  * @param os The <code>Vector</code> of <code>String</code>s. containing
   * the os names
   *
-  * @return    <code>true</code> if the item is required for the os, otherwise 
+  * @return    <code>true</code> if the item is required for the os, otherwise
   * returns <code>false</code>.
    */
   public boolean itemRequiredForOs(Vector os)
-  {  	
-	if (os.size () == 0)
-	{
-	  return true;
-	}
+  {
+        if (os.size () == 0)
+        {
+          return true;
+        }
 
-	for (int i = 0; i < os.size (); i++)
-	{
-		String family = ((XMLElement)os.elementAt (i)).getAttribute(FAMILY);
-		boolean match = false;
-		
-		if (family.equals("windows"))
-		{
-			match = OsVersion.IS_WINDOWS;
-		}
-		else if (family.equals("mac"))
-		{
-			match = OsVersion.IS_OSX;
-		}
-		else if (family.equals("unix"))
-		{
+        for (int i = 0; i < os.size (); i++)
+        {
+                String family = ((XMLElement)os.elementAt (i)).getAttribute(FAMILY);
+                boolean match = false;
+
+                if (family.equals("windows"))
+                {
+                        match = OsVersion.IS_WINDOWS;
+                }
+                else if (family.equals("mac"))
+                {
+                        match = OsVersion.IS_OSX;
+                }
+                else if (family.equals("unix"))
+                {
       match = OsVersion.IS_UNIX;
-		}
-		return match;
-	}
-	return false;
+                }
+                return match;
+        }
+        return false;
   }
-  
-  
+
+
  /*--------------------------------------------------------------------------*/
  /**
   * Verifies if an item is required for any of the packs listed. An item is
@@ -2258,7 +2260,7 @@ public class UserInputPanel extends IzPanel
   *--------------------------------------------------------------------------*/
   private boolean itemRequiredFor (Vector packs)
   {
-	
+
     String selected;
     String required;
 
@@ -2275,7 +2277,7 @@ public class UserInputPanel extends IzPanel
     // PacksPanel, because the process of building the
     // UI is not reversable.
     // ----------------------------------------------------
-   	//packsDefined = true;
+        //packsDefined = true;
 
     // ----------------------------------------------------
     // analyze if the any of the packs for which the item
@@ -2377,7 +2379,7 @@ private static class TextValuePair
 /**
  * This class encapsulates a lot of search field functionality.
  *
- * A search field supports searching directories and files on the target 
+ * A search field supports searching directories and files on the target
  * system. This is a helper class to manage all data belonging to a
  * search field.
  */
@@ -2422,13 +2424,13 @@ private static class SearchField implements ActionListener
    * @param autobutton  the autodetection button for triggering autodetection
    * @param browsebutton the browse button to look for the file
    * @param search_type what to search for - TYPE_FILE or TYPE_DIRECTORY
-   * @param result_type what to return as the result - RESULT_FILE or 
+   * @param result_type what to return as the result - RESULT_FILE or
    *                    RESULT_DIRECTORY or RESULT_PARENTDIR
    */
   /*---------------------------------------------------------------------------*/
   public SearchField (String filename, String checkFilename,
-                      InstallerFrame parent, JComboBox combobox, 
-                      JButton autobutton, JButton browsebutton, 
+                      InstallerFrame parent, JComboBox combobox,
+                      JButton autobutton, JButton browsebutton,
                       int search_type, int result_type)
   {
     this.filename = filename;
@@ -2446,7 +2448,7 @@ private static class SearchField implements ActionListener
     autodetect ();
   }
 
-  /** Check whether the given combobox belongs to this searchfield. 
+  /** Check whether the given combobox belongs to this searchfield.
    * This is used when reading the results.
    */
   public boolean belongsTo (JComboBox combobox)
@@ -2460,13 +2462,13 @@ private static class SearchField implements ActionListener
     //System.out.println ("checking path " + path);
 
     File file = null;
-    
+
     if ((this.filename == null) || (this.searchType == TYPE_DIRECTORY))
     {
       file = new File (path);
     }
     else
-    {      
+    {
       file = new File (path, this.filename);
     }
 
@@ -2479,12 +2481,12 @@ private static class SearchField implements ActionListener
         // no file to check for
         if (this.checkFilename == null)
           return true;
-        
+
         file = new File (file, this.checkFilename);
-        
+
         return file.exists();
       }
-      
+
     }
 
     //System.out.println (path + " did not match");
@@ -2494,47 +2496,47 @@ private static class SearchField implements ActionListener
   /** perform autodetection */
   public boolean autodetect ()
   {
-  	
-	Vector items = new Vector();
 
-	//Checks whether a placeholder item is in the combobox
-	//and resolve the pathes automatically:
-	///usr/lib/* searches all folders in usr/lib to find /usr/lib/*/lib/tools.jar
-	for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
-	{
-		String path = (String)this.pathComboBox.getItemAt (i);
+        Vector items = new Vector();
 
-		if (path.endsWith("*"))
-		{
-			path = path.substring(0,path.length()-1);
-			File dir = new File(path);
+        //Checks whether a placeholder item is in the combobox
+        //and resolve the pathes automatically:
+        ///usr/lib/* searches all folders in usr/lib to find /usr/lib/*/lib/tools.jar
+        for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
+        {
+                String path = (String)this.pathComboBox.getItemAt (i);
 
-			if (dir.isDirectory())
-			{
-				File[] subdirs = dir.listFiles();
-				for (int x=0;x<subdirs.length;x++)
-				{
-					String search = subdirs[x].getAbsolutePath();
-					if (this.pathMatches (search))
-					{
-						items.add(search);
-					}
-				}
-			}
-		}
-		else
-		{
-			items.add(path);
-		}
-	}
+                if (path.endsWith("*"))
+                {
+                        path = path.substring(0,path.length()-1);
+                        File dir = new File(path);
 
-	//Now clear the combobox and add the items out of the newly
-	//generated vector
-	this.pathComboBox.removeAllItems();
-	for (int i=0;i<items.size();i++)
-	{
-		this.pathComboBox.addItem(items.get(i));
-	}
+                        if (dir.isDirectory())
+                        {
+                                File[] subdirs = dir.listFiles();
+                                for (int x=0;x<subdirs.length;x++)
+                                {
+                                        String search = subdirs[x].getAbsolutePath();
+                                        if (this.pathMatches (search))
+                                        {
+                                                items.add(search);
+                                        }
+                                }
+                        }
+                }
+                else
+                {
+                        items.add(path);
+                }
+        }
+
+        //Now clear the combobox and add the items out of the newly
+        //generated vector
+        this.pathComboBox.removeAllItems();
+        for (int i=0;i<items.size();i++)
+        {
+                this.pathComboBox.addItem(items.get(i));
+        }
 
     // loop through all items
     for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
@@ -2591,14 +2593,14 @@ private static class SearchField implements ActionListener
         File f = chooser.getSelectedFile();
 
         this.pathComboBox.setSelectedItem (f.getAbsolutePath());
-        
+
         // use any given directory directly
         if (! this.pathMatches(f.getAbsolutePath()))
         {
           JOptionPane.showMessageDialog (parent,
                                          parent.langpack.getString ("UserInputPanel.search.wrongselection.message"),
                                          parent.langpack.getString ("UserInputPanel.search.wrongselection.caption"),
-                                         JOptionPane.WARNING_MESSAGE);          
+                                         JOptionPane.WARNING_MESSAGE);
         }
       }
 
@@ -2622,14 +2624,14 @@ private static class SearchField implements ActionListener
     String item = (String)this.pathComboBox.getSelectedItem ();
     if (item != null) item = item.trim();
     String path = item;
-    
+
     File f = new File (item);
 
     if (! f.isDirectory ())
     {
       path = f.getParent ();
     }
-    
+
 
     // path now contains the final content of the combo box
     if (this.resultType == RESULT_DIRECTORY)
@@ -2650,7 +2652,7 @@ private static class SearchField implements ActionListener
     else if (this.resultType == RESULT_PARENTDIR)
     {
       File dir = new File (path);
-      return dir.getParent (); 
+      return dir.getParent ();
     }
 
     return null;
