@@ -152,6 +152,8 @@ public class UserInputPanel extends IzPanel
 
   /** The name of the XML file that specifies the panel layout */
   private static final String SPEC_FILE_NAME                = "userInputSpec.xml";
+  private static final String LANG_FILE_NAME                = "userInputLang.xml";
+
 
   /** how the spec node for a specific panel is identified */
   private static final String NODE_ID                       = "panel";
@@ -311,7 +313,10 @@ public class UserInputPanel extends IzPanel
     // ----------------------------------------------------
     try
     {
-      this.langpack = new LocaleDatabase (ResourceManager.getInstance().getInputStream (SPEC_FILE_NAME));
+      //this.langpack = parent.langpack;
+
+      String resource = LANG_FILE_NAME+"_"+idata.localeISO3;
+      this.langpack = new LocaleDatabase (ResourceManager.getInstance().getInputStream (resource));
     }
     catch (Throwable exception)
     {}
@@ -1114,9 +1119,9 @@ public class UserInputPanel extends IzPanel
 
       for (int i = 0; i < choices.size (); i++)
       {
-      	String processorClass = ((XMLElement)choices.elementAt (i)).getAttribute ("processor");
+      	String processorClass = ((XMLElement)choices.elementAt (i)).getAttribute("processor");
       	
-      	if (!processorClass.equals(""))
+      	if (!"".equals(processorClass))
       	{
 			String choiceValues = "";
       		try

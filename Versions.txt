@@ -1,6 +1,20 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.6.0 (build 2004.xx.yy)
+  > 3.6.1 (build 2004.xx.yy)
+
+- Slovak translation updates (Milan Madzia).
+- Java class execution bug fix (Erik Artzmark).
+- ImgPacksPanel was not aware of i18n by using the packsLang.xml_xxx resource.
+- Portuguese langpack updates (Flavio Fonseca).
+- Blocking the GUI interaction (like in InstallPanel) was only working with the
+  mouse events. It now works with the keyboard ones too (Eduard Jodas Samper).
+- TargetPanel: refuse selecting read-only directories.
+- Documentation fixes.
+- TargetPanel: more sanity checks (Andreas Vox).
+- InstallPanel: register errors as failures (Andreas Vox).
+- Polish translation updates (Bronek Truzkowski).
+
+  > 3.6.0 (build 2004.07.28)
 
 - New Danish langpack (Frank Bille Jensen).
 - Web installers can now prompt for passwords and a proxy (Chad McHenry).
@@ -31,6 +45,7 @@
 - Web install location specified in xml, not resource. (Chad McHenry)
 - Web installer packs are in separate jars to minimize downloads. (Chad McHenry)
 - fix bug so <fileset> uses same default excludes as ant. (Chad McHenry)
+- added 'defaultexcludes' attribute to <fileset> (Chad McHenry)
 - More elements in dtd are optional, fixed bugs causing errors if certain
   optional elements were omitted. (Chad McHenry)
 - It is now possible to have a specific picture for a specific panel by using 
@@ -45,6 +60,16 @@
 - The choices of a combo box can be generated throug a processor class
   (Thorsten Kamann).
 - The message of a validator can be a i18n message (Thorsten Kamann).
+- If a translation string value cannot be found, then the key will be returned
+  instead of null, avoiding null exceptions when new strings are added.
+- The finish panels are now setting the quit button text to 'Finish' instead of
+  'Quit', which could confuse some users (Dario Yuri).
+- Many Windows shortcuts code fixes and enhancements (Bill Wong).
+- UserInputPanel and PacksPanel i18n support (Gaganis Giorgos).
+- ProcessPanel can now execute Java classes (Alex Bradley).
+- TargetPanel: pressing enter in the target editor will move to the next panel
+  (Gaganis Giorgos).
+- Polish langpack fix (Bronek Truszkowski).
 
   > 3.5.4 (build 2004.06.05)
 

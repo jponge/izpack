@@ -38,7 +38,6 @@ import java.util.Vector;
  * @version  0.0.1 / 3/4/02
  * @author   Elmar Grom
  */
-/*---------------------------------------------------------------------------*/
 public class Shortcut 
 {
   // ------------------------------------------------------------------------
@@ -54,7 +53,6 @@ public class Shortcut
   /** Show the window 'normal' when starting. Usually restores the window
       properties at the last shut-down. */
   public static final int       NORMAL          = 1;
-  /** Show the window minimized when starting. */
   public static final int       MINIMIZED       = 2;
   /** Show the window maximized when starting. */
   public static final int       MAXIMIZED       = 3;
@@ -74,11 +72,11 @@ public class Shortcut
   *                   the link should exist.
   * @param     name   the name of the shortcut.
   */
- /*--------------------------------------------------------------------------*/
   public void initialize (int    type,
                           String name) throws Exception
   {
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Returns the base path of the shortcut depending on type. The base path is
@@ -90,16 +88,16 @@ public class Shortcut
   * @see #setLinkType(int)
   * @see #setUserType(int)
   */
- /*--------------------------------------------------------------------------*/
   public String getBasePath () throws Exception
   {
     return ("");
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Returns a list of currently existing program groups, based on the
   * requested type. For example if the type is <code>APPLICATIONS</code> then
-  * all the names of the program groups in the applications menu would be
+  * all the names of the program groups in the Start Menu\Programs menu would be
   * returned.
   *
   * @param     userType   the type of user for the program group set.
@@ -111,11 +109,11 @@ public class Shortcut
   * @see       #APPLICATIONS
   * @see       #START_MENU  
   */
- /*--------------------------------------------------------------------------*/
   public Vector getProgramGroups (int userType)
   {
     return (null);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Subclass implementations return the fully qualified file name under which
@@ -125,11 +123,11 @@ public class Shortcut
   *
   * @return    an empty <code>String</code>
   */
- /*--------------------------------------------------------------------------*/
   public String getFileName ()
   {
     return ("");
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Subclass implementations return the path of the directory where the link
@@ -140,11 +138,11 @@ public class Shortcut
   *
   * @return    this implementation returns always <code>null</code>.
   */
- /*--------------------------------------------------------------------------*/
   public String getDirectoryCreated ()
   {
     return (null);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Returns <code>true</code> if the target OS supports current user and
@@ -152,11 +150,11 @@ public class Shortcut
   *
   * @return    <code>true</code> if the target OS supports current and all users.
   */
- /*--------------------------------------------------------------------------*/
   public boolean multipleUsers ()
   {
     return (false);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Determines if a specific instance of this class supports the creation of
@@ -173,11 +171,11 @@ public class Shortcut
   * @return    <code>true</code> if the creation of shortcuts is supported,
   *            <code>flase</code> if this is not supported.
   */
- /*--------------------------------------------------------------------------*/
   public boolean supported ()
   {
     return (false);
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the command line arguments that will be passed to the target when
@@ -185,10 +183,10 @@ public class Shortcut
   *
   * @param     arguments    the command line arguments
   */
- /*--------------------------------------------------------------------------*/
   public void setArguments (String arguments)
   {
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the description string that is used to identify the link in a menu
@@ -196,10 +194,10 @@ public class Shortcut
   *
   * @param     description  the descriptiojn string
   */
- /*--------------------------------------------------------------------------*/
   public void setDescription (String description)
   {
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the location of the icon that is shown for the shortcut on the
@@ -211,21 +209,32 @@ public class Shortcut
   *                   If there is only one icon in the file, use an index
   *                   of 0.
   */
- /*--------------------------------------------------------------------------*/
   public void setIconLocation (String path,
                                int    index)
   {
   }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * returns icon Location
+  *
+  * @return iconLocation
+  */
+  public String getIconLocation()
+  {
+      return "";
+  }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the name of the program group this ShellLinbk should be placed in.
   *
   * @param     groupName    the name of the program group
   */
- /*--------------------------------------------------------------------------*/
   public void setProgramGroup (String groupName)
   {
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the show command that is passed to the target application when the
@@ -245,31 +254,51 @@ public class Shortcut
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
   *                   <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
   *                   </ul>
+  *
+  * @see       #getShowCommand
   */
- /*--------------------------------------------------------------------------*/
   public void setShowCommand (int show)
   {
   }
+
+ /* retrieves showCommand from the OS.  Translates it into Shortcut.XXX terms.
+  */
+  public int getShowCommand()
+  {
+  	return Shortcut.NORMAL;
+  }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the absolute path to the shortcut target.
   *
   * @param     path     the fully qualified file name of the target
   */
- /*--------------------------------------------------------------------------*/
   public void setTargetPath (String path)
   {
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the working directory for the link target.
   *
   * @param     dir    the working directory
   */
- /*--------------------------------------------------------------------------*/
   public void setWorkingDirectory (String dir)
   {
   }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Gets the working directory for the link target.
+  *
+  * @return the working directory.
+  */
+  public String getWorkingDirectory ()
+  {
+    return "";
+  }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the name shown in a menu or on the desktop for the link.
@@ -277,10 +306,27 @@ public class Shortcut
   * @param     name   The name that the link should display on a menu or on
   *                   the desktop. Do not include a file extension.
   */
- /*--------------------------------------------------------------------------*/
   public void setLinkName (String name)
   {
   }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Gets the type of link
+  *  types are: <br>
+  *                   <ul>
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
+  *                   <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
+  *                   </ul>
+  */
+  public int getLinkType()
+  {
+	// fake default.
+  	return Shortcut.DESKTOP;
+  }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the type of link
@@ -295,10 +341,10 @@ public class Shortcut
   *
   * @exception IllegalArgumentException if an an invalid type is passed
   */
- /*--------------------------------------------------------------------------*/
   public void setLinkType (int type) throws IllegalArgumentException
   {
   }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Sets the user type for the link
@@ -308,18 +354,51 @@ public class Shortcut
   * @see       #CURRENT_USER
   * @see       #ALL_USERS
   */
- /*--------------------------------------------------------------------------*/
   public void setUserType (int type)
   {
   }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Gets the user type for the link
+  *
+  * @return  userType 
+  * @see       #CURRENT_USER
+  * @see       #ALL_USERS
+  */
+  public int getUserType()
+  {
+  	return CURRENT_USER;
+  }
+
  /*--------------------------------------------------------------------------*/
  /**
   * Saves this link.
   *
   * @exception Exception if problems are encountered
   */
- /*--------------------------------------------------------------------------*/
   public void save () throws Exception
+  {
+  }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Gets the link hotKey
+  *
+  * @return  int hotKey
+  */
+  public int getHotkey()
+  {
+  	return 0;
+  }
+
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Sets the link hotKey
+  *
+  * @param hotkey
+  */
+  public void setHotkey(int hotkey)
   {
   }
 }

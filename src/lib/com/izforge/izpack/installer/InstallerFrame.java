@@ -27,14 +27,18 @@
 package com.izforge.izpack.installer;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.DefaultFocusTraversalPolicy;
 import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
@@ -117,7 +121,7 @@ public class InstallerFrame extends JFrame
 
   /**  The 'made with izpack' label, please KEEP IT THERE. */
   private JLabel madewithLabel;
-  
+
   /** Image */
   private JLabel iconLabel;
 
@@ -147,7 +151,7 @@ public class InstallerFrame extends JFrame
     showFrame();
     switchPanel(0);
   }
-  
+
   /**
    *  Loads the panels.
    *
@@ -257,6 +261,9 @@ public class InstallerFrame extends JFrame
     glassPane.addKeyListener(new KeyAdapter()
     {
     });
+    glassPane.addFocusListener(new FocusAdapter()
+    {
+    });
 
     // We set the layout & prepare the constraint object
     contentPane = (JPanel) getContentPane();
@@ -319,7 +326,15 @@ public class InstallerFrame extends JFrame
     try
     {
       ResourceManager rm = ResourceManager.getInstance();
-      ImageIcon icon = rm.getImageIconResource("Installer.image");
+      ImageIcon icon;
+      try
+      {
+        icon = rm.getImageIconResource("Installer.image");
+      }
+      catch (Exception e) // This is not that clean ...
+      {
+        icon = rm.getImageIconResource("Installer.image.0");
+      }
       if (icon != null)
       {
         JPanel imgPanel = new JPanel();
@@ -327,23 +342,23 @@ public class InstallerFrame extends JFrame
         imgPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
         iconLabel = new JLabel(icon);
         iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
-        imgPanel.add(iconLabel, BorderLayout.CENTER);
+        imgPanel.add(iconLabel, BorderLayout.NORTH);
         contentPane.add(imgPanel, BorderLayout.WEST);
       }
     } catch (Exception e)
     {
       //ignore
     }
-    
+
     loadImage(0);
     getRootPane().setDefaultButton(nextButton);
   }
-  
+
   private void loadImage(int panelNo) {
     try
     {
       ResourceManager rm = ResourceManager.getInstance();
-      ImageIcon icon = rm.getImageIconResource("Installer.image."+panelNo);
+      ImageIcon icon = rm.getImageIconResource("Installer.image." + panelNo);
       if (icon != null)
       {
           iconLabel.setVisible(false);
@@ -353,7 +368,7 @@ public class InstallerFrame extends JFrame
     } catch (Exception e)
     {
       //ignore
-    }      
+    }
   }
 
   /**  Shows the frame.  */
@@ -366,7 +381,7 @@ public class InstallerFrame extends JFrame
     setVisible(true);
   }
 
-	private boolean isBack = false;
+        private boolean isBack = false;
   /**
    *  Switches the current panel.
    *
@@ -374,13 +389,13 @@ public class InstallerFrame extends JFrame
    */
   protected void switchPanel(int last)
   {
-  	if (installdata.curPanelNumber<last)
-  	{
-  		isBack = true;
-  	}
+        if (installdata.curPanelNumber<last)
+        {
+                isBack = true;
+        }
     panelsContainer.setVisible(false);
     IzPanel panel =
-      (IzPanel) installdata.panels.get(installdata.curPanelNumber);  
+      (IzPanel) installdata.panels.get(installdata.curPanelNumber);
     IzPanel l_panel = (IzPanel) installdata.panels.get(last);
     l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
     panelsContainer.remove(l_panel);
@@ -405,7 +420,7 @@ public class InstallerFrame extends JFrame
     l_panel.panelDeactivate();
     panel.panelActivate();
     panelsContainer.setVisible(true);
-	loadImage(installdata.curPanelNumber);
+        loadImage(installdata.curPanelNumber);
     isBack = false;
   }
 
@@ -477,22 +492,22 @@ public class InstallerFrame extends JFrame
    */
   public InputStream getResource(String res)
   {
-  	String basePath = "";
-  	ResourceManager rm = null;
-  	
+        String basePath = "";
+        ResourceManager rm = null;
+
     try
     {
-    	rm =  ResourceManager.getInstance();
-		basePath = rm.resourceBasePath;
-		
-		return this.getClass().getResourceAsStream(basePath+res);
+        rm =  ResourceManager.getInstance();
+                basePath = rm.resourceBasePath;
+
+                return this.getClass().getResourceAsStream(basePath+res);
     } catch (Exception e)
     {
       return null;
     }
   }
-  
-  
+
+
 
   /**
    *  Centers a window on screen.
@@ -647,12 +662,30 @@ public class InstallerFrame extends JFrame
     writer.write(root);
   }
 
+  /**
+   * Changes the quit button text. If <tt>text</tt> is null, the default quit
+   * text is used.
+   */
+  public void setQuitButtonText(String text)
+  {
+    if (text == null)
+      text = langpack.getString("installer.quit");
+    quitButton.setText(text);
+  }
+
+  private FocusTraversalPolicy usualFTP;
+  private FocusTraversalPolicy blockFTP;
+  
   /**  Blocks GUI interaction.  */
   public void blockGUI()
   {
     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     getGlassPane().setVisible(true);
     getGlassPane().setEnabled(true);
+    usualFTP = getFocusTraversalPolicy();
+    if (blockFTP == null) blockFTP = new BlockFocusTraversalPolicy();
+    setFocusTraversalPolicy(blockFTP);
+    getGlassPane().requestFocus();
   }
 
   /**  Releases GUI interaction.  */
@@ -661,6 +694,7 @@ public class InstallerFrame extends JFrame
     getGlassPane().setEnabled(false);
     getGlassPane().setVisible(false);
     setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    setFocusTraversalPolicy(usualFTP);
   }
 
   /**  Locks the 'previous' button.  */
@@ -693,16 +727,44 @@ public class InstallerFrame extends JFrame
   {
     if (installdata.curPanelNumber < installdata.panels.size() - 1)
     {
-    	if (isBack)
-    	{
-			installdata.curPanelNumber--;
-			switchPanel(installdata.curPanelNumber + 1);	
-    	}else
-    	{
-			installdata.curPanelNumber++;
-			switchPanel(installdata.curPanelNumber - 1);	
-    	}
-      
+        if (isBack)
+        {
+                        installdata.curPanelNumber--;
+                        switchPanel(installdata.curPanelNumber + 1);
+        }else
+        {
+                        installdata.curPanelNumber++;
+                        switchPanel(installdata.curPanelNumber - 1);
+        }
+
+    }
+  }
+  /** This function moves to the next panel */
+  public void navigateNext()
+  {
+    // If the button is inactive this indicates that we cannot move
+    // so we don't do the move
+    if( !nextButton.isEnabled())
+      return;
+    if ((installdata.curPanelNumber < installdata.panels.size() - 1)
+            && ((IzPanel) installdata.panels.get(installdata.curPanelNumber))
+            .isValidated())
+    {
+      installdata.curPanelNumber++;
+      switchPanel(installdata.curPanelNumber - 1);
+    }
+  }
+  /** This function moves to the previous panel */
+  public void navigatePrevious()
+  {
+    // If the button is inactive this indicates that we cannot move
+    // so we don't do the move
+    if( !prevButton.isEnabled())
+      return;
+    if ((installdata.curPanelNumber > 0))
+    {
+      installdata.curPanelNumber--;
+      switchPanel(installdata.curPanelNumber + 1);
     }
   }
 
@@ -723,20 +785,10 @@ public class InstallerFrame extends JFrame
       Object source = e.getSource();
       if (source == prevButton)
       {
-        if ((installdata.curPanelNumber > 0))
-        {
-          installdata.curPanelNumber--;
-          switchPanel(installdata.curPanelNumber + 1);
-        }
+        navigatePrevious();
       } else if (source == nextButton)
       {
-        if ((installdata.curPanelNumber < installdata.panels.size() - 1)
-          && ((IzPanel) installdata.panels.get(installdata.curPanelNumber))
-            .isValidated())
-        {
-          installdata.curPanelNumber++;
-          switchPanel(installdata.curPanelNumber - 1);
-        }
+        navigateNext();
       } else if (source == quitButton)
         exit();
 
@@ -768,5 +820,20 @@ public class InstallerFrame extends JFrame
       wipeAborted();
       Housekeeper.getInstance().shutDown(0);
     }
+  }
+
+  /** A FocusTraversalPolicy that only allows the block panel to have 
+   * the focus
+   */
+  private class BlockFocusTraversalPolicy extends DefaultFocusTraversalPolicy
+  {
+      /** Only accepts the block panel
+       * @param aComp the component to check
+       * @return true if aComp is the block panel
+       */
+      protected boolean accept(Component aComp)
+      {
+          return aComp == getGlassPane();
+      }
   }
 }

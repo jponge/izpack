@@ -73,6 +73,9 @@ public class TargetPanel extends IzPanel implements ActionListener
   /**  The layout constraints. */
   private GridBagConstraints gbConstraints;
 
+  /** The parent installerframe. */
+  private InstallerFrame parent;
+
   /**
    *  The constructor.
    *
@@ -82,6 +85,8 @@ public class TargetPanel extends IzPanel implements ActionListener
   public TargetPanel(InstallerFrame parent, InstallData idata)
   {
     super(parent, idata);
+    //Initialization
+    this.parent = parent;
 
     // We initialize our layout
     layout = new GridBagLayout();
@@ -241,7 +246,17 @@ public class TargetPanel extends IzPanel implements ActionListener
     installPath = path.toString();
 
     // We put a warning if the directory exists else we warn that it will be created
-    if (path.exists())
+    // We signal an error if the selected file is no directory or if it is not writable 
+    if (path.exists() && ! path.isDirectory())
+    {
+        JOptionPane.showMessageDialog(
+          this,
+          parent.langpack.getString("TargetPanel.nodir"),
+          parent.langpack.getString("installer.error"),
+          JOptionPane.ERROR_MESSAGE);
+        ok = false;
+    }
+    else if (path.exists() && path.canWrite())
     {
       int res =
         JOptionPane.showConfirmDialog(
@@ -250,16 +265,44 @@ public class TargetPanel extends IzPanel implements ActionListener
           parent.langpack.getString("installer.warning"),
           JOptionPane.YES_NO_OPTION);
       ok = (res == JOptionPane.YES_OPTION);
-    } else
+    } 
+/*    else if ( ! existingParent(path).canWrite()) 
+    {
+      JOptionPane.showMessageDialog(
+          this,
+          parent.langpack.getString("TargetPanel.notwritable"),
+          parent.langpack.getString("installer.error"),
+          JOptionPane.ERROR_MESSAGE);
+        ok = false;
+    }*/
+    else
+    {
       JOptionPane.showMessageDialog(
         this,
         parent.langpack.getString("TargetPanel.createdir")
           + "\n"
           + installPath);
-
+    }
     idata.setInstallPath(installPath);
     return ok;
   }
+
+  /**
+    * Finds the first existing parentdirectory in a path
+    */
+  private static File existingParent(File path) {
+    File result = path;
+    while ( ! result.exists() )
+    {
+      if (result.getParent() == null)
+      {
+        return result;
+      }
+      result = result.getParentFile();
+    }
+    return result;
+  }
+
 
   /**
    *  Actions-handling method.
@@ -283,8 +326,16 @@ public class TargetPanel extends IzPanel implements ActionListener
 
       // Shows it
       if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-        textField.setText(fc.getSelectedFile().getAbsolutePath());
+      {
+        String path = fc.getSelectedFile().getAbsolutePath();
+        File dir = new File(path);
+        if (dir.canWrite()) textField.setText(path);
+      }
 
+    }
+    else if (source == textField)
+    {
+      parent.navigateNext();
     }
   }
 
