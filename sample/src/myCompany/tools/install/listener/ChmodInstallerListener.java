@@ -78,11 +78,13 @@ public class ChmodInstallerListener extends SimpleInstallerListener
     int dirVal = -1;
     if( dir != null &&dir instanceof Integer )
       dirVal = ((Integer) dir).intValue();
-    if( (dirVal & 0x000001B0) < 0x000001B0 )
-      throw new InstallerException( "Bad owner permission for directory " 
-        + dirPath.getAbsolutePath() +"; at installation time the owner needs full rights" );
     if( dirVal != -1)
+    {
+      if( (dirVal & 0x000001C0) < 0x000001C0 )
+        throw new InstallerException( "Bad owner permission for directory " 
+          + dirPath.getAbsolutePath() +"; at installation time the owner needs full rights" );
       chmod(dirPath, dirVal);
+    }
   }
 
   private void chmod(File path, int permissions) throws IOException
