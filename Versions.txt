@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.5.1 (build 2004.xx.yy)
+  > 3.5.1 (build 2004.03.16)
 
 - No custom look and feel will be applied on Mac platforms (Chad McHenry).
 - A message box is now raised when the installer detects that the Java version
