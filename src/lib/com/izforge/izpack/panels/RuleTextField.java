@@ -1,12 +1,28 @@
-/*---------------------------------------------------------------------------*
- *                      (C) Copyright 2002 by Elmar Grom
- *                                       
- *                           - All Rights Reserved -             
- *                                       
- *                  THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE        
- *                                       
- * This copyright notice does not evidence any actual or intended publication
- *---------------------------------------------------------------------------*/
+/*
+ * $Id$
+ * Copyright (C) 2002 Elmar Grom
+ *
+ * File :               RuleInputField.java
+ * Description :        A Java component that serves as a text input field
+ *                      with the abilty to impose limitations on the type
+ *                      of data that can be entered.
+ * Author's email :     elmar@grom.net
+ * Author's Website :   http://www.izforge.com
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
 
 package   com.izforge.izpack.panels;
 

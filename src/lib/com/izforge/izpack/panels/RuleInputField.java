@@ -2,7 +2,7 @@
  * $Id$
  * Copyright (C) 2002 Elmar Grom
  *
- * File :               SerialNumberField.java
+ * File :               RuleInputField.java
  * Description :        A Java component that serves as a serial number
  *                      input field with limited format verification.
  * Author's email :     elmar@grom.net
@@ -49,19 +49,22 @@ import    javax.swing.event.*;
  * <b>Formatting:</b>
  * 
  * <ul>
- * <li><code>NX </code>- numeric field, accepts digits only
- * <li><code>HX </code>- hex field, accepts only hexadecimal digits
- * <li><code>AX </code>- alpha field, accepts only letters, no digits
- * <li><code>ANX</code>- alpha-numeric field, accepts digits and letters
+ * <li><code>N:X:Y </code>- numeric field, accepts digits only
+ * <li><code>H:X:Y </code>- hex field, accepts only hexadecimal digits
+ * <li><code>A:X:Y </code>- alpha field, accepts only letters, no digits
+ * <li><code>AN:X:Y</code>- alpha-numeric field, accepts digits and letters
  * </ul>
  * <b>Example:</b>
+ * <br><br>
  * <code>"N:4:4 - H:6:6 - AN:3:3 x A:5:5"</code><br><br>
  * This formatting string will produce a serial number field consisting of
  * four separate input fields. The fisrt input field will accept four
  * numeric digits, the second six hexa-decimal digits, the third three
  * alpha-numeric digits and the fourth five letters. The first three input
- * fields will be separated by '-' and the third and fourth by 'x'.
- * 
+ * fields will be separated by '-' and the third and fourth by 'x'. The
+ * following snapshot was obtained with this setting: 
+ * <br><br>
+ * <img src="doc-files/RuleInputField-1.gif"/>
  *
  * @version  0.0.1 / 10/19/02
  * @author   Elmar Grom
