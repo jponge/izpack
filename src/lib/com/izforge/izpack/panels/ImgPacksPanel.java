@@ -26,83 +26,47 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
 package com.izforge.izpack.panels;
 
-import java.awt.*;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
-import javax.swing.*;
-import javax.swing.AbstractCellEditor;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
-import javax.swing.table.TableCellRenderer;
 
-import net.n3.nanoxml.XMLElement;
-
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.installer.*;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.util.IoHelper;
 
 /**
  *  The ImgPacks panel class. Allows the packages selection with a small picture
  *  displayed for every pack.
  *  This new version combines the old PacksPanel and the ImgPacksPanel so that
  *  the positive characteristics of both are combined.
+ *  This class handles only the layout and some related stuff. Common
+ *  stuff are handled by the base class.
  *
  * @author     Julien Ponge
  * @author     Volker Friedritz
+ * @author     Klaus Bartz
  */
-public class ImgPacksPanel extends IzPanel
-  implements ActionListener, ListSelectionListener, PacksPanelInterface
+public class ImgPacksPanel extends PacksPanelBase
 {
-  /**  The space label. */
-  private JLabel spaceLabel;
-
-  /**  The description area. */
-  private JTextArea descriptionArea;
-  
-  /**  The description scroll. */
-  private JScrollPane descriptionScroller;
-  
-
-  /**  The tablescroll. */
-  private JScrollPane tableScroller;
-
-  /**  The bytes of the current pack. */
-  protected int bytes = 0;
-
-  /**  The packs table. */
-  private JTable packsTable;
 
   /**  The images to display. */
   private ArrayList images;  
+  
+  /**  The description scroll. */
+  private JScrollPane descriptionScroller;
   
   /**  The img label. */
   private JLabel imgLabel;
@@ -116,13 +80,6 @@ public class ImgPacksPanel extends IzPanel
   /**  The layout constraints. */
   private GridBagConstraints gbConstraints;
   
-  /** The packs locale database. */
-  private LocaleDatabase langpack = null;
-  
-  /** The name of the XML file that specifies the panel langpack */
-  private static final String LANG_FILE_NAME = "packsLang.xml";
-
-  
   /**
    *  The constructor.
    *
@@ -132,136 +89,80 @@ public class ImgPacksPanel extends IzPanel
   public ImgPacksPanel(InstallerFrame parent, InstallData idata)
   {
     super(parent, idata);
+  }
+
+  /* (non-Javadoc)
+   * @see com.izforge.izpack.panels.PacksPanelBase#createNormalLayout()
+   */
+  protected void createNormalLayout()
+  {
     preLoadImages();
-    
-    try
-    {
-      String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
-      this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
-    }
-    catch (Throwable exception)
-    {}
-    
     layout = new GridBagLayout();
     gbConstraints = new GridBagConstraints();
-    
     setLayout(layout);
-
-    JLabel infoLabel =
-      new JLabel(
-        parent.langpack.getString("PacksPanel.info"),
-        parent.icons.getImageIcon("preferences"),
-				JLabel.LEFT);
-        
+    
+    // Create constraint for first component as standard constraint.
     parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 0.25, 0.0);
     gbConstraints.insets = new Insets(5, 5, 5, 5);
     gbConstraints.fill = GridBagConstraints.BOTH;
     gbConstraints.anchor = GridBagConstraints.WEST;
-    layout.addLayoutComponent(infoLabel, gbConstraints);
-    add(infoLabel);
+    // Create the info label.
+    createLabel( "PacksPanel.info", "preferences", layout, gbConstraints);
 
-    JLabel descriptionLabel =
-      new JLabel(
-        parent.langpack.getString("ImgPacksPanel.snap"),
-        parent.icons.getImageIcon("tip"),
-        JLabel.LEFT);
-
+    // Create the snap label.
     parent.buildConstraints(gbConstraints, 1, 0, 1, 1, 0.50, 0.0);
-    layout.addLayoutComponent(descriptionLabel, gbConstraints);
-    add(descriptionLabel);
+    createLabel( "ImgPacksPanel.snap", "tip", layout, gbConstraints);
     
-
-    packsTable = new JTable();
-    packsTable.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
-    packsTable.setIntercellSpacing(new Dimension(0, 0));
-    packsTable.setBackground(Color.white);
-    packsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    packsTable.getSelectionModel().addListSelectionListener(this);
-    packsTable.setShowGrid(false);
-    tableScroller = new JScrollPane(packsTable);
-    tableScroller.setAlignmentX(LEFT_ALIGNMENT);
-    tableScroller.getViewport().setBackground(Color.white);
-    tableScroller.setPreferredSize(
-      new Dimension(250, (idata.guiPrefs.height / 3 + 30)));
-
-    parent.buildConstraints(gbConstraints, 0, 1, 1, 3, 0.50, 0.0);
-    layout.addLayoutComponent(tableScroller, gbConstraints);
-    add(tableScroller);
+    // Create packs table with a scroller.
+    tableScroller = new JScrollPane();
+    parent.buildConstraints(gbConstraints, 0, 1, 1, 2, 0.50, 0.0);
+    packsTable = createPacksTable(250, tableScroller, layout, gbConstraints );
     
+    // Create the image label with a scroller.
     imgLabel = new JLabel((ImageIcon) images.get(0));
     JScrollPane imgScroller = new JScrollPane(imgLabel);
     imgScroller.setPreferredSize(getPreferredSizeFromImages());
-
     parent.buildConstraints(gbConstraints, 1, 1, 1, 1, 0.5, 1.0);
     layout.addLayoutComponent(imgScroller, gbConstraints);
     add(imgScroller);
     
+    // Create a vertical strut.
+
     Component strut = Box.createVerticalStrut(20);
     parent.buildConstraints(gbConstraints, 1, 2, 1, 3, 0.0, 0.0);
     layout.addLayoutComponent(strut, gbConstraints);
     add(strut);
-    
-    descriptionArea = new JTextArea();
-    descriptionArea.setMargin(new Insets(2, 2, 2, 2));
-    descriptionArea.setAlignmentX(LEFT_ALIGNMENT);
-    descriptionArea.setCaretPosition(0);
-    descriptionArea.setEditable(false);
-    descriptionArea.setEditable(false);
-    descriptionArea.setOpaque(false);
-    descriptionArea.setLineWrap(true);
-    descriptionArea.setWrapStyleWord(true);
-    descriptionArea.setBorder(
-      BorderFactory.createTitledBorder(
-        parent.langpack.getString("PacksPanel.description")));
 
-    descriptionScroller = new JScrollPane(descriptionArea);
+    // Create the dependency area with a scroller.
+    if( dependenciesExist )
+    {
+      JScrollPane depScroller = new JScrollPane();
+      depScroller.setPreferredSize(new Dimension(250, 40));
+      parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 0.50, 0.50);
+      dependencyArea = createTextArea("ImgPacksPanel.dependencyList",
+        depScroller, layout, gbConstraints  );
+    }
+
+
+    // Create the description area with a scroller.
+    descriptionScroller = new JScrollPane();
     descriptionScroller.setPreferredSize(new Dimension(200, 60));
     
     parent.buildConstraints(gbConstraints, 1, 3, 1, 1, 0.50, 0.50);
-    layout.addLayoutComponent(descriptionScroller, gbConstraints);
-    add(descriptionScroller);
-    
-    JLabel tipLabel =
-      new JLabel(
-        parent.langpack.getString("PacksPanel.tip"),
-        parent.icons.getImageIcon("tip"),
-        JLabel.LEFT);
-    
+    descriptionArea = createTextArea("PacksPanel.description", 
+      descriptionScroller, layout, gbConstraints  );
+    // Create the tip label.
     parent.buildConstraints(gbConstraints, 0, 4, 2, 1, 0.0, 0.0);
-    layout.addLayoutComponent(tipLabel, gbConstraints);
-    add(tipLabel);
-    
-//    strut = Box.createVerticalStrut(20);
-//    parent.buildConstraints(gbConstraints, 0, 5, 1, 1, 0.0, 0.0);
-//    layout.addLayoutComponent(strut, gbConstraints);
-//    add(strut);    
-
-    
-    JPanel spacePanel = new JPanel();
-    spacePanel.setAlignmentX(LEFT_ALIGNMENT);
-    spacePanel.setLayout(new BoxLayout(spacePanel, BoxLayout.X_AXIS));
-    spacePanel.add(new JLabel(parent.langpack.getString("PacksPanel.space")));
-    spacePanel.add(Box.createHorizontalGlue());
-    spaceLabel = new JLabel("");
-    //    spaceLabel.setFont(new Font("Monospaced",Font.PLAIN,11));
-    spacePanel.add(spaceLabel);
-    
-    parent.buildConstraints(gbConstraints, 0, 6, 2, 1, 0.0, 0.0);
-    layout.addLayoutComponent(spacePanel, gbConstraints);
-    add(spacePanel);
-  }
-
-  public void setBytes(int bytes)
-  {
-    this.bytes = bytes;
-  }
-  public int getBytes()
-  {
-    return bytes;
-  }
-  public LocaleDatabase getLangpack()
-  {
-    return langpack;
+    createLabel( "PacksPanel.tip", "tip", layout, gbConstraints);
+    // Create the space label.
+    parent.buildConstraints(gbConstraints, 0, 5, 2, 1, 0.0, 0.0);
+    spaceLabel = createPanelWithLabel( "PacksPanel.space", layout, gbConstraints );
+    if( IoHelper.supported("getFreeSpace"))
+    { // Create the free space label only if free space is supported.
+      parent.buildConstraints(gbConstraints, 0, 6, 2, 1, 0.0, 0.0);
+      freeSpaceLabel = createPanelWithLabel( "PacksPanel.freespace", layout, gbConstraints );
+    }
+ 
   }
   /**  Pre-loads the images.  */
   private void preLoadImages()
@@ -286,214 +187,22 @@ public class ImgPacksPanel extends IzPanel
    */
   private Dimension getPreferredSizeFromImages()
   {
-  	int maxWidth = 80, maxHeight = 60;
-  	ImageIcon icon;
-  	
-  	for (Iterator it = images.iterator(); it.hasNext(); )
-  	{
-  		icon = (ImageIcon) it.next();
-  		maxWidth = Math.max(maxWidth, icon.getIconWidth());
-  		maxHeight = Math.max(maxHeight, icon.getIconHeight());
-  	}
-  	
-  	maxWidth = Math.min(maxWidth + 20, idata.guiPrefs.width - 150);
-  	maxHeight = Math.min(maxHeight + 20, idata.guiPrefs.height - 150);
-  	
-  	return new Dimension(maxWidth, maxHeight);
+    int maxWidth = 80, maxHeight = 60;
+    ImageIcon icon;
+    
+    for (Iterator it = images.iterator(); it.hasNext(); )
+    {
+      icon = (ImageIcon) it.next();
+      maxWidth = Math.max(maxWidth, icon.getIconWidth());
+      maxHeight = Math.max(maxHeight, icon.getIconHeight());
+    }
+    
+    maxWidth = Math.min(maxWidth + 20, idata.guiPrefs.width - 150);
+    maxHeight = Math.min(maxHeight + 20, idata.guiPrefs.height - 150);
+    
+    return new Dimension(maxWidth, maxHeight);
   }
   
   
-  /**  Called when the panel becomes active.  */
-  public void panelActivate()
-  {
-    try
-    {
-      packsTable.setModel(
-        new PacksModel(idata.availablePacks, idata.selectedPacks,this));
-      CheckBoxEditorRenderer packSelectedRenderer =
-        new CheckBoxEditorRenderer(false);
-      packsTable.getColumnModel().getColumn(0).setCellRenderer(
-        packSelectedRenderer);
-      CheckBoxEditorRenderer packSelectedEditor =
-        new CheckBoxEditorRenderer(true);
-      packsTable.getColumnModel().getColumn(0).setCellEditor(
-        packSelectedEditor);
-      packsTable.getColumnModel().getColumn(0).setMaxWidth(40);
-      DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer()
-      {
-        public void setBorder(Border b)
-        {
-        }
-      };
-      packsTable.getColumnModel().getColumn(1).setCellRenderer(renderer1);
-      DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer()
-      {
-        public void setBorder(Border b)
-        {
-        }
 
-  };
-      renderer2.setHorizontalAlignment(JLabel.RIGHT);
-      packsTable.getColumnModel().getColumn(2).setCellRenderer(renderer2);
-      packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
-
-      //remove header,so we don't need more strings
-      tableScroller.remove(packsTable.getTableHeader());
-      tableScroller.setColumnHeaderView(null);
-      tableScroller.setColumnHeader(null);
-
-      // set the JCheckBoxes to the currently selected panels. The selection might have changed in another panel
-      java.util.Iterator iter = idata.availablePacks.iterator();
-      bytes = 0;
-      while (iter.hasNext())
-      {
-        Pack p = (Pack) iter.next();
-        if (p.required)
-        {
-          bytes += p.nbytes;
-          continue;
-        }
-        if (idata.selectedPacks.contains(p))
-          bytes += p.nbytes;
-      }
-    } catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    showSpaceRequired();
-    packsTable.getSelectionModel().setSelectionInterval(0, 0);
-  }
-
-  /**  Sets the label text of space required for installation.  */
-  public void showSpaceRequired()
-  {
-    spaceLabel.setText(Pack.toByteUnitsString(bytes));
-  }
-
-  /**
-   *  Actions-handling method.
-   *
-   * @param  e  The event.
-   */
-  public void actionPerformed(ActionEvent e)
-  {
-  }
-
-  /**
-   *  Indicates wether the panel has been validated or not.
-   *
-   * @return    Always true.
-   */
-  public boolean isValidated()
-  {
-    return true;
-  }
-
-  /**
-   *  Asks to make the XML panel data.
-   *
-   * @param  panelRoot  The XML tree to write the data in.
-   */
-  public void makeXMLData(XMLElement panelRoot)
-  {
-    new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
-  }
-
-
-  /**
-   * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
-   */
-  public void valueChanged(ListSelectionEvent e)
-  {
-    if (e.getValueIsAdjusting())
-      return;
-  	
-  	//  We update the the description and the image  	
-    int i = packsTable.getSelectedRow();
-    if (i >= 0)
-    {
-      Pack pack = (Pack) idata.availablePacks.get(i);
-      String desc = "";
-      if (pack.id != null && !pack.id.equals(""))
-      {
-        desc = langpack.getString(pack.id+".description");
-      }
-      if (desc.equals(""))
-      {
-      	desc = pack.description;
-      }
-      descriptionArea.setText(desc);
-      
-      int last = e.getLastIndex();
-      int first = e.getFirstIndex();
-      index = (index < last) ? last : first;
-      imgLabel.setIcon((ImageIcon) images.get(index));
-    }
-  }
-
-  static class CheckBoxEditorRenderer
-    extends AbstractCellEditor
-    implements TableCellRenderer, TableCellEditor, ActionListener
-  {
-    private JCheckBox display;
-    public CheckBoxEditorRenderer(boolean useAsEditor)
-    {
-      display = new JCheckBox();
-      display.setHorizontalAlignment(JLabel.CENTER);
-      if (useAsEditor)
-        display.addActionListener(this);
-
-    }
-
-    public Component getTableCellRendererComponent(
-      JTable table,
-      Object value,
-      boolean isSelected,
-      boolean hasFocus,
-      int row,
-      int column)
-    {
-      if (isSelected)
-      {
-        display.setForeground(table.getSelectionForeground());
-        display.setBackground(table.getSelectionBackground());
-      } else
-      {
-        display.setForeground(table.getForeground());
-        display.setBackground(table.getBackground());
-      }
-      int state = ((Integer) value).intValue();
-      display.setSelected((value != null && Math.abs(state) == 1));
-      display.setEnabled(state >= 0);
-      return display;
-    }
-    /**
-     * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
-     */
-    public Component getTableCellEditorComponent(
-      JTable table,
-      Object value,
-      boolean isSelected,
-      int row,
-      int column)
-    {
-      return getTableCellRendererComponent(
-        table,
-        value,
-        isSelected,
-        false,
-        row,
-        column);
-    }
-
-    public Object getCellEditorValue()
-    {
-      return new Integer(display.isSelected() ? 1 : 0);
-    }
-
-    public void actionPerformed(ActionEvent e)
-    {
-      stopCellEditing();
-    }
-  }
 }
