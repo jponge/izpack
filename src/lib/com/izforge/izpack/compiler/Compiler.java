@@ -697,9 +697,14 @@ public class Compiler extends Thread
     // dummy variable used for values from XML
     String val;
 
+    // at least one langpack is required
+    Vector packElements = root.getChildrenNamed("pack");
+    if (packElements.size() == 0)
+      parseError(root, "<packs> requires a <pack>");
+    
     // We process each pack markup
     int packCounter = 0;
-    Iterator packIter = root.getChildrenNamed("pack").iterator();
+    Iterator packIter = packElements.iterator();
     while (packIter.hasNext())
     {
       XMLElement el = (XMLElement) packIter.next();
@@ -718,15 +723,12 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement p = (XMLElement) iter.next();
-        String targetFile = requireAttribute(p, "targetfile");
+        String target = requireAttribute(p, "targetfile");
+        String type = p.getAttribute("type", "plain");
+        String encoding = p.getAttribute("encoding", null);
         List osList = OsConstraint.getOsList(p); // TODO: unverified
 
-        pack.parsables.add(
-          new ParsableFile(
-            targetFile,
-            p.getAttribute("type", "plain"),
-            p.getAttribute("encoding", null),
-            osList));
+        pack.parsables.add(new ParsableFile(target, type, encoding, osList));
       }
 
       // We get the executables list
@@ -799,23 +801,19 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
-        String src_attr = requireAttribute(f, "src");
-        String path;
-
-        if (new File(src_attr).isAbsolute())
-          path = src_attr;
-        else
-          path = basedir + File.separator + src_attr;
-
-        File file = new File(path);
-        int override = getOverrideValue(f);
+        String src = requireAttribute(f, "src");
+        String targetdir = requireAttribute(f, "targetdir");
         List osList = OsConstraint.getOsList(f); // TODO: unverified
-        String targetdir_attr = requireAttribute(f, "targetdir");
+        int override = getOverrideValue(f);
+
+        File file = new File(src);
+        if (! file.isAbsolute())
+          file = new File(basedir, src);
 
         try
         {
-          addFile(file, targetdir_attr, osList, override, pack.packFiles);
-        } catch (CompilerException x)
+          addRecursively(file, targetdir, osList, override, pack);
+        } catch (Exception x)
         {
           parseError(f, x.getMessage(), x);
         }
@@ -826,22 +824,18 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
-        String src_attr = requireAttribute(f, "src");
-        String path;
-
-        if (new File(src_attr).isAbsolute())
-          path = src_attr;
-        else
-          path = basedir + File.separator + src_attr;
-
-        File file = new File(path);
-        int override = getOverrideValue(f);
+        String src = requireAttribute(f, "src");
+        String target = requireAttribute(f, "target");
         List osList = OsConstraint.getOsList(f); // TODO: unverified
-        String target_attr = requireAttribute(f, "target");
+        int override = getOverrideValue(f);
+
+        File file = new File(src);
+        if (! file.isAbsolute())
+          file = new File(basedir, src);
 
         try
         {
-          addSingleFile(file, target_attr, osList, override, pack.packFiles);
+          addSingleFile(file, target, osList, override, pack);
         } catch (CompilerException x)
         {
           parseError(f, x.getMessage(), x);
@@ -854,120 +848,107 @@ public class Compiler extends Thread
       {
         XMLElement f = (XMLElement) iter.next();
         String dir_attr = requireAttribute(f, "dir");
-        String path;
 
-        if (new File(dir_attr).isAbsolute())
-          path = dir_attr;
-        else
-          path = basedir + File.separator + dir_attr;
+        File dir = new File(dir_attr);
+        if (! dir.isAbsolute())
+          dir = new File(basedir, dir_attr);
+        if (! dir.isDirectory()) // also tests '.exists()'
+          parseError(f, "Invalid directory 'dir': " + dir);
 
-        boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
+        boolean casesensitive = validateYesNoAttribute(f, "casesensitive",
+                                                       YES);
+        String targetdir = requireAttribute(f, "targetdir");
+        List osList = OsConstraint.getOsList(f); // TODO: unverified
+        int override = getOverrideValue(f);
+        
         //  get includes and excludes
-        Vector xcludesList = f.getChildrenNamed("include");
+        Vector xcludesList = null;
         String[] includes = null;
-        XMLElement xclude = null;
+        xcludesList = f.getChildrenNamed("include");
         if (xcludesList.size() > 0)
         {
           includes = new String[xcludesList.size()];
           for (int j = 0; j < xcludesList.size(); j++)
           {
-            xclude = (XMLElement) xcludesList.get(j);
+            XMLElement xclude = (XMLElement) xcludesList.get(j);
             includes[j] = requireAttribute(xclude, "name");
           }
         }
-
-        xcludesList = f.getChildrenNamed("exclude");
         String[] excludes = null;
-        xclude = null;
+        xcludesList = f.getChildrenNamed("exclude");
         if (xcludesList.size() > 0)
         {
           excludes = new String[xcludesList.size()];
           for (int j = 0; j < xcludesList.size(); j++)
           {
-            xclude = (XMLElement) xcludesList.get(j);
+            XMLElement xclude = (XMLElement) xcludesList.get(j);
             excludes[j] = requireAttribute(xclude, "name");
           }
         }
 
-        int override = getOverrideValue(f);
-        String targetdir_attr = requireAttribute(f, "targetdir");
-        List osList = OsConstraint.getOsList(f); // TODO: unverified
+        // scan and add fileset
+        DirectoryScanner ds = new DirectoryScanner();
+        ds.setIncludes(includes);
+        ds.setExcludes(excludes);
+        ds.setBasedir(dir);
+        ds.setCaseSensitive(casesensitive);
+        ds.scan();
 
-        try
+        String[] files = ds.getIncludedFiles();
+        String[] dirs = ds.getIncludedDirectories();
+
+        // Directory scanner has done recursion, add files and directories
+        for (int i = 0; i < files.length; ++i)
         {
-          addFileSet(
-            path,
-            includes,
-            excludes,
-            targetdir_attr,
-            osList,
-            pack.packFiles,
-            casesensitive,
-            override);
-        } catch (CompilerException x)
+          try
+          {
+            File file = new File(dir, files[i]);
+            String target = new File(targetdir, files[i]).getPath();
+            addSingleFile(file, target, osList, override, pack);
+          } catch (Exception x)
+          {
+            parseError(f, x.getMessage(), x);
+          }
+        }
+        for (int i = 0; i < dirs.length; ++i)
         {
-          parseError(f, x.getMessage(), x);
+          try
+          {
+            // can't add empty dirs so from target dir, append temp file name
+            File target = new File(targetdir, dirs[i]);
+            target = new File(target, keepDirFile.getName());
+            addSingleFile(keepDirFile, target.getPath(), osList, override, pack);
+          } catch (Exception x)
+          {
+            parseError(f, x.getMessage(), x);
+          }
         }
       }
 
       // get the updatechecks list
-      // We get the fileset list
       iter = el.getChildrenNamed("updatecheck").iterator();
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
 
         String casesensitive = f.getAttribute("casesensitive");
+
         //  get includes and excludes
-
         ArrayList includesList = new ArrayList();
-
-        Vector includesElementList = f.getChildrenNamed("include");
-
-        if (includesElementList != null)
-        {
-          Iterator include_it = includesElementList.iterator();
-          while (include_it.hasNext())
-          {
-            XMLElement inc_el = (XMLElement) include_it.next();
-
-            String name = inc_el.getAttribute("name");
-
-            if (name != null)
-            {
-              includesList.add(name);
-            } else
-            {
-              parseError(
-                inc_el,
-                "missing \"name\" attribute for <include> in <updatecheck>");
-            }
-          }
-        }
-
         ArrayList excludesList = new ArrayList();
 
-        Vector excludesElementList = f.getChildrenNamed("exclude");
-
-        if (excludesElementList != null)
+        Iterator include_it = f.getChildrenNamed("include").iterator();
+        while (include_it.hasNext())
         {
-          Iterator exclude_it = excludesElementList.iterator();
-          while (exclude_it.hasNext())
-          {
-            XMLElement excl_el = (XMLElement) exclude_it.next();
+          XMLElement inc_el = (XMLElement) include_it.next();
+          includesList.add(requireAttribute(inc_el, "name"));
+        }
 
-            String name = excl_el.getAttribute("name");
-
-            if (name != null)
-            {
-              excludesList.add(name);
-            } else
-            {
-              parseError(
-                excl_el,
-                "missing \"name\" attribute for <exclude> in <updatecheck>");
-            }
-          }
+        Iterator exclude_it = f.getChildrenNamed("exclude").iterator();
+        while (exclude_it.hasNext())
+        {
+          XMLElement excl_el = (XMLElement) exclude_it.next();
+          excludesList.add(requireAttribute(excl_el, "name"));
         }
 
         pack.updatechecks.add(
@@ -985,119 +966,24 @@ public class Compiler extends Thread
   }
 
   /**
-   *  Adds a Ant fileset.
-   *
-   * @param  path           The path.
-   * @param  includes       The includes rules.
-   * @param  excludes       The excludes rules.
-   * @param  relPath        The relative path.
-   * @param  osList         The target os constraints.
-   * @param  list           The files list.
-   * @param  casesensitive  Case-sensitive stuff.
-   * @param  override       Behaviour if a file already exists during install
-   * @exception  Exception  Description of the Exception
-   */
-  protected void addFileSet(
-    String path,
-    String[] includes,
-    String[] excludes,
-    String relPath,
-    List osList,
-    ArrayList list,
-    boolean casesensitive,
-    int override)
-    throws CompilerException
-  {
-    File test = new File(path);
-    if (test.isDirectory())
-    {
-      DirectoryScanner ds = new DirectoryScanner();
-      ds.setIncludes(includes);
-      ds.setExcludes(excludes);
-      ds.setBasedir(new File(path));
-      ds.setCaseSensitive(casesensitive);
-      ds.scan();
-
-      String[] files = ds.getIncludedFiles();
-      String[] dirs = ds.getIncludedDirectories();
-
-      /* Old buggy code
-      String newRelativePath = null;
-      
-      String absolutBasePath = test.getParentFile().getAbsolutePath();
-      String absolutPath = test.getAbsolutePath();
-      String absolutFilePath = null;
-      int copyPathFrom = absolutBasePath.length() + 1;
-      for (int i = 0; i < files.length; i++)
-      {
-        File file = new File(absolutPath + File.separator + files[i]);
-      
-        absolutFilePath = file.getParentFile().getAbsolutePath();
-      
-        newRelativePath = relPath + File.separator + absolutFilePath.substring(copyPathFrom);
-        //FIX ME: the override for fileset is by default true, needs to be changed
-        addFile(file, newRelativePath, targetOs, true, list);
-      }
-      */
-
-      // New working code (for files)
-      String filePath, instPath, expPath;
-      int pathLimit;
-      File file;
-      for (int i = 0; i < files.length; ++i)
-      {
-        filePath = path + File.separator + files[i];
-        expPath = relPath + File.separator + files[i];
-        file = new File(filePath);
-        pathLimit = expPath.indexOf(file.getName());
-        if (pathLimit > 0)
-          instPath = expPath.substring(0, pathLimit);
-        else
-          instPath = relPath;
-        addFile(file, instPath, osList, override, list);
-      }
-
-      // Empty directories are left by the previous code section, so we need to
-      // take care of them
-      for (int i = 0; i < dirs.length; ++i)
-      {
-        expPath = path + File.separator + dirs[i];
-        File dir = new File(expPath);
-        if (dir.list().length == 0)
-        {
-          instPath = relPath + File.separator + dirs[i];
-          pathLimit = instPath.lastIndexOf(dir.getName());
-          instPath = instPath.substring(0, pathLimit);
-          addFile(dir, instPath, osList, override, list);
-        }
-      }
-    } else
-      throw new CompilerException(
-        "\"dir\" attribute of fileset is not valid: " + path);
-  }
-
-  /**
    *  Recursive method to add files in a pack.
    *
    * @param  file           The file to add.
-   * @param  relPath        The relative path.
+   * @param  targetdir      The relative path to the parent.
    * @param  osList         The target OS constraints.
    * @param  override       Overriding behaviour.
-   * @param  list           The files list.
-   * @exception  Exception  Description of the Exception
+   * @param  pack           Pack to be packed into
+   * @exception FileNotFoundException if the file does not exist
    */
-  protected void addFile(
-    File file,
-    String relPath,
-    List osList,
-    int override,
-    ArrayList list)
-    throws CompilerException
+  protected void addRecursively(File file, String targetdir,
+                                List osList, int override, Pack pack)
+    throws IOException
   {
     // We check if 'file' is correct
     if (!file.exists())
       throw new CompilerException(file.toString() + " does not exist");
 
+    String targetfile = targetdir + "/" + file.getName();
     // Recursive part
     if (file.isDirectory())
     {
@@ -1109,19 +995,19 @@ public class Compiler extends Thread
         files = new File[1];
         files[0] = keepDirFile;
       }
+      // new targetdir = targetfile;
       int size = files.length;
-      String np = relPath + "/" + file.getName();
       for (int i = 0; i < size; i++)
-        addFile(files[i], np, osList, override, list);
+        addRecursively(files[i], targetfile, osList, override, pack);
     } else
     {
       PackSource nf = new PackSource();
       nf.src = file.getAbsolutePath();
-      nf.setTargetDir(relPath);
+      nf.setTargetFile(targetfile);
       nf.osConstraints = osList;
       nf.override = override;
       debug("Adding file: " + nf.toString());
-      list.add(nf);
+      pack.packFiles.add(nf);
     }
   }
 
@@ -1149,7 +1035,7 @@ public class Compiler extends Thread
     String targetFile,
     List osList,
     int override,
-    ArrayList list)
+    Pack pack)
     throws CompilerException
   {
     //System.out.println ("adding single file " + file.getName() + " as " + targetFile);
@@ -1158,7 +1044,7 @@ public class Compiler extends Thread
     nf.setTargetFile(targetFile);
     nf.osConstraints = osList;
     nf.override = override;
-    list.add(nf);
+    pack.packFiles.add(nf);
   }
 
   /**
@@ -1203,33 +1089,8 @@ public class Compiler extends Thread
   {
     // Initialisation
     ArrayList resources = new ArrayList();
-    XMLElement root = data.getFirstChildNamed("resources");
 
-    if (root == null)
-      return resources;
-
-    // We process each res markup
-    Iterator iter = root.getChildrenNamed("res").iterator();
-    while (iter.hasNext())
-    {
-      XMLElement res = (XMLElement) iter.next();
-
-      // Do not prepend basedir if src is already an absolute path
-      File src = new File(requireAttribute(res, "src"));
-      if (!src.isAbsolute())
-        src = new File(basedir, src.getPath());
-
-      resources.add(
-        new Resource(
-          requireAttribute(res, "id"),
-          src.getPath(),
-          validateYesNoAttribute(res, "parse", NO),
-          res.getAttribute("type"),
-          res.getAttribute("encoding")));
-    }
-    if (resources.isEmpty())
-      parseError(root, "<resources> requires a <res>");
-
+    // write the uninstaller first, so <resources> is not required
     if (writeUninstaller)
     {
     InputStream uninst_is =
@@ -1255,6 +1116,30 @@ public class Compiler extends Thread
     resources.add(new Resource("IzPack.uninstaller", uninst_is));
     }
 
+    XMLElement root = data.getFirstChildNamed("resources");
+    if (root == null)
+      return resources;
+
+    // We process each res markup
+    Iterator iter = root.getChildrenNamed("res").iterator();
+    while (iter.hasNext())
+    {
+      XMLElement res = (XMLElement) iter.next();
+
+      // Do not prepend basedir if src is already an absolute path
+      File src = new File(requireAttribute(res, "src"));
+      if (!src.isAbsolute())
+        src = new File(basedir, src.getPath());
+
+      resources.add(
+        new Resource(
+          requireAttribute(res, "id"),
+          src.getPath(),
+          validateYesNoAttribute(res, "parse", NO),
+          res.getAttribute("type"),
+          res.getAttribute("encoding")));
+    }
+    
     // We return the ArrayList
     return resources;
   }
