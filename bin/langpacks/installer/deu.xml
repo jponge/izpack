@@ -63,7 +63,7 @@
     <str id="ImgPacksPanel.packs" txt="Die folgenden Pakete stehen zur Verfügung:"/>
     <str id="ImgPacksPanel.snap" txt="Hier ist der zugehörige Schnappschuss:"/>
     <str id="ImgPacksPanel.checkbox" txt=" Installiere dieses Paket"/>
-    <str id="ShortcutPanel.regular.list" txt="Wählen Sie eine Programmgruppe für die Verknüfung:"/>
+    <str id="ShortcutPanel.regular.list" txt="Wählen Sie eine Programmgruppe für die Verknüpfung:"/>
     <str id="ShortcutPanel.regular.default" txt="Wiederherstellen"/>
     <str id="ShortcutPanel.regular.desktop" txt="Verknüpfung auf dem Desktop einrichten"/>
     <str id="ShortcutPanel.regular.create" txt="Verknüpfung erstellen"/>
