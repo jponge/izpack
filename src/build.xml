@@ -215,6 +215,7 @@
                 <include name="com/izforge/izpack/compiler/*.class"/>
                 <include name="com/izforge/izpack/util/OsConstraint.class"/>
                 <include name="com/izforge/izpack/util/Debug.class"/>
+                <include name="com/izforge/izpack/util/NotEmptyValidator.class"/>
                 <include name="com/izforge/izpack/ant/*.class"/>
                 <include name="com/izforge/izpack/ant/langpacks/*.properties"/>
                 <include name="com/izforge/izpack/installer/VariableValueMap.class"/>
@@ -250,6 +251,7 @@
                 <include name="com/izforge/izpack/compiler/*.class"/>
                 <include name="com/izforge/izpack/util/OsConstraint.class"/>
                 <include name="com/izforge/izpack/util/Debug.class"/>
+                <include name="com/izforge/izpack/util/NotEmptyValidator.class"/>
                 <include name="com/izforge/izpack/ant/*.class"/>
                 <include name="com/izforge/izpack/ant/langpacks/*.properties"/>
                 <include name="com/izforge/izpack/installer/VariableValueMap.class"/>
