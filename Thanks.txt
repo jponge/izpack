@@ -4,7 +4,7 @@
 by their libraries, contributions, feedback, and so on. If you think that I
 forgot to mention your name, just send me a email : julien@izforge.com.
 
-    Of course, I would first like to thank YOU, whoever you are, for using 
+    Of course, I would first like to thank YOU, whoever you are, for using
 IzPack for your projects ;-)
 
 - Marc De Scheemaecker : for the great NanoXML 2 library.
@@ -12,12 +12,12 @@ IzPack for your projects ;-)
   link on the Incors.org Kunststoff homepage.
 - Pierre Dittgen : for the Jakarta Ant makefile.
 - Klaus Hartlage : for the German language pack support.
-- Romain Guy : for the Jext editor, the feedback, and the use of IzPack for 
+- Romain Guy : for the Jext editor, the feedback, and the use of IzPack for
   Jext itself.
 - Johann Loefflmann for the great bug reports and improvements.
 - Carlos Rueda for the Spanish language pack support.
 - Eric Samson : for the feedback and the encouragements toward the project.
-- Brad Cox : for the feedback, some tips in the source code, and using IzPack 
+- Brad Cox : for the feedback, some tips in the source code, and using IzPack
   with its MyBank project.
 - Bertrand Luc : for the feedback.
 - Chris Boothe : for the feedback.
@@ -26,7 +26,7 @@ IzPack for your projects ;-)
   and the variables substitution system as well as some other hacks.
 - John Rousseau : for the feedback.
 - Nicolas Deschaume : for the nice splash screens.
-- Michael Peterson : for the TargetPanel enhancements (default target 
+- Michael Peterson : for the TargetPanel enhancements (default target
   customization) and the English language packs enhancements.
 - Paul Wilkinson : for the English language packs enhancements and the Ant
   IzPack integration.
@@ -70,4 +70,4 @@ IzPack for your projects ;-)
 - Mike Cunneen : for the UserPanel enhancements.
 - Thorsten Kamann : for the various contributions.
 
-# vim: fileformat=dos 
+# vim: fileformat=dos

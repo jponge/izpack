@@ -12,7 +12,7 @@
 - Packagers refactorings.
 - Changed the JFrame icon shown in the installers and uninstallers.
 - New SimpleFinishPanel that don't have the automated installers feature.
-- Heavy refactorings on the look and feels side. The Kunststoff packagers have 
+- Heavy refactorings on the look and feels side. The Kunststoff packagers have
   been removed. The look and feels can now be specified on a per-OS basis. If
   no look and feel is specified for a particular OS, then the platform default
   one will be used.
@@ -20,16 +20,16 @@
   packages pictures.
 - UserInputPanel: more parameters and a regular expressions validator have been
   added (Mike Cunneen).
-- 3 new UserInputPanel validators (Thorsten Kamann): 
-  * PortValidator (checks whether a port on localhost is available) 
-  * IsPortValidator (checks whether the enterd value is a port in the range 
+- 3 new UserInputPanel validators (Thorsten Kamann):
+  * PortValidator (checks whether a port on localhost is available)
+  * IsPortValidator (checks whether the enterd value is a port in the range
     between 0 and 32000)
   * HostAddressValidator (checks whether the combination host:port is available)
 - 1 new UserInputPanel processor that checks checks whether the combination of
   host:port is available. If not the port will be arised until it is available.
   (Thorsten Kamann)
 
-  > 3.5.4 (build 2004.xx.yy)
+  > 3.5.4 (build 2004.06.05)
 
 - German langpack fixes once again (Klaus Bartz).
 - Slovak langpack fix (pbe@whitestein.com).
