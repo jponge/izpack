@@ -47,9 +47,6 @@ public class Info implements Serializable
   /**  The required Java version (min) */
   private String javaVersion = "1.2";
 
-  /**  Whether to write the uninstaller */
-  private boolean writeUninstaller = true;
-
   /**  The constructor, deliberatly void.  */
   public Info()
   {
@@ -153,19 +150,6 @@ public class Info implements Serializable
   public String getJavaVersion()
   {
     return javaVersion;
-  }
-
-  /**
-   * @return Whether to write an uninstaller.
-   */
-  public boolean getWriteUninstaller()
-  {
-    return writeUninstaller;
-  }
-
-  public void setWriteUninstaller(boolean b)
-  {
-    writeUninstaller = b;
   }
 
   /**
