@@ -315,7 +315,9 @@ public class Compiler extends Thread
         FileInputStream in = new FileInputStream(f);
         long nbytes = f.length();
 
-        // p.targetdir will always end with separator
+        if(!p.targetdir.endsWith(File.separator)) {
+          p.targetdir = p.targetdir+File.separatorChar;
+        }        
         String targetFilename = p.targetdir + f.getName();
 
         // pack paths in canonical (unix) form regardless of current host o/s:
@@ -484,7 +486,7 @@ public class Compiler extends Thread
         while (iter.hasNext())
         {
           XMLElement p = (XMLElement) iter.next();
-	  String targetFile = p.getAttribute("targetfile");
+      String targetFile = p.getAttribute("targetfile");
           pack.parsables.add
             (new ParsableFile(targetFile,
             p.getAttribute("type", "plain"),
@@ -552,7 +554,7 @@ public class Compiler extends Thread
               os.getAttribute("version", null),
               os.getAttribute("arch", null)));
           }
-	  String targetFile = e.getAttribute("targetfile");
+      String targetFile = e.getAttribute("targetfile");
           pack.executables.add(new ExecutableFile(targetFile,
             executeType, executeClass,
             executeOn, onFailure, argList, osList));
@@ -612,7 +614,7 @@ public class Compiler extends Thread
           }
         }
 
-	String targetDir = f.getAttribute("targetdir");
+    String targetDir = f.getAttribute("targetdir");
         addFileSet(path, includes, excludes,
           targetDir,
           f.getAttribute("os"),
