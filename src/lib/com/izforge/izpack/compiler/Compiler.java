@@ -890,6 +890,7 @@ public class Compiler extends Thread
         DirectoryScanner ds = new DirectoryScanner();
         ds.setIncludes(includes);
         ds.setExcludes(excludes);
+        ds.addDefaultExcludes();
         ds.setBasedir(dir);
         ds.setCaseSensitive(casesensitive);
         ds.scan();
