@@ -3,7 +3,7 @@
 <project name="IzPack" default="all" basedir="..">
 
 <!--
-
+  $Id$
   build.xml first written by Pierre Dittgen (pierre.dittgen@criltelecom.com)
   This file is intended to be used with ant (http://jakarta.apache.org/ant),
   a java/xml makefile utility.
@@ -488,6 +488,10 @@
             <param name="panel-dir" value="PacksPanel"/>
         </antcall>
         <antcall target="compile.panel">
+            <param name="panel" value="PacksPanelBase"/>
+            <param name="panel-dir" value="PacksPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
             <param name="panel" value="PacksPanel"/>
             <param name="panel-dir" value="PacksPanel"/>
         </antcall>
@@ -500,6 +504,10 @@
         </antcall>
         <antcall target="compile.panel">
             <param name="panel" value="PacksModel"/>
+            <param name="panel-dir" value="ImgPacksPanel"/>
+        </antcall>
+        <antcall target="compile.panel">
+            <param name="panel" value="PacksPanelBase"/>
             <param name="panel-dir" value="ImgPacksPanel"/>
         </antcall>
         <antcall target="compile.panel">
