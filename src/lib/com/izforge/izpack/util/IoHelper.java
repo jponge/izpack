@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.StringTokenizer;
 
 import com.izforge.izpack.installer.VariableSubstitutor;
@@ -51,6 +52,8 @@ public class IoHelper
 
   /** Placeholder during translatePath computing */
   private static final String MASKED_SLASH_PLACEHOLDER = "§&_&§";
+  
+  private static Properties envVars = null;
 	/**
 	 * Default constructor
 	 */
@@ -269,7 +272,10 @@ public class IoHelper
     int state;
     if( OsVersion.IS_WINDOWS )
     {
-      String[] params = {"CMD", "/C", "\"dir /D /-C \"" + path + "\"\""};
+      String command = "cmd.exe";
+      if( System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+        command = "command.com";
+      String[] params = {command, "/C", "\"dir /D /-C \"" + path + "\"\""};
       String[] output = new String[2];
       FileExecutor fe = new FileExecutor();
       state = fe.executeCommand(params, output);
@@ -315,6 +321,10 @@ public class IoHelper
     {
       if(OsVersion.IS_UNIX)
         return true;
+    }
+    else if(method.equals("getenv")) 
+    {
+       return true;
     }
     else
     {
@@ -497,4 +507,84 @@ public class IoHelper
     return destination;
   }
 
+  /**
+   * Returns the value of the environment variable given
+   * by key. This method is a work around for VM versions which
+   * do not support getenv in an other way.
+   * At the first call all environment variables will be loaded via
+   * an exec.  
+   * @param key variable name for which the value should be resolved
+   * @return the value of the environment variable given
+   * by key
+   */
+  public static String getenv(String key)
+  {
+    if( envVars == null)
+      loadEnv();
+    if( envVars == null)
+      return( null );
+    return(String) ( envVars.get(key));
+  }
+  
+  /**
+   * Loads all environment variables via an exec.
+   */
+  private static void loadEnv()
+  {
+    String retval = null;
+    int state;
+    String[] output = new String[2];
+    String[] params;
+    if( OsVersion.IS_WINDOWS )
+    {
+      String command = "cmd.exe";
+      if( System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+        command = "command.com";
+      String[] paramst = {command, "/C", "set"};
+      params = paramst;
+    }
+    else 
+    {
+      String[] paramst = {"env"};
+      params = paramst;
+    }    
+    FileExecutor fe = new FileExecutor();
+    state = fe.executeCommand(params, output);
+    if( output[0].length() <= 0 )
+      return;
+    String lineSep = System.getProperty("line.separator");
+    StringTokenizer st = new StringTokenizer(output[0], lineSep);
+    envVars = new Properties();
+    String var = null;
+    int index = 0;
+    while(st.hasMoreTokens())
+    {
+      String line = st.nextToken();
+      if( line.indexOf('=') == -1)
+      { // May be a env var with a new line in it.
+        if( var == null )
+        {
+          var = lineSep + line;
+        }
+        else
+        {
+          var += lineSep + line;
+        }
+      }
+      else
+      { // New var, perform the previous one.
+        if( var != null )
+        {
+          index = var.indexOf('=');
+          envVars.setProperty(var.substring(0, index), var.substring(index + 1));
+        }
+        var = line;
+      }
+    }
+    if( var != null )
+    { // Add last env var.
+      index = var.indexOf('=');
+      envVars.setProperty(var.substring(0, index), var.substring(index + 1));
+    }
+  }
 }
