@@ -2,6 +2,7 @@
 
   > x.y.z (build xxxx.yy.zz)
 
+- Italian localization updates by Cristian Ghezzi.
 - Win32: Fixed the localization of "Program Files" and added support for 8
   more languages (Dennis Lundberg).
 - Portuguese localization updates from Alex Carlos Braga Antao.

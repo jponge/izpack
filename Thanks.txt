@@ -61,5 +61,6 @@ IzPack for your projects ;-)
 - Tino Schwarze : for the great enhancements.
 - Dennis Lundberg : for the Swedish i18n contributions.
 - Alex Carlos Braga Antao : for the portuguese i18 contributions.
+- Cristian Ghezzi : for the Italian i18n contributions.
 
 # vim: fileformat=dos 
