@@ -145,6 +145,8 @@ public class IzPackTask extends org.apache.tools.ant.Task implements com.izforge
      * @param izPackDir New value of property izPackDir.
      */
     public void setIzPackDir(String izPackDir) {
+      if( !(izPackDir.endsWith("/") ) )
+        izPackDir += "/";
         this.izPackDir = izPackDir;
     }
     
