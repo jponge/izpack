@@ -138,7 +138,7 @@ public class Pack implements Serializable
   }
   /**
    * Creates a text list of all the packs it depend on
-   * @return
+   * @return the created text
    */
   public String depString()
   {
