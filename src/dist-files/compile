@@ -1,0 +1,10 @@
+#! /bin/sh
+
+# Launches the IzPack compiler.
+# Use the '-?' argument to know the parameters and call syntax.
+
+# Sets the IzPack home directory
+IZPACK_HOME='$INSTALL_PATH'
+
+# Does the effective launching
+java -jar "${IZPACK_HOME}/lib/compiler.jar" -HOME "$IZPACK_HOME" "$@"

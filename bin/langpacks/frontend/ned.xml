@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The English langpack -->
+
+<langpack>
+
+    <!-- General frontend strings -->
+    <str id="frontend.title" txt="IzPack - GUI Frontend"/>
+    <str id="frontend.untitled" txt="Naamloos"/>
+    <str id="frontend.error" txt="Fout"/>
+    <str id="frontend.save_first" txt="Bewaar eerst uw instllatie-bestand."/>
+    <str id="frontend.comp_dlg.title" txt="Compilatie"/>
+    <str id="frontend.comp_dlg.msg" txt="Compiler berichten :"/>
+    <str id="frontend.comp_dlg.ok" txt="Ok"/>
+    <str id="frontend.basepath" txt="Selecteer het basis pad."/>
+    <str id="frontend.licence.msg" txt="De GNU General Public Licence versie 2 :"/>
+    <str id="frontend.licence.ok" txt="Ok"/>
+    <str id="frontend.about.copyright" txt="Copyright (c) 2001,2002 Julien PONGE - Alle rechten voorbehouden"/>
+    <str id="frontend.about.url" txt="http://www.izforge.com/"/>
+    <str id="frontend.lpswitch" txt="Taal veranderen"/>
+    <str id="frontend.nexttime" txt="De veranderingen zullen zichtbaar worden na een herstart."/>
+    
+    <!-- Menu specific strings -->
+
+    <str id="menu.langpack" txt="Taal"/>
+    <str id="menu.langpack.mn" txt="g"/>
+    
+    <str id="menu.bookmarks" txt="Recente bestanden"/>
+    <str id="menu.bookmarks.mn" txt="R"/>
+    
+    <str id="menu.files" txt="Bestand"/>
+    <str id="menu.files.mn" txt="F"/>
+    <str id="menu.new" txt="Nieuw"/>
+    <str id="menu.new.mn" txt="N"/>
+    <str id="menu.open" txt="Open"/>
+    <str id="menu.open.mn" txt="O"/>
+    <str id="menu.save" txt="Opslaan"/>
+    <str id="menu.save.mn" txt="S"/>
+    <str id="menu.save_as" txt="Opslaan als"/>
+    <str id="menu.save_as.mn" txt="a"/>
+    <str id="menu.exit" txt="Afsluiten"/>
+    <str id="menu.exit.mn" txt="E"/>
+    <str id="menu.import" txt="Importeer een bestand met relatieve paden."/>
+    <str id="menu.import.mn" txt="I"/>
+    
+    <str id="menu.compile" txt="Compileer"/>
+    <str id="menu.compile.mn" txt="C"/>
+    <str id="menu.comp.standard" txt="Standaard Installeerder"/>
+    <str id="menu.comp.standard.mn" txt="S"/>
+    <str id="menu.comp.standardk" txt="Standaard Kunststoff Installeerder"/>
+    <str id="menu.comp.standardk.mn" txt="a"/>
+    <str id="menu.comp.web" txt="Web Installeerder"/>
+    <str id="menu.comp.web.mn" txt="W"/>
+    <str id="menu.comp.webk" txt="Web Kunststoff Installeerder"/>
+    <str id="menu.comp.webk.mn" txt="e"/>
+    
+    <str id="menu.izpack" txt="IzPack"/>
+    <str id="menu.izpack.mn" txt="I"/>
+    <str id="menu.about" txt="Over IzPack ..."/>
+    <str id="menu.about.mn" txt="A"/>
+    <str id="menu.licence" txt="IzPack Licentie ..."/>
+    <str id="menu.licence.mn" txt="L"/>
+    
+    <!-- Tabs specific strings -->
+    
+    <str id="tabs.info.title" txt="Algemene Informatie"/>
+    <str id="tabs.info.appname" txt="Naam van het product :"/>
+    <str id="tabs.info.appversion" txt="Product versie :"/>
+    <str id="tabs.info.appurl" txt="Product homepage :"/>
+    <str id="tabs.info.authorslist" txt="Lijst van Schrijvers :"/>
+    <str id="tabs.info.author" txt="Schrijvers naam :"/>
+    <str id="tabs.info.email" txt="Schrijvers e-mail :"/>
+    <str id="tabs.info.add" txt="Voeg een schrijver toe"/>
+    <str id="tabs.info.del" txt="Verwijder schrijver"/>
+    <str id="tabs.info.width" txt=" Scherm breedte :"/>
+    <str id="tabs.info.height" txt=" Scherm hoogte :"/>
+    <str id="tabs.info.resizable" txt=" Maak het scherm veranderbaar"/>
+    
+    <str id="tabs.loc.title" txt="Localen"/>
+    <str id="tabs.loc.available" txt="Beschikbare taal-pakketten :"/>
+    <str id="tabs.loc.selected" txt="Geselecteerde taal-pakketten :"/>
+    <str id="tabs.loc.include" txt="Voeg toe"/>
+    <str id="tabs.loc.remove" txt="Verwijder"/>
+    
+    <str id="tabs.res.title" txt="Bronnen"/>
+    <str id="tabs.res.list" txt="Lijst van Bronnen :"/>
+    <str id="tabs.res.add" txt="Voeg een bron toe"/>
+    <str id="tabs.res.remove" txt="Verwijder bron"/>
+    <str id="tabs.res.input" txt="Bron ID :"/>
+    
+    <str id="tabs.pan.title" txt="Panelen"/>
+    <str id="tabs.pan.available" txt="Beschikbare panelen :"/>
+    <str id="tabs.pan.selected" txt="Geselecteerde panelen :"/>
+    <str id="tabs.pan.include" txt="Voeg toe"/>
+    <str id="tabs.pan.remove" txt="Verwijder"/>
+    <str id="tabs.pan.tip" txt="Sommige panelen hebben bepaalde bronnen nodig. Zie de documentatie voor meer informatie."/>
+    
+    <str id="tabs.packs.title" txt="Pakketten"/>
+    <str id="tabs.packs.packs" txt="Pakketten :"/>
+    <str id="tabs.packs.files" txt="Bestanden in het geselecteerde pakket :"/>
+    <str id="tabs.packs.addpack" txt="Voeg een pakket toe"/>
+    <str id="tabs.packs.delpack" txt="Verwijder pakket"/>
+    <str id="tabs.packs.required" txt="Dit pakket is nodig"/>
+    <str id="tabs.packs.addfile" txt="Voeg een bestand of directory toe"/>
+    <str id="tabs.packs.delfile" txt="Verwijder bestand of directory"/>
+    <str id="tabs.packs.parsable" txt="Dit bestand is parsable"/>
+    <str id="tabs.packs.pack_name" txt="Pakket naam :"/>
+    <str id="tabs.packs.pack_desc" txt="Pakket beschrijving :"/>
+    <str id="tabs.packs.target" txt="Destinatie folder :"/>
+    <str id="tabs.packs.scriptProps" txt="Parser opties ..."/>
+    <str id="tabs.packs.f_type" txt="Bestand type ? (leeg voor standaard)"/>
+    <str id="tabs.packs.f_enc" txt="Bestand codering ? (leeg voor standaard)"/>
+
+</langpack>

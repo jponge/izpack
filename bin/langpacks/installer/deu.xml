@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+
+
+<!-- The German langpack -->
+
+
+
+<langpack>
+
+
+
+    <!-- General installer strings -->
+
+    <str id="installer.title" txt="IzPack - Installation von "/>
+
+    <str id="installer.next" txt="Weiter"/>
+
+    <str id="installer.prev" txt="Zurück"/>
+
+    <str id="installer.quit" txt="Beenden"/>
+
+    <str id="installer.madewith" txt="(Erstellt mit IzPack - http://www.izforge.com/)"/>
+
+    <str id="installer.quit.title" txt="Wollen Sie wirklich beenden ?"/>
+
+    <str id="installer.quit.message" txt="Die Installation wird jetzt abgebrochen !"/>
+
+    <str id="installer.warning" txt="Warnung !"/>
+
+    <str id="installer.yes" txt="Ja"/>
+
+    <str id="installer.no" txt="Nein"/>
+
+    <str id="installer.cancel" txt="Abbruch"/>
+
+    <str id="installer.error" txt="Fehler"/>
+
+    
+
+    <!-- Uninstaller specific strings -->
+
+    <str id="uninstaller.warning" txt="Jetzt wird(werden) die installierte(n) Anwendung(en) entfernt !"/>
+
+    <str id="uninstaller.destroytarget" txt=" Deinstallation durchführen für "/>
+
+    <str id="uninstaller.uninstall" txt="Deinstallieren"/>
+
+    
+
+    <!-- The strings for the 'official' IzPack plugins -->
+
+    <str id="HelloPanel.welcome1" txt="Willkommen zur Installation von "/>
+
+    <str id="HelloPanel.welcome2" txt=" !"/>
+
+    <str id="HelloPanel.authors" txt="Der(die) Autor(en) dieser Software ist(sind) : "/>
+
+    <str id="HelloPanel.url" txt="Die Homepage für diese Software : "/>
+
+    
+
+    <str id="LicencePanel.info" txt="Bitte lesen Sie die folgenden Lizenzvereinbarungen durch :"/>
+
+    <str id="LicencePanel.agree" txt="Stimmen Sie diesen Lizenzvereinbarungen zu ?"/>
+
+    <str id="LicencePanel.yes" txt="Ja"/>
+
+    <str id="LicencePanel.no" txt="Nein"/>
+
+    
+
+    <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen :"/>
+
+    
+
+    <str id="TargetPanel.info" txt="Wählen Sie den Installationspfad :"/>
+
+    <str id="TargetPanel.browse" txt="Auswählen ..."/>
+
+    <str id="TargetPanel.warn" 
+
+         txt="Das Verzeichnis existiert bereits ! Sind Sie sicher, dass Sie in diesem Verzeichnis installieren wollen ?"/>
+
+    <str id="TargetPanel.empty_target"
+
+         txt="Sie haben ein namenloses Ziel eingegeben ! Wollen Sie fortfahren ?"/>
+
+	 
+
+    <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus :"/>
+
+    <str id="PacksPanel.tip" txt="Hinweis : die grau markierten Pakete können nicht optional ausgewählt werden."/>
+
+    
+
+    <str id="InstallPanel.info" txt="Starten Sie hier die Installation :"/>
+
+    <str id="InstallPanel.install" txt="Installieren !"/>
+
+    <str id="InstallPanel.tip" txt="Installations-Fortschritt :"/>
+
+    <str id="InstallPanel.begin" txt="[Nichts]"/>
+
+    <str id="InstallPanel.finished" txt="[Fertig]"/>
+
+    
+
+    <str id="FinishPanel.success" txt="Die Installation wurde erfolgreich durchgeführt !"/>
+
+    <str id="FinishPanel.fail" txt="Die Installation ist fehlgeschlagen ..."/>
+
+    <str id="FinishPanel.uninst.info" txt="Ein Deinstallationsprogramm wurde in folgendem Dateipfad gespeichert:"/>
+
+    <str id="FinishPanel.auto" txt="Automatisches Installationsskript generieren"/>
+
+    <str id="FinishPanel.auto.tip"
+
+         txt="Generiert eine Datei mit der die gleiche Installation automatisch auf einem anderen Computer durchgeführt werden kann."/>
+
+    
+
+    <str id="ImgPacksPanel.packs" txt="Die folgenden Pakete stehen zur Verfügung :"/>
+
+    <str id="ImgPacksPanel.snap" txt="Hier ist der zugehörige Schnappschuss :"/>
+
+    <str id="ImgPacksPanel.checkbox" txt=" Installiere dies Paket"/>
+
+    
+
+    <str id="ShortcutPanel.regular.list" txt="Select a Program Group for the Shortcuts:"/>
+    <str id="ShortcutPanel.regular.default" txt="Reset"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Create shortcut on the desktop"/>
+    <str id="ShortcutPanel.regular.create" txt="Create Shortcuts"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="current user"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="all users"/>
+
+    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
+    
+    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Shortcut Target   : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Command Line      : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Icon File         : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Working Directory : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
+    <str id="ShortcutPanel.location.applications" txt="Applications Menu"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
+    <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
+
+    <!-- Add your own panels specific strings here if you need -->
+
+
+
+</langpack>

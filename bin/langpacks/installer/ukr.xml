@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- The Ukrainian langpack -->
+
+<langpack>
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - Інсталяція "/>
+    <str id="installer.next" txt="Далі"/>
+    <str id="installer.prev" txt="Назад"/>
+    <str id="installer.quit" txt="Вийти"/>
+    <str id="installer.madewith" txt="(Інсталятор зроблено за допомогою IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Завершити роботу?"/>
+    <str id="installer.quit.message" txt="Інсталяція буде відмінена !"/>
+    <str id="installer.warning" txt="Застереження !"/>
+    <str id="installer.yes" txt="Так"/>
+    <str id="installer.no" txt="Ні"/>
+    <str id="installer.cancel" txt="Відмінити"/> 
+    
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="Інстальовані програми будуть стерті !"/>
+    <str id="uninstaller.destroytarget" txt="Деінсталювати "/>
+    <str id="uninstaller.uninstall" txt="Деінсталювати встановлені програми"/>
+    
+    <!-- The strings for the 'official' IzPack plugins -->
+    <str id="HelloPanel.welcome1" txt="Ласкаво просимо в програму інсталяції "/>
+    <str id="HelloPanel.welcome2" txt=" !"/>
+    <str id="HelloPanel.authors" txt="Автори програми: "/>
+    <str id="HelloPanel.url" txt="Домашня сторінка програми: "/>
+    
+    <str id="LicencePanel.info" txt="Будь ласка уважно прочитайте ліцензію :"/>
+    <str id="LicencePanel.agree" txt="Ви згідні з лiцензією ?"/>
+    <str id="LicencePanel.yes" txt="Так"/>
+    <str id="LicencePanel.no" txt="Ні"/>
+    
+    <str id="InfoPanel.info" txt="Будь ласка уважно прочитайте слідуючу інформацію :"/>
+    
+    <str id="TargetPanel.info" txt="Виберіть каталог для інсталяції :"/>
+    <str id="TargetPanel.browse" txt="Вказати ..."/>
+    <str id="TargetPanel.warn" 
+         txt="Каталог вже існує ! Бажаєте встановити програму незважаючи на це ?"/>
+    
+    <str id="PacksPanel.info" txt="Виберіть пакети для інсталяції :"/>
+    <str id="PacksPanel.tip" txt="Примітка: пакети виділені сірим кольором необхідні для інсталяції."/>
+    
+    <str id="InstallPanel.info" txt="Підготовка для інсталяції програми завершена :"/>
+    <str id="InstallPanel.install" txt="Інсталювати !"/>
+    <str id="InstallPanel.tip" txt="Проходження інсталяції :"/>
+    <str id="InstallPanel.begin" txt="[Порожньо]"/>
+    <str id="InstallPanel.finished" txt="[Завершено]"/>
+    
+    <str id="FinishPanel.success" txt="Інсталяція успішно завершена !"/>
+    <str id="FinishPanel.fail" txt="Інсталяція зазнала збою ..."/>
+    <str id="FinishPanel.uninst.info" txt="Програма деінсталяції розміщена в :"/>
+    <str id="FinishPanel.auto" txt="Створити сценарій автоматичної інсталяції"/>
+    <str id="FinishPanel.auto.tip" 
+         txt="Буде створено файл, яких дозволяє автоматично провести таку саму інсталяцію програми на іншому комп'ютері."/>
+    
+    <str id="ImgPacksPanel.packs" txt="Доступні слідуючі пакети :"/>
+    <str id="ImgPacksPanel.snap" txt="Знимок пакету :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Встановити цей пакет"/>
+    
+    <str id="ShortcutPanel.regular.list" txt="Select a Program Group for the Shortcuts:"/>
+    <str id="ShortcutPanel.regular.default" txt="Reset"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Create shortcut on the desktop"/>
+    <str id="ShortcutPanel.regular.create" txt="Create Shortcuts"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="current user"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="all users"/>
+
+    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
+    
+    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Shortcut Target   : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Command Line      : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Icon File         : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Working Directory : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
+    <str id="ShortcutPanel.location.applications" txt="Applications Menu"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
+    <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
+
+    <!-- Add your own panels specific strings here if you need -->
+
+</langpack>

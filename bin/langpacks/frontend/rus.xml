@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="windows-1251" standalone="yes" ?>
+
+<!-- The English langpack -->
+
+<langpack>
+
+    <!-- General frontend strings -->
+    <str id="frontend.title" txt="IzPack - GUI Frontend"/>
+    <str id="frontend.untitled" txt="Нет имени"/>
+    <str id="frontend.error" txt="Ошибка"/>
+    <str id="frontend.save_first" txt="Сначала сохраните Ваш установочный файл."/>
+    <str id="frontend.comp_dlg.title" txt="Сборка"/>
+    <str id="frontend.comp_dlg.msg" txt="Сообщения компилятора :"/>
+    <str id="frontend.comp_dlg.ok" txt="Ok"/>
+    <str id="frontend.basepath" txt="Выберите базовый каталог"/>
+    <str id="frontend.licence.msg" txt="The GNU General Public Licence version 2 :"/>
+    <str id="frontend.licence.ok" txt="Ok"/>
+    <str id="frontend.about.copyright" txt="Copyright (c) 2001,2002 Julien PONGE"/>
+    <str id="frontend.about.url" txt="http://www.izforge.com/"/>
+    <str id="frontend.lpswitch" txt="Ящык установки"/>
+    <str id="frontend.nexttime" txt="Сделанные изменения начнут действовать со следующего запуска."/>
+    
+    <!-- Menu specific strings -->
+
+    <str id="menu.langpack" txt="Язык"/>
+    <str id="menu.langpack.mn" txt="з"/>
+    
+    <str id="menu.bookmarks" txt="Последние файлы"/>
+    <str id="menu.bookmarks.mn" txt="П"/>
+    
+    <str id="menu.files" txt="Файл"/>
+    <str id="menu.files.mn" txt="Ф"/>
+    <str id="menu.new" txt="Новый"/>
+    <str id="menu.new.mn" txt="Н"/>
+    <str id="menu.open" txt="Открыть"/>
+    <str id="menu.open.mn" txt="О"/>
+    <str id="menu.save" txt="Сохранить"/>
+    <str id="menu.save.mn" txt="С"/>
+    <str id="menu.save_as" txt="Сохранить как"/>
+    <str id="menu.save_as.mn" txt="к"/>
+    <str id="menu.exit" txt="Выход"/>
+    <str id="menu.exit.mn" txt="В"/>
+    <str id="menu.import" txt="Вставить файл с относительными путями"/>
+    <str id="menu.import.mn" txt="I"/>
+    
+    <str id="menu.compile" txt="Сборка"/>
+    <str id="menu.compile.mn" txt="С"/>
+    <str id="menu.comp.standard" txt="Стандартный инсталлятор"/>
+    <str id="menu.comp.standard.mn" txt="т"/>
+    <str id="menu.comp.standardk" txt="Стандартный Kunststoff инсталлятор"/>
+    <str id="menu.comp.standardk.mn" txt="K"/>
+    <str id="menu.comp.web" txt="Web инсталлятор"/>
+    <str id="menu.comp.web.mn" txt="W"/>
+    <str id="menu.comp.webk" txt="Web Kunststoff инсталлятор"/>
+    <str id="menu.comp.webk.mn" txt="e"/>
+    
+    <str id="menu.izpack" txt="IzPack"/>
+    <str id="menu.izpack.mn" txt="I"/>
+    <str id="menu.about" txt="О IzPack ..."/>
+    <str id="menu.about.mn" txt="О"/>
+    <str id="menu.licence" txt="IzPack лицензия ..."/>
+    <str id="menu.licence.mn" txt="л"/>
+    
+    <!-- Tabs specific strings -->
+    
+    <str id="tabs.info.title" txt="Общая информация"/>
+    <str id="tabs.info.appname" txt="Имя приложения :"/>
+    <str id="tabs.info.appversion" txt="Версия приложенеия :"/>
+    <str id="tabs.info.appurl" txt="URL домашней страница приложания :"/>
+    <str id="tabs.info.authorslist" txt="Список авторов :"/>
+    <str id="tabs.info.author" txt="ФИО :"/>
+    <str id="tabs.info.email" txt="email :"/>
+    <str id="tabs.info.add" txt="Добавить автора"/>
+    <str id="tabs.info.del" txt="Убрать автора"/>
+    <str id="tabs.info.width" txt=" Ширина окна :"/>
+    <str id="tabs.info.height" txt=" Высота окна :"/>
+    <str id="tabs.info.resizable" txt=" Позволить менять ращзмеры окна"/>
+    
+    <str id="tabs.loc.title" txt="Языки"/>
+    <str id="tabs.loc.available" txt="Список доступных языков :"/>
+    <str id="tabs.loc.selected" txt="Выбранные языки :"/>
+    <str id="tabs.loc.include" txt="Добавить"/>
+    <str id="tabs.loc.remove" txt="Убрать"/>
+    
+    <str id="tabs.res.title" txt="Ресурсы"/>
+    <str id="tabs.res.list" txt="Список ресурсов :"/>
+    <str id="tabs.res.add" txt="Добавить ресурс"/>
+    <str id="tabs.res.remove" txt="Убрать ресурс"/>
+    <str id="tabs.res.input" txt="ID ресурса :"/>
+    
+    <str id="tabs.pan.title" txt="Панели"/>
+    <str id="tabs.pan.available" txt="Доступные панели :"/>
+    <str id="tabs.pan.selected" txt="Выбранные панели :"/>
+    <str id="tabs.pan.include" txt="Добавить"/>
+    <str id="tabs.pan.remove" txt="Убрать"/>
+    <str id="tabs.pan.tip" txt="Некоторые панели могут требовать дополнительные ресурсы. Подробнее описано в документации."/>
+    
+    <str id="tabs.packs.title" txt="Наборы"/>
+    <str id="tabs.packs.packs" txt="Наборы :"/>
+    <str id="tabs.packs.files" txt="Файлы в указанном наборе :"/>
+    <str id="tabs.packs.addpack" txt="Добавить набор"/>
+    <str id="tabs.packs.delpack" txt="Удалить набор"/>
+    <str id="tabs.packs.required" txt=" Набор обязателен"/>
+    <str id="tabs.packs.addfile" txt="Добавить файл или каталог"/>
+    <str id="tabs.packs.delfile" txt="Удалить файл или каталог"/>
+    <str id="tabs.packs.parsable" txt=" Текст Файла подставляется "/>
+    <str id="tabs.packs.pack_name" txt="Имя набора :"/>
+    <str id="tabs.packs.pack_desc" txt="Описание набора :"/>
+    <str id="tabs.packs.target" txt="Целевой каталог :"/>
+
+</langpack>

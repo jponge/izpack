@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The Catalan langpack -->
+
+<langpack>
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - Instal.lació de "/>
+    <str id="installer.next" txt="Següent"/>
+    <str id="installer.prev" txt="Anterior"/>
+    <str id="installer.quit" txt="Sortir"/>
+    <str id="installer.madewith" txt="(Fet amb IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Confirma que vol sortir?"/>
+    <str id="installer.quit.message" txt="Això cancel.larà la instal.lació!"/>
+    <str id="installer.warning" txt="Atenció!"/>
+    <str id="installer.yes" txt="Sí"/>
+    <str id="installer.no" txt="No"/>
+    <str id="installer.cancel" txt="Cancel.lar"/>
+    <str id="installer.error" txt="Error"/>
+
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="Això eliminarà l'aplicació instal.lada!"/>
+    <str id="uninstaller.destroytarget" txt=" Forçar l'eliminació de "/>
+    <str id="uninstaller.uninstall" txt="Desinstal.lar"/>
+
+    <!-- The strings for the 'official' IzPack plugins -->
+    <str id="HelloPanel.welcome1" txt="Benvingut a la instalació de "/>
+    <str id="HelloPanel.welcome2" txt=" !"/>
+    <str id="HelloPanel.authors" txt="Autor(s) d'aquest programa: "/>
+    <str id="HelloPanel.url" txt="Pàgina d'aquest programa: "/>
+
+    <str id="LicencePanel.info" txt="Si us plau, llegiu atentament el conveni de la llicència:"/>
+    <str id="LicencePanel.agree" txt="Accepta els tèrmes d'aquest conveni de llicència?"/>
+    <str id="LicencePanel.yes" txt="Sí"/>
+    <str id="LicencePanel.no" txt="No"/>
+
+    <str id="InfoPanel.info" txt="Si us plau, llegiu la següent informació:"/>
+
+    <str id="TargetPanel.info" txt="Seleccioni la ruta de la instal.lació:"/>
+    <str id="TargetPanel.browse" txt="Escollir ..."/>
+    <str id="TargetPanel.warn"
+         txt="El directori ja existeix! Confirma que vol fer la instal.lació en l'esmentat directori?"/>
+    <str id="TargetPanel.empty_target"
+         txt="Ha fet una designació sense nom! Desitja fer-ho així?"/>
+
+    <str id="PacksPanel.info" txt="Seleccioni els paquets que desitja instal.lar:"/>
+    <str id="PacksPanel.tip" txt="Nota: els paquets en gris no són opcionals."/>
+
+    <str id="InstallPanel.info" txt="Faigi clic en Instal.lar! per iniciar el procés de la instal.lació"/>
+    <str id="InstallPanel.install" txt="Instal.lar!"/>
+    <str id="InstallPanel.tip" txt="Progrés de la instal.lació:"/>
+    <str id="InstallPanel.begin" txt="[Sense iniciar]"/>
+    <str id="InstallPanel.finished" txt="[Instal.lació finalitzada]"/>
+
+    <str id="FinishPanel.success" txt="Instal.lació finalitzada exitosament!"/>
+    <str id="FinishPanel.fail" txt="La instal.lació ha fallat ..."/>
+    <str id="FinishPanel.uninst.info" txt="S'ha ficat un programa de desinstal.lació:"/>
+    <str id="FinishPanel.auto" txt="Generar un guió per replicar aquesta mateixa instal.lació"/>
+    <str id="FinishPanel.auto.tip"
+         txt="Generar un arxiu que pugui usar-se per a fer automàticament la mateixa instal.lació en una altra màquina."/>
+
+    <str id="ImgPacksPanel.packs" txt="Paquets disponibles:"/>
+    <str id="ImgPacksPanel.snap" txt="Captura de pantalla associada:"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Instal.lar aquest paquet"/>
+
+    <!-- Add your own panels specific strings here if you need -->
+
+</langpack>
+

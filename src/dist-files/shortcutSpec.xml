@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<shortcuts>
+
+  <programGroup defaultName="IzPack" location="applications"/>
+  
+  <shortcut
+     name="IzPack"
+     programGroup="yes"
+     desktop="yes"
+     applications="yes"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\bin\izpack-fe.bat"
+     commandLine=""
+     description="Front-End for IzPack installation tool"
+     iconFile="$INSTALL_PATH\bin\icons\izpack.ico"
+     iconIndex="0"
+     initialState="noShow">
+   
+     <createForPack name="Core"/>
+     
+   </shortcut>
+   
+</shortcuts>

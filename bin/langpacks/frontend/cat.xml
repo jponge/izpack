@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The Catalan langpack -->
+
+<langpack>
+
+    <!-- General frontend strings -->
+    <str id="frontend.title" txt="IzPack - GUI Frontend"/>
+    <str id="frontend.untitled" txt="Sense títol"/>
+    <str id="frontend.error" txt="Error"/>
+    <str id="frontend.save_first" txt="Si us plau, guardi primer el seu fitxer d'instal.lació."/>
+    <str id="frontend.comp_dlg.title" txt="Compilació"/>
+    <str id="frontend.comp_dlg.msg" txt="Missatges del compilador:"/>
+    <str id="frontend.comp_dlg.ok" txt="Ok"/>
+    <str id="frontend.basepath" txt="Sel.leccioni la ruta de base"/>
+    <str id="frontend.licence.msg" txt="The GNU General Public Licence version 2 :"/>
+    <str id="frontend.licence.ok" txt="Ok"/>
+    <str id="frontend.about.copyright" txt="Copyright (c) 2001, 2002 Julien PONGE"/>
+    <str id="frontend.about.url" txt="http://www.izforge.com/"/>
+    <str id="frontend.lpswitch" txt="Canvi d'idioma"/>
+    <str id="frontend.nexttime" txt="Els canvis tindran efecte en la pròxima execució."/>
+
+    <!-- Menu specific strings -->
+
+    <str id="menu.langpack" txt="Idioma"/>
+    <str id="menu.langpack.mn" txt="i"/>
+
+    <str id="menu.bookmarks" txt="Arxius recents"/>
+    <str id="menu.bookmarks.mn" txt="R"/>
+
+    <str id="menu.files" txt="Arxiu"/>
+    <str id="menu.files.mn" txt="F"/>
+    <str id="menu.new" txt="Nou"/>
+    <str id="menu.new.mn" txt="N"/>
+    <str id="menu.open" txt="Obrir"/>
+    <str id="menu.open.mn" txt="A"/>
+    <str id="menu.save" txt="Guardar"/>
+    <str id="menu.save.mn" txt="G"/>
+    <str id="menu.save_as" txt="Guardar com"/>
+    <str id="menu.save_as.mn" txt="O"/>
+    <str id="menu.exit" txt="Sortir"/>
+    <str id="menu.exit.mn" txt="S"/>
+    <str id="menu.import" txt="Importar un arxiu usant rutes relatives"/>
+    <str id="menu.import.mn" txt="M"/>
+
+    <str id="menu.compile" txt="Compilar"/>
+    <str id="menu.compile.mn" txt="C"/>
+    <str id="menu.comp.standard" txt="Instal.lador Estàndard"/>
+    <str id="menu.comp.standard.mn" txt="E"/>
+    <str id="menu.comp.standardk" txt="Instal.lador Estàndard Kunststoff"/>
+    <str id="menu.comp.standardk.mn" txt="k"/>
+    <str id="menu.comp.web" txt="Instal.lador Web"/>
+    <str id="menu.comp.web.mn" txt="W"/>
+    <str id="menu.comp.webk" txt="Instal.lador Web Kunststoff"/>
+    <str id="menu.comp.webk.mn" txt="e"/>
+
+    <str id="menu.izpack" txt="IzPack"/>
+    <str id="menu.izpack.mn" txt="I"/>
+    <str id="menu.about" txt="A propòsit de IzPack ..."/>
+    <str id="menu.about.mn" txt="P"/>
+    <str id="menu.licence" txt="Llicència IzPack ..."/>
+    <str id="menu.licence.mn" txt="L"/>
+
+    <!-- Tabs specific strings -->
+
+    <str id="tabs.info.title" txt="Informació General"/>
+    <str id="tabs.info.appname" txt="Nom de la aplicació:"/>
+    <str id="tabs.info.appversion" txt="Versió de la aplicació:"/>
+    <str id="tabs.info.appurl" txt="URL de la pàgina de la aplicació:"/>
+    <str id="tabs.info.authorslist" txt="Llista d'autors:"/>
+    <str id="tabs.info.author" txt="Nom del autor:"/>
+    <str id="tabs.info.email" txt="Adreça de correu electrònic de l'autor:"/>
+    <str id="tabs.info.add" txt="Agregar un autor"/>
+    <str id="tabs.info.del" txt="Esborrar el autor"/>
+    <str id="tabs.info.width" txt=" Ample de la finestra:"/>
+    <str id="tabs.info.height" txt=" Alt de la finestra:"/>
+    <str id="tabs.info.resizable" txt=" Fer la finestra redimensionable"/>
+
+    <str id="tabs.loc.title" txt="Localitzacions"/>
+    <str id="tabs.loc.available" txt="Idiomes disponibles:"/>
+    <str id="tabs.loc.selected" txt="Idiomes sel.leccionats:"/>
+    <str id="tabs.loc.include" txt="Incloure"/>
+    <str id="tabs.loc.remove" txt="Treure"/>
+
+    <str id="tabs.res.title" txt="Recursos"/>
+    <str id="tabs.res.list" txt="Llista de recursos:"/>
+    <str id="tabs.res.add" txt="Incloure un recurs"/>
+    <str id="tabs.res.remove" txt="Treure el recurs"/>
+    <str id="tabs.res.input" txt="ID del recurs:"/>
+
+    <str id="tabs.pan.title" txt="Panells"/>
+    <str id="tabs.pan.available" txt="Panells disponibles:"/>
+    <str id="tabs.pan.selected" txt="Panells sel.leccionats:"/>
+    <str id="tabs.pan.include" txt="Incloure"/>
+    <str id="tabs.pan.remove" txt="Treure"/>
+    <str id="tabs.pan.tip" txt="Alguns panells poden requerir recursos específics. Consulti la documentació."/>
+
+    <str id="tabs.packs.title" txt="Paquets"/>
+    <str id="tabs.packs.packs" txt="Paquets:"/>
+    <str id="tabs.packs.files" txt="Arxius en el paquet sel.leccionat:"/>
+    <str id="tabs.packs.addpack" txt="Incloure un paquet"/>
+    <str id="tabs.packs.delpack" txt="Treure el paquet"/>
+    <str id="tabs.packs.required" txt=" Aquest paquet és requerit"/>
+    <str id="tabs.packs.addfile" txt="Incloure un arxiu o un directori"/>
+    <str id="tabs.packs.delfile" txt="Treure l'arxiu o directori"/>
+    <str id="tabs.packs.parsable" txt=" Aquest arxiu conté variables IzPack"/>
+    <str id="tabs.packs.pack_name" txt="Nom del paquet:"/>
+    <str id="tabs.packs.pack_desc" txt="Descripció del paquet:"/>
+    <str id="tabs.packs.target" txt="Directori de destí:"/>
+    <str id="tabs.packs.scriptProps" txt="Paràmetres d' anàlisis ..."/>
+    <str id="tabs.packs.f_type" txt="Tipus d'arixu? (buit por defecte)"/>
+    <str id="tabs.packs.f_enc" txt="Codificació de l'arxiu? (buit por defecte)"/>
+
+</langpack>
+

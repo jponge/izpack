@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The Dutch langpack -->
+
+<langpack>
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - Installatie van "/>
+    <str id="installer.next" txt="Verder"/>
+    <str id="installer.prev" txt="Terug"/>
+    <str id="installer.quit" txt="Afsluiten"/>
+    <str id="installer.madewith" txt="(Gemaakt met IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Weet u zeker dat u wilt afsluiten?"/>
+    <str id="installer.quit.message" txt="Weet u zeker dat u de installatie wilt afbreken?"/>
+    <str id="installer.warning" txt="Waarschuwing !"/>
+    <str id="installer.yes" txt="Ja"/>
+    <str id="installer.no" txt="Nee"/>
+    <str id="installer.cancel" txt="Annuleer"/> 
+    <str id="installer.error" txt="Fout"/>
+    
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="Dit zal de geselecteerde bestanden verwijderen !"/>
+    <str id="uninstaller.destroytarget" txt=" Forceer het verwijderen van "/>
+    <str id="uninstaller.uninstall" txt="Deïnstalleer"/>
+    
+    <!-- The strings for the 'official' IzPack plugins -->
+    <str id="HelloPanel.welcome1" txt="Welkom bij de installtie van "/>
+    <str id="HelloPanel.welcome2" txt=" !"/>
+    <str id="HelloPanel.authors" txt="De schrijver(s) van deze software is/zijn : "/>
+    <str id="HelloPanel.url" txt="De software homepage is : "/>
+    
+    <str id="LicencePanel.info" txt="Lees a.u.b. de volgende licentie :"/>
+    <str id="LicencePanel.agree" txt="Accepteerd u de voorwaardenvan deze licentie ?"/>
+    <str id="LicencePanel.yes" txt="Ja"/>
+    <str id="LicencePanel.no" txt="Nee"/>
+    
+    <str id="InfoPanel.info" txt="Lees a.u.b. de volgende informatie :"/>
+    
+    <str id="TargetPanel.info" txt="Selecteer het installatie pad :"/>
+    <str id="TargetPanel.browse" txt="Bladeren ..."/>
+    <str id="TargetPanel.warn" 
+         txt="Deze directory bestaat al. Wilt u doorgaan en het risico lopen dat bestanden worden overgeschreven?"/>
+    <str id="TargetPanel.empty_target"
+         txt="U heeft niks ingevuld. Wilt u toch doorgaan?"/>
+    
+    <str id="PacksPanel.info" txt="Selecteer de pakketten die u wilt installeren :"/>
+    <str id="PacksPanel.tip" txt="NB: Grijze pakketten zijn verplicht."/>
+    
+    <str id="InstallPanel.info" txt="Klik 'Installeer' om de installatie te beginnen."/>
+    <str id="InstallPanel.install" txt="Installeer !"/>
+    <str id="InstallPanel.tip" txt="Installatie :"/>
+    <str id="InstallPanel.begin" txt="[Niks]"/>
+    <str id="InstallPanel.finished" txt="[Klaar]"/>
+    
+    <str id="FinishPanel.success" txt="Installatie is geslaagd."/>
+    <str id="FinishPanel.fail" txt="Installatie is mislukt!"/>
+    <str id="FinishPanel.uninst.info" txt="Een deïnstallatie programma is geïnstalleerd in:"/>
+    <str id="FinishPanel.auto" txt="Maak een automatisch installatie-script."/>
+    <str id="FinishPanel.auto.tip" 
+         txt="Gebruik dit script om de installatie te herhalen op andere computers."/>
+    
+    <str id="ImgPacksPanel.packs" txt="The volgende pakketten zijn beschikbaar :"/>
+    <str id="ImgPacksPanel.snap" txt="Pakket plaatje  :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Installeer dit pakket"/>
+
+    <str id="ShortcutPanel.list" txt="Selecteer een programma groep voor de snelkoppelingen:"/>
+    <str id="ShortcutPanel.default" txt="Herstel"/>
+    <str id="ShortcutPanel.desktop" txt="Maak snelkoppelingen op de desktop."/>
+    <str id="ShortcutPanel.create" txt="Maak Snelkoppelingen"/>
+    <str id="ShortcutPanel.userIntro" txt="Maak snelkoppeling voor:"/>
+    <str id="ShortcutPanel.currentUser" txt="huidige gebruiker "/>
+    <str id="ShortcutPanel.allUsers" txt="alle gebruikers "/> 
+    
+    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
+    
+    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Shortcut Target   : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Command Line      : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Icon File         : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Working Directory : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
+    <str id="ShortcutPanel.location.applications" txt="Applications Menu"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
+    <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
+
+    <!-- Add your own panels specific strings here if you need -->
+
+</langpack>

@@ -1,0 +1,115 @@
+<!-- 
+    IzPack installer XML file
+
+    By Julien PONGE
+
+    In order to build an installer for IzPack, let's create a directory
+    named '_dist' in the IzPack root directory. Then copy the files from
+    'src/dist-files' into '_dist'. Copy your IzPack image, that is all
+    the files present at the IzPack root directory. To make it clear,
+    you'll get bin/, lib/, ... and text files like Versions.txt and so
+    on. Now you can invoke the IzPack compiler and it will generate the
+    installer ;-)
+-->
+
+<!-- The installation -->
+<installation version="1.0">
+    
+    <!-- The info section -->
+    <info>
+        <appname>IzPack</appname>
+        <appversion>3.0.0 pre4 (build 2002.06.15)</appversion>
+        <authors>
+            <author email="julien@izforge.com" name="Julien PONGE"/>
+        </authors>
+        <url>http://www.izforge.com/izpack/</url>
+    </info>
+
+    <!-- Flexible and in the screen proportions -->
+    <guiprefs height="540" resizable="yes" width="700"/>
+
+    <!-- We include every langpack -->
+    <locale>
+        <langpack iso3="eng"/>
+        <langpack iso3="fra"/>
+        <langpack iso3="deu"/>
+        <langpack iso3="spa"/>
+        <langpack iso3="cat"/>
+        <langpack iso3="ned"/>
+        <langpack iso3="fin"/>
+        <langpack iso3="swe"/>
+        <langpack iso3="por"/>
+        <langpack iso3="pol"/>
+        <langpack iso3="rus"/>
+        <langpack iso3="ukr"/>
+        <langpack iso3="hun"/>
+    </locale>
+
+    <!-- The resources needed by the various panels -->
+    <resources>
+        <res src="install-readme.html" id="HTMLInfoPanel.info"/>
+        <res src="Licence.txt" id="LicencePanel.licence"/>
+        <res src="core.jpg" id="ImgPacksPanel.img.0"/>
+        <res src="doc.jpg" id="ImgPacksPanel.img.1"/>
+        <res src="sample.jpg" id="ImgPacksPanel.img.2"/>
+        <res src="src.jpg" id="ImgPacksPanel.img.3"/>
+        <res src="langsel.jpg" id="installer.langsel.img"/>
+        <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
+    </resources>
+
+    <!-- The panels in a classic order -->
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="HTMLInfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="ImgPacksPanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="FinishPanel"/>
+    </panels>
+    
+    <!-- The native libraries to add -->
+    <native type="izpack" name="ShellLink.dll"/>
+
+    <!-- The packs section -->
+    <packs>
+
+        <!-- The core files -->
+        <pack name="Core" required="yes">
+            <description>The IzPack core files.</description>
+            <file targetdir="$INSTALL_PATH" src="bin"/>
+            <file targetdir="$INSTALL_PATH" src="lib"/>
+            <file targetdir="$INSTALL_PATH" src="legal"/>
+            <file targetdir="$INSTALL_PATH" src="Readme.txt"/>
+            <file targetdir="$INSTALL_PATH" src="Versions.txt"/>
+            <file targetdir="$INSTALL_PATH" src="Thanks.txt"/>
+            <parsable targetfile="$INSTALL_PATH/bin/izpack-fe"/>
+            <parsable targetfile="$INSTALL_PATH/bin/izpack-fe.bat"/>
+            <parsable targetfile="$INSTALL_PATH/bin/compile"/>
+            <parsable targetfile="$INSTALL_PATH/bin/compile.bat"/>
+            <executable targetfile="$INSTALL_PATH/bin/compile" stage="never"/>
+            <executable targetfile="$INSTALL_PATH/bin/izpack-fe" stage="never"/>
+        </pack>
+	
+	      <!-- The documentation (1 directory) -->
+        <pack name="Documentation" required="no">
+            <description>The IzPack documentation (HTML and PDF).</description>
+            <file targetdir="$INSTALL_PATH" src="doc"/>
+        </pack>
+
+        <!-- A trivial sample to get started (1 directory) -->
+        <pack name="Sample" required="no">
+            <description>A sample installation.</description>
+            <file targetdir="$INSTALL_PATH" src="sample"/>
+        </pack>
+
+        <!-- The source code of this version (1 directory) -->
+        <pack name="Sources" required="no">
+            <description>The full IzPack source code.</description>
+            <file targetdir="$INSTALL_PATH" src="src"/>
+        </pack>
+
+    </packs>
+
+</installation>

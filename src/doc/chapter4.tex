@@ -1,0 +1,518 @@
+% IzPack - Documentation
+
+% Shortcut definition
+
+\chapter{Shortcuts handling \\
+         (by Elmar \textsc{Grom})}
+
+\section{Defining Shortcuts}
+
+\subsection{Introduction}
+
+On today's operating systems, users are used to launching applications,
+view web sites, look at documentation and perform a variety of other
+tasks, by simply clicking on an icon on the desktop or in menu system
+located on the desktop. Depending on the operating system these icons
+have different names. In this context I will refer to them collectively
+as shortcuts.\\
+
+Apart from actually placing an application on the target system, users
+routinely expect an installer to create the necessary shortcuts for the
+application as well. For you as application developer, this means that
+for a professional appearance of your application you should also
+consider creating shortcuts for your application.\\
+
+In contrast to the general specification of an IzPack installer, the
+specification of shortcuts in IzPack requires a little more effort. In
+addition, some of the concepts are a bit more complex and there are some
+operating specific issues to observe. Fortunately, you only need to
+worry about operating system specifics if you want to deploy your
+application to multiple different operating systems. In any case, it
+will pay off to spend some time to study this documentation and the
+example spec file before you start to implement your shortcuts.\\
+
+At the time of this writing (for IzPack version 3.0) IzPack is only
+capable of creating shortcuts on the Microsoft Windows operating systems
+[Win95 and higher and Win-NT 4.0 and higher]. Other operating systems,
+such as Mac and UNIX flavors are not directly supported. However, there
+is a special UI that automatically pops up on unsupported systems. It
+informs the user about the intended targets of your shortcuts and allows
+the user to save this information to a text file. While this is not an
+elegant solution, at least it aids the user in the manual creation of
+the shortcuts.\\
+
+If you would like to review what an end user would see if the target
+operating system is not supported, you can do the following. Simply
+place the tag \texttt{<notSupported/>} in the spec file. This tag requires no
+attributes or other data. It must be placed under \texttt{<shortcuts>}, just like
+the individual shortcut specifications. Be sure to remove this tag
+before getting your application ready for shipment.\\
+
+We expect other operating systems to be supported in the near future and
+as always, contributions are very welcome.\\
+
+\subsection{What to Add to the Installer}
+
+There are a number of things that you must add to the installer to make
+it ready for creating shortcuts. Obviously you need to add the panel
+responsible for creating shortcuts. This panel is aptly enough called
+ShortcutPanel. However, in order for the ShortcutPanel to function
+properly a number of additional items are required. These must be added
+manually to the installer, because the front-end does not support this
+feature yet. In this chapter I will explain which of these items are
+required and for what reason.\\
+
+First, I would like to discuss items that are supplied with IzPack and
+only need to be added to the installer. After that, I move on to the
+things you have to prepare yourself before you can add them. The way in
+which shortcuts are actually created varies widely among operating
+systems. In some cases it is actually possible to do this with pure Java
+code, while other systems -such as MS-Windows- require native code to
+accomplish this task. The native libraries required for the supported
+operating systems are supplied with IzPack but they are not
+automatically added to your installer file. You need to list them
+yourself in the XML file for the installer. I'll describe later how to
+do this. At the time of this writing (for IzPack version 3.0) only
+MS-Windows is supported. The native library required for this operating
+system is called ShellLink.dll.\\
+
+Adding libraries to the installer is made through the \texttt{<native>} tag so
+here you'll just have to specify :\\
+\texttt{<native type="izpack" name="ShellLink.dll"/>}\\
+
+You have to supply an extra specification file for the shortcuts that
+you want to be  created on the target system. The format for this spec
+file is XML. This XML file must be added to the installer as a resource.
+The source name of this specification does not matter, however its name
+when added to the installer must be shortcutSpec.xml. This is the name
+the ShortcutPanel looks for. If the specification file can not be found,
+the ShortcutPanel will not show at all.\\
+
+\subsection{The Shortcut Specification}
+
+The specification for shortcuts is provided to the ShortcutPanel in the
+form of a XML file. At the time of this writing (for IzPack version 3.0)
+the front-end has no support for generating this specification. Until a
+later version provides front-end support you will have to write the
+specification manually. For your convenience, an annotated sample
+specification is located in the sample subdirectory of your IzPack
+installation. At the beginning you might want to experiment with this
+file.\\
+
+The specification file has only one major section called \texttt{<shortcuts>}.
+In this section, two different tags are recognized: \texttt{<programGroup>} and
+\texttt{<shortcut>}.\\
+
+The \texttt{<programGroup>} tag allows you to specify the name of the menu under
+which the shortcuts will be grouped. The exact location and appearance
+of the program group depends on the specific target system on which the
+application will be installed, however you have some influence on this.
+Please note that \texttt{<programGroup>} may only appear once in the
+specification. If more than one instance occurs, only the first one will
+be used. This tag requires two attributes: 'defaultName' and 'location'.
+'defaultName' specifies the name that the group menu should have on the
+target system. You should be aware that the ShortcutPanel will present
+this name to the user as a choice. The user can then edit this name or
+select a group that already exists. As a result, there is no guarantee
+that the actual name of the program group on the target system is
+identical with your specification. 'location' specifies where the group
+menu should show up. There are two choices: applications and startMenu.
+If you use applications, then the menu will be placed in the menu that
+is ordinarily used for application shortcuts. If you use startMenu, the
+group menu will be placed at the top most menu level available on the
+target system. Depending on the target system it might not be possible
+to honor this specification exactly. In such cases, the ShortcutPanel
+will map the choice to the location that most closely resembles your
+choice.\\
+
+For each shortcut you want to create, add one \texttt{<shortcut>} tag. Most
+details about the shortcut are listed as attributes with this tag. The
+following sections describe what each attribute does, which attributes
+are optional and which ones are required and what the values are that
+are accepted for each of the attributes. Note that all attributes that
+have a yes/no choice can also be omitted. Doing so has the same effect
+as using a value of no.\\
+
+\textbf{name}\\
+
+The value of this attribute defines the name that the shortcut will
+have. This is the text that makes up the menu name if the shortcut is
+placed in a menu or the caption that is displayed with the shortcut if
+it is placed on the desktop.\\
+\begin{itemize}
+\item required
+\end{itemize}\
+
+\textbf{programGroup}\\
+
+The value for this attribute can be either yes or no. Any other value
+will be interpreted as no. If the value is yes, then a copy of this
+shortcut will be placed in the group menu.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\textbf{desktop}\\
+
+For this attribute the value should also be yes or no. If the value is
+yes, then a copy of the shortcut is placed on the desktop.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\textbf{applications}\\
+
+This is also a yes/no attribute. If the value is yes, then a copy of the
+shortcut is placed in the applications menu (if the target operating
+system supports this). This is the same location as the applications
+choice for the program group.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\textbf{startMenu}\\
+
+This is a yes/no attribute as well. If the value is yes, then a copy of
+the shortcut is placed directly in the top most menu that is available
+for placing application shortcuts.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\textbf{startup}\\
+
+This is also a yes/no attribute. If the value is yes, then a copy of the
+shortcut is placed in a location where all applications get automatically
+started at OS launch time, if this is available on the target OS.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\textbf{target}\\
+
+The value if this attribute points to the application that should be
+launched when the shortcut is clicked. The value is translated through
+the variable substitutor. Therefore variables such as \$INSTALL\_PATH can
+be used to describe the location. \textbf{You should be aware that the use of
+this tag is likely to change once other operating systems are
+supported}.\\
+\begin{itemize}
+\item reqired
+\end{itemize}\
+
+\textbf{commandLine}\\
+
+The value of this attribute will be passed to the application as command
+line. I recommend to work without command line arguments, since these are
+not supported by all operating systems. As a result your applications
+will not be portable if they depend on command line arguments. Instead,
+consider using system properties or configuration files.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\textbf{description}\\
+
+The value of this attribute will be visible to the user when a brief
+description about this application is requested. The form of the
+request and the way in which this description is displayed varies
+between operating systems. On MS-Windows the description is shown as a
+tool tip when the mouse cursor hovers over the icon for a few seconds.\\
+
+\textbf{iconFile}\\
+
+The value of this attribute points to the file that holds an icon which
+should be displayed as a symbol for this shortcut. This value is also
+translated through the variable substitutor and consequently can contain
+variables such as \$INSTALL\_PATH. If this attribute is omitted, no icon
+will be specified for the shortcut. Usually this causes the OS to
+display an OS supplied default icon. \textbf{The use of this attribute is also
+likely to chance once other operating systems are supported}.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\textbf{iconIndex}\\
+
+If the file type for the icon supports multiple icons in one file, then
+this attribute may be used to specify the correct index for the icon. I
+would also advise against using this feature, because of operating
+system incompatibilities in this area. In file formats that do not
+support multiple icons, this values is ignored.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\textbf{initialState}\\
+
+There are four values accepted for this attribute: noShow, normal,
+maximized and minimized. If the target operating system supports this
+feature, then this value will have the appropriate influence on the
+initial window state of the application. noShow is particularly useful
+when launch scripts are used that cause command window to open, because
+the command window will not be visible with this option. For instance on
+MS-Windows starting a batch file that launches a Java application has
+the less than pretty side effect that two windows show: the DOS command
+prompt and the Java application window. Even if the shortcut is
+configured to show minimized, there are buttons for both windows in the
+task bar. Using noShow will completely eliminate this, only the Java
+application window will be visible.\\
+\begin{itemize}
+\item optional
+\end{itemize}\
+
+\subsection{Selective Creation of Shortcuts}
+
+Usually all shortcuts that are listed will be created when the user
+clicks the 'Create Shortcuts' button. However it is possible to control
+to some degree if specific shortcuts should be created or not. This is
+based on install conditions. By including one or more \texttt{<createForPack>}
+tags in the specification for a shortcut, you can direct the
+ShortcutPanel to create the shortcut only if any of the listed packs are
+actually installed. The 'name' attribute is used to define the name of
+one of the packs for which the shortcut should be created. You do not
+need to list all packs if a shortcut should always be created. In this
+case simply omit this tag altogether.\\
+
+\subsection{Summary}
+
+\textbf{Native Libraries}
+\begin{itemize}
+\item ShellLink.dll
+\end{itemize}\
+
+\textbf{Name of Specification File}
+shortcutSpec.xml\\
+
+\textbf{Specification File Layout}
+\footnotesize
+\begin{verbatim}
+<shortcuts>
+  <programGroup/>
+  <shortcut 
+    name="the name"
+    programGroup="yes/no"
+    desktop="yes/no" 
+    applications="yes/no" 
+    startMenu="yes/no" 
+    startup="yes/no"
+    target="the application to launch"
+    commandLine=""
+    description="a description for the shortcut"
+    iconFile="the file that contains an icon for the shortcut" 
+    iconIndex="0"
+    initialState="noShow/normal/maximized/minimized">
+  
+    <createForPack name="a pack name"/>
+    <createForPack name="another pack name"/>
+  </shortcut>
+</shortcuts>
+\end{verbatim}\
+\normalsize
+
+\section{Shortcut Tips}
+
+I wrote this section to provide additional information about
+issues surrounding the creation of shortcuts. None of this is necessary
+to successfully create shortcuts but it might help you creating an
+installation that works more smoothly. In addition, it might give you
+some knowledge about operating systems that you don't know so well. In
+fact most of the issues described in this section are focused on
+operating system specifics.\\
+
+\subsection{The Desktop}
+
+You should recognize that the desktop is precious real estate for many
+people. They like to keep it uncluttered and keep only the things there
+that they use on a regular basis. This is not true for everybody and you
+might personally think different about this. Still, the fact remains
+that a lot of people migth have different feelings about it, so you
+should not automatically assume that it is ok to place all of your
+shortcuts on the desktop proper. While your application is certainly one
+of the most important things for you, for your customers it is probably
+one of many applications they use and maybe not even the most important one.
+Accordingly, placing more shortcut icons there than they feel they will
+use regularly and especially doing this without asking for permision
+might trigger some bad temper.\\
+
+It is common practice to create a program group on the application menu
+system of the OS and place all shortcuts that go with an application in
+that program group. In addition, only one shortcut to the key access
+point of the application is placed directly on the desktop. Many
+installers first ask for permission to do so, as does the ShortcutPanel
+in IzPack.\\
+
+I would like to recommend that you always create a shortcut in the menu
+system, even if your application has only one access point and you are
+placing this on the desktop. Note that shortcuts can be placed directly
+in the menu, they don't need to be in a program group. There are two
+reasons for doing so.\\
+
+\begin{itemize}
+\item If the user elects not to create shortcuts on the desktop, they
+      will end up with no access point to your application
+\item Even if this works fine, occasionally people 'clean up' their
+      desktop. They migth later find that they accidentally deleted the
+      only access point to your application. For the less tech savvy
+      users, recreating the shortcut might be a rough experience.
+\end{itemize}\
+
+\subsection{Icons}
+
+Icons are supplied in image files, usually in some kind of bitmap
+format. Unfortunately there is no format that is universally recognized
+by all operating systems. If you would like to create shortcuts on a
+variety of operating systems that use your own icons, you must supply
+each icon in a number of different formats. This chapter discusses icon
+file formats used on various operating systems. Fortunately there are
+good programs available that allow you to convert between these formats,
+so that creating the different files is not much of a problem once the
+icons themselfes are created.\\
+
+\textbf{Microsoft Windows}\\
+
+Windows prefers to use its native icon file format. Files of this type
+usually use the extension *.ico. Icon files can hold multiple icons in
+one file, which can be useful if the same icon is to be provided in a
+number of sizes. The iconIndex attribute in the spec file allows you to
+specify which of the icons to use.\\
+
+Windows also supports the use of bitmap files in the *.bmp format as
+icons. Note that this format does not support multiple icons.\\
+
+I am not a total expert in this area and might have overlookd other file
+formats that are supported by Windows. However, I would suggest to test
+other formats for compatibility as they might not work all the way back
+to Windows 95 or on the NT/non-NT strain. Sticking with one of these two
+formats should keep you out of trouble.\\
+
+\textbf{Apple}\\
+
+Apple Macintosh systems use the Macintosh PICT format, extension *.pct.
+If you are working with an apple system you know a whole lot more about
+this format than I do. If you don't but would like to be able to install
+your application on a Mac, simply start with any bitmap format that you
+feel comfortable to work with. Then find an application that is capable
+of converting this format into a *.pct file. I like to use Paint Shop
+Pro (PC based), because it provides conversion capabilities among
+several dozen different file formats.\\
+
+\textbf{UNIX flavors}\\
+
+\textit{Elmar said :}\\
+Sorry, folks I have no information available at this time.
+Any addition is most welcome.\\
+
+\textit{Julien says :}\\
+Everything depends of the Window Manager that you use. A common thing is that
+Unix users get a graphical interface through a X11-compatible Window Manager.
+However they are almost incompatible with each other. Often they consist of
+blind text files to create or edit somewhere on the system and/or in the user
+account. The KDE shortcuts system is a model of good sense. I will add the
+support for it in a future \IzPack version.\\
+
+\subsection{Targets}
+
+So, you thought you could escape the ugly mess of operating system
+dependencies at least with the way how your Java application is started?
+Sorry but I have just another bad message. The one positive thing is
+that here you have a way of escaping, even if doing so has a few less
+pretty side effects. At first, I would like to discuss various launching
+options you have available on different operating systems. At the end of
+the chapter I write about a way to make launching your application OS
+independent.\\
+
+\textbf{Microsoft Windows}\\
+
+On Microsoft windows you have a variety of options for launching your
+application. Probably the most simple case directly starting the Java VM
+from the command line and typing out all parameters, such as calss path,
+the class name etc. In principle, this can be stuck right into a
+shortcut and should work.\\
+
+A little more elagant solution is to place this in a batch file and have
+the shortcut point to this batch file. This will also make it more
+likely that users can repair or recreate shortcuts. Recreating shortcuts
+with sophisticated command lines is practically impossible.\\
+
+Another method is less comonly used but just as possible. Implement a
+native executable that launches the VM with your Java application. The
+VM comes as DLL and is used by java.exe in just the same way.\\
+
+Clearly, even though the first option is a bit ugly and has some
+drawbacks, it is the most portable solution among the three.\\
+
+\textbf{Apple}\\
+
+\textbf{UNIX}\\
+
+UNIX provides essentailly the same options as Windows. You can simply
+use the command line option, you can write a shell script and you can
+write a native launcher. Naturally this stuff is in now way compatible
+with the equivalent Windows implementations. The native options is even
+more problematic in this environment, since the code can not even moved
+from one UNIX hardware platform to another, without recompilation.\\
+
+\textbf{OS Independent Launching}\\
+
+So, after all this rather discouraging news, there is actually a
+portable way to launch Java applications? You bet! although I have to
+admit that it is not necessarily the most pretty way of doing things.\\
+
+This approach is actually used by IzPack. Package your application in a
+*.jar file if you don't already do so and make it executable. I am not
+going into all the details on how exactly to do this, the Java
+documentation will have to do. You might have noticed that even though
+the instructions to install IzPack say to type :
+\begin{verbatim}
+java -jar IzPack-install.jar
+\end{verbatim}\
+
+You can just as well double click on IzPack-install.jar and it will
+start up. This procedure will work on all Java supported operating
+systems -though you might have to replace double clicking with dropping
+the file on the VM. In just the same way, you can make the *.jar file
+itself the target of a shortcut.\\
+
+The one drawback with this approach is that a *.jar file can only have
+one main file. So, if you have multiple targets, they need to be
+packaged each into a different *.jar file. They can be in one *.jar file
+but then you have to start them explicitely, which gets you back to the
+problems that I mentioned before. This brings me to the ugly part. If
+you have just one target, you are all set. If you have multiple targets,
+you need to create a *.jar file for each. In addition, you have a much
+harder time setting the classpath, because each of the *.jar files that
+contain supporting code must be listed. In fact, at present there is no
+way of setting this during the installation, because IzPack does not yet
+(version 3.0) support the setting and modification of environment
+variables.\\
+
+\subsection{Command Line}
+
+Before I start to write a lot about the use of command line arguments
+let me state this: If you can avoide using them, do it! Not that there
+is anything wrong with command line arguments as such. The issue is
+simply that if you want your application to be usable cross platform
+(the big Java promise) you should shy away from using command line
+arguments. The problem here is that not all operating systems actually
+support command line arguments. To be more precise, to my knowledge only
+Apple operating systems do not support command line parameters. If you
+don't care for running your application on a Mac, then you might not
+worry about his at all. If you are intereseted to support the Mac as
+well, read on.\\
+
+In fact the Mac sopports command line parameters in a way. More to the
+point, it supports a single parameter that your pplication should
+interpret as the name of a data file to open. You have no way of
+supplying this to your application through the command line atribute.
+The operating system generates this when the user drops the file on your
+application and then passes it as command line argument. That's it. This
+same bahavior will probably fly well on pretty much any system and
+should therefore be an ok implementation.\\
+
+So what to do if you want to modify program behavior based on run-time
+switches? For one thing,  could set system properties accordingly.
+The drawback here is the same as with the command line parameters: the
+way of setting these might vary between operating systems. The best way
+to me seems to be using a property file that contains the configuration
+data.\\

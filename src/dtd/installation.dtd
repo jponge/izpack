@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<!--
+        =====================================
+        The DTD for IzPack Installation Files
+        =====================================
+        
+        $Id$
+-->
+
+<!-- The root element -->
+<!ELEMENT installation (preinstall?, info, variables*, locale, resources, panels,
+                        packs, screen, jar*, native*, postinstall?)>
+    <!ATTLIST installation version CDATA #REQUIRED>
+
+<!-- The info section (general information on an installation) -->
+<!ELEMENT info (appname, appversion, authors, url)>
+    <!ELEMENT appname (CDATA)>
+    <!ELEMENT appversion (CDATA)>
+    <!ELEMENT authors (author+)>
+    <!ELEMENT author EMPTY>
+        <!ATTLIST author name CDATA #REQUIRED>
+        <!ATTLIST author email CDATA #REQUIRED>
+    <!ELEMENT url (CDATA)>
+
+
+<!-- The variables markup (variable declarations ) -->    
+<!ELEMENT variables (variable*)>
+    <!ELEMENT variable EMPTY>
+        <!ATTLIST variable name CDATA #REQUIRED>
+        <!ATTLIST variable value CDATA #REQUIRED>
+        
+        
+<!-- The guiprefs markup (customizes the installer in GUI mode) -->
+<!ELEMENT guiprefs EMPTY>
+    <!ATTLIST guiprefs resizable (yes|no) #REQUIRED>
+    <!ATTLIST guiprefs width CDATA #REQUIRED>
+    <!ATTLIST guiprefs height CDATA #REQUIRED>
+
+<!-- The locale section (indicates which langpacks to include) -->
+<!ELEMENT locale (langpack+)>
+    <!ELEMENT langpack EMPTY>
+        <!ATTLIST langpack iso3 CDATA #REQUIRED>
+
+<!-- The resources section (resources for the panel's usings) -->
+<!ELEMENT resources (res+)>
+    <!ELEMENT res EMPTY>
+        <!ATTLIST res src CDATA #REQUIRED>
+        <!ATTLIST res id CDATA #REQUIRED>
+        <!ATTLIST  res parse  (yes|no) "no">
+        <!ATTLIST  res type CDATA "plain">
+        <!ATTLIST  res encoding CDATA>        
+
+<!-- The panels section (indicates the panels to use) -->
+<!ELEMENT panels (panel+)>
+    <!ELEMENT panel EMPTY>
+        <!ATTLIST panel classname CDATA #REQUIRED>
+
+
+<!ELEMENT enrollinfo (enrollitems) >
+	<!ATTLIST enrollinfo url CDATA #REQUIRED>
+	<!ELEMENT enrollitems (item+) >
+		<!ELEMENT item  >
+		<!ATTLIST item name CDATA #REQUIRED>
+		<!ATTLIST item required (yes|no) "no">
+
+<!-- The packs section (indicates the packs to create) -->
+<!ELEMENT packs (pack+)>
+    <!ELEMENT pack (preinstall?, description, file*, fileset*, parsable*, executable*, postinstall?)>
+        <!ATTLIST pack name CDATA #REQUIRED>
+        <!ATTLIST pack required (yes|no) #REQUIRED>
+        <!ELEMENT description (CDATA)>
+        <!ELEMENT file EMPTY>
+            <!ATTLIST file src CDATA #REQUIRED>
+            <!ATTLIST file targetdir CDATA #REQUIRED>
+            <!ATTLIST file os (unix|windows|mac)>
+		<!ELEMENT fileset (include*, exclude*)>
+	        <!ATTLIST fileset dir CDATA #REQUIRED>
+	        <!ATTLIST fileset targetdir CDATA #REQUIRED>	
+	    	<!ATTLIST fileset casesensitive (yes|no)>	
+            <!ATTLIST fileset os (unix|windows|mac)>
+	    <!ELEMENT include EMPTY>
+           	<!ATTLIST include name CDATA #REQUIRED>
+	    <!ELEMENT exclude EMPTY>
+           	<!ATTLIST exclude name CDATA #REQUIRED>            	
+	          
+        <!ELEMENT parsable EMPTY>
+            <!ATTLIST parsable targetfile CDATA #REQUIRED>
+            <!ATTLIST parsable type CDATA "plain">
+            <!ATTLIST parsable encoding CDATA>
+        <!ELEMENT executable (args?, os*)>
+            <!ATTLIST executable targetfile CDATA #REQUIRED>
+            <!ATTLIST executable class CDATA >
+            <!ATTLIST executable type (bin|jar) "bin">
+            <!ATTLIST executable stage (postinstall|never) "never">
+            <!ATTLIST executable failure (abort|warn|ask) "ask">
+            <!ELEMENT args (arg+)>
+                <!ELEMENT arg >
+                    <!ATTLIST arg value CDATA #REQUIRED>
+            <!ELEMENT os EMPTY>
+                    <!ATTLIST os family (unix|windows|mac) #REQUIRED>
+                    <!ATTLIST os name CDATA #IMPLIED>
+                    <!ATTLIST os version CDATA #IMPLIED>
+                    <!ATTLIST os arch CDATA #IMPLIED>
+
+<!-- Allows the inclusion in the installer of a native library -->
+<!ELEMENT native EMPTY>
+    <!ATTLIST native type (izpack|3rdparty) #REQUIRED>
+    <!ATTLIST native name CDATA #REQUIRED>
+
+<!-- Allows the inclusion in the installer of an additional jar file content -->
+<!ELEMENT jar EMPTY>
+    <!ATTLIST jar src CDATA #REQUIRED>

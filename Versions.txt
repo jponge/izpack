@@ -1,0 +1,295 @@
+[ The list of the different public versions of IzPack ]
+
+    > 3.0.0 pre4 (build 2002.06.15)
+
+- Polish language pack thanks to Piotr Bzdyl.
+- Shortcut system fixes.
+- The IzPack installer is now able to create shortcuts on Windows systems
+  while not creating any problem on another Operating System.
+- Catalan language pack thanks to Oscar Aubareda Fernandez.
+- The uninstaller is now copied under $INSTALL_PATH/Uninstaller.
+- Closing the language selection box of an installer will (finally !) close
+  the installer.
+- Removed the same named directories and files from the installers jars.
+- The ShortcutPanel now uses the IzPack highlighted buttons.
+- Many improvements from the e-xmlmedia.fr people including the Ant fileset
+  support, all these features will be documented in the coming new
+  documentation.
+
+    > 3.0.0 pre3 (build 2002.05.19)
+
+- HTML licence panel agreement system fix by Jonelo.
+- Official inclusion of Elmar Grom's Windows library to create some shortcuts on
+  this operating system.
+( following : Johannes Lehtinen )
+- Cleaned up the InstallData interface and added utility methods.
+- Made the special variables (such as $INSTALL_PATH) available to panels using
+  the standard interface.
+- Made InstallData a singleton class.
+- Added InstallData properties for Panel interoptability.
+- Added a new variable : $FILE_SEPARATOR.
+
+    > 3.0.0 pre2 (build 2002.04.27)
+
+- Fixes & enhancements in the executable files support (Olexij Tkatchenko).
+- 2 new splash screens by Nicolas Deschaume.
+- The launching scripts of the pre1 were corrupted.
+
+    > 3.0.0 pre1 (build 2002.04.21)
+
+- Enhanced splash #5 by Nicolas Deschaume.
+- Improved uninstalling system giving an access to the panels.
+- Image support at the language selection dialog through an optionnal resource
+  (installer.langsel.img).
+- Added executable element support (Olexij Tkatchenko).
+- /usr/local is now the default installation directory only for root user,
+  normal users will have $HOME instead (Unix* - Olexij Tkatchenko).
+- New Ukrainian language support (Olexij Tkatchenko).
+- The uninstaller now deletes itself after the uninstallation job is done.
+- Modified the IzPack Ant building process to integrate IzPack itself in order
+  to generate a ready-to-distribute installer. 
+
+    > 2.12.0 (build 2002.03.31)
+
+- Removed the JScrollPane for the panels container.
+- Improved panels sizing policy due to the JScrollPane removing.
+
+    > 2.12.0 pre3 (build 2002.03.02)
+
+- Fixed a problem with the default compiler output file naming.
+- Added the Dutch language packs thanks to Fridjof Jansen.
+- Modified the Ant makefile so that any inner class of a panel can be 
+  copied too.
+
+    > 2.12.0 pre2 (build 2002.02.22)
+
+- Changed the font sizes to 12 as it really looks better.
+- Removed the "All rights reserved" portions in the frontend languages
+  packs as it is not really usefull and it now makes the About Box look
+  better.
+- Fix in PacksPanel thanks to Marcus Wolschon.
+- Fixes in both Unix and Windows new startup scripts.
+- Paul Wilkinson added the integration with Ant.
+- Native libraries can now be specified to be added to the IzPack
+  installers through a new optionnal tag.
+
+    > 2.12.0 pre1 (build 2002.02.15)
+
+- Made some modifications to get the source code pass through the
+  IBM Jikes compiler checkings successfully.
+- Updated the Readme.txt file (I forgot to make it reflect the fact that
+  IzPack has a GUI frontend :-)
+- Updated the installer english langpack file so that 'installer.quit.message'
+  is not wrong anymore.
+- Added a complete Javadoc comments set to com.izforge.izpack.installer.IzPanel .
+- Inclusion of the IzPack installer XML file in the source directory.
+- The compiler and the frontend can now be invoked outside of the bin/ directory
+  without any problem. This provide a *noticeable* improvement ;-)
+
+    > 2.11.1 (build 2002.02.09)
+
+- Inclusion of the Kunststoff Look And Feel version 2.
+
+    > 2.11.0 (build 2002.01.18)
+
+- Pre-versions modifications have been validated.
+- Improved documentation HTML version.
+- IzPack's own installer : use the ImgPacksPanel instead of the classic PacksPanel.
+- 2 new frontend splash screens thanks to Nicolas Deschaume.
+- HelloPanel : displays the email adresses enclosed by '<' and '>'.
+- This version is compiled with IBM Jikes.
+
+    > 2.11.0 pre2 (build 2001.12.17)
+
+- Frontend : added a toolbar.
+- Ant makefile : removed the 'clean' dependency for the 'all' target.
+- Installer : the next button will automatically lock if the last panel is
+  reached but does not already lock it.
+
+    > 2.11.0 pre1 (build 2001.12.09)
+
+- Installer : cached languages flags.
+- Installer : the languages flags are now grayed when not active (it creates
+  a rollover-effect when choosing the language in the list).
+- Frontend : the about box can't be resized.
+- Errors : now reported on the error output stream (System.err) instead of
+  the output stream (System.out).
+- Frontend : better GUI interaction.
+- ImgPacksPanel : fixed the bug that caused the snapshots not to switch as
+  expected when using the keyboard.
+- Updated Brazilian and Russian flags to conform with the other flags.
+
+    > 2.10.0 (build 2001.12.02)
+
+- Pre-versions modifications have been validated.    
+- A panel can now specify some custom variables (Serge Sivkov).
+- New Brazilian-Portuguese translation thanks to Joao Marcelo Pereira Alves.
+- New Russian translation thanks to Serge Sivkov.
+
+    > 2.10.0 pre 2 (build 2001.11.25)
+
+- TargetPanel : it is now possible to specify a specific default installation 
+  directory for a specific Operating System thanks to Michael Peterson.
+- Ant makefile : generation of the lib/ directory if not present (Michael
+  Peterson).
+- Documentation : updated to reflect the TargetPanel enhancements.
+
+    > 2.10.0 pre 1 (build 2001.11.11)
+
+- A CVS server is now available thanks to TuxFamily.org .
+- 2 New frontend splash screens pictures by Nicolas Deschaume.
+- Safer command-line compiler invocation.
+- New variable substitution backend by Johannes Lehtinen (backward compatible).
+- Better exceptions reporting system to the end-user.
+- Installer : centered labels at the language selection prompt.
+- LicencePanel : now locks the 'next' button if the 'yes' radio is not selected.
+- TargetPanel : now warns if the specified target is an empty string.
+- InstallPanel : now removes the last processed file path when the installation is over.
+
+
+    > 2.9.0 (build 2001.10.26)
+
+- Faster and safer I/O thanks to Johannes Lehtinen.
+- Faster frontend splash screen.
+- Removed the finalizers in the code.
+- Windows icon file added.
+
+    > 2.8.0 (build 2001.10.20)
+
+- New Frontend splash screen.
+- New file saving stupid bug fix in the Frontend.
+- FinishPanel : tooltip for the script button.
+- InstallPanel : new animated icon for the install button.
+- XInfoPanel : adaptative text panel.
+- Frontend : recent files list (support for the imported files also).
+- Fixed some size problems with the installer language selection dialog.
+- XML Frontend preferences file spec auto-upgrade.
+- New Finnish language pack thanks to Johannes Lehtinen.
+
+    > 2.7.0 (build 2001.09.26)
+
+- Frontend localisation support.
+- The Frontend remembers the last opened directory.
+- Flags for the language selection for the installers.
+- Language pre-selection for the installers.
+- TargetPanel : warns when the selected directory exists.
+- InstallPanel : animated icon for the install button.
+- New spanish langpack thanks to Carlos Rueda.
+
+    > 2.6.1 (build 2001.09.22)
+
+- Added an image to the frontend about box.
+- Fix in the Ant Makefile that caused it to fail in case of a first-time build.
+    
+    > 2.6.0 (build 2001.09.20)
+
+- Cleaner installer icons loading using an XML file.
+- Installation DTD mistake fix.
+- New GUI Frontend.
+- Sample installation XML comment fix.
+- German langpack small fixes.
+- Better internationalisation on Swing-specific strings.
+- Minor bug fixes.
+- Threaded compiling process.
+- Fix in the packs panel.
+- Better installer navigation buttons locking/unlocking.
+
+    > 2.5.0 (build 2001.09.07)
+
+- New web installers support.
+    
+    > 2.4.0 (build 2001.09.05)
+
+- Automated installations support.
+- New XPM icons.
+- Improved build.xml.
+- MacOS and MacOSX installation paths support.
+- Minor bug fix in the TargetPanel path selection.
+    
+    > 2.3.0 (build 2001.08.29)
+    
+- Uninstaller support.
+- Fix on InstallPanel : it does not change its size each time that a new
+  file is processed.
+- Bug fix in the IzPack variables translation system.
+- German langpack thanks to Klaus Hartlage.
+- Made a real documentation (it was time to do it :-) .
+
+    > 2.2.0 (build 2001.08.18)
+    
+- New panels available : ImgPacksPanel, HTMLInfoPanel, HTMLLicencePanel.
+- Use of Kunststoff 1.1.1 instead of 1.0.
+- Jakarta Ant script thanks to Pierre Dittgen.
+- API changes to allow a panel to ask for being skipped.
+- Wheights for some panels components fixed.
+- Added a Thanks.txt file :-)
+
+    > 2.1.0 (build 2001.08.14)
+
+- Fixed a problem with the base path and the installation xml file, they don't
+  need to be in the same directory anymore.
+- 2 tips in the source code from Brad Cox have been included.
+- A new kind of installer is available : standard-kunststoff (same as standard
+  but with the Kunststoff Look and Feel support).
+- Fix in TargetPanel : you can specify the installation path by typing it
+  without having to validate it with the enter key.
+- Fixed the bottom components wheights in the installer frame : now it looks 
+  much better.
+
+    > 2.0.1 (build 2001.08.11)
+    
+- No more warnings when the user wants to quit the installer and the
+  installation is done with the panel InstallPanel.
+
+    > 2.0.0 (build 2001.08.10)
+
+- ... a brand new IzPack !
+- Now it is an XML-based compiler.
+- A more modular architecture (you can create your own panels for instance).
+- No GUI builder for the moment, it will come in the next versions.
+- More kinds of installers to come.
+
+_______________________________________________________________________________
+
+
+    > 1.1.1 (build 2001.04.21)
+
+- Faster installer building / installation process.
+- String comparisons are now using the equalsIgnoreCase method instead of an 
+  objects equality test '==' (safest).
+- Modified the about box.
+- Clearly made a difference between images & icons in the jar files 
+  (restructuration).
+- Tested successfully on BlackDown Linux JVM.
+
+    > 1.1 (build 2001.04.10)
+     
+- Adds the extensions to the filenames in the builder if it was omited.
+- Adjusted the fonts in the Metal theme; now it should look right.
+- Adjusted the thread priority of the splash & progress windows, it should be 
+  faster.
+- The setup now recognizes the os so that the default installation path is 
+  appropriated.
+- Editors now place the caret at the beginning when a need (ex : a new text 
+  is loaded).
+- Enhanced the language packs selection in the builder.
+- Added the french language packs.
+- Parses the script files for special variables.
+- Now comes along with a documentation.
+     
+    > 1.0 (build 2001.03.18)          
+
+- Adjusted the fonts in the Metal theme.
+- Fixed the very stupid bugs with the files in pack deletion.
+- Improved the behaviour of the packs tab functions.
+- Made some small optimizations on various gui code parts.
+- Changed the text editors from JEditorPane to JTextArea : no more lines 
+  wrappings problems.
+- Gained 5kb on Setup.jar.
+- Blocks user interaction in the builder during the installer creation.
+
+    > 1.0 beta 1 (build 2001.03.11)   
+
+- The first public release :-)
+- There are a lot of features to add and enhance in the next releases, of 
+  course.

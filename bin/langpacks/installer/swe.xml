@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The Swedish langpack -->
+
+<langpack>
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - Installation av "/>
+    <str id="installer.next" txt="Nästa"/>
+    <str id="installer.prev" txt="Föregående"/>
+    <str id="installer.quit" txt="Avsluta"/>
+    <str id="installer.madewith" txt="(Skapad med IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Är du säker att du vill avsluta?"/>
+    <str id="installer.quit.message" txt="Detta kommer att avbryta installationen !"/>
+    <str id="installer.warning" txt="Varning !"/>
+    <str id="installer.yes" txt="Ja"/>
+    <str id="installer.no" txt="Nej"/>
+    <str id="installer.cancel" txt="Avbryt"/> 
+    <str id="installer.error" txt="Fel"/>
+    
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="Detta kommer att ta bort installerade applikationer !"/>
+    <str id="uninstaller.destroytarget" txt=" Tvinga radering av "/>
+    <str id="uninstaller.uninstall" txt="Avinstallera"/>
+    
+    <!-- The strings for the 'official' IzPack plugins -->
+    <str id="HelloPanel.welcome1" txt="Välkommen till installationen av "/>
+    <str id="HelloPanel.welcome2" txt=" !"/>
+    <str id="HelloPanel.authors" txt="Författare till det här programmet är : "/>
+    <str id="HelloPanel.url" txt="Programmets hemsida är : "/>
+    
+    <str id="LicencePanel.info" txt="Läs följande licensavtal :"/>
+    <str id="LicencePanel.agree" txt="Accepterar du licensavtalet ?"/>
+    <str id="LicencePanel.yes" txt="Ja"/>
+    <str id="LicencePanel.no" txt="Nej"/>
+    
+    <str id="InfoPanel.info" txt="Läs följande information :"/>
+    
+    <str id="TargetPanel.info" txt="Välj installation sökväg :"/>
+    <str id="TargetPanel.browse" txt="Bläddra ..."/>
+    <str id="TargetPanel.warn" 
+         txt="Katalogen existerar ! Är du säker att du vill installera här och möjligen skriva över existerande filer?"/>
+    <str id="TargetPanel.empty_target"
+         txt="Du har inte specificerat en målkatalog! Är det korrekt?"/>
+    
+    <str id="PacksPanel.info" txt="Välj de paket du vill installera :"/>
+    <str id="PacksPanel.tip" txt="Obs: gråade paket är obligatoriska."/>
+    
+    <str id="InstallPanel.info" txt="Klicka 'Installera !' för att starta installationsprocess"/>
+    <str id="InstallPanel.install" txt="Installera !"/>
+    <str id="InstallPanel.tip" txt="Installations förlopp:"/>
+    <str id="InstallPanel.begin" txt="[Inget]"/>
+    <str id="InstallPanel.finished" txt="[Slutförd]"/>
+    
+    <str id="FinishPanel.success" txt="Installationen har slutförts utan fel."/>
+    <str id="FinishPanel.fail" txt="Installationen har misslyckats!"/>
+    <str id="FinishPanel.uninst.info" txt="Ett avinstallationsprogram har skapats i:"/>
+    <str id="FinishPanel.auto" txt="Generera ett automatiskt installationsskript"/>
+    <str id="FinishPanel.auto.tip" 
+         txt="Använd detta skript för att upprepa installationen på andra datorer."/>
+    
+    <str id="ImgPacksPanel.packs" txt="Följande paket är tillgängliga :"/>
+    <str id="ImgPacksPanel.snap" txt="Paket granskning  :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Installera detta paket"/>
+    
+    <str id="ShortcutPanel.regular.list" txt="Select a Program Group for the Shortcuts:"/>
+    <str id="ShortcutPanel.regular.default" txt="Reset"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Create shortcut on the desktop"/>
+    <str id="ShortcutPanel.regular.create" txt="Create Shortcuts"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="current user"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="all users"/>
+
+    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
+    
+    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Shortcut Target   : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Command Line      : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Icon File         : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Working Directory : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
+    <str id="ShortcutPanel.location.applications" txt="Applications Menu"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
+    <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
+
+    <!-- Add your own panels specific strings here if you need -->
+
+</langpack>

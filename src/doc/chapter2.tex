@@ -1,0 +1,487 @@
+% Chapter 2
+\chapter{Writing installation XML files}
+
+% What you need
+\section{What you need}
+
+\subsection{Your editor}
+
+In order to write your XML installation files, you just need any plain text
+editor. Of course it's always easier to work with a colored text, so you'll feel
+better with a text editor havaing such a feature. Valueable free ones can be :
+\begin{itemize}
+  \item Jext : \url{http://www.jext.org/}
+  \item JEdit : \url{http://www.jedit.org/}
+  \item classics like Vim and (X)Emacs.
+\end{itemize}\
+
+\subsection{Writing in XML}
+
+You may not know much about XML. You have certainly heard about it, but never
+really played with it. XML-aware people can leave this subsection as we will
+present quickly how to use XML.\\
+
+XML is a markup language, really close to HTML. If you've ever worked with HTML
+the transition will be fast. However there are some little things to know. The
+markups used in XML have the following form : \texttt{<markup>}. Each markup has
+to be closed somewhere with its ending tag : \texttt{</markup>}. Each tag can
+contain some text and other markups. If a markup does not contain anything, it
+is just reported once : \texttt{<markup/>}. A markup can contain some attributes
+like : \texttt{<markup attr1="123" attr2="hello !"/>}. Here is a sample of a
+valid XML structure :
+\footnotesize
+\begin{verbatim}
+<chapter title="Chapter 1">
+  <section name="Introduction">
+    <paragraph>
+    This is the text of the paragraph number 1. It is available for the very low
+    price of <price currency="dollar">1 000 000</price>.
+    </paragraph>
+  </section>
+  <section name="xxx">
+  xxx
+  </section>
+</chapter>
+\end{verbatim}
+\normalsize
+
+You should be aware of the following common mistakes :
+\begin{itemize}
+
+  \item markups \textbf{are} case sensitive : \texttt{<markup>} is different
+  from \texttt{<Markup>}.
+  
+  \item you \textbf{must} close the markups in the same order as you create them
+  : \texttt{<m1><m2>(...)</m2></m1>} is right but 
+  \texttt{<m1><m2>(...)</m1></m2>} is not.
+
+\end{itemize}
+
+Also, an XML file must start with the following header :\\
+\texttt{<?xml version="1.0" encoding="iso-8859-1 standalone="yes" ?>}. The only
+thing you should modify is the encoding (put here the one your text editor saves
+your files to). The \texttt{standalone} attribute is not very important for
+us.\\
+
+This (quick !) introduction to XML was just to make you able to write your
+installation specification. For a better introduction there are plenty of books
+and articles/tutorials dealing of XML on Internet, in book stores, in magazines
+and so on.\\
+
+% Built-in variables
+\section{The built-in variables}
+
+These variables are built-in :
+\begin{itemize}
+
+  \item \texttt{\$INSTALL\_PATH} : the installation path
+  \item \texttt{\$JAVA\_HOME} : the \Java virtual machine home path
+  \item \texttt{\$USER\_HOME} : the user home directory path
+  \item \texttt{\$USER\_NAME} : the user name
+
+\end{itemize}\
+
+% The IzPack elements
+\section{The \IzPack elements}
+
+\noindent
+\textit{When writing your installers XML files, it's a good idea to have a look
+at the \IzPack installation DTD}.\\
+
+\subsection{The root element \texttt{<installation>}}
+
+The root element of an installation is \texttt{<installation>}. It takes one
+required attribute : \texttt{version}. It should be set to $1.0$ for the
+moment.\\
+
+\subsection{The information element \texttt{<info>}}
+
+This element is there to specify some general informations on the installer. It
+contains the following elements :
+\begin{itemize}
+
+  \item \texttt{<appname>} : the application name
+  \item \texttt{<appversion>} : the application version
+  \item \texttt{<url>} : the application official website url
+  \item \texttt{<authors>} : specifies the authors of the application, contains
+  at least one \texttt{<author>} element whose attributes are :
+  \begin{itemize}
+    \item \texttt{name} : the author's name
+    \item \texttt{email} : the author's email
+  \end{itemize}
+
+\end{itemize}\
+
+An example of a typical \texttt{<info>} section is :\\
+\footnotesize
+\begin{verbatim}
+<info>
+  <appname>Super extractor</appname>
+  <appversion>2.1 beta 666</appversion>
+  <url>http://www.superextractor.com/</url>
+  <authors>
+    <author name="John John Doo" email="jjd@jjd-mail.com"/>
+    <author name="El Goyo" email="goyoman@mymail.org"/>
+  </authors>
+</info>
+\end{verbatim}
+\normalsize
+
+\subsection{The variables element \texttt{<variables>}}
+
+This element allows you defines some variables for the variables substitution
+system. Some variables are built-in, such as \texttt{\$INSTALL\_PATH} (which is
+the installation choosen by the user). When you define a set of variables, you
+just have to put as many \texttt{<variable>} tags as needed. In the files to
+parse, if you define a variable named \texttt{VERSION}, you will type \$VERSION
+and the variables subsitutor will replace it by the right value.
+One \texttt{<variable>} tag take the following arguments :
+\begin{itemize}
+
+  \item \texttt{name} : the variable name
+  \item \texttt{value} : the variable value
+
+\end{itemize}\
+
+Here's a sample \texttt{<variables>} section :\\
+\footnotesize
+\begin{verbatim}
+<variables>
+  <variable name="app-version" value="1.4"/>
+  <variable name="released-on" value="08/03/2002"/>
+</variables>
+\end{verbatim}
+\normalsize
+
+\subsection{The GUI preferences element \texttt{<guiprefs>}}
+
+This element allows you to set the behaviour of your installer GUI. This
+information will not have any effect on the command-line installers that will be
+available in the future versions of \IzPack. The arguments to specify are :
+\begin{itemize}
+
+  \item \texttt{resizable} : takes \texttt{yes} or \texttt{no} and indicates
+  wether the window size can be changed or not.
+  \item \texttt{width} : sets the initial window width
+  \item \texttt{height} : sets the initial window height
+  
+\end{itemize}\
+
+Here's a sample :
+\footnotesize
+\begin{verbatim}
+<guiprefs resizable="no" width="800" height="600"/>
+\end{verbatim}
+\normalsize
+
+\subsection{The localisation element \texttt{<locale>}}
+
+This element is used to specify the language packs (langpacks) that you want to
+use for your installer. You must set one \texttt{<langpack>} markup per
+language. This markup takes the \texttt{iso3} parameter which specifies the iso3
+language code.\\
+
+Here's a sample :\\
+\footnotesize
+\begin{verbatim}
+<locale>
+  <langpack iso3="eng"/>
+  <langpack iso3="fra"/>
+  <langpack iso3="spa"/>
+</locale>
+\end{verbatim}
+\normalsize
+
+\subsection{The resources element \texttt{<resources>}}
+
+The resources are the data of the panels. Here you can specify them. Take a look
+at each panel description to see the resources it might need. You have to set
+one \texttt{<res>} markup for each resource and here are the attributes to
+specify :
+\begin{itemize}
+
+  \item \texttt{src} : the path to the resource file which can be named freely
+  of course (for instance \texttt{my-picture.jpg}).
+  \item \texttt{id} : the resource id, specified by the panel needs
+  \item \texttt{parse} : takes \texttt{yes} or \texttt{no} (default is
+  \texttt{no}) - used to specify wether the resource must be parsed at the
+  installer compilation time (for instance you could set the application version
+  in a readme file use by \texttt{InfoPanel}).
+  \item \texttt{type} : specifies the type (makes sense only for a textual
+  resource)  - default is \texttt{plain}, other values are \texttt{javaprop,
+  xml} (Java properties file and XML files)
+  \item \texttt{encoding} : specifies the resource encoding (makes sense only
+  for a textual resource) if it does matter to know it.
+
+\end{itemize}\
+
+Here's a sample :
+\footnotesize
+\begin{verbatim}
+<resources>
+  <res id="InfoPanel.info" src="doc/readme.txt" parse="yes"/>
+  <res id="LicencePanel.licence" src="legal/License.txt"/>
+</resources>
+\end{verbatim}
+\normalsize
+
+\subsection{The panels element \texttt{<panels>}}
+
+There you tell the compiler which panels you want to use. They will appear in
+the installer in the order that you put them in your XML installation file. Take
+a look at the different panels in order to see the ones you need. The
+\texttt{<panel>} markup takes a single attribute \texttt{classname} which is the
+classname of the panel.\\
+
+Here's a sample :
+\footnotesize
+\begin{verbatim}
+<panels>
+  <panel classname="HelloPanel"/>
+  <panel classname="LicencePanel"/>
+  <panel classname="TargetPanel"/>
+  <panel classname="InstallPanel"/>
+  <panel classname="FinishPanel"/>
+</panels>
+\end{verbatim}
+\normalsize
+
+\subsection{The packs section \texttt{<packs>}}
+
+This is a crucial section as you will specify here the files to be installed. It
+contains the following XML elements :\\
+\begin{itemize}
+
+  \item \texttt{<pack>} : specifies a pack, takes the following attributes :
+  \begin{itemize}
+  
+    \item \texttt{name} : the pack name
+    \item \texttt{required} : takes \texttt{yes} or \texttt{no} and specifies
+    wether the pack is optional or not.
+    
+  \end{itemize}\
+  The following tags are available for a \texttt{<pack>} markup :
+  \begin{itemize}
+  
+    \item \texttt{<description>} : text data describing the pack
+    \item \texttt{<file>} : specifies a file to include, takes the following
+    attributes :
+    \begin{itemize}
+    
+      \item \texttt{src} : the file location (relative path) - if it's a
+      directory it will add recursively its content
+      \item \texttt{targetdir} : the destination directory, could be something
+      like \texttt{\$INSTALL\_PATH/subdirX}
+      \item \texttt{os} : can optionnaly specify a target operating system
+      (\texttt{unix, windows, mac})
+    
+    \end{itemize}\
+    \item \texttt{<fileset>} : supports the Jakarta Ant powerful set syntax,
+    takes the following parameters :
+    \begin{itemize}
+    
+      \item \texttt{dir} : the base directory for the fileset (relative path)
+      \item \texttt{targetdir} : the destination path, works like for
+      \texttt{<file>}
+      \item \texttt{casesensitive} : optionally lets you specify if the names
+      are case-sensitive or not - takes \texttt{yes} or \texttt{no}
+      \item \texttt{os} : specifies the operating system, works like for
+      \texttt{<file>}
+    
+    \end{itemize}\
+    You specify the files with  \texttt{<include>} and \texttt{<exclude>} tags
+    that take the \texttt{name} parameter to specify the Ant-like pattern
+    \item \texttt{<parsable>} : used to specify the files to parse by the
+    variables substitutor, here are the attributes :
+    \begin{itemize}
+    
+      \item \texttt{targetfile} : the file to parse, could be something like\\
+      \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
+      \item \texttt{type} : specifies the type (same as for the resources) -
+      default is \texttt{plain}
+      \item \texttt{encoding} : specifies the file encoding
+    
+    \end{itemize}\
+    \item \texttt{<executable>} : a very useful thing if you need to execute
+    something at a stage of the installation process. It can also be use to set
+    the executable flag on Unix-like systems. Here are the attributes :
+    \begin{itemize}
+    
+      \item \texttt{targetfile} : the file to run, could be something like\\
+      \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
+      \item \texttt{class} : the class to run for a \Java program
+      \item \texttt{type} : \texttt{bin} or \texttt{jar} (default is
+      \texttt{bin})
+      \item \texttt{stage} : specifies when to launch it : \texttt{postinstall}
+      is just after the installation is done and the default value,
+      \texttt{never} will never launch it (useful to set the +x flag on Unix)
+      \item \texttt{failure} : specifies what to do when an error occurs :
+      \texttt{abort} will abort the installation process, \texttt{ask} (default)
+      will ask the user what to do and \texttt{warn} will just tell the user
+      that something's wrong
+    
+    \end{itemize}\
+    A \texttt{<args>} tag can also be specified in order to give the executable
+    some arguments :
+    \begin{itemize}
+    
+      \item \texttt{<arg>} : specifies an argument specified in the
+      \texttt{value} attribute
+    
+    \end{itemize}\
+    Finally it is possible to specifiy the target operating system with the
+    \texttt{<os>} tag :
+    \begin{itemize}
+    
+      \item \texttt{family} : \texttt{unix, windows, mac} to specify the
+      operating system family
+      \item \texttt{name} : the operating system name
+      \item \texttt{version} : the operating system version
+      \item \texttt{arch} : the operating system architecture (for intance the
+      Linux kernel can run on i386, sparc, and so on)
+    
+    \end{itemize}\
+  
+  \end{itemize}\
+
+\end{itemize}\
+
+Here's a sample one :
+\footnotesize
+\begin{verbatim}
+<packs>
+    <!-- The core files -->
+    <pack name="Core" required="yes">
+        <description>The IzPack core files.</description>
+        <file targetdir="$INSTALL_PATH" src="bin"/>
+        <file targetdir="$INSTALL_PATH" src="lib"/>
+        <file targetdir="$INSTALL_PATH" src="legal"/>
+        <file targetdir="$INSTALL_PATH" src="Readme.txt"/>
+        <file targetdir="$INSTALL_PATH" src="Versions.txt"/>
+        <file targetdir="$INSTALL_PATH" src="Thanks.txt"/>
+        <parsable targetfile="$INSTALL_PATH/bin/izpack-fe"/>
+        <parsable targetfile="$INSTALL_PATH/bin/izpack-fe.bat"/>
+        <parsable targetfile="$INSTALL_PATH/bin/compile"/>
+        <parsable targetfile="$INSTALL_PATH/bin/compile.bat"/>
+        <executable targetfile="$INSTALL_PATH/bin/compile" stage="never"/>
+        <executable targetfile="$INSTALL_PATH/bin/izpack-fe" stage="never"/>
+    </pack>
+    
+    <!-- The documentation (1 directory) -->
+    <pack name="Documentation" required="no">
+        <description>The IzPack documentation (HTML and PDF).</description>
+        <file targetdir="$INSTALL_PATH" src="doc"/>
+    </pack>
+</packs>
+\end{verbatim}
+\normalsize
+
+\subsection{The native element \texttt{<native>}}
+
+This is used when you want to use a feature that requires a native library. The
+native libraries are put under \texttt{bin/native/}. There are 2 kind of native
+libraries : the \IzPack ones and the third-party ones. As a consequence you will
+find the official ones under \texttt{bin/native/izpack} and you can put your own
+for instance under \texttt{bin/native/3rdparty}. The markup takes the following
+attributes :
+\begin{itemize}
+
+  \item \texttt{type} : \texttt{izpack} or \texttt{3rdparty}
+  \item \texttt{name} : the library filename
+
+\end{itemize}\
+
+Here's a sample :
+\footnotesize
+\begin{verbatim}
+<native type="izpack" name="ShellLink.dll"/>
+\end{verbatim}
+\normalsize
+
+\subsection{The jar merging element \texttt{<jar>}}
+
+If you adapt \IzPack for your own needs, you might need to merge the content of
+a jar file into the jar installer. For instance, it could be a library that you
+need to merge into. For this the \texttt{<jar>} markup can allow you to merge
+rawly the content of another jar file, specified by the \texttt{src}
+attribute.\\
+
+A sample :
+\footnotesize
+\begin{verbatim}
+<jar src="../nicelibrary.jar"/>
+\end{verbatim}
+\normalsize
+
+% The panels
+\section{The available panels}
+
+We will list here a set of \Java-only panels. More advanced ones are listed in
+the \textit{Advanced features} chapter. Each panel is listed by its name, hence
+the \texttt{classname} attribute (case-sensitive).\\
+
+\subsection{HelloPanel}
+
+This panel is able to welcome the user by specifying the project name, the
+version, the URL as well as the authors.\\
+
+\subsection{InfoPanel and HTMLInfoPanel}
+
+A kind of 'README' panels. Shows any text you would like to set. The text to
+show is specified by the \texttt{(HTML)InfoPanel.info} resource.\\
+
+\subsection{LicencePanel and HTMLLicencePanel}
+
+\noindent
+\textit{\underline{Note :} there is a mistake in the name - it should be
+LicensePanel. In France the word is Licence ... and one of my diploma is a
+'Licence' so ...} :-)\\
+
+These panels can prompt the user for a license agreement. This panel blocks
+unless the user selects the agreeing option. To specify the license agreemnet
+textn you have to use the \texttt{(HTML)LicencePanel.licence} resource.\\
+
+\subsection{PacksPanel}
+
+Allows the user to select the packs he wants to install.\\
+
+\subsection{ImgPacksPanel}
+
+Same as above, but for each a panel a different picture is shown to the user.
+The pictures are specified with the resources \texttt{ImgPacksPanel.img.x} where
+x stands for the pack name, the numbers start from 0. Of course it's up to you
+to specify as many images as needed and with right numbers.\\
+
+\subsection{TargetPanel}
+
+Will allow the user to select the installation path. This can be customized with
+the following resources (they are text files containing the path) :
+\begin{itemize}
+
+  \item \texttt{TargetPanel.dir.f} where f stands for the family (\texttt{mac,
+  macosx, windows, unix})
+  \item \texttt{TargetPanel.dir} : the directory name, instead of the software
+  to install name
+  \item \texttt{TargetPanel.dir.d} where d is a "dynamic" name, as returned by
+  the \Java machine. You should write the name in lowercase and by replacing the
+  spaces with underscores. For instance, you could need a different setting for
+  Solaris and GNU/Linux which are both Unix-like systems. The resources would be
+  \texttt{TargetPanel.dir.sunos, TargetPanel.dir.linux}. You should have a
+  Unix-resource in case it wouldn't work though.
+
+\end{itemize}\
+
+\subsection{InstallPanel}
+
+You should always have this one as it launches the installation process !\\
+
+\subsection{XInfoPanel}
+
+A panel showing a text parsed by the variables subsitutor. The text can be
+specified through the \texttt{XInfoPanel.info} resource. It can be useful when
+you have to show some information after the installation process is done (for
+instance if the text contains the target path).\\
+
+\subsection{FinishPanel}
+
+A ending panel, able to write automated installers information (see later).\\ 

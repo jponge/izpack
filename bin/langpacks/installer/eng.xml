@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The English langpack -->
+
+<langpack>
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - Installation of "/>
+    <str id="installer.next" txt="Next"/>
+    <str id="installer.prev" txt="Previous"/>
+    <str id="installer.quit" txt="Quit"/>
+    <str id="installer.madewith" txt="(Created with IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Are you sure you want to quit ?"/>
+    <str id="installer.quit.message" txt="This will cancel the installation !"/>
+    <str id="installer.warning" txt="Warning !"/>
+    <str id="installer.yes" txt="Yes"/>
+    <str id="installer.no" txt="No"/>
+    <str id="installer.cancel" txt="Cancel"/> 
+    <str id="installer.error" txt="Error"/>
+    
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="This will remove the installed application(s) !"/>
+    <str id="uninstaller.destroytarget" txt=" Force the deletion of "/>
+    <str id="uninstaller.uninstall" txt="Uninstall"/>
+    
+    <!-- The strings for the 'official' IzPack plugins -->
+    <str id="HelloPanel.welcome1" txt="Welcome to the installation of "/>
+    <str id="HelloPanel.welcome2" txt=" !"/>
+    <str id="HelloPanel.authors" txt="The author(s) of this software is(are) : "/>
+    <str id="HelloPanel.url" txt="The software homepage is : "/>
+    
+    <str id="LicencePanel.info" txt="Please read the following licence agreement :"/>
+    <str id="LicencePanel.agree" txt="Do you agree with this licence agreement ?"/>
+    <str id="LicencePanel.yes" txt="Yes"/>
+    <str id="LicencePanel.no" txt="No"/>
+    
+    <str id="InfoPanel.info" txt="Please read the following information :"/>
+    
+    <str id="TargetPanel.info" txt="Select the installation path :"/>
+    <str id="TargetPanel.browse" txt="Browse ..."/>
+    <str id="TargetPanel.warn" 
+         txt="The directory already exists ! Are you sure you want to install here and possibly overwrite existing files?"/>
+    <str id="TargetPanel.empty_target"
+         txt="You have not specified a target location! Is this correct?"/>
+    
+    <str id="PacksPanel.info" txt="Select the packs you want to install :"/>
+    <str id="PacksPanel.tip" txt="Note: greyed packs are required."/>
+    
+    <str id="InstallPanel.info" txt="Click 'Install !' to begin the installation process"/>
+    <str id="InstallPanel.install" txt="Install !"/>
+    <str id="InstallPanel.tip" txt="Installation progress :"/>
+    <str id="InstallPanel.begin" txt="[Nothing]"/>
+    <str id="InstallPanel.finished" txt="[Finished]"/>
+    
+    <str id="FinishPanel.success" txt="Installation has completed successfully."/>
+    <str id="FinishPanel.fail" txt="Installation has failed!"/>
+    <str id="FinishPanel.uninst.info" txt="An uninstaller program has been created in:"/>
+    <str id="FinishPanel.auto" txt="Generate an automatic installation script"/>
+    <str id="FinishPanel.auto.tip" 
+         txt="Use this script to repeat this installation on other computers."/>
+    
+    <str id="ImgPacksPanel.packs" txt="The following packs are available :"/>
+    <str id="ImgPacksPanel.snap" txt="Package snapshot  :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Install this pack"/>
+    
+    <str id="ShortcutPanel.regular.list" txt="Select a Program Group for the Shortcuts:"/>
+    <str id="ShortcutPanel.regular.default" txt="Reset"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Create shortcut on the desktop"/>
+    <str id="ShortcutPanel.regular.create" txt="Create Shortcuts"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="current user"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="all users"/>
+
+    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
+    
+    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Shortcut Target   : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Command Line      : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Icon File         : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Working Directory : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
+    <str id="ShortcutPanel.location.applications" txt="Applications Menu"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
+    <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
+
+    <!-- Add your own panels specific strings here if you need -->
+
+</langpack>

@@ -1,0 +1,9 @@
+#! /bin/sh
+
+# Runs the IzPack Frontend
+
+# Sets the IzPack home directory
+IZPACK_HOME='$INSTALL_PATH'
+
+# Does the effective launching
+java -jar "${IZPACK_HOME}/lib/frontend.jar" -HOME "$IZPACK_HOME" "$@"

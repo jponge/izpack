@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!-- The Finnish langpack -->
+
+<langpack>
+
+    <!-- General installer strings -->
+    <str id="installer.title" txt="IzPack - Asennetaan "/>
+    <str id="installer.next" txt="Seuraava"/>
+    <str id="installer.prev" txt="Edellinen"/>
+    <str id="installer.quit" txt="Lopeta"/>
+    <str id="installer.madewith" txt="(Tehty IzPackilla - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Haluatko varmasti lopettaa ?"/>
+    <str id="installer.quit.message" txt="Tämä keskeyttää asennuksen !"/>
+    <str id="installer.warning" txt="Varoitus !"/>
+    <str id="installer.yes" txt="Kyllä"/>
+    <str id="installer.no" txt="Ei"/>
+    <str id="installer.cancel" txt="Peruuta"/> 
+    <str id="installer.error" txt="Virhe"/>
+    
+    <!-- Uninstaller specific strings -->
+    <str id="uninstaller.warning" txt="Tämä poistaa asennetun sovelluksen/sovellukset !"/>
+    <str id="uninstaller.destroytarget" txt=" Poista väkisin "/>
+    <str id="uninstaller.uninstall" txt="Poista asennus"/>
+    
+    <!-- The strings for the 'official' IzPack plugins -->
+    <str id="HelloPanel.welcome1" txt="Tervetuloa asentamaan sovellusta "/>
+    <str id="HelloPanel.welcome2" txt=" !"/>
+    <str id="HelloPanel.authors" txt="Tämän ohjelmiston on tehnyt : "/>
+    <str id="HelloPanel.url" txt="Ohjelmiston kotisivu on : "/>
+    
+    <str id="LicencePanel.info" txt="Ole hyvä ja lue huolellisesti seuraava lisenssisopimus :"/>
+    <str id="LicencePanel.agree" txt="Hyväksytkö tämän lisenssisopimuksen ?"/>
+    <str id="LicencePanel.yes" txt="Kyllä"/>
+    <str id="LicencePanel.no" txt="En"/>
+    
+    <str id="InfoPanel.info" txt="Ole hyvä ja lue seuraavat tiedotteet :"/>
+    
+    <str id="TargetPanel.info" txt="Valitse asennuspolku :"/>
+    <str id="TargetPanel.browse" txt="Selaa ..."/>
+    <str id="TargetPanel.warn" 
+         txt="Hakemisto on jo olemassa ! Haluatko varmasti asentaa sovelluksen kyseiseen hakemistoon ?"/>
+    <str id="TargetPanel.empty_target"
+         txt="Et ole määritellyt asennushakemistoa ! Haluatko varmasti jatkaa ?"/>
+    
+    <str id="PacksPanel.info" txt="Valitse paketit jotka haluat asentaa :"/>
+    <str id="PacksPanel.tip" txt="Huomaa: Harmaat paketit ovat pakollisia."/>
+    
+    <str id="InstallPanel.info" txt="Aloita asennus tästä :"/>
+    <str id="InstallPanel.install" txt="Asenna !"/>
+    <str id="InstallPanel.tip" txt="Asennuksen eteneminen :"/>
+    <str id="InstallPanel.begin" txt="[Asennus ei ole alkanut]"/>
+    <str id="InstallPanel.finished" txt="[Asennus päättynyt]"/>
+    
+    <str id="FinishPanel.success" txt="Ohjelmisto on asennettu onnistuneesti !"/>
+    <str id="FinishPanel.fail" txt="Asennus epäonnistui ..."/>
+    <str id="FinishPanel.uninst.info" txt="Asennuksen purkuohjelma löytyy :"/>
+    <str id="FinishPanel.auto" txt="Luo automaattisen asennuksen ohjetiedosto"/>
+    <str id="FinishPanel.auto.tip"
+         txt="Tätä ohjetiedostoa voit käyttää toistaaksesi asennuksen automaattisesti toisella koneella."/>
+    
+    <str id="ImgPacksPanel.packs" txt="Seuraavat paketit ovat tarjolla :"/>
+    <str id="ImgPacksPanel.snap" txt="Tässä vastaava esittelynäkymä :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" Asenna tämä paketti"/>
+    
+    <str id="ShortcutPanel.regular.list" txt="Select a Program Group for the Shortcuts:"/>
+    <str id="ShortcutPanel.regular.default" txt="Reset"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Create shortcut on the desktop"/>
+    <str id="ShortcutPanel.regular.create" txt="Create Shortcuts"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="current user"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="all users"/>
+
+    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
+    
+    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="Shortcut Target   : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="Command Line      : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Icon File         : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Working Directory : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
+    <str id="ShortcutPanel.location.applications" txt="Applications Menu"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
+    <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
+
+    <!-- Add your own panels specific strings here if you need -->
+
+</langpack>

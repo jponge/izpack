@@ -1,0 +1,54 @@
+%
+% IzPack documentation
+%
+%	Copyright (c) 2001, 2002 Julien Ponge
+%
+%	<julien@izforge.com>
+%	http://www.izforge.com/
+%
+
+% Change this as needed :
+%		- a4paper to your paper format
+%		- the document class to your need (book, article, ...)
+\documentclass[a4paper, 12pt]{report}
+
+% The packages we need
+\usepackage{verbatim}
+\usepackage{moreverb}
+\usepackage{url}
+\usepackage{picins}
+\usepackage[final, dvips]{graphicx}
+
+% Commands definition
+\newcommand{\Java}{Java\texttrademark\ }
+\newcommand{\IzPack}{\textsc{IzPack}\ }
+
+% Headers
+\title{\Huge{\textbf{IzPack documentation}}}
+\author{Julien \textsc{Ponge} \\
+				\url{<julien@izforge.com>} \\
+				\url{http://www.izforge.com/}}
+
+% We start here
+\begin{document}
+
+	% First pages
+	\maketitle
+	\tableofcontents
+	
+	% The chapters
+	\include{introduction}
+	\include{chapter1}
+	\include{chapter2}
+  \include{chapter3}
+  \include{chapter4}
+  \include{chapter5}
+  
+  % Appendixes
+  \appendix
+  \chapter{The GNU General Public License}
+  \footnotesize
+  \verbatiminput{GPL}
+  \normalsize
+
+\end{document}

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="iso-8859-2" standalone="yes" ?>
+
+<!-- The English langpack -->
+
+<langpack>
+
+    <!-- General frontend strings -->
+    <str id="frontend.title" txt="IzPack - GUI Frontend"/>
+    <str id="frontend.untitled" txt="Névtelen"/>
+    <str id="frontend.error" txt="Hiba"/>
+    <str id="frontend.save_first" txt="Kérem mentse a file-t először!"/>
+    <str id="frontend.comp_dlg.title" txt="Fordítás"/>
+    <str id="frontend.comp_dlg.msg" txt="Fordítási üzenetek :"/>
+    <str id="frontend.comp_dlg.ok" txt="Ok"/>
+    <str id="frontend.basepath" txt="Válassza ki a bázis útvonalat"/>
+    <str id="frontend.licence.msg" txt="A GNU General Public Licence versió 2 :"/>
+    <str id="frontend.licence.ok" txt="Ok"/>
+    <str id="frontend.about.copyright" txt="Copyright (c) 2001,2002 Julien PONGE"/>
+    <str id="frontend.about.url" txt="http://www.izforge.com/"/>
+    <str id="frontend.lpswitch" txt="Nyelv választás"/>
+    <str id="frontend.nexttime" txt="A változtatások csak újra indítás után érvényesülnek!"/>
+    
+    <!-- Menu specific strings -->
+
+    <str id="menu.langpack" txt="Nyelv"/>
+    <str id="menu.langpack.mn" txt="N"/>
+    
+    <str id="menu.bookmarks" txt="Utóljára használt file-ok"/>
+    <str id="menu.bookmarks.mn" txt="U"/>
+    
+    <str id="menu.files" txt="File"/>
+    <str id="menu.files.mn" txt="F"/>
+    <str id="menu.new" txt="Új"/>
+    <str id="menu.new.mn" txt="j"/>
+    <str id="menu.open" txt="Megnyitás"/>
+    <str id="menu.open.mn" txt="n"/>
+    <str id="menu.save" txt="Mentés"/>
+    <str id="menu.save.mn" txt="M"/>
+    <str id="menu.save_as" txt="Mentés másként"/>
+    <str id="menu.save_as.mn" txt="e"/>
+    <str id="menu.exit" txt="Kilépés"/>
+    <str id="menu.exit.mn" txt="K"/>
+    <str id="menu.import" txt="File importálása 'relative paths'-hoz"/>
+    <str id="menu.import.mn" txt="i"/>
+    
+    <str id="menu.compile" txt="Fordítás"/>
+    <str id="menu.compile.mn" txt="F"/>
+    <str id="menu.comp.standard" txt="Standard installáló"/>
+    <str id="menu.comp.standard.mn" txt="S"/>
+    <str id="menu.comp.standardk" txt="Standard 'Kunststoff' installáló"/>
+    <str id="menu.comp.standardk.mn" txt="a"/>
+    <str id="menu.comp.web" txt="Web installáló"/>
+    <str id="menu.comp.web.mn" txt="W"/>
+    <str id="menu.comp.webk" txt="Web 'Kunststoff' Installáló"/>
+    <str id="menu.comp.webk.mn" txt="e"/>
+    
+    <str id="menu.izpack" txt="IzPack"/>
+    <str id="menu.izpack.mn" txt="I"/>
+    <str id="menu.about" txt="IzPack névjegy ..."/>
+    <str id="menu.about.mn" txt="n"/>
+    <str id="menu.licence" txt="IzPack Licence ..."/>
+    <str id="menu.licence.mn" txt="L"/>
+    
+    <!-- Tabs specific strings -->
+    
+    <str id="tabs.info.title" txt="Általános informacio"/>
+    <str id="tabs.info.appname" txt="Az alkalmazás neve :"/>
+    <str id="tabs.info.appversion" txt="Az alkalmazás verziója :"/>
+    <str id="tabs.info.appurl" txt="Az alkalmazás honlapjának URL-je :"/>
+    <str id="tabs.info.authorslist" txt="Szerzők listája :"/>
+    <str id="tabs.info.author" txt="A szerző neve :"/>
+    <str id="tabs.info.email" txt="A szerző email címe :"/>
+    <str id="tabs.info.add" txt="Szerző hozzáadása"/>
+    <str id="tabs.info.del" txt="Szerző eltávolítása"/>
+    <str id="tabs.info.width" txt=" Ablak szélesség :"/>
+    <str id="tabs.info.height" txt=" Ablak magasság :"/>
+    <str id="tabs.info.resizable" txt=" Az ablak méretezhetővé tétele"/>
+    
+    <str id="tabs.loc.title" txt="Nyelvi beállítás"/>
+    <str id="tabs.loc.available" txt="Elérhető nyelvi csomagok :"/>
+    <str id="tabs.loc.selected" txt="Kiválasztott nyelvi csomagok :"/>
+    <str id="tabs.loc.include" txt="Hozzáadás"/>
+    <str id="tabs.loc.remove" txt="Eltávolítás"/>
+    
+    <str id="tabs.res.title" txt="Erőforrások"/>
+    <str id="tabs.res.list" txt="Erőforrás lista :"/>
+    <str id="tabs.res.add" txt="Erőforrás hozzáadása"/>
+    <str id="tabs.res.remove" txt="Erőforrás eltávolítása"/>
+    <str id="tabs.res.input" txt="Erőforrás azonositó :"/>
+    
+    <str id="tabs.pan.title" txt="Panelek"/>
+    <str id="tabs.pan.available" txt="Elérhető panelek :"/>
+    <str id="tabs.pan.selected" txt="Kiválasztott panelek :"/>
+    <str id="tabs.pan.include" txt="Hozzáadás"/>
+    <str id="tabs.pan.remove" txt="Eltávolítás"/>
+    <str id="tabs.pan.tip" txt="Néhány panel igényel erőforrás beállítást is. További információért lásd a dokumrntációt."/>
+    
+    <str id="tabs.packs.title" txt="Csomagok"/>
+    <str id="tabs.packs.packs" txt="Csomagok :"/>
+    <str id="tabs.packs.files" txt="A kiválasztott csomag file-i :"/>
+    <str id="tabs.packs.addpack" txt="Csomag hozzáadása"/>
+    <str id="tabs.packs.delpack" txt="Csomag eltávolítása"/>
+    <str id="tabs.packs.required" txt=" Szükséges csomag"/>
+    <str id="tabs.packs.addfile" txt="File vagy mappa hozzáadása"/>
+    <str id="tabs.packs.delfile" txt="File vagy mappa eltávolítása"/>
+    <str id="tabs.packs.parsable" txt=" Elemzendő file"/>
+    <str id="tabs.packs.pack_name" txt="A csomag neve :"/>
+    <str id="tabs.packs.pack_desc" txt="A csomag leírása :"/>
+    <str id="tabs.packs.target" txt="Cél mappa :"/>
+    <str id="tabs.packs.scriptProps" txt="Az elemző beállítása ..."/>
+    <str id="tabs.packs.f_type" txt="File tipusa ? (hagyd üresen az alapértelmezéshez)"/>
+    <str id="tabs.packs.f_enc" txt="File kódolása ? (hagyd üresen az alapértelmezéshez)"/>
+
+</langpack>

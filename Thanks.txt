@@ -1,0 +1,45 @@
+[ A list to thank some people ]
+
+    I'd like to thank the following people as they helped me to create IzPack
+by their libraries, contributions, feedback, and so on. If you think that I
+forgot to mention your name, just send me a email : julien@izforge.com.
+
+    Of course, I would first like to thank YOU, whoever you are, for using 
+IzPack for your projects ;-)
+
+- Marc De Scheemaecker : for the great NanoXML 2 library.
+- Jan Bosenberg at Incors : for the Kunststoff Look and Feel library and the
+  link on the Incors.org Kunststoff homepage.
+- Pierre Dittgen : for the Jakarta Ant makefile.
+- Klaus Hartlage : for the German language pack support.
+- Romain Guy : for the Jext editor, the feedback, and the use of IzPack for 
+  Jext itself.
+- Johann Loefflmann for the great bug reports and improvements.
+- Carlos Rueda for the Spanish language pack support.
+- Eric Samson : for the feedback and the encouragements toward the project.
+- Brad Cox : for the feedback, some tips in the source code, and using IzPack 
+  with its MyBank project.
+- Bertrand Luc : for the feedback.
+- Chris Boothe : for the feedback.
+- Alberto Molpeceres : for the javahispano.com website.
+- Johannes Lehtinen : for the Finnish language pack, the I/O improvements,
+  and the variables substitution system as well as some other hacks.
+- John Rousseau : for the feedback.
+- Nicolas Deschaume : for the nice splash screens.
+- Michael Peterson : for the TargetPanel enhancements (default target 
+  customization) and the English language packs enhancements.
+- Paul Wilkinson : for the English language packs enhancements and the Ant
+  IzPack integration.
+- Joao Marcelo Pereira Alves : for the Brazilian-Portuguese langpack.
+- Serge Sivkov : for the fixes and the Russian langpack.
+- Marcus Wolschon : for the fix in PacksPanel.
+- Fridjof Jansen : for the Dutch language packs support.
+- Stefan Norman : for the Swedish language packs support.
+- Elmar Grom : for the huge job on giving IzPack the ability to add shortcuts to
+  the Windows operating system in a very elegant way.
+- Olexij Tkatchenko : for the Ukrainian language pack as well as the job on
+  making IzPack able to execute some external executables scripts.
+- Piotr Bzdyl for the Polish language pack support.
+- The e-xmlmedia.fr people for the lot of improvements and new features added to
+  IzPack.
+- Harsan Peter for the Hungarian language pack.
