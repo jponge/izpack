@@ -303,6 +303,14 @@ public class IoHelper
       state = fe.executeCommand(params, output);
       retval = extractLong(output[0], -3, 3, "%");
     }
+    else if( OsVersion.IS_SUNOS )
+    {
+      String[] params = {"df", "-k", path};
+      String[] output = new String[2];
+      FileExecutor fe = new FileExecutor();
+      state = fe.executeCommand(params, output);
+      retval = extractLong(output[0], -3, 3, "%") * 1024;
+    }    
     else if( OsVersion.IS_UNIX )
     {
       String[] params = {"df", "-Pk", path};
