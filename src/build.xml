@@ -263,21 +263,9 @@
     <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.panels">
         <delete file="${standalone-compiler.jar}" verbose="true"/>
         <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
-            <fileset dir="${build.dir}">
-                <include name="com/izforge/izpack/*.class"/>
-                <include name="com/izforge/izpack/compiler/*.class"/>
-                <include name="com/izforge/izpack/util/OsConstraint.class"/>
-                <include name="com/izforge/izpack/util/Debug.class"/>
-                <include name="com/izforge/izpack/util/*Validator.class"/>
-                <include name="com/izforge/izpack/util/*Processor.class"/>
-                <include name="com/izforge/izpack/ant/*.class"/>
-                <include name="com/izforge/izpack/ant/langpacks/*.properties"/>
-                <include name="com/izforge/izpack/installer/VariableValueMap.class"/>
-                <include name="com/izforge/izpack/installer/VariableValueMapImpl.class"/>
-                <include name="com/izforge/izpack/installer/VariableSubstitutor.class"/>
-                <include name="net/n3/nanoxml/*.class"/>
-            </fileset>
-            <zipfileset src="${basedir}/lib/ant.jar"/>
+            <zipfileset src="${installer.jar}"/>
+            <zipfileset src="${compiler.jar}"/>
+            <zipfileset src="lib/ant.jar"/>
             <fileset dir="${basedir}">
                 <include name="bin/langpacks/flags/*"/>
                 <include name="bin/langpacks/installer/*"/>
@@ -286,6 +274,9 @@
                 <include name="lib/uninstaller.jar"/>
                 <include name="lib/installer.jar"/>
                 <include name="lib/kunststoff.jar"/>
+                <include name="lib/liquidlnf.jar"/>
+                <include name="lib/metouia.jar"/>
+                <include name="lib/looks.jar"/>
                 <exclude name="**/CVS"/>
             </fileset>
         </jar>
