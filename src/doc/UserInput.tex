@@ -200,10 +200,10 @@ To provide internationalization you can create a file named
 \texttt{userInputLang.xml\_xyz} where \texttt{xyz} is the ISO3 code of the language
 in lowercase. Please be aware that case is significant. This file has to be inserted in the resources section
 of \texttt{install.xml} with the \texttt{id} and \texttt{src} attributes
-set at the name of the file.
-\\\\
+set at the name of the file.\\
+
 Example:\\
-\\
+
 If you have the following userInputSpec.xml 
 and you want to internationalize \texttt{input.comment}, \texttt{input.proxy}, \texttt{input.port} for 
 english and french you have to create two files named userInputLang.xml\_eng and userInputLang.xml\_fra:
@@ -220,7 +220,7 @@ english and french you have to create two files named userInputLang.xml\_eng and
 </panel>
 </userInput>
 \end{verbatim}
-\\
+
 userInputLang.xml\_eng file contains:
 \begin{verbatim}
 <langpack>
@@ -229,6 +229,7 @@ userInputLang.xml\_eng file contains:
   <str id="input.port" txt="English:Proxy Port:"/>
 </langpack>
 \end{verbatim}
+
 userInputLang.xml\_fra file contains:
 \begin{verbatim}
 <langpack>
