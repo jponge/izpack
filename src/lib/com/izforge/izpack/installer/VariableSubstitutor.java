@@ -37,7 +37,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.izforge.izpack.util.EnvironmentVariables;
+import com.izforge.izpack.util.IoHelper;
 
 /**
  *  Substitutes variables occurring in an input stream or a string. This
@@ -251,7 +251,7 @@ public class VariableSubstitutor
         // check for environment variables
         if (braces && name.startsWith("ENV[") && (name.lastIndexOf(']') == name.length()-1))
         {
-          varvalue = EnvironmentVariables.getInstance().getProperty(name.substring(4, name.length()-1));
+          varvalue = IoHelper.getenv(name.substring(4, name.length()-1));
         }
         else
           varvalue = (String)variables.get(name);
