@@ -16,6 +16,8 @@
 - Portuguese langpack updates (Flavio Fonseca).
 - Blocking the GUI interaction (like in InstallPanel) was only working with the
   mouse events. It now works with the keyboard ones too (Eduard Jodas Samper).
+- TargetPanel: refuse selecting read-only directories.
+- Documentation fixes.
 
   > 3.6.0 (build 2004.07.28)
 

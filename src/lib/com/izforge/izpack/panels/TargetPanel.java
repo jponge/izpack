@@ -288,9 +288,14 @@ public class TargetPanel extends IzPanel implements ActionListener
 
       // Shows it
       if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-        textField.setText(fc.getSelectedFile().getAbsolutePath());
+      {
+        String path = fc.getSelectedFile().getAbsolutePath();
+        File dir = new File(path);
+        if (dir.canWrite()) textField.setText(path);
+      }
 
-    }else if(source == textField)
+    }
+    else if (source == textField)
     {
       parent.navigateNext();
     }
