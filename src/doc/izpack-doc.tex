@@ -6,6 +6,7 @@
 % <julien@izforge.com>
 % http://www.izforge.com/
 %
+%begin{latexonly}
 \newif\ifpdf
 \ifx\pdfoutput\undefined
 \pdffalse
@@ -20,8 +21,11 @@
 \ifpdf
 \documentclass[a4paper, 12pt, pdftex]{report}
 \else
+%end{latexonly}
 \documentclass[a4paper, 12pt, dvips]{report}
+%begin{latexonly}
 \fi
+%end{latexonly}
 
 % The packages we need
 \usepackage{verbatim}
@@ -30,9 +34,15 @@
 \usepackage{tabularx}
 \usepackage[final]{graphicx}
 \usepackage[hyperindex,breaklinks=true,pdfborder={0 0 0}]{hyperref}
+%begin{latexonly}
 \ifpdf
 \hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=red}
 \fi
+%end{latexonly}
+\usepackage{html}
+\begin{htmlonly}
+\newcommand{\href}[2]{\htmladdnormallink{#2}{#1}}
+\end{htmlonly}
 
 % Commands definition
 \newcommand{\Java}{Java\texttrademark\ }

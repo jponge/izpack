@@ -25,8 +25,10 @@ ps: dvi
 
 # Makes the PDF(tm) version
 .PHONY:	pdf
-pdf: dvi
+pdf:
 	[ -d pdf ] || mkdir pdf
+	${PDFLATEX} ${MAIN}
+	${PDFLATEX} ${MAIN}
 	${PDFLATEX} ${MAIN} && mv ${MAIN}.pdf pdf/
 
 # Makes the HTML version
