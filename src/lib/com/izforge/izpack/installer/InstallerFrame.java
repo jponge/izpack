@@ -27,14 +27,18 @@
 package com.izforge.izpack.installer;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.DefaultFocusTraversalPolicy;
 import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseMotionAdapter;
@@ -255,6 +259,9 @@ public class InstallerFrame extends JFrame
     {
     });
     glassPane.addKeyListener(new KeyAdapter()
+    {
+    });
+    glassPane.addFocusListener(new FocusAdapter()
     {
     });
 
@@ -666,12 +673,19 @@ public class InstallerFrame extends JFrame
     quitButton.setText(text);
   }
 
+  private FocusTraversalPolicy usualFTP;
+  private FocusTraversalPolicy blockFTP;
+  
   /**  Blocks GUI interaction.  */
   public void blockGUI()
   {
     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     getGlassPane().setVisible(true);
     getGlassPane().setEnabled(true);
+    usualFTP = getFocusTraversalPolicy();
+    if (blockFTP == null) blockFTP = new BlockFocusTraversalPolicy();
+    setFocusTraversalPolicy(blockFTP);
+    getGlassPane().requestFocus();
   }
 
   /**  Releases GUI interaction.  */
@@ -680,6 +694,7 @@ public class InstallerFrame extends JFrame
     getGlassPane().setEnabled(false);
     getGlassPane().setVisible(false);
     setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+    setFocusTraversalPolicy(usualFTP);
   }
 
   /**  Locks the 'previous' button.  */
@@ -805,5 +820,20 @@ public class InstallerFrame extends JFrame
       wipeAborted();
       Housekeeper.getInstance().shutDown(0);
     }
+  }
+
+  /** A FocusTraversalPolicy that only allows the block panel to have 
+   * the focus
+   */
+  private class BlockFocusTraversalPolicy extends DefaultFocusTraversalPolicy
+  {
+      /** Only accepts the block panel
+       * @param aComp the component to check
+       * @return true if aComp is the block panel
+       */
+      protected boolean accept(Component aComp)
+      {
+          return aComp == getGlassPane();
+      }
   }
 }
