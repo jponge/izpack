@@ -56,7 +56,7 @@
     <str id="ShortcutPanel.regular.default" txt="Wiederherstellen"/>
     <str id="ShortcutPanel.regular.desktop" txt="Verknüpfung auf dem Desktop einrichten"/>
     <str id="ShortcutPanel.regular.create" txt="Verknüpfung erstellen"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="Erstelle Verknüfpunf für:"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="Erstelle Verknüpfung für :"/>
     <str id="ShortcutPanel.regular.currentUser" txt="aktuellen Benutzer"/>
     <str id="ShortcutPanel.regular.allUsers" txt="alle Benutzer"/>
     <str id="ShortcutPanel.alternate.apology" txt="Leider wird die Erzeugung von Verknüpfungen durch IzPack unter diesem Betriebssystem noch nicht unterstützt. Bitte ziehen Sie das Handbuch Ihres Betriebssystems zu Rate, um manuell Verknüpfungen zu erstellen."/>
