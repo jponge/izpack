@@ -394,7 +394,7 @@ public class InstallerFrame extends JFrame
     setVisible(true);
   }
 
-        private boolean isBack = false;
+  private boolean isBack = false;
   /**
    *  Switches the current panel.
    *
@@ -402,62 +402,78 @@ public class InstallerFrame extends JFrame
    */
   protected void switchPanel(int last)
   {
-        if (installdata.curPanelNumber<last)
+    try
+    {
+        if (installdata.curPanelNumber < last)
         {
-                isBack = true;
+            isBack = true;
         }
-    panelsContainer.setVisible(false);
-    IzPanel panel =
-      (IzPanel) installdata.panels.get(installdata.curPanelNumber);
-    IzPanel l_panel = (IzPanel) installdata.panels.get(last);
-    l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
-    panelsContainer.remove(l_panel);
-    panelsContainer.add(panel);
-    if (installdata.curPanelNumber == 0)
-    {
-      prevButton.setVisible(false);
-      lockPrevButton();
-      unlockNextButton(); // if we push the button back at the license panel
-    } else if (installdata.curPanelNumber == installdata.panels.size() - 1)
-    {
-      prevButton.setVisible(false);
-      nextButton.setVisible(false);
-      lockNextButton();
-      // Set the default button to the only visible button.
-      getRootPane().setDefaultButton(quitButton);
-    } else
-    {
-      prevButton.setVisible(true);
-      nextButton.setVisible(true);
-      unlockPrevButton();
-      unlockNextButton();
-    }
-    l_panel.panelDeactivate();
-    if( panel.getInitialFocus() != null )
-    { // Give a hint for the initial focus to the system.
-      Component inFoc = panel.getInitialFocus();
-      if( JAVA_SPECIFICATION_VERSION < 1.4)
-        inFoc.requestFocus();
-      else
-        inFoc.requestFocusInWindow();
-      // Call the IzPanel specific method.
-      panel.panelActivate();
-      // On editable text components positionite the caret to the end
-      // of the cust existent text.
-      if( inFoc instanceof JTextComponent )
-      {
-        JTextComponent inText = (JTextComponent) inFoc;
-        if( inText.isEditable() && inText.getDocument() != null)
+        panelsContainer.setVisible(false);
+        IzPanel panel = (IzPanel)installdata.panels.get(installdata.curPanelNumber);
+        IzPanel l_panel = (IzPanel)installdata.panels.get(last);
+        l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
+
+        if (installdata.curPanelNumber == 0)
         {
-          inText.setCaretPosition( inText.getDocument().getLength());
+            prevButton.setVisible(false);
+            lockPrevButton();
+            unlockNextButton(); // if we push the button back at the license panel
         }
-      }
-    }
-    else
-      panel.panelActivate();
-    panelsContainer.setVisible(true);
+        else if (installdata.curPanelNumber == installdata.panels.size() - 1)
+        {
+            prevButton.setVisible(false);
+            nextButton.setVisible(false);
+            lockNextButton();
+
+            // Set the default button to the only visible button.
+            getRootPane().setDefaultButton(quitButton);
+        }
+        else
+        {
+            prevButton.setVisible(true);
+            nextButton.setVisible(true);
+            unlockPrevButton();
+            unlockNextButton();
+        }
+
+        if(panel.getInitialFocus() != null)
+        {
+            // Give a hint for the initial focus to the system.
+            Component inFoc = panel.getInitialFocus();
+            if( JAVA_SPECIFICATION_VERSION < 1.4)
+            {
+                inFoc.requestFocus();
+            }
+            else
+            {
+                inFoc.requestFocusInWindow();
+            }
+
+            /* On editable text components position the caret to the end
+               of the cust existent text. */
+            if( inFoc instanceof JTextComponent )
+            {
+                JTextComponent inText = (JTextComponent) inFoc;
+                if( inText.isEditable() && inText.getDocument() != null)
+                {
+                    inText.setCaretPosition( inText.getDocument().getLength());
+                }
+            }
+        }
+
+        panelsContainer.remove(l_panel);
+        l_panel.panelDeactivate();
+        panelsContainer.add(panel);
+        panel.panelActivate();
+
+        panelsContainer.setVisible(true);
         loadImage(installdata.curPanelNumber);
-    isBack = false;
+        isBack = false;
+    }
+    catch (Exception err)
+    {
+        err.printStackTrace();
+    }
   }
 
   /**  Writes the uninstalldata.  */
@@ -545,13 +561,13 @@ public class InstallerFrame extends JFrame
            }
            else if( key.equals("uninstallerListeners") ||
             key.equals("uninstallerJars"))
-           { // It is a ArrayList of ArrayLists which contains the full 
-             // package paths of all needed class files. 
+           { // It is a ArrayList of ArrayLists which contains the full
+             // package paths of all needed class files.
              // First we create a new ArrayList which contains only
              // the full paths for the uninstall listener self; thats
              // the first entry of each sub ArrayList.
              ArrayList subContents = new ArrayList();
-            
+
              // Secound put the class into  uninstaller.jar
              Iterator listenerIter = ((List) contents).iterator();
              while( listenerIter.hasNext() )
@@ -593,11 +609,11 @@ public class InstallerFrame extends JFrame
                  else
                    Debug.trace("custom data not found: " + contentPath );
                  outJar.closeEntry();
-          
+
                }
              }
-             // Third we write the list into the 
-             // uninstaller.jar 
+             // Third we write the list into the
+             // uninstaller.jar
              outJar.putNextEntry(new ZipEntry(key));
              ObjectOutputStream objOut = new ObjectOutputStream(outJar);
              objOut.writeObject(subContents);
@@ -651,9 +667,9 @@ public class InstallerFrame extends JFrame
     }
     catch(Exception e)
     { e.printStackTrace(); }
-    
+
     result = this.getClass().getResourceAsStream( basePath+res );
-    
+
     if( result == null )
     {
       throw new ResourceNotFoundException( "Warning: Resource not found: " + res );
@@ -829,7 +845,7 @@ public class InstallerFrame extends JFrame
 
   private FocusTraversalPolicy usualFTP;
   private FocusTraversalPolicy blockFTP;
-  
+
   /**  Blocks GUI interaction.  */
   public void blockGUI()
   {
@@ -976,7 +992,7 @@ public class InstallerFrame extends JFrame
     }
   }
 
-  /** A FocusTraversalPolicy that only allows the block panel to have 
+  /** A FocusTraversalPolicy that only allows the block panel to have
    * the focus
    */
   private class BlockFocusTraversalPolicy extends DefaultFocusTraversalPolicy

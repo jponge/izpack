@@ -41,6 +41,8 @@
 - New Serbian translation (Filip Brcic).
 - Bug at loading Panels from other packages fixed (Klaus Bartz).
 - Unix (KDE/Gnome) shortcuts support (Marc Eppelmann).
+- ShortcutPanel: going to a previous panel could lead to strange situations
+  (bug #2713).
 
   > 3.6.1 (build 2004.10.09)
 
