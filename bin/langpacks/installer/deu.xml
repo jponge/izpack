@@ -17,7 +17,7 @@
 
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Jetzt werden die installierten Anwendungen entfernt!"/>
-    <str id="uninstaller.destroytarget" txt=" Deinstallation durchführen für "/>
+    <str id="uninstaller.destroytarget" txt="Lösche alle Dateien in "/>
     <str id="uninstaller.uninstall" txt="Deinstallieren"/>
 
     <!-- The strings for the 'official' IzPack plugins -->
