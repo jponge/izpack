@@ -111,12 +111,6 @@
               <include name="doc/izpack/pdf/**/*" />
             </fileset>
         </pack>
-        <pack name="Documentation-PS" required="no">
-            <description>The IzPack documentation (PS version).</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-              <include name="doc/izpack/ps/**/*" />
-            </fileset>
-        </pack>
         <pack name="Documentation-NanoXML" required="no">
             <description>The NanoXML documentation (PDF-only).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">

@@ -26,6 +26,8 @@
   (bug #1472).
 - Files with the same file source are never stored more than once anymore in the
   resulting installer jar (Jan Blok).
+- Various documentation refreshments. The PostScript[tm] version is not produced
+  anymore (PDF + HTML are the 2 targets).
 
   > 3.4.0 (build 2003.12.06)
 

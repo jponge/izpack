@@ -7,7 +7,7 @@ HTML = latex2html
 SUBDIRS = img
 
 # Default target - makes it all
-all: subdirs dvi ps pdf html
+all: subdirs dvi pdf html
 
 # Makes the dvi
 .PHONY:	dvi
@@ -60,4 +60,4 @@ uninstall:
 .PHONY: install
 install: dvi ps pdf html
 	[ -d ../../doc/izpack ] || mkdir ../../doc/izpack
-	cp -R pdf ps html ../../doc/izpack
+	cp -R pdf html ../../doc/izpack
