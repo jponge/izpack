@@ -1,5 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.5.1 (build 2004.xx.yy)
+
+- No custom look and feel will be applied on Mac platforms (Chad McHenry).
+
   > 3.5.0 (build.2004.02.26)
 
 - The developer services have moved to BerliOS (http://developer.berlios.de/).

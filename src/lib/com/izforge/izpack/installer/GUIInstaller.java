@@ -207,15 +207,21 @@ public class GUIInstaller extends InstallerBase
    */
   protected void loadLookAndFeel() throws Exception
   {
+    // Macs don't like our other LnF so only allow the default
+    boolean onMac = (System.getProperty("mrj.version") != null);
+    
     if (this.installdata.kind.equalsIgnoreCase("standard")
-      || this.installdata.kind.equalsIgnoreCase("web"))
+      || this.installdata.kind.equalsIgnoreCase("web")
+      || onMac)
     {
-      if (getClass().getResourceAsStream("/res/useNativeLAF") != null)
+      if (getClass().getResourceAsStream("/res/useNativeLAF") != null
+        && !onMac)
       {
         String nlaf = UIManager.getSystemLookAndFeelClassName();
         UIManager.setLookAndFeel(nlaf);
       }
-      if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
+      if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel
+        && !onMac)
       {
         // We simply put our nice theme
         MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
