@@ -140,12 +140,6 @@ public class InstallerBase
 
     installPath = dir + inf.getAppName();
 
-    // We read the installation kind
-    in = getClass().getResourceAsStream("/kind");
-    datIn = new DataInputStream(in);
-    String kind = datIn.readUTF();
-    datIn.close();
-
     installdata.setInstallPath(installPath);
     installdata.setVariable
       (ScriptParser.JAVA_HOME, System.getProperty("java.home"));
@@ -168,7 +162,6 @@ public class InstallerBase
       }
     }
     installdata.info = inf;
-    installdata.kind = kind;
     installdata.panelsOrder = panelsOrder;
     installdata.availablePacks = availablePacks;
     installdata.allPacks = allPacks;
