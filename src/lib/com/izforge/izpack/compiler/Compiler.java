@@ -1017,8 +1017,7 @@ public class Compiler extends Thread
     {
       URL appURL = requireURLContent(URLElem);
       info.setAppURL(appURL.toString());
-    }else
-      info.setAppURL(null);
+    }
 
     // We get the authors list
     XMLElement authors = root.getFirstChildNamed("authors");

@@ -44,7 +44,7 @@ public class Info implements Serializable
   private ArrayList authors = new ArrayList();
 
   /**  The application URL */
-  private String appURL = "";
+  private String appURL = null;
 
   /**  The required Java version (min) */
   private String javaVersion = "1.2";
