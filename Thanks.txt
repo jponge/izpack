@@ -87,5 +87,6 @@ IzPack for your projects ;-)
 - Marc Eppelmann : for the Unix shortcuts support.
 - Michael Hagedorn : for the UserInputPanel fixes.
 - Jan Pavlovic : for the Czech translation.
+- Oscar Sierra : for the patches.
 
 # vim: fileformat=dos

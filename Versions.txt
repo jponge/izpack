@@ -1,5 +1,11 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.7.1
+
+- The Danish langpack was empty by mistake in 3.7.0.
+- Silent installations fix (Oscar Sierra).
+- Free disk space bugfix on Solaris (Oscar Sierra).
+
   > 3.7.0 (build 2004.01.11)
 
 - Adding custom action stuff for packaging, installation and uninstallation
