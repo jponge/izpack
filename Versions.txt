@@ -13,6 +13,9 @@
 - Slovak translation updates (Milan Madzia).
 - Java class execution bug fix (Erik Artzmark).
 - ImgPacksPanel was not aware of i18n by using the packsLang.xml_xxx resource.
+- Portuguese langpack updates (Flavio Fonseca).
+- Blocking the GUI interaction (like in InstallPanel) was only working with the
+  mouse events. It now works with the keyboard ones too (Eduard Jodas Samper).
 
   > 3.6.0 (build 2004.07.28)
 
