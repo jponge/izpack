@@ -41,6 +41,9 @@ public class Info implements Serializable
     // The application URL
     private String appURL = "";
     
+    // The JVM version required
+    private String javaVersion = "1.2";
+    
     //.....................................................................    
     
     // The constructor, deliberatly void
@@ -62,6 +65,11 @@ public class Info implements Serializable
     // Set / get for the URL
     public void setAppURL(String appURL) { this.appURL = appURL; }
     public String getAppURL() { return appURL; }
+    
+    // Set / get for the JVM version
+    public void setJavaVersion(String javaVersion)
+    {this.javaVersion = javaVersion; }
+    public String getJavaVersion() { return javaVersion; }
     
     //.....................................................................    
     // The Author class

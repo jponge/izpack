@@ -57,6 +57,9 @@ public class Installer
 
         // Loads the installation data
         loadInstallData();
+        
+        // Checks the Java version
+        checkJavaVersion();
 
         // Sets up the GUI L&F
         loadLookAndFeel();
@@ -92,6 +95,22 @@ public class Installer
 
     //.....................................................................
     // The methods
+    
+    // Checks the Java version
+    private void checkJavaVersion() throws Exception
+    {
+        String version = System.getProperty("java.version");
+        String required = installdata.info.getJavaVersion();
+        if (version.compareTo(required) < 0)
+        {
+            System.out.println("Can't install !");
+            System.out.println("> The minimum Java version required is " +
+                               required);
+            System.out.println("> Your version is " + version);
+            System.out.println("Please upgrade to the minimum version.");
+            System.exit(1);
+        }
+    }
 
     // Loads the xml data for the automated mode
     private void loadXMLData(File input) throws Exception

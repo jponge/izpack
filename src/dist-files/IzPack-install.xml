@@ -26,6 +26,7 @@
             <author email="julien@izforge.com" name="Julien PONGE"/>
         </authors>
         <url>http://www.izforge.com/izpack/</url>
+				<javaversion>1.2</javaversion>
     </info>
 
     <!-- Flexible and in the screen proportions -->

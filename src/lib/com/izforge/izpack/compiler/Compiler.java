@@ -709,6 +709,11 @@ public class Compiler extends Thread
                                                     author.getAttribute("email"));
             info.addAuthor(newAuthor);
         }
+        
+        // We get the java version required
+        XMLElement javaVersion = root.getFirstChildNamed("javaversion");
+        if (javaVersion != null)
+            info.setJavaVersion(javaVersion.getContent());
 
         // We return the suitable Info object
         return info;
