@@ -35,11 +35,14 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -78,6 +81,7 @@ import com.izforge.izpack.util.OsConstraint;
  *
  * @author     Julien Ponge
  * @author     Tino Schwarze
+ * @author     Chadwick McHenry
  */
 public class Compiler extends Thread
 {
@@ -102,6 +106,9 @@ public class Compiler extends Thread
   /** Constant for checking attributes. */
   private static boolean NO = false;
 
+  /**  The IzPack home directory specified or found on startup. */
+  private static File home = new File (IZPACK_HOME);
+
   /**  The XML filename. */
   protected String filename;
 
@@ -117,15 +124,12 @@ public class Compiler extends Thread
   /**  The packager listener. */
   protected PackagerListener packagerListener;
 
-  /** The directory-keeping special file. */
-  protected File keepDirFile;
-
+  /** Collects and packs files into installation jars, as told. */
+  private Packager packager = null;
+  
   /** Error code, set to true if compilation succeeded. */
   private boolean compileFailed = true;
 
-  /** Whether the uninstaller should be added to the installer jar */
-  private boolean writeUninstaller = true;
-  
   /**
    *  The constructor.
    *
@@ -141,16 +145,6 @@ public class Compiler extends Thread
     this.basedir = basedir;
     this.kind = kind;
     this.output = output;
-
-    // Creates a temporary temp file for keeping empty directories
-    try
-    {
-      keepDirFile = File.createTempFile("izpack-keepme", ".tmp");
-      keepDirFile.deleteOnExit();
-    } catch (Exception err)
-    {
-      err.printStackTrace();
-    }
   }
 
   /**
@@ -190,49 +184,6 @@ public class Compiler extends Thread
     }
   }
 
-  private static class ByteCountingOutputStream extends OutputStream
-  {
-    private long count;
-    private OutputStream os;
-    public ByteCountingOutputStream(OutputStream os)
-    {
-      this.os = os;
-    }
-
-    public void write(byte[] b, int off, int len) throws IOException
-    {
-      os.write(b, off, len);
-      count += len;
-    }
-
-    public void write(byte[] b) throws IOException
-    {
-      os.write(b);
-      count += b.length;
-    }
-
-    public void write(int b) throws IOException
-    {
-      os.write(b);
-      count++;
-    }
-
-    public void close() throws IOException
-    {
-      os.close();
-    }
-
-    public void flush() throws IOException
-    {
-      os.flush();
-    }
-
-    public long getByteCount()
-    {
-      return count;
-    }
-  }
-
   /**
    *  Compiles the installation.
    *
@@ -245,321 +196,26 @@ public class Compiler extends Thread
     if (!base.canRead() || !base.isDirectory())
       throw new CompilerException("Invalid base directory: " + base);
 
-    // Usefull variables
-    String str;
-    Iterator iter;
-    InputStream inStream;
-
     // We get the XML data tree
     XMLElement data = getXMLTree();
 
-    // We get the Packager
-    Packager packager = getPackager();
+    // We create the Packager
+    packager = new Packager();
+    packager.setPackagerListener(packagerListener);
 
-    // We add the variable declaration
-    Properties varMap = getVariables(data);
-    packager.setVariables(varMap);
-
-    // We add the info (must call before getResources for uninstaller)
-    packager.setInfo(getInfo(data));
-
-    // We add the GUIPrefs
-    packager.setGUIPrefs(getGUIPrefs(data));
-
-    // We add the language packs
-    iter = getLangpacksCodes(data).iterator();
-    while (iter.hasNext())
-    {
-      str = (String) iter.next();
-
-      // The language pack - first try to get stream directly (for standalone compiler)
-      inStream =
-        getClass().getResourceAsStream(
-          "/bin/langpacks/installer/" + str + ".xml");
-      if (inStream == null)
-      {
-        inStream =
-          new FileInputStream(
-            Compiler.IZPACK_HOME
-              + "bin"
-              + File.separator
-              + "langpacks"
-              + File.separator
-              + "installer"
-              + File.separator
-              + str
-              + ".xml");
-      }
-      packager.addLangPack(str, inStream);
-
-      // The flag - try to get stream for standalone compiler
-      inStream =
-        getClass().getResourceAsStream("/bin/langpacks/flags/" + str + ".gif");
-      if (inStream == null)
-      {
-        inStream =
-          new FileInputStream(
-            Compiler.IZPACK_HOME
-              + "bin"
-              + File.separator
-              + "langpacks"
-              + File.separator
-              + "flags"
-              + File.separator
-              + str
-              + ".gif");
-      }
-      packager.addResource("flag." + str, inStream);
-      inStream.close();
-    }
-
-    // We add the resources
-    iter = getResources(data).iterator();
-    while (iter.hasNext())
-    {
-      Resource res = (Resource) iter.next();
-      if (res.parse)
-      {
-        if ((res.src == null) || (res.src_is != null))
-        {
-          System.err.println(
-            "ERROR: cannot parse resource from stream. (Internal error.)");
-          packager.addResource(res.id, res.src_is);
-        }
-
-        if (null != varMap)
-        {
-          File resFile = new File(res.src);
-          FileInputStream inFile = new FileInputStream(resFile);
-          BufferedInputStream bin = new BufferedInputStream(inFile, 5120);
-
-          File parsedFile =
-            File.createTempFile("izpp", null, resFile.getParentFile());
-          FileOutputStream outFile = new FileOutputStream(parsedFile);
-          BufferedOutputStream bout = new BufferedOutputStream(outFile, 5120);
-
-          VariableSubstitutor vs = new VariableSubstitutor(varMap);
-          vs.substitute(bin, bout, res.type, res.encoding);
-          bin.close();
-          bout.close();
-          inFile = new FileInputStream(parsedFile);
-          packager.addResource(res.id, inFile);
-          inFile.close();
-          parsedFile.delete();
-        } else
-        {
-          System.err.println(
-            "ERROR: no variable is defined. " + res.src + " is not parsed.");
-          inStream = new FileInputStream(res.src);
-          packager.addResource(res.id, inStream);
-          inStream.close();
-        }
-      } else
-      {
-        if (res.src != null)
-        {
-          inStream = new FileInputStream(res.src);
-        } else
-        {
-          inStream = res.src_is;
-        }
-        packager.addResource(res.id, inStream);
-        if (res.src != null)
-          inStream.close();
-      }
-    }
-
-    // We add the native libraries
-    iter = getNativeLibraries(data).iterator();
-    while (iter.hasNext())
-    {
-      NativeLibrary nat = (NativeLibrary) iter.next();
-      inStream = new FileInputStream(nat.path);
-      packager.addNativeLibrary(nat.name, inStream);
-    }
-
-    // We add the additionnal jar files content
-    iter = getJars(data).iterator();
-    while (iter.hasNext())
-      packager.addJarContent((String) iter.next());
-
-    // We add the panels
-    ArrayList panels = getPanels(data);
-    TreeSet panelsCache = new TreeSet();
-
-    iter = panels.iterator();
-    while (iter.hasNext())
-    {
-      Panel p = (Panel) iter.next();
-
-      // We locate the panel classes directory
-      str = p.className;
-
-      // first try to get a Jar file for standalone compiler
-      JarInputStream panel_is = null;
-
-      try
-      {
-        InputStream jarInStream =
-          getClass().getResourceAsStream("/bin/panels/" + str + ".jar");
-        if (jarInStream != null)
-          panel_is = new JarInputStream(jarInStream);
-      } catch (IOException e)
-      {
-        // for now, ignore this - try to read panel classes from filesystem
-        panel_is = null;
-      }
-
-      if (panel_is != null)
-      {
-        if (panelsCache.contains(str))
-          continue;
-        panelsCache.add(str);
-
-        // now add files
-        ZipEntry entry = null;
-
-        while ((entry = panel_is.getNextEntry()) != null)
-          packager.addPanelClass(entry.getName(), panel_is);
-
-      } else
-      {
-        File dir = new File(Compiler.IZPACK_HOME, "bin/panels/" + str);
-        if (!dir.exists())
-          throw new Exception(str + " panel does not exist");
-
-        if (panelsCache.contains(str))
-          continue;
-        panelsCache.add(str);
-
-        DirectoryScanner ds = new DirectoryScanner();
-        ds.setBasedir(dir);
-        ds.scan();
-
-        String[] files = ds.getIncludedFiles();
-        for (int j = 0; j < files.length; j++)
-        {
-          File f = new File(dir, files[j]);
-          FileInputStream inClass = new FileInputStream(f);
-          // file names must be in cononical (unix) form
-          if ('/' != File.separatorChar)
-            files[j] = files[j].replace(File.separatorChar, '/');
-          packager.addPanelClass(files[j], inClass);
-        }
-      }
-    }
-
-    // We set the panels order
-    packager.setPanelsOrder(panels);
-
-    Map storedFiles = new HashMap();
-    // We add the packs
-    iter = getPacks(data).iterator();
-    while (iter.hasNext())
-    {
-      Pack pack = (Pack) iter.next();
-      ZipOutputStream zipOut =
-        packager.addPack(
-          pack.number,
-          pack.name,
-          pack.osConstraints,
-          pack.required,
-          pack.description,
-          pack.preselected);
-      zipOut.flush();
-      //make sure buffers are flushed before we start counting 
-      ByteCountingOutputStream dos = new ByteCountingOutputStream(zipOut);
-      //stream with byte counter
-      ObjectOutputStream objOut = new ObjectOutputStream(dos);
-
-      // We write the pack data
-      objOut.writeInt(pack.packFiles.size());
-      Iterator iter2 = pack.packFiles.iterator();
-      long packageBytes = 0;
-      while (iter2.hasNext())
-      {
-        // Initialisations
-        PackSource p = (PackSource) iter2.next();
-        File f = new File(p.src);
-        FileInputStream in = new FileInputStream(f);
-        long nbytes = f.length();
-        long mtime = f.lastModified();
-
-        String targetFilename = p.getTargetFilename();
-
-        // pack paths in canonical (unix) form regardless of current host o/s:
-        if ('/' != File.separatorChar)
-        {
-          targetFilename = targetFilename.replace(File.separatorChar, '/');
-        }
-
-        // Writing
-        PackFile pf =
-          new PackFile(
-            targetFilename,
-            p.osConstraints,
-            nbytes,
-            mtime,
-            p.override);
-        long[] info = (long[]) storedFiles.get(p.src);
-        boolean addFile = true;
-        if (info != null && packager.allowPackFileBackReferences())
-        {
-          pf.setPreviousPackFileRef((int) info[0], info[1]);
-          addFile = false;
-        }
-        objOut.writeObject(pf);
-        objOut.flush(); //make sure it is written
-        long pos = dos.getByteCount(); //get the position
-        if (addFile)
-        {
-          byte[] buffer = new byte[5120];
-          long bytesWritten = 0;
-          int bytesInBuffer;
-          while ((bytesInBuffer = in.read(buffer)) != -1)
-          {
-            objOut.write(buffer, 0, bytesInBuffer);
-            bytesWritten += bytesInBuffer;
-          }
-          if (bytesWritten != nbytes)
-            throw new IOException("File size mismatch when reading " + f);
-          storedFiles.put(p.src, new long[] { pack.number, pos });
-        }
-        packageBytes += nbytes;
-        //aldo could be not really written we still want to know size.
-        in.close();
-      }
-      packager.packAdded(pack.number, packageBytes);
-
-      // Write out information about parsable files
-      objOut.writeInt(pack.parsables.size());
-      iter2 = pack.parsables.iterator();
-      while (iter2.hasNext())
-        objOut.writeObject(iter2.next());
-
-      // Write out information about executable files
-      objOut.writeInt(pack.executables.size());
-      iter2 = pack.executables.iterator();
-      while (iter2.hasNext())
-      {
-        objOut.writeObject(iter2.next());
-      }
-
-      // Write out information about updatecheck files
-      objOut.writeInt(pack.updatechecks.size());
-      iter2 = pack.updatechecks.iterator();
-      while (iter2.hasNext())
-      {
-        objOut.writeObject(iter2.next());
-      }
-
-      // Cleanup
-      objOut.flush();
-      zipOut.closeEntry();
-    }
-
-    // We ask the packager to finish
-    packager.finish();
+    // We add all the information
+    addVariables(data);
+    addInfo(data);
+    addGUIPrefs(data);
+    addLangpacks(data);
+    addResources(data);
+    addNativeLibraries(data);
+    addJars(data);
+    addPanels(data);
+    addPacks(data);
+    
+    // We ask the packager to create the installer
+    packager.createInstaller(new File(output));
     this.compileFailed = false;
   }
 
@@ -568,6 +224,7 @@ public class Compiler extends Thread
     return !this.compileFailed;
   }
 
+
   /**
    *  Returns the GUIPrefs.
    *
@@ -575,148 +232,136 @@ public class Compiler extends Thread
    * @return                The GUIPrefs.
    * @exception  Exception  Description of the Exception
    */
-  protected GUIPrefs getGUIPrefs(XMLElement data) throws CompilerException
+  protected void addGUIPrefs(XMLElement data) throws CompilerException
   {
     // We get the XMLElement & the attributes
     XMLElement gp = data.getFirstChildNamed("guiprefs");
-    Integer integer;
-    GUIPrefs p = new GUIPrefs();
-    if (gp == null)
-      return p;
-
-    p.resizable = requireYesNoAttribute(gp, "resizable");
-    p.width = requireIntAttribute(gp, "width");
-    p.height = requireIntAttribute(gp, "height");
-    
-    // Look and feel mappings
-    Iterator it = gp.getChildrenNamed("laf").iterator();
-    while (it.hasNext())
+    GUIPrefs prefs = new GUIPrefs();
+    if (gp != null)
     {
-      XMLElement laf = (XMLElement)it.next();
-      String lafName = requireAttribute(laf, "name");
-      requireChildNamed(laf, "os");
+      prefs.resizable = requireYesNoAttribute(gp, "resizable");
+      prefs.width = requireIntAttribute(gp, "width");
+      prefs.height = requireIntAttribute(gp, "height");
 
-      Iterator oit = laf.getChildrenNamed("os").iterator();
-      while (oit.hasNext())
+      // Look and feel mappings
+      Iterator it = gp.getChildrenNamed("laf").iterator();
+      while (it.hasNext())
       {
-        XMLElement os = (XMLElement)oit.next(); 
-        String osName = requireAttribute(os, "family");
-        p.lookAndFeelMapping.put(osName, lafName);
+        XMLElement laf = (XMLElement)it.next();
+        String lafName = requireAttribute(laf, "name");
+        requireChildNamed(laf, "os");
+
+        Iterator oit = laf.getChildrenNamed("os").iterator();
+        while (oit.hasNext())
+        {
+          XMLElement os = (XMLElement)oit.next(); 
+          String osName = requireAttribute(os, "family");
+          prefs.lookAndFeelMapping.put(osName, lafName);
+        }
+
+        Iterator pit = laf.getChildrenNamed("param").iterator();
+        Map params = new TreeMap();
+        while (pit.hasNext())
+        {
+          XMLElement param = (XMLElement)pit.next();
+          String name  = requireAttribute(param, "name");
+          String value = requireAttribute(param, "value");
+          params.put(name, value);
+        }
+        prefs.lookAndFeelParams.put(lafName, params);
       }
+
+      // make sure jar contents of each are available in installer
+      // map is easier to read/modify than if tree
+      HashMap lafMap = new HashMap();
+      lafMap.put("liquid",    "liquidlnf.jar");
+      lafMap.put("kunststoff","kunststoff.jar");
+      lafMap.put("metouia",   "metouia.jar");
+      lafMap.put("looks",     "looks.jar");
       
-      Iterator pit = laf.getChildrenNamed("param").iterator();
-      Map params = new TreeMap();
-      while (pit.hasNext())
+      // is this really what we want? a double loop? needed, since above, it's
+      // the /last/ lnf for an os which is used, so can't add during initial
+      // loop
+      Iterator kit = prefs.lookAndFeelMapping.keySet().iterator();
+      while (kit.hasNext())
       {
-        XMLElement param = (XMLElement)pit.next();
-        String name  = requireAttribute(param, "name");
-        String value = requireAttribute(param, "value");
-        params.put(name, value);
+        String lafName = (String)prefs.lookAndFeelMapping.get(kit.next());
+        String lafJarName = (String) lafMap.get(lafName);
+        if (lafJarName == null)
+          parseError(gp, "Unrecognized Look and Feel: " + lafName);
+
+        URL lafJarURL = findProjectResource("lib/" + lafJarName,
+                                            "Look and Feel Jar file", gp);
+        packager.addJarContent(lafJarURL);
       }
-      p.lookAndFeelParams.put(lafName, params);
     }
-
-    // We return the GUIPrefs
-    return p;
+    packager.setGUIPrefs(prefs);
   }
 
   /**
-   *  Returns a list of the jar files to add.
+   * Add project specific external jar files to the installer.
    *
    * @param  data           The XML data.
-   * @return                The jar files list.
-   * @exception  Exception  Description of the Exception
    */
-  protected ArrayList getJars(XMLElement data) throws Exception
+  protected void addJars(XMLElement data) throws CompilerException
   {
-    // Initialisation
-    ArrayList jars = new ArrayList();
-    Vector v = data.getChildrenNamed("jar");
-
-    // We add each jar to the list
-    Iterator iter = v.iterator();
+    Iterator iter = data.getChildrenNamed("jar").iterator();
     while (iter.hasNext())
     {
       XMLElement el = (XMLElement) iter.next();
-      jars.add(basedir + File.separator + requireAttribute(el, "src"));
+      String src = requireAttribute(el, "src");
+      URL url = findProjectResource(src, "Jar file", el);
+      packager.addJarContent(url);
     }
-
-    // We return
-    return jars;
   }
 
   /**
-   *  Returns a list of the native libraries to add.
+   * Add native libraries to the installer.
    *
    * @param  data           The XML data.
-   * @return                The native libraries list.
-   * @exception  Exception  Description of the Exception
    */
-  protected ArrayList getNativeLibraries(XMLElement data) throws Exception
+  protected void addNativeLibraries(XMLElement data) throws Exception
   {
-    // Initialisation
-    ArrayList natives = new ArrayList();
-    Vector v = data.getChildrenNamed("native");
-
-    // We add each native lib path to the list
-    Iterator iter = v.iterator();
+    Iterator iter = data.getChildrenNamed("native").iterator();
     while (iter.hasNext())
     {
       XMLElement el = (XMLElement) iter.next();
-      NativeLibrary nat = new NativeLibrary();
-      nat.path =
-        IZPACK_HOME
-          + "bin"
-          + File.separator
-          + "native"
-          + File.separator
-          + el.getAttribute("type")
-          + File.separator
-          + el.getAttribute("name");
-      nat.name = el.getAttribute("name");
-      natives.add(nat);
+      String type = requireAttribute(el, "type");
+      String name = requireAttribute(el, "name");
+      String path = "bin/native/" + type + "/" + name;
+      URL url = findIzPackResource(path, "Native Library", el);
+      packager.addNativeLibrary(name, url);
     }
-
-    // We return the paths to the native libraries
-    return natives;
   }
 
   /**
-   *  Returns a list of the packs to add.
+   *  Add packs and their contents to the installer.
    *
    * @param  data           The XML data.
-   * @return                The packs to add list.
-   * @exception  Exception  Description of the Exception
    */
-  protected ArrayList getPacks(XMLElement data) throws CompilerException
+  protected void addPacks(XMLElement data) throws CompilerException
   {
     // Initialisation
-    ArrayList packs = new ArrayList();
     XMLElement root = requireChildNamed(data, "packs");
 
-    // dummy variable used for values from XML
-    String val;
-
-    // at least one langpack is required
+    // at least one pack is required
     Vector packElements = root.getChildrenNamed("pack");
-    if (packElements.size() == 0)
+    if (packElements.isEmpty())
       parseError(root, "<packs> requires a <pack>");
     
-    // We process each pack markup
-    int packCounter = 0;
     Iterator packIter = packElements.iterator();
     while (packIter.hasNext())
     {
       XMLElement el = (XMLElement) packIter.next();
 
       // Trivial initialisations
-      Pack pack = new Pack();
-      pack.number = packCounter++;
-      pack.name = requireAttribute(el, "name");
-      pack.osConstraints = OsConstraint.getOsList(el); // TODO: unverified
-      pack.required = requireYesNoAttribute(el, "required");
-      pack.description = requireChildNamed(el, "description").getContent();
-      pack.preselected = validateYesNoAttribute(el, "preselected", YES);
+      String name = requireAttribute(el, "name");
+      String description = requireChildNamed(el, "description").getContent();
+      boolean required = requireYesNoAttribute(el, "required");
+
+      PackInfo pack = new PackInfo(name, description, required);
+      pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO: unverified
+      pack.setPreselected(validateYesNoAttribute(el, "preselected", YES));
 
       // We get the parsables list
       Iterator iter = el.getChildrenNamed("parsable").iterator();
@@ -728,7 +373,7 @@ public class Compiler extends Thread
         String encoding = p.getAttribute("encoding", null);
         List osList = OsConstraint.getOsList(p); // TODO: unverified
 
-        pack.parsables.add(new ParsableFile(target, type, encoding, osList));
+        pack.addParsable(new ParsableFile(target, type, encoding, osList));
       }
 
       // We get the executables list
@@ -736,64 +381,52 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement e = (XMLElement) iter.next();
+        ExecutableFile executable = new ExecutableFile();
+        String val; // temp value
+
+        executable.path = requireAttribute(e, "targetfile");
 
         // when to execute this executable
-        int executeOn = ExecutableFile.NEVER;
         val = e.getAttribute("stage", "never");
         if ("postinstall".equalsIgnoreCase(val))
-          executeOn = ExecutableFile.POSTINSTALL;
+          executable.executionStage = ExecutableFile.POSTINSTALL;
         else if ("uninstall".equalsIgnoreCase(val))
-          executeOn = ExecutableFile.UNINSTALL;
+          executable.executionStage = ExecutableFile.UNINSTALL;
 
         // main class  of this executable
         String executeClass = e.getAttribute("class");
 
         // type of this executable
-        int executeType = ExecutableFile.BIN;
         val = e.getAttribute("type", "bin");
         if ("jar".equalsIgnoreCase(val))
-          executeType = ExecutableFile.JAR;
+          executable.type = ExecutableFile.JAR;
 
         // what to do if execution fails
-        int onFailure = ExecutableFile.ASK;
         val = e.getAttribute("failure", "ask");
         if ("abort".equalsIgnoreCase(val))
-          onFailure = ExecutableFile.ABORT;
+          executable.onFailure = ExecutableFile.ABORT;
         else if ("warn".equalsIgnoreCase(val))
-          onFailure = ExecutableFile.WARN;
+          executable.onFailure = ExecutableFile.WARN;
 
         // whether to keep the executable after executing it
         val = e.getAttribute("keep");
-        boolean keepFile = "true".equalsIgnoreCase(val);
+        executable.keepFile = "true".equalsIgnoreCase(val);
 
         // get arguments for this executable
-        ArrayList argList = new ArrayList();
         XMLElement args = e.getFirstChildNamed("args");
         if (null != args)
         {
-          argList = new ArrayList();
           Iterator argIterator = args.getChildrenNamed("arg").iterator();
           while (argIterator.hasNext())
           {
             XMLElement arg = (XMLElement) argIterator.next();
-            argList.add(requireAttribute(arg, "value"));
+            executable.argList.add(requireAttribute(arg, "value"));
           }
         }
 
-        List osList = OsConstraint.getOsList(e); // TODO: unverified
+        executable.osList = OsConstraint.getOsList(e); // TODO: unverified
 
-        String targetfile_attr = requireAttribute(e, "targetfile");
-
-        pack.executables.add(
-          new ExecutableFile(
-            targetfile_attr,
-            executeType,
-            executeClass,
-            executeOn,
-            onFailure,
-            argList,
-            osList,
-            keepFile));
+        pack.addExecutable(executable);
       }
 
       // We get the files list
@@ -835,8 +468,8 @@ public class Compiler extends Thread
 
         try
         {
-          addSingleFile(file, target, osList, override, pack);
-        } catch (CompilerException x)
+          pack.addFile(file, target, osList, override);
+        } catch (FileNotFoundException x)
         {
           parseError(f, x.getMessage(), x);
         }
@@ -853,10 +486,9 @@ public class Compiler extends Thread
         if (! dir.isAbsolute())
           dir = new File(basedir, dir_attr);
         if (! dir.isDirectory()) // also tests '.exists()'
-          parseError(f, "Invalid directory 'dir': " + dir);
+          parseError(f, "Invalid directory 'dir': " + dir_attr);
 
-        boolean casesensitive = validateYesNoAttribute(f, "casesensitive",
-                                                       YES);
+        boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
         String targetdir = requireAttribute(f, "targetdir");
         List osList = OsConstraint.getOsList(f); // TODO: unverified
         int override = getOverrideValue(f);
@@ -865,7 +497,7 @@ public class Compiler extends Thread
         Vector xcludesList = null;
         String[] includes = null;
         xcludesList = f.getChildrenNamed("include");
-        if (xcludesList.size() > 0)
+        if (! xcludesList.isEmpty())
         {
           includes = new String[xcludesList.size()];
           for (int j = 0; j < xcludesList.size(); j++)
@@ -876,7 +508,7 @@ public class Compiler extends Thread
         }
         String[] excludes = null;
         xcludesList = f.getChildrenNamed("exclude");
-        if (xcludesList.size() > 0)
+        if (! xcludesList.isEmpty())
         {
           excludes = new String[xcludesList.size()];
           for (int j = 0; j < xcludesList.size(); j++)
@@ -903,10 +535,9 @@ public class Compiler extends Thread
         {
           try
           {
-            File file = new File(dir, files[i]);
             String target = new File(targetdir, files[i]).getPath();
-            addSingleFile(file, target, osList, override, pack);
-          } catch (Exception x)
+            pack.addFile(new File(dir, files[i]), target, osList, override);
+          } catch (FileNotFoundException x)
           {
             parseError(f, x.getMessage(), x);
           }
@@ -915,11 +546,9 @@ public class Compiler extends Thread
         {
           try
           {
-            // can't add empty dirs so from target dir, append temp file name
-            File target = new File(targetdir, dirs[i]);
-            target = new File(target, keepDirFile.getName());
-            addSingleFile(keepDirFile, target.getPath(), osList, override, pack);
-          } catch (Exception x)
+            String target = new File(targetdir, dirs[i]).getPath();
+            pack.addFile(new File(dir, dirs[i]), target, osList, override);
+          } catch (FileNotFoundException x)
           {
             parseError(f, x.getMessage(), x);
           }
@@ -938,6 +567,7 @@ public class Compiler extends Thread
         ArrayList includesList = new ArrayList();
         ArrayList excludesList = new ArrayList();
 
+        //  get includes and excludes
         Iterator include_it = f.getChildrenNamed("include").iterator();
         while (include_it.hasNext())
         {
@@ -952,18 +582,13 @@ public class Compiler extends Thread
           excludesList.add(requireAttribute(excl_el, "name"));
         }
 
-        pack.updatechecks.add(
+        pack.addUpdateCheck(
           new UpdateCheck(includesList, excludesList, casesensitive));
       }
 
       // We add the pack
-      packs.add(pack);
+      packager.addPack(pack);
     }
-    if (packs.isEmpty())
-      parseError(root, "<packs> requires a <pack>");
-
-    // We return the ArrayList
-    return packs;
   }
 
   /**
@@ -977,199 +602,159 @@ public class Compiler extends Thread
    * @exception FileNotFoundException if the file does not exist
    */
   protected void addRecursively(File file, String targetdir,
-                                List osList, int override, Pack pack)
+                                List osList, int override, PackInfo pack)
     throws IOException
   {
-    // We check if 'file' is correct
-    if (!file.exists())
-      throw new CompilerException(file.toString() + " does not exist");
-
     String targetfile = targetdir + "/" + file.getName();
-    // Recursive part
-    if (file.isDirectory())
+    if (! file.isDirectory())
+      pack.addFile(file, targetfile, osList, override);
+    else
     {
       File[] files = file.listFiles();
-      if (files.length == 0) // The directory is empty
+      if (files.length == 0) // The directory is empty so must be added
+        pack.addFile(file, targetfile, osList, override);
+      else
       {
-        // We add a special file so that the empty directory will be written
-        // anyway
-        files = new File[1];
-        files[0] = keepDirFile;
+        // new targetdir = targetfile;
+        for (int i = 0; i < files.length; i++)
+          addRecursively(files[i], targetfile, osList, override, pack);
       }
-      // new targetdir = targetfile;
-      int size = files.length;
-      for (int i = 0; i < size; i++)
-        addRecursively(files[i], targetfile, osList, override, pack);
-    } else
-    {
-      PackSource nf = new PackSource();
-      nf.src = file.getAbsolutePath();
-      nf.setTargetFile(targetfile);
-      nf.osConstraints = osList;
-      nf.override = override;
-      debug("Adding file: " + nf.toString());
-      pack.packFiles.add(nf);
-    }
-  }
-
-  private void debug(String s)
-  {
-    if (Debug.tracing())
-      //if you are wondering what files gets added to the installer
-    {
-      packagerListener.packagerMsg(s);
     }
   }
 
   /**
-   *  Method to add a single file in a pack.
-   *
-   * @param  file           The file to add.
-   * @param  targetFile     The target to add the file as.
-   * @param  osList         The target OS constraints.
-   * @param  override       Overriding behaviour.
-   * @param  list           The files list.
-   * @exception  Exception  Description of the Exception
-   */
-  protected void addSingleFile(
-    File file,
-    String targetFile,
-    List osList,
-    int override,
-    Pack pack)
-    throws CompilerException
-  {
-    //System.out.println ("adding single file " + file.getName() + " as " + targetFile);
-    PackSource nf = new PackSource();
-    nf.src = file.getAbsolutePath();
-    nf.setTargetFile(targetFile);
-    nf.osConstraints = osList;
-    nf.override = override;
-    pack.packFiles.add(nf);
-  }
-
-  /**
-   *  Returns a list of the panels names to add.
+   * Parse panels and their paramters, locate the panels resources and add to
+   * the Packager.
    *
    * @param  data           The XML data.
-   * @return                The panels list.
    * @exception  Exception  Description of the Exception
    */
-  protected ArrayList getPanels(XMLElement data) throws CompilerException
+  protected void addPanels(XMLElement data) throws CompilerException
   {
-    // Initialisation
-    ArrayList panels = new ArrayList();
     XMLElement root = requireChildNamed(data, "panels");
 
-    // We process each langpack markup
-    Iterator iter = root.getChildrenNamed("panel").iterator();
+    // at least one panel is required
+    Vector panels = root.getChildrenNamed("panel");
+    if (panels.isEmpty())
+      parseError(root, "<panels> requires a <panel>");
+      
+    // We process each panel markup
+    Iterator iter = panels.iterator();
     while (iter.hasNext())
     {
       XMLElement xmlPanel = (XMLElement) iter.next();
-      List osList = OsConstraint.getOsList(xmlPanel);
+      
+      // create the serialized Panel data
       Panel panel = new Panel();
-      panel.osConstraints = osList;
+      panel.osConstraints = OsConstraint.getOsList(xmlPanel);
       panel.className = xmlPanel.getAttribute("classname");
-      panels.add(panel);
-    }
-    if (panels.isEmpty())
-      parseError(root, "<panels> requires a <panel>");
 
-    // We return the ArrayList
-    return panels;
+      // Panel files come in jars packaged w/ IzPack
+      String jarPath = "bin/panels/" + panel.className + ".jar";
+      URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel);
+
+      // insert into the packager
+      packager.addPanelJar(panel, url);
+    }
   }
 
   /**
-   *  Returns a list of the resources to include.
+   *  Adds the resources.
    *
    * @param  data           The XML data.
-   * @return                The resources list.
-   * @exception  Exception  Description of the Exception
+   * @exception  CompilerException  Description of the Exception
    */
-  protected ArrayList getResources(XMLElement data) throws CompilerException
+  protected void addResources(XMLElement data) throws CompilerException
   {
-    // Initialisation
-    ArrayList resources = new ArrayList();
-
-    // write the uninstaller first, so <resources> is not required
-    if (writeUninstaller)
-    {
-    InputStream uninst_is =
-      getClass().getResourceAsStream("/lib/uninstaller.jar");
-
-    if (uninst_is == null)
-    {
-      String uninst =
-        Compiler.IZPACK_HOME + "lib" + File.separator + "uninstaller.jar";
-      try
-      {
-        uninst_is = new FileInputStream(uninst);
-      } catch (IOException x)
-      {
-        // it's a runtime exception if this can't be found
-        throw new RuntimeException(
-          "The uninstaller ("
-            + uninst
-            + ") seems to be missing: "
-            + x.toString());
-      }
-    }
-    resources.add(new Resource("IzPack.uninstaller", uninst_is));
-    }
-
     XMLElement root = data.getFirstChildNamed("resources");
     if (root == null)
-      return resources;
+      return;
 
     // We process each res markup
     Iterator iter = root.getChildrenNamed("res").iterator();
     while (iter.hasNext())
     {
       XMLElement res = (XMLElement) iter.next();
+      String id = requireAttribute(res, "id");
+      String src = requireAttribute(res, "src");
+      boolean parse = validateYesNoAttribute(res, "parse", NO);
 
-      // Do not prepend basedir if src is already an absolute path
-      File src = new File(requireAttribute(res, "src"));
-      if (!src.isAbsolute())
-        src = new File(basedir, src.getPath());
+      // basedir is not prepended if src is already an absolute path
+      URL url = findProjectResource(src, "Resource", res);
 
-      resources.add(
-        new Resource(
-          requireAttribute(res, "id"),
-          src.getPath(),
-          validateYesNoAttribute(res, "parse", NO),
-          res.getAttribute("type"),
-          res.getAttribute("encoding")));
+      // substitute variable values in the resource if parsed
+      if (parse)
+      {
+        if (packager.getVariables().isEmpty())
+        {
+          parseWarn(res, "No variables defined. " +
+                    url.getPath() + " not parsed.");
+        } else
+        {
+          String type = res.getAttribute("type");
+          String encoding = res.getAttribute("encoding");
+          File parsedFile = null;
+
+          try
+          {
+            // make the substitutions into a temp file
+            InputStream bin = new BufferedInputStream(url.openStream());
+
+            parsedFile = File.createTempFile("izpp", null);
+            parsedFile.deleteOnExit();
+            FileOutputStream outFile = new FileOutputStream(parsedFile);
+            BufferedOutputStream bout = new BufferedOutputStream(outFile);
+
+            VariableSubstitutor vs = new VariableSubstitutor(packager.getVariables());
+            vs.substitute(bin, bout, type, encoding);
+            bin.close();
+            bout.close();
+
+            // and specify the substituted file to be added to the packager
+            url = parsedFile.toURL();
+          } catch (IOException x)
+          {
+            parseError(res, x.getMessage(), x);
+          }
+        }
+      }
+
+      packager.addResource(id, url);
     }
-    
-    // We return the ArrayList
-    return resources;
   }
 
   /**
-   *  Returns a list of the ISO3 codes of the langpacks to include.
+   *  Adds the ISO3 codes of the langpacks and associated resources.
    *
    * @param  data           The XML data.
-   * @return                The ISO 3 codes list.
+   * @exception  CompilerException  Description of the Exception
    */
-  protected ArrayList getLangpacksCodes(XMLElement data)
+  protected void addLangpacks(XMLElement data)
     throws CompilerException
   {
-    // Initialisation
-    ArrayList langpacks = new ArrayList();
-    XMLElement locals = requireChildNamed(data, "locale");
+    XMLElement root = requireChildNamed(data, "locale");
 
+    // at least one langpack is required
+    Vector locals = root.getChildrenNamed("langpack");
+    if (locals.isEmpty())
+      parseError(root, "<locale> requires a <langpack>");
+      
     // We process each langpack markup
-    Iterator iter = locals.getChildrenNamed("langpack").iterator();
+    Iterator iter = locals.iterator();
     while (iter.hasNext())
     {
-      XMLElement pack = (XMLElement) iter.next();
-      langpacks.add(requireAttribute(pack, "iso3"));
-    }
-    if (langpacks.isEmpty())
-      parseError(locals, "<locale> requires a <langpack>");
+      XMLElement el = (XMLElement) iter.next();
+      String iso3 = requireAttribute(el, "iso3");
+      String path;
 
-    // We return the ArrayList
-    return langpacks;
+      path = "bin/langpacks/installer/" + iso3 + ".xml";
+      URL iso3xmlURL = findIzPackResource(path, "ISO3 file", el);
+
+      path = "bin/langpacks/flags/" + iso3 + ".gif";
+      URL iso3FlagURL = findIzPackResource(path, "ISO3 flag image", el);
+      
+      packager.addLangPack(iso3, iso3xmlURL, iso3FlagURL);
+    }
   }
 
   /**
@@ -1179,15 +764,19 @@ public class Compiler extends Thread
    * @return                The Info.
    * @exception  Exception  Description of the Exception
    */
-  protected Info getInfo(XMLElement data) throws Exception
+  protected void addInfo(XMLElement data) throws Exception
   {
     // Initialisation
-    Info info = new Info();
     XMLElement root = requireChildNamed(data, "info");
 
+    Info info = new Info();
+    String temp = null;
     info.setAppName(requireContent(requireChildNamed(root, "appname")));
     info.setAppVersion(requireContent(requireChildNamed(root, "appversion")));
-    info.setAppURL(requireContent(requireChildNamed(root, "url")));
+
+    // validate and insert app URL
+    URL appURL = requireURLContent(requireChildNamed(root, "url"));
+    info.setAppURL(appURL.toString());
 
     // We get the authors list
     XMLElement authors = root.getFirstChildNamed("authors");
@@ -1206,60 +795,68 @@ public class Compiler extends Thread
     // We get the java version required
     XMLElement javaVersion = root.getFirstChildNamed("javaversion");
     if (javaVersion != null)
-      info.setJavaVersion(javaVersion.getContent());
+      info.setJavaVersion(requireContent(javaVersion));
 
+    // validate and insert (and require if -web kind) web dir
+    XMLElement webDirURL = root.getFirstChildNamed("webdir");
+    if (webDirURL != null)
+      info.setWebDirURL(requireURLContent(webDirURL).toString());
+    if (kind != null)
+    {
+      if (kind.equalsIgnoreCase(WEB) && webDirURL == null)
+      {
+        parseError(root, "<webdir> required when \"WEB\" installer requested");
+      }
+      else if (kind.equalsIgnoreCase(STANDARD) && webDirURL != null)
+      {
+        // Need a Warning? parseWarn(webDirURL, "Not creating web installer.");
+        info.setWebDirURL(null);
+      }
+    }
+
+    // Add the uninstaller as a resource if specified
     XMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
-    if (uninstallInfo != null)
-      writeUninstaller = validateYesNoAttribute(uninstallInfo, "write", YES);
+    if (validateYesNoAttribute(uninstallInfo, "write", YES))
+    {
+      URL url = findIzPackResource("lib/uninstaller.jar", "Uninstaller", root);
+      packager.addResource("IzPack.uninstaller", url);
+    }
 
-    // We return the suitable Info object
-    return info;
+    packager.setInfo(info);
   }
 
   /**
-   *  Returns the suitable Packager, depending of the kind variable.
-   *
-   * @return                The packager.
-   * @exception  Exception  Description of the Exception
-   */
-  protected Packager getPackager() throws Exception
-  {
-    if (kind.equalsIgnoreCase(STANDARD))
-      return new StdPackager(output, packagerListener);
-    else if (kind.equalsIgnoreCase(WEB))
-      return new WebPackager(output, packagerListener);
-    else
-      throw new Exception("unknown installer kind");
-  }
-
-  /**
-   *  Variable declaration is a fragmention in install.xml like : <variables>
-   *  <variable name="nom" value="value"/> <variable name="foo" value="pippo"/>
-   *  </variables> variable declared in this can be referd in parsable files
+   *  Variable declaration is a fragment of the xml file.  For example:
+   *  <pre>
+   *    &lt;variables&gt;
+   *      &lt;variable name="nom" value="value"/&gt;
+   *      &lt;variable name="foo" value="pippo"/&gt;
+   *    &lt;/variables&gt;
+   *  </pre>
+   *  variable declared in this can be referred to in parsable files.
    *
    * @param  data           The XML data.
-   * @return                The Properties.
    * @exception  Exception  Description of the Exception
    */
-  protected Properties getVariables(XMLElement data) throws Exception
+  protected void addVariables(XMLElement data) throws CompilerException
   {
-    Properties retVal = new Properties();
-
     // We get the varible list
     XMLElement root = data.getFirstChildNamed("variables");
     if (root == null)
-      return retVal;
+      return;
+
+    Properties variables = packager.getVariables();
 
     Iterator iter = root.getChildrenNamed("variable").iterator();
     while (iter.hasNext())
     {
       XMLElement var = (XMLElement) iter.next();
-      retVal.setProperty(
-        requireAttribute(var, "name"),
-        requireAttribute(var, "value"));
+      String name = requireAttribute(var, "name");
+      String value = requireAttribute(var, "value");
+      if (variables.contains(name))
+        parseWarn(var, "Variable '" + name + "' being overwritten");
+      variables.setProperty(name, value);
     }
-
-    return retVal;
   }
 
   /**
@@ -1301,30 +898,103 @@ public class Compiler extends Thread
 
   protected int getOverrideValue(XMLElement f)
   {
-    int override = PackSource.OVERRIDE_UPDATE;
+    int override = PackFile.OVERRIDE_UPDATE;
 
     String override_val = f.getAttribute("override");
     if (override_val != null)
     {
       if (override_val.equalsIgnoreCase("true"))
       {
-        override = PackSource.OVERRIDE_TRUE;
+        override = PackFile.OVERRIDE_TRUE;
       } else if (override_val.equalsIgnoreCase("false"))
       {
-        override = PackSource.OVERRIDE_FALSE;
+        override = PackFile.OVERRIDE_FALSE;
       } else if (override_val.equalsIgnoreCase("asktrue"))
       {
-        override = PackSource.OVERRIDE_ASK_TRUE;
+        override = PackFile.OVERRIDE_ASK_TRUE;
       } else if (override_val.equalsIgnoreCase("askfalse"))
       {
-        override = PackSource.OVERRIDE_ASK_FALSE;
+        override = PackFile.OVERRIDE_ASK_FALSE;
       } else if (override_val.equalsIgnoreCase("update"))
       {
-        override = PackSource.OVERRIDE_UPDATE;
+        override = PackFile.OVERRIDE_UPDATE;
       }
     }
 
     return override;
+  }
+
+  
+  /**
+   * Look for a project specified resources, which, if not absolute, are sought
+   * relative to the projects basedir. The path should use '/' as the
+   * fileSeparator. If the resource is not found, a CompilerException is thrown
+   * indicating fault in the parent element.
+   *
+   * @param path the relative path (using '/' as separator) to the resource.
+   * @param desc the description of the resource used to report errors
+   * @param parent the XMLElement the resource is specified in, used to
+   *               report errors
+   * @return a URL to the resource.
+   */
+  private URL findProjectResource(String path, String desc, XMLElement parent)
+    throws CompilerException
+  {
+    URL url = null;
+    File resource = new File(path);
+    if (! resource.isAbsolute())
+      resource = new File(basedir, path);
+
+    if (! resource.exists()) // fatal
+      parseError(parent, path + " not found");
+
+    try
+    {
+      url = resource.toURL();
+    } catch(MalformedURLException how)
+    {
+      parseError(parent, resource + " " + how.getMessage(), how);
+    }
+
+    return url;
+  }
+
+  /**
+   * Look for an IzPack resource either in the compiler jar, or within
+   * IZPACK_HOME.  The path must not be absolute. The path must use '/' as the
+   * fileSeparator (it's used to access the jar file). If the resource is not
+   * found, a CompilerException is thrown indicating fault in the parent
+   * element.
+   *
+   * @param path the relative path (using '/' as separator) to the resource.
+   * @param desc the description of the resource used to report errors
+   * @param parent the XMLElement the resource is specified in, used to
+   *               report errors
+   * @return a URL to the resource.
+   */
+  private URL findIzPackResource(String path, String desc, XMLElement parent)
+    throws CompilerException
+  {
+    URL url = getClass().getResource("/" + path);
+    if (url == null)
+    {
+      File resource = new File(path);
+      if (! resource.isAbsolute())
+        resource = new File(IZPACK_HOME, path);
+
+      if (! resource.exists()) // fatal
+        parseError(parent, path + " not found");
+
+      try
+      {
+        url = resource.toURL();
+      } catch(MalformedURLException how)
+      {
+        parseError(parent, resource + " " + how.getMessage(), how);
+      }
+    }
+
+    return url;
   }
 
   /**
@@ -1386,6 +1056,28 @@ public class Compiler extends Thread
         parent,
         "<" + parent.getName() + "> requires child <" + name + ">");
     return child;
+  }
+
+  /**
+   * Call getContent on an element, producing a meaningful error message if not
+   * present, or empty, or a valid URL. It is an error for 'element' to be
+   * null.
+   *
+   * @param element   The element to get content of
+   */
+  protected URL requireURLContent(XMLElement element)
+    throws CompilerException
+  {
+    URL url = null;
+    try
+    {
+      url = new URL(requireContent(element));
+    }
+    catch (MalformedURLException x)
+    {
+      parseError(element, "<" + element.getName() + "> requires valid URL", x);
+    }
+    return url;
   }
 
   /**
@@ -1466,18 +1158,16 @@ public class Compiler extends Thread
 
     parseError(
       element,
-      "<"
-        + element.getName()
-        + "> invalid attribute '"
-        + attribute
-        + "': Expected (yes|no)");
+      "<" + element.getName() + "> invalid attribute '"
+      + attribute + "': Expected (yes|no)");
 
     return false; // never happens
   }
 
   /**
    * Call getAttribute on an element, producing a meaningful warning if not
-   * "yes" or "no". It is an error for 'element' or 'attribute' to be null.
+   * "yes" or "no". If the 'element' or 'attribute' are null, the default value
+   * is returned.
    *
    * @param element        The element to get the attribute value of
    * @param attribute      The name of the attribute to get
@@ -1488,6 +1178,9 @@ public class Compiler extends Thread
     String attribute,
     boolean defaultValue)
   {
+    if (element == null)
+      return defaultValue;
+
     String value =
       element.getAttribute(attribute, (defaultValue ? "yes" : "no"));
     if (value.equalsIgnoreCase("yes"))
@@ -1498,239 +1191,10 @@ public class Compiler extends Thread
     // TODO: should this be an error if it's present but "none of the above"?
     parseWarn(
       element,
-      "<"
-        + element.getName()
-        + "> invalid attribute '"
-        + attribute
-        + "': Expected (yes|no) if present");
+      "<" + element.getName() + "> invalid attribute '"
+      + attribute + "': Expected (yes|no) if present");
 
     return defaultValue;
-  }
-
-  /**
-   *  Represents a resource.
-   *
-   * @author     julien
-   * created    October 26, 2002
-   */
-  class Resource
-  {
-    /**  The source. */
-    public String src;
-
-    /**  The input stream to read from. */
-    public InputStream src_is;
-
-    /**  The Id. */
-    public String id;
-
-    /**  Shall we parse it ? */
-    public boolean parse = false;
-
-    /**  The type. */
-    public String type;
-
-    /**  The encoding. */
-    public String encoding;
-
-    /**
-     *  The constructor.
-     *
-     * @param  id   The Id.
-     * @param  src  The source.
-     */
-    public Resource(String id, String src)
-    {
-      this.src = src;
-      this.id = id;
-    }
-
-    /**
-     *  The constructor.
-     *
-     * @param  id   The Id.
-     * @param  is   The source.
-     */
-    public Resource(String id, InputStream is)
-    {
-      this.src_is = is;
-      this.id = id;
-    }
-
-    /**
-     *  The constructor.
-     *
-     * @param  id        The Id.
-     * @param  src       The source.
-     * @param  parse     true if it must be parsed.
-     * @param  type      The type.
-     * @param  encoding  The encoding.
-     */
-    public Resource(
-      String id,
-      String src,
-      boolean parse,
-      String type,
-      String encoding)
-    {
-      this.src = src;
-      this.id = id;
-      this.parse = parse;
-      this.type = type;
-      this.encoding = encoding;
-    }
-
-  }
-
-  /**
-   *  Represents a pack.
-   *
-   * @author     julien
-   * created    October 26, 2002
-   */
-  class Pack
-  {
-    /**  The pack number. */
-    public int number;
-
-    /**  The pack name. */
-    public String name;
-
-    /**  Is the pack required ? */
-    public boolean required;
-
-    /**  The pack description. */
-    public String description;
-
-    /**  The files list. */
-    public ArrayList packFiles = new ArrayList();
-
-    /**  The parsable files list. */
-    public ArrayList parsables = new ArrayList();
-
-    /**  The executable files list. */
-    public ArrayList executables = new ArrayList();
-
-    /**  The list of update checks. */
-    public ArrayList updatechecks = new ArrayList();
-
-    /**  The target operation system of this file */
-    public List osConstraints = null;
-
-    public boolean preselected;
-
-  }
-
-  /**
-   *  Represents a pack data source.
-   *
-   * @author     julien
-   * created    October 26, 2002
-   */
-  class PackSource
-  {
-    /**  The source. */
-    public String src;
-
-    public final static int OVERRIDE_TRUE =
-      com.izforge.izpack.PackFile.OVERRIDE_TRUE;
-    public final static int OVERRIDE_FALSE =
-      com.izforge.izpack.PackFile.OVERRIDE_FALSE;
-    public final static int OVERRIDE_ASK_TRUE =
-      com.izforge.izpack.PackFile.OVERRIDE_ASK_TRUE;
-    public final static int OVERRIDE_ASK_FALSE =
-      com.izforge.izpack.PackFile.OVERRIDE_ASK_FALSE;
-    public final static int OVERRIDE_UPDATE =
-      com.izforge.izpack.PackFile.OVERRIDE_UPDATE;
-
-    /**  Shall we override the file ? */
-    public int override = OVERRIDE_TRUE;
-
-    /**  The target operating systems of this file */
-    public List osConstraints = null;
-
-    /**  The target directory. */
-    private String targetdir = null;
-
-    /**  The target file. */
-    private String targetfile = null;
-
-    public String getTargetFilename()
-    {
-      // targetfile overrides targetdir
-      if (this.targetfile != null)
-        return this.targetfile;
-
-      File f = new File(this.src);
-
-      return this.targetdir + f.getName();
-    }
-
-    public void setTargetFile(String targetFile) throws CompilerException
-    {
-      this.targetdir = null;
-      if (targetFile == null)
-      {
-        if (this.src != null)
-          throw new CompilerException("target for file " + src + " missing!");
-        else
-          throw new CompilerException("target for file missing!");
-      }
-      this.targetfile = targetFile;
-    }
-
-    public String getTargetFile()
-    {
-      return this.targetfile;
-    }
-
-    public void setTargetDir(String targetDir) throws CompilerException
-    {
-      if (targetDir == null)
-      {
-        if (this.src != null)
-          throw new CompilerException("target for file " + src + " missing!");
-        else
-          throw new CompilerException("target for file missing!");
-      }
-
-      this.targetfile = null;
-      this.targetdir = targetDir;
-
-      if (!this.targetdir.endsWith(File.separator))
-      {
-        this.targetdir = this.targetdir + File.separatorChar;
-      }
-
-    }
-
-    public String getTargetDir()
-    {
-      return this.targetdir;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    public String toString()
-    {
-      return "[PackSource file: '" + src + "' with path '" + targetdir + "']";
-    }
-  }
-
-  /**
-   *  Represents a native library.
-   *
-   * @author     julien
-   * created    October 26, 2002
-   */
-  class NativeLibrary
-  {
-    /**  The native library name. */
-    public String name;
-
-    /**  The library path. */
-    public String path;
   }
 
   /**
@@ -1778,10 +1242,19 @@ public class Compiler extends Thread
         stdArgsIndex = 2;
         IZPACK_HOME = args[1];
       } else
+      {
         stdArgsIndex = 0;
-
-      if (!IZPACK_HOME.endsWith(File.separator))
-        IZPACK_HOME = IZPACK_HOME + File.separator;
+        String izHome = System.getProperty("IZPACK_HOME");
+        if (izHome != null)
+          IZPACK_HOME = izHome;
+      }
+      
+      home = new File(IZPACK_HOME);
+      if (! home.exists() && home.isDirectory())
+      {
+        System.err.println("IZPACK_HOME (" + IZPACK_HOME + ") doesn't exist");
+        System.exit(-1);
+      }
 
       // The users wants to know the command line parameters
       if (args[stdArgsIndex].equalsIgnoreCase("-?"))
@@ -1808,6 +1281,7 @@ public class Compiler extends Thread
 
         // We get the input file name and we initialize the output file name
         filename = args[stdArgsIndex];
+        // default jar files names are based on input file name
         output = filename.substring(0, filename.length() - 3) + "jar";
 
         // We parse the other ones
