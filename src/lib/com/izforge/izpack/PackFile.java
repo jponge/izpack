@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  Encloses information about a packed file. This class abstracts the way file
@@ -61,6 +62,10 @@ public class PackFile implements Serializable
   /**  Whether or not this file is going to override any existing ones */
   private int override = OVERRIDE_FALSE;
 
+  /** Additional attributes or any else for customisation */
+  private Map  additionals = null;
+
+
   public int previousPackNumber = -1;
   public long offsetInPreviousPack = -1;
   
@@ -91,6 +96,23 @@ public class PackFile implements Serializable
     this.length = src.length();
     this.mtime = src.lastModified();
     this.isDirectory = src.isDirectory();
+  }
+
+  /**
+   * Constructs and initializes from a source file.
+   *
+   * @param  src      file which this PackFile describes
+   * @param  target   the path to install the file to
+   * @param  osList   OS constraints
+   * @param  override what to do when the file already exists
+   * @param  additionals  additional attributes
+   * @throws FileNotFoundException if the specified file does not exist.
+   */
+  public PackFile(File src, String target, List osList, int override,
+    Map additionals) throws FileNotFoundException
+  {
+    this( src, target, osList, override);
+    this.additionals = additionals;
   }
 
   public void setPreviousPackFileRef(int previousPackNumber,
@@ -139,4 +161,13 @@ public class PackFile implements Serializable
   {
     return targetPath;
   }
+  /**
+   * Returns the additionals map.
+   * @return additionals
+   */
+  public Map getAdditionals()
+  {
+    return additionals;
+  }
+
 }
