@@ -64,6 +64,7 @@ import javax.swing.table.TableCellRenderer;
 import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -114,6 +115,12 @@ public class ImgPacksPanel extends IzPanel
 
   /**  The layout constraints. */
   private GridBagConstraints gbConstraints;
+  
+  /** The packs locale database. */
+  private LocaleDatabase langpack = null;
+  
+  /** The name of the XML file that specifies the panel langpack */
+  private static final String LANG_FILE_NAME = "packsLang.xml";
 
   
   /**
@@ -126,6 +133,14 @@ public class ImgPacksPanel extends IzPanel
   {
     super(parent, idata);
     preLoadImages();
+    
+    try
+    {
+      String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
+      this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
+    }
+    catch (Throwable exception)
+    {}
     
     layout = new GridBagLayout();
     gbConstraints = new GridBagConstraints();
@@ -451,7 +466,11 @@ public class ImgPacksPanel extends IzPanel
           return new Integer(val);
 
         case 1 :
-          return pack.name;
+          if (pack.id == null || pack.id.equals("")){
+        		return pack.name;
+        	}else{
+        		return langpack.getString(pack.id);
+        	}
 
         case 2 :
           return Pack.toByteUnitsString((int) pack.nbytes);
@@ -498,7 +517,16 @@ public class ImgPacksPanel extends IzPanel
     if (i >= 0)
     {
       Pack pack = (Pack) idata.availablePacks.get(i);
-      descriptionArea.setText(pack.description);
+      String desc = "";
+      if (pack.id != null && !pack.id.equals(""))
+      {
+        desc = langpack.getString(pack.id+".description");
+      }
+      if (desc.equals(""))
+      {
+      	desc = pack.description;
+      }
+      descriptionArea.setText(desc);
       
       int last = e.getLastIndex();
       int first = e.getFirstIndex();

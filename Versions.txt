@@ -11,6 +11,7 @@
 
 - Slovak translation updates (Milan Madzia).
 - Java class execution bug fix (Erik Artzmark).
+- ImgPacksPanel was not aware of i18n by using the packsLang.xml_xxx resource.
 
   > 3.6.0 (build 2004.07.28)
 
