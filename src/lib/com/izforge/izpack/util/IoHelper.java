@@ -94,6 +94,18 @@ public class IoHelper
   }
 
   /**
+   * Copies the contents of inFile into outFile.
+   * 
+   * @param inFile path of file which should be copied
+   * @param outFile path of file to create and copy the contents
+   * of inFile into
+   */
+  public static void copyFile(String inFile, String outFile) 
+    throws IOException
+  {
+     copyFile( new File(inFile), new File(outFile) );    
+  }
+  /**
    * Creates an in- and output stream for the given File objects and
    * copies all the data from the specified input  to the specified
    * output.
@@ -200,14 +212,32 @@ public class IoHelper
    */
   public static File copyToTempFile( File template, String defaultExtension) throws IOException
   {
+    return(copyToTempFile(template, defaultExtension, null ));
+  }
+
+  /**
+   * Creates a temp file with delete on exit rule. The extension
+   * is extracted from the template if possible, else the
+   * default extension is used. The contents of template will be
+   * copied into the temporary file. If the variable substitutor
+   * is not null, variables will be replaced during copying.
+   * @param template file to copy from and define file extension
+   * @param defaultExtension file extension if no is contained in template
+   * @param vss substitutor which is used during copying
+   * @return newly created and filled temporary file
+   * @throws IOException
+   */
+  public static File copyToTempFile( File template, String defaultExtension,
+     VariableSubstitutor vss) throws IOException
+  {
     String path = template.getCanonicalPath();
     int pos = path.lastIndexOf('.');
     String ext = path.substring(pos);
     if( ext == null )
       ext = defaultExtension;
-    File tmpFile = File.createTempFile("izpack_ant", ext);
+    File tmpFile = File.createTempFile("izpack_io", ext);
     tmpFile.deleteOnExit();
-    IoHelper.copyFile(template, tmpFile);
+    IoHelper.copyFile(template, tmpFile, vss);
     return( tmpFile);
   }
   
