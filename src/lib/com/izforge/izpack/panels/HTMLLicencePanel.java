@@ -127,7 +127,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     {
         URL retVal = null;
 
-        String resNamePrifix = "HTMLLicencePanel.licence";
+        String resNamePrifix = "/res/HTMLLicencePanel.licence";
         String resName = resNamePrifix + "_" + idata.localeISO3;
 
         retVal = getClass().getResource(resName);

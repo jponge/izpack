@@ -324,9 +324,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       // add files and directories to the uninstaller
       addToUninstaller ();
       
+      // Disables the createButton
+      createButton.setEnabled(false);   
+      
       // when finished unlock the next button and lock
       // the previous button
-      parent.unlockNextButton ();
+      //parent.unlockNextButton ();
       parent.lockPrevButton ();
     }
     // ----------------------------------------------------
@@ -379,7 +382,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     {
       if (shortcut.supported () && !simulteNotSupported)
       {
-        parent.lockNextButton ();
+        //parent.lockNextButton ();
         buildUI (shortcut.getProgramGroups (ShellLink.CURRENT_USER), true);  // always start out with the current user
       }
       else

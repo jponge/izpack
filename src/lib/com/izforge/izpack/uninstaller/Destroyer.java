@@ -93,8 +93,10 @@ public class Destroyer extends Thread
         // We delete
         File jar = new File(reader.readLine());
         File path = new File(reader.readLine());
+        File inst = new File(installPath);
         jar.deleteOnExit();
         path.deleteOnExit();
+        inst.deleteOnExit();
     }
     
     // Returns an ArrayList of the files to delete
