@@ -620,7 +620,8 @@ This feature needs to be documented.
   <spec txt="Please enter your phone number:" 
         layout="( N:3:3 ) N:3:3 - N:4:4 x N:5:5" 
         resultFormat="specialSeparator" separator="."/>
-  <!--validator class=""/-->
+  <validator class="com.izforge.izpack.util.NotEmptyValidator"
+             txt="The phone number is mandatory!" />
   <!--processor class=""/-->
 </field>
 \end{verbatim}
@@ -634,7 +635,7 @@ suggestions. The field is basically a combobox with an extra button to
 trigger autodetection (again).
 
 \begin{center}
-\fbox{\includegraphics[scale=1.0]{img/userInput-search}}
+\fbox{\includegraphics[scale=0.8]{img/userInput-search}}
 \end{center}
 
 \subsection{Specification}
@@ -656,19 +657,23 @@ The \texttt{<description>} tag is the same as with other fields (see
   \item \texttt{directory} - only return directory where the file was found (this is the same as \texttt{file} when searching for directories)
   \item \texttt{parentdir} - return the full path of the parent directory where the file was found
   \end{itemize}
+\item \texttt{checkfilename} - the name of a file or directory to check for existence (this can be used to validate the user's selection)
 \end{itemize}
 
 \subsection{Example}
 
 \footnotesize
 \begin{verbatim}
-<field type="search" variable="postgres_libdir">
-  <description align="left" txt="This is a description for a search input field."
-               id="description.rule.1"/>
-  <spec txt="Path to PostgreSQL library:" filename="plpgsql.so"
+<field type="search" variable="java_sdk_home">
+  <description align="left" 
+               txt="This is a description for a search input field."
+               id="description.java_sdk_home"/>
+  <spec txt="Path to Java SDK:" checkfilename="lib/tools.jar"
         type="file" result="directory">
-  <choice value="/usr/lib/pgsql/" />
-  <choice value="/opt/postgres/lib" />
+  <choice value="/usr/lib/java/" os="unix" />
+  <choice value="/opt/java" os="unix" />
+  <choice value="C:\Program Files\Java" os="windows" />
+  <choice value="C:\Java" os="windows" />
   </spec>
 </field>
 \end{verbatim}
