@@ -30,6 +30,7 @@ package com.izforge.izpack.installer;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,9 +76,6 @@ public class Unpacker extends Thread
 
   /**  The uninstallation data. */
   private UninstallData udata;
-
-  /**  The jar location. */
-  private String jarLocation;
 
   /**  The variables substitutor. */
   private VariableSubstitutor vs;
@@ -134,16 +132,6 @@ public class Unpacker extends Thread
       handler.startAction("Unpacking", npacks);
       udata = UninstallData.getInstance();
 
-      // Specific to the web installers
-      if (idata.kind.equalsIgnoreCase("web")
-        || idata.kind.equalsIgnoreCase("web-kunststoff"))
-      {
-        InputStream kin =
-          getClass().getResourceAsStream("/res/WebInstallers.url");
-        BufferedReader kreader = new BufferedReader(new InputStreamReader(kin));
-        jarLocation = kreader.readLine();
-      }
-
       // We unpack the selected packs
       for (int i = 0; i < npacks; i++)
       {
@@ -159,12 +147,15 @@ public class Unpacker extends Thread
           // We read the header
           PackFile pf = (PackFile) objIn.readObject();
 
-          if (OsConstraint.oneMatchesCurrentSystem(pf.osConstraints))
+          if (OsConstraint.oneMatchesCurrentSystem(pf.osConstraints()))
           {
             // We translate & build the path
-            String path = translatePath(pf.targetPath);
+            String path = translatePath(pf.getTargetPath());
             File pathFile = new File(path);
-            File dest = pathFile.getParentFile();
+            File dest = pathFile;
+            if (! pf.isDirectory())
+              dest = pathFile.getParentFile();
+            
             if (!dest.exists())
             {
               if (!dest.mkdirs())
@@ -176,6 +167,9 @@ public class Unpacker extends Thread
                 return;
               }
             }
+            
+            if (pf.isDirectory())
+              continue;
 
             // We add the path to the log,
             udata.addFile(path);
@@ -184,31 +178,31 @@ public class Unpacker extends Thread
 
             //if this file exists and should not be overwritten, check
             //what to do
-            if ((pathFile.exists()) && (pf.override != PackFile.OVERRIDE_TRUE))
+            if ((pathFile.exists()) && (pf.override() != PackFile.OVERRIDE_TRUE))
             {
               boolean overwritefile = false;
 
               // don't overwrite file if the user said so
-              if (pf.override != PackFile.OVERRIDE_FALSE)
+              if (pf.override() != PackFile.OVERRIDE_FALSE)
               {
-                if (pf.override == PackFile.OVERRIDE_TRUE)
+                if (pf.override() == PackFile.OVERRIDE_TRUE)
                 {
                   overwritefile = true;
-                } else if (pf.override == PackFile.OVERRIDE_UPDATE)
+                } else if (pf.override() == PackFile.OVERRIDE_UPDATE)
                 {
                   // check mtime of involved files
                   // (this is not 100% perfect, because the already existing file might
                   // still be modified but the new installed is just a bit newer; we would
                   // need the creation time of the existing file or record with which mtime
                   // it was installed...) 
-                  overwritefile = (pathFile.lastModified() < pf.mtime);
+                  overwritefile = (pathFile.lastModified() < pf.lastModified());
                 } else
                 {
                   int def_choice = -1;
 
-                  if (pf.override == PackFile.OVERRIDE_ASK_FALSE)
+                  if (pf.override() == PackFile.OVERRIDE_ASK_FALSE)
                     def_choice = AbstractUIHandler.ANSWER_NO;
-                  if (pf.override == PackFile.OVERRIDE_ASK_TRUE)
+                  if (pf.override() == PackFile.OVERRIDE_ASK_TRUE)
                     def_choice = AbstractUIHandler.ANSWER_YES;
 
                   int answer =
@@ -229,7 +223,7 @@ public class Unpacker extends Thread
               if (!overwritefile)
               {
                 if (!pf.isBackReference())
-                  objIn.skip(pf.length);
+                  objIn.skip(pf.length());
                 continue;
               }
 
@@ -249,11 +243,11 @@ public class Unpacker extends Thread
               is.skip(pf.offsetInPreviousPack - 4);
               //but the stream header is now already read (== 4 bytes)
             }
-            while (bytesCopied < pf.length)
+            while (bytesCopied < pf.length())
             {
               int maxBytes =
-                (pf.length - bytesCopied < buffer.length
-                  ? (int) (pf.length - bytesCopied)
+                (pf.length() - bytesCopied < buffer.length
+                  ? (int) (pf.length() - bytesCopied)
                   : buffer.length);
               int bytesInBuffer = pis.read(buffer, 0, maxBytes);
               if (bytesInBuffer == -1)
@@ -269,18 +263,13 @@ public class Unpacker extends Thread
               pis.close();
 
             // Set file modification time if specified
-            if (pf.mtime >= 0)
-              pathFile.setLastModified(pf.mtime);
-
-            // Empty dirs restoring
-            String _n = pathFile.getName();
-            if (_n.startsWith("izpack-keepme") && _n.endsWith(".tmp"))
-              pathFile.delete();
+            if (pf.lastModified() >= 0)
+              pathFile.setLastModified(pf.lastModified());
 
           } else
           {
             if (!pf.isBackReference())
-              objIn.skip(pf.length);
+              objIn.skip(pf.length());
           }
         }
 
@@ -688,28 +677,38 @@ public class Unpacker extends Thread
   }
 
   /**
-   *  Returns a stream to a pack, depending on the installation kind.
+   *  Returns a stream to a pack, location depending on if it's web based.
    *
    * @param  n              The pack number.
-   * @return                The stream.
+   * @return                The stream or null if it could not be found.
    * @exception  Exception  Description of the Exception
    */
   private InputStream getPackAsStream(int n) throws Exception
   {
     InputStream in = null;
 
-    if (idata.kind.equalsIgnoreCase("standard")
-      || idata.kind.equalsIgnoreCase("standard-kunststoff"))
-      in = getClass().getResourceAsStream("/packs/pack" + n);
-
-    else if (
-      idata.kind.equalsIgnoreCase("web")
-        || idata.kind.equalsIgnoreCase("web-kunststoff"))
+    String webDirURL = idata.info.getWebDirURL();
+    
+    if (webDirURL == null) // local
     {
-      URL url = new URL("jar:" + jarLocation + "!/packs/pack" + n);
+      in = getClass().getResourceAsStream("/packs/pack" + n);
+    }
+    else // web based
+    {
+      // TODO: Look first in same directory as primary jar
+      //       This may include prompting for changing of media
+      // TODO: download and cache them all before starting copy process
+      
+      // See compiler.Packager#getJarOutputStream for the counterpart
+      String baseName = idata.info.getInstallerBase();
+      String packURL = webDirURL + "/" + baseName + ".pack" + n + ".jar";
+      URL url = new URL("jar:" + packURL + "!/packs/pack" + n);
       //JarURLConnection jarConnection = (JarURLConnection) url.openConnection();
       // TODO: what happens when using an automated installer?
       in = new WebAccessor(null).openInputStream(url);
+      // TODO: Fails miserably when pack jars are not found, so this is temporary
+      if (in == null)
+        throw new FileNotFoundException(url.toString());
     }
     return in;
   }
