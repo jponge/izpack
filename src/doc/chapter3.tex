@@ -77,3 +77,26 @@ line the URL to the file. And that's it.\\
 
 Please note that the installation can look like freezed while the installer
 grabs the server part.\\
+
+% More internationalization
+\section{More internationalization}
+
+IzPack is available in several languages. However you might want to
+internationalize a little more some parts of your installers. In particular you
+could want this for the *InfoPanel and *LicencePanel. This is actually pretty
+easy to do. You just have to add one resource per localization suffixed with the
+ISO3 language code. At runtime these panels will try to load a localized version
+if possible.\\
+
+For instance let's suppose that we use a HTMLInfoPanel. Suppose that we have it
+in English, French and German. We want to have a French text for french users.
+Here we add a resource pointing to the French text whose name is
+\texttt{HTMLInfoPanel.info\_fra}. And that's it ! English and German users (or
+anywhere else that in France) will get the default text (denoted by 
+\texttt{HTMLInfoPanel.info}) and the French users will get the French version.
+Same thing for the other Licence and Info panels.\\
+
+\noindent
+\textit{To sum up :} add \texttt{\_<iso3 code>} to the resource name for
+\texttt{InfoPanel}, \texttt{HTMLInfoPanel}, \texttt{LicencePanel} and
+\texttt{HTMLLicencePanel}.\\
