@@ -1,5 +1,5 @@
 /*
- *  $Id$
+ *  $Id$ 
  *  IzPack
  *  Copyright (C) 2001-2004 Julien Ponge
  *
@@ -330,6 +330,7 @@ public class Compiler extends Thread
    */
   protected void addNativeLibraries(XMLElement data) throws Exception
   {
+    boolean needAddOns = false;
     notifyCompilerListener("addNativeLibraries", CompilerListener.BEGIN, data);
     Iterator iter = data.getChildrenNamed("native").iterator();
     while (iter.hasNext())
@@ -340,6 +341,35 @@ public class Compiler extends Thread
       String path = "bin/native/" + type + "/" + name;
       URL url = findIzPackResource(path, "Native Library", el);
       packager.addNativeLibrary(name, url);
+      // Additionals for mark a native lib also used in the uninstaller
+      // The lib will be copied from the installer into the uninstaller if needed.
+      // Therefore the lib should be in the installer also it is used only from
+      // the uninstaller. This is the reason why the stage wiil be only observed
+      // for the uninstaller.
+      String stage = el.getAttribute("stage");
+      List constraints = OsConstraint.getOsList(el);
+      if( stage != null && 
+        ( stage.equalsIgnoreCase("both") || stage.equalsIgnoreCase("uninstall")))
+      {
+        ArrayList al = new ArrayList();
+        al.add(name);
+        CustomActionData cad = new CustomActionData(al, constraints, CustomActionData.UNINSTALLER_LIB);
+        packager.addNativeUninstallerLibrary(cad);
+        needAddOns = true;
+      }
+      
+    }
+    if( needAddOns )
+    {
+      // Add the uninstaller extensions as a resource if specified
+      XMLElement root = requireChildNamed(data, "info");
+      XMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
+      if (validateYesNoAttribute(uninstallInfo, "write", YES))
+      {
+        URL url = findIzPackResource("lib/uninstaller-ext.jar", "Uninstaller extensions", root);
+        packager.addResource("IzPack.uninstaller-ext", url);
+      }
+      
     }
     notifyCompilerListener("addNativeLibraries", CompilerListener.END, data);
   }
@@ -1466,8 +1496,8 @@ public class Compiler extends Thread
         {
           String jarPath = "bin/customActions/" + className + ".jar";
           URL url = findIzPackResource(jarPath, "CustomAction jar file", xmlAction);
-          String fullName = getFullClassName(url, className);
-          CustomActionData ca = new CustomActionData( fullName, 
+          List fullNames = getFullClassNames(url, className);
+          CustomActionData ca = new CustomActionData( fullNames, 
             OsConstraint.getOsList(xmlAction), types[i] );
 
           packager.addCustomActionJar( ca, url);  
@@ -1477,36 +1507,41 @@ public class Compiler extends Thread
     
   }
   /**
-   * Returns the qualified class name for the given short class name.
+   * Returns the qualified class names of all classes which
+   * are contained in the given url. 
    * This method expects as the url param a jar file which contains
    * the given class. It scans the zip entries of the jar file.
+   * The first entry of the returned list will be the qualified class
+   * name of the given short class name.
    * @param url url of the jar file which contains the class
    * @param className short name of the class for which the full name 
    * should be resolved
    * @return full qualified class name
    * @throws Exception
    */
-  private String getFullClassName(URL url, String className) 
+  private List getFullClassNames(URL url, String className) 
     throws Exception
   {
     // CustomAction files come in jars packaged  IzPack
     JarInputStream jis = new JarInputStream(url.openStream());
     ZipEntry zentry = null;
     String fullName = null;
+    ArrayList fullNames = new ArrayList();
     while ( (zentry = jis.getNextEntry()) != null)
     {
       String name = zentry.getName();
+      int lastPos = name.indexOf(".class");
+      if( lastPos < 0 )
+        continue; // No class file.
+      name = name.replace('/', '.');
       int pos = name.indexOf(className);
-      if( pos > 0 )
-      { // Class file found?
-        int lastPos = name.indexOf('.', pos);
-        name = name.replace('/', '.');
-        fullName = name.substring(0, lastPos);
-        break;
-       }
+      if( pos > 0 ) // "Main" class found
+        fullNames.add(0,name.substring(0, lastPos));
+      else
+      fullNames.add(name.substring(0, lastPos));
     }
     jis.close();
-    return( fullName );
+    return( fullNames );
   }
 
   /**
@@ -1532,7 +1567,8 @@ public class Compiler extends Thread
     // CustomAction files come in jars packaged  IzPack
     String jarPath = "bin/customActions/" + className + ".jar";
     URL url = findIzPackResource(jarPath, "CustomAction jar file", var);
-    String fullName = getFullClassName(url, className);
+    List names = getFullClassNames(url, className);
+    String fullName = (String) names.get(0);
     if( url != null )
     {
       if(getClass().getResource("/" + jarPath) != null )
