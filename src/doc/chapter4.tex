@@ -82,7 +82,7 @@ Native libraries can be added to the installer by using the
 have to add the following line to the installer XML file:\\
 \texttt{<native type="izpack" name="ShellLink.dll"/>}\\
 For more details about the use of the \texttt{<native>} tag see the
-cahpter about the format of the XML file.\\
+chapter about the format of the XML file.\\
 
 You have to supply an extra specification file for the shortcuts that
 you want to be  created on the target system. This file is required by
@@ -622,8 +622,8 @@ case the ShortcutPanel cannot find the spec file. This can be caused by
 a number of reasons. The associated resource tag might be missing in the
 installer specification, the target file name might be misspelled (the
 name you specify for the \texttt{id} attribute) or the target file name
-has a path or package name prepended. Just use
-\\texttt{shortcutSpec.xml} and nothing else, just as described in 'What
+has a path or package name pre-pended. Just use
+\texttt{shortcutSpec.xml} and nothing else, just as described in 'What
 to Add to the Installer'. You can always verify if this part is ok by
 inspecting the content of the installer *.jar file. The file
 shortcutSpec.xml should be located in the directory \texttt{res}. This
@@ -656,7 +656,7 @@ actually defined in your installation and verify that they are all
 spelled correctly. Remember: case matters! Did the ShortcutPanel use to
 work in your installation and all of a sudden stopped working? Very
 likely you are dealing with the last problem. A package name might have
-been modified and the shortcut spec was not adjusted to stay in synch.\\
+been modified and the shortcut spec was not adjusted to stay in sync.\\
 
 \subsection{Problems That Have No Solution (yet)}
 

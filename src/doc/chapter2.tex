@@ -130,7 +130,7 @@ following parse types are available:
         properly within the context of XML files.
   \item \texttt{shell} - use this type if the substitution happens in
         a shell script. Because shell scripts use \texttt{\$variable} 
-        themself, an alternative variable marker is used: 
+        themselves, an alternative variable marker is used: 
         \texttt{\%variable} or \texttt{\%\{variable\}}.
 \end{itemize}
 
@@ -220,7 +220,7 @@ available in future versions of \IzPack. The arguments to specify are :
 \begin{itemize}
 
   \item \texttt{resizable} : takes \texttt{yes} or \texttt{no} and indicates
-  wether the window size can be changed or not.
+  whether the window size can be changed or not.
   \item \texttt{width} : sets the initial window width
   \item \texttt{height} : sets the initial window height
   
@@ -287,7 +287,7 @@ the attributes to specify :
   of course (for instance \texttt{my-picture.jpg}).
   \item \texttt{id} : the resource id, depending on the needs of a particular panel
   \item \texttt{parse} : takes \texttt{yes} or \texttt{no} (default is
-  \texttt{no}) - used to specify wether the resource must be parsed at the
+  \texttt{no}) - used to specify whether the resource must be parsed at the
   installer compilation time. For instance you could set the application version
   in a readme file used by \texttt{InfoPanel}.
   \item \texttt{type} : specifies the parse type. This makes sense only for a text
@@ -339,7 +339,7 @@ The \texttt{<pack>} takes the following attributes :
   \begin{itemize}
     \item \texttt{name}: the pack name
     \item \texttt{required}: takes \texttt{yes} or \texttt{no} and specifies
-    wether the pack is optional or not.
+    whether the pack is optional or not.
     \item \texttt{os}: optional attribute that lets you make the pack targeted
     to a specific \textsl{operating system}, for instance \texttt{unix},
     \texttt{mac} and so on.
@@ -464,7 +464,7 @@ Jakarta Ant set syntax. It takes the following parameters:
 You specify the files with  \texttt{<include>} and \texttt{<exclude>} tags
 that take the \texttt{name} parameter to specify the Ant-like pattern :
 \begin{itemize}    
-  \item \texttt{**} : means any subdirectoy
+  \item \texttt{**} : means any subdirectory
   \item \texttt{*} : used as a wildcard.
 \end{itemize}
 Here are some examples of Ant patterns :
@@ -530,7 +530,7 @@ executable flag on Unix-like systems. Here are the attributes :
   \item \texttt{failure} : specifies what to do when an error occurs :
   \texttt{abort} will abort the installation process, \texttt{ask} (default)
   will ask the user what to do and \texttt{warn} will just tell the user
-  that something's wrong
+  that something is wrong
 
   \item \texttt{os}: specifies the operating system, works like for
   \texttt{<file>}
