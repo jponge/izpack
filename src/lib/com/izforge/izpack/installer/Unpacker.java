@@ -119,11 +119,17 @@ public class Unpacker extends Thread
                             int z = fname.length();
                             File dest = pathFile.getParentFile();
                             if (!dest.exists()) dest.mkdirs();
-
-                            // We add the path to the log
+                            
+                            //check to see whether or not this file should be written out
+                            boolean write = !((pf.override == false) && (pathFile.exists()));
+                            // UPDATE ME: Need to implement the conditional overwriting of files
+                            
+                            // We add the path to the log,
                             udata.addFile(path);
+                            
 
                             // We copy the file
+                            
                             out = new FileOutputStream(path);
                             listener.progressUnpack(j, path);
                             byte[] buffer = new byte[5120];
@@ -138,7 +144,9 @@ public class Unpacker extends Thread
                                 {
                                     throw new IOException("Unexpected end of stream");
                                 }
+                                
                                 out.write(buffer, 0, bytesInBuffer);
+                                
                                 bytesCopied += bytesInBuffer;
                             }
                             // Cleanings

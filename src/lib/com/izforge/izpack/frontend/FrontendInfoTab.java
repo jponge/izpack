@@ -208,7 +208,7 @@ public class FrontendInfoTab extends FrontendTab implements ActionListener
     {
         // Our base root
         XMLElement root = installation.getFirstChildNamed("info");
-        
+                
         // We fill the trivials textfields
         appnameTextField.setText(root.getFirstChildNamed("appname").getContent());
         appversionTextField.setText(root.getFirstChildNamed("appversion").getContent());
@@ -227,10 +227,10 @@ public class FrontendInfoTab extends FrontendTab implements ActionListener
             authorsVect.add(aut);
         }
         authorsList.setListData(authorsVect);
-        
+         
         // The root for the GUI prefs
         root = installation.getFirstChildNamed("guiprefs");
-        
+                
         // We fill the trivial textfields
         widthTextField.setText(root.getAttribute("width"));
         heightTextField.setText(root.getAttribute("height"));

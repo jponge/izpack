@@ -123,6 +123,7 @@ public class FrontendFrame extends JFrame
         
         // Creates the tabbed pane
         tabbedPane = new JTabbedPane();
+        
         tabbedPane.addTab(langpack.getString("tabs.info.title"),
                           icons.getImageIcon("information"),
                           new FrontendInfoTab(installation, icons, langpack));

@@ -269,7 +269,7 @@ public class Compiler extends Thread
                 String targetFilename = p.targetdir + "/" + f.getName();
 
                 // Writing
-                objOut.writeObject(new PackFile(targetFilename,p.os, nbytes));
+                objOut.writeObject(new PackFile(targetFilename, p.os, nbytes, p.override));
                 byte[] buffer = new byte[5120];
                 long bytesWritten = 0;
                 int bytesInBuffer;
@@ -485,9 +485,17 @@ public class Compiler extends Thread
                 XMLElement f = (XMLElement) iter.next();
                 String path = basedir + File.separator + f.getAttribute("src");
                 File file = new File(path);
+                
+                boolean override = true;
+                if(f.getAttribute("override") != null)
+                {
+                    override = f.getAttribute("override").equalsIgnoreCase("true");
+                } 
+                System.err.println(f.getAttribute("src") + " " + override);
                 addFile(file,
                     f.getAttribute("targetdir"),
                     f.getAttribute("os"),
+                    override,
                     pack.packFiles);
             }
 
@@ -570,7 +578,8 @@ public class Compiler extends Thread
                 absolutFilePath = file.getParent();
 
                 newRelativePath = relPath + File.separator + absolutFilePath.substring(copyPathFrom);
-                addFile(file, newRelativePath, targetOs, list);
+                //FIX ME: the override for fileset is by default true, needs to be changed
+                addFile(file, newRelativePath, targetOs, true, list);
             }
         }
         else {
@@ -579,7 +588,7 @@ public class Compiler extends Thread
     }
 
     // Recursive method to add files in a pack
-    protected void addFile(File file, String relPath, String targetOs, ArrayList list) throws Exception
+    protected void addFile(File file, String relPath, String targetOs, boolean override, ArrayList list) throws Exception
     {
         // We check if 'file' is correct
         if (!file.exists()) throw new Exception(file.toString() + " does not exist");
@@ -591,7 +600,7 @@ public class Compiler extends Thread
             if (files == null) return;
             int size = files.length;
             String np = relPath + "/" + file.getName();
-            for (int i = 0; i < size; i++) addFile(files[i], np, targetOs, list);
+            for (int i = 0; i < size; i++) addFile(files[i], np, targetOs, override, list);
         }
         else
         {
@@ -599,6 +608,7 @@ public class Compiler extends Thread
             nf.src = file.getAbsolutePath();
             nf.targetdir = relPath;
             nf.os = targetOs;
+            nf.override = override;
             list.add(nf);
         }
     }
@@ -881,6 +891,7 @@ public class Compiler extends Thread
         // The fields (public to make it cool to use)
         public String src;
         public String targetdir;
+        public boolean override = true;
 
         /* The target operation system of this file*/
         public String os;

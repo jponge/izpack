@@ -43,6 +43,9 @@ public class PackFile implements Serializable
 
     /** The length of the file in bytes */
     public long length = 0;
+    
+    /** Whether or not this file is going to override any existing ones */
+    public boolean override = true;
 
     /**
      * Constructs a new uninitialized instance.
@@ -68,10 +71,11 @@ public class PackFile implements Serializable
      * @param this file should only be installed on  "targetOs" operating system
      * @param length the length of the file
      */
-    public PackFile(String targetPath, String targetOs, long length) {
+    public PackFile(String targetPath, String targetOs, long length, boolean override) {
         this.targetPath = targetPath;
         this.length = length;
         this.os = targetOs;
+        this.override = override;
     }
 }
 
