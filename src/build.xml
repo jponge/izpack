@@ -643,7 +643,7 @@
     <echo message="Makes the installer using IzPack"/>
     <izpack input="${dist.dir}/IzPack-install.xml"
             output="${dist.dir}/IzPack-install.jar"
-            installerType="standard"
+            installerType="standard-kunststoff"
             basedir="${dist.dir}"
             izPackDir="${dist.dir}/"/>
 

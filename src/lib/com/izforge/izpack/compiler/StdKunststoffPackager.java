@@ -27,6 +27,7 @@ package com.izforge.izpack.compiler;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
@@ -56,9 +57,13 @@ public class StdKunststoffPackager extends StdPackager
 
     // Copies the Kunststoff library
     sendMsg("Copying the Kunststoff library ...");
-    ZipInputStream skeleton_is = new ZipInputStream (getClass().getResourceAsStream("/lib/kunststoff.jar"));
-
-    if (skeleton_is == null)
+    InputStream istream = getClass().getResourceAsStream("/lib/kunststoff.jar");
+    ZipInputStream skeleton_is;
+    if (istream != null)
+    {
+      skeleton_is = new ZipInputStream(istream);
+    }
+    else
     {
       skeleton_is = new JarInputStream (new FileInputStream (
         Compiler.IZPACK_HOME + "lib" + File.separator + "kunststoff.jar"));    
