@@ -42,6 +42,7 @@
          txt="Deze directory bestaat al. Wilt u doorgaan en het risico lopen dat bestanden worden overgeschreven?"/>
     <str id="TargetPanel.empty_target"
          txt="U heeft geen installatiepad ingevuld. Wilt u toch doorgaan?"/>
+    <str id="TargetPanel.createdir" txt="Het installatiepad zal worden aangemaakt :" />
     
     <str id="PacksPanel.info" txt="Selecteer de pakketten die u wilt installeren :"/>
     <str id="PacksPanel.tip" txt="NB: Grijze pakketten zijn verplicht."/>
