@@ -103,6 +103,14 @@
     29.05.2004: (by Julien Ponge)
     	New SimpleFinishPanel.
 
+    30.07.2004: (by Klaus Bartz)
+        Simple CustomAction stuff added.
+    
+    09.09.2004: (by Klaus Bartz)
+        Clean up of CustomActions added.
+        New uninstaller-ext.jar with native helper stuff for native libs
+           in uninstaller.
+
   Mini-HowTo:
 
   To compile and package the compiler.jar jar file, type:
@@ -166,6 +174,7 @@
     <property name="installer.manifest" value="${basedir}/src/installer.manifest"/>
     <property name="uninstaller.jar" value="${basedir}/lib/uninstaller.jar"/>
     <property name="uninstaller.manifest" value="${basedir}/src/uninstaller.manifest"/>
+    <property name="uninstaller-ext.jar" value="${basedir}/lib/uninstaller-ext.jar"/>
 
     <property name="debug" value="off"/>
     <property name="debuglevel" value=""/>
@@ -262,7 +271,7 @@
             </section>
         </manifest>
     </target>
-    <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.panels, build.listener">
+    <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listener">
         <delete file="${standalone-compiler.jar}" verbose="true"/>
         <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
             <zipfileset src="${installer.jar}"/>
@@ -272,9 +281,11 @@
                 <include name="bin/langpacks/flags/*"/>
                 <include name="bin/langpacks/installer/*"/>
                 <include name="bin/native/izpack/*"/>
+                <include name="bin/native/3rdparty/*"/>
                 <include name="bin/panels/*Panel.jar"/>
                 <include name="bin/customActions/*.jar"/>
                 <include name="lib/uninstaller.jar"/>
+                <include name="lib/uninstaller-ext.jar"/>
                 <include name="lib/installer.jar"/>
                 <include name="lib/kunststoff.jar"/>
                 <include name="lib/liquidlnf.jar"/>
@@ -382,6 +393,32 @@
                 <include name="net/n3/nanoxml/*.class"/>
             </fileset>
             <fileset dir="${img.dir}/uninstaller"/>
+        </jar>
+    </target>
+
+    <!-- Compiles the extended uninstaller src files -->
+    <target name="compile.uninstaller-ext" depends="prepare">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
+        deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
+            <include name="com/izforge/izpack/util/os/*.java"/>
+            <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java"/>
+            <include name="net/n3/nanoxml/*.java"/>
+        </javac>
+    </target>
+    <!-- Package extended uninstaller.jar used if one ore more native libs are
+         declared for uninstallation -->
+    <target name="build.uninstaller-ext" depends="compile.uninstaller-ext">
+        <delete file="${uninstaller-ext.jar}" verbose="true"/>
+        <jar jarfile="${uninstaller-ext.jar}" >
+            <fileset dir="${build.dir}">
+                <include name="com/izforge/izpack/util/Librarian.class"/>
+                <include name="com/izforge/izpack/util/Housekeeper.class"/>
+                <include name="com/izforge/izpack/util/TargetFactory.class"/>
+                <include name="com/izforge/izpack/util/FreeThread.class"/>
+                <include name="com/izforge/izpack/util/CleanupClient.class"/>
+                <include name="com/izforge/izpack/util/NativeLibraryClient.class"/>
+                <!-- Add helper etc. you need for uninstallation -->
+            </fileset>
         </jar>
     </target>
 
@@ -589,12 +626,16 @@
             <fileset dir="${basedir}/bin/panels/">
                 <include name="**/*"/>
             </fileset>
+            <fileset dir="${basedir}/bin/customActions/">
+                <include name="**/*"/>
+            </fileset>
             <fileset dir="${basedir}/lib/">
                 <include name="compiler.jar"/>
                 <include name="standalone-compiler.jar"/>
                 <include name="frontend.jar"/>
                 <include name="installer.jar"/>
                 <include name="uninstaller.jar"/>
+                <include name="uninstaller-ext.jar"/>
             </fileset>
         </delete>
     </target>
