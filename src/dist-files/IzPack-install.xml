@@ -1,6 +1,6 @@
-<!-- 
+<!--
     $Id$
-    
+
     IzPack installer XML file
 
     By Julien PONGE
@@ -12,14 +12,14 @@
     you'll get bin/, lib/, ... and text files like Versions.txt and so
     on. Now you can invoke the IzPack compiler and it will generate the
     installer.
-    
+
     Alternatively, you can use the IzPack Ant makefile and run 'ant dist'. It's
     much simpler :-)
 -->
 
 <!-- The installation -->
 <installation version="1.0">
-    
+
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
@@ -29,7 +29,7 @@
             <author email="(see Thanks.txt)" name="Many other nice contributors" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
-        <javaversion>1.2</javaversion>
+        <javaversion>1.3</javaversion>
     </info>
 
     <!-- Flexible and in the screen proportions -->
@@ -76,7 +76,7 @@
         <panel classname="ShortcutPanel"/>
         <panel classname="FinishPanel"/>
     </panels>
-    
+
     <!-- The native libraries to add -->
     <native type="izpack" name="ShellLink.dll"/>
 
@@ -96,7 +96,7 @@
             <parsable targetfile="$INSTALL_PATH/bin/compile.bat"/>
             <executable targetfile="$INSTALL_PATH/bin/compile" stage="never"/>
         </pack>
-	
+
 	      <!-- The documentation -->
         <pack name="Documentation-HTML" required="no">
             <description>The IzPack documentation (HTML version) + Javadoc.</description>

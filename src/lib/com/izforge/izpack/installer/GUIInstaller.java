@@ -39,6 +39,7 @@ import java.io.DataInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
+import java.lang.StringBuffer;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TreeMap;
@@ -51,6 +52,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
@@ -93,11 +95,11 @@ public class GUIInstaller extends InstallerBase
     // add the GUI install data
     loadGUIInstallData();
 
-    // Checks the Java version
-    checkJavaVersion();
-
     // Sets up the GUI L&F
     loadLookAndFeel();
+
+    // Checks the Java version
+    checkJavaVersion();
 
     // Loads the suitable langpack
     loadLangPack();
@@ -133,10 +135,18 @@ public class GUIInstaller extends InstallerBase
     String required = this.installdata.info.getJavaVersion();
     if (version.compareTo(required) < 0)
     {
-      System.out.println("Can't install !");
-      System.out.println("> The minimum Java version required is " + required);
-      System.out.println("> Your version is " + version);
-      System.out.println("Please upgrade to the minimum version.");
+      StringBuffer msg = new StringBuffer();
+      msg.append("The application that you are trying to install requires a ");
+      msg.append(required);
+      msg.append(" version or later of the Java platform.\n");
+      msg.append("You are running a ");
+      msg.append(version);
+      msg.append(" version of the Java platform.\n");
+      msg.append("Please upgrade to a newer version.");
+
+      System.out.println(msg.toString());
+      JOptionPane.showMessageDialog(null, msg.toString(), "Error",
+                                    JOptionPane.ERROR_MESSAGE);
       System.exit(1);
     }
   }
@@ -209,7 +219,7 @@ public class GUIInstaller extends InstallerBase
   {
     // Macs don't like our other LnF so only allow the default
     boolean onMac = (System.getProperty("mrj.version") != null);
-    
+
     if (this.installdata.kind.equalsIgnoreCase("standard")
       || this.installdata.kind.equalsIgnoreCase("web")
       || onMac)
@@ -462,7 +472,7 @@ public class GUIInstaller extends InstallerBase
     {
       setOpaque(true);
     }
-    
+
     /**
      *  Returns a suitable cell.
      *

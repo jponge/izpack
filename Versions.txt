@@ -5,6 +5,8 @@
   > 3.5.1 (build 2004.xx.yy)
 
 - No custom look and feel will be applied on Mac platforms (Chad McHenry).
+- A message box is now raised when the installer detects that the Java version
+  it is running on is lower than the one required by the package provider.
 
   > 3.5.0 (build.2004.02.26)
 
