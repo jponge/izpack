@@ -416,6 +416,8 @@ public class InstallerFrame extends JFrame
       prevButton.setVisible(false);
       nextButton.setVisible(false);
       lockNextButton();
+      // Set the default button to the only visible button.
+      getRootPane().setDefaultButton(quitButton);
     } else
     {
       prevButton.setVisible(true);
