@@ -13,9 +13,8 @@
 \usepackage[latin1]{inputenc}
 
 \usepackage{graphicx}
-
 \usepackage{url}
-\usepackage{times}
+\usepackage{pgf}
 
 % ............................................................................ %
 
@@ -38,9 +37,20 @@
 \pgfdeclareimage[height=0.5cm]{logo}{logo}
 \logo{\pgfuseimage{logo}}
 
-\setbeamertemplate{footline}[page number]
+\setbeamertemplate{footline}[frame number]
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{background canvas}[vertical shading]
+
+\pgfdeclareimage[width=1.5cm,interploate=true]{cc}{cc}
+\pgfdeclareimage[width=3cm,interpolate=true]{tree-view}{tree-view}
+
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-hello}{panel-hello}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-info}{panel-info}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-license}{panel-license}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-packs}{panel-packs}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-target}{panel-target}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-install}{panel-install}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-finish}{panel-finish}
 
 \AtBeginSubsection[]
 {
@@ -66,7 +76,7 @@
 
 \footnotesize
 
-\href{http://www.creativecommons.org/}{\includegraphics[scale=0.5]{cc}}
+\href{http://www.creativecommons.org/}{\pgfuseimage{cc}}
 
 \vspace{2em}
 
@@ -282,7 +292,7 @@ Fast facts:
   \end{column}
 
   \begin{column}{3cm}
-  \includegraphics[width=3cm]{tree-view}
+  \pgfuseimage{tree-view}
   \end{column}
 
 \end{columns}
@@ -324,6 +334,46 @@ Fast facts:
     \end{enumerate}
 
 \end{itemize}
+
+\end{frame}
+
+% ................................... %
+
+\begin{frame}
+
+\frametitle{Panels flow illustrated}
+
+\begin{overprint}
+
+  \onslide<1>\textsl{HelloPanel}\\
+  
+  \pgfuseimage{panel-hello}
+  
+  \onslide<2>\textsl{HTMLInfoPanel}\\
+  
+  \pgfuseimage{panel-info}
+  
+  \onslide<3>\textsl{LicencePanel}\\
+  
+  \pgfuseimage{panel-license}
+  
+  \onslide<4>\textsl{PacksPanel} (here \textit{ImgPacksPanel})\\
+  
+  \pgfuseimage{panel-packs}
+  
+  \onslide<5>\textsl{TargetPanel}\\
+  
+  \pgfuseimage{panel-target}
+  
+  \onslide<6>\textsl{InstallPanel}\\
+  
+  \pgfuseimage{panel-install}
+  
+  \onslide<7>\textsl{SimpleFinishPanel}\\
+  
+  \pgfuseimage{panel-finish}
+
+\end{overprint}
 
 \end{frame}
 
