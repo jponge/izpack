@@ -562,8 +562,8 @@
     </target>
 
     <!-- Compile all custom actions (listener) and put them at the right location -->
-    <!-- CUSTOM ACTION test START
-    <target name="build.listener" depends="build.installer">
+     <target name="build.listener" depends="build.installer">
+       <!-- CUSTOM ACTION test START
         <antcall target="compile.listener.simple">
             <param name="listener" value="ChmodCompilerListener"/>
             <param name="listener-dir" value="ChmodCompilerListener"/>
@@ -574,8 +574,8 @@
             <param name="listener-dir" value="ChmodInstallerListener"/>
             <param name="listener-include" value="com/myCompany/tools/install/listener"/>
         </antcall>
+        COSTOM ACTION test END -->
     </target>
-    COSTOM ACTION test END -->
 
     <!-- Performs some cleanups -->
     <target name="clean">
