@@ -51,6 +51,7 @@ import javax.swing.SwingConstants;
 import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.CompileHandler;
 import com.izforge.izpack.installer.CompileResult;
 import com.izforge.izpack.installer.CompileWorker;
@@ -132,7 +133,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     JLabel argumentsLabel = new JLabel();
     this.argumentsComboBox = new JComboBox();
     this.startButton = ButtonFactory.createButton (parent.langpack.getString ("CompilePanel.start"), idata.buttonsHColor);
-    this.tipLabel = new JLabel(parent.langpack.getString ("CompilePanel.tip"),
+    this.tipLabel = LabelFactory.create(parent.langpack.getString ("CompilePanel.tip"),
         parent.icons.getImageIcon ("tip"), SwingConstants.TRAILING);
     this.opLabel = new JLabel();
     packProgressBar = new JProgressBar();

@@ -33,6 +33,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -90,7 +91,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     int row = 1;
 
     this.tipLabel =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString("InstallPanel.tip"),
         parent.icons.getImageIcon("information"),
         JLabel.TRAILING);
@@ -100,7 +101,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     layout.addLayoutComponent(this.tipLabel, gbConstraints);
     add(this.tipLabel);
 
-    this.packOpLabel = new JLabel(" ", JLabel.TRAILING);
+    this.packOpLabel = LabelFactory.create(" ", JLabel.TRAILING);
     parent.buildConstraints(gbConstraints, 0, row++, 2, 1, 1.0, 0.0);
     gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
     layout.addLayoutComponent(this.packOpLabel, gbConstraints);
@@ -128,7 +129,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     add(sep);
 
     this.overallOpLabel =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString("InstallPanel.progress"),
         parent.icons.getImageIcon("information"),
         JLabel.TRAILING);

@@ -66,6 +66,7 @@ import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -936,7 +937,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
     // label a the top of the panel, that gives the
     // basic instructions
     // ----------------------------------------------------
-    listLabel = new JLabel (parent.langpack.getString ("ShortcutPanel.regular.list"),
+    listLabel = LabelFactory.create (parent.langpack.getString ("ShortcutPanel.regular.list"),
                             JLabel.LEADING);
 
     constraints.gridx       = 0;

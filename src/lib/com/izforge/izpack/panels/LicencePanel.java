@@ -39,6 +39,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -82,7 +83,7 @@ public class LicencePanel extends IzPanel implements ActionListener
     // We put our components
 
     JLabel infoLabel =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString("LicencePanel.info"),
         parent.icons.getImageIcon("history"),
         JLabel.TRAILING);

@@ -39,6 +39,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -92,7 +93,7 @@ public class HTMLLicencePanel
     // We put our components
 
     infoLabel =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString("LicencePanel.info"),
         parent.icons.getImageIcon("history"),
         JLabel.TRAILING);
@@ -121,7 +122,7 @@ public class HTMLLicencePanel
     }
 
     agreeLabel =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString("LicencePanel.agree"),
         parent.icons.getImageIcon("help"),
         JLabel.TRAILING);

@@ -64,6 +64,7 @@ import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -307,7 +308,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     GridBagLayout layout,GridBagConstraints constraints )
   {
     JLabel label =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString(msgId),
         parent.icons.getImageIcon(iconId),
         JLabel.TRAILING);
@@ -339,7 +340,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
       label = new JLabel("");
     panel.setAlignmentX(LEFT_ALIGNMENT);
     panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-    panel.add(new JLabel(parent.langpack.getString(msgId)));
+    panel.add(LabelFactory.create(parent.langpack.getString(msgId)));
     panel.add(Box.createHorizontalGlue());
     panel.add(label);
     if( layout != null && constraints != null)

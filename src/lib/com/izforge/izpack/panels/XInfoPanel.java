@@ -36,6 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -83,7 +84,7 @@ public class XInfoPanel extends IzPanel
     // We add the components
 
     infoLabel =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString("InfoPanel.info"),
         parent.icons.getImageIcon("edit"),
         JLabel.TRAILING);

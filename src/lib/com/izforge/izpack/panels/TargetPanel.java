@@ -44,6 +44,7 @@ import javax.swing.JTextField;
 import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -102,7 +103,7 @@ public class TargetPanel extends IzPanel implements ActionListener
     // We create and put the components
 
     infoLabel =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString("TargetPanel.info"),
         parent.icons.getImageIcon("home"),
         JLabel.TRAILING);
@@ -115,6 +116,7 @@ public class TargetPanel extends IzPanel implements ActionListener
 
     textField = new JTextField(idata.getInstallPath(), 40);
     textField.addActionListener(this);
+    setInitialFocus(textField);
     parent.buildConstraints(gbConstraints, 0, 1, 
       GridBagConstraints.RELATIVE, 1, 1.0, 0.0);
     gbConstraints.fill = GridBagConstraints.HORIZONTAL;

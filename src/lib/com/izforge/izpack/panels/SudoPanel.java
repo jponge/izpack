@@ -26,6 +26,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.*;
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
@@ -63,13 +64,13 @@ public class SudoPanel extends IzPanel implements ActionListener
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		add(new JLabel(
+		add(LabelFactory.create(
 				/*parent.langpack.getString("SudoPanel.info")*/"For installing administrator privileges are necessary",
 				JLabel.TRAILING));
 
 		add(Box.createRigidArea(new Dimension(0, 5)));
 		
-		add(new JLabel(
+		add(LabelFactory.create(
 				/*parent.langpack.getString("SudoPanel.tip")*/"Please note that passwords are case-sensitive", parent.icons.getImageIcon("tip"),
 				JLabel.TRAILING));
 
@@ -81,7 +82,7 @@ public class SudoPanel extends IzPanel implements ActionListener
 		spacePanel.setBorder(BorderFactory.createEmptyBorder(80, 30, 0, 50));
 		spacePanel.setLayout(new BorderLayout(5,5));
 		spacePanel.add(
-			new JLabel(
+    LabelFactory.create(
 				/*parent.langpack.getString("SudoPanel.specifyAdminPassword")*/"Please specify your password:"),BorderLayout.NORTH);
 		passwordField = new JPasswordField();
 		passwordField.addActionListener(this);

@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -77,7 +78,7 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
     // We add the components
 
     infoLabel =
-      new JLabel(
+      LabelFactory.create(
         parent.langpack.getString("InfoPanel.info"),
         parent.icons.getImageIcon("edit"),
         JLabel.TRAILING);

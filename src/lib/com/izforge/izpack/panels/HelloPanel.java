@@ -37,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.izforge.izpack.Info;
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -96,7 +97,7 @@ public class HelloPanel extends IzPanel
         + idata.info.getAppVersion()
         + parent.langpack.getString("HelloPanel.welcome2");
     welcomeLabel =
-      new JLabel(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
+      LabelFactory.create(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
     centerPanel.add(welcomeLabel);
 
     centerPanel.add(Box.createVerticalStrut(20));
@@ -107,7 +108,7 @@ public class HelloPanel extends IzPanel
     {
       str = parent.langpack.getString("HelloPanel.authors");
       appAuthorsLabel =
-        new JLabel(
+        LabelFactory.create(
           str,
           parent.icons.getImageIcon("information"),
           JLabel.TRAILING);
@@ -120,7 +121,7 @@ public class HelloPanel extends IzPanel
         String email =
           (a.getEmail() != null) ? (" <" + a.getEmail() + ">") : "";
         label =
-          new JLabel(
+          LabelFactory.create(
             " - " + a.getName() + email,
             parent.icons.getImageIcon("empty"),
             JLabel.TRAILING);
@@ -135,7 +136,7 @@ public class HelloPanel extends IzPanel
       str =
         parent.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
       appURLLabel =
-        new JLabel(str, parent.icons.getImageIcon("bookmark"), JLabel.TRAILING);
+        LabelFactory.create(str, parent.icons.getImageIcon("bookmark"), JLabel.TRAILING);
       centerPanel.add(appURLLabel);
     }
   }
