@@ -1,5 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.6.1 (build 2004.xx.yy)
+
+- Slovak translation updates (Milan Madzia).
+
   > 3.6.0 (build 2004.07.28)
 
 - New Danish langpack (Frank Bille Jensen).
