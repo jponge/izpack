@@ -60,7 +60,7 @@
     <str id="InstallPanel.overwrite.question" txt="Het volgende bestand bestaat al. Moet het worden overschreven?"/>
     
     <str id="FinishPanel.success" txt="Installatie is geslaagd."/>
-    <str id="FinishPanel.done" txt="Gedaan"/>
+    <str id="FinishPanel.done" txt="Gereed"/>
     <str id="FinishPanel.fail" txt="Installatie is mislukt!"/>
     <str id="FinishPanel.uninst.info" txt="Een deïnstallatie programma is geïnstalleerd in:"/>
     <str id="FinishPanel.auto" txt="Maak een automatisch installatie-script."/>
