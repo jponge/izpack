@@ -38,7 +38,6 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.izforge.izpack.util.EnvironmentVariables;
 import com.izforge.izpack.util.IoHelper;
 
 /**
