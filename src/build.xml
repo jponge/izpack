@@ -113,6 +113,9 @@
     14.10.2004: (by Klaus Bartz)
     	New izevent.jar with the base classes of the custom action stuff
     	  to support creation of custom action jars without IzPack source tree
+   	25.10.2004: (by Klaus Bartz)
+   	    "Standard" CustomActions AntActionInstallerListener and
+   	      AntActionUninstallerListener added
 
   Mini-HowTo:
 
@@ -693,6 +696,17 @@
     </target>
     <!-- Compile all custom actions (listener) and put them at the right location -->
      <target name="build.listener" depends="build.compiler,build.installer,build.listener_base">
+        <antcall target="compile.installer-listener.simple">
+            <param name="listener" value="AntActionInstallerListener"/>
+            <param name="listener-dir" value="AntActionInstallerListener"/>
+            <param name="listener-include" value="com/izforge/izpack/event"/>
+        </antcall>
+        <antcall target="compile.uninstaller-listener.simple">
+            <param name="listener" value="AntActionUninstallerListener"/>
+            <param name="listener-dir" value="AntActionUninstallerListener"/>
+            <param name="listener-include" value="com/izforge/izpack/event"/>
+        </antcall>
+     
        <!-- CUSTOM ACTION test START
         <antcall target="compile.compiler-listener.simple">
             <param name="listener" value="ChmodCompilerListener"/>
