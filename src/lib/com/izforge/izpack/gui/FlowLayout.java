@@ -1,5 +1,6 @@
 /*
- * IzPack version 3.1.0 pre1 (build 2002.09.21)
+ * $Id$
+ * IzPack
  * Copyright (C) 2002 Elmar Grom
  *
  * File :               FlowLayout.java
