@@ -66,6 +66,7 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
@@ -498,14 +499,14 @@ public class UserInputPanel extends IzPanel
       {
         try
         {
-                if (uiElement [POS_DISPLAYED] == null || uiElement [POS_DISPLAYED].toString().equals("false"))
-                {
-                                add ((JComponent)uiElement [POS_FIELD], uiElement [POS_CONSTRAINTS]);
-                }
-                        uiElement [POS_DISPLAYED] = Boolean.valueOf(true);
-                        uiElements.remove(i);
-                        uiElements.add(i, uiElement);
-
+        	if (uiElement [POS_DISPLAYED] == null || uiElement [POS_DISPLAYED].toString().equals("false"))
+        	{
+        	  add ((JComponent)uiElement [POS_FIELD], uiElement [POS_CONSTRAINTS]);
+        	}
+          
+        	uiElement [POS_DISPLAYED] = Boolean.valueOf (true);
+        	uiElements.remove(i);
+        	uiElements.add(i, uiElement);          
         }
         catch (Throwable exception)
         {
@@ -514,20 +515,20 @@ public class UserInputPanel extends IzPanel
       }
       else
       {
-        try
-        {
-                        if (uiElement [POS_DISPLAYED] != null && uiElement [POS_DISPLAYED].toString().equals("true"))
-                        {
-                                remove((JComponent)uiElement [POS_FIELD]);
-                        }
-        }
-                catch (Throwable exception)
-                {
-                        System.out.println ("Internal format error in field: " + uiElement [POS_TYPE].toString ());  // !!! logging
-                }
-        uiElement [POS_DISPLAYED] = Boolean.valueOf(false);
-                uiElements.remove(i);
-                uiElements.add(i, uiElement);
+      	try
+      	{
+      	  if (uiElement [POS_DISPLAYED] != null && uiElement [POS_DISPLAYED].toString().equals("true"))
+      	  {
+      	    remove((JComponent)uiElement [POS_FIELD]);
+      	  }
+      	}
+      	catch (Throwable exception)
+      	{
+      	  System.out.println ("Internal format error in field: " + uiElement [POS_TYPE].toString ());  // !!! logging
+      	}
+        uiElement [POS_DISPLAYED] = Boolean.valueOf (false);
+        uiElements.remove(i);
+        uiElements.add(i, uiElement);
       }
     }
   }
@@ -1656,7 +1657,7 @@ public class UserInputPanel extends IzPanel
   private void addSearch (XMLElement spec)
   {
     Vector        forPacks    = spec.getChildrenNamed (PACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+    Vector        forOs       = spec.getChildrenNamed(OS);
     XMLElement    element     = spec.getFirstChildNamed (SPEC);
     String        variable    = spec.getAttribute (VARIABLE);
     String        filename    = null;
@@ -2497,46 +2498,45 @@ private static class SearchField implements ActionListener
   public boolean autodetect ()
   {
 
-        Vector items = new Vector();
+	//Checks whether a placeholder item is in the combobox
+	//and resolve the pathes automatically:
+	///usr/lib/* searches all folders in usr/lib to find /usr/lib/*/lib/tools.jar
+	for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
+	{
+		String path = (String)this.pathComboBox.getItemAt (i);
 
-        //Checks whether a placeholder item is in the combobox
-        //and resolve the pathes automatically:
-        ///usr/lib/* searches all folders in usr/lib to find /usr/lib/*/lib/tools.jar
-        for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
-        {
-                String path = (String)this.pathComboBox.getItemAt (i);
+		if (path.endsWith("*"))
+		{
+			path = path.substring(0,path.length()-1);
+			File dir = new File(path);
 
-                if (path.endsWith("*"))
-                {
-                        path = path.substring(0,path.length()-1);
-                        File dir = new File(path);
+			if (dir.isDirectory())
+			{
+				File[] subdirs = dir.listFiles();
+				for (int x=0;x<subdirs.length;x++)
+				{
+					String search = subdirs[x].getAbsolutePath();
+					if (this.pathMatches (search))
+					{
+						items.add(search);
+					}
+				}
+			}
+		}
+		else
+		{
+			items.add(path);
+		}
+	}
 
-                        if (dir.isDirectory())
-                        {
-                                File[] subdirs = dir.listFiles();
-                                for (int x=0;x<subdirs.length;x++)
-                                {
-                                        String search = subdirs[x].getAbsolutePath();
-                                        if (this.pathMatches (search))
-                                        {
-                                                items.add(search);
-                                        }
-                                }
-                        }
-                }
-                else
-                {
-                        items.add(path);
-                }
-        }
-
-        //Now clear the combobox and add the items out of the newly
-        //generated vector
-        this.pathComboBox.removeAllItems();
-        for (int i=0;i<items.size();i++)
-        {
-                this.pathComboBox.addItem(items.get(i));
-        }
+	//Now clear the combobox and add the items out of the newly
+	//generated vector
+	this.pathComboBox.removeAllItems();
+    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+	for (int i=0;i<items.size();i++)
+	{
+		this.pathComboBox.addItem(vs.substitute((String)items.get(i), "plain"));
+	}
 
     // loop through all items
     for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
