@@ -50,7 +50,7 @@
     <str id="TargetPanel.nodir" txt="Vous avez spécifié le nom d'un fichier existant ! Veuillez choisir un autre chemin d'installation."/>
     <str id="TargetPanel.notwritable" txt="Le répertoire que vous avez choisi n'autorise pas l'écriture. Veuillez en choisir un autre." />
     <str id="TargetPanel.empty_target"txt="Vous avez spécifié un nom de répertoire vide ! Etes-vous sûr(e) ?"/>
-	<str id="TargetPanel.createdir" txt="Le répertoire de destination sera créé :" />
+    <str id="TargetPanel.createdir" txt="Le répertoire de destination sera créé :" />
     
     <!-- JDKPathPanel strings -->
     <str id="JDKPathPanel.intro" txt="The installed application needs a JDK. A java runtime environment (JRE) will be not sufficient."/>
@@ -101,7 +101,7 @@
     <str id="ShortcutPanel.regular.userIntro" txt="Créer un raccourci pour :"/>
     <str id="ShortcutPanel.regular.currentUser" txt="utilisateur courant"/>
     <str id="ShortcutPanel.regular.allUsers" txt="tous les utilisateurs"/>
-	<str id="ShortcutPanel.alternate.apology" txt="Désolé, mais IzPack ne supporte pas la création de raccourcis pour ce système d'exploitation. Veuillez vous référer à son manuel pour créer des raccourcis."/>
+    <str id="ShortcutPanel.alternate.apology" txt="Désolé, mais IzPack ne supporte pas la création de raccourcis pour ce système d'exploitation. Veuillez vous référer à son manuel pour créer des raccourcis."/>
     <str id="ShortcutPanel.alternate.targetsLabel" txt="La liste suivante contient les cibles auxquelles le créateur de ce logiciel voulait vous donner accès."/>  
     <str id="ShortcutPanel.alternate.textFileExplanation" txt="Vous pouvez enregistrer les informations détaillées concernant les cibles dans un fichier texte pour vous y référer plus tard."/>
     <str id="ShortcutPanel.alternate.saveButton" txt="Enregistrer le fichier texte"/>
@@ -113,7 +113,7 @@
     <str id="ShortcutPanel.textFile.command"      txt="Ligne de commande     : "/>
     <str id="ShortcutPanel.textFile.iconName"     txt="Icone                 : "/>
     <str id="ShortcutPanel.textFile.iconIndex"    txt="Index de l'icone      : "/>
-    <str id="ShortcutPanel.textFile.work"         txt="Répertoire de tarvail :"/>
+    <str id="ShortcutPanel.textFile.work"         txt="Répertoire de travail :"/>
     <str id="ShortcutPanel.location.desktop"      txt="Bureau"/>
     <str id="ShortcutPanel.location.applications" txt="Menu applications"/>
     <str id="ShortcutPanel.location.startMenu"    txt="Menu démarrer"/>
@@ -155,8 +155,8 @@
     <!-- ProcessPanel strings -->
     <str id="ProcessPanel.heading" txt="En cours de traitement" />
     
-	<!-- SummaryPanel strings -->
-	<str id="SummaryPanel.info" txt="Prêt à installer. Les données importantes sont listées ci-dessous. Appuyez sur &quot;Suivant&quot; pour commencer l'installation, "/>
+    <!-- SummaryPanel strings -->
+    <str id="SummaryPanel.info" txt="Prêt à installer. Les données importantes sont listées ci-dessous. Appuyez sur &quot;Suivant&quot; pour commencer l'installation, "/>
     <str id="TargetPanel.summaryCaption" txt="Chemin de l'installation"/>
     <str id="JDKPathPanel.summaryCaption" txt="Chemin du JDK"/>
     <str id="PacksPanel.summaryCaption" txt="Paquet(s) d'installation choisis"/>

@@ -83,13 +83,13 @@
     <str id="FinishPanel.success" txt="L'installazione si è conclusa con successo."/>
     <str id="FinishPanel.done" txt="Fatto"/>
     <str id="FinishPanel.fail" txt="L'installazione è fallita !"/>
-    <str id="FinishPanel.uninst.info" txt="Un programma di disinstallazione é stato creato in:"/>
+    <str id="FinishPanel.uninst.info" txt="Un programma di disinstallazione è stato creato in:"/>
     <str id="FinishPanel.auto" txt="Genera uno script d'installazione automatica"/>
     <str id="FinishPanel.auto.tip" txt="Usa questo script per ripetere l'installazione in altri computers."/>
     
     <!-- ImgPacksPanel strings -->
     <str id="ImgPacksPanel.dependencyList" txt="Dipendenza(e)"/>
-  	<str id="ImgPacksPanel.packs" txt="Sono disponibili questi pacchetti :"/>
+    <str id="ImgPacksPanel.packs" txt="Sono disponibili questi pacchetti :"/>
     <str id="ImgPacksPanel.snap" txt="Contenuto sommario  :"/>
     <str id="ImgPacksPanel.checkbox" txt=" Installa questo pacchetto"/>
      
@@ -101,7 +101,7 @@
     <str id="ShortcutPanel.regular.userIntro" txt="crea shortcut per:"/>
     <str id="ShortcutPanel.regular.currentUser" txt="questo utilizzatore"/>
     <str id="ShortcutPanel.regular.allUsers" txt="tutti gli utilizzatori"/>
-	<str id="ShortcutPanel.alternate.apology" txt="Scusa ma IzPack non supporta la creazione di shortcut nel tuo Sistema Operativo. Potrai farlo manualmente usando il manuale del Sistema Operativo."/>
+    <str id="ShortcutPanel.alternate.apology" txt="Scusa ma IzPack non supporta la creazione di shortcut nel tuo Sistema Operativo. Potrai farlo manualmente usando il manuale del Sistema Operativo."/>
     <str id="ShortcutPanel.alternate.targetsLabel" txt="Questa è una lista di 'targets' che lo sviluppatore del software voleva metterti a disposizione."/>
     <str id="ShortcutPanel.alternate.textFileExplanation" txt="Puoi registrare la lista per futuro riferimento in un file di testo."/>
     <str id="ShortcutPanel.alternate.saveButton" txt="Registra file di testo"/>
@@ -126,8 +126,8 @@
     <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Autorilevazione fallita."/>
     <str id="UserInputPanel.search.autodetect.tooltip"           txt="controlla il file o la directory nel percorso specificato sopra."/>
     <str id="UserInputPanel.search.location"           txt="Inserire la posizione di {0}."/>
-	<str id="UserInputPanel.search.browse" txt="Browse ..."/>
-    <str id="UserInputPanel.search.wrongselection.message"   txt="Il file o la directory che avete scelto non esiste o non é appropriata."/>
+    <str id="UserInputPanel.search.browse" txt="Browse ..."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="Il file o la directory che avete scelto non esiste o non è appropriata."/>
     <str id="UserInputPanel.search.wrongselection.caption" txt="Selezione invalida."/>
     <str id="UserInputPanel.search.location.checkedfile" txt="L'esistenza di {0} è verificata."/>
     
@@ -153,10 +153,10 @@
     <str id="CompilePanel.additional_arguments" txt="Parametri aggiuntivi per il compilatore:" />
     
     <!-- ProcessPanel strings -->
-    <str id="ProcessPanel.heading" txt="In progresso..." />*
-	
-	<!-- SummaryPanel strings -->
-	<str id="SummaryPanel.info" txt="Pronto per iniziare l'installazione. I data importanti sono elencati qui sotto. Premi &quot;Prossimo&quot; per iniziare l'installazione to start installation, "/>
+    <str id="ProcessPanel.heading" txt="In progresso..." />
+
+    <!-- SummaryPanel strings -->
+    <str id="SummaryPanel.info" txt="Pronto per iniziare l'installazione. I data importanti sono elencati qui sotto. Premi &quot;Prossimo&quot; per iniziare l'installazione to start installation, "/>
     <str id="TargetPanel.summaryCaption" txt="Destinazione dell'installazione"/>
     <str id="JDKPathPanel.summaryCaption" txt="Destinazione dello JDK"/>
     <str id="PacksPanel.summaryCaption" txt="Pacchetti scelti dell'installazione"/>
