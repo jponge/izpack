@@ -52,6 +52,8 @@ IzPack for your projects ;-)
   feature patch.
 - Milan Madzia : for the Slovakian langpack.
 - Fran Taylor : for the packs OS-targeting patch.
-- ? : for the OS selection accuracy patch.
+- Sanjay Linganna : for the OS selection accuracy patch.
+- Igor Anikeev : for the russian langpack updates.
+- Jonathan Halliday : for the directory creation patch.
 
 # vim: fileformat=dos 

@@ -1,102 +1,102 @@
-<?xml version="1.0" encoding="windows-1251" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <!-- The English langpack -->
 
 <langpack>
 
     <!-- General installer strings -->
-    <str id="installer.title" txt="IzPack - сЯРЮМНБЙЮ "/>
-    <str id="installer.next" txt="дЮКЕЕ"/>
-    <str id="installer.prev" txt="мЮГЮД"/>
-    <str id="installer.quit" txt="бШУНД"/>
-    <str id="installer.madewith" txt="(оПНЦПЮЛЛЮ СЯРЮМНБЙХ ЯДЕКЮМЮ ОПХ ОНЛНЫХ IzPack - http://www.izforge.com/)"/>
-    <str id="installer.quit.title" txt="гЮЙНМВХРЭ ПЮАНРС?"/>
-    <str id="installer.quit.message" txt="сЯРЮМНБЙЮ АСДЕР НРЛЕМЕМЮ!"/>
-    <str id="installer.warning" txt="оПЕДСОПЕФДЕМХЕ!"/>
-    <str id="installer.yes" txt="дЮ"/>
-    <str id="installer.no" txt="мЕР"/>
-    <str id="installer.cancel" txt="нРЙЮГ"/> 
-    <str id="installer.error" txt="нЬХАЙЮ"/>
-    
+    <str id="installer.title" txt="IzPack - РЈСЃС‚Р°РЅРѕРІРєР° "/>
+    <str id="installer.next" txt="Р”Р°Р»РµРµ"/>
+    <str id="installer.prev" txt="РќР°Р·Р°Рґ"/>
+    <str id="installer.quit" txt="Р’С‹С…РѕРґ"/>
+    <str id="installer.madewith" txt="(РџСЂРѕРіСЂР°РјРјР° СѓСЃС‚Р°РЅРѕРІРєРё СЃРґРµР»Р°РЅР° РїСЂРё РїРѕРјРѕС‰Рё IzPack - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="Р—Р°РєРѕРЅС‡РёС‚СЊ СЂР°Р±РѕС‚Сѓ?"/>
+    <str id="installer.quit.message" txt="РЈСЃС‚Р°РЅРѕРІРєР° Р±СѓРґРµС‚ РѕС‚РјРµРЅРµРЅР°!"/>
+    <str id="installer.warning" txt="РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ!"/>
+    <str id="installer.yes" txt="Р”Р°"/>
+    <str id="installer.no" txt="РќРµС‚"/>
+    <str id="installer.cancel" txt="РћС‚РєР°Р·"/>
+    <str id="installer.error" txt="РћС€РёР±РєР°"/>
+
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="сЯРЮМНБКЕММШЕ ОПНЦПЮЛЛШ АСДСР СДЮКЕМШ!"/>
-    <str id="uninstaller.destroytarget" txt=" сДЮКХРЭ "/>
-    <str id="uninstaller.uninstall" txt="сДЮКХРЭ СЯРЮМНБКЕММШЕ ОПНЦПЮЛЛШ"/>
-    
+    <str id="uninstaller.warning" txt="РЈСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Рµ РїСЂРѕРіСЂР°РјРјС‹ Р±СѓРґСѓС‚ СѓРґР°Р»РµРЅС‹!"/>
+    <str id="uninstaller.destroytarget" txt=" РЈРґР°Р»РёС‚СЊ "/>
+    <str id="uninstaller.uninstall" txt="РЈРґР°Р»РёС‚СЊ СѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹Рµ РїСЂРѕРіСЂР°РјРјС‹"/>
+
     <!-- The strings for the 'official' IzPack plugins -->
-    <str id="HelloPanel.welcome1" txt="дНАПН ОНФЮКНБЮРЭ Б ОПНЦПЮЛЛС СЯРЮМНБЙХ "/>
+    <str id="HelloPanel.welcome1" txt="Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ РїСЂРѕРіСЂР°РјРјСѓ СѓСЃС‚Р°РЅРѕРІРєРё "/>
     <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="юБРНПШ ОПНЦПЮЛЛШ: "/>
-    <str id="HelloPanel.url" txt="дНЛЮЬМЪЪ ЯРПЮМХЖЮ ОПНЦПЮЛЛШ: "/>
-    
-    <str id="LicencePanel.info" txt="оНФЮКСИЯРЮ БМХЛЮРЕКЭМН ОПНВХРЮИРЕ КХЖЕМГХЧ:"/>
-    <str id="LicencePanel.agree" txt="ъ ЯНЦКЮЯЕМ Я СЯКНБХЪЛХ КХЖЕМГХХ."/>
-    <str id="LicencePanel.notagree" txt="ъ МЕ ЯНЦКЮЯЕМ Я СЯКНБХЪЛХ КХЖЕМГХХ."/>
-    <str id="LicencePanel.yes" txt="дЮ"/>
-    <str id="LicencePanel.no" txt="мЕР"/>
-    
-    <str id="InfoPanel.info" txt="оНФЮКСИЯРЮ ОПНВХРЮИРЕ ЯКЕДСЧЫСЧ ХМТНПЛЮЖХЧ:"/>
-    
-    <str id="TargetPanel.info" txt="бШАЕПХРЕ ЙЮРЮКНЦ СЯРЮМНБЙХ:"/>
-    <str id="TargetPanel.browse" txt="сЙЮГЮРЭ ..."/>
-    <str id="TargetPanel.warn" 
-         txt="йЮРЮКНЦ СФЕ ЯСЫЕЯРБСЕР! бШ ФЕКЮЕРЕ СЯРЮМНБХРЭ ОПНЦПЮЛЛС Б МЕЦН?"/>
+    <str id="HelloPanel.authors" txt="РђРІС‚РѕСЂС‹ РїСЂРѕРіСЂР°РјРјС‹: "/>
+    <str id="HelloPanel.url" txt="Р”РѕРјР°С€РЅСЏСЏ СЃС‚СЂР°РЅРёС†Р° РїСЂРѕРіСЂР°РјРјС‹: "/>
+
+    <str id="LicencePanel.info" txt="РџРѕР¶Р°Р»СѓР№СЃС‚Р° РІРЅРёРјР°С‚РµР»СЊРЅРѕ РїСЂРѕС‡РёС‚Р°Р№С‚Рµ Р»РёС†РµРЅР·РёСЋ:"/>
+    <str id="LicencePanel.agree" txt="РЇ СЃРѕРіР»Р°СЃРµРЅ СЃ СѓСЃР»РѕРІРёСЏРјРё Р»РёС†РµРЅР·РёРё."/>
+    <str id="LicencePanel.notagree" txt="РЇ РЅРµ СЃРѕРіР»Р°СЃРµРЅ СЃ СѓСЃР»РѕРІРёСЏРјРё Р»РёС†РµРЅР·РёРё."/>
+    <str id="LicencePanel.yes" txt="Р”Р°"/>
+    <str id="LicencePanel.no" txt="РќРµС‚"/>
+
+    <str id="InfoPanel.info" txt="РџРѕР¶Р°Р»СѓР№СЃС‚Р° РїСЂРѕС‡РёС‚Р°Р№С‚Рµ СЃР»РµРґСѓСЋС‰СѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ:"/>
+
+    <str id="TargetPanel.info" txt="Р’С‹Р±РµСЂРёС‚Рµ РєР°С‚Р°Р»РѕРі СѓСЃС‚Р°РЅРѕРІРєРё:"/>
+    <str id="TargetPanel.browse" txt="РЈРєР°Р·Р°С‚СЊ ..."/>
+    <str id="TargetPanel.warn"
+         txt="РљР°С‚Р°Р»РѕРі СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚! Р’С‹ Р¶РµР»Р°РµС‚Рµ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ РїСЂРѕРіСЂР°РјРјСѓ РІ РЅРµРіРѕ?"/>
     <str id="TargetPanel.empty_target"
-         txt="бШ МЕ СЙЮГЮКХ ЙЮРЮКНЦ ДКЪ СЯРЮМНБЙХ.  оПНДНКФЮРЭ?"/>
-    <str id="TargetPanel.createdir" txt="аСДЕР ЯНГДЮМ ЙЮРЮКНЦ ДКЪ СЯРЮМНБЙХ:" />
+         txt="Р’С‹ РЅРµ СѓРєР°Р·Р°Р»Рё РєР°С‚Р°Р»РѕРі РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё.  РџСЂРѕРґРѕР»Р¶Р°С‚СЊ?"/>
+    <str id="TargetPanel.createdir" txt="Р‘СѓРґРµС‚ СЃРѕР·РґР°РЅ РєР°С‚Р°Р»РѕРі РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё:" />
 
-    <str id="PacksPanel.info" txt="бШАЕПХРЕ МЮАНПШ ДКЪ СЯРЮМНБЙХ:"/>
-    <str id="PacksPanel.tip" txt="оПХЛЕВЮМХЕ: МЕЮЙРХБМШЕ МЮАНПШ НАЪГЮРЕКЭМШ Й СЯРЮМНБЙЕ."/>
-    <str id="PacksPanel.space" txt="рПЕАСЕРЯЪ ЛЕЯРЮ: "/>
-    <str id="PacksPanel.description" txt="нОХЯЮМХЕ"/>
+    <str id="PacksPanel.info" txt="Р’С‹Р±РµСЂРёС‚Рµ РЅР°Р±РѕСЂС‹ РґР»СЏ СѓСЃС‚Р°РЅРѕРІРєРё:"/>
+    <str id="PacksPanel.tip" txt="РџСЂРёРјРµС‡Р°РЅРёРµ: РЅРµР°РєС‚РёРІРЅС‹Рµ РЅР°Р±РѕСЂС‹ РѕР±СЏР·Р°С‚РµР»СЊРЅС‹ Рє СѓСЃС‚Р°РЅРѕРІРєРµ."/>
+    <str id="PacksPanel.space" txt="РўСЂРµР±СѓРµС‚СЃСЏ РјРµСЃС‚Р°: "/>
+    <str id="PacksPanel.description" txt="РћРїРёСЃР°РЅРёРµ"/>
     
-    <str id="InstallPanel.info" txt="оНДЦНРНБЙЮ Й СЯРЮМНБЙЕ ОПНЦПЮЛЛШ ГЮБЕПЬЕМЮ:"/>
-    <str id="InstallPanel.install" txt="сЯРЮМНБХРЭ!"/>
-    <str id="InstallPanel.tip" txt="уНД СЯРЮМНБЙХ:"/>
-    <str id="InstallPanel.begin" txt="[оСЯРН]"/>
-    <str id="InstallPanel.finished" txt="[гЮЙНМВЕМ]"/>
+    <str id="InstallPanel.info" txt="РџРѕРґРіРѕС‚РѕРІРєР° Рє СѓСЃС‚Р°РЅРѕРІРєРµ РїСЂРѕРіСЂР°РјРјС‹ Р·Р°РІРµСЂС€РµРЅР°:"/>
+    <str id="InstallPanel.install" txt="РЈСЃС‚Р°РЅРѕРІРёС‚СЊ!"/>
+    <str id="InstallPanel.tip" txt="РҐРѕРґ СѓСЃС‚Р°РЅРѕРІРєРё:"/>
+    <str id="InstallPanel.begin" txt="[РџСѓСЃС‚Рѕ]"/>
+    <str id="InstallPanel.finished" txt="[Р—Р°РєРѕРЅС‡РµРЅ]"/>
     
-    <str id="FinishPanel.success" txt="сЯРЮМНБЙЮ СЯОЕЬМН ГЮБЕПЬЕМЮ!"/>
-    <str id="FinishPanel.fail" txt="сЯРЮМНБЙЮ ОПЕПБЮМЮ ЮБЮПХИМН ..."/>
-    <str id="FinishPanel.uninst.info" txt="оПНЦПЮЛЛЮ СДЮКЕМХЪ СЯРЮМНБЙХ ОНЛЕЫЕМЮ:"/>
-    <str id="FinishPanel.auto" txt="яНГДЮРЭ ЯЖЕМЮПХИ ЮБРНЛЮРХВЕЯЙНИ СЯРЮМНБЙХ"/>
-    <str id="FinishPanel.auto.tip" 
-         txt="аСДЕР ЯНГДЮМ ТЮИК, ОНГБНКЪЧЫХИ ЮБРНЛЮРХВЕЯЙХ ОПНБЕЯРХ РЮЙСЧ ФЕ ХМЯРЮККЪЖХЧ ОПНЦПЮЛЛШ МЮ ДПСЦНЛ ЙНЛОЭЧРЕПЕ."/>
-    
-    <str id="ImgPacksPanel.packs" txt="Доступны следующие наборы:"/>
-    <str id="ImgPacksPanel.snap" txt="Снимок экрана:"/>
-    <str id="ImgPacksPanel.checkbox" txt=" Установить набор"/>
-    
-    <str id="ShortcutPanel.regular.list" txt="Выберите программную группу для ярлыков:"/>
-    <str id="ShortcutPanel.regular.default" txt="Сбросить"/>
-    <str id="ShortcutPanel.regular.desktop" txt="Создать ярлыки на рабочем столе"/>
-    <str id="ShortcutPanel.regular.create" txt="Создать ярлыки"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="создать ярлык для:"/>
-    <str id="ShortcutPanel.regular.currentUser" txt="текущий пользователь"/>
-    <str id="ShortcutPanel.regular.allUsers" txt="все пользователи"/>
+    <str id="FinishPanel.success" txt="РЈСЃС‚Р°РЅРѕРІРєР° СѓСЃРїРµС€РЅРѕ Р·Р°РІРµСЂС€РµРЅР°!"/>
+    <str id="FinishPanel.fail" txt="РЈСЃС‚Р°РЅРѕРІРєР° РїСЂРµСЂРІР°РЅР° Р°РІР°СЂРёР№РЅРѕ ..."/>
+    <str id="FinishPanel.uninst.info" txt="РџСЂРѕРіСЂР°РјРјР° СѓРґР°Р»РµРЅРёСЏ СѓСЃС‚Р°РЅРѕРІРєРё РїРѕРјРµС‰РµРЅР°:"/>
+    <str id="FinishPanel.auto" txt="РЎРѕР·РґР°С‚СЊ СЃС†РµРЅР°СЂРёР№ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕР№ СѓСЃС‚Р°РЅРѕРІРєРё"/>
+    <str id="FinishPanel.auto.tip"
+         txt="Р‘СѓРґРµС‚ СЃРѕР·РґР°РЅ С„Р°Р№Р», РїРѕР·РІРѕР»СЏСЋС‰РёР№ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РїСЂРѕРІРµСЃС‚Рё С‚Р°РєСѓСЋ Р¶Рµ РёРЅСЃС‚Р°Р»Р»СЏС†РёСЋ РїСЂРѕРіСЂР°РјРјС‹ РЅР° РґСЂСѓРіРѕРј РєРѕРјРїСЊСЋС‚РµСЂРµ."/>
 
-    <str id="ShortcutPanel.alternate.apology" txt="К сожалению, IzPack не поддерживает создание ярлыков в этой операционной системе.  Чтобы создать ярлыки, обратитесь к руководству по Вашей операционной системе."/>
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="Список объектов, к которым Вам потребуется обращаться для использования приложения:"/>
-    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Вы можете сохранить подробную информацию об объектах, на которые указывают ярлыки, в текстовом файле для справки."/>
-    <str id="ShortcutPanel.alternate.saveButton" txt="Сохранить текстовый файл"/>
-    
-    <str id="ShortcutPanel.textFile.header" txt="Информация о ярлыке\n====================\n\nНиже приведены все необходимые сведения о создаваемых ярлыках.\nИх достаточно, чтобы Вы могли создать нужные ярлыки самостоятельно.\n"/>
-    
-    <str id="ShortcutPanel.textFile.name"         txt="Ярлык                        : "/>
-    <str id="ShortcutPanel.textFile.location"     txt="Расположение ярлыка          : "/>
-    <str id="ShortcutPanel.textFile.description"  txt="Описание                     : "/>
-    <str id="ShortcutPanel.textFile.target"       txt="Объект, на который указывает ярлык : "/>
-    <str id="ShortcutPanel.textFile.command"      txt="Командная строка             : "/>
-    <str id="ShortcutPanel.textFile.iconName"     txt="Пиктограмма                  : "/>
-    <str id="ShortcutPanel.textFile.iconIndex"    txt="Номер пиктограммы в файле    : "/>
-    <str id="ShortcutPanel.textFile.work"         txt="Рабочий каталог              : "/>
+    <str id="ImgPacksPanel.packs" txt="Р”РѕСЃС‚СѓРїРЅС‹ СЃР»РµРґСѓСЋС‰РёРµ РЅР°Р±РѕСЂС‹:"/>
+    <str id="ImgPacksPanel.snap" txt="РЎРЅРёРјРѕРє СЌРєСЂР°РЅР°:"/>
+    <str id="ImgPacksPanel.checkbox" txt=" РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РЅР°Р±РѕСЂ"/>
 
-    <str id="ShortcutPanel.location.desktop"      txt="Рабочий стол"/>
-    <str id="ShortcutPanel.location.applications" txt="Меню приложений"/>
-    <str id="ShortcutPanel.location.startMenu"    txt='Меню кнопки "Пуск"'/>
-    <str id="ShortcutPanel.location.startup"      txt="Группа автозапуска"/>
+    <str id="ShortcutPanel.regular.list" txt="Р’С‹Р±РµСЂРёС‚Рµ РїСЂРѕРіСЂР°РјРјРЅСѓСЋ РіСЂСѓРїРїСѓ РґР»СЏ СЏСЂР»С‹РєРѕРІ:"/>
+    <str id="ShortcutPanel.regular.default" txt="РЎР±СЂРѕСЃРёС‚СЊ"/>
+    <str id="ShortcutPanel.regular.desktop" txt="РЎРѕР·РґР°С‚СЊ СЏСЂР»С‹РєРё РЅР° СЂР°Р±РѕС‡РµРј СЃС‚РѕР»Рµ"/>
+    <str id="ShortcutPanel.regular.create" txt="РЎРѕР·РґР°С‚СЊ СЏСЂР»С‹РєРё"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="СЃРѕР·РґР°С‚СЊ СЏСЂР»С‹Рє РґР»СЏ:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="С‚РµРєСѓС‰РёР№ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="РІСЃРµ РїРѕР»СЊР·РѕРІР°С‚РµР»Рё"/>
 
-    <str id="UserInputPanel.error.caption"        txt="нЬХАЙЮ ББНДЮ"/>
+    <str id="ShortcutPanel.alternate.apology" txt="Рљ СЃРѕР¶Р°Р»РµРЅРёСЋ, IzPack РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚ СЃРѕР·РґР°РЅРёРµ СЏСЂР»С‹РєРѕРІ РІ СЌС‚РѕР№ РѕРїРµСЂР°С†РёРѕРЅРЅРѕР№ СЃРёСЃС‚РµРјРµ.  Р§С‚РѕР±С‹ СЃРѕР·РґР°С‚СЊ СЏСЂР»С‹РєРё, РѕР±СЂР°С‚РёС‚РµСЃСЊ Рє СЂСѓРєРѕРІРѕРґСЃС‚РІСѓ РїРѕ Р’Р°С€РµР№ РѕРїРµСЂР°С†РёРѕРЅРЅРѕР№ СЃРёСЃС‚РµРјРµ."/>
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="РЎРїРёСЃРѕРє РѕР±СЉРµРєС‚РѕРІ, Рє РєРѕС‚РѕСЂС‹Рј Р’Р°Рј РїРѕС‚СЂРµР±СѓРµС‚СЃСЏ РѕР±СЂР°С‰Р°С‚СЊСЃСЏ РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ:"/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Р’С‹ РјРѕР¶РµС‚Рµ СЃРѕС…СЂР°РЅРёС‚СЊ РїРѕРґСЂРѕР±РЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± РѕР±СЉРµРєС‚Р°С…, РЅР° РєРѕС‚РѕСЂС‹Рµ СѓРєР°Р·С‹РІР°СЋС‚ СЏСЂР»С‹РєРё, РІ С‚РµРєСЃС‚РѕРІРѕРј С„Р°Р№Р»Рµ РґР»СЏ СЃРїСЂР°РІРєРё."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="РЎРѕС…СЂР°РЅРёС‚СЊ С‚РµРєСЃС‚РѕРІС‹Р№ С„Р°Р№Р»"/>
+
+    <str id="ShortcutPanel.textFile.header" txt="РРЅС„РѕСЂРјР°С†РёСЏ Рѕ СЏСЂР»С‹РєРµ\n====================\n\nРќРёР¶Рµ РїСЂРёРІРµРґРµРЅС‹ РІСЃРµ РЅРµРѕР±С…РѕРґРёРјС‹Рµ СЃРІРµРґРµРЅРёСЏ Рѕ СЃРѕР·РґР°РІР°РµРјС‹С… СЏСЂР»С‹РєР°С….\nРС… РґРѕСЃС‚Р°С‚РѕС‡РЅРѕ, С‡С‚РѕР±С‹ Р’С‹ РјРѕРіР»Рё СЃРѕР·РґР°С‚СЊ РЅСѓР¶РЅС‹Рµ СЏСЂР»С‹РєРё СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ.\n"/>
+    
+    <str id="ShortcutPanel.textFile.name"         txt="РЇСЂР»С‹Рє                        : "/>
+    <str id="ShortcutPanel.textFile.location"     txt="Р Р°СЃРїРѕР»РѕР¶РµРЅРёРµ СЏСЂР»С‹РєР°          : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="РћРїРёСЃР°РЅРёРµ                     : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="РћР±СЉРµРєС‚, РЅР° РєРѕС‚РѕСЂС‹Р№ СѓРєР°Р·С‹РІР°РµС‚ СЏСЂР»С‹Рє : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="РљРѕРјР°РЅРґРЅР°СЏ СЃС‚СЂРѕРєР°             : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="РџРёРєС‚РѕРіСЂР°РјРјР°                  : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="РќРѕРјРµСЂ РїРёРєС‚РѕРіСЂР°РјРјС‹ РІ С„Р°Р№Р»Рµ    : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="Р Р°Р±РѕС‡РёР№ РєР°С‚Р°Р»РѕРі              : "/>
+
+    <str id="ShortcutPanel.location.desktop"      txt="Р Р°Р±РѕС‡РёР№ СЃС‚РѕР»"/>
+    <str id="ShortcutPanel.location.applications" txt="РњРµРЅСЋ РїСЂРёР»РѕР¶РµРЅРёР№"/>
+    <str id="ShortcutPanel.location.startMenu"    txt='РњРµРЅСЋ РєРЅРѕРїРєРё "РџСѓСЃРє"'/>
+    <str id="ShortcutPanel.location.startup"      txt="Р“СЂСѓРїРїР° Р°РІС‚РѕР·Р°РїСѓСЃРєР°"/>
+
+    <str id="UserInputPanel.error.caption"        txt="РћС€РёР±РєР° РІРІРѕРґР°"/>
 
     <!-- Add your own panels specific strings here if you need -->
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1251" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <!-- The English langpack -->
 
@@ -6,106 +6,106 @@
 
     <!-- General frontend strings -->
     <str id="frontend.title" txt="IzPack - GUI Frontend"/>
-    <str id="frontend.untitled" txt="Нет имени"/>
-    <str id="frontend.error" txt="Ошибка"/>
-    <str id="frontend.save_first" txt="Сначала сохраните Ваш установочный файл."/>
-    <str id="frontend.comp_dlg.title" txt="Сборка"/>
-    <str id="frontend.comp_dlg.msg" txt="Сообщения компилятора :"/>
+    <str id="frontend.untitled" txt="РќРµС‚ РёРјРµРЅРё"/>
+    <str id="frontend.error" txt="РћС€РёР±РєР°"/>
+    <str id="frontend.save_first" txt="РЎРЅР°С‡Р°Р»Р° СЃРѕС…СЂР°РЅРёС‚Рµ Р’Р°С€ СѓСЃС‚Р°РЅРѕРІРѕС‡РЅС‹Р№ С„Р°Р№Р»."/>
+    <str id="frontend.comp_dlg.title" txt="РЎР±РѕСЂРєР°"/>
+    <str id="frontend.comp_dlg.msg" txt="РЎРѕРѕР±С‰РµРЅРёСЏ РєРѕРјРїРёР»СЏС‚РѕСЂР° :"/>
     <str id="frontend.comp_dlg.ok" txt="Ok"/>
-    <str id="frontend.basepath" txt="Выберите базовый каталог"/>
-    <str id="frontend.licence.msg" txt="The GNU General Public Licence version 2 :"/>
+    <str id="frontend.basepath" txt="Р’С‹Р±РµСЂРёС‚Рµ Р±Р°Р·РѕРІС‹Р№ РєР°С‚Р°Р»РѕРі"/>
+    <str id="frontend.licence.msg" txt="The GNU General Public License version 2 :"/>
     <str id="frontend.licence.ok" txt="Ok"/>
     <str id="frontend.about.copyright" txt="Copyright (c) 2001,2002 Julien PONGE"/>
     <str id="frontend.about.url" txt="http://www.izforge.com/"/>
-    <str id="frontend.lpswitch" txt="Ящык установки"/>
-    <str id="frontend.nexttime" txt="Сделанные изменения начнут действовать со следующего запуска."/>
+    <str id="frontend.lpswitch" txt="РЇС‰РёРє СѓСЃС‚Р°РЅРѕРІРєРё"/>
+    <str id="frontend.nexttime" txt="РЎРґРµР»Р°РЅРЅС‹Рµ РёР·РјРµРЅРµРЅРёСЏ РЅР°С‡РЅСѓС‚ РґРµР№СЃС‚РІРѕРІР°С‚СЊ СЃРѕ СЃР»РµРґСѓСЋС‰РµРіРѕ Р·Р°РїСѓСЃРєР°."/>
     
     <!-- Menu specific strings -->
 
-    <str id="menu.langpack" txt="Язык"/>
-    <str id="menu.langpack.mn" txt="з"/>
+    <str id="menu.langpack" txt="РЇР·С‹Рє"/>
+    <str id="menu.langpack.mn" txt="Р·"/>
     
-    <str id="menu.bookmarks" txt="Последние файлы"/>
-    <str id="menu.bookmarks.mn" txt="П"/>
+    <str id="menu.bookmarks" txt="РџРѕСЃР»РµРґРЅРёРµ С„Р°Р№Р»С‹"/>
+    <str id="menu.bookmarks.mn" txt="Рџ"/>
     
-    <str id="menu.files" txt="Файл"/>
-    <str id="menu.files.mn" txt="Ф"/>
-    <str id="menu.new" txt="Новый"/>
-    <str id="menu.new.mn" txt="Н"/>
-    <str id="menu.open" txt="Открыть"/>
-    <str id="menu.open.mn" txt="О"/>
-    <str id="menu.save" txt="Сохранить"/>
-    <str id="menu.save.mn" txt="С"/>
-    <str id="menu.save_as" txt="Сохранить как"/>
-    <str id="menu.save_as.mn" txt="к"/>
-    <str id="menu.exit" txt="Выход"/>
-    <str id="menu.exit.mn" txt="В"/>
-    <str id="menu.import" txt="Вставить файл с относительными путями"/>
+    <str id="menu.files" txt="Р¤Р°Р№Р»"/>
+    <str id="menu.files.mn" txt="Р¤"/>
+    <str id="menu.new" txt="РќРѕРІС‹Р№"/>
+    <str id="menu.new.mn" txt="Рќ"/>
+    <str id="menu.open" txt="РћС‚РєСЂС‹С‚СЊ"/>
+    <str id="menu.open.mn" txt="Рћ"/>
+    <str id="menu.save" txt="РЎРѕС…СЂР°РЅРёС‚СЊ"/>
+    <str id="menu.save.mn" txt="РЎ"/>
+    <str id="menu.save_as" txt="РЎРѕС…СЂР°РЅРёС‚СЊ РєР°Рє"/>
+    <str id="menu.save_as.mn" txt="Рє"/>
+    <str id="menu.exit" txt="Р’С‹С…РѕРґ"/>
+    <str id="menu.exit.mn" txt="Р’"/>
+    <str id="menu.import" txt="Р’СЃС‚Р°РІРёС‚СЊ С„Р°Р№Р» СЃ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅС‹РјРё РїСѓС‚СЏРјРё"/>
     <str id="menu.import.mn" txt="I"/>
     
-    <str id="menu.compile" txt="Сборка"/>
-    <str id="menu.compile.mn" txt="С"/>
-    <str id="menu.comp.standard" txt="Стандартный инсталлятор"/>
-    <str id="menu.comp.standard.mn" txt="т"/>
-    <str id="menu.comp.standardk" txt="Стандартный Kunststoff инсталлятор"/>
+    <str id="menu.compile" txt="РЎР±РѕСЂРєР°"/>
+    <str id="menu.compile.mn" txt="РЎ"/>
+    <str id="menu.comp.standard" txt="РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РёРЅСЃС‚Р°Р»Р»СЏС‚РѕСЂ"/>
+    <str id="menu.comp.standard.mn" txt="С‚"/>
+    <str id="menu.comp.standardk" txt="РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ Kunststoff РёРЅСЃС‚Р°Р»Р»СЏС‚РѕСЂ"/>
     <str id="menu.comp.standardk.mn" txt="K"/>
-    <str id="menu.comp.web" txt="Web инсталлятор"/>
+    <str id="menu.comp.web" txt="Web РёРЅСЃС‚Р°Р»Р»СЏС‚РѕСЂ"/>
     <str id="menu.comp.web.mn" txt="W"/>
-    <str id="menu.comp.webk" txt="Web Kunststoff инсталлятор"/>
+    <str id="menu.comp.webk" txt="Web Kunststoff РёРЅСЃС‚Р°Р»Р»СЏС‚РѕСЂ"/>
     <str id="menu.comp.webk.mn" txt="e"/>
     
     <str id="menu.izpack" txt="IzPack"/>
     <str id="menu.izpack.mn" txt="I"/>
-    <str id="menu.about" txt="О IzPack ..."/>
-    <str id="menu.about.mn" txt="О"/>
-    <str id="menu.licence" txt="IzPack лицензия ..."/>
-    <str id="menu.licence.mn" txt="л"/>
+    <str id="menu.about" txt="Рћ IzPack ..."/>
+    <str id="menu.about.mn" txt="Рћ"/>
+    <str id="menu.licence" txt="IzPack Р»РёС†РµРЅР·РёСЏ ..."/>
+    <str id="menu.licence.mn" txt="Р»"/>
     
     <!-- Tabs specific strings -->
     
-    <str id="tabs.info.title" txt="Общая информация"/>
-    <str id="tabs.info.appname" txt="Имя приложения :"/>
-    <str id="tabs.info.appversion" txt="Версия приложенеия :"/>
-    <str id="tabs.info.appurl" txt="URL домашней страница приложания :"/>
-    <str id="tabs.info.authorslist" txt="Список авторов :"/>
-    <str id="tabs.info.author" txt="ФИО :"/>
+    <str id="tabs.info.title" txt="РћР±С‰Р°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ"/>
+    <str id="tabs.info.appname" txt="РРјСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ :"/>
+    <str id="tabs.info.appversion" txt="Р’РµСЂСЃРёСЏ РїСЂРёР»РѕР¶РµРЅРµРёСЏ :"/>
+    <str id="tabs.info.appurl" txt="URL РґРѕРјР°С€РЅРµР№ СЃС‚СЂР°РЅРёС†Р° РїСЂРёР»РѕР¶Р°РЅРёСЏ :"/>
+    <str id="tabs.info.authorslist" txt="РЎРїРёСЃРѕРє Р°РІС‚РѕСЂРѕРІ :"/>
+    <str id="tabs.info.author" txt="Р¤РРћ :"/>
     <str id="tabs.info.email" txt="email :"/>
-    <str id="tabs.info.add" txt="Добавить автора"/>
-    <str id="tabs.info.del" txt="Убрать автора"/>
-    <str id="tabs.info.width" txt=" Ширина окна :"/>
-    <str id="tabs.info.height" txt=" Высота окна :"/>
-    <str id="tabs.info.resizable" txt=" Позволить менять ращзмеры окна"/>
+    <str id="tabs.info.add" txt="Р”РѕР±Р°РІРёС‚СЊ Р°РІС‚РѕСЂР°"/>
+    <str id="tabs.info.del" txt="РЈР±СЂР°С‚СЊ Р°РІС‚РѕСЂР°"/>
+    <str id="tabs.info.width" txt=" РЁРёСЂРёРЅР° РѕРєРЅР° :"/>
+    <str id="tabs.info.height" txt=" Р’С‹СЃРѕС‚Р° РѕРєРЅР° :"/>
+    <str id="tabs.info.resizable" txt=" РџРѕР·РІРѕР»РёС‚СЊ РјРµРЅСЏС‚СЊ СЂР°Р·РјРµСЂС‹ РѕРєРЅР°"/>
     
-    <str id="tabs.loc.title" txt="Языки"/>
-    <str id="tabs.loc.available" txt="Список доступных языков :"/>
-    <str id="tabs.loc.selected" txt="Выбранные языки :"/>
-    <str id="tabs.loc.include" txt="Добавить"/>
-    <str id="tabs.loc.remove" txt="Убрать"/>
+    <str id="tabs.loc.title" txt="РЇР·С‹РєРё"/>
+    <str id="tabs.loc.available" txt="РЎРїРёСЃРѕРє РґРѕСЃС‚СѓРїРЅС‹С… СЏР·С‹РєРѕРІ :"/>
+    <str id="tabs.loc.selected" txt="Р’С‹Р±СЂР°РЅРЅС‹Рµ СЏР·С‹РєРё :"/>
+    <str id="tabs.loc.include" txt="Р”РѕР±Р°РІРёС‚СЊ"/>
+    <str id="tabs.loc.remove" txt="РЈР±СЂР°С‚СЊ"/>
     
-    <str id="tabs.res.title" txt="Ресурсы"/>
-    <str id="tabs.res.list" txt="Список ресурсов :"/>
-    <str id="tabs.res.add" txt="Добавить ресурс"/>
-    <str id="tabs.res.remove" txt="Убрать ресурс"/>
-    <str id="tabs.res.input" txt="ID ресурса :"/>
+    <str id="tabs.res.title" txt="Р РµСЃСѓСЂСЃС‹"/>
+    <str id="tabs.res.list" txt="РЎРїРёСЃРѕРє СЂРµСЃСѓСЂСЃРѕРІ :"/>
+    <str id="tabs.res.add" txt="Р”РѕР±Р°РІРёС‚СЊ СЂРµСЃСѓСЂСЃ"/>
+    <str id="tabs.res.remove" txt="РЈР±СЂР°С‚СЊ СЂРµСЃСѓСЂСЃ"/>
+    <str id="tabs.res.input" txt="ID СЂРµСЃСѓСЂСЃР° :"/>
     
-    <str id="tabs.pan.title" txt="Панели"/>
-    <str id="tabs.pan.available" txt="Доступные панели :"/>
-    <str id="tabs.pan.selected" txt="Выбранные панели :"/>
-    <str id="tabs.pan.include" txt="Добавить"/>
-    <str id="tabs.pan.remove" txt="Убрать"/>
-    <str id="tabs.pan.tip" txt="Некоторые панели могут требовать дополнительные ресурсы. Подробнее описано в документации."/>
+    <str id="tabs.pan.title" txt="РџР°РЅРµР»Рё"/>
+    <str id="tabs.pan.available" txt="Р”РѕСЃС‚СѓРїРЅС‹Рµ РїР°РЅРµР»Рё :"/>
+    <str id="tabs.pan.selected" txt="Р’С‹Р±СЂР°РЅРЅС‹Рµ РїР°РЅРµР»Рё :"/>
+    <str id="tabs.pan.include" txt="Р”РѕР±Р°РІРёС‚СЊ"/>
+    <str id="tabs.pan.remove" txt="РЈР±СЂР°С‚СЊ"/>
+    <str id="tabs.pan.tip" txt="РќРµРєРѕС‚РѕСЂС‹Рµ РїР°РЅРµР»Рё РјРѕРіСѓС‚ С‚СЂРµР±РѕРІР°С‚СЊ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Рµ СЂРµСЃСѓСЂСЃС‹. РџРѕРґСЂРѕР±РЅРµРµ РѕРїРёСЃР°РЅРѕ РІ РґРѕРєСѓРјРµРЅС‚Р°С†РёРё."/>
     
-    <str id="tabs.packs.title" txt="Наборы"/>
-    <str id="tabs.packs.packs" txt="Наборы :"/>
-    <str id="tabs.packs.files" txt="Файлы в указанном наборе :"/>
-    <str id="tabs.packs.addpack" txt="Добавить набор"/>
-    <str id="tabs.packs.delpack" txt="Удалить набор"/>
-    <str id="tabs.packs.required" txt=" Набор обязателен"/>
-    <str id="tabs.packs.addfile" txt="Добавить файл или каталог"/>
-    <str id="tabs.packs.delfile" txt="Удалить файл или каталог"/>
-    <str id="tabs.packs.parsable" txt=" Текст Файла подставляется "/>
-    <str id="tabs.packs.pack_name" txt="Имя набора :"/>
-    <str id="tabs.packs.pack_desc" txt="Описание набора :"/>
-    <str id="tabs.packs.target" txt="Целевой каталог :"/>
+    <str id="tabs.packs.title" txt="РќР°Р±РѕСЂС‹"/>
+    <str id="tabs.packs.packs" txt="РќР°Р±РѕСЂС‹ :"/>
+    <str id="tabs.packs.files" txt="Р¤Р°Р№Р»С‹ РІ СѓРєР°Р·Р°РЅРЅРѕРј РЅР°Р±РѕСЂРµ :"/>
+    <str id="tabs.packs.addpack" txt="Р”РѕР±Р°РІРёС‚СЊ РЅР°Р±РѕСЂ"/>
+    <str id="tabs.packs.delpack" txt="РЈРґР°Р»РёС‚СЊ РЅР°Р±РѕСЂ"/>
+    <str id="tabs.packs.required" txt=" РќР°Р±РѕСЂ РѕР±СЏР·Р°С‚РµР»РµРЅ"/>
+    <str id="tabs.packs.addfile" txt="Р”РѕР±Р°РІРёС‚СЊ С„Р°Р№Р» РёР»Рё РєР°С‚Р°Р»РѕРі"/>
+    <str id="tabs.packs.delfile" txt="РЈРґР°Р»РёС‚СЊ С„Р°Р№Р» РёР»Рё РєР°С‚Р°Р»РѕРі"/>
+    <str id="tabs.packs.parsable" txt=" РўРµРєСЃС‚ Р¤Р°Р№Р»Р° РїРѕРґСЃС‚Р°РІР»СЏРµС‚СЃСЏ "/>
+    <str id="tabs.packs.pack_name" txt="РРјСЏ РЅР°Р±РѕСЂР° :"/>
+    <str id="tabs.packs.pack_desc" txt="РћРїРёСЃР°РЅРёРµ РЅР°Р±РѕСЂР° :"/>
+    <str id="tabs.packs.target" txt="Р¦РµР»РµРІРѕР№ РєР°С‚Р°Р»РѕРі :"/>
 
 </langpack>

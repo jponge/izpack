@@ -314,7 +314,15 @@ public class Compiler extends Thread
         File f = new File(p.src);
         FileInputStream in = new FileInputStream(f);
         long nbytes = f.length();
-        String targetFilename = p.targetdir + "/" + f.getName();
+
+        // p.targetdir will always end with separator
+        String targetFilename = p.targetdir + f.getName();
+
+        // pack paths in canonical (unix) form regardless of current host o/s:
+        if('/' != File.separatorChar)
+        {
+            targetFilename = targetFilename.replace(File.separatorChar, '/');
+        }
 
         // Writing
         objOut.writeObject(new PackFile(targetFilename, p.os, nbytes, p.override));
