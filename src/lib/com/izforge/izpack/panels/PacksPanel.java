@@ -91,7 +91,7 @@ public class PacksPanel
   private LocaleDatabase      langpack        = null;
   
   /** The name of the XML file that specifies the panel langpack */
-  private static final String PACK_FILE_NAME                = "PacksPanel";
+  private static final String LANG_FILE_NAME                = "packsLang.xml";
 
   /**
    *  The constructor.
@@ -102,14 +102,15 @@ public class PacksPanel
   public PacksPanel(InstallerFrame parent, InstallData idata)
   {
     super(parent, idata);
-
-	try
-	{
-	  this.langpack = new LocaleDatabase (ResourceManager.getInstance().getInputStream (PACK_FILE_NAME));
-	}
-	catch (Throwable exception)
-	{}
-
+  
+    try
+    {
+      String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
+      this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
+    }
+    catch (Throwable exception)
+    {}
+  
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
     JLabel infoLabel =
