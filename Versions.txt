@@ -1,6 +1,17 @@
 [ The list of the different public versions of IzPack ]
 
-    > 3.1.0 pre4 (build 2002.12.08)
+  > 3.1.0 pre5 (build 2003.01.12)
+
+- Included Elmar's new UserInputPanel documentation.
+- A panel can now be added several times in an installation. This is mostly
+  useful for the new UserInputPanel.
+- Separated the installer generation from the 'dist' target in the Ant building
+  process. The new target is 'generate.installer'.
+- Move the com.izforge.izpack.util.EtchedBorder class to com.izforge.izpack.gui.
+  The class has also been rewritten because the original code was introduced
+  with a proprietary license notice.
+
+  > 3.1.0 pre4 (build 2002.12.08)
 
 - A lot of installer GUI improvements by Jan Blok :
   o an image can be shown in the installer left side

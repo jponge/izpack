@@ -1,4 +1,4 @@
-[ IzPack 2.x - Readme ]
+[ IzPack 2.x-3.x - Readme ]
 
     > 1 - A quick introduction <
     

@@ -67,6 +67,10 @@
     03.07.2002: (by Julien Ponge)
         Added a target to generate some javadoc.
 
+    12.01.2003: (by Julien Ponge)
+        Separated the installer generation from the dist target so that it is
+        much cleaner.
+
   Mini-HowTo:
 
   To compile and package the compiler.jar jar file, type:
@@ -103,7 +107,7 @@
   <!-- Define directories -->
   <property file="src/ant.properties"/>
   <property name="ver" value="3.1" />
-  <property name="rel" value="pre4" />
+  <property name="rel" value="pre5" />
   
   <property name="src.dir" value="${basedir}/src/lib" />
   <property name="img.dir" value="${basedir}/src/img" />

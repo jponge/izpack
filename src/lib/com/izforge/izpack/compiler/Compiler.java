@@ -56,7 +56,7 @@ public class Compiler extends Thread
   public final static String VERSION = "1.0";
 
   /**  The IzPack version. */
-  public final static String IZPACK_VERSION = "3.1.0 pre4 (build 2002.12.08)";
+  public final static String IZPACK_VERSION = "3.1.0 pre5 (build 2003.01.12)";
 
   /**  Standard installer. */
   public final static String STANDARD = "standard";
