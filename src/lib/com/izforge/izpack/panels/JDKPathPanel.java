@@ -106,8 +106,8 @@ public class JDKPathPanel extends PathInputPanel
     // The variable will be exist if we enter this panel
     // second time. We would maintain the previos 
     // selected path.
-    if( idata.getVariable("JDKPath") != null )
-      chosenPath = idata.getVariable("JDKPath");
+    if( idata.getVariable(getVariableName()) != null )
+      chosenPath = idata.getVariable(getVariableName());
     else
     // Try the JAVA_HOME as child dir of the jdk path
       chosenPath = (new File(idata.getVariable("JAVA_HOME"))).getParent();
@@ -123,7 +123,7 @@ public class JDKPathPanel extends PathInputPanel
     if( chosenPath.length() > 0 && 
       var != null &&  var.equalsIgnoreCase("yes") )
     {
-      idata.setVariable("JDKPath",chosenPath);
+      idata.setVariable(getVariableName(),chosenPath);
       parent.skipPanel();
     }
       
