@@ -314,6 +314,7 @@
       </fileset>
       <fileset dir="${src.dir}">
         <include name="com/izforge/izpack/installer/*.xml"/>
+        <include name="com/izforge/izpack/installer/*.properties" />
       </fileset>
       <fileset dir="${img.dir}/installer" />
     </jar>

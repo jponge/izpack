@@ -10,6 +10,8 @@
 - The documentation is now licensed under a Commons Creative license.
 - The documentation now has a nicer cover page.
 - Jar file execution fix on the classpath arguments passing.
+- Win32: "Program Files" can now be localised (resolves problems with German
+  Windows for instance).
 
   > 3.1.0b (build 2003.08.22)
 

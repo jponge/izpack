@@ -30,10 +30,12 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Locale;
 
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
@@ -114,16 +116,28 @@ public class InstallerBase
     String dir;
     String installPath;
     if (os.regionMatches(true, 0, "windows", 0, 7))
-      dir = System.getProperty("user.home").substring(0, 3) + "Program Files" + File.separator;
+    {
+      dir = buildWindowsDefaultPath();
+    }
     else if (os.regionMatches(true, 0, "mac os x", 0, 6))
+    {
       dir = "/Applications" + File.separator;
+    }
     else if (os.regionMatches(true, 0, "mac", 0, 3))
+    {
       dir = "";
+    }
     else
+    {
       if (user.equals("root"))
-      dir = "/usr/local" + File.separator;
-    else
-      dir = System.getProperty("user.home") + File.separator;
+      {
+        dir = "/usr/local" + File.separator;
+      }
+      else
+      {
+        dir = System.getProperty("user.home") + File.separator;
+      }
+    }
 
     installPath = dir + inf.getAppName();
 
@@ -168,5 +182,36 @@ public class InstallerBase
         installdata.selectedPacks.add (pack);
     }
 
+  }
+
+  /**
+   * Builds the default path for Windows (i.e Program Files/...).
+   * @ return The Windows default installation path.
+   */
+  private String buildWindowsDefaultPath()
+  {
+    String dpath = "";
+    try
+    {
+      // We load the properties
+      Properties props = new Properties();
+      props.load(InstallerBase.class.getResourceAsStream(
+        "/com/izforge/izpack/installer/win32-defaultpaths.properties"));
+      
+      // We look for the drive mapping
+      String drive = System.getProperty("user.home");
+      if (drive.length() > 3) drive = drive.substring(0, 3);
+
+      // Now we have it :-)
+      String locale = Locale.getDefault().getCountry();
+      dpath = drive
+            + props.getProperty(locale, props.getProperty("EN")) + "\\";
+    }
+    catch (IOException ioErr)
+    {
+      dpath = "C:\\Program Files\\";
+    }
+
+    return dpath;
   }
 }
