@@ -66,5 +66,6 @@ IzPack for your projects ;-)
 - Chad McHenry : for the compiler warnings generation patch.
 - Everaldo & the KDE crew : for the first-class Crystal icons theme.
 - Frank Bille Jensen : for the Danish translation.
+- Volker Friedritz : for the ImgPacksPanel redesign.
 
 # vim: fileformat=dos 

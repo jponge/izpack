@@ -5,6 +5,8 @@
 - New Danish langpack (Frank Bille Jensen).
 - Web installers can now prompt for passwords and a proxy (Chad McHenry).
 - Fixed all javadoc warnings and errors (Chad McHenry).
+- ImgPacksPanel has been reworked to offer some features that only PacksPanel
+  had (Volker Friedritz).
 
   > 3.5.2 (build 2004.xx.yy)
 
