@@ -1,5 +1,14 @@
 [ The list of the different public versions of IzPack ]
 
+    > 3.0.0 rc2 (build 2002.07.06)
+
+- Added some documentation on the *LicencePanel and *InfoPanel panels.
+- Bugfix in HTMLLicencePanel.
+- The uninstaller is now able to take care of the jar new location (under the
+  install path) and wipes everything cleanly.
+- The 'create shortcut' button in ShortcutPanel is now disabled after the
+  shortcuts are created.
+
     > 3.0.0 rc1 (build 2002.07.03)
 
 - Fixes on the shortcuts sytem.

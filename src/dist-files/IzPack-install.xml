@@ -9,7 +9,10 @@
     the files present at the IzPack root directory. To make it clear,
     you'll get bin/, lib/, ... and text files like Versions.txt and so
     on. Now you can invoke the IzPack compiler and it will generate the
-    installer ;-)
+    installer.
+    
+    Alternatively, you can use the IzPack Ant makefile and run 'ant dist'. It's
+    much simpler :-)
 -->
 
 <!-- The installation -->
@@ -18,7 +21,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.0.0 rc1 (build 2002.07.03)</appversion>
+        <appversion>3.0.0 rc2 (build 2002.07.06)</appversion>
         <authors>
             <author email="julien@izforge.com" name="Julien PONGE"/>
         </authors>
