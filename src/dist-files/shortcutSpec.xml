@@ -21,5 +21,33 @@
      <createForPack name="Core"/>
      
    </shortcut>
+
+   <shortcut
+     name="Documentation"
+     programGroup="yes"
+     desktop="no"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\doc\izpack\html\izpack-doc.html"
+     commandLine=""
+     description="IzPack user documentation (HTML format)">
+     
+     <createForPack name="Documentation" />
+   </shortcut>
+   
+   <shortcut
+     name="Uninstaller"
+     programGroup="yes"
+     desktop="no"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\Uninstaller\uninstaller.jar"
+     commandLine=""
+     description="IzPack uninstaller">
+     
+     <createForPack name="Core" />
+   </shortcut>
    
 </shortcuts>
