@@ -439,6 +439,7 @@
                               
   <!-- Builds the Javadoc -->
   <target name="build.javadoc" depends="prepare">
+	<mkdir dir="${build.dir}/javadoc"/>
     <javadoc destdir="${build.dir}/javadoc">
       <fileset dir="${src.dir}">
         <include name="com/izforge/izpack/installer/IzPanel.java"/>
