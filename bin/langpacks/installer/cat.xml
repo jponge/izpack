@@ -65,6 +65,8 @@
     <str id="ImgPacksPanel.snap" txt="Captura de pantalla associada:"/>
     <str id="ImgPacksPanel.checkbox" txt=" Instal.lar aquest paquet"/>
 
+    <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>

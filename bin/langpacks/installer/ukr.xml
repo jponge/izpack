@@ -91,6 +91,8 @@
     <str id="ShortcutPanel.location.startMenu"    txt="Меню запу�?ку"/>
     <str id="ShortcutPanel.location.startup"      txt="Група запу�?ку"/>
 
+    <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>

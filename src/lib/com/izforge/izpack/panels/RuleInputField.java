@@ -97,15 +97,20 @@ public class RuleInputField extends JComponent implements KeyListener,
   private static int       DEFAULT             = DISPLAY_FORMAT;
 
   private Vector          items       = new Vector ();
+  /** This <code>Vector</code> holds a reference to each input field, in the
+      order in which they appear on the screen. */
   private Vector          inputFields = new Vector ();
-  private Vector          separators  = new Vector ();
   private RuleTextField   activeField;
   private boolean         backstep = false;
   private Toolkit         toolkit;
   private String          separator;  
   private int             resultFormat        = DEFAULT;
-  
+
+  /** Holds an instance of the <code>RuleValidator</code> if one was
+      specified and available */  
   private RuleValidator   validationService;
+  /** Holds an instance of the <code>Encryptor</code> if one was specified
+      and available */  
   private Encryptor       encryptionService;
 
  /*--------------------------------------------------------------------------*/
@@ -115,7 +120,7 @@ public class RuleInputField extends JComponent implements KeyListener,
   * @param     format        a string that specifies the formatting and to a 
   *                          limited degree the behavior of this field.
   * @param     preset        a string that specifies preset values for specific
-  *                          fields.
+  *                          sub-fields.
   * @param     separator     a string to be used for separating the contents
   *                          of individual fields in the string returned by
   *                          <code>getText()</code>
@@ -200,25 +205,46 @@ public class RuleInputField extends JComponent implements KeyListener,
     activeField = (RuleTextField)inputFields.elementAt (0);
     activeField.grabFocus ();
   }
-  
  /*--------------------------------------------------------------------------*/
  /**
-  * Enter description synopsis here. More detailed description after the first period.
+  * Returns the number of sub-fields composing this <code>RuleInputField</code>.
   *
-  * @param     - 
-  *
-  * @return    -
-  *
-  * @see       -
-  *
-  * @exception -
+  * @return    the number of sub-fields
   */
  /*--------------------------------------------------------------------------*/
- /*$
-  * @design     <- keep this tag in place and don't write on this line!
+  public int getNumFields ()
+  {
+    return (inputFields.size ());
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Returns the contents of the field indicated by <code>index</code>.
   *
-  * Enter design related documentation here.
-  *--------------------------------------------------------------------------*/
+  * @param     index  the index of the sub-field from which the contents
+  *                   is requested.
+  *
+  * @return    the contents of the indicated sub-field.
+  *
+  * @exception IndexOutOfBoundsException if the index is out of bounds.
+  */
+ /*--------------------------------------------------------------------------*/
+  public String getFieldContents (int index)
+  {
+    if ((index < 0) || (index > (inputFields.size () - 1)))
+    {
+      throw (new IndexOutOfBoundsException ());
+    }
+    
+    return (((JTextField)inputFields.elementAt (index)).getText ());
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Returns the field contents, assembled acording to the encryption and
+  * separator rules.
+  *
+  * @return    the field contents
+  */
+ /*--------------------------------------------------------------------------*/
   public String getText ()
   {
     Object        item;
@@ -453,22 +479,9 @@ public class RuleInputField extends JComponent implements KeyListener,
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Enter description synopsis here. More detailed description after the first period.
-  *
-  * @param     - 
-  *
-  * @return    -
-  *
-  * @see       -
-  *
-  * @exception -
+  * Sets the focus to the first field.
   */
  /*--------------------------------------------------------------------------*/
- /*$
-  * @design     <- keep this tag in place and don't write on this line!
-  *
-  * Enter design related documentation here.
-  *--------------------------------------------------------------------------*/
   private void selectFirst ()
   {
     // set the focus to the first field
@@ -479,18 +492,13 @@ public class RuleInputField extends JComponent implements KeyListener,
  /*--------------------------------------------------------------------------*/
  /**
   * This method validates the field contend. Validating is performed through
-  * a service class that provides the validation rules.
+  * a user supplied service class that provides the validation rules.
   *
-  * @return    <code>true</code> if the validation passes, otherwise <code>false</code>.
-  *
-  * @see       -
+  * @return    <code>true</code> if the validation passes or no implementation
+  *            of a validation rule exists. Otherwise <code>false</code> is
+  *            returned.
   */
  /*--------------------------------------------------------------------------*/
- /*$
-  * @design     <- keep this tag in place and don't write on this line!
-  *
-  * Enter design related documentation here.
-  *--------------------------------------------------------------------------*/
   public boolean validateContent ()
   {
     if (validationService != null)
@@ -510,12 +518,7 @@ public class RuleInputField extends JComponent implements KeyListener,
  /*--------------------------------------------------------------------------*/
  /**
   * This method is invoked when a key has been typed. The event occurs when
-  * a key press is followed by a key release. This method verifies the
-  * condition of the input field in focus. Once the column count in the field
-  * has reached the specified maximum, the rule specified for the field in
-  * question is invoked. In case the test result is positive, focus is set
-  * to the next field. If hte test result is negative, the field content is
-  * marked and the caret set to the start of the field.
+  * a key press is followed by a key release. 
   *
   * @param     event the key event forwarded by the system.
   */
@@ -525,8 +528,12 @@ public class RuleInputField extends JComponent implements KeyListener,
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * This method is invoked when a key has been pressed. This method does
-  * nothing, we are only listening for 'key typed' events.
+  * This method is invoked when a key has been pressed. This method verifies
+  * the condition of the input field in focus. Once the column count in the
+  * field has reached the specified maximum, the rule specified for the field
+  * in question is invoked. In case the test result is positive, focus is set
+  * to the next field. If hte test result is negative, the field content is
+  * marked and the caret set to the start of the field.
   *
   * @param     event the key event forwarded by the system.
   */
@@ -553,9 +560,7 @@ public class RuleInputField extends JComponent implements KeyListener,
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Enter description synopsis here. More detailed description after the first
-  * period. This method does nothing, we are only listening for 'key typed'
-  * events.
+  * This method is invoked when a key has been released.
   *
   * @param     event the key event forwarded by the system.
   */

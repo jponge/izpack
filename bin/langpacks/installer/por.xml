@@ -93,6 +93,8 @@
     <str id="ShortcutPanel.location.startMenu"    txt="Menu Iniciar"/>
     <str id="ShortcutPanel.location.startup"      txt="Grupo Iniciar"/>
 
+    <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>

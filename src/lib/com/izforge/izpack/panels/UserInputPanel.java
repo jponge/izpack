@@ -85,16 +85,23 @@ import    net.n3.nanoxml.*;
  *
  * The actual variable substitution is not performed by this panel but by
  * the variable substitutor.
+ *
+ * To Do:
+ * ------
+ * * make sure all header documentation is complete and correct
+ * * password field
  *--------------------------------------------------------------------------*/
 public class UserInputPanel extends IzPanel
 {
-  private static final int    POS_TYPE                      = 0;
-  private static final int    POS_VARIABLE                  = 1;
-  private static final int    POS_CONSTRAINTS               = 2;
-  private static final int    POS_FIELD                     = 3;
-  private static final int    POS_PACKS                     = 4;
-  private static final int    POS_TRUE                      = 5;
-  private static final int    POS_FALSE                     = 6;
+  private static final int    POS_DISPLAYED                 = 0;
+  private static final int    POS_TYPE                      = 1;
+  private static final int    POS_VARIABLE                  = 2;
+  private static final int    POS_CONSTRAINTS               = 3;
+  private static final int    POS_FIELD                     = 4;
+  private static final int    POS_PACKS                     = 5;
+  private static final int    POS_TRUE                      = 6;
+  private static final int    POS_FALSE                     = 7;
+  private static final int    POS_MESSAGE                   = 8;
 
   /** The name of the XML file that specifies the panel layout */
   private static final String SPEC_FILE_NAME                = "userInputSpec.xml";
@@ -157,6 +164,18 @@ public class UserInputPanel extends IzPanel
   private static final String PACKS                         = "createForPack";
   private static final String NAME                          = "name";
 
+  // ------------------------------------------------------
+  // automatic script section keys
+  // ------------------------------------------------------
+  private static final String AUTO_KEY_USER_INPUT           = "userInput";
+  private static final String AUTO_KEY_ENTRY                = "entry";
+
+  // ------------------------------------------------------
+  // automatic script keys attributes
+  // ------------------------------------------------------
+  private static final String AUTO_ATTRIBUTE_KEY            = "key";
+  private static final String AUTO_ATTRIBUTE_VALUE          = "value";
+
   /** specifies the percentage of the total panel width to use for the space
       buffer on the right and left side. */
   private static final int    SIDE_BUFFER_RATIO             = 5;
@@ -189,6 +208,9 @@ public class UserInputPanel extends IzPanel
   /** Holds the references to all radio button groups */
   private Vector              buttonGroups    = new Vector ();
 
+  /** Holds all user inputs for use in automated installation */
+  private Vector              entries         = new Vector ();
+
   private TwoColumnLayout     layout;
   private LocaleDatabase      langpack        = null;
 
@@ -196,7 +218,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
  // This method can be used to search for layout problems. If this class is
  // compiled with this method uncommented, the layout guides will be shown
- // on the panel, making it possible to see iff all components are placed
+ // on the panel, making it possible to see if all components are placed
  // correctly.
  /*--------------------------------------------------------------------------*/
 //  public void paint (Graphics graphics)
@@ -357,6 +379,84 @@ public class UserInputPanel extends IzPanel
   }
  /*--------------------------------------------------------------------------*/
  /**
+  * Asks the panel to set its own XML data that can be brought back for an
+  * automated installation process. Use it as a blackbox if your panel needs
+  * to do something even in automated mode.
+  *
+  * @param     panelRoot    The XML root element of the panels blackbox tree.
+  */
+ /*--------------------------------------------------------------------------*/
+  public void makeXMLData (XMLElement panelRoot)
+  {
+    XMLElement    userInput;
+    XMLElement    dataElement;
+
+    // ----------------------------------------------------
+    // add the item that combines all entries
+    // ----------------------------------------------------
+    userInput = new XMLElement (AUTO_KEY_USER_INPUT);
+    panelRoot.addChild (userInput);
+
+    // ----------------------------------------------------
+    // add all entries
+    // ----------------------------------------------------
+    for (int i = 0; i < entries.size (); i++)
+    {
+      dataElement = new XMLElement (AUTO_KEY_ENTRY);
+      dataElement.setAttribute (AUTO_ATTRIBUTE_KEY, (((TextValuePair)entries.elementAt (i)).toString ()));
+      dataElement.setAttribute (AUTO_ATTRIBUTE_VALUE, (((TextValuePair)entries.elementAt (i)).getValue ()));
+      
+      userInput.addChild (dataElement);
+    }
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Makes the panel work in automated mode. Default is to do nothing, but any
+  * panel doing something 'effective' during the installation process should
+  * implement this method.
+  *
+  * @param     panelRoot    The XML root element of the panels blackbox tree.
+  */
+ /*--------------------------------------------------------------------------*/
+  public void runAutomated (XMLElement panelRoot)
+  {
+    XMLElement    userInput;
+    XMLElement    dataElement;
+    String        variable;
+    String        value;
+
+    // ----------------------------------------------------
+    // get the section containing the user entries
+    // ----------------------------------------------------
+    userInput = panelRoot.getFirstChildNamed (AUTO_KEY_USER_INPUT);
+    
+    if (userInput == null)
+    {
+      return;
+    }
+    
+    Vector userEntries = userInput.getChildrenNamed (AUTO_KEY_ENTRY);
+    
+    if (userEntries == null)
+    {
+      return;
+    }
+  
+    // ----------------------------------------------------
+    // retieve each entrie and substitute the associated
+    // variable
+    // ----------------------------------------------------
+    for (int i = 0; i < userEntries.size (); i++)
+    {
+      dataElement = (XMLElement)userEntries.elementAt (i);
+      variable    = dataElement.getAttribute (AUTO_ATTRIBUTE_KEY);
+      value       = dataElement.getAttribute (AUTO_ATTRIBUTE_VALUE);
+
+      idata.getVariableValueMap ().setVariable (variable, value);
+    }
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
   * Builds the UI and makes it ready for display
   */
  /*--------------------------------------------------------------------------*/
@@ -373,11 +473,16 @@ public class UserInputPanel extends IzPanel
         try
         {
           add ((JComponent)uiElement [POS_FIELD], uiElement [POS_CONSTRAINTS]);
+          uiElement [POS_DISPLAYED] = new Boolean (true);
         }
         catch (Throwable exception)
         {
-          System.out.println ("Internal format error in field: " + uiElement [0].toString ());  // !!! logging
+          System.out.println ("Internal format error in field: " + uiElement [POS_TYPE].toString ());  // !!! logging
         }
+      }
+      else
+      {
+        uiElement [POS_DISPLAYED] = new Boolean (false);
       }
     }
   }
@@ -399,7 +504,7 @@ public class UserInputPanel extends IzPanel
     {
       field     = (Object [])uiElements.elementAt (i);
 
-      if (field != null)
+      if ((field != null) && (((Boolean)field [POS_DISPLAYED]).booleanValue ()))
       {
         fieldType = (String)(field [POS_TYPE]);
 
@@ -546,7 +651,7 @@ public class UserInputPanel extends IzPanel
       Font   font  = label.getFont ();
       float  size  = font.getSize ();
       int    style = 0;
-      
+
       if (bold)
       {
         style = style + Font.BOLD;
@@ -588,6 +693,7 @@ public class UserInputPanel extends IzPanel
     String          format;
     String          description   = null;
     String          validator     = null;
+    String          message       = null;
     String          processor     = null;
     int             resultFormat  = RuleInputField.DISPLAY_FORMAT;
 
@@ -645,6 +751,7 @@ public class UserInputPanel extends IzPanel
     if (element != null)
     {
       validator = element.getAttribute (RULE_CLASS);
+      message   = getText (element);
     }
 
     element = spec.getFirstChildNamed (RULE_PROCESSOR);
@@ -669,12 +776,12 @@ public class UserInputPanel extends IzPanel
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position              = constraints.WEST;
 
-    uiElements.add (new Object [] {FIELD_LABEL, null, constraints, label, forPacks});
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
     constraints2.position             = constraints2.EAST;
 
-    uiElements.add (new Object [] {RULE_FIELD, variable, constraints2, field, forPacks});
+    uiElements.add (new Object [] {null, RULE_FIELD, variable, constraints2, field, forPacks, null, null, message});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -707,16 +814,18 @@ public class UserInputPanel extends IzPanel
       return (true);
     }
 
-/*    boolean success = ruleField.validate ()
+    boolean success = ruleField.validateContent ();
     if (!success)
     {
-      // !!! pop up a dialog!
+      JOptionPane.showMessageDialog (parent, 
+                                     (String)field [POS_MESSAGE], 
+                                     parent.langpack.getString ("UserInputPanel.error.caption"), 
+                                     JOptionPane.WARNING_MESSAGE);
       return (false);
     }
 
-    ruleField.processInput ();*/
-
     idata.getVariableValueMap ().setVariable (variable, ruleField.getText ());
+    entries.add (new TextValuePair (variable, ruleField.getText ()));
     return (true);
   }
  /*--------------------------------------------------------------------------*/
@@ -786,12 +895,12 @@ public class UserInputPanel extends IzPanel
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position  = constraints.WEST;
 
-    uiElements.add (new Object [] {FIELD_LABEL, null, constraints, label, forPacks});
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
     constraints2.position  = constraints2.EAST;
 
-    uiElements.add (new Object [] {TEXT_FIELD, variable, constraints2, field, forPacks});
+    uiElements.add (new Object [] {null, TEXT_FIELD, variable, constraints2, field, forPacks});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -827,6 +936,7 @@ public class UserInputPanel extends IzPanel
     }
 
     idata.getVariableValueMap ().setVariable (variable, value);
+    entries.add (new TextValuePair (variable, value));
     return (true);
   }
  /*--------------------------------------------------------------------------*/
@@ -873,7 +983,7 @@ public class UserInputPanel extends IzPanel
 
       for (int i = 0; i < choices.size (); i++)
       {
-        listItem = new TextValuePair (getText ((XMLElement)choices.elementAt (i)), 
+        listItem = new TextValuePair (getText ((XMLElement)choices.elementAt (i)),
                                       ((XMLElement)choices.elementAt (i)).getAttribute (COMBO_VALUE));
 
         field.addItem (listItem);
@@ -907,13 +1017,12 @@ public class UserInputPanel extends IzPanel
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position  = constraints.WEST;
 
-    uiElements.add (new Object [] {FIELD_LABEL, null, constraints, label, forPacks});
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
     constraints2.position  = constraints2.EAST;
 
-//    uiElements.add (new Object [] {COMBO_FIELD, variable, constraints2, field, forPacks, value});
-    uiElements.add (new Object [] {COMBO_FIELD, variable, constraints2, field, forPacks});
+    uiElements.add (new Object [] {null, COMBO_FIELD, variable, constraints2, field, forPacks});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -950,6 +1059,7 @@ public class UserInputPanel extends IzPanel
     }
 
     idata.getVariableValueMap ().setVariable (variable, value);
+    entries.add (new TextValuePair (variable, value));
     return (true);
   }
  /*--------------------------------------------------------------------------*/
@@ -1032,7 +1142,7 @@ public class UserInputPanel extends IzPanel
           }
         }
 
-        uiElements.add (new Object [] {RADIO_FIELD, variable, constraints, choice, forPacks, value});
+        uiElements.add (new Object [] {null, RADIO_FIELD, variable, constraints, choice, forPacks, value});
       }
     }
   }
@@ -1077,6 +1187,7 @@ public class UserInputPanel extends IzPanel
     }
 
     idata.getVariableValueMap ().setVariable (variable, value);
+    entries.add (new TextValuePair (variable, value));
     return (true);
   }
  /*--------------------------------------------------------------------------*/
@@ -1136,7 +1247,7 @@ public class UserInputPanel extends IzPanel
     constraints.stretch   = true;
     constraints.indent    = true;
 
-    uiElements.add (new Object [] {CHECK_FIELD, variable, constraints, checkbox, forPacks, trueValue, falseValue});
+    uiElements.add (new Object [] {null, CHECK_FIELD, variable, constraints, checkbox, forPacks, trueValue, falseValue});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1182,10 +1293,12 @@ public class UserInputPanel extends IzPanel
     if (box.isSelected ())
     {
       idata.getVariableValueMap ().setVariable (variable, trueValue);
+      entries.add (new TextValuePair (variable, trueValue));
     }
     else
     {
       idata.getVariableValueMap ().setVariable (variable, falseValue);
+      entries.add (new TextValuePair (variable, falseValue));
     }
 
     return (true);
@@ -1222,7 +1335,7 @@ public class UserInputPanel extends IzPanel
     constraints.position  = constraints.BOTH;
     constraints.stretch   = true;
 
-    uiElements.add (new Object [] {SPACE_FIELD, null, constraints, panel, forPacks});
+    uiElements.add (new Object [] {null, SPACE_FIELD, null, constraints, panel, forPacks});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1258,7 +1371,7 @@ public class UserInputPanel extends IzPanel
     constraints.position  = constraints.BOTH;
     constraints.stretch   = true;
 
-    uiElements.add (new Object [] {DIVIDER_FIELD, null, constraints, panel, forPacks});
+    uiElements.add (new Object [] {null, DIVIDER_FIELD, null, constraints, panel, forPacks});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1304,7 +1417,7 @@ public class UserInputPanel extends IzPanel
 
         MultiLineLabel label = new MultiLineLabel (description, justify);
 
-        uiElements.add (new Object [] {DESCRIPTION, null, constraints, label, forPacks});
+        uiElements.add (new Object [] {null, DESCRIPTION, null, constraints, label, forPacks});
       }
     }
   }
@@ -1333,11 +1446,11 @@ public class UserInputPanel extends IzPanel
                               boolean    defaultValue)
   {
     boolean result = defaultValue;
-    
+
     if ((attribute != null) && (attribute.length () > 0))
     {
       String value = element.getAttribute (attribute);
-      
+
       if (value != null)
       {
         if (value.equals (TRUE))
@@ -1350,7 +1463,7 @@ public class UserInputPanel extends IzPanel
         }
       }
     }
-    
+
     return (result);
   }
  /*--------------------------------------------------------------------------*/
@@ -1369,12 +1482,12 @@ public class UserInputPanel extends IzPanel
   *            returned.
   */
  /*--------------------------------------------------------------------------*/
-  private int getInt (XMLElement  element, 
+  private int getInt (XMLElement  element,
                       String      attribute,
                       int         defaultValue)
   {
     int result = defaultValue;
-    
+
     if ((attribute != null) && (attribute.length () > 0))
     {
       try
@@ -1384,7 +1497,7 @@ public class UserInputPanel extends IzPanel
       catch (Throwable exception)
       {}
     }
-    
+
     return (result);
   }
  /*--------------------------------------------------------------------------*/
@@ -1403,12 +1516,12 @@ public class UserInputPanel extends IzPanel
   *            returned.
   */
  /*--------------------------------------------------------------------------*/
-  private float getFloat (XMLElement  element, 
-                          String      attribute, 
+  private float getFloat (XMLElement  element,
+                          String      attribute,
                           float       defaultValue)
   {
     float result = defaultValue;
-    
+
     if ((attribute != null) && (attribute.length () > 0))
     {
       try
@@ -1418,7 +1531,7 @@ public class UserInputPanel extends IzPanel
       catch (Throwable exception)
       {}
     }
-    
+
     return (result);
   }
  /*--------------------------------------------------------------------------*/
@@ -1489,7 +1602,7 @@ public class UserInputPanel extends IzPanel
     int result = TwoColumnConstraints.LEFT;
 
     String value = element.getAttribute (ALIGNMENT);
-    
+
     if (value != null)
     {
       if (value.equals (LEFT))
@@ -1505,7 +1618,7 @@ public class UserInputPanel extends IzPanel
         result = TwoColumnConstraints.RIGHT;
       }
     }
-    
+
     return (result);
   }
  /*--------------------------------------------------------------------------*/
@@ -1587,7 +1700,7 @@ private class TextValuePair
 {
   private String text   = "";
   private String value  = "";
-  
+
  /*--------------------------------------------------------------------------*/
  /**
   * Constructs a new Text/Value pair, initialized with the text and a value.
@@ -1596,11 +1709,33 @@ private class TextValuePair
   * @param     value  the value that should be associated with this object
   */
  /*--------------------------------------------------------------------------*/
-  public TextValuePair  (String text, 
+  public TextValuePair  (String text,
                          String value)
   {
     this.text   = text;
     this.value  = value;
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Sets the text
+  *
+  * @param     text   the text for this object
+  */
+ /*--------------------------------------------------------------------------*/
+  public void setText (String text)
+  {
+    this.text = text;
+  }
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Sets the value of this object
+  *
+  * @param     value    the value for this object
+  */
+ /*--------------------------------------------------------------------------*/
+  public void setValue (String value)
+  {
+    this.value = value;
   }
  /*--------------------------------------------------------------------------*/
  /**

@@ -91,6 +91,8 @@
     <str id="ShortcutPanel.textFile.iconIndex"    txt="Icon Index        : "/>
     <str id="ShortcutPanel.textFile.work"         txt="Munka könyvtár    : "/>
 
+    <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>
