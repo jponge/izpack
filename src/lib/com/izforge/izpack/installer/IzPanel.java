@@ -35,7 +35,7 @@ import net.n3.nanoxml.*;
  * Defines the base class for the IzPack panels. Any panel should be a subclass of
  * it and should belong to the <code>com.izforge.izpack.panels</code> package.
  *
- * @author Julien PONGE <<a href="mailto:julien@izforge.com>julien@izforge.com</a>>
+ * @author Julien PONGE
  * @version 3.0.0 (build 2002.08.13)
  * @see javax.swing.JPanel
  */
@@ -111,6 +111,12 @@ public class IzPanel extends JPanel
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
     public void runAutomated(XMLElement panelRoot) { }
+    
+    /**
+     * Called when the installer works in non-GUI mode. All the panel job must
+     * be done from here.
+     */
+    public void runNoGUI() { }
         
     //.....................................................................
 }

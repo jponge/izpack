@@ -945,87 +945,87 @@ public class Compiler extends Thread
         {
         stdArgsIndex = 0;
         }
-            if (!IZPACK_HOME.endsWith(File.separator))
-                IZPACK_HOME = IZPACK_HOME + File.separator;
+        if (!IZPACK_HOME.endsWith(File.separator))
+            IZPACK_HOME = IZPACK_HOME + File.separator;
 
-            // The users wants to know the command line parameters
-            if (args[stdArgsIndex].equalsIgnoreCase("-?"))
-            {
-                System.out.println("-> Command line parameters are : (xml file) [args]");
-                System.out.println("   (xml file): the xml file describing the installation");
-                System.out.println("   -b (base) : indicates the base path that the compiler will use for filenames");
-                System.out.println("               default is the current path");
-                System.out.println("   -k (kind) : indicates the kind of installer to generate");
-                System.out.println("               default is standard");
-                System.out.println("   -o (out)  : indicates the output file name");
-                System.out.println("               default is the xml file name");
-                System.out.println("");
-            }
-            else
-            // We can parse the other parameters & try to compile the installation
-            {
-                // We get the input file name and we initialize the output file name
-                filename = args[stdArgsIndex];
-                output = filename.substring(0, filename.length() - 3) + "jar";
+        // The users wants to know the command line parameters
+        if (args[stdArgsIndex].equalsIgnoreCase("-?"))
+        {
+            System.out.println("-> Command line parameters are : (xml file) [args]");
+            System.out.println("   (xml file): the xml file describing the installation");
+            System.out.println("   -b (base) : indicates the base path that the compiler will use for filenames");
+            System.out.println("               default is the current path");
+            System.out.println("   -k (kind) : indicates the kind of installer to generate");
+            System.out.println("               default is standard");
+            System.out.println("   -o (out)  : indicates the output file name");
+            System.out.println("               default is the xml file name");
+            System.out.println("");
+        }
+        else
+        // We can parse the other parameters & try to compile the installation
+        {
+            // We get the input file name and we initialize the output file name
+            filename = args[stdArgsIndex];
+            output = filename.substring(0, filename.length() - 3) + "jar";
 
-                // We parse the other ones
-                int pos = stdArgsIndex + 1;
-                while (pos < nArgs)
+            // We parse the other ones
+            int pos = stdArgsIndex + 1;
+            while (pos < nArgs)
+            {
+                if ( (args[pos].startsWith("-")) && (args[pos].length() == 2) )
                 {
-                    if ( (args[pos].startsWith("-")) && (args[pos].length() == 2) )
+                    switch (args[pos].toLowerCase().charAt(1))
                     {
-                        switch (args[pos].toLowerCase().charAt(1))
-                        {
-                            case 'b' :
-                                 if ((pos + 1) < nArgs)
-                                 {
-                                     pos++;
-                                     base = args[pos];
-                                 }
-                                 else throw new Exception("base argument missing");
-                                 break;
+                        case 'b' :
+                             if ((pos + 1) < nArgs)
+                             {
+                                 pos++;
+                                 base = args[pos];
+                             }
+                             else throw new Exception("base argument missing");
+                             break;
 
-                            case 'k' :
-                                 if ((pos + 1) < nArgs)
-                                 {
-                                     pos++;
-                                     kind = args[pos];
-                                 }
-                                 else throw new Exception("kind argument missing");
-                                 break;
+                        case 'k' :
+                             if ((pos + 1) < nArgs)
+                             {
+                                 pos++;
+                                 kind = args[pos];
+                             }
+                             else throw new Exception("kind argument missing");
+                             break;
 
-                            case 'o' :
-                                 if ((pos + 1) < nArgs)
-                                 {
-                                     pos++;
-                                     output = args[pos];
-                                 }
-                                 else throw new Exception("output argument missing");
-                                 break;
+                        case 'o' :
+                             if ((pos + 1) < nArgs)
+                             {
+                                 pos++;
+                                 output = args[pos];
+                             }
+                             else throw new Exception("output argument missing");
+                             break;
 
-                            default : throw new Exception("unknown argument");
-                        }
-                        pos++;
+                        default : throw new Exception("unknown argument");
                     }
-                    else throw new Exception("bad argument");
+                    pos++;
                 }
-
-                // Outputs what we are going to do
-                System.out.println("-> Processing : " + filename);
-                System.out.println("-> Output     : " + output);
-                System.out.println("-> Base path  : " + base);
-                System.out.println("-> Kind       : " + kind);
-                System.out.println("");
-
-                // Calls the compiler
-                Compiler compiler = new Compiler(filename, base, kind, output);
-                CmdlinePackagerListener listener = new CmdlinePackagerListener();
-                compiler.setPackagerListener(listener);
-                compiler.compile();
-
-                // Waits
-                while (compiler.isAlive()) Thread.yield();
+                else throw new Exception("bad argument");
             }
+
+            // Outputs what we are going to do
+            System.out.println("-> Processing : " + filename);
+            System.out.println("-> Output     : " + output);
+            System.out.println("-> Base path  : " + base);
+            System.out.println("-> Kind       : " + kind);
+            System.out.println("");
+
+            // Calls the compiler
+            Compiler compiler = new Compiler(filename, base, kind, output);
+            CmdlinePackagerListener listener = new CmdlinePackagerListener();
+            compiler.setPackagerListener(listener);
+            compiler.compile();
+
+            // Waits
+            while (compiler.isAlive()) Thread.yield();
+        }
         }
         catch (Exception err)
         {

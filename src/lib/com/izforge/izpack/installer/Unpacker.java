@@ -111,7 +111,8 @@ public class Unpacker extends Thread
                 {
                     // We read the header
                     PackFile pf = (PackFile) objIn.readObject();
-                    if (null == pf.os || currentOs.indexOf(pf.os.toLowerCase()) > -1) {
+                    if (null == pf.os || currentOs.indexOf(pf.os.toLowerCase()) > -1) 
+                    {
                             // We translate & build the path
                             String path = translatePath(pf.targetPath);
                             File pathFile = new File(path);
@@ -152,7 +153,8 @@ public class Unpacker extends Thread
                             // Cleanings
                             out.close();
                     }
-                    else {
+                    else 
+                    {
                         objIn.skip(pf.length);
                     }
                 }
@@ -192,14 +194,14 @@ public class Unpacker extends Thread
 
             // We use the file executor
             FileExecutor executor = new FileExecutor(executables);
-            if(executor.executeFiles() != 0) {
+            if(executor.executeFiles() != 0) 
+            {
                 javax.swing.JOptionPane.showMessageDialog(
                     null, 
                     "The installation was not completed.",
                     "Installation warning",
                     javax.swing.JOptionPane.WARNING_MESSAGE);
-        // rollback installation?
-        }
+            }
 
         // We put the uninstaller
         putUninstaller();
