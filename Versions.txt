@@ -5,6 +5,7 @@
 - Added a new built-in variable ISO3_LANG that contains the selected language
   ISO3 code (Elmar's idea).
 - Added a new 'run.installer' target to the Ant build file.
+- Added an uninstall target to the documentation makefile.
 
   > 3.2.0 (build 2003.09.18)
 
