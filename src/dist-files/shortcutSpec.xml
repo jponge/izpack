@@ -8,7 +8,7 @@
      name="IzPack"
      programGroup="yes"
      desktop="yes"
-     applications="yes"
+     applications="no"
      startMenu="no"
      startup="no"
      target="$INSTALL_PATH\bin\izpack-fe.bat"
