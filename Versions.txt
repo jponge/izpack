@@ -11,6 +11,8 @@
 - New SummaryPanel (Klaus Bartz).
 - New SummaryLoggerInstallerListener which loggs the summary
   into a log file (Klaus Bartz).
+  Langpack up-to-date check script (Oscar Sierra | Klaus Bartz).
+  Custom langpacks (Klaus Bartz).
 
   > 3.7.2 (build N/A)
 

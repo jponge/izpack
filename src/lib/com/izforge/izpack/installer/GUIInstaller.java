@@ -107,7 +107,10 @@ public class GUIInstaller extends InstallerBase
 
     // create the resource manager (after the language selection!)
     ResourceManager.create(this.installdata);
-
+    
+    // Load custom langpack if exist.
+    addCustomLangpack(installdata);
+    
     // We launch the installer GUI
     loadGUI();
   }

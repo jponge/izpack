@@ -39,6 +39,7 @@ import java.util.Properties;
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
@@ -52,6 +53,11 @@ import com.izforge.izpack.util.OsVersion;
  */
 public class InstallerBase
 {
+
+  /** The base name of the XML file that specifies the custom langpack.
+   *  Searched is for the file with the name expanded by _ISO3.
+   */
+  protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
 
   /**
    *  Loads the installation data. Also sets environment variables to
@@ -193,6 +199,28 @@ public class InstallerBase
     // Load custom action data.
     loadCustomData(installdata);
 
+  }
+  
+  /**
+   * Add the contents of a custom langpack (if exist) 
+   * to the previos loaded comman langpack.
+   * If not exist, trace an info and do nothing more.
+   * @param idata install data to be used 
+   */
+  protected void addCustomLangpack(AutomatedInstallData idata)
+  {
+    // We try to load and add a custom langpack.
+    try
+    {
+      idata.langpack.add(ResourceManager.getInstance().
+          getInputStream(LANG_FILE_NAME));
+     }
+    catch (Throwable exception)
+    {
+      Debug.trace("No custom langpack available." );
+      return;
+    }
+    Debug.trace("Custom langpack for " + idata.localeISO3 + " available." );
   }
 
   /**

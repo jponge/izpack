@@ -94,6 +94,10 @@ public class AutomatedInstaller extends InstallerBase
     // create the resource manager singleton
     ResourceManager.create(idata);
 
+    // Load custom langpack if exist.
+    addCustomLangpack(idata);
+    
+
     this.panelInstanceCount = new TreeMap();
 
     doInstall(idata);
