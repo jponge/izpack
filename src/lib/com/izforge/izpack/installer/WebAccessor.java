@@ -51,7 +51,7 @@ import javax.swing.UIManager;
  * Dialogs for password authentication and firewall specification, when needed,
  * during web installation.
  *
- * @author <a href="mailto:mchenryc@acm.org">Chadwick A. McHenry</a>
+ * @author  Chadwick McHenry
  * @version 1.0
  */
 public class WebAccessor
