@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -43,6 +44,7 @@ import net.n3.nanoxml.XMLElement;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  * This class does alle the work for compiling sources.
@@ -299,7 +301,15 @@ public class CompileWorker implements Runnable
       String value = choice.getAttribute ("value");
 
       if (value != null)
-        result.add (this.vs.substitute (value, "plain"));
+      {
+        List osconstraints = OsConstraint.getOsList(choice);
+      
+        if (OsConstraint.oneMatchesCurrentSystem(osconstraints))
+        {
+          result.add (this.vs.substitute (value, "plain"));
+        }
+      }
+      
     }
 
   }
