@@ -49,6 +49,16 @@ public class PackInfo
   /** The pack object serialized in the installer. */
   private Pack pack;
 
+  /** The color of the node. This is used for the dependency graph algorithms */
+  public int colour;
+
+  /** white colour*/
+  public final static int WHITE = 0;
+  /** grey colour*/
+  public final static int GREY  = 1;
+  /** black colour*/
+  public final static int BLACK = 2;
+
   /** Files of the Pack. */
   private Map files = new HashMap();
 
@@ -64,13 +74,18 @@ public class PackInfo
   /** Constructor with required info. */
   protected PackInfo(String name, String id, String description, boolean required, boolean loose)
   {
-    pack = new Pack( name, id, description, null, required, true, loose);
+    pack = new Pack( name, id, description, null,null, required, true, loose);
+    colour = PackInfo.WHITE;
   }
   
   /* **********************************************************************
    * Attributes of the Pack
    * **********************************************************************/
 
+  public void setDependencies(List dependencies)
+  {
+    pack.dependencies = dependencies;
+  }
   public void setOsConstraints(List osConstraints)
   {
     pack.osConstraints = osConstraints;
@@ -202,5 +217,24 @@ public class PackInfo
   public List getUpdateChecks()
   {
     return updateChecks;
+  }
+  /**
+   * The packs that this file depends on
+   */
+  public void addDependency(String dependency)
+  {
+    if(pack.dependencies == null)
+    {
+      pack.dependencies = new ArrayList();
+    }
+    pack.dependencies.add(dependency);
+  }
+  public List getDependencies()
+  {
+    return pack.dependencies;
+  }
+  public String toString()
+  {
+    return pack.name;
   }
 }

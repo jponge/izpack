@@ -42,16 +42,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.Vector;
+import java.util.*;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
@@ -233,8 +224,8 @@ public class Compiler extends Thread
    *  Returns the GUIPrefs.
    *
    * @param  data           The XML data.
-   * @return                The GUIPrefs.
-   * @exception  Exception  Description of the Exception
+   * return                The GUIPrefs.
+   * @exception  CompilerException  Description of the Exception
    */
   protected void addGUIPrefs(XMLElement data) throws CompilerException
   {
@@ -670,12 +661,130 @@ public class Compiler extends Thread
         pack.addUpdateCheck(
           new UpdateCheck(includesList, excludesList, casesensitive));
       }
+      //We get the dependencies
+      iter = el.getChildrenNamed("depends").iterator();
+      while (iter.hasNext())
+      {
+        XMLElement dep = (XMLElement) iter.next();
+        String depName = requireAttribute(dep,"packname");
+        pack.addDependency(depName);
+
+      }
 
       // We add the pack
       packager.addPack(pack);
     }
+    checkDependencies(packager.getPacksList());
+
     notifyCompilerListener("addPacks", CompilerListener.END, data);
   }
+  /**
+   * Checks whether the dependencies stated in the configuration file are
+   * correct. Specifically it checks that no pack point to a non existent
+   * pack and also that there are no circular dependencies in the packs.
+   */
+  public void checkDependencies(List packs) throws CompilerException
+  {
+    // Because we use package names in the configuration file we assosiate
+    // the names with the objects
+    Map names = new HashMap();
+    for (int i = 0; i < packs.size(); i++)
+    {
+      PackInfo pack = (PackInfo) packs.get(i);
+      names.put(pack.getPack().name,pack);
+    }
+    int result = dfs(packs,names);
+    //@todo More informative messages to include the source of the error
+    if(result == -2)
+      parseError("Circular dependency detected");
+    else if(result == -1)
+      parseError("A dependency doesn't exist");
+  }
+  /** We use the dfs graph search algorithm to check whether the graph
+   * is acyclic as described in:
+   * Thomas H. Cormen, Charles Leiserson, Ronald Rivest and Clifford Stein. Introduction
+   * to algorithms 2nd Edition 540-549,MIT Press, 2001
+   * @param packs The graph
+   * @param names The name map
+   * @return
+   */
+  private int dfs(List packs,Map names)
+  {
+    Map edges = new HashMap();
+    for (int i = 0; i < packs.size(); i++)
+    {
+      PackInfo pack = (PackInfo) packs.get(i);
+      if(pack.colour == PackInfo.WHITE)
+      {
+        if(dfsVisit(pack,names,edges)!=0)
+          return -1;
+      }
+
+    }
+    return checkBackEdges(edges);
+  }
+  /**
+   * This function checks for the existence of back edges.
+   */
+  private int checkBackEdges(Map edges)
+  {
+    Set keys = edges.keySet();
+    for (Iterator iterator = keys.iterator(); iterator.hasNext();)
+    {
+      final Object key = iterator.next();
+      int color = ((Integer) edges.get(key)).intValue();
+      if(color == PackInfo.GREY)
+      {
+        return -2;
+      }
+    }
+    return 0;
+
+  }
+  /**
+   * This class is used for the classification of the edges
+   */
+  private class Edge
+  {
+    PackInfo u;
+    PackInfo v;
+    Edge(PackInfo u,PackInfo v)
+    {
+      this.u = u;
+      this.v = v;
+    }
+  }
+  private int dfsVisit(PackInfo u,Map names,Map edges)
+  {
+    u.colour = PackInfo.GREY;
+    List deps = u.getDependencies();
+    if (deps != null)
+    {
+      for (int i = 0; i < deps.size(); i++)
+      {
+        String name = (String) deps.get(i);
+        PackInfo v = (PackInfo)names.get(name);
+        if(v == null)
+          return -1;
+        Edge edge = new Edge(u,v);
+        if(edges.get(edge) == null)
+          edges.put(edge,new Integer(v.colour));
+
+        if(v.colour == PackInfo.WHITE)
+        {
+
+          final int result = dfsVisit(v,names,edges);
+          if(result != 0)
+            return result;
+        }
+      }
+    }
+    u.colour = PackInfo.BLACK;
+    return 0;
+  }
+
+
+
 
   /**
    *  Recursive method to add files in a pack.
@@ -716,7 +825,7 @@ public class Compiler extends Thread
    * the Packager.
    *
    * @param  data           The XML data.
-   * @exception  Exception  Description of the Exception
+   * @exception  CompilerException  Description of the Exception
    */
   protected void addPanels(XMLElement data) throws CompilerException
   {
@@ -856,7 +965,7 @@ public class Compiler extends Thread
    *  Builds the Info class from the XML tree.
    *
    * @param  data           The XML data.
-   * @return                The Info.
+   * return                The Info.
    * @exception  Exception  Description of the Exception
    */
   protected void addInfo(XMLElement data) throws Exception
@@ -933,7 +1042,7 @@ public class Compiler extends Thread
    *  variable declared in this can be referred to in parsable files.
    *
    * @param  data           The XML data.
-   * @exception  Exception  Description of the Exception
+   * @exception  CompilerException  Description of the Exception
    */
   protected void addVariables(XMLElement data) throws CompilerException
   {
@@ -1097,7 +1206,19 @@ public class Compiler extends Thread
 
     return url;
   }
-
+  /**
+   * Create parse error with consistent messages. Includes file name. For use
+   * When parent is unknown.
+   *
+   * @param message Brief message explaining error
+   */
+  protected void parseError(String message)
+    throws CompilerException
+  {
+    this.compileFailed = true;
+    throw new CompilerException(
+      filename + ":" + message);
+  }
   /**
    * Create parse error with consistent messages. Includes file name and line #
    * of parent. It is an error for 'parent' to be null.
@@ -1632,7 +1753,7 @@ public class Compiler extends Thread
    * @param callerName name of the calling method as string
    * @param state CompileListener.BEGIN or END
    * @param data current install data
-   * @throws Exception
+   * @throws CompilerException
    */
   private void notifyCompilerListener( String callerName, 
     int state, XMLElement data ) throws CompilerException 

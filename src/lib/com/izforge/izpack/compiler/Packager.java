@@ -267,6 +267,13 @@ public class Packager
   {
     packsList.add(pack);
   }
+  /**
+   * Gets the packages list
+   */
+  public List getPacksList()
+  {
+    return packsList;
+  }
 
   /**
    * Adds a language pack.
