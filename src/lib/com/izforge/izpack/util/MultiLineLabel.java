@@ -69,7 +69,6 @@ public class MultiLineLabel extends JComponent
     public  static final int DEFAULT_MARGIN = 10;
     public  static final int DEFAULT_ALIGN  = LEFT;
     public  static final int LEAST_ALLOWED  = 200;   // default setting for maxAllowed
-    private static final int MIN_MARGIN     = 5;
 
     private static final int FOUND          = 0;     // constants for string search.
     private static final int NOT_FOUND      = 1;
@@ -91,7 +90,7 @@ public class MultiLineLabel extends JComponent
     protected int        lineDescent;        // font hight below the baseline
     protected int []     lineWidth;          // width of each line
     protected int        maxWidth;           // width of the widest line
-    private   int        maxAllowed;         // max width allowed to use
+    private   int        maxAllowed = LEAST_ALLOWED; // max width allowed to use
     private   boolean    maxAllowedSet  = false;  // signals if the max allowed width has been explicitly set
 
     protected int        alignment   = LEFT; // default text alignment
@@ -173,7 +172,6 @@ public class MultiLineLabel extends JComponent
     {
       this.labelText = label;
     }
-
    /*-------------------------------------------------------------------*/
    /**
     * This method searches the target string for occurences of any of the
@@ -273,7 +271,6 @@ public class MultiLineLabel extends JComponent
       int width;
       int currentPos;
       int endPos;
-      int maxAllowed = super.getSize ().width;
 
       width       = 0;
       currentPos  = 0;
@@ -402,7 +399,12 @@ public class MultiLineLabel extends JComponent
       {
         maxAllowed = getParent ().getSize ().width;
       }
-      maxAllowed = maxAllowed - MIN_MARGIN;
+
+      // return if width is too small
+      if (maxAllowed < (20))
+      {
+        return;
+      }
 
       FontMetrics fm  = this.getFontMetrics (this.getFont ());
       
@@ -549,6 +551,24 @@ public class MultiLineLabel extends JComponent
     }
    /*-------------------------------------------------------------------*/
    /**
+    * Moves and resizes this component. The new location of the top-left
+    * corner is specified by <code>x</code> and <code>y</code>, and the
+    * new size is specified by <code>width</code> and <code>height</code>.
+    *
+    * @param     x      The new x-coordinate of this component.
+    * @param     y      The new y-coordinate of this component.
+    * @param     width  The new width of this component.
+    * @param     height The new height of this component.
+    */
+   /*-------------------------------------------------------------------*/
+    public void setBounds (int x, int y, int width, int height)
+    {
+      super.setBounds (x, y, width, height);
+      this.maxAllowed     = width;
+      this.maxAllowedSet  = true;
+    }
+   /*-------------------------------------------------------------------*/
+   /**
     * This method may be used to retrieve the text alignment for the label
     *
     * @return alignment  the text alignment currently in use for the label
@@ -593,7 +613,7 @@ public class MultiLineLabel extends JComponent
     public Dimension getPreferredSize ()
     {
       measure ();
-      return (new Dimension (maxWidth + (2 * marginWidth),
+      return (new Dimension (maxAllowed,
                  (numLines * (lineHeight + lineAscent + lineDescent)) + (2 * marginHeight)));
     }
    /*-------------------------------------------------------------------*/
@@ -606,7 +626,7 @@ public class MultiLineLabel extends JComponent
     public Dimension getMinimumSize ()
     {
       measure ();
-      return (new Dimension (maxWidth,
+      return (new Dimension (maxWidth + (2 * marginWidth),
                  (numLines * (lineHeight + lineAscent + lineDescent))));
     }
    /*-------------------------------------------------------------------*/
