@@ -89,13 +89,26 @@ import    net.n3.nanoxml.*;
  * To Do:
  * ------
  * * make sure all header documentation is complete and correct
- * * password field
  *--------------------------------------------------------------------------*/
 public class UserInputPanel extends IzPanel
 {
   // ------------------------------------------------------------------------
   // Constant Definitions
   // ------------------------------------------------------------------------
+
+  // The constants beginning with 'POS_' define locations in the object arrays
+  // that used to hold all information for the individual fields. Some data is
+  // not required for all field types. If this happens withing the array, that
+  // location must be padded with 'null'. At the end of the array it can be
+  // omitted. The data stored in this way is in most cases only known by
+  // convention between the add and the associated read method. the following
+  // positions are also used by other service methods in this class and must
+  // not be used for other purposes:
+  // - POS_DISPLAYED
+  // - POS_TYPE
+  // - POS_CONSTRAINTS
+  // - POS_PACKS
+  
   private static final int    POS_DISPLAYED                 = 0;
   private static final int    POS_TYPE                      = 1;
   private static final int    POS_VARIABLE                  = 2;
@@ -105,6 +118,7 @@ public class UserInputPanel extends IzPanel
   private static final int    POS_TRUE                      = 6;
   private static final int    POS_FALSE                     = 7;
   private static final int    POS_MESSAGE                   = 8;
+  private static final int    POS_GROUP                     = 9;
 
   /** The name of the XML file that specifies the panel layout */
   private static final String SPEC_FILE_NAME                = "userInputSpec.xml";
@@ -166,6 +180,7 @@ public class UserInputPanel extends IzPanel
 
   private static final String PWD_FIELD                     = "password";
   private static final String PWD_INPUT                     = "pwd";
+  private static final String PWD_SIZE                      = "size";
 
   private static final String PACKS                         = "createForPack";
   private static final String NAME                          = "name";
@@ -218,6 +233,9 @@ public class UserInputPanel extends IzPanel
   private Vector              buttonGroups    = new Vector ();
   /** Holds the references to all password field groups */
   private Vector              passwordGroups  = new Vector ();
+  /** used for temporary storage of references to password groups that
+      have already been read in a given read cycle. */
+  private Vector              passwordGroupsRead  = new Vector ();
 
   /** Holds all user inputs for use in automated installation */
   private Vector              entries         = new Vector ();
@@ -349,6 +367,15 @@ public class UserInputPanel extends IzPanel
     }
   }
 
+ /*--------------------------------------------------------------------------*/
+ /**
+  * Indicates wether the panel has been validated or not. The installer won't
+  * let the user go further through the installation process until the panel
+  * is validated. Default behavior is to return true.
+  *
+  * @return    A boolean stating wether the panel has been validated or not.
+  */
+ /*--------------------------------------------------------------------------*/
   public boolean isValidated ()
   {
     return (readInput ());
@@ -507,6 +534,11 @@ public class UserInputPanel extends IzPanel
     String      fieldType = null;
     Object []   field     = null;
 
+    passwordGroupsRead.clear ();
+    // ----------------------------------------------------
+    // cycle through all but the password fields and read
+    // their contents
+    // ----------------------------------------------------
     for (int i = 0; i < uiElements.size (); i++)
     {
       field     = (Object [])uiElements.elementAt (i);
@@ -519,6 +551,16 @@ public class UserInputPanel extends IzPanel
         if (fieldType.equals (RULE_FIELD))
         {
           success = readRuleField (field);
+          if (!success)
+          {
+            return (false);
+          }
+        }
+
+        // ------------------------------------------------
+        if (fieldType.equals (PWD_FIELD))
+        {
+          success = readPasswordField (field);
           if (!success)
           {
             return (false);
@@ -566,6 +608,7 @@ public class UserInputPanel extends IzPanel
         }
       }
     }
+
     return (true);
   }
  /*--------------------------------------------------------------------------*/
@@ -821,7 +864,7 @@ public class UserInputPanel extends IzPanel
       return (true);
     }
 
-    boolean success = ruleField.validateContent ();
+    boolean success = ruleField.validateContents ();
     if (!success)
     {
       JOptionPane.showMessageDialog (parent, 
@@ -1033,15 +1076,15 @@ public class UserInputPanel extends IzPanel
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Enter description synopsis here. More detailed description after the first period.
+  * Reads the content of the combobox field and substitutes the associated
+  * variable.
   *
-  * @param     -
+  * @param     field  the object array that holds the details of the field.
   *
-  * @return    -
-  *
-  * @see       -
-  *
-  * @exception -
+  * @return    <code>true</code> if there was no problem reading the data or
+  *            if there was an irrecovarable problem. If there was a problem
+  *            that can be corrected by the operator, an error dialog is
+  *            popped up and <code>false</code> is returned.
   */
  /*--------------------------------------------------------------------------*/
   private boolean readComboBox (Object [] field)
@@ -1093,19 +1136,18 @@ public class UserInputPanel extends IzPanel
   private void addRadioButton (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
-    String                variable  = spec.getAttribute (VARIABLE);
-    String                value     = null;
+    String                variable    = spec.getAttribute (VARIABLE);
+    String                value       = null;
 
-    XMLElement            element   = null;
+    XMLElement            element     = null;
     JLabel                label;
 
-    ButtonGroup           group     = new ButtonGroup ();
-    buttonGroups.add (group);
+    ButtonGroup           group       = new ButtonGroup ();
 
     TwoColumnConstraints  constraints = new TwoColumnConstraints ();
-    constraints.position  = constraints.BOTH;
-    constraints.indent    = true;
-    constraints.stretch   = true;
+    constraints.position              = constraints.BOTH;
+    constraints.indent                = true;
+    constraints.stretch               = true;
 
     // ----------------------------------------------------
     // get the description and add it to the list of UI
@@ -1150,21 +1192,22 @@ public class UserInputPanel extends IzPanel
           }
         }
 
-        uiElements.add (new Object [] {null, RADIO_FIELD, variable, constraints, choice, forPacks, value});
+        buttonGroups.add (group);
+        uiElements.add (new Object [] {null, RADIO_FIELD, variable, constraints, choice, forPacks, value, null, null, group});
       }
     }
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Enter description synopsis here. More detailed description after the first period.
+  * Reads the content of the radio button field and substitutes the associated
+  * variable.
   *
-  * @param     -
+  * @param     field  the object array that holds the details of the field.
   *
-  * @return    -
-  *
-  * @see       -
-  *
-  * @exception -
+  * @return    <code>true</code> if there was no problem reading the data or
+  *            if there was an irrecovarable problem. If there was a problem
+  *            that can be corrected by the operator, an error dialog is
+  *            popped up and <code>false</code> is returned.
   */
  /*--------------------------------------------------------------------------*/
   private boolean readRadioButton (Object [] field)
@@ -1220,14 +1263,14 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addPasswordField (XMLElement spec)
   {
-/*    Vector        forPacks  = spec.getChildrenNamed (PACKS);
+    Vector        forPacks  = spec.getChildrenNamed (PACKS);
     String        variable  = spec.getAttribute (VARIABLE);
     String        validator = null;
     String        message   = null;
     String        processor = null;
     XMLElement    element   = null;
-    PasswordGroup group     = new PasswordGroup ();
-    passwordGroups.add (group);
+    PasswordGroup group     = null; 
+    int           size      = 0;
 
     // ----------------------------------------------------
     // get the description and add it to the list of UI
@@ -1252,6 +1295,8 @@ public class UserInputPanel extends IzPanel
       processor = element.getAttribute (CLASS);
     }
 
+    group = new PasswordGroup (validator, 
+                               processor);
 
     // ----------------------------------------------------
     // extract the specification details
@@ -1270,41 +1315,48 @@ public class UserInputPanel extends IzPanel
       // --------------------------------------------------
       // process each input field
       // --------------------------------------------------
+      XMLElement fieldSpec;
       for (int i = 0; i < inputs.size (); i++)
       {
-//        JRadioButton choice   = new JRadioButton ();
-//        choice.setText          (getText ((XMLElement)choices.elementAt (i)));
+        fieldSpec     = (XMLElement)inputs.elementAt (i);
+        String set    = fieldSpec.getAttribute (SET);
+        JLabel label  = new JLabel (getText (fieldSpec));
+        try
+        {
+          size = Integer.parseInt (fieldSpec.getAttribute (PWD_SIZE));
+        }
+        catch (Throwable exception)
+        {
+          size = 1;
+        }
 
--->        group.add (choice);
+        // ----------------------------------------------------
+        // construct the UI element and add it to the list
+        // ----------------------------------------------------
+        JPasswordField field = new JPasswordField (set, size);
+        field.setCaretPosition (0);
 
-        String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
+        TwoColumnConstraints constraints = new TwoColumnConstraints ();
+        constraints.position  = constraints.WEST;
 
-        uiElements.add (new Object [] {null, RADIO_FIELD, variable, constraints, choice, forPacks, value});
+        uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
+
+        TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
+        constraints2.position  = constraints2.EAST;
+
+        uiElements.add (new Object [] {null, PWD_FIELD, variable, constraints2, field, forPacks, null, null, message, group});
+        group.addField (field);
       }
     }
     
-    // ----------------------------------------------------
-    // construct the UI element and add it to the list
-    // ----------------------------------------------------
-    JTextField field = new JTextField (set, size);
-    field.setCaretPosition (0);
-
-    TwoColumnConstraints constraints = new TwoColumnConstraints ();
-    constraints.position  = constraints.WEST;
-
-    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
-
-    TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
-    constraints2.position  = constraints2.EAST;
-
-    uiElements.add (new Object [] {null, TEXT_FIELD, variable, constraints2, field, forPacks});*/
+    passwordGroups.add (group);
   }
  /*--------------------------------------------------------------------------*/
  /**
   * Reads the content of the password field and substitutes the associated
   * variable.
   *
-  * @param     field  the object array that holds the details of the field.
+  * @param     field  a password group that manages one or more passord fields.
   *
   * @return    <code>true</code> if there was no problem reading the data or
   *            if there was an irrecovarable problem. If there was a problem
@@ -1312,18 +1364,42 @@ public class UserInputPanel extends IzPanel
   *            popped up and <code>false</code> is returned.
   */
  /*--------------------------------------------------------------------------*/
-  private boolean readPassordField (Object [] field)
+  private boolean readPasswordField (Object [] field)
   {
-//    boolean success = ruleField.validateContent ();
-    boolean success = true;
+    PasswordGroup   group     = null;
+    String          variable  = null;
+    String          message   = null;
+
+    try
+    {
+      group         = (PasswordGroup)field [POS_GROUP];
+      variable      = (String)field [POS_VARIABLE];
+      message       = (String)field [POS_MESSAGE];
+    }
+    catch (Throwable exception)
+    {
+      return (true);
+    }
+    if ((variable == null) || (passwordGroupsRead.contains (group)))
+    {
+      return (true);
+    }
+    passwordGroups.add (group);
+  
+
+    boolean success = group.validateContents ();
+
     if (!success)
     {
       JOptionPane.showMessageDialog (parent, 
-                                     (String)field [POS_MESSAGE], 
+                                     message, 
                                      parent.langpack.getString ("UserInputPanel.error.caption"), 
                                      JOptionPane.WARNING_MESSAGE);
       return (false);
     }
+
+    idata.getVariableValueMap ().setVariable (variable, group.getPassword ());
+    entries.add (new TextValuePair (variable, group.getPassword ()));
     return (true);
   }
  /*--------------------------------------------------------------------------*/
@@ -1387,15 +1463,15 @@ public class UserInputPanel extends IzPanel
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * Enter description synopsis here. More detailed description after the first period.
+  * Reads the content of the checkbox field and substitutes the associated
+  * variable.
   *
-  * @param     -
+  * @param     field  the object array that holds the details of the field.
   *
-  * @return    -
-  *
-  * @see       -
-  *
-  * @exception -
+  * @return    <code>true</code> if there was no problem reading the data or
+  *            if there was an irrecovarable problem. If there was a problem
+  *            that can be corrected by the operator, an error dialog is
+  *            popped up and <code>false</code> is returned.
   */
  /*--------------------------------------------------------------------------*/
   private boolean readCheckBox (Object [] field)

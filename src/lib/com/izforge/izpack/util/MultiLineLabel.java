@@ -626,8 +626,8 @@ public class MultiLineLabel extends JComponent
     public Dimension getMinimumSize ()
     {
       measure ();
-      return (new Dimension (maxWidth + (2 * marginWidth),
-                 (numLines * (lineHeight + lineAscent + lineDescent))));
+      return (new Dimension (maxAllowed,
+                 (numLines * (lineHeight + lineAscent + lineDescent)) + (2 * marginHeight)));
     }
    /*-------------------------------------------------------------------*/
    /**

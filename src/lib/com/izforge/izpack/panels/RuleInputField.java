@@ -131,12 +131,12 @@ public class RuleInputField extends JComponent implements KeyListener,
   *                          The class must implement the <code>RuleValidator</code>
   *                          interface. If an attempt to instantiate this class
   *                          fails, no validation will be performed.
-  * @param     encryptor     A string that specifies a class to perform
-  *                          encryption services. The string must completely
+  * @param     processor     A string that specifies a class to perform
+  *                          processing services. The string must completely
   *                          identify the class, so that it can be instantiated.
-  *                          The class must implement the <code>Encryptor</code>
+  *                          The class must implement the <code>Processor</code>
   *                          interface. If an attempt to instantiate this class
-  *                          fails, no encryption will be performed. Instead,
+  *                          fails, no processing will be performed. Instead,
   *                          the text is returned in the default formatting.
   * @param     resultFormat  specifies in which format the resulting text
   *                          should be returned, wehn <code>getText()</code>
@@ -154,7 +154,7 @@ public class RuleInputField extends JComponent implements KeyListener,
                          String   preset,
                          String   separator,
                          String   validator,
-                         String   encryptor,
+                         String   processor,
                          int      resultFormat,
                          Toolkit  toolkit)
   {
@@ -167,7 +167,7 @@ public class RuleInputField extends JComponent implements KeyListener,
     setLayout (layout);
 
     // ----------------------------------------------------
-    // attempt to create an instance of the RuleValidator
+    // attempt to create an instance of the Validator
     // ----------------------------------------------------
     try
     {
@@ -179,11 +179,11 @@ public class RuleInputField extends JComponent implements KeyListener,
     }
 
     // ----------------------------------------------------
-    // attempt to create an instance of the Encryptor
+    // attempt to create an instance of the Processor
     // ----------------------------------------------------
     try
     {
-      encryptionService = (Processor)Class.forName (encryptor).newInstance ();
+      encryptionService = (Processor)Class.forName (processor).newInstance ();
     }
     catch (Throwable exception)
     {
@@ -229,7 +229,7 @@ public class RuleInputField extends JComponent implements KeyListener,
   * @exception IndexOutOfBoundsException if the index is out of bounds.
   */
  /*--------------------------------------------------------------------------*/
-  public String getFieldContents (int index)
+  public String getFieldContents (int index) throws IndexOutOfBoundsException
   {
     if ((index < 0) || (index > (inputFields.size () - 1)))
     {
@@ -492,7 +492,7 @@ public class RuleInputField extends JComponent implements KeyListener,
   }
  /*--------------------------------------------------------------------------*/
  /**
-  * This method validates the field contend. Validating is performed through
+  * This method validates the field content. Validating is performed through
   * a user supplied service class that provides the validation rules.
   *
   * @return    <code>true</code> if the validation passes or no implementation
@@ -500,7 +500,7 @@ public class RuleInputField extends JComponent implements KeyListener,
   *            returned.
   */
  /*--------------------------------------------------------------------------*/
-  public boolean validateContent ()
+  public boolean validateContents ()
   {
     if (validationService != null)
     {
