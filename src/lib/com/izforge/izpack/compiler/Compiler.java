@@ -926,7 +926,8 @@ public class Compiler extends Thread
   /**
    * Look for a project specified resources, which, if not absolute, are sought
    * relative to the projects basedir. The path should use '/' as the
-   * fileSeparator. If the resource is not found, IzPack resources are tried next.
+   * fileSeparator. If the resource is not found, a CompilerException is thrown
+   * indicating fault in the parent element.
    *
    * @param path the relative path (using '/' as separator) to the resource.
    * @param desc the description of the resource used to report errors
@@ -942,8 +943,8 @@ public class Compiler extends Thread
     if (! resource.isAbsolute())
       resource = new File(basedir, path);
 
-    if (! resource.exists()) // try IzPack resources as fallback
-      return findIzPackResource(path, desc, parent);
+    if (! resource.exists()) // fatal
+      parseError(parent, path + " not found");
 
     try
     {
