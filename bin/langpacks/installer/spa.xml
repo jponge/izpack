@@ -130,6 +130,15 @@
     <str id="CompilePanel.choose_compiler" txt="Compilador a usar:" />
     <str id="CompilePanel.additional_arguments" txt="Argumentos adicionales de compilación:" />
 
+    <str id="ProcessPanel.heading" txt="Procesando" />
+
+    <!-- Strings for the summary of panels --- START -->
+    <str id="SummaryPanel.info" txt="La instalación está a punto de comenzar. Los parámetros de instalación se muestran a continuación. Pulse &quot;Siguiente&quot; para continuar, "/>
+    <str id="TargetPanel.summaryCaption" txt="Directorio de instalación"/>
+    <str id="JDKPathPanel.summaryCaption" txt="Ruta a la JDK"/>
+    <str id="PacksPanel.summaryCaption" txt="Paquetes seleccionados"/>
+    <str id="ImgPacksPanel.summaryCaption" txt="Paquetes seleccionados"/>
+    <!-- Strings for the summary of panels --- END -->
 
     <!-- Add your own panels specific strings here if you need -->
 
