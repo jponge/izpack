@@ -27,6 +27,7 @@ package com.izforge.izpack.uninstaller;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import com.izforge.izpack.gui.IzPackMetalTheme;
+import java.lang.reflect.Method;
 
 /**
  *  The uninstaller class.
@@ -42,6 +43,25 @@ public class Uninstaller
    * @param  args  The arguments passed on the command line.
    */
   public static void main(String[] args)
+  {
+    try
+    {
+      Class clazz = Uninstaller.class;
+      Method target = clazz.getMethod("uninstall",
+                                      new Class[] {String[].class});
+      new SelfModifier(target).invoke(args);
+    }
+    catch (Exception ioeOrTypo)
+    {
+      System.err.println(ioeOrTypo.getMessage());
+      ioeOrTypo.printStackTrace();
+      System.err.println("Unable to exec java as a subprocess.");
+      System.err.println("The uninstall may not fully complete.");
+      uninstall(args);
+    }
+  }
+  
+  public static void uninstall(String[] args)
   {
     try
     {
