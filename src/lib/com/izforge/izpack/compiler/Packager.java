@@ -323,6 +323,16 @@ public class Packager
     sendMsg("Adding content of jar : " + jarURL.getFile() + " ...");
     includedJarURLs.add(jarURL);
   }
+  
+  /**
+   * Marks a native library to be added to the uninstaller.
+   * @param data the describing custom action data object
+   */
+  public void addNativeUninstallerLibrary(CustomActionData data)
+  {
+    customActionsList.add(data);  // serialized to keep order/variables correct
+
+  }
 
 
   /* **********************************************************************
