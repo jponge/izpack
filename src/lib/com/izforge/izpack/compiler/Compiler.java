@@ -1,5 +1,5 @@
 /*
- * IzPack Version 3.0.0 pre4 (build 2002.06.15)
+ * IzPack Version 3.0.0 rc1 (build 2002.07.03)
  * Copyright (C) 2001,2002 Julien Ponge
  *
  * File :               Compiler.java
@@ -52,7 +52,7 @@ public class Compiler extends Thread
 
     // The compiler version
     public static final String VERSION = "1.0";
-    public static final String IZPACK_VERSION = "3.0.0 pre4 (build 2002.06.15)";
+    public static final String IZPACK_VERSION = "3.0.0 rc1 (build 2002.07.03)";
 
     // The installers kinds
     public static final String STANDARD = "standard";

@@ -1,5 +1,15 @@
 [ The list of the different public versions of IzPack ]
 
+    > 3.0.0 rc1 (build 2002.07.03)
+
+- Fixes on the shortcuts sytem.
+- New Hungarian language pack thanks to Harsan Peter.
+- New Japanese language pack thanks to Hiroki Akimoto.
+- New documentation.
+- Fixed many source coding style errors.
+- Coding guidelines publication.
+- Some Javadoc text is now generated for those who need to make panels.
+
     > 3.0.0 pre4 (build 2002.06.15)
 
 - Polish language pack thanks to Piotr Bzdyl.

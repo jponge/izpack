@@ -43,3 +43,4 @@ IzPack for your projects ;-)
 - The e-xmlmedia.fr people for the lot of improvements and new features added to
   IzPack.
 - Harsan Peter for the Hungarian language pack.
+- Hiroki Akimoto for the Japanes language pack.

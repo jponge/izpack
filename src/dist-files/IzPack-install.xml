@@ -18,7 +18,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.0.0 pre4 (build 2002.06.15)</appversion>
+        <appversion>3.0.0 rc1 (build 2002.07.03)</appversion>
         <authors>
             <author email="julien@izforge.com" name="Julien PONGE"/>
         </authors>
@@ -33,6 +33,7 @@
         <langpack iso3="eng"/>
         <langpack iso3="fra"/>
         <langpack iso3="deu"/>
+        <langpack iso3="jpn"/>
         <langpack iso3="spa"/>
         <langpack iso3="cat"/>
         <langpack iso3="ned"/>
