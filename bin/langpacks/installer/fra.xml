@@ -112,6 +112,9 @@
     <str id="UserInputPanel.search.autodetect.tooltip" txt="Vérifiez le fichier ou répertoire dans les chemis suivants :"/>
     <str id="UserInputPanel.search.location" txt="Entrez l'emplacement de "/>
     <str id="UserInputPanel.search.browse" txt="Parcourir ..."/>
+    <str id="UserInputPanel.search.wrongselection.message" txt="Le fichier ou le répertoire que vous avez choisi n'existe pas ou n'est pas convenable." />
+    <str id="UserInputPanel.search.wrongselection.caption" txt="Sélection invalide."/>
+    <str id="UserInputPanel.search.location.checkedfile" txt="L'existence de {0} est vérifiée."/>
     
     <str id="CompilePanel.heading" txt="Compilation" />
     <str id="CompilePanel.tip" txt="Progression de la compilation :" />
@@ -132,6 +135,8 @@
     <str id="CompilePanel.error.noclassfile" txt="Le compilateur n'a pas génére de fichier .class pour le fichier source " />
     <str id="CompilePanel.choose_compiler" txt="Compilateur à utiliser :" />
     <str id="CompilePanel.additional_arguments" txt="Arguments supplémentaires du compilateur : " />
+    
+    <str id="ProcessPanel.heading" txt="En cours de traitement" />
 
     <!-- Add your own panels specific strings here if you need -->
     
