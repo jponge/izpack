@@ -1,5 +1,5 @@
 /*
- * IzPack Version 3.0.0 (build 2002.08.13)
+ * IzPack Version 3.1.0 pre1 (build 2002.09.21)
  * Copyright (C) 2002 Johannes Lehtinen
  *
  * File :               VariableValueMap.java

@@ -1,5 +1,5 @@
 /*
- * IzPack version 3.0.0 (build 2002.08.13)
+ * IzPack version 3.1.0 pre1 (build 2002.09.21)
  * Copyright (C) 2002 by Elmar Grom
  *
  * File :               Win_Shortcut.java
