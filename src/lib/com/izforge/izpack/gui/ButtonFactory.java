@@ -37,18 +37,33 @@ public class ButtonFactory
 {
 	private static boolean useHighlightButtons = false;
 	private static boolean useButtonIcons = false;
-	
-	
+
+
+  /**
+   * Enable icons for buttons
+   * This setting has no effect on OSX
+   */
 	public static void useButtonIcons()
 	{
-		useButtonIcons = true;
+    if(System.getProperty("mrj.version")==null)
+    {
+  		useButtonIcons = true;
+    }
 	}
+
+  /**
+   * Enable highlight buttons
+   * This setting has no effect on OSX
+   */
 	public static void useHighlightButtons()
 	{
-		useHighlightButtons = true;
-		useButtonIcons = true;
+    if(System.getProperty("mrj.version")==null)
+    {
+  		useHighlightButtons = true;
+  		useButtonIcons = true;
+    }
 	}
-	
+
 	public static JButton createButton(Icon icon, Color color)
 	{
 		if (useHighlightButtons)
