@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.6.1 (build 2004.xx.yy)
+  > 3.6.1 (build 2004.10.09)
 
 - Slovak translation updates (Milan Madzia).
 - Java class execution bug fix (Erik Artzmark).
