@@ -1,33 +1,35 @@
 % Chapter 2
-\chapter{Writing installation XML files}
+\chapter{Writing Installation XML Files}
 
 % What you need
-\section{What you need}
+\section{What You Need}
 
 \subsection{Your editor}
 
-In order to write your XML installation files, you just need any plain text
-editor. Of course it's always easier to work with a colored text, so you'll feel
-better with a text editor havaing such a feature. Valueable free ones can be :
+In order to write your XML installation files, you just need a plain
+text editor. Of course it's always easier to work with color coded text,
+so you might rather want to work with a text editor havaing such a
+feature. Here is a list of free editors that work well :
 \begin{itemize}
   \item Jext : \url{http://www.jext.org/}
   \item JEdit : \url{http://www.jedit.org/}
   \item classics like Vim and (X)Emacs.
 \end{itemize}\
 
-\subsection{Writing in XML}
+\subsection{Writing XML}
 
-You may not know much about XML. You have certainly heard about it, but never
-really played with it. XML-aware people can leave this subsection as we will
-present quickly how to use XML.\\
+Though you might not know much about XML, you have certainly heard about
+it. If you know XML you can skip this subsection as we will briefly
+present how to use XML.\\
 
-XML is a markup language, really close to HTML. If you've ever worked with HTML
-the transition will be fast. However there are some little things to know. The
-markups used in XML have the following form : \texttt{<markup>}. Each markup has
-to be closed somewhere with its ending tag : \texttt{</markup>}. Each tag can
-contain some text and other markups. If a markup does not contain anything, it
-is just reported once : \texttt{<markup/>}. A markup can contain some attributes
-like : \texttt{<markup attr1="123" attr2="hello !"/>}. Here is a sample of a
+XML is a markup language, really close to HTML. If you've ever worked
+with HTML the transition will be fast. However there are a few little
+things to know. The markups used in XML have the following form :
+\texttt{<markup>}. Each markup has to be closed somewhere with its
+ending tag : \texttt{</markup>}. Each tag can contain text and other
+markups. If a markup does not contain anything, it is just reported once
+: \texttt{<markup/>}. A markup can contain attributes like :
+\texttt{<markup attr1="123" attr2="hello !"/>}. Here is a sample of a
 valid XML structure :
 \footnotesize
 \begin{verbatim}
@@ -63,47 +65,92 @@ thing you should modify is the encoding (put here the one your text editor saves
 your files to). The \texttt{standalone} attribute is not very important for
 us.\\
 
-This (quick !) introduction to XML was just to make you able to write your
-installation specification. For a better introduction there are plenty of books
-and articles/tutorials dealing of XML on Internet, in book stores, in magazines
-and so on.\\
+This (brief !) introduction to XML was just meant to enable you to write
+your installation specification. For a better introduction there are
+plenty of books and articles/tutorials dealing with XML on the Internet,
+in book stores, in magazines and so on.\\
 
 % Built-in variables
-\section{The built-in variables}
+\section{Variable Substitution}
 
-These variables are built-in :
+During the installation process IzPack can substitute variables in
+various places with real values. Obvious targets for variable
+substitution are resource files and launch scripts, however you will
+notice many more places where it is more powerful to use variables
+rather then hard coded values. Wherever variables can be used it will
+be explained in the documentation.\\
+
+There are two types of variables:
 \begin{itemize}
+  \item Built-In variables. These are implemented in IzPack and are 
+        all dynamic in nature. This means that the value of each
+        variable depends on local conditions on the target system.
+  \item Variables that you can define. You also define the value,
+        wich is fixed for a given installation file.
+\end{itemize}
 
-  \item \texttt{\$INSTALL\_PATH} : the installation path
+You define your own variables in the installation XML file with the
+texttt{<variable>} tag. How to do this is explained in detail later in
+this cahpter.\\
+
+textbf\{Please note} that when using variables they must always appear
+with a '\texttt{$}' sign as the first character, even though they are
+not defined this way.\\
+
+\subsection{The Built-In Variables}
+The following variables are built-in :
+\begin{itemize}
+  \item \texttt{\$INSTALL\_PATH} : the installation path on the
+        target system, as chosen by the user.
   \item \texttt{\$JAVA\_HOME} : the \Java virtual machine home path
-  \item \texttt{\$USER\_HOME} : the user home directory path
+  \item \texttt{\$USER\_HOME} : the user's home directory path
   \item \texttt{\$USER\_NAME} : the user name
-
 \end{itemize}\
 
+\subsection{Parse Types}
+Parse types apply only when replacing variables in text files. At places
+where it might be necessary to specify a parse type, the documentation
+will mention this. Depending on the parse type, IzPack will handle
+special cases -such as escaping control characters- correctly. The
+following parse types are available:
+\begin{itemize}
+  \item \texttt{plain} - use this type for plain text files, where no
+        special substitution rules apply. All variables will be
+        replaced with their respective values as is.
+  \item \texttt{javaprop} - use this type if the substitution happens
+        in a Java properties file. Individual variables might be
+        modified to function properly within the context of Java
+        property files.
+  \item \texttt{xml} - use this type if the substitution happens in
+        a XML file. Individual variables might be modified to function
+        properly within the context of XML files.
+\end{itemize}
+
 % The IzPack elements
-\section{The \IzPack elements}
+\section{The \IzPack Elements}
 
 \noindent
-\textit{When writing your installers XML files, it's a good idea to have a look
+\textit{When writing your installer XML files, it's a good idea to have a look
 at the \IzPack installation DTD}.\\
 
-\subsection{The root element \texttt{<installation>}}
+\subsection{The Root Element \texttt{<installation>}}
 
-The root element of an installation is \texttt{<installation>}. It takes one
-required attribute : \texttt{version}. It should be set to $1.0$ for the
-moment.\\
+The root element of an installation is \texttt{<installation>}. It takes
+one required attribute : \texttt{version}. The attribute defines the
+version of the XML file layout and is used by the compiler to identify
+if it is compatible with the XML file. This should be set to $1.0$ for
+the moment.\\
 
-\subsection{The information element \texttt{<info>}}
+\subsection{The Information Element \texttt{<info>}}
 
-This element is there to specify some general informations on the installer. It
+This element is used to specify some general information for the installer. It
 contains the following elements :
 \begin{itemize}
 
   \item \texttt{<appname>} : the application name
   \item \texttt{<appversion>} : the application version
   \item \texttt{<url>} : the application official website url
-  \item \texttt{<authors>} : specifies the authors of the application, contains
+  \item \texttt{<authors>} : specifies the author(s) of the application. It must contain
   at least one \texttt{<author>} element whose attributes are :
   \begin{itemize}
     \item \texttt{name} : the author's name
@@ -112,7 +159,7 @@ contains the following elements :
 
 \end{itemize}\
 
-An example of a typical \texttt{<info>} section is :\\
+Here is an example of a typical \texttt{<info>} section :\\
 \footnotesize
 \begin{verbatim}
 <info>
@@ -127,15 +174,16 @@ An example of a typical \texttt{<info>} section is :\\
 \end{verbatim}
 \normalsize
 
-\subsection{The variables element \texttt{<variables>}}
+\subsection{The Variables Element \texttt{<variables>}}
 
-This element allows you defines some variables for the variables substitution
-system. Some variables are built-in, such as \texttt{\$INSTALL\_PATH} (which is
-the installation choosen by the user). When you define a set of variables, you
-just have to put as many \texttt{<variable>} tags as needed. In the files to
-parse, if you define a variable named \texttt{VERSION}, you will type \$VERSION
-and the variables subsitutor will replace it by the right value.
-One \texttt{<variable>} tag take the following arguments :
+This element allows you to define variables for the variables
+substitution system. Some variables are built-in, such as
+\texttt{\$INSTALL\_PATH} (which is the installation path choosen by the
+user). When you define a set of variables, you just have to place as
+many \texttt{<variable>} tags in the file as needed. If you define a
+variable named \texttt{VERSION} you need to type \$VERSION in the files
+to parse. The variable subsitutor will then replace it with the correct
+value. One \texttt{<variable>} tag take the following attributes :
 \begin{itemize}
 
   \item \texttt{name} : the variable name
@@ -153,11 +201,11 @@ Here's a sample \texttt{<variables>} section :\\
 \end{verbatim}
 \normalsize
 
-\subsection{The GUI preferences element \texttt{<guiprefs>}}
+\subsection{The GUI Preferences Element \texttt{<guiprefs>}}
 
 This element allows you to set the behaviour of your installer GUI. This
 information will not have any effect on the command-line installers that will be
-available in the future versions of \IzPack. The arguments to specify are :
+available in future versions of \IzPack. The arguments to specify are :
 \begin{itemize}
 
   \item \texttt{resizable} : takes \texttt{yes} or \texttt{no} and indicates
@@ -174,7 +222,7 @@ Here's a sample :
 \end{verbatim}
 \normalsize
 
-\subsection{The localisation element \texttt{<locale>}}
+\subsection{The Localisation Element \texttt{<locale>}}
 
 This element is used to specify the language packs (langpacks) that you want to
 use for your installer. You must set one \texttt{<langpack>} markup per
@@ -192,26 +240,28 @@ Here's a sample :\\
 \end{verbatim}
 \normalsize
 
-\subsection{The resources element \texttt{<resources>}}
+\subsection{The Resources Element \texttt{<resources>}}
 
-The resources are the data of the panels. Here you can specify them. Take a look
-at each panel description to see the resources it might need. You have to set
-one \texttt{<res>} markup for each resource and here are the attributes to
-specify :
+Several panels, such as the license panel and the shortcut panel,
+require additional data to perform their task. This data is supplied in
+the form of resources. This section describes how to specify them. Take
+a look at each panel description to see if it might need any resources.
+You have to set one \texttt{<res>} markup for each resource. Here are
+the attributes to specify :
 \begin{itemize}
 
   \item \texttt{src} : the path to the resource file which can be named freely
   of course (for instance \texttt{my-picture.jpg}).
-  \item \texttt{id} : the resource id, specified by the panel needs
+  \item \texttt{id} : the resource id, depending on the needs of a particular panel
   \item \texttt{parse} : takes \texttt{yes} or \texttt{no} (default is
   \texttt{no}) - used to specify wether the resource must be parsed at the
-  installer compilation time (for instance you could set the application version
-  in a readme file use by \texttt{InfoPanel}).
-  \item \texttt{type} : specifies the type (makes sense only for a textual
-  resource)  - default is \texttt{plain}, other values are \texttt{javaprop,
+  installer compilation time. For instance you could set the application version
+  in a readme file used by \texttt{InfoPanel}.
+  \item \texttt{type} : specifies the parse type. This makes sense only for a text
+  resource  - the default is \texttt{plain}, other values are \texttt{javaprop,
   xml} (Java properties file and XML files)
-  \item \texttt{encoding} : specifies the resource encoding (makes sense only
-  for a textual resource) if it does matter to know it.
+  \item \texttt{encoding} : specifies the resource encoding if the receiver needs
+  to know. This makes sense only for a text resource.
 
 \end{itemize}\
 
