@@ -515,9 +515,8 @@ public class InstallerFrame extends JFrame
   {
     if (installdata.canClose)
     {
-      // Everything went well
-      if (installdata.info.getWriteUninstaller())
-        writeUninstallData();
+      // this does nothing if the uninstaller was not included
+      writeUninstallData();
       Housekeeper.getInstance().shutDown(0);
     } else
     {

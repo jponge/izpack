@@ -120,6 +120,8 @@ public class AutomatedInstaller extends InstallerBase
       if (outJar == null)
         return;
 
+      System.out.println("[ Writing the uninstaller data ... ]");
+
       // We write the files log
       outJar.putNextEntry(new ZipEntry("install.log"));
       BufferedWriter logWriter =
@@ -252,11 +254,8 @@ public class AutomatedInstaller extends InstallerBase
 
     }
 
-		if (idata.info.getWriteUninstaller())
-		{
-			System.out.println("[ Writing the uninstaller data ... ]");
-			writeUninstallData();
-		}
+    // this does nothing if the uninstaller was not included
+    writeUninstallData();
 
     System.out.println("[ Automated installation done ]");
 
