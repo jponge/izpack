@@ -40,6 +40,7 @@ import java.util.Properties;
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
@@ -144,10 +145,6 @@ public class InstallerBase
         dir = System.getProperty("user.home") + File.separator;
       }
     }
-
-    installPath = dir + inf.getAppName();
-
-    installdata.setInstallPath(installPath);
     installdata.setVariable(ScriptParser.JAVA_HOME, System
         .getProperty("java.home"));
     installdata.setVariable(ScriptParser.USER_HOME, System
@@ -192,6 +189,15 @@ public class InstallerBase
       Pack pack = (Pack) pack_it.next();
       if (pack.preselected) installdata.selectedPacks.add(pack);
     }
+    // Set the installation path in a default manner
+    installPath = dir + inf.getAppName();
+    if( inf.getInstallationSubPath() != null )
+    { // A subpath was defined, use it.
+      installPath = dir + inf.getInstallationSubPath();
+      installPath = IoHelper.translatePath(dir + inf.getInstallationSubPath(), 
+        new VariableSubstitutor(installdata.getVariables()));
+    }
+    installdata.setInstallPath(installPath);
     // Load custom action data.
     loadCustomData(installdata);
 

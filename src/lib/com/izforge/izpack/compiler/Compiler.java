@@ -1004,6 +1004,12 @@ public class Compiler extends Thread
     String temp = null;
     info.setAppName(requireContent(requireChildNamed(root, "appname")));
     info.setAppVersion(requireContent(requireChildNamed(root, "appversion")));
+    // We get the installation subpath
+    XMLElement subpath = root.getFirstChildNamed("appsubpath");
+    if(subpath != null)
+    {
+      info.setInstallationSubPath(requireContent(subpath));
+    }
 
     // validate and insert app URL
     final XMLElement URLElem = root.getFirstChildNamed("url");
