@@ -241,8 +241,7 @@ public class Destroyer extends Thread
         UninstallerListener ul = (UninstallerListener) clazz.newInstance();
         if( ul.isFileListener())
           uninstaller[1].add( ul );
-        else
-          uninstaller[0].add( ul );
+        uninstaller[0].add( ul );
      }
     }
     return uninstaller;
