@@ -81,6 +81,7 @@ public class RuleTextField extends JTextField
     this.unlimitedEdit  = unlimitedEdit;
     rule = new Rule();
     rule.setRuleType (type, editLength, unlimitedEdit);
+    setDocument(rule);
   }
 
   protected Document createDefaultModel () 

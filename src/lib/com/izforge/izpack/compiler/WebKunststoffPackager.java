@@ -27,9 +27,11 @@ package com.izforge.izpack.compiler;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -56,10 +58,12 @@ public class WebKunststoffPackager extends WebPackager
 
     // Copies the Kunststoff library
     sendMsg("Copying the Kunststoff library ...");
-    ZipInputStream skeleton_is =
-      new ZipInputStream(getClass().getResourceAsStream("/lib/kunststoff.jar"));
-
-    if (skeleton_is == null)
+    InputStream istream = getClass().getResourceAsStream("/lib/kunststoff.jar");
+    ZipInputStream skeleton_is;
+    if (istream != null)
+    {
+      skeleton_is = new ZipInputStream(istream);
+    } else
     {
       skeleton_is =
         new JarInputStream(
@@ -72,15 +76,21 @@ public class WebKunststoffPackager extends WebPackager
     while ((zentry = skeleton_is.getNextEntry()) != null)
     {
       // Puts a new entry
-      outJar.putNextEntry(new ZipEntry(zentry.getName()));
+      try {
+        outJar.putNextEntry(new ZipEntry(zentry.getName()));
+        // Copy the data
+        copyStream(skeleton_is, outJar);
 
-      // Copy the data
-      copyStream(skeleton_is, outJar);
-
-      outJar.closeEntry();
-      skeleton_is.closeEntry();
+        outJar.closeEntry();
+        skeleton_is.closeEntry();
+      } catch(ZipException x) {
+        /* Hopefully only duplicate entries cause this error. This is needed
+         * because the skeleton has already been copied in (including classes
+         * in the 'com/' directory) and copying the kunststoff installer tries
+         * to add an entry for the 'com/' directory also, which fails because
+         * it already exists. */
+      }
     }
-
   }
 
   /**

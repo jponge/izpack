@@ -7,67 +7,67 @@
     <str id="installer.prev" txt="Zurück"/>
     <str id="installer.quit" txt="Beenden"/>
     <str id="installer.madewith" txt="(Erstellt mit IzPack - http://www.izforge.com/)"/>
-    <str id="installer.quit.title" txt="Wollen Sie wirklich beenden ?"/>
-    <str id="installer.quit.message" txt="Die Installation wird jetzt abgebrochen !"/>
-    <str id="installer.warning" txt="Warnung !"/>
+    <str id="installer.quit.title" txt="Wollen Sie wirklich beenden?"/>
+    <str id="installer.quit.message" txt="Die Installation wird jetzt abgebrochen!"/>
+    <str id="installer.warning" txt="Warnung!"/>
     <str id="installer.yes" txt="Ja"/>
     <str id="installer.no" txt="Nein"/>
     <str id="installer.cancel" txt="Abbruch"/>
     <str id="installer.error" txt="Fehler"/>
 
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="Jetzt wird(werden) die installierte(n) Anwendung(en) entfernt !"/>
+    <str id="uninstaller.warning" txt="Jetzt werden die installierten Anwendungen entfernt!"/>
     <str id="uninstaller.destroytarget" txt=" Deinstallation durchführen für "/>
     <str id="uninstaller.uninstall" txt="Deinstallieren"/>
 
     <!-- The strings for the 'official' IzPack plugins -->
     <str id="HelloPanel.welcome1" txt="Willkommen zur Installation von "/>
-    <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="Der(die) Autor(en) dieser Software ist(sind) : "/>
-    <str id="HelloPanel.url" txt="Die Homepage für diese Software : "/>
-    <str id="LicencePanel.info" txt="Bitte lesen Sie die folgenden Lizenzvereinbarungen durch :"/>
-    <str id="LicencePanel.agree" txt="Stimmen Sie diesen Lizenzvereinbarungen zu ?"/>
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <str id="HelloPanel.authors" txt="Der(die) Autor(en) dieser Software ist(sind): "/>
+    <str id="HelloPanel.url" txt="Die Homepage für diese Software: "/>
+    <str id="LicencePanel.info" txt="Bitte lesen Sie die folgenden Lizenzvereinbarungen durch:"/>
+    <str id="LicencePanel.agree" txt="Ja, ich stimme diesen Lizenzvereinbarungen zu."/>
     <str id="LicencePanel.notagree" txt="Nein, ich stimme diesen Lizenzvereinbarungen nicht zu."/>
     <str id="LicencePanel.yes" txt="Ja"/>
     <str id="LicencePanel.no" txt="Nein"/>
-    <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen :"/>
-    <str id="TargetPanel.info" txt="Wählen Sie den Installationspfad :"/>
+    <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen:"/>
+    <str id="TargetPanel.info" txt="Wählen Sie den Installationspfad:"/>
     <str id="TargetPanel.browse" txt="Auswählen ..."/>
     <str id="TargetPanel.warn" 
-         txt="Das Verzeichnis existiert bereits ! Sind Sie sicher, dass Sie in diesem Verzeichnis installieren wollen ?"/>
+         txt="Das Verzeichnis existiert bereits! Sind Sie sicher, dass Sie in diesem Verzeichnis installieren wollen?"/>
     <str id="TargetPanel.empty_target"
-         txt="Sie haben ein namenloses Ziel eingegeben ! Wollen Sie fortfahren ?"/>
+         txt="Sie haben ein namenloses Ziel eingegeben! Wollen Sie fortfahren?"/>
     <str id="TargetPanel.createdir"
-         txt="Das folgende Verzeichnis wird erstellt :" />         
+         txt="Das folgende Verzeichnis wird erstellt:" />         
          
-    <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus :"/>
-    <str id="PacksPanel.tip" txt="Hinweis : die grau markierten Pakete können nicht optional ausgewählt werden."/>
-    <str id="PacksPanel.space" txt="Erforderlicher Speicherplatz : "/>
+    <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus:"/>
+    <str id="PacksPanel.tip" txt="Hinweis: die grau markierten Pakete können nicht optional ausgewählt werden."/>
+    <str id="PacksPanel.space" txt="Erforderlicher Speicherplatz: "/>
     <str id="PacksPanel.description" txt="Beschreibung"/>
     
     <str id="InstallPanel.info" txt="Starten Sie hier die Installation:"/>
-    <str id="InstallPanel.install" txt="Installieren !"/>
-    <str id="InstallPanel.tip" txt="Installations-Fortschritt des Pakets:"/>
+    <str id="InstallPanel.install" txt="Installieren!"/>
+    <str id="InstallPanel.tip" txt="Installationsfortschritt des Pakets:"/>
     <str id="InstallPanel.begin" txt="[Nichts]"/>
     <str id="InstallPanel.finished" txt="[Fertig]"/>
-    <str id="InstallPanel.progress" txt="Installations-Fortschritt gesamt:"/>
+    <str id="InstallPanel.progress" txt="Installationsfortschritt gesamt:"/>
     <str id="InstallPanel.overwrite.title" txt="Datei existiert bereits"/>
-    <str id="InstallPanel.overwrite.question" txt="Die folgende Datei existiert bereits. Soll Sie überschrieben werden?"/>
+    <str id="InstallPanel.overwrite.question" txt="Die folgende Datei existiert bereits. Soll sie überschrieben werden?"/>
 
-    <str id="FinishPanel.success" txt="Die Installation wurde erfolgreich durchgeführt !"/>
+    <str id="FinishPanel.success" txt="Die Installation wurde erfolgreich durchgeführt!"/>
     <str id="FinishPanel.fail" txt="Die Installation ist fehlgeschlagen ..."/>
     <str id="FinishPanel.uninst.info" txt="Ein Deinstallationsprogramm wurde in folgendem Dateipfad gespeichert:"/>
     <str id="FinishPanel.auto" txt="Automatisches Installationsskript generieren"/>
     <str id="FinishPanel.auto.tip"
          txt="Generiert eine Datei mit der die gleiche Installation automatisch auf einem anderen Computer durchgeführt werden kann."/>
-    <str id="ImgPacksPanel.packs" txt="Die folgenden Pakete stehen zur Verfügung :"/>
-    <str id="ImgPacksPanel.snap" txt="Hier ist der zugehörige Schnappschuss :"/>
+    <str id="ImgPacksPanel.packs" txt="Die folgenden Pakete stehen zur Verfügung:"/>
+    <str id="ImgPacksPanel.snap" txt="Hier ist der zugehörige Schnappschuss:"/>
     <str id="ImgPacksPanel.checkbox" txt=" Installiere dieses Paket"/>
-    <str id="ShortcutPanel.regular.list" txt="Wählen Sie eine Programmgruppe für die Verknüfung:"/>
+    <str id="ShortcutPanel.regular.list" txt="Wählen Sie eine Programmgruppe für die Verknüpfung:"/>
     <str id="ShortcutPanel.regular.default" txt="Wiederherstellen"/>
     <str id="ShortcutPanel.regular.desktop" txt="Verknüpfung auf dem Desktop einrichten"/>
     <str id="ShortcutPanel.regular.create" txt="Verknüpfung erstellen"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="Erstelle Verknüpfung für :"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="Erstelle Verknüpfung für:"/>
     <str id="ShortcutPanel.regular.currentUser" txt="aktuellen Benutzer"/>
     <str id="ShortcutPanel.regular.allUsers" txt="alle Benutzer"/>
     <str id="ShortcutPanel.alternate.apology" txt="Leider wird die Erzeugung von Verknüpfungen durch IzPack unter diesem Betriebssystem noch nicht unterstützt. Bitte ziehen Sie das Handbuch Ihres Betriebssystems zu Rate, um manuell Verknüpfungen zu erstellen."/>
@@ -98,13 +98,13 @@
     <str id="UserInputPanel.search.location"           txt="Position von {0} eingeben."/>
     <str id="UserInputPanel.search.location.checkedfile" txt="Die Existenz von {0} wird geprüft."/>
     <str id="UserInputPanel.search.browse"           txt="Durchsuchen..."/>
-    <str id="UserInputPanel.search.wrongselection.message"   txt="Die gewählte Datei oder das Verzeichnis existiert nicht oder is unpassend."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="Die gewählte Datei oder das Verzeichnis existiert nicht oder ist unpassend."/>
     <str id="UserInputPanel.search.wrongselection.caption"   txt="Ungültige Auswahl."/>
 
     <str id="CompilePanel.heading" txt="Kompilierung" />
     <str id="CompilePanel.tip" txt="Job-Fortschritt:" />
     <str id="CompilePanel.browse" txt="Auswählen..." />
-    <str id="CompilePanel.browse.approve" txt="Als Kompiler verwenden" />
+    <str id="CompilePanel.browse.approve" txt="Als Compiler verwenden" />
     <str id="CompilePanel.start" txt="Start" />
     <str id="CompilePanel.progress.initial" txt="[Start-Knopf drücken]" />
     <str id="CompilePanel.progress.finished" txt="[Fertig]" />
@@ -115,14 +115,15 @@
     <str id="CompilePanel.error.abort" txt="Abbrechen" />
     <str id="CompilePanel.error.seebelow" txt="Unten sehen Sie das fehlgeschlagene Kommando und seine Ausgaben." />
     <str id="CompilePanel.error.nofiles" txt="Beim Suchen der Dateien für die Kompilierung trat ein Fehler auf." />
-    <str id="CompilePanel.error.invalidarguments" txt="Der Kompiler versteht die zusätzlichen Parameter nicht." />
-    <str id="CompilePanel.error.noclassfile" txt="Der Kompiler hat keine Klassendatei erzeugt für die Quelldatei " />
-    <str id="CompilePanel.error.compilernotfound" txt="Der Kompiler konnte nicht gefunden werden." />
-    <str id="CompilePanel.choose_compiler" txt="Zu verwendender Kompiler:" />
-    <str id="CompilePanel.additional_arguments" txt="Zusätzliche Kompilerparameter:" />
+    <str id="CompilePanel.error.invalidarguments" txt="Der Compiler versteht die zusätzlichen Parameter nicht." />
+    <str id="CompilePanel.error.noclassfile" txt="Der Compiler hat keine Klassendatei erzeugt für die Quelldatei " />
+    <str id="CompilePanel.error.compilernotfound" txt="Der Compiler konnte nicht gefunden werden." />
+    <str id="CompilePanel.choose_compiler" txt="Zu verwendender Compiler:" />
+    <str id="CompilePanel.additional_arguments" txt="Zusätzliche Compilerparameter:" />
 
     <str id="ProcessPanel.heading" txt="Prozesse" />
 
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>
+

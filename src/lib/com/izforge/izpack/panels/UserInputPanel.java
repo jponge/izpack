@@ -419,6 +419,7 @@ public class UserInputPanel extends IzPanel
     }
     
     Vector forPacks = spec.getChildrenNamed (PACKS);
+    
     if (!itemRequiredFor (forPacks))
     {
       parent.skipPanel ();
@@ -2312,6 +2313,47 @@ private class SearchField implements ActionListener
   /** perform autodetection */
   public boolean autodetect ()
   {
+  	
+	Vector items = new Vector();
+
+	//Checks whether a placeholder item is in the combobox
+	//and resolve the pathes automatically:
+	///usr/lib/* searches all folders in usr/lib to find /usr/lib/*/lib/tools.jar
+	for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
+	{
+		String path = (String)this.pathComboBox.getItemAt (i);
+
+		if (path.endsWith("*"))
+		{
+			path = path.substring(0,path.length()-1);
+			File dir = new File(path);
+
+			if (dir.isDirectory())
+			{
+				File[] subdirs = dir.listFiles();
+				for (int x=0;x<subdirs.length;x++)
+				{
+					String search = subdirs[x].getAbsolutePath();
+					if (this.pathMatches (search))
+					{
+						items.add(search);
+					}
+				}
+			}
+		}
+		else
+		{
+			items.add(path);
+		}
+	}
+
+	//Now clear the combobox and add the items out of the newly
+	//generated vector
+	this.pathComboBox.removeAllItems();
+	for (int i=0;i<items.size();i++)
+	{
+		this.pathComboBox.addItem(items.get(i));
+	}
 
     // loop through all items
     for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
@@ -2358,7 +2400,7 @@ private class SearchField implements ActionListener
     {
       JFileChooser chooser = new JFileChooser ();
 
-      if (this.searchType == TYPE_DIRECTORY)
+      if (this.searchType == RESULT_DIRECTORY)
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
       int result = chooser.showOpenDialog (this.parent);
@@ -2397,16 +2439,16 @@ private class SearchField implements ActionListener
   public String getResult ()
   {
     String item = (String)this.pathComboBox.getSelectedItem ();
+    if (item != null) item.trim();
     String path = item;
+    
+    File f = new File (item);
 
+    if (! f.isDirectory ())
     {
-      File f = new File (item);
-
-      if (! f.isDirectory ())
-      {
-        path = f.getParent ();
-      }
+      path = f.getParent ();
     }
+    
 
     // path now contains the final content of the combo box
     if (this.resultType == RESULT_DIRECTORY)
@@ -2417,17 +2459,17 @@ private class SearchField implements ActionListener
     {
       if (this.filename != null)
       {
-        return path + File.pathSeparatorChar + this.filename;
+        return path + File.separatorChar + this.filename;
       }
       else
       {
-        return path;
+        return item;
       }
     }
     else if (this.resultType == RESULT_PARENTDIR)
     {
-      File f = new File (path);
-      return f.getParent ();
+      File dir = new File (path);
+      return dir.getParent (); 
     }
 
     return null;
