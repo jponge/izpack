@@ -1,11 +1,12 @@
 # Variables
 TEX  = latex
 PS   = dvips
-PDF  = dvipdfm
+PDF  = dvipdf
 MAIN = izpack-doc
+HTML = latex2html
 
 # Default target - makes it all
-all: dvi ps pdf
+all: dvi ps pdf html
 
 # Makes the dvi
 dvi: ${MAIN}.tex
@@ -20,11 +21,16 @@ ps: dvi
 # Makes the PDF(tm) version
 pdf: dvi
 	mkdir pdf
-	${PDF} -o pdf/${MAIN}.pdf ${MAIN}.dvi
+	${PDF} ${MAIN}.dvi pdf/${MAIN}.pdf
+
+# Makes the HTML version
+html:
+	mkdir html
+	${HTML} -split 3 -noexternal_images -dir html -white -image_type png -local_icons ${MAIN}.tex
 
 # Cleanup
 clean:
-	rm -f *.dvi *.aux *.log *.toc
+	rm -f *.dvi *.aux *.log *.toc *~
 	rm -rf pdf
 	rm -rf ps
-
+	rm -rf html
