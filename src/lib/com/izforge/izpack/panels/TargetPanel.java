@@ -157,7 +157,7 @@ public class TargetPanel extends IzPanel implements ActionListener
     try
     {
       String os = System.getProperty("os.name");
-      InputStream in = null;
+      InputStream in;
 
       if (os.regionMatches(true, 0, "windows", 0, 7))
         in = parentFrame.getResource("TargetPanel.dir.windows");
@@ -192,7 +192,7 @@ public class TargetPanel extends IzPanel implements ActionListener
       // now read the file, once we've identified which one to read
       InputStreamReader isr = new InputStreamReader(in);
       br = new BufferedReader(isr);
-      String line = null;
+      String line;
       while ((line = br.readLine()) != null)
       {
         line = line.trim();
@@ -333,10 +333,20 @@ public class TargetPanel extends IzPanel implements ActionListener
       }
 
     }
-    else if (source == textField)
+    else
     {
       parentFrame.navigateNext();
     }
+  }
+
+  public String getDefaultDir()
+  {
+    return defaultDir;
+  }
+
+  public void setDefaultDir(String defaultDir)
+  {
+    this.defaultDir = defaultDir;
   }
 
   /**
