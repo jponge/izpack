@@ -47,6 +47,12 @@ public class Info implements Serializable
   /**  The required Java version (min) */
   private String javaVersion = "1.2";
 
+  /**  The name of the installer file (name without jar suffix) */
+  private String installerBase = null;
+
+  /**  The application Web Directory URL */
+  private String webDirURL = null;
+
   /**  The constructor, deliberatly void.  */
   public Info()
   {
@@ -150,6 +156,47 @@ public class Info implements Serializable
   public String getJavaVersion()
   {
     return javaVersion;
+  }
+
+  /**
+   *  Sets the installer name.
+   *
+   * @param  installerBase  The new installer name.
+   */
+  public void setInstallerBase(String installerBase)
+  {
+    this.installerBase = installerBase;
+  }
+
+  /**
+   *  Gets the installer name.
+   *
+   * @return    The name of the installer file, without the jar suffix.
+   */
+  public String getInstallerBase()
+  {
+    return installerBase;
+  }
+
+  /**
+   *  Sets the webDir URL.
+   *
+   * @param  url  The application URL.
+   */
+  public void setWebDirURL(String url)
+  {
+    this.webDirURL = url;
+  }
+
+  /**
+   *  Gets the webDir URL if it has been specified
+   *
+   * @return The webDir URL from which the installer is retrieved, or
+   *         <tt>null</tt> if non has been set.
+   */
+  public String getWebDirURL()
+  {
+    return webDirURL;
   }
 
   /**
