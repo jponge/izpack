@@ -1,0 +1,429 @@
+/*
+ *  $Id$
+ *  IzPack
+ *  Copyright (C) 2004 Klaus Bartz
+ *
+ *  File :               PathInputPanel.java
+ *  Description :        A base panel to handle selection of a paths.
+ *  Author's email :     bartzkau@users.berlios.de
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation; either version 2
+ *  of the License, or any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+package com.izforge.izpack.panels;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import javax.swing.JLabel;
+
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.MultiLineLabel;
+
+/**
+ * Base class for panels which asks for paths.
+ *
+ * @author  Klaus Bartz
+ *
+ */
+public class PathInputPanel extends IzPanel implements ActionListener
+{
+  /** Flag whether the choosen path must exist or not */
+  protected boolean mustExist = false;
+  
+  /** Files which should be exist */
+  protected String [] existFiles = null;
+  
+  /** The path which was chosen */
+//  protected String chosenPath;
+
+  /** The path selection sub panel */
+  protected PathSelectionPanel pathSelectionPanel;
+
+  /**  The layout . */
+  private GridBagLayout layout;
+
+  /**  The layout constraints. */
+  private GridBagConstraints gbConstraints;
+  
+  protected String emptyTargetMsg;
+  protected String warnMsg;
+
+  protected static String defaultInstallDir = null;
+
+  /**
+   *  The constructor.
+   *
+   * @param  parent  The parent window.
+   * @param  idata   The installation data.
+   */
+  public PathInputPanel(InstallerFrame parent, InstallData idata)
+  {
+    super(parent, idata);
+    // Set default values
+    emptyTargetMsg = getI18nStringForClass( "empty_target", "TargetPanel");
+    warnMsg = getI18nStringForClass( "warn", "TargetPanel");
+    //if( this.class.)
+
+    // Customize the default GridBagConstraints. 
+    GridBagConstraints gbConstraint = getDefaultGridBagConstraints();
+    gbConstraint.gridwidth = GridBagConstraints.REMAINDER;  
+    this.setDefaultGridBagConstraints(gbConstraint);
+    String introText = getI18nStringForClass( "intro", "PathInputPanel");
+    if(  introText == null || introText.equals("PathInputPanel.intro"))
+      introText = "";
+    if( introText != null)
+    {
+      // Intro
+      //   Create and customize constraint for it.
+      //   row 0 column 0
+      gbConstraint = getNextYGridBagConstraints();
+      //   Create component and add it to this panel.
+      MultiLineLabel introLabel = createMultiLineLabel(introText);
+      add( introLabel, gbConstraint );
+    }
+    // Label for input
+    //   Create and customize constraint for it.
+    //   row 1 column 0; is the next Y
+    gbConstraint = getNextYGridBagConstraints();
+    gbConstraint.gridwidth = GridBagConstraints.RELATIVE;  
+    gbConstraint.insets = new Insets(0,0,10,0); 
+    //   Create component and add it to this panel.
+    JLabel infoLabel = createLabel(getI18nStringForClass( "info", "TargetPanel"),"open", JLabel.LEFT);
+    add( infoLabel, gbConstraint );
+    //   Create path selection components and add they to this panel.
+    pathSelectionPanel = new PathSelectionPanel( this, idata);
+    gbConstraint = getNextYGridBagConstraints();
+    gbConstraint.gridwidth = GridBagConstraints.REMAINDER;   
+    gbConstraint.fill = GridBagConstraints.HORIZONTAL;
+    gbConstraint.insets = new Insets(0,0,0,0);
+    add(pathSelectionPanel, gbConstraint );
+    createLayoutBottom();
+    // Place a footer as last component, if 
+    completeGridBagLayout();
+  }
+
+  /**
+   * This method does nothing. It is
+   * called from ctor of PathInputPanel, to
+   * give in a derived class the possibility to add more
+   * components under the path input
+   * components.
+   */
+  private void createLayoutBottom()
+  {
+  }
+
+  /**
+   *  Actions-handling method.
+   *
+   * @param  e  The event.
+   */
+  public void actionPerformed(ActionEvent e)
+  {
+    Object source = e.getSource();
+    if (source == pathSelectionPanel.getPathInputField())
+    {
+      parent.navigateNext();
+    }
+
+    }
+  /**
+   *  Indicates wether the panel has been validated or not.
+   *
+   * @return    Wether the panel has been validated or not.
+   */
+  public boolean isValidated()
+  {
+    String chosenPath = pathSelectionPanel.getPath();
+    boolean ok = true;
+
+    // We put a warning if the specified target is nameless
+    if (chosenPath.length() == 0)
+    {
+      if(isMustExist())
+      {
+        emitError(parent.langpack.getString("installer.error"), 
+          parent.langpack.getString("PathInputPanel.required") );
+        return( false );
+      }
+      else
+      {
+        ok = emitWarning( 
+          parent.langpack.getString("installer.warning"),
+          emptyTargetMsg);
+      }
+    }
+    if (!ok)
+      return ok;
+
+    // Normalize the path
+    File path = new File(chosenPath).getAbsoluteFile();
+    chosenPath = path.toString();
+    pathSelectionPanel.setPath(chosenPath);
+    if( isMustExist() )
+    {
+      if (! path.exists())
+      {
+        emitError(parent.langpack.getString("installer.error"), 
+          parent.langpack.getString(getI18nStringForClass( "required", 
+          "PathInputPanel")) );
+        return( false );
+      }
+      if( !pathIsValid() )
+      {
+        emitError(parent.langpack.getString("installer.error"),
+          parent.langpack.getString(getI18nStringForClass( "notValid",  
+          "PathInputPanel")) );
+        return( false );
+      }
+    }
+    else
+    {
+      // We assume, that we would install something into this dir
+      if( ! isWriteable() )
+      {
+        emitError(parent.langpack.getString("installer.error"),
+          getI18nStringForClass( "notwritable", "TargetPanel"));
+        return( false );
+      }
+      // We put a warning if the directory exists else we warn 
+      // that it will be created
+      if (path.exists())
+      {
+        int res =
+          askQuestion(parent.langpack.getString("installer.warning"),
+            warnMsg, AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
+        ok = (res == AbstractUIHandler.ANSWER_YES);
+      } else
+        this.emitNotification(getI18nStringForClass( "createdir",  
+          "TargetPanel")+ "\n" + chosenPath);
+    }
+    return ok;
+  }
+
+  /**
+   * Returns whether the chosen path is true or not.
+   * If existFiles are not null, the existence of it
+   * under the choosen path are detected.
+   * This method can be also implemented in derived classes
+   * to handle special verification of the path. 
+   * @return true if existFiles are exist or not defined,
+   * else false
+   */
+  protected boolean pathIsValid()
+  {
+    if( existFiles == null)
+      return(true);
+    for( int i = 0; i < existFiles.length; ++i)
+    {
+      File path = new File(pathSelectionPanel.getPath(), existFiles[i]).getAbsoluteFile();
+      if( ! path.exists())
+        return( false );
+    }
+    return(true);
+  }
+
+
+  /**
+   * Returns the must exist state.
+   * @return the must exist state
+   */
+  public boolean isMustExist()
+  {
+    return mustExist;
+  }
+
+  /**
+   * Sets the must exist state. If it
+   * is true, the path must exist.
+   * @param b must exist state
+   */
+  public void setMustExist(boolean b)
+  {
+    mustExist = b;
+  }
+
+  /**
+   * Returns the array of strings which
+   * are described the files which must exist.
+   * @return paths of files which must exist
+   */
+  public String[] getExistFiles()
+  {
+    return existFiles;
+  }
+
+  /**
+   * Sets the paths of files which must
+   * exist under the chosen path.
+   * @param strings paths of files which must
+   * exist under the chosen path
+   */
+  public void setExistFiles(String[] strings)
+  {
+    existFiles = strings;
+  }
+  /**
+   *  Loads up the "dir" resource associated with TargetPanel. Acceptable dir
+   *  resource names: <code>
+   *   TargetPanel.dir.macosx
+   *   TargetPanel.dir.mac
+   *   TargetPanel.dir.windows
+   *   TargetPanel.dir.unix
+   *   TargetPanel.dir.xxx,
+   *     where xxx is the lower case version of System.getProperty("os.name"),
+   *     with any spaces replace with underscores
+   *   TargetPanel.dir (generic that will be applied if none of above is found)
+   *   </code> As with all IzPack resources, each the above ids should be
+   *  associated with a separate filename, which is set in the install.xml file
+   *  at compile time.
+   */
+  public static void loadDefaultInstallDir(InstallerFrame parentFrame)
+  {
+    // Load only once ...
+    if( getDefaultInstallDir() != null)
+      return;
+    BufferedReader br = null;
+    try
+    {
+      String os = System.getProperty("os.name");
+      InputStream in;
+
+      if (os.regionMatches(true, 0, "windows", 0, 7))
+        in = parentFrame.getResource("TargetPanel.dir.windows");
+
+      else if (os.regionMatches(true, 0, "mac os x", 0, 8))
+        in = parentFrame.getResource("TargetPanel.dir.macosx");
+
+      else if (os.regionMatches(true, 0, "mac", 0, 3))
+        in = parentFrame.getResource("TargetPanel.dir.mac");
+
+      else
+      {
+        // first try to look up by specific os name
+        os = os.replace(' ', '_'); // avoid spaces in file names
+        os = os.toLowerCase(); // for consistency among TargetPanel res files
+        in = parentFrame.getResource("TargetPanel.dir.".concat(os));
+        // if not specific os, try getting generic 'unix' resource file
+        if (in == null)
+          in = parentFrame.getResource("TargetPanel.dir.unix");
+
+        // if all those failed, try to look up a generic dir file
+        if (in == null)
+          in = parentFrame.getResource("TargetPanel.dir");
+
+      }
+
+      // if all above tests failed, there is no resource file,
+      // so use system default
+      if (in == null)
+        return;
+
+      // now read the file, once we've identified which one to read
+      InputStreamReader isr = new InputStreamReader(in);
+      br = new BufferedReader(isr);
+      String line;
+      while ((line = br.readLine()) != null)
+      {
+        line = line.trim();
+        // use the first non-blank line
+        if (!line.equals(""))
+          break;
+      }
+      defaultInstallDir = line;
+    } catch (Exception e)
+    {
+      defaultInstallDir = null;
+      // leave unset to take the system default set by Installer class
+    } finally
+    {
+      try
+      {
+        if (br != null)
+          br.close();
+      } catch (IOException ignored)
+      {
+      }
+    }
+  }
+  
+  /**
+   * This method determines whether the chosen dir 
+   * is writeable or not.
+   * @return whether the chosen dir is writeable or not
+   */
+  public boolean isWriteable()
+  {
+    int currentOS = IoHelper.getOSFamily();
+    File existParent = IoHelper.existingParent( 
+      new File(pathSelectionPanel.getPath()));
+    if( existParent == null)
+      return( false );
+    // On windows we cannot use canWrite because
+    // it looks to the dos flags which are not valid
+    // on NT or 2k XP or ...
+    if( currentOS == IoHelper.WINDOWS )
+    {
+      File tmpFile;
+      try
+      {
+        tmpFile = File.createTempFile("izWrTe", ".tmp", existParent);
+        tmpFile.deleteOnExit();
+      }
+      catch (IOException e)
+      {
+        Debug.trace( e.toString() );
+        return(false);
+      }
+      return( true );
+    }
+    else
+      return( existParent.canWrite());
+  }
+
+  /**
+   * Returns the default for the installation directory.
+   * @return the default for the installation directory
+   */
+  public static String getDefaultInstallDir()
+  {
+    return defaultInstallDir;
+  }
+
+  /**
+   * Sets the default for the installation directory to the
+   * given string.
+   * @param string path for default for the installation directory 
+   */
+  public static void setDefaultInstallDir(String string)
+  {
+    defaultInstallDir = string;
+  }
+
+
+}
