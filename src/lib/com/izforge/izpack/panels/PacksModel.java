@@ -104,8 +104,8 @@ class PacksModel extends AbstractTableModel
     for (int i = 0; i < packs.size(); i++)
     {
       Pack pack = (Pack) packs.get(i);
-      if(packsToInstall.contains(pack));
-      checkValues[i] =1;
+      if(packsToInstall.contains(pack))
+        checkValues[i] =1;
     }
     //Check out and disable the ones that are excluded by non fullfiled deps
     for (int i = 0; i < packs.size(); i++)
