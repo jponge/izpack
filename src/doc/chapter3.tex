@@ -58,6 +58,19 @@ Here is a sample of the task invocation:\\
 \end{verbatim}
 \normalsize
 
+% System properties as variables
+\section{System properties as variable}
+
+All system properties are available as
+\$SYSTEM_<variable> where <variable> is the actual name _BUT_ with
+all separators replaced by '_'. Properties with null values 
+are never stored.\\
+
+Examples:
+\begin{verbatim}
+$SYSTEM_java_version or $SYSTEM_os_name
+\end{verbatim}
+
 % Automated Installers
 \section{Automated Installers}
 

@@ -53,7 +53,12 @@ public class InstallerBase
 {
 
   /**
-   * Loads the installation data.
+   *  Loads the installation data. Also sets environment variables to
+   * <code>installdata</code>. All system properties are available as
+   * $SYSTEM_<variable> where <variable> is the actual name _BUT_ with
+   * all separators replaced by '_'. Properties with null values 
+   * are never stored.
+   * Example: $SYSTEM_java_version or $SYSTEM_os_name
    * 
    * @param installdata Where to store the installation data.
    * 
@@ -150,6 +155,18 @@ public class InstallerBase
     installdata.setVariable(ScriptParser.USER_NAME, System
         .getProperty("user.name"));
     installdata.setVariable(ScriptParser.FILE_SEPARATOR, File.separator);
+    
+    Enumeration e = System.getProperties().keys();
+    while (e.hasMoreElements())
+    {
+      String varName = (String) e.nextElement();
+      String varValue = System.getProperty(varName);
+      if (varValue != null) {
+      	varName = varName.replace('.', '_');
+        installdata.setVariable("SYSTEM_" + varName, varValue);
+      }
+    }
+    
     if (null != variables)
     {
       Enumeration enum = variables.keys();
@@ -162,6 +179,7 @@ public class InstallerBase
         installdata.setVariable(varName, varValue);
       }
     }
+    
     installdata.info = inf;
     installdata.panelsOrder = panelsOrder;
     installdata.availablePacks = availablePacks;

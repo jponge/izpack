@@ -17,6 +17,7 @@
 - PacksPanels: free disk space stuff (Klaus Bartz).
 - New Malaysian langpack (Redhuan Daniel Oon).
 - Various other translations updates.
+- System properties can now be used as variables (Borje Jonsson).
 
   > 3.6.1 (build 2004.xx.yy)
 
