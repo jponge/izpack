@@ -118,6 +118,8 @@ public class Compiler extends Thread
   /** The directory-keeping special file. */
   protected File keepDirFile;
 
+  /** Error code, set to true if compilation succeeded. */
+  private boolean compileFailed = true;
 
   /**
    *  The constructor.
@@ -455,8 +457,13 @@ public class Compiler extends Thread
 
     // We ask the packager to finish
     packager.finish();
+    this.compileFailed = false;
   }
 
+  public boolean wasSuccessful ()
+  {
+    return ! this.compileFailed;
+  }
 
   /**
    *  Returns the GUIPrefs.
@@ -1523,6 +1530,9 @@ public class Compiler extends Thread
     System.out.println("  of the licence, or any later version.");
     System.out.println("");
 
+    // exit code 1 means: error
+    int exitCode = 1;
+    
     // We analyse the command line parameters
     try
     {
@@ -1628,6 +1638,11 @@ public class Compiler extends Thread
         // Waits
         while (compiler.isAlive())
           Thread.yield();
+        
+        if (compiler.wasSuccessful())
+          exitCode = 0;
+        
+        System.out.println("Build time: "+new Date());
       }
     }
     catch (Exception err)
@@ -1640,9 +1655,8 @@ public class Compiler extends Thread
       System.err.println("(tip : use -? to get the commmand line parameters)");
     }
 
-    System.out.println("Build time: "+new Date());
     // Closes the JVM
-    System.exit(0);
+    System.exit(exitCode);
   }
 
 

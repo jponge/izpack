@@ -2,6 +2,8 @@
 
   > x.y.z (build xxxx.yy.zz)
 
+- The compiler now returns a sensible exit code on error. This way, it can be
+  used in scripts.
 - Italian localization updates by Cristian Ghezzi.
 - Win32: Fixed the localization of "Program Files" and added support for 8
   more languages (Dennis Lundberg).
