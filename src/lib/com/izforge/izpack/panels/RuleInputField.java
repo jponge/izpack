@@ -88,22 +88,22 @@ public class RuleInputField extends JComponent implements KeyListener,
   /** Used to specify the retsult format. This constant specifies to return
       the contents of all fields concatenated into one long string, with
       separation between each component. */
-  public  static int       PLAIN_STRING        = 1;
+  public  static final int       PLAIN_STRING        = 1;
   /** Used to specify the retsult format. This constant specifies to return
       the contents of all fields together with all separators as specified
       in the field format concatenated into one long string. In this case
       the resulting string looks just like the user saw it during data entry */
-  public  static int       DISPLAY_FORMAT      = 2;
+  public  static final int       DISPLAY_FORMAT      = 2;
   /** Used to specify the retsult format. This constant specifies to return
       the contents of all fields concatenated into one long string, with
       a special separator string inserted in between the individual
       components. */
-  public  static int       SPECIAL_SEPARATOR   = 3;
+  public  static final int       SPECIAL_SEPARATOR   = 3;
   /** Used to specify the retsult format. This constant specifies to return
       the contents of all fields in a somehow modified way. How the content
       is modified depends on the operation performed by a encryption
       service class. The class must be provided at object instatiation. */
-  public  static int       ENCRYPTED           = 4;
+  public  static final int       ENCRYPTED           = 4;
   /** Used internally to identify the default setting for the return format. */
   private static int       DEFAULT             = DISPLAY_FORMAT;
 
@@ -772,7 +772,7 @@ public class RuleInputField extends JComponent implements KeyListener,
 // ----------------------------------------------------------------------------
 //
 // ----------------------------------------------------------------------------
-  class FieldSpec
+  private static class FieldSpec
   {
     private int     MIN_TOKENS     = 2;
     private int     MAX_TOKENS     = 3;

@@ -51,10 +51,19 @@ public class ShortcutData implements Cloneable
   * Returns a clone (copy) of this object.
   *
   * @return    a copy of this object
+ * @throws CloneNotSupportedException
   */
  /*--------------------------------------------------------------------------*/
   public Object clone () throws OutOfMemoryError
   {
+    try
+    {
+      super.clone();
+    }
+    catch (CloneNotSupportedException e)
+    {
+      e.printStackTrace();
+    }
     ShortcutData result = new ShortcutData ();
 
     result.type              = type;

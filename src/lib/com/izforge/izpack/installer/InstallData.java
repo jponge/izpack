@@ -25,6 +25,7 @@
 package com.izforge.izpack.installer;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 import com.izforge.izpack.GUIPrefs;
 
@@ -36,7 +37,7 @@ import com.izforge.izpack.GUIPrefs;
  * @author     Julien Ponge <julien@izforge.com>
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class InstallData extends AutomatedInstallData
+public class InstallData extends AutomatedInstallData implements Serializable
 {
   /**  The GUI preferences. */
   public GUIPrefs guiPrefs;

@@ -140,7 +140,7 @@ public class XInfoPanel extends IzPanel
     parseText();
 
     // UI handling
-    textArea.setText(info.toString());
+    textArea.setText(info);
     textArea.setCaretPosition(0);
   }
 

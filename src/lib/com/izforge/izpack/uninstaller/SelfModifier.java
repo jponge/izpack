@@ -843,7 +843,7 @@ public class SelfModifier
     // to the correct location, so we need to fall back to
     // assuming java is somewhere on the PATH.
     if (!jExecutable.exists())
-      return executable.toString();
+      return executable;
     return jExecutable.getAbsolutePath();
   }
 }

@@ -337,7 +337,7 @@ public class Packager
   {
     sendMsg("Copying the skeleton installer ...");
 
-    InputStream is = getClass().getResourceAsStream("/" + SKELETON_SUBPATH);
+    InputStream is = Packager.class.getResourceAsStream("/" + SKELETON_SUBPATH);
     if (is == null)
     {
       File skeleton = new File(Compiler.IZPACK_HOME, SKELETON_SUBPATH);

@@ -554,7 +554,7 @@ public class CompileWorker implements Runnable
   }
 
   /** a compilation job */
-  private class CompilationJob
+  private static class CompilationJob
   {
     private CompileHandler listener;
     private String name;

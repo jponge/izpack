@@ -43,7 +43,6 @@ public class IzPackMetalTheme extends DefaultMetalTheme
   private FontUIResource controlFont;
   private FontUIResource menuFont;
   private FontUIResource windowTitleFont;
-  private FontUIResource monospacedFont;
 
   /**  The constructor.  */
   public IzPackMetalTheme()
@@ -56,7 +55,6 @@ public class IzPackMetalTheme extends DefaultMetalTheme
     menuFont = new FontUIResource(font1);
     controlFont = new FontUIResource(font1);
     windowTitleFont = new FontUIResource(font2);
-    monospacedFont = new FontUIResource(font1);
   }
 
   private Font createFont(String name, int style, int size)

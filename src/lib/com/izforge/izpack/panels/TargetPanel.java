@@ -74,7 +74,7 @@ public class TargetPanel extends IzPanel implements ActionListener
   private GridBagConstraints gbConstraints;
 
   /** The parent installerframe. */
-  private InstallerFrame parent;
+  private InstallerFrame parentFrame;
 
   /**
    *  The constructor.
@@ -86,7 +86,7 @@ public class TargetPanel extends IzPanel implements ActionListener
   {
     super(parent, idata);
     //Initialization
-    this.parent = parent;
+    this.parentFrame = parent;
 
     // We initialize our layout
     layout = new GridBagLayout();
@@ -160,27 +160,27 @@ public class TargetPanel extends IzPanel implements ActionListener
       InputStream in = null;
 
       if (os.regionMatches(true, 0, "windows", 0, 7))
-        in = parent.getResource("TargetPanel.dir.windows");
+        in = parentFrame.getResource("TargetPanel.dir.windows");
 
       else if (os.regionMatches(true, 0, "mac os x", 0, 8))
-        in = parent.getResource("TargetPanel.dir.macosx");
+        in = parentFrame.getResource("TargetPanel.dir.macosx");
 
       else if (os.regionMatches(true, 0, "mac", 0, 3))
-        in = parent.getResource("TargetPanel.dir.mac");
+        in = parentFrame.getResource("TargetPanel.dir.mac");
 
       else
       {
         // first try to look up by specific os name
         os = os.replace(' ', '_'); // avoid spaces in file names
         os = os.toLowerCase(); // for consistency among TargetPanel res files
-        in = parent.getResource("TargetPanel.dir.".concat(os));
+        in = parentFrame.getResource("TargetPanel.dir.".concat(os));
         // if not specific os, try getting generic 'unix' resource file
         if (in == null)
-          in = parent.getResource("TargetPanel.dir.unix");
+          in = parentFrame.getResource("TargetPanel.dir.unix");
 
         // if all those failed, try to look up a generic dir file
         if (in == null)
-          in = parent.getResource("TargetPanel.dir");
+          in = parentFrame.getResource("TargetPanel.dir");
 
       }
 
@@ -233,8 +233,8 @@ public class TargetPanel extends IzPanel implements ActionListener
       int res =
         JOptionPane.showConfirmDialog(
           this,
-          parent.langpack.getString("TargetPanel.empty_target"),
-          parent.langpack.getString("installer.warning"),
+          parentFrame.langpack.getString("TargetPanel.empty_target"),
+          parentFrame.langpack.getString("installer.warning"),
           JOptionPane.YES_NO_OPTION);
       ok = (res == JOptionPane.YES_OPTION);
     }
@@ -251,14 +251,14 @@ public class TargetPanel extends IzPanel implements ActionListener
       int res =
         JOptionPane.showConfirmDialog(
           this,
-          parent.langpack.getString("TargetPanel.warn"),
-          parent.langpack.getString("installer.warning"),
+          parentFrame.langpack.getString("TargetPanel.warn"),
+          parentFrame.langpack.getString("installer.warning"),
           JOptionPane.YES_NO_OPTION);
       ok = (res == JOptionPane.YES_OPTION);
     } else
       JOptionPane.showMessageDialog(
         this,
-        parent.langpack.getString("TargetPanel.createdir")
+        parentFrame.langpack.getString("TargetPanel.createdir")
           + "\n"
           + installPath);
 
@@ -297,7 +297,7 @@ public class TargetPanel extends IzPanel implements ActionListener
     }
     else if (source == textField)
     {
-      parent.navigateNext();
+      parentFrame.navigateNext();
     }
   }
 

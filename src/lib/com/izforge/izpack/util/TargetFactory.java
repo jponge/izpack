@@ -110,7 +110,7 @@ public class TargetFactory
       <li>UNIX
       <li>GENERIC
       </ul> */
-  public static final String [] LIBRARY_EXTENSION =
+  static final String [] LIBRARY_EXTENSION =
   {
     "dll",
     "so",
@@ -128,7 +128,7 @@ public class TargetFactory
       <li>UNIX
       <li>GENERIC
       </ul> */
-  public static final String [] CLASS_PREFIX =
+  static final String [] CLASS_PREFIX =
   {
     "Win_",
     "Mac_",
@@ -145,7 +145,7 @@ public class TargetFactory
       <li>NT
       <li>X
       </ul> */
-  public static final String [] CLASS_FLAVOR_PREFIX =
+  static final String [] CLASS_FLAVOR_PREFIX =
   {
     "",
     "NT_",
@@ -159,7 +159,7 @@ public class TargetFactory
       <li>X86
       <li>OTHER
       </ul> */
-  public static final String [] CLASS_ARCHITECTURE_PREFIX =
+  static final String [] CLASS_ARCHITECTURE_PREFIX =
   {
     "X86_",  // Intel X86 architecture
     "U_"     // unknown
@@ -178,7 +178,7 @@ public class TargetFactory
       <li>UNIX
       <li>GENERIC
       </ul> */
-  public static final String [] INSTALL_PATH_FRAGMENT =
+  static final String [] INSTALL_PATH_FRAGMENT =
   {
     "Program Files" + File.separator,
     "/Applications" + File.separator,
@@ -198,7 +198,7 @@ public class TargetFactory
       a real operating system/flavor combination exists are
       populated. For example, there is no such thing as
       <code>INSTALL_PATH_RESOURCE_KEY[UNIX][X]</code> */
-  public static final String [][] INSTALL_PATH_RESOURCE_KEY = 
+  static final String [][] INSTALL_PATH_RESOURCE_KEY = 
   {
     //      Standard                        NT                          X
     { "TargetPanel.dir.windows", "TargetPanel.dir.windows", "" },                         // Windows
@@ -587,7 +587,7 @@ public class TargetFactory
     {
   		String key  = osName.replace (' ', '_');         // avoid spaces in file names
       key         = keyFragment + key.toLowerCase ();  // for consistency among TargetPanel res files
-  		input       = getClass ().getResourceAsStream (key);
+  		input       = TargetFactory.class.getResourceAsStream (key);
     }
 
     // ----------------------------------------------------
@@ -596,7 +596,7 @@ public class TargetFactory
     // ----------------------------------------------------
     if (input == null)
     {
-      input = getClass ().getResourceAsStream (keyFragment);
+      input = TargetFactory.class.getResourceAsStream (keyFragment);
     }
 
     // ----------------------------------------------------

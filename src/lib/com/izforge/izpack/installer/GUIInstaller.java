@@ -119,7 +119,7 @@ public class GUIInstaller extends InstallerBase
    */
   public void loadGUIInstallData() throws Exception
   {
-    InputStream in = getClass().getResourceAsStream("/GUIPrefs");
+    InputStream in = GUIInstaller.class.getResourceAsStream("/GUIPrefs");
     ObjectInputStream objIn = new ObjectInputStream(in);
     this.installdata.guiPrefs = (GUIPrefs) objIn.readObject();
     objIn.close();
@@ -356,7 +356,7 @@ public class GUIInstaller extends InstallerBase
    *
    * @author     Julien Ponge
    */
-  class LanguageDialog extends JDialog implements ActionListener
+  private final class LanguageDialog extends JDialog implements ActionListener
   {
 
     /**  The combo box. */
@@ -379,7 +379,9 @@ public class GUIInstaller extends InstallerBase
         loadLookAndFeel();
       }
       catch (Exception err)
-      {}
+      {
+        err.printStackTrace();
+      }
 
       // We build the GUI
       addWindowListener(new WindowHandler());
@@ -455,7 +457,7 @@ public class GUIInstaller extends InstallerBase
       ImageIcon img;
       try
       {
-        img = new ImageIcon(this.getClass().getResource(
+        img = new ImageIcon(LanguageDialog.class.getResource(
             "/res/installer.langsel.img"));
       }
       catch (NullPointerException err)
@@ -500,7 +502,7 @@ public class GUIInstaller extends InstallerBase
      *
      * @author     Julien Ponge
      */
-    class WindowHandler extends WindowAdapter
+    private class WindowHandler extends WindowAdapter
     {
 
       /**
@@ -520,7 +522,7 @@ public class GUIInstaller extends InstallerBase
    *
    * @author     Julien Ponge
    */
-  class FlagRenderer extends JLabel implements ListCellRenderer
+  private static class FlagRenderer extends JLabel implements ListCellRenderer
   {
 
     /**  Icons cache. */

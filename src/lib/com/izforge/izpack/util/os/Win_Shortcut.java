@@ -27,8 +27,6 @@ package   com.izforge.izpack.util.os;
 
 import java.io.File;
 import java.util.Vector;
-
-import com.izforge.izpack.util.TargetFactory;
   
 /*---------------------------------------------------------------------------*/
 /**

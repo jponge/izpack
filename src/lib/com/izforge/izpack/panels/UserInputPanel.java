@@ -251,7 +251,7 @@ public class UserInputPanel extends IzPanel
       locking the 'previous' button. */
   private         boolean     packsDefined    = false;
 
-  private InstallerFrame      parent;
+  private InstallerFrame      parentFrame;
   /** The parsed result from reading the XML specification from the file */
   private XMLElement          spec;
   private boolean             haveSpec = false;
@@ -301,7 +301,7 @@ public class UserInputPanel extends IzPanel
     super (parent, installData);
 
     instanceNumber = instanceCount++;
-    this.parent = parent;
+    this.parentFrame = parent;
 
     // ----------------------------------------------------
     // ----------------------------------------------------
@@ -429,7 +429,7 @@ public class UserInputPanel extends IzPanel
       // TODO: translate
       emitError("User input specification could not be found.", 
           "The specification for the user input panel could not be found. Please contact the packager.");
-      parent.skipPanel();
+      parentFrame.skipPanel();
     }
     
     Vector forPacks = spec.getChildrenNamed (PACKS);
@@ -437,12 +437,12 @@ public class UserInputPanel extends IzPanel
     
     if (!itemRequiredFor (forPacks) || !itemRequiredForOs(forOs))
     {
-      parent.skipPanel ();
+      parentFrame.skipPanel ();
       return;
     }
     if (!haveSpec)
     {
-      parent.skipPanel ();
+      parentFrame.skipPanel ();
       return;
     }
    // if (uiBuilt)
@@ -455,7 +455,7 @@ public class UserInputPanel extends IzPanel
 
     if (packsDefined)
     {
-      parent.lockPrevButton ();
+      parentFrame.lockPrevButton ();
     }
   }
  /*--------------------------------------------------------------------------*/
@@ -501,7 +501,7 @@ public class UserInputPanel extends IzPanel
         	{
 				add ((JComponent)uiElement [POS_FIELD], uiElement [POS_CONSTRAINTS]);
         	}
-			uiElement [POS_DISPLAYED] = new Boolean (true);
+			uiElement [POS_DISPLAYED] = Boolean.valueOf(true);
 			uiElements.remove(i);
 			uiElements.add(i, uiElement);
           
@@ -524,7 +524,7 @@ public class UserInputPanel extends IzPanel
 		{
 			System.out.println ("Internal format error in field: " + uiElement [POS_TYPE].toString ());  // !!! logging
 		}
-        uiElement [POS_DISPLAYED] = new Boolean (false);
+        uiElement [POS_DISPLAYED] = Boolean.valueOf(false);
 		uiElements.remove(i);
 		uiElements.add(i, uiElement);
       }
@@ -647,7 +647,7 @@ public class UserInputPanel extends IzPanel
 
     try
     {
-      input = parent.getResource (SPEC_FILE_NAME);
+      input = parentFrame.getResource (SPEC_FILE_NAME);
     }
     catch (Exception exception)
     {
@@ -947,9 +947,9 @@ public class UserInputPanel extends IzPanel
     	}catch (Throwable t){
 			message = (String)field [POS_MESSAGE];
     	}
-      JOptionPane.showMessageDialog (parent,
+      JOptionPane.showMessageDialog (parentFrame,
                                      message,
-                                     parent.langpack.getString ("UserInputPanel.error.caption"),
+                                     parentFrame.langpack.getString ("UserInputPanel.error.caption"),
                                      JOptionPane.WARNING_MESSAGE);
       return (false);
     }
@@ -1510,9 +1510,9 @@ public class UserInputPanel extends IzPanel
 
     if (!success)
     {
-      JOptionPane.showMessageDialog (parent,
+      JOptionPane.showMessageDialog (parentFrame,
                                      message,
-                                     parent.langpack.getString ("UserInputPanel.error.caption"),
+                                     parentFrame.langpack.getString ("UserInputPanel.error.caption"),
                                      JOptionPane.WARNING_MESSAGE);
       return (false);
     }
@@ -1780,14 +1780,14 @@ public class UserInputPanel extends IzPanel
     if ((filename != null) && (filename.length() > 0))
     {
       tooltiptext.append (
-        MessageFormat.format (parent.langpack.getString ("UserInputPanel.search.location"), 
+        MessageFormat.format (parentFrame.langpack.getString ("UserInputPanel.search.location"), 
             new String[] { filename} ));
     }
     
     if ((check_filename != null) && (check_filename.length() > 0))
     {
       tooltiptext.append (          
-        MessageFormat.format (parent.langpack.getString ("UserInputPanel.search.location.checkedfile"), 
+        MessageFormat.format (parentFrame.langpack.getString ("UserInputPanel.search.location.checkedfile"), 
           new String[] { check_filename } ));
     }
     
@@ -1799,13 +1799,13 @@ public class UserInputPanel extends IzPanel
     JPanel buttonPanel = new JPanel ();
     buttonPanel.setLayout (new com.izforge.izpack.gui.FlowLayout (com.izforge.izpack.gui.FlowLayout.LEADING));
 
-    JButton autodetectButton = ButtonFactory.createButton (parent.langpack.getString ("UserInputPanel.search.autodetect"), idata.buttonsHColor);
+    JButton autodetectButton = ButtonFactory.createButton (parentFrame.langpack.getString ("UserInputPanel.search.autodetect"), idata.buttonsHColor);
 
-    autodetectButton.setToolTipText (parent.langpack.getString ("UserInputPanel.search.autodetect.tooltip"));
+    autodetectButton.setToolTipText (parentFrame.langpack.getString ("UserInputPanel.search.autodetect.tooltip"));
 
     buttonPanel.add (autodetectButton);
 
-    JButton browseButton = ButtonFactory.createButton (parent.langpack.getString ("UserInputPanel.search.browse"), idata.buttonsHColor);
+    JButton browseButton = ButtonFactory.createButton (parentFrame.langpack.getString ("UserInputPanel.search.browse"), idata.buttonsHColor);
 
     buttonPanel.add (browseButton);
 
@@ -1814,7 +1814,7 @@ public class UserInputPanel extends IzPanel
 
     uiElements.add (new Object [] {null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint, buttonPanel, forPacks, forOs});
 
-    searchFields.add (new SearchField (filename, check_filename, parent, combobox, autodetectButton, browseButton, search_type, result_type));
+    searchFields.add (new SearchField (filename, check_filename, parentFrame, combobox, autodetectButton, browseButton, search_type, result_type));
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -2319,7 +2319,7 @@ public class UserInputPanel extends IzPanel
  * This class can be used to associate a text string and a (text) value.
  */
 /*---------------------------------------------------------------------------*/
-private class TextValuePair
+private static class TextValuePair
 {
   private String text   = "";
   private String value  = "";
@@ -2395,7 +2395,7 @@ private class TextValuePair
  */
 /*---------------------------------------------------------------------------*/
 
-private class SearchField implements ActionListener
+private static class SearchField implements ActionListener
 {
   /** used in constructor - we search for a directory. */
   public static final int       TYPE_DIRECTORY = 1;
@@ -2632,7 +2632,7 @@ private class SearchField implements ActionListener
   public String getResult ()
   {
     String item = (String)this.pathComboBox.getSelectedItem ();
-    if (item != null) item.trim();
+    if (item != null) item = item.trim();
     String path = item;
     
     File f = new File (item);

@@ -49,15 +49,15 @@ import javax.swing.text.PlainDocument;
 public class RuleTextField extends JTextField
 {
   /** Used to specify numeric input only */
-  public  static int     N       = 1;
+  public  static final int     N       = 1;
   /** Used to specify hexadecimal input only */
-  public  static int     H       = 2;
+  public  static final int     H       = 2;
   /** Used to specify alphabetic input only */
-  public  static int     A       = 3;
+  public  static final int     A       = 3;
   /** Used to specify open input (no restrictions) */
-  public  static int     O       = 4;
+  public  static final int     O       = 4;
   /** Used to specify alpha-numeric input only */
-  public  static int     AN      = 5;
+  public  static final int     AN      = 5;
 
   private int       columns;
   private int       editLength;

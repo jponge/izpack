@@ -356,7 +356,7 @@ public class MultiLineLabel extends JComponent
         if (currentPos == endPos)
         {
           lastPos = currentPos;
-          String s = new String (labelText.substring (startPos));
+          String s = labelText.substring (startPos);
           line.addElement (s);
         }
         // ----------------------------------------------------------------
@@ -374,7 +374,7 @@ public class MultiLineLabel extends JComponent
               lastPos = startPos +
                           breakWord (labelText.substring (startPos, currentPos), fm);
           }
-          String s = new String (labelText.substring (startPos, lastPos));
+          String s = labelText.substring (startPos, lastPos);
           line.addElement (s);
         }
 

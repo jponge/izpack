@@ -30,6 +30,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -51,11 +52,11 @@ import java.util.Map;
  *
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class VariableSubstitutor
+public class VariableSubstitutor implements Serializable
 {
 
   /**  The variable value mappings */
-  protected Map environment;
+  protected transient Map environment;
 
   /**  A constant for file type. Plain file. */
   protected final static int TYPE_PLAIN = 0;
@@ -70,7 +71,7 @@ public class VariableSubstitutor
   protected final static int TYPE_SHELL = 3;
 
   /**  A mapping of file type names to corresponding integer constants. */
-  protected static Map typeNameToConstantMap;
+  protected final static Map typeNameToConstantMap;
 
   // Initialize the file type map
   static

@@ -74,9 +74,7 @@ public class PortProcessor implements Processor {
 			}finally{
 				try{
 					socket.close();
-				}catch (Exception ex){
-					;
-				}
+				}catch (Exception ex){}
 			}
 		}
 		return retValue;

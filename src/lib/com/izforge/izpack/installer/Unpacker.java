@@ -651,7 +651,7 @@ public class Unpacker extends Thread
   {
     // get the uninstaller base, returning if not found so that
     // idata.uninstallOutJar remains null
-    InputStream in = getClass().getResourceAsStream("/res/IzPack.uninstaller");
+    InputStream in = Unpacker.class.getResourceAsStream("/res/IzPack.uninstaller");
     if (in == null)
       return;
 

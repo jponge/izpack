@@ -142,7 +142,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     setLayout(new GridBagLayout());
 
     Font font = heading.getFont ();
-    font = font.deriveFont (Font.BOLD, font.getSize()*2.0f);
+    font = font.deriveFont (Font.BOLD, font.getSize() * 2.0f);
     heading.setFont(font);
     heading.setHorizontalAlignment(SwingConstants.CENTER);
     heading.setText(parent.langpack.getString ("CompilePanel.heading"));

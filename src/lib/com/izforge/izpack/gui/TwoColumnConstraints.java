@@ -74,8 +74,9 @@ public class TwoColumnConstraints
   *
   * @return    a copy of this <code>TwoColumnConstraints</code>
   */
-  public Object clone ()
+  public Object clone () throws CloneNotSupportedException
   {
+    super.clone();
     TwoColumnConstraints newObject = new TwoColumnConstraints ();
 
     newObject.position  = position;

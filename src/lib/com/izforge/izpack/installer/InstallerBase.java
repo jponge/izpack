@@ -35,7 +35,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 
 import com.izforge.izpack.CustomActionData;
@@ -44,9 +43,9 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
- * Common utility functions for the GUI and text installers.
- * (Do not import swing/awt classes to this class.)
- *
+ * Common utility functions for the GUI and text installers. (Do not import
+ * swing/awt classes to this class.)
+ * 
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
@@ -54,13 +53,14 @@ public class InstallerBase
 {
 
   /**
-   *  Loads the installation data.
-   *
+   * Loads the installation data.
+   * 
    * @param installdata Where to store the installation data.
    * 
-   * @exception  Exception  Description of the Exception
+   * @exception Exception Description of the Exception
    */
-  public void loadInstallData(AutomatedInstallData installdata) throws Exception
+  public void loadInstallData(AutomatedInstallData installdata)
+      throws Exception
   {
     // Usefull variables
     InputStream in;
@@ -71,7 +71,7 @@ public class InstallerBase
 
     // We load the variables
     Properties variables = null;
-    in = getClass().getResourceAsStream("/vars");
+    in = InstallerBase.class.getResourceAsStream("/vars");
     if (null != in)
     {
       objIn = new ObjectInputStream(in);
@@ -80,7 +80,7 @@ public class InstallerBase
     }
 
     // We load the Info data
-    in = getClass().getResourceAsStream("/info");
+    in = InstallerBase.class.getResourceAsStream("/info");
     objIn = new ObjectInputStream(in);
     Info inf = (Info) objIn.readObject();
     objIn.close();
@@ -91,14 +91,14 @@ public class InstallerBase
     installdata.setVariable(ScriptParser.APP_VER, inf.getAppVersion());
 
     // We read the panels order data
-    in = getClass().getResourceAsStream("/panelsOrder");
-	objIn = new ObjectInputStream(in);
-    List panelsOrder = (List)objIn.readObject();
-	objIn.close();
+    in = InstallerBase.class.getResourceAsStream("/panelsOrder");
+    objIn = new ObjectInputStream(in);
+    List panelsOrder = (List) objIn.readObject();
+    objIn.close();
 
     String os = System.getProperty("os.name");
     // We read the packs data
-    in = getClass().getResourceAsStream("/packs.info");
+    in = InstallerBase.class.getResourceAsStream("/packs.info");
     objIn = new ObjectInputStream(in);
     size = objIn.readInt();
     ArrayList availablePacks = new ArrayList();
@@ -108,7 +108,7 @@ public class InstallerBase
       Pack pk = (Pack) objIn.readObject();
       allPacks.add(pk);
       if (OsConstraint.oneMatchesCurrentSystem(pk.osConstraints))
-        availablePacks.add(pk);
+          availablePacks.add(pk);
     }
     objIn.close();
 
@@ -143,14 +143,13 @@ public class InstallerBase
     installPath = dir + inf.getAppName();
 
     installdata.setInstallPath(installPath);
-    installdata.setVariable
-      (ScriptParser.JAVA_HOME, System.getProperty("java.home"));
-    installdata.setVariable
-      (ScriptParser.USER_HOME, System.getProperty("user.home"));
-    installdata.setVariable
-      (ScriptParser.USER_NAME, System.getProperty("user.name"));
-    installdata.setVariable
-      (ScriptParser.FILE_SEPARATOR, File.separator);
+    installdata.setVariable(ScriptParser.JAVA_HOME, System
+        .getProperty("java.home"));
+    installdata.setVariable(ScriptParser.USER_HOME, System
+        .getProperty("user.home"));
+    installdata.setVariable(ScriptParser.USER_NAME, System
+        .getProperty("user.name"));
+    installdata.setVariable(ScriptParser.FILE_SEPARATOR, File.separator);
     if (null != variables)
     {
       Enumeration enum = variables.keys();
@@ -172,18 +171,17 @@ public class InstallerBase
     Iterator pack_it = availablePacks.iterator();
     while (pack_it.hasNext())
     {
-      Pack pack = (Pack)pack_it.next();
-      if (pack.preselected)
-        installdata.selectedPacks.add (pack);
+      Pack pack = (Pack) pack_it.next();
+      if (pack.preselected) installdata.selectedPacks.add(pack);
     }
     // Load custom action data.
     loadCustomActionData(installdata);
- 
 
   }
 
   /**
    * Builds the default path for Windows (i.e Program Files/...).
+   * 
    * @return The Windows default installation path.
    */
   private String buildWindowsDefaultPath()
@@ -193,8 +191,9 @@ public class InstallerBase
     {
       // We load the properties
       Properties props = new Properties();
-      props.load(InstallerBase.class.getResourceAsStream(
-        "/com/izforge/izpack/installer/win32-defaultpaths.properties"));
+      props
+          .load(InstallerBase.class
+              .getResourceAsStream("/com/izforge/izpack/installer/win32-defaultpaths.properties"));
 
       // We look for the drive mapping
       String drive = System.getProperty("user.home");
@@ -203,7 +202,8 @@ public class InstallerBase
       // Now we have it :-)
       dpath.append(drive);
 
-      // Ensure that we have a trailing backslash (in case drive was something like "C:")
+      // Ensure that we have a trailing backslash (in case drive was something
+      // like "C:")
       if (drive.length() == 2) dpath.append("\\");
 
       String language = Locale.getDefault().getLanguage();
@@ -232,15 +232,17 @@ public class InstallerBase
 
     return dpath.toString();
   }
+
   /**
-   * Loads custom action data like listener and lib references
-   * if exist and fills the installdata.
-   * @param installdata installdata into which the custom action data
-   * should be stored
+   * Loads custom action data like listener and lib references if exist and
+   * fills the installdata.
+   * 
+   * @param installdata installdata into which the custom action data should be
+   * stored
    * @throws Exception
    */
   private void loadCustomActionData(AutomatedInstallData installdata)
-    throws Exception
+      throws Exception
   {
     // Usefull variables
     InputStream in;
@@ -248,48 +250,45 @@ public class InstallerBase
     int size;
     int i;
     // Load listeners if exist.
-    String [] streamNames = AutomatedInstallData.CUSTOM_ACTION_TYPES;
-    List [] out = new List[streamNames.length];
-    for(i = 0; i < streamNames.length; ++i )
+    String[] streamNames = AutomatedInstallData.CUSTOM_ACTION_TYPES;
+    List[] out = new List[streamNames.length];
+    for (i = 0; i < streamNames.length; ++i)
       out[i] = new ArrayList();
-    in = getClass().getResourceAsStream("/customActions");
-    if( in != null )
+    in = InstallerBase.class.getResourceAsStream("/customActions");
+    if (in != null)
     {
       objIn = new ObjectInputStream(in);
       Object listeners = objIn.readObject();
       objIn.close();
-      Iterator keys = ((List)listeners).iterator();
-      while( keys != null && keys.hasNext())
+      Iterator keys = ((List) listeners).iterator();
+      while (keys != null && keys.hasNext())
       {
         CustomActionData ca = (CustomActionData) keys.next();
         List osconstraint = (List) ca.osConstraints;
-        if( ca != null )
-        {
-          if( ca.osConstraints != null 
-            && ! OsConstraint.oneMatchesCurrentSystem((List)ca.osConstraints))
-          { // OS constraint defined, but not matched; therefore ignore it.
-            continue;
-          }
-           switch( ca.type )
-          {
-            case CustomActionData.INSTALLER_LISTENER:
-              Class clazz = Class.forName(ca.name);
-              out[ca.type].add( clazz.newInstance());
-              break;
-            case CustomActionData.UNINSTALLER_LISTENER:
-            case CustomActionData.UNINSTALLER_LIB:
-              out[ca.type].add( ca.name);
-              break;
-           }
+
+        if (ca.osConstraints != null
+            && !OsConstraint.oneMatchesCurrentSystem((List) ca.osConstraints))
+        { // OS constraint defined, but not matched; therefore ignore it.
+          continue;
         }
-      
+        switch (ca.type)
+        {
+        case CustomActionData.INSTALLER_LISTENER:
+          Class clazz = Class.forName(ca.name);
+          out[ca.type].add(clazz.newInstance());
+          break;
+        case CustomActionData.UNINSTALLER_LISTENER:
+        case CustomActionData.UNINSTALLER_LIB:
+          out[ca.type].add(ca.name);
+          break;
+        }
+
       }
       // Add the current custem action data to the installdata hash map.
-      for(i = 0; i < streamNames.length; ++i )
+      for (i = 0; i < streamNames.length; ++i)
         installdata.customActionData.put(streamNames[i], out[i]);
     }
     // uninstallerLib list if exist
-
 
   }
 

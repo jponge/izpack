@@ -64,8 +64,6 @@ public class ProcessPanelWorker implements Runnable
 
   private XMLElement spec;
 
-  private AutomatedInstallData idata;
-
   protected AbstractUIProcessHandler handler;
 
   private ArrayList jobs = new ArrayList();
@@ -83,7 +81,6 @@ public class ProcessPanelWorker implements Runnable
     AbstractUIProcessHandler handler)
     throws IOException
   {
-    this.idata = idata;
     this.handler = handler;
     this.vs = new VariableSubstitutor(idata.getVariables());
 
@@ -240,7 +237,7 @@ public class ProcessPanelWorker implements Runnable
       VariableSubstitutor vs);
   }
 
-  class ProcessingJob implements Processable
+  private static class ProcessingJob implements Processable
   {
     public String name;
     private List processables;
@@ -268,7 +265,7 @@ public class ProcessPanelWorker implements Runnable
 
   }
 
-  class ExecutableFile implements Processable
+  private static class ExecutableFile implements Processable
   {
     private String filename;
     private List arguments;
@@ -372,12 +369,12 @@ public class ProcessPanelWorker implements Runnable
       }
     }
 
-    public class OutputMonitor implements Runnable
+    static public class OutputMonitor implements Runnable
     {
       private boolean stderr = false;
       private AbstractUIProcessHandler handler;
       private BufferedReader reader;
-      private Boolean stop = new Boolean(false);
+      private Boolean stop = Boolean.valueOf(false);
 
       public OutputMonitor(
         AbstractUIProcessHandler handler,
@@ -415,7 +412,7 @@ public class ProcessPanelWorker implements Runnable
       {
         synchronized (this.stop)
         {
-          this.stop = new Boolean(true);
+          this.stop = Boolean.valueOf(true);
         }
       }
 
@@ -429,7 +426,7 @@ public class ProcessPanelWorker implements Runnable
    * a method run(AbstractUIProcessHandler, String[])
    * If found, it calls the method and processes all returned exceptions
    */
-  class ExecutableClass implements Processable
+  private static class ExecutableClass implements Processable
   {
       final private String myClassName;
       final private List myArguments;

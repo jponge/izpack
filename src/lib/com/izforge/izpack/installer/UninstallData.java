@@ -122,7 +122,7 @@ public class UninstallData
    *
    * @return    The uninstaller jar filename.
    */
-  public String getUninstallerJarFilename()
+  public synchronized String getUninstallerJarFilename()
   {
     return uninstallerJarFilename;
   }

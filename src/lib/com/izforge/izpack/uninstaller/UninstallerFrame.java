@@ -110,7 +110,7 @@ public class UninstallerFrame extends JFrame
 
     // Initializations
     langpack =
-      new LocaleDatabase(getClass().getResourceAsStream("/langpack.xml"));
+      new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
     getInstallPath();
     icons = new IconsDatabase();
     loadIcons();
@@ -268,7 +268,7 @@ public class UninstallerFrame extends JFrame
    */
   private void getInstallPath() throws Exception
   {
-    InputStream in = getClass().getResourceAsStream("/install.log");
+    InputStream in = UninstallerFrame.class.getResourceAsStream("/install.log");
     InputStreamReader inReader = new InputStreamReader(in);
     BufferedReader reader = new BufferedReader(inReader);
     installPath = reader.readLine();
@@ -288,19 +288,19 @@ public class UninstallerFrame extends JFrame
     ImageIcon img;
 
     // We load it
-    url = getClass().getResource("/img/trash.png");
+    url = UninstallerFrame.class.getResource("/img/trash.png");
     img = new ImageIcon(url);
     icons.put("delete", img);
 
-    url = getClass().getResource("/img/stop.png");
+    url = UninstallerFrame.class.getResource("/img/stop.png");
     img = new ImageIcon(url);
     icons.put("stop", img);
 
-    url = getClass().getResource("/img/flag.png");
+    url = UninstallerFrame.class.getResource("/img/flag.png");
     img = new ImageIcon(url);
     icons.put("warning", img);
 
-    url = getClass().getResource("/img/JFrameIcon.png");
+    url = UninstallerFrame.class.getResource("/img/JFrameIcon.png");
     img = new ImageIcon(url);
     icons.put("JFrameIcon", img);
   }
@@ -326,7 +326,7 @@ public class UninstallerFrame extends JFrame
    *
    * @author     Julien Ponge
    */
-  class WindowHandler extends WindowAdapter
+  private final class WindowHandler extends WindowAdapter
   {
     /**
      *  We can't avoid the exit here, so don't call exit elsewhere.
@@ -348,7 +348,7 @@ public class UninstallerFrame extends JFrame
    * @author     Julien Ponge
    * @author     Tino Schwarze
    */
-  class DestroyerHandler
+  private final class DestroyerHandler
     implements com.izforge.izpack.util.AbstractUIProgressHandler
   {
     /**

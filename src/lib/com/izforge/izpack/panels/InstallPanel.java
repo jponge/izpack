@@ -182,7 +182,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     idata.installSuccess = false;
     JOptionPane.showMessageDialog(
       this,
-      error.toString(),
+      error,
       parent.langpack.getString("installer.error"),
       JOptionPane.ERROR_MESSAGE);
   }

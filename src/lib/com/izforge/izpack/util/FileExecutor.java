@@ -56,7 +56,7 @@ public class FileExecutor
    *
    * @author     Olexij Tkatchenko <ot@parcs.de>
    */
-  private class MonitorInputStream implements Runnable
+  private static class MonitorInputStream implements Runnable
   {
 
     private BufferedReader reader;
@@ -333,7 +333,7 @@ public class FileExecutor
           deleteAfterwards = false;
           String message = output[0] + "\n" + output[1];
           if (message.length() == 1)
-            message = new String("Failed to execute " + file.toString() + ".");
+            message = "Failed to execute " + file.toString() + ".";
 
           if (efile.onFailure == ExecutableFile.ABORT)
           {

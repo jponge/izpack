@@ -8,6 +8,8 @@
   an application located on a live cd (Erik Artzmark).
 - The attributes "includes" and "excludes" now are supported for filesets
   (Klaus Bartz).
+- As many sensitive clean-ups as possible have been made after a FindBugs run.
+
   > 3.6.1 (build 2004.xx.yy)
 
 - Slovak translation updates (Milan Madzia).

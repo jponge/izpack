@@ -1377,7 +1377,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
       dataElement = new XMLElement (AUTO_KEY_SHORTCUT);
 
       dataElement.setAttribute (AUTO_ATTRIBUTE_NAME,          data.name);
-      dataElement.setAttribute (AUTO_ATTRIBUTE_GROUP,         new Boolean (data.addToGroup).toString ());
+      dataElement.setAttribute (AUTO_ATTRIBUTE_GROUP,         Boolean.valueOf(data.addToGroup).toString ());
       dataElement.setAttribute (AUTO_ATTRIBUTE_TYPE,          Integer.toString (data.type));
       dataElement.setAttribute (AUTO_ATTRIBUTE_COMMAND,       data.commandLine);
       dataElement.setAttribute (AUTO_ATTRIBUTE_DESCRIPTION,   data.description);

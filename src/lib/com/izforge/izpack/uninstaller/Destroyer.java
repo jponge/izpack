@@ -139,7 +139,7 @@ public class Destroyer extends Thread
   private void askUninstallerRemoval() throws Exception
   {
     // Initialisations
-    InputStream in = getClass().getResourceAsStream("/jarlocation.log");
+    InputStream in = Destroyer.class.getResourceAsStream("/jarlocation.log");
     InputStreamReader inReader = new InputStreamReader(in);
     BufferedReader reader = new BufferedReader(inReader);
 
@@ -162,7 +162,7 @@ public class Destroyer extends Thread
   {
     // Initialisations
     TreeSet files = new TreeSet(Collections.reverseOrder());
-    InputStream in = getClass().getResourceAsStream("/install.log");
+    InputStream in = Destroyer.class.getResourceAsStream("/install.log");
     InputStreamReader inReader = new InputStreamReader(in);
     BufferedReader reader = new BufferedReader(inReader);
 
@@ -185,7 +185,7 @@ public class Destroyer extends Thread
   {
     ArrayList executables = new ArrayList();
     ObjectInputStream in =
-      new ObjectInputStream(getClass().getResourceAsStream("/executables"));
+      new ObjectInputStream(Destroyer.class.getResourceAsStream("/executables"));
     int num = in.readInt();
     for (int i = 0; i < num; i++)
     {
@@ -228,7 +228,7 @@ public class Destroyer extends Thread
     // Load listeners if exist
     InputStream in;
     ObjectInputStream objIn;
-    in = getClass().getResourceAsStream("/uninstallerListeners");
+    in = Destroyer.class.getResourceAsStream("/uninstallerListeners");
     if( in != null )
     {
       objIn = new ObjectInputStream(in);

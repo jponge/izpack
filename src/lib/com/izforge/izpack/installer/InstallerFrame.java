@@ -212,7 +212,7 @@ public class InstallerFrame extends JFrame
     ImageIcon img;
     XMLElement icon;
     InputStream inXML =
-      getClass().getResourceAsStream("/com/izforge/izpack/installer/icons.xml");
+      InstallerFrame.class.getResourceAsStream("/com/izforge/izpack/installer/icons.xml");
 
     // Initialises the parser
     StdXMLParser parser = new StdXMLParser();
@@ -229,7 +229,7 @@ public class InstallerFrame extends JFrame
     for (int i = 0; i < size; i++)
     {
       icon = (XMLElement) children.get(i);
-      url = getClass().getResource(icon.getAttribute("res"));
+      url = InstallerFrame.class.getResource(icon.getAttribute("res"));
       img = new ImageIcon(url);
       icons.put(icon.getAttribute("id"), img);
     }
@@ -240,7 +240,7 @@ public class InstallerFrame extends JFrame
     for (int i = 0; i < size; i++)
     {
       icon = (XMLElement) children.get(i);
-      url = getClass().getResource(icon.getAttribute("res"));
+      url = InstallerFrame.class.getResource(icon.getAttribute("res"));
       img = new ImageIcon(url);
       UIManager.put(icon.getAttribute("id"), img);
     }

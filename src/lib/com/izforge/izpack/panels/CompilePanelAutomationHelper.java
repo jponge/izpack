@@ -168,7 +168,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper
    */
   public void progress(int val, String msg)
   {
-    float percentage = ((float)val)*100.0f/(float)this.job_max;
+    double percentage = ((double)val)*100.0d/(double)this.job_max;
 
     String percent = (new Integer ((int)percentage)).toString()+'%';
     String line = this.job_name + ": " + percent;

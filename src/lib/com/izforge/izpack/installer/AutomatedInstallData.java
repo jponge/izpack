@@ -55,7 +55,7 @@ public class AutomatedInstallData
   // Attention !! Do not change the existent names and the order.
   // Add a / as first char at new types. Add new type handling in
   // Unpacker.
-  public static final String [] CUSTOM_ACTION_TYPES = new String[] 
+  static final String [] CUSTOM_ACTION_TYPES = new String[] 
           {"/installerListeners","/uninstallerListeners", "/uninstallerLibs" };
           
   public static final int INSTALLER_LISTENER_INDEX = 0;

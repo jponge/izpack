@@ -133,14 +133,14 @@ public class ResourceManager
   {
     InputStream in;
     String resourcePath = this.resourceBasePath + resource + "_" + this.locale;
-    in = this.getClass().getResourceAsStream(resourcePath);
+    in = ResourceManager.class.getResourceAsStream(resourcePath);
     if (in != null)
       return resourcePath;
     else
     {
       // if there's no language dependent resource found
       resourcePath = this.resourceBasePath + resource;
-      in = this.getClass().getResourceAsStream(resourcePath);
+      in = ResourceManager.class.getResourceAsStream(resourcePath);
       if (in != null)
         return resourcePath;
       else
@@ -168,7 +168,7 @@ public class ResourceManager
   {
     String resourcepath = this.getLanguageResourceString(resource);
     //System.out.println ("reading resource "+resourcepath);
-    return this.getClass().getResourceAsStream(resourcepath);
+    return ResourceManager.class.getResourceAsStream(resourcepath);
   }
 
 
