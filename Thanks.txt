@@ -88,5 +88,7 @@ IzPack for your projects ;-)
 - Michael Hagedorn : for the UserInputPanel fixes.
 - Jan Pavlovic : for the Czech translation.
 - Oscar Sierra : for the patches.
+- Per Abich : for the patches.
+- Alexey Makhmutov : Russian langpack updates.
 
 # vim: fileformat=dos

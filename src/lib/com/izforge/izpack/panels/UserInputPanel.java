@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -2460,6 +2461,7 @@ private class SearchField implements ActionListener
   /** check whether the given path matches */
   private boolean pathMatches (String path)
   {
+    if (path != null) { // Make sure, path is not null
     //System.out.println ("checking path " + path);
 
     File file = null;
@@ -2491,6 +2493,7 @@ private class SearchField implements ActionListener
     }
 
     //System.out.println (path + " did not match");
+    } //end if
     return false;
   }
 
@@ -2499,6 +2502,25 @@ private class SearchField implements ActionListener
   {
       Vector items = new Vector();
 
+      /*
+       * Check if the user has entered data into the ComboBox and add it to the
+       * Itemlist
+       */
+      String selected = (String) this.pathComboBox.getSelectedItem();
+      boolean found = false;
+      for (int x = 0; x < this.pathComboBox.getItemCount(); x++)
+      {
+         if (((String) this.pathComboBox.getItemAt(x)).equals(selected))
+         {
+            found = true;
+         }
+      }
+      if (!found)
+      {
+         //System.out.println("Not found in Itemlist");
+         this.pathComboBox.addItem(this.pathComboBox.getSelectedItem());
+      }
+      
       //Checks whether a placeholder item is in the combobox
       //and resolve the pathes automatically:
       ///usr/lib/* searches all folders in usr/lib to find
@@ -2527,9 +2549,14 @@ private class SearchField implements ActionListener
         }
         else
         {
-          items.add(path);
+           if (this.pathMatches(path))
+               {
+                  items.add(path);
+               }
         }
       }
+      // Make the enties in the vector unique
+      items=new Vector(new HashSet(items));
 
       //Now clear the combobox and add the items out of the newly
       //generated vector
