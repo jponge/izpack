@@ -26,6 +26,7 @@ package com.izforge.izpack.compiler;
 
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,32 +126,37 @@ public class WebPackager extends Packager
    */
   public void finish() throws Exception
   {
-    // Usefull stuff
+    sendMsg("Finishing the enpacking ..."); 
+    writeInstallationKind("web");
+    writePacksInfo();
+    writeLangPacksInfo();
+    closeStreams();
+    sendStop();
+  }
+
+  /**
+   * Closes the streams.
+   * 
+   * @throws IOException
+   */
+  protected void closeStreams() throws IOException
+  {
+    outJar.flush();
+    outJar.close();
+    webJar.flush();
+    webJar.close();
+  }
+
+  /**
+   * Writes the langpacks informations.
+   * 
+   * @throws IOException
+   */
+  protected void writeLangPacksInfo() throws IOException
+  {
     DataOutputStream datOut;
-    ObjectOutputStream objOut;
     int size;
     int i;
-
-    sendMsg("Finishing the enpacking ...");
-
-    // Writes the installation kind information
-    outJar.putNextEntry(new ZipEntry("kind"));
-    datOut = new DataOutputStream(outJar);
-    datOut.writeUTF("web");
-    datOut.flush();
-    outJar.closeEntry();
-
-    // Writes the packs informations
-    outJar.putNextEntry(new ZipEntry("packs.info"));
-    objOut = new ObjectOutputStream(outJar);
-    size = packs.size();
-    objOut.writeInt(size);
-    for (i = 0; i < size; i++)
-      objOut.writeObject(packs.get(i));
-    objOut.flush();
-    outJar.closeEntry();
-
-    // Writes the langpacks informations
     outJar.putNextEntry(new ZipEntry("langpacks.info"));
     datOut = new DataOutputStream(outJar);
     size = langpacks.size();
@@ -159,13 +165,41 @@ public class WebPackager extends Packager
       datOut.writeUTF((String) langpacks.get(i));
     datOut.flush();
     outJar.closeEntry();
+  }
 
-    // Closes the stream
-    outJar.flush();
-    outJar.close();
-    webJar.flush();
-    webJar.close();
+  /**
+   * Writes the packs informations.
+   * 
+   * @throws IOException
+   */
+  protected void writePacksInfo() throws IOException
+  {
+    ObjectOutputStream objOut;
+    int size;
+    int i;
+    outJar.putNextEntry(new ZipEntry("packs.info"));
+    objOut = new ObjectOutputStream(outJar);
+    size = packs.size();
+    objOut.writeInt(size);
+    for (i = 0; i < size; i++)
+      objOut.writeObject(packs.get(i));
+    objOut.flush();
+    outJar.closeEntry();
+  }
 
-    sendStop();
+  /**
+   * Writes the installation kind information.
+   * 
+   * @param kind The installation kind.
+   * @throws IOException
+   */
+  protected void writeInstallationKind(String kind) throws IOException
+  {
+    DataOutputStream datOut;
+    outJar.putNextEntry(new ZipEntry("kind"));
+    datOut = new DataOutputStream(outJar);
+    datOut.writeUTF(kind);
+    datOut.flush();
+    outJar.closeEntry();
   }
 }
