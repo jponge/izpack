@@ -87,6 +87,9 @@
     
     10.09.2003: (by Julien Ponge)
         Reformatting, 4 spaces tabs, got rid of residual hard tabs.
+    
+    19.09.2003: (by Julien Ponge)
+        Added a run.installer target to test an installer.
 
   Mini-HowTo:
 
@@ -641,6 +644,11 @@
             <include name="**/*.xml"/>
             <include name="**/*.properties"/>
         </fixcrlf>
+    </target>
+    
+    <!-- Runs a testing installer. -->
+    <target name="run.installer">
+        <java jar="../_dist/IzPack-install.jar" fork="true" />
     </target>
 
     <!-- Makes everything, from compilation to generating an installer. -->
