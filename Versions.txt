@@ -4,6 +4,7 @@
 
 - Fixed moving empty directory to root (pbe@whitestein.com).
 - UserInputPanel getResult() fix (bug #1769).
+- Slovak langpack fix (patch #88).
 
   > 3.5.1 (build 2004.03.16)
 
