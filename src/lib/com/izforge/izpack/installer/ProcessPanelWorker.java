@@ -33,7 +33,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -236,9 +236,9 @@ public class ProcessPanelWorker implements Runnable
       else
         appVersion = "undef";
 
-      String identifier = DateFormat.getDateTimeInstance().format(new Date());
+      String identifier = (new SimpleDateFormat("yyyyMMddHHmmss")).format(new Date());
 
-      identifier = (appVersion + "_" + identifier).replace('.', '-').replace(' ', '_').replace(':', '-');
+      identifier = appVersion.replace(' ', '_') + "_" + identifier;
 
       try
       {
