@@ -2,6 +2,11 @@
 
   > 3.6.0 (build 2004.xx.yy)
 
+  > 3.5.2 (build 2004.xx.yy)
+
+- Fixed moving empty directory to root (pbe@whitestein.com).
+- UserInputPanel getResult() fix (bug #1769).
+
   > 3.5.1 (build 2004.03.16)
 
 - No custom look and feel will be applied on Mac platforms (Chad McHenry).

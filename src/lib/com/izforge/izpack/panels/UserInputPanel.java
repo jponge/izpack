@@ -2421,7 +2421,7 @@ private class SearchField implements ActionListener
       }
       else
       {
-        return path;
+        return item;
       }
     }
     else if (this.resultType == RESULT_PARENTDIR)
