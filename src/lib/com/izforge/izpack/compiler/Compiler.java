@@ -938,8 +938,8 @@ public class Compiler extends Thread
         int stdArgsIndex;
         if (args[0].equalsIgnoreCase("-HOME"))
         {
-        stdArgsIndex = 2;
-        IZPACK_HOME = args[1];
+            stdArgsIndex = 2;
+            IZPACK_HOME = args[1];
         }
         else
         {
