@@ -66,8 +66,7 @@
     <str id="PacksPanel.description" txt="Descrizione"/>
     <str id="PacksPanel.freespace" txt="Spazio disponibile :"/>
     <str id="PacksPanel.dependencyList" txt="Il prodotto selezionato richiede i seguenti pacchetti"/>
-    <str id="ImgPacksPanel.dependencyList" txt="Dipendenza(e)"/>
-  	<str id="PacksPanel.notEnoughSpace" txt="Il spazio disponibile non è sufficiente"/>
+    <str id="PacksPanel.notEnoughSpace" txt="Il spazio disponibile non è sufficiente"/>
     <str id="PacksPanel.notAscertainable" txt="Incerto"/>
     
     <!-- InstallPanel strings -->
@@ -86,11 +85,11 @@
     <str id="FinishPanel.fail" txt="L'installazione è fallita !"/>
     <str id="FinishPanel.uninst.info" txt="Un programma di disinstallazione é stato creato in:"/>
     <str id="FinishPanel.auto" txt="Genera uno script d'installazione automatica"/>
-    <str id="FinishPanel.auto.tip" 
-         txt="Usa questo script per ripetere l'installazione in altri computers."/>
+    <str id="FinishPanel.auto.tip" txt="Usa questo script per ripetere l'installazione in altri computers."/>
     
     <!-- ImgPacksPanel strings -->
-    <str id="ImgPacksPanel.packs" txt="Sono disponibili questi pacchetti :"/>
+    <str id="ImgPacksPanel.dependencyList" txt="Dipendenza(e)"/>
+  	<str id="ImgPacksPanel.packs" txt="Sono disponibili questi pacchetti :"/>
     <str id="ImgPacksPanel.snap" txt="Contenuto sommario  :"/>
     <str id="ImgPacksPanel.checkbox" txt=" Installa questo pacchetto"/>
      
@@ -122,6 +121,7 @@
 
     <!-- UserInputPanel strings -->
     <str id="UserInputPanel.error.caption"        txt="Problema di input"/>
+    <str id="UserInputPanel.search.autodetect"    txt="Autorilevazione"/>
     <str id="UserInputPanel.search.autodetect.failed.message"    txt="Autorilevazione fallita."/>
     <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Autorilevazione fallita."/>
     <str id="UserInputPanel.search.autodetect.tooltip"           txt="controlla il file o la directory nel percorso specificato sopra."/>
