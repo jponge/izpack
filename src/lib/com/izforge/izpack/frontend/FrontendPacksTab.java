@@ -216,6 +216,8 @@ public class FrontendPacksTab extends FrontendTab implements ActionListener, Lis
             // We select it
             curPack = installation.getFirstChildNamed("packs").getChildrenNamed("pack").size() - 1;
             curFile = -1;
+            
+            updateComponents();
         }
         else if (source == delPackButton)
         {
@@ -230,6 +232,8 @@ public class FrontendPacksTab extends FrontendTab implements ActionListener, Lis
             curPack = (index < packsList.getModel().getSize() - 2) ? index
                       : packsList.getModel().getSize() - 2;
             curFile = -1;
+            
+            updateComponents();
         }
         else if (source == requiredCheckBox)
         {
@@ -268,6 +272,8 @@ public class FrontendPacksTab extends FrontendTab implements ActionListener, Lis
                 curFile = filesList.getModel().getSize();
                 curPack = index;
             }
+            
+            updateComponents();
         }
         else if (source == delFileButton)
         {
@@ -286,6 +292,8 @@ public class FrontendPacksTab extends FrontendTab implements ActionListener, Lis
             curFile = (findex < filesList.getModel().getSize() - 2) ? findex
                       : filesList.getModel().getSize() - 2;
             curPack = pindex;
+            
+            updateComponents();
         }
         else if (source == parsableCheckBox)
         {
@@ -323,6 +331,8 @@ public class FrontendPacksTab extends FrontendTab implements ActionListener, Lis
                 }
                 root.removeChild(toRemove);
             }
+            
+            scriptPropsButton.setEnabled(parsableCheckBox.isSelected());
         }
         else if (source == scriptPropsButton)
         {
@@ -368,8 +378,6 @@ public class FrontendPacksTab extends FrontendTab implements ActionListener, Lis
                 else
                     toEdit.removeAttribute("encoding");
         }
-        
-        updateComponents();
     }
     
     // List events handler
