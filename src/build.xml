@@ -241,6 +241,8 @@
   <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.uninstaller, build.panels">
     <echo message="Build ${standalone-compiler.jar}"/>
     <delete file="${standalone-compiler.jar}" verbose="true" />
+    <delete dir="${build.dir}/ant-tmp" />
+    <unjar src="${basedir}/lib/ant.jar" dest="${build.dir}/ant-tmp" />
     <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
       <fileset dir="${build.dir}">
         <include name="com/izforge/izpack/*.class"/>
@@ -253,6 +255,9 @@
         <include name="com/izforge/izpack/installer/VariableValueMapImpl.class"/>
         <include name="com/izforge/izpack/installer/VariableSubstitutor.class"/>
         <include name="net/n3/nanoxml/*.class"/>
+      </fileset>
+      <fileset dir="${build.dir}/ant-tmp" >
+        <include name="**/*.class" />
       </fileset>
       <fileset dir="${basedir}">
         <include name="bin/langpacks/flags/*" />
