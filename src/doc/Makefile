@@ -50,6 +50,10 @@ clean:	subdirs
 	rm -rf pdf
 	rm -rf ps
 	rm -rf html
+	
+# Uninstall
+.PHONY: uninstall
+uninstall:
 	rm -rf ../../doc/izpack
 
 # Install
