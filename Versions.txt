@@ -53,6 +53,8 @@
 - Many Windows shortcuts code fixes and enhancements (Bill Wong).
 - UserInputPanel and PacksPanel i18n support (Gaganis Giorgos).
 - ProcessPanel can now execute Java classes (Alex Bradley).
+- TargetPanel: pressing enter in the target editor will move to the next panel
+  (Gaganis Giorgos).
 
   > 3.5.4 (build 2004.06.05)
 
