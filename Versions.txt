@@ -1,5 +1,10 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.0.8a (build 2003.05.02)
+
+- A bug had been introduced in 3.0.8 during the files extraction. Fixed.
+- Polish langpacks update.
+
   > 3.0.8 (build 2003.04.26)
 
 - Packs OS-targeting (Fran Taylor).
