@@ -55,6 +55,7 @@
 - ProcessPanel can now execute Java classes (Alex Bradley).
 - TargetPanel: pressing enter in the target editor will move to the next panel
   (Gaganis Giorgos).
+- Polish langpack fix (Bronek Truszkowski).
 
   > 3.5.4 (build 2004.06.05)
 
