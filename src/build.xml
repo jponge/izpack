@@ -449,6 +449,9 @@
       <fileset dir="${basedir}/src/">
         <include name="*.manifest"/>
       </fileset>
+      <fileset dir="${basedir}/bin/panels/">
+        <include name="**/*" />
+      </fileset>
       <fileset dir="${basedir}/lib/">
         <include name="compiler.jar" />
         <include name="frontend.jar" />
