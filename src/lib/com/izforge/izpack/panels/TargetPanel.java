@@ -145,7 +145,7 @@ public class TargetPanel extends IzPanel implements ActionListener
       if (os.regionMatches(true, 0, "windows", 0, 7))
         in = parent.getResource("TargetPanel.dir.windows");
 
-      else if (os.regionMatches(true, 0, "macosx", 0, 6))
+      else if (os.regionMatches(true, 0, "mac os x", 0, 8))
         in = parent.getResource("TargetPanel.dir.macosx");
 
       else if (os.regionMatches(true, 0, "mac", 0, 3))
