@@ -36,7 +36,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -111,7 +110,7 @@ public abstract class Packager
   public void writeSkeletonInstaller (JarOutputStream out)
     throws Exception
   {
-    InputStream is = getClass().getResourceAsStream("lib/installer.jar");
+    InputStream is = getClass().getResourceAsStream("/lib/installer.jar");
     ZipInputStream skeleton_is = null;
     if (is != null)
     {
