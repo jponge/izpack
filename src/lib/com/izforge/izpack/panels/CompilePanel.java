@@ -399,7 +399,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
   {
     CompileResult result = this.worker.getResult ();
 
-    this.releaseGUI(true);
+    this.releaseGUI(result.isReconfigure());
 
     if (result.isContinue())
     {

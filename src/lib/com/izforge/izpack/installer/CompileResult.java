@@ -90,6 +90,7 @@ public class CompileResult
     this.stderr = stderr;
   }
 
+  /* is this neccessary?
   public void setStatus (int status)
   {
     if (   (status == SUCCESS)
@@ -98,6 +99,7 @@ public class CompileResult
       this.status = status;
     }
   }
+  */
 
   public int getStatus ()
   {
