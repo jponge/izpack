@@ -44,9 +44,9 @@
     <str id="TargetPanel.nodir" 
          txt="Vous avez spécifié le nom d'un fichier existant ! Veuillez choisir un autre chemin d'installation."/>
     <str id="TargetPanel.notwritable" 
-         txt="Le répertoire que vous avez choisi n'est pas convenable. Veuillez en choisir un autre." />
+         txt="Le répertoire que vous avez choisi n'autorise pas l'écriture. Veuillez en choisir un autre." />
     <str id="TargetPanel.empty_target"
-         txt="Vous avez spécifié un nom de répertoire vide ! Voulez-vous faire ainsi ?"/>
+         txt="Vous avez spécifié un nom de répertoire vide ! Etes-vous sûr(e) ?"/>
 		<str id="TargetPanel.createdir" txt="Le répertoire de destination sera créé :" />
     
     <str id="PacksPanel.info" txt="Choisissez ici les paquetages à installer :"/>

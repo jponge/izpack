@@ -266,7 +266,7 @@ public class TargetPanel extends IzPanel implements ActionListener
           JOptionPane.YES_NO_OPTION);
       ok = (res == JOptionPane.YES_OPTION);
     } 
-    else if ( ! existingParent(path).canWrite()) 
+/*    else if ( ! existingParent(path).canWrite()) 
     {
       JOptionPane.showMessageDialog(
           this,
@@ -274,7 +274,7 @@ public class TargetPanel extends IzPanel implements ActionListener
           parent.langpack.getString("installer.error"),
           JOptionPane.ERROR_MESSAGE);
         ok = false;
-    }
+    }*/
     else
     {
       JOptionPane.showMessageDialog(
@@ -295,7 +295,9 @@ public class TargetPanel extends IzPanel implements ActionListener
     while ( ! result.exists() )
     {
       if (result.getParent() == null)
+      {
         return result;
+      }
       result = result.getParentFile();
     }
     return result;
