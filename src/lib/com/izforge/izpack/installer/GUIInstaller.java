@@ -384,9 +384,9 @@ public class GUIInstaller extends InstallerBase
      *
      * @param  items  The items to display in the box.
      */
-    public LanguageDialog(Object[] items)
+    public LanguageDialog(JFrame frame, Object[] items)
     {
-      super();
+      super(frame);
 
       try
       {
