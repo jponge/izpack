@@ -390,9 +390,9 @@ public class Compiler extends Thread
 
     // We add the panels
     ArrayList panels = getPanels(data);
-
     TreeSet panelsCache = new TreeSet();
-    iter = getPanels(data).iterator();
+
+    iter = panels.iterator();
     while (iter.hasNext())
     {
       Panel p = (Panel) iter.next();
