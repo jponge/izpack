@@ -190,6 +190,7 @@ public class RuleInputField extends JComponent implements KeyListener,
 			resultFormat,
 			toolkit);
 		this.validatorParams = validatorParams;
+                this.hasParams = true;
 	}
 
 	/*--------------------------------------------------------------------------*/
