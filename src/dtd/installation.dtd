@@ -61,6 +61,7 @@
     <!ELEMENT pack (description, file*, fileset*, parsable*, executable*,)>
         <!ATTLIST pack name CDATA #REQUIRED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
+        <!ATTLIST pack os CDATA #IMPLIED>
         <!ELEMENT description (#PCDATA)>
         <!ELEMENT file EMPTY>
             <!ATTLIST file src CDATA #REQUIRED>
