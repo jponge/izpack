@@ -71,7 +71,7 @@
     <str id="ImgPacksPanel.checkbox" txt=" Installeer dit pakket"/>
 
     <str id="ShortcutPanel.regular.list" txt="Selecteer een programma groep voor de snelkoppelingen:"/>
-    <str id="ShortcutPanel.regular.default" txt="Herstel"/>
+    <str id="ShortcutPanel.regular.default" txt="Standaardwaarde"/>
     <str id="ShortcutPanel.regular.desktop" txt="Maak snelkoppelingen op de desktop."/>
     <str id="ShortcutPanel.regular.create" txt="Maak Snelkoppelingen"/>
     <str id="ShortcutPanel.regular.userIntro" txt="Maak snelkoppeling voor:"/>
@@ -106,8 +106,11 @@
     <str id="UserInputPanel.search.autodetect.failed.message"    txt="Het automatisch zoeken is mislukt."/>
     <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Automatisch zoeken mislukt"/>
     <str id="UserInputPanel.search.autodetect.tooltip"           txt="Zoek naar het bestand of de map in de hierboven aangegeven paden."/>
-    <str id="UserInputPanel.search.location"           txt="Geef de locatie van "/>
+    <str id="UserInputPanel.search.location"           txt="Geef de locatie van {0}"/>
+    <str id="UserInputPanel.search.location.checkedfile" txt="Het bestaan van {0} is gecontroleerd."/>
     <str id="UserInputPanel.search.browse"           txt="Bladeren..."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="Het bestand of de map die u gekozen hebt bestaat niet of is niet bruikbaar."/>
+    <str id="UserInputPanel.search.wrongselection.caption"   txt="Ongeldige selectie"/>
 
     <str id="CompilePanel.heading" txt="Compilatie" />
     <str id="CompilePanel.tip" txt="Voortgang compilatie taak:" />
@@ -129,6 +132,7 @@
     <str id="CompilePanel.choose_compiler" txt="Te gebruiken compiler:" />
     <str id="CompilePanel.additional_arguments" txt="Extra compiler parameters:" />
 
+    <str id="ProcessPanel.heading" txt="Bezig" />
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>
