@@ -250,6 +250,7 @@ public class Compiler extends Thread
     // We add the panels
     ArrayList panels = getPanels(data);
     ArrayList panelsOrder = new ArrayList(panels.size());
+    TreeSet panelsCache = new TreeSet();
     iter = panels.iterator();
     while (iter.hasNext())
     {
@@ -263,6 +264,8 @@ public class Compiler extends Thread
       panelsOrder.add(str);
 
       // We add each file in the panel folder
+      if (panelsCache.contains(str)) continue;
+      panelsCache.add(str);
       File[] files = dir.listFiles();
       int nf = files.length;
       for (int j = 0; j < nf; j++)
