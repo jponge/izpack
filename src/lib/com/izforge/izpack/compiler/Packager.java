@@ -28,11 +28,23 @@
  */
 package com.izforge.izpack.compiler;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.jar.JarInputStream;
+import java.util.jar.JarOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
-import com.izforge.izpack.*;
+import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.Info;
+import com.izforge.izpack.Pack;
 
 /**
  *  The packager class. A packager is used by the compiler to actually do the
@@ -44,7 +56,7 @@ import com.izforge.izpack.*;
 public abstract class Packager
 {
   /**  The path to the skeleton installer. */
-  public final static String SKELETON_PATH = Compiler.IZPACK_HOME + "lib" +
+  public final static String SKELETON_SUBPATH = "lib" +
     File.separator + "installer.jar";
 
   /**  The packs informations. */
@@ -92,7 +104,37 @@ public abstract class Packager
     listener.packagerStop();
   }
 
+  
+  /**
+   * Write the skeleton installer to the output JAR. 
+   */
+  public void writeSkeletonInstaller (JarOutputStream out)
+    throws Exception
+  {
+    ZipInputStream skeleton_is = new ZipInputStream (getClass().getResourceAsStream("/lib/installer.jar"));
 
+    if (skeleton_is == null)
+    {
+      skeleton_is = new JarInputStream (new FileInputStream (
+        Compiler.IZPACK_HOME + "lib" + File.separator + "installer.jar"));    
+    }
+    
+    ZipEntry zentry;
+       
+    while ((zentry = skeleton_is.getNextEntry()) != null)
+    {
+      // Puts a new entry
+      out.putNextEntry(new ZipEntry(zentry.getName()));
+
+      // Copy the data
+      copyStream(skeleton_is, out);
+
+      out.closeEntry();
+      skeleton_is.closeEntry();
+    }
+    
+  }
+  
   /**
    *  Adds a pack (the compiler sends the merged data).
    *

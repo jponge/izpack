@@ -65,21 +65,8 @@ public class StdPackager extends Packager
 
     // Copies the skeleton installer
     sendMsg("Copying the skeleton installer ...");
-    JarFile skeleton = new JarFile(SKELETON_PATH);
-    Enumeration entries = skeleton.entries();
-    while (entries.hasMoreElements())
-    {
-      // Puts a new entry
-      ZipEntry zentry = (ZipEntry) entries.nextElement();
-      InputStream zin = skeleton.getInputStream(zentry);
-      outJar.putNextEntry(new ZipEntry(zentry.getName()));
-
-      // Copy the data
-      copyStream(zin, outJar);
-
-      outJar.closeEntry();
-      zin.close();
-    }
+    
+    writeSkeletonInstaller (outJar);
   }
 
 
@@ -143,7 +130,6 @@ public class StdPackager extends Packager
     outJar.putNextEntry(new ZipEntry("com/izforge/izpack/panels/" + classFilename));
     copyStream(input, outJar);
     outJar.closeEntry();
-    input.close();
   }
 
 

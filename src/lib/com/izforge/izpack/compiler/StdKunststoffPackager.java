@@ -24,10 +24,13 @@
  */
 package com.izforge.izpack.compiler;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-import java.util.jar.*;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectOutputStream;
+import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 
 /**
@@ -38,10 +41,6 @@ import java.util.jar.*;
  */
 public class StdKunststoffPackager extends StdPackager
 {
-  /**  The path to the Kunststoff lib. */
-  public final static String KUNSTSTOFF_PATH = Compiler.IZPACK_HOME + "lib" +
-    File.separator + "kunststoff.jar";
-
 
   /**
    *  The constructor.
@@ -57,22 +56,31 @@ public class StdKunststoffPackager extends StdPackager
 
     // Copies the Kunststoff library
     sendMsg("Copying the Kunststoff library ...");
-    JarFile skeleton = new JarFile(KUNSTSTOFF_PATH);
-    Enumeration entries = skeleton.entries();
-    while (entries.hasMoreElements())
+    ZipInputStream skeleton_is = new ZipInputStream (getClass().getResourceAsStream("/lib/kunststoff.jar"));
+
+    if (skeleton_is == null)
     {
+      skeleton_is = new JarInputStream (new FileInputStream (
+        Compiler.IZPACK_HOME + "lib" + File.separator + "kunststoff.jar"));    
+    }
+    
+    ZipEntry zentry;
+       
+    while ((zentry = skeleton_is.getNextEntry()) != null)
+    {
+      // ugly hack: may not add a directory twice, therefore add no directories
+      if (zentry.isDirectory()) continue;
+      
       // Puts a new entry
-      ZipEntry zentry = (ZipEntry) entries.nextElement();
-      if (zentry.getName().equalsIgnoreCase("com/"))
-        continue;// Avoids a stupid ZipException
-      InputStream zin = skeleton.getInputStream(zentry);
       outJar.putNextEntry(new ZipEntry(zentry.getName()));
 
       // Copy the data
-      copyStream(zin, outJar);
+      copyStream(skeleton_is, outJar);
+
       outJar.closeEntry();
-      zin.close();
+      skeleton_is.closeEntry();
     }
+    
   }
 
 

@@ -31,19 +31,42 @@
  */
 package com.izforge.izpack.compiler;
 
-import net.n3.nanoxml.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+import java.util.TreeSet;
+import java.util.Vector;
+import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-
-import com.izforge.izpack.*;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
 
 import org.apache.tools.ant.DirectoryScanner;
-import com.izforge.izpack.installer.VariableValueMapImpl;
+
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.Info;
+import com.izforge.izpack.PackFile;
+import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.installer.VariableSubstitutor;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.installer.VariableValueMapImpl;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  * @author tisc
@@ -205,14 +228,22 @@ public class Compiler extends Thread
     {
       str = (String) iter.next();
 
-      // The language pack
-      inStream = new FileInputStream(Compiler.IZPACK_HOME + "bin" + File.separator + "langpacks" +
-        File.separator + "installer" + File.separator + str + ".xml");
+      // The language pack - first try to get stream directly (for standalone compiler)
+      inStream = getClass().getResourceAsStream("/bin/langpacks/installer/"+str+".xml");
+      if (inStream == null)
+      {
+        inStream = new FileInputStream(Compiler.IZPACK_HOME + "bin" + File.separator + "langpacks" +
+          File.separator + "installer" + File.separator + str + ".xml");
+      }
       packager.addLangPack(str, inStream);
 
-      // The flag
-      inStream = new FileInputStream(Compiler.IZPACK_HOME + "bin" + File.separator + "langpacks" +
-        File.separator + "flags" + File.separator + str + ".gif");
+      // The flag - try to get stream for standalone compiler
+      inStream = getClass ().getResourceAsStream("/bin/langpacks/flags/"+str+".gif");
+      if (inStream == null)
+      {
+        inStream = new FileInputStream(Compiler.IZPACK_HOME + "bin" + File.separator + "langpacks" +
+          File.separator + "flags" + File.separator + str + ".gif");
+      }
       packager.addResource("flag." + str, inStream);
     }
 
@@ -225,6 +256,12 @@ public class Compiler extends Thread
       Resource res = (Resource) iter.next();
       if (res.parse)
       {
+        if ((res.src == null) || (res.src_is != null))
+        {
+          System.err.println("ERROR: cannot parse resource from stream. (Internal error.)");
+          packager.addResource(res.id, res.src_is);
+        }
+        
         if (null != varMap)
         {
           File resFile = new File(res.src);
@@ -253,7 +290,14 @@ public class Compiler extends Thread
       }
       else
       {
-        inStream = new FileInputStream(res.src);
+        if (res.src != null)
+        {
+          inStream = new FileInputStream(res.src);
+        }
+        else
+        {
+          inStream = res.src_is;
+        }
         packager.addResource(res.id, inStream);
       }
     }
@@ -283,24 +327,59 @@ public class Compiler extends Thread
     {
       // We locate the panel classes directory
       str = (String) iter.next();
-      File dir = new File(Compiler.IZPACK_HOME + "bin" + File.separator + "panels" + File.separator + str);
-      if (!dir.exists())
-        throw new Exception(str + " panel does not exist");
-
-      // We add the panel in the order array
-      panelsOrder.add(str);
-
-      // We add each file in the panel folder
-      if (panelsCache.contains(str)) continue;
-      panelsCache.add(str);
-      File[] files = dir.listFiles();
-      int nf = files.length;
-      for (int j = 0; j < nf; j++)
+      
+      // first try to get a Jar file for standalone compiler
+      JarInputStream panel_is = null;
+      
+      try
       {
-        if (files[j].isDirectory())
-          continue;
-        FileInputStream inClass = new FileInputStream(files[j]);
-        packager.addPanelClass(files[j].getName(), inClass);
+        InputStream jarInStream = getClass().getResourceAsStream("/bin/panels/"+str+".jar");
+        if (jarInStream != null)
+          panel_is = new JarInputStream (jarInStream);
+      }
+      catch (IOException e)
+      {
+        // for now, ignore this - try to read panel classes from filesystem
+        panel_is = null; 
+      }
+      
+      if (panel_is != null)
+      {        
+        // We add the panel in the order array
+        panelsOrder.add(str);
+
+        if (panelsCache.contains(str)) continue;
+        panelsCache.add(str);
+
+        // now add files
+        ZipEntry entry = null;
+        
+        while ((entry = panel_is.getNextEntry()) != null)
+        {
+          packager.addPanelClass(entry.getName(), panel_is);        
+        }
+      }
+      else
+      {
+        File dir = new File(Compiler.IZPACK_HOME + "bin" + File.separator + "panels" + File.separator + str);
+        if (!dir.exists())
+          throw new Exception(str + " panel does not exist");
+
+        // We add the panel in the order array
+        panelsOrder.add(str);
+
+        // We add each file in the panel folder
+        if (panelsCache.contains(str)) continue;
+        panelsCache.add(str);
+        File[] files = dir.listFiles();
+        int nf = files.length;
+        for (int j = 0; j < nf; j++)
+        {
+          if (files[j].isDirectory())
+            continue;
+          FileInputStream inClass = new FileInputStream(files[j]);
+          packager.addPanelClass(files[j].getName(), inClass);
+        }
       }
     }
 
@@ -978,9 +1057,18 @@ public class Compiler extends Thread
     }
 
     // We add the uninstaller as a resource
-    resources.add(new Resource("IzPack.uninstaller", Compiler.IZPACK_HOME +
-      "lib" + File.separator + "uninstaller.jar"));
-
+    {
+      // neccessary for standalone compiler
+      InputStream uninst_is = getClass().getResourceAsStream("/lib/uninstaller.jar");
+      
+      if (uninst_is == null)
+      {
+        uninst_is = new FileInputStream (Compiler.IZPACK_HOME + "lib" + File.separator + "uninstaller.jar");
+      }
+      
+      resources.add(new Resource("IzPack.uninstaller", uninst_is));
+    }
+    
     // We return the ArrayList
     return resources;
   }
@@ -1201,6 +1289,9 @@ public class Compiler extends Thread
     /**  The source. */
     public String src;
 
+    /**  The input stream to read from. */
+    public InputStream src_is;
+    
     /**  The Id. */
     public String id;
 
@@ -1223,6 +1314,19 @@ public class Compiler extends Thread
     public Resource(String id, String src)
     {
       this.src = src;
+      this.id = id;
+    }
+
+
+    /**
+     *  The constructor.
+     *
+     * @param  id   The Id.
+     * @param  src  The source.
+     */
+    public Resource(String id, InputStream is)
+    {
+      this.src_is = is;
       this.id = id;
     }
 

@@ -142,6 +142,8 @@
   <!-- Define file paths -->
   <property name="compiler.jar" value="${basedir}/lib/compiler.jar" />
   <property name="compiler.manifest" value="${basedir}/src/compiler.manifest" />
+  <property name="standalone-compiler.jar" value="${basedir}/lib/standalone-compiler.jar" />
+  <property name="standalone-compiler.manifest" value="${basedir}/src/standalone-compiler.manifest" />
   <property name="installer.jar" value="${basedir}/lib/installer.jar" />
   <property name="installer.manifest" value="${basedir}/src/installer.manifest" />
   <property name="uninstaller.jar" value="${basedir}/lib/uninstaller.jar" />
@@ -220,6 +222,51 @@
     </jar>
   </target>
 
+  <!-- Package standalone-compiler.jar -->
+  <target name="standalone-compiler.manifest">
+    <manifest file="${standalone-compiler.manifest}">
+        <attribute name="Built-By" value="IzPack"/>
+        <attribute name="Class-Path" value="ant.jar"/>
+        <attribute name="Main-Class" value="com.izforge.izpack.compiler.Compiler"/>
+        <section name="com/izforge/izpack/standalone-compiler/">
+            <attribute name="Specification-Title" value="IzPack compiler" />
+            <attribute name="Specification-Version" value="${rel}" />
+            <attribute name="Specification-Vendor" value="IzPack." />
+            <attribute name="Implementation-Title" value="IzPack compiler" />
+            <attribute name="Implementation-Version" value="${ver}" />
+            <attribute name="Implementation-Vendor" value="IzPack." />
+        </section>
+    </manifest>
+  </target>
+  <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.uninstaller, build.panels">
+    <echo message="Build ${standalone-compiler.jar}"/>
+    <delete file="${standalone-compiler.jar}" verbose="true" />
+    <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
+      <fileset dir="${build.dir}">
+        <include name="com/izforge/izpack/*.class"/>
+        <include name="com/izforge/izpack/compiler/*.class"/>
+        <include name="com/izforge/izpack/util/OsConstraint.class"/>
+        <include name="com/izforge/izpack/util/Debug.class"/>
+        <include name="com/izforge/izpack/ant/*.class"/>
+        <include name="com/izforge/izpack/ant/langpacks/*.properties"/>
+        <include name="com/izforge/izpack/installer/VariableValueMap.class"/>
+        <include name="com/izforge/izpack/installer/VariableValueMapImpl.class"/>
+        <include name="com/izforge/izpack/installer/VariableSubstitutor.class"/>
+        <include name="net/n3/nanoxml/*.class"/>
+      </fileset>
+      <fileset dir="${basedir}">
+        <include name="bin/langpacks/flags/*" />
+        <include name="bin/langpacks/installer/*" />
+        <include name="bin/native/izpack/*" />
+        <include name="bin/panels/*Panel.jar"/>
+        <include name="lib/uninstaller.jar" />
+        <include name="lib/installer.jar" />
+        <include name="lib/kunststoff.jar" />
+        <exclude name="**/CVS" />
+      </fileset>
+    </jar>
+  </target>
+
   <!-- Compiles the installer src files -->
   <target name="compile.installer" depends="prepare">
     <javac srcdir="${src.dir}"
@@ -264,9 +311,9 @@
             <include name="com/izforge/izpack/util/os/*.class"/>
         <include name="net/n3/nanoxml/*.class"/>
       </fileset>
-            <fileset dir="${src.dir}">
-                <include name="com/izforge/izpack/installer/*.xml"/>
-            </fileset>
+      <fileset dir="${src.dir}">
+        <include name="com/izforge/izpack/installer/*.xml"/>
+      </fileset>
       <fileset dir="${img.dir}/installer" />
     </jar>
   </target>
@@ -394,49 +441,70 @@
     </move>
   </target>
 
+  <!-- Make JAR for a panel -->
+  <target name="compile.panel.finish">
+    <echo message="Making JAR for panel  ${panel}"/>
+    <jar jarfile="${bin.dir}/panels/${panel}.jar" >
+      <fileset dir="${bin.dir}/panels/${panel}">
+        <include name="*.class" />
+      </fileset>
+    </jar>
+  </target>
+
+  <!-- convenience: compile simple panel and finish it -->
+  <target name="compile.panel.simple">
+    <antcall target="compile.panel">
+      <param name="panel" value="${panel}"/>
+      <param name="panel-dir" value="${panel-dir}"/>
+    </antcall>
+    <antcall target="compile.panel.finish">
+      <param name="panel" value="${panel}"/>
+    </antcall>
+  </target>
+
   <!-- Compile all panels and put them at the right location -->
   <target name="build.panels" depends="build.installer">
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="FinishPanel"/>
       <param name="panel-dir" value="FinishPanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="HelloPanel"/>
       <param name="panel-dir" value="HelloPanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="InfoPanel"/>
       <param name="panel-dir" value="InfoPanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="InstallPanel"/>
       <param name="panel-dir" value="InstallPanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="LicencePanel"/>
       <param name="panel-dir" value="LicencePanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="PacksPanel"/>
       <param name="panel-dir" value="PacksPanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="ImgPacksPanel"/>
       <param name="panel-dir" value="ImgPacksPanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="HTMLLicencePanel"/>
       <param name="panel-dir" value="HTMLLicencePanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="HTMLInfoPanel"/>
       <param name="panel-dir" value="HTMLInfoPanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="TargetPanel"/>
       <param name="panel-dir" value="TargetPanel"/>
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.simple">
       <param name="panel" value="XInfoPanel"/>
       <param name="panel-dir" value="XInfoPanel"/>
     </antcall>
@@ -447,6 +515,9 @@
     <antcall target="compile.panel">
       <param name="panel" value="ShortcutPanel"/>
       <param name="panel-dir" value="ShortcutPanel"/>
+    </antcall>
+    <antcall target="compile.panel.finish">
+      <param name="panel" value="ShortcutPanel"/>
     </antcall>
     <antcall target="compile.panel">
       <param name="panel" value="UserInputPanel" />
@@ -476,7 +547,10 @@
       <param name="panel" value="PasswordGroup" />
       <param name="panel-dir" value="UserInputPanel" />
     </antcall>
-    <antcall target="compile.panel">
+    <antcall target="compile.panel.finish">
+      <param name="panel" value="UserInputPanel" />
+    </antcall>
+    <antcall target="compile.panel.simple">
       <param name="panel" value="CompilePanel" />
       <param name="panel-dir" value="CompilePanel" />
     </antcall>
@@ -496,6 +570,7 @@
       </fileset>
       <fileset dir="${basedir}/lib/">
         <include name="compiler.jar" />
+        <include name="standalone-compiler.jar" />
         <include name="frontend.jar" />
         <include name="installer.jar" />
         <include name="uninstaller.jar" />
@@ -504,8 +579,8 @@
   </target>
 
   <!-- Builds all compilation targets -->
-  <target name="all" depends="build.compiler,build.installer,build.uninstaller,
-                              build.frontend,build.panels"/>
+  <target name="all" depends="build.compiler,build.standalone-compiler,
+        build.installer,build.uninstaller,build.frontend,build.panels"/>
 
   <!-- Builds the Javadoc -->
   <target name="build.javadoc" depends="prepare">
