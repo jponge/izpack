@@ -21,6 +21,7 @@ problems in variables substitutions). (bug #1866).
 Fixed by Klaus Bartz (bug #1875).
 - German langpack: spelling correction (Dustin Sacks)
 - Fixed probelems creating a web-kunststoff installer (bug #1904)
+- IzPack installer: simpler and refreshed readme text.
 
   > 3.5.2 (build 2004.05.01)
 
