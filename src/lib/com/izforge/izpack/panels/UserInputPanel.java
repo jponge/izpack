@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.Iterator;
 
@@ -143,10 +144,11 @@ public class UserInputPanel extends IzPanel
   private static final int    POS_CONSTRAINTS               = 3;
   private static final int    POS_FIELD                     = 4;
   private static final int    POS_PACKS                     = 5;
-  private static final int    POS_TRUE                      = 6;
-  private static final int    POS_FALSE                     = 7;
-  private static final int    POS_MESSAGE                   = 8;
-  private static final int    POS_GROUP                     = 9;
+  private static final int    POS_OS                     = 6;
+  private static final int    POS_TRUE                      = 7;
+  private static final int    POS_FALSE                     = 8;
+  private static final int    POS_MESSAGE                   = 9;
+  private static final int    POS_GROUP                     = 10;
 
   /** The name of the XML file that specifies the panel layout */
   private static final String SPEC_FILE_NAME                = "userInputSpec.xml";
@@ -228,6 +230,9 @@ public class UserInputPanel extends IzPanel
 
   private static final String PACKS                         = "createForPack";
   private static final String NAME                          = "name";
+  
+  private static final String OS = "os";
+  private static final String FAMILY = "family";
 
 
   // ------------------------------------------------------------------------
@@ -423,8 +428,9 @@ public class UserInputPanel extends IzPanel
     }
     
     Vector forPacks = spec.getChildrenNamed (PACKS);
+    Vector forOs = spec.getChildrenNamed(OS);
     
-    if (!itemRequiredFor (forPacks))
+    if (!itemRequiredFor (forPacks) || !itemRequiredForOs(forOs))
     {
       parent.skipPanel ();
       return;
@@ -434,10 +440,10 @@ public class UserInputPanel extends IzPanel
       parent.skipPanel ();
       return;
     }
-    if (uiBuilt)
-    {
-      return;
-    }
+   // if (uiBuilt)
+    //{
+     // return;
+    //}
 
     buildUI ();
     uiBuilt = true;
@@ -482,12 +488,18 @@ public class UserInputPanel extends IzPanel
     {
       uiElement = (Object [])uiElements.elementAt (i);
 
-      if (itemRequiredFor ((Vector)uiElement [POS_PACKS]))
+      if (itemRequiredFor ((Vector)uiElement [POS_PACKS]) && itemRequiredForOs((Vector) uiElement[POS_OS]) )
       {
         try
         {
-          add ((JComponent)uiElement [POS_FIELD], uiElement [POS_CONSTRAINTS]);
-          uiElement [POS_DISPLAYED] = new Boolean (true);
+        	if (uiElement [POS_DISPLAYED] == null || uiElement [POS_DISPLAYED].toString().equals("false"))
+        	{
+				add ((JComponent)uiElement [POS_FIELD], uiElement [POS_CONSTRAINTS]);
+        	}
+			uiElement [POS_DISPLAYED] = new Boolean (true);
+			uiElements.remove(i);
+			uiElements.add(i, uiElement);
+          
         }
         catch (Throwable exception)
         {
@@ -496,7 +508,20 @@ public class UserInputPanel extends IzPanel
       }
       else
       {
+      	try
+      	{
+			if (uiElement [POS_DISPLAYED] != null && uiElement [POS_DISPLAYED].toString().equals("true"))
+			{
+				remove((JComponent)uiElement [POS_FIELD]);				
+			}
+      	}
+		catch (Throwable exception)
+		{
+			System.out.println ("Internal format error in field: " + uiElement [POS_TYPE].toString ());  // !!! logging
+		}
         uiElement [POS_DISPLAYED] = new Boolean (false);
+		uiElements.remove(i);
+		uiElements.add(i, uiElement);
       }
     }
   }
@@ -721,6 +746,7 @@ public class UserInputPanel extends IzPanel
   private void addRuleField (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     XMLElement      element       = spec.getFirstChildNamed (SPEC);
     String          variable      = spec.getAttribute (VARIABLE);
     RuleInputField  field         = null;
@@ -792,7 +818,7 @@ public class UserInputPanel extends IzPanel
     // elements if it exists.
     // ----------------------------------------------------
     element = spec.getFirstChildNamed (DESCRIPTION);
-    addDescription (element, forPacks);
+    addDescription (element, forPacks, forOs);
 
     // ----------------------------------------------------
     // get the validator and processor if they are defined
@@ -866,12 +892,12 @@ public class UserInputPanel extends IzPanel
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position              = TwoColumnConstraints.WEST;
 
-    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
     constraints2.position             = TwoColumnConstraints.EAST;
 
-    uiElements.add (new Object [] {null, RULE_FIELD, variable, constraints2, field, forPacks, null, null, message});
+    uiElements.add (new Object [] {null, RULE_FIELD, variable, constraints2, field, forPacks, forOs, null, null, message});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -903,12 +929,21 @@ public class UserInputPanel extends IzPanel
     {
       return (true);
     }
-
+	
     boolean success = ruleField.validateContents ();
     if (!success)
     {
+    	String message = "";
+    	try{
+    		message = langpack.getString( (String)field [POS_MESSAGE]);
+    		if (message.equals("")){
+    			message = (String)field [POS_MESSAGE];
+    		}
+    	}catch (Throwable t){
+			message = (String)field [POS_MESSAGE];
+    	}
       JOptionPane.showMessageDialog (parent,
-                                     (String)field [POS_MESSAGE],
+                                     message,
                                      parent.langpack.getString ("UserInputPanel.error.caption"),
                                      JOptionPane.WARNING_MESSAGE);
       return (false);
@@ -929,6 +964,7 @@ public class UserInputPanel extends IzPanel
   private void addTextField (XMLElement spec)
   {
     Vector      forPacks = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     XMLElement  element  = spec.getFirstChildNamed (SPEC);
     JLabel      label;
     String      set;
@@ -978,7 +1014,7 @@ public class UserInputPanel extends IzPanel
     // elements if it exists.
     // ----------------------------------------------------
     element = spec.getFirstChildNamed (DESCRIPTION);
-    addDescription (element, forPacks);
+    addDescription (element, forPacks, forOs);
 
     // ----------------------------------------------------
     // construct the UI element and add it to the list
@@ -989,12 +1025,12 @@ public class UserInputPanel extends IzPanel
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position  = TwoColumnConstraints.WEST;
 
-    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
     constraints2.position  = TwoColumnConstraints.EAST;
 
-    uiElements.add (new Object [] {null, TEXT_FIELD, variable, constraints2, field, forPacks});
+    uiElements.add (new Object [] {null, TEXT_FIELD, variable, constraints2, field, forPacks, forOs});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1055,6 +1091,7 @@ public class UserInputPanel extends IzPanel
   private void addComboBox (XMLElement spec)
   {
     Vector        forPacks  = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     XMLElement    element   = spec.getFirstChildNamed (SPEC);
     String        variable  = spec.getAttribute (VARIABLE);
     TextValuePair listItem  = null;
@@ -1077,19 +1114,53 @@ public class UserInputPanel extends IzPanel
 
       for (int i = 0; i < choices.size (); i++)
       {
-        listItem = new TextValuePair (getText ((XMLElement)choices.elementAt (i)),
-                                      ((XMLElement)choices.elementAt (i)).getAttribute (COMBO_VALUE));
+      	String processorClass = ((XMLElement)choices.elementAt (i)).getAttribute ("processor");
+      	
+      	if (!processorClass.equals(""))
+      	{
+			String choiceValues = "";
+      		try
+      		{
+				choiceValues = ((Processor) Class.forName(processorClass).newInstance()).process(null);
+      		}
+      		catch (Throwable t)
+      		{
+      			t.printStackTrace();
+      		}
+			String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
+			if (set == null)
+			{
+				set = "";
+			}
+      		StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");  
+      		int counter = 0;    		
+      		while (tokenizer.hasMoreTokens()){
+      			String token = tokenizer.nextToken();
+      			listItem = new TextValuePair(token, token);
+      			field.addItem(listItem);
+				if (set.equals(token)){
+					field.setSelectedIndex (field.getItemCount()-1);
+				}
+      			counter++;
+      		}      		
+      	}
+      	else
+      	{
+        	listItem = new TextValuePair (getText ((XMLElement)choices.elementAt (i)),
+            	                          ((XMLElement)choices.elementAt (i)).getAttribute (COMBO_VALUE));
+			field.addItem (listItem);
+			String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
+			if (set != null)
+			{
+			  if (set.equals (TRUE))
+			  {
+				field.setSelectedIndex (i);
+			  }
+			}
+      	}
+        
 
-        field.addItem (listItem);
 
-        String set    = ((XMLElement)choices.elementAt (i)).getAttribute (SET);
-        if (set != null)
-        {
-          if (set.equals (TRUE))
-          {
-            field.setSelectedIndex (i);
-          }
-        }
       }
     }
     // ----------------------------------------------------
@@ -1106,17 +1177,17 @@ public class UserInputPanel extends IzPanel
     // elements if it exists.
     // ----------------------------------------------------
     element = spec.getFirstChildNamed (DESCRIPTION);
-    addDescription (element, forPacks);
+    addDescription (element, forPacks, forOs);
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position  = TwoColumnConstraints.WEST;
 
-    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
     TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
     constraints2.position  = TwoColumnConstraints.EAST;
 
-    uiElements.add (new Object [] {null, COMBO_FIELD, variable, constraints2, field, forPacks});
+    uiElements.add (new Object [] {null, COMBO_FIELD, variable, constraints2, field, forPacks, forOs});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1180,6 +1251,7 @@ public class UserInputPanel extends IzPanel
   private void addRadioButton (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     String                variable    = spec.getAttribute (VARIABLE);
     String                value       = null;
 
@@ -1198,7 +1270,7 @@ public class UserInputPanel extends IzPanel
     // elements if it exists.
     // ----------------------------------------------------
     element = spec.getFirstChildNamed (DESCRIPTION);
-    addDescription (element, forPacks);
+    addDescription (element, forPacks, forOs);
 
     // ----------------------------------------------------
     // extract the specification details
@@ -1238,7 +1310,7 @@ public class UserInputPanel extends IzPanel
         }
 
         buttonGroups.add (group);
-        uiElements.add (new Object [] {null, RADIO_FIELD, variable, constraints, choice, forPacks, value, null, null, group});
+        uiElements.add (new Object [] {null, RADIO_FIELD, variable, constraints, choice, forPacks, forOs, value, null, null, group});
       }
     }
   }
@@ -1305,6 +1377,7 @@ public class UserInputPanel extends IzPanel
   private void addPasswordField (XMLElement spec)
   {
     Vector        forPacks  = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     String        variable  = spec.getAttribute (VARIABLE);
     String        validator = null;
     String        message   = null;
@@ -1318,7 +1391,7 @@ public class UserInputPanel extends IzPanel
     // elements if it exists.
     // ----------------------------------------------------
     element = spec.getFirstChildNamed (DESCRIPTION);
-    addDescription (element, forPacks);
+    addDescription (element, forPacks, forOs);
 
     // ----------------------------------------------------
     // get the validator and processor if they are defined
@@ -1380,12 +1453,12 @@ public class UserInputPanel extends IzPanel
         TwoColumnConstraints constraints = new TwoColumnConstraints ();
         constraints.position  = TwoColumnConstraints.WEST;
 
-        uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks});
+        uiElements.add (new Object [] {null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints ();
         constraints2.position  = TwoColumnConstraints.EAST;
 
-        uiElements.add (new Object [] {null, PWD_FIELD, variable, constraints2, field, forPacks, null, null, message, group});
+        uiElements.add (new Object [] {null, PWD_FIELD, variable, constraints2, field, forPacks, forOs, null, null, message, group});
         group.addField (field);
       }
     }
@@ -1454,6 +1527,7 @@ public class UserInputPanel extends IzPanel
   private void addCheckBox (XMLElement spec)
   {
     Vector      forPacks    = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     String      label       = "";
     String      set         = null;
     String      trueValue   = null;
@@ -1493,14 +1567,14 @@ public class UserInputPanel extends IzPanel
     // elements if it exists.
     // ----------------------------------------------------
     XMLElement element = spec.getFirstChildNamed (DESCRIPTION);
-    addDescription (element, forPacks);
+    addDescription (element, forPacks, forOs);
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position  = TwoColumnConstraints.BOTH;
     constraints.stretch   = true;
     constraints.indent    = true;
 
-    uiElements.add (new Object [] {null, CHECK_FIELD, variable, constraints, checkbox, forPacks, trueValue, falseValue});
+    uiElements.add (new Object [] {null, CHECK_FIELD, variable, constraints, checkbox, forPacks, forOs, trueValue, falseValue});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1576,6 +1650,7 @@ public class UserInputPanel extends IzPanel
   private void addSearch (XMLElement spec)
   {
     Vector        forPacks    = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     XMLElement    element     = spec.getFirstChildNamed (SPEC);
     String        variable    = spec.getAttribute (VARIABLE);
     String        filename    = null;
@@ -1685,12 +1760,12 @@ public class UserInputPanel extends IzPanel
     // elements if it exists.
     // ----------------------------------------------------
     element = spec.getFirstChildNamed (DESCRIPTION);
-    addDescription (element, forPacks);
+    addDescription (element, forPacks, forOs);
 
     TwoColumnConstraints westconstraint1 = new TwoColumnConstraints ();
     westconstraint1.position  = TwoColumnConstraints.WEST;
 
-    uiElements.add (new Object [] {null, FIELD_LABEL, null, westconstraint1, label, forPacks});
+    uiElements.add (new Object [] {null, FIELD_LABEL, null, westconstraint1, label, forPacks, forOs});
 
     TwoColumnConstraints eastconstraint1 = new TwoColumnConstraints ();
     eastconstraint1.position  = TwoColumnConstraints.EAST;
@@ -1714,7 +1789,7 @@ public class UserInputPanel extends IzPanel
     if (tooltiptext.length() > 0)
       combobox.setToolTipText (tooltiptext.toString());
 
-    uiElements.add (new Object [] {null, SEARCH_FIELD, variable, eastconstraint1, combobox, forPacks});
+    uiElements.add (new Object [] {null, SEARCH_FIELD, variable, eastconstraint1, combobox, forPacks, forOs});
 
     JPanel buttonPanel = new JPanel ();
     buttonPanel.setLayout (new com.izforge.izpack.gui.FlowLayout (com.izforge.izpack.gui.FlowLayout.LEADING));
@@ -1732,7 +1807,7 @@ public class UserInputPanel extends IzPanel
     TwoColumnConstraints eastonlyconstraint = new TwoColumnConstraints ();
     eastonlyconstraint.position  = TwoColumnConstraints.EASTONLY;
 
-    uiElements.add (new Object [] {null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint, buttonPanel, forPacks});
+    uiElements.add (new Object [] {null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint, buttonPanel, forPacks, forOs});
 
     searchFields.add (new SearchField (filename, check_filename, parent, combobox, autodetectButton, browseButton, search_type, result_type));
   }
@@ -1793,8 +1868,9 @@ public class UserInputPanel extends IzPanel
   private void addText (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
 
-    addDescription (spec, forPacks);
+    addDescription (spec, forPacks, forOs);
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1808,13 +1884,14 @@ public class UserInputPanel extends IzPanel
   private void addSpace (XMLElement spec)
   {
     Vector forPacks = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     JPanel panel    = new JPanel ();
 
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
     constraints.position  = TwoColumnConstraints.BOTH;
     constraints.stretch   = true;
 
-    uiElements.add (new Object [] {null, SPACE_FIELD, null, constraints, panel, forPacks});
+    uiElements.add (new Object [] {null, SPACE_FIELD, null, constraints, panel, forPacks, forOs});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1827,6 +1904,7 @@ public class UserInputPanel extends IzPanel
   private void addDivider (XMLElement spec)
   {
     Vector forPacks   = spec.getChildrenNamed (PACKS);
+	Vector forOs = spec.getChildrenNamed(OS);
     JPanel panel      = new JPanel ();
     String alignment  = spec.getAttribute (ALIGNMENT);
 
@@ -1850,7 +1928,7 @@ public class UserInputPanel extends IzPanel
     constraints.position  = TwoColumnConstraints.BOTH;
     constraints.stretch   = true;
 
-    uiElements.add (new Object [] {null, DIVIDER_FIELD, null, constraints, panel, forPacks});
+    uiElements.add (new Object [] {null, DIVIDER_FIELD, null, constraints, panel, forPacks, forOs});
   }
  /*--------------------------------------------------------------------------*/
  /**
@@ -1861,7 +1939,7 @@ public class UserInputPanel extends IzPanel
   */
  /*--------------------------------------------------------------------------*/
   private void addDescription (XMLElement spec,
-                               Vector     forPacks)
+                               Vector     forPacks, Vector forOs)
   {
     String               description;
     TwoColumnConstraints constraints = new TwoColumnConstraints ();
@@ -1896,7 +1974,7 @@ public class UserInputPanel extends IzPanel
 
         MultiLineLabel label = new MultiLineLabel (description, justify);
 
-        uiElements.add (new Object [] {null, DESCRIPTION, null, constraints, label, forPacks});
+        uiElements.add (new Object [] {null, DESCRIPTION, null, constraints, label, forPacks, forOs});
       }
     }
   }
@@ -2100,6 +2178,66 @@ public class UserInputPanel extends IzPanel
 
     return (result);
   }
+  
+  /**
+   * Verifies if an item is required for the operating system the installer executed.
+   * The configuration for this feature is:
+   * <br/>
+   * &lt;os family="unix"/&gt;
+  * <br><br>
+  * <b>Note:</b><br>
+  * If the list of the os is empty then <code>true</code> is always
+  * returnd. 
+  *
+  * @param os The <code>Vector</code> of <code>String</code>s. containing 
+  * the os names
+  *
+  * @return    <code>true</code> if the item is required for the os, otherwise 
+  * returns <code>false</code>.
+   */
+  public boolean itemRequiredForOs(Vector os)
+  {  	
+  	String osName = System.getProperty("os.name");
+	
+	if (os.size () == 0)
+	{
+	  return (true);
+	}
+
+	for (int i = 0; i < os.size (); i++)
+	{
+		String family = ((XMLElement)os.elementAt (i)).getAttribute(FAMILY);
+		boolean match = false;
+		
+		if (family.equals("windows"))
+		{
+			match = (osName.indexOf("windows") > -1);
+		}
+		else if (family.equals("mac"))
+		{
+			match = ((osName.indexOf("mac") > -1) && !(osName.endsWith("x")));
+		}
+		else if (family.equals("unix"))
+		{
+			String pathSep = System.getProperty("path.separator");
+			match = (   osName.lastIndexOf("unix")    > -1
+						 || osName.lastIndexOf("linux")   > -1
+						 || osName.lastIndexOf("solaris") > -1
+						 || osName.lastIndexOf("sunos")   > -1
+						 || osName.lastIndexOf("aix")     > -1
+						 || osName.lastIndexOf("hpux")    > -1
+						 || osName.lastIndexOf("hp-ux")   > -1
+						 || osName.lastIndexOf("irix")    > -1
+						 || osName.lastIndexOf("bsd")     > -1
+						 || ((pathSep.equals(":") && (!osName.startsWith("mac") || osName.endsWith("x"))))
+						);
+		}
+		return match;
+	}
+	return (false);
+  }
+  
+  
  /*--------------------------------------------------------------------------*/
  /**
   * Verifies if an item is required for any of the packs listed. An item is
@@ -2127,6 +2265,7 @@ public class UserInputPanel extends IzPanel
   *--------------------------------------------------------------------------*/
   private boolean itemRequiredFor (Vector packs)
   {
+	
     String selected;
     String required;
 
@@ -2143,7 +2282,7 @@ public class UserInputPanel extends IzPanel
     // PacksPanel, because the process of building the
     // UI is not reversable.
     // ----------------------------------------------------
-    packsDefined = true;
+   	//packsDefined = true;
 
     // ----------------------------------------------------
     // analyze if the any of the packs for which the item
