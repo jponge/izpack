@@ -75,5 +75,6 @@ IzPack for your projects ;-)
 - Gaganis Giorgos : for the userInputPanel i18n code.
 - Alex Bradley : for the ProcessPanel contributions.
 - Bronek Truszkowski : for the polish langpack fixes.
+- Erik Artzmark : for the bug fixes and the "files on disk" feature.
 
 # vim: fileformat=dos

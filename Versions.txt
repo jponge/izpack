@@ -1,9 +1,14 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.7.0 (build 2004.xx.yy)
-  
+  > 3.7.0 (build 2004.xx.yy))
+
 - Adding custom action stuff for packaging, installation and uninstallation
-  (Klaus Bartz)
+  (Klaus Bartz).
+
+  > 3.6.1 (build 2004.xx.yy)
+
+- Slovak translation updates (Milan Madzia).
+- Java class execution bug fix (Erik Artzmark).
 
   > 3.6.0 (build 2004.07.28)
 
@@ -39,14 +44,14 @@
 - added 'defaultexcludes' attribute to <fileset> (Chad McHenry)
 - More elements in dtd are optional, fixed bugs causing errors if certain
   optional elements were omitted. (Chad McHenry)
-- It is now possible to have a specific picture for a specific panel by using 
+- It is now possible to have a specific picture for a specific panel by using
   the Installer.image.n resources where n is the panel 0-based index.
   (Peter Mikula).
 - Adding support for i18n to the pack panel (Thorsten Kamann)
-- Removing limtation the going backward is disabled if a pack not selected and 
+- Removing limtation the going backward is disabled if a pack not selected and
   the pack using a panel (Thorsten Kamann)
 - Adding support for floating text in a langpack file (Thorsten Kamann).
-- At now you can specify a processor class to pre process the set value of a 
+- At now you can specify a processor class to pre process the set value of a
   RuleInputField (Thorsten Kamann).
 - The choices of a combo box can be generated throug a processor class
   (Thorsten Kamann).
