@@ -5,8 +5,8 @@
 - The compiler now returns a sensible exit code on error. This way, it can be
   used in scripts.
 - Italian localization updates by Cristian Ghezzi.
-- Win32: Fixed the localization of "Program Files" and added support for 8
-  more languages (Dennis Lundberg).
+- Win32: Rewrote the localization of "Program Files" and added support for all
+  24 localized versions of Windows 2000/XP (Dennis Lundberg).
 - Portuguese localization updates from Alex Carlos Braga Antao.
 - Swedish localization updates from Dennis Lundberg.
 - InstallPanel: the overall progress bar makes steps forward only after a pack
