@@ -46,6 +46,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import com.izforge.izpack.CustomActionData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
@@ -87,6 +88,9 @@ public class Packager
 
   /** The ordered langpack ISO3 names. */
   private List langpackNameList = new ArrayList();
+
+  /** The ordered custom actions informations. */
+  private List customActionsList = new ArrayList();
 
   /** The langpack URLs keyed by ISO3 name. */
   private Map installerResourceURLMap = new HashMap();
@@ -139,6 +143,7 @@ public class Packager
     writeInstallerObject("vars", variables);
     writeInstallerObject("GUIPrefs", guiPrefs);
     writeInstallerObject("panelsOrder", panelList);
+    writeInstallerObject("customActions", customActionsList);
     writeInstallerObject("langpacks.info", langpackNameList);
     writeInstallerResources();
     writeIncludedJars();
@@ -241,6 +246,18 @@ public class Packager
     addJarContent(jarURL); // each included once, no matter how many times added
   }
 
+
+  /**
+   * Add a custom action, where order is important. Only one copy of the class files
+   * neeed are inserted in the installer.
+   * @param ca custom action object
+   * @param url the URL to include once
+   */
+  public void addCustomActionJar(CustomActionData ca, URL url)
+  {
+    customActionsList.add(ca);  // serialized to keep order/variables correct
+    addJarContent(url); // each included once, no matter how many times added
+  }
   /**
    * Adds a pack, order is mostly irrelevant.
    *

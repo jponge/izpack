@@ -113,13 +113,35 @@ public class PackInfo
    * thus a FileNotFoundEception will occur then, if the file is deleted
    * in between.
    */
-  public void addFile(File file, String targetfile, List osList, int override)
+/*  public void addFile(File file, String targetfile, List osList, int override)
     throws FileNotFoundException
+  {
+    addFile( file,targetfile, osList, override, null);
+  }
+
+
+  /**
+   * Add a file or directory to be installed.
+   *
+   * @param file       the file or basedir to be installed.
+   * @param targetfile path file will be installed to.
+   * @param osList     the target operation system(s) of this pack.
+   * @param override   what to do if the file already exists when installing
+   * @param  additionals    Map which contains additional data
+   *
+   * @throws FileNotFoundException if the file specified does not exist. The
+   * file is not read until the {@link Packager#createInstaller} is invoked,
+   * thus a FileNotFoundEception will occur then, if the file is deleted
+   * in between.
+   */
+  public void addFile(File file, String targetfile, List osList, 
+    int override, Map additionals) throws FileNotFoundException
   {
     if (! file.exists())
       throw new FileNotFoundException(file.toString());
 
-    PackFile packFile = new PackFile(file, targetfile, osList, override);
+    PackFile packFile = new PackFile(file, targetfile, osList, 
+      override, additionals);
     files.put(packFile, file);
   }
 
