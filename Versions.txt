@@ -11,6 +11,9 @@
   into a log file (Klaus Bartz).
   Langpack up-to-date check script (Oscar Sierra | Klaus Bartz).
   Custom langpacks (Klaus Bartz).
+  New variable APPLICATIONS_DEFAULT_ROOT (Klaus Bartz).
+  Bugfix in MultiLineLabel; now a line break will be performed also
+  it is needed at the last word of the line (Klaus Bartz).
 
   > 3.7.2 (build N/A)
 
