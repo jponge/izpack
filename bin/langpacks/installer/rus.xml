@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <!-- The Russian langpack -->
-<!-- Last edited by Alexey Makhmutov (aka Lerm) at 05.05.2005 -->
+<!-- Last edited by Alexey Makhmutov (aka Lerm) at 25.02.2005 -->
 
 <langpack>
 
@@ -64,7 +64,7 @@
     <str id="ImgPacksPanel.dependencyList" txt="Зависимости"/>
 	<str id="PacksPanel.notEnoughSpace"    txt="Недостаточно места для установки приложения."/>
     <str id="PacksPanel.notAscertainable"  txt="не установлено"/>
-    
+
     <str id="InstallPanel.info"               txt="Подготовка к установке программы завершена:"/>
     <str id="InstallPanel.install"            txt="Установить!"/>
     <str id="InstallPanel.tip"                txt="Ход установки:"/>
@@ -73,11 +73,11 @@
     <str id="InstallPanel.progress"           txt="Общий ход установки:"/>
     <str id="InstallPanel.overwrite.title"    txt="Файл уже существует"/>
     <str id="InstallPanel.overwrite.question" txt="Следующий файл уже существует. Перезаписать?"/>
-    
+
     <str id="FinishPanel.success"     txt="Установка успешно завершена!"/>
     <str id="FinishPanel.done"        txt="Завершено"/>
     <str id="FinishPanel.fail"        txt="Установка прервана аварийно ..."/>
-    <str id="FinishPanel.uninst.info" txt="Программа удаления данного приложения помещена:"/>
+    <str id="FinishPanel.uninst.info" txt="Программа удаления данного приложения помещена в следующий каталог:"/>
     <str id="FinishPanel.auto"        txt="Создать сценарий автоматической установки"/>
     <str id="FinishPanel.auto.tip"    txt="Будет создан файл, позволяющий автоматически провести такую же инсталляцию программы на другом компьютере."/>
 
@@ -99,7 +99,6 @@
     <str id="ShortcutPanel.alternate.saveButton"          txt="Сохранить текстовый файл"/>
 
     <str id="ShortcutPanel.textFile.header" txt="Информация о ярлыке\n====================\n\nНиже приведены все необходимые сведения о создаваемых ярлыках.\nИх достаточно, чтобы вы могли создать нужные ярлыки самостоятельно.\n"/>
-    
     <str id="ShortcutPanel.textFile.name"         txt="Ярлык                        : "/>
     <str id="ShortcutPanel.textFile.location"     txt="Расположение ярлыка          : "/>
     <str id="ShortcutPanel.textFile.description"  txt="Описание                     : "/>
@@ -148,6 +147,14 @@
     <str id="CompilePanel.additional_arguments"   txt="Дополнительные аргументы компилятора:" />
 
     <str id="ProcessPanel.heading" txt="Выполнение" />
+
+    <!-- Strings for the summary of panels - START -->
+    <str id="SummaryPanel.info"            txt="Все необходимые данные для начала установки собраны. Нажмите &quot;Далее&quot; для запуска."/>
+    <str id="TargetPanel.summaryCaption"   txt="Каталог установки"/>
+    <str id="JDKPathPanel.summaryCaption"  txt="Путь к JDK"/>
+    <str id="PacksPanel.summaryCaption"    txt="Выбранные наборы для установки"/>
+    <str id="ImgPacksPanel.summaryCaption" txt="Выбранные наборы для установки"/>
+    <!-- Strings for the summary of panels - END -->
 
     <!-- Add your own panels specific strings here if you need -->
 
