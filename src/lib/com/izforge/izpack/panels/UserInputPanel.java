@@ -250,6 +250,14 @@ public class UserInputPanel extends IzPanel
       exception.printStackTrace ();
     }
 
+    if (!haveSpec)
+    {
+      // return if we could not read the spec. further
+      // processing will only lead to problems. In this
+      // case we must skip the panel when it gets activated.
+      return;
+    }
+
     // ----------------------------------------------------
     // process all field nodes. Each field node is analyzed
     // for its type, then an appropriate memeber function
