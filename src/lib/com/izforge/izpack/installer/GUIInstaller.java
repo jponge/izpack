@@ -486,18 +486,19 @@ public class GUIInstaller extends InstallerBase
           setOpaque(true);
         setForeground(list.getSelectionForeground());
         setBackground(list.getSelectionBackground());
-      } else
+      } else {
         setOpaque(false);
-
+        setForeground(list.getForeground());
+        setBackground(list.getBackground());
+      }
       // We put the icon
       if (!icons.containsKey(iso3))
       {
-        ImageIcon icon =
-          new ImageIcon(this.getClass().getResource("/res/flag." + iso3));
+        ImageIcon icon;
+        icon = new ImageIcon(this.getClass().getResource("/res/flag." + iso3));
         icons.put(iso3, icon);
-        grayIcons.put(
-          iso3,
-          new ImageIcon(GrayFilter.createDisabledImage(icon.getImage())));
+        icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
+        grayIcons.put(iso3, icon);
       }
       if (isSelected)
         setIcon((ImageIcon) icons.get(iso3));
