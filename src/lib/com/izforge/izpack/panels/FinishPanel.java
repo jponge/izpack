@@ -102,17 +102,21 @@ public class FinishPanel extends IzPanel implements ActionListener
     parent.lockPrevButton();
     if (idata.installSuccess)
     {
-      // We prepare a message for the uninstaller feature
-      String path = translatePath("$INSTALL_PATH") + File.separator +
-        "Uninstaller";
-
       // We set the information
       centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.success"),
         parent.icons.getImageIcon("information"), JLabel.TRAILING));
       centerPanel.add(Box.createVerticalStrut(20));
-      centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.uninst.info"),
-        parent.icons.getImageIcon("information"), JLabel.TRAILING));
-      centerPanel.add(new JLabel(path, parent.icons.getImageIcon("empty"), JLabel.TRAILING));
+      
+      if (idata.info.getWriteUninstaller())
+      {
+        // We prepare a message for the uninstaller feature
+        String path = translatePath("$INSTALL_PATH") + File.separator +
+          "Uninstaller";
+
+        centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.uninst.info"),
+          parent.icons.getImageIcon("information"), JLabel.TRAILING));
+        centerPanel.add(new JLabel(path, parent.icons.getImageIcon("empty"), JLabel.TRAILING));
+      }
 
       // We add the autoButton
       centerPanel.add(Box.createVerticalStrut(20));

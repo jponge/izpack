@@ -275,7 +275,8 @@ public class Unpacker extends Thread
         handler.emitError ("File execution failed", "The installation was not completed");
 
       // We put the uninstaller
-      putUninstaller();
+      if (idata.info.getWriteUninstaller())
+        putUninstaller();
 
       // The end :-)
       handler.stopAction();

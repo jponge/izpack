@@ -1046,6 +1046,26 @@ public class Compiler extends Thread
     if (javaVersion != null)
       info.setJavaVersion(javaVersion.getContent());
 
+    XMLElement uninstallInfo = root.getFirstChildNamed ("uninstaller");
+    if (uninstallInfo != null)
+    {
+      String value = uninstallInfo.getAttribute("write", "yes");
+      boolean result = info.getWriteUninstaller ();
+      if (value.equals ("yes"))
+      {
+        result = true;
+      }
+      else if (value.equals ("no"))
+      {
+        result = false;
+      }
+      else 
+      {
+        System.out.println ("invalid value for <uninstaller> attribute \"write\": Expected \"yes\" or \"no\"");
+      }
+      info.setWriteUninstaller (result);
+    }
+    
     // We return the suitable Info object
     return info;
   }
