@@ -342,8 +342,7 @@ public class Unpacker extends Thread
           "The installation was not completed");
 
       // We put the uninstaller (it's not yet complete...)
-      if (idata.info.getWriteUninstaller())
-        putUninstaller();
+      putUninstaller();
 
       // update checks _after_ uninstaller was put, so we don't delete it
       performUpdateChecks(updatechecks);
@@ -629,6 +628,12 @@ public class Unpacker extends Thread
    */
   private void putUninstaller() throws Exception
   {
+    // get the uninstaller base, returning if not found so that
+    // idata.uninstallOutJar remains null
+    InputStream in = getClass().getResourceAsStream("/res/IzPack.uninstaller");
+    if (in == null)
+      return;
+
     // Me make the .uninstaller directory
     String dest =
       translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
@@ -648,7 +653,6 @@ public class Unpacker extends Thread
     udata.addFile(jar);
 
     // We copy the uninstaller
-    InputStream in = getClass().getResourceAsStream("/res/IzPack.uninstaller");
     ZipInputStream inRes = new ZipInputStream(in);
     ZipEntry zentry = inRes.getNextEntry();
     while (zentry != null)
