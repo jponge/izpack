@@ -117,6 +117,10 @@ public class InstallerFrame extends JFrame
 
   /**  The 'made with izpack' label, please KEEP IT THERE. */
   private JLabel madewithLabel;
+  
+  /** Image */
+  private JLabel iconLabel;
+
 
   /**
    *  The constructor (normal mode).
@@ -321,17 +325,35 @@ public class InstallerFrame extends JFrame
         JPanel imgPanel = new JPanel();
         imgPanel.setLayout(new BorderLayout());
         imgPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
-        JLabel label = new JLabel(icon);
-        label.setBorder(BorderFactory.createLoweredBevelBorder());
-        imgPanel.add(label, BorderLayout.CENTER);
+        iconLabel = new JLabel(icon);
+        iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
+        imgPanel.add(iconLabel, BorderLayout.CENTER);
         contentPane.add(imgPanel, BorderLayout.WEST);
       }
     } catch (Exception e)
     {
       //ignore
     }
-
+    
+    loadImage(0);
     getRootPane().setDefaultButton(nextButton);
+  }
+  
+  private void loadImage(int panelNo) {
+    try
+    {
+      ResourceManager rm = ResourceManager.getInstance();
+      ImageIcon icon = rm.getImageIconResource("Installer.image."+panelNo);
+      if (icon != null)
+      {
+          iconLabel.setVisible(false);
+          iconLabel.setIcon(icon);
+          iconLabel.setVisible(true);
+      }
+    } catch (Exception e)
+    {
+      //ignore
+    }      
   }
 
   /**  Shows the frame.  */
@@ -378,6 +400,8 @@ public class InstallerFrame extends JFrame
     l_panel.panelDeactivate();
     panel.panelActivate();
     panelsContainer.setVisible(true);
+    
+    loadImage(installdata.curPanelNumber);
   }
 
   /**  Writes the uninstalldata.  */

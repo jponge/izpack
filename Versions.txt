@@ -33,6 +33,9 @@
 - fix bug so <fileset> uses same default excludes as ant. (Chad McHenry)
 - More elements in dtd are optional, fixed bugs causing errors if certain
   optional elements were omitted. (Chad McHenry)
+- It is now possible to have a specific picture for a specific panel by using 
+  the Installer.image.n resources where n is the panel 0-based index.
+  (Peter Mikula).
 
   > 3.5.4 (build 2004.06.05)
 
