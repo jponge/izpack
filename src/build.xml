@@ -660,8 +660,11 @@
     It also fixes the encoding problems by moving it to UTF-8.
   -->
   <target name="fix.crlf">
-    <fixcrlf srcDir="${src.dir}" eol="lf" eof="remove" encoding="UTF-8"
-             includes="**/*" />
+    <fixcrlf srcDir="${src.dir}" eol="lf" eof="remove" encoding="UTF-8">
+      <include name="**/*.java" />
+      <include name="**/*.xml" />
+      <include name="**/*.properties" />
+    </fixcrlf>
   </target>
 
   <!-- Makes everything, from compilation to generating an installer. -->
