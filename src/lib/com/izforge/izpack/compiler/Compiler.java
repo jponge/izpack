@@ -491,7 +491,6 @@ public class Compiler extends Thread
                 {
                     override = f.getAttribute("override").equalsIgnoreCase("true");
                 } 
-                System.err.println(f.getAttribute("src") + " " + override);
                 addFile(file,
                     f.getAttribute("targetdir"),
                     f.getAttribute("os"),
