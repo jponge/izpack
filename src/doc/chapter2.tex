@@ -1049,6 +1049,41 @@ the feedback panel, and to add new functionality to the installer, after its
 been built.
 \end{quotation}
 
+New with version 3.7 is the possibility to tee output that is written to
+the ProcessPanel's textarea into an optional logfile. Using this feature is
+pretty much straightforward, you only have to add a line in \texttt{ProcessPanel.Spec.xml} 
+that will tell IzPack the location, where the logfile should be stored.
+
+Variable substitution is performed, so you can use \texttt{\$INSTALL\_PATH} as example.
+
+The name of the logfile is not (yet) configurable but should fit in most cases. It will
+be named 
+\begin{verbatim}
+Install_V<$APP_VER>_<YYYY>-<MM>-<DD>_<hh>-<mm>-<ss>_<RandomId>.log
+\end{verbatim}
+
+Here's an example:
+
+\begin{verbatim}
+<processing>
+  <logfiledir>$INSTALL_PATH</logfiledir>
+  <job name="do xyz">
+    <os family="windows" />
+    <executefile name="$INSTALL_PATH/scripts/xyz.bat">
+      <arg>doit</arg><arg>$variable</arg>
+    </executefile>
+</processing>
+\end{verbatim}
+
+This will generate a logfile named e.g. \texttt{Install\_V1.3\_2004-11-08\_19-22-20\_43423.log} 
+located in \texttt{\$INSTALL\_PATH}.
+
+\texttt{ProcessPanelWorker} will write all output that is directed to \texttt{stdout} and \texttt{stderr} to this file
+if \texttt{ProcessPanel.Spec.xml} contains the \texttt{logfiledir} entry.
+
+Please note that this one file is used for storing the complete output of all jobs and not
+a file for each job that is run.
+
 \subsection{JDKPathPanel}
 This panel allows the user to select a JDK path. The variable JAVA\_HOME does
 not point to a JDK, else to a JRE also the environment variable points to a JDK.

@@ -25,12 +25,17 @@
 package com.izforge.izpack.installer;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,6 +47,8 @@ import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
@@ -70,6 +77,12 @@ public class ProcessPanelWorker implements Runnable
 
   private Thread processingThread = null;
 
+  private static PrintWriter logfile = null;
+  
+  private String logfiledir = null;
+
+  protected AutomatedInstallData idata;
+
   /**
    *  The constructor.
    *
@@ -82,13 +95,14 @@ public class ProcessPanelWorker implements Runnable
     throws IOException
   {
     this.handler = handler;
+    this.idata  = idata;
     this.vs = new VariableSubstitutor(idata.getVariables());
 
     if (!readSpec())
       throw new IOException("Error reading processing specification");
   }
 
-  private boolean readSpec()
+  private boolean readSpec() throws IOException
   {
     InputStream input;
     try
@@ -118,7 +132,15 @@ public class ProcessPanelWorker implements Runnable
 
     if (!this.spec.hasChildren())
       return false;
-
+    
+    // Handle logfile
+    XMLElement lfd = spec.getFirstChildNamed("logfiledir");
+    if( lfd != null)
+    {
+      logfiledir = lfd.getContent();
+    }
+    
+    
     for (Iterator job_it = this.spec.getChildrenNamed("job").iterator();
       job_it.hasNext();
       )
@@ -199,6 +221,37 @@ public class ProcessPanelWorker implements Runnable
    */
   public void run()
   {
+    // Create logfile if needed. Do it at this point because
+    // variable substitution needs selected install path.
+    if( logfiledir != null )
+    {
+      logfiledir = IoHelper.translatePath(logfiledir,new VariableSubstitutor(idata.getVariables()));
+      
+      File lf;
+      
+      String appVersion = idata.getVariable("APP_VER");
+      
+      if (appVersion != null)
+      	appVersion = "V"+appVersion;
+      else
+      	appVersion = "undef";
+      
+      String identifier = DateFormat.getDateTimeInstance().format(new Date());
+      
+      identifier = identifier.replace('.', '-').replace(' ', '_').replace(':', '-');
+      
+      try
+      {
+        lf = File.createTempFile("Install_"+appVersion+"_"+identifier+"_", ".log", new File(logfiledir));
+        logfile = new PrintWriter(new FileOutputStream( lf ), true);
+      }
+      catch (IOException e)
+      {
+        Debug.error(e);
+        // TODO throw or throw not, that's the question...
+      }
+    }
+
     this.handler.startProcessing(this.jobs.size());
 
     for (Iterator job_it = this.jobs.iterator(); job_it.hasNext();)
@@ -216,6 +269,8 @@ public class ProcessPanelWorker implements Runnable
     }
 
     this.handler.finishProcessing();
+    if( logfile != null )
+      logfile.close();
   }
 
   /** Start the compilation in a separate thread. */
@@ -395,6 +450,11 @@ public class ProcessPanelWorker implements Runnable
           {
             this.handler.logOutput(line, stderr);
 
+            // log output also to file given in ProcessPanelSpec
+            
+            if( logfile != null )
+              logfile.println( line);
+
             synchronized (this.stop)
             {
               if (stop.booleanValue())
@@ -404,6 +464,12 @@ public class ProcessPanelWorker implements Runnable
         } catch (IOException ioe)
         {
           this.handler.logOutput(ioe.toString(), true);
+
+          // log errors also to file given in ProcessPanelSpec
+          
+          if( logfile != null )
+            logfile.println( ioe.toString());
+
         }
 
       }
