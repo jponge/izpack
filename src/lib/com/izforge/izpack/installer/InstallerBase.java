@@ -205,6 +205,9 @@ public class InstallerBase
       // Now we have it :-)
       dpath.append(drive);
 
+      // Ensure that we have a trailing backslash (in case drive was something like "C:")
+      if (drive.length() == 2) dpath.append("\\");
+
       String language = Locale.getDefault().getLanguage();
       String country = Locale.getDefault().getCountry();
       String language_country = language + "_" + country;
