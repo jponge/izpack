@@ -183,15 +183,16 @@ rather simple. Input fields with a more complex nature tend to have
 accordingly complex content in this tag. Since the details vary widely,
 they are explained with each input field.\\
 
-Any number of \texttt{<createForPack>} tags can be added to the
-\texttt{<panel>} and \texttt{<field>} sections. This tag has only one
-attribute and no data. The attribute is \texttt{name} and specifies the
-name of one of the installation packs that you have defined. Here is how
-it works: if no \texttt{<createForPack>} tag exists in a section, the
-entity is always created. However, if the tag exists, the entity is only
-created if one or more of the listed packs are selected for
-installation. As mentioned before, if you are using this feature, make
-sure the user input panel shows up after the packs panel.\\
+Any number of \texttt{<createForPack name=''pack-name'' />} tags can be
+added to the \texttt{<panel>} and \texttt{<field>} sections. This tag
+has only one attribute and no data. The attribute is \texttt{name} and
+specifies the name of one of the installation packs that you have
+defined. Here is how it works: if no \texttt{<createForPack ...>} tag
+exists in a section, the entity is always created. However, if the tag
+exists, the entity is only created if one or more of the listed packs
+are selected for installation. As mentioned before, if you are using
+this feature, make sure the user input panel shows up after the packs
+panel.\\
 
 \section{Panel Title}
 
