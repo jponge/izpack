@@ -52,4 +52,6 @@ public interface PacksPanelInterface {
     public void setBytes(int bytes);
 
     public void showSpaceRequired();
+
+    public void showFreeSpace();
 }

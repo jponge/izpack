@@ -14,6 +14,7 @@
 - InstallPanel supports internationalized package names (Gaganis Giorgos).
 - Support for package dependencies (Gaganis Giorgos).
 - ShortcutPanel: can be optionally skipped on non-supported platforms.
+- PacksPanels: free disk space stuff (Klaus Bartz).
 
   > 3.6.1 (build 2004.xx.yy)
 

@@ -47,8 +47,14 @@
     <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus:"/>
     <str id="PacksPanel.tip" txt="Hinweis: die grau markierten Pakete können nicht optional ausgewählt werden."/>
     <str id="PacksPanel.space" txt="Erforderlicher Speicherplatz: "/>
+    <str id="PacksPanel.freespace" txt="Verfügbarer Speicherplatz: "/>
     <str id="PacksPanel.description" txt="Beschreibung"/>
-    <str id="PacksPanel.dependencyList" txt="Das Paket ist von folgenden Paketen abhängig, bitte wählen Sie diese zuerst aus:"/>
+    <str id="PacksPanel.dependencyList" 
+    	txt="Das Paket ist von folgenden Paketen abhängig, bitte wählen Sie diese zuerst aus:"/>
+    <str id="ImgPacksPanel.dependencyList" txt="Abhängigkeiten"/>
+    <str id="PacksPanel.notEnoughSpace" 
+    	txt="Der erforderliche Festplattenplatz für die Installation ist größer als der zur Verfügung stehende Speicherplatz."/>
+    <str id="PacksPanel.notAscertainable" txt="nicht bestimmbar"/>
     
     <str id="InstallPanel.info" txt="Starten Sie hier die Installation:"/>
     <str id="InstallPanel.install" txt="Installieren!"/>
