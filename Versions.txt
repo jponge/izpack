@@ -28,6 +28,7 @@
   resulting installer jar (Jan Blok).
 - Various documentation refreshments. The PostScript[tm] version is not produced
   anymore (PDF + HTML are the 2 targets).
+- Language selection box: UI rendering fix (Chad McHenry).
 
   > 3.4.0 (build 2003.12.06)
 
