@@ -33,6 +33,8 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.security.CodeSource;
 import java.security.ProtectionDomain;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
@@ -425,6 +427,9 @@ public class Librarian implements CleanupClient
     path = path.substring (0, nameStart);
     path = path + name + extension;
     path = path.replace ('/', File.separatorChar);
+    // Revise the URI-path to a file path; needed in uninstaller because it
+    // writes the jar contents into a sandbox; may be with blanks in the path.
+    path = revisePath(path);
     
     return (path);
   }
@@ -449,10 +454,51 @@ public class Librarian implements CleanupClient
     String            path        = url.getPath ();
     path                          = path + nativeDirectory + '/' + name + extension;
     path                          = path.replace ('/', File.separatorChar);
+    // Revise the URI-path to a file path; needed in uninstaller because it
+    // writes the jar contents into a sandbox; may be with blanks in the path.
+    path                          = revisePath(path);
 
     return (path);
   }
  /*--------------------------------------------------------------------------*/
+ /**
+  * Revises the given path to a file compatible path.
+  * In fact this method replaces URI-like entries with it chars 
+  * (e.g. %20 with a space).
+  * @param in path to be revised
+  * @return revised path
+  */
+ /*--------------------------------------------------------------------------*/
+  private String revisePath( String in )
+  {
+    // This was "stolen" from com.izforge.izpack.util.SelfModifier
+
+    StringBuffer sb = new StringBuffer();
+    CharacterIterator iter = new StringCharacterIterator(in);
+    for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next())
+    {
+      if (c == '%')
+      {
+        char c1 = iter.next();
+        if (c1 != CharacterIterator.DONE)
+        {
+          int i1 = Character.digit(c1, 16);
+          char c2 = iter.next();
+          if (c2 != CharacterIterator.DONE)
+          {
+            int i2 = Character.digit(c2, 16);
+            sb.append((char) ((i1 << 4) + i2));
+          }
+        }
+      } else
+      {
+        sb.append(c);
+      }
+    }
+    String path = sb.toString();
+    return path;
+  }
+/*--------------------------------------------------------------------------*/
  /**
   * Opens an <code>InputStream</code> to the native library.
   *
