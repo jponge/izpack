@@ -63,6 +63,9 @@
         
     15.06.2002: (by Julien Ponge)
         Added the ant-generated manifests in the clean target scope.
+    
+    03.07.2002: (by Julien Ponge)
+        Added a target to generate some javadoc.
 
   Mini-HowTo:
 
@@ -105,6 +108,7 @@
   <property name="src.dir" value="${basedir}/src/lib" />
   <property name="img.dir" value="${basedir}/src/img" />
   <property name="bin.dir" value="${basedir}/bin" />
+  <property name="doc.dir" value="${basedir}/doc" />
   
   <property name="langpacks.subdir" value="langpacks" />
   <property name="langpacks.dir" value="${basedir}/bin/${langpacks.subdir}" />
@@ -431,7 +435,22 @@
 
   <!-- Builds all targets -->
   <target name="all" depends="build.compiler,build.installer,build.uninstaller,
-                              build.frontend,build.panels"/>
+                              build.frontend,build.panels,build.javadoc"/>
+                              
+  <!-- Builds the Javadoc -->
+  <target name="build.javadoc" depends="prepare">
+    <javadoc destdir="${build.dir}/javadoc">
+      <fileset dir="${src.dir}">
+        <include name="com/izforge/izpack/installer/IzPanel.java"/>
+        <include name="com/izforge/izpack/installer/InstallData.java"/>
+      </fileset>
+    </javadoc>
+    <copy todir="${doc.dir}/izpack/javadoc">
+      <fileset dir="${build.dir}/javadoc">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
+  </target>
 
   <!-- Creates an installer for IzPack -->
   <target name="dist" depends="all">
