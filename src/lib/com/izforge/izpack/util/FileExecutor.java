@@ -281,6 +281,12 @@ public class FileExecutor
           Debug.trace("making file executable (setting executable flag)");
           String[] params = {"/bin/chmod", permissions, file.toString()};
           exitStatus = executeCommand(params, output);
+          if (exitStatus != 0)
+          {
+            handler.emitError("file execution error", "Error executing \n"+
+              params[0]+" "+params[1]+" "+params[2]);
+            continue;            
+          }
         }
       }
 
@@ -344,7 +350,6 @@ public class FileExecutor
         }
 
       }
-
       
 
       // POSTINSTALL executables will be deleted
