@@ -566,7 +566,11 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
-        String path = basedir + File.separator + f.getAttribute("src");
+
+	// Do not prepend basedir if already an absolute path
+	String path = f.getAttribute("src");
+	if (!new File(path).isAbsolute())
+	   path = basedir + File.separator + path;
         File file = new File(path);
 
         boolean override = true;
@@ -585,7 +589,11 @@ public class Compiler extends Thread
       while (iter.hasNext())
       {
         XMLElement f = (XMLElement) iter.next();
-        String path = basedir + File.separator + f.getAttribute("dir");
+
+	// Do not prepend basedir if already an absolute path
+	String path = f.getAttribute("dir");
+	if (!new File(path).isAbsolute())
+	   path = basedir + File.separator + path;
         String casesensitive = f.getAttribute("casesensitive");
         //  get includes and excludes
         Vector xcludesList = f.getChildrenNamed("include");
@@ -817,8 +825,13 @@ public class Compiler extends Thread
       if (null != parse)
         blParse = parse.equalsIgnoreCase("yes");
 
+      // Do not prepend basedir if already an absolute path
+      String path = res.getAttribute("src");
+      if (!new File(path).isAbsolute())
+	 path = basedir + File.separator + path;
+
       resources.add(new Resource(res.getAttribute("id"),
-        basedir + File.separator + res.getAttribute("src"),
+        path,
         blParse,
         res.getAttribute("type"),
         res.getAttribute("encoding")));
