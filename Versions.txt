@@ -20,6 +20,14 @@
   packages pictures.
 - UserInputPanel: more parameters and a regular expressions validator have been
   added (Mike Cunneen).
+- 3 new UserInputPanel validators (Thorsten Kamann): 
+  * PortValidator (checks whether a port on localhost is available) 
+  * IsPortValidator (checks whether the enterd value is a port in the range 
+    between 0 and 32000)
+  * HostAddressValidator (checks whether the combination host:port is available)
+- 1 new UserInputPanel processor that checks checks whether the combination of
+  host:port is available. If not the port will be arised until it is available.
+  (Thorsten Kamann)
 
   > 3.5.4 (build 2004.xx.yy)
 
@@ -31,16 +39,6 @@
 - UserInputPanel: fix for the directory detection failure (bug #1849) + added
   the possibility to use a '*' in the choices
   (ex: <choice value="/opt/java/*"/>). Patch by Thorsten Kamann.
-- 3 new Validators: 
-		PortValidator (checks whether a port on localhost is available) 
-		IsPortValidator (checks whether the enterd value is a port in the range 
-		between 0 and 32000)
-		HostAddressValidator (checks whether the combination host:port is available)
-		All validators submitted by Thorsten Kamann
-- 1 new Processor
-		This processor checks whether the combination of host:port is available.
-		If not the port will be arised until it is available.
-		Thsi processor is submitted by Thorsten Kamann
 
   > 3.5.3 (build 2004.05.15)
 
