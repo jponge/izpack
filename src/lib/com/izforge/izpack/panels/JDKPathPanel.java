@@ -151,11 +151,11 @@ public class JDKPathPanel extends PathInputPanel
     String vs = (output[0].length() > 0 ) ? output[0] : output[1];
     if( min != null )
     {
-      if( ! compareVersions( vs, min, true, 3, 3, "__NO_NOT_IDENTIFIER_")) 
+      if( ! compareVersions( vs, min, true, 4, 4, "__NO_NOT_IDENTIFIER_")) 
         return( false );
     }
     if( max != null )
-    if( ! compareVersions( vs, max, false, 3, 3, "__NO_NOT_IDENTIFIER_")) 
+    if( ! compareVersions( vs, max, false, 4, 4, "__NO_NOT_IDENTIFIER_")) 
       return( false );
     return( true );
   }
@@ -199,11 +199,36 @@ public class JDKPathPanel extends PathInputPanel
     detectedVersion = interestedEntries[i];
     StringTokenizer current = new StringTokenizer(interestedEntries[i], "._-" );
     StringTokenizer needed = new StringTokenizer(template, "._-" );
-    while( needed.hasMoreTokens() && current.hasMoreTokens())
+    while( needed.hasMoreTokens()  )
     {
+      // Current can have no more tokens if needed has more
+      // and if a privious token was not accepted as good version.
+      // e.g. 1.4.2_02 needed, 1.4.2 current. The false return
+      // will be right here. Only if e.g. needed is 1.4.2_00 the
+      // return value will be false, but zero should not b e used
+      // at the last version part.
+      if( ! current.hasMoreTokens())
+        return(false);
       String cur = current.nextToken();
       String nee = needed.nextToken();
-      if( Integer.parseInt(cur) < Integer.parseInt(nee))
+      int curVal = 0;
+      int neededVal = 0;
+      try
+      {
+        curVal = Integer.parseInt(cur);
+        neededVal = Integer.parseInt(nee);
+      }
+      catch( NumberFormatException nfe)
+      { // A number format exception will be raised if
+        // there is a non numeric part in the version,
+        // e.g. 1.5.0_beta. The verification runs only into
+        // this deep area of version number (fourth sub place)
+        // if all other are equal to the given limit. Then
+        // it is right to return false because e.g.
+        // the minimal needed version will be 1.5.0.2. 
+        return(false);
+      }
+      if( curVal < neededVal)
         if(isMin ) 
           return( false ); 
         else 
