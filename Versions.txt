@@ -1,5 +1,13 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.x.x (build xxxx.yy.zz)
+
+- Added 3 built-in variables that you can use with the variables substitutor:
+  o APP_NAME for the application name
+  o APP_URL for the application URL
+  o APP_VER for the application version.
+- New ProcessPanel (Tino Schwarze).
+
   > 3.1.0b (build 2003.08.22)
 
 - Fix in the standalone compiler (Tino Schwarze).

@@ -28,7 +28,6 @@ import com.izforge.izpack.*;
 
 import java.util.*;
 import java.util.zip.*;
-
 import net.n3.nanoxml.*;
 
 /**

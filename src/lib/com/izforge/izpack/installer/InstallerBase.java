@@ -48,6 +48,7 @@ import com.izforge.izpack.util.OsConstraint;
  */
 public class InstallerBase
 {
+
   /**
    *  Loads the installation data.
    *
@@ -77,6 +78,11 @@ public class InstallerBase
     objIn = new ObjectInputStream(in);
     Info inf = (Info) objIn.readObject();
     objIn.close();
+
+    // We put the Info data as variables
+    installdata.setVariable(ScriptParser.APP_NAME, inf.getAppName());
+    installdata.setVariable(ScriptParser.APP_URL, inf.getAppURL());
+    installdata.setVariable(ScriptParser.APP_VER, inf.getAppVersion());
 
     // We read the panels order data
     in = getClass().getResourceAsStream("/panelsOrder");

@@ -57,6 +57,15 @@ public class ScriptParser
   /**  The file separator character. */
   public final static String FILE_SEPARATOR = "FILE_SEPARATOR";
 
+  /** The application name. */
+  public final static String APP_NAME = "APP_NAME";
+
+  /** The application URL. */
+  public final static String APP_URL = "APP_URL";
+
+  /** The application version.*/
+  public final static String APP_VER = "APP_VER";
+
   /**  The files to parse. */
   private Collection files;
 
