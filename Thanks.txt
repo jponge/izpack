@@ -48,5 +48,8 @@ IzPack for your projects ;-)
 - Hiroki Akimoto for the Japanes language pack.
 - Gareth Cronin : for the Ant task fixes.
 - Jan Blok : for the very great improvements on the installer GUI.
+- Hani Suleiman : various things as well as the uninstallers script launching
+  feature patch.
+- Milan Madzia : for the Slovakian langpack.
 
 # vim: fileformat=dos 
