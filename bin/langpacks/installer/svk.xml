@@ -66,6 +66,7 @@
     <str id="FinishPanel.auto" txt="Vytvori» automatický in¹talaèný skript"/>
     <str id="FinishPanel.auto.tip" 
          txt="Pou¾ite tento skript v prípade in¹talácie na iný poèítaè."/>
+    <str id="FinishPanel.done" txt="Hotovo"/>
     
     <str id="ImgPacksPanel.packs" txt="Nasledovné balíku sú prístupné :"/>
     <str id="ImgPacksPanel.snap" txt="Náhµad na balík  :"/>
