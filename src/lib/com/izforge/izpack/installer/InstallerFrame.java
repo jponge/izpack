@@ -9,7 +9,7 @@
  *  Author's Website :   http://www.izforge.com
  *
  *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
- * 
+ *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
  *  as published by the Free Software Foundation; either version 2
@@ -33,7 +33,7 @@ import com.izforge.izpack.util.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.jar.*;
+import java.util.List;
 import java.util.zip.*;
 import java.lang.reflect.*;
 
@@ -41,8 +41,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.event.*;
 
 import net.n3.nanoxml.*;
 
@@ -50,7 +48,7 @@ import net.n3.nanoxml.*;
  *  The IzPack installer frame.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
+ * created    October 27, 2002
  */
 public class InstallerFrame extends JFrame
 {
@@ -288,7 +286,7 @@ public class InstallerFrame extends JFrame
     navPanel.setLayout(new BoxLayout(navPanel, BoxLayout.X_AXIS));
     navPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(8,8,8,8), BorderFactory.createTitledBorder(new EtchedLineBorder(), langpack.getString("installer.madewith")+" ")));
     navPanel.add(Box.createHorizontalGlue());
-	
+
     prevButton = ButtonFactory.createButton(langpack.getString("installer.prev"),
       icons.getImageIcon("stepback"),
       installdata.buttonsHColor);
@@ -360,7 +358,7 @@ public class InstallerFrame extends JFrame
     IzPanel l_panel = (IzPanel) installdata.panels.get(last);
     l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
     panelsContainer.remove(l_panel);
-    panelsContainer.add((JPanel) panel);
+    panelsContainer.add(panel);
     if (installdata.curPanelNumber == 0)
     {
       prevButton.setVisible(false);
@@ -393,14 +391,12 @@ public class InstallerFrame extends JFrame
     {
       // We get the data
       UninstallData udata = UninstallData.getInstance();
-      ArrayList files = udata.getFilesList();
+      List files = udata.getFilesList();
       ZipOutputStream outJar = installdata.uninstallOutJar;
 
       // We write the files log
       outJar.putNextEntry(new ZipEntry("install.log"));
       BufferedWriter logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
-      int size = files.size();
-      int lim = size - 1;
       logWriter.write(installdata.getInstallPath());
       logWriter.newLine();
       Iterator iter = files.iterator();
@@ -415,10 +411,24 @@ public class InstallerFrame extends JFrame
 
       // We write the uninstaller jar file log
       outJar.putNextEntry(new ZipEntry("jarlocation.log"));
+      logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
       logWriter.write(udata.getUninstallerJarFilename());
       logWriter.newLine();
       logWriter.write(udata.getUninstallerPath());
       logWriter.flush();
+      outJar.closeEntry();
+
+      // Write out executables to execute on uninstall
+      outJar.putNextEntry(new ZipEntry("executables"));
+      ObjectOutputStream execStream = new ObjectOutputStream(outJar);
+      iter = udata.getExecutablesList().iterator();
+      execStream.writeInt(udata.getExecutablesList().size());
+      while (iter.hasNext())
+      {
+        ExecutableFile file = (ExecutableFile)iter.next();
+        execStream.writeObject(file);
+      }
+      execStream.flush();
       outJar.closeEntry();
 
       // Cleanup
@@ -659,7 +669,7 @@ public class InstallerFrame extends JFrame
    *  Handles the events from the navigation bar elements.
    *
    * @author     julien
-   * @created    October 27, 2002
+   * created    October 27, 2002
    */
   class NavigationHandler implements ActionListener
   {
@@ -701,7 +711,7 @@ public class InstallerFrame extends JFrame
    *  The window events handler.
    *
    * @author     julien
-   * @created    October 27, 2002
+   * created    October 27, 2002
    */
   class WindowHandler extends WindowAdapter
   {

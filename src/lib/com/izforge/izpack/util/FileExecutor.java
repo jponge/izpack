@@ -30,7 +30,6 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -231,7 +230,7 @@ public class FileExecutor
    *
    * @return    Description of the Return Value
    */
-  public int executeFiles()
+  public int executeFiles(int currentStage)
   {
     int exitStatus = 0;
     String[] output = new String[2];
@@ -248,13 +247,16 @@ public class FileExecutor
       File file = new File(efile.path);
       Debug.trace("handeling executable file "+efile);
 
-      // fix executable permission for unix systems
-      if (pathSep.equals(":") && (!osName.startsWith("mac") ||
-        osName.endsWith("x")))
+      if(currentStage!=ExecutableFile.UNINSTALL)
       {
-      	Debug.trace("making file executable (setting executable flag)");
-        String[] params = {"/bin/chmod", permissions, file.toString()};
-        exitStatus = executeCommand(params, output);
+        // fix executable permission for unix systems
+        if (pathSep.equals(":") && (!osName.startsWith("mac") ||
+          osName.endsWith("x")))
+        {
+          Debug.trace("making file executable (setting executable flag)");
+          String[] params = {"/bin/chmod", permissions, file.toString()};
+          exitStatus = executeCommand(params, output);
+        }
       }
       // loop through all operating systems
       Iterator osIterator = efile.osList.iterator();
@@ -271,7 +273,9 @@ public class FileExecutor
         {
 	      	Debug.trace("match current os");
           // execute command in POSTINSTALL stage
-          if ((exitStatus == 0) && (efile.executionStage == ExecutableFile.POSTINSTALL))
+          if ((exitStatus == 0) &&
+            ((currentStage == ExecutableFile.POSTINSTALL && efile.executionStage == ExecutableFile.POSTINSTALL)
+            || (currentStage==ExecutableFile.UNINSTALL && efile.executionStage == ExecutableFile.UNINSTALL)))
           {
             List paramList = new ArrayList();
             if (ExecutableFile.BIN == efile.type)
@@ -298,7 +302,6 @@ public class FileExecutor
               params[i] = (String) paramList.get(i);
 
             exitStatus = executeCommand(params, output);
-
             // bring a dialog depending on return code and failure handling
             if (exitStatus != 0)
             {

@@ -85,7 +85,7 @@
 					<!ATTLIST executable targetfile CDATA #REQUIRED>
 					<!ATTLIST executable class CDATA #IMPLIED>
 					<!ATTLIST executable type (bin|jar) "bin">
-					<!ATTLIST executable stage (postinstall|never) "never">
+					<!ATTLIST executable stage (postinstall|never|uninstall) "never">
 					<!ATTLIST executable failure (abort|warn|ask) "ask">
 					<!ELEMENT args (arg+)>
 							<!ELEMENT arg EMPTY>

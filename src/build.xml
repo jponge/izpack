@@ -299,7 +299,12 @@
       <fileset dir="${build.dir}">
         <include name="com/izforge/izpack/LocaleDatabase.class"/>
         <include name="com/izforge/izpack/gui/*.class"/>
-                <include name="com/izforge/izpack/uninstaller/*.class"/>
+        <include name="com/izforge/izpack/uninstaller/*.class"/>
+        <include name="com/izforge/izpack/ExecutableFile.class"/>
+        <include name="com/izforge/izpack/util/FileExecutor*.class"/>
+        <include name="com/izforge/izpack/util/Console.class"/>
+        <include name="com/izforge/izpack/util/Debug.class"/>
+        <include name="com/izforge/izpack/util/Os.class"/>
         <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class"/>
         <include name="net/n3/nanoxml/*.class"/>
       </fileset>

@@ -25,8 +25,10 @@
 package com.izforge.izpack.uninstaller;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
+
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.util.FileExecutor;
 
 /**
  *  The files destroyer class.
@@ -69,6 +71,10 @@ public class Destroyer extends Thread
     try
     {
       // We get the list of the files to delete
+      ArrayList executables = getExecutablesList();
+      FileExecutor executor = new FileExecutor(executables);
+      executor.executeFiles(ExecutableFile.UNINSTALL);
+
       ArrayList files = getFilesList();
       int size = files.size();
 
@@ -93,6 +99,7 @@ public class Destroyer extends Thread
     catch (Exception err)
     {
       listener.destroyerStop();
+      err.printStackTrace();
       listener.destroyerError(err.toString());
     }
   }
@@ -149,6 +156,18 @@ public class Destroyer extends Thread
     return files;
   }
 
+  private ArrayList getExecutablesList() throws Exception
+  {
+    ArrayList executables = new ArrayList();
+    ObjectInputStream in = new ObjectInputStream(getClass().getResourceAsStream("/executables"));
+    int num = in.readInt();
+    for(int i=0;i<num;i++)
+    {
+      ExecutableFile file = (ExecutableFile)in.readObject();
+      executables.add(file);
+    }
+    return executables;
+  }
 
   /**
    *  Makes some reccursive cleanups.

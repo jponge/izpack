@@ -36,7 +36,6 @@ import net.n3.nanoxml.*;
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
-import java.util.jar.*;
 
 import com.izforge.izpack.*;
 
@@ -48,7 +47,7 @@ import com.izforge.izpack.installer.VariableSubstitutor;
  *  The IzPack compiler class.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
+ * created    October 26, 2002
  */
 public class Compiler extends Thread
 {
@@ -120,7 +119,7 @@ public class Compiler extends Thread
     catch (Exception err)
     {
       err.printStackTrace();
-    }    
+    }
   }
 
 
@@ -165,7 +164,6 @@ public class Compiler extends Thread
   {
 
     // Usefull variables
-    int size;
     int i;
     String str;
     InputStream inStream;
@@ -346,7 +344,9 @@ public class Compiler extends Thread
       objOut.writeInt(pack.executables.size());
       iter2 = pack.executables.iterator();
       while (iter2.hasNext())
+      {
         objOut.writeObject(iter2.next());
+      }
 
       // Cleanup
       objOut.flush();
@@ -451,7 +451,6 @@ public class Compiler extends Thread
   {
     // Initialisation
     ArrayList packs = new ArrayList();
-    Vector v;
     XMLElement root = data.getFirstChildNamed("packs");
 
     // We process each pack markup
@@ -497,6 +496,8 @@ public class Compiler extends Thread
           String val = e.getAttribute("stage", "never");
           if ("postinstall".compareToIgnoreCase(val) == 0)
             executeOn = ExecutableFile.POSTINSTALL;
+          else if ("uninstall".compareToIgnoreCase(val) == 0)
+            executeOn = ExecutableFile.UNINSTALL;
 
           // main class  of this executable
           String executeClass = e.getAttribute("class");
@@ -516,7 +517,7 @@ public class Compiler extends Thread
             onFailure = ExecutableFile.WARN;
 
           // get arguments for this executable
-          ArrayList argList = null;
+          ArrayList argList = new ArrayList();
           XMLElement args = e.getFirstChildNamed("args");
           if (null != args)
           {
@@ -583,7 +584,7 @@ public class Compiler extends Thread
           for (int j = 0; j < xcludesList.size(); j++)
           {
             xclude = (XMLElement) xcludesList.get(j);
-            includes[j] = (String) xclude.getAttribute("name");
+            includes[j] = xclude.getAttribute("name");
           }
         }
 
@@ -596,7 +597,7 @@ public class Compiler extends Thread
           for (int j = 0; j < xcludesList.size(); j++)
           {
             xclude = (XMLElement) xcludesList.get(j);
-            excludes[j] = (String) xclude.getAttribute("name");
+            excludes[j] = xclude.getAttribute("name");
           }
         }
 
@@ -647,7 +648,7 @@ public class Compiler extends Thread
       ds.setCaseSensitive(bCasesensitive);
       ds.scan();
 
-      String[] files = ds.getIncludedFiles();  
+      String[] files = ds.getIncludedFiles();
       String[] dirs = ds.getIncludedDirectories();
 
       /* Old buggy code
@@ -657,10 +658,9 @@ public class Compiler extends Thread
       String absolutPath = test.getAbsolutePath();
       String absolutFilePath = null;
       int copyPathFrom = absolutBasePath.length() + 1;
-
       for (int i = 0; i < files.length; i++)
       {
-        File file = new File(absolutPath + File.separator + (String) files[i]);
+        File file = new File(absolutPath + File.separator + files[i]);
 
         absolutFilePath = file.getParentFile().getAbsolutePath();
 
@@ -669,7 +669,7 @@ public class Compiler extends Thread
         addFile(file, newRelativePath, targetOs, true, list);
       }
       */
-      
+
       // New working code (for files)
       String filePath, instPath, expPath;
       int pathLimit;
@@ -974,7 +974,7 @@ public class Compiler extends Thread
    *  Represents a resource.
    *
    * @author     julien
-   * @created    October 26, 2002
+   * created    October 26, 2002
    */
   class Resource
   {
@@ -1032,7 +1032,7 @@ public class Compiler extends Thread
    *  Represents a pack.
    *
    * @author     julien
-   * @created    October 26, 2002
+   * created    October 26, 2002
    */
   class Pack
   {
@@ -1072,7 +1072,7 @@ public class Compiler extends Thread
    *  Represents a pack data source.
    *
    * @author     julien
-   * @created    October 26, 2002
+   * created    October 26, 2002
    */
   class PackSource
   {
@@ -1094,7 +1094,7 @@ public class Compiler extends Thread
    *  Represents a native library.
    *
    * @author     julien
-   * @created    October 26, 2002
+   * created    October 26, 2002
    */
   class NativeLibrary
   {
@@ -1252,7 +1252,7 @@ public class Compiler extends Thread
    *  Used to handle the packager messages in the command-line mode.
    *
    * @author     julien
-   * @created    October 26, 2002
+   * created    October 26, 2002
    */
   static class CmdlinePackagerListener implements PackagerListener
   {

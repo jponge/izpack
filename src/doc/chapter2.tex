@@ -408,7 +408,9 @@ to be installed. It contains the following XML elements :\\
       \texttt{bin})
       \item \texttt{stage} : specifies when to launch : \texttt{postinstall}
       is just after the installation is done and the default value,
-      \texttt{never} will never launch it (useful to set the +x flag on Unix)
+      \texttt{never} will never launch it (useful to set the +x flag on Unix).
+      \texttt{uninstall} will launch the executable when the application
+      is uninstalled. The executable is executed before any files are deleted.
       \item \texttt{failure} : specifies what to do when an error occurs :
       \texttt{abort} will abort the installation process, \texttt{ask} (default)
       will ask the user what to do and \texttt{warn} will just tell the user

@@ -24,20 +24,15 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.*;
-
-import java.net.*;
 import java.util.*;
 
-import java.awt.*;
-
-import net.n3.nanoxml.*;
+import com.izforge.izpack.ExecutableFile;
 
 /**
  *  Holds uninstallation data. Implemented as a singleton.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
+ * created    October 27, 2002
  */
 public class UninstallData
 {
@@ -45,10 +40,10 @@ public class UninstallData
   private static UninstallData instance = null;
 
   /**  The files list. */
-  private ArrayList filesList;
+  private List filesList;
 
   /**  The executables list. */
-  private ArrayList executablesList;
+  private List executablesList;
 
   /**  The uninstaller jar filename. */
   private String uninstallerJarFilename;
@@ -61,6 +56,7 @@ public class UninstallData
   private UninstallData()
   {
     filesList = new ArrayList();
+    executablesList = new ArrayList();
   }
 
 
@@ -93,7 +89,7 @@ public class UninstallData
    *
    * @return    The files list.
    */
-  public ArrayList getFilesList()
+  public List getFilesList()
   {
     return filesList;
   }
@@ -102,11 +98,11 @@ public class UninstallData
   /**
    *  Adds an executable to the data.
    *
-   * @param  path  The executable file path.
+   * @param file The executable file.
    */
-  public void addExecutable(String path)
+  public void addExecutable(ExecutableFile file)
   {
-    executablesList.add(path);
+    executablesList.add(file);
   }
 
 
@@ -115,7 +111,7 @@ public class UninstallData
    *
    * @return    The executables list.
    */
-  public ArrayList getExecutablesList()
+  public List getExecutablesList()
   {
     return executablesList;
   }

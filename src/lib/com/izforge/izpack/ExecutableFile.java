@@ -25,6 +25,8 @@
 package com.izforge.izpack;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *  Encloses information about a executable file. This class abstracts the way
@@ -39,6 +41,7 @@ public class ExecutableFile implements Serializable
   /**  when to execute this file */
   public final static int POSTINSTALL = 0;
   public final static int NEVER = 1;
+  public final static int UNINSTALL = 2;
 
   /**  type of a file */
   public final static int BIN = 0;
@@ -52,7 +55,7 @@ public class ExecutableFile implements Serializable
   /**  The file path */
   public String path;
 
-  /**  Execution stage (NEVER, POSTINSTALL) */
+  /**  Execution stage (NEVER, POSTINSTALL, UNINSTALL) */
   public int executionStage;
 
   /**  Main class of jar file */
@@ -65,10 +68,10 @@ public class ExecutableFile implements Serializable
   public int onFailure;
 
   /**  List of arguments */
-  public java.util.ArrayList argList;
+  public List argList = null;
 
   /**  List of operating systems to run on */
-  public java.util.ArrayList osList;
+  public List osList = null;
 
 
   /**  Constructs a new uninitialized instance.  */
@@ -79,8 +82,8 @@ public class ExecutableFile implements Serializable
     mainClass = null;
     type = BIN;
     onFailure = ASK;
-    osList = null;
-    argList = null;
+    osList = new ArrayList();
+    argList = new ArrayList();
   }
 
 

@@ -176,7 +176,7 @@ public class Unpacker extends Thread
             }
             // Cleanings
             out.close();
-            
+
             // Empty dirs restoring
             String _n = pathFile.getName();
             if (_n.startsWith("izpack-keepme") && _n.endsWith(".tmp"))
@@ -215,6 +215,10 @@ public class Unpacker extends Thread
             }
           }
           executables.add(ef);
+          if(ef.executionStage == ExecutableFile.UNINSTALL)
+          {
+            udata.addExecutable(ef);
+          }
         }
         objIn.close();
       }
@@ -225,7 +229,7 @@ public class Unpacker extends Thread
 
       // We use the file executor
       FileExecutor executor = new FileExecutor(executables);
-      if (executor.executeFiles() != 0)
+      if (executor.executeFiles(ExecutableFile.POSTINSTALL) != 0)
         javax.swing.JOptionPane.showMessageDialog(
           null,
           "The installation was not completed.",
