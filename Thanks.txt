@@ -68,5 +68,6 @@ IzPack for your projects ;-)
 - Frank Bille Jensen : for the Danish translation.
 - Volker Friedritz : for the ImgPacksPanel redesign.
 - Mike Cunneen : for the UserPanel enhancements.
+- Thorsten Kamann : for the various contributions.
 
 # vim: fileformat=dos 

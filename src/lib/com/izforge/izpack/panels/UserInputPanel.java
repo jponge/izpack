@@ -423,6 +423,7 @@ public class UserInputPanel extends IzPanel
     }
     
     Vector forPacks = spec.getChildrenNamed (PACKS);
+    
     if (!itemRequiredFor (forPacks))
     {
       parent.skipPanel ();
@@ -2361,6 +2362,47 @@ private class SearchField implements ActionListener
   /** perform autodetection */
   public boolean autodetect ()
   {
+  	
+	Vector items = new Vector();
+
+	//Checks whether a placeholder item is in the combobox
+	//and resolve the pathes automatically:
+	///usr/lib/* searches all folders in usr/lib to find /usr/lib/*/lib/tools.jar
+	for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
+	{
+		String path = (String)this.pathComboBox.getItemAt (i);
+
+		if (path.endsWith("*"))
+		{
+			path = path.substring(0,path.length()-1);
+			File dir = new File(path);
+
+			if (dir.isDirectory())
+			{
+				File[] subdirs = dir.listFiles();
+				for (int x=0;x<subdirs.length;x++)
+				{
+					String search = subdirs[x].getAbsolutePath();
+					if (this.pathMatches (search))
+					{
+						items.add(search);
+					}
+				}
+			}
+		}
+		else
+		{
+			items.add(path);
+		}
+	}
+
+	//Now clear the combobox and add the items out of the newly
+	//generated vector
+	this.pathComboBox.removeAllItems();
+	for (int i=0;i<items.size();i++)
+	{
+		this.pathComboBox.addItem(items.get(i));
+	}
 
     // loop through all items
     for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
@@ -2407,7 +2449,7 @@ private class SearchField implements ActionListener
     {
       JFileChooser chooser = new JFileChooser ();
 
-      if (this.searchType == TYPE_DIRECTORY)
+      if (this.searchType == RESULT_DIRECTORY)
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
       int result = chooser.showOpenDialog (this.parent);
