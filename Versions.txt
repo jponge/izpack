@@ -2,6 +2,8 @@
 
   > x.y.z (build xxxx.yy.zz)
 
+- Win32: Fixed the localization of "Program Files" and added support for 8
+  more languages (Dennis Lundberg).
 - Portuguese localization updates from Alex Carlos Braga Antao.
 - Swedish localization updates from Dennis Lundberg.
 - InstallPanel: the overall progress bar makes steps forward only after a pack
@@ -34,7 +36,7 @@
 - Small documentation typing errors fixed.
 - Added an install target to the documentation Makefile.
 - Frontend: Jar files could be listed in the panels tab. Fixed.
-- The scripts execution flag is now set to every users on Unix-like systems 
+- The scripts execution flag is now set to every users on Unix-like systems
   (chmod a+x), regardless of who the user is (i.e. root or a single user).
 - Reformatting (imports, Ant build file).
 
@@ -174,7 +176,7 @@
 - Restyled, cleaned, javadoc'ed the whole IzPack source code.
 - The full IzPack source code Javadocs are generated when making a release.
 - Wiped the Enroll* classes that were polluting IzPack.
-- Added the creation of shortcuts for the IzPack documentation and the 
+- Added the creation of shortcuts for the IzPack documentation and the
 uninstaller.
 
     > 3.1.0 pre2 (build 2002.10.19)
@@ -186,18 +188,18 @@ uninstaller.
 
 - When InstallPanel was the last panel, it unlocked the next button and this was
   of course not the desired behaviour.
-- ImgPacksPanel and PacksPanel can now display the total disk space required 
+- ImgPacksPanel and PacksPanel can now display the total disk space required
   (Adam Barclay for this task).
 - MacOSX GUI fix thanks to Hani Suleiman.
 - GUI Frontend fixes by Andrew De Torres.
-- Support for files overriding behaviour (override or keep old version if 
+- Support for files overriding behaviour (override or keep old version if
   present) by Adam Barclay.
 - New Italian langpack thanks to Franco Graziosi.
 
     > 3.0.0 (build 2002.08.13)
 
 - First stable release of the 3.x series ;-)
-- Ant task : the trailing '/' is appended on the IzPack directory when it is 
+- Ant task : the trailing '/' is appended on the IzPack directory when it is
   omitted (Gareth Cronin).
 - Many improvements on the documentation which should be quite fine - Elmar Grom
   helped a lot on this.
@@ -210,7 +212,7 @@ uninstaller.
   compliant).
 - Windows shortcuts counterpart is now fully working thanks to the big efforts
   of Elmar Grom with the additional help of Marcus Stursberg.
-- Documentation mispelling fixes and additions by Elmar Grom.  
+- Documentation mispelling fixes and additions by Elmar Grom.
 
     > 3.0.0 rc2 (build 2002.07.06)
 
@@ -278,7 +280,7 @@ uninstaller.
 - New Ukrainian language support (Olexij Tkatchenko).
 - The uninstaller now deletes itself after the uninstallation job is done.
 - Modified the IzPack Ant building process to integrate IzPack itself in order
-  to generate a ready-to-distribute installer. 
+  to generate a ready-to-distribute installer.
 
     > 2.12.0 (build 2002.03.31)
 
@@ -289,7 +291,7 @@ uninstaller.
 
 - Fixed a problem with the default compiler output file naming.
 - Added the Dutch language packs thanks to Fridjof Jansen.
-- Modified the Ant makefile so that any inner class of a panel can be 
+- Modified the Ant makefile so that any inner class of a panel can be
   copied too.
 
     > 2.12.0 pre2 (build 2002.02.22)
@@ -312,7 +314,7 @@ uninstaller.
   IzPack has a GUI frontend :-)
 - Updated the installer english langpack file so that 'installer.quit.message'
   is not wrong anymore.
-- Added a complete Javadoc comments set to com.izforge.izpack.installer.IzPanel 
+- Added a complete Javadoc comments set to com.izforge.izpack.installer.IzPanel
 .
 - Inclusion of the IzPack installer XML file in the source directory.
 - The compiler and the frontend can now be invoked outside of the bin/ directory
@@ -326,7 +328,7 @@ uninstaller.
 
 - Pre-versions modifications have been validated.
 - Improved documentation HTML version.
-- IzPack's own installer : use the ImgPacksPanel instead of the classic 
+- IzPack's own installer : use the ImgPacksPanel instead of the classic
 PacksPanel.
 - 2 new frontend splash screens thanks to Nicolas Deschaume.
 - HelloPanel : displays the email adresses enclosed by '<' and '>'.
@@ -354,14 +356,14 @@ PacksPanel.
 
     > 2.10.0 (build 2001.12.02)
 
-- Pre-versions modifications have been validated.    
+- Pre-versions modifications have been validated.
 - A panel can now specify some custom variables (Serge Sivkov).
 - New Brazilian-Portuguese translation thanks to Joao Marcelo Pereira Alves.
 - New Russian translation thanks to Serge Sivkov.
 
     > 2.10.0 pre 2 (build 2001.11.25)
 
-- TargetPanel : it is now possible to specify a specific default installation 
+- TargetPanel : it is now possible to specify a specific default installation
   directory for a specific Operating System thanks to Michael Peterson.
 - Ant makefile : generation of the lib/ directory if not present (Michael
   Peterson).
@@ -377,7 +379,7 @@ PacksPanel.
 - Installer : centered labels at the language selection prompt.
 - LicencePanel : now locks the 'next' button if the 'yes' radio is not selected.
 - TargetPanel : now warns if the specified target is an empty string.
-- InstallPanel : now removes the last processed file path when the installation 
+- InstallPanel : now removes the last processed file path when the installation
 is over.
 
 
@@ -414,7 +416,7 @@ is over.
 
 - Added an image to the frontend about box.
 - Fix in the Ant Makefile that caused it to fail in case of a first-time build.
-    
+
     > 2.6.0 (build 2001.09.20)
 
 - Cleaner installer icons loading using an XML file.
@@ -431,7 +433,7 @@ is over.
     > 2.5.0 (build 2001.09.07)
 
 - New web installers support.
-    
+
     > 2.4.0 (build 2001.09.05)
 
 - Automated installations support.
@@ -439,9 +441,9 @@ is over.
 - Improved build.xml.
 - MacOS and MacOSX installation paths support.
 - Minor bug fix in the TargetPanel path selection.
-    
+
     > 2.3.0 (build 2001.08.29)
-    
+
 - Uninstaller support.
 - Fix on InstallPanel : it does not change its size each time that a new
   file is processed.
@@ -450,7 +452,7 @@ is over.
 - Made a real documentation (it was time to do it :-) .
 
     > 2.2.0 (build 2001.08.18)
-    
+
 - New panels available : ImgPacksPanel, HTMLInfoPanel, HTMLLicencePanel.
 - Use of Kunststoff 1.1.1 instead of 1.0.
 - Jakarta Ant script thanks to Pierre Dittgen.
@@ -467,11 +469,11 @@ is over.
   but with the Kunststoff Look and Feel support).
 - Fix in TargetPanel : you can specify the installation path by typing it
   without having to validate it with the enter key.
-- Fixed the bottom components wheights in the installer frame : now it looks 
+- Fixed the bottom components wheights in the installer frame : now it looks
   much better.
 
     > 2.0.1 (build 2001.08.11)
-    
+
 - No more warnings when the user wants to quit the installer and the
   installation is done with the panel InstallPanel.
 
@@ -489,43 +491,43 @@ _______________________________________________________________________________
     > 1.1.1 (build 2001.04.21)
 
 - Faster installer building / installation process.
-- String comparisons are now using the equalsIgnoreCase method instead of an 
+- String comparisons are now using the equalsIgnoreCase method instead of an
   objects equality test '==' (safest).
 - Modified the about box.
-- Clearly made a difference between images & icons in the jar files 
+- Clearly made a difference between images & icons in the jar files
   (restructuration).
 - Tested successfully on BlackDown Linux JVM.
 
     > 1.1 (build 2001.04.10)
-     
+
 - Adds the extensions to the filenames in the builder if it was omited.
 - Adjusted the fonts in the Metal theme; now it should look right.
-- Adjusted the thread priority of the splash & progress windows, it should be 
+- Adjusted the thread priority of the splash & progress windows, it should be
   faster.
-- The setup now recognizes the os so that the default installation path is 
+- The setup now recognizes the os so that the default installation path is
   appropriated.
-- Editors now place the caret at the beginning when a need (ex : a new text 
+- Editors now place the caret at the beginning when a need (ex : a new text
   is loaded).
 - Enhanced the language packs selection in the builder.
 - Added the french language packs.
 - Parses the script files for special variables.
 - Now comes along with a documentation.
-     
-    > 1.0 (build 2001.03.18)          
+
+    > 1.0 (build 2001.03.18)
 
 - Adjusted the fonts in the Metal theme.
 - Fixed the very stupid bugs with the files in pack deletion.
 - Improved the behaviour of the packs tab functions.
 - Made some small optimizations on various gui code parts.
-- Changed the text editors from JEditorPane to JTextArea : no more lines 
+- Changed the text editors from JEditorPane to JTextArea : no more lines
   wrappings problems.
 - Gained 5kb on Setup.jar.
 - Blocks user interaction in the builder during the installer creation.
 
-    > 1.0 beta 1 (build 2001.03.11)   
+    > 1.0 beta 1 (build 2001.03.11)
 
 - The first public release :-)
-- There are a lot of features to add and enhance in the next releases, of 
+- There are a lot of features to add and enhance in the next releases, of
   course.
 
-# vim: fileformat=dos 
+# vim: fileformat=dos
