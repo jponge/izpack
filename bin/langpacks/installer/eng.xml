@@ -37,18 +37,27 @@
     
     <str id="InfoPanel.info" txt="Please read the following information :"/>
     
-    <str id="TargetPanel.info" txt="Select the installation path :"/>
-    <str id="TargetPanel.browse" txt="Browse ..."/>
+    <str id="PathInputPanel.required" txt="The chosen directory should be exist."/>
+    <str id="PathInputPanel.notValid" txt="The chosen directory does not contain the required product."/>
+
+    <str id="TargetPanel.info" txt="Select the installation path:"/>
+    <str id="TargetPanel.browse" txt="Browse..."/>
     <str id="TargetPanel.warn" 
          txt="The directory already exists ! Are you sure you want to install here and possibly overwrite existing files?"/>
     <str id="TargetPanel.empty_target"
          txt="You have not specified a target location! Is this correct?"/>
-	<str id="TargetPanel.createdir" txt="The target directory will be created :" />
+	<str id="TargetPanel.createdir" txt="The target directory will be created:" />
     <str id="TargetPanel.nodir" 
          txt="This file is not a directory! Please choose a directory!"/>
     <str id="TargetPanel.notwritable" 
          txt="This directory can not be written! Please choose another directory!"/>
     
+    <str id="JDKPathPanel.intro" txt="The installed application needs a JDK. A java runtime environment (JRE) will be not sufficient."/>
+    <str id="JDKPathPanel.info" txt="Select the JDK path:"/>
+    <str id="JDKPathPanel.badVersion1" txt="The chosen JDK has the wrong version (available: "/>
+    <str id="JDKPathPanel.badVersion2" txt=" required: "/>
+    <str id="JDKPathPanel.badVersion3" txt=") should the JDK anyway be used?"/>
+
     <str id="PacksPanel.info" txt="Select the packs you want to install :"/>
     <str id="PacksPanel.tip" txt="Note: greyed packs are required."/>
     <str id="PacksPanel.space" txt="Total space Required: "/>

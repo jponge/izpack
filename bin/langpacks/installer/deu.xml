@@ -31,8 +31,12 @@
     <str id="LicencePanel.yes" txt="Ja"/>
     <str id="LicencePanel.no" txt="Nein"/>
     <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen:"/>
+    
+    <str id="PathInputPanel.required" txt="Das gewählte Verzeichnis muss existieren."/>
+    <str id="PathInputPanel.notValid" txt="Das gewählte Verzeichnis enthällt nicht das benötigte Produkt."/>
+
     <str id="TargetPanel.info" txt="Wählen Sie den Installationspfad:"/>
-    <str id="TargetPanel.browse" txt="Auswählen ..."/>
+    <str id="TargetPanel.browse" txt="Auswählen..."/>
     <str id="TargetPanel.warn" 
          txt="Das Verzeichnis existiert bereits! Sind Sie sicher, dass Sie in diesem Verzeichnis installieren wollen?"/>
     <str id="TargetPanel.empty_target"
@@ -42,8 +46,14 @@
     <str id="TargetPanel.notwritable"
          txt="Sie haben ein Ziel eingegeben, welches nicht beschreibbar ist! Bitte wählen Sie ein anderes Verzeichnis aus!"/>
     <str id="TargetPanel.createdir"
-         txt="Das folgende Verzeichnis wird erstellt:" />         
-         
+         txt="Das folgende Verzeichnis wird erstellt:" />
+
+    <str id="JDKPathPanel.intro" txt="Für den Betrieb des Produktes wird ein JDK benötigt. Eine Java-Runtime-Umgebung (JRE) ist nicht ausreichend."/>
+    <str id="JDKPathPanel.info" txt="Pfad des JDK-Verzeichnisses:"/>
+    <str id="JDKPathPanel.badVersion1" txt="Der gewählte JDK hat die falsche Version (vorhanden: "/>
+    <str id="JDKPathPanel.badVersion2" txt=" benötigt: "/>
+    <str id="JDKPathPanel.badVersion3" txt=") Soll der JDK trotzdem benutzt werden?"/>
+
     <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus:"/>
     <str id="PacksPanel.tip" txt="Hinweis: die grau markierten Pakete können nicht optional ausgewählt werden."/>
     <str id="PacksPanel.space" txt="Erforderlicher Speicherplatz: "/>
