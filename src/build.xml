@@ -110,6 +110,9 @@
         Clean up of CustomActions added.
         New uninstaller-ext.jar with native helper stuff for native libs
            in uninstaller.
+    14.10.2004: (by Klaus Bartz)
+    	New izevent.jar with the base classes of the custom action stuff
+    	  to support creation of custom action jars without IzPack source tree
 
   Mini-HowTo:
 
@@ -175,6 +178,7 @@
     <property name="uninstaller.jar" value="${basedir}/lib/uninstaller.jar"/>
     <property name="uninstaller.manifest" value="${basedir}/src/uninstaller.manifest"/>
     <property name="uninstaller-ext.jar" value="${basedir}/lib/uninstaller-ext.jar"/>
+    <property name="izevent.jar" value="${basedir}/lib/izevent.jar"/>
 
     <property name="debug" value="off"/>
     <property name="debuglevel" value=""/>
@@ -595,13 +599,35 @@
         </antcall>
     </target>
 
+    <!-- Compiles the base custom action classes which should placed into
+         izevent.jar  -->
+    <target name="compile.listener_base" >
+        <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
+        deprecation="on" debug="${debug}" debuglevel="${debuglevel}"
+        classpath="${installer.jar};${compiler.jar}">
+            <include name="com/izforge/izpack/event/ActionBase.java"/>
+            <include name="com/izforge/izpack/event/Simple*nstallerListener.java"/>
+            <include name="com/izforge/izpack/event/InstallerListener.java"/>
+            <include name="com/izforge/izpack/event/UninstallerListener.java"/>
+        </javac>
+    </target>
+    <!-- Package izevent.jar  -->
+    <target name="build.listener_base" depends="compile.listener_base">
+        <delete file="${izevent.jar}" verbose="true"/>
+        <jar jarfile="${izevent.jar}" >
+            <fileset dir="${build.dir}">
+                <include name="com/izforge/izpack/event/*.class"/>
+                <exclude name="com/izforge/izpack/event/*Compiler*.class"/>
+            </fileset>
+        </jar>
+    </target>
     <!-- Compile a listener -->
-    <target name="compile.listener">
+    <target name="compile.listener" >
         <echo message="Compiles listener ${listener}"/>
         <mkdir dir="${bin.dir}/customActions/${listener-dir}"/>
         <javac srcdir="${src.dir}" 
                destdir="${bin.dir}/customActions/${listener-dir}" 
-               classpath="${installer.jar}" 
+               classpath="${installer.jar};${compiler.jar};${izevent.jar}" 
                optimize="on" 
                deprecation="on" 
                debug="${debug}"
@@ -612,9 +638,12 @@
 
     <!-- Make JAR for a listener -->
     <target name="compile.listener.finish">
+    	<unzip src="${izevent.jar}" dest="${bin.dir}/customActions/${listener}" />
         <jar jarfile="${bin.dir}/customActions/${listener}.jar">
             <fileset dir="${bin.dir}/customActions/${listener}">
                 <include name="**/*.class"/>
+                <exclude name="**/*${listener-exclude1}*.class"/>
+                <exclude name="**/*${listener-exclude2}*.class"/>
             </fileset>
         </jar>
     </target>
@@ -627,18 +656,50 @@
         </antcall>
         <antcall target="compile.listener.finish">
             <param name="listener" value="${listener}"/>
+            <param name="listener-exclude1" value="${listener-exclude1}"/>
+            <param name="listener-exclude2" value="${listener-exclude2}"/>
         </antcall>
     </target>
 
-    <!-- Compile all custom actions (listener) and put them at the right location -->
-     <target name="build.listener" depends="build.installer">
-       <!-- CUSTOM ACTION test START
+    <!-- simple installer listener -->
+    <target name="compile.installer-listener.simple">
         <antcall target="compile.listener.simple">
+            <param name="listener" value="${listener}"/>
+            <param name="listener-dir" value="${listener-dir}"/>
+            <param name="listener-include" value="${listener-include}"/>
+            <param name="listener-exclude1" value="Uninstaller"/>
+            <param name="listener-exclude2" value="_NO_MORE_EXCLUDES_"/>
+        </antcall>
+    </target>
+    <!-- simple uninstaller listener -->
+    <target name="compile.uninstaller-listener.simple">
+        <antcall target="compile.listener.simple">
+            <param name="listener" value="${listener}"/>
+            <param name="listener-dir" value="${listener-dir}"/>
+            <param name="listener-include" value="${listener-include}"/>
+            <param name="listener-exclude1" value="Installer"/>
+            <param name="listener-exclude2" value="_NO_MORE_EXCLUDES_"/>
+        </antcall>
+    </target>
+    <!-- simple compiler listener -->
+    <target name="compile.compiler-listener.simple">
+        <antcall target="compile.listener.simple">
+            <param name="listener" value="${listener}"/>
+            <param name="listener-dir" value="${listener-dir}"/>
+            <param name="listener-include" value="${listener-include}"/>
+            <param name="listener-exclude1" value="Installer"/>
+            <param name="listener-exclude2" value="Uninstaller"/>
+        </antcall>
+    </target>
+    <!-- Compile all custom actions (listener) and put them at the right location -->
+     <target name="build.listener" depends="build.compiler,build.installer,build.listener_base">
+       <!-- CUSTOM ACTION test START
+        <antcall target="compile.compiler-listener.simple">
             <param name="listener" value="ChmodCompilerListener"/>
             <param name="listener-dir" value="ChmodCompilerListener"/>
             <param name="listener-include" value="com/myCompany/tools/install/listener"/>
         </antcall>
-        <antcall target="compile.listener.simple">
+        <antcall target="compile.installer-listener.simple">
             <param name="listener" value="ChmodInstallerListener"/>
             <param name="listener-dir" value="ChmodInstallerListener"/>
             <param name="listener-include" value="com/myCompany/tools/install/listener"/>
