@@ -428,7 +428,12 @@ public class Installer
             contentPane.add(okButton);
 
             // Packs and centers
-            pack();
+            // Fix for bug "Installer won't show anything on OSX"
+            if(System.getProperty("mrj.version")==null)
+              pack();
+            else
+              setSize(getPreferredSize());
+              
             Dimension frameSize = getSize();
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             setLocation( (screenSize.width - frameSize.width) / 2,
