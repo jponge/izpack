@@ -10,7 +10,8 @@ $Id$
 -->
 
 <!-- The root element -->
-<!ELEMENT installation (preinstall?, info, variables?, guiprefs?, locale, resources?, panels,
+<!ELEMENT installation (preinstall?, info, properties?, variables?, 
+                        guiprefs?, locale, resources?, panels,
                         listeners?, packs, jar*, native*, postinstall?)>
     <!ATTLIST installation version CDATA #REQUIRED>
 
@@ -31,12 +32,20 @@ $Id$
     <!ELEMENT webdir (#PCDATA)>
     <!ELEMENT summarylogfilepath (#PCDATA)>
 
-<!-- The variables markup (variable declarations ) -->    
+<!-- The properties markup (property declarations) -->
+<!ELEMENT properties (property*)>
+    <!ELEMENT property EMPTY>
+        <!ATTLIST property name CDATA #IMPLIED>
+        <!ATTLIST property value CDATA #IMPLIED>
+        <!ATTLIST property file CDATA #IMPLIED>
+        <!ATTLIST property environment CDATA #IMPLIED>
+        <!ATTLIST property prefix CDATA #IMPLIED>
+        
+<!-- The variables markup (variable declarations) -->
 <!ELEMENT variables (variable*)>
     <!ELEMENT variable EMPTY>
         <!ATTLIST variable name CDATA #REQUIRED>
         <!ATTLIST variable value CDATA #REQUIRED>
-        
         
 <!-- The guiprefs markup (customizes the installer in GUI mode) -->
 <!ELEMENT guiprefs (laf*, modifier*)>

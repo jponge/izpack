@@ -1,4 +1,5 @@
   > 3.8.0 (build N/A)
+
 - Fixing bug with comboboxes. There was no text shown if you do not use a
   processor to generate the choices. At now you can us the id or txt attribute
   (Thorsten Kamann)
@@ -9,19 +10,22 @@
 - New SummaryPanel (Klaus Bartz).
 - New SummaryLoggerInstallerListener which loggs the summary
   into a log file (Klaus Bartz).
-  Langpack up-to-date check script (Oscar Sierra | Klaus Bartz).
-  Custom langpacks (Klaus Bartz).
-  New variable APPLICATIONS_DEFAULT_ROOT (Klaus Bartz).
-  Bugfix in MultiLineLabel; now a line break will be performed also
+- Langpack up-to-date check script (Oscar Sierra | Klaus Bartz).
+- Custom langpacks (Klaus Bartz).
+- New variable APPLICATIONS_DEFAULT_ROOT (Klaus Bartz).
+- Bugfix in MultiLineLabel; now a line break will be performed also
   it is needed at the last word of the line (Klaus Bartz).
 - Bugfix in JDKPathPanel: now it is possible to select an out-of-version
   JDK (Klaus Bartz).
+- Properties can be substituted at compile time from the environment,
+  command line, java properties, ant, or <property> tag (Chad McHenry)
 
 
   > 3.7.2 (build N/A)
 
 - IoHelper.getPrimaryGroup: bugfix for SunOS (Klaus Bartz).
 - Russian langpack fixes (Alexey Makhmutov).
+
   > 3.7.1 (build 2005.02.15)
 
 - The Danish langpack was empty by mistake in 3.7.0.
