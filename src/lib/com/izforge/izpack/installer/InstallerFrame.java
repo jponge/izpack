@@ -414,11 +414,54 @@ public class InstallerFrame extends JFrame
                       JOptionPane.YES_NO_OPTION);
             if (res == JOptionPane.YES_OPTION)
             {
+                wipeAborted();
                 Housekeeper.getInstance ().shutDown (0);
             }
         }
     }
-
+    
+    // Wipes the written files when you abort the installation
+    private void wipeAborted()
+    {
+        Iterator it;
+        
+        // We check for running unpackers
+        ArrayList unpackers = Unpacker.getRunningInstances();
+        it = unpackers.iterator();
+        while (it.hasNext())
+        {
+            Thread t = (Thread) it.next();
+            t.interrupt();
+            // The unpacker process might keep writing stuffs so we wait :-/
+            try { Thread.sleep(3000, 0); } catch (Exception e) { }
+        }
+        
+        // Wipes them all in 2 stages
+        UninstallData u  = UninstallData.getInstance();
+        it = u.getFilesList().iterator();
+        if (!it.hasNext())
+            return;
+        while (it.hasNext())
+        {
+            String p = (String) it.next();
+            File f = new File(p);
+            f.delete();
+        }
+        cleanWipe(new File(InstallData.getInstance().getInstallPath()));
+    }
+    
+    // Recursive files wiper
+    private void cleanWipe(File file)
+    {
+        if (file.isDirectory())
+        {
+            File[] files = file.listFiles();
+            int size = files.length;
+            for (int i = 0; i < size; i++) cleanWipe(files[i]);
+        }
+        file.delete();
+    }
+    
     // Launches the installation
     public void install(InstallListener listener)
     {
@@ -527,8 +570,7 @@ public class InstallerFrame extends JFrame
             JOptionPane.showMessageDialog(null, langpack.getString("installer.quit.message"),
                                          langpack.getString("installer.warning"),
                                          JOptionPane.ERROR_MESSAGE);
-
-
+            wipeAborted();
             Housekeeper.getInstance ().shutDown (0);
         }
     }

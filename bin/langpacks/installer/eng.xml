@@ -29,8 +29,8 @@
     <str id="HelloPanel.authors" txt="The author(s) of this software is(are) : "/>
     <str id="HelloPanel.url" txt="The software homepage is : "/>
     
-    <str id="LicencePanel.info" txt="Please read the following licence agreement :"/>
-    <str id="LicencePanel.agree" txt="Do you agree with this licence agreement ?"/>
+    <str id="LicencePanel.info" txt="Please read the following license agreement :"/>
+    <str id="LicencePanel.agree" txt="Do you agree with this license agreement ?"/>
     <str id="LicencePanel.yes" txt="Yes"/>
     <str id="LicencePanel.no" txt="No"/>
     

@@ -144,6 +144,7 @@ public class InstallPanel extends IzPanel implements ActionListener, InstallList
         parent.releaseGUI();
         parent.lockPrevButton();
         parent.unlockNextButton();
+        installButton.setIcon(parent.icons.getImageIcon("empty"));
         installButton.setEnabled(false);
         progressBar.setString(parent.langpack.getString("InstallPanel.finished"));
         progressBar.setEnabled(false);

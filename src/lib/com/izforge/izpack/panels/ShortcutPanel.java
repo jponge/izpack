@@ -229,6 +229,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
   /** This is set to true if the shortcut spec instructs to simulate running
       on an operating system that is not supported.  */
   private boolean             simulteNotSupported        = false;
+  /** Avoids bogus behaviour when the user goes back then returns to this panel.*/
+  private boolean             firstTime = true;
   
  /*--------------------------------------------------------------------------*/
  /**
@@ -373,6 +375,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener,
  /*--------------------------------------------------------------------------*/
   public void panelActivate ()
   {
+    if (firstTime)
+      firstTime = false;
+    else
+      return;
+    
     analyzeShortcutSpec ();
 
     if (shortcutsToCreate)

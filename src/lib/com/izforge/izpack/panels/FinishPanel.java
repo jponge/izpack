@@ -45,7 +45,6 @@ public class FinishPanel extends IzPanel implements ActionListener
     
     // The fields
     private BoxLayout layout;
-    private JLabel infoLabel;
     private HighlightJButton autoButton;
     private JPanel centerPanel;
     private VariableSubstitutor vs;
@@ -71,12 +70,6 @@ public class FinishPanel extends IzPanel implements ActionListener
         centerPanel.setLayout(layout);
         superLayout.addLayoutComponent(centerPanel, gbConstraints);
         add(centerPanel);
-        
-        // We create and put the labels
-        
-        centerPanel.add(Box.createVerticalStrut(20));
-        
-        infoLabel = new JLabel("", parent.icons.getImageIcon("information"), JLabel.TRAILING);
     }
     
     //.....................................................................
@@ -93,7 +86,6 @@ public class FinishPanel extends IzPanel implements ActionListener
     {
         parent.lockNextButton();
         parent.lockPrevButton();
-        
         if (idata.installSuccess)
         {
             // We prepare a message for the uninstaller feature
@@ -103,7 +95,8 @@ public class FinishPanel extends IzPanel implements ActionListener
                           "Uninstaller";
             
             // We set the information
-            infoLabel.setText(parent.langpack.getString("FinishPanel.success"));
+            centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.success"),
+                            parent.icons.getImageIcon("information"), JLabel.TRAILING));
             centerPanel.add(Box.createVerticalStrut(20));
             centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.uninst.info"),
                             parent.icons.getImageIcon("information"), JLabel.TRAILING));
@@ -119,7 +112,8 @@ public class FinishPanel extends IzPanel implements ActionListener
             centerPanel.add(autoButton);
         }
         else
-            infoLabel.setText(parent.langpack.getString("FinishPanel.fail"));
+            centerPanel.add(new JLabel(parent.langpack.getString("FinishPanel.fail"),
+                            parent.icons.getImageIcon("information"), JLabel.TRAILING));
     }
     
     // Actions-handling method

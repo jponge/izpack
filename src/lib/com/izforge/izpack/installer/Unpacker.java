@@ -46,6 +46,8 @@ public class Unpacker extends Thread
     private UninstallData udata;
     private String jarLocation;
     private VariableSubstitutor vs;
+    
+    static private ArrayList instances = new ArrayList();
 
     // The constructor
     public Unpacker(InstallData idata, InstallListener listener)
@@ -58,6 +60,12 @@ public class Unpacker extends Thread
         // Initialize the variable substitutor
         vs = new VariableSubstitutor(idata.getVariableValueMap());
     }
+    
+    // Returns the active unpacker instances
+    static public ArrayList getRunningInstances()
+    {
+        return instances;
+    }
 
     //.....................................................................
     // The methods
@@ -65,6 +73,7 @@ public class Unpacker extends Thread
     // The run method
     public void run()
     {
+        instances.add(this);
         try
         {
             listener.startUnpack();
@@ -195,6 +204,7 @@ public class Unpacker extends Thread
             listener.stopUnpack();
             listener.errorUnpack(err.toString());
         }
+        instances.remove(instances.indexOf(this));
     }
 
     // Puts the uninstaller
