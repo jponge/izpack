@@ -39,7 +39,7 @@ $Id$
     <!ATTLIST guiprefs resizable (yes|no) #REQUIRED>
     <!ATTLIST guiprefs width CDATA #REQUIRED>
     <!ATTLIST guiprefs height CDATA #REQUIRED>
-    <!ELEMENT laf (os+, lafparam*)>
+    <!ELEMENT laf (os+, param*)>
     <!ATTLIST laf name CDATA #REQUIRED>
     <!ELEMENT param EMPTY>
     <!ATTLIST param

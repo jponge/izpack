@@ -77,19 +77,6 @@ will do that. If the resource isn't specified, no picture will be displayed at
 all. \textsl{GIF}, \textsl{JPEG} and
 \textsl{PNG} pictures are supported starting from J2SE 1.3.\\
 
-% Native LAF installers
-\section{Native-looking installers}
-
-When using standard installers, it is possible to make them use the native
-look and feel as provided by the JRE
-(\texttt{UIManager.getNativeLookAndFeelClassName()}). To do that, just create
-a 0-bytes file and add it as a resource with \texttt{useNativeLAF} as its ID.
-That's all you have to do. If the JRE can't provide a native look and feel, then
-the standard Metal look and feel will be used.\\
-
-This feature should make happy a lot of users with the JDK 1.4.2 which
-introduces native look and feel bindings for Windows XP and GTK+. I know it will
-work like that for Windows XP but I'm not sure as far as GTK+ is concerned.\\
 
 % Web Installers
 \section{Web Installers}

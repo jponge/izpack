@@ -222,7 +222,7 @@ available in future versions of \IzPack. The arguments to specify are :
   \item \texttt{resizable} : takes \texttt{yes} or \texttt{no} and indicates
   whether the window size can be changed or not.
   \item \texttt{width} : sets the initial window width
-  \item \texttt{height} : sets the initial window height
+  \item \texttt{height} : sets the initial window height.
   
 \end{itemize}\
 
@@ -232,6 +232,70 @@ Here's a sample :
 <guiprefs resizable="no" width="800" height="600"/>
 \end{verbatim}
 \normalsize
+
+Starting from IzPack 3.6, the look and feel can be specified in this section on
+a per-OS basis. For instance you can use the native look and feels on Win32 and
+OS X but use a third-party one on Unix-like platforms. To do that, you have to
+add some children to the \texttt{guiprefs} tag:
+\begin{itemize}
+
+  \item \texttt{laf}: the tag that specifies a look and feel. It has a
+  \texttt{name} parameter that defines the look and feel name.
+  \item Each \texttt{laf} element needs at least one \texttt{os} tag, specified
+  like in the other parts of the specification that support this tag.
+  \item Like you can add \texttt{os} elements, you can add any number of
+  \texttt{param} elements to customize a look and feel. A \texttt{param}
+  elements has two attribues: \texttt{name} and \texttt{value}.
+
+\end{itemize}\
+
+The available look and feels are:
+\begin{itemize}
+
+  \item Kunststoff: \texttt{kunststoff}
+  \item Liquid: \texttt{liquid}
+  \item Metouia: \texttt{metouia}
+  \item JGoodies Looks: \texttt{looks}
+
+\end{itemize}\
+
+If you don't specify a look and feel for a particular operating system, then the
+default native one will be used: Windows on Windows, Aqua on Mac OS X and Metal
+on the Unix-like variants.\\
+
+The \textit{Liquid Look and Feel} supports the following parameters:
+\begin{itemize}
+
+  \item \texttt{decorate.frames}: \texttt{yes} means that it will render the
+  frames in Liquid style
+  \item \texttt{decorate.dialogs}: \texttt{yes} means that it will render the
+  dialogs in Liquid style
+
+\end{itemize}\
+
+The \textit{JGoodies Looks} look and feel can be specified by using the
+\texttt{variant} parameters. The values can be one of:
+\begin{itemize}
+
+  \item \texttt{extwin}: use the Windows Extension look
+  \item \texttt{plastic}: use the basic Plastic look
+  \item \texttt{plastic3D}: use the Plastic 3D look
+  \item \texttt{plasticXP}: use the Plastic XP look (default).
+
+\end{itemize}\
+
+Here is a small sample:
+\begin{verbatim}
+<guiprefs height="600" resizable="yes" width="800">
+    <laf name="metouia">
+        <os family="unix" />
+    </laf>
+    <laf name="looks">
+        <os family="windows" />
+        <param name="variant" value="extwin" />
+    </laf>
+</guiprefs>
+\end{verbatim}
 
 \subsection{The Localization Element \texttt{<locale>}}
 
