@@ -1052,7 +1052,7 @@ public class Compiler extends Thread
         if (dir.list().length == 0)
         {
           instPath = relPath + File.separator + dirs[i];
-          pathLimit = instPath.indexOf(dir.getName());
+          pathLimit = instPath.lastIndexOf(dir.getName());
           instPath = instPath.substring(0, pathLimit);
           addFile(dir, instPath, osList, override, list);
         }

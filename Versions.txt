@@ -1,5 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.5.2 (build 2004.xx.yy)
+
+- Fixed moving empty directory to root (pbe@whitestein.com).
+
   > 3.5.1 (build 2004.03.16)
 
 - No custom look and feel will be applied on Mac platforms (Chad McHenry).
