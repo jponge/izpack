@@ -13,12 +13,9 @@ you already know that \texttt{doc} contains this documentation :-)\\
 So let's go into \texttt{bin/}. The \texttt{icons/} directory contains some
 directories for your system, in case you would like an icon to launch a
 component of \IzPack. But the most important things you can see in \texttt{bin}
-are the \texttt{izpack-fe} and \texttt{compile} scripts (in both Unix* and
-Windows formats). \texttt{izpack-fe} will launch the GUI based frontend of
-\IzPack. It gives you the ability to prepare an installation XML file and
-compile it to generate your installer. \texttt{compile} is used to compile a
-ready-to-go XML installation file from a command-line context or from an
-external tool.\\
+are the texttt{compile} scripts (in both Unix* and Windows formats).
+\texttt{compile} is used to compile a ready-to-go XML installation file from
+a command-line context or from an external tool.\\
 
 \noindent
 \textit{Note : these scripts can be launched from anywhere on your system as the
@@ -39,23 +36,7 @@ $ java -jar install.jar
 \end{verbatim}
 
 There you are! The first command has produced the installer and the
-second one did launch it. You can do the same thing by using the
-frontend. You launch it with the \texttt{izpack-fe} script located in
-\texttt{bin/}.\\
-
-\fbox{\includegraphics[scale=0.30]{img/ch1-import}}Like on
-the picture, import the file by selecting it from the \texttt{sample/}
-directory. Then you will be asked for a base path, just go one directory
-back and select \texttt{sample/}. The different fields of the frontend
-should be filled properly. To compile the installer, just go into the
-\textit{compile} menu and select a \textit{standard} kind of installer.
-It will ask you for an output file name, just enter install.jar. The
-building process should work just as smooth as in command-line mode.\\
-
-\noindent
-\textbf{Important note: the current frontend is deprecated ! The project is
-looking for people to take over the development of a new one. Do not hesitate
-to volunteer.}
+second one did launch it.
 
 % The IzPack Architecture
 \section{The \IzPack Architecture}
@@ -69,7 +50,6 @@ The compilation system (see figure \ref{comparch}) is quite modular.
 Indeed, you can use the compiler in 3 ways :
 \begin{itemize}
   \item from a command-line
-  \item from the GUI frontend (\textbf{note: the current one is deprecated !})
   \item from Jakarta Ant
 \end{itemize}\
 

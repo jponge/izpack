@@ -90,6 +90,9 @@
     
     19.09.2003: (by Julien Ponge)
         Added a run.installer target to test an installer.
+    
+    06.12.2003: (by Julien Ponge)
+        Removed the frontend-related sections.
 
   Mini-HowTo:
 
@@ -154,8 +157,6 @@
     <property name="installer.manifest" value="${basedir}/src/installer.manifest"/>
     <property name="uninstaller.jar" value="${basedir}/lib/uninstaller.jar"/>
     <property name="uninstaller.manifest" value="${basedir}/src/uninstaller.manifest"/>
-    <property name="frontend.jar" value="${basedir}/lib/frontend.jar"/>
-    <property name="frontend.manifest" value="${basedir}/src/frontend.manifest"/>
 
     <property name="debug" value="off"/>
 
@@ -370,50 +371,6 @@
         </jar>
     </target>
 
-    <!-- Compiles the frontend src files -->
-    <target name="compile.frontend" depends="prepare">
-        <javac srcdir="${src.dir}" destdir="${build.dir}" classpath="${basedir}/lib/kunststoff.jar:${basedir}/lib/compiler.jar" optimize="on" deprecation="on" debug="${debug}">
-            <include name="com/izforge/izpack/*.java"/>
-            <include name="com/izforge/izpack/gui/*.java"/>
-            <include name="com/izforge/izpack/frontend/*.java"/>
-            <include name="net/n3/nanoxml/*.java"/>
-        </javac>
-    </target>
-
-    <!-- Package frontend.jar -->
-    <target name="frontend.manifest">
-        <manifest file="${frontend.manifest}">
-            <attribute name="Built-By" value="IzPack"/>
-            <attribute name="Class-Path" value="compiler.jar kunststoff.jar"/>
-            <attribute name="Main-Class" value="com.izforge.izpack.frontend.Frontend"/>
-            <section name="com/izforge/izpack/frontend/">
-                <attribute name="Specification-Title" value="IzPack frontend"/>
-                <attribute name="Specification-Version" value="${rel}"/>
-                <attribute name="Specification-Vendor" value="IzPack."/>
-                <attribute name="Implementation-Title" value="IzPack frontend"/>
-                <attribute name="Implementation-Version" value="${ver}"/>
-                <attribute name="Implementation-Vendor" value="IzPack."/>
-            </section>
-        </manifest>
-    </target>
-    <target name="build.frontend" depends="compile.frontend, frontend.manifest">
-        <echo message="Build ${frontend.jar}"/>
-        <delete file="${frontend.jar}" verbose="true"/>
-        <jar jarfile="${frontend.jar}" manifest="${frontend.manifest}">
-            <fileset dir="${build.dir}">
-                <include name="com/izforge/izpack/*.class"/>
-                <include name="com/izforge/izpack/gui/*.class"/>
-                <include name="com/izforge/izpack/frontend/*.class"/>
-                <include name="com/izforge/izpack/util/OsConstraint.class"/>
-                <include name="net/n3/nanoxml/*.class"/>
-            </fileset>
-            <fileset dir="${src.dir}">
-                <include name="com/izforge/izpack/frontend/*.xml"/>
-            </fileset>
-            <fileset dir="${img.dir}/frontend"/>
-        </jar>
-    </target>
-
     <!-- Compile a panel -->
     <target name="compile.panel">
         <echo message="Compiles panel ${panel}"/>
@@ -572,7 +529,7 @@
     </target>
 
     <!-- Builds all compilation targets -->
-    <target name="all" depends="build.compiler,build.installer,build.uninstaller,build.frontend,build.panels,build.standalone-compiler"/>
+    <target name="all" depends="build.compiler,build.installer,build.uninstaller,build.panels,build.standalone-compiler"/>
 
     <!-- Builds the Javadoc -->
     <target name="build.javadoc" depends="prepare">

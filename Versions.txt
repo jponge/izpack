@@ -2,6 +2,8 @@
 
   > x.y.z. (build x.y.z)
 
+- The frontend which had been deprecated in 3.3.0 has been removed. There won't
+  be another frontend until someone volunteers to make a new one.
 - The files executor has been fixed when dealing with classpath arguments
   passing.
 

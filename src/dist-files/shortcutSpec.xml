@@ -3,7 +3,8 @@
 <shortcuts>
 
   <programGroup defaultName="IzPack" location="applications"/>
-  
+
+<!--  
   <shortcut
      name="IzPack"
      programGroup="yes"
@@ -21,6 +22,7 @@
      <createForPack name="Core"/>
      
    </shortcut>
+-->
 
    <shortcut
      name="Documentation"
