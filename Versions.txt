@@ -1,14 +1,14 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.5.3 (build 2004.xx.yy)
+  > 3.5.3 (build 2004.05.15)
 
 - German langpack punctuation fixes (jonelo).
 - TargetPanel: the target path could be written several times in the automated
-install XML descriptor (bug #1864).
+  install XML descriptor (bug #1864).
 - TargetPanel: the path is now always converted to absolute (could cause
-problems in variables substitutions). (bug #1866).
+  problems in variables substitutions). (bug #1866).
 - Target Panel: the path input field could be a bit short if a picture was used.
-Fixed by Klaus Bartz (bug #1875).
+  Fixed by Klaus Bartz (bug #1875).
 - German langpack: spelling correction (Dustin Sacks)
 - Fixed probelems creating a web-kunststoff installer (bug #1904)
 - IzPack installer: simpler and refreshed readme text.
