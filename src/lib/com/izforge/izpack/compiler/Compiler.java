@@ -388,13 +388,13 @@ public class Compiler extends Thread
         else if ("uninstall".equalsIgnoreCase(val))
           executable.executionStage = ExecutableFile.UNINSTALL;
 
-        // main class  of this executable
-        String executeClass = e.getAttribute("class");
-
         // type of this executable
         val = e.getAttribute("type", "bin");
         if ("jar".equalsIgnoreCase(val))
+        {
           executable.type = ExecutableFile.JAR;
+          executable.mainClass = e.getAttribute("class"); // executable class
+        }
 
         // what to do if execution fails
         val = e.getAttribute("failure", "ask");

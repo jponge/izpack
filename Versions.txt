@@ -3,6 +3,7 @@
   > 3.6.1 (build 2004.xx.yy)
 
 - Slovak translation updates (Milan Madzia).
+- Java class execution bug fix (Erik Artzmark).
 
   > 3.6.0 (build 2004.07.28)
 
