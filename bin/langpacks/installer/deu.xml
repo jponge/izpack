@@ -27,7 +27,7 @@
     <str id="HelloPanel.url" txt="Die Homepage für diese Software : "/>
     <str id="LicencePanel.info" txt="Bitte lesen Sie die folgenden Lizenzvereinbarungen durch :"/>
     <str id="LicencePanel.agree" txt="Stimmen Sie diesen Lizenzvereinbarungen zu ?"/>
-    <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>
+    <str id="LicencePanel.notagree" txt="Nein, ich stimme diesen Lizenzvereinbarungen nicht zu."/>
     <str id="LicencePanel.yes" txt="Ja"/>
     <str id="LicencePanel.no" txt="Nein"/>
     <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen :"/>
