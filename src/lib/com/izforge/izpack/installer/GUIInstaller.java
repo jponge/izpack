@@ -165,13 +165,27 @@ public class GUIInstaller extends InstallerBase
     if (npacks == 0) throw new Exception("no language pack available");
     String selectedPack;
 
+    // Dummy Frame
+    JFrame frame = new JFrame();
+    frame.setIconImage( new ImageIcon(
+      this.getClass().getResource( "/img/JFrameIcon.png" )).getImage() );
+
+    Dimension frameSize = frame.getSize();
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    frame.setLocation((screenSize.width - frameSize.width) / 2,
+      (screenSize.height - frameSize.height) / 2 - 10);
+
     // We get the langpack name
     if (npacks != 1)
     {
-      LanguageDialog picker = new LanguageDialog(availableLangPacks.toArray());
+      LanguageDialog picker = new LanguageDialog(frame, availableLangPacks.toArray());
       picker.setSelection(Locale.getDefault().getISO3Country().toLowerCase());
       picker.setModal(true);
+      picker.toFront();
+      frame.show();
       picker.show();
+      frame.hide();
+
 
       selectedPack = (String) picker.getSelection();
       if (selectedPack == null) throw new Exception("installation canceled");
