@@ -53,6 +53,11 @@
     <str id="PacksPanel.tip" txt="Note : les paquetages grisés ne sont pas optionnels."/>
     <str id="PacksPanel.space" txt="Espace total requis :" />
     <str id="PacksPanel.description" txt="Description"/>
+    <str id="PacksPanel.freespace" txt="Espace disque disponible :"/>
+    <str id="PacksPanel.dependencyList" txt="Les paquetages selectionnés nécessitent également les suivants :"/>
+    <str id="ImgPacksPanel.dependencyList" txt="Dépendences"/>
+  	<str id="PacksPanel.notEnoughSpace" txt="L'espace disque disponible est insuffisant."/>
+    <str id="PacksPanel.notAscertainable" txt="incertain"/>
     
     <str id="InstallPanel.info" txt="Vous pouvez lancer le processus d'installation ici :"/>
     <str id="InstallPanel.install" txt="Installer !"/>
