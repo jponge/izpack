@@ -2,6 +2,9 @@
 
   > x.y.z (build xxxx.yy.zz)
 
+- Swedish localization updates from Dennis Lundberg
+  * Localized Path for "Program Files" for ShortcutPanel
+  * more swedish translations / fixes for installer and frontend
 - InstallPanel: the overall progress bar makes steps forward only after a pack
   has been fully processed. The previous behaviour was to step forward at the
   beginning of a pack extraction.

@@ -67,16 +67,16 @@
     <str id="tabs.info.appname" txt="Applikationsnamn :"/>
     <str id="tabs.info.appversion" txt="Applikationsversion :"/>
     <str id="tabs.info.appurl" txt="Applikationens hemsida URL :"/>
-    <str id="tabs.info.authorslist" txt="Författar lista :"/>
+    <str id="tabs.info.authorslist" txt="Författarlista :"/>
     <str id="tabs.info.author" txt="Författarens namn :"/>
     <str id="tabs.info.email" txt="Författarens epost :"/>
     <str id="tabs.info.add" txt="Lägg till författare"/>
     <str id="tabs.info.del" txt="Ta bort författare"/>
-    <str id="tabs.info.width" txt="Fönster bredd :"/>
-    <str id="tabs.info.height" txt=" Fönster höjd :"/>
+    <str id="tabs.info.width" txt="Fönsterbredd :"/>
+    <str id="tabs.info.height" txt=" Fönsterhöjd :"/>
     <str id="tabs.info.resizable" txt="Fönstret kan ändra storlek"/>
     
-    <str id="tabs.loc.title" txt="Lokaler"/>
+    <str id="tabs.loc.title" txt="Språkpaket"/>
     <str id="tabs.loc.available" txt="Tillgängliga språkpaket :"/>
     <str id="tabs.loc.selected" txt="Valda språkpaket :"/>
     <str id="tabs.loc.include" txt="Inkludera"/>
@@ -104,10 +104,10 @@
     <str id="tabs.packs.addfile" txt="Lägg till fil eller katalog"/>
     <str id="tabs.packs.delfile" txt="Ta bort fil eller katalog"/>
     <str id="tabs.packs.parsable" txt="Den här filen är tolkningsbar"/>
-    <str id="tabs.packs.pack_name" txt="Paket namn :"/>
-    <str id="tabs.packs.pack_desc" txt="Paket beskrivning :"/>
-    <str id="tabs.packs.target" txt="Mål katalog"/>
-    <str id="tabs.packs.scriptProps" txt="Tolk inställningar ..."/>
+    <str id="tabs.packs.pack_name" txt="Paketnamn :"/>
+    <str id="tabs.packs.pack_desc" txt="Paketbeskrivning :"/>
+    <str id="tabs.packs.target" txt="Målkatalog"/>
+    <str id="tabs.packs.scriptProps" txt="Tolkinställningar ..."/>
     <str id="tabs.packs.f_type" txt="Filtyp ? (lämna tomt för förvalt värde)"/>
     <str id="tabs.packs.f_enc" txt="Filkodning ? (lämna tomt för förvalt värde)"/>
 
