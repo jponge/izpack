@@ -10,6 +10,8 @@
 - Panels can be from any package (Chad McHenry)
 - Uninstaller not included, if it is not to be written anyway (Chad McHenry).
 - Packagers refactorings.
+- Changed the JFrame icon shown in the installers and uninstallers.
+- New SimpleFinishPanel that don't have the automated installers feature.
 
   > 3.5.4 (build 2004.xx.yy)
 

@@ -99,6 +99,9 @@
     
     18.02.2004: (by Julien Ponge)
         New installer naming scheme (IzPack-install-{version}.jar).
+    
+    29.05.2004: (by Julien Ponge)
+    	New SimpleFinishPanel.
 
   Mini-HowTo:
 
@@ -518,6 +521,10 @@
         <antcall target="compile.panel.simple">
             <param name="panel" value="SudoPanel" />
             <param name="panel-dir" value="SudoPanel" />
+        </antcall>
+    	<antcall target="compile.panel.simple">
+            <param name="panel" value="SimpleFinishPanel"/>
+            <param name="panel-dir" value="SimpleFinishPanel"/>
         </antcall>
     </target>
 

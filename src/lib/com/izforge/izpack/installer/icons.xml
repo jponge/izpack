@@ -19,6 +19,7 @@
     <icon res="/img/compfile.png" id="import"/>
     <icon res="/img/compfile.png" id="refresh_cycle"/>
     <icon res="/img/JFrameIcon.png" id="JFrameIcon"/>
+    <icon res="/img/check32.png" id="check"/>
     
     <sysicon res="/img/ascii.png" id="FileView.fileIcon" />
     <sysicon res="/img/error.png" id="OptionPane.errorIcon" />
