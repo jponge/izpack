@@ -256,7 +256,8 @@ public class FileExecutor
     String[] output = new String[2];
     String pathSep = System.getProperty("path.separator");
     String osName = System.getProperty("os.name").toLowerCase();
-    String permissions = (System.getProperty("user.name").equals("root")) ? "a+x" : "u+x";
+    //String permissions = (System.getProperty("user.name").equals("root")) ? "a+x" : "u+x";
+    String permissions = "a+x";
 
     // loop through all executables
     Iterator efileIterator = files.iterator();

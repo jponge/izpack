@@ -16,6 +16,8 @@
 - Small documentation typing errors fixed.
 - Added an install target to the documentation Makefile.
 - Frontend: Jar files could be listed in the panels tab. Fixed.
+- The scripts execution flag is now set to every users on Unix-like systems 
+  (chmod a+x), regardless of who the user is (i.e. root or a single user).
 
   > 3.1.0b (build 2003.08.22)
 
