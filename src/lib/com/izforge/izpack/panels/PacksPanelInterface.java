@@ -1,4 +1,5 @@
 /*
+ *  $Id$
  *  IzPack
  *  Copyright (C) 2004 Gaganis Giorgos
  *

@@ -1,4 +1,5 @@
  /*
+ *  $Id$
  *  IzPack
  *  Copyright (C) 2001-2004 Julien Ponge
  *
