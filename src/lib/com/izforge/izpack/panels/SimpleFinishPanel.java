@@ -35,6 +35,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -104,9 +105,9 @@ public class SimpleFinishPanel extends IzPanel
     if (idata.installSuccess)
     {
       // We set the information
-      centerPanel.add(new JLabel(parent.icons.getImageIcon("check")));
+      centerPanel.add(LabelFactory.create(parent.icons.getImageIcon("check")));
       centerPanel.add(Box.createVerticalStrut(20));
-      centerPanel.add(new JLabel(parent.langpack
+      centerPanel.add(LabelFactory.create(parent.langpack
           .getString("FinishPanel.success"), parent.icons
           .getImageIcon("information"), JLabel.TRAILING));
       centerPanel.add(Box.createVerticalStrut(20));
@@ -117,10 +118,10 @@ public class SimpleFinishPanel extends IzPanel
         String path = translatePath("$INSTALL_PATH") + File.separator
             + "Uninstaller";
 
-        centerPanel.add(new JLabel(parent.langpack
+        centerPanel.add(LabelFactory.create(parent.langpack
             .getString("FinishPanel.uninst.info"), parent.icons
             .getImageIcon("information"), JLabel.TRAILING));
-        centerPanel.add(new JLabel(path, parent.icons.getImageIcon("empty"),
+        centerPanel.add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
             JLabel.TRAILING));
       }
     }
