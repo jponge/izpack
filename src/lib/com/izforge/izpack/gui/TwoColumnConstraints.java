@@ -34,7 +34,7 @@ import java.awt.Component;
  * @version  0.0.1 / 11/15/02
  * @author   Elmar Grom
  */
-public class TwoColumnConstraints
+public class TwoColumnConstraints implements Cloneable
 {
   // these numbers are arbitrary - this way, there's a lower chance
   // of somebody using the number instead of the symbolic name
@@ -74,9 +74,8 @@ public class TwoColumnConstraints
   *
   * @return    a copy of this <code>TwoColumnConstraints</code>
   */
-  public Object clone () throws CloneNotSupportedException
+  public Object clone ()
   {
-    super.clone();
     TwoColumnConstraints newObject = new TwoColumnConstraints ();
 
     newObject.position  = position;

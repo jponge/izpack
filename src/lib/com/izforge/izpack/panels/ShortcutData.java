@@ -56,14 +56,6 @@ public class ShortcutData implements Cloneable
  /*--------------------------------------------------------------------------*/
   public Object clone () throws OutOfMemoryError
   {
-    try
-    {
-      super.clone();
-    }
-    catch (CloneNotSupportedException e)
-    {
-      e.printStackTrace();
-    }
     ShortcutData result = new ShortcutData ();
 
     result.type              = type;
