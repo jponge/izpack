@@ -15,6 +15,7 @@
 - com.izforge.izpack.util.OsConstraint was missing in uninstaller.jar .
 - Small documentation typing errors fixed.
 - Added an install target to the documentation Makefile.
+- Frontend: Jar files could be listed in the panels tab. Fixed.
 
   > 3.1.0b (build 2003.08.22)
 

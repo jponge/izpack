@@ -219,7 +219,11 @@ public class FrontendPanTab extends FrontendTab implements ActionListener
     {
       // We get the panels list
       File dir = new File(PAN_DIR);
-      String[] panels = dir.list();
+      String[] panels = dir.list(new FilenameFilter() {
+        public boolean accept(File dir, String name) {
+          return !name.endsWith(".jar");
+        }
+      });
 
       // We initialize our vectors
       avPans = new Vector();
