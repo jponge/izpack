@@ -50,7 +50,7 @@ clean:	subdirs
 	rm -rf pdf
 	rm -rf ps
 	rm -rf html
-	[ -d ../../doc/izpack ] && rm -rf ../../doc/izpack
+	rm -rf ../../doc/izpack
 
 # Install
 .PHONY: install
