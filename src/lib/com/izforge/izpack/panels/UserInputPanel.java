@@ -1123,7 +1123,7 @@ public class UserInputPanel extends IzPanel
       {
         String processorClass = ((XMLElement)choices.elementAt (i)).getAttribute("processor");
 
-        if (!"".equals(processorClass))
+        if (processorClass != null && !"".equals(processorClass))
         {
                         String choiceValues = "";
                 try
