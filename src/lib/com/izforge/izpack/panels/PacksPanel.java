@@ -348,7 +348,7 @@ public class PacksPanel
           return new Integer(val);
 
         case 1 :
-        	if (pack.id == null || pack.id.equals("")){
+        	if (langpack == null || pack.id == null || pack.id.equals("")){
         		return pack.name;
         	}else{
         		return langpack.getString(pack.id);
@@ -396,7 +396,7 @@ public class PacksPanel
     {
       Pack pack = (Pack) idata.availablePacks.get(i);
       String desc = "";
-      if (pack.id != null && !pack.id.equals(""))
+      if (langpack != null && pack.id != null && !pack.id.equals(""))
       {
         desc = langpack.getString(pack.id+".description");
       }

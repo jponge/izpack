@@ -50,11 +50,7 @@ import org.apache.regexp.RE;
 import org.apache.regexp.RECompiler;
 import org.apache.regexp.RESyntaxException;
 
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.ParsableFile;
-import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.*;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.FileExecutor;
@@ -86,6 +82,12 @@ public class Unpacker extends Thread
   /**  The absolute path of the installation. (NOT the canonical!) */
   private File absolute_installpath;
 
+  /** The packs locale database. */
+  private LocaleDatabase langpack = null;
+
+  /** The name of the XML file that specifies the panel langpack */
+  private static final String LANG_FILE_NAME = "packsLang.xml";
+
   /**
    *  The constructor.
    *
@@ -97,6 +99,13 @@ public class Unpacker extends Thread
     AbstractUIProgressHandler handler)
   {
     super("IzPack - Unpacker thread");
+    try
+    {
+      String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
+      this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
+    }
+    catch (Throwable exception)
+    {}
 
     this.idata = idata;
     this.handler = handler;
@@ -144,13 +153,26 @@ public class Unpacker extends Thread
         int n = idata.allPacks.indexOf(packs.get(i));
 
         // Custom action listener stuff --- beforePack ----
-        informListeners(customActions, InstallerListener.BEFORE_PACK,packs.get(i), 
+        informListeners(customActions, InstallerListener.BEFORE_PACK,packs.get(i),
           new Integer(npacks), handler);
         ObjectInputStream objIn = new ObjectInputStream(getPackAsStream(n));
 
         // We unpack the files
         int nfiles = objIn.readInt();
-        handler.nextStep(((Pack) packs.get(i)).name, i + 1, nfiles);
+
+          //We get the internationalized name of the pack
+          final Pack pack = ((Pack) packs.get(i));
+          String stepname = pack.name;//the message to be passed to the installpanel
+          if(langpack !=null && !(pack.id == null || pack.id.equals("")) )
+          {
+
+            final String name = langpack.getString(pack.id);
+            if(name !=null && !name.equals(""))
+            {
+              stepname = name;
+            }
+          }
+          handler.nextStep(stepname, i + 1, nfiles);
         for (int j = 0; j < nfiles; j++)
         {
           // We read the header
@@ -164,7 +186,7 @@ public class Unpacker extends Thread
             File dest = pathFile;
             if (! pf.isDirectory())
               dest = pathFile.getParentFile();
-            
+
             if (!dest.exists())
             {
               // If there are custom actions which would be called at
@@ -184,12 +206,12 @@ public class Unpacker extends Thread
                 }
               }
             }
-            
+
             if (pf.isDirectory())
               continue;
 
             // Custom action listener stuff --- beforeFile ----
-            informListeners(customActions, InstallerListener.BEFORE_FILE,pathFile, 
+            informListeners(customActions, InstallerListener.BEFORE_FILE,pathFile,
               pf, null);
             // We add the path to the log,
             udata.addFile(path);
@@ -214,7 +236,7 @@ public class Unpacker extends Thread
                   // (this is not 100% perfect, because the already existing file might
                   // still be modified but the new installed is just a bit newer; we would
                   // need the creation time of the existing file or record with which mtime
-                  // it was installed...) 
+                  // it was installed...)
                   overwritefile = (pathFile.lastModified() < pf.lastModified());
                 } else
                 {
@@ -287,9 +309,9 @@ public class Unpacker extends Thread
             if (pf.lastModified() >= 0)
               pathFile.setLastModified(pf.lastModified());
             // Custom action listener stuff --- afterFile ----
-            informListeners(customActions, InstallerListener.AFTER_FILE,pathFile, 
+            informListeners(customActions, InstallerListener.AFTER_FILE,pathFile,
               pf, null);
-  
+
 
           } else
           {
