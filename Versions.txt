@@ -1,5 +1,15 @@
 [ The list of the different public versions of IzPack ]
 
+    > 3.0.0 (build 2002.08.13)
+
+- First stable release of the 3.x series ;-)
+- Ant task : the trailing '/' is appended on the IzPack directory when it is 
+  omitted (Gareth Cronin).
+- Many improvements on the documentation which should be quite fine - Elmar Grom
+  helped a lot on this.
+- Updated ant.jar from the Ant 1.5 stable release.
+- German language pack fixes by Jonelo.
+
     > 3.0.0 rc3 (build 2002.07.28)
 
 - The Japanese langpack has been fixed by Akky Akimoto (now Windows shortcuts

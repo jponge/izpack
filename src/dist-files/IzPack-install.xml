@@ -21,7 +21,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.0.0 rc3 (build 2002.07.28)</appversion>
+        <appversion>3.0.0 (build 2002.08.13)</appversion>
         <authors>
             <author email="julien@izforge.com" name="Julien PONGE"/>
         </authors>
