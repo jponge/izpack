@@ -982,8 +982,13 @@ public class Compiler extends Thread
     info.setAppVersion(requireContent(requireChildNamed(root, "appversion")));
 
     // validate and insert app URL
-    URL appURL = requireURLContent(requireChildNamed(root, "url"));
-    info.setAppURL(appURL.toString());
+    final XMLElement URLElem = root.getFirstChildNamed("url");
+    if(URLElem != null)
+    {
+      URL appURL = requireURLContent(URLElem);
+      info.setAppURL(appURL.toString());
+    }else
+      info.setAppURL(null);
 
     // We get the authors list
     XMLElement authors = root.getFirstChildNamed("authors");
