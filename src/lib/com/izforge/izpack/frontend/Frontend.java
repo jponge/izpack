@@ -99,7 +99,7 @@ public class Frontend
     String title = langpack.getString("frontend.title");
 
     // We launch the GUI
-    FrontendFrame fef = new FrontendFrame(title, langpack);
+    new FrontendFrame(title, langpack);
   }
 
 
@@ -186,7 +186,7 @@ public class Frontend
     // Launches the GUI
     try
     {
-      Frontend fe = new Frontend();
+      new Frontend();
     }
     catch (Exception err)
     {

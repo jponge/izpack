@@ -730,7 +730,7 @@ public class Compiler extends Thread
         String src_attr = f.getAttribute ("src");
         if (src_attr == null)
         {
-          throw new Exception ("missing \"src\" attribute for <file> in line "+f.getLineNr());
+          throw new Exception ("missing \"src\" attribute for <singlefile> in line "+f.getLineNr());
         }
 
         String path;

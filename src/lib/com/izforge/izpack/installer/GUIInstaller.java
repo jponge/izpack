@@ -49,7 +49,7 @@ public class GUIInstaller extends InstallerBase
   private InstallData installdata;
 
   /**  The L&F. */
-  private String lnf;
+  protected String lnf;
 
 
   /**
@@ -185,7 +185,7 @@ public class GUIInstaller extends InstallerBase
    *
    * @exception  Exception  Description of the Exception
    */
-  private void loadLookAndFeel() throws Exception
+  protected void loadLookAndFeel() throws Exception
   {
     if (this.installdata.kind.equalsIgnoreCase("standard") ||
       this.installdata.kind.equalsIgnoreCase("web"))
@@ -244,7 +244,7 @@ public class GUIInstaller extends InstallerBase
     UIManager.put("OptionPane.cancelButtonText", installdata.langpack.getString("installer.cancel"));
 
     String title = installdata.langpack.getString("installer.title") + this.installdata.info.getAppName();
-    InstallerFrame installerFrame = new InstallerFrame(title, this.installdata);
+    new InstallerFrame(title, this.installdata);
   }
 
 

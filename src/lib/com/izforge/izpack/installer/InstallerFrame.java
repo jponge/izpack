@@ -56,25 +56,25 @@ public class InstallerFrame extends JFrame
   public LocaleDatabase langpack;
 
   /**  The installation data. */
-  private InstallData installdata;
+  protected InstallData installdata;
 
   /**  The icons database. */
   public IconsDatabase icons;
 
   /**  The panels container. */
-  private JPanel panelsContainer;
+  protected JPanel panelsContainer;
 
   /**  The frame content pane. */
-  private JPanel contentPane;
+  protected JPanel contentPane;
 
   /**  The previous button. */
-  private JButton prevButton;
+  protected JButton prevButton;
 
   /**  The next button. */
-  private JButton nextButton;
+  protected JButton nextButton;
 
   /**  The quit button. */
-  private JButton quitButton;
+  protected JButton quitButton;
 
   /**  The 'made with izpack' label, please KEEP IT THERE. */
   private JLabel madewithLabel;
@@ -292,7 +292,7 @@ public class InstallerFrame extends JFrame
    *
    * @param  last  Description of the Parameter
    */
-  private void switchPanel(int last)
+  protected void switchPanel(int last)
   {
     panelsContainer.setVisible(false);
     IzPanel panel = (IzPanel) installdata.panels.get(installdata.curPanelNumber);
@@ -480,7 +480,7 @@ public class InstallerFrame extends JFrame
 
 
   /**  Wipes the written files when you abort the installation.  */
-  private void wipeAborted()
+  protected void wipeAborted()
   {
     Iterator it;
 

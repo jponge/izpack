@@ -48,22 +48,22 @@ public class UninstallerFrame extends JFrame
   private IconsDatabase icons;
 
   /**  The language pack. */
-  private LocaleDatabase langpack;
+  protected LocaleDatabase langpack;
 
   /**  The warning label. */
   private JLabel warningLabel;
 
   /**  The target destroy checkbox. */
-  private JCheckBox targetDestroyCheckbox;
+  protected JCheckBox targetDestroyCheckbox;
 
   /**  The progress bar. */
-  private JProgressBar progressBar;
+  protected JProgressBar progressBar;
 
   /**  The destroy button. */
-  private JButton destroyButton;
+  protected JButton destroyButton;
 
   /**  The quit button. */
-  private JButton quitButton;
+  protected JButton quitButton;
 
   /**  The layout. */
   private GridBagLayout layout;
@@ -75,7 +75,7 @@ public class UninstallerFrame extends JFrame
   private Color buttonsHColor = new Color(230, 230, 230);
 
   /**  The installation path. */
-  private String installPath;
+  protected String installPath;
 
 
   /**

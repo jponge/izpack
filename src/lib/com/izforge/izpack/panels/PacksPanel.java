@@ -66,7 +66,7 @@ public class PacksPanel extends IzPanel implements ActionListener,ListSelectionL
   private JScrollPane tableScroller;
 
   /**  The bytes of the current pack. */
-  private int bytes = 0;
+  protected int bytes = 0;
 
   /**  The packs table. */
   private JTable packsTable;
@@ -189,7 +189,7 @@ public class PacksPanel extends IzPanel implements ActionListener,ListSelectionL
 
 
   /**  Sets the label text of space required for installation.  */
-  private void showSpaceRequired()
+  protected void showSpaceRequired()
   {
     spaceLabel.setText(Pack.toByteUnitsString(bytes));
   }

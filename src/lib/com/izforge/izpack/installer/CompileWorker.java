@@ -294,7 +294,7 @@ public class CompileWorker implements Runnable
 
     // we throw away the toplevel compilation job
     // (all jobs are collected in this.jobs)
-    CompilationJob dummy = collectJobsRecursive (data, classpath);
+    collectJobsRecursive (data, classpath);
     
     return true;
   }

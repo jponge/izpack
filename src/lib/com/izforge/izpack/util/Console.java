@@ -50,7 +50,7 @@ public class Console
             and use pwd as the current working directory.
            */
           p = rt.exec(args);//, env, pwd);
-			    Console c = new Console(p);
+			    new Console(p);
 	        System.exit(p.exitValue());
         }
         catch (IOException e) 

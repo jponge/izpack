@@ -203,7 +203,7 @@ public class FileExecutor
         t1.start();
         t2.start();
 
-        // wait for command to comlete
+        // wait for command to complete
         exitStatus = process.waitFor();
         if (t1 != null)
         {

@@ -125,10 +125,10 @@ public class HighlightJButton extends JButton
 
 
   /**  The highlighted color. */
-  private Color highlightColor;
+  protected Color highlightColor;
 
   /**  The default color. */
-  private Color defaultColor;
+  protected Color defaultColor;
 
 
   /**

@@ -47,7 +47,7 @@ public class Uninstaller
     try
     {
       MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
-      UninstallerFrame frame = new UninstallerFrame();
+      new UninstallerFrame();
     }
     catch (Exception err)
     {

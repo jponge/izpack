@@ -91,9 +91,22 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         // generated installers, yes I need this! tisc.)
         if (index_str != null)
         {
-          Integer integer = new Integer(index_str);
-          int index = integer.intValue();
-          idata.selectedPacks.add(idata.availablePacks.get(index));
+          try
+          {
+            int index = Integer.parseInt(index_str);
+            if ((index >= 0 ) && (index < idata.availablePacks.size()))
+            {
+              idata.selectedPacks.add(idata.availablePacks.get(index));
+            }
+            else
+            {
+              System.err.println ("Invalid pack index \""+index_str+"\" in line "+el.getLineNr());
+            }
+          }
+          catch (NumberFormatException e)
+          {
+            System.err.println ("Invalid pack index \""+index_str+"\" in line "+el.getLineNr());
+          }
         }
         else
         {
@@ -120,7 +133,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
             
             if (! found)
             {
-              System.out.println ("Could not find selected pack named \""+name+"\".");
+              System.err.println ("Could not find selected pack named \""+name+"\" in line "+el.getLineNr());
             }
             
           }

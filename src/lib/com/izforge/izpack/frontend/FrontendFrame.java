@@ -55,7 +55,7 @@ public class FrontendFrame extends JFrame
   private IconsDatabase icons;
 
   /**  The language pack. */
-  private LocaleDatabase langpack;
+  protected LocaleDatabase langpack;
 
   /**  The installation XML tree. */
   private XMLElement installation;
@@ -259,7 +259,7 @@ public class FrontendFrame extends JFrame
 
 
   /**  Makes a clean exit.  */
-  private void exit()
+  protected void exit()
   {
     Frontend.saveConfig();
 
@@ -276,21 +276,21 @@ public class FrontendFrame extends JFrame
 
 
   /**  Shows the license text.  */
-  private void showLicence()
+  protected void showLicence()
   {
     new FrontendLicence(this, langpack, icons);
   }
 
 
   /**  Shows the about box.  */
-  private void showAbout()
+  protected void showAbout()
   {
     new FrontendAbout(this, langpack, icons);
   }
 
 
   /**  Makes a new file.  */
-  private void nnew()
+  protected void nnew()
   {
     installation = Frontend.createBlankInstallation();
     installationUpdated();
@@ -303,7 +303,7 @@ public class FrontendFrame extends JFrame
   /**
    *  Imports a file with relative paths (not made with this frontend).
    */
-  private void iimport()
+  protected void iimport()
   {
     try
     {
@@ -373,7 +373,7 @@ public class FrontendFrame extends JFrame
    *
    * @param  file  The filename.
    */
-  private void bookmarkLoad(String file)
+  protected void bookmarkLoad(String file)
   {
     try
     {
@@ -416,7 +416,7 @@ public class FrontendFrame extends JFrame
 
 
   /**  Opens a file.  */
-  private void open()
+  protected void open()
   {
     try
     {
@@ -471,7 +471,7 @@ public class FrontendFrame extends JFrame
 
 
   /**  Saves the file.  */
-  private void save()
+  protected void save()
   {
     if (curFilename.equalsIgnoreCase(langpack.getString("frontend.untitled")))
       saveAs();
@@ -497,7 +497,7 @@ public class FrontendFrame extends JFrame
 
 
   /**  Saves the file 'as ...'.  */
-  private void saveAs()
+  protected void saveAs()
   {
     try
     {
@@ -554,7 +554,7 @@ public class FrontendFrame extends JFrame
    *
    * @param  kind  The compiler kind.
    */
-  private void compile(String kind)
+  protected void compile(String kind)
   {
     // We ensure that the file is saved
     if (curFilename.equalsIgnoreCase(langpack.getString("frontend.untitled")))

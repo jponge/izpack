@@ -109,6 +109,8 @@ public class VariableSubstitutor
   public String substitute(String str, String type)
      throws IllegalArgumentException
   {
+    if (str == null) return null;
+    
     // Create reader and writer for the strings
     StringReader reader = new StringReader(str);
     StringWriter writer = new StringWriter();
