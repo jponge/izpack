@@ -24,27 +24,54 @@
  */
 package com.izforge.izpack.frontend;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.Vector;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
+import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
 
-import java.awt.*;
-import java.awt.event.*;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLWriter;
 
-import javax.swing.*;
-
-import net.n3.nanoxml.*;
-
-import com.incors.plaf.kunststoff.*;
+import com.incors.plaf.kunststoff.KunststoffLookAndFeel;
+import com.incors.plaf.kunststoff.ModifiedDefaultListCellRenderer;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.gui.IzPackKMetalTheme;
 
 /**
  *  The frontend frame class.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class FrontendFrame extends JFrame
 {
@@ -634,8 +661,7 @@ public class FrontendFrame extends JFrame
   /**
    *  The window events handler.
    *
-   * @author     julien
-   * @created    October 26, 2002
+   * @author     Julien Ponge
    */
   class WindowHandler extends WindowAdapter
   {
@@ -654,8 +680,7 @@ public class FrontendFrame extends JFrame
   /**
    *  The files action events handler/
    *
-   * @author     julien
-   * @created    October 26, 2002
+   * @author     Julien Ponge
    */
   class FilesHandler implements ActionListener
   {
@@ -691,8 +716,7 @@ public class FrontendFrame extends JFrame
   /**
    *  The compiler action events handler.
    *
-   * @author     julien
-   * @created    October 26, 2002
+   * @author     Julien Ponge
    */
   class CompilerHandler implements ActionListener
   {
@@ -726,8 +750,7 @@ public class FrontendFrame extends JFrame
   /**
    *  The others action events handler.
    *
-   * @author     julien
-   * @created    October 26, 2002
+   * @author     Julien
    */
   class OthersHandler implements ActionListener
   {

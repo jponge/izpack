@@ -26,14 +26,20 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.installer.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.util.ArrayList;
 
-import java.awt.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import java.util.*;
-
-import javax.swing.*;
+import com.izforge.izpack.Info;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
 
 /**
  * The Hello panel class.

@@ -24,24 +24,49 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.DataInputStream;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.TreeMap;
 
-import java.io.*;
-import java.util.*;
-import java.lang.reflect.*;
+import javax.swing.GrayFilter;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.plaf.metal.*;
+import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IzPackMetalTheme;
 
 /**
  *  The IzPack graphical installer class.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
  */
 public class GUIInstaller extends InstallerBase
 {
@@ -251,8 +276,7 @@ public class GUIInstaller extends InstallerBase
   /**
    *  Used to prompt the user for the language.
    *
-   * @author     julien
-   * @created    October 27, 2002
+   * @author     Julien Ponge
    */
   class LanguageDialog extends JDialog implements ActionListener
   {
@@ -397,8 +421,7 @@ public class GUIInstaller extends InstallerBase
     /**
      *  The window events handler.
      *
-     * @author     julien
-     * @created    October 27, 2002
+     * @author     Julien Ponge
      */
     class WindowHandler extends WindowAdapter
     {
@@ -418,8 +441,7 @@ public class GUIInstaller extends InstallerBase
   /**
    *  A list cell renderer that adds the flags on the display.
    *
-   * @author     julien
-   * @created    October 27, 2002
+   * @author     Julien Ponge
    */
   class FlagRenderer extends JLabel implements ListCellRenderer
   {

@@ -24,26 +24,36 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.installer.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import java.util.ArrayList;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import java.net.*;
-import java.util.*;
+import net.n3.nanoxml.XMLElement;
 
-import javax.swing.*;
-import javax.swing.event.*;
-
-import net.n3.nanoxml.*;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.ResourceManager;
 
 /**
  *  The ImgPacks panel class. Allows the packages selection with a small picture
  *  displayed for every pack.
  *
  * @author     Julien Ponge
- * @created    November 1, 2002
  */
 public class ImgPacksPanel extends IzPanel implements ActionListener, ListSelectionListener
 {

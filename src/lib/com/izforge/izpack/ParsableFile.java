@@ -32,7 +32,6 @@ import java.util.List;
  *  information is stored to package.
  *
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
- * @created    October 26, 2002
  */
 public class ParsableFile implements Serializable
 {

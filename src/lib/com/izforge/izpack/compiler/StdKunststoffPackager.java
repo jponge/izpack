@@ -38,7 +38,6 @@ import java.util.zip.ZipInputStream;
  *  The standard installer class, using the Kunststoff L&F.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class StdKunststoffPackager extends StdPackager
 {

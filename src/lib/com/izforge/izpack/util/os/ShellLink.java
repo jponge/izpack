@@ -26,8 +26,10 @@
 
 package   com.izforge.izpack.util.os;
 
-import    java.io.*;
-import    com.izforge.izpack.util.*;
+import java.io.File;
+
+import com.izforge.izpack.util.Librarian;
+import com.izforge.izpack.util.NativeLibraryClient;
 
 /*---------------------------------------------------------------------------*/
 /**

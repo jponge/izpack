@@ -24,16 +24,20 @@
  */
 package com.izforge.izpack;
 
-import java.io.*;
-import java.util.*;
+import java.io.InputStream;
+import java.util.TreeMap;
+import java.util.Vector;
 
-import net.n3.nanoxml.*;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
 
 /**
  *  Represents a database of a locale.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class LocaleDatabase extends TreeMap
 {

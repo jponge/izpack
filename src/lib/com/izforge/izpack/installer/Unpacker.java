@@ -28,19 +28,35 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.util.*;
-import com.izforge.izpack.*;
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.zip.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
+
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.PackFile;
+import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  *  Unpacker class.
  *
  * @author     Julien Ponge
  * @author     Johannes Lehtinen
- * @created    October 27, 2002
  */
 public class Unpacker extends Thread
 {

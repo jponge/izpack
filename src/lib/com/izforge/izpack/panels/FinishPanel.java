@@ -24,21 +24,33 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.gui.*;
-import com.izforge.izpack.installer.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
-import java.io.*;
-
-import javax.swing.*;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.VariableSubstitutor;
 
 /**
  *  The finish panel class.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
  */
 public class FinishPanel extends IzPanel implements ActionListener
 {

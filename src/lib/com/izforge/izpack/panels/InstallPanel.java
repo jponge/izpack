@@ -24,18 +24,24 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.*;
-import com.izforge.izpack.util.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
+import javax.swing.JSeparator;
 
-import javax.swing.*;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
  *  The install panel class. Launches the actual installation job.
  *
  * @author     Julien Ponge
- * @created    November 1, 2002
  */
 public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
 {

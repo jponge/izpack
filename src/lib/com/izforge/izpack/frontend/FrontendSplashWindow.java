@@ -24,17 +24,22 @@
  */
 package com.izforge.izpack.frontend;
 
-import java.net.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.net.URL;
 
-import java.awt.*;
-
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JWindow;
 
 /**
  *  The frontend splash window class.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
  */
 public class FrontendSplashWindow extends JWindow
 {

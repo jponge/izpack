@@ -28,21 +28,52 @@
 
 package   com.izforge.izpack.panels;
 
-import    java.awt.*;
-import    java.awt.event.*;
-import    java.io.*;
-import    java.util.*;
-import    javax.swing.*;
-import    javax.swing.border.*;
-import    javax.swing.event.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.util.Vector;
 
-import    com.izforge.izpack.*;
-import    com.izforge.izpack.gui.*;
-import    com.izforge.izpack.installer.*;
-import    com.izforge.izpack.util.*;
-import    com.izforge.izpack.util.os.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import    net.n3.nanoxml.*;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.installer.VariableSubstitutor;
+import com.izforge.izpack.util.MultiLineLabel;
+import com.izforge.izpack.util.TargetFactory;
+import com.izforge.izpack.util.os.ShellLink;
+import com.izforge.izpack.util.os.Shortcut;
   
 /*---------------------------------------------------------------------------*/
 /**

@@ -18,6 +18,7 @@
 - Frontend: Jar files could be listed in the panels tab. Fixed.
 - The scripts execution flag is now set to every users on Unix-like systems 
   (chmod a+x), regardless of who the user is (i.e. root or a single user).
+- Reformatting (imports, Ant build file).
 
   > 3.1.0b (build 2003.08.22)
 

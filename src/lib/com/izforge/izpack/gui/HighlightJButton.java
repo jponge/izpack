@@ -24,16 +24,18 @@
  */
 package com.izforge.izpack.gui;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JButton;
 
 /**
  *  A button that highlights when the button passes over.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
  */
 public class HighlightJButton extends JButton
 {
@@ -134,8 +136,7 @@ public class HighlightJButton extends JButton
   /**
    *  The mouse handler which makes the highlighting.
    *
-   * @author     julien
-   * @created    October 27, 2002
+   * @author     Julien Ponge
    */
   private class MouseHandler extends MouseAdapter
   {

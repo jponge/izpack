@@ -50,13 +50,13 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.tools.ant.DirectoryScanner;
+
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
-
-import org.apache.tools.ant.DirectoryScanner;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.GUIPrefs;

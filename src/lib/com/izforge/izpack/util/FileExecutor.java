@@ -24,13 +24,20 @@
  */
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.ExecutableFile;
-
-import java.io.*;
-import java.util.List;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+
+import com.izforge.izpack.ExecutableFile;
 
 /**
  *  Executes a bunch of files. This class is intended to do a system dependent
@@ -39,7 +46,6 @@ import java.util.Iterator;
  *  execution on Unix systems execution flag will be set on processed file.
  *
  * @author     Olexij Tkatchenko <ot@parcs.de>
- * @created    November 1, 2002
  */
 public class FileExecutor
 {
@@ -48,8 +54,7 @@ public class FileExecutor
    *  command execution end terminates if the apropriate stream runs out of
    *  data.
    *
-   * @author     julien
-   * @created    November 1, 2002
+   * @author     Olexij Tkatchenko <ot@parcs.de>
    */
   private class MonitorInputStream implements Runnable
   {

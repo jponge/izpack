@@ -24,25 +24,37 @@
  */
 package com.izforge.izpack.frontend;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.Vector;
 
-import java.io.*;
-import java.util.*;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import java.awt.*;
-import java.awt.event.*;
+import net.n3.nanoxml.XMLElement;
 
-import javax.swing.*;
-import javax.swing.event.*;
-
-import net.n3.nanoxml.*;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IconsDatabase;
 
 /**
  *  The frontend 'packs' tab class.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
  */
 public class FrontendPacksTab extends FrontendTab
    implements ActionListener, ListSelectionListener
@@ -529,8 +541,7 @@ public class FrontendPacksTab extends FrontendTab
   /**
    *  Represents a file to put it in a JList.
    *
-   * @author     julien
-   * @created    October 27, 2002
+   * @author     Julien Ponge
    */
   class LFile
   {

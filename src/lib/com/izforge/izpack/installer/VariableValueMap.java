@@ -30,7 +30,6 @@ import java.util.Map;
  *  Maps variable names to a variable value.
  *
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
- * @created    October 27, 2002
  */
 public interface VariableValueMap extends Map
 {

@@ -24,7 +24,7 @@
 
 package   com.izforge.izpack.gui;
 
-import    java.awt.*;
+import java.awt.Component;
 
 /**
  * The constraints class to use with <code>TwoColumnLayout</code>.

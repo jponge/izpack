@@ -55,7 +55,6 @@ import com.izforge.izpack.util.AbstractUIProcessHandler;
  * 
  * @author     Tino Schwarze
  * @author     Julien Ponge
- * @created    May 2003
  */
 public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
 {

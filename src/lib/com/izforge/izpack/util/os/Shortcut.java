@@ -25,7 +25,7 @@
 
 package   com.izforge.izpack.util.os;
 
-import    java.util.*;
+import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
 /**

@@ -24,8 +24,15 @@
 
 package   com.izforge.izpack.gui;
 
-import    java.awt.*;
-import    java.util.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.LayoutManager2;
+import java.awt.Stroke;
+import java.util.Vector;
 
 /**
  * This class implements a layout manager that generally lays out components

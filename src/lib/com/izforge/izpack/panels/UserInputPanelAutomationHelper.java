@@ -24,14 +24,14 @@
  */
 package com.izforge.izpack.panels;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
 import net.n3.nanoxml.XMLElement;
 
-import java.util.Vector;
-import java.util.Map;
-import java.util.Iterator;
-
-import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.Debug;
 
 /**

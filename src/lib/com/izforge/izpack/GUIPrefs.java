@@ -24,13 +24,12 @@
  */
 package com.izforge.izpack;
 
-import java.io.*;
+import java.io.Serializable;
 
 /**
  *  This class holds the GUI preferences for an installer.
  *
- * @author     Julien PONGE
- * @created    October 26, 2002
+ * @author     Julien Ponge
  */
 public class GUIPrefs implements Serializable
 {

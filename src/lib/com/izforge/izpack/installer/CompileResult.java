@@ -39,7 +39,6 @@ package com.izforge.izpack.installer;
  * </ol>
  *
  * @author     Tino Schwarze
- * @created    2003-27-05
  */
 public class CompileResult
 {

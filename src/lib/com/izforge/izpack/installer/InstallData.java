@@ -24,9 +24,9 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.GUIPrefs;
-
 import java.awt.Color;
+
+import com.izforge.izpack.GUIPrefs;
 
 /**
  *  Encloses information about the install process. This class is implemented as
@@ -35,7 +35,6 @@ import java.awt.Color;
  *
  * @author     Julien Ponge <julien@izforge.com>
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
- * @created    October 27, 2002
  */
 public class InstallData extends AutomatedInstallData
 {

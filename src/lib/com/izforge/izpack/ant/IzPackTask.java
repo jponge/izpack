@@ -33,7 +33,6 @@ import com.izforge.izpack.compiler.Compiler;
  *  A IzPack Ant task.
  *
  * @author     Paul Wilkinson
- * @created    October 26, 2002
  */
 public class IzPackTask extends org.apache.tools.ant.Task
    implements com.izforge.izpack.compiler.PackagerListener
@@ -190,8 +189,7 @@ public class IzPackTask extends org.apache.tools.ant.Task
   /**
    *  Enumerated attribute with the values "asis", "add" and "remove".
    *
-   * @author     julien
-   * @created    October 26, 2002
+   * @author     Paul Wilkinson
    */
   public static class InstallerType extends EnumeratedAttribute
   {

@@ -33,8 +33,8 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Locale;
+import java.util.Properties;
 
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;

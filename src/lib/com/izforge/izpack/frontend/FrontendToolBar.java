@@ -24,23 +24,28 @@
  */
 package com.izforge.izpack.frontend;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
+import java.awt.event.ActionListener;
+import java.io.InputStream;
+import java.util.TreeMap;
+import java.util.Vector;
 
-import java.io.*;
-import java.util.*;
+import javax.swing.JButton;
+import javax.swing.JToolBar;
 
-import java.awt.event.*;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
 
-import javax.swing.*;
-
-import net.n3.nanoxml.*;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IconsDatabase;
 
 /**
  *  The frontend toolbar class.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
  */
 public class FrontendToolBar extends JToolBar
 {

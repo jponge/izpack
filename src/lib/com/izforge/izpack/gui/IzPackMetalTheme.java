@@ -24,16 +24,16 @@
  */
 package com.izforge.izpack.gui;
 
-import java.awt.*;
+import java.awt.Font;
 
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.plaf.metal.DefaultMetalTheme;
 
 /**
  *  The IzPack metal theme.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
  */
 public class IzPackMetalTheme extends DefaultMetalTheme
 {

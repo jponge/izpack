@@ -26,18 +26,28 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.*;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
-import javax.swing.*;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.ResourceManager;
 
 /**
  *  The license panel.
  *
  * @author     Julien Ponge
- * @created    November 1, 2002
  */
 public class LicencePanel extends IzPanel implements ActionListener
 {

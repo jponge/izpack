@@ -25,8 +25,12 @@
 package com.izforge.izpack.panels;
 
 import net.n3.nanoxml.XMLElement;
-import com.izforge.izpack.installer.*;
-import com.izforge.izpack.util.*;
+
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.PanelAutomationHelper;
+import com.izforge.izpack.installer.Unpacker;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
  * Functions to support automated usage of the InstallPanel

@@ -32,8 +32,8 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +50,6 @@ import java.util.Map;
  *  copied as is.
  *
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
- * @created    October 27, 2002
  */
 public class VariableSubstitutor
 {

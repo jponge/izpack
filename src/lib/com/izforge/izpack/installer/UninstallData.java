@@ -24,7 +24,8 @@
  */
 package com.izforge.izpack.installer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.izforge.izpack.ExecutableFile;
 

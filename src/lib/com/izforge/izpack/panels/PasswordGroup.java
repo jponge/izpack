@@ -26,8 +26,9 @@
 
 package   com.izforge.izpack.panels;
 
-import    java.util.*;
-import    javax.swing.*;
+import java.util.Vector;
+
+import javax.swing.JPasswordField;
   
 /*---------------------------------------------------------------------------*/
 /**

@@ -24,7 +24,9 @@
  */
 package com.izforge.izpack.util;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class Debug
 {

@@ -24,14 +24,25 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.Debug;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
+
 import com.izforge.izpack.LocaleDatabase;
-
-import java.io.*;
-import java.util.*;
-
-import net.n3.nanoxml.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileExecutor;
 
 /**
  * This class does alle the work for compiling sources.
@@ -44,7 +55,6 @@ import net.n3.nanoxml.*;
  * </ul>
  *
  * @author     Tino Schwarze
- * @created    May 2003
  */
 public class CompileWorker implements Runnable
 {

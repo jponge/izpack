@@ -24,17 +24,21 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.util.Housekeeper;
-
 import java.io.File;
-import java.io.InputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import net.n3.nanoxml.*;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.util.Housekeeper;
 
 /**
  *  Runs the install process in text only (no GUI) mode.

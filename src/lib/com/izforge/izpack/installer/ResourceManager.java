@@ -48,7 +48,6 @@ import javax.swing.ImageIcon;
  * using <code>getInstance</code>.
  *
  * @author     Marcus Stursberg
- * @created    October 27, 2002
  */
 public class ResourceManager
 {

@@ -24,9 +24,10 @@
  */
 package com.izforge.izpack.installer;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
-import net.n3.nanoxml.*;
+import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.util.AbstractUIHandler;
 
@@ -36,7 +37,6 @@ import com.izforge.izpack.util.AbstractUIHandler;
  *  package.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
  */
 public class IzPanel extends JPanel implements AbstractUIHandler
 {

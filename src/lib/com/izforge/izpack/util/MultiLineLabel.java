@@ -26,10 +26,14 @@
 
 package   com.izforge.izpack.util;
 
-import    java.awt.*;
-import    java.util.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.util.Vector;
 
-import    javax.swing.*;
+import javax.swing.JComponent;
   
 /*---------------------------------------------------------------------------*/
 /**

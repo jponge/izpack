@@ -24,19 +24,26 @@
  */
 package com.izforge.izpack.frontend;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-import javax.swing.*;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IconsDatabase;
 
 /**
  *  The IzPack frontend about dialog class.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class FrontendAbout extends JDialog implements ActionListener
 {

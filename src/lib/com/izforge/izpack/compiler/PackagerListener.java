@@ -28,7 +28,6 @@ package com.izforge.izpack.compiler;
  *  An interface for classes that want to listen to a packager events.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public interface PackagerListener
 {

@@ -24,15 +24,14 @@
  */
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.gui.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
-import javax.swing.plaf.metal.*;
+import com.izforge.izpack.gui.IzPackMetalTheme;
 
 /**
  *  The uninstaller class.
  *
  * @author     Julien Ponge
- * @created    November 1, 2002
  */
 public class Uninstaller
 {

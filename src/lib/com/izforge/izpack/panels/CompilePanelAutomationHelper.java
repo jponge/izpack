@@ -24,10 +24,16 @@
  */
 package com.izforge.izpack.panels;
 
-import net.n3.nanoxml.XMLElement;
-import com.izforge.izpack.installer.*;
-
 import java.io.IOException;
+
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.CompileHandler;
+import com.izforge.izpack.installer.CompileResult;
+import com.izforge.izpack.installer.CompileWorker;
+import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.PanelAutomationHelper;
 
 /**
  * Functions to support automated usage of the CompilePanel

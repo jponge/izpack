@@ -24,7 +24,7 @@
  */
 package com.izforge.izpack;
 
-import java.io.*;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -32,7 +32,6 @@ import java.util.List;
  *  Represents a Pack.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class Pack implements Serializable
 {

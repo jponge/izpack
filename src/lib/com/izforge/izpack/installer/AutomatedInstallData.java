@@ -24,11 +24,17 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.zip.ZipOutputStream;
 
-import java.util.*;
-import java.util.zip.*;
-import net.n3.nanoxml.*;
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.Info;
+import com.izforge.izpack.LocaleDatabase;
 
 /**
  *  Encloses information about the install process.
@@ -36,7 +42,6 @@ import net.n3.nanoxml.*;
  *
  * @author     Julien Ponge <julien@izforge.com>
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
- * @created    October 27, 2002
  */
 public class AutomatedInstallData
 {
@@ -46,7 +51,6 @@ public class AutomatedInstallData
    *  A Properties based implementation for VariableValueMap interface.
    *
    * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
-   * @created    October 27, 2002
    * @version    $Revision$
    */
   private final static class VariableValueMapImpl

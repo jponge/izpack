@@ -24,23 +24,29 @@
  */
 package com.izforge.izpack.frontend;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Random;
 
-import java.io.*;
-import java.util.*;
+import javax.swing.UIManager;
 
-import javax.swing.*;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLWriter;
 
-import net.n3.nanoxml.*;
-
-import com.incors.plaf.kunststoff.*;
+import com.incors.plaf.kunststoff.KunststoffLookAndFeel;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.IzPackKMetalTheme;
 
 /**
  *  The IzPack frontend class.
  *
- * @author     Julien Ponge.
- * @created    October 26, 2002
+ * @author     Julien Ponge
  */
 public class Frontend
 {

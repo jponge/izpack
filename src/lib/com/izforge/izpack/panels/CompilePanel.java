@@ -24,18 +24,39 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.*;
-import com.izforge.izpack.gui.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 
-import java.io.*;
-import java.util.*;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
-import java.awt.*;
-import java.awt.event.*;
+import net.n3.nanoxml.XMLElement;
 
-import javax.swing.*;
-
-import net.n3.nanoxml.*;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.installer.CompileHandler;
+import com.izforge.izpack.installer.CompileResult;
+import com.izforge.izpack.installer.CompileWorker;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
 
 /**
  *  The compile panel class.
@@ -47,7 +68,6 @@ import net.n3.nanoxml.*;
  * 
  * @author     Tino Schwarze
  * @author     Julien Ponge
- * @created    May 2003
  */
 public class CompilePanel extends IzPanel implements ActionListener, CompileHandler
 {

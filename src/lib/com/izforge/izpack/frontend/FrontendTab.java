@@ -24,19 +24,18 @@
  */
 package com.izforge.izpack.frontend;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
+import javax.swing.JPanel;
 
-import javax.swing.*;
+import net.n3.nanoxml.XMLElement;
 
-import net.n3.nanoxml.*;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.IconsDatabase;
 
 /**
  *  The frontend tab class. Shall be implemented by any tab appearing in the
  *  frontend GUI.
  *
  * @author     Julien Ponge.
- * @created    October 27, 2002
  */
 public abstract class FrontendTab extends JPanel
 {

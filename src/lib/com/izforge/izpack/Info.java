@@ -24,15 +24,14 @@
  */
 package com.izforge.izpack;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *  Contains some informations for an installer, as defined in the <info>
  *  section of the XML files.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class Info implements Serializable
 {
@@ -181,8 +180,7 @@ public class Info implements Serializable
   /**
    *  This class represents an author.
    *
-   * @author     julien
-   * @created    October 26, 2002
+   * @author     Julien Ponge
    */
   public static class Author implements Serializable
   {

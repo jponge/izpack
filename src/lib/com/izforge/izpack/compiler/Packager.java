@@ -50,7 +50,6 @@ import com.izforge.izpack.Pack;
  *  packaging job.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public abstract class Packager
 {

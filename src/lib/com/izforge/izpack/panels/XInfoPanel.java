@@ -28,18 +28,25 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
-import javax.swing.*;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.installer.VariableSubstitutor;
 
 /**
  *  The XInfo panel class - shows some adaptative text (ie by parsing for some
  *  variables.
  *
  * @author     Julien Ponge
- * @created    November 1, 2002
  */
 public class XInfoPanel extends IzPanel
 {

@@ -24,21 +24,30 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
 
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JEditorPane;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 
-import java.net.*;
-
-import javax.swing.*;
-import javax.swing.event.*;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.ResourceManager;
 
 /**
  *  The IzPack HTML license panel.
  *
  * @author     Julien Ponge
- * @created    November 1, 2002
  */
 public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, ActionListener
 {

@@ -32,8 +32,10 @@
 
 package com.izforge.izpack.gui;
 
-import java.awt.*;
-import javax.swing.border.*;
+import java.awt.Component;
+import java.awt.Graphics;
+
+import javax.swing.border.EtchedBorder;
 
 /**
  * Draws an etched line border.

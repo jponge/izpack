@@ -24,13 +24,14 @@
  */
 package com.izforge.izpack.panels;
 
-import net.n3.nanoxml.XMLElement;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.installer.AutomatedInstallData;
-
-import java.util.Vector;
 import java.util.Iterator;
+import java.util.Vector;
+
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelAutomation;
 
 /**
  * Functions to support automated usage of the PacksPanel

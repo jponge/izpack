@@ -24,23 +24,45 @@
  */
 package com.izforge.izpack.uninstaller;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
-import com.izforge.izpack.util.*;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 
-import java.io.*;
-import java.net.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.UIManager;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.util.AbstractUIHandler;
 
 /**
  *  The uninstaller frame class.
  *
  * @author     Julien Ponge
- * @created    November 1, 2002
  */
 public class UninstallerFrame extends JFrame
 {
@@ -289,8 +311,7 @@ public class UninstallerFrame extends JFrame
   /**
    *  The window events handler.
    *
-   * @author     julien
-   * @created    November 1, 2002
+   * @author     Julien Ponge
    */
   class WindowHandler extends WindowAdapter
   {
@@ -312,8 +333,8 @@ public class UninstallerFrame extends JFrame
    * This class also implements the InstallListener because the FileExecutor needs it.
    * TODO: get rid of the InstallListener - implement generic Listener
    * 
-   * @author    julien, Tino Schwarze
-   * @created    November 1, 2002
+   * @author     Julien Ponge
+   * @author     Tino Schwarze
    */
   class DestroyerHandler implements com.izforge.izpack.util.AbstractUIProgressHandler
   {
@@ -450,8 +471,7 @@ public class UninstallerFrame extends JFrame
   /**
    *  The actions events handler.
    *
-   * @author     julien
-   * @created    November 1, 2002
+   * @author     Julien Ponge
    */
   class ActionsHandler implements ActionListener
   {

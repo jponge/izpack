@@ -25,10 +25,15 @@
 
 package   com.izforge.izpack.util;
 
-import    java.util.*;
-import    java.net.*;
-import    java.security.*;
-import    java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.security.CodeSource;
+import java.security.ProtectionDomain;
+import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
 /**

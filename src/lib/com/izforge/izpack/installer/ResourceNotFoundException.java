@@ -28,7 +28,6 @@ package com.izforge.izpack.installer;
  *  Describes that a resource could not be found
  *
  * @author     Marcus Stursberg
- * @created    October 27, 2002
  */
 class ResourceNotFoundException extends java.io.IOException
 {

@@ -32,7 +32,6 @@ import java.util.List;
  *  data is stored to package.
  *
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
- * @created    October 26, 2002
  */
 public class PackFile implements Serializable
 {

@@ -24,23 +24,31 @@
  */
 package com.izforge.izpack.frontend;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.gui.*;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.InputStream;
+import java.util.TreeMap;
+import java.util.Vector;
 
-import java.io.*;
-import java.util.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
-import java.awt.event.*;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
 
-import javax.swing.*;
-
-import net.n3.nanoxml.*;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.IconsDatabase;
 
 /**
  *  The frontend menu bar.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class FrontendMenuBar extends JMenuBar
 {

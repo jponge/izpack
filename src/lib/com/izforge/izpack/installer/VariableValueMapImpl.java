@@ -30,7 +30,6 @@ import java.util.Properties;
  *  A Properties based implementation for VariableValueMap interface.
  *
  * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
- * @created    October 27, 2002
  */
 public final class VariableValueMapImpl extends Properties implements VariableValueMap
 {

@@ -24,15 +24,15 @@
  */
 package com.izforge.izpack.gui;
 
-import java.util.*;
+import java.util.TreeMap;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
 
 /**
  *  The icons database class.
  *
  * @author     Julien Ponge
- * @created    October 27, 2002
+ *    October 27, 2002
  */
 public class IconsDatabase extends TreeMap
 {

@@ -36,7 +36,6 @@ import java.util.zip.ZipInputStream;
  *  Web installer class with the Kunststoff L&F support.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class WebKunststoffPackager extends WebPackager
 {

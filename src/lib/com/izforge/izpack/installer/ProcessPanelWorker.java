@@ -38,8 +38,8 @@ import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
 
-import com.izforge.izpack.util.AbstractUIProcessHandler;
 import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.AbstractUIProcessHandler;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
@@ -52,7 +52,6 @@ import com.izforge.izpack.util.OsConstraint;
  * </ul>
  *
  * @author    Tino Schwarze
- * @created    August 2003
  */
 public class ProcessPanelWorker implements Runnable
 {

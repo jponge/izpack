@@ -33,7 +33,6 @@ import java.util.List;
  *  to do a system dependent postprocessing of installation.
  *
  * @author     Olexij Tkatchenko <ot@parcs.de>
- * @created    October 26, 2002
  */
 
 public class ExecutableFile implements Serializable

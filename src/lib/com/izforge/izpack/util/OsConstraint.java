@@ -38,7 +38,6 @@ import net.n3.nanoxml.XMLElement;
  * the executable is suitable for the current OS.
  *
  * @author     Olexij Tkatchenko <ot@parcs.de>
- * @created    November 1, 2002
  */
 public class OsConstraint implements java.io.Serializable
 {

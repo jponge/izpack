@@ -24,18 +24,28 @@
  */
 package com.izforge.izpack.compiler;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-import java.util.jar.*;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+import java.util.jar.JarFile;
+import java.util.jar.JarOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipOutputStream;
 
-import com.izforge.izpack.*;
+import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.Info;
+import com.izforge.izpack.Pack;
 
 /**
  *  Web packager class.
  *
  * @author     Julien Ponge
- * @created    October 26, 2002
  */
 public class WebPackager extends Packager
 {
