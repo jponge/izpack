@@ -366,6 +366,7 @@ public class InstallerFrame extends JFrame
     setVisible(true);
   }
 
+	private boolean isBack = false;
   /**
    *  Switches the current panel.
    *
@@ -373,9 +374,13 @@ public class InstallerFrame extends JFrame
    */
   protected void switchPanel(int last)
   {
+  	if (installdata.curPanelNumber<last)
+  	{
+  		isBack = true;
+  	}
     panelsContainer.setVisible(false);
     IzPanel panel =
-      (IzPanel) installdata.panels.get(installdata.curPanelNumber);
+      (IzPanel) installdata.panels.get(installdata.curPanelNumber);  
     IzPanel l_panel = (IzPanel) installdata.panels.get(last);
     l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
     panelsContainer.remove(l_panel);
@@ -400,8 +405,8 @@ public class InstallerFrame extends JFrame
     l_panel.panelDeactivate();
     panel.panelActivate();
     panelsContainer.setVisible(true);
-    
-    loadImage(installdata.curPanelNumber);
+	loadImage(installdata.curPanelNumber);
+    isBack = false;
   }
 
   /**  Writes the uninstalldata.  */
@@ -472,15 +477,22 @@ public class InstallerFrame extends JFrame
    */
   public InputStream getResource(String res)
   {
+  	String basePath = "";
+  	ResourceManager rm = null;
+  	
     try
     {
-      //System.out.println ("retrieving resource " + res);
-      return ResourceManager.getInstance().getInputStream(res);
-    } catch (ResourceNotFoundException e)
+    	rm =  ResourceManager.getInstance();
+		basePath = rm.resourceBasePath;
+		
+		return this.getClass().getResourceAsStream(basePath+res);
+    } catch (Exception e)
     {
       return null;
     }
   }
+  
+  
 
   /**
    *  Centers a window on screen.
@@ -681,8 +693,16 @@ public class InstallerFrame extends JFrame
   {
     if (installdata.curPanelNumber < installdata.panels.size() - 1)
     {
-      installdata.curPanelNumber++;
-      switchPanel(installdata.curPanelNumber - 1);
+    	if (isBack)
+    	{
+			installdata.curPanelNumber--;
+			switchPanel(installdata.curPanelNumber + 1);	
+    	}else
+    	{
+			installdata.curPanelNumber++;
+			switchPanel(installdata.curPanelNumber - 1);	
+    	}
+      
     }
   }
 
