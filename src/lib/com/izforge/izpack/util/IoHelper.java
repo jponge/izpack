@@ -292,7 +292,7 @@ public class IoHelper
       String[] output = new String[2];
       FileExecutor fe = new FileExecutor();
       state = fe.executeCommand(params, output);
-      retval = extractLong(output[0], -3, 3, "%");
+      retval = extractLong(output[0], -3, 3, "%") * 1024;
     }
     else if(IoHelper.getOSFamily() == MAC)
     {
@@ -300,7 +300,7 @@ public class IoHelper
       String[] output = new String[2];
       FileExecutor fe = new FileExecutor();
       state = fe.executeCommand(params, output);
-      retval = extractLong(output[0], -3, 3, "%");
+      retval = extractLong(output[0], -3, 3, "%") * 1024;
     }
     
     return retval;
