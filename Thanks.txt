@@ -47,3 +47,4 @@ IzPack for your projects ;-)
 - Harsan Peter for the Hungarian language pack.
 - Hiroki Akimoto for the Japanes language pack.
 - Gareth Cronin : for the Ant task fixes.
+- Jan Blok : for the very great improvements on the installer GUI.

@@ -98,12 +98,12 @@
   -->
 
   <!-- Compiler to use put your own here (jikes, modern, gcj, ...) -->
-  <!-- <property name="build.compiler" value="jikes" /> -->
+  <!--<property name="build.compiler" value="jikes" />-->
   
   <!-- Define directories -->
   <property file="src/ant.properties"/>
-  <property name="ver" value="3.0" />
-  <property name="rel" value="0" />
+  <property name="ver" value="3.1" />
+  <property name="rel" value="pre4" />
   
   <property name="src.dir" value="${basedir}/src/lib" />
   <property name="img.dir" value="${basedir}/src/img" />
@@ -418,6 +418,18 @@
     <antcall target="compile.panel">
       <param name="panel" value="ShortcutPanel"/>
       <param name="panel-dir" value="ShortcutPanel"/>
+    </antcall>
+    <antcall target="compile.panel">
+      <param name="panel" value="UserInputPanel" />
+      <param name="panel-dir" value="UserInputPanel" />
+    </antcall>
+    <antcall target="compile.panel">
+      <param name="panel" value="RuleTextField" />
+      <param name="panel-dir" value="UserInputPanel" />
+    </antcall>
+    <antcall target="compile.panel">
+      <param name="panel" value="RuleInputField" />
+      <param name="panel-dir" value="UserInputPanel" />
     </antcall>
   </target>
 

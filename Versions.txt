@@ -1,5 +1,22 @@
 [ The list of the different public versions of IzPack ]
 
+    > 3.1.0 pre4 (build 2002.12.08)
+
+- A lot of installer GUI improvements by Jan Blok :
+  o an image can be shown in the installer left side
+  o buttons will look great under OSX
+  o HelloPanel : don't display authors if not present
+  o InstallPanel : immediate installation launching (the silly install button
+    has gone to heaven)
+  o LicencePanel : better GUI
+  o PackPanel : use table and display description, complete rewrite of this
+    panel
+  o IzPackMetalTheme : Tahoma is used if present on the target machine.
+- New UserInputPanel that allows to prompt the users for some values that can
+  later be stored as variables that can be parsed for in files (Elmar Grom).
+  Sorry but I did not have time to include the related documentation at the
+  release time.
+
     > 3.1.0 pre3 (build 2002.11.24)
 
 - Restyled, cleaned, javadoc'ed the whole IzPack source code.
