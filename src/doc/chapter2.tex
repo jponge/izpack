@@ -366,6 +366,28 @@ tag takes the following attributes:
 \item \texttt{arch}: the machine architecture (see the JVM \texttt{os.arch} property).
 \end{itemize}
 
+\subsubsection{\texttt{<updatecheck>}}
+
+This feature can update an already installed package, therefore removing
+superfluous files after installation. Here's how this feature author (Tino Schwarze)
+described it on the IzPack development mailing-list:
+\begin{quote}
+Each pack can now
+specify an \texttt{<updatecheck>} tag. It supports a subset of ant fileset
+syntax, e.g.:
+\begin{verbatim}
+<updatecheck>
+  <include name="lib/**" />
+  <exclude name="config/local/** />
+</updatecheck>
+\end{verbatim}\
+
+If the paths are relative, they will be matched relative to
+\texttt{\$INSTALL\_PATH}. Update checks are only enabled if at least one
+\texttt{<include>} is specified. See
+\texttt{com.izforge.izpack.installer.Unpacker} for details.
+\end{quote}
+
 \subsubsection{\label{tag:file}\texttt{<file>} - add files or directories}
 
 The \texttt{<file>} tag specifies a file (a directory is a file too) to 

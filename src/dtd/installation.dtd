@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 
 <!--
+
         =====================================
         The DTD for IzPack Installation Files
         =====================================
+$Id$
         
 -->
 
@@ -59,7 +61,7 @@
 
 <!-- The packs section (indicates the packs to create) -->
 <!ELEMENT packs (pack+)>
-    <!ELEMENT pack (description, os*, file*, singlefile*, fileset*, parsable*, executable*)>
+    <!ELEMENT pack (description, os*, file*, singlefile*, fileset*, updatecheck?, parsable*, executable*)>
         <!ATTLIST pack name CDATA #REQUIRED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
         <!ATTLIST pack preselected (yes|no) "yes">
@@ -84,8 +86,7 @@
       <!ELEMENT include EMPTY>
             <!ATTLIST include name CDATA #REQUIRED>
       <!ELEMENT exclude EMPTY>
-            <!ATTLIST exclude name CDATA #REQUIRED>             
-            
+            <!ATTLIST exclude name CDATA #REQUIRED>                         
       <!ELEMENT parsable (os*)>
           <!ATTLIST parsable targetfile CDATA #REQUIRED>
           <!ATTLIST parsable type CDATA "plain">
@@ -106,6 +107,7 @@
                   <!ATTLIST os name CDATA #IMPLIED>
                   <!ATTLIST os version CDATA #IMPLIED>
                   <!ATTLIST os arch CDATA #IMPLIED>
+      <!ELEMENT updatecheck (include*, exclude*)>
 
 <!-- Allows the inclusion in the installer of a native library -->
 <!ELEMENT native EMPTY>
