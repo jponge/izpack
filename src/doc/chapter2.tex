@@ -8,7 +8,7 @@
 
 In order to write your XML installation files, you just need a plain
 text editor. Of course it's always easier to work with color coded text,
-so you might rather want to work with a text editor havaing such a
+so you might rather want to work with a text editor having such a
 feature. Here is a list of free editors that work well :
 \begin{itemize}
   \item Jext : \url{http://www.jext.org/}
@@ -86,14 +86,14 @@ There are two types of variables:
         all dynamic in nature. This means that the value of each
         variable depends on local conditions on the target system.
   \item Variables that you can define. You also define the value,
-        wich is fixed for a given installation file.
+        which is fixed for a given installation file.
 \end{itemize}
 
 You define your own variables in the installation XML file with the
-texttt{<variable>} tag. How to do this is explained in detail later in
-this cahpter.\\
+\texttt{<variable>} tag. How to do this is explained in detail later in
+this chapter.\\
 
-\textbf\{Please note} that when using variables they must always appear
+\textbf{Please note} that when using variables they must always appear
 with a '\texttt{\$}' sign as the first character, even though they are
 not defined this way.\\
 
@@ -178,11 +178,11 @@ Here is an example of a typical \texttt{<info>} section :\\
 
 This element allows you to define variables for the variables
 substitution system. Some variables are built-in, such as
-\texttt{\$INSTALL\_PATH} (which is the installation path choosen by the
+\texttt{\$INSTALL\_PATH} (which is the installation path chosen by the
 user). When you define a set of variables, you just have to place as
 many \texttt{<variable>} tags in the file as needed. If you define a
 variable named \texttt{VERSION} you need to type \$VERSION in the files
-to parse. The variable subsitutor will then replace it with the correct
+to parse. The variable substitutor will then replace it with the correct
 value. One \texttt{<variable>} tag take the following attributes :
 \begin{itemize}
 
@@ -203,7 +203,7 @@ Here's a sample \texttt{<variables>} section :\\
 
 \subsection{The GUI Preferences Element \texttt{<guiprefs>}}
 
-This element allows you to set the behaviour of your installer GUI. This
+This element allows you to set the behavior of your installer GUI. This
 information will not have any effect on the command-line installers that will be
 available in future versions of \IzPack. The arguments to specify are :
 \begin{itemize}
@@ -222,7 +222,7 @@ Here's a sample :
 \end{verbatim}
 \normalsize
 
-\subsection{The Localisation Element \texttt{<locale>}}
+\subsection{The Localization Element \texttt{<locale>}}
 
 This element is used to specify the language packs (langpacks) that you want to
 use for your installer. You must set one \texttt{<langpack>} markup per
@@ -275,13 +275,13 @@ Here's a sample :
 \end{verbatim}
 \normalsize
 
-\subsection{The panels element \texttt{<panels>}}
+\subsection{The Panels Element \texttt{<panels>}}
 
-There you tell the compiler which panels you want to use. They will appear in
-the installer in the order that you put them in your XML installation file. Take
-a look at the different panels in order to see the ones you need. The
-\texttt{<panel>} markup takes a single attribute \texttt{classname} which is the
-classname of the panel.\\
+Here you tell the compiler which panels you want to use. They will
+appear in the installer in the order in which they are listed in your
+XML installation file. Take a look at the different panels in order to
+find the ones you need. The \texttt{<panel>} markup takes a single
+attribute \texttt{classname} which is the classname of the panel.\\
 
 Here's a sample :
 \footnotesize
@@ -296,10 +296,10 @@ Here's a sample :
 \end{verbatim}
 \normalsize
 
-\subsection{The packs section \texttt{<packs>}}
+\subsection{The Packs Section \texttt{<packs>}}
 
-This is a crucial section as you will specify here the files to be installed. It
-contains the following XML elements :\\
+This is a crucial section as it is used to specify the files that need
+to be installed. It contains the following XML elements :\\
 \begin{itemize}
 
   \item \texttt{<pack>} : specifies a pack, takes the following attributes :
@@ -313,16 +313,16 @@ contains the following XML elements :\\
   The following tags are available for a \texttt{<pack>} markup :
   \begin{itemize}
   
-    \item \texttt{<description>} : text data describing the pack
+    \item \texttt{<description>} : text describing the pack
     \item \texttt{<file>} : specifies a file to include, takes the following
     attributes :
     \begin{itemize}
     
-      \item \texttt{src} : the file location (relative path) - if it's a
-      directory it will add recursively its content
+      \item \texttt{src} : the file location (relative path) - if this is a
+      directory its content will be added recursively
       \item \texttt{targetdir} : the destination directory, could be something
       like \texttt{\$INSTALL\_PATH/subdirX}
-      \item \texttt{os} : can optionnaly specify a target operating system
+      \item \texttt{os} : can optionally specify a target operating system
       (\texttt{unix, windows, mac})
     
     \end{itemize}\
@@ -341,28 +341,28 @@ contains the following XML elements :\\
     \end{itemize}\
     You specify the files with  \texttt{<include>} and \texttt{<exclude>} tags
     that take the \texttt{name} parameter to specify the Ant-like pattern
-    \item \texttt{<parsable>} : used to specify the files to parse by the
+    \item \texttt{<parsable>} : used to specify the files for parsing by the
     variables substitutor, here are the attributes :
     \begin{itemize}
     
       \item \texttt{targetfile} : the file to parse, could be something like\\
       \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
       \item \texttt{type} : specifies the type (same as for the resources) -
-      default is \texttt{plain}
+      the default is \texttt{plain}
       \item \texttt{encoding} : specifies the file encoding
     
     \end{itemize}\
     \item \texttt{<executable>} : a very useful thing if you need to execute
-    something at a stage of the installation process. It can also be use to set
+    something during the installation process. It can also be used to set
     the executable flag on Unix-like systems. Here are the attributes :
     \begin{itemize}
     
       \item \texttt{targetfile} : the file to run, could be something like\\
       \texttt{\$INSTALL\_PATH/bin/launch-script.sh}
       \item \texttt{class} : the class to run for a \Java program
-      \item \texttt{type} : \texttt{bin} or \texttt{jar} (default is
+      \item \texttt{type} : \texttt{bin} or \texttt{jar} (the default is
       \texttt{bin})
-      \item \texttt{stage} : specifies when to launch it : \texttt{postinstall}
+      \item \texttt{stage} : specifies when to launch : \texttt{postinstall}
       is just after the installation is done and the default value,
       \texttt{never} will never launch it (useful to set the +x flag on Unix)
       \item \texttt{failure} : specifies what to do when an error occurs :
@@ -371,15 +371,15 @@ contains the following XML elements :\\
       that something's wrong
     
     \end{itemize}\
-    A \texttt{<args>} tag can also be specified in order to give the executable
-    some arguments :
+    A \texttt{<args>} tag can also be specified in order to pass
+    arguments to the executable:
     \begin{itemize}
     
-      \item \texttt{<arg>} : specifies an argument specified in the
+      \item \texttt{<arg>} : passes the argument specified in the
       \texttt{value} attribute
     
     \end{itemize}\
-    Finally it is possible to specifiy the target operating system with the
+    Finally it is possible to specify the target operating system with the
     \texttt{<os>} tag :
     \begin{itemize}
     
@@ -387,7 +387,7 @@ contains the following XML elements :\\
       operating system family
       \item \texttt{name} : the operating system name
       \item \texttt{version} : the operating system version
-      \item \texttt{arch} : the operating system architecture (for intance the
+      \item \texttt{arch} : the operating system architecture (for instance the
       Linux kernel can run on i386, sparc, and so on)
     
     \end{itemize}\
@@ -396,7 +396,7 @@ contains the following XML elements :\\
 
 \end{itemize}\
 
-Here's a sample one :
+Here's an example installation file :
 \footnotesize
 \begin{verbatim}
 <packs>
@@ -426,14 +426,14 @@ Here's a sample one :
 \end{verbatim}
 \normalsize
 
-\subsection{The native element \texttt{<native>}}
+\subsection{The Native Element \texttt{<native>}}
 
-This is used when you want to use a feature that requires a native library. The
-native libraries are put under \texttt{bin/native/}. There are 2 kind of native
-libraries : the \IzPack ones and the third-party ones. As a consequence you will
-find the official ones under \texttt{bin/native/izpack} and you can put your own
-for instance under \texttt{bin/native/3rdparty}. The markup takes the following
-attributes :
+Use this if you want to use a feature that requires a native library.
+The native libraries are placed under \texttt{bin/native/..}. There are 2
+kinds of native libraries : the \IzPack libraries and the third-party
+ones. The IzPack libraries are located at \texttt{bin/native/izpack},
+you can place your own libraries at \texttt{bin/native/3rdparty}. The
+markup takes the following attributes :
 \begin{itemize}
 
   \item \texttt{type} : \texttt{izpack} or \texttt{3rdparty}
@@ -448,13 +448,13 @@ Here's a sample :
 \end{verbatim}
 \normalsize
 
-\subsection{The jar merging element \texttt{<jar>}}
+\subsection{The jar Merging Element \texttt{<jar>}}
 
-If you adapt \IzPack for your own needs, you might need to merge the content of
-a jar file into the jar installer. For instance, it could be a library that you
-need to merge into. For this the \texttt{<jar>} markup can allow you to merge
-rawly the content of another jar file, specified by the \texttt{src}
-attribute.\\
+If you adapt \IzPack for your own needs, you might need to merge the
+content of another jar file into the jar installer. For instance, this
+could be a library that you need to merge. The \texttt{<jar>} markup
+allows you to merge the raw content of another jar file, specified by
+the \texttt{src} attribute.\\
 
 A sample :
 \footnotesize
@@ -464,21 +464,24 @@ A sample :
 \normalsize
 
 % The panels
-\section{The available panels}
+\section{The Available Panels}
 
-We will list here a set of \Java-only panels. More advanced ones are listed in
-the \textit{Advanced features} chapter. Each panel is listed by its name, hence
-the \texttt{classname} attribute (case-sensitive).\\
+In this section I will introduce the various panels available in IzPack.
+The usage for most is pretty simple and described right here. The more
+elaborate ones are explained in more detail in the \textit{Advanced
+Features} chapter or in their own chapter. The panels are listed by
+their class name. This is the name that must be used with the
+\texttt{classname} attribute (case-sensitive).\\
 
 \subsection{HelloPanel}
 
-This panel is able to welcome the user by specifying the project name, the
+This panel welcomes the user by displaying the project name, the
 version, the URL as well as the authors.\\
 
 \subsection{InfoPanel and HTMLInfoPanel}
 
-A kind of 'README' panels. Shows any text you would like to set. The text to
-show is specified by the \texttt{(HTML)InfoPanel.info} resource.\\
+This is a kind of 'README' panel. It presents text of any length. The
+text is specified by the \texttt{(HTML)InfoPanel.info} resource.\\
 
 \subsection{LicencePanel and HTMLLicencePanel}
 
@@ -487,9 +490,9 @@ show is specified by the \texttt{(HTML)InfoPanel.info} resource.\\
 LicensePanel. In France the word is Licence ... and one of my diploma is a
 'Licence' so ...} :-)\\
 
-These panels can prompt the user for a license agreement. This panel blocks
-unless the user selects the agreeing option. To specify the license agreemnet
-textn you have to use the \texttt{(HTML)LicencePanel.licence} resource.\\
+These panels can prompt the user to acknowledge a license agreement. They block
+unless the user selects the 'agree' option. To specify the license agreement
+text you have to use the \texttt{(HTML)LicencePanel.licence} resource.\\
 
 \subsection{PacksPanel}
 
@@ -497,14 +500,15 @@ Allows the user to select the packs he wants to install.\\
 
 \subsection{ImgPacksPanel}
 
-Same as above, but for each a panel a different picture is shown to the user.
-The pictures are specified with the resources \texttt{ImgPacksPanel.img.x} where
-x stands for the pack name, the numbers start from 0. Of course it's up to you
-to specify as many images as needed and with right numbers.\\
+This is the same as above, but for each panel a different picture is
+shown to the user. The pictures are specified with the resources
+\texttt{ImgPacksPanel.img.x} where x stands for the pack name, the
+numbers start from 0. Of course it's up to you to specify as many images
+as needed and with correct numbers.\\
 
 \subsection{TargetPanel}
 
-Will allow the user to select the installation path. This can be customized with
+This panel allows the user to select the installation path. It can be customized with
 the following resources (they are text files containing the path) :
 \begin{itemize}
 
@@ -513,8 +517,8 @@ the following resources (they are text files containing the path) :
   \item \texttt{TargetPanel.dir} : the directory name, instead of the software
   to install name
   \item \texttt{TargetPanel.dir.d} where d is a "dynamic" name, as returned by
-  the \Java machine. You should write the name in lowercase and by replacing the
-  spaces with underscores. For instance, you could need a different setting for
+  the \Java virtual machine. You should write the name in lowercase and replace the
+  spaces with underscores. For instance, you might want a different setting for
   Solaris and GNU/Linux which are both Unix-like systems. The resources would be
   \texttt{TargetPanel.dir.sunos, TargetPanel.dir.linux}. You should have a
   Unix-resource in case it wouldn't work though.
@@ -527,11 +531,18 @@ You should always have this one as it launches the installation process !\\
 
 \subsection{XInfoPanel}
 
-A panel showing a text parsed by the variables subsitutor. The text can be
-specified through the \texttt{XInfoPanel.info} resource. It can be useful when
-you have to show some information after the installation process is done (for
-instance if the text contains the target path).\\
+A panel showing text parsed by the variable substitutor. The text can be
+specified through the \texttt{XInfoPanel.info} resource. This panel can
+be useful when you have to show information after the installation
+process is completed (for instance if the text contains the target
+path).\\
 
 \subsection{FinishPanel}
 
-A ending panel, able to write automated installers information (see later).\\ 
+A ending panel, able to write automated installer information. For
+details see the chapter on 'Advanced Features'.\\ 
+
+\subsection{ShortcutPanel}
+
+This panel is used to create desktop shortcuts. For details on using the
+ShortcutPanel see the chapter 'Desktop Shortcuts'.
