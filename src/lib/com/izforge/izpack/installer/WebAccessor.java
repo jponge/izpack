@@ -318,47 +318,5 @@ public class WebAccessor
                                         passField.getPassword());
     }
   };
-  
-  /**
-   * Testing... remove this
-   */
-  public static void main(String[] args)
-  {
-    final JTextField page = new JTextField("http://callisto.mitre.org/superman");
-    final JLabel result = new JLabel(" ");
-    final javax.swing.JButton button = new javax.swing.JButton("foo");
-    button.setAction(new javax.swing.AbstractAction("go!") {
-          public void actionPerformed(java.awt.event.ActionEvent e)
-          {
-            WebAccessor accessor = new WebAccessor(null);
-            URL url = null;
-            try {
-              url = new URL(page.getText());
-            } catch (Exception x) {}
-            
-            try {
-              InputStream iStream = accessor.openInputStream(url);
-              
-              if (iStream != null)
-              {
-                String h1 = ((java.net.HttpURLConnection)url.openConnection()).getHeaderField(1);
-                result.setText("HEADER FIELD 1 = " + h1);
-              }
-              else
-                result.setText("Failure: iStream=null");
-              
-            } catch (Exception x) {
-              x.printStackTrace();
-            }
-          }
-        });
-    javax.swing.JFrame frame = new javax.swing.JFrame();
-    frame.getContentPane().add(page, BorderLayout.NORTH);
-    frame.getContentPane().add(result, BorderLayout.CENTER);
-    frame.getContentPane().add(button, BorderLayout.SOUTH);
-    frame.pack();
-    frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-    frame.setVisible(true);
-  }
 }
 
