@@ -353,8 +353,9 @@ public class Installer
     	{
 		      // We simply put our nice theme
           MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
-          ButtonFactory.useButtonIcons();
-    	}
+          ButtonFactory.useHighlightButtons();
+          installdata.buttonsHColor = new Color(182, 182, 204);
+      }
       lnf = "swing";
     }
     else
@@ -381,6 +382,7 @@ public class Installer
 
       lnf = "kunststoff";
     }
+    ButtonFactory.useButtonIcons();
   }
 
 
