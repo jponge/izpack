@@ -40,7 +40,7 @@ html:
 .PHONY: subdirs
 subdirs:
 	for d in $(SUBDIRS) ; do \
-		make -C $$d $(MAKECMDGOALS) ; \
+		${MAKE} -C $$d $(MAKECMDGOALS) ; \
 	done
 
 # Cleanup
@@ -50,7 +50,7 @@ clean:	subdirs
 	rm -rf pdf
 	rm -rf ps
 	rm -rf html
-	
+
 # Uninstall
 .PHONY: uninstall
 uninstall:
