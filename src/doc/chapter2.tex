@@ -783,7 +783,7 @@ uninstaller. The markup takes the following attributes :\begin{itemize}
 
   \item \texttt{type} : \texttt{izpack} or \texttt{3rdparty}
   \item \texttt{name} : the library filename
-  \item \texttt(stage): stage where to use the library
+  \item \texttt{stage}: stage where to use the library
   (install|uninstall|both)
 
 \end{itemize}\
@@ -807,8 +807,17 @@ Here's a sample :
 If you adapt \IzPack for your own needs, you might need to merge the
 content of another jar file into the jar installer. For instance, this
 could be a library that you need to merge. The \texttt{<jar>} markup
-allows you to merge the raw content of another jar file, specified by
-the \texttt{src} attribute.\\
+allows you to merge the raw content of another jar file into the 
+installer and the uninstaller. It is necessary that the paths in the
+jars are unique because only the contained files of the jar are added
+to the installer jar, not the jar file self.
+The attributes are:\begin{itemize}
+\item \texttt{src} : the path at compile time
+\item \texttt{stage}: stage where to use the contents of the additional jar file
+  (install|uninstall|both)
+
+\end{itemize}\
+
 
 A sample :
 \footnotesize
