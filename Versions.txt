@@ -11,6 +11,7 @@
 - As many sensitive clean-ups as possible have been made after a FindBugs run.
 - Support of native libraries in the uninstaller (Klaus Bartz).
 - InfoPanel: variables substitution is now allowed (Borje Jonsson).
+- InstallPanel supports internationalized package names (Gaganis Giorgos).
 
   > 3.6.1 (build 2004.xx.yy)
 
