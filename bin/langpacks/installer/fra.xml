@@ -45,6 +45,7 @@
     
     <str id="PacksPanel.info" txt="Choisissez ici les paquetages à installer :"/>
     <str id="PacksPanel.tip" txt="Note : les paquetages grisés ne sont pas optionnels."/>
+    <str id="PacksPanel.space" txt="Espace total requis :" />
     
     <str id="InstallPanel.info" txt="Vous pouvez lancer le processus d'installation ici :"/>
     <str id="InstallPanel.install" txt="Installer !"/>
