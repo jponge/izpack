@@ -1074,14 +1074,19 @@ public class Compiler extends Thread
       URL url = findIzPackResource("lib/uninstaller.jar", "Uninstaller", root);
       packager.addResource("IzPack.uninstaller", url);
 
-      if (uninstallInfo != null) {
-	String uninstallerName = uninstallInfo.getAttribute("name");
-	if (uninstallerName != null &&
-	    uninstallerName.endsWith(".jar") &&
-	    uninstallerName.length() > ".jar".length())
-	  info.setUninstallerName(uninstallerName);
+      if (uninstallInfo != null) 
+      {
+        String uninstallerName = uninstallInfo.getAttribute("name");
+        if (uninstallerName != null &&
+            uninstallerName.endsWith(".jar") &&
+            uninstallerName.length() > ".jar".length())
+          info.setUninstallerName(uninstallerName);
       }
     }
+    // Add the path for the summary log file if specified
+    XMLElement slfPath = root.getFirstChildNamed("summarylogfilepath");
+    if (slfPath != null)
+      info.setSummaryLogFilePath(requireContent(slfPath));
 
     packager.setInfo(info);
     notifyCompilerListener("addInfo", CompilerListener.END, data);

@@ -38,6 +38,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -520,6 +521,32 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     showSpaceRequired();
     showFreeSpace();
   }
+  /* (non-Javadoc)
+   * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
+   */
+  public String getSummaryBody()
+  {
+    StringBuffer retval = new StringBuffer(256);
+    Iterator iter = idata.selectedPacks.iterator();
+    boolean first = true;
+    while( iter.hasNext())
+    {
+      if( ! first )
+      {
+        retval.append("<br>");
+      }
+      first = false;
+      Pack pack = (Pack) iter.next();
+      if (langpack != null && pack.id != null && !pack.id.equals(""))
+      {
+        retval.append(langpack.getString(pack.id));
+      }
+      else
+        retval.append(pack.name);
+    }
+    return( retval.toString());
+  }
+
 
   static class CheckBoxEditorRenderer
     extends AbstractCellEditor

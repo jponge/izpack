@@ -58,6 +58,9 @@ public class Info implements Serializable
   /** The uninstaller name */
   private String uninstallerName = "uninstaller.jar";
 
+  /** The path of the summary log file */
+  private String summaryLogFilePath = "$INSTALL_PATH/uninstaller/InstallSummary.htm";
+
   /**  The constructor, deliberatly void.  */
   public Info()
   {
@@ -297,4 +300,20 @@ public class Info implements Serializable
     installationSubPath = string;
   }
 
+  /**
+   * Returns the summary log file path.
+   * @return the summary log file path
+   */
+  public String getSummaryLogFilePath()
+  {
+    return summaryLogFilePath;
+  }
+  /**
+   * Sets the summary log file path.
+   * @param summaryLogFilePath the summary log file path to set
+   */
+  public void setSummaryLogFilePath(String summaryLogFilePath)
+  {
+    this.summaryLogFilePath = summaryLogFilePath;
+  }
 }

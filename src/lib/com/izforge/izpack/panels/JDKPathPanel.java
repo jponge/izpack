@@ -288,5 +288,11 @@ public class JDKPathPanel extends PathInputPanel
   {
     variableName = string;
   }
-
+  /* (non-Javadoc)
+   * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
+   */
+  public String getSummaryBody()
+  {
+    return(idata.getVariable(getVariableName()));
+  }
 }

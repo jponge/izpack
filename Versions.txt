@@ -8,6 +8,9 @@
   (feature request #470).
 - The uninstaller name can be changed (Thomas Girard).
 - Documentation on the panels creation updates (Elmar Grom).
+- New SummaryPanel (Klaus Bartz).
+- New SummaryLoggerInstallerListener which loggs the summary
+  into a log file (Klaus Bartz).
 
   > 3.7.2 (build N/A)
 

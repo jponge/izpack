@@ -145,6 +145,14 @@
 
     <str id="ProcessPanel.heading" txt="Prozesse" />
 
+    <!-- Strings for the summary of panels --- START -->
+    <str id="SummaryPanel.info" txt="Alle für die Installation notwendigen Daten liegen nun vor. Die wichtigsten sind nachfolgend aufgeführt. Klicken Sie auf &quot;Weiter&quot; um mit der Installation zu beginnen, "/>
+    <str id="TargetPanel.summaryCaption" txt="Installationspfad"/>
+    <str id="JDKPathPanel.summaryCaption" txt="Pfad des JDK-Verzeichnisses"/>
+    <str id="PacksPanel.summaryCaption" txt="Gewählte Installationspakete"/>
+    <str id="ImgPacksPanel.summaryCaption" txt="Gewählte Installationspakete"/>
+    <!-- Strings for the summary of panels --- END -->
+
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>

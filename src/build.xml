@@ -638,6 +638,10 @@
             <param name="panel" value="SimpleFinishPanel"/>
             <param name="panel-dir" value="SimpleFinishPanel"/>
         </antcall>
+    	<antcall target="compile.panel.simple">
+            <param name="panel" value="SummaryPanel"/>
+            <param name="panel-dir" value="SummaryPanel"/>
+        </antcall>
     </target>
 
     <!-- Compiles the base custom action classes which should placed into
@@ -745,6 +749,11 @@
         <antcall target="compile.uninstaller-listener.simple">
             <param name="listener" value="AntActionUninstallerListener"/>
             <param name="listener-dir" value="AntActionUninstallerListener"/>
+            <param name="listener-include" value="com/izforge/izpack/event"/>
+        </antcall>
+        <antcall target="compile.installer-listener.simple">
+            <param name="listener" value="SummaryLoggerInstallerListener"/>
+            <param name="listener-dir" value="SummaryLoggerInstallerListener"/>
             <param name="listener-include" value="com/izforge/izpack/event"/>
         </antcall>
      

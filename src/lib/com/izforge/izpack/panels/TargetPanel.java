@@ -119,4 +119,11 @@ public class TargetPanel extends PathInputPanel
   {
     new TargetPanelAutomationHelper().makeXMLData(idata, panelRoot);
   }
+  /* (non-Javadoc)
+   * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
+   */
+  public String getSummaryBody()
+  {
+    return(idata.getInstallPath());
+  }
 }
