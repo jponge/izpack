@@ -125,3 +125,39 @@ There are 2 kinds of installers available :
   an HTTP server, and the installer retrieves it at install time (see
   section~\ref{webinstaller}))
 \end{itemize}
+
+\subsection{Installers for older VM Versions}
+For default the installer will be made for the current most used version of
+the java runtime environment. It is possible to create an installation that
+is runable with an older VM version.\\
+What version is used can be detected in the Ant properties file that is used 
+to build IzPack. It is \texttt{[IzPackRoot]/src/ant.properties}. 
+The value of the property "source" determines the VM version.\\
+If compatibility to older versions is needed, a recompilation of the jar files 
+of the IzPack system should be done. For this the sources of IzPack and an Ant
+installation are needed. The sources of IzPack are selectable at installation
+time of IzPack. Before a recompilation of all can be triggered, the version of 
+byte code should be changed. This can be done simple by changing the "source" 
+entry in \texttt{[IzPackRoot]/src/ant.properties} to the needed value. The 
+recompilation should be performed with the current most used VM version 
+because there are classes of it referenced in the IzPack code. Usage of an 
+older VM version at installation time will be possible because the classes of
+the newer VM version are only used after a VM version check. Of course, some 
+features of IzPack will be missing at using an old VM version. To recompile
+IzPack go into \texttt{[IzPackRoot]/src}. Use a current JDK (not JRE) for this. 
+Call
+\footnotesize
+\begin{verbatim}
+ant clean
+\end{verbatim}
+\normalsize
+followed by
+\footnotesize
+\begin{verbatim}
+ant all
+\end{verbatim}
+\normalsize
+Then all jar files in \texttt{[IzPackRoot]/lib}, 
+\texttt{[IzPackRoot]/bin/panels} and \texttt{[IzPackRoot]/bin/customActions}
+should be recompiled with the selected source version.
+
