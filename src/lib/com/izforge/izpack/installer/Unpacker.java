@@ -692,7 +692,7 @@ public class Unpacker extends Thread
     // Me make the .uninstaller directory
     String dest =
       IoHelper.translatePath("$INSTALL_PATH", vs) + File.separator + "Uninstaller";
-    String jar = dest + File.separator + "uninstaller.jar";
+    String jar = dest + File.separator + idata.info.getUninstallerName();
     File pathMaker = new File(dest);
     pathMaker.mkdirs();
 

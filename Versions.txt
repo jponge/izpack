@@ -6,6 +6,7 @@
   (Thorsten Kamann)
 - Uninstaller: use the system Look and Feel instead of the cross-platform one
   (feature request #470).
+- The uninstaller name can be changed (Thomas Girard).
 
   > 3.7.0 (build 2004.01.11)
 

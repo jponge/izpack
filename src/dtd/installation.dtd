@@ -27,6 +27,7 @@ $Id$
     <!ELEMENT javaversion (#PCDATA)>
     <!ELEMENT uninstaller EMPTY>
         <!ATTLIST uninstaller write (yes|no) "yes">
+        <!ATTLIST uninstaller name CDATA "uninstaller.jar">
     <!ELEMENT webdir (#PCDATA)>
 
 <!-- The variables markup (variable declarations ) -->    

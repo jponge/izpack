@@ -55,6 +55,9 @@ public class Info implements Serializable
   /**  The application Web Directory URL */
   private String webDirURL = null;
 
+  /** The uninstaller name */
+  private String uninstallerName = "uninstaller.jar";
+
   /**  The constructor, deliberatly void.  */
   public Info()
   {
@@ -199,6 +202,24 @@ public class Info implements Serializable
   public String getWebDirURL()
   {
     return webDirURL;
+  }
+
+  /**
+   *  Sets the name of the uninstaller.
+   *
+   * @param name the name of the uninstaller.
+   */
+  public void setUninstallerName(String name) {
+    this.uninstallerName = name;
+  }
+
+  /**
+   *  Returns the name of the uninstaller.
+   *
+   * @return the name of the uninstaller.
+   */
+  public String  getUninstallerName() {
+    return this.uninstallerName;
   }
 
   /**

@@ -1073,6 +1073,14 @@ public class Compiler extends Thread
     {
       URL url = findIzPackResource("lib/uninstaller.jar", "Uninstaller", root);
       packager.addResource("IzPack.uninstaller", url);
+
+      if (uninstallInfo != null) {
+	String uninstallerName = uninstallInfo.getAttribute("name");
+	if (uninstallerName != null &&
+	    uninstallerName.endsWith(".jar") &&
+	    uninstallerName.length() > ".jar".length())
+	  info.setUninstallerName(uninstallerName);
+      }
     }
 
     packager.setInfo(info);

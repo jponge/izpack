@@ -87,5 +87,6 @@ IzPack for your projects ;-)
 - Marc Eppelmann : for the Unix shortcuts support.
 - Michael Hagedorn : for the UserInputPanel fixes.
 - Jan Pavlovic : for the Czech translation.
+- Thomas Girard : for the uninstaller custom names patch.
 
 # vim: fileformat=dos

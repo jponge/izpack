@@ -179,7 +179,7 @@ contains the following elements :
     \item \texttt{name} : the author's name
     \item \texttt{email} : the author's email
   \end{itemize}
-  \item \texttt{<uninstaller>} : specifies whether to create an uninstaller after installation, it has only the \texttt{write} attribute, with default value \texttt{yes}. If this tag is not specified, the uninstaller will still be written.
+  \item \texttt{<uninstaller>} : specifies whether to create an uninstaller after installation, and which name to use for it. This tag has the \texttt{write} attribute, with default value \texttt{yes}. If this tag is not specified, the uninstaller will still be written. The \texttt{name} attribute can be used to change the default name of the generated uninstaller, \textit{i.e.} \texttt{uninstaller.jar}.
   \item \texttt{<javaversion>} : specifies the minimum version of Java required to install your program. Values can be \texttt{1.2}, \texttt{1.2.2}, \texttt{1.4}, etc. The test is a lexical comparison against the \texttt{java.version} System property on the install machine.
   \item \texttt{<webdir>} : Causes a ``web installer'' to be created, and specifies the URL packages are retrieved from at install time. The content of the tag must be a properly formed URL. See section~\ref{webinstaller} for more details.
 
