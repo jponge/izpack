@@ -1,5 +1,11 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.0.7 (build 2003.04.04)
+
+- Slovakian langpack thanks to Milan Madzia.
+- Japanese, Russian and Dutch langpacks updates.
+- The uninstallers can now run scripts thanks to a patch from Hani Suleiman.
+
   > 3.0.6 (build 2003.02.27)
 
 - Updated the French and German langpacks.
