@@ -65,5 +65,6 @@ IzPack for your projects ;-)
 - Cristian Ghezzi : for the Italian i18n contributions.
 - Chad McHenry : for the compiler warnings generation patch.
 - Everaldo & the KDE crew : for the first-class Crystal icons theme.
+- Frank Bille Jensen : for the Danish translation.
 
 # vim: fileformat=dos 

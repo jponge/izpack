@@ -2,6 +2,8 @@
 
   > 3.6.0 (build 2004.xx.yy)
 
+- New Danish langpack (Frank Bille Jensen).
+
   > 3.5.2 (build 2004.xx.yy)
 
 - Fixed moving empty directory to root (pbe@whitestein.com).
