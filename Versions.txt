@@ -20,7 +20,7 @@
 - New Norwegian langpack (Mohammed Sourouri).
 - New Chinese langpack (Xi Ping Wang).
 - The language selection box will now appear in the Windows tasks list (Harald
-  Süpfle).
+  Spfle).
 - Spanish langpack update (David Perez Carmona).
 - Fix that prevented the correct detection of OS X.
 - Custom actions for ant calls (Klaus Bartz).
@@ -38,6 +38,7 @@
 - Logfile for ProcessPanel (Klaus Bartz).
 - Automatic scrolling of ProcessPanel output (Anthony Xin Chen).
 - Fixed bug parsing some brace enclosed variables (Chad McHenry) (bug #2451).
+- New Serbian translation (Filip Brcic).
 - Bug at loading Panels from other packages fixed (Klaus Bartz).
 
   > 3.6.1 (build 2004.10.09)

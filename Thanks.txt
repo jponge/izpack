@@ -83,5 +83,6 @@ IzPack for your projects ;-)
 - Redhuan Daniel Oon : for the Malaysian translation.
 - Mohammed Sourouri : for the Norwegian translation.
 - Xi Ping Wang : for the Chinese translation.
+- Filip Brcic : for the Serbian translation.
 
 # vim: fileformat=dos
