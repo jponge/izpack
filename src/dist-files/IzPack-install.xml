@@ -23,13 +23,13 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.4.0 (build 2003.12.06)</appversion>
+        <appversion>3.5.0-RC1 (build 2004.xx.yy) [unofficial]</appversion>
         <authors>
             <author email="julien@izforge.com" name="Julien PONGE (maintainer)"/>
             <author email="(see Thanks.txt)" name="Many other nice contributors" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
-				<javaversion>1.2</javaversion>
+        <javaversion>1.2</javaversion>
     </info>
 
     <!-- Flexible and in the screen proportions -->
@@ -40,7 +40,7 @@
         <langpack iso3="eng"/>
         <langpack iso3="fra"/>
         <langpack iso3="deu"/>
-				<langpack iso3="ita"/>
+        <langpack iso3="ita"/>
         <langpack iso3="jpn"/>
         <langpack iso3="spa"/>
         <langpack iso3="cat"/>
@@ -60,12 +60,6 @@
     <resources>
         <res src="install-readme.html" id="HTMLInfoPanel.info"/>
         <res src="Licence.txt" id="LicencePanel.licence"/>
-        <!--
-        <res src="core.jpg" id="ImgPacksPanel.img.0"/>
-        <res src="doc.jpg" id="ImgPacksPanel.img.1"/>
-        <res src="sample.jpg" id="ImgPacksPanel.img.2"/>
-        <res src="src.jpg" id="ImgPacksPanel.img.3"/>
-        -->
         <res src="langsel.jpg" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
         <res src="useNativeLAF" id="useNativeLAF" />

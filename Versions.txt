@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.x.x (build.2004.xx.yy)
+  > 3.5.0 (build.2004.xx.yy) [TBA]
 
 - Upate Checking: The installer is now able to "update" an already installed
   package, therefore removing superfluous files after installation
