@@ -132,9 +132,10 @@ $Id$
       <!ELEMENT updatecheck (include*, exclude*)>
 
 <!-- Allows the inclusion in the installer or uninstaller of a native library -->
-<!ELEMENT native EMPTY>
+<!ELEMENT native (os*)>
     <!ATTLIST native type (izpack|3rdparty) #REQUIRED>
     <!ATTLIST native name CDATA #REQUIRED>
+    <!ATTLIST native stage (install|uninstall|both) "install">
 
 <!-- Allows the inclusion in the installer of an additional jar file content -->
 <!ELEMENT jar EMPTY>

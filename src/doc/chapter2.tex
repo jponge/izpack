@@ -760,14 +760,27 @@ Use this if you want to use a feature that requires a native library.
 The native libraries are placed under \texttt{bin/native/..}. There are 2
 kinds of native libraries : the \IzPack libraries and the third-party
 ones. The IzPack libraries are located at \texttt{bin/native/izpack},
-you can place your own libraries at \texttt{bin/native/3rdparty}. The
-markup takes the following attributes :
-\begin{itemize}
+you can place your own libraries at \texttt{bin/native/3rdparty}. 
+It is possible to place a native library also into the uninstaller. 
+It is useable from CustomActions (\ref{cha:customactions}). If one or 
+more are referenced for it, the needed support classes are automatically
+placed into the uninstaller. To place it only on operating systems
+for which they are build, it is possible to define an OS
+restriction. This restriction will only be performed for the
+uninstaller. The markup takes the following attributes :\begin{itemize}
 
   \item \texttt{type} : \texttt{izpack} or \texttt{3rdparty}
   \item \texttt{name} : the library filename
+  \item \texttt(stage): stage where to use the library
+  (install|uninstall|both)
 
 \end{itemize}\
+\subsubsection{\texttt{<os>} - make a library OS-dependent}
+
+The \texttt{<os>} tag can be used to restrict the inclusion into
+the uninstaller to a specific operating system family,
+architecture or version. The inclusion into the installer will be
+always done. For more information see \ref{tag:os}.
 
 Here's a sample :
 \footnotesize

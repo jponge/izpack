@@ -211,6 +211,30 @@ In the default Ant definition file (build.xml) there are some
 targets for this stuff.
 
 
+\subsection{Correlated Stuff}
+\subsubsection{Native Libraries for Uninstallation}
+If a custom action uses JNI at installation time, often the
+associated uninstall custom action needs JNI too. For this
+situation it is possible to declare a native library for
+unstallation. The only work to do is to add a \texttt{stage}
+attribute to the \texttt{native} tag in the install xml file like
+\footnotesize
+\begin{verbatim}
+<!-- The native section. We specify here our os dependant
+libs..--> <native type="3rdparty"
+name="MyOSHelper.dll"stage="both" >
+   <os family="windows" />
+</native>
+\end{verbatim}
+\normalsize
+
+The needed additional classes are packed into
+lib/uninstaller-ext.jar. If a native library is defined for
+uninstallation, this file will also be packed into the
+installer.jar as IzPack.unistaller-ext and used at its right
+position.
+
+
 \section{What You Have To Do}
 Follow the steps that are needed to create and use custom actions
 with the "normal" source environment (not standalone compiler)
