@@ -495,7 +495,38 @@ public class InstallerFrame extends JFrame
                 outJar.write(buffer, 0, bytesInBuffer);
                 bytesCopied += bytesInBuffer;
               }
+              outJar.closeEntry();
              }
+          }
+          else if( key.equals("uninstallerListeners"))
+          { // It is a ArrayList which contains the full 
+            // package paths. First we write the list into the 
+            // uninstaller.jar 
+            outJar.putNextEntry(new ZipEntry(key));
+            ObjectOutputStream objOut = new ObjectOutputStream(outJar);
+            objOut.writeObject(contents);
+            objOut.flush();
+            outJar.closeEntry();
+            // Secound put the class into  uninstaller.jar
+            Iterator listenerIter = ((List) contents).iterator();
+            while( listenerIter.hasNext() )
+            {
+              byte[] buffer = new byte[5120];
+              long bytesCopied = 0;
+              int bytesInBuffer;
+              String listenerName = (String) listenerIter.next();
+              listenerName = listenerName.replace('.', '/');
+              listenerName = listenerName + ".class"; 
+              outJar.putNextEntry(new ZipEntry( listenerName));
+              InputStream in = getClass().getResourceAsStream("/" + listenerName);
+              while ((bytesInBuffer = in.read(buffer)) != -1)
+              {
+                outJar.write(buffer, 0, bytesInBuffer);
+                bytesCopied += bytesInBuffer;
+              }
+              outJar.closeEntry();
+          
+            }
           }
           else
           {
