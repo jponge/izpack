@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
@@ -651,9 +652,13 @@ public class Unpacker extends Thread
   {
     // get the uninstaller base, returning if not found so that
     // idata.uninstallOutJar remains null
-    InputStream in = Unpacker.class.getResourceAsStream("/res/IzPack.uninstaller");
-    if (in == null)
+    InputStream [] in = new InputStream[2];
+    in[0] = Unpacker.class.getResourceAsStream("/res/IzPack.uninstaller");
+    if (in[0] == null)
       return;
+    // The uninstaller extension is facultative; it will be exist only
+    // if a native library was marked for uninstallation.
+    in[1] = Unpacker.class.getResourceAsStream("/res/IzPack.uninstaller-ext");
 
     // Me make the .uninstaller directory
     String dest =
@@ -673,38 +678,49 @@ public class Unpacker extends Thread
     outJar.setLevel(9);
     udata.addFile(jar);
 
-    // We copy the uninstaller
-    ZipInputStream inRes = new ZipInputStream(in);
-    ZipEntry zentry = inRes.getNextEntry();
-    while (zentry != null)
+    // We copy the uninstallers
+    HashSet doubles = new HashSet();
+        
+    for( int i = 0; i < in.length; ++i )
     {
-      // Puts a new entry
-      outJar.putNextEntry(new ZipEntry(zentry.getName()));
-
-      // Byte to byte copy
-      int unc = inRes.read();
-      while (unc != -1)
+      if( in[i] == null )
+        continue;
+      ZipInputStream inRes = new ZipInputStream(in[i]);
+      ZipEntry zentry = inRes.getNextEntry();
+      while (zentry != null)
       {
-        outJar.write(unc);
-        unc = inRes.read();
-      }
+        // Puts a new entry, but not twice like META-INF
+        if( ! doubles.contains(zentry.getName()))
+        {
+          doubles.add(zentry.getName());
+          outJar.putNextEntry(new ZipEntry(zentry.getName()));
 
-      // Next one please
-      inRes.closeEntry();
-      outJar.closeEntry();
-      zentry = inRes.getNextEntry();
+          // Byte to byte copy
+          int unc = inRes.read();
+          while (unc != -1)
+          {
+            outJar.write(unc);
+            unc = inRes.read();
+          }
+
+          // Next one please
+          inRes.closeEntry();
+          outJar.closeEntry();
+        }
+        zentry = inRes.getNextEntry();
+      }
+      inRes.close();
     }
-    inRes.close();
 
     // We put the langpack
-    in =
-      getClass().getResourceAsStream("/langpacks/" + idata.localeISO3 + ".xml");
+    InputStream in2 =
+    Unpacker.class.getResourceAsStream("/langpacks/" + idata.localeISO3 + ".xml");
     outJar.putNextEntry(new ZipEntry("langpack.xml"));
-    int read = in.read();
+    int read = in2.read();
     while (read != -1)
     {
       outJar.write(read);
-      read = in.read();
+      read = in2.read();
     }
     outJar.closeEntry();
   }
@@ -724,7 +740,7 @@ public class Unpacker extends Thread
     
     if (webDirURL == null) // local
     {
-      in = getClass().getResourceAsStream("/packs/pack" + n);
+      in = Unpacker.class.getResourceAsStream("/packs/pack" + n);
     }
     else // web based
     {
