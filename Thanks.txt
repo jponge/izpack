@@ -49,4 +49,4 @@ IzPack for your projects ;-)
 - Gareth Cronin : for the Ant task fixes.
 - Jan Blok : for the very great improvements on the installer GUI.
 
-[ vim: fileformat=dos ]
+# vim: fileformat=dos 

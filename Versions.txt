@@ -413,4 +413,4 @@ _______________________________________________________________________________
 - There are a lot of features to add and enhance in the next releases, of 
   course.
 
-[ vim: fileformat=dos ]
+# vim: fileformat=dos 
