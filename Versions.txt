@@ -1,5 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.1.0a (build 2003.08.15)
+
+- Fixes a bug while generating a Kunststoff installer.
+
   > 3.1.0 (build 2003.08.11)
 
 - Added the possibility to use a standalone compiler (Tino Schwarze).
