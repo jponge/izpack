@@ -221,6 +221,7 @@ public class TargetPanel extends IzPanel implements ActionListener
         JOptionPane.YES_NO_OPTION);
       ok = (res == JOptionPane.YES_OPTION);
     }
+    if (!ok) return ok;
 
     // Normalize the path
     File path = new File(installPath);
