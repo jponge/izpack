@@ -27,7 +27,6 @@ package   com.izforge.izpack.gui;
 import    java.awt.*;
 import    java.util.*;
 
-/*---------------------------------------------------------------------------*/
 /**
  * This class implements a layout manager that generally lays out components
  * in two columns.
@@ -142,7 +141,6 @@ public class TwoColumnLayout implements LayoutManager2
   private int centerRule;
   private int titleHeight;
 
- /*--------------------------------------------------------------------------*/
  /**
   * Constructs a <code>TwoColumnLayout</code> layout manager. To add components
   * use the container's <code>add(comp, constraints)</code> method with a
@@ -160,7 +158,6 @@ public class TwoColumnLayout implements LayoutManager2
   * @param     alignment  how to align the overall layout. Legal values are
   *                       LEFT, CENTER, RIGHT.
   */
- /*--------------------------------------------------------------------------*/
   public TwoColumnLayout (int margin,
                           int gap,
                           int indent,
@@ -183,7 +180,7 @@ public class TwoColumnLayout implements LayoutManager2
       this.alignment = alignment;
     }
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Sets the constraints for the specified component in this layout.
   * <code>null</code> is a legal value for a component, but not for a
@@ -192,7 +189,6 @@ public class TwoColumnLayout implements LayoutManager2
   * @param     comp         the component to be modified.
   * @param     constraints  the constraints to be applied.
   */
- /*--------------------------------------------------------------------------*/
   public void addLayoutComponent (Component comp,
                                   Object    constraints)
   {
@@ -289,20 +285,19 @@ public class TwoColumnLayout implements LayoutManager2
     // consequently will not be laid out.
     // ----------------------------------------------------
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Lays out the container in the specified panel.
   *
   * @param     parent   the component which needs to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   public void layoutContainer (Container parent)
   {
     positionRules (parent);
     positionTitle (parent);
     positionComponents (parent);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Positions the three rules in preparation for layout. Sets the variables:<br>
   * <ul>
@@ -313,7 +308,6 @@ public class TwoColumnLayout implements LayoutManager2
   *
   * @param     parent   the component which needs to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   private void positionRules (Container parent)
   {
     int margin = margin (parent);
@@ -322,24 +316,24 @@ public class TwoColumnLayout implements LayoutManager2
     {
       leftRule    = margin;
       centerRule  = leftRule + minimumColumnWidth (LEFT, parent) + gap;
-      rightRule   = (int)parent.getWidth () - margin;
+      rightRule   = parent.getWidth () - margin;
     }
 
     else if (alignment == CENTER)
     {
       centerRule  = (int)(parent.getMinimumSize ().getWidth () / 2);
       leftRule    = centerRule - minimumColumnWidth (LEFT, parent) - gap;
-      rightRule   = (int)parent.getWidth () - margin;
+      rightRule   = parent.getWidth () - margin;
     }
 
     else if (alignment == RIGHT)
     {
-      rightRule   = (int)parent.getWidth () - margin;
+      rightRule   = parent.getWidth () - margin;
       centerRule  = rightRule - minimumColumnWidth (RIGHT, parent);
       leftRule    = centerRule - minimumColumnWidth (LEFT, parent) - gap;
     }
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Positions the title component and sets the variable <code>titleHeight</code>.
   * <b>Note:</b> this method depends on the fact that the rules are set to
@@ -347,7 +341,6 @@ public class TwoColumnLayout implements LayoutManager2
   *
   * @param     parent   the component which needs to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   private void positionTitle (Container parent)
   {
     if (title != null)
@@ -383,13 +376,12 @@ public class TwoColumnLayout implements LayoutManager2
       }
     }
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Positions all components in the container.
   *
   * @param     parent   the component which needs to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   private void positionComponents (Container parent)
   {
     int usedHeight  = titleHeight + minimumClusterHeight ();
@@ -411,7 +403,7 @@ public class TwoColumnLayout implements LayoutManager2
 
       if (leftHeight > rightHeight)
       {
-        int offset = (int)(leftHeight - rightHeight) / 2;
+        int offset = (leftHeight - rightHeight) / 2;
 
         positionComponent (y, i, LEFT, parent);
         positionComponent ((y + offset), i, RIGHT, parent);
@@ -420,7 +412,7 @@ public class TwoColumnLayout implements LayoutManager2
       }
       else if (leftHeight < rightHeight)
       {
-        int offset = (int)(rightHeight - leftHeight) / 2;
+        int offset = (rightHeight - leftHeight) / 2;
 
         positionComponent ((y + offset), i, LEFT, parent);
         positionComponent (y, i, RIGHT, parent);
@@ -436,7 +428,7 @@ public class TwoColumnLayout implements LayoutManager2
       }
     }
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Positiones one component as instructed. Constraints for each component,
   * such as <code>stretch</code>, <code>BOTH</code> and <code>indent</code>
@@ -448,7 +440,6 @@ public class TwoColumnLayout implements LayoutManager2
   * @param     column   the column of the component
   * @param     parent   the container which needs to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   private void positionComponent (int       y,
                                   int       row,
                                   int       column,
@@ -531,10 +522,11 @@ public class TwoColumnLayout implements LayoutManager2
         }
 
         component.setBounds (x, y, width, height);
+        System.out.println("component bounds=" + component.getBounds());
       }
     }
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Returns the minimum width of the column requested.
   *
@@ -543,7 +535,6 @@ public class TwoColumnLayout implements LayoutManager2
   *
   * @return    the minimum width required to fis the components in this column
   */
- /*--------------------------------------------------------------------------*/
   private int minimumColumnWidth (int       column,
                                   Container parent)
   {
@@ -576,7 +567,7 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (width);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Retrunds the minimum width both columns together should have based on the
   * minimum widths of all the components that straddle both columns and the
@@ -586,7 +577,6 @@ public class TwoColumnLayout implements LayoutManager2
   *
   * @return    the minimum width required to fis the components in this column
   */
- /*--------------------------------------------------------------------------*/
   private int minimumBothColumnsWidth (Container parent)
   {
     Component             component   = null;
@@ -624,24 +614,7 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (width);
   }
- /*--------------------------------------------------------------------------*/
- /**
-  * Enter description synopsis here. More detailed description after the first period.
-  *
-  * @param     -
-  *
-  * @return    -
-  *
-  * @see       -
-  *
-  * @exception -
-  */
- /*--------------------------------------------------------------------------*/
- /*$
-  * @design     <- keep this tag in place and don't write on this line!
-  *
-  * Enter design related documentation here.
-  *--------------------------------------------------------------------------*/
+
   private int minimumClusterHeight ()
   {
     int height    = 0;
@@ -653,11 +626,10 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (height);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Returns the number of rows that need to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   private int rows ()
   {
     int rows      = 0;
@@ -675,14 +647,13 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (rows);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Measures and returns the minimum height required to render the components
   * in the indicated row.
   *
   * @param     row  the index of the row to measure
   */
- /*--------------------------------------------------------------------------*/
   private int rowHeight (int row)
   {
     int height  = 0;
@@ -703,7 +674,7 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (height);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Measures and returns the minimum height required to render the component
   * in the indicated row and column.
@@ -712,7 +683,6 @@ public class TwoColumnLayout implements LayoutManager2
   * @param     column   the column of the component to measure
   *                     (<code>LEFT</code> or <code>RIGHT</code>)
   */
- /*--------------------------------------------------------------------------*/
   private int height (int row,
                       int column)
   {
@@ -766,27 +736,25 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (height);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Computes the margin value based on the container width and the margin setting.
   *
   * @param     parent  the component which needs to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   private int margin (Container parent)
   {
     int amount = (int)(((parent.getSize ().getWidth ()) * margin) / 100);
 
     return (amount);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Computes the margin value based on the width of both columns and the
   * margin setting.
   *
   * @param     parent  the component which needs to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   private int reverseMargin (Container parent)
   {
     int left   = minimumColumnWidth (LEFT, parent);
@@ -803,7 +771,7 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (amount);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Computes the top buffer value based on the container width and the setting
   * for the top buffer
@@ -813,7 +781,6 @@ public class TwoColumnLayout implements LayoutManager2
   *            of all rows).
   * @param     parent     the component which needs to be laid out.
   */
- /*--------------------------------------------------------------------------*/
   private int topBuffer (int       usedHeight,
                          Container parent)
   {
@@ -835,26 +802,23 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (amount);
   }*/
- /*--------------------------------------------------------------------------*/
  /**
   * Calculates the preferred size dimensions for the specified panel given
   * the components in the specified parent container.
   *
   * @param     parent   the component to be laid out
   */
- /*--------------------------------------------------------------------------*/
   public Dimension preferredLayoutSize (Container parent)
   {
     return (minimumLayoutSize (parent));
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Calculates the minimum size dimensions for the specified panel given the
   * components in the specified parent container.
   *
   * @param     parent   the component to be laid out
   */
- /*--------------------------------------------------------------------------*/
   public Dimension minimumLayoutSize (Container parent)
   {
     positionTitle (parent);
@@ -864,19 +828,18 @@ public class TwoColumnLayout implements LayoutManager2
 
     return (new Dimension (width, height));
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Calculates the maximum size dimensions for the specified panel given the
   * components in the specified parent container.
   *
   * @param     parent   the component to be laid out
   */
- /*--------------------------------------------------------------------------*/
   public Dimension maximumLayoutSize (Container parent)
   {
     return (minimumLayoutSize (parent));
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Returns the alignment along the x axis. This specifies how the component
   * would like to be aligned relative to other components. The value should
@@ -885,12 +848,11 @@ public class TwoColumnLayout implements LayoutManager2
   *
   * @param     parent   the component to be laid out
   */
- /*--------------------------------------------------------------------------*/
   public float getLayoutAlignmentX (Container parent)
   {
     return (0);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Returns the alignment along the y axis. This specifies how the component
   * would like to be aligned relative to other components. The value should
@@ -899,19 +861,17 @@ public class TwoColumnLayout implements LayoutManager2
   *
   * @param     parent   the component to be laid out
   */
- /*--------------------------------------------------------------------------*/
   public float getLayoutAlignmentY (Container parent)
   {
     return (0);
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Invalidates the layout, indicating that if the layout manager has cached
   * information it should be discarded.
   *
   * @param     parent   the component to be laid out
   */
- /*--------------------------------------------------------------------------*/
   public void invalidateLayout (Container parent)
   {
     leftRule    = 0;
@@ -919,7 +879,7 @@ public class TwoColumnLayout implements LayoutManager2
     centerRule  = 0;
     titleHeight = 0;
   }
- /*--------------------------------------------------------------------------*/
+
  /**
   * Adds the specified component with the specified name to the layout. This
   * version is not supported, use <code>addLayoutComponent</code> with layout
@@ -928,20 +888,18 @@ public class TwoColumnLayout implements LayoutManager2
   * @param     name   the component name
   * @param     comp   the component to be added
   */
- /*--------------------------------------------------------------------------*/
   public void addLayoutComponent (String    name,
                                   Component comp)
   { }
- /*--------------------------------------------------------------------------*/
+
  /**
   * This functionality is not supported
   *
   * @param     comp   the component to be removed
   */
- /*--------------------------------------------------------------------------*/
   public void removeLayoutComponent (Component comp)
   { }
- /*--------------------------------------------------------------------------*/
+
  /**
   * This method is provided for conveninence of debugging layout problems. It
   * renders the three rules and the limit of the title marign visible after
@@ -959,7 +917,6 @@ public class TwoColumnLayout implements LayoutManager2
   * @param     graphics   the graphics context used for drawing.
   * @param     color      the color to use for rendering the layout grid
   */
- /*--------------------------------------------------------------------------*/
   public void showRules (Graphics2D graphics,
                          Color      color)
   {
