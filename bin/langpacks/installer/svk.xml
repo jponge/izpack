@@ -55,13 +55,17 @@
     <str id="InstallPanel.tip" txt="Prebieha in¹talácia:"/>
     <str id="InstallPanel.begin" txt="[Niè]"/>
     <str id="InstallPanel.finished" txt="[Ukonèené]"/>
+    <str id="InstallPanel.progress" txt="Celkový stav in¹talácie :"/>
+    <str id="InstallPanel.overwrite.title" txt="Súbor u¾ existuje"/>
+    <str id="InstallPanel.overwrite.question" txt="Súbor u¾ existuje. Má by» súbor prepísaný?"/>
+    
     
     <str id="FinishPanel.success" txt="In¹talácia skonèila úspe¹ne."/>
     <str id="FinishPanel.fail" txt="In¹talácia zlyhala!"/>
     <str id="FinishPanel.uninst.info" txt="Odin¹talaèný program bol vytvorený v:"/>
     <str id="FinishPanel.auto" txt="Vytvori» automatický in¹talaèný skript"/>
     <str id="FinishPanel.auto.tip" 
-         txt="Pouzite tento skript v prípade in¹talácie na iný poèítaè."/>
+         txt="Pou¾ite tento skript v prípade in¹talácie na iný poèítaè."/>
     
     <str id="ImgPacksPanel.packs" txt="Nasledovné balíku sú prístupné :"/>
     <str id="ImgPacksPanel.snap" txt="Náhµad na balík  :"/>
@@ -95,6 +99,36 @@
     <str id="ShortcutPanel.location.applications" txt="Menu programov"/>
     <str id="ShortcutPanel.location.startMenu"    txt="©tartovacie Menu"/>
     <str id="ShortcutPanel.location.startup"      txt="Skupina Auto¹tart"/>
+    
+    <str id="UserInputPanel.error.caption"        txt="Problém pri zadávaní"/>
+    <str id="UserInputPanel.search.autodetect"    txt="Automatická detekcia"/>
+
+    <!-- more descriptive error message would be cool, like specifying what file we looked for -->
+    <str id="UserInputPanel.search.autodetect.failed.message"    txt="Automatická detekcia zlyhala."/>
+    <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Automatická detekcia zlyhala."/>
+    <str id="UserInputPanel.search.autodetect.tooltip"           txt="Skontrolujte súbor alebo prieèinok v zadanej ceste."/>
+    <str id="UserInputPanel.search.location"           txt="Zadajte cestu "/>
+    <str id="UserInputPanel.search.browse"           txt="Prehµada»..."/>
+
+    <str id="CompilePanel.heading" txt="Preklad" />
+    <str id="CompilePanel.tip" txt="Priebeh prekladanej úlohy:" />
+    <str id="CompilePanel.browse" txt="Prehµada»..." />
+    <str id="CompilePanel.browse.approve" txt="Pou¾i ako prekladaè" />
+    <str id="CompilePanel.start" txt="©tart" />
+    <str id="CompilePanel.progress.initial" txt="[Stlaète ©tart tlaèitko]" />
+    <str id="CompilePanel.progress.finished" txt="[Ukonèené]" />
+    <str id="CompilePanel.progress.overall" txt="Celkový stav prekladu:" />
+    <str id="CompilePanel.error" txt="Preklad zlyhal" />
+    <str id="CompilePanel.error.reconfigure" txt="Prekonfigurovanie" />
+    <str id="CompilePanel.error.ignore" txt="Ignorova»" />
+    <str id="CompilePanel.error.abort" txt="Zru¹i»" />
+    <str id="CompilePanel.error.seebelow" txt="Detaily zlyhaneho prekladu si pozrite dole." />
+    <str id="CompilePanel.error.nofiles" txt="Chyba poèas hµadania súborov pre preklad." />
+    <str id="CompilePanel.error.compilernotfound" txt="Prekladaè nemô¾e by» spustený." />
+    <str id="CompilePanel.error.invalidarguments" txt="Prekladaè nepozna pou¾ité argumenty ." />
+    <str id="CompilePanel.error.noclassfile" txt="Prekladaè nevytvoril triedu pre zdrojový súbor " />
+    <str id="CompilePanel.choose_compiler" txt="Prekladaè :" />
+    <str id="CompilePanel.additional_arguments" txt="Pridavné argumenty pre prekladaè:" />
 
     <!-- Add your own panels specific strings here if you need -->
 

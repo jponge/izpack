@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2" standalone="yes" ?>
 
-<!-- The Slovak langpack
--->
+<!-- The Slovak langpack -->
 
 <langpack>
 
@@ -44,7 +43,7 @@
     <str id="menu.import" txt="Naimportovať súbor ktorý používa relatívnu cestu"/>
     <str id="menu.import.mn" txt="r"/>
     
-    <str id="menu.compile" txt="Kompilacia"/>
+    <str id="menu.compile" txt="Kompilácia"/>
     <str id="menu.compile.mn" txt="K"/>
     <str id="menu.comp.standard" txt="Štandartná inštalácia"/>
     <str id="menu.comp.standard.mn" txt="d"/>
