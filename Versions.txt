@@ -1,5 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
+  > x.y.z (build xxxx.yy.zz)
+
+- XInfoPanel: UI fix.
+
   > 3.2.1 (build 2003.09.19)
 
 - Added a new built-in variable ISO3_LANG that contains the selected language
