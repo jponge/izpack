@@ -56,11 +56,9 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
   /* 
    * @see com.izforge.izpack.util.AbstractUIHandler#emitError(java.lang.String, java.lang.String)
    */
-  public boolean emitError(String title, String message)
+  public void emitError(String title, String message)
   {
     System.err.println("[ ERROR: "+message+" ]");
-    // default: continue
-    return true;
   }
 
   /* 

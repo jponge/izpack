@@ -49,9 +49,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler
   /**  The parent IzPack installer frame. */
   protected InstallerFrame parent;
 
-  /**  ResourceManager for easy access to resources. */
-  private ResourceManager resourceManager;
-
 
   /**
    *  The constructor.
@@ -65,7 +62,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
     this.idata = idata;
     this.parent = parent;
-    this.resourceManager = ResourceManager.getInstance ();
   }
 
 
@@ -188,10 +184,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
    * 
    * @param message The error message.
    */
-  public boolean emitError (String title, String message)
+  public void emitError (String title, String message)
   {
-    return (JOptionPane.showConfirmDialog(this, message, title, 
-      JOptionPane.ERROR_MESSAGE, JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
+    JOptionPane.showMessageDialog(this, message, title, JOptionPane.ERROR_MESSAGE);
   }
   
 }

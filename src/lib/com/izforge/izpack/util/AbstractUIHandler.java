@@ -62,7 +62,7 @@ public interface AbstractUIHandler
    * @param message The error message.
    * @return true if the user decided not to continue
    */
-  public boolean emitError (String title, String message);
+  public void emitError (String title, String message);
   
   // constants for asking questions
   // must all be >= 0!

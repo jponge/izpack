@@ -384,11 +384,10 @@ public class UninstallerFrame extends JFrame
      *
      * @param  error  The error message.
      */
-    public boolean emitError(String title, String error)
+    public void emitError(String title, String error)
     {
       progressBar.setString(error);
-      return (JOptionPane.showConfirmDialog(null, error, title, 
-        JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE) == JOptionPane.OK_OPTION);
+      JOptionPane.showMessageDialog(null, error, title, JOptionPane.OK_CANCEL_OPTION);
     }
     
     /**
