@@ -35,7 +35,21 @@
      commandLine=""
      description="IzPack user documentation (HTML format)">
      
-     <createForPack name="Documentation" />
+     <createForPack name="Documentation-HTML" />
+   </shortcut>
+   
+   <shortcut
+     name="Documentation"
+     programGroup="yes"
+     desktop="no"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\doc\izpack\pdf\izpack-doc.pdf"
+     commandLine=""
+     description="IzPack user documentation (PDF format)">
+     
+     <createForPack name="Documentation-PDF" />
    </shortcut>
    
    <shortcut
