@@ -26,7 +26,7 @@
     <str id="HelloPanel.authors" txt="Der(die) Autor(en) dieser Software ist(sind) : "/>
     <str id="HelloPanel.url" txt="Die Homepage für diese Software : "/>
     <str id="LicencePanel.info" txt="Bitte lesen Sie die folgenden Lizenzvereinbarungen durch :"/>
-    <str id="LicencePanel.agree" txt="Ja, ich stiemme diesen Lizenzvereinbarungen zu."/>
+    <str id="LicencePanel.agree" txt="Ja, ich stimme diesen Lizenzvereinbarungen zu."/>
     <str id="LicencePanel.notagree" txt="Nein, ich stimme diesen Lizenzvereinbarungen nicht zu."/>
     <str id="LicencePanel.yes" txt="Ja"/>
     <str id="LicencePanel.no" txt="Nein"/>
