@@ -655,8 +655,7 @@ public class InstallerFrame extends JFrame
   /**
    *  Handles the events from the navigation bar elements.
    *
-   * @author     julien
-   * created    October 27, 2002
+   * @author     Julien Ponge
    */
   class NavigationHandler implements ActionListener
   {

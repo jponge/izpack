@@ -81,6 +81,7 @@ public class AutomatedInstaller extends InstallerBase
       idata.localeISO3 +
       ".xml");
     idata.langpack = new LocaleDatabase(in);
+    idata.setVariable(ScriptParser.ISO3_LANG, idata.localeISO3);
 
     // create the resource manager singleton
     ResourceManager.create (idata);

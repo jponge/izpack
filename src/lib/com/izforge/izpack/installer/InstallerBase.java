@@ -172,6 +172,7 @@ public class InstallerBase
     installdata.panelsOrder = panelsOrder;
     installdata.availablePacks = availablePacks;
     installdata.allPacks = allPacks;
+    
     // get list of preselected packs
     Iterator pack_it = availablePacks.iterator();
     while (pack_it.hasNext())

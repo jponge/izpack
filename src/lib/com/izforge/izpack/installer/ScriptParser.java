@@ -68,8 +68,11 @@ public class ScriptParser
   /** The application URL. */
   public final static String APP_URL = "APP_URL";
 
-  /** The application version.*/
+  /** The application version. */
   public final static String APP_VER = "APP_VER";
+  
+  /** The language IS03 code. */
+  public final static String ISO3_LANG = "IS03_LANG";
 
   /**  The files to parse. */
   private Collection files;

@@ -178,7 +178,8 @@ public class GUIInstaller extends InstallerBase
     this.installdata.xmlData.setAttribute("langpack", selectedPack);
 
     // We load the langpack
-    this.installdata.localeISO3 = selectedPack;
+    installdata.localeISO3 = selectedPack;
+    installdata.setVariable(ScriptParser.ISO3_LANG, installdata.localeISO3);
     InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
     this.installdata.langpack = new LocaleDatabase(in);
   }
