@@ -52,9 +52,9 @@ You should be aware of the following common mistakes :
 
   \item markups \textbf{are} case sensitive : \texttt{<markup>} is different
   from \texttt{<Markup>}.
-  
+
   \item you \textbf{must} close the markups in the same order as you create them
-  : \texttt{<m1><m2>(...)</m2></m1>} is right but 
+  : \texttt{<m1><m2>(...)</m2></m1>} is right but
   \texttt{<m1><m2>(...)</m1></m2>} is not.
 
 \end{itemize}
@@ -82,7 +82,7 @@ be explained in the documentation.\\
 
 There are two types of variables:
 \begin{itemize}
-  \item Built-In variables. These are implemented in IzPack and are 
+  \item Built-In variables. These are implemented in IzPack and are
         all dynamic in nature. This means that the value of each
         variable depends on local conditions on the target system.
   \item Variables that you can define. You also define the value,
@@ -129,8 +129,8 @@ following parse types are available:
         a XML file. Individual variables might be modified to function
         properly within the context of XML files.
   \item \texttt{shell} - use this type if the substitution happens in
-        a shell script. Because shell scripts use \texttt{\$variable} 
-        themselves, an alternative variable marker is used: 
+        a shell script. Because shell scripts use \texttt{\$variable}
+        themselves, an alternative variable marker is used:
         \texttt{\%variable} or \texttt{\%\{variable\}}.
 \end{itemize}
 
@@ -159,6 +159,9 @@ contains the following elements :
 
   \item \texttt{<appname>} : the application name
   \item \texttt{<appversion>} : the application version
+  \item \texttt{<appsubpath>} : the subpath for the default of the installation path.
+  A variable substitution and a maskable slash-backslash conversion will be done. If this
+  tag is not defined, the application name will be used instead.
   \item \texttt{<url>} : the application official website url
   \item \texttt{<authors>} : specifies the author(s) of the application. It must contain
   at least one \texttt{<author>} element whose attributes are :
@@ -178,6 +181,7 @@ Here is an example of a typical \texttt{<info>} section :\\
 <info>
   <appname>Super extractor</appname>
   <appversion>2.1 beta 6</appversion>
+  <appsubpath>myCompany/SExtractor</appsubpath>
   <url>http://www.superextractor.com/</url>
   <authors>
     <author name="John John Doo" email="jjd@jjd-mail.com"/>
@@ -228,7 +232,7 @@ available in future versions of \IzPack. The arguments to specify are :
   whether the window size can be changed or not.
   \item \texttt{width} : sets the initial window width
   \item \texttt{height} : sets the initial window height.
-  
+
 \end{itemize}\
 
 Here's a sample :
@@ -302,7 +306,7 @@ Here is a small sample:
 </guiprefs>
 \end{verbatim}
 
-Starting from IzPack 3.7, some characteristics can be customized with the 
+Starting from IzPack 3.7, some characteristics can be customized with the
 \texttt{<modifier>} tag which contains following attributes:
 \begin{itemize}
 
@@ -436,7 +440,7 @@ Here's a sample :
 \label{packs-element}
 
 This is a crucial section as it is used to specify the files that need
-to be installed. The \texttt{<packs>} section consists of several 
+to be installed. The \texttt{<packs>} section consists of several
 \texttt{<pack>} tags.
 
 The \texttt{<pack>} takes the following attributes :
@@ -480,13 +484,13 @@ The following sections describe the tags available for a \texttt{<pack>} section
 \subsubsection{\texttt{<description>} - pack description}
 
 The contents of the \texttt{<description>} tag describe the pack contents.
-This description is displayed if the user highlights the pack during 
+This description is displayed if the user highlights the pack during
 installation.
 
 \subsubsection{\texttt{<depends>} - pack dependencies}
-This can be used to make this pack selectable only to be installed only if some other is 
+This can be used to make this pack selectable only to be installed only if some other is
 selected to be installed. The pack can depend on more than one by specifying more than one
-\texttt{<depends>} elements.\\ 
+\texttt{<depends>} elements.\\
 Circular depedencies are not supported and the compiler reports an error if one occurs.
 
 This tag takes the following attribute:
@@ -529,7 +533,7 @@ If the paths are relative, they will be matched relative to
 
 \subsubsection{\label{tag:file}\texttt{<file>} - add files or directories}
 
-The \texttt{<file>} tag specifies a file (a directory is a file too) to 
+The \texttt{<file>} tag specifies a file (a directory is a file too) to
 include into the pack. It takes the following attributes:
 
 \begin{itemize}
@@ -570,7 +574,7 @@ related to a file tag for customizing.
 \subsubsection{\label{tag:singlefile}\texttt{<singlefile>} - add a single file}
 
 Specifies a single file to include. The difference to \texttt{<file>} is that
-this tag allows the file to be renamed, therefore it has a 
+this tag allows the file to be renamed, therefore it has a
 \texttt{target} attribute instead of \texttt{targetdir}.
 
 \begin{itemize}
@@ -625,7 +629,7 @@ Jakarta Ant set syntax. It takes the following parameters:
 
 You specify the files with  \texttt{<include>} and \texttt{<exclude>} tags
 that take the \texttt{name} parameter to specify the Ant-like pattern :
-\begin{itemize}    
+\begin{itemize}
   \item \texttt{**} : means any subdirectory
   \item \texttt{*} : used as a wildcard.
 \end{itemize}
@@ -704,7 +708,7 @@ executable flag on Unix-like systems. Here are the attributes :
 
   \item \texttt{targetfile} : the file to run, could be something like\\
   \texttt{\$INSTALL\_PATH/bin/launch-script.sh}\\
-  Slashes are handled special (see attribute 
+  Slashes are handled special (see attribute
   \texttt{targetfile} of tag \texttt{<parsable>}\ref{tag:slashMasking}).
 
   \item \texttt{class} : If the executable is a jar file, this is the
@@ -737,11 +741,11 @@ arguments to the executable:
 \begin{itemize}
 
   \item \texttt{<arg>}: passes the argument specified in the
-  \texttt{value} attribute.   Slashes are handled special (see attribute 
+  \texttt{value} attribute.   Slashes are handled special (see attribute
   \texttt{targetfile} of tag \texttt{<parsable>}\ref{tag:slashMasking}).
 
 \end{itemize}
-  
+
 \subsubsection{\label{tag:os}\texttt{<os>} - make a file OS-dependent}
 
 The \texttt{<os>} tag can be used inside the \texttt{<file>},
@@ -781,7 +785,7 @@ Here's an example installation file :
         <executable targetfile="$INSTALL_PATH/bin/compile" stage="never"/>
         <executable targetfile="$INSTALL_PATH/bin/izpack-fe" stage="never"/>
     </pack>
-    
+
     <!-- The documentation (1 directory) -->
     <pack name="Documentation" required="no">
         <description>The IzPack documentation (HTML and PDF).</description>
@@ -798,9 +802,9 @@ Use this if you want to use a feature that requires a native library.
 The native libraries are placed under \texttt{bin/native/..}. There are 2
 kinds of native libraries : the \IzPack libraries and the third-party
 ones. The IzPack libraries are located at \texttt{bin/native/izpack},
-you can place your own libraries at \texttt{bin/native/3rdparty}. 
-It is possible to place a native library also into the uninstaller. 
-It is useable from CustomActions (\ref{cha:customactions}). If one or 
+you can place your own libraries at \texttt{bin/native/3rdparty}.
+It is possible to place a native library also into the uninstaller.
+It is useable from CustomActions (\ref{cha:customactions}). If one or
 more are referenced for it, the needed support classes are automatically
 placed into the uninstaller. To place it only on operating systems
 for which they are build, it is possible to define an OS
@@ -833,7 +837,7 @@ Here's a sample :
 If you adapt \IzPack for your own needs, you might need to merge the
 content of another jar file into the jar installer. For instance, this
 could be a library that you need to merge. The \texttt{<jar>} markup
-allows you to merge the raw content of another jar file into the 
+allows you to merge the raw content of another jar file into the
 installer and the uninstaller. It is necessary that the paths in the
 jars are unique because only the contained files of the jar are added
 to the installer jar, not the jar file self.
@@ -935,7 +939,7 @@ path).\\
 \subsection{FinishPanel}
 
 A ending panel, able to write automated installer information. For
-details see the chapter on 'Advanced Features'.\\ 
+details see the chapter on 'Advanced Features'.\\
 
 \subsection{SimpleFinishPanel}
 
@@ -957,7 +961,7 @@ for a detailed explanation.
 
 \subsection{CompilePanel}
 
-This panel allows you to compile just installed Java sourcecode. 
+This panel allows you to compile just installed Java sourcecode.
 The details for the compilation are specified using the resource \texttt{CompilePanel.Spec.xml}.
 The XML file has the following format:
 \begin{verbatim}
@@ -994,7 +998,7 @@ the classpath within a job only affects this job and nested jobs. The classpath
 should be specified before any files or directories.
 
 The user can change the compiler to use and choose from some default
-compilation options before compilation is started. 
+compilation options before compilation is started.
 
 \includegraphics[width=\linewidth]{img/compilePanel}
 
