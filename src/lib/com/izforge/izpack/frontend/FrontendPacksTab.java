@@ -509,6 +509,7 @@ public class FrontendPacksTab extends FrontendTab
       XMLElement el = (XMLElement) v.get(i);
       Pack p = new Pack(el.getAttribute("name"),
         el.getFirstChildNamed("description").getContent(),
+        el.getAttribute("os"),
         el.getAttribute("required").equalsIgnoreCase("yes"));
       packs.add(p);
     }

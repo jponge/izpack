@@ -105,6 +105,9 @@ public class InstallData
   /**  The GUI preferences. */
   public GUIPrefs guiPrefs;
 
+  /**  The complete list of packs. */
+  public List allPacks;
+
   /**  The available packs. */
   public List availablePacks;
 

@@ -262,17 +262,22 @@ public class Installer
       panelsOrder.add(datIn.readUTF());
     datIn.close();
 
+    String os = System.getProperty("os.name"); 
     // We read the packs data
     in = getClass().getResourceAsStream("/packs.info");
     objIn = new ObjectInputStream(in);
     size = objIn.readInt();
     ArrayList availablePacks = new ArrayList();
-    for (i = 0; i < size; i++)
-      availablePacks.add(objIn.readObject());
+    ArrayList allPacks = new ArrayList();
+    for (i = 0; i < size; i++) {
+	Pack pk = (Pack) objIn.readObject();
+	allPacks.add(pk);
+	if (null == pk.os || os.toLowerCase().indexOf(pk.os.toLowerCase()) > -1)
+	    availablePacks.add(pk);
+    }
     objIn.close();
 
     // We determine the operating system and the initial installation path
-    String os = System.getProperty("os.name");
     String user = System.getProperty("user.name");
     String dir;
     String installPath;
@@ -324,6 +329,7 @@ public class Installer
     installdata.kind = kind;
     installdata.panelsOrder = panelsOrder;
     installdata.availablePacks = availablePacks;
+    installdata.allPacks = allPacks;
     installdata.selectedPacks = (ArrayList) availablePacks.clone();
   }
 

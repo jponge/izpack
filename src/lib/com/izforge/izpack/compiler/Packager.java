@@ -100,11 +100,12 @@ public abstract class Packager
    * @param  packNumber     The pack number.
    * @param  name           The pack name.
    * @param  required       Is the pack required ?
+   * @param  targetOs       The target operation system of this pack.
    * @param  description    The pack description.
    * @return                Description of the Return Value
    * @exception  Exception  Description of the Exception
    */
-  public abstract ZipOutputStream addPack(int packNumber, String name,
+  public abstract ZipOutputStream addPack(int packNumber, String name, String targetOs,
                                           boolean required, String description)
      throws Exception;
 

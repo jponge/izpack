@@ -51,5 +51,7 @@ IzPack for your projects ;-)
 - Hani Suleiman : various things as well as the uninstallers script launching
   feature patch.
 - Milan Madzia : for the Slovakian langpack.
+- Fran Taylor : for the packs OS-targeting patch.
+- ? : for the OS selection accuracy patch.
 
 # vim: fileformat=dos 

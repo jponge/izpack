@@ -299,7 +299,7 @@ public class Compiler extends Thread
     while (iter.hasNext())
     {
       Pack pack = (Pack) iter.next();
-      ZipOutputStream zipOut = packager.addPack(i++, pack.name, pack.required,
+      ZipOutputStream zipOut = packager.addPack(i++, pack.name, pack.os, pack.required,
         pack.description);
       ObjectOutputStream objOut = new ObjectOutputStream(zipOut);
 
@@ -463,6 +463,7 @@ public class Compiler extends Thread
       Pack pack = new Pack();
       pack.number = i;
       pack.name = el.getAttribute("name");
+      pack.os = el.getAttribute("os");
       pack.required = el.getAttribute("required").equalsIgnoreCase("yes");
       pack.description = el.getFirstChildNamed("description").getContent();
 
@@ -475,8 +476,9 @@ public class Compiler extends Thread
         while (iter.hasNext())
         {
           XMLElement p = (XMLElement) iter.next();
+	  String targetFile = p.getAttribute("targetfile");
           pack.parsables.add
-            (new ParsableFile(p.getAttribute("targetfile"),
+            (new ParsableFile(targetFile,
             p.getAttribute("type", "plain"),
             p.getAttribute("encoding", null)));
         }
@@ -542,7 +544,8 @@ public class Compiler extends Thread
               os.getAttribute("version", null),
               os.getAttribute("arch", null)));
           }
-          pack.executables.add(new ExecutableFile(e.getAttribute("targetfile"),
+	  String targetFile = e.getAttribute("targetfile");
+          pack.executables.add(new ExecutableFile(targetFile,
             executeType, executeClass,
             executeOn, onFailure, argList, osList));
         }
@@ -601,8 +604,9 @@ public class Compiler extends Thread
           }
         }
 
+	String targetDir = f.getAttribute("targetdir");
         addFileSet(path, includes, excludes,
-          f.getAttribute("targetdir"),
+          targetDir,
           f.getAttribute("os"),
           pack.packFiles,
           casesensitive);
@@ -1056,6 +1060,9 @@ public class Compiler extends Thread
 
     /**  The executable files list. */
     public ArrayList executables;
+
+      /**  The target operation system of this file */
+      public String os;
 
 
     /**  The constructor. */

@@ -92,6 +92,54 @@ public class Unpacker extends Thread
     return instances;
   }
 
+  private boolean matchOS(String actualOS, String targetOS) 
+  {
+
+    if(targetOS.equalsIgnoreCase("unix")) 
+    {
+
+      if(actualOS.lastIndexOf("unix")    > -1 ||
+         actualOS.lastIndexOf("linux")   > -1 ||
+         actualOS.lastIndexOf("solaris") > -1 ||
+         actualOS.lastIndexOf("sunos")   > -1 ||
+         actualOS.lastIndexOf("aix")     > -1 ||
+         actualOS.lastIndexOf("bsd")     > -1 )
+      {
+                
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else if (targetOS.equalsIgnoreCase("windows"))
+    {
+      if(actualOS.lastIndexOf("windows") > -1)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else if (targetOS.equalsIgnoreCase("mac"))
+    {
+      if(actualOS.lastIndexOf("mac") > -1)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+    else
+    {
+      return actualOS.equalsIgnoreCase(targetOS);
+    }
+  }
 
   /**  The run method.  */
   public void run()
@@ -123,7 +171,7 @@ public class Unpacker extends Thread
       for (int i = 0; i < npacks; i++)
       {
         // We get the pack stream
-        int n = idata.availablePacks.indexOf(packs.get(i));
+        int n = idata.allPacks.indexOf(packs.get(i));
         ObjectInputStream objIn
            = new ObjectInputStream(getPackAsStream(n));
 
@@ -134,7 +182,7 @@ public class Unpacker extends Thread
         {
           // We read the header
           PackFile pf = (PackFile) objIn.readObject();
-          if (null == pf.os || currentOs.indexOf(pf.os.toLowerCase()) > -1)
+          if (null == pf.os || matchOS(currentOs, pf.os.toLowerCase()))
           {
             // We translate & build the path
             String path = translatePath(pf.targetPath);
