@@ -32,7 +32,6 @@ import java.io.File;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -52,11 +51,8 @@ public class SimpleFinishPanel extends IzPanel
   /**  The layout. */
   private BoxLayout layout;
 
-  /**  The automated installers generation button. */
-  private JButton autoButton;
-
   /**  The center panel. */
-  private JPanel centerPanel;
+  protected JPanel centerPanel;
 
   /**  The variables substitutor. */
   private VariableSubstitutor vs;
