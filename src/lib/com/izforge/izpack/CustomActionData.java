@@ -47,8 +47,8 @@ public class CustomActionData implements Serializable
   public static final int UNINSTALLER_LIB = 2;
   
   
-  /**  The custom action classname. */
-  public String name;
+  /**  The custom action classnames or the names of the native libs. */
+  public List names;
 
   /**  The target operation system of this custom action */
   public List osConstraints = null;
@@ -61,13 +61,15 @@ public class CustomActionData implements Serializable
   
   /**
    * Constructs an CustomAction object with the needed values.
-   * @param name custom action data name (full qualified class name or library name)
+   * The list names contains all full qualified class names which are
+   * needed by the custom action. The first entry is the custom action self.
+   * @param names custom action data names (full qualified class name or library name)
    * @param osConstraints target operation system of this custom action
    * @param type type of this custom action
    */
-  public CustomActionData(String name, List osConstraints, int type)
+  public CustomActionData(List names, List osConstraints, int type)
   {
-    this.name = name;
+    this.names = names;
     this.osConstraints = osConstraints;
     this.type = type;
   }
