@@ -5,6 +5,7 @@
 - IoHelper.getPrimaryGroup: bugfix for SunOS (Klaus Bartz).
 - Russian langpack fixes (Alexey Makhmutov).
 - Swedish langpack update (Nils Nordman).
+- Spanish langpack update (Juan Alvarez).
 
   > 3.7.1 (build 2005.02.15)
 
