@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.5.2 (build 2004.xx.yy)
+  > 3.5.2 (build 2004.05.01)
 
 - Fixed moving empty directory to root (pbe@whitestein.com).
 - UserInputPanel getResult() fix (bug #1769).
