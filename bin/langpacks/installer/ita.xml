@@ -31,7 +31,7 @@
     
     <!-- LicensePanel strings -->
     <str id="LicencePanel.info" txt="Leggi, per piacere, questa licenza :"/>
-    <str id="LicencePanel.agree" txt="Acceto i termini di questa licenza."/>
+    <str id="LicencePanel.agree" txt="Accetto i termini di questa licenza."/>
     <str id="LicencePanel.notagree" txt="Non accetto i termini di questa licenza."/>
     <str id="LicencePanel.yes" txt="Si"/>
     <str id="LicencePanel.no" txt="No"/>
