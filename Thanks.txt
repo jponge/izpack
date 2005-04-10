@@ -93,5 +93,7 @@ IzPack for your projects ;-)
 - Alexey Makhmutov : Russian langpack updates.
 - Anthony Xin Chen : for the ProcessPanel patch.
 - Christian Murphy : for native language notation support.
+- Nils Nordman : for the Swedish updates.
+- Juan Alvarez : for the Spanish updates.
 
 # vim: fileformat=dos

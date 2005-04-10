@@ -882,7 +882,7 @@
     
     <!-- Runs a testing installer. -->
     <target name="run.installer">
-        <java jar="../_dist/IzPack-install.jar" fork="true" />
+    	<java jar="${basedir}/_dist/IzPack-install-${ver}.${rel}.jar" fork="true" />
     </target>
 
     <!-- Makes everything, from compilation to generating an installer. -->
