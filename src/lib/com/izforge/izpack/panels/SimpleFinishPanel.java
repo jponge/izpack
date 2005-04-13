@@ -125,6 +125,13 @@ public class SimpleFinishPanel extends IzPanel
             JLabel.TRAILING));
       }
     }
+    else
+      centerPanel.add(
+        LabelFactory.create(
+          parent.langpack.getString("FinishPanel.fail"),
+          parent.icons.getImageIcon("information"),
+          JLabel.TRAILING));
+
   }
 
   /**
