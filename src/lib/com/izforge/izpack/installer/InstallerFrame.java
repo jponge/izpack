@@ -132,7 +132,12 @@ public class InstallerFrame extends JFrame
 
   /** Image */
   private JLabel iconLabel;
-
+  
+  /** Count for discarded interrupt trials. */
+  private int interruptCount = 1;
+  
+  /** Maximum of discarded interrupt trials. */
+  private static final int MAX_INTERRUPT = 3;
 
   /**
    *  The constructor (normal mode).
@@ -149,7 +154,7 @@ public class InstallerFrame extends JFrame
 
     // Sets the window events handler
     addWindowListener(new WindowHandler());
-
+    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     // Builds the GUI
     loadIcons();
     loadPanels();
@@ -742,6 +747,12 @@ public class InstallerFrame extends JFrame
     } else
     {
       // The installation is not over
+      if( Unpacker.isDiscardInterrupt() 
+          && interruptCount < MAX_INTERRUPT)
+      { // But we should not interrupt.
+        interruptCount++;
+        return;
+      }
       int res =
         JOptionPane.showConfirmDialog(
           this,
@@ -761,21 +772,10 @@ public class InstallerFrame extends JFrame
   {
     Iterator it;
 
-    // We check for running unpackers
-    ArrayList unpackers = Unpacker.getRunningInstances();
-    it = unpackers.iterator();
-    while (it.hasNext())
-    {
-      Thread t = (Thread) it.next();
-      t.interrupt();
-      // The unpacker process might keep writing stuffs so we wait :-/
-      try
-      {
-        Thread.sleep(3000, 0);
-      } catch (Exception e)
-      {
-      }
-    }
+    // We set interrupt to all running Unpacker and wait 40 sec for maximum.
+    // If interrupt is discarded (return value false), return immediately:
+    if( ! Unpacker.interruptAll(40000))
+      return;
 
     // Wipes them all in 2 stages
     UninstallData u = UninstallData.getInstance();
@@ -788,7 +788,9 @@ public class InstallerFrame extends JFrame
       File f = new File(p);
       f.delete();
     }
-    cleanWipe(new File(installdata.getInstallPath()));
+    String fullCleanup = installdata.getVariable("InstallerFrame.cleanAllAtInterrupt");
+    if( fullCleanup == null || ! fullCleanup.equalsIgnoreCase("no") )
+      cleanWipe(new File(installdata.getInstallPath()));
   }
 
   /**
@@ -992,6 +994,12 @@ public class InstallerFrame extends JFrame
      */
     public void windowClosing(WindowEvent e)
     {
+      if( Unpacker.isDiscardInterrupt() 
+          && interruptCount < MAX_INTERRUPT)
+      { // But we should not interrupt.
+        interruptCount++;
+        return;
+      }
       // We show an alert anyway
       if (!installdata.canClose)
         JOptionPane.showMessageDialog(

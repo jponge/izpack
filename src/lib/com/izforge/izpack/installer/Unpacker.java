@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -84,17 +85,25 @@ public class Unpacker extends Thread
   private VariableSubstitutor vs;
 
   /**  The instances of the unpacker objects. */
-  private static ArrayList instances = new ArrayList();
+  private static HashMap instances = new HashMap();
 
   /**  The absolute path of the installation. (NOT the canonical!) */
   private File absolute_installpath;
 
   /** The packs locale database. */
   private LocaleDatabase langpack = null;
+  
+  /** Do not perform a interrupt call. */
+  private static boolean discardInterrupt = false;
 
   /** The name of the XML file that specifies the panel langpack */
   private static final String LANG_FILE_NAME = "packsLang.xml";
 
+  
+  public static final String ALIVE = "alive";
+  public static final String INTERRUPT = "doInterrupt";
+  public static final String INTERRUPTED = "interruppted";
+  
   /**
    *  The constructor.
    *
@@ -122,19 +131,154 @@ public class Unpacker extends Thread
   }
 
   /**
-   *  Returns the active unpacker instances.
+   *  Returns a copy of the active unpacker instances.
    *
-   * @return    The active unpacker instances.
+   * @return    a copy of active unpacker instances
    */
-  public static ArrayList getRunningInstances()
+  public static HashMap getRunningInstances()
   {
-    return instances;
+    synchronized(instances)
+    { // Return a shallow copy to prevent a ConcurrentModificationException.
+      return(HashMap) ( instances.clone());
+    }
+  }
+  
+  /**
+   * Adds this to the map of all existent instances of Unpacker.
+   */
+  private void addToInstances()
+  {
+    synchronized(instances)
+    {
+      instances.put(this, ALIVE);
+    }
+  }
+  
+  /**
+   * Removes this from the map of all existent instances of Unpacker.
+   */
+  private void removeFromInstances()
+  {
+    synchronized(instances)
+    {
+      instances.remove(this);
+    }
   }
 
+  /**
+   * Initiate interrupt of all alive Unpacker.
+   * This method does not interrupt the Unpacker objects else it
+   * sets only the interrupt flag for the Unpacker objects.
+   * The dispatching of interrupt will be performed by the Unpacker
+   * objects self. 
+   */
+  private static void setInterruptAll()
+  {
+    synchronized(instances)
+    {
+      Iterator iter = instances.keySet().iterator();
+      while(iter.hasNext())
+      {
+        Object key = iter.next();
+        if(instances.get(key).equals(ALIVE))
+        {
+          instances.put(key, INTERRUPT);
+          // Set interrupt to thread to allow detection of it in other classes.
+          if( key instanceof Unpacker )
+            ((Unpacker)key).interrupt();
+          
+        }
+      }
+    }
+  }
+  
+  /**
+   * Initiate interrupt of all alive Unpacker and waits
+   * until all Unpacker are interrupted or the wait time
+   * has arrived. If the doNotInterrupt flag in InstallerListener
+   * is set to true, the interrupt will be discarded.
+   * @param waitTime wait time in millisecounds
+   * @return true if the interrupt will be performed, false
+   * if the interrupt will be discarded
+   */
+  public static boolean interruptAll(long waitTime)
+  {
+    long t0 = System.currentTimeMillis();
+    if( isDiscardInterrupt())
+      return(false);
+    setInterruptAll();
+    while( ! isInterruptReady())
+    {
+      if( System.currentTimeMillis() - t0 > waitTime )
+        return(true);
+      try
+      {
+        Thread.sleep(100);
+      }
+      catch (InterruptedException e)
+      {
+      }
+    }
+    return(true);
+  }
+  
+
+  private static boolean isInterruptReady()
+  {
+    synchronized(instances)
+    {
+      Iterator iter = instances.keySet().iterator();
+      while(iter.hasNext())
+      {
+        Object key = iter.next();
+        if( ! instances.get(key).equals(INTERRUPTED))
+          return( false );
+      }
+      return(true);
+    }
+    
+  }
+  /**
+   * Sets the interrupt flag for this Unpacker to
+   * INTERRUPTED if the previos state was INTERRUPT or
+   * INTERRUPTED and returns whether interrupt was initiate or not.
+   * @return whether interrupt was initiate or not
+   */
+  private boolean performInterrupted()
+  {
+    synchronized(instances)
+    {
+      Object doIt = instances.get(this);
+      if( doIt != null && (doIt.equals(INTERRUPT) || doIt.equals(INTERRUPTED)))
+      {
+        instances.put(this, INTERRUPTED);
+        return(true);
+      }
+      return(false);
+    }    
+  }
+
+  /**
+   * Returns whether interrupt was initiate or not for this Unpacker.
+   * @return whether interrupt was initiate or not
+   */
+  private boolean shouldInterrupt()
+  {
+    synchronized(instances)
+    {
+      Object doIt = instances.get(this);
+      if( doIt != null && (doIt.equals(INTERRUPT) || doIt.equals(INTERRUPTED)))
+      {
+        return(true);
+      }
+      return(false);
+    }    
+    
+  }
   /**  The run method.  */
   public void run()
   {
-    instances.add(this);
+    addToInstances();
     try
     {
       //
@@ -298,6 +442,13 @@ public class Unpacker extends Thread
             }
             while (bytesCopied < pf.length())
             {
+              if( performInterrupted())
+              { // Interrupt was initiated; perform it.
+                out.close();
+                if (pis != objIn)
+                  pis.close();
+                return;
+              }
               int maxBytes = (int)Math.min(pf.length() - bytesCopied, buffer.length);
               int bytesInBuffer = pis.read(buffer, 0, maxBytes);
               if (bytesInBuffer == -1)
@@ -372,6 +523,12 @@ public class Unpacker extends Thread
         }
 
         objIn.close();
+
+        if( performInterrupted())
+        { // Interrupt was initiated; perform it.
+           return;
+        }
+
         // Custom action listener stuff --- afterPack ----
         informListeners(customActions, InstallerListener.AFTER_PACK,
           packs.get(i), new Integer(i), handler);
@@ -380,6 +537,10 @@ public class Unpacker extends Thread
       // We use the scripts parser
       ScriptParser parser = new ScriptParser(parsables, vs);
       parser.parseFiles();
+      if( performInterrupted())
+      { // Interrupt was initiated; perform it.
+         return;
+      }
 
       // We use the file executor
       FileExecutor executor = new FileExecutor(executables);
@@ -388,15 +549,29 @@ public class Unpacker extends Thread
           "File execution failed",
           "The installation was not completed");
 
+      if( performInterrupted())
+      { // Interrupt was initiated; perform it.
+         return;
+      }
+
       // We put the uninstaller (it's not yet complete...)
       putUninstaller();
 
       // update checks _after_ uninstaller was put, so we don't delete it
       performUpdateChecks(updatechecks);
 
+      if( performInterrupted())
+      { // Interrupt was initiated; perform it.
+         return;
+      }
+
       // Custom action listener stuff --- afterPacks ----
       informListeners(customActions, InstallerListener.AFTER_PACKS,idata, 
         handler, null);
+      if( performInterrupted())
+      { // Interrupt was initiated; perform it.
+         return;
+      }
 
       // The end :-)
       handler.stopAction();
@@ -408,7 +583,7 @@ public class Unpacker extends Thread
       err.printStackTrace();
     } finally
     {
-      instances.remove(instances.indexOf(this));
+      removeFromInstances();
     }
   }
 
@@ -826,6 +1001,8 @@ public class Unpacker extends Thread
     Iterator iter = listener.iterator();
     while( iter.hasNext())
     {
+      if( shouldInterrupt())
+        return;
       InstallerListener il = (InstallerListener) iter.next();
       switch( action )
       {
@@ -964,4 +1141,20 @@ public class Unpacker extends Thread
   }
   // CUSTOM ACTION STUFF -------------- end -----------------
 
+  /**
+   * Returns whether an interrupt request should be discarded or not. 
+   * @return Returns the discard interrupt flag
+   */
+  public static synchronized boolean isDiscardInterrupt()
+  {
+    return discardInterrupt;
+  }
+  /**
+   * Sets the discard interrupt flag.
+   * @param di the discard interrupt flag to set
+   */
+  public static synchronized void setDiscardInterrupt(boolean di)
+  {
+    discardInterrupt = di;
+  }
 }

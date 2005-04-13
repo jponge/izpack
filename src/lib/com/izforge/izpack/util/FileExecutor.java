@@ -260,6 +260,9 @@ public class FileExecutor
     Iterator efileIterator = files.iterator();
     while (exitStatus == 0 && efileIterator.hasNext())
     {
+      // If the current thread is marked as interrupted, return immediately.
+      if( Thread.currentThread().isInterrupted())
+        return(exitStatus);
       ExecutableFile efile = (ExecutableFile) efileIterator.next();
       boolean deleteAfterwards = ! efile.keepFile;
       File file = new File(efile.path);
