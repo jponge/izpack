@@ -93,6 +93,9 @@ public class Unpacker extends Thread
   /** The packs locale database. */
   private LocaleDatabase langpack = null;
   
+  /** Interrupt flag if global interrupt is desired. */ 
+  private static boolean interruptDesired = false;
+  
   /** Do not perform a interrupt call. */
   private static boolean discardInterrupt = false;
 
@@ -183,12 +186,11 @@ public class Unpacker extends Thread
         if(instances.get(key).equals(ALIVE))
         {
           instances.put(key, INTERRUPT);
-          // Set interrupt to thread to allow detection of it in other classes.
-          if( key instanceof Unpacker )
-            ((Unpacker)key).interrupt();
-          
         }
       }
+      // Set global flag to allow detection of it in other classes.
+      // Do not set it to thread because an exec will then be stoped.
+      setInterruptDesired(true);
     }
   }
   
@@ -1156,5 +1158,21 @@ public class Unpacker extends Thread
   public static synchronized void setDiscardInterrupt(boolean di)
   {
     discardInterrupt = di;
+    setInterruptDesired( false);
+  }
+  /**
+   * Returns the interrupt desired state.
+   * @return the interrupt desired state
+   */
+  public static boolean isInterruptDesired()
+  {
+    return interruptDesired;
+  }
+  /**
+   * @param interruptDesired The interrupt desired flag to set
+   */
+  private static void setInterruptDesired(boolean interruptDesired)
+  {
+    Unpacker.interruptDesired = interruptDesired;
   }
 }

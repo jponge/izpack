@@ -38,6 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.installer.Unpacker;
 
 /**
  *  Executes a bunch of files. This class is intended to do a system dependent
@@ -260,8 +261,8 @@ public class FileExecutor
     Iterator efileIterator = files.iterator();
     while (exitStatus == 0 && efileIterator.hasNext())
     {
-      // If the current thread is marked as interrupted, return immediately.
-      if( Thread.currentThread().isInterrupted())
+      // If interrupt is desired, return immediately.
+      if( Unpacker.isInterruptDesired())
         return(exitStatus);
       ExecutableFile efile = (ExecutableFile) efileIterator.next();
       boolean deleteAfterwards = ! efile.keepFile;

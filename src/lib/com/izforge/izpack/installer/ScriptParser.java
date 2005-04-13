@@ -105,8 +105,8 @@ public class ScriptParser
     Iterator iter = files.iterator();
     while (iter.hasNext())
     {
-      // If the current thread is marked as interrupted, return immediately.
-      if( Thread.currentThread().isInterrupted())
+      // If interrupt is desired, return immediately.
+      if( Unpacker.isInterruptDesired())
         return;
       // Create a temporary file for the parsed data
       // (Use the same directory so that renaming works later)
