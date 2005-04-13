@@ -25,6 +25,7 @@
   ( Christian Murphy | Klaus Bartz).
 - Fail message in SimpleFinishPanel (Klaus Bartz).
 - Interrupt handling changed (Klaus Bartz).
+- Fixed shortcuts for RedHat and Mandrake (Vitor Rodrigues)
 
   > 3.7.2 (build N/A)
 
