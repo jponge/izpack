@@ -93,5 +93,6 @@ IzPack for your projects ;-)
 - Anthony Xin Chen : for the ProcessPanel patch.
 - Nils Nordman : for the Swedish updates.
 - Juan Alvarez : for the Spanish updates.
+- Andreas Breiter : for various patches.
 
 # vim: fileformat=dos

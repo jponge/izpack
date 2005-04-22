@@ -244,7 +244,7 @@ public class UserInputPanel extends IzPanel
   // Variable Declarations
   // ------------------------------------------------------------------------
   private static int          instanceCount   = 0;
-  private        int          instanceNumber  = 0;
+  protected      int          instanceNumber  = 0;
   private        boolean      uiBuilt         = false;
 
   /** If there is a possibility that some UI elements will not get added we

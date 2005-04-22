@@ -6,6 +6,8 @@
 - Russian langpack fixes (Alexey Makhmutov).
 - Swedish langpack update (Nils Nordman).
 - Spanish langpack update (Juan Alvarez).
+- UserInputPanel: made 'instanceNumber' a protected atribute (patch #406,
+  Andreas Breiter).
 
   > 3.7.1 (build 2005.02.15)
 
