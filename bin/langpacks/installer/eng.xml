@@ -153,6 +153,14 @@
 
     <str id="ProcessPanel.heading" txt="Processing" />
 
+    <!-- Strings for the summary of panels --- START -->
+    <str id="SummaryPanel.info" txt="Ready to install. Important data are listed below. Press &quot;Next&quot; to start installation, "/>
+    <str id="TargetPanel.summaryCaption" txt="Installation path"/>
+    <str id="JDKPathPanel.summaryCaption" txt="JDK path"/>
+    <str id="PacksPanel.summaryCaption" txt="Chosen installation packs"/>
+    <str id="ImgPacksPanel.summaryCaption" txt="Chosen installation packs"/>
+    <!-- Strings for the summary of panels --- END -->
+
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>
