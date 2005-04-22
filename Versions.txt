@@ -28,7 +28,7 @@
 - Fixed shortcuts for RedHat and Mandrake (Vitor Rodrigues).
 - New ConditionalUserInputPanel (Andreas Breiter, patches #407, #408).
 
-  > 3.7.2 (build N/A)
+  > 3.7.2 (build 2005.04.22)
 
 - IoHelper.getPrimaryGroup: bugfix for SunOS (Klaus Bartz).
 - Russian langpack fixes (Alexey Makhmutov).
