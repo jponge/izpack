@@ -87,6 +87,7 @@ private String itsDescription;
 private String itsArguments;
 private String itsName;
 private String itsFileName;
+private String itsApplnkFolder="applnk";
 
 private static String template = "";
 
@@ -228,7 +229,17 @@ public Vector getProgramGroups( int userType )
     File kdeHomeShare = new File( kdeHome.toString()+ FS + "share" );
     if( ! kdeHomeShare.exists() )
       return( groups );
-    kdeHomeShareApplnk = new File(kdeHomeShare.toString() + FS + "applnk");  
+    kdeHomeShareApplnk = new File(kdeHomeShare.toString() + FS + "applnk");
+    String[] applnkFolders={"applnk-mdk","applnk-redhat","applnk"};
+    for (int i=0;i<applnkFolders.length;i++)
+    {
+        kdeHomeShareApplnk = new File(kdeHomeShare.toString() + FS + applnkFolders[i]);
+        if (kdeHomeShareApplnk.exists()) 
+        {
+            itsApplnkFolder=applnkFolders[i];
+            break;
+       }
+    }
     if( ! kdeHomeShareApplnk.exists() )
       return( groups );
   }
@@ -290,7 +301,7 @@ public void save() throws Exception
     File homedir  = new File( System.getProperty( "user.home" ) );  
     File kdeHome = new File( homedir.toString() + FS + ".kde" );
     File kdeHomeShare = new File( kdeHome.toString()+ FS + "share" );
-    File kdeHomeShareApplnk = new File( kdeHomeShare.toString()+ FS + "applnk" );
+    File kdeHomeShareApplnk = new File( kdeHomeShare.toString()+ FS + itsApplnkFolder);
     target = kdeHomeShareApplnk.toString() + FS + this.itsGroupName + FS + this.itsName + DESKTOP_EXT;
   } 
   File targetPath = new File( target.toString().substring( 0, target.toString().lastIndexOf( File.separatorChar ) ) );

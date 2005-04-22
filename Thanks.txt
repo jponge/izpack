@@ -87,5 +87,12 @@ IzPack for your projects ;-)
 - Marc Eppelmann : for the Unix shortcuts support.
 - Michael Hagedorn : for the UserInputPanel fixes.
 - Jan Pavlovic : for the Czech translation.
+- Oscar Sierra : for the patches.
+- Per Abich : for the patches.
+- Alexey Makhmutov : Russian langpack updates.
+- Anthony Xin Chen : for the ProcessPanel patch.
+- Nils Nordman : for the Swedish updates.
+- Juan Alvarez : for the Spanish updates.
+- Andreas Breiter : for various patches.
 
 # vim: fileformat=dos

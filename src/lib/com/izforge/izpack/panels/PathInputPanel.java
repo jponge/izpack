@@ -39,6 +39,7 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.*;
+import com.izforge.izpack.installer.ResourceNotFoundException;
 
 /**
  * Base class for panels which asks for paths.
@@ -298,7 +299,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
     BufferedReader br = null;
     try
     {
-      InputStream in;
+      InputStream in = null;
 
       if (OsVersion.IS_WINDOWS)
         in = parentFrame.getResource("TargetPanel.dir.windows");
@@ -311,21 +312,32 @@ public class PathInputPanel extends IzPanel implements ActionListener
         // first try to look up by specific os name
         os = os.replace(' ', '_'); // avoid spaces in file names
         os = os.toLowerCase(); // for consistency among TargetPanel res files
-        in = parentFrame.getResource("TargetPanel.dir.".concat(os));
+        try {
+    	    in = parentFrame.getResource("TargetPanel.dir.".concat(os));
+	}
+	catch (ResourceNotFoundException rnfe) {}
         // if not specific os, try getting generic 'unix' resource file
         if (in == null)
           in = parentFrame.getResource("TargetPanel.dir.unix");
 
         // if all those failed, try to look up a generic dir file
-        if (in == null)
-          in = parentFrame.getResource("TargetPanel.dir");
+        if (in == null) {
+	    try {
+		in = parentFrame.getResource("TargetPanel.dir.unix");
+	    }
+	    catch (ResourceNotFoundException eee) {}
+	}
 
       }
 
       // if all above tests failed, there is no resource file,
       // so use system default
-      if (in == null)
-        return;
+      if (in == null) {
+	    try {
+		in = parentFrame.getResource("TargetPanel.dir");
+	    }
+	    catch (ResourceNotFoundException eee) {}
+	}
 
       // now read the file, once we've identified which one to read
       InputStreamReader isr = new InputStreamReader(in);

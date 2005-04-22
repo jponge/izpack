@@ -13,9 +13,8 @@
 \usepackage[latin1]{inputenc}
 
 \usepackage{graphicx}
-
 \usepackage{url}
-\usepackage{times}
+\usepackage{pgf}
 
 % ............................................................................ %
 
@@ -37,6 +36,21 @@
 
 \pgfdeclareimage[height=0.5cm]{logo}{logo}
 \logo{\pgfuseimage{logo}}
+
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{background canvas}[vertical shading][top=blue!10,bottom=white]
+
+\pgfdeclareimage[width=1.5cm,interploate=true]{cc}{cc}
+\pgfdeclareimage[width=3cm,interpolate=true]{tree-view}{tree-view}
+
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-hello}{panel-hello}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-info}{panel-info}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-license}{panel-license}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-packs}{panel-packs}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-target}{panel-target}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-install}{panel-install}
+\pgfdeclareimage[width=9cm,interpolate=true]{panel-finish}{panel-finish}
 
 \AtBeginSubsection[]
 {
@@ -62,7 +76,7 @@
 
 \footnotesize
 
-\href{http://www.creativecommons.org/}{\includegraphics[scale=0.5]{cc}}
+\href{http://www.creativecommons.org/}{\pgfuseimage{cc}}
 
 \vspace{2em}
 
@@ -117,7 +131,7 @@ Fast facts:
 
     \item Available for about 22 languages.
 
-    \item One of the most active project at
+    \item One of the most active projects at
     \href{http://www.berlios.de/}{BerliOS}.
   \end{itemize}
 
@@ -133,8 +147,8 @@ Fast facts:
 
   \item Cross-platform (tested on Win32, Mac OS X, Linux/i386 and FreeBSD/i386).
 
-  \item XML-based, modular and extensible (you choose what will your installer be
-  made of).
+  \item XML-based, modular and extensible (you choose what your installer will
+  be made of).
 
   \item Integrates with Jakarta Ant.
 
@@ -176,7 +190,7 @@ Fast facts:
 
     \item Minor releases occur depending on fixes inclusion.
 
-    \item Major releases happend depending on new features inclusion.
+    \item Major releases happen depending on new features inclusion.
 
 \end{itemize}
 
@@ -198,7 +212,7 @@ Fast facts:
     \item An installer is described by an \textsl{XML installation file} that:
       \begin{itemize}
         \item arranges files into \textsl{packs}
-        \item can be cutomized by some resources (depending of what you choose).
+        \item can be customized by some resources (depending on what you choose).
       \end{itemize}
 
     \item The compiler takes the XML file as its input to build an installer as
@@ -278,7 +292,7 @@ Fast facts:
   \end{column}
 
   \begin{column}{3cm}
-  \includegraphics[width=3cm]{tree-view}
+  \pgfuseimage{tree-view}
   \end{column}
 
 \end{columns}
@@ -308,7 +322,7 @@ Fast facts:
       \item \textsl{LicencePanel}: the legal terms that must be agreed to reach
       the next installation steps
 
-      \item \textsl{PacksPanel}: allow the user to pick the packs that he wants
+      \item \textsl{PacksPanel}: allow the user to pick the packs that she/he wants
       to install or not
 
       \item \textsl{TargetPanel}: choose where to install the files
@@ -320,6 +334,46 @@ Fast facts:
     \end{enumerate}
 
 \end{itemize}
+
+\end{frame}
+
+% ................................... %
+
+\begin{frame}
+
+\frametitle{Panels flow illustrated}
+
+\begin{overprint}
+
+  \onslide<1>\textsl{HelloPanel}\\
+  
+  \pgfuseimage{panel-hello}
+  
+  \onslide<2>\textsl{HTMLInfoPanel}\\
+  
+  \pgfuseimage{panel-info}
+  
+  \onslide<3>\textsl{LicencePanel}\\
+  
+  \pgfuseimage{panel-license}
+  
+  \onslide<4>\textsl{PacksPanel} (here \textit{ImgPacksPanel})\\
+  
+  \pgfuseimage{panel-packs}
+  
+  \onslide<5>\textsl{TargetPanel}\\
+  
+  \pgfuseimage{panel-target}
+  
+  \onslide<6>\textsl{InstallPanel}\\
+  
+  \pgfuseimage{panel-install}
+  
+  \onslide<7>\textsl{SimpleFinishPanel}\\
+  
+  \pgfuseimage{panel-finish}
+
+\end{overprint}
 
 \end{frame}
 
@@ -507,8 +561,8 @@ Simply put the panels names in the obvious order:
 
 \begin{itemize}
 
-  \item We use the smart Ant filesets syntax to pick the files contained in a
-  pack.
+  \item We use the smart Ant filesets syntax to pick the files contained in 
+  each pack.
 
   \item Target directories are specified. \alert{\texttt{\small\$INSTALL\_PATH}
   identifies the path chosen from \textsl{TargetPanel}}.
@@ -557,7 +611,7 @@ Simply put the panels names in the obvious order:
 
       \item the kind of installer (standard or web-based)
 
-      \item the base directory (to resolve the relative paths specified for the
+      \item the base directory, to resolve the relative paths specified for the
       various files of the XML installation file (files, resources, ...)
 
       \item the directory where IzPack is installed.
@@ -608,7 +662,7 @@ Make the IzPack compiler jar available in the classpath before you call Ant.
 \begin{itemize}
 
   \item You have now made a simple installer for your application. You should
-  now feel more confident of IzPack, however you can get much more from it.
+  now feel more confident with IzPack, however you can get much more from it.
 
   \item You can now try some more advanced features (such as desktop shortcuts
   generation or scripts token replacement) or play with some other panels as
@@ -648,7 +702,7 @@ financially. Just think about how expensive are its proprietary competitors...
 
   \item Missing a feature ? Then you can offer a bounty to an IzPack developer
   for implementing it. Ask for the feature and see if a developer wants to make
-  it for a donation that you can negociate at your own discretion with her/him.
+  it for a donation that you can negotiate at your own discretion with her/him.
 
 \end{itemize}
 

@@ -37,6 +37,9 @@
 
     <str id="InfoPanel.info" txt="Por favor, lea la siguiente información:"/>
 
+	<str id="PathInputPanel.required" txt="El directorio seleccionado debe existir"/>
+	<str id="PathInputPanel.notValid" txt="El directorio no contiene el producto requerido"/>
+
     <str id="TargetPanel.info" txt="Seleccione la ruta de instalación:"/>
     <str id="TargetPanel.browse" txt="Escoger ..."/>
     <str id="TargetPanel.warn"
@@ -45,10 +48,22 @@
          txt="¡Ha hecho una designación sin nombre! ¿Desea hacerlo así?"/>
 	<str id="TargetPanel.createdir" txt="El directorio será creado:" />
 
+    <str id="JDKPathPanel.intro" txt="La aplicación necesita un JDK. Un Java Runtime Environment (JRE) no es suficiente."/>
+    <str id="JDKPathPanel.info" txt="Seleccione el directorio del JDK:"/>
+    <str id="JDKPathPanel.badVersion1" txt="El JDK seleccionado es una versión incorrecta (disponible: "/>
+    <str id="JDKPathPanel.badVersion2" txt=" necesaria: "/>
+    <str id="JDKPathPanel.badVersion3" txt=" ¿desea usar este JDK de todas formas?"/>
+
     <str id="PacksPanel.info" txt="Seleccione los paquetes que desea instalar:"/>
     <str id="PacksPanel.tip" txt="Nota: los paquetes en gris no son opcionales."/>
     <str id="PacksPanel.space" txt="Espacio total requerido: "/>
     <str id="PacksPanel.description" txt="Description"/>
+
+    <str id="PacksPanel.freespace" txt="Espacio disponible: "/>
+    <str id="PacksPanel.dependencyList" txt="El paquete elegido requere los siguientes paquetes para ser instalado"/>
+    <str id="ImgPacksPanel.dependencyList" txt="Dependencias"/>
+    <str id="PacksPanel.notEnoughSpace" txt="El espacio en disco necesario para la instalación excede el disponible."/>
+    <str id="PacksPanel.notAscertainable" txt="No determinable"/>
 
     <str id="InstallPanel.info" txt="Haga clic en ¡Instalar! para iniciar el proceso de instalación"/>
     <str id="InstallPanel.install" txt="¡Instalar!"/>
@@ -100,6 +115,9 @@
     <str id="ShortcutPanel.location.startMenu"    txt="Menú de inicio"/>
     <str id="ShortcutPanel.location.startup"      txt="Grupo de inicio"/>
 
+    <str id="UserInputPanel.error.caption"        txt="Problema de datos de entrada"/>
+    <str id="UserInputPanel.search.autodetect"    txt="Autodetectar"/>
+    
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
     <str id="UserInputPanel.search.autodetect.failed.message"    txt="Autodetección ha fallado."/>
     <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Autodetección ha fallado."/>
@@ -130,7 +148,7 @@
     <str id="CompilePanel.choose_compiler" txt="Compilador a usar:" />
     <str id="CompilePanel.additional_arguments" txt="Argumentos adicionales de compilación:" />
 
+    <str id="ProcessPanel.heading" txt="Procesando"/>
 
     <!-- Add your own panels specific strings here if you need -->
-
 </langpack>

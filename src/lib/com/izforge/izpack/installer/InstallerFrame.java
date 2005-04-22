@@ -29,9 +29,7 @@ package com.izforge.izpack.installer;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.DefaultFocusTraversalPolicy;
 import java.awt.Dimension;
-import java.awt.FocusTraversalPolicy;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -447,7 +445,7 @@ public class InstallerFrame extends JFrame
           // be ignored.
             // Give a hint for the initial focus to the system.
             Component inFoc = panel.getInitialFocus();
-            if( JAVA_SPECIFICATION_VERSION < 1.4)
+            if( JAVA_SPECIFICATION_VERSION < 1.35)
             {
                 inFoc.requestFocus();
             }
@@ -845,8 +843,12 @@ public class InstallerFrame extends JFrame
     quitButton.setText(text);
   }
 
-  private FocusTraversalPolicy usualFTP;
-  private FocusTraversalPolicy blockFTP;
+  /* FocusTraversalPolicy objects to handle 
+   * keybord blocking; the declaration os Object
+   * allows to use a pre version 1.4 VM.
+   */
+  private Object usualFTP = null;
+  private Object blockFTP = null;
 
   /**  Blocks GUI interaction.  */
   public void blockGUI()
@@ -854,9 +856,14 @@ public class InstallerFrame extends JFrame
     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     getGlassPane().setVisible(true);
     getGlassPane().setEnabled(true);
-    usualFTP = getFocusTraversalPolicy();
-    if (blockFTP == null) blockFTP = new BlockFocusTraversalPolicy();
-    setFocusTraversalPolicy(blockFTP);
+    // No traversal handling before VM version 1.4
+    if( JAVA_SPECIFICATION_VERSION < 1.35)
+      return;
+    if( usualFTP == null)
+      usualFTP = getFocusTraversalPolicy();
+    if (blockFTP == null) 
+      blockFTP = new BlockFocusTraversalPolicy();
+    setFocusTraversalPolicy((java.awt.FocusTraversalPolicy) blockFTP);
     getGlassPane().requestFocus();
   }
 
@@ -866,7 +873,10 @@ public class InstallerFrame extends JFrame
     getGlassPane().setEnabled(false);
     getGlassPane().setVisible(false);
     setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
-    setFocusTraversalPolicy(usualFTP);
+    // No traversal handling before VM version 1.4
+    if( JAVA_SPECIFICATION_VERSION < 1.35)
+      return;
+    setFocusTraversalPolicy((java.awt.FocusTraversalPolicy) usualFTP);
   }
 
   /**  Locks the 'previous' button.  */
@@ -997,7 +1007,7 @@ public class InstallerFrame extends JFrame
   /** A FocusTraversalPolicy that only allows the block panel to have
    * the focus
    */
-  private class BlockFocusTraversalPolicy extends DefaultFocusTraversalPolicy
+  private class BlockFocusTraversalPolicy extends java.awt.DefaultFocusTraversalPolicy
   {
       /** Only accepts the block panel
        * @param aComp the component to check
