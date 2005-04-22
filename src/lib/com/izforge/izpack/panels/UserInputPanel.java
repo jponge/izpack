@@ -2302,6 +2302,16 @@ public class UserInputPanel extends IzPanel
     return (false);
   }
 
+  // ----------- Inheritance stuff -----------------------------------------
+  /**
+   * Returns the uiElements.
+   * @return Returns the uiElements.
+   */
+  protected Vector getUiElements()
+  {
+    return uiElements;
+  }
+  
 // --------------------------------------------------------------------------
 // Inner Classes
 // --------------------------------------------------------------------------
