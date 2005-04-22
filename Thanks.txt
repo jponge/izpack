@@ -95,5 +95,6 @@ IzPack for your projects ;-)
 - Christian Murphy : for native language notation support.
 - Nils Nordman : for the Swedish updates.
 - Juan Alvarez : for the Spanish updates.
+- Andreas Breiter : for various patches.
 
 # vim: fileformat=dos

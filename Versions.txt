@@ -25,7 +25,8 @@
   ( Christian Murphy | Klaus Bartz).
 - Fail message in SimpleFinishPanel (Klaus Bartz).
 - Interrupt handling changed (Klaus Bartz).
-- Fixed shortcuts for RedHat and Mandrake (Vitor Rodrigues)
+- Fixed shortcuts for RedHat and Mandrake (Vitor Rodrigues).
+- New ConditionalUserInputPanel (Andreas Breiter, patches #407, #408).
 
   > 3.7.2 (build N/A)
 
@@ -33,6 +34,8 @@
 - Russian langpack fixes (Alexey Makhmutov).
 - Swedish langpack update (Nils Nordman).
 - Spanish langpack update (Juan Alvarez).
+- UserInputPanel: made 'instanceNumber' a protected atribute (patch #406,
+  Andreas Breiter).
 
   > 3.7.1 (build 2005.02.15)
 

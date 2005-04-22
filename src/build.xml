@@ -623,6 +623,10 @@
             <param name="panel" value="UserInputPanel"/>
         </antcall>
         <antcall target="compile.panel.simple">
+            <param name="panel" value="ConditionalUserInputPanel"/>
+            <param name="panel-dir" value="ConditionalUserInputPanel"/>
+        </antcall>
+        <antcall target="compile.panel.simple">
             <param name="panel" value="CompilePanel"/>
             <param name="panel-dir" value="CompilePanel"/>
         </antcall>
