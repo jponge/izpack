@@ -45,6 +45,10 @@ import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
 
+// NEEDED FOR executeForPack
+import java.util.Vector;
+import com.izforge.izpack.Pack;
+
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 import com.izforge.izpack.util.Debug;
@@ -98,8 +102,9 @@ public class ProcessPanelWorker implements Runnable
     this.idata  = idata;
     this.vs = new VariableSubstitutor(idata.getVariables());
 
-    if (!readSpec())
-      throw new IOException("Error reading processing specification");
+    //Removed this test in order to move out of the CTOR (ExecuteForPack Patch)
+    //if (!readSpec())
+    //  throw new IOException("Error reading processing specification");
   }
 
   private boolean readSpec() throws IOException
@@ -146,6 +151,14 @@ public class ProcessPanelWorker implements Runnable
       )
     {
       XMLElement job_el = (XMLElement) job_it.next();
+      
+       // ExecuteForPack Patch
+       // Check if processing required for pack
+       Vector forPacks = job_el.getChildrenNamed ("executeForPack");
+       if (!jobRequiredFor (forPacks))
+       {
+         continue;
+       }
 
       // first check OS constraints - skip jobs not suited for this OS
       List constraints = OsConstraint.getOsList(job_el);
@@ -221,6 +234,19 @@ public class ProcessPanelWorker implements Runnable
    */
   public void run()
   {
+    // ExecuteForPack patch
+    // Read spec only here... not before, cause packs are otherwise
+    // all selected or de-selected
+    try {
+          if (!readSpec()) {
+             System.err.println("Error parsing XML specification for processing.");
+             return;
+        }
+    } catch (java.io.IOException ioe) {
+        System.err.println(ioe.toString());
+              return;
+    }
+    
     // Create logfile if needed. Do it at this point because
     // variable substitution needs selected install path.
     if( logfiledir != null )
@@ -555,6 +581,63 @@ public class ProcessPanelWorker implements Runnable
     }
   }
 
+  /*------------------------ ExecuteForPack PATCH -------------------------*/
+  /*
+  * Verifies if the job is required for any of the packs listed. The
+  * job is required for a pack in the list if that pack is actually
+  * selected for installation.
+  * <br><br>
+  * <b>Note:</b><br>
+  * If the list of selected packs is empty then <code>true</code> is always
+  * returned. The same is true if the <code>packs</code> list is empty.
+  *
+  * @param     packs  a <code>Vector</code> of <code>String</code>s. Each of
+  *                   the strings denotes a pack for which the schortcut
+  *                   should be created if the pack is actually installed.
+  *
+  * @return    <code>true</code> if the shortcut is required for at least
+  *            on pack in the list, otherwise returns <code>false</code>.
+  */
+ /*--------------------------------------------------------------------------*/
+ /*
+  * @design
+  *
+  * The information about the installed packs comes from
+  * InstallData.selectedPacks. This assumes that this panel is presented to
+  * the user AFTER the PacksPanel.
+  
+  /*--------------------------------------------------------------------------*/
 
+  private boolean jobRequiredFor (Vector packs)
+  {
+    String selected;
+    String required;
+
+    if (packs.size () == 0)
+    {
+      return (true);
+    }
+
+    // System.out.println ("Number of selected packs is " +idata.selectedPacks.size () );
+
+    for (int i = 0; i < idata.selectedPacks.size (); i++)
+    {
+      selected = ((Pack)idata.selectedPacks.get (i)).name;
+    
+    // System.out.println ("Selected pack is " + selected);
+
+      for (int k = 0; k < packs.size (); k++)
+      {
+        required = (String)((XMLElement)packs.elementAt (k)).getAttribute("name", "");
+    // System.out.println ("Attribute name is " + required);
+        if (selected.equals (required))
+        {
+    // System.out.println ("Return true");
+          return (true);
+        }
+      }
+    }
+    return (false);
+  }
 
 }
