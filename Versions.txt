@@ -25,8 +25,9 @@
   ( Christian Murphy | Klaus Bartz).
 - Fail message in SimpleFinishPanel (Klaus Bartz).
 - Interrupt handling changed (Klaus Bartz).
-- Fixed shortcuts for RedHat and Mandrake (Vitor Rodrigues).
+- Fixed shortcuts for RedHat and Mandrake (Fabrice Mirabile, thanks to Vitor Rodrigues for the code).
 - New ConditionalUserInputPanel (Andreas Breiter, patches #407, #408).
+- ExecuteForPack, allow processing depending on the selected pack (Fabrice Mirabile, thanks to Johannes Gutleber for the code).
 
   > 3.7.2 (build 2005.04.22)
 
