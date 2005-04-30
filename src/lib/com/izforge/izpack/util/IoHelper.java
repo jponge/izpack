@@ -296,7 +296,7 @@ public class IoHelper
     {
       String command = "cmd.exe";
       if( System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
-        command = "command.com";
+        return(-1);
       String[] params = {command, "/C", "\"dir /D /-C \"" + path + "\"\""};
       String[] output = new String[2];
       FileExecutor fe = new FileExecutor();
@@ -335,8 +335,14 @@ public class IoHelper
   {
     if(method.equals("getFreeSpace"))
     {
-      if( OsVersion.IS_UNIX || OsVersion.IS_WINDOWS)
+      if( OsVersion.IS_UNIX )
         return true;
+      if( OsVersion.IS_WINDOWS )
+      { // getFreeSpace do not work on Windows 98.
+        if( System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+          return(false);
+        return(true);
+      }
     }
     else if(method.equals("chmod" ) ) 
     {
