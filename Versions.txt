@@ -1,3 +1,4 @@
+[ The list of the different public versions of IzPack ]
   > 3.8.0 (build N/A)
 
 - Fixing bug with comboboxes. There was no text shown if you do not use a
@@ -33,6 +34,10 @@
 - Ant file cleanup: requires ant 1.6. Incremental builds of jar files.
   Macrodefs instead of antcalls (Chad McHenry).
 
+  > 3.7.3 (build N/A)
+
+- standalone-compiler.jar no longer has duplicate entries (bug #3928).
+
   > 3.7.2 (build 2005.04.22)
 
 - IoHelper.getPrimaryGroup: bugfix for SunOS (Klaus Bartz).
@@ -47,7 +52,7 @@
 - The Danish langpack was empty by mistake in 3.7.0.
 - Silent installations fix (Oscar Sierra).
 - Free disk space bugfix on Solaris (Oscar Sierra).
-- Installation runable with VM versions < 1.4 again (Klaus Bartz)
+- Installation runable with VM versions < 1.4 again (Klaus Bartz) 
   (implementation for bug #2268 changed).
 - Italian langpack fixes (Fabrice Mirabille).
 - UserInputPanel: bug fixes by Per Abich (bugs #3233 and #3283).
@@ -100,7 +105,7 @@
   (bug #2713).
 - Installers: avoid showing an empty JFrame behind the languages selection
   dialog (observed on X11).
-- UserInputPanel: the autodetect button is hidden if not needed
+- UserInputPanel: the autodetect button is hidden if not needed 
   (Michael Hagedorn).
 - A tutorial is now available.
 - New Czech langpack (Jan Pavlovic).
@@ -801,4 +806,3 @@ _______________________________________________________________________________
   course.
 
 # vim: fileformat=dos
-
