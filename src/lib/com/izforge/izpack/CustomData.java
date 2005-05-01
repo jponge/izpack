@@ -29,14 +29,13 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * <p>Container for serialized custom  data</p>
+ * Container for serialized custom  data.
  *
  * @author  Klaus Bartz
- *
  */
 public class CustomData implements Serializable
 {
-  /** Identifier for custom data typ "installer listener". */
+  /** Identifier for custom data type "installer listener". */
   public static final int INSTALLER_LISTENER = 0;
   /** Identifier for custom data typ "uninstaller listener". */
   public static final int UNINSTALLER_LISTENER = 1;

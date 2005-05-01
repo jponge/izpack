@@ -6,7 +6,7 @@ import com.izforge.izpack.installer.InstallerFrame;
 
 /**
  * This panel adds some conditional behavior to the standard
- * UserInputPanel.<br/>
+ * UserInputPanel. <br/>
  * <b>Usage:</b><br/>
  * In the "panels" list, just use ConditionalUserInputPanel like the normal UserInputPanel.
  * The specification goes also into userInputSpec.xml and userInputLang.xml_XXX.

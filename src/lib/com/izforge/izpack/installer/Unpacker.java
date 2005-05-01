@@ -1082,7 +1082,7 @@ public class Unpacker extends Thread
   /**
    * Adds additional unistall data to the uninstall data object.
    * @param udata unistall data 
-   * @param customActions array of lists of custom action data like uninstaller listeners
+   * @param customData array of lists of custom action data like uninstaller listeners
    */
   private void handleAdditionalUninstallData(UninstallData udata, List[] customData)
   {

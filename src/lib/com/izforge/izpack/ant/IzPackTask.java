@@ -217,7 +217,7 @@ public class IzPackTask extends Task implements PackagerListener
 
 
   /**
-   * Ant will call this for each &lt;property..&gt; tag to the IzPack task.
+   * Ant will call this for each &lt;property&gt; tag to the IzPack task.
    */
   public void addConfiguredProperty(Property property) {
     if (properties == null)

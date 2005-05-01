@@ -149,7 +149,7 @@ class PacksModel extends AbstractTableModel
    * Given a map of names  and Integer for position and a name it return
    * the position of this name as an int
    *
-   * @return
+   * @return position of the name
    */
   private int getPos(String name)
   {
@@ -317,7 +317,6 @@ class PacksModel extends AbstractTableModel
   /** We use a modified dfs graph search algorithm as described in:
    * Thomas H. Cormen, Charles Leiserson, Ronald Rivest and Clifford Stein. Introduction
    * to algorithms 2nd Edition 540-549,MIT Press, 2001
-   * @return
    */
   private int dfs(int[] status)
   {

@@ -169,8 +169,6 @@ public class Compiler extends Thread
 
   /**
    *  Retrieves the packager listener
-   *
-   * @param  listener  The listener.
    */
   public PackagerListener getPackagerListener()
   {
@@ -813,7 +811,6 @@ public class Compiler extends Thread
    * to algorithms 2nd Edition 540-549,MIT Press, 2001
    * @param packs The graph
    * @param names The name map
-   * @return
    */
   private int dfs(List packs,Map names)
   {
