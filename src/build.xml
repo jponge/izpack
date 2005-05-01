@@ -254,7 +254,7 @@
     </target>
 
     <!-- Package standalone-compiler.jar -->
-    <target name="build.standalone-compiler" depends="compile.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listener">
+    <target name="build.standalone-compiler" depends="compile.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners">
         <jar jarfile="${standalone-compiler.jar}" duplicate="preserve">
             <manifest>
                 <attribute name="Built-By" value="IzPack"/>
@@ -538,7 +538,7 @@
 
     <!-- Compiles the base custom action classes which should placed into
          izevent.jar  -->
-    <target name="compile.listener_base" >
+    <target name="compile.listener-base">
         <javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" 
          source="${source}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}"
         classpath="${installer.jar};${compiler.jar}">
@@ -550,7 +550,7 @@
         </javac>
     </target>
     <!-- Package izevent.jar  -->
-    <target name="build.listener_base" depends="compile.listener_base">
+    <target name="build.listener-base" depends="compile.listener-base">
         <jar jarfile="${izevent.jar}" >
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/event/*.class"/>
@@ -638,7 +638,7 @@
          be sure to explicitly include the .java file in the nested fileset.
          This also acts as a check to help limit dependancies.
     -->
-    <target name="build.listener" depends="build.compiler,build.installer,build.listener_base">
+    <target name="build.listeners" depends="build.compiler,build.installer,build.listener-base">
         <build-installer-listener name="AntActionInstallerListener">
             <include name="com/izforge/izpack/event/AntActionInstallerListener.java"/>
             <include name="com/izforge/izpack/event/AntAction.java"/>
@@ -689,7 +689,7 @@
     </target>
 
     <!-- Builds all compilation targets -->
-    <target name="all" depends="build.compiler,build.installer,build.uninstaller,build.uninstaller-ext,build.panels,build.listener,build.standalone-compiler"/>
+    <target name="all" depends="build.compiler,build.installer,build.uninstaller,build.uninstaller-ext,build.panels,build.listeners,build.standalone-compiler"/>
 
     <!-- Builds the Javadoc -->
     <target name="build.javadoc" depends="prepare">
