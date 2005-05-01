@@ -170,16 +170,16 @@
     <property name="dist.dir" value="${basedir}/${dist.subdir}"/>
     <property name="dist-files.dir" value="${basedir}/src/dist-files"/>
 
+    <!-- Define Main-Classes -->
+    <property name="compiler.class" value="com.izforge.izpack.compiler.Compiler"/>
+    <property name="installer.class" value="com.izforge.izpack.installer.Installer"/>
+    <property name="uninstaller.class" value="com.izforge.izpack.uninstaller.Uninstaller"/>
 
     <!-- Define file paths -->
     <property name="compiler.jar" value="${basedir}/lib/compiler.jar"/>
-    <property name="compiler.manifest" value="${basedir}/src/compiler.manifest"/>
     <property name="standalone-compiler.jar" value="${basedir}/lib/standalone-compiler.jar"/>
-    <property name="standalone-compiler.manifest" value="${basedir}/src/standalone-compiler.manifest"/>
     <property name="installer.jar" value="${basedir}/lib/installer.jar"/>
-    <property name="installer.manifest" value="${basedir}/src/installer.manifest"/>
     <property name="uninstaller.jar" value="${basedir}/lib/uninstaller.jar"/>
-    <property name="uninstaller.manifest" value="${basedir}/src/uninstaller.manifest"/>
     <property name="uninstaller-ext.jar" value="${basedir}/lib/uninstaller-ext.jar"/>
     <property name="izevent.jar" value="${basedir}/lib/izevent.jar"/>
 
@@ -227,24 +227,13 @@
     </target>
 
     <!-- Package compiler.jar -->
-    <target name="compiler.manifest">
-        <manifest file="${compiler.manifest}">
-            <attribute name="Built-By" value="IzPack"/>
-            <attribute name="Class-Path" value="ant.jar"/>
-            <attribute name="Main-Class" value="com.izforge.izpack.compiler.Compiler"/>
-            <section name="com/izforge/izpack/compiler/">
-                <attribute name="Specification-Title" value="IzPack compiler"/>
-                <attribute name="Specification-Version" value="${rel}"/>
-                <attribute name="Specification-Vendor" value="IzPack."/>
-                <attribute name="Implementation-Title" value="IzPack compiler"/>
-                <attribute name="Implementation-Version" value="${ver}"/>
-                <attribute name="Implementation-Vendor" value="IzPack."/>
-            </section>
-        </manifest>
-    </target>
-    <target name="build.compiler" depends="compile.compiler, compiler.manifest">
-        <delete file="${compiler.jar}" verbose="true"/>
-        <jar jarfile="${compiler.jar}" manifest="${compiler.manifest}">
+    <target name="build.compiler" depends="compile.compiler">
+        <jar jarfile="${compiler.jar}">
+            <manifest>
+                <attribute name="Built-By" value="IzPack"/>
+                <attribute name="Class-Path" value="ant.jar"/>
+                <attribute name="Main-Class" value="${compiler.class}"/>
+            </manifest>
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/*.class"/>
                 <include name="com/izforge/izpack/compiler/*.class"/>
@@ -265,24 +254,13 @@
     </target>
 
     <!-- Package standalone-compiler.jar -->
-    <target name="standalone-compiler.manifest">
-        <manifest file="${standalone-compiler.manifest}">
-            <attribute name="Built-By" value="IzPack"/>
-            <attribute name="Class-Path" value="ant.jar"/>
-            <attribute name="Main-Class" value="com.izforge.izpack.compiler.Compiler"/>
-            <section name="com/izforge/izpack/standalone-compiler/">
-                <attribute name="Specification-Title" value="IzPack compiler"/>
-                <attribute name="Specification-Version" value="${rel}"/>
-                <attribute name="Specification-Vendor" value="IzPack."/>
-                <attribute name="Implementation-Title" value="IzPack compiler"/>
-                <attribute name="Implementation-Version" value="${ver}"/>
-                <attribute name="Implementation-Vendor" value="IzPack."/>
-            </section>
-        </manifest>
-    </target>
-    <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listener">
-        <delete file="${standalone-compiler.jar}" verbose="true"/>
-        <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
+    <target name="build.standalone-compiler" depends="compile.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listener">
+        <jar jarfile="${standalone-compiler.jar}">
+            <manifest>
+                <attribute name="Built-By" value="IzPack"/>
+                <attribute name="Class-Path" value="ant.jar"/>
+                <attribute name="Main-Class" value="${compiler.class}"/>
+            </manifest>
             <zipfileset src="${installer.jar}"/>
             <zipfileset src="${compiler.jar}"/>
             <zipfileset src="lib/ant.jar"/>
@@ -319,24 +297,13 @@
     </target>
 
     <!-- Package installer.jar -->
-    <target name="installer.manifest">
-        <manifest file="${installer.manifest}">
-            <attribute name="Built-By" value="IzPack"/>
-            <attribute name="Class-Path" value=""/>
-            <attribute name="Main-Class" value="com.izforge.izpack.installer.Installer"/>
-            <section name="com/izforge/izpack/installer/">
-                <attribute name="Specification-Title" value="IzPack installer"/>
-                <attribute name="Specification-Version" value="${rel}"/>
-                <attribute name="Specification-Vendor" value="IzPack."/>
-                <attribute name="Implementation-Title" value="IzPack installer"/>
-                <attribute name="Implementation-Version" value="${ver}"/>
-                <attribute name="Implementation-Vendor" value="IzPack."/>
-            </section>
-        </manifest>
-    </target>
-    <target name="build.installer" depends="compile.installer, installer.manifest">
-        <delete file="${installer.jar}" verbose="true"/>
-        <jar jarfile="${installer.jar}" manifest="${installer.manifest}">
+    <target name="build.installer" depends="compile.installer">
+        <jar jarfile="${installer.jar}">
+            <manifest>
+                <attribute name="Built-By" value="IzPack"/>
+                <attribute name="Class-Path" value=""/>
+                <attribute name="Main-Class" value="${installer.class}"/>
+            </manifest>
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/*.class"/>
                 <include name="com/izforge/izpack/gui/*.class"/>
@@ -370,24 +337,13 @@
     </target>
 
     <!-- Package uninstaller.jar -->
-    <target name="uninstaller.manifest">
-        <manifest file="${uninstaller.manifest}">
-            <attribute name="Built-By" value="IzPack"/>
-            <attribute name="Class-Path" value=""/>
-            <attribute name="Main-Class" value="com.izforge.izpack.uninstaller.Uninstaller"/>
-            <section name="com/izforge/izpack/uninstaller/">
-                <attribute name="Specification-Title" value="IzPack uninstaller"/>
-                <attribute name="Specification-Version" value="${rel}"/>
-                <attribute name="Specification-Vendor" value="IzPack."/>
-                <attribute name="Implementation-Title" value="IzPack uninstaller"/>
-                <attribute name="Implementation-Version" value="${ver}"/>
-                <attribute name="Implementation-Vendor" value="IzPack."/>
-            </section>
-        </manifest>
-    </target>
-    <target name="build.uninstaller" depends="compile.uninstaller, uninstaller.manifest">
-        <delete file="${uninstaller.jar}" verbose="true"/>
-        <jar jarfile="${uninstaller.jar}" manifest="${uninstaller.manifest}">
+    <target name="build.uninstaller" depends="compile.uninstaller">
+        <jar jarfile="${uninstaller.jar}">
+            <manifest>
+                <attribute name="Built-By" value="IzPack"/>
+                <attribute name="Class-Path" value=""/>
+                <attribute name="Main-Class" value="${uninstaller.class}"/>
+            </manifest>
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/LocaleDatabase.class"/>
                 <include name="com/izforge/izpack/gui/*.class"/>
@@ -417,7 +373,6 @@
     <!-- Package extended uninstaller.jar used if one ore more native libs are
          declared for uninstallation -->
     <target name="build.uninstaller-ext" depends="compile.uninstaller-ext">
-        <delete file="${uninstaller-ext.jar}" verbose="true"/>
         <jar jarfile="${uninstaller-ext.jar}" >
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/util/Librarian.class"/>
@@ -431,222 +386,149 @@
         </jar>
     </target>
 
-    <!-- Compile a panel -->
-    <target name="compile.panel">
-        <echo message="Compiles panel ${panel}"/>
-        <mkdir dir="${bin.dir}/panels/${panel-dir}"/>
-        <javac srcdir="${src.dir}" 
-               destdir="${bin.dir}/panels/${panel-dir}" 
-               classpath="${installer.jar}" 
-               optimize="on" 
-               deprecation="on" 
-               debug="${debug}"
-	       source="${source}"
-               debuglevel="${debuglevel}">
-            <include name="com/izforge/izpack/panels/${panel}*.java"/>
-        </javac>
-    </target>
+    <!-- 
+         ======================================================================
+           Create Panel Modules
+         ======================================================================
+    -->
 
-    <!-- Make JAR for a panel -->
-    <target name="compile.panel.finish">
-        <jar jarfile="${bin.dir}/panels/${panel}.jar">
-            <fileset dir="${bin.dir}/panels/${panel}">
-                <include name="**/*.class"/>
-            </fileset>
-        </jar>
-    </target>
-
-    <!-- convenience: compile simple panel and finish it -->
-    <target name="compile.panel.simple">
-        <antcall target="compile.panel">
-            <param name="panel" value="${panel}"/>
-            <param name="panel-dir" value="${panel-dir}"/>
-        </antcall>
-        <antcall target="compile.panel.finish">
-            <param name="panel" value="${panel}"/>
-        </antcall>
-    </target>
+    <!-- Macro to compile a panel's classes and create it's jar file -->
+    <macrodef name="build-panel">
+        <attribute name="name" description="The panels jar will get this name"/>
+        <attribute name="srcdir" default="${src.dir}"
+                   description="Source directory. Defaults to izpack src dir"/>
+        <element name="panel-fileset" implicit="yes" 
+                 description="include and exclude elements indicating panel sources"/>
+        <sequential>
+            <echo message="build-panel: @{name}"/>
+            <mkdir dir="${bin.dir}/panels/@{name}"/>
+            <!-- sourcepath is cleared so there's no mistaking what goes into the Panel -->
+            <javac srcdir="@{srcdir}" 
+                   destdir="${bin.dir}/panels/@{name}" 
+                   classpath="${installer.jar}" 
+                   sourcepath=""
+                   optimize="on" 
+                   deprecation="on" 
+                   debug="${debug}"
+	           source="${source}"
+                   debuglevel="${debuglevel}">
+                <panel-fileset/>
+            </javac>
+            <jar jarfile="${bin.dir}/panels/@{name}.jar"
+                 basedir="${bin.dir}/panels/@{name}"/>
+        </sequential>
+    </macrodef>
 
     <!-- Compile all panels and put them at the right location -->
+    <!-- 
+         If you add a another, and the build fails because it can't find a class, 
+         be sure to explicitly include the .java file in the nested fileset.
+         This also acts as a check to help limit dependancies.
+    -->
     <target name="build.panels" depends="build.installer">
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="FinishPanel"/>
-            <param name="panel-dir" value="FinishPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="HelloPanel"/>
-            <param name="panel-dir" value="HelloPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="InfoPanel"/>
-            <param name="panel-dir" value="InfoPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="InstallPanel"/>
-            <param name="panel-dir" value="InstallPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="InstallPanel"/>
-            <param name="panel-dir" value="ExtendedInstallPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="ExtendedInstallPanel"/>
-            <param name="panel-dir" value="ExtendedInstallPanel"/>
-        </antcall>
-        <antcall target="compile.panel.finish">
-            <param name="panel" value="ExtendedInstallPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="LicencePanel"/>
-            <param name="panel-dir" value="LicencePanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PacksPanelInterface"/>
-            <param name="panel-dir" value="PacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PacksModel"/>
-            <param name="panel-dir" value="PacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PacksPanelBase"/>
-            <param name="panel-dir" value="PacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PacksPanel"/>
-            <param name="panel-dir" value="PacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel.finish">
-            <param name="panel" value="PacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PacksPanelInterface"/>
-            <param name="panel-dir" value="ImgPacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PacksModel"/>
-            <param name="panel-dir" value="ImgPacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PacksPanelBase"/>
-            <param name="panel-dir" value="ImgPacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="ImgPacksPanel"/>
-            <param name="panel-dir" value="ImgPacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel.finish">
-            <param name="panel" value="ImgPacksPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="HTMLLicencePanel"/>
-            <param name="panel-dir" value="HTMLLicencePanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="HTMLInfoPanel"/>
-            <param name="panel-dir" value="HTMLInfoPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="TargetPanel"/>
-            <param name="panel-dir" value="TargetPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PathInputPanel"/>
-            <param name="panel-dir" value="TargetPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PathSelectionPanel"/>
-            <param name="panel-dir" value="TargetPanel"/>
-        </antcall>
-        <antcall target="compile.panel.finish">
-            <param name="panel" value="TargetPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="JDKPathPanel"/>
-            <param name="panel-dir" value="JDKPathPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PathInputPanel"/>
-            <param name="panel-dir" value="JDKPathPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PathSelectionPanel"/>
-            <param name="panel-dir" value="JDKPathPanel"/>
-        </antcall>
-        <antcall target="compile.panel.finish">
-            <param name="panel" value="JDKPathPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="XInfoPanel"/>
-            <param name="panel-dir" value="XInfoPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="ShortcutData"/>
-            <param name="panel-dir" value="ShortcutPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="ShortcutPanel"/>
-            <param name="panel-dir" value="ShortcutPanel"/>
-        </antcall>
-        <antcall target="compile.panel.finish">
-            <param name="panel" value="ShortcutPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="UserInputPanel"/>
-            <param name="panel-dir" value="UserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="RuleTextField"/>
-            <param name="panel-dir" value="UserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="RuleInputField"/>
-            <param name="panel-dir" value="UserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="Validator"/>
-            <param name="panel-dir" value="UserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="Processor"/>
-            <param name="panel-dir" value="UserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="ProcessingClient"/>
-            <param name="panel-dir" value="UserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel">
-            <param name="panel" value="PasswordGroup"/>
-            <param name="panel-dir" value="UserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel.finish">
-            <param name="panel" value="UserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="ConditionalUserInputPanel"/>
-            <param name="panel-dir" value="ConditionalUserInputPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="CompilePanel"/>
-            <param name="panel-dir" value="CompilePanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="ProcessPanel"/>
-            <param name="panel-dir" value="ProcessPanel"/>
-        </antcall>
-        <antcall target="compile.panel.simple">
-            <param name="panel" value="SudoPanel" />
-            <param name="panel-dir" value="SudoPanel" />
-        </antcall>
-    	<antcall target="compile.panel.simple">
-            <param name="panel" value="SimpleFinishPanel"/>
-            <param name="panel-dir" value="SimpleFinishPanel"/>
-        </antcall>
-    	<antcall target="compile.panel.simple">
-            <param name="panel" value="SummaryPanel"/>
-            <param name="panel-dir" value="SummaryPanel"/>
-        </antcall>
+        <mkdir dir="${bin.dir}/panels"/>
+
+        <build-panel name="FinishPanel">
+            <include name="com/izforge/izpack/panels/FinishPanel.java"/>
+        </build-panel>
+        <build-panel name="HelloPanel">
+            <include name="com/izforge/izpack/panels/HelloPanel.java"/>
+        </build-panel>
+        <build-panel name="InfoPanel">
+            <include name="com/izforge/izpack/panels/InfoPanel.java"/>
+        </build-panel>
+        <build-panel name="InstallPanel">
+            <include name="com/izforge/izpack/panels/InstallPanel.java"/>
+        </build-panel>
+        <build-panel name="ExtendedInstallPanel">
+            <include name="com/izforge/izpack/panels/InstallPanel.java"/>
+            <include name="com/izforge/izpack/panels/ExtendedInstallPanel.java"/>
+        </build-panel>
+        <build-panel name="LicencePanel">
+            <include name="com/izforge/izpack/panels/LicencePanel.java"/>
+        </build-panel>
+        <build-panel name="PacksPanel">
+            <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
+            <include name="com/izforge/izpack/panels/PacksModel.java"/>
+            <include name="com/izforge/izpack/panels/PacksPanelBase.java"/>
+            <include name="com/izforge/izpack/panels/ImgPacksPanelBase.java"/>
+            <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/PacksPanel.java"/>
+        </build-panel>
+        <build-panel name="ImgPacksPanel">
+            <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
+            <include name="com/izforge/izpack/panels/PacksModel.java"/>
+            <include name="com/izforge/izpack/panels/PacksPanelBase.java"/>
+            <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/ImgPacksPanel.java"/>
+        </build-panel>
+        <build-panel name="HTMLLicencePanel">
+            <include name="com/izforge/izpack/panels/HTMLLicencePanel.java"/>
+        </build-panel>
+        <build-panel name="HTMLInfoPanel">
+            <include name="com/izforge/izpack/panels/HTMLInfoPanel.java"/>
+        </build-panel>
+        <build-panel name="TargetPanel">
+            <include name="com/izforge/izpack/panels/TargetPanel.java"/>
+            <include name="com/izforge/izpack/panels/TargetPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/PathInputPanel.java"/>
+            <include name="com/izforge/izpack/panels/PathSelectionPanel.java"/>
+        </build-panel>
+        <build-panel name="JDKPathPanel">
+            <include name="com/izforge/izpack/panels/JDKPathPanel.java"/>
+            <include name="com/izforge/izpack/panels/PathInputPanel.java"/>
+            <include name="com/izforge/izpack/panels/PathSelectionPanel.java"/>
+        </build-panel>
+        <build-panel name="XInfoPanel">
+            <include name="com/izforge/izpack/panels/XInfoPanel.java"/>
+        </build-panel>
+        <build-panel name="ShortcutPanel">
+            <include name="com/izforge/izpack/panels/ShortcutData.java"/>
+            <include name="com/izforge/izpack/panels/ShortcutPanel.java"/>
+        </build-panel>
+        <build-panel name="UserInputPanel">
+            <include name="com/izforge/izpack/panels/UserInputPanel.java"/>
+            <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/RuleTextField.java"/>
+            <include name="com/izforge/izpack/panels/RuleInputField.java"/>
+            <include name="com/izforge/izpack/panels/Validator.java"/>
+            <include name="com/izforge/izpack/panels/Processor.java"/>
+            <include name="com/izforge/izpack/panels/ProcessingClient.java"/>
+            <include name="com/izforge/izpack/panels/PasswordGroup.java"/>
+        </build-panel>
+        <build-panel name="ConditionalUserInputPanel">
+            <include name="com/izforge/izpack/panels/ConditionalUserInputPanel.java"/>
+            <include name="com/izforge/izpack/panels/UserInputPanel.java"/>
+            <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/RuleTextField.java"/>
+            <include name="com/izforge/izpack/panels/RuleInputField.java"/>
+            <include name="com/izforge/izpack/panels/Processor.java"/>
+            <include name="com/izforge/izpack/panels/Validator.java"/>
+            <include name="com/izforge/izpack/panels/ProcessingClient.java"/>
+            <include name="com/izforge/izpack/panels/PasswordGroup.java"/>
+        </build-panel>
+        <build-panel name="CompilePanel">
+            <include name="com/izforge/izpack/panels/CompilePanel.java"/>
+        </build-panel>
+        <build-panel name="ProcessPanel">
+            <include name="com/izforge/izpack/panels/ProcessPanel.java"/>
+        </build-panel>
+        <build-panel name="SudoPanel">
+            <include name="com/izforge/izpack/panels/SudoPanel.java"/>
+        </build-panel>
+        <build-panel name="SimpleFinishPanel">
+            <include name="com/izforge/izpack/panels/SimpleFinishPanel.java"/>
+        </build-panel>
+        <build-panel name="SummaryPanel">
+            <include name="com/izforge/izpack/panels/SummaryPanel.java"/>
+        </build-panel>
     </target>
+
+    <!-- 
+         ======================================================================
+           Create Listener Modules
+         ======================================================================
+    -->
 
     <!-- Compiles the base custom action classes which should placed into
          izevent.jar  -->
@@ -663,7 +545,6 @@
     </target>
     <!-- Package izevent.jar  -->
     <target name="build.listener_base" depends="compile.listener_base">
-        <delete file="${izevent.jar}" verbose="true"/>
         <jar jarfile="${izevent.jar}" >
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/event/*.class"/>
@@ -672,108 +553,111 @@
             </fileset>
         </jar>
     </target>
-    <!-- Compile a listener -->
-    <target name="compile.listener" >
-        <echo message="Compiles listener ${listener}"/>
-        <mkdir dir="${bin.dir}/customActions/${listener-dir}"/>
-        <javac srcdir="${src.dir}" 
-               destdir="${bin.dir}/customActions/${listener-dir}" 
-               classpath="${installer.jar};${compiler.jar};${izevent.jar}" 
-               optimize="on" 
-               deprecation="on" 
-               debug="${debug}"
-	       source="${source}"
-               debuglevel="${debuglevel}">
-            <include name="${listener-include}/${listener}*.java"/>
-        </javac>
-    </target>
 
-    <!-- Make JAR for a listener -->
-    <target name="compile.listener.finish">
-    	<unzip src="${izevent.jar}" dest="${bin.dir}/customActions/${listener}" />
-        <jar jarfile="${bin.dir}/customActions/${listener}.jar">
-            <fileset dir="${bin.dir}/customActions/${listener}">
-                <include name="**/*.class"/>
-                <exclude name="**/*${listener-exclude1}*.class"/>
-                <exclude name="**/*${listener-exclude2}*.class"/>
-            </fileset>
-        </jar>
-    </target>
-    <!-- convenience: compile simple listener and finish it -->
-    <target name="compile.listener.simple">
-        <antcall target="compile.listener">
-            <param name="listener" value="${listener}"/>
-            <param name="listener-dir" value="${listener-dir}"/>
-            <param name="listener-include" value="${listener-include}"/>
-        </antcall>
-        <antcall target="compile.listener.finish">
-            <param name="listener" value="${listener}"/>
-            <param name="listener-exclude1" value="${listener-exclude1}"/>
-            <param name="listener-exclude2" value="${listener-exclude2}"/>
-        </antcall>
-    </target>
 
-    <!-- simple installer listener -->
-    <target name="compile.installer-listener.simple">
-        <antcall target="compile.listener.simple">
-            <param name="listener" value="${listener}"/>
-            <param name="listener-dir" value="${listener-dir}"/>
-            <param name="listener-include" value="${listener-include}"/>
-            <param name="listener-exclude1" value="Uninstaller"/>
-            <param name="listener-exclude2" value="_NO_MORE_EXCLUDES_"/>
-        </antcall>
-    </target>
-    <!-- simple uninstaller listener -->
-    <target name="compile.uninstaller-listener.simple">
-        <antcall target="compile.listener.simple">
-            <param name="listener" value="${listener}"/>
-            <param name="listener-dir" value="${listener-dir}"/>
-            <param name="listener-include" value="${listener-include}"/>
-            <param name="listener-exclude1" value="Installer"/>
-            <param name="listener-exclude2" value="_NO_MORE_EXCLUDES_"/>
-        </antcall>
-    </target>
-    <!-- simple compiler listener -->
-    <target name="compile.compiler-listener.simple">
-        <antcall target="compile.listener.simple">
-            <param name="listener" value="${listener}"/>
-            <param name="listener-dir" value="${listener-dir}"/>
-            <param name="listener-include" value="${listener-include}"/>
-            <param name="listener-exclude1" value="Installer"/>
-            <param name="listener-exclude2" value="Uninstaller"/>
-        </antcall>
-    </target>
+    <!-- Macro to compile a listener's classes and create its jar file -->
+    <macrodef name="build-listener">
+        <attribute name="name" description="The listener jar will get this name"/>
+        <attribute name="srcdir" default="${src.dir}"
+                   description="Source directory. Defaults to izpack src dir"/>
+        <attribute name="izeventExcludes" 
+                   description="excludes patter for files in the ${izevent.jar} file"/>
+        <element name="listener-fileset" implicit="yes"
+                 description="include and exclude elements indicating listener sources"/>
+        <sequential>
+            <echo message="build-listener: @{name}"/>
+            <mkdir dir="${bin.dir}/customActions/@{name}"/>
+            <!-- sourcepath is cleared so there's no mistaking what goes into the Listener -->
+            <javac srcdir="@{srcdir}" 
+                   destdir="${bin.dir}/customActions/@{name}" 
+                   classpath="${installer.jar};${compiler.jar};${izevent.jar}" 
+                   sourcepath=""
+                   optimize="on" 
+                   deprecation="on" 
+                   debug="${debug}"
+	           source="${source}"
+                   debuglevel="${debuglevel}">
+                <listener-fileset/>
+            </javac>
+            <jar jarfile="${bin.dir}/customActions/@{name}.jar"
+                 basedir="${bin.dir}/customActions/@{name}">
+                <!-- also include files from the previously built ${izevent.jar} -->
+                <zipfileset src="${izevent.jar}" excludes="@{izeventExcludes}"/>
+            </jar>
+        </sequential>
+    </macrodef>
+    <!-- Convenience macro to call build-listener for compiler listeners -->
+    <macrodef name="build-compiler-listener">
+        <attribute name="name"/>
+        <attribute name="srcdir" default="${src.dir}"/>
+        <element name="compiler-fileset" implicit="yes"
+                 description="include and exclude elements indicating listener sources"/>
+        <sequential>
+            <build-listener name="@{name}" srcdir="@{srcdir}"
+                            izeventExcludes="**/*Installer*,**/*Uninstaller*">
+                <compiler-fileset/>
+            </build-listener>
+        </sequential>
+    </macrodef>
+    <!-- Convenience macro to call build-listener for installer listeners -->
+    <macrodef name="build-installer-listener">
+        <attribute name="name"/>
+        <attribute name="srcdir" default="${src.dir}"/>
+        <element name="installer-fileset" implicit="yes"
+                 description="include and exclude elements indicating listener sources"/>
+        <sequential>
+            <build-listener name="@{name}" srcdir="@{srcdir}" 
+                            izeventExcludes="**/*Uninstaller*">
+                <installer-fileset/>
+            </build-listener>
+        </sequential>
+    </macrodef>
+    <!-- Convenience macro to call build-listener for uninstaller listeners -->
+    <macrodef name="build-uninstaller-listener">
+        <attribute name="name"/>
+        <attribute name="srcdir" default="${src.dir}"/>
+        <element name="uninstaller-fileset" implicit="yes"
+                 description="include and exclude elements indicating listener sources"/>
+        <sequential>
+            <build-listener name="@{name}" srcdir="@{srcdir}" 
+                            izeventExcludes="**/*Installer*">
+                <uninstaller-fileset/>
+            </build-listener>
+        </sequential>
+    </macrodef>
+
     <!-- Compile all custom actions (listener) and put them at the right location -->
-     <target name="build.listener" depends="build.compiler,build.installer,build.listener_base">
-        <antcall target="compile.installer-listener.simple">
-            <param name="listener" value="AntActionInstallerListener"/>
-            <param name="listener-dir" value="AntActionInstallerListener"/>
-            <param name="listener-include" value="com/izforge/izpack/event"/>
-        </antcall>
-        <antcall target="compile.uninstaller-listener.simple">
-            <param name="listener" value="AntActionUninstallerListener"/>
-            <param name="listener-dir" value="AntActionUninstallerListener"/>
-            <param name="listener-include" value="com/izforge/izpack/event"/>
-        </antcall>
-        <antcall target="compile.installer-listener.simple">
-            <param name="listener" value="SummaryLoggerInstallerListener"/>
-            <param name="listener-dir" value="SummaryLoggerInstallerListener"/>
-            <param name="listener-include" value="com/izforge/izpack/event"/>
-        </antcall>
-     
-       <!-- CUSTOM ACTION test START
-        <antcall target="compile.compiler-listener.simple">
-            <param name="listener" value="ChmodCompilerListener"/>
-            <param name="listener-dir" value="ChmodCompilerListener"/>
-            <param name="listener-include" value="com/myCompany/tools/install/listener"/>
-        </antcall>
-        <antcall target="compile.installer-listener.simple">
-            <param name="listener" value="ChmodInstallerListener"/>
-            <param name="listener-dir" value="ChmodInstallerListener"/>
-            <param name="listener-include" value="com/myCompany/tools/install/listener"/>
-        </antcall>
+    <!-- 
+         If you add a another, and the build fails because it can't find a class, 
+         be sure to explicitly include the .java file in the nested fileset.
+         This also acts as a check to help limit dependancies.
+    -->
+    <target name="build.listener" depends="build.compiler,build.installer,build.listener_base">
+        <build-installer-listener name="AntActionInstallerListener">
+            <include name="com/izforge/izpack/event/AntActionInstallerListener.java"/>
+            <include name="com/izforge/izpack/event/AntAction.java"/>
+        </build-installer-listener>
+
+        <build-uninstaller-listener name="AntActionUninstallerListener">
+            <include name="com/izforge/izpack/event/AntActionUninstallerListener"/>
+        </build-uninstaller-listener>
+
+        <build-installer-listener name="SummaryLoggerInstallerListener">
+            <include name="com/izforge/izpack/event/SummaryLoggerInstallerListener"/>
+        </build-installer-listener>
+        
+        <!-- CUSTOM ACTION test START
+        <build-compiler-listener name="ChmodCompilerListener">
+            <include name="com/myCompany/tools/install/listener/ChmodCompilerListener"/>
+        </build-compiler-listener>
+
+        <build-installer-listener name="ChmodInstallerListener">
+            <include name="com/myCompany/tools/install/listener/ChmodInstallerListener"/>
+        </build-installer-listener>
         COSTOM ACTION test END -->
     </target>
+
+    <!-- ====================================================================== -->
 
     <!-- Performs some cleanups -->
     <target name="clean">
@@ -781,9 +665,6 @@
         <delete includeEmptyDirs="true" quiet="true">
             <fileset dir="${build.dir}"/>
             <fileset dir="${dist.dir}"/>
-            <fileset dir="${basedir}/src/">
-                <include name="*.manifest"/>
-            </fileset>
             <fileset dir="${basedir}/bin/panels/">
                 <include name="**/*"/>
             </fileset>

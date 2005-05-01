@@ -25,9 +25,13 @@
   ( Christian Murphy | Klaus Bartz).
 - Fail message in SimpleFinishPanel (Klaus Bartz).
 - Interrupt handling changed (Klaus Bartz).
-- Fixed shortcuts for RedHat and Mandrake (Fabrice Mirabile, thanks to Vitor Rodrigues for the code).
+- Fixed shortcuts for RedHat and Mandrake (Fabrice Mirabile, thanks to Vitor 
+  Rodrigues for the code).
 - New ConditionalUserInputPanel (Andreas Breiter, patches #407, #408).
-- ExecuteForPack, allow processing depending on the selected pack (Fabrice Mirabile, thanks to Johannes Gutleber for the code).
+- ExecuteForPack, allow processing depending on the selected pack (Fabrice
+  Mirabile, thanks to Johannes Gutleber for the code).
+- Ant file cleanup: requires ant 1.6. Incremental builds of jar files.
+  Macrodefs instead of antcalls (Chad McHenry).
 
   > 3.7.2 (build 2005.04.22)
 
