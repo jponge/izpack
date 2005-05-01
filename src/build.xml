@@ -282,9 +282,15 @@
     </target>
     <target name="build.standalone-compiler" depends="compile.compiler, standalone-compiler.manifest, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listener">
         <delete file="${standalone-compiler.jar}" verbose="true"/>
-        <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}">
+        <jar jarfile="${standalone-compiler.jar}" manifest="${standalone-compiler.manifest}"  duplicate="preserve">
             <zipfileset src="${installer.jar}"/>
-            <zipfileset src="${compiler.jar}"/>
+            <zipfileset src="${compiler.jar}">
+                <!-- skip files already included via installer.jar -->
+                <exclude name="com/izforge/izpack/*.class"/>
+                <exclude name="com/izforge/izpack/installer/*.class"/>
+                <exclude name="com/izforge/izpack/util/*.class"/>
+                <exclude name="net/n3/nanoxml/*.class"/>
+            </zipfileset>
             <zipfileset src="lib/ant.jar"/>
             <fileset dir="${basedir}">
                 <include name="bin/langpacks/flags/*"/>
