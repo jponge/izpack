@@ -22,7 +22,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package com.izforge.izpack.installer;
+package com.izforge.izpack.util;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,8 +37,6 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.izforge.izpack.util.IoHelper;
 
 /**
  *  Substitutes variables occurring in an input stream or a string. This

@@ -54,6 +54,7 @@ import com.izforge.izpack.util.AbstractUIProcessHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * This class does alle the work for the process panel.

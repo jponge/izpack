@@ -45,6 +45,7 @@ import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * This class does alle the work for compiling sources.

@@ -38,7 +38,7 @@ import net.n3.nanoxml.XMLElement;
 
 import org.apache.tools.ant.taskdefs.Execute;
 
-import com.izforge.izpack.installer.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * Sets a property by name, or set of properties (from file or resource) in the

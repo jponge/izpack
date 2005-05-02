@@ -65,7 +65,7 @@ import com.izforge.izpack.Panel;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.event.CompilerListener;
-import com.izforge.izpack.installer.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 

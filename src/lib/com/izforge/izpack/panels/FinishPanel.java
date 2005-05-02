@@ -46,7 +46,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  *  The finish panel class.

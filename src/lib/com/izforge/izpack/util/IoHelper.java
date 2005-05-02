@@ -33,8 +33,6 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import com.izforge.izpack.installer.VariableSubstitutor;
-
 /**
  * <p>Class  with some IO related helper.</p>
  *

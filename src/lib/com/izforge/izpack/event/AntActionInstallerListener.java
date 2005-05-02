@@ -35,11 +35,11 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 import com.izforge.izpack.util.SpecHelper;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 
 /**

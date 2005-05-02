@@ -34,7 +34,6 @@ import java.util.Vector;
 
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.ResourceManager;
-import com.izforge.izpack.installer.VariableSubstitutor;
 
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;

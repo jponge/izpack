@@ -63,6 +63,7 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  *  Unpacker class.

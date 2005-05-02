@@ -30,6 +30,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;

@@ -73,9 +73,9 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.MultiLineLabel;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;

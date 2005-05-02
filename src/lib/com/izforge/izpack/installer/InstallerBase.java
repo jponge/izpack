@@ -43,6 +43,7 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import

@@ -39,6 +39,7 @@ import java.util.Iterator;
 
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * The script parser classe.

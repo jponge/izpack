@@ -31,11 +31,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.VariableSubstitutor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.SummaryProcessor;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * Installer listener which writes the summary of all panels
