@@ -233,7 +233,8 @@ public class UserInputPanel extends IzPanel
   private static final String SEARCH_PARENTDIR              = "parentdir";
   private static final String SEARCH_CHECKFILENAME          = "checkfilename";
 
-  private static final String PACKS                         = "createForPack";
+  private static final String SELECTEDPACKS = "createForPack"; //renamed
+  private static final String UNSELECTEDPACKS = "createForUnselectedPack"; //new node
   private static final String NAME                          = "name";
 
   private static final String OS = "os";
@@ -435,10 +436,11 @@ public class UserInputPanel extends IzPanel
       parentFrame.skipPanel();
     }
 
-    Vector forPacks = spec.getChildrenNamed (PACKS);
+    Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+    Vector forUnselectedPacks = spec.getChildrenNamed(UNSELECTEDPACKS);
     Vector forOs = spec.getChildrenNamed(OS);
 
-    if (!itemRequiredFor (forPacks) || !itemRequiredForOs(forOs))
+    if (!itemRequiredFor (forPacks) || !itemRequiredForUnselected(forUnselectedPacks) || !itemRequiredForOs(forOs))
     {
       parentFrame.skipPanel ();
       return;
@@ -753,7 +755,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addRuleField (XMLElement spec)
   {
-    Vector forPacks = spec.getChildrenNamed (PACKS);
+    Vector forPacks = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
     XMLElement      element       = spec.getFirstChildNamed (SPEC);
     String          variable      = spec.getAttribute (VARIABLE);
@@ -971,7 +973,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addTextField (XMLElement spec)
   {
-    Vector      forPacks = spec.getChildrenNamed (PACKS);
+    Vector      forPacks = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
     XMLElement  element  = spec.getFirstChildNamed (SPEC);
     JLabel      label;
@@ -1098,7 +1100,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addComboBox (XMLElement spec)
   {
-    Vector        forPacks  = spec.getChildrenNamed (PACKS);
+    Vector        forPacks  = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
     XMLElement    element   = spec.getFirstChildNamed (SPEC);
     String        variable  = spec.getAttribute (VARIABLE);
@@ -1124,7 +1126,7 @@ public class UserInputPanel extends IzPanel
       {
         String processorClass = ((XMLElement)choices.elementAt (i)).getAttribute("processor");
 
-        if (!"".equals(processorClass))
+        if (processorClass != null && !"".equals(processorClass))
         {
                         String choiceValues = "";
                 try
@@ -1258,7 +1260,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addRadioButton (XMLElement spec)
   {
-    Vector forPacks = spec.getChildrenNamed (PACKS);
+    Vector forPacks = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
     String                variable    = spec.getAttribute (VARIABLE);
     String                value       = null;
@@ -1384,7 +1386,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addPasswordField (XMLElement spec)
   {
-    Vector        forPacks  = spec.getChildrenNamed (PACKS);
+    Vector        forPacks  = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
     String        variable  = spec.getAttribute (VARIABLE);
     String        validator = null;
@@ -1534,7 +1536,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addCheckBox (XMLElement spec)
   {
-    Vector      forPacks    = spec.getChildrenNamed (PACKS);
+    Vector      forPacks    = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
     String      label       = "";
     String      set         = null;
@@ -1657,7 +1659,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addSearch (XMLElement spec)
   {
-    Vector        forPacks    = spec.getChildrenNamed (PACKS);
+    Vector        forPacks    = spec.getChildrenNamed (SELECTEDPACKS);
     Vector        forOs       = spec.getChildrenNamed(OS);
     XMLElement    element     = spec.getFirstChildNamed (SPEC);
     String        variable    = spec.getAttribute (VARIABLE);
@@ -1877,7 +1879,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addText (XMLElement spec)
   {
-    Vector forPacks = spec.getChildrenNamed (PACKS);
+    Vector forPacks = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
 
     addDescription (spec, forPacks, forOs);
@@ -1893,7 +1895,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addSpace (XMLElement spec)
   {
-    Vector forPacks = spec.getChildrenNamed (PACKS);
+    Vector forPacks = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
     JPanel panel    = new JPanel ();
 
@@ -1913,7 +1915,7 @@ public class UserInputPanel extends IzPanel
  /*--------------------------------------------------------------------------*/
   private void addDivider (XMLElement spec)
   {
-    Vector forPacks   = spec.getChildrenNamed (PACKS);
+    Vector forPacks   = spec.getChildrenNamed (SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
     JPanel panel      = new JPanel ();
     String alignment  = spec.getAttribute (ALIGNMENT);
@@ -2302,6 +2304,73 @@ public class UserInputPanel extends IzPanel
     return (false);
   }
 
+   /*--------------------------------------------------------------------------*/
+  /**
+  * Verifies if an item is required for any of the packs listed. An item is
+  * required for a pack in the list if that pack is actually NOT selected for
+  * installation.
+  * <br><br>
+  * <b>Note:</b><br>
+  * If the list of selected packs is empty then <code>true</code> is always
+  * returnd. The same is true if the <code>packs</code> list is empty.
+  *
+  * @param     packs  a <code>Vector</code> of <code>String</code>s. Each of
+  *                   the strings denotes a pack for which an item
+  *                   should be created if the pack is actually installed.
+  *
+  * @return    <code>true</code> if the item is required for at least
+  *            one pack in the list, otherwise returns <code>false</code>.
+  */
+  /*--------------------------------------------------------------------------*/
+  /*$
+  * @design
+  *
+  * The information about the installed packs comes from
+  * InstallData.selectedPacks. This assumes that this panel is presented to
+  * the user AFTER the PacksPanel.
+  *--------------------------------------------------------------------------*/
+  private boolean itemRequiredForUnselected (Vector packs)
+   {
+
+     String selected;
+     String required;
+
+     if (packs.size () == 0)
+     {
+       return (true);
+     }
+
+     // ----------------------------------------------------
+     // analyze if the any of the packs for which the item
+     // is required have been selected for installation.
+     // ----------------------------------------------------
+     for (int i = 0; i < idata.selectedPacks.size (); i++)
+     {
+       selected = ((Pack)idata.selectedPacks.get (i)).name;
+
+       for (int k = 0; k < packs.size (); k++)
+       {
+         required = (String)((XMLElement)packs.elementAt(k)).getAttribute (NAME, "");
+         if (selected.equals (required))
+         {
+           return (false);
+         }
+       }
+     }
+
+     return (true);
+   }
+
+   // ----------- Inheritance stuff -----------------------------------------
+  /**
+   * Returns the uiElements.
+   * @return Returns the uiElements.
+   */
+  protected Vector getUiElements()
+  {
+    return uiElements;
+  }
+  
 // --------------------------------------------------------------------------
 // Inner Classes
 // --------------------------------------------------------------------------
