@@ -30,49 +30,48 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
 /**
- * Installer listener for reset the progress bar and initialize
- * the simple installer listener to support progress bar interaction.
- * To support progress bar interaction add this installer listener
- * as first listener.
- *
- * @author  Klaus Bartz
- *
+ * Installer listener for reset the progress bar and initialize the simple
+ * installer listener to support progress bar interaction. To support progress
+ * bar interaction add this installer listener as first listener.
+ * 
+ * @author Klaus Bartz
+ * 
  */
 public class ProgressBarInstallerListener extends SimpleInstallerListener
 {
 
-  /**
-   * 
-   */
-  public ProgressBarInstallerListener()
-  {
-    super(false);
-    // TODO Auto-generated constructor stub
-  }
-
-  /* (non-Javadoc)
-   * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData, com.izforge.izpack.util.AbstractUIProgressHandler)
-   */
-  public void afterPacks(
-    AutomatedInstallData idata,
-    AbstractUIProgressHandler handler)
-    throws Exception
-  {
-    if( handler instanceof ExtendedUIProgressHandler &&
-      getProgressBarCallerCount() > 0)
+    /**
+     * 
+     */
+    public ProgressBarInstallerListener()
     {
-      String progress = getMsg("CustomActions.progress");
-      String tip = getMsg("CustomActions.tip");
-      if( tip.equals("CustomActions.tip") || progress.equals("CustomActions.progress"))
-      {
-        Debug.trace("No messages found for custom action progress bar interactions; skiped.");
-        return;
-      }
-      ((ExtendedUIProgressHandler) handler).restartAction("Configure", 
-        progress, tip, getProgressBarCallerCount());
-      SimpleInstallerListener.doInformProgressBar = true;
+        super(false);
+        // TODO Auto-generated constructor stub
     }
-  }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
+     *      com.izforge.izpack.util.AbstractUIProgressHandler)
+     */
+    public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
+            throws Exception
+    {
+        if (handler instanceof ExtendedUIProgressHandler && getProgressBarCallerCount() > 0)
+        {
+            String progress = getMsg("CustomActions.progress");
+            String tip = getMsg("CustomActions.tip");
+            if (tip.equals("CustomActions.tip") || progress.equals("CustomActions.progress"))
+            {
+                Debug
+                        .trace("No messages found for custom action progress bar interactions; skiped.");
+                return;
+            }
+            ((ExtendedUIProgressHandler) handler).restartAction("Configure", progress, tip,
+                    getProgressBarCallerCount());
+            SimpleInstallerListener.doInformProgressBar = true;
+        }
+    }
 
 }

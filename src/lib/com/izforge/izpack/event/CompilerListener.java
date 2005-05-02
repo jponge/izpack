@@ -27,51 +27,59 @@ package com.izforge.izpack.event;
 
 import java.util.Map;
 
+import net.n3.nanoxml.XMLElement;
+
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.Packager;
 
-import net.n3.nanoxml.XMLElement;
-
 /**
- * <p>Implementations of this class are used
- * to add extensions to the packs at compilation.</p>
- *
- * @author  Klaus Bartz
- *
+ * <p>
+ * Implementations of this class are used to add extensions to the packs at
+ * compilation.
+ * </p>
+ * 
+ * @author Klaus Bartz
+ * 
  */
 public interface CompilerListener
 {
-  public final static int BEGIN = 1;
-  public final static int END   = 2;
-  /**
-   * This method is called from the compiler for each file (or dir)
-   * parsing. The XMLElement is a node of the file related children
-   * of the XML element "pack" (see installation.dtd). Current
-   * these are "file", "singlefile" or "fileset".
-   * If an additional data should be set, it should be added
-   * to the given data map (if exist). If no map exist a new
-   * should be created and filled. The data map will be added
-   * to the PackFile object after all registered CompilerListener are
-   * called.
-   * If the map contains an not common object, it is necessary
-   * to add the needed class to the installer. 
-   * @param existentDataMap attribute set with previos setted attributes
-   * @param element current file related XML node
-   * @return the given or a new attribute set. If no attribute set is given
-   * and no attribute was added, null returns
-   * @throws CompilerException
-   */
-  Map reviseAdditionalDataMap( 
-    Map existentDataMap, XMLElement element )
-    throws CompilerException;
 
-  /**
-   * This method will be called from each step of packaging.
-   * @param position name of the calling method, e.g. "addVariables"
-   * @param state BEGIN or END
-   * @param data  current install data
-   * @param packager current packager object
-   */
-  void notify(String position, int state, XMLElement data, Packager packager);
-  
+    public final static int BEGIN = 1;
+
+    public final static int END = 2;
+
+    /**
+     * This method is called from the compiler for each file (or dir) parsing.
+     * The XMLElement is a node of the file related children of the XML element
+     * "pack" (see installation.dtd). Current these are "file", "singlefile" or
+     * "fileset". If an additional data should be set, it should be added to the
+     * given data map (if exist). If no map exist a new should be created and
+     * filled. The data map will be added to the PackFile object after all
+     * registered CompilerListener are called. If the map contains an not common
+     * object, it is necessary to add the needed class to the installer.
+     * 
+     * @param existentDataMap
+     *            attribute set with previos setted attributes
+     * @param element
+     *            current file related XML node
+     * @return the given or a new attribute set. If no attribute set is given
+     *         and no attribute was added, null returns
+     * @throws CompilerException
+     */
+    Map reviseAdditionalDataMap(Map existentDataMap, XMLElement element) throws CompilerException;
+
+    /**
+     * This method will be called from each step of packaging.
+     * 
+     * @param position
+     *            name of the calling method, e.g. "addVariables"
+     * @param state
+     *            BEGIN or END
+     * @param data
+     *            current install data
+     * @param packager
+     *            current packager object
+     */
+    void notify(String position, int state, XMLElement data, Packager packager);
+
 }

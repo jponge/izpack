@@ -29,93 +29,94 @@ package com.izforge.izpack.gui;
 import javax.swing.plaf.ColorUIResource;
 
 /**
- *  The IzPack Kunststoff L&F theme.
- *
- * @author     Julien Ponge
+ * The IzPack Kunststoff L&F theme.
+ * 
+ * @author Julien Ponge
  */
 public class IzPackKMetalTheme extends IzPackMetalTheme
 {
-  /**  Primary color. */
-  private final ColorUIResource primary1 = new ColorUIResource(32, 32, 64);
 
-  /**  Primary color. */
-  private final ColorUIResource primary2 = new ColorUIResource(160, 160, 180);
+    /** Primary color. */
+    private final ColorUIResource primary1 = new ColorUIResource(32, 32, 64);
 
-  /**  Primary color. */
-  private final ColorUIResource primary3 = new ColorUIResource(200, 200, 224);
+    /** Primary color. */
+    private final ColorUIResource primary2 = new ColorUIResource(160, 160, 180);
 
-  /**  Secondary color. */
-  private final ColorUIResource secondary1 = new ColorUIResource(130, 130, 130);
+    /** Primary color. */
+    private final ColorUIResource primary3 = new ColorUIResource(200, 200, 224);
 
-  /**  Secondary color. */
-  private final ColorUIResource secondary2 = new ColorUIResource(180, 180, 180);
+    /** Secondary color. */
+    private final ColorUIResource secondary1 = new ColorUIResource(130, 130, 130);
 
-  /**  Secondary color. */
-  private final ColorUIResource secondary3 = new ColorUIResource(224, 224, 224);
+    /** Secondary color. */
+    private final ColorUIResource secondary2 = new ColorUIResource(180, 180, 180);
 
-  /**  The constructor.  */
-  public IzPackKMetalTheme()
-  {
-    super();
-  }
+    /** Secondary color. */
+    private final ColorUIResource secondary3 = new ColorUIResource(224, 224, 224);
 
-  /**
-   *  Returns the wished color.
-   *
-   * @return    The wished color.
-   */
-  public ColorUIResource getPrimary1()
-  {
-    return primary1;
-  }
+    /** The constructor. */
+    public IzPackKMetalTheme()
+    {
+        super();
+    }
 
-  /**
-   *  Returns the wished color.
-   *
-   * @return    The wished color.
-   */
-  public ColorUIResource getPrimary2()
-  {
-    return primary2;
-  }
+    /**
+     * Returns the wished color.
+     * 
+     * @return The wished color.
+     */
+    public ColorUIResource getPrimary1()
+    {
+        return primary1;
+    }
 
-  /**
-   *  Returns the wished color.
-   *
-   * @return    The wished color.
-   */
-  public ColorUIResource getPrimary3()
-  {
-    return primary3;
-  }
+    /**
+     * Returns the wished color.
+     * 
+     * @return The wished color.
+     */
+    public ColorUIResource getPrimary2()
+    {
+        return primary2;
+    }
 
-  /**
-   *  Returns the wished color.
-   *
-   * @return    The wished color.
-   */
-  public ColorUIResource getSecondary1()
-  {
-    return secondary1;
-  }
+    /**
+     * Returns the wished color.
+     * 
+     * @return The wished color.
+     */
+    public ColorUIResource getPrimary3()
+    {
+        return primary3;
+    }
 
-  /**
-   *  Returns the wished color.
-   *
-   * @return    The wished color.
-   */
-  public ColorUIResource getSecondary2()
-  {
-    return secondary2;
-  }
+    /**
+     * Returns the wished color.
+     * 
+     * @return The wished color.
+     */
+    public ColorUIResource getSecondary1()
+    {
+        return secondary1;
+    }
 
-  /**
-   *  Returns the wished color.
-   *
-   * @return    The wished color.
-   */
-  public ColorUIResource getSecondary3()
-  {
-    return secondary3;
-  }
+    /**
+     * Returns the wished color.
+     * 
+     * @return The wished color.
+     */
+    public ColorUIResource getSecondary2()
+    {
+        return secondary2;
+    }
+
+    /**
+     * Returns the wished color.
+     * 
+     * @return The wished color.
+     */
+    public ColorUIResource getSecondary3()
+    {
+        return secondary3;
+    }
 }

@@ -14,10 +14,13 @@ import java.util.List;
  */
 public class Panel implements Serializable
 {
-  /**  The panel classname. */
-  public String className;
 
-  /**  The target operation system of this panel */
-  public List osConstraints = null;
+    static final long serialVersionUID = 8886445274940938809L;
+
+    /** The panel classname. */
+    public String className;
+
+    /** The target operation system of this panel */
+    public List osConstraints = null;
 
 }

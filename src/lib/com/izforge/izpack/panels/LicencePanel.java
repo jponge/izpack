@@ -46,124 +46,127 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 
 /**
- *  The license panel.
- *
- * @author     Julien Ponge
+ * The license panel.
+ * 
+ * @author Julien Ponge
  */
 public class LicencePanel extends IzPanel implements ActionListener
 {
-  /**  The license text. */
-  private String licence;
 
-  /**  The text area. */
-  private JTextArea textArea;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3691043187997552948L;
 
-  /**  The radio buttons. */
-  private JRadioButton yesRadio, noRadio;
+    /** The license text. */
+    private String licence;
 
-  /**  The scrolling container. */
-  private JScrollPane scroller;
+    /** The text area. */
+    private JTextArea textArea;
 
-  /**
-   *  The constructor.
-   *
-   * @param  parent  The parent window.
-   * @param  idata   The installation data.
-   */
-  public LicencePanel(InstallerFrame parent, InstallData idata)
-  {
-    super(parent, idata);
+    /** The radio buttons. */
+    private JRadioButton yesRadio, noRadio;
 
-    // We initialize our layout
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    /** The scrolling container. */
+    private JScrollPane scroller;
 
-    // We load the licence
-    loadLicence();
-
-    // We put our components
-
-    JLabel infoLabel =
-      LabelFactory.create(
-        parent.langpack.getString("LicencePanel.info"),
-        parent.icons.getImageIcon("history"),
-        JLabel.TRAILING);
-    add(infoLabel);
-
-    add(Box.createRigidArea(new Dimension(0, 3)));
-
-    textArea = new JTextArea(licence);
-    textArea.setMargin(new Insets(2, 2, 2, 2));
-    textArea.setCaretPosition(0);
-    textArea.setEditable(false);
-    textArea.setLineWrap(true);
-    textArea.setWrapStyleWord(true);
-    scroller = new JScrollPane(textArea);
-    scroller.setAlignmentX(LEFT_ALIGNMENT);
-    add(scroller);
-
-    ButtonGroup group = new ButtonGroup();
-
-    yesRadio =
-      new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
-    group.add(yesRadio);
-    add(yesRadio);
-    yesRadio.addActionListener(this);
-
-    noRadio =
-      new JRadioButton(
-        parent.langpack.getString("LicencePanel.notagree"),
-        true);
-    group.add(noRadio);
-    add(noRadio);
-    noRadio.addActionListener(this);
-  }
-
-  /**  Loads the licence text.  */
-  private void loadLicence()
-  {
-    try
+    /**
+     * The constructor.
+     * 
+     * @param parent
+     *            The parent window.
+     * @param idata
+     *            The installation data.
+     */
+    public LicencePanel(InstallerFrame parent, InstallData idata)
     {
-      // We read it
-      String resNamePrifix = "LicencePanel.licence";
-      licence = ResourceManager.getInstance().getTextResource(resNamePrifix);
-    } catch (Exception err)
-    {
-      licence = "Error : could not load the licence text !";
+        super(parent, idata);
+
+        // We initialize our layout
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        // We load the licence
+        loadLicence();
+
+        // We put our components
+
+        JLabel infoLabel = LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
+                parent.icons.getImageIcon("history"), JLabel.TRAILING);
+        add(infoLabel);
+
+        add(Box.createRigidArea(new Dimension(0, 3)));
+
+        textArea = new JTextArea(licence);
+        textArea.setMargin(new Insets(2, 2, 2, 2));
+        textArea.setCaretPosition(0);
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        scroller = new JScrollPane(textArea);
+        scroller.setAlignmentX(LEFT_ALIGNMENT);
+        add(scroller);
+
+        ButtonGroup group = new ButtonGroup();
+
+        yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
+        group.add(yesRadio);
+        add(yesRadio);
+        yesRadio.addActionListener(this);
+
+        noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.notagree"), true);
+        group.add(noRadio);
+        add(noRadio);
+        noRadio.addActionListener(this);
     }
-  }
 
-  /**
-   *  Actions-handling method (here it allows the installation).
-   *
-   * @param  e  The event.
-   */
-  public void actionPerformed(ActionEvent e)
-  {
-    if (yesRadio.isSelected())
-      parent.unlockNextButton();
-    else
-      parent.lockNextButton();
-  }
-
-  /**
-   *  Indicates wether the panel has been validated or not.
-   *
-   * @return    true if the user has agreed.
-   */
-  public boolean isValidated()
-  {
-    if (noRadio.isSelected())
+    /** Loads the licence text. */
+    private void loadLicence()
     {
-      parent.exit();
-      return false;
-    } else
-      return (yesRadio.isSelected());
-  }
+        try
+        {
+            // We read it
+            String resNamePrifix = "LicencePanel.licence";
+            licence = ResourceManager.getInstance().getTextResource(resNamePrifix);
+        }
+        catch (Exception err)
+        {
+            licence = "Error : could not load the licence text !";
+        }
+    }
 
-  /**  Called when the panel becomes active.  */
-  public void panelActivate()
-  {
-    if (!yesRadio.isSelected())
-      parent.lockNextButton();
-  }
+    /**
+     * Actions-handling method (here it allows the installation).
+     * 
+     * @param e
+     *            The event.
+     */
+    public void actionPerformed(ActionEvent e)
+    {
+        if (yesRadio.isSelected())
+            parent.unlockNextButton();
+        else
+            parent.lockNextButton();
+    }
+
+    /**
+     * Indicates wether the panel has been validated or not.
+     * 
+     * @return true if the user has agreed.
+     */
+    public boolean isValidated()
+    {
+        if (noRadio.isSelected())
+        {
+            parent.exit();
+            return false;
+        }
+        else
+            return (yesRadio.isSelected());
+    }
+
+    /** Called when the panel becomes active. */
+    public void panelActivate()
+    {
+        if (!yesRadio.isSelected()) parent.lockNextButton();
+    }
 }

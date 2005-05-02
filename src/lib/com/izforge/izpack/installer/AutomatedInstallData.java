@@ -37,187 +37,198 @@ import com.izforge.izpack.Info;
 import com.izforge.izpack.LocaleDatabase;
 
 /**
- *  Encloses information about the install process.
- *  This implementation is not thread safe.
- *
- * @author     Julien Ponge <julien@izforge.com>
- * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
+ * Encloses information about the install process. This implementation is not
+ * thread safe.
+ * 
+ * @author Julien Ponge <julien@izforge.com>
+ * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
 public class AutomatedInstallData
 {
-  //--- Static members -------------------------------------------------
 
-  /** Names of the custom actions types with which they are stored in the
-   * installer jar file. These names are also used to identify the type of
-   * custom action in the customData map. Slashes as first char 
-   * are needed to use the names as "file" name in the installer jar.
-   */
-  // Attention !! Do not change the existent names and the order.
-  // Add a / as first char at new types. Add new type handling in
-  // Unpacker.
-  static final String [] CUSTOM_ACTION_TYPES = new String[] 
-          {"/installerListeners","/uninstallerListeners", 
-          "/uninstallerLibs", "/uninstallerJars" };
-          
-  public static final int INSTALLER_LISTENER_INDEX = 0;
-  public static final int UNINSTALLER_LISTENER_INDEX = 1;
-  public static final int UNINSTALLER_LIBS_INDEX = 2;
-  public static final int UNINSTALLER_JARS_INDEX = 3;
+    // --- Static members -------------------------------------------------
 
-  //--- Instance members -----------------------------------------------
+    /**
+     * Names of the custom actions types with which they are stored in the
+     * installer jar file. These names are also used to identify the type of
+     * custom action in the customData map. Slashes as first char are needed to
+     * use the names as "file" name in the installer jar.
+     */
+    // Attention !! Do not change the existent names and the order.
+    // Add a / as first char at new types. Add new type handling in
+    // Unpacker.
+    static final String[] CUSTOM_ACTION_TYPES = new String[] { "/installerListeners",
+            "/uninstallerListeners", "/uninstallerLibs", "/uninstallerJars"};
 
-  /**  The language code. */
-  public String localeISO3;
+    public static final int INSTALLER_LISTENER_INDEX = 0;
 
-  /**  The language pack. */
-  public LocaleDatabase langpack;
+    public static final int UNINSTALLER_LISTENER_INDEX = 1;
 
-  /**  The uninstaller jar stream. */
-  public ZipOutputStream uninstallOutJar;
+    public static final int UNINSTALLER_LIBS_INDEX = 2;
 
-  /**  The inforamtions. */
-  public Info info;
+    public static final int UNINSTALLER_JARS_INDEX = 3;
 
-  /**  The complete list of packs. */
-  public List allPacks;
+    // --- Instance members -----------------------------------------------
 
-  /**  The available packs. */
-  public List availablePacks;
+    /** The language code. */
+    public String localeISO3;
 
-  /**  The selected packs. */
-  public List selectedPacks;
+    /** The language pack. */
+    public LocaleDatabase langpack;
 
-  /**  The panels list. */
-  public List panels;
+    /** The uninstaller jar stream. */
+    public ZipOutputStream uninstallOutJar;
 
-  /**  The panels order. */
-  public List panelsOrder;
+    /** The inforamtions. */
+    public Info info;
 
-  /**  The current panel. */
-  public int curPanelNumber;
+    /** The complete list of packs. */
+    public List allPacks;
 
-  /**  Can we close the installer ? */
-  public boolean canClose = false;
+    /** The available packs. */
+    public List availablePacks;
 
-  /**  Did the installation succeed ? */
-  public boolean installSuccess = true;
+    /** The selected packs. */
+    public List selectedPacks;
 
-  /**  The xmlData for automated installers. */
-  public XMLElement xmlData;
-  
-  /** Custom  data. */
-  public Map customData;
+    /** The panels list. */
+    public List panels;
 
-  /**
-   * Maps the variable names to their values
-   */
-  protected Properties variables;
+    /** The panels order. */
+    public List panelsOrder;
 
-  /**  The attributes used by the panels */
-  protected Map attributes;
+    /** The current panel. */
+    public int curPanelNumber;
 
-  /**  Constructs a new instance of this class.  */
-  public AutomatedInstallData()
-  {
-    availablePacks = new ArrayList();
-    selectedPacks = new ArrayList();
-    panels = new ArrayList();
-    panelsOrder = new ArrayList();
-    xmlData = new XMLElement("AutomatedInstallation");
-    variables = new Properties();
-    attributes = new HashMap();
-    customData = new HashMap();
-  }
+    /** Can we close the installer ? */
+    public boolean canClose = false;
 
-  /**
-   *  Returns the map of variable values. Modifying this will directly affect
-   *  the current value of variables.
-   *
-   * @return    the map of variable values
-   */
-  public Properties getVariables()
-  {
-      return variables;
-  }
+    /** Did the installation succeed ? */
+    public boolean installSuccess = true;
 
-  /**
-   *  Sets a variable to the specified value. This is short hand for
-   *  <code>getVariables().setProperty(var, val)</code>.
-   *
-   * @param  var  the name of the variable
-   * @param  val  the new value of the variable
-   * @see         #getVariable
-   */
-  public void setVariable(String var, String val)
-  {
-      variables.setProperty(var, val);
-  }
+    /** The xmlData for automated installers. */
+    public XMLElement xmlData;
 
-  /**
-   *  Returns the current value of the specified variable. This is short hand
-   *  for <code>getVariables().getProperty(var)</code>.
-   *
-   * @param  var  the name of the variable
-   * @return      the value of the variable or null if not set
-   * @see         #setVariable
-   */
-  public String getVariable(String var)
-  {
-      return variables.getProperty(var);
-  }
+    /** Custom data. */
+    public Map customData;
 
-  /**
-   *  Sets the install path.
-   *
-   * @param  path  the new install path
-   * @see          #getInstallPath
-   */
-  public void setInstallPath(String path)
-  {
-    setVariable(ScriptParser.INSTALL_PATH, path);
-  }
+    /**
+     * Maps the variable names to their values
+     */
+    protected Properties variables;
 
-  /**
-   *  Returns the install path.
-   *
-   * @return    the current install path or null if none set yet
-   * @see       #setInstallPath
-   */
-  public String getInstallPath()
-  {
-    return getVariable(ScriptParser.INSTALL_PATH);
-  }
+    /** The attributes used by the panels */
+    protected Map attributes;
 
-  /**
-   *  Returns the value of the named attribute.
-   *
-   * @param  attr  the name of the attribute
-   * @return       the value of the attribute or null if not set
-   * @see          #setAttribute
-   */
-  public Object getAttribute(String attr)
-  {
-    return attributes.get(attr);
-  }
+    /** Constructs a new instance of this class. */
+    public AutomatedInstallData()
+    {
+        availablePacks = new ArrayList();
+        selectedPacks = new ArrayList();
+        panels = new ArrayList();
+        panelsOrder = new ArrayList();
+        xmlData = new XMLElement("AutomatedInstallation");
+        variables = new Properties();
+        attributes = new HashMap();
+        customData = new HashMap();
+    }
 
-  /**
-   *  Sets a named attribute. The panels and other IzPack components can attach
-   *  custom attributes to InstallData to communicate with each other. For
-   *  example, a set of co-operating custom panels do not need to implement a
-   *  common data storage but can use InstallData singleton. The name of the
-   *  attribute should include the package and class name to prevent name space
-   *  collisions.
-   *
-   * @param  attr  the name of the attribute to set
-   * @param  val   the value of the attribute or null to unset the attribute
-   * @see          #getAttribute
-   */
-  public void setAttribute(String attr, Object val)
-  {
-    if (val == null)
-      attributes.remove(attr);
-    else
-      attributes.put(attr, val);
+    /**
+     * Returns the map of variable values. Modifying this will directly affect
+     * the current value of variables.
+     * 
+     * @return the map of variable values
+     */
+    public Properties getVariables()
+    {
+        return variables;
+    }
 
-  }
+    /**
+     * Sets a variable to the specified value. This is short hand for
+     * <code>getVariables().setProperty(var, val)</code>.
+     * 
+     * @param var
+     *            the name of the variable
+     * @param val
+     *            the new value of the variable
+     * @see #getVariable
+     */
+    public void setVariable(String var, String val)
+    {
+        variables.setProperty(var, val);
+    }
+
+    /**
+     * Returns the current value of the specified variable. This is short hand
+     * for <code>getVariables().getProperty(var)</code>.
+     * 
+     * @param var
+     *            the name of the variable
+     * @return the value of the variable or null if not set
+     * @see #setVariable
+     */
+    public String getVariable(String var)
+    {
+        return variables.getProperty(var);
+    }
+
+    /**
+     * Sets the install path.
+     * 
+     * @param path
+     *            the new install path
+     * @see #getInstallPath
+     */
+    public void setInstallPath(String path)
+    {
+        setVariable(ScriptParser.INSTALL_PATH, path);
+    }
+
+    /**
+     * Returns the install path.
+     * 
+     * @return the current install path or null if none set yet
+     * @see #setInstallPath
+     */
+    public String getInstallPath()
+    {
+        return getVariable(ScriptParser.INSTALL_PATH);
+    }
+
+    /**
+     * Returns the value of the named attribute.
+     * 
+     * @param attr
+     *            the name of the attribute
+     * @return the value of the attribute or null if not set
+     * @see #setAttribute
+     */
+    public Object getAttribute(String attr)
+    {
+        return attributes.get(attr);
+    }
+
+    /**
+     * Sets a named attribute. The panels and other IzPack components can attach
+     * custom attributes to InstallData to communicate with each other. For
+     * example, a set of co-operating custom panels do not need to implement a
+     * common data storage but can use InstallData singleton. The name of the
+     * attribute should include the package and class name to prevent name space
+     * collisions.
+     * 
+     * @param attr
+     *            the name of the attribute to set
+     * @param val
+     *            the value of the attribute or null to unset the attribute
+     * @see #getAttribute
+     */
+    public void setAttribute(String attr, Object val)
+    {
+        if (val == null)
+            attributes.remove(attr);
+        else
+            attributes.put(attr, val);
+
+    }
 }

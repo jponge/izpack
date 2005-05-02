@@ -31,146 +31,163 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  Encloses information about a packed file. This class abstracts the way file
- *  data is stored to package.
- *
- * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
+ * Encloses information about a packed file. This class abstracts the way file
+ * data is stored to package.
+ * 
+ * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
 public class PackFile implements Serializable
 {
-  public static final int OVERRIDE_FALSE = 0;
-  public static final int OVERRIDE_TRUE = 1;
-  public static final int OVERRIDE_ASK_FALSE = 2;
-  public static final int OVERRIDE_ASK_TRUE = 3;
-  public static final int OVERRIDE_UPDATE = 4;
 
-  public String sourcePath = null;
+    static final long serialVersionUID = -834377078706854909L;
 
-  /**  The full path name of the target file */
-  private String targetPath = null;
+    public static final int OVERRIDE_FALSE = 0;
 
-  /**  The target operating system constraints of this file */
-  private List osConstraints = null;
+    public static final int OVERRIDE_TRUE = 1;
 
-  /**  The length of the file in bytes */
-  private long length = 0;
+    public static final int OVERRIDE_ASK_FALSE = 2;
 
-  /**  The last-modification time of the file. */
-  private long mtime = -1;
+    public static final int OVERRIDE_ASK_TRUE = 3;
 
-  /** True if file is a directory (length should be 0 or ignored) */
-  private boolean isDirectory = false;
+    public static final int OVERRIDE_UPDATE = 4;
 
-  /**  Whether or not this file is going to override any existing ones */
-  private int override = OVERRIDE_FALSE;
+    public String sourcePath = null;
 
-  /** Additional attributes or any else for customisation */
-  private Map  additionals = null;
+    /** The full path name of the target file */
+    private String targetPath = null;
 
+    /** The target operating system constraints of this file */
+    private List osConstraints = null;
 
-  public int previousPackNumber = -1;
-  public long offsetInPreviousPack = -1;
-  
-  /**
-   * Constructs and initializes from a source file.
-   *
-   * @param  src      file which this PackFile describes
-   * @param  target   the path to install the file to
-   * @param  osList   OS constraints
-   * @param  override what to do when the file already exists
-   * @throws FileNotFoundException if the specified file does not exist.
-   */
-  public PackFile(File src, String target, List osList, int override)
-    throws FileNotFoundException
-  {
-    if (! src.exists()) // allows cleaner client co
-      throw new FileNotFoundException("No such file: "+src);
-    
-    if ('/' != File.separatorChar)
-      target = target.replace(File.separatorChar, '/');
-    if (target.endsWith("/"))
-      target = target.substring(0, target.length()-1);
+    /** The length of the file in bytes */
+    private long length = 0;
 
-    this.sourcePath = src.getPath();
-    this.targetPath = target;
-    this.osConstraints = osList;
-    this.override = override;
+    /** The last-modification time of the file. */
+    private long mtime = -1;
 
-    this.length = src.length();
-    this.mtime = src.lastModified();
-    this.isDirectory = src.isDirectory();
-  }
+    /** True if file is a directory (length should be 0 or ignored) */
+    private boolean isDirectory = false;
 
-  /**
-   * Constructs and initializes from a source file.
-   *
-   * @param  src      file which this PackFile describes
-   * @param  target   the path to install the file to
-   * @param  osList   OS constraints
-   * @param  override what to do when the file already exists
-   * @param  additionals  additional attributes
-   * @throws FileNotFoundException if the specified file does not exist.
-   */
-  public PackFile(File src, String target, List osList, int override,
-    Map additionals) throws FileNotFoundException
-  {
-    this( src, target, osList, override);
-    this.additionals = additionals;
-  }
+    /** Whether or not this file is going to override any existing ones */
+    private int override = OVERRIDE_FALSE;
 
-  public void setPreviousPackFileRef(int previousPackNumber,
-                                     long offsetInPreviousPack)
-  {
-    this.previousPackNumber = previousPackNumber;
-    this.offsetInPreviousPack = offsetInPreviousPack;
-  }
+    /** Additional attributes or any else for customisation */
+    private Map additionals = null;
 
-  /**  The target operating system constraints of this file */
-  public final List osConstraints()
-  {
-    return osConstraints;
-  }
+    public int previousPackNumber = -1;
 
-  /**  The length of the file in bytes */
-  public final long length()
-  {
-    return length;
-  }
+    public long offsetInPreviousPack = -1;
 
-  /**  The last-modification time of the file. */
-  public final long lastModified()
-  {
-    return mtime;
-  }
+    /**
+     * Constructs and initializes from a source file.
+     * 
+     * @param src
+     *            file which this PackFile describes
+     * @param target
+     *            the path to install the file to
+     * @param osList
+     *            OS constraints
+     * @param override
+     *            what to do when the file already exists
+     * @throws FileNotFoundException
+     *             if the specified file does not exist.
+     */
+    public PackFile(File src, String target, List osList, int override)
+            throws FileNotFoundException
+    {
+        if (!src.exists()) // allows cleaner client co
+            throw new FileNotFoundException("No such file: " + src);
 
-  /**  Whether or not this file is going to override any existing ones */
-  public final int override()
-  {
-    return override;
-  }
+        if ('/' != File.separatorChar) target = target.replace(File.separatorChar, '/');
+        if (target.endsWith("/")) target = target.substring(0, target.length() - 1);
 
-  public final boolean isDirectory()
-  {
-    return isDirectory;
-  }
+        this.sourcePath = src.getPath();
+        this.targetPath = target;
+        this.osConstraints = osList;
+        this.override = override;
 
-  public final boolean isBackReference()
-  {
-    return (previousPackNumber >= 0);
-  }
+        this.length = src.length();
+        this.mtime = src.lastModified();
+        this.isDirectory = src.isDirectory();
+    }
 
-  /**  The full path name of the target file, using '/' as fileseparator. */
-  public final String getTargetPath()
-  {
-    return targetPath;
-  }
-  /**
-   * Returns the additionals map.
-   * @return additionals
-   */
-  public Map getAdditionals()
-  {
-    return additionals;
-  }
+    /**
+     * Constructs and initializes from a source file.
+     * 
+     * @param src
+     *            file which this PackFile describes
+     * @param target
+     *            the path to install the file to
+     * @param osList
+     *            OS constraints
+     * @param override
+     *            what to do when the file already exists
+     * @param additionals
+     *            additional attributes
+     * @throws FileNotFoundException
+     *             if the specified file does not exist.
+     */
+    public PackFile(File src, String target, List osList, int override, Map additionals)
+            throws FileNotFoundException
+    {
+        this(src, target, osList, override);
+        this.additionals = additionals;
+    }
+
+    public void setPreviousPackFileRef(int previousPackNumber, long offsetInPreviousPack)
+    {
+        this.previousPackNumber = previousPackNumber;
+        this.offsetInPreviousPack = offsetInPreviousPack;
+    }
+
+    /** The target operating system constraints of this file */
+    public final List osConstraints()
+    {
+        return osConstraints;
+    }
+
+    /** The length of the file in bytes */
+    public final long length()
+    {
+        return length;
+    }
+
+    /** The last-modification time of the file. */
+    public final long lastModified()
+    {
+        return mtime;
+    }
+
+    /** Whether or not this file is going to override any existing ones */
+    public final int override()
+    {
+        return override;
+    }
+
+    public final boolean isDirectory()
+    {
+        return isDirectory;
+    }
+
+    public final boolean isBackReference()
+    {
+        return (previousPackNumber >= 0);
+    }
+
+    /** The full path name of the target file, using '/' as fileseparator. */
+    public final String getTargetPath()
+    {
+        return targetPath;
+    }
+
+    /**
+     * Returns the additionals map.
+     * 
+     * @return additionals
+     */
+    public Map getAdditionals()
+    {
+        return additionals;
+    }
 
 }

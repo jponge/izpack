@@ -49,167 +49,157 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
- *  The finish panel class.
- *
- * @author     Julien Ponge
+ * The finish panel class.
+ * 
+ * @author Julien Ponge
  */
 public class FinishPanel extends IzPanel implements ActionListener
 {
-  /**  The layout. */
-  private BoxLayout layout;
 
-  /**  The automated installers generation button. */
-  private JButton autoButton;
+    private static final long serialVersionUID = 3257282535107998009L;
 
-  /**  The center panel. */
-  private JPanel centerPanel;
+    /** The layout. */
+    private BoxLayout layout;
 
-  /**  The variables substitutor. */
-  private VariableSubstitutor vs;
+    /** The automated installers generation button. */
+    private JButton autoButton;
 
-  /**
-   *  The constructor.
-   *
-   * @param  parent  The parent.
-   * @param  idata   The installation data.
-   */
-  public FinishPanel(InstallerFrame parent, InstallData idata)
-  {
-    super(parent, idata);
+    /** The center panel. */
+    private JPanel centerPanel;
 
-    vs = new VariableSubstitutor(idata.getVariables());
+    /** The variables substitutor. */
+    private VariableSubstitutor vs;
 
-    // The 'super' layout
-    GridBagLayout superLayout = new GridBagLayout();
-    setLayout(superLayout);
-    GridBagConstraints gbConstraints = new GridBagConstraints();
-    gbConstraints.insets = new Insets(0, 0, 0, 0);
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.anchor = GridBagConstraints.CENTER;
-
-    // We initialize our 'real' layout
-    centerPanel = new JPanel();
-    layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
-    centerPanel.setLayout(layout);
-    superLayout.addLayoutComponent(centerPanel, gbConstraints);
-    add(centerPanel);
-  }
-
-  /**
-   *  Indicates wether the panel has been validated or not.
-   *
-   * @return    true if the panel has been validated.
-   */
-  public boolean isValidated()
-  {
-    return true;
-  }
-
-  /**  Called when the panel becomes active.  */
-  public void panelActivate()
-  {
-    parent.lockNextButton();
-    parent.lockPrevButton();
-    parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
-    if (idata.installSuccess)
+    /**
+     * The constructor.
+     * 
+     * @param parent
+     *            The parent.
+     * @param idata
+     *            The installation data.
+     */
+    public FinishPanel(InstallerFrame parent, InstallData idata)
     {
-      // We set the information
-      centerPanel.add(
-        LabelFactory.create(
-          parent.langpack.getString("FinishPanel.success"),
-          parent.icons.getImageIcon("information"),
-          JLabel.TRAILING));
-      centerPanel.add(Box.createVerticalStrut(20));
+        super(parent, idata);
 
-      if (idata.uninstallOutJar != null)
-      {
-        // We prepare a message for the uninstaller feature
-        String path =
-          translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
+        vs = new VariableSubstitutor(idata.getVariables());
 
-        centerPanel.add(
-          LabelFactory.create(
-            parent.langpack.getString("FinishPanel.uninst.info"),
-            parent.icons.getImageIcon("information"),
-            JLabel.TRAILING));
-        centerPanel.add(
-          LabelFactory.create(
-            path,
-            parent.icons.getImageIcon("empty"),
-            JLabel.TRAILING));
-      }
+        // The 'super' layout
+        GridBagLayout superLayout = new GridBagLayout();
+        setLayout(superLayout);
+        GridBagConstraints gbConstraints = new GridBagConstraints();
+        gbConstraints.insets = new Insets(0, 0, 0, 0);
+        gbConstraints.fill = GridBagConstraints.NONE;
+        gbConstraints.anchor = GridBagConstraints.CENTER;
 
-      // We add the autoButton
-      centerPanel.add(Box.createVerticalStrut(20));
-      autoButton =
-        ButtonFactory.createButton(
-          parent.langpack.getString("FinishPanel.auto"),
-          parent.icons.getImageIcon("edit"),
-          idata.buttonsHColor);
-      autoButton.setToolTipText(
-        parent.langpack.getString("FinishPanel.auto.tip"));
-      autoButton.addActionListener(this);
-      centerPanel.add(autoButton);
-    } else
-      centerPanel.add(
-        LabelFactory.create(
-          parent.langpack.getString("FinishPanel.fail"),
-          parent.icons.getImageIcon("information"),
-          JLabel.TRAILING));
-  }
-
-  /**
-   *  Actions-handling method.
-   *
-   * @param  e  The event.
-   */
-  public void actionPerformed(ActionEvent e)
-  {
-    // Prepares the file chooser
-    JFileChooser fc = new JFileChooser();
-    fc.setCurrentDirectory(new File(idata.getInstallPath()));
-    fc.setMultiSelectionEnabled(false);
-    fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
-    //fc.setCurrentDirectory(new File("."));
-
-    // Shows it
-    try
-    {
-      if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
-      {
-        // We handle the xml data writing
-        File file = fc.getSelectedFile();
-        FileOutputStream out = new FileOutputStream(file);
-        BufferedOutputStream outBuff = new BufferedOutputStream(out, 5120);
-        parent.writeXMLTree(idata.xmlData, outBuff);
-        outBuff.flush();
-        outBuff.close();
-
-        autoButton.setEnabled(false);
-      }
-    } catch (Exception err)
-    {
-      err.printStackTrace();
-      JOptionPane.showMessageDialog(
-        this,
-        err.toString(),
-        parent.langpack.getString("installer.error"),
-        JOptionPane.ERROR_MESSAGE);
+        // We initialize our 'real' layout
+        centerPanel = new JPanel();
+        layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
+        centerPanel.setLayout(layout);
+        superLayout.addLayoutComponent(centerPanel, gbConstraints);
+        add(centerPanel);
     }
-  }
 
-  /**
-   *  Translates a relative path to a local system path.
-   *
-   * @param  destination  The path to translate.
-   * @return              The translated path.
-   */
-  private String translatePath(String destination)
-  {
-    // Parse for variables
-    destination = vs.substitute(destination, null);
+    /**
+     * Indicates wether the panel has been validated or not.
+     * 
+     * @return true if the panel has been validated.
+     */
+    public boolean isValidated()
+    {
+        return true;
+    }
 
-    // Convert the file separator characters
-    return destination.replace('/', File.separatorChar);
-  }
+    /** Called when the panel becomes active. */
+    public void panelActivate()
+    {
+        parent.lockNextButton();
+        parent.lockPrevButton();
+        parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
+        if (idata.installSuccess)
+        {
+            // We set the information
+            centerPanel.add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
+                    parent.icons.getImageIcon("information"), JLabel.TRAILING));
+            centerPanel.add(Box.createVerticalStrut(20));
+
+            if (idata.uninstallOutJar != null)
+            {
+                // We prepare a message for the uninstaller feature
+                String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
+
+                centerPanel.add(LabelFactory.create(parent.langpack
+                        .getString("FinishPanel.uninst.info"), parent.icons
+                        .getImageIcon("information"), JLabel.TRAILING));
+                centerPanel.add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
+                        JLabel.TRAILING));
+            }
+
+            // We add the autoButton
+            centerPanel.add(Box.createVerticalStrut(20));
+            autoButton = ButtonFactory.createButton(parent.langpack.getString("FinishPanel.auto"),
+                    parent.icons.getImageIcon("edit"), idata.buttonsHColor);
+            autoButton.setToolTipText(parent.langpack.getString("FinishPanel.auto.tip"));
+            autoButton.addActionListener(this);
+            centerPanel.add(autoButton);
+        }
+        else
+            centerPanel.add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
+                    parent.icons.getImageIcon("information"), JLabel.TRAILING));
+    }
+
+    /**
+     * Actions-handling method.
+     * 
+     * @param e
+     *            The event.
+     */
+    public void actionPerformed(ActionEvent e)
+    {
+        // Prepares the file chooser
+        JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(new File(idata.getInstallPath()));
+        fc.setMultiSelectionEnabled(false);
+        fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
+        // fc.setCurrentDirectory(new File("."));
+
+        // Shows it
+        try
+        {
+            if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+            {
+                // We handle the xml data writing
+                File file = fc.getSelectedFile();
+                FileOutputStream out = new FileOutputStream(file);
+                BufferedOutputStream outBuff = new BufferedOutputStream(out, 5120);
+                parent.writeXMLTree(idata.xmlData, outBuff);
+                outBuff.flush();
+                outBuff.close();
+
+                autoButton.setEnabled(false);
+            }
+        }
+        catch (Exception err)
+        {
+            err.printStackTrace();
+            JOptionPane.showMessageDialog(this, err.toString(), parent.langpack
+                    .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Translates a relative path to a local system path.
+     * 
+     * @param destination
+     *            The path to translate.
+     * @return The translated path.
+     */
+    private String translatePath(String destination)
+    {
+        // Parse for variables
+        destination = vs.substitute(destination, null);
+
+        // Convert the file separator characters
+        return destination.replace('/', File.separatorChar);
+    }
 }

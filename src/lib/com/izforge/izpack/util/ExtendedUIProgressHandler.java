@@ -25,33 +25,40 @@ package com.izforge.izpack.util;
 
 /**
  * This interface allowes an extended interaction with a user interface handler.
- *
- * @author  Dr. Klaus Bartz (COI-ES)
- * @version @(#) $Revision$ $Date$
- *
+ * 
+ * @author Dr. Klaus Bartz (COI-ES)
+ * @version
+ * @(#) $Revision$ $Date$
+ * 
  */
 public interface ExtendedUIProgressHandler
 {
-  static final int BEFORE = 0;
-  static final int AFTER  = 1;
-  /**
-   * The action restarts.
-   * 
-   * @param name The name of the action.
-   * @param overallMsg message to be used in the overall label.
-   * @param tipMsg message to be used in the tip label.
-   * @param no_of_steps The number of steps the action consists of.
-   */
-  void restartAction (String name, String overallMsg, String tipMsg, int no_of_steps);
 
+    static final int BEFORE = 0;
 
-  /**
-   * Notify of progress with automatic counting.
-   * 
-   * @param stepMessage an additional message describing the substep
-   * the type of the substep
-   */
-  public void progress ( String stepMessage);
-    
-  
+    static final int AFTER = 1;
+
+    /**
+     * The action restarts.
+     * 
+     * @param name
+     *            The name of the action.
+     * @param overallMsg
+     *            message to be used in the overall label.
+     * @param tipMsg
+     *            message to be used in the tip label.
+     * @param no_of_steps
+     *            The number of steps the action consists of.
+     */
+    void restartAction(String name, String overallMsg, String tipMsg, int no_of_steps);
+
+    /**
+     * Notify of progress with automatic counting.
+     * 
+     * @param stepMessage
+     *            an additional message describing the substep the type of the
+     *            substep
+     */
+    public void progress(String stepMessage);
+
 }

@@ -28,13 +28,11 @@
 
 package net.n3.nanoxml;
 
-
 import java.util.Properties;
-
 
 /**
  * IXMLValidator processes the DTD and handles entity references.
- *
+ * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -43,137 +41,135 @@ public interface IXMLValidator
 
     /**
      * Sets the parameter entity resolver.
-     *
-     * @param resolver the entity resolver.
+     * 
+     * @param resolver
+     *            the entity resolver.
      */
     public void setParameterEntityResolver(IXMLEntityResolver resolver);
-    
-    
+
     /**
      * Returns the parameter entity resolver.
-     *
+     * 
      * @return the entity resolver.
      */
     public IXMLEntityResolver getParameterEntityResolver();
-    
-    
-    /**
-     * Parses the DTD. The validator object is responsible for reading the
-     * full DTD.
-     *
-     * @param publicID       the public ID, which may be null.
-     * @param reader         the reader to read the DTD from.
-     * @param entityResolver the entity resolver.
-     * @param external       true if the DTD is external.
-     *
-     * @throws java.lang.Exception
-     *     if something went wrong.
-     */
-    public void parseDTD(String             publicID,
-                         IXMLReader         reader,
-                         IXMLEntityResolver entityResolver,
-                         boolean            external)
-        throws Exception;
 
-    
+    /**
+     * Parses the DTD. The validator object is responsible for reading the full
+     * DTD.
+     * 
+     * @param publicID
+     *            the public ID, which may be null.
+     * @param reader
+     *            the reader to read the DTD from.
+     * @param entityResolver
+     *            the entity resolver.
+     * @param external
+     *            true if the DTD is external.
+     * 
+     * @throws java.lang.Exception
+     *             if something went wrong.
+     */
+    public void parseDTD(String publicID, IXMLReader reader, IXMLEntityResolver entityResolver,
+            boolean external) throws Exception;
+
     /**
      * Indicates that an element has been started.
-     *
-     * @param name       the name of the element.
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemId the system ID associated with the namespace
-     * @param systemId   the system ID of the XML data of the element.
-     * @param lineNr     the line number in the XML data of the element.
-     *
+     * 
+     * @param name
+     *            the name of the element.
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemId
+     *            the system ID associated with the namespace
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
+     * 
      * @throws java.lang.Exception
-     *     if the element could not be validated.
+     *             if the element could not be validated.
      */
-    public void elementStarted(String name,
-                               String nsPrefix,
-                               String nsSystemId,
-                               String systemId,
-                               int    lineNr)
-        throws Exception;
-    
-    
+    public void elementStarted(String name, String nsPrefix, String nsSystemId, String systemId,
+            int lineNr) throws Exception;
+
     /**
      * Indicates that the current element has ended.
-     *
-     * @param name       the name of the element.
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemId the system ID associated with the namespace
-     * @param systemId   the system ID of the XML data of the element.
-     * @param lineNr     the line number in the XML data of the element.
-     *
+     * 
+     * @param name
+     *            the name of the element.
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemId
+     *            the system ID associated with the namespace
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
+     * 
      * @throws java.lang.Exception
-     *     if the element could not be validated.
+     *             if the element could not be validated.
      */
-    public void elementEnded(String name,
-                             String nsPrefix,
-                             String nsSystemId,
-                             String systemId,
-                             int    lineNr)
-        throws Exception;
-    
-    
+    public void elementEnded(String name, String nsPrefix, String nsSystemId, String systemId,
+            int lineNr) throws Exception;
+
     /**
      * Indicates that an attribute has been added to the current element.
-     *
-     * @param key        the name of the attribute.
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemId the system ID associated with the namespace
-     * @param value      the value of the attribute.
-     * @param systemId   the system ID of the XML data of the element.
-     * @param lineNr     the line number in the XML data of the element.
-     *
+     * 
+     * @param key
+     *            the name of the attribute.
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemId
+     *            the system ID associated with the namespace
+     * @param value
+     *            the value of the attribute.
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
+     * 
      * @throws java.lang.Exception
-     *     if the attribute could not be validated.
+     *             if the attribute could not be validated.
      */
-    public void attributeAdded(String key,
-                               String nsPrefix,
-                               String nsSystemId,
-                               String value,
-                               String systemId,
-                               int    lineNr)
-        throws Exception;
-    
-    
+    public void attributeAdded(String key, String nsPrefix, String nsSystemId, String value,
+            String systemId, int lineNr) throws Exception;
+
     /**
      * This method is called when the attributes of an XML element have been
-     * processed.
-     * If there are attributes with a default value which have not been
-     * specified yet, they have to be put into <I>extraAttributes</I>.
-     *
-     * @param name            the name of the element.
-     * @param nsPrefix        the prefix used to identify the namespace
-     * @param nsSystemId      the system ID associated with the namespace
-     * @param extraAttributes where to put extra attributes.
-     * @param systemId        the system ID of the XML data of the element.
-     * @param lineNr          the line number in the XML data of the element.
-     *
+     * processed. If there are attributes with a default value which have not
+     * been specified yet, they have to be put into <I>extraAttributes</I>.
+     * 
+     * @param name
+     *            the name of the element.
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemId
+     *            the system ID associated with the namespace
+     * @param extraAttributes
+     *            where to put extra attributes.
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
+     * 
      * @throws java.lang.Exception
-     *     if the element could not be validated.
+     *             if the element could not be validated.
      */
-    public void elementAttributesProcessed(String     name,
-                                           String     nsPrefix,
-                                           String     nsSystemId,
-                                           Properties extraAttributes,
-                                           String     systemId,
-                                           int        lineNr)
-        throws Exception;
-    
-    
+    public void elementAttributesProcessed(String name, String nsPrefix, String nsSystemId,
+            Properties extraAttributes, String systemId, int lineNr) throws Exception;
+
     /**
      * Indicates that a new #PCDATA element has been encountered.
-     *
-     * @param systemId the system ID of the XML data of the element.
-     * @param lineNr   the line number in the XML data of the element.
-     *
+     * 
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
+     * 
      * @throws java.lang.Exception
-     *     if the element could not be validated.
+     *             if the element could not be validated.
      */
-    public void PCDataAdded(String systemId,
-                            int    lineNr)
-        throws Exception;
+    public void PCDataAdded(String systemId, int lineNr) throws Exception;
 
 }

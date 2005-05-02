@@ -28,228 +28,248 @@
 
 package net.n3.nanoxml;
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.Enumeration;
 
-
 /**
  * An XMLWriter writes XML data to a stream.
- *
+ * 
  * @see net.n3.nanoxml.XMLElement
  * @see java.io.Writer
- *
+ * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
 public class XMLWriter
 {
-    
+
     /**
      * Where to write the output to.
      */
     private PrintWriter writer;
-    
-    
+
     /**
      * Creates a new XML writer.
-     *
-     * @param writer where to write the output to.
+     * 
+     * @param writer
+     *            where to write the output to.
      */
     public XMLWriter(Writer writer)
     {
-        if (writer instanceof PrintWriter) {
+        if (writer instanceof PrintWriter)
+        {
             this.writer = (PrintWriter) writer;
-        } else {
+        }
+        else
+        {
             this.writer = new PrintWriter(writer);
         }
     }
-    
-    
+
     /**
      * Creates a new XML writer.
-     *
-     * @param stream where to write the output to.
+     * 
+     * @param stream
+     *            where to write the output to.
      */
     public XMLWriter(OutputStream stream)
     {
         this.writer = new PrintWriter(stream);
     }
-    
-    
+
     /**
      * Cleans up the object when it's destroyed.
      */
-    protected void finalize()
-        throws Throwable
+    protected void finalize() throws Throwable
     {
         this.writer = null;
         super.finalize();
     }
-    
-    
+
     /**
      * Writes an XML element.
-     *
-     * @param xml the non-null XML element to write.
+     * 
+     * @param xml
+     *            the non-null XML element to write.
      */
-    public void write(XMLElement xml)
-        throws IOException
+    public void write(XMLElement xml) throws IOException
     {
         this.write(xml, true, 0);
     }
-    
-    
+
     /**
      * Writes an XML element.
-     *
-     * @param xml the non-null XML element to write.
-     * @param prettyPrint if spaces need to be inserted to make the output more
-     *                    readable
+     * 
+     * @param xml
+     *            the non-null XML element to write.
+     * @param prettyPrint
+     *            if spaces need to be inserted to make the output more readable
      */
-    public void write(XMLElement xml,
-                      boolean    prettyPrint)
-        throws IOException
+    public void write(XMLElement xml, boolean prettyPrint) throws IOException
     {
         this.write(xml, prettyPrint, 0);
     }
-    
-    
+
     /**
      * Writes an XML element.
-     *
-     * @param xml the non-null XML element to write.
-     * @param prettyPrint if spaces need to be inserted to make the output more
-     *                    readable
-     * @param indent how many spaces to indent the element.
+     * 
+     * @param xml
+     *            the non-null XML element to write.
+     * @param prettyPrint
+     *            if spaces need to be inserted to make the output more readable
+     * @param indent
+     *            how many spaces to indent the element.
      */
-    public void write(XMLElement xml,
-                      boolean    prettyPrint,
-                      int        indent)
-        throws IOException
+    public void write(XMLElement xml, boolean prettyPrint, int indent) throws IOException
     {
-        if (prettyPrint) {
-            for (int i = 0; i < indent; i++) {
+        if (prettyPrint)
+        {
+            for (int i = 0; i < indent; i++)
+            {
                 this.writer.print(' ');
             }
         }
 
-        if (xml.getName() == null) {
-            if (xml.getContent() != null) {
-                if (prettyPrint) {
+        if (xml.getName() == null)
+        {
+            if (xml.getContent() != null)
+            {
+                if (prettyPrint)
+                {
                     this.writeEncoded(xml.getContent().trim());
                     writer.println();
-                } else {
+                }
+                else
+                {
                     this.writeEncoded(xml.getContent());
                 }
             }
-        } else {
+        }
+        else
+        {
             this.writer.print('<');
             this.writer.print(xml.getName());
             Enumeration enum = xml.enumerateAttributeNames();
-            
-            while (enum.hasMoreElements()) {
+
+            while (enum.hasMoreElements())
+            {
                 String key = (String) enum.nextElement();
                 String value = xml.getAttribute(key);
                 this.writer.print(" " + key + "=\"");
                 this.writeEncoded(value);
                 this.writer.print('"');
             }
-            
-            if ((xml.getContent() != null)
-                    && (xml.getContent().length() > 0)) {
+
+            if ((xml.getContent() != null) && (xml.getContent().length() > 0))
+            {
                 writer.print('>');
                 this.writeEncoded(xml.getContent());
                 writer.print("</" + xml.getName() + '>');
-                
-                if (prettyPrint) {
+
+                if (prettyPrint)
+                {
                     writer.println();
                 }
-            } else if (xml.hasChildren()) {
+            }
+            else if (xml.hasChildren())
+            {
                 writer.print('>');
-                
-                if (prettyPrint) {
+
+                if (prettyPrint)
+                {
                     writer.println();
                 }
 
                 enum = xml.enumerateChildren();
-                
-                while (enum.hasMoreElements()) {
+
+                while (enum.hasMoreElements())
+                {
                     XMLElement child = (XMLElement) enum.nextElement();
                     this.write(child, prettyPrint, indent + 4);
                 }
-                
-                if (prettyPrint) {
-                    for (int i = 0; i < indent; i++) {
+
+                if (prettyPrint)
+                {
+                    for (int i = 0; i < indent; i++)
+                    {
                         this.writer.print(' ');
                     }
                 }
-                
+
                 this.writer.print("</" + xml.getName() + ">");
-                
-                if (prettyPrint) {
+
+                if (prettyPrint)
+                {
                     writer.println();
                 }
-            } else {
+            }
+            else
+            {
                 this.writer.print("/>");
-                
-                if (prettyPrint) {
+
+                if (prettyPrint)
+                {
                     writer.println();
                 }
             }
         }
-        
+
         this.writer.flush();
     }
 
-
     /**
      * Writes a string encoding reserved characters.
-     *
-     * @param str the string to write.
+     * 
+     * @param str
+     *            the string to write.
      */
     private void writeEncoded(String str)
     {
-        for (int i = 0; i < str.length(); i++) {
+        for (int i = 0; i < str.length(); i++)
+        {
             char c = str.charAt(i);
-            
-            switch (c) {
-                case 0x0D:
-                case 0x0A:
+
+            switch (c)
+            {
+            case 0x0D:
+            case 0x0A:
+                this.writer.print(c);
+                break;
+
+            case '<':
+                this.writer.print("&lt;");
+                break;
+
+            case '>':
+                this.writer.print("&gt;");
+                break;
+
+            case '&':
+                this.writer.print("&amp;");
+                break;
+
+            case '\'':
+                this.writer.print("&apos;");
+                break;
+
+            case '"':
+                this.writer.print("&quot;");
+                break;
+
+            default:
+                if ((c < ' ') || (c > 0x7E))
+                {
+                    this.writer.print("&#x");
+                    this.writer.print(Integer.toString(c, 16));
+                    this.writer.print(';');
+                }
+                else
+                {
                     this.writer.print(c);
-                    break;
-                    
-                case '<':
-                    this.writer.print("&lt;");
-                    break;
-                    
-                case '>':
-                    this.writer.print("&gt;");
-                    break;
-                    
-                case '&':
-                    this.writer.print("&amp;");
-                    break;
-                    
-                case '\'':
-                    this.writer.print("&apos;");
-                    break;
-                    
-                case '"':
-                    this.writer.print("&quot;");
-                    break;
-                    
-                default:
-                    if ((c < ' ') || (c > 0x7E)) {
-                        this.writer.print("&#x");
-                        this.writer.print(Integer.toString(c, 16));
-                        this.writer.print(';');
-                    } else {
-                        this.writer.print(c);
-                    }
+                }
             }
         }
     }

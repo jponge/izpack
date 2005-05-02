@@ -29,155 +29,164 @@ package com.izforge.izpack.util;
 
 import java.io.File;
 
-
 /**
  * A extended Java Implementation of Pythons string.replace()
- *
+ * 
  * @author marc.eppelmann&#064;gmx.de
  */
 public class StringTool
 {
-  //~ Constructors *********************************************************************************
 
-  /**
-   * Default Constructor 
-   */
-  public StringTool(  )
-  {
-    super(  );
-  }
+    // ~ Constructors
+    // *********************************************************************************
 
-  //~ Methods **************************************************************************************
-
-  /** 
-   * Test method  
-   *
-   * @param args Commandline Args
-   */
-  public static void main( String[] args )
-  {
-    System.out.println( "Test: string.replace(abc$defg,$de ,null ):" + StringTool.replace( "abc$defg", "$de", null, true ) );
-  }
-
-  /** 
-   * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>  
-   *
-   * @param value original String 
-   * @param from Search Pattern
-   * @param to Replace with this
-   *
-   * @return the replaced String
-   */
-  public static String replace( String value, String from, String to )
-  {
-    return replace( value, from, to, true );
-  }
-
-  /** 
-   * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>  
-   *
-   * @param value original String 
-   * @param from Search Pattern
-   * @param to Replace with this
-   * @param aCaseSensitiveFlag set to true be case sensitive.
-   *
-   * @return the replaced String
-   */
-  public static String replace( String value, String from, String to, boolean aCaseSensitiveFlag )
-  {
-    if( ( value == null ) || ( value.length(  ) == 0 ) || ( from == null ) || ( from.length(  ) == 0 ) )
+    /**
+     * Default Constructor
+     */
+    public StringTool()
     {
-      return value;
+        super();
     }
 
-    if( to == null )
+    // ~ Methods
+    // **************************************************************************************
+
+    /**
+     * Test method
+     * 
+     * @param args
+     *            Commandline Args
+     */
+    public static void main(String[] args)
     {
-      to = "";
+        System.out.println("Test: string.replace(abc$defg,$de ,null ):"
+                + StringTool.replace("abc$defg", "$de", null, true));
     }
 
-    String searchData = value;
-
-    if( ! aCaseSensitiveFlag )
+    /**
+     * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>
+     * 
+     * @param value
+     *            original String
+     * @param from
+     *            Search Pattern
+     * @param to
+     *            Replace with this
+     * 
+     * @return the replaced String
+     */
+    public static String replace(String value, String from, String to)
     {
-      searchData = value.toLowerCase(  );
-      from       = from.toLowerCase(  );
+        return replace(value, from, to, true);
     }
 
-    String result = value;
-    int    lastIndex = 0;
-    int    index = value.indexOf( from );
-
-    if( index != -1 )
+    /**
+     * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>
+     * 
+     * @param value
+     *            original String
+     * @param from
+     *            Search Pattern
+     * @param to
+     *            Replace with this
+     * @param aCaseSensitiveFlag
+     *            set to true be case sensitive.
+     * 
+     * @return the replaced String
+     */
+    public static String replace(String value, String from, String to, boolean aCaseSensitiveFlag)
     {
-      StringBuffer buffer = new StringBuffer(  );
+        if ((value == null) || (value.length() == 0) || (from == null) || (from.length() == 0)) { return value; }
 
-      while( index != -1 )
-      {
-        buffer.append( value.substring( lastIndex, index ) ).append( to );
-        lastIndex = index + from.length(  );
-        index     = value.indexOf( from, lastIndex );
-      }
+        if (to == null)
+        {
+            to = "";
+        }
 
-      buffer.append( value.substring( lastIndex ) );
-      result = buffer.toString(  );
+        String searchData = value;
+
+        if (!aCaseSensitiveFlag)
+        {
+            searchData = value.toLowerCase();
+            from = from.toLowerCase();
+        }
+
+        String result = value;
+        int lastIndex = 0;
+        int index = value.indexOf(from);
+
+        if (index != -1)
+        {
+            StringBuffer buffer = new StringBuffer();
+
+            while (index != -1)
+            {
+                buffer.append(value.substring(lastIndex, index)).append(to);
+                lastIndex = index + from.length();
+                index = value.indexOf(from, lastIndex);
+            }
+
+            buffer.append(value.substring(lastIndex));
+            result = buffer.toString();
+        }
+
+        return result;
     }
 
-    return result;
-  }
-
-  /** 
-   * Normalizes a Windows or Unix Path.
-   * 
-   * Reason: Javas File accepts / or \ for Pathes.
-   * Batches or ShellScripts does it not!
-   *
-   * TODO: implement support for MAC < MacOSX
-   *
-   * @param destination
-   * @param fileSeparator a target-system fileseparator
-   *
-   * @return the normalized path
-   */
-  public static String normalizePath( String destination, String fileSeparator )
-  {
-    String FILESEP = (fileSeparator == null) ? File.separator : fileSeparator;
-   
-   destination = StringTool.replace( destination, "\\", "/" );
-   
-    //all occs of "//" by "/" 
-    destination = StringTool.replace( destination, "//", "/" );
-    
-    destination = StringTool.replace( destination, ":", ";" );
-    destination = StringTool.replace( destination, ";", ":" );
-    
-    destination = StringTool.replace( destination, "/",  FILESEP );
-    
-    if( "\\".equals( FILESEP ) )
+    /**
+     * Normalizes a Windows or Unix Path.
+     * 
+     * Reason: Javas File accepts / or \ for Pathes. Batches or ShellScripts
+     * does it not!
+     * 
+     * TODO: implement support for MAC < MacOSX
+     * 
+     * @param destination
+     * @param fileSeparator
+     *            a target-system fileseparator
+     * 
+     * @return the normalized path
+     */
+    public static String normalizePath(String destination, String fileSeparator)
     {
-      destination = StringTool.replace( destination, ":", ";" );
+        String FILESEP = (fileSeparator == null) ? File.separator : fileSeparator;
 
-      // results in "C;\" instead of "C:\"
-      // so correct it:
-      destination = StringTool.replace( destination, ";\\", ":\\" );
+        destination = StringTool.replace(destination, "\\", "/");
+
+        // all occs of "//" by "/"
+        destination = StringTool.replace(destination, "//", "/");
+
+        destination = StringTool.replace(destination, ":", ";");
+        destination = StringTool.replace(destination, ";", ":");
+
+        destination = StringTool.replace(destination, "/", FILESEP);
+
+        if ("\\".equals(FILESEP))
+        {
+            destination = StringTool.replace(destination, ":", ";");
+
+            // results in "C;\" instead of "C:\"
+            // so correct it:
+            destination = StringTool.replace(destination, ";\\", ":\\");
+        }
+
+        // Convert the file separator characters
+        return (destination);
     }
-    
 
-    //  Convert the file separator characters
-    return ( destination );
-  }
-  
-  /** 
-   * Normalizes a mixed Windows/Unix Path.
-   * Does Only work for Windows or Unix Pathes
-   * Reason: Java.File accepts / or \ for Pathes.
-   * Batches or ShellScripts does it not!
-   * 
-   * @param destination accepted mixed form by java.File like "C:/a/mixed\path\accepted/by\Java"
-   *
-   * @return the normalized Path
-   */
-  public static String normalizePath( String destination )
-  {
-   return( normalizePath( destination, null ) );
-  }
+    /**
+     * Normalizes a mixed Windows/Unix Path. Does Only work for Windows or Unix
+     * Pathes Reason: Java.File accepts / or \ for Pathes. Batches or
+     * ShellScripts does it not!
+     * 
+     * @param destination
+     *            accepted mixed form by java.File like
+     *            "C:/a/mixed\path\accepted/by\Java"
+     * 
+     * @return the normalized Path
+     */
+    public static String normalizePath(String destination)
+    {
+        return (normalizePath(destination, null));
+    }
 }

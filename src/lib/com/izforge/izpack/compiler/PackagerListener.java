@@ -25,22 +25,24 @@
 package com.izforge.izpack.compiler;
 
 /**
- *  An interface for classes that want to listen to a packager events.
- *
- * @author     Julien Ponge
+ * An interface for classes that want to listen to a packager events.
+ * 
+ * @author Julien Ponge
  */
 public interface PackagerListener
 {
-  /**
-   *  Called as the packager sends messages.
-   *
-   * @param  info  The information that has been sent.
-   */
-  public void packagerMsg(String info);
 
-  /**  Called when the packager starts.  */
-  public void packagerStart();
+    /**
+     * Called as the packager sends messages.
+     * 
+     * @param info
+     *            The information that has been sent.
+     */
+    public void packagerMsg(String info);
 
-  /**  Called when the packager stops.  */
-  public void packagerStop();
+    /** Called when the packager starts. */
+    public void packagerStart();
+
+    /** Called when the packager stops. */
+    public void packagerStop();
 }

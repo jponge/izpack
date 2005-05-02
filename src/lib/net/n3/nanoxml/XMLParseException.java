@@ -28,42 +28,45 @@
 
 package net.n3.nanoxml;
 
-
 /**
  * An XMLParseException is thrown when the XML passed to the XML parser is not
  * well-formed.
- *
+ * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
-public class XMLParseException
-    extends XMLException
+public class XMLParseException extends XMLException
 {
 
     /**
+     * 
+     */
+    private static final long serialVersionUID = 3976739155453555000L;
+
+    /**
      * Creates a new exception.
-     *
-     * @param msg the message of the exception.
+     * 
+     * @param msg
+     *            the message of the exception.
      */
     public XMLParseException(String msg)
     {
         super(msg);
     }
-    
-    
+
     /**
      * Creates a new exception.
-     *
-     * @param systemID the system ID from where the data came
-     * @param lineNr   the line number in the XML data where the exception 
-     *                 occurred.
-     * @param msg      the message of the exception.
+     * 
+     * @param systemID
+     *            the system ID from where the data came
+     * @param lineNr
+     *            the line number in the XML data where the exception occurred.
+     * @param msg
+     *            the message of the exception.
      */
-    public XMLParseException(String systemID,
-                             int    lineNr,
-                             String msg)
+    public XMLParseException(String systemID, int lineNr, String msg)
     {
         super(systemID, lineNr, null, msg, true);
     }
-    
+
 }

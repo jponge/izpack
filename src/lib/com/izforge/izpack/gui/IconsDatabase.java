@@ -29,27 +29,30 @@ import java.util.TreeMap;
 import javax.swing.ImageIcon;
 
 /**
- *  The icons database class.
- *
- * @author     Julien Ponge
- *    October 27, 2002
+ * The icons database class.
+ * 
+ * @author Julien Ponge October 27, 2002
  */
 public class IconsDatabase extends TreeMap
 {
-  /**  The constructor.  */
-  public IconsDatabase()
-  {
-    super();
-  }
 
-  /**
-   *  Convenience method to retrieve an element.
-   *
-   * @param  key  The icon key.
-   * @return      The icon as an ImageIcon object.
-   */
-  public ImageIcon getImageIcon(String key)
-  {
-    return (ImageIcon) get(key);
-  }
+    private static final long serialVersionUID = 3257567287145083446L;
+
+    /** The constructor. */
+    public IconsDatabase()
+    {
+        super();
+    }
+
+    /**
+     * Convenience method to retrieve an element.
+     * 
+     * @param key
+     *            The icon key.
+     * @return The icon as an ImageIcon object.
+     */
+    public ImageIcon getImageIcon(String key)
+    {
+        return (ImageIcon) get(key);
+    }
 }

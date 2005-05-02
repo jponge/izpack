@@ -23,81 +23,92 @@
  */
 package com.izforge.izpack.panels;
 
-
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
 /**
- *  The install panel class. 
- * Launches the actual installation job with extensions for
- * custom actions.
- *
- * @author     Klaus Bartz
+ * The install panel class. Launches the actual installation job with extensions
+ * for custom actions.
+ * 
+ * @author Klaus Bartz
  */
-public class ExtendedInstallPanel extends InstallPanel
-implements ExtendedUIProgressHandler
+public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProgressHandler
 {
-  protected int currentStep = 0;
 
+    private static final long serialVersionUID = 3257291344052500789L;
 
-  /**
-   *  The constructor.
-   *
-   * @param  parent  The parent window.
-   * @param  idata   The installation data.
-   */
-   public ExtendedInstallPanel(InstallerFrame parent, InstallData idata)
-  {
-    super(parent, idata);
-  }
+    protected int currentStep = 0;
 
-  /* (non-Javadoc)
-   * @see com.izforge.izpack.util.ExtendedUIProgressHandler#startAction(java.lang.String, java.lang.String, java.lang.String, int)
-   */
-  public void restartAction(String name, String overallMsg, String tipMsg, int no_of_steps)
-  {
-    overallOpLabel.setText(overallMsg);
-    tipLabel.setText(tipMsg);
-    currentStep = 0;
-    startAction(name, no_of_steps );
-  }
-  
-  /**
-   *  Normal progress indicator.
-   *
-   * @param  val  The progression value.
-   * @param  msg  The progression message.
-   */
-  public void progress(int val, String msg)
-  {
-    packProgressBar.setValue(val + 1);
-    packOpLabel.setText(msg);
-    currentStep++;
-  }
+    /**
+     * The constructor.
+     * 
+     * @param parent
+     *            The parent window.
+     * @param idata
+     *            The installation data.
+     */
+    public ExtendedInstallPanel(InstallerFrame parent, InstallData idata)
+    {
+        super(parent, idata);
+    }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.izforge.izpack.util.ExtendedUIProgressHandler#startAction(java.lang.String,
+     *      java.lang.String, java.lang.String, int)
+     */
+    public void restartAction(String name, String overallMsg, String tipMsg, int no_of_steps)
+    {
+        overallOpLabel.setText(overallMsg);
+        tipLabel.setText(tipMsg);
+        currentStep = 0;
+        startAction(name, no_of_steps);
+    }
 
-  /* (non-Javadoc)
-   * @see com.izforge.izpack.util.ExtendedUIProgressHandler#progress(java.lang.String, java.lang.String)
-   */
-  public void progress(String stepMessage)
-  {
-    packOpLabel.setText(stepMessage);
-    currentStep++;
-    packProgressBar.setValue(currentStep);
-  }
+    /**
+     * Normal progress indicator.
+     * 
+     * @param val
+     *            The progression value.
+     * @param msg
+     *            The progression message.
+     */
+    public void progress(int val, String msg)
+    {
+        packProgressBar.setValue(val + 1);
+        packOpLabel.setText(msg);
+        currentStep++;
+    }
 
-  /**
-   *  Pack changing.
-   *
-   * @param  packName  The pack name.
-   * @param  stepno    The number of the pack.
-   * @param  max       The new maximum progress.
-   */
-  public void nextStep(String packName, int stepno, int max)
-  {
-    currentStep = 0;
-    super.nextStep(packName, stepno, max);
-  }
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.izforge.izpack.util.ExtendedUIProgressHandler#progress(java.lang.String,
+     *      java.lang.String)
+     */
+    public void progress(String stepMessage)
+    {
+        packOpLabel.setText(stepMessage);
+        currentStep++;
+        packProgressBar.setValue(currentStep);
+    }
+
+    /**
+     * Pack changing.
+     * 
+     * @param packName
+     *            The pack name.
+     * @param stepno
+     *            The number of the pack.
+     * @param max
+     *            The new maximum progress.
+     */
+    public void nextStep(String packName, int stepno, int max)
+    {
+        currentStep = 0;
+        super.nextStep(packName, stepno, max);
+    }
 
 }

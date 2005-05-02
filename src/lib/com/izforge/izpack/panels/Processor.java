@@ -23,29 +23,31 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package   com.izforge.izpack.panels;
+package com.izforge.izpack.panels;
 
 /*---------------------------------------------------------------------------*/
 /**
  * Interface for classes that provide input field processing services.
- *
- * @see      com.izforge.izpack.panels.ProcessingClient
- *
- * @version  0.0.1 / 10/26/02
- * @author   Elmar Grom
+ * 
+ * @see com.izforge.izpack.panels.ProcessingClient
+ * 
+ * @version 0.0.1 / 10/26/02
+ * @author Elmar Grom
  */
 /*---------------------------------------------------------------------------*/
 public interface Processor
 {
- /*--------------------------------------------------------------------------*/
- /**
-  * Processes the contend of an input field. 
-  *
-  * @param     client   the client object using the services of this processor.
-  *
-  * @return    The result of the encryption.
-  */
- /*--------------------------------------------------------------------------*/
-  public String process (ProcessingClient client);
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Processes the contend of an input field.
+     * 
+     * @param client
+     *            the client object using the services of this processor.
+     * 
+     * @return The result of the encryption.
+     */
+    /*--------------------------------------------------------------------------*/
+    public String process(ProcessingClient client);
 }
 /*---------------------------------------------------------------------------*/

@@ -31,8 +31,8 @@
  */
 package com.izforge.izpack.compiler;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Stream which countes the bytes written through it. Be sure to flush before
@@ -40,44 +40,46 @@ import java.io.IOException;
  */
 public class ByteCountingOutputStream extends OutputStream
 {
-  private long count;
-  private OutputStream os;
 
-  public ByteCountingOutputStream(OutputStream os)
-  {
-    this.os = os;
-  }
+    private long count;
 
-  public void write(byte[] b, int off, int len) throws IOException
-  {
-    os.write(b, off, len);
-    count += len;
-  }
+    private OutputStream os;
 
-  public void write(byte[] b) throws IOException
-  {
-    os.write(b);
-    count += b.length;
-  }
+    public ByteCountingOutputStream(OutputStream os)
+    {
+        this.os = os;
+    }
 
-  public void write(int b) throws IOException
-  {
-    os.write(b);
-    count++;
-  }
+    public void write(byte[] b, int off, int len) throws IOException
+    {
+        os.write(b, off, len);
+        count += len;
+    }
 
-  public void close() throws IOException
-  {
-    os.close();
-  }
+    public void write(byte[] b) throws IOException
+    {
+        os.write(b);
+        count += b.length;
+    }
 
-  public void flush() throws IOException
-  {
-    os.flush();
-  }
+    public void write(int b) throws IOException
+    {
+        os.write(b);
+        count++;
+    }
 
-  public long getByteCount()
-  {
-    return count;
-  }
+    public void close() throws IOException
+    {
+        os.close();
+    }
+
+    public void flush() throws IOException
+    {
+        os.flush();
+    }
+
+    public long getByteCount()
+    {
+        return count;
+    }
 }

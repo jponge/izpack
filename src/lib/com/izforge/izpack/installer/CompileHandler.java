@@ -25,31 +25,32 @@
 package com.izforge.izpack.installer;
 
 /**
- *  Interface for monitoring compilation progress.
- *
- * This is used by <code>CompilePanel</code>, <code>CompileWorker</code> and
- * <code>CompilePanelAutomationHelper</code> to display the progress of the
- * compilation. Most of the functionality, however, is inherited from interface
- * com.izforge.izpack.util.AbstractUIProgressHandler
- *
- * @author   Tino Schwarze
+ * Interface for monitoring compilation progress.
+ * 
+ * This is used by <code>CompilePanel</code>, <code>CompileWorker</code>
+ * and <code>CompilePanelAutomationHelper</code> to display the progress of
+ * the compilation. Most of the functionality, however, is inherited from
+ * interface com.izforge.izpack.util.AbstractUIProgressHandler
+ * 
+ * @author Tino Schwarze
  * @see com.izforge.izpack.util.AbstractUIProgressHandler
  */
 public interface CompileHandler extends com.izforge.izpack.util.AbstractUIProgressHandler
 {
-  /**
-   * An error was encountered.
-   *
-   * This method should notify the user of the error and request a choice
-   * whether to continue, abort or reconfigure. It should alter the error
-   * accordingly.
-   *
-   * Although a CompileResult is passed in, the method is only called if
-   * something failed.
-   *
-   * @param error the error to handle
-   */
-  public void handleCompileError (CompileResult error);
+
+    /**
+     * An error was encountered.
+     * 
+     * This method should notify the user of the error and request a choice
+     * whether to continue, abort or reconfigure. It should alter the error
+     * accordingly.
+     * 
+     * Although a CompileResult is passed in, the method is only called if
+     * something failed.
+     * 
+     * @param error
+     *            the error to handle
+     */
+    public void handleCompileError(CompileResult error);
 
 }
-

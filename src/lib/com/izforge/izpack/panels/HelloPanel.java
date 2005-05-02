@@ -44,110 +44,106 @@ import com.izforge.izpack.installer.IzPanel;
 
 /**
  * The Hello panel class.
+ * 
  * @author Julien Ponge
  */
 public class HelloPanel extends IzPanel
 {
-  /**  The layout. */
-  private BoxLayout layout;
 
-  /**  The welcome label. */
-  private JLabel welcomeLabel;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3257848774955905587L;
 
-  /**  The application authors label. */
-  private JLabel appAuthorsLabel;
+    /** The layout. */
+    private BoxLayout layout;
 
-  /**  The application URL label. */
-  private JLabel appURLLabel;
+    /** The welcome label. */
+    private JLabel welcomeLabel;
 
-  /**
-   *  The constructor.
-   *
-   * @param  parent  The parent.
-   * @param  idata   The installation data.
-   */
-  public HelloPanel(InstallerFrame parent, InstallData idata)
-  {
-    super(parent, idata);
+    /** The application authors label. */
+    private JLabel appAuthorsLabel;
 
-    // The 'super' layout
-    GridBagLayout superLayout = new GridBagLayout();
-    setLayout(superLayout);
-    GridBagConstraints gbConstraints = new GridBagConstraints();
-    gbConstraints.insets = new Insets(0, 0, 0, 0);
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.anchor = GridBagConstraints.CENTER;
+    /** The application URL label. */
+    private JLabel appURLLabel;
 
-    // We initialize our 'real' layout
-    JPanel centerPanel = new JPanel();
-    layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
-    centerPanel.setLayout(layout);
-    superLayout.addLayoutComponent(centerPanel, gbConstraints);
-    add(centerPanel);
-
-    // We create and put the labels
-    String str;
-
-    centerPanel.add(Box.createVerticalStrut(10));
-
-    str =
-      parent.langpack.getString("HelloPanel.welcome1")
-        + idata.info.getAppName()
-        + " "
-        + idata.info.getAppVersion()
-        + parent.langpack.getString("HelloPanel.welcome2");
-    welcomeLabel =
-      LabelFactory.create(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
-    centerPanel.add(welcomeLabel);
-
-    centerPanel.add(Box.createVerticalStrut(20));
-
-    ArrayList authors = idata.info.getAuthors();
-    int size = authors.size();
-    if (size > 0)
+    /**
+     * The constructor.
+     * 
+     * @param parent
+     *            The parent.
+     * @param idata
+     *            The installation data.
+     */
+    public HelloPanel(InstallerFrame parent, InstallData idata)
     {
-      str = parent.langpack.getString("HelloPanel.authors");
-      appAuthorsLabel =
-        LabelFactory.create(
-          str,
-          parent.icons.getImageIcon("information"),
-          JLabel.TRAILING);
-      centerPanel.add(appAuthorsLabel);
+        super(parent, idata);
 
-      JLabel label;
-      for (int i = 0; i < size; i++)
-      {
-        Info.Author a = (Info.Author) authors.get(i);
-        String email =
-          (a.getEmail() != null) ? (" <" + a.getEmail() + ">") : "";
-        label =
-          LabelFactory.create(
-            " - " + a.getName() + email,
-            parent.icons.getImageIcon("empty"),
-            JLabel.TRAILING);
-        centerPanel.add(label);
-      }
+        // The 'super' layout
+        GridBagLayout superLayout = new GridBagLayout();
+        setLayout(superLayout);
+        GridBagConstraints gbConstraints = new GridBagConstraints();
+        gbConstraints.insets = new Insets(0, 0, 0, 0);
+        gbConstraints.fill = GridBagConstraints.NONE;
+        gbConstraints.anchor = GridBagConstraints.CENTER;
 
-      centerPanel.add(Box.createVerticalStrut(20));
+        // We initialize our 'real' layout
+        JPanel centerPanel = new JPanel();
+        layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
+        centerPanel.setLayout(layout);
+        superLayout.addLayoutComponent(centerPanel, gbConstraints);
+        add(centerPanel);
+
+        // We create and put the labels
+        String str;
+
+        centerPanel.add(Box.createVerticalStrut(10));
+
+        str = parent.langpack.getString("HelloPanel.welcome1") + idata.info.getAppName() + " "
+                + idata.info.getAppVersion() + parent.langpack.getString("HelloPanel.welcome2");
+        welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
+        centerPanel.add(welcomeLabel);
+
+        centerPanel.add(Box.createVerticalStrut(20));
+
+        ArrayList authors = idata.info.getAuthors();
+        int size = authors.size();
+        if (size > 0)
+        {
+            str = parent.langpack.getString("HelloPanel.authors");
+            appAuthorsLabel = LabelFactory.create(str, parent.icons.getImageIcon("information"),
+                    JLabel.TRAILING);
+            centerPanel.add(appAuthorsLabel);
+
+            JLabel label;
+            for (int i = 0; i < size; i++)
+            {
+                Info.Author a = (Info.Author) authors.get(i);
+                String email = (a.getEmail() != null) ? (" <" + a.getEmail() + ">") : "";
+                label = LabelFactory.create(" - " + a.getName() + email, parent.icons
+                        .getImageIcon("empty"), JLabel.TRAILING);
+                centerPanel.add(label);
+            }
+
+            centerPanel.add(Box.createVerticalStrut(20));
+        }
+
+        if (idata.info.getAppURL() != null)
+        {
+            str = parent.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
+            appURLLabel = LabelFactory.create(str, parent.icons.getImageIcon("bookmark"),
+                    JLabel.TRAILING);
+            centerPanel.add(appURLLabel);
+        }
     }
 
-    if (idata.info.getAppURL() != null)
+    /**
+     * Indicates wether the panel has been validated or not.
+     * 
+     * @return Always true.
+     */
+    public boolean isValidated()
     {
-      str =
-        parent.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
-      appURLLabel =
-        LabelFactory.create(str, parent.icons.getImageIcon("bookmark"), JLabel.TRAILING);
-      centerPanel.add(appURLLabel);
+        return true;
     }
-  }
-
-  /**
-   *  Indicates wether the panel has been validated or not.
-   *
-   * @return    Always true.
-   */
-  public boolean isValidated()
-  {
-    return true;
-  }
 }

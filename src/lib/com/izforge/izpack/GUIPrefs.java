@@ -24,33 +24,35 @@
  */
 package com.izforge.izpack;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
-import java.io.Serializable;
-
 /**
- *  This class holds the GUI preferences for an installer.
- *
- * @author     Julien Ponge
+ * This class holds the GUI preferences for an installer.
+ * 
+ * @author Julien Ponge
  */
 public class GUIPrefs implements Serializable
 {
-  /**  Specifies wether the window will be resizable. */
-  public boolean resizable;
 
-  /**  Specifies the starting window width, in pixels. */
-  public int width;
+    static final long serialVersionUID = -9081878949718963824L;
 
-  /**  Specifies the starting window height, in pixels. */
-  public int height;
-  
-  /** Specifies the OS Look and Feels mappings. */
-  public Map lookAndFeelMapping = new TreeMap();
-  
-  /** Specifies the OS Look and Feels optionnal parameters. */
-  public Map lookAndFeelParams = new TreeMap();
+    /** Specifies wether the window will be resizable. */
+    public boolean resizable;
 
-  /** Specifies the modifier. */
-  public Map modifier = new TreeMap();
+    /** Specifies the starting window width, in pixels. */
+    public int width;
+
+    /** Specifies the starting window height, in pixels. */
+    public int height;
+
+    /** Specifies the OS Look and Feels mappings. */
+    public Map lookAndFeelMapping = new TreeMap();
+
+    /** Specifies the OS Look and Feels optionnal parameters. */
+    public Map lookAndFeelParams = new TreeMap();
+
+    /** Specifies the modifier. */
+    public Map modifier = new TreeMap();
 }

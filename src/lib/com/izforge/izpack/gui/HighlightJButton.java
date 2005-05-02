@@ -33,125 +33,140 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 
 /**
- *  A button that highlights when the button passes over.
- *
- * @author     Julien Ponge
+ * A button that highlights when the button passes over.
+ * 
+ * @author Julien Ponge
  */
 public class HighlightJButton extends JButton
 {
-  /**
-   *  The constructor (use ButtonFactory to create button).
-   *
-   * @param  icon   The icon to display.
-   * @param  color  The highlight color.
-   */
-  HighlightJButton(Icon icon, Color color)
-  {
-    super(icon);
-    initButton(color);
-  }
 
-  /**
-   *  The constructor (use ButtonFactory to create button).
-   *
-   * @param  text   The text to display.
-   * @param  color  The highlight color.
-   */
-  HighlightJButton(String text, Color color)
-  {
-    super(text);
-    initButton(color);
-  }
+    private static final long serialVersionUID = 3833184718324969525L;
 
-  /**
-   *  The constructor (use ButtonFactory to create button).
-   *
-   * @param  text   The text to display.
-   * @param  icon   The icon to display.
-   * @param  color  The highlight color.
-   */
-  HighlightJButton(String text, Icon icon, Color color)
-  {
-    super(text, icon);
-    initButton(color);
-  }
-
-  /**
-   *  The constructor (use ButtonFactory to create button).
-   *
-   * @param  a      The action.
-   * @param  color  The highlight color.
-   */
-  HighlightJButton(Action a, Color color)
-  {
-    super(a);
-    initButton(color);
-  }
-
-  /**
-   *  Does the extra initialisations.
-   *
-   * @param  highlightColor  The highlight color.
-   */
-  protected void initButton(Color highlightColor)
-  {
-    this.highlightColor = highlightColor;
-    defaultColor = getBackground();
-
-    addMouseListener(new MouseHandler());
-  }
-
-  /**
-   *  Overriden to ensure that the button won't stay highlighted if it had the
-   *  mouse over it.
-   *
-   * @param  b  Button state.
-   */
-  public void setEnabled(boolean b)
-  {
-    reset();
-    super.setEnabled(b);
-  }
-
-  /**  Forces the button to unhighlight.  */
-  protected void reset()
-  {
-    setBackground(defaultColor);
-  }
-
-  /**  The highlighted color. */
-  protected Color highlightColor;
-
-  /**  The default color. */
-  protected Color defaultColor;
-
-  /**
-   *  The mouse handler which makes the highlighting.
-   *
-   * @author     Julien Ponge
-   */
-  private class MouseHandler extends MouseAdapter
-  {
     /**
-     *  When the mouse passes over the button.
-     *
-     * @param  e  The event.
+     * The constructor (use ButtonFactory to create button).
+     * 
+     * @param icon
+     *            The icon to display.
+     * @param color
+     *            The highlight color.
      */
-    public void mouseEntered(MouseEvent e)
+    HighlightJButton(Icon icon, Color color)
     {
-      if (isEnabled())
-        setBackground(highlightColor);
+        super(icon);
+        initButton(color);
     }
 
     /**
-     *  When the mouse passes out of the button.
-     *
-     * @param  e  The event.
+     * The constructor (use ButtonFactory to create button).
+     * 
+     * @param text
+     *            The text to display.
+     * @param color
+     *            The highlight color.
      */
-    public void mouseExited(MouseEvent e)
+    HighlightJButton(String text, Color color)
     {
-      if (isEnabled())
+        super(text);
+        initButton(color);
+    }
+
+    /**
+     * The constructor (use ButtonFactory to create button).
+     * 
+     * @param text
+     *            The text to display.
+     * @param icon
+     *            The icon to display.
+     * @param color
+     *            The highlight color.
+     */
+    HighlightJButton(String text, Icon icon, Color color)
+    {
+        super(text, icon);
+        initButton(color);
+    }
+
+    /**
+     * The constructor (use ButtonFactory to create button).
+     * 
+     * @param a
+     *            The action.
+     * @param color
+     *            The highlight color.
+     */
+    HighlightJButton(Action a, Color color)
+    {
+        super(a);
+        initButton(color);
+    }
+
+    /**
+     * Does the extra initialisations.
+     * 
+     * @param highlightColor
+     *            The highlight color.
+     */
+    protected void initButton(Color highlightColor)
+    {
+        this.highlightColor = highlightColor;
+        defaultColor = getBackground();
+
+        addMouseListener(new MouseHandler());
+    }
+
+    /**
+     * Overriden to ensure that the button won't stay highlighted if it had the
+     * mouse over it.
+     * 
+     * @param b
+     *            Button state.
+     */
+    public void setEnabled(boolean b)
+    {
+        reset();
+        super.setEnabled(b);
+    }
+
+    /** Forces the button to unhighlight. */
+    protected void reset()
+    {
         setBackground(defaultColor);
     }
-  }
+
+    /** The highlighted color. */
+    protected Color highlightColor;
+
+    /** The default color. */
+    protected Color defaultColor;
+
+    /**
+     * The mouse handler which makes the highlighting.
+     * 
+     * @author Julien Ponge
+     */
+    private class MouseHandler extends MouseAdapter
+    {
+
+        /**
+         * When the mouse passes over the button.
+         * 
+         * @param e
+         *            The event.
+         */
+        public void mouseEntered(MouseEvent e)
+        {
+            if (isEnabled()) setBackground(highlightColor);
+        }
+
+        /**
+         * When the mouse passes out of the button.
+         * 
+         * @param e
+         *            The event.
+         */
+        public void mouseExited(MouseEvent e)
+        {
+            if (isEnabled()) setBackground(defaultColor);
+        }
+    }
 }

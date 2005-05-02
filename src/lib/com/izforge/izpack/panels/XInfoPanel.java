@@ -44,114 +44,121 @@ import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
- *  The XInfo panel class - shows some adaptative text (ie by parsing for some
- *  variables.
- *
- * @author     Julien Ponge
+ * The XInfo panel class - shows some adaptative text (ie by parsing for some
+ * variables.
+ * 
+ * @author Julien Ponge
  */
 public class XInfoPanel extends IzPanel
 {
-  /**  The layout. */
-  private GridBagLayout layout;
 
-  /**  The layout constraints. */
-  private GridBagConstraints gbConstraints;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3257009856274970416L;
 
-  /**  The info label. */
-  private JLabel infoLabel;
+    /** The layout. */
+    private GridBagLayout layout;
 
-  /**  The text area. */
-  private JTextArea textArea;
+    /** The layout constraints. */
+    private GridBagConstraints gbConstraints;
 
-  /**  The info to display. */
-  private String info;
+    /** The info label. */
+    private JLabel infoLabel;
 
-  /**
-   *  The constructor.
-   *
-   * @param  parent  The parent window.
-   * @param  idata   The installation data.
-   */
-  public XInfoPanel(InstallerFrame parent, InstallData idata)
-  {
-    super(parent, idata);
+    /** The text area. */
+    private JTextArea textArea;
 
-    // We initialize our layout
-    layout = new GridBagLayout();
-    gbConstraints = new GridBagConstraints();
-    setLayout(layout);
+    /** The info to display. */
+    private String info;
 
-    // We add the components
-
-    infoLabel =
-      LabelFactory.create(
-        parent.langpack.getString("InfoPanel.info"),
-        parent.icons.getImageIcon("edit"),
-        JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
-    gbConstraints.insets = new Insets(5, 5, 5, 5);
-    gbConstraints.fill = GridBagConstraints.BOTH;
-    gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-    layout.addLayoutComponent(infoLabel, gbConstraints);
-    add(infoLabel);
-
-    textArea = new JTextArea();
-    textArea.setEditable(false);
-    JScrollPane scroller = new JScrollPane(textArea);
-    parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 1.0, 0.9);
-    gbConstraints.anchor = GridBagConstraints.CENTER;
-    layout.addLayoutComponent(scroller, gbConstraints);
-    add(scroller);
-  }
-
-  /**  Loads the info text.  */
-  private void loadInfo()
-  {
-    try
+    /**
+     * The constructor.
+     * 
+     * @param parent
+     *            The parent window.
+     * @param idata
+     *            The installation data.
+     */
+    public XInfoPanel(InstallerFrame parent, InstallData idata)
     {
-      // We read it
-      info = ResourceManager.getInstance().getTextResource("XInfoPanel.info");
-    } catch (Exception err)
-    {
-      info = "Error : could not load the info text !";
+        super(parent, idata);
+
+        // We initialize our layout
+        layout = new GridBagLayout();
+        gbConstraints = new GridBagConstraints();
+        setLayout(layout);
+
+        // We add the components
+
+        infoLabel = LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
+                .getImageIcon("edit"), JLabel.TRAILING);
+        parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
+        gbConstraints.insets = new Insets(5, 5, 5, 5);
+        gbConstraints.fill = GridBagConstraints.BOTH;
+        gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
+        layout.addLayoutComponent(infoLabel, gbConstraints);
+        add(infoLabel);
+
+        textArea = new JTextArea();
+        textArea.setEditable(false);
+        JScrollPane scroller = new JScrollPane(textArea);
+        parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 1.0, 0.9);
+        gbConstraints.anchor = GridBagConstraints.CENTER;
+        layout.addLayoutComponent(scroller, gbConstraints);
+        add(scroller);
     }
-  }
 
-  /**  Parses the text for special variables.  */
-  private void parseText()
-  {
-    try
+    /** Loads the info text. */
+    private void loadInfo()
     {
-      // Initialize the variable substitutor
-      VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-
-      // Parses the info text
-      info = vs.substitute(info, null);
-    } catch (Exception err)
-    {
-      err.printStackTrace();
+        try
+        {
+            // We read it
+            info = ResourceManager.getInstance().getTextResource("XInfoPanel.info");
+        }
+        catch (Exception err)
+        {
+            info = "Error : could not load the info text !";
+        }
     }
-  }
 
-  /**  Called when the panel becomes active.  */
-  public void panelActivate()
-  {
-    // Text handling
-    loadInfo();
-    parseText();
+    /** Parses the text for special variables. */
+    private void parseText()
+    {
+        try
+        {
+            // Initialize the variable substitutor
+            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
 
-    // UI handling
-    textArea.setText(info);
-    textArea.setCaretPosition(0);
-  }
+            // Parses the info text
+            info = vs.substitute(info, null);
+        }
+        catch (Exception err)
+        {
+            err.printStackTrace();
+        }
+    }
 
-  /**
-   *  Indicates wether the panel has been validated or not.
-   *
-   * @return    Always true.
-   */
-  public boolean isValidated()
-  {
-    return true;
-  }
+    /** Called when the panel becomes active. */
+    public void panelActivate()
+    {
+        // Text handling
+        loadInfo();
+        parseText();
+
+        // UI handling
+        textArea.setText(info);
+        textArea.setCaretPosition(0);
+    }
+
+    /**
+     * Indicates wether the panel has been validated or not.
+     * 
+     * @return Always true.
+     */
+    public boolean isValidated()
+    {
+        return true;
+    }
 }

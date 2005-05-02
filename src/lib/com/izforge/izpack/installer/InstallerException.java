@@ -26,44 +26,46 @@ package com.izforge.izpack.installer;
 
 /**
  * Indicates a Failure in a custom action.
- *
- * @author  Klaus Bartz
- *
+ * 
+ * @author Klaus Bartz
+ * 
  */
 public class InstallerException extends Exception
 {
 
-  /**
-   * 
-   */
-  public InstallerException()
-  {
-    super();
-  }
+    private static final long serialVersionUID = 3978984358113982004L;
 
-  /**
-   * @param message
-   */
-  public InstallerException(String message)
-  {
-    super(message);
-  }
+    /**
+     * 
+     */
+    public InstallerException()
+    {
+        super();
+    }
 
-  /**
-   * @param cause
-   */
-  public InstallerException(Throwable cause)
-  {
-    super(cause);
-  }
+    /**
+     * @param message
+     */
+    public InstallerException(String message)
+    {
+        super(message);
+    }
 
-  /**
-   * @param message
-   * @param cause
-   */
-  public InstallerException(String message, Throwable cause)
-  {
-    super(message, cause);
-  }
+    /**
+     * @param cause
+     */
+    public InstallerException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    /**
+     * @param message
+     * @param cause
+     */
+    public InstallerException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 
 }

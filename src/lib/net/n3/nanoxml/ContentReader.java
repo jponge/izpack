@@ -28,89 +28,79 @@
 
 package net.n3.nanoxml;
 
-
 import java.io.IOException;
 import java.io.Reader;
-
 
 /**
  * This reader reads data from another reader until a certain string is
  * encountered.
- *
+ * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Version$
  */
-class ContentReader
-    extends Reader
+class ContentReader extends Reader
 {
-        
+
     /**
      * The encapsulated reader.
      */
     private IXMLReader reader;
-    
-    
+
     /**
      * The encapsulated entityResolver.
      */
     private IXMLEntityResolver entityResolver;
-    
-    
+
     /**
      * The escape char (&amp; or %).
      */
     private char escapeChar;
-    
-    
+
     /**
      * The delimiter that will indicate the end of the stream.
      */
     private char[] delimiter;
-    
-    
+
     /**
      * The characters that have been read too much.
      */
     private String charsReadTooMuch;
-    
-    
+
     /**
-     * The number of characters in the delimiter that stil need to be
-     * scanned.
+     * The number of characters in the delimiter that stil need to be scanned.
      */
     private int charsToGo;
-    
-    
+
     /**
      * True if the escape char (&amp; or %) needs to be left untouched.
      */
     private boolean useLowLevelReader;
-    
-    
+
     /**
      * True if we are passed the initial prefix.
      */
     private boolean pastInitialPrefix;
-    
-    
+
     /**
      * Creates the reader.
-     *
-     * @param reader the encapsulated reader
-     * @param entityResolver resolves entities
-     * @param escapeChar escape character (&amp; or %)
-     * @param delimiter the delimiter, as a backwards string, that will 
-     *                  indicate the end of the stream
-     * @param useLowLevelReader true if &amp; needs to be left untouched;
-     *                          false if entities need to be processed
-     * @param prefix chars that are already read
+     * 
+     * @param reader
+     *            the encapsulated reader
+     * @param entityResolver
+     *            resolves entities
+     * @param escapeChar
+     *            escape character (&amp; or %)
+     * @param delimiter
+     *            the delimiter, as a backwards string, that will indicate the
+     *            end of the stream
+     * @param useLowLevelReader
+     *            true if &amp; needs to be left untouched; false if entities
+     *            need to be processed
+     * @param prefix
+     *            chars that are already read
      */
-    ContentReader(IXMLReader         reader,
-                  IXMLEntityResolver entityResolver,
-                  char               escapeChar,
-                  char[]             delimiter,
-                  boolean            useLowLevelReader,
-                  String             prefix)
+    ContentReader(IXMLReader reader, IXMLEntityResolver entityResolver, char escapeChar,
+            char[] delimiter, boolean useLowLevelReader, String prefix)
     {
         this.delimiter = delimiter;
         this.charsToGo = this.delimiter.length;
@@ -121,13 +111,11 @@ class ContentReader
         this.entityResolver = entityResolver;
         this.escapeChar = escapeChar;
     }
-    
-    
+
     /**
      * Cleans up the object when it's destroyed.
      */
-    protected void finalize()
-        throws Throwable
+    protected void finalize() throws Throwable
     {
         this.reader = null;
         this.entityResolver = null;
@@ -135,137 +123,160 @@ class ContentReader
         this.charsReadTooMuch = null;
         super.finalize();
     }
-    
 
     /**
      * Reads a block of data.
-     *
-     * @param buffer where to put the read data
-     * @param offset first position in buffer to put the data
-     * @param size maximum number of chars to read
-     *
+     * 
+     * @param buffer
+     *            where to put the read data
+     * @param offset
+     *            first position in buffer to put the data
+     * @param size
+     *            maximum number of chars to read
+     * 
      * @return the number of chars read, or -1 if at EOF
-     *
+     * 
      * @throws java.io.IOException
-     *		if an error occurred reading the data
+     *             if an error occurred reading the data
      */
-    public int read(char[] buffer,
-                    int    offset,
-                    int    size)
-        throws IOException
+    public int read(char[] buffer, int offset, int size) throws IOException
     {
         int charsRead = 0;
         boolean isEntity[] = new boolean[1];
         isEntity[0] = false;
-        
-        if ((offset + size) > buffer.length) {
+
+        if ((offset + size) > buffer.length)
+        {
             size = buffer.length - offset;
         }
-        
-        while ((this.charsToGo > 0) && (charsRead < size)) {
+
+        while ((this.charsToGo > 0) && (charsRead < size))
+        {
             char ch;
-            
-            if (this.charsReadTooMuch.length() > 0) {
+
+            if (this.charsReadTooMuch.length() > 0)
+            {
                 ch = this.charsReadTooMuch.charAt(0);
                 this.charsReadTooMuch = this.charsReadTooMuch.substring(1);
-            } else {
+            }
+            else
+            {
                 this.pastInitialPrefix = true;
 
-                try {
-                    if (useLowLevelReader) {
+                try
+                {
+                    if (useLowLevelReader)
+                    {
                         ch = this.reader.read();
-                    } else {
-                        ch = XMLUtil.read(this.reader, isEntity,
-                                          this.escapeChar,
-                                          this.entityResolver);
-                    
-                        if (! isEntity[0]) {
-                            if (ch == '&') {
-                                this.reader.startNewStream(
-                                    XMLUtil.scanEntity(isEntity,
-                                                       this.reader,
-                                                       this.escapeChar,
-                                                       this.entityResolver));
+                    }
+                    else
+                    {
+                        ch = XMLUtil.read(this.reader, isEntity, this.escapeChar,
+                                this.entityResolver);
+
+                        if (!isEntity[0])
+                        {
+                            if (ch == '&')
+                            {
+                                this.reader.startNewStream(XMLUtil.scanEntity(isEntity,
+                                        this.reader, this.escapeChar, this.entityResolver));
                                 ch = this.reader.read();
                             }
                         }
                     }
-                } catch (XMLParseException e) {
+                }
+                catch (XMLParseException e)
+                {
                     throw new RuntimeException(e.getMessage());
                     // necessary to be able to implement Reader
                 }
             }
-            
-            if (isEntity[0]) {
+
+            if (isEntity[0])
+            {
                 buffer[offset + charsRead] = ch;
                 charsRead++;
-            } else {
-                if ((ch == (this.delimiter[this.charsToGo - 1]))
-                        && pastInitialPrefix) {
+            }
+            else
+            {
+                if ((ch == (this.delimiter[this.charsToGo - 1])) && pastInitialPrefix)
+                {
                     --this.charsToGo;
-                } else if (this.charsToGo < this.delimiter.length) {
-                    this.charsReadTooMuch
-                            = new String(this.delimiter, this.charsToGo + 1,
-                                        this.delimiter.length - this.charsToGo)
-                                   + ch;
+                }
+                else if (this.charsToGo < this.delimiter.length)
+                {
+                    this.charsReadTooMuch = new String(this.delimiter, this.charsToGo + 1,
+                            this.delimiter.length - this.charsToGo)
+                            + ch;
                     this.charsToGo = this.delimiter.length;
-                    buffer[offset + charsRead]
-                            = this.delimiter[this.charsToGo - 1];
+                    buffer[offset + charsRead] = this.delimiter[this.charsToGo - 1];
                     charsRead++;
-                } else {
+                }
+                else
+                {
                     buffer[offset + charsRead] = ch;
                     charsRead++;
                 }
             }
         }
-        
-        if (charsRead == 0) {
+
+        if (charsRead == 0)
+        {
             charsRead = -1;
         }
-        
+
         return charsRead;
     }
-    
-    
+
     /**
      * Skips remaining data and closes the stream.
-     *
+     * 
      * @throws java.io.IOException
-     *		if an error occurred reading the data
+     *             if an error occurred reading the data
      */
-    public void close()
-        throws IOException
+    public void close() throws IOException
     {
-        while (this.charsToGo > 0) {
+        while (this.charsToGo > 0)
+        {
             char ch;
-            
-            if (this.charsReadTooMuch.length() > 0) {
+
+            if (this.charsReadTooMuch.length() > 0)
+            {
                 ch = this.charsReadTooMuch.charAt(0);
                 this.charsReadTooMuch = this.charsReadTooMuch.substring(1);
-            } else {
-                if (useLowLevelReader) {
+            }
+            else
+            {
+                if (useLowLevelReader)
+                {
                     ch = this.reader.read();
-                } else {
-                    try {
-                        ch = XMLUtil.read(this.reader, null, this.escapeChar,
-                                        this.entityResolver);
-                    } catch (XMLParseException e) {
+                }
+                else
+                {
+                    try
+                    {
+                        ch = XMLUtil.read(this.reader, null, this.escapeChar, this.entityResolver);
+                    }
+                    catch (XMLParseException e)
+                    {
                         throw new RuntimeException(e.getMessage());
                         // necessary to be able to implement Reader
                     }
                 }
             }
-            
-            if (ch == (this.delimiter[this.charsToGo - 1])) {
+
+            if (ch == (this.delimiter[this.charsToGo - 1]))
+            {
                 --this.charsToGo;
-            } else if (this.charsToGo < this.delimiter.length) {
-                this.charsReadTooMuch
-                        = new String(this.delimiter, this.charsToGo + 1,
-                                     this.delimiter.length - this.charsToGo)
-                                + ch;
+            }
+            else if (this.charsToGo < this.delimiter.length)
+            {
+                this.charsReadTooMuch = new String(this.delimiter, this.charsToGo + 1,
+                        this.delimiter.length - this.charsToGo)
+                        + ch;
                 this.charsToGo = this.delimiter.length;
             }
         }
     }
-    
+
 }

@@ -28,7 +28,6 @@
 
 package net.n3.nanoxml;
 
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Enumeration;
@@ -36,49 +35,42 @@ import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Stack;
 
-
 /**
- * NonValidator processes the DTD and handles entity definitions.
- * It does not do any validation itself.
- *
+ * NonValidator processes the DTD and handles entity definitions. It does not do
+ * any validation itself.
+ * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
-public class NonValidator
-    implements IXMLValidator
+public class NonValidator implements IXMLValidator
 {
 
     /**
      * Delimiter for CDATA sections.
      */
-    private static final char[] END_OF_CONDSECTION = { '>', ']', ']' };
-    
-    
+    private static final char[] END_OF_CONDSECTION = { '>', ']', ']'};
+
     /**
      * The parameter entity resolver.
      */
     protected IXMLEntityResolver parameterEntityResolver;
-    
-    
+
     /**
      * The parameter entity level.
      */
     protected int peLevel;
-    
-    
+
     /**
      * Contains the default values for attributes for the different element
      * types.
      */
     protected Hashtable attributeDefaultValues;
-    
-    
+
     /**
      * The stack of elements to be processed.
      */
     protected Stack currentElements;
-    
-    
+
     /**
      * Creates the &quot;validator&quot;.
      */
@@ -89,13 +81,11 @@ public class NonValidator
         this.parameterEntityResolver = new XMLEntityResolver();
         this.peLevel = 0;
     }
-    
-    
+
     /**
      * Cleans up the object when it's destroyed.
      */
-    protected void finalize()
-        throws Throwable
+    protected void finalize() throws Throwable
     {
         this.parameterEntityResolver = null;
         this.attributeDefaultValues.clear();
@@ -104,516 +94,525 @@ public class NonValidator
         this.currentElements = null;
         super.finalize();
     }
-    
-    
+
     /**
      * Sets the parameter entity resolver.
-     *
-     * @param resolver the entity resolver.
+     * 
+     * @param resolver
+     *            the entity resolver.
      */
     public void setParameterEntityResolver(IXMLEntityResolver resolver)
     {
         this.parameterEntityResolver = resolver;
     }
-    
-    
+
     /**
      * Returns the parameter entity resolver.
-     *
+     * 
      * @return the entity resolver.
      */
     public IXMLEntityResolver getParameterEntityResolver()
     {
         return this.parameterEntityResolver;
     }
-    
-    
+
     /**
-     * Parses the DTD. The validator object is responsible for reading the
-     * full DTD.
-     *
-     * @param publicID       the public ID, which may be null.
-     * @param reader         the reader to read the DTD from.
-     * @param entityResolver the entity resolver.
-     * @param external       true if the DTD is external.
-     *
+     * Parses the DTD. The validator object is responsible for reading the full
+     * DTD.
+     * 
+     * @param publicID
+     *            the public ID, which may be null.
+     * @param reader
+     *            the reader to read the DTD from.
+     * @param entityResolver
+     *            the entity resolver.
+     * @param external
+     *            true if the DTD is external.
+     * 
      * @throws java.lang.Exception
-     *     if something went wrong.
+     *             if something went wrong.
      */
-    public void parseDTD(String             publicID,
-                         IXMLReader         reader,
-                         IXMLEntityResolver entityResolver,
-                         boolean            external)
-        throws Exception
+    public void parseDTD(String publicID, IXMLReader reader, IXMLEntityResolver entityResolver,
+            boolean external) throws Exception
     {
         XMLUtil.skipWhitespace(reader, '%', null, null);
-        
-        for (;;) {
-            char ch = XMLUtil.read(reader, null, '%',
-                                   this.parameterEntityResolver);
-            
-            if (ch == '<') {
+
+        for (;;)
+        {
+            char ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+
+            if (ch == '<')
+            {
                 this.processElement(reader, entityResolver);
-            } else if (ch == ']') {
-                return; // end internal DTD
-            } else {
-                XMLUtil.errorInvalidInput(reader.getSystemID(),
-                                          reader.getLineNr(),
-                                          "" + ch);
             }
-            
-            do {
-                if (external
-                        && (peLevel == 0)
-                        && reader.atEOFOfCurrentStream()) {
-                    return; // end external DTD
+            else if (ch == ']')
+            {
+                return; // end internal DTD
+            }
+            else
+            {
+                XMLUtil.errorInvalidInput(reader.getSystemID(), reader.getLineNr(), "" + ch);
+            }
+
+            do
+            {
+                if (external && (peLevel == 0) && reader.atEOFOfCurrentStream()) { return; // end
+                // external
+                // DTD
                 }
-                
+
                 ch = reader.read();
-            } while ((ch == ' ') || (ch == '\t') || (ch == '\n')
-                     || (ch == '\r'));
-                     
+            }
+            while ((ch == ' ') || (ch == '\t') || (ch == '\n') || (ch == '\r'));
+
             reader.unread(ch);
             XMLUtil.skipWhitespace(reader, '%', null, null);
         }
     }
-    
 
     /**
      * Processes an element in the DTD.
-     *
-     * @param reader         the reader to read data from
-     * @param entityResolver the entity resolver
-     *
+     * 
+     * @param reader
+     *            the reader to read data from
+     * @param entityResolver
+     *            the entity resolver
+     * 
      * @throws java.lang.Exception
-     *     if something went wrong.
+     *             if something went wrong.
      */
-    protected void processElement(IXMLReader         reader,
-                                  IXMLEntityResolver entityResolver)
-        throws Exception
+    protected void processElement(IXMLReader reader, IXMLEntityResolver entityResolver)
+            throws Exception
     {
-        char ch = XMLUtil.read(reader, null,'%', this.parameterEntityResolver);
-        
-        if (ch != '!') {
+        char ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+
+        if (ch != '!')
+        {
             XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
             return;
         }
-        
+
         ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-        
-        switch (ch) {
-            case '-':
-                XMLUtil.skipComment(reader, this.parameterEntityResolver);
-                break;
-                
-            case '[':
-                this.processConditionalSection(reader, entityResolver);
-                break;
-                
-            case 'E':
-                this.processEntity(reader, entityResolver);
-                break;
-                
-            case 'A':
-                this.processAttList(reader, entityResolver);
-                break;
-                
-            default:
-                XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
+
+        switch (ch)
+        {
+        case '-':
+            XMLUtil.skipComment(reader, this.parameterEntityResolver);
+            break;
+
+        case '[':
+            this.processConditionalSection(reader, entityResolver);
+            break;
+
+        case 'E':
+            this.processEntity(reader, entityResolver);
+            break;
+
+        case 'A':
+            this.processAttList(reader, entityResolver);
+            break;
+
+        default:
+            XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
         }
     }
-    
-    
+
     /**
      * Processes a conditional section.
-     *
-     * @param reader         the reader to read data from
-     * @param entityResolver the entity resolver
-     *
+     * 
+     * @param reader
+     *            the reader to read data from
+     * @param entityResolver
+     *            the entity resolver
+     * 
      * @throws java.lang.Exception
-     *     if something went wrong.
+     *             if something went wrong.
      */
-    protected void processConditionalSection(IXMLReader         reader,
-                                             IXMLEntityResolver entityResolver)
-        throws Exception
+    protected void processConditionalSection(IXMLReader reader, IXMLEntityResolver entityResolver)
+            throws Exception
     {
         XMLUtil.skipWhitespace(reader, '%', null, null);
-        
-        char ch = XMLUtil.read(reader, null,'%', this.parameterEntityResolver);
-        
-        if (ch != 'I') {
+
+        char ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+
+        if (ch != 'I')
+        {
             XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
             return;
         }
-        
+
         ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-        
-        switch (ch) {
-            case 'G':
-                this.processIgnoreSection(reader, entityResolver);
-                return;
-                
-            case 'N':
-                break;
-                
-            default:
-                XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
-                return;
-        }
-        
-        if (! XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver,
-                                   "CLUDE")) {
+
+        switch (ch)
+        {
+        case 'G':
+            this.processIgnoreSection(reader, entityResolver);
+            return;
+
+        case 'N':
+            break;
+
+        default:
             XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
             return;
         }
-        
+
+        if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "CLUDE"))
+        {
+            XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
+            return;
+        }
+
         XMLUtil.skipWhitespace(reader, '%', null, null);
-        
+
         ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-        
-        if (ch != '[') {
+
+        if (ch != '[')
+        {
             XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
             return;
         }
-        
-        Reader subreader
-                = new ContentReader(reader, this.parameterEntityResolver,
-                                    '\0', NonValidator.END_OF_CONDSECTION,
-                                    true, "");
+
+        Reader subreader = new ContentReader(reader, this.parameterEntityResolver, '\0',
+                NonValidator.END_OF_CONDSECTION, true, "");
         StringBuffer buf = new StringBuffer(1024);
-        
-        for (;;) {
+
+        for (;;)
+        {
             int ch2 = subreader.read();
-            
-            if (ch2 < 0) {
+
+            if (ch2 < 0)
+            {
                 break;
             }
-            
+
             buf.append((char) ch2);
         }
-        
+
         subreader.close();
-        reader.startNewStream(new StringReader(buf.toString())); 
+        reader.startNewStream(new StringReader(buf.toString()));
     }
-        
-    
-    
+
     /**
      * Processes an ignore section.
-     *
-     * @param reader         the reader to read data from
-     * @param entityResolver the entity resolver
-     *
+     * 
+     * @param reader
+     *            the reader to read data from
+     * @param entityResolver
+     *            the entity resolver
+     * 
      * @throws java.lang.Exception
-     *     if something went wrong.
+     *             if something went wrong.
      */
-    protected void processIgnoreSection(IXMLReader         reader,
-                                        IXMLEntityResolver entityResolver)
-        throws Exception
+    protected void processIgnoreSection(IXMLReader reader, IXMLEntityResolver entityResolver)
+            throws Exception
     {
-        if (! XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver,
-                                   "NORE")) {
+        if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "NORE"))
+        {
             XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
             return;
         }
-        
+
         XMLUtil.skipWhitespace(reader, '%', null, null);
-        
-        char ch = XMLUtil.read(reader, null,'%', this.parameterEntityResolver);
-        
-        if (ch != '[') {
+
+        char ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+
+        if (ch != '[')
+        {
             XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
             return;
         }
-        
-        Reader subreader
-                = new ContentReader(reader, this.parameterEntityResolver,
-                                    '\0', NonValidator.END_OF_CONDSECTION,
-                                    true, "");
+
+        Reader subreader = new ContentReader(reader, this.parameterEntityResolver, '\0',
+                NonValidator.END_OF_CONDSECTION, true, "");
         subreader.close();
     }
-        
-    
+
     /**
      * Processes an ATTLIST element.
-     *
-     * @param reader         the reader to read data from
-     * @param entityResolver the entity resolver
-     *
+     * 
+     * @param reader
+     *            the reader to read data from
+     * @param entityResolver
+     *            the entity resolver
+     * 
      * @throws java.lang.Exception
-     *     if something went wrong.
+     *             if something went wrong.
      */
-    protected void processAttList(IXMLReader         reader,
-                                  IXMLEntityResolver entityResolver)
-        throws Exception
+    protected void processAttList(IXMLReader reader, IXMLEntityResolver entityResolver)
+            throws Exception
     {
-        if (! XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver,
-                                   "TTLIST")) {
+        if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "TTLIST"))
+        {
             XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
             return;
         }
-        
+
         XMLUtil.skipWhitespace(reader, '%', null, null);
-        String elementName
-                = XMLUtil.scanIdentifier(reader, '%',
-                                         this.parameterEntityResolver);
+        String elementName = XMLUtil.scanIdentifier(reader, '%', this.parameterEntityResolver);
         XMLUtil.skipWhitespace(reader, '%', null, null);
-        char ch = XMLUtil.read(reader, null,'%', this.parameterEntityResolver);
+        char ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
         Properties props = new Properties();
-        
-        while (ch != '>') {
+
+        while (ch != '>')
+        {
             reader.unread(ch);
-            String attName
-                    = XMLUtil.scanIdentifier(reader, '%',
-                                             this.parameterEntityResolver);
+            String attName = XMLUtil.scanIdentifier(reader, '%', this.parameterEntityResolver);
             XMLUtil.skipWhitespace(reader, '%', null, null);
             ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-            
-            if (ch == '(') {
-                while (ch != ')') {
-                    ch = XMLUtil.read(reader, null, '%',
-                                      this.parameterEntityResolver);
+
+            if (ch == '(')
+            {
+                while (ch != ')')
+                {
+                    ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
                 }
-            } else {
-                reader.unread(ch);
-                XMLUtil.scanIdentifier(reader, '%',
-                                       this.parameterEntityResolver);
             }
-            
+            else
+            {
+                reader.unread(ch);
+                XMLUtil.scanIdentifier(reader, '%', this.parameterEntityResolver);
+            }
+
             XMLUtil.skipWhitespace(reader, '%', null, null);
             ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-            
-            if (ch == '#') {
-                String str
-                        = XMLUtil.scanIdentifier(reader, '%',
-                                                 this.parameterEntityResolver);
+
+            if (ch == '#')
+            {
+                String str = XMLUtil.scanIdentifier(reader, '%', this.parameterEntityResolver);
                 XMLUtil.skipWhitespace(reader, '%', null, null);
-                
-                if (! str.equals("FIXED")) {
+
+                if (!str.equals("FIXED"))
+                {
                     XMLUtil.skipWhitespace(reader, '%', null, null);
-                    ch = XMLUtil.read(reader, null, '%',
-                                      this.parameterEntityResolver);
+                    ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
                     continue;
                 }
-            } else {
+            }
+            else
+            {
                 reader.unread(ch);
             }
-            
-            String value = XMLUtil.scanString(reader, '%', false,
-                                              this.parameterEntityResolver);
+
+            String value = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
             props.put(attName, value);
             XMLUtil.skipWhitespace(reader, '%', null, null);
             ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
         }
-        
-        if (! props.isEmpty()) {
+
+        if (!props.isEmpty())
+        {
             this.attributeDefaultValues.put(elementName, props);
         }
     }
-    
-    
+
     /**
      * Processes an ENTITY element.
-     *
-     * @param reader         the reader to read data from
-     * @param entityResolver the entity resolver
-     *
+     * 
+     * @param reader
+     *            the reader to read data from
+     * @param entityResolver
+     *            the entity resolver
+     * 
      * @throws java.lang.Exception
-     *     if something went wrong.
+     *             if something went wrong.
      */
-    protected void processEntity(IXMLReader         reader,
-                                 IXMLEntityResolver entityResolver)
-        throws Exception
+    protected void processEntity(IXMLReader reader, IXMLEntityResolver entityResolver)
+            throws Exception
     {
-        if (! XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver,
-                                   "NTITY")) {
+        if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "NTITY"))
+        {
             XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
             return;
         }
-        
+
         XMLUtil.skipWhitespace(reader, '\0', null, null);
-        char ch = XMLUtil.read(reader, null, '\0',
-                               this.parameterEntityResolver);
-        
-        if (ch == '%') {
+        char ch = XMLUtil.read(reader, null, '\0', this.parameterEntityResolver);
+
+        if (ch == '%')
+        {
             XMLUtil.skipWhitespace(reader, '%', null, null);
             entityResolver = this.parameterEntityResolver;
-        } else {
+        }
+        else
+        {
             reader.unread(ch);
         }
-        
-        String key = XMLUtil.scanIdentifier(reader, '%',
-                                            this.parameterEntityResolver);
+
+        String key = XMLUtil.scanIdentifier(reader, '%', this.parameterEntityResolver);
         XMLUtil.skipWhitespace(reader, '%', null, null);
         ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
         String systemID = null;
         String publicID = null;
-        
-        switch (ch) {
-            case 'P':
-                if (! XMLUtil.checkLiteral(reader, '%',
-                                           this.parameterEntityResolver,
-                                           "UBLIC")) {
-                    XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
-                    return;
-                }
-                
-                XMLUtil.skipWhitespace(reader, '%', null, null);
-                publicID = XMLUtil.scanString(reader, '%', false,
-                                              this.parameterEntityResolver);
-                XMLUtil.skipWhitespace(reader, '%', null, null);
-                systemID = XMLUtil.scanString(reader, '%', false,
-                                              this.parameterEntityResolver);
-                XMLUtil.skipWhitespace(reader, '%', null, null);
-                XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-                break;
-                
-            case 'S':
-                if (! XMLUtil.checkLiteral(reader, '%',
-                                           this.parameterEntityResolver,
-                                           "YSTEM")) {
-                    XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
-                    return;
-                }
-        
-                XMLUtil.skipWhitespace(reader, '%', null, null);
-                systemID = XMLUtil.scanString(reader, '%', false,
-                                              this.parameterEntityResolver);
-                XMLUtil.skipWhitespace(reader, '%', null, null);
-                XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-                break;
-                
-            case '"':
-            case '\'':
-                reader.unread(ch);
-                String value = XMLUtil.scanString(reader, '%', false,
-                                                 this.parameterEntityResolver);
-                entityResolver.addInternalEntity(key, value);
-                XMLUtil.skipWhitespace(reader, '%', null, null);
-                XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-                break;
-            default:
+
+        switch (ch)
+        {
+        case 'P':
+            if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "UBLIC"))
+            {
                 XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
+                return;
+            }
+
+            XMLUtil.skipWhitespace(reader, '%', null, null);
+            publicID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
+            XMLUtil.skipWhitespace(reader, '%', null, null);
+            systemID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
+            XMLUtil.skipWhitespace(reader, '%', null, null);
+            XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+            break;
+
+        case 'S':
+            if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "YSTEM"))
+            {
+                XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
+                return;
+            }
+
+            XMLUtil.skipWhitespace(reader, '%', null, null);
+            systemID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
+            XMLUtil.skipWhitespace(reader, '%', null, null);
+            XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+            break;
+
+        case '"':
+        case '\'':
+            reader.unread(ch);
+            String value = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
+            entityResolver.addInternalEntity(key, value);
+            XMLUtil.skipWhitespace(reader, '%', null, null);
+            XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+            break;
+        default:
+            XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
         }
-        
-        if (systemID != null) {
+
+        if (systemID != null)
+        {
             entityResolver.addExternalEntity(key, publicID, systemID);
         }
     }
-     
 
     /**
      * Indicates that an element has been started.
-     *
-     * @param name       the name of the element.
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemId the system ID associated with the namespace
-     * @param systemId   the system ID of the XML data of the element.
-     * @param lineNr     the line number in the XML data of the element.
+     * 
+     * @param name
+     *            the name of the element.
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemId
+     *            the system ID associated with the namespace
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
      */
-    public void elementStarted(String name,
-                               String nsPrefix,
-                               String nsSystemId,
-                               String systemId,
-                               int    lineNr)
+    public void elementStarted(String name, String nsPrefix, String nsSystemId, String systemId,
+            int lineNr)
     {
-        Properties attribs
-                = (Properties) this.attributeDefaultValues.get(name);
-        
-        if (attribs == null) {
+        Properties attribs = (Properties) this.attributeDefaultValues.get(name);
+
+        if (attribs == null)
+        {
             attribs = new Properties();
-        } else {
+        }
+        else
+        {
             attribs = (Properties) attribs.clone();
         }
-        
+
         this.currentElements.push(attribs);
     }
-    
-                             
+
     /**
      * Indicates that the current element has ended.
-     *
-     * @param name       the name of the element.
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemId the system ID associated with the namespace
-     * @param systemId   the system ID of the XML data of the element.
-     * @param lineNr     the line number in the XML data of the element.
+     * 
+     * @param name
+     *            the name of the element.
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemId
+     *            the system ID associated with the namespace
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
      */
-    public void elementEnded(String name,
-                             String nsPrefix,
-                             String nsSystemId,
-                             String systemId,
-                             int    lineNr)
+    public void elementEnded(String name, String nsPrefix, String nsSystemId, String systemId,
+            int lineNr)
     {
         // nothing to do
     }
-    
-    
+
     /**
      * This method is called when the attributes of an XML element have been
-     * processed.
-     * If there are attributes with a default value which have not been
-     * specified yet, they have to be put into <I>extraAttributes</I>.
-     *
-     * @param name            the name of the element.
-     * @param nsPrefix        the prefix used to identify the namespace
-     * @param nsSystemId      the system ID associated with the namespace
-     * @param extraAttributes where to put extra attributes.
-     * @param systemId        the system ID of the XML data of the element.
-     * @param lineNr          the line number in the XML data of the element.
+     * processed. If there are attributes with a default value which have not
+     * been specified yet, they have to be put into <I>extraAttributes</I>.
+     * 
+     * @param name
+     *            the name of the element.
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemId
+     *            the system ID associated with the namespace
+     * @param extraAttributes
+     *            where to put extra attributes.
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
      */
-    public void elementAttributesProcessed(String     name,
-                                           String     nsPrefix,
-                                           String     nsSystemId,
-                                           Properties extraAttributes,
-                                           String     systemId,
-                                           int        lineNr)
+    public void elementAttributesProcessed(String name, String nsPrefix, String nsSystemId,
+            Properties extraAttributes, String systemId, int lineNr)
     {
         Properties props = (Properties) this.currentElements.pop();
         Enumeration enum = props.keys();
-        
-        while (enum.hasMoreElements()) {
+
+        while (enum.hasMoreElements())
+        {
             String key = (String) enum.nextElement();
             extraAttributes.put(key, props.get(key));
         }
     }
-    
-    
+
     /**
      * Indicates that an attribute has been added to the current element.
-     *
-     * @param key        the name of the attribute.
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemId the system ID associated with the namespace
-     * @param value      the value of the attribute.
-     * @param systemId   the system ID of the XML data of the element.
-     * @param lineNr     the line number in the XML data of the element.
+     * 
+     * @param key
+     *            the name of the attribute.
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemId
+     *            the system ID associated with the namespace
+     * @param value
+     *            the value of the attribute.
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
      */
-    public void attributeAdded(String key,
-                               String nsPrefix,
-                               String nsSystemId,
-                               String value,
-                               String systemId,
-                               int    lineNr)
+    public void attributeAdded(String key, String nsPrefix, String nsSystemId, String value,
+            String systemId, int lineNr)
     {
         Properties props = (Properties) this.currentElements.peek();
-        
-        if (props.containsKey(key)) {
+
+        if (props.containsKey(key))
+        {
             props.remove(key);
         }
     }
-    
-                             
+
     /**
      * Indicates that a new #PCDATA element has been encountered.
-     *
-     * @param systemId the system ID of the XML data of the element.
-     * @param lineNr   the line number in the XML data of the element.
+     * 
+     * @param systemId
+     *            the system ID of the XML data of the element.
+     * @param lineNr
+     *            the line number in the XML data of the element.
      */
-    public void PCDataAdded(String systemId,
-                            int    lineNr)
+    public void PCDataAdded(String systemId, int lineNr)
     {
         // nothing to do
     }
-   
+
 }

@@ -24,42 +24,46 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package   com.izforge.izpack.panels;
+package com.izforge.izpack.panels;
 
 /*---------------------------------------------------------------------------*/
 /**
  * Implement this interface in any class that wants to use processing or
  * validation services.
- *
- * @see      com.izforge.izpack.panels.Processor
- * @see      com.izforge.izpack.panels.Validator
- *
- * @version  0.0.1 / 2/22/03
- * @author   Elmar Grom
+ * 
+ * @see com.izforge.izpack.panels.Processor
+ * @see com.izforge.izpack.panels.Validator
+ * 
+ * @version 0.0.1 / 2/22/03
+ * @author Elmar Grom
  */
 /*---------------------------------------------------------------------------*/
 public interface ProcessingClient
 {
- /*--------------------------------------------------------------------------*/
- /**
-  * Returns the number of sub-fields.
-  *
-  * @return    the number of sub-fields
-  */
- /*--------------------------------------------------------------------------*/
-  public int getNumFields ();
- /*--------------------------------------------------------------------------*/
- /**
-  * Returns the contents of the field indicated by <code>index</code>.
-  *
-  * @param     index  the index of the sub-field from which the contents
-  *                   is requested.
-  *
-  * @return    the contents of the indicated sub-field.
-  *
-  * @exception IndexOutOfBoundsException if the index is out of bounds.
-  */
- /*--------------------------------------------------------------------------*/
-  public String getFieldContents (int index);
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Returns the number of sub-fields.
+     * 
+     * @return the number of sub-fields
+     */
+    /*--------------------------------------------------------------------------*/
+    public int getNumFields();
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Returns the contents of the field indicated by <code>index</code>.
+     * 
+     * @param index
+     *            the index of the sub-field from which the contents is
+     *            requested.
+     * 
+     * @return the contents of the indicated sub-field.
+     * 
+     * @exception IndexOutOfBoundsException
+     *                if the index is out of bounds.
+     */
+    /*--------------------------------------------------------------------------*/
+    public String getFieldContents(int index);
 }
 /*---------------------------------------------------------------------------*/

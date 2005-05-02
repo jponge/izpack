@@ -31,43 +31,48 @@ import com.izforge.izpack.installer.PanelAutomation;
 
 /**
  * Functions to support automated usage of the TargetPanel
- *
+ * 
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
 public class TargetPanelAutomationHelper implements PanelAutomation
 {
-	/**
-	 *  Asks to make the XML panel data.
-	 *
-	 * @param idata The installation data.
-	 * @param panelRoot The tree to put the data in.
-	 */
-	public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
-	{
-		// Installation path markup
-		XMLElement ipath = new XMLElement("installpath");
-		// check this writes even if value is the default,
-		// because without the constructor, default does not get set.
-		ipath.setContent(idata.getInstallPath());
-		
-                // Checkings to fix bug #1864
-                XMLElement prev = panelRoot.getFirstChildNamed("installpath");
-                if (prev != null) panelRoot.removeChild(prev);
-                
-                panelRoot.addChild(ipath);
-	}
 
-	/**
-	 *  Asks to run in the automated mode.
-	 *
-	 * @param idata The installation data.
-	 * @param panelRoot The XML tree to read the data from.
-	 */
-	public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
-	{
-		// We set the installation path
-		XMLElement ipath = panelRoot.getFirstChildNamed("installpath");
-		idata.setInstallPath(ipath.getContent());
-	}
+    /**
+     * Asks to make the XML panel data.
+     * 
+     * @param idata
+     *            The installation data.
+     * @param panelRoot
+     *            The tree to put the data in.
+     */
+    public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
+    {
+        // Installation path markup
+        XMLElement ipath = new XMLElement("installpath");
+        // check this writes even if value is the default,
+        // because without the constructor, default does not get set.
+        ipath.setContent(idata.getInstallPath());
+
+        // Checkings to fix bug #1864
+        XMLElement prev = panelRoot.getFirstChildNamed("installpath");
+        if (prev != null) panelRoot.removeChild(prev);
+
+        panelRoot.addChild(ipath);
+    }
+
+    /**
+     * Asks to run in the automated mode.
+     * 
+     * @param idata
+     *            The installation data.
+     * @param panelRoot
+     *            The XML tree to read the data from.
+     */
+    public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    {
+        // We set the installation path
+        XMLElement ipath = panelRoot.getFirstChildNamed("installpath");
+        idata.setInstallPath(ipath.getContent());
+    }
 }

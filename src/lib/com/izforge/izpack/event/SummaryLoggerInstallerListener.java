@@ -38,59 +38,59 @@ import com.izforge.izpack.util.SummaryProcessor;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
- * Installer listener which writes the summary of all panels
- * into the logfile which is defined by info.summarylogfilepath. 
- * Default is $INSTALL_PATH/Uninstaller/InstallSummary.htm
- *
- * @author  Klaus Bartz
- *
+ * Installer listener which writes the summary of all panels into the logfile
+ * which is defined by info.summarylogfilepath. Default is
+ * $INSTALL_PATH/Uninstaller/InstallSummary.htm
+ * 
+ * @author Klaus Bartz
+ * 
  */
 public class SummaryLoggerInstallerListener extends SimpleInstallerListener
 {
-  /**
-   * Default constructor.
-   */
-  public SummaryLoggerInstallerListener()
-  {
-    super(false);
-  }
-  /* (non-Javadoc)
-   * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData, com.izforge.izpack.util.AbstractUIProgressHandler)
-   */
-  public void afterPacks(
-    AutomatedInstallData idata,
-    AbstractUIProgressHandler handler)
-    throws Exception
-  {
-    if( ! getInstalldata().installSuccess )
-      return;
-    // No logfile at automated installation because panels are not
-    // involved.
-    if( getInstalldata().panels == null || getInstalldata().panels.size() < 1)
-      return;
-    String path = getInstalldata().info.getSummaryLogFilePath();
-    if( path == null )
-      return;
-    VariableSubstitutor vs = new VariableSubstitutor(getInstalldata().getVariables());
-    path = IoHelper.translatePath(path, vs);
-    File parent = new File(path).getParentFile();
-    
-    if( ! parent.exists())
+
+    /**
+     * Default constructor.
+     */
+    public SummaryLoggerInstallerListener()
     {
-      parent.mkdirs();
+        super(false);
     }
-    PrintWriter logfile = null;
-    try
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
+     *      com.izforge.izpack.util.AbstractUIProgressHandler)
+     */
+    public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
+            throws Exception
     {
-      logfile = new PrintWriter(new FileOutputStream(path), true);
+        if (!getInstalldata().installSuccess) return;
+        // No logfile at automated installation because panels are not
+        // involved.
+        if (getInstalldata().panels == null || getInstalldata().panels.size() < 1) return;
+        String path = getInstalldata().info.getSummaryLogFilePath();
+        if (path == null) return;
+        VariableSubstitutor vs = new VariableSubstitutor(getInstalldata().getVariables());
+        path = IoHelper.translatePath(path, vs);
+        File parent = new File(path).getParentFile();
+
+        if (!parent.exists())
+        {
+            parent.mkdirs();
+        }
+        PrintWriter logfile = null;
+        try
+        {
+            logfile = new PrintWriter(new FileOutputStream(path), true);
+        }
+        catch (IOException e)
+        {
+            Debug.error(e);
+        }
+        String summary = SummaryProcessor.getSummary(getInstalldata());
+        logfile.print(summary);
+        logfile.close();
     }
-    catch (IOException e)
-    {
-      Debug.error(e);
-    }
-    String summary = SummaryProcessor.getSummary(getInstalldata());
-    logfile.print(summary);
-    logfile.close();
-  }
 
 }

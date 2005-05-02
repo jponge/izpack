@@ -47,185 +47,190 @@ import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 /**
- *  The process panel class.
- *
- * This class allows external processes to be executed during installation.
- *
- * Parts of the code have been taken from CompilePanel.java and
- * modified a lot. 
+ * The process panel class.
  * 
- * @author     Tino Schwarze
- * @author     Julien Ponge
+ * This class allows external processes to be executed during installation.
+ * 
+ * Parts of the code have been taken from CompilePanel.java and modified a lot.
+ * 
+ * @author Tino Schwarze
+ * @author Julien Ponge
  */
 public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
 {
-  /**  The operation label . */
-  protected JLabel processLabel;
 
-  /**  The overall progress bar. */
-  protected JProgressBar overallProgressBar;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3258417209583155251L;
 
-  /**  True if the compilation has been done. */
-  private boolean validated = false;
+    /** The operation label . */
+    protected JLabel processLabel;
 
-  /**  The processing worker. Does all the work. */
-  private ProcessPanelWorker worker;
+    /** The overall progress bar. */
+    protected JProgressBar overallProgressBar;
 
-  /**  Number of jobs to process. Used for progress indication. */
-  private int noOfJobs;
+    /** True if the compilation has been done. */
+    private boolean validated = false;
 
-  private int currentJob;
+    /** The processing worker. Does all the work. */
+    private ProcessPanelWorker worker;
 
-  /**  Where the output is displayed */
-  private JTextArea outputPane;
+    /** Number of jobs to process. Used for progress indication. */
+    private int noOfJobs;
 
-  private JScrollPane outputScrollPane;
+    private int currentJob;
 
-  /**
-   *  The constructor.
-   *
-   * @param  parent  The parent window.
-   * @param  idata   The installation data.
-   */
-  public ProcessPanel(InstallerFrame parent, InstallData idata)
-    throws IOException
-  {
-    super(parent, idata);
+    /** Where the output is displayed */
+    private JTextArea outputPane;
 
-    this.worker = new ProcessPanelWorker(idata, this);
+    private JScrollPane outputScrollPane;
 
-    JLabel heading = new JLabel();
-    Font font = heading.getFont();
-    font = font.deriveFont(Font.BOLD, font.getSize() * 2.0f);
-    heading.setFont(font);
-    heading.setHorizontalAlignment(SwingConstants.CENTER);
-    heading.setText(parent.langpack.getString("ProcessPanel.heading"));
-    heading.setVerticalAlignment(SwingConstants.TOP);
-    setLayout(new BorderLayout());
-    add(heading, BorderLayout.NORTH);
+    /**
+     * The constructor.
+     * 
+     * @param parent
+     *            The parent window.
+     * @param idata
+     *            The installation data.
+     */
+    public ProcessPanel(InstallerFrame parent, InstallData idata) throws IOException
+    {
+        super(parent, idata);
 
-    // put everything but the heading into it's own panel
-    // (to center it vertically)
-    JPanel subpanel = new JPanel();
+        this.worker = new ProcessPanelWorker(idata, this);
 
-    subpanel.setAlignmentX(0.5f);
-    subpanel.setLayout(new BoxLayout(subpanel, BoxLayout.Y_AXIS));
+        JLabel heading = new JLabel();
+        Font font = heading.getFont();
+        font = font.deriveFont(Font.BOLD, font.getSize() * 2.0f);
+        heading.setFont(font);
+        heading.setHorizontalAlignment(SwingConstants.CENTER);
+        heading.setText(parent.langpack.getString("ProcessPanel.heading"));
+        heading.setVerticalAlignment(SwingConstants.TOP);
+        setLayout(new BorderLayout());
+        add(heading, BorderLayout.NORTH);
 
-    this.processLabel = new JLabel();
-    this.processLabel.setAlignmentX(0.5f);
-    this.processLabel.setText(" ");
-    subpanel.add(this.processLabel);
+        // put everything but the heading into it's own panel
+        // (to center it vertically)
+        JPanel subpanel = new JPanel();
 
-    this.overallProgressBar = new JProgressBar();
-    this.overallProgressBar.setAlignmentX(0.5f);
-    this.overallProgressBar.setStringPainted(true);
-    subpanel.add(this.overallProgressBar);
+        subpanel.setAlignmentX(0.5f);
+        subpanel.setLayout(new BoxLayout(subpanel, BoxLayout.Y_AXIS));
 
-    this.outputPane = new JTextArea();
-    this.outputPane.setEditable(false);
-    this.outputScrollPane = new JScrollPane(this.outputPane);
-    subpanel.add(this.outputScrollPane);
+        this.processLabel = new JLabel();
+        this.processLabel.setAlignmentX(0.5f);
+        this.processLabel.setText(" ");
+        subpanel.add(this.processLabel);
 
-    add(subpanel, BorderLayout.CENTER);
-  }
+        this.overallProgressBar = new JProgressBar();
+        this.overallProgressBar.setAlignmentX(0.5f);
+        this.overallProgressBar.setStringPainted(true);
+        subpanel.add(this.overallProgressBar);
 
-  /**
-   *  Indicates wether the panel has been validated or not.
-   *
-   * @return    The validation state.
-   */
-  public boolean isValidated()
-  {
-    return validated;
-  }
+        this.outputPane = new JTextArea();
+        this.outputPane.setEditable(false);
+        this.outputScrollPane = new JScrollPane(this.outputPane);
+        subpanel.add(this.outputScrollPane);
 
-  /**  The compiler starts.  */
-  public void startProcessing(int no_of_jobs)
-  {
-    this.noOfJobs = no_of_jobs;
-    overallProgressBar.setMaximum(noOfJobs);
-    parent.lockPrevButton();
-  }
+        add(subpanel, BorderLayout.CENTER);
+    }
 
-  /**  The compiler stops.  */
-  public void finishProcessing()
-  {
-    overallProgressBar.setValue(this.noOfJobs);
-    String no_of_jobs = Integer.toString(this.noOfJobs);
-    overallProgressBar.setString(no_of_jobs + " / " + no_of_jobs);
-    overallProgressBar.setEnabled(false);
+    /**
+     * Indicates wether the panel has been validated or not.
+     * 
+     * @return The validation state.
+     */
+    public boolean isValidated()
+    {
+        return validated;
+    }
 
-    processLabel.setText(" ");
-    processLabel.setEnabled(false);
+    /** The compiler starts. */
+    public void startProcessing(int no_of_jobs)
+    {
+        this.noOfJobs = no_of_jobs;
+        overallProgressBar.setMaximum(noOfJobs);
+        parent.lockPrevButton();
+    }
 
-    validated = true;
-    idata.installSuccess = true;
-    if (idata.panels.indexOf(this) != (idata.panels.size() - 1))
-      parent.unlockNextButton();
-  }
+    /** The compiler stops. */
+    public void finishProcessing()
+    {
+        overallProgressBar.setValue(this.noOfJobs);
+        String no_of_jobs = Integer.toString(this.noOfJobs);
+        overallProgressBar.setString(no_of_jobs + " / " + no_of_jobs);
+        overallProgressBar.setEnabled(false);
 
-  /**
-   * Log a message.
-   * 
-   * @param message The message.
-   * @param stderr Whether the message came from stderr or stdout.
-   */
-  public void logOutput(String message, boolean stderr)
-  {
-    // TODO: make it colored
-    this.outputPane.append(message + '\n');
-    
-    SwingUtilities.invokeLater(new Runnable() 
-      {
-        public void run()
-        {
-          outputPane.setCaretPosition(outputPane.getText().length());
-        }
-      }
-    );
-  }
+        processLabel.setText(" ");
+        processLabel.setEnabled(false);
 
-  /**
-   *  Next job starts.
-   *
-   * @param  jobName   The job name.
-   */
-  public void startProcess(String jobName)
-  {
-    processLabel.setText(jobName);
+        validated = true;
+        idata.installSuccess = true;
+        if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) parent.unlockNextButton();
+    }
 
-    this.currentJob++;
-    overallProgressBar.setValue(this.currentJob);
-    overallProgressBar.setString(
-      Integer.toString(this.currentJob)
-        + " / "
-        + Integer.toString(this.noOfJobs));
-  }
+    /**
+     * Log a message.
+     * 
+     * @param message
+     *            The message.
+     * @param stderr
+     *            Whether the message came from stderr or stdout.
+     */
+    public void logOutput(String message, boolean stderr)
+    {
+        // TODO: make it colored
+        this.outputPane.append(message + '\n');
 
-  public void finishProcess()
-  {
-  }
+        SwingUtilities.invokeLater(new Runnable() {
 
-  /**  Called when the panel becomes active.  */
-  public void panelActivate()
-  {
-    // We clip the panel
-    Dimension dim = parent.getPanelsContainerSize();
-    dim.width = dim.width - (dim.width / 4);
-    dim.height = 150;
-    setMinimumSize(dim);
-    setMaximumSize(dim);
-    setPreferredSize(dim);
+            public void run()
+            {
+                outputPane.setCaretPosition(outputPane.getText().length());
+            }
+        });
+    }
 
-    parent.lockNextButton();
+    /**
+     * Next job starts.
+     * 
+     * @param jobName
+     *            The job name.
+     */
+    public void startProcess(String jobName)
+    {
+        processLabel.setText(jobName);
 
-    this.worker.startThread();
-  }
+        this.currentJob++;
+        overallProgressBar.setValue(this.currentJob);
+        overallProgressBar.setString(Integer.toString(this.currentJob) + " / "
+                + Integer.toString(this.noOfJobs));
+    }
 
-  /** Create XML data for automated installation. */
-  public void makeXMLData(XMLElement panelRoot)
-  {
-    // does nothing (no state to save)
-  }
+    public void finishProcess()
+    {
+    }
+
+    /** Called when the panel becomes active. */
+    public void panelActivate()
+    {
+        // We clip the panel
+        Dimension dim = parent.getPanelsContainerSize();
+        dim.width = dim.width - (dim.width / 4);
+        dim.height = 150;
+        setMinimumSize(dim);
+        setMaximumSize(dim);
+        setPreferredSize(dim);
+
+        parent.lockNextButton();
+
+        this.worker.startThread();
+    }
+
+    /** Create XML data for automated installation. */
+    public void makeXMLData(XMLElement panelRoot)
+    {
+        // does nothing (no state to save)
+    }
 
 }

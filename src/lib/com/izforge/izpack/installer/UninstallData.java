@@ -32,148 +32,155 @@ import java.util.Map;
 import com.izforge.izpack.ExecutableFile;
 
 /**
- *  Holds uninstallation data. Implemented as a singleton.
- *
- * @author     Julien Ponge
- * created    October 27, 2002
+ * Holds uninstallation data. Implemented as a singleton.
+ * 
+ * @author Julien Ponge created October 27, 2002
  */
 public class UninstallData
 {
-  /**  The uninstall data object. */
-  private static UninstallData instance = null;
 
-  /**  The files list. */
-  private List filesList;
+    /** The uninstall data object. */
+    private static UninstallData instance = null;
 
-  /**  The executables list. */
-  private List executablesList;
+    /** The files list. */
+    private List filesList;
 
-  /**  The uninstaller jar filename. */
-  private String uninstallerJarFilename;
+    /** The executables list. */
+    private List executablesList;
 
-  /**  The uninstaller path. */
-  private String uninstallerPath;
+    /** The uninstaller jar filename. */
+    private String uninstallerJarFilename;
 
-  /**  Additional uninstall data like uninstaller listener list. */
-  private Map additionalData;
-  
-  /**  The constructor.  */
-  private UninstallData()
-  {
-    filesList = new ArrayList();
-    executablesList = new ArrayList();
-    additionalData  = new HashMap();
-  }
+    /** The uninstaller path. */
+    private String uninstallerPath;
 
-  /**
-   *  Returns the instance (it is a singleton).
-   *
-   * @return    The instance.
-   */
-  public synchronized static UninstallData getInstance()
-  {
-    if (instance == null)
-      instance = new UninstallData();
-    return instance;
-  }
+    /** Additional uninstall data like uninstaller listener list. */
+    private Map additionalData;
 
-  /**
-   *  Adds a file to the data.
-   *
-   * @param  path  The file to add.
-   */
-  public synchronized void addFile(String path)
-  {
-    filesList.add(path);
-  }
+    /** The constructor. */
+    private UninstallData()
+    {
+        filesList = new ArrayList();
+        executablesList = new ArrayList();
+        additionalData = new HashMap();
+    }
 
-  /**
-   *  Returns the files list.
-   *
-   * @return    The files list.
-   */
-  public List getFilesList()
-  {
-    return filesList;
-  }
+    /**
+     * Returns the instance (it is a singleton).
+     * 
+     * @return The instance.
+     */
+    public synchronized static UninstallData getInstance()
+    {
+        if (instance == null) instance = new UninstallData();
+        return instance;
+    }
 
-  /**
-   *  Adds an executable to the data.
-   *
-   * @param file The executable file.
-   */
-  public synchronized void addExecutable(ExecutableFile file)
-  {
-    executablesList.add(file);
-  }
+    /**
+     * Adds a file to the data.
+     * 
+     * @param path
+     *            The file to add.
+     */
+    public synchronized void addFile(String path)
+    {
+        filesList.add(path);
+    }
 
-  /**
-   *  Returns the executables list.
-   *
-   * @return    The executables list.
-   */
-  public List getExecutablesList()
-  {
-    return executablesList;
-  }
+    /**
+     * Returns the files list.
+     * 
+     * @return The files list.
+     */
+    public List getFilesList()
+    {
+        return filesList;
+    }
 
-  /**
-   *  Returns the uninstaller jar filename.
-   *
-   * @return    The uninstaller jar filename.
-   */
-  public synchronized String getUninstallerJarFilename()
-  {
-    return uninstallerJarFilename;
-  }
+    /**
+     * Adds an executable to the data.
+     * 
+     * @param file
+     *            The executable file.
+     */
+    public synchronized void addExecutable(ExecutableFile file)
+    {
+        executablesList.add(file);
+    }
 
-  /**
-   *  Sets the uninstaller jar filename.
-   *
-   * @param  name  The uninstaller jar filename.
-   */
-  public synchronized void setUninstallerJarFilename(String name)
-  {
-    uninstallerJarFilename = name;
-  }
+    /**
+     * Returns the executables list.
+     * 
+     * @return The executables list.
+     */
+    public List getExecutablesList()
+    {
+        return executablesList;
+    }
 
-  /**
-   *  Returns the path to the uninstaller.
-   *
-   * @return    The uninstaller filename path.
-   */
-  public String getUninstallerPath()
-  {
-    return uninstallerPath;
-  }
+    /**
+     * Returns the uninstaller jar filename.
+     * 
+     * @return The uninstaller jar filename.
+     */
+    public synchronized String getUninstallerJarFilename()
+    {
+        return uninstallerJarFilename;
+    }
 
-  /**
-   *  Sets the uninstaller path.
-   *
-   * @param  path  The uninstaller path.
-   */
-  public void setUninstallerPath(String path)
-  {
-    uninstallerPath = path;
-  }
-  
-  /**
-   * Returns  additional uninstall data like uninstaller listener list.
-   * @return additional uninstall data
-   */
-  public Map getAdditionalData()
-  {
-    return additionalData;
-  }
- 
-  /**
-   * Sets additional uninstall data like uninstaller listener list. 
-   * @param name key for the additional uninstall data
-   * @param value the additional uninstall data
-   */
-  public void addAdditionalData(String name, Object value)
-  {
-    additionalData.put(name, value);
-  }
- 
+    /**
+     * Sets the uninstaller jar filename.
+     * 
+     * @param name
+     *            The uninstaller jar filename.
+     */
+    public synchronized void setUninstallerJarFilename(String name)
+    {
+        uninstallerJarFilename = name;
+    }
+
+    /**
+     * Returns the path to the uninstaller.
+     * 
+     * @return The uninstaller filename path.
+     */
+    public String getUninstallerPath()
+    {
+        return uninstallerPath;
+    }
+
+    /**
+     * Sets the uninstaller path.
+     * 
+     * @param path
+     *            The uninstaller path.
+     */
+    public void setUninstallerPath(String path)
+    {
+        uninstallerPath = path;
+    }
+
+    /**
+     * Returns additional uninstall data like uninstaller listener list.
+     * 
+     * @return additional uninstall data
+     */
+    public Map getAdditionalData()
+    {
+        return additionalData;
+    }
+
+    /**
+     * Sets additional uninstall data like uninstaller listener list.
+     * 
+     * @param name
+     *            key for the additional uninstall data
+     * @param value
+     *            the additional uninstall data
+     */
+    public void addAdditionalData(String name, Object value)
+    {
+        additionalData.put(name, value);
+    }
+
 }

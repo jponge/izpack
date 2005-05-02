@@ -43,100 +43,103 @@ import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * The script parser classe.
+ * 
  * @author Julien Ponge
  * @author Johannes Lehtinen
  */
 public class ScriptParser
 {
-  /**  The install path. */
-  public final static String INSTALL_PATH = "INSTALL_PATH";
 
-  /**  The Java home path. */
-  public final static String JAVA_HOME = "JAVA_HOME";
+    /** The install path. */
+    public final static String INSTALL_PATH = "INSTALL_PATH";
 
-  /**  The user home path. */
-  public final static String USER_HOME = "USER_HOME";
+    /** The Java home path. */
+    public final static String JAVA_HOME = "JAVA_HOME";
 
-  /**  The user name. */
-  public final static String USER_NAME = "USER_NAME";
+    /** The user home path. */
+    public final static String USER_HOME = "USER_HOME";
 
-  /**  The file separator character. */
-  public final static String FILE_SEPARATOR = "FILE_SEPARATOR";
+    /** The user name. */
+    public final static String USER_NAME = "USER_NAME";
 
-  /** The application name. */
-  public final static String APP_NAME = "APP_NAME";
+    /** The file separator character. */
+    public final static String FILE_SEPARATOR = "FILE_SEPARATOR";
 
-  /** The application URL. */
-  public final static String APP_URL = "APP_URL";
+    /** The application name. */
+    public final static String APP_NAME = "APP_NAME";
 
-  /** The application version. */
-  public final static String APP_VER = "APP_VER";
+    /** The application URL. */
+    public final static String APP_URL = "APP_URL";
 
-  /** The language IS03 code. */
-  public final static String ISO3_LANG = "ISO3_LANG";
+    /** The application version. */
+    public final static String APP_VER = "APP_VER";
 
-  /**  The files to parse. */
-  private Collection files;
+    /** The language IS03 code. */
+    public final static String ISO3_LANG = "ISO3_LANG";
 
-  /**  The variables substituror. */
-  private VariableSubstitutor vs;
+    /** The files to parse. */
+    private Collection files;
 
-  /**
-   *  Constructs a new parser. The parsable files specified must have
-   *  pretranslated paths (variables expanded and file separator characters
-   *  converted if necessary).
-   *
-   * @param  files  the parsable files to process
-   * @param  vs     the variable substitutor to use
-   */
-  public ScriptParser(Collection files, VariableSubstitutor vs)
-  {
-    this.files = files;
-    this.vs = vs;
-  }
+    /** The variables substituror. */
+    private VariableSubstitutor vs;
 
-  /**
-   *  Parses the files.
-   *
-   * @exception  Exception  Description of the Exception
-   */
-  public void parseFiles() throws Exception
-  {
-    // Parses the files
-    Iterator iter = files.iterator();
-    while (iter.hasNext())
+    /**
+     * Constructs a new parser. The parsable files specified must have
+     * pretranslated paths (variables expanded and file separator characters
+     * converted if necessary).
+     * 
+     * @param files
+     *            the parsable files to process
+     * @param vs
+     *            the variable substitutor to use
+     */
+    public ScriptParser(Collection files, VariableSubstitutor vs)
     {
-      // If interrupt is desired, return immediately.
-      if( Unpacker.isInterruptDesired())
-        return;
-      // Create a temporary file for the parsed data
-      // (Use the same directory so that renaming works later)
-      ParsableFile pfile = (ParsableFile) iter.next();
-
-      // check whether the OS matches
-      if (!OsConstraint.oneMatchesCurrentSystem(pfile.osConstraints))
-      {
-        continue;
-      }
-
-      File file = new File(pfile.path);
-      File parsedFile = File.createTempFile("izpp", null, file.getParentFile());
-
-      // Parses the file
-      // (Use buffering because substitutor processes byte at a time)
-      FileInputStream inFile = new FileInputStream(file);
-      BufferedInputStream in = new BufferedInputStream(inFile, 5120);
-      FileOutputStream outFile = new FileOutputStream(parsedFile);
-      BufferedOutputStream out = new BufferedOutputStream(outFile, 5120);
-      vs.substitute(in, out, pfile.type, pfile.encoding);
-      in.close();
-      out.close();
-
-      // Replace the original file with the parsed one
-      file.delete();
-      if (!parsedFile.renameTo(file))
-        throw new IOException(
-          "Could not rename file " + parsedFile + " to " + file);
+        this.files = files;
+        this.vs = vs;
     }
-  }
+
+    /**
+     * Parses the files.
+     * 
+     * @exception Exception
+     *                Description of the Exception
+     */
+    public void parseFiles() throws Exception
+    {
+        // Parses the files
+        Iterator iter = files.iterator();
+        while (iter.hasNext())
+        {
+            // If interrupt is desired, return immediately.
+            if (Unpacker.isInterruptDesired()) return;
+            // Create a temporary file for the parsed data
+            // (Use the same directory so that renaming works later)
+            ParsableFile pfile = (ParsableFile) iter.next();
+
+            // check whether the OS matches
+            if (!OsConstraint.oneMatchesCurrentSystem(pfile.osConstraints))
+            {
+                continue;
+            }
+
+            File file = new File(pfile.path);
+            File parsedFile = File.createTempFile("izpp", null, file.getParentFile());
+
+            // Parses the file
+            // (Use buffering because substitutor processes byte at a time)
+            FileInputStream inFile = new FileInputStream(file);
+            BufferedInputStream in = new BufferedInputStream(inFile, 5120);
+            FileOutputStream outFile = new FileOutputStream(parsedFile);
+            BufferedOutputStream out = new BufferedOutputStream(outFile, 5120);
+            vs.substitute(in, out, pfile.type, pfile.encoding);
+            in.close();
+            out.close();
+
+            // Replace the original file with the parsed one
+            file.delete();
+            if (!parsedFile.renameTo(file))
+                throw new IOException("Could not rename file " + parsedFile + " to " + file);
+        }
+    }
 }

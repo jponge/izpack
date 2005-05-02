@@ -28,27 +28,23 @@
 
 package net.n3.nanoxml;
 
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Hashtable;
 
-
 /**
  * An XMLEntityResolver resolves entities.
- *
+ * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
-public class XMLEntityResolver
-    implements IXMLEntityResolver
+public class XMLEntityResolver implements IXMLEntityResolver
 {
-    
+
     /**
      * The entities.
      */
     private Hashtable entities;
-    
 
     /**
      * Initializes the resolver.
@@ -62,99 +58,104 @@ public class XMLEntityResolver
         this.entities.put("lt", "&#38;#60;");
         this.entities.put("gt", "&#38;#62;");
     }
-    
-    
+
     /**
      * Cleans up the object when it's destroyed.
      */
-    protected void finalize()
-        throws Throwable
+    protected void finalize() throws Throwable
     {
         this.entities.clear();
         this.entities = null;
         super.finalize();
     }
-    
-    
+
     /**
      * Adds an internal entity.
-     *
-     * @param name the name of the entity.
-     * @param value the value of the entity.
+     * 
+     * @param name
+     *            the name of the entity.
+     * @param value
+     *            the value of the entity.
      */
-    public void addInternalEntity(String name,
-                                  String value)
+    public void addInternalEntity(String name, String value)
     {
-        if (! this.entities.containsKey(name)) {
+        if (!this.entities.containsKey(name))
+        {
             this.entities.put(name, value);
         }
     }
-    
-    
+
     /**
      * Adds an external entity.
-     *
-     * @param name the name of the entity.
-     * @param publicID the public ID of the entity, which may be null.
-     * @param systemID the system ID of the entity.
+     * 
+     * @param name
+     *            the name of the entity.
+     * @param publicID
+     *            the public ID of the entity, which may be null.
+     * @param systemID
+     *            the system ID of the entity.
      */
-    public void addExternalEntity(String name,
-                                  String publicID,
-                                  String systemID)
+    public void addExternalEntity(String name, String publicID, String systemID)
     {
-        if (! this.entities.containsKey(name)) {
-            this.entities.put(name, new String[] { publicID, systemID } );
+        if (!this.entities.containsKey(name))
+        {
+            this.entities.put(name, new String[] { publicID, systemID});
         }
     }
-    
-    
+
     /**
      * Returns a Java reader containing the value of an entity.
-     *
-     * @param xmlReader the current XML reader
-     * @param name the name of the entity.
-     *
+     * 
+     * @param xmlReader
+     *            the current XML reader
+     * @param name
+     *            the name of the entity.
+     * 
      * @return the reader, or null if the entity could not be resolved.
      */
-    public Reader getEntity(IXMLReader xmlReader,
-                            String     name)
-        throws XMLParseException
+    public Reader getEntity(IXMLReader xmlReader, String name) throws XMLParseException
     {
         Object obj = this.entities.get(name);
-        
-        if (obj == null) {
+
+        if (obj == null)
+        {
             return null;
-        } else if (obj instanceof java.lang.String) {
-            return new StringReader((String)obj);
-        } else {
+        }
+        else if (obj instanceof java.lang.String)
+        {
+            return new StringReader((String) obj);
+        }
+        else
+        {
             String[] id = (String[]) obj;
             return this.openExternalEntity(xmlReader, id[0], id[1]);
         }
     }
-    
-    
+
     /**
      * Opens an external entity.
-     *
-     * @param xmlReader the current XML reader
-     * @param publicID the public ID, which may be null
-     * @param systemID the system ID
-     *
+     * 
+     * @param xmlReader
+     *            the current XML reader
+     * @param publicID
+     *            the public ID, which may be null
+     * @param systemID
+     *            the system ID
+     * 
      * @return the reader, or null if the reader could not be created/opened
      */
-    protected Reader openExternalEntity(IXMLReader xmlReader,
-                                        String     publicID,
-                                        String     systemID)
-        throws XMLParseException
+    protected Reader openExternalEntity(IXMLReader xmlReader, String publicID, String systemID)
+            throws XMLParseException
     {
-        try {
+        try
+        {
             return xmlReader.openStream(publicID, systemID);
-        } catch (Exception e) {
-            throw new XMLParseException(xmlReader.getSystemID(),
-                                        xmlReader.getLineNr(),
-                                        "Could not open external entity "
-                                        + "at system ID: " + systemID);
+        }
+        catch (Exception e)
+        {
+            throw new XMLParseException(xmlReader.getSystemID(), xmlReader.getLineNr(),
+                    "Could not open external entity " + "at system ID: " + systemID);
         }
     }
-    
+
 }

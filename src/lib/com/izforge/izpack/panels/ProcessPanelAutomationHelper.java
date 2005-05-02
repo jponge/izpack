@@ -36,93 +36,98 @@ import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 /**
  * Functions to support automated usage of the CompilePanel
- *
+ * 
  * @author Jonathan Halliday
  * @author Tino Schwarze
  */
-public class ProcessPanelAutomationHelper extends PanelAutomationHelper 
-                                            implements PanelAutomation, AbstractUIProcessHandler
+public class ProcessPanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation,
+        AbstractUIProcessHandler
 {
-  private ProcessPanelWorker worker = null;
 
-  private int noOfJobs = 0;
-  private int currentJob = 0;
+    private ProcessPanelWorker worker = null;
 
-	/**
-	 * Save data for running automated.
-	 *
-	 * @param installData installation parameters
-	 * @param panelRoot unused.
-	 */
-	public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
-	{
-    // not used here - during automatic installation, no automatic
-    // installation information is generated
-	}
+    private int noOfJobs = 0;
 
-	/**
-	 *  Perform the installation actions.
-	 *
-	 * @param panelRoot The panel XML tree root.
-	 */
-	public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
-	{
-    try
+    private int currentJob = 0;
+
+    /**
+     * Save data for running automated.
+     * 
+     * @param installData
+     *            installation parameters
+     * @param panelRoot
+     *            unused.
+     */
+    public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
     {
-      this.worker = new ProcessPanelWorker (idata, this); 
-
-      this.worker.run ();
-    }
-    catch (IOException e)
-    {
-      e.printStackTrace ();
+        // not used here - during automatic installation, no automatic
+        // installation information is generated
     }
 
-	}
-
-  public void logOutput (String message, boolean stderr)
-  {
-    if (stderr)
+    /**
+     * Perform the installation actions.
+     * 
+     * @param panelRoot
+     *            The panel XML tree root.
+     */
+    public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
-      System.err.println (message);      
+        try
+        {
+            this.worker = new ProcessPanelWorker(idata, this);
+
+            this.worker.run();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
-    else
+
+    public void logOutput(String message, boolean stderr)
     {
-      System.out.println (message);
+        if (stderr)
+        {
+            System.err.println(message);
+        }
+        else
+        {
+            System.out.println(message);
+        }
     }
-  }
-  
-	/**
-	 * Reports progress on System.out
-	 *
-   * @see com.izforge.izpack.util.AbstractUIProcessHandler#startProcessing(int)
-	 */
-	public void startProcessing (int noOfJobs)
-	{
-    System.out.println ("[ Starting processing ]");
-    this.noOfJobs = noOfJobs;
-	}
 
-	/**
-	 *
-	 * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing()
-	 */
-	public void finishProcessing ()
-	{
-    System.out.println ("[ Processing finished ]");
-	}
+    /**
+     * Reports progress on System.out
+     * 
+     * @see com.izforge.izpack.util.AbstractUIProcessHandler#startProcessing(int)
+     */
+    public void startProcessing(int noOfJobs)
+    {
+        System.out.println("[ Starting processing ]");
+        this.noOfJobs = noOfJobs;
+    }
 
-  /**
-   * 
-   */
-  public void startProcess (String name)
-  {
-    this.currentJob++;
-    System.out.println ("Starting process "+name+
-       " ("+Integer.toString (this.currentJob)+"/"+Integer.toString (this.noOfJobs)+")");
-  }
+    /**
+     * 
+     * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing()
+     */
+    public void finishProcessing()
+    {
+        System.out.println("[ Processing finished ]");
+    }
 
-  public void finishProcess ()
-  {      
-  }
+    /**
+     * 
+     */
+    public void startProcess(String name)
+    {
+        this.currentJob++;
+        System.out.println("Starting process " + name + " (" + Integer.toString(this.currentJob)
+                + "/" + Integer.toString(this.noOfJobs) + ")");
+    }
+
+    public void finishProcess()
+    {
+    }
 }

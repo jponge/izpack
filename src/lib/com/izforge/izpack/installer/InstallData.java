@@ -30,24 +30,27 @@ import java.io.Serializable;
 import com.izforge.izpack.GUIPrefs;
 
 /**
- *  Encloses information about the install process. This class is implemented as
- *  a singleton which can be easily accessed by different components of the
- *  installer. However, this implementation is not thread safe.
- *
- * @author     Julien Ponge <julien@izforge.com>
- * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
+ * Encloses information about the install process. This class is implemented as
+ * a singleton which can be easily accessed by different components of the
+ * installer. However, this implementation is not thread safe.
+ * 
+ * @author Julien Ponge <julien@izforge.com>
+ * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
 public class InstallData extends AutomatedInstallData implements Serializable
 {
-  /**  The GUI preferences. */
-  public GUIPrefs guiPrefs;
 
-  /**  The buttons highlighting color. */
-  public Color buttonsHColor = new Color(230, 230, 230);
+    private static final long serialVersionUID = 4048793450990024505L;
 
-  /**  Constructs a new instance of this class.  */
-  protected InstallData()
-  {
-    super();
-  }
+    /** The GUI preferences. */
+    public GUIPrefs guiPrefs;
+
+    /** The buttons highlighting color. */
+    public Color buttonsHColor = new Color(230, 230, 230);
+
+    /** Constructs a new instance of this class. */
+    protected InstallData()
+    {
+        super();
+    }
 }

@@ -46,172 +46,174 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 
 /**
- *  The IzPack HTML license panel.
- *
- * @author     Julien Ponge
+ * The IzPack HTML license panel.
+ * 
+ * @author Julien Ponge
  */
-public class HTMLLicencePanel
-  extends IzPanel
-  implements HyperlinkListener, ActionListener
+public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, ActionListener
 {
-  /**  The layout. */
-  private GridBagLayout layout;
 
-  /**  The layout constraints. */
-  private GridBagConstraints gbConstraints;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3256728385458746416L;
 
-  /**  The info label. */
-  private JLabel infoLabel;
+    /** The layout. */
+    private GridBagLayout layout;
 
-  /**  The text area. */
-  private JEditorPane textArea;
+    /** The layout constraints. */
+    private GridBagConstraints gbConstraints;
 
-  /**  The radio buttons. */
-  private JRadioButton yesRadio, noRadio;
+    /** The info label. */
+    private JLabel infoLabel;
 
-  /**
-   *  The constructor.
-   *
-   * @param  idata   The installation data.
-   * @param  parent  Description of the Parameter
-   */
-  public HTMLLicencePanel(InstallerFrame parent, InstallData idata)
-  {
-    super(parent, idata);
+    /** The text area. */
+    private JEditorPane textArea;
 
-    // We initialize our layout
-    layout = new GridBagLayout();
-    gbConstraints = new GridBagConstraints();
-    setLayout(layout);
+    /** The radio buttons. */
+    private JRadioButton yesRadio, noRadio;
 
-    // We load the licence
-    loadLicence();
-
-    // We put our components
-
-    infoLabel =
-      LabelFactory.create(
-        parent.langpack.getString("LicencePanel.info"),
-        parent.icons.getImageIcon("history"),
-        JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
-    gbConstraints.insets = new Insets(5, 5, 5, 5);
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.anchor = GridBagConstraints.WEST;
-    layout.addLayoutComponent(infoLabel, gbConstraints);
-    add(infoLabel);
-
-    try
+    /**
+     * The constructor.
+     * 
+     * @param idata
+     *            The installation data.
+     * @param parent
+     *            Description of the Parameter
+     */
+    public HTMLLicencePanel(InstallerFrame parent, InstallData idata)
     {
-      textArea = new JEditorPane();
-      textArea.setEditable(false);
-      textArea.addHyperlinkListener(this);
-      JScrollPane scroller = new JScrollPane(textArea);
-      textArea.setPage(loadLicence());
-      parent.buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 1.0);
-      gbConstraints.anchor = GridBagConstraints.CENTER;
-      gbConstraints.fill = GridBagConstraints.BOTH;
-      layout.addLayoutComponent(scroller, gbConstraints);
-      add(scroller);
-    } catch (Exception err)
-    {
-      err.printStackTrace();
+        super(parent, idata);
+
+        // We initialize our layout
+        layout = new GridBagLayout();
+        gbConstraints = new GridBagConstraints();
+        setLayout(layout);
+
+        // We load the licence
+        loadLicence();
+
+        // We put our components
+
+        infoLabel = LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
+                parent.icons.getImageIcon("history"), JLabel.TRAILING);
+        parent.buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
+        gbConstraints.insets = new Insets(5, 5, 5, 5);
+        gbConstraints.fill = GridBagConstraints.NONE;
+        gbConstraints.anchor = GridBagConstraints.WEST;
+        layout.addLayoutComponent(infoLabel, gbConstraints);
+        add(infoLabel);
+
+        try
+        {
+            textArea = new JEditorPane();
+            textArea.setEditable(false);
+            textArea.addHyperlinkListener(this);
+            JScrollPane scroller = new JScrollPane(textArea);
+            textArea.setPage(loadLicence());
+            parent.buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 1.0);
+            gbConstraints.anchor = GridBagConstraints.CENTER;
+            gbConstraints.fill = GridBagConstraints.BOTH;
+            layout.addLayoutComponent(scroller, gbConstraints);
+            add(scroller);
+        }
+        catch (Exception err)
+        {
+            err.printStackTrace();
+        }
+
+        ButtonGroup group = new ButtonGroup();
+
+        yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
+        group.add(yesRadio);
+        parent.buildConstraints(gbConstraints, 0, 2, 1, 1, 1.0, 0.0);
+        gbConstraints.anchor = GridBagConstraints.WEST;
+        gbConstraints.fill = GridBagConstraints.NONE;
+        layout.addLayoutComponent(yesRadio, gbConstraints);
+        add(yesRadio);
+        yesRadio.addActionListener(this);
+
+        noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.notagree"), true);
+        group.add(noRadio);
+        parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 1.0, 0.0);
+        gbConstraints.anchor = GridBagConstraints.WEST;
+        gbConstraints.fill = GridBagConstraints.NONE;
+        gbConstraints.insets = new Insets(0, 5, 5, 5);
+        layout.addLayoutComponent(noRadio, gbConstraints);
+        add(noRadio);
+        noRadio.addActionListener(this);
+        setInitialFocus(textArea);
     }
 
-
-    ButtonGroup group = new ButtonGroup();
-
-    yesRadio =
-      new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
-    group.add(yesRadio);
-    parent.buildConstraints(gbConstraints, 0, 2, 1, 1, 1.0, 0.0);
-    gbConstraints.anchor = GridBagConstraints.WEST;
-    gbConstraints.fill = GridBagConstraints.NONE;
-    layout.addLayoutComponent(yesRadio, gbConstraints);
-    add(yesRadio);
-    yesRadio.addActionListener(this);
-
-    noRadio =
-      new JRadioButton(
-      parent.langpack.getString("LicencePanel.notagree"), 
-      true);
-    group.add(noRadio);
-    parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 1.0, 0.0);
-    gbConstraints.anchor = GridBagConstraints.WEST;
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.insets = new Insets(0, 5, 5, 5);
-    layout.addLayoutComponent(noRadio, gbConstraints);
-    add(noRadio);
-    noRadio.addActionListener(this);
-    setInitialFocus(textArea);
-  }
-
-  /**
-   *  Loads the license text.
-   *
-   * @return    The license text URL.
-   */
-  private URL loadLicence()
-  {
-    String resNamePrifix = "HTMLLicencePanel.licence";
-    try
+    /**
+     * Loads the license text.
+     * 
+     * @return The license text URL.
+     */
+    private URL loadLicence()
     {
-      return ResourceManager.getInstance().getURL(resNamePrifix);
-    } catch (Exception ex)
-    {
-      ex.printStackTrace();
+        String resNamePrifix = "HTMLLicencePanel.licence";
+        try
+        {
+            return ResourceManager.getInstance().getURL(resNamePrifix);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return null;
     }
-    return null;
-  }
 
-  /**
-   *  Actions-handling method (here it launches the installation).
-   *
-   * @param  e  The event.
-   */
-  public void actionPerformed(ActionEvent e)
-  {
-    if (yesRadio.isSelected())
-      parent.unlockNextButton();
-    else
-      parent.lockNextButton();
-  }
-
-  /**
-   *  Indicates wether the panel has been validated or not.
-   *
-   * @return    true if the user agrees with the license, false otherwise.
-   */
-  public boolean isValidated()
-  {
-    if (noRadio.isSelected())
+    /**
+     * Actions-handling method (here it launches the installation).
+     * 
+     * @param e
+     *            The event.
+     */
+    public void actionPerformed(ActionEvent e)
     {
-      parent.exit();
-      return false;
-    } else
-      return (yesRadio.isSelected());
-  }
-
-  /**
-   *  Hyperlink events handler.
-   *
-   * @param  e  The event.
-   */
-  public void hyperlinkUpdate(HyperlinkEvent e)
-  {
-    try
-    {
-      if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
-        textArea.setPage(e.getURL());
-    } catch (Exception err)
-    {
+        if (yesRadio.isSelected())
+            parent.unlockNextButton();
+        else
+            parent.lockNextButton();
     }
-  }
 
-  /**  Called when the panel becomes active.  */
-  public void panelActivate()
-  {
-    if (!yesRadio.isSelected())
-      parent.lockNextButton();
-  }
+    /**
+     * Indicates wether the panel has been validated or not.
+     * 
+     * @return true if the user agrees with the license, false otherwise.
+     */
+    public boolean isValidated()
+    {
+        if (noRadio.isSelected())
+        {
+            parent.exit();
+            return false;
+        }
+        else
+            return (yesRadio.isSelected());
+    }
+
+    /**
+     * Hyperlink events handler.
+     * 
+     * @param e
+     *            The event.
+     */
+    public void hyperlinkUpdate(HyperlinkEvent e)
+    {
+        try
+        {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+                textArea.setPage(e.getURL());
+        }
+        catch (Exception err)
+        {}
+    }
+
+    /** Called when the panel becomes active. */
+    public void panelActivate()
+    {
+        if (!yesRadio.isSelected()) parent.lockNextButton();
+    }
 }

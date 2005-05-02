@@ -23,24 +23,25 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package   com.izforge.izpack.util;
+package com.izforge.izpack.util;
 
 /*---------------------------------------------------------------------------*/
 /**
  * Any class that wants to perform cleanup operations and to be notified by
  * <code>Hosekeeper</code> for this purpose must implement this interface.
- *
- * @version  0.0.1 / 2/9/02
- * @author   Elmar Grom
+ * 
+ * @version 0.0.1 / 2/9/02
+ * @author Elmar Grom
  */
 /*---------------------------------------------------------------------------*/
 public interface CleanupClient
 {
- /*--------------------------------------------------------------------------*/
- /**
-  * Performs custom cleanup operations.
-  */
- /*--------------------------------------------------------------------------*/
-  public void cleanUp ();
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Performs custom cleanup operations.
+     */
+    /*--------------------------------------------------------------------------*/
+    public void cleanUp();
 }
 /*---------------------------------------------------------------------------*/

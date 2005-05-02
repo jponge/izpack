@@ -28,49 +28,64 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- *  Encloses information about an update check.
- *
+ * Encloses information about an update check.
+ * 
  * @author Tino Schwarze <tino.schwarze@community4you.de>
  */
 public class UpdateCheck implements Serializable
 {
-  /** ant-fileset-like list of include patterns, based on INSTALL_PATH if relative */
-  public ArrayList includesList = null;
-  
-  /** ant-fileset-like list of exclude patterns, based on INSTALL_PATH if relative */
-  public ArrayList excludesList = null;
 
-  /** Whether pattern matching is performed case-sensitive */
-  boolean caseSensitive = true;
-  
-  /**  Constructs a new uninitialized instance. */
-  public UpdateCheck() { }
+    static final long serialVersionUID = -3721254065037691999L;
 
-  /**
-   * Constructs and initializes a new instance.
-   *
-   * @param  includes The patterns to include in the check.
-   * @param  excludes The patterns to exclude from the check.
-   */
-  public UpdateCheck(ArrayList includes, ArrayList excludes)
-  {
-    this.includesList = includes;
-    this.excludesList = excludes;
-  }
+    /**
+     * ant-fileset-like list of include patterns, based on INSTALL_PATH if
+     * relative
+     */
+    public ArrayList includesList = null;
 
-  /**
-   * Constructs and initializes a new instance.
-   *
-   * @param  includes      The patterns to include in the check.
-   * @param  excludes      The patterns to exclude from the check.
-   * @param  casesensitive If "yes", matches are performed case sensitive.
-   */
-  public UpdateCheck(ArrayList includes, ArrayList excludes, String casesensitive)
-  {
-    this.includesList = includes;
-    this.excludesList = excludes;
-    this.caseSensitive = ((casesensitive != null) && casesensitive.equalsIgnoreCase("yes"));
-  }
+    /**
+     * ant-fileset-like list of exclude patterns, based on INSTALL_PATH if
+     * relative
+     */
+    public ArrayList excludesList = null;
+
+    /** Whether pattern matching is performed case-sensitive */
+    boolean caseSensitive = true;
+
+    /** Constructs a new uninitialized instance. */
+    public UpdateCheck()
+    {
+    }
+
+    /**
+     * Constructs and initializes a new instance.
+     * 
+     * @param includes
+     *            The patterns to include in the check.
+     * @param excludes
+     *            The patterns to exclude from the check.
+     */
+    public UpdateCheck(ArrayList includes, ArrayList excludes)
+    {
+        this.includesList = includes;
+        this.excludesList = excludes;
+    }
+
+    /**
+     * Constructs and initializes a new instance.
+     * 
+     * @param includes
+     *            The patterns to include in the check.
+     * @param excludes
+     *            The patterns to exclude from the check.
+     * @param casesensitive
+     *            If "yes", matches are performed case sensitive.
+     */
+    public UpdateCheck(ArrayList includes, ArrayList excludes, String casesensitive)
+    {
+        this.includesList = includes;
+        this.excludesList = excludes;
+        this.caseSensitive = ((casesensitive != null) && casesensitive.equalsIgnoreCase("yes"));
+    }
 
 }
-

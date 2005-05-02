@@ -29,143 +29,147 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Encloses information about a executable file. This class abstracts the way
- *  to do a system dependent postprocessing of installation.
- *
- * @author     Olexij Tkatchenko <ot@parcs.de>
+ * Encloses information about a executable file. This class abstracts the way to
+ * do a system dependent postprocessing of installation.
+ * 
+ * @author Olexij Tkatchenko <ot@parcs.de>
  */
 
 public class ExecutableFile implements Serializable
 {
-  /**  when to execute this file */
-  public final static int POSTINSTALL = 0;
-  public final static int NEVER = 1;
-  public final static int UNINSTALL = 2;
 
-  /**  type of a file */
-  public final static int BIN = 0;
-  public final static int JAR = 1;
+    static final long serialVersionUID = 4175489415984990405L;
 
-  /**  what to do if execution fails */
-  public final static int ABORT = 0;
-  public final static int WARN = 1;
-  public final static int ASK = 2;
+    /** when to execute this file */
+    public final static int POSTINSTALL = 0;
 
-  /**  The file path */
-  public String path;
+    public final static int NEVER = 1;
 
-  /**  Execution stage (NEVER, POSTINSTALL, UNINSTALL) */
-  public int executionStage;
+    public final static int UNINSTALL = 2;
 
-  /**  Main class of jar file */
-  public String mainClass;
+    /** type of a file */
+    public final static int BIN = 0;
 
-  /**  type (BIN|JAR) */
-  public int type;
+    public final static int JAR = 1;
 
-  /**  Failure handling (ABORT, WARN, ASK) */
-  public int onFailure;
+    /** what to do if execution fails */
+    public final static int ABORT = 0;
 
-  /**  List of arguments */
-  public List argList = null;
+    public final static int WARN = 1;
 
-  /**  List of operating systems to run on */
-  public List osList = null;
+    public final static int ASK = 2;
 
-  /**  Indicates the file should be kept after executing.
-   *  Default is false for backward compatibility. */
-  public boolean keepFile;
+    /** The file path */
+    public String path;
 
-  /**  Constructs a new uninitialized instance.  */
-  public ExecutableFile()
-  {
-    this.path = null;
-    executionStage = NEVER;
-    mainClass = null;
-    type = BIN;
-    onFailure = ASK;
-    osList = new ArrayList();
-    argList = new ArrayList();
-    keepFile = false;
-  }
+    /** Execution stage (NEVER, POSTINSTALL, UNINSTALL) */
+    public int executionStage;
 
+    /** Main class of jar file */
+    public String mainClass;
 
-  /**
-   *  Constructs and initializes a new instance.
-   *
-   * @param  path            the file path
-   * @param  executionStage  when to execute
-   * @param  onFailure       what to do if execution fails
-   * @param  osList          list of operating systems to run on
-   */
-  public ExecutableFile(String path, int executionStage,
-                        int onFailure, java.util.List osList,
-                        boolean keepFile)
-  {
-    this.path = path;
-    this.executionStage = executionStage;
-    this.onFailure = onFailure;
-    this.osList = osList;
-    this.keepFile = keepFile;
-  }
+    /** type (BIN|JAR) */
+    public int type;
 
+    /** Failure handling (ABORT, WARN, ASK) */
+    public int onFailure;
 
-  public ExecutableFile(String path,
-                        int type,
-                        String mainClass,
-                        int executionStage,
-                        int onFailure,
-                        java.util.List argList,
-                        java.util.List osList,
-                        boolean keepFile)
-  {
-    this.path = path;
-    this.mainClass = mainClass;
-    this.type = type;
-    this.executionStage = executionStage;
-    this.onFailure = onFailure;
-    this.argList = argList;
-    this.osList = osList;
-    this.keepFile = keepFile;
-  }
+    /** List of arguments */
+    public List argList = null;
 
-  public String toString()
-  {
-    StringBuffer retval = new StringBuffer();
-    retval.append("path = "+path);
-    retval.append("\n");
-    retval.append("mainClass = "+mainClass);
-    retval.append("\n");
-    retval.append("type = "+type);
-    retval.append("\n");
-    retval.append("executionStage = "+executionStage);
-    retval.append("\n");
-    retval.append("onFailure = "+onFailure);
-    retval.append("\n");
-    retval.append("argList: "+argList);
-    retval.append("\n");
-    if (argList != null)
+    /** List of operating systems to run on */
+    public List osList = null;
+
+    /**
+     * Indicates the file should be kept after executing. Default is false for
+     * backward compatibility.
+     */
+    public boolean keepFile;
+
+    /** Constructs a new uninitialized instance. */
+    public ExecutableFile()
     {
-      for (int i = 0; i < argList.size(); i++)
-      {
-        retval.append("\targ: "+argList.get(i));
-        retval.append("\n");
-      }
+        this.path = null;
+        executionStage = NEVER;
+        mainClass = null;
+        type = BIN;
+        onFailure = ASK;
+        osList = new ArrayList();
+        argList = new ArrayList();
+        keepFile = false;
     }
-    retval.append("\n");
-    retval.append("osList = "+osList);
-    retval.append("\n");
-    if (osList != null)
+
+    /**
+     * Constructs and initializes a new instance.
+     * 
+     * @param path
+     *            the file path
+     * @param executionStage
+     *            when to execute
+     * @param onFailure
+     *            what to do if execution fails
+     * @param osList
+     *            list of operating systems to run on
+     */
+    public ExecutableFile(String path, int executionStage, int onFailure, java.util.List osList,
+            boolean keepFile)
     {
-      for (int i = 0; i < osList.size(); i++)
-      {
-        retval.append("\tos: "+osList.get(i));
-        retval.append("\n");
-      }
+        this.path = path;
+        this.executionStage = executionStage;
+        this.onFailure = onFailure;
+        this.osList = osList;
+        this.keepFile = keepFile;
     }
-    retval.append("keepFile = "+keepFile);
-    retval.append("\n");
-    return retval.toString();
-  }
+
+    public ExecutableFile(String path, int type, String mainClass, int executionStage,
+            int onFailure, java.util.List argList, java.util.List osList, boolean keepFile)
+    {
+        this.path = path;
+        this.mainClass = mainClass;
+        this.type = type;
+        this.executionStage = executionStage;
+        this.onFailure = onFailure;
+        this.argList = argList;
+        this.osList = osList;
+        this.keepFile = keepFile;
+    }
+
+    public String toString()
+    {
+        StringBuffer retval = new StringBuffer();
+        retval.append("path = " + path);
+        retval.append("\n");
+        retval.append("mainClass = " + mainClass);
+        retval.append("\n");
+        retval.append("type = " + type);
+        retval.append("\n");
+        retval.append("executionStage = " + executionStage);
+        retval.append("\n");
+        retval.append("onFailure = " + onFailure);
+        retval.append("\n");
+        retval.append("argList: " + argList);
+        retval.append("\n");
+        if (argList != null)
+        {
+            for (int i = 0; i < argList.size(); i++)
+            {
+                retval.append("\targ: " + argList.get(i));
+                retval.append("\n");
+            }
+        }
+        retval.append("\n");
+        retval.append("osList = " + osList);
+        retval.append("\n");
+        if (osList != null)
+        {
+            for (int i = 0; i < osList.size(); i++)
+            {
+                retval.append("\tos: " + osList.get(i));
+                retval.append("\n");
+            }
+        }
+        retval.append("keepFile = " + keepFile);
+        retval.append("\n");
+        return retval.toString();
+    }
 }
-

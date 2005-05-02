@@ -42,112 +42,117 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 
 /**
- *  The HTML info panel.
- *
- * @author     Julien Ponge
+ * The HTML info panel.
+ * 
+ * @author Julien Ponge
  */
 public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 {
-  /**  The layout. */
-  private GridBagLayout layout;
 
-  /**  The layout constraints. */
-  private GridBagConstraints gbConstraints;
+    private static final long serialVersionUID = 3257008769514025270L;
 
-  /**  The info label. */
-  private JLabel infoLabel;
+    /** The layout. */
+    private GridBagLayout layout;
 
-  /**  The text area. */
-  private JEditorPane textArea;
+    /** The layout constraints. */
+    private GridBagConstraints gbConstraints;
 
-  /**
-   *  The constructor.
-   *
-   * @param  parent  The parent.
-   * @param  idata   The installation data.
-   */
-  public HTMLInfoPanel(InstallerFrame parent, InstallData idata)
-  {
-    super(parent, idata);
+    /** The info label. */
+    private JLabel infoLabel;
 
-    // We initialize our layout
-    layout = new GridBagLayout();
-    gbConstraints = new GridBagConstraints();
-    setLayout(layout);
+    /** The text area. */
+    private JEditorPane textArea;
 
-    // We add the components
-
-    infoLabel =
-      LabelFactory.create(
-        parent.langpack.getString("InfoPanel.info"),
-        parent.icons.getImageIcon("edit"),
-        JLabel.TRAILING);
-    parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
-    gbConstraints.insets = new Insets(5, 5, 5, 5);
-    gbConstraints.fill = GridBagConstraints.NONE;
-    gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-    layout.addLayoutComponent(infoLabel, gbConstraints);
-    add(infoLabel);
-
-    try
+    /**
+     * The constructor.
+     * 
+     * @param parent
+     *            The parent.
+     * @param idata
+     *            The installation data.
+     */
+    public HTMLInfoPanel(InstallerFrame parent, InstallData idata)
     {
-      textArea = new JEditorPane();
-      textArea.setEditable(false);
-      textArea.addHyperlinkListener(this);
-      JScrollPane scroller = new JScrollPane(textArea);
-      textArea.setPage(loadInfo());
-      parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 1.0, 1.0);
-      gbConstraints.anchor = GridBagConstraints.CENTER;
-      gbConstraints.fill = GridBagConstraints.BOTH;
-      layout.addLayoutComponent(scroller, gbConstraints);
-      add(scroller);
-    } catch (Exception err)
-    {
-      err.printStackTrace();
+        super(parent, idata);
+
+        // We initialize our layout
+        layout = new GridBagLayout();
+        gbConstraints = new GridBagConstraints();
+        setLayout(layout);
+
+        // We add the components
+
+        infoLabel = LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
+                .getImageIcon("edit"), JLabel.TRAILING);
+        parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
+        gbConstraints.insets = new Insets(5, 5, 5, 5);
+        gbConstraints.fill = GridBagConstraints.NONE;
+        gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
+        layout.addLayoutComponent(infoLabel, gbConstraints);
+        add(infoLabel);
+
+        try
+        {
+            textArea = new JEditorPane();
+            textArea.setEditable(false);
+            textArea.addHyperlinkListener(this);
+            JScrollPane scroller = new JScrollPane(textArea);
+            textArea.setPage(loadInfo());
+            parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 1.0, 1.0);
+            gbConstraints.anchor = GridBagConstraints.CENTER;
+            gbConstraints.fill = GridBagConstraints.BOTH;
+            layout.addLayoutComponent(scroller, gbConstraints);
+            add(scroller);
+        }
+        catch (Exception err)
+        {
+            err.printStackTrace();
+        }
     }
-  }
 
-  /**
-   *  Loads the info.
-   *
-   * @return    The info URL.
-   */
-  private URL loadInfo()
-  {
-    String resNamePrifix = "HTMLInfoPanel.info";
-    try
+    /**
+     * Loads the info.
+     * 
+     * @return The info URL.
+     */
+    private URL loadInfo()
     {
-      return ResourceManager.getInstance().getURL(resNamePrifix);
-    } catch (Exception ex)
-    {
-      ex.printStackTrace();
+        String resNamePrifix = "HTMLInfoPanel.info";
+        try
+        {
+            return ResourceManager.getInstance().getURL(resNamePrifix);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return null;
     }
-    return null;
-  }
 
-  /**
-   *  Indicates wether the panel has been validated or not.
-   *
-   * @return    Always true.
-   */
-  public boolean isValidated()
-  {
-    return true;
-  }
-
-  /**
-   *  Hyperlink events handler.
-   *
-   * @param  e  The event.
-   */
-  public void hyperlinkUpdate(HyperlinkEvent e)
-  {
-    try
+    /**
+     * Indicates wether the panel has been validated or not.
+     * 
+     * @return Always true.
+     */
+    public boolean isValidated()
     {
-      if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
-        textArea.setPage(e.getURL());
-    } catch (Exception err)
-    {
+        return true;
     }
-  }
+
+    /**
+     * Hyperlink events handler.
+     * 
+     * @param e
+     *            The event.
+     */
+    public void hyperlinkUpdate(HyperlinkEvent e)
+    {
+        try
+        {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+                textArea.setPage(e.getURL());
+        }
+        catch (Exception err)
+        {}
+    }
 }

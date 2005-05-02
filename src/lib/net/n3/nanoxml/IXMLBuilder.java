@@ -28,17 +28,15 @@
 
 package net.n3.nanoxml;
 
-
 import java.io.Reader;
-
 
 /**
  * NanoXML uses IXMLBuilder to construct the XML data structure it retrieved
  * from its data source. You can supply your own builder or you can use the
  * default builder of NanoXML.
- *
+ * 
  * @see net.n3.nanoxml.IXMLParser
- *
+ * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -47,147 +45,141 @@ public interface IXMLBuilder
 
     /**
      * This method is called before the parser starts processing its input.
-     *
-     * @param systemID the system ID of the XML data source
-     * @param lineNr   the line on which the parsing starts
-     *
+     * 
+     * @param systemID
+     *            the system ID of the XML data source
+     * @param lineNr
+     *            the line on which the parsing starts
+     * 
      * @throws java.lang.Exception
-     *     If an exception occurred while processing the event.
+     *             If an exception occurred while processing the event.
      */
-    public void startBuilding(String systemID,
-                              int    lineNr)
-        throws Exception;
-
+    public void startBuilding(String systemID, int lineNr) throws Exception;
 
     /**
-     * This method is called when a processing instruction is encountered.
-     * PIs with target "xml" are handled by the parser.
-     *
-     * @param target the PI target
-     * @param reader to read the data from the PI
-     *
+     * This method is called when a processing instruction is encountered. PIs
+     * with target "xml" are handled by the parser.
+     * 
+     * @param target
+     *            the PI target
+     * @param reader
+     *            to read the data from the PI
+     * 
      * @throws java.lang.Exception
-     *     If an exception occurred while processing the event.
+     *             If an exception occurred while processing the event.
      */
-    public void newProcessingInstruction(String target,
-                                         Reader reader)
-        throws Exception;
-
+    public void newProcessingInstruction(String target, Reader reader) throws Exception;
 
     /**
      * This method is called when a new XML element is encountered.
-     *
+     * 
      * @see #endElement
-     *
-     * @param name       the name of the element
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemID the system ID associated with the namespace
-     * @param systemID   the system ID of the XML data source
-     * @param lineNr     the line in the source where the element starts
-     *
+     * 
+     * @param name
+     *            the name of the element
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemID
+     *            the system ID associated with the namespace
+     * @param systemID
+     *            the system ID of the XML data source
+     * @param lineNr
+     *            the line in the source where the element starts
+     * 
      * @throws java.lang.Exception
-     *     If an exception occurred while processing the event.
+     *             If an exception occurred while processing the event.
      */
-    public void startElement(String name,
-                             String nsPrefix,
-                             String nsSystemID,
-                             String systemID,
-                             int    lineNr)
-        throws Exception;
+    public void startElement(String name, String nsPrefix, String nsSystemID, String systemID,
+            int lineNr) throws Exception;
 
-    
     /**
-     * This method is called when a new attribute of an XML element is 
+     * This method is called when a new attribute of an XML element is
      * encountered.
-     *
-     * @param key        the key (name) of the attribute
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemID the system ID associated with the namespace
-     * @param value      the value of the attribute
-     * @param type       the type of the attribute ("CDATA" if unknown)
-     *
+     * 
+     * @param key
+     *            the key (name) of the attribute
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemID
+     *            the system ID associated with the namespace
+     * @param value
+     *            the value of the attribute
+     * @param type
+     *            the type of the attribute ("CDATA" if unknown)
+     * 
      * @throws java.lang.Exception
-     *     If an exception occurred while processing the event.
+     *             If an exception occurred while processing the event.
      */
-    public void addAttribute(String key,
-                             String nsPrefix,
-                             String nsSystemID,
-                             String value,
-                             String type)
-        throws Exception;
-    
-    
+    public void addAttribute(String key, String nsPrefix, String nsSystemID, String value,
+            String type) throws Exception;
+
     /**
      * This method is called when the attributes of an XML element have been
      * processed.
-     *
+     * 
      * @see #startElement
      * @see #addAttribute
-     *
-     * @param name       the name of the element
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemID the system ID associated with the namespace
-     *
+     * 
+     * @param name
+     *            the name of the element
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemID
+     *            the system ID associated with the namespace
+     * 
      * @throws java.lang.Exception
-     *     If an exception occurred while processing the event.
+     *             If an exception occurred while processing the event.
      */
-    public void elementAttributesProcessed(String name,
-                                           String nsPrefix,
-                                           String nsSystemID)
-        throws Exception;
-    
-    
+    public void elementAttributesProcessed(String name, String nsPrefix, String nsSystemID)
+            throws Exception;
+
     /**
      * This method is called when the end of an XML elemnt is encountered.
-     *
+     * 
      * @see #startElement
-     *
-     * @param name       the name of the element
-     * @param nsPrefix   the prefix used to identify the namespace
-     * @param nsSystemID the system ID associated with the namespace
-     *
+     * 
+     * @param name
+     *            the name of the element
+     * @param nsPrefix
+     *            the prefix used to identify the namespace
+     * @param nsSystemID
+     *            the system ID associated with the namespace
+     * 
      * @throws java.lang.Exception
-     *     If an exception occurred while processing the event.
+     *             If an exception occurred while processing the event.
      */
-    public void endElement(String name,
-                           String nsPrefix,
-                           String nsSystemID)
-        throws Exception;
-    
-    
+    public void endElement(String name, String nsPrefix, String nsSystemID) throws Exception;
+
     /**
-     * This method is called when a PCDATA element is encountered. A Java 
-     * reader is supplied from which you can read the data. The reader will
-     * only read the data of the element. You don't need to check for
-     * boundaries. If you don't read the full element, the rest of the data 
-     * is skipped. You also don't have to care about entities; they are 
-     * resolved by the parser.
-     *
-     * @param reader   the Java reader from which you can retrieve the data
-     * @param systemID the system ID of the XML data source
-     * @param lineNr   the line in the source where the element starts
-     *
+     * This method is called when a PCDATA element is encountered. A Java reader
+     * is supplied from which you can read the data. The reader will only read
+     * the data of the element. You don't need to check for boundaries. If you
+     * don't read the full element, the rest of the data is skipped. You also
+     * don't have to care about entities; they are resolved by the parser.
+     * 
+     * @param reader
+     *            the Java reader from which you can retrieve the data
+     * @param systemID
+     *            the system ID of the XML data source
+     * @param lineNr
+     *            the line in the source where the element starts
+     * 
      * @throws java.lang.Exception
-     *     If an exception occurred while processing the event.
+     *             If an exception occurred while processing the event.
      */
-    public void addPCData(Reader reader,
-                          String systemID,
-                          int    lineNr)
-        throws Exception;
-                          
-    
+    public void addPCData(Reader reader, String systemID, int lineNr) throws Exception;
+
     /**
      * Returns the result of the building process. This method is called just
      * before the parse() method of IXMLParser returns.
-     *
+     * 
      * @see net.n3.nanoxml.IXMLParser#parse
-     *
+     * 
      * @return the result of the building process.
-     *
+     * 
      * @throws java.lang.Exception
-     *     If an exception occurred while processing the event.
+     *             If an exception occurred while processing the event.
      */
-    public Object getResult()
-        throws Exception;
+    public Object getResult() throws Exception;
 
 }

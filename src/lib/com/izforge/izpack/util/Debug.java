@@ -30,105 +30,109 @@ import java.io.PrintWriter;
 
 public class Debug
 {
-	private static final boolean TRACE;
-	private static final boolean STACKTRACE;
-	public static boolean LOG;
-	
-	static 
-	{
-		boolean st = false;
-		try
-		{
-			 st = Boolean.getBoolean ("STACKTRACE");
-		}
-		catch(Exception ex)
-		{
-			//ignore
-		}
-		STACKTRACE = st;
-		
-		boolean t = false;
-		try
-		{
-			if (STACKTRACE)
-			{
-				t = true;
-			}
-			else
-			{
-				t = Boolean.getBoolean ("TRACE");
-			}
-		}
-		catch(Exception ex)
-		{
-			//ignore
-		}
-		TRACE = t;
-	}
-	
-	public static void trace(Object s)
-	{
-		if (TRACE)
-		{
-//			console.println(s.toString());
-			System.out.println(s);
-			if(STACKTRACE && (s instanceof Throwable ))
-			{
-//				StringWriter sw = new StringWriter();
-//				PrintWriter pw = new PrintWriter(sw);
-//				((Throwable)s).printStackTrace(pw);
-//				console.println(sw.toString());
-				((Throwable)s).printStackTrace();
-			}
-			System.out.flush();
-		}
-	}
 
-	public static void error(Object s)
-	{
-		trace(s);
-		System.err.println(s);
-		System.err.flush();
-		
-		if (LOG && logFile == null) createLogFile();
-		if (LOG && logFile != null && s != null)
-		{
-			logFile.print(s);
-			if(s instanceof Throwable )
-			{
-				((Throwable)s).printStackTrace(logFile);
-			}
-			logFile.flush();
-		}
-	}
-	
-	private static PrintWriter logFile;
-	private static void createLogFile()
-	{
-		try
-		{
-			File out = new File(System.getProperty("user.dir"),".log.txt");
-			if (out.canWrite())
-			{
-				if (out.exists()) out.delete();
-				FileWriter fw = new FileWriter(out);
-				logFile = new PrintWriter(fw);
-			}
-		}
-		catch (Throwable e)
-		{
-			System.err.println(e);
-			System.err.flush();
-		}
-	}
-	
-	public static boolean tracing()
-	{
-		return TRACE;
-	}
-  
-  public static boolean stackTracing()
-  {
-    return STACKTRACE;
-  }
+    private static final boolean TRACE;
+
+    private static final boolean STACKTRACE;
+
+    public static boolean LOG;
+
+    static
+    {
+        boolean st = false;
+        try
+        {
+            st = Boolean.getBoolean("STACKTRACE");
+        }
+        catch (Exception ex)
+        {
+            // ignore
+        }
+        STACKTRACE = st;
+
+        boolean t = false;
+        try
+        {
+            if (STACKTRACE)
+            {
+                t = true;
+            }
+            else
+            {
+                t = Boolean.getBoolean("TRACE");
+            }
+        }
+        catch (Exception ex)
+        {
+            // ignore
+        }
+        TRACE = t;
+    }
+
+    public static void trace(Object s)
+    {
+        if (TRACE)
+        {
+            // console.println(s.toString());
+            System.out.println(s);
+            if (STACKTRACE && (s instanceof Throwable))
+            {
+                // StringWriter sw = new StringWriter();
+                // PrintWriter pw = new PrintWriter(sw);
+                // ((Throwable)s).printStackTrace(pw);
+                // console.println(sw.toString());
+                ((Throwable) s).printStackTrace();
+            }
+            System.out.flush();
+        }
+    }
+
+    public static void error(Object s)
+    {
+        trace(s);
+        System.err.println(s);
+        System.err.flush();
+
+        if (LOG && logFile == null) createLogFile();
+        if (LOG && logFile != null && s != null)
+        {
+            logFile.print(s);
+            if (s instanceof Throwable)
+            {
+                ((Throwable) s).printStackTrace(logFile);
+            }
+            logFile.flush();
+        }
+    }
+
+    private static PrintWriter logFile;
+
+    private static void createLogFile()
+    {
+        try
+        {
+            File out = new File(System.getProperty("user.dir"), ".log.txt");
+            if (out.canWrite())
+            {
+                if (out.exists()) out.delete();
+                FileWriter fw = new FileWriter(out);
+                logFile = new PrintWriter(fw);
+            }
+        }
+        catch (Throwable e)
+        {
+            System.err.println(e);
+            System.err.flush();
+        }
+    }
+
+    public static boolean tracing()
+    {
+        return TRACE;
+    }
+
+    public static boolean stackTracing()
+    {
+        return STACKTRACE;
+    }
 }

@@ -24,53 +24,54 @@
  */
 package com.izforge.izpack.uninstaller;
 
-import javax.swing.UIManager;
-
-import com.izforge.izpack.gui.IzPackMetalTheme;
 import java.lang.reflect.Method;
 
+import javax.swing.UIManager;
+
 /**
- *  The uninstaller class.
- *
- * @author     Julien Ponge
+ * The uninstaller class.
+ * 
+ * @author Julien Ponge
  */
 public class Uninstaller
 {
 
-  /**
-   *  The main method (program entry point).
-   *
-   * @param  args  The arguments passed on the command line.
-   */
-  public static void main(String[] args)
-  {
-    try
+    /**
+     * The main method (program entry point).
+     * 
+     * @param args
+     *            The arguments passed on the command line.
+     */
+    public static void main(String[] args)
     {
-      Class clazz = Uninstaller.class;
-      Method target =
-        clazz.getMethod("uninstall", new Class[] { String[].class });
-      new SelfModifier(target).invoke(args);
-    } catch (Exception ioeOrTypo)
-    {
-      System.err.println(ioeOrTypo.getMessage());
-      ioeOrTypo.printStackTrace();
-      System.err.println("Unable to exec java as a subprocess.");
-      System.err.println("The uninstall may not fully complete.");
-      uninstall(args);
+        try
+        {
+            Class clazz = Uninstaller.class;
+            Method target = clazz.getMethod("uninstall", new Class[] { String[].class});
+            new SelfModifier(target).invoke(args);
+        }
+        catch (Exception ioeOrTypo)
+        {
+            System.err.println(ioeOrTypo.getMessage());
+            ioeOrTypo.printStackTrace();
+            System.err.println("Unable to exec java as a subprocess.");
+            System.err.println("The uninstall may not fully complete.");
+            uninstall(args);
+        }
     }
-  }
 
-  public static void uninstall(String[] args)
-  {
-    try
+    public static void uninstall(String[] args)
     {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-      new UninstallerFrame();
-    } catch (Exception err)
-    {
-      System.err.println("- Error -");
-      err.printStackTrace();
-      System.exit(0);
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            new UninstallerFrame();
+        }
+        catch (Exception err)
+        {
+            System.err.println("- Error -");
+            err.printStackTrace();
+            System.exit(0);
+        }
     }
-  }
 }

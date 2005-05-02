@@ -50,245 +50,246 @@ import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
- *  Runs the install process in text only (no GUI) mode.
- *
+ * Runs the install process in text only (no GUI) mode.
+ * 
  * @author Jonathan Halliday <jonathan.halliday@arjuna.com>
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
 public class AutomatedInstaller extends InstallerBase
 {
-  // there are panels which can be instantiated multiple times
-  // we therefore need to select the right XML section for each
-  // instance
-  private TreeMap panelInstanceCount;
-  
-	/** The automated installation data. */
-	private AutomatedInstallData idata = new AutomatedInstallData();
 
-  /**
-   *  Constructing an instance triggers the install.
-   *
-   * @param inputFilename Name of the file containing the installation data.
-   * @exception Exception Description of the Exception
-   */
-  public AutomatedInstaller(String inputFilename) throws Exception
-  {
-    super();
+    // there are panels which can be instantiated multiple times
+    // we therefore need to select the right XML section for each
+    // instance
+    private TreeMap panelInstanceCount;
 
-    File input = new File(inputFilename);
+    /** The automated installation data. */
+    private AutomatedInstallData idata = new AutomatedInstallData();
 
-    // Loads the installation data
-    loadInstallData(idata);
-
-    // Loads the xml data
-    idata.xmlData = getXMLData(input);
-
-    // Loads the langpack
-    idata.localeISO3 = idata.xmlData.getAttribute("langpack", "eng");
-    InputStream in =
-      getClass().getResourceAsStream("/langpacks/" + idata.localeISO3 + ".xml");
-    idata.langpack = new LocaleDatabase(in);
-    idata.setVariable(ScriptParser.ISO3_LANG, idata.localeISO3);
-
-    // create the resource manager singleton
-    ResourceManager.create(idata);
-
-    // Load custom langpack if exist.
-    addCustomLangpack(idata);
-    
-
-    this.panelInstanceCount = new TreeMap();
-
-    doInstall(idata);
-  }
-
-  /**
-   * Writes the uninstalldata.
-   *
-   * Unfortunately, Java doesn't allow multiple inheritance, so
-   * <code>AutomatedInstaller</code> and <code>InstallerFrame</code> can't
-   * share this code ... :-/
-   * 
-   * TODO: We should try to fix this in the future. 
-   */
-  private void writeUninstallData()
-  {
-    try
+    /**
+     * Constructing an instance triggers the install.
+     * 
+     * @param inputFilename
+     *            Name of the file containing the installation data.
+     * @exception Exception
+     *                Description of the Exception
+     */
+    public AutomatedInstaller(String inputFilename) throws Exception
     {
-      // We get the data
-      UninstallData udata = UninstallData.getInstance();
-      List files = udata.getFilesList();
-      ZipOutputStream outJar = idata.uninstallOutJar;
+        super();
 
-      if (outJar == null)
-        return;
+        File input = new File(inputFilename);
 
-      System.out.println("[ Writing the uninstaller data ... ]");
+        // Loads the installation data
+        loadInstallData(idata);
 
-      // We write the files log
-      outJar.putNextEntry(new ZipEntry("install.log"));
-      BufferedWriter logWriter =
-        new BufferedWriter(new OutputStreamWriter(outJar));
-      logWriter.write(idata.getInstallPath());
-      logWriter.newLine();
-      Iterator iter = files.iterator();
-      while (iter.hasNext())
-      {
-        logWriter.write((String) iter.next());
-        if (iter.hasNext())
-          logWriter.newLine();
-      }
-      logWriter.flush();
-      outJar.closeEntry();
+        // Loads the xml data
+        idata.xmlData = getXMLData(input);
 
-      // We write the uninstaller jar file log
-      outJar.putNextEntry(new ZipEntry("jarlocation.log"));
-      logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
-      logWriter.write(udata.getUninstallerJarFilename());
-      logWriter.newLine();
-      logWriter.write(udata.getUninstallerPath());
-      logWriter.flush();
-      outJar.closeEntry();
+        // Loads the langpack
+        idata.localeISO3 = idata.xmlData.getAttribute("langpack", "eng");
+        InputStream in = getClass().getResourceAsStream("/langpacks/" + idata.localeISO3 + ".xml");
+        idata.langpack = new LocaleDatabase(in);
+        idata.setVariable(ScriptParser.ISO3_LANG, idata.localeISO3);
 
-      // Write out executables to execute on uninstall
-      outJar.putNextEntry(new ZipEntry("executables"));
-      ObjectOutputStream execStream = new ObjectOutputStream(outJar);
-      iter = udata.getExecutablesList().iterator();
-      execStream.writeInt(udata.getExecutablesList().size());
-      while (iter.hasNext())
-      {
-        ExecutableFile file = (ExecutableFile) iter.next();
-        execStream.writeObject(file);
-      }
-      execStream.flush();
-      outJar.closeEntry();
+        // create the resource manager singleton
+        ResourceManager.create(idata);
 
-      // Cleanup
-      outJar.flush();
-      outJar.close();
-    } catch (Exception err)
-    {
-      err.printStackTrace();
-    }
-  }
+        // Load custom langpack if exist.
+        addCustomLangpack(idata);
 
-  /**
-   * Runs the automated installation logic for each panel in turn.
-   *
-   * @param installdata the installation data.
-   * @throws Exception
-   */
-  private void doInstall(AutomatedInstallData installdata) throws Exception
-  {
-    // TODO: i18n
-    System.out.println("[ Starting automated installation ]");
+        this.panelInstanceCount = new TreeMap();
 
-    // walk the panels in order
-    Iterator panelsIterator = installdata.panelsOrder.iterator();
-    while (panelsIterator.hasNext())
-    {
-      Panel p = (Panel) panelsIterator.next();
-      String praefix = "com.izforge.izpack.panels.";
-      if( p.className.compareTo(".") > -1 )
-        // Full qualified class name
-        praefix = "";
-      if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
-        continue;
-
-      String panelClassName = p.className;
-      String automationHelperClassName =
-        praefix + panelClassName + "AutomationHelper";
-      Class automationHelperClass = null;
-      // determine if the panel supports automated install
-      try
-      {
-        automationHelperClass = Class.forName(automationHelperClassName);
-      } catch (ClassNotFoundException e)
-      {
-        // this is OK - not all panels have/need automation support.
-        continue;
-      }
-
-      // instantiate the automation logic for the panel
-      PanelAutomation automationHelperInstance = null;
-      if (automationHelperClass != null)
-      {
-        try
-        {
-          automationHelperInstance =
-            (PanelAutomation) automationHelperClass.newInstance();
-        } catch (Exception e)
-        {
-          System.err.println(
-            "ERROR: no default constructor for "
-              + automationHelperClassName
-              + ", skipping...");
-          continue;
-        }
-      }
-
-      // We get the panels root xml markup
-      Vector panelRoots = installdata.xmlData.getChildrenNamed(panelClassName);
-      int panelRootNo = 0;
-
-      if (this.panelInstanceCount.containsKey(panelClassName))
-      {
-        // get number of panel instance to process
-        panelRootNo =
-          ((Integer) this.panelInstanceCount.get(panelClassName)).intValue();
-      }
-
-      XMLElement panelRoot = (XMLElement) panelRoots.elementAt(panelRootNo);
-
-      this.panelInstanceCount.put(panelClassName, new Integer(panelRootNo + 1));
-
-      // execute the installation logic for the current panel, if it has any:
-      if (automationHelperInstance != null)
-      {
-        try
-        {
-          automationHelperInstance.runAutomated(installdata, panelRoot);
-        } catch (Exception e)
-        {
-          System.err.println(
-            "ERROR: automated installation failed for panel " + panelClassName);
-          e.printStackTrace();
-          continue;
-        }
-
-      }
-
+        doInstall(idata);
     }
 
-    // this does nothing if the uninstaller was not included
-    writeUninstallData();
+    /**
+     * Writes the uninstalldata.
+     * 
+     * Unfortunately, Java doesn't allow multiple inheritance, so
+     * <code>AutomatedInstaller</code> and <code>InstallerFrame</code> can't
+     * share this code ... :-/
+     * 
+     * TODO: We should try to fix this in the future.
+     */
+    private void writeUninstallData()
+    {
+        try
+        {
+            // We get the data
+            UninstallData udata = UninstallData.getInstance();
+            List files = udata.getFilesList();
+            ZipOutputStream outJar = idata.uninstallOutJar;
 
-    System.out.println("[ Automated installation done ]");
+            if (outJar == null) return;
 
-    // Bye
-    Housekeeper.getInstance().shutDown(0);
-  }
+            System.out.println("[ Writing the uninstaller data ... ]");
 
-  /**
-   *  Loads the xml data for the automated mode.
-   *
-   * @param  input          The file containing the installation data.
-   * @exception  Exception  thrown if there are problems reading the file.
-   */
-  public XMLElement getXMLData(File input) throws Exception
-  {
-    FileInputStream in = new FileInputStream(input);
+            // We write the files log
+            outJar.putNextEntry(new ZipEntry("install.log"));
+            BufferedWriter logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
+            logWriter.write(idata.getInstallPath());
+            logWriter.newLine();
+            Iterator iter = files.iterator();
+            while (iter.hasNext())
+            {
+                logWriter.write((String) iter.next());
+                if (iter.hasNext()) logWriter.newLine();
+            }
+            logWriter.flush();
+            outJar.closeEntry();
 
-    // Initialises the parser
-    StdXMLParser parser = new StdXMLParser();
-    parser.setBuilder(new StdXMLBuilder());
-    parser.setReader(new StdXMLReader(in));
-    parser.setValidator(new NonValidator());
+            // We write the uninstaller jar file log
+            outJar.putNextEntry(new ZipEntry("jarlocation.log"));
+            logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
+            logWriter.write(udata.getUninstallerJarFilename());
+            logWriter.newLine();
+            logWriter.write(udata.getUninstallerPath());
+            logWriter.flush();
+            outJar.closeEntry();
 
-    XMLElement rtn = (XMLElement) parser.parse();
-    in.close();
+            // Write out executables to execute on uninstall
+            outJar.putNextEntry(new ZipEntry("executables"));
+            ObjectOutputStream execStream = new ObjectOutputStream(outJar);
+            iter = udata.getExecutablesList().iterator();
+            execStream.writeInt(udata.getExecutablesList().size());
+            while (iter.hasNext())
+            {
+                ExecutableFile file = (ExecutableFile) iter.next();
+                execStream.writeObject(file);
+            }
+            execStream.flush();
+            outJar.closeEntry();
 
-    return rtn;
-  }
+            // Cleanup
+            outJar.flush();
+            outJar.close();
+        }
+        catch (Exception err)
+        {
+            err.printStackTrace();
+        }
+    }
+
+    /**
+     * Runs the automated installation logic for each panel in turn.
+     * 
+     * @param installdata
+     *            the installation data.
+     * @throws Exception
+     */
+    private void doInstall(AutomatedInstallData installdata) throws Exception
+    {
+        // TODO: i18n
+        System.out.println("[ Starting automated installation ]");
+
+        // walk the panels in order
+        Iterator panelsIterator = installdata.panelsOrder.iterator();
+        while (panelsIterator.hasNext())
+        {
+            Panel p = (Panel) panelsIterator.next();
+            String praefix = "com.izforge.izpack.panels.";
+            if (p.className.compareTo(".") > -1)
+            // Full qualified class name
+                praefix = "";
+            if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) continue;
+
+            String panelClassName = p.className;
+            String automationHelperClassName = praefix + panelClassName + "AutomationHelper";
+            Class automationHelperClass = null;
+            // determine if the panel supports automated install
+            try
+            {
+                automationHelperClass = Class.forName(automationHelperClassName);
+            }
+            catch (ClassNotFoundException e)
+            {
+                // this is OK - not all panels have/need automation support.
+                continue;
+            }
+
+            // instantiate the automation logic for the panel
+            PanelAutomation automationHelperInstance = null;
+            if (automationHelperClass != null)
+            {
+                try
+                {
+                    automationHelperInstance = (PanelAutomation) automationHelperClass
+                            .newInstance();
+                }
+                catch (Exception e)
+                {
+                    System.err.println("ERROR: no default constructor for "
+                            + automationHelperClassName + ", skipping...");
+                    continue;
+                }
+            }
+
+            // We get the panels root xml markup
+            Vector panelRoots = installdata.xmlData.getChildrenNamed(panelClassName);
+            int panelRootNo = 0;
+
+            if (this.panelInstanceCount.containsKey(panelClassName))
+            {
+                // get number of panel instance to process
+                panelRootNo = ((Integer) this.panelInstanceCount.get(panelClassName)).intValue();
+            }
+
+            XMLElement panelRoot = (XMLElement) panelRoots.elementAt(panelRootNo);
+
+            this.panelInstanceCount.put(panelClassName, new Integer(panelRootNo + 1));
+
+            // execute the installation logic for the current panel, if it has
+            // any:
+            if (automationHelperInstance != null)
+            {
+                try
+                {
+                    automationHelperInstance.runAutomated(installdata, panelRoot);
+                }
+                catch (Exception e)
+                {
+                    System.err.println("ERROR: automated installation failed for panel "
+                            + panelClassName);
+                    e.printStackTrace();
+                    continue;
+                }
+
+            }
+
+        }
+
+        // this does nothing if the uninstaller was not included
+        writeUninstallData();
+
+        System.out.println("[ Automated installation done ]");
+
+        // Bye
+        Housekeeper.getInstance().shutDown(0);
+    }
+
+    /**
+     * Loads the xml data for the automated mode.
+     * 
+     * @param input
+     *            The file containing the installation data.
+     * @exception Exception
+     *                thrown if there are problems reading the file.
+     */
+    public XMLElement getXMLData(File input) throws Exception
+    {
+        FileInputStream in = new FileInputStream(input);
+
+        // Initialises the parser
+        StdXMLParser parser = new StdXMLParser();
+        parser.setBuilder(new StdXMLBuilder());
+        parser.setReader(new StdXMLReader(in));
+        parser.setValidator(new NonValidator());
+
+        XMLElement rtn = (XMLElement) parser.parse();
+        in.close();
+
+        return rtn;
+    }
 }

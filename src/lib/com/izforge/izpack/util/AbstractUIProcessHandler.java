@@ -31,24 +31,26 @@ package com.izforge.izpack.util;
  */
 public interface AbstractUIProcessHandler extends AbstractUIHandler
 {
-  /**
-   * Log the given message.
-   * 
-   * @param message
-   * @param stderr true if this is a message received from a program via stderr
-   */
-  public void logOutput (String message, boolean stderr);
-  
-  public void startProcessing (int no_of_processes);
-  
-  /**
-   * Notify the user that a process has started.
-   * 
-   * @param name
-   */
-  public void startProcess (String name);
-  
-  public void finishProcess ();
-  
-  public void finishProcessing ();
+
+    /**
+     * Log the given message.
+     * 
+     * @param message
+     * @param stderr
+     *            true if this is a message received from a program via stderr
+     */
+    public void logOutput(String message, boolean stderr);
+
+    public void startProcessing(int no_of_processes);
+
+    /**
+     * Notify the user that a process has started.
+     * 
+     * @param name
+     */
+    public void startProcess(String name);
+
+    public void finishProcess();
+
+    public void finishProcessing();
 }
