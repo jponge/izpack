@@ -296,13 +296,21 @@ public class IoHelper
     {
       String command = "cmd.exe";
       if( System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
-        command = "command.com";
+        return(-1);
       String[] params = {command, "/C", "\"dir /D /-C \"" + path + "\"\""};
       String[] output = new String[2];
       FileExecutor fe = new FileExecutor();
       state = fe.executeCommand(params, output);
       retval = extractLong(output[0], -3, 3, "%");
     }
+    else if( OsVersion.IS_SUNOS )
+    {
+      String[] params = {"df", "-k", path};
+      String[] output = new String[2];
+      FileExecutor fe = new FileExecutor();
+      state = fe.executeCommand(params, output);
+      retval = extractLong(output[0], -3, 3, "%") * 1024;
+    }    
     else if( OsVersion.IS_UNIX )
     {
       String[] params = {"df", "-Pk", path};
@@ -327,8 +335,14 @@ public class IoHelper
   {
     if(method.equals("getFreeSpace"))
     {
-      if( OsVersion.IS_UNIX || OsVersion.IS_WINDOWS)
+      if( OsVersion.IS_UNIX )
         return true;
+      if( OsVersion.IS_WINDOWS )
+      { // getFreeSpace do not work on Windows 98.
+        if( System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+          return(false);
+        return(true);
+      }
     }
     else if(method.equals("chmod" ) ) 
     {
@@ -444,11 +458,34 @@ public class IoHelper
   {
     if(  supported("getPrimaryGroup"))
     {
-      String[] params = {"id", "-gn"};
-      String[] output = new String[2];
-      FileExecutor fe = new FileExecutor();
-      fe.executeCommand(params, output);
-      return output[0];
+      if( OsVersion.IS_SUNOS )
+      { // Standard id of SOLARIS do not support -gn.
+        String[] params = {"id"};
+        String[] output = new String[2];
+        FileExecutor fe = new FileExecutor();
+        fe.executeCommand(params, output);
+        // No we have "uid=%u(%s) gid=%u(%s)"
+        if( output[0] != null)
+        {
+          StringTokenizer st = new StringTokenizer(output[0], "()");
+          int length = st.countTokens();
+          if( length >= 4)
+          {
+            for(int i =0; i < 3; ++i)
+              st.nextToken();
+            return( st.nextToken());
+          }
+        }
+        return( null);
+      }
+      else
+      {
+        String[] params = {"id", "-gn"};
+        String[] output = new String[2];
+        FileExecutor fe = new FileExecutor();
+        fe.executeCommand(params, output);
+        return output[0];
+      }
     }
     else
       return null;
@@ -535,6 +572,7 @@ public class IoHelper
    * do not support getenv in an other way.
    * At the first call all environment variables will be loaded via
    * an exec.  
+   * On Windows keys are not case sensitive.
    * @param key variable name for which the value should be resolved
    * @return the value of the environment variable given
    * by key
@@ -545,6 +583,8 @@ public class IoHelper
       loadEnv();
     if( envVars == null)
       return( null );
+    if( OsVersion.IS_WINDOWS )
+      key = key.toUpperCase();
     return(String) ( envVars.get(key));
   }
   
@@ -595,18 +635,31 @@ public class IoHelper
       }
       else
       { // New var, perform the previous one.
-        if( var != null )
-        {
-          index = var.indexOf('=');
-          envVars.setProperty(var.substring(0, index), var.substring(index + 1));
-        }
+        setEnvVar(var);
         var = line;
       }
     }
-    if( var != null )
-    { // Add last env var.
-      index = var.indexOf('=');
-      envVars.setProperty(var.substring(0, index), var.substring(index + 1));
-    }
+    setEnvVar(var);
+  }
+  
+  /**
+   * Extracts key and value from the given string var.
+   * The key should be separated from the value by a sign.
+   * On Windows all chars of the key are translated to upper case.
+   * @param var
+   */
+  private static void setEnvVar( String var )
+  {
+    if( var == null)
+      return;
+    int index = var.indexOf('=');
+    if( index < 0 )
+      return;
+    String key = var.substring(0, index);
+    // On windows change all key chars to upper.
+    if( OsVersion.IS_WINDOWS )
+      key = key.toUpperCase();
+    envVars.setProperty(key, var.substring(index + 1));
+    
   }
 }

@@ -100,11 +100,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
   /**  The packs table. */
   protected JTable packsTable;
-  
+
   /**  The tablescroll. */
   protected JScrollPane tableScroller;
-  
- // Non-GUI fields 
+
+ // Non-GUI fields
   /** Map that connects names with pack objects */
   private Map names;
 
@@ -113,13 +113,13 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
   /**  The free bytes of the current selected disk. */
   protected long freeBytes = 0;
-  
+
   /** Are there dependencies in the packs */
   protected boolean dependenciesExist = false;
 
   /** The packs locale database. */
   private LocaleDatabase langpack = null;
-  
+
   /** The name of the XML file that specifies the panel langpack */
   private static final String LANG_FILE_NAME = "packsLang.xml";
 
@@ -137,7 +137,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     try
     {
       String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
-      this.langpack = 
+      this.langpack =
         new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
     }
     catch (Throwable exception)
@@ -149,7 +149,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
   }
 
   /**
-   * The Implementation of this method should create the layout 
+   * The Implementation of this method should create the layout
    * for the current class.
    */
   abstract protected void createNormalLayout();
@@ -295,7 +295,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
    * Layout helper method:<br>
    * Creates an label with a message given by msgId and an
    * icon given by the iconId. If layout and constraints
-   * are not null, the label will be added to layout 
+   * are not null, the label will be added to layout
    * with the given constraints.
    * The label will be added to this object.
    * @param msgId identifier for the IzPack langpack
@@ -320,10 +320,10 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
   /**
    * Creates a panel containing a anonymous label on
-   * the left with the message for the given msgId and 
+   * the left with the message for the given msgId and
    * a label on the right side with initial no text.
    * The right label will be returned.
-   * If layout and constraints are not null, the label 
+   * If layout and constraints are not null, the label
    * will be added to layout with the given constraints.
    * The panel will be added to this object.
    * @param msgId identifier for the IzPack langpack
@@ -331,7 +331,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
    * @param constraints constraints to be used
    * @return the created (right) label
    */
-  protected JLabel createPanelWithLabel(String msgId, 
+  protected JLabel createPanelWithLabel(String msgId,
     GridBagLayout layout,GridBagConstraints constraints )
   {
     JPanel panel = new JPanel();
@@ -349,12 +349,12 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     return( label);
   }
   /**
-   * Creates a text area with standard settings and the 
-   * title given by the msgId. 
+   * Creates a text area with standard settings and the
+   * title given by the msgId.
    * If scroller is not null, the create text area will be
    * added to the scroller and the scroller to this object,
    * else the text area will be added directly to this object.
-   * If layout and constraints are not null, the text area 
+   * If layout and constraints are not null, the text area
    * or scroller will be added to layout with the given constraints.
    * The text area will be returned.
    * @param msgId identifier for the IzPack langpack
@@ -363,7 +363,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
    * @param constraints constraints to be used
    * @return the created text area
    */
-  protected JTextArea createTextArea( String msgId, JScrollPane scroller, 
+  protected JTextArea createTextArea( String msgId, JScrollPane scroller,
     GridBagLayout layout,GridBagConstraints constraints )
   {
     JTextArea area = new JTextArea();
@@ -396,7 +396,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     else
       add(area);
     return(area);
-    
+
   }
 
   /**
@@ -409,7 +409,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
    * @param constraints constraints to be used
    * @return the created table
    */
-  protected JTable createPacksTable(int width, JScrollPane scroller, 
+  protected JTable createPacksTable(int width, JScrollPane scroller,
     GridBagLayout layout,GridBagConstraints constraints)
   {
 
@@ -450,12 +450,12 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     }
   }
 
-  /**  
+  /**
    * Called when the panel becomes active.
    * If a derived class implements this method also, it
-   * is recomanded to call this method with the super operator 
+   * is recomanded to call this method with the super operator
    * first.
-   *  
+   *
    */
   public void panelActivate()
   {

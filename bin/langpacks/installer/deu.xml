@@ -17,7 +17,7 @@
 
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Jetzt werden die installierten Anwendungen entfernt!"/>
-    <str id="uninstaller.destroytarget" txt=" Deinstallation durchführen für "/>
+    <str id="uninstaller.destroytarget" txt="Lösche alle Dateien in "/>
     <str id="uninstaller.uninstall" txt="Deinstallieren"/>
 
     <!-- The strings for the 'official' IzPack plugins -->
@@ -33,7 +33,7 @@
     <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen:"/>
     
     <str id="PathInputPanel.required" txt="Das gewählte Verzeichnis muss existieren."/>
-    <str id="PathInputPanel.notValid" txt="Das gewählte Verzeichnis enthällt nicht das benötigte Produkt."/>
+    <str id="PathInputPanel.notValid" txt="Das gewählte Verzeichnis enthält nicht das benötigte Produkt."/>
 
     <str id="TargetPanel.info" txt="Wählen Sie den Installationspfad:"/>
     <str id="TargetPanel.browse" txt="Auswählen..."/>
@@ -144,6 +144,14 @@
     <str id="CompilePanel.additional_arguments" txt="Zusätzliche Compilerparameter:" />
 
     <str id="ProcessPanel.heading" txt="Prozesse" />
+
+    <!-- Strings for the summary of panels --- START -->
+    <str id="SummaryPanel.info" txt="Alle für die Installation notwendigen Daten liegen nun vor. Die wichtigsten sind nachfolgend aufgeführt. Klicken Sie auf &quot;Weiter&quot; um mit der Installation zu beginnen. "/>
+    <str id="TargetPanel.summaryCaption" txt="Installationspfad"/>
+    <str id="JDKPathPanel.summaryCaption" txt="Pfad des JDK-Verzeichnisses"/>
+    <str id="PacksPanel.summaryCaption" txt="Gewählte Installationspakete"/>
+    <str id="ImgPacksPanel.summaryCaption" txt="Gewählte Installationspakete"/>
+    <!-- Strings for the summary of panels --- END -->
 
     <!-- Add your own panels specific strings here if you need -->
 

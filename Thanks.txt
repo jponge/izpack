@@ -87,5 +87,15 @@ IzPack for your projects ;-)
 - Marc Eppelmann : for the Unix shortcuts support.
 - Michael Hagedorn : for the UserInputPanel fixes.
 - Jan Pavlovic : for the Czech translation.
+- Oscar Sierra : for the patches.
+- Per Abich : for the patches.
+- Alexey Makhmutov : Russian langpack updates.
+- Anthony Xin Chen : for the ProcessPanel patch.
+- Nils Nordman : for the Swedish updates.
+- Juan Alvarez : for the Spanish updates.
+- Andreas Breiter : for various patches.
+- Johannes Gutleber : for the ExecuteForPack, processing dependency on a selected pack
+- Vitor Rodrigues : fox Fixes on shortcuts for RedHat and Mandrake
+- Stefano Gamma: createForUnselectedPack, show a userinputapanel if a pack is not selected
 
 # vim: fileformat=dos

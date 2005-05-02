@@ -1048,14 +1048,14 @@ I've been able to work around my requirements by extending the
 \texttt{ProcessPanelWorker} functionality to run user-specified classes. I've
 extended the DTD of the \texttt{ProcessPanel.Spec.xml} to include a new element:
 \begin{verbatim}
-<executableclass name="classname">
+<executeclass name="classname">
 <args..../>
-</executableclass>
+</executeclass>
 \end{verbatim}
 I've also added a new sub-class of \texttt{Processable} called
-\texttt{ExecutableClass}. This will run a user-specified class in the context of
+\texttt{executeclass}. This will run a user-specified class in the context of
 the installer JVM with a single method :
-\begin{verbatim}run( AbstractUIHandler handler, String[] args]);\end{verbatim}
+\begin{verbatim}run( AbstractUIProcessHandler handler, String[] args]);\end{verbatim}
 
 It can do everything I need and more. In particular, it allows me to write a
 process extension and still be able to provide feedback to the user through

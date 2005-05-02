@@ -1,6 +1,32 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.7.0 (build 2004.xx.yy))
+  > 3.7.3 (build N/A)
+
+- standalone-compiler.jar no longer has duplicate entries (bug #3928).
+
+  > 3.7.2 (build 2005.04.22)
+
+- IoHelper.getPrimaryGroup: bugfix for SunOS (Klaus Bartz).
+- Russian langpack fixes (Alexey Makhmutov).
+- Swedish langpack update (Nils Nordman).
+- Spanish langpack update (Juan Alvarez).
+- UserInputPanel: made 'instanceNumber' a protected atribute (patch #406,
+  Andreas Breiter).
+
+  > 3.7.1 (build 2005.02.15)
+
+- The Danish langpack was empty by mistake in 3.7.0.
+- Silent installations fix (Oscar Sierra).
+- Free disk space bugfix on Solaris (Oscar Sierra).
+- Installation runable with VM versions < 1.4 again (Klaus Bartz) 
+  (implementation for bug #2268 changed).
+- Italian langpack fixes (Fabrice Mirabille).
+- UserInputPanel: bug fixes by Per Abich (bugs #3233 and #3283).
+- Russian langpack fixes (Alexey Makhmutov).
+- ProcessPanel log file creation fix on Win32 (Anthony Xin Chen).
+- IoHelper.getenv: on Windows keys are not case sensitive (Klaus Bartz).
+
+  > 3.7.0 (build 2005.01.11)
 
 - Adding custom action stuff for packaging, installation and uninstallation
   (Klaus Bartz).
@@ -49,6 +75,10 @@
   (Michael Hagedorn).
 - A tutorial is now available.
 - New Czech langpack (Jan Pavlovic).
+- German langpack: the uninstaller checkbox string was confusing about the
+  uninstaller performing a full deletion, including the files not unpacked
+  by an IzPack installer.
+- Liquid LnF: version bump (0.2.9-alpha5).
 
   > 3.6.1 (build 2004.10.09)
 
