@@ -63,33 +63,6 @@ public class AutomatedInstallData
   public static final int UNINSTALLER_LISTENER_INDEX = 1;
   public static final int UNINSTALLER_LIBS_INDEX = 2;
   public static final int UNINSTALLER_JARS_INDEX = 3;
-  
-  /**
-   *  A Properties based implementation for VariableValueMap
-   * interface.<p>
-   *
-   * TODO: this can be removed as once the deprecated VariableValueMap is gone
-   * (IzPack v1.7?).
-   *
-   * @author     Johannes Lehtinen <johannes.lehtinen@iki.fi>
-   */
-  private final static class VariableValueMapImpl extends Properties
-    implements VariableValueMap
-  {
-
-    public String getVariable(String var)
-    {
-      return getProperty(var);
-    }
-
-    public void setVariable(String var, String val)
-    {
-      if (var != null && val != null)
-      {
-        setProperty(var, val);
-      }
-    }
-  }
 
   //--- Instance members -----------------------------------------------
 
@@ -137,11 +110,8 @@ public class AutomatedInstallData
 
   /**
    * Maps the variable names to their values
-   * @deprecated this will change to a simple Properties object as once the
-   * deprecated VariableValueMap is gone (IzPack v1.7?).
    */
-  protected VariableValueMapImpl variableValueMap;
-  // TODO: protected Properties variables;
+  protected Properties variables;
 
   /**  The attributes used by the panels */
   protected Map attributes;
@@ -154,22 +124,9 @@ public class AutomatedInstallData
     panels = new ArrayList();
     panelsOrder = new ArrayList();
     xmlData = new XMLElement("AutomatedInstallation");
-    variableValueMap = new VariableValueMapImpl();
-    // TODO: variables = new Properties();
+    variables = new Properties();
     attributes = new HashMap();
     customData = new HashMap();
-  }
-
-  /**
-   *  Returns the map of variable values. Modifying this map will directly
-   *  affect the current value of variables.
-   *
-   * @return    the map of variable values
-   * @deprecated use {@link #getVariables}
-   */
-  public VariableValueMap getVariableValueMap()
-  {
-    return variableValueMap;
   }
 
   /**
@@ -180,8 +137,7 @@ public class AutomatedInstallData
    */
   public Properties getVariables()
   {
-    return variableValueMap;
-    // TODO: return variables;
+      return variables;
   }
 
   /**
@@ -194,8 +150,7 @@ public class AutomatedInstallData
    */
   public void setVariable(String var, String val)
   {
-    variableValueMap.setVariable(var, val);
-    // TODO: variables.setProperty(var, val);
+      variables.setProperty(var, val);
   }
 
   /**
@@ -208,8 +163,7 @@ public class AutomatedInstallData
    */
   public String getVariable(String var)
   {
-    return variableValueMap.getVariable(var);
-    // TODO: return variables.getProperty(var);
+      return variables.getProperty(var);
   }
 
   /**
