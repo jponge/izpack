@@ -445,28 +445,31 @@
         </build-panel>
         <build-panel name="InstallPanel">
             <include name="com/izforge/izpack/panels/InstallPanel.java"/>
+            <include name="com/izforge/izpack/panels/InstallPanelAutomationHelper.java"/>
         </build-panel>
         <build-panel name="ExtendedInstallPanel">
-            <include name="com/izforge/izpack/panels/InstallPanel.java"/>
             <include name="com/izforge/izpack/panels/ExtendedInstallPanel.java"/>
+            <include name="com/izforge/izpack/panels/ExtendedInstallPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/InstallPanel.java"/>
         </build-panel>
         <build-panel name="LicencePanel">
             <include name="com/izforge/izpack/panels/LicencePanel.java"/>
         </build-panel>
         <build-panel name="PacksPanel">
-            <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
-            <include name="com/izforge/izpack/panels/PacksModel.java"/>
-            <include name="com/izforge/izpack/panels/PacksPanelBase.java"/>
-            <include name="com/izforge/izpack/panels/ImgPacksPanelBase.java"/>
             <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/ImgPacksPanelBase.java"/>
+            <include name="com/izforge/izpack/panels/PacksModel.java"/>
             <include name="com/izforge/izpack/panels/PacksPanel.java"/>
+            <include name="com/izforge/izpack/panels/PacksPanelAutomationHelper.java"/>
+            <include name="com/izforge/izpack/panels/PacksPanelBase.java"/>
+            <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
         </build-panel>
         <build-panel name="ImgPacksPanel">
-            <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
+            <include name="com/izforge/izpack/panels/ImgPacksPanel.java"/>
+            <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/PacksModel.java"/>
             <include name="com/izforge/izpack/panels/PacksPanelBase.java"/>
-            <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java"/>
-            <include name="com/izforge/izpack/panels/ImgPacksPanel.java"/>
+            <include name="com/izforge/izpack/panels/PacksPanelInterface.java"/>
         </build-panel>
         <build-panel name="HTMLLicencePanel">
             <include name="com/izforge/izpack/panels/HTMLLicencePanel.java"/>
@@ -475,10 +478,10 @@
             <include name="com/izforge/izpack/panels/HTMLInfoPanel.java"/>
         </build-panel>
         <build-panel name="TargetPanel">
-            <include name="com/izforge/izpack/panels/TargetPanel.java"/>
-            <include name="com/izforge/izpack/panels/TargetPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/PathInputPanel.java"/>
             <include name="com/izforge/izpack/panels/PathSelectionPanel.java"/>
+            <include name="com/izforge/izpack/panels/TargetPanel.java"/>
+            <include name="com/izforge/izpack/panels/TargetPanelAutomationHelper.java"/>
         </build-panel>
         <build-panel name="JDKPathPanel">
             <include name="com/izforge/izpack/panels/JDKPathPanel.java"/>
@@ -493,31 +496,33 @@
             <include name="com/izforge/izpack/panels/ShortcutPanel.java"/>
         </build-panel>
         <build-panel name="UserInputPanel">
+            <include name="com/izforge/izpack/panels/PasswordGroup.java"/>
+            <include name="com/izforge/izpack/panels/ProcessingClient.java"/>
+            <include name="com/izforge/izpack/panels/Processor.java"/>
+            <include name="com/izforge/izpack/panels/RuleInputField.java"/>
+            <include name="com/izforge/izpack/panels/RuleTextField.java"/>
             <include name="com/izforge/izpack/panels/UserInputPanel.java"/>
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java"/>
-            <include name="com/izforge/izpack/panels/RuleTextField.java"/>
-            <include name="com/izforge/izpack/panels/RuleInputField.java"/>
             <include name="com/izforge/izpack/panels/Validator.java"/>
-            <include name="com/izforge/izpack/panels/Processor.java"/>
-            <include name="com/izforge/izpack/panels/ProcessingClient.java"/>
-            <include name="com/izforge/izpack/panels/PasswordGroup.java"/>
         </build-panel>
         <build-panel name="ConditionalUserInputPanel">
             <include name="com/izforge/izpack/panels/ConditionalUserInputPanel.java"/>
+            <include name="com/izforge/izpack/panels/PasswordGroup.java"/>
+            <include name="com/izforge/izpack/panels/ProcessingClient.java"/>
+            <include name="com/izforge/izpack/panels/Processor.java"/>
+            <include name="com/izforge/izpack/panels/RuleInputField.java"/>
+            <include name="com/izforge/izpack/panels/RuleTextField.java"/>
             <include name="com/izforge/izpack/panels/UserInputPanel.java"/>
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java"/>
-            <include name="com/izforge/izpack/panels/RuleTextField.java"/>
-            <include name="com/izforge/izpack/panels/RuleInputField.java"/>
-            <include name="com/izforge/izpack/panels/Processor.java"/>
             <include name="com/izforge/izpack/panels/Validator.java"/>
-            <include name="com/izforge/izpack/panels/ProcessingClient.java"/>
-            <include name="com/izforge/izpack/panels/PasswordGroup.java"/>
         </build-panel>
         <build-panel name="CompilePanel">
             <include name="com/izforge/izpack/panels/CompilePanel.java"/>
+            <include name="com/izforge/izpack/panels/CompilePanelAutomationHelper.java"/>
         </build-panel>
         <build-panel name="ProcessPanel">
             <include name="com/izforge/izpack/panels/ProcessPanel.java"/>
+            <include name="com/izforge/izpack/panels/ProcessPanelAutomationPanel.java"/>
         </build-panel>
         <build-panel name="SudoPanel">
             <include name="com/izforge/izpack/panels/SudoPanel.java"/>
@@ -645,20 +650,21 @@
         </build-installer-listener>
 
         <build-uninstaller-listener name="AntActionUninstallerListener">
-            <include name="com/izforge/izpack/event/AntActionUninstallerListener"/>
+            <include name="com/izforge/izpack/event/AntActionUninstallerListener.java"/>
+            <include name="com/izforge/izpack/event/AntAction.java"/>
         </build-uninstaller-listener>
 
         <build-installer-listener name="SummaryLoggerInstallerListener">
-            <include name="com/izforge/izpack/event/SummaryLoggerInstallerListener"/>
+            <include name="com/izforge/izpack/event/SummaryLoggerInstallerListener.java"/>
         </build-installer-listener>
         
         <!-- CUSTOM ACTION test START
         <build-compiler-listener name="ChmodCompilerListener">
-            <include name="com/myCompany/tools/install/listener/ChmodCompilerListener"/>
+            <include name="com/myCompany/tools/install/listener/ChmodCompilerListener.java"/>
         </build-compiler-listener>
 
         <build-installer-listener name="ChmodInstallerListener">
-            <include name="com/myCompany/tools/install/listener/ChmodInstallerListener"/>
+            <include name="com/myCompany/tools/install/listener/ChmodInstallerListener.java"/>
         </build-installer-listener>
         COSTOM ACTION test END -->
     </target>
