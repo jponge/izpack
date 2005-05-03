@@ -39,7 +39,7 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.Unpacker;
-import com.izforge.izpack.installer.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.SpecHelper;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
