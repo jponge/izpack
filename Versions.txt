@@ -70,7 +70,7 @@
 
 - createForUnselectedPack, show a userinputapanel if a pack is not selected (Fabrice Mirabile, thanks to Stefano Gamma)
 
-
+- Registry support on Windows (Klaus Bartz).
 
   > 3.7.3 (build N/A)
 
