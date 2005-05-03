@@ -101,7 +101,7 @@
         New installer naming scheme (IzPack-install-{version}.jar).
     
     29.05.2004: (by Julien Ponge)
-    	New SimpleFinishPanel.
+        New SimpleFinishPanel.
 
     30.07.2004: (by Klaus Bartz)
         Simple CustomAction stuff added.
@@ -111,11 +111,11 @@
         New uninstaller-ext.jar with native helper stuff for native libs
            in uninstaller.
     14.10.2004: (by Klaus Bartz)
-    	New izevent.jar with the base classes of the custom action stuff
-    	  to support creation of custom action jars without IzPack source tree
-   	25.10.2004: (by Klaus Bartz)
-   	    "Standard" CustomActions AntActionInstallerListener and
-   	      AntActionUninstallerListener added
+        New izevent.jar with the base classes of the custom action stuff
+          to support creation of custom action jars without IzPack source tree
+    25.10.2004: (by Klaus Bartz)
+        "Standard" CustomActions AntActionInstallerListener and
+        AntActionUninstallerListener added
 
   Mini-HowTo:
 
@@ -414,7 +414,7 @@
                    optimize="on" 
                    deprecation="on" 
                    debug="${debug}"
-	           source="${source}"
+                   source="${source}"
                    debuglevel="${debuglevel}">
                 <panel-fileset/>
             </javac>
@@ -557,7 +557,7 @@
         <jar jarfile="${izevent.jar}" >
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/event/*.class"/>
-            	<include name="com/izforge/izpack/util/IoHelper.class"/>
+                <include name="com/izforge/izpack/util/IoHelper.class"/>
                 <exclude name="com/izforge/izpack/event/*Compiler*.class"/>
             </fileset>
         </jar>
@@ -584,7 +584,7 @@
                    optimize="on" 
                    deprecation="on" 
                    debug="${debug}"
-	           source="${source}"
+                   source="${source}"
                    debuglevel="${debuglevel}">
                 <listener-fileset/>
             </javac>
@@ -771,7 +771,7 @@
                 <include name="IzPack-install*.xml"/>
                 <include name="shortcutSpec.xml"/>
                 <include name="Unix_shortcutSpec.xml"/>
-            	<include name="RegistrySpec.xml"/>
+                <include name="RegistrySpec.xml"/>
             </fileset>
         </copy>
         <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
@@ -790,22 +790,22 @@
 
     </target>
   
-	<!-- Creates a normal installer for IzPack -->
-	<target name="generate.installer" >
+    <!-- Creates a normal installer for IzPack -->
+    <target name="generate.installer" >
         <antcall target="generate.installer.worker">
             <param name="installer.xmlfile" value="IzPack-install.xml"/>
             <param name="installer.name" value="IzPack-install-"/>
         </antcall>
-	</target>
-  	
-	<!-- Creates an installer for IzPack with registry support -->
-	<target name="generate.installer-reg" >
+    </target>
+
+    <!-- Creates an installer for IzPack with registry support -->
+    <target name="generate.installer-reg" >
         <antcall target="generate.installer.worker">
             <param name="installer.xmlfile" value="IzPack-install-reg.xml"/>
             <param name="installer.name" value="IzPack-install-reg-"/>
         </antcall>
-	</target>
-  	
+   </target>
+
     <!--
         Fixes CR/LF by applying the Unix convention (\n for endlines).
         It also fixes the encoding problems by moving it to UTF-8.
@@ -820,7 +820,7 @@
     
     <!-- Runs a testing installer. -->
     <target name="run.installer">
-    	<java jar="${basedir}/_dist/IzPack-install-${ver}.${rel}.jar" fork="true" />
+        <java jar="${basedir}/_dist/IzPack-install-${ver}.${rel}.jar" fork="true" />
     </target>
 
     <!-- Makes everything, from compilation to generating an installer. -->
