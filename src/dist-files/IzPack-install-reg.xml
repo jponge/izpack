@@ -38,7 +38,7 @@
             <author name="Marc Eppelmann (contributor)" email="marc.eppelmann@gmx.de" />
             <author name="Michael Hagedorn (contributor)" email="michael.hagedorn@gmx.de" />
             <author name="Jan Pavlovic (contributor)" email="xpavlov@fi.muni.cz" />
-	    <author name="Oscar Sierra (contributor)" email="o.sierra@ieee.org" />
+            <author name="Oscar Sierra (contributor)" email="o.sierra@ieee.org" />
             <author name="Per Abich (contributor)" email="perabich@users.berlios.de" />
             <author name="Alexey Makhmutov (contributor)" email="alexmach@mail.ru" />
             <author name="Anthony Xin Chen (contributor)" email="mail@4techie.net" />
@@ -109,7 +109,7 @@
         <res src="border6.png" id="Installer.image.6"/>
         <res src="border7.png" id="Installer.image.7"/>
         <res src="border8.png" id="Installer.image.8"/>
-		<res src="RegistrySpec.xml" id="RegistrySpec.xml"/>
+        <res src="RegistrySpec.xml" id="RegistrySpec.xml"/>
     </resources>
 
     <!-- The panels in a classic order -->
@@ -126,12 +126,12 @@
     </panels>
 
     <!-- The listeners section for CustomActions -->
-	<listeners>
-		<listener installer="SummaryLoggerInstallerListener"/>
-		<listener installer="RegistryInstallerListener" uninstaller="RegistryUninstallerListener">
-			<os family="windows"/>
-		</listener>
-	</listeners>
+    <listeners>
+        <listener installer="SummaryLoggerInstallerListener"/>
+        <listener installer="RegistryInstallerListener" uninstaller="RegistryUninstallerListener">
+            <os family="windows"/>
+        </listener>
+    </listeners>
 
     <!-- The packs section -->
     <packs>
@@ -191,9 +191,9 @@
     </packs>
 
      <!-- The native libraries to add -->
-	<native type="3rdparty" name="COIOSHelper.dll" stage="both">
-		<os family="windows"/>
-	</native>
+    <native type="3rdparty" name="COIOSHelper.dll" stage="both">
+        <os family="windows"/>
+    </native>
     <native type="izpack" name="ShellLink.dll"/>
 
 
