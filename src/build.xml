@@ -661,7 +661,7 @@
             <include name="com/izforge/izpack/event/NativeInstallerListener.java"/>
             <include name="com/izforge/izpack/util/os/*RegistryHandler.java"/>
             <include name="com/izforge/izpack/util/OSClassHelper.java"/>
-            <include name="com/izforge/izpack/util/WrappedNativeLibException.java"/>
+            <include name="com/izforge/izpack/util/os/WrappedNativeLibException.java"/>
             <include name="com/coi/tools/os/win/NativeLibException.java"/>
             <include name="com/coi/tools/os/win/Reg*.java"/>
             <include name="com/coi/tools/os/win/resources/NativeLibErr*.java"/>
@@ -674,7 +674,7 @@
             <include name="com/izforge/izpack/event/NativeUninstallerListener.java"/>
             <include name="com/izforge/izpack/util/os/*RegistryHandler.java"/>
             <include name="com/izforge/izpack/util/OSClassHelper.java"/>
-            <include name="com/izforge/izpack/util/WrappedNativeLibException.java"/>
+            <include name="com/izforge/izpack/util/os/WrappedNativeLibException.java"/>
             <include name="com/coi/tools/os/win/NativeLibException.java"/>
             <include name="com/coi/tools/os/win/Reg*.java"/>
             <include name="com/coi/tools/os/win/resources/NativeLibErr*.java"/>
@@ -768,7 +768,7 @@
                 <include name="*.png"/>
                 <include name="*.html"/>
                 <include name="Licence.txt"/>
-                <include name="IzPack-install.xml"/>
+                <include name="IzPack-install*.xml"/>
                 <include name="shortcutSpec.xml"/>
                 <include name="Unix_shortcutSpec.xml"/>
             	<include name="RegistrySpec.xml"/>
