@@ -709,6 +709,7 @@
             </fileset>
             <fileset dir="${basedir}/lib/">
                 <include name="compiler.jar"/>
+                <include name="izevent.jar"/>
                 <include name="standalone-compiler.jar"/>
                 <include name="frontend.jar"/>
                 <include name="installer.jar"/>
