@@ -656,6 +656,32 @@
             <include name="com/izforge/izpack/event/SummaryLoggerInstallerListener.java"/>
         </build-installer-listener>
         
+        <build-installer-listener name="RegistryInstallerListener">
+            <include name="com/izforge/izpack/event/RegistryInstallerListener.java"/>
+            <include name="com/izforge/izpack/event/NativeInstallerListener.java"/>
+            <include name="com/izforge/izpack/util/os/*RegistryHandler.java"/>
+            <include name="com/izforge/izpack/util/OSClassHelper.java"/>
+            <include name="com/izforge/izpack/util/WrappedNativeLibException.java"/>
+            <include name="com/coi/tools/os/win/NativeLibException.java"/>
+            <include name="com/coi/tools/os/win/Reg*.java"/>
+            <include name="com/coi/tools/os/win/resources/NativeLibErr*.java"/>
+            <include name="com/coi/tools/os/izpack/Registry.java"/>
+            <include name="com/coi/tools/os/izpack/COIOSHelper.java"/>
+        </build-installer-listener>
+        
+        <build-uninstaller-listener name="RegistryUninstallerListener">
+            <include name="com/izforge/izpack/event/RegistryUninstallerListener.java"/>
+            <include name="com/izforge/izpack/event/NativeUninstallerListener.java"/>
+            <include name="com/izforge/izpack/util/os/*RegistryHandler.java"/>
+            <include name="com/izforge/izpack/util/OSClassHelper.java"/>
+            <include name="com/izforge/izpack/util/WrappedNativeLibException.java"/>
+            <include name="com/coi/tools/os/win/NativeLibException.java"/>
+            <include name="com/coi/tools/os/win/Reg*.java"/>
+            <include name="com/coi/tools/os/win/resources/NativeLibErr*.java"/>
+            <include name="com/coi/tools/os/izpack/Registry.java"/>
+            <include name="com/coi/tools/os/izpack/COIOSHelper.java"/>
+        </build-uninstaller-listener>
+
         <!-- CUSTOM ACTION test START
         <build-compiler-listener name="ChmodCompilerListener">
             <include name="com/myCompany/tools/install/listener/ChmodCompilerListener.java"/>
@@ -713,7 +739,7 @@
     </target>
 
     <!-- Creates an installer for IzPack -->
-    <target name="generate.installer">
+    <target name="generate.installer.worker">
 
         <!-- Allows us to use the IzPack Ant task -->
         <taskdef name="izpack" classpath="${basedir}/lib/compiler.jar" classname="com.izforge.izpack.ant.IzPackTask"/>
@@ -744,7 +770,8 @@
                 <include name="Licence.txt"/>
                 <include name="IzPack-install.xml"/>
                 <include name="shortcutSpec.xml"/>
-             <include name="Unix_shortcutSpec.xml"/>
+                <include name="Unix_shortcutSpec.xml"/>
+            	<include name="RegistrySpec.xml"/>
             </fileset>
         </copy>
         <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
@@ -756,13 +783,29 @@
 
         <!-- We call IzPack -->
         <echo message="Makes the installer using IzPack" level="verbose"/>
-        <izpack input="${dist.dir}/IzPack-install.xml"
-                output="${dist.dir}/IzPack-install-${ver}.${rel}.jar"
+        <izpack input="${dist.dir}/${installer.xmlfile}"
+                output="${dist.dir}/${installer.name}${ver}.${rel}.jar"
                 installerType="standard" basedir="${dist.dir}"
                 izPackDir="${dist.dir}/"/>
 
     </target>
   
+	<!-- Creates a normal installer for IzPack -->
+	<target name="generate.installer" >
+        <antcall target="generate.installer.worker">
+            <param name="installer.xmlfile" value="IzPack-install.xml"/>
+            <param name="installer.name" value="IzPack-install-"/>
+        </antcall>
+	</target>
+  	
+	<!-- Creates an installer for IzPack with registry support -->
+	<target name="generate.installer-reg" >
+        <antcall target="generate.installer.worker">
+            <param name="installer.xmlfile" value="IzPack-install-reg.xml"/>
+            <param name="installer.name" value="IzPack-install-reg-"/>
+        </antcall>
+	</target>
+  	
     <!--
         Fixes CR/LF by applying the Unix convention (\n for endlines).
         It also fixes the encoding problems by moving it to UTF-8.
