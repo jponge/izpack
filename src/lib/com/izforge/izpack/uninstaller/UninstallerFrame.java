@@ -76,7 +76,7 @@ public class UninstallerFrame extends JFrame
     private IconsDatabase icons;
 
     /** The language pack. */
-    protected LocaleDatabase langpack;
+    protected static LocaleDatabase langpack;
 
     /** The warning label. */
     private JLabel warningLabel;
@@ -501,4 +501,13 @@ public class UninstallerFrame extends JFrame
             }
         }
     }
+  /**
+   * Returns the langpack.
+   * @return Returns the langpack.
+   */
+  public static LocaleDatabase getLangpack()
+  {
+    return langpack;
+  }
+
 }

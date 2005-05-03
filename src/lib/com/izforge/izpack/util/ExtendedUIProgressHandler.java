@@ -26,10 +26,7 @@ package com.izforge.izpack.util;
 /**
  * This interface allowes an extended interaction with a user interface handler.
  * 
- * @author Dr. Klaus Bartz (COI-ES)
- * @version
- * @(#) $Revision$ $Date$
- * 
+ * @author Klaus Bartz
  */
 public interface ExtendedUIProgressHandler
 {
@@ -56,8 +53,7 @@ public interface ExtendedUIProgressHandler
      * Notify of progress with automatic counting.
      * 
      * @param stepMessage
-     *            an additional message describing the substep the type of the
-     *            substep
+     *            an additional message describing the substep the type of the substep
      */
     public void progress(String stepMessage);
 
