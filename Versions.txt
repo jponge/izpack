@@ -37,6 +37,7 @@
 - createForUnselectedPack, show a userinputapanel if a pack is not selected 
   (Fabrice Mirabile, thanks to Stefano Gamma)
 - Registry support on Windows (Klaus Bartz).
+- Most IzPackTask output for ant is only dumped in VERBOSE mode (Chad McHenry)
 
   > 3.7.3 (build N/A)
 
