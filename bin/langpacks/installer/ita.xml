@@ -162,6 +162,9 @@
     <str id="PacksPanel.summaryCaption" txt="Pacchetti scelti dell'installazione"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Pacchetti scelti dell'installazione"/>
 
+    <!-- Strings for the Registry -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Impossibile di aprire la chiave di registro {0}\\{1}."/>
+    
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>

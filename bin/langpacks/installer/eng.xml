@@ -161,6 +161,9 @@
     <str id="ImgPacksPanel.summaryCaption" txt="Chosen installation packs"/>
     <!-- Strings for the summary of panels --- END -->
 
+    <!-- Strings for the Registry -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Cannot open registry key {0}\\{1}."/>
+    
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>
