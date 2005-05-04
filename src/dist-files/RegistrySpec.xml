@@ -14,7 +14,7 @@
 		<value name="UninstallString" 
 			keypath="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$APP_NAME $APP_VER"  
 			root="HKLM" 
-			string="$JAVA_HOME\bin\javaw.exe -jar $INSTALL_PATH\uninstaller\uninstaller.jar"/>
+			string="&quot;$JAVA_HOME\bin\javaw.exe&quot; -jar &quot;$INSTALL_PATH\uninstaller\uninstaller.jar&quot;"/>
 		<value name="DisplayIcon" 
 			keypath="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$APP_NAME $APP_VER"  
 			root="HKLM" 
