@@ -31,5 +31,3 @@ on it must also be covered by this licence.
 distributing an installer using a panel that is not released under a free 
 licence compatible with GNU GPL 2 is not permitted as the installer is covered
 by this licence.
-
-# vim: fileformat=dos 

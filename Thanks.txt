@@ -97,5 +97,3 @@ IzPack for your projects ;-)
 - Johannes Gutleber : for the ExecuteForPack, processing dependency on a selected pack
 - Vitor Rodrigues : fox Fixes on shortcuts for RedHat and Mandrake
 - Stefano Gamma: createForUnselectedPack, show a userinputapanel if a pack is not selected
-
-# vim: fileformat=dos

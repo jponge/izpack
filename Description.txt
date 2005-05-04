@@ -20,5 +20,3 @@ choice of the kind of installer that you want to use.
 independant from the operating system that runs it. It is very easy for the
 end-user to use an installer made with IzPack, with a well-installed JVM, 
 a single "java -jar installer.jar" will launch it :-)
-
-# vim: fileformat=dos 
