@@ -79,14 +79,45 @@ public class IzPackTask extends Task implements PackagerListener
     }
 
     /**
-     * Logs a message to the Ant log.
+     * Logs a message to the Ant log at default priority (MSG_INFO).
      * 
-     * @param str
-     *            The message to log.
+     * @param str The message to log.
      */
-    public void packagerMsg(java.lang.String str)
+    public void packagerMsg(String str)
     {
-        log(str);// Log the message to the Ant log
+        packagerMsg(str, MSG_INFO);
+    }
+
+    /**
+     * Logs a message to the Ant log at the specified priority.
+     * 
+     * @param str The message to log.
+     * @param priority The priority of the message.
+     */
+    public void packagerMsg(String str, int priority)
+    {
+        final int antPriority;
+        switch(priority) // No guarantee of a direct conversion. It's an enum
+        {
+            case MSG_DEBUG:
+                antPriority = Project.MSG_DEBUG;
+                break;
+            case MSG_ERR:
+                antPriority = Project.MSG_ERR;
+                break;
+            case MSG_INFO:
+                antPriority = Project.MSG_INFO;
+                break;
+            case MSG_VERBOSE:
+                antPriority = Project.MSG_VERBOSE;
+                break;
+            case MSG_WARN:
+                antPriority = Project.MSG_WARN;
+                break;
+            default: // rather than die...
+                antPriority = Project.MSG_INFO;
+        }
+        log(str, antPriority);
     }
 
     /** Called when the packaging starts. */

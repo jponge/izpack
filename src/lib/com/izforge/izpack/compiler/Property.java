@@ -189,7 +189,8 @@ public class Property
     protected void loadFile(File file) throws CompilerException
     {
         Properties props = new Properties();
-        compiler.getPackagerListener().packagerMsg("Loading " + file.getAbsolutePath()); // VERBOSE
+        compiler.getPackagerListener().packagerMsg("Loading " + file.getAbsolutePath(),
+                                                   PackagerListener.MSG_VERBOSE);
         try
         {
             if (file.exists())
@@ -208,7 +209,8 @@ public class Property
             else
             {
                 compiler.getPackagerListener().packagerMsg(
-                        "Unable to find property file: " + file.getAbsolutePath()); // VERBOSE
+                        "Unable to find property file: " + file.getAbsolutePath(),
+                        PackagerListener.MSG_VERBOSE);
             }
         }
         catch (IOException ex)
@@ -226,7 +228,8 @@ public class Property
     protected void loadEnvironment(String prefix) throws CompilerException
     {
         Properties props = new Properties();
-        compiler.getPackagerListener().packagerMsg("Loading Environment " + prefix); // VERBOSE
+        compiler.getPackagerListener().packagerMsg("Loading Environment " + prefix,
+                                                   PackagerListener.MSG_VERBOSE);
         Vector osEnv = Execute.getProcEnvironment();
         for (Enumeration e = osEnv.elements(); e.hasMoreElements();)
         {
@@ -234,7 +237,8 @@ public class Property
             int pos = entry.indexOf('=');
             if (pos == -1)
             {
-                compiler.getPackagerListener().packagerMsg("Ignoring " + prefix); // WARN
+                compiler.getPackagerListener().packagerMsg("Ignoring " + prefix,
+                                                           PackagerListener.MSG_WARN);
             }
             else
             {

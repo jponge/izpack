@@ -825,6 +825,6 @@
     </target>
 
     <!-- Makes everything, from compilation to generating an installer. -->
-    <target name="dist" depends="all,build.javadoc,generate.installer"/>
+    <target name="dist" depends="all,generate.installer"/>
 
 </project>

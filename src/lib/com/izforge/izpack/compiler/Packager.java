@@ -179,12 +179,22 @@ public class Packager
     /**
      * Dispatches a message to the listeners.
      * 
-     * @param job
-     *            The job description.
+     * @param job The job description.
      */
     private void sendMsg(String job)
     {
-        if (listener != null) listener.packagerMsg(job);
+        sendMsg(job, PackagerListener.MSG_INFO);
+    }
+
+    /**
+     * Dispatches a message to the listeners at specified priority.
+     * 
+     * @param job The job description.
+     * @param priority The message priority.
+     */
+    private void sendMsg(String job, int priority)
+    {
+        if (listener != null) listener.packagerMsg(job, priority);
     }
 
     /** Dispatches a start event to the listeners. */
@@ -213,7 +223,7 @@ public class Packager
      */
     public void setInfo(Info info) throws Exception
     {
-        sendMsg("Setting the installer informations ...");
+        sendMsg("Setting the installer information", PackagerListener.MSG_VERBOSE);
         this.info = info;
     }
 
@@ -227,7 +237,7 @@ public class Packager
      */
     public void setGUIPrefs(GUIPrefs prefs)
     {
-        sendMsg("Setting the GUI preferences ...");
+        sendMsg("Setting the GUI preferences", PackagerListener.MSG_VERBOSE);
         guiPrefs = prefs;
     }
 
@@ -302,7 +312,7 @@ public class Packager
      */
     public void addLangPack(String iso3, URL xmlURL, URL flagURL)
     {
-        sendMsg("Adding langpack : " + iso3 + " ...");
+        sendMsg("Adding langpack: " + iso3, PackagerListener.MSG_VERBOSE);
         // put data & flag as entries in installer, and keep array of iso3's
         // names
         langpackNameList.add(iso3);
@@ -322,7 +332,7 @@ public class Packager
      */
     public void addResource(String resId, URL url)
     {
-        sendMsg("Adding resource : " + resId + " ...");
+        sendMsg("Adding resource: " + resId, PackagerListener.MSG_VERBOSE);
         installerResourceURLMap.put("res/" + resId, url);
     }
 
@@ -338,7 +348,7 @@ public class Packager
      */
     public void addNativeLibrary(String name, URL url) throws Exception
     {
-        sendMsg("Adding native library : " + name + " ...");
+        sendMsg("Adding native library: " + name, PackagerListener.MSG_VERBOSE);
         installerResourceURLMap.put("native/" + name, url);
     }
 
@@ -352,7 +362,8 @@ public class Packager
      */
     public void addJarContent(URL jarURL)
     {
-        sendMsg("Adding content of jar : " + jarURL.getFile() + " ...");
+        sendMsg("Adding content of jar: " + jarURL.getFile(),
+                PackagerListener.MSG_VERBOSE);
         includedJarURLs.add(jarURL);
     }
 
@@ -379,7 +390,7 @@ public class Packager
      */
     private void writeSkeletonInstaller() throws IOException
     {
-        sendMsg("Copying the skeleton installer ...");
+        sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
 
         InputStream is = Packager.class.getResourceAsStream("/" + SKELETON_SUBPATH);
         if (is == null)
@@ -406,7 +417,7 @@ public class Packager
     /** Write the data referenced by URL to primary jar. */
     private void writeInstallerResources() throws IOException
     {
-        sendMsg("Copying " + installerResourceURLMap.size() + " files into installer ...");
+        sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
 
         Iterator i = installerResourceURLMap.keySet().iterator();
         while (i.hasNext())
@@ -423,7 +434,7 @@ public class Packager
     /** Copy included jars to primary jar. */
     private void writeIncludedJars() throws IOException
     {
-        sendMsg("Copying contents of " + includedJarURLs.size() + " jars into installer ...");
+        sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
 
         Iterator i = includedJarURLs.iterator();
         while (i.hasNext())
@@ -439,7 +450,8 @@ public class Packager
      */
     private void writePacks() throws IOException
     {
-        sendMsg("Writing Packs ...");
+        final int num = packsList.size();
+        sendMsg("Writing " + num + " Pack" + (num>1 ? "s" : "") + " into installer");
 
         // Map to remember pack number and bytes offsets of back references
         Map storedFiles = new HashMap();
@@ -464,7 +476,8 @@ public class Packager
                 packStream = getJarOutputStream(name);
             }
 
-            sendMsg("Writing Pack #" + packNumber + " : " + pack.name);
+            sendMsg("Writing Pack " + packNumber + ": " + pack.name,
+                    PackagerListener.MSG_VERBOSE);
 
             // Retrieve the correct output stream
             ZipEntry entry = new ZipEntry("packs/pack" + packNumber);

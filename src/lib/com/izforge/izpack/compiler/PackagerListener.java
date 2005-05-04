@@ -31,14 +31,35 @@ package com.izforge.izpack.compiler;
  */
 public interface PackagerListener
 {
+    /** Message priority of "debug". */
+    public static final int MSG_DEBUG = 0;
+
+    /** Message priority of "error". */
+    public static final int MSG_ERR = 1;
+
+    /** Message priority of "information". */
+    public static final int MSG_INFO = 2;
+
+    /** Message priority of "verbose". */
+    public static final int MSG_VERBOSE = 3;
+
+    /** Message priority of "warning". */
+    public static final int MSG_WARN = 4;
 
     /**
-     * Called as the packager sends messages.
+     * Send a message with the priority MSG_INFO.
      * 
-     * @param info
-     *            The information that has been sent.
+     * @param info The information that has been sent.
      */
     public void packagerMsg(String info);
+
+    /**
+     * Send a message with the specified priority.
+     * 
+     * @param info The information that has been sent.
+     * @param priority The priority of the message.
+     */
+    public void packagerMsg(String info, int priority);
 
     /** Called when the packager starts. */
     public void packagerStart();
