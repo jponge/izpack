@@ -65,7 +65,7 @@ public class ByteCountingOutputStream extends OutputStream
     public void write(int b) throws IOException
     {
         os.write(b);
-        count++;
+        count += 4;
     }
 
     public void close() throws IOException
