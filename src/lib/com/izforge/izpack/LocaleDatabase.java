@@ -103,7 +103,7 @@ public class LocaleDatabase extends TreeMap
     public String getString(String key)
     {
         String val = (String) get(key);
-        if (val == null) val = key;
+        if (val == null) val = key + "(???)";
         return val;
     }
 }
