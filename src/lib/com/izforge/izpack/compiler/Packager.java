@@ -1,26 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               Packager.java
- *  Description :        Packs files and data into an installer
- *  Author's email :     julien@izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.compiler;
 
 import java.io.File;
@@ -54,8 +50,8 @@ import com.izforge.izpack.PackFile;
 import com.izforge.izpack.Panel;
 
 /**
- * The packager class. The packager is used by the compiler to put files into an
- * installer, and create the actual installer files.
+ * The packager class. The packager is used by the compiler to put files into an installer, and
+ * create the actual installer files.
  * 
  * @author Julien Ponge
  * @author Chadwick McHenry
@@ -111,12 +107,11 @@ public class Packager
     }
 
     /**
-     * Create the installer, beginning with the specified jar. If the name
-     * specified does not end in ".jar", it is appended. If secondary jars are
-     * created for packs (if the Info object added has a webDirURL set), they
-     * are created in the same directory, named sequentially by inserting
-     * ".pack#" (where '#' is the pack number) ".jar" suffix: e.g.
-     * "foo.pack1.jar". If any file exists, it is overwritten.
+     * Create the installer, beginning with the specified jar. If the name specified does not end in
+     * ".jar", it is appended. If secondary jars are created for packs (if the Info object added has
+     * a webDirURL set), they are created in the same directory, named sequentially by inserting
+     * ".pack#" (where '#' is the pack number) ".jar" suffix: e.g. "foo.pack1.jar". If any file
+     * exists, it is overwritten.
      */
     public void createInstaller(File primaryFile) throws IOException
     {
@@ -161,15 +156,14 @@ public class Packager
         sendStop();
     }
 
-    /***************************************************************************
+    /***********************************************************************************************
      * Listener assistance
-     **************************************************************************/
+     **********************************************************************************************/
 
     /**
      * Adds a listener.
      * 
-     * @param listener
-     *            The listener.
+     * @param listener The listener.
      */
     public void setPackagerListener(PackagerListener listener)
     {
@@ -209,17 +203,15 @@ public class Packager
         if (listener != null) listener.packagerStop();
     }
 
-    /***************************************************************************
+    /***********************************************************************************************
      * Public methods to add data to the Installer being packed
-     **************************************************************************/
+     **********************************************************************************************/
 
     /**
      * Sets the informations related to this installation.
      * 
-     * @param info
-     *            The info section.
-     * @exception Exception
-     *                Description of the Exception
+     * @param info The info section.
+     * @exception Exception Description of the Exception
      */
     public void setInfo(Info info) throws Exception
     {
@@ -230,10 +222,8 @@ public class Packager
     /**
      * Sets the GUI preferences.
      * 
-     * @param prefs
-     *            The new gUIPrefs value
-     * @exception Exception
-     *                Description of the Exception
+     * @param prefs The new gUIPrefs value
+     * @exception Exception Description of the Exception
      */
     public void setGUIPrefs(GUIPrefs prefs)
     {
@@ -242,8 +232,8 @@ public class Packager
     }
 
     /**
-     * Allows access to add, remove and update the variables for the project,
-     * which are maintained in the packager.
+     * Allows access to add, remove and update the variables for the project, which are maintained
+     * in the packager.
      * 
      * @return map of variable names to values
      */
@@ -253,8 +243,8 @@ public class Packager
     }
 
     /**
-     * Add a panel, where order is important. Only one copy of the class files
-     * neeed are inserted in the installer.
+     * Add a panel, where order is important. Only one copy of the class files neeed are inserted in
+     * the installer.
      */
     public void addPanelJar(Panel panel, URL jarURL)
     {
@@ -264,13 +254,11 @@ public class Packager
     }
 
     /**
-     * Add a custom data like custom actions, where order is important. Only one
-     * copy of the class files neeed are inserted in the installer.
+     * Add a custom data like custom actions, where order is important. Only one copy of the class
+     * files neeed are inserted in the installer.
      * 
-     * @param ca
-     *            custom action object
-     * @param url
-     *            the URL to include once
+     * @param ca custom action object
+     * @param url the URL to include once
      */
     public void addCustomJar(CustomData ca, URL url)
     {
@@ -282,8 +270,7 @@ public class Packager
     /**
      * Adds a pack, order is mostly irrelevant.
      * 
-     * @param pack
-     *            contains all the files and items that go with a pack
+     * @param pack contains all the files and items that go with a pack
      */
     public void addPack(PackInfo pack)
     {
@@ -301,14 +288,10 @@ public class Packager
     /**
      * Adds a language pack.
      * 
-     * @param iso3
-     *            The ISO3 code.
-     * @param xmlURL
-     *            The location of the xml local info
-     * @param flagURL
-     *            The location of the flag image resource
-     * @exception Exception
-     *                Description of the Exception
+     * @param iso3 The ISO3 code.
+     * @param xmlURL The location of the xml local info
+     * @param flagURL The location of the flag image resource
+     * @exception Exception Description of the Exception
      */
     public void addLangPack(String iso3, URL xmlURL, URL flagURL)
     {
@@ -323,12 +306,9 @@ public class Packager
     /**
      * Adds a resource.
      * 
-     * @param resId
-     *            The resource Id.
-     * @param url
-     *            The location of the data
-     * @exception Exception
-     *                Description of the Exception
+     * @param resId The resource Id.
+     * @param url The location of the data
+     * @exception Exception Description of the Exception
      */
     public void addResource(String resId, URL url)
     {
@@ -339,12 +319,9 @@ public class Packager
     /**
      * Adds a native library.
      * 
-     * @param name
-     *            The native library name.
-     * @param url
-     *            The url to get the data from.
-     * @exception Exception
-     *                Description of the Exception
+     * @param name The native library name.
+     * @param url The url to get the data from.
+     * @exception Exception Description of the Exception
      */
     public void addNativeLibrary(String name, URL url) throws Exception
     {
@@ -353,25 +330,22 @@ public class Packager
     }
 
     /**
-     * Adds a jar file content to the installer. Package structure is
-     * maintained. Need mechanism to copy over signed entry information.
+     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
+     * copy over signed entry information.
      * 
-     * @param jarURL
-     *            The url of the jar to add to the installer. We use a URL so
-     *            the jar may be nested within another.
+     * @param jarURL The url of the jar to add to the installer. We use a URL so the jar may be
+     * nested within another.
      */
     public void addJarContent(URL jarURL)
     {
-        sendMsg("Adding content of jar: " + jarURL.getFile(),
-                PackagerListener.MSG_VERBOSE);
+        sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
         includedJarURLs.add(jarURL);
     }
 
     /**
      * Marks a native library to be added to the uninstaller.
      * 
-     * @param data
-     *            the describing custom action data object
+     * @param data the describing custom action data object
      */
     public void addNativeUninstallerLibrary(CustomData data)
     {
@@ -380,13 +354,13 @@ public class Packager
 
     }
 
-    /***************************************************************************
+    /***********************************************************************************************
      * Private methods used when writing out the installer to jar files.
-     **************************************************************************/
+     **********************************************************************************************/
 
     /**
-     * Write skeleton installer to primary jar. It is just an included jar,
-     * except that we copy the META-INF as well.
+     * Write skeleton installer to primary jar. It is just an included jar, except that we copy the
+     * META-INF as well.
      */
     private void writeSkeletonInstaller() throws IOException
     {
@@ -451,7 +425,7 @@ public class Packager
     private void writePacks() throws IOException
     {
         final int num = packsList.size();
-        sendMsg("Writing " + num + " Pack" + (num>1 ? "s" : "") + " into installer");
+        sendMsg("Writing " + num + " Pack" + (num > 1 ? "s" : "") + " into installer");
 
         // Map to remember pack number and bytes offsets of back references
         Map storedFiles = new HashMap();
@@ -476,8 +450,7 @@ public class Packager
                 packStream = getJarOutputStream(name);
             }
 
-            sendMsg("Writing Pack " + packNumber + ": " + pack.name,
-                    PackagerListener.MSG_VERBOSE);
+            sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
 
             // Retrieve the correct output stream
             ZipEntry entry = new ZipEntry("packs/pack" + packNumber);
@@ -571,9 +544,9 @@ public class Packager
         primaryJarStream.closeEntry();
     }
 
-    /***************************************************************************
+    /***********************************************************************************************
      * Stream utilites for creation of the installer.
-     **************************************************************************/
+     **********************************************************************************************/
 
     /** Return a stream for the next jar. */
     private JarOutputStream getJarOutputStream(String name) throws IOException
@@ -591,9 +564,8 @@ public class Packager
      * Copies contents of one jar to another.
      * 
      * <p>
-     * TODO: it would be useful to be able to keep signature information from
-     * signed jar files, can we combine manifests and still have their content
-     * signed?
+     * TODO: it would be useful to be able to keep signature information from signed jar files, can
+     * we combine manifests and still have their content signed?
      * 
      * @see #copyStream(InputStream, OutputStream)
      */
@@ -618,16 +590,12 @@ public class Packager
     }
 
     /**
-     * Copies all the data from the specified input stream to the specified
-     * output stream.
+     * Copies all the data from the specified input stream to the specified output stream.
      * 
-     * @param in
-     *            the input stream to read
-     * @param out
-     *            the output stream to write
+     * @param in the input stream to read
+     * @param out the output stream to write
      * @return the total number of bytes copied
-     * @exception IOException
-     *                if an I/O error occurs
+     * @exception IOException if an I/O error occurs
      */
     private long copyStream(InputStream in, OutputStream out) throws IOException
     {

@@ -1,31 +1,26 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               PacksModel.java
- *  Description :        A table model for packs.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  Portions are Copyright (C) 2002 Marcus Wolschon
- *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
- *  Portions are Copyright (C) 2004 Gaganis Giorgos (gaganis@users.berlios.de)
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Marcus Wolschon
+ * Copyright 2002 Jan Blok
+ * Copyright 2004 Gaganis Giorgos
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import java.util.HashMap;
@@ -160,8 +155,8 @@ class PacksModel extends AbstractTableModel
     }
 
     /**
-     * Given a map of names and Integer for position and a name it return the
-     * position of this name as an int
+     * Given a map of names and Integer for position and a name it return the position of this name
+     * as an int
      * 
      * @return position of the name
      */
@@ -301,10 +296,10 @@ class PacksModel extends AbstractTableModel
     }
 
     /**
-     * This function updates the checkboxes after a change by disabling packs
-     * that cannot be installed anymore and enabling those that can after the
-     * change. This is accomplished by running a search that pinpoints the packs
-     * that must be disabled by a non-fullfiled dependency.
+     * This function updates the checkboxes after a change by disabling packs that cannot be
+     * installed anymore and enabling those that can after the change. This is accomplished by
+     * running a search that pinpoints the packs that must be disabled by a non-fullfiled
+     * dependency.
      */
     private void updateDeps()
     {
@@ -332,9 +327,9 @@ class PacksModel extends AbstractTableModel
     }
 
     /**
-     * We use a modified dfs graph search algorithm as described in: Thomas H.
-     * Cormen, Charles Leiserson, Ronald Rivest and Clifford Stein. Introduction
-     * to algorithms 2nd Edition 540-549,MIT Press, 2001
+     * We use a modified dfs graph search algorithm as described in: Thomas H. Cormen, Charles
+     * Leiserson, Ronald Rivest and Clifford Stein. Introduction to algorithms 2nd Edition
+     * 540-549,MIT Press, 2001
      */
     private int dfs(int[] status)
     {

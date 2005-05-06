@@ -1,31 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               Unpacker.java
- *  Description :        The unpacker class.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  Portions are Copyright (c) 2001 Johannes Lehtinen
- *  johannes.lehtinen@iki.fi
- *  http://www.iki.fi/jle/
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2001 Johannes Lehtinen
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.io.File;
@@ -113,10 +106,8 @@ public class Unpacker extends Thread
     /**
      * The constructor.
      * 
-     * @param idata
-     *            The installation data.
-     * @param handler
-     *            The installation progress handler.
+     * @param idata The installation data.
+     * @param handler The installation progress handler.
      */
     public Unpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler)
     {
@@ -174,10 +165,9 @@ public class Unpacker extends Thread
     }
 
     /**
-     * Initiate interrupt of all alive Unpacker. This method does not interrupt
-     * the Unpacker objects else it sets only the interrupt flag for the
-     * Unpacker objects. The dispatching of interrupt will be performed by the
-     * Unpacker objects self.
+     * Initiate interrupt of all alive Unpacker. This method does not interrupt the Unpacker objects
+     * else it sets only the interrupt flag for the Unpacker objects. The dispatching of interrupt
+     * will be performed by the Unpacker objects self.
      */
     private static void setInterruptAll()
     {
@@ -199,14 +189,12 @@ public class Unpacker extends Thread
     }
 
     /**
-     * Initiate interrupt of all alive Unpacker and waits until all Unpacker are
-     * interrupted or the wait time has arrived. If the doNotInterrupt flag in
-     * InstallerListener is set to true, the interrupt will be discarded.
+     * Initiate interrupt of all alive Unpacker and waits until all Unpacker are interrupted or the
+     * wait time has arrived. If the doNotInterrupt flag in InstallerListener is set to true, the
+     * interrupt will be discarded.
      * 
-     * @param waitTime
-     *            wait time in millisecounds
-     * @return true if the interrupt will be performed, false if the interrupt
-     *         will be discarded
+     * @param waitTime wait time in millisecounds
+     * @return true if the interrupt will be performed, false if the interrupt will be discarded
      */
     public static boolean interruptAll(long waitTime)
     {
@@ -242,9 +230,8 @@ public class Unpacker extends Thread
     }
 
     /**
-     * Sets the interrupt flag for this Unpacker to INTERRUPTED if the previos
-     * state was INTERRUPT or INTERRUPTED and returns whether interrupt was
-     * initiate or not.
+     * Sets the interrupt flag for this Unpacker to INTERRUPTED if the previos state was INTERRUPT
+     * or INTERRUPTED and returns whether interrupt was initiate or not.
      * 
      * @return whether interrupt was initiate or not
      */
@@ -722,11 +709,8 @@ public class Unpacker extends Thread
     }
 
     /**
-     * @param list
-     *            A list of file name patterns (in ant fileset syntax)
-     * @param recompiler
-     *            The regular expression compiler (used to speed up RE
-     *            compiling).
+     * @param list A list of file name patterns (in ant fileset syntax)
+     * @param recompiler The regular expression compiler (used to speed up RE compiling).
      * 
      * @return List of org.apache.regexp.RE
      */
@@ -846,8 +830,7 @@ public class Unpacker extends Thread
     /**
      * Puts the uninstaller.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private void putUninstaller() throws Exception
     {
@@ -926,11 +909,9 @@ public class Unpacker extends Thread
     /**
      * Returns a stream to a pack, location depending on if it's web based.
      * 
-     * @param n
-     *            The pack number.
+     * @param n The pack number.
      * @return The stream or null if it could not be found.
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private InputStream getPackAsStream(int n) throws Exception
     {
@@ -969,16 +950,11 @@ public class Unpacker extends Thread
     /**
      * Informs all listeners which would be informed at the given action type.
      * 
-     * @param customActions
-     *            array of lists with the custom action objects
-     * @param action
-     *            identifier for which callback should be called
-     * @param firstParam
-     *            first parameter for the call
-     * @param secondParam
-     *            second parameter for the call
-     * @param thirdParam
-     *            third parameter for the call
+     * @param customActions array of lists with the custom action objects
+     * @param action identifier for which callback should be called
+     * @param firstParam first parameter for the call
+     * @param secondParam second parameter for the call
+     * @param thirdParam third parameter for the call
      */
     private void informListeners(List[] customActions, int action, Object firstParam,
             Object secondParam, Object thirdParam) throws Exception
@@ -1040,8 +1016,8 @@ public class Unpacker extends Thread
     }
 
     /**
-     * Returns the defined custom actions split into types including a
-     * constructed type for the file related installer listeners.
+     * Returns the defined custom actions split into types including a constructed type for the file
+     * related installer listeners.
      * 
      * @return array of lists of custom action data like listeners
      */
@@ -1080,11 +1056,8 @@ public class Unpacker extends Thread
     /**
      * Adds additional unistall data to the uninstall data object.
      * 
-     * @param udata
-     *            unistall data
-     * @param customData
-     *            array of lists of custom action data like uninstaller
-     *            listeners
+     * @param udata unistall data
+     * @param customData array of lists of custom action data like uninstaller listeners
      */
     private void handleAdditionalUninstallData(UninstallData udata, List[] customData)
     {
@@ -1101,16 +1074,12 @@ public class Unpacker extends Thread
 
     // This method is only used if a file related custom action exist.
     /**
-     * Creates the given directory recursive and calls the method "afterDir" of
-     * each listener with the current file object and the pack file object. On
-     * error an exception is raised.
+     * Creates the given directory recursive and calls the method "afterDir" of each listener with
+     * the current file object and the pack file object. On error an exception is raised.
      * 
-     * @param dest
-     *            the directory which should be created
-     * @param pf
-     *            current pack file object
-     * @param customActions
-     *            all defined custom actions
+     * @param dest the directory which should be created
+     * @param pf current pack file object
+     * @param customActions all defined custom actions
      * @return false on error, true else
      * @throws Exception
      */
@@ -1155,8 +1124,7 @@ public class Unpacker extends Thread
     /**
      * Sets the discard interrupt flag.
      * 
-     * @param di
-     *            the discard interrupt flag to set
+     * @param di the discard interrupt flag to set
      */
     public static synchronized void setDiscardInterrupt(boolean di)
     {
@@ -1175,8 +1143,7 @@ public class Unpacker extends Thread
     }
 
     /**
-     * @param interruptDesired
-     *            The interrupt desired flag to set
+     * @param interruptDesired The interrupt desired flag to set
      */
     private static void setInterruptDesired(boolean interruptDesired)
     {

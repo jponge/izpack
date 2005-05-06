@@ -32,8 +32,8 @@ import java.io.Reader;
 import java.util.Stack;
 
 /**
- * StdXMLBuilder is a concrete implementation of IXMLBuilder which creates a
- * tree of XMLElement from an XML data source.
+ * StdXMLBuilder is a concrete implementation of IXMLBuilder which creates a tree of XMLElement from
+ * an XML data source.
  * 
  * @see net.n3.nanoxml.XMLElement
  * 
@@ -76,10 +76,8 @@ public class StdXMLBuilder implements IXMLBuilder
     /**
      * This method is called before the parser starts processing its input.
      * 
-     * @param systemID
-     *            the system ID of the XML data source
-     * @param lineNr
-     *            the line on which the parsing starts
+     * @param systemID the system ID of the XML data source
+     * @param lineNr the line on which the parsing starts
      */
     public void startBuilding(String systemID, int lineNr)
     {
@@ -88,13 +86,11 @@ public class StdXMLBuilder implements IXMLBuilder
     }
 
     /**
-     * This method is called when a processing instruction is encountered. PIs
-     * with target "xml" are handled by the parser.
+     * This method is called when a processing instruction is encountered. PIs with target "xml" are
+     * handled by the parser.
      * 
-     * @param target
-     *            the PI target
-     * @param reader
-     *            to read the data from the PI
+     * @param target the PI target
+     * @param reader to read the data from the PI
      */
     public void newProcessingInstruction(String target, Reader reader)
     {
@@ -106,16 +102,11 @@ public class StdXMLBuilder implements IXMLBuilder
      * 
      * @see #endElement
      * 
-     * @param name
-     *            the name of the element
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemID
-     *            the system ID associated with the namespace
-     * @param systemID
-     *            the system ID of the XML data source
-     * @param lineNr
-     *            the line in the source where the element starts
+     * @param name the name of the element
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemID the system ID associated with the namespace
+     * @param systemID the system ID of the XML data source
+     * @param lineNr the line in the source where the element starts
      */
     public void startElement(String name, String nsPrefix, String nsSystemID, String systemID,
             int lineNr)
@@ -136,18 +127,14 @@ public class StdXMLBuilder implements IXMLBuilder
     }
 
     /**
-     * This method is called when the attributes of an XML element have been
-     * processed.
+     * This method is called when the attributes of an XML element have been processed.
      * 
      * @see #startElement
      * @see #addAttribute
      * 
-     * @param name
-     *            the name of the element
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemID
-     *            the system ID associated with the namespace
+     * @param name the name of the element
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemID the system ID associated with the namespace
      */
     public void elementAttributesProcessed(String name, String nsPrefix, String nsSystemID)
     {
@@ -159,12 +146,9 @@ public class StdXMLBuilder implements IXMLBuilder
      * 
      * @see #startElement
      * 
-     * @param name
-     *            the name of the element
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemID
-     *            the system ID associated with the namespace
+     * @param name the name of the element
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemID the system ID associated with the namespace
      */
     public void endElement(String name, String nsPrefix, String nsSystemID)
     {
@@ -183,22 +167,15 @@ public class StdXMLBuilder implements IXMLBuilder
     }
 
     /**
-     * This method is called when a new attribute of an XML element is
-     * encountered.
+     * This method is called when a new attribute of an XML element is encountered.
      * 
-     * @param key
-     *            the key (name) of the attribute
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemID
-     *            the system ID associated with the namespace
-     * @param value
-     *            the value of the attribute
-     * @param type
-     *            the type of the attribute ("CDATA" if unknown)
+     * @param key the key (name) of the attribute
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemID the system ID associated with the namespace
+     * @param value the value of the attribute
+     * @param type the type of the attribute ("CDATA" if unknown)
      * 
-     * @throws java.lang.Exception
-     *             If an exception occurred while processing the event.
+     * @throws java.lang.Exception If an exception occurred while processing the event.
      */
     public void addAttribute(String key, String nsPrefix, String nsSystemID, String value,
             String type) throws Exception
@@ -212,21 +189,16 @@ public class StdXMLBuilder implements IXMLBuilder
     }
 
     /**
-     * This method is called when a PCDATA element is encountered. A Java reader
-     * is supplied from which you can read the data. The reader will only read
-     * the data of the element. You don't need to check for boundaries. If you
-     * don't read the full element, the rest of the data is skipped. You also
-     * don't have to care about entities; they are resolved by the parser.
+     * This method is called when a PCDATA element is encountered. A Java reader is supplied from
+     * which you can read the data. The reader will only read the data of the element. You don't
+     * need to check for boundaries. If you don't read the full element, the rest of the data is
+     * skipped. You also don't have to care about entities; they are resolved by the parser.
      * 
-     * @param reader
-     *            the Java reader from which you can retrieve the data
-     * @param systemID
-     *            the system ID of the XML data source
-     * @param lineNr
-     *            the line in the source where the element starts
+     * @param reader the Java reader from which you can retrieve the data
+     * @param systemID the system ID of the XML data source
+     * @param lineNr the line in the source where the element starts
      * 
-     * @throws java.lang.Exception
-     *             If an exception occurred while processing the event.
+     * @throws java.lang.Exception If an exception occurred while processing the event.
      */
     public void addPCData(Reader reader, String systemID, int lineNr) throws Exception
     {
@@ -265,8 +237,8 @@ public class StdXMLBuilder implements IXMLBuilder
     }
 
     /**
-     * Returns the result of the building process. This method is called just
-     * before the parse() method of IXMLParser returns.
+     * Returns the result of the building process. This method is called just before the parse()
+     * method of IXMLParser returns.
      * 
      * @see net.n3.nanoxml.IXMLParser#parse
      * 

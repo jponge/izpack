@@ -1,7 +1,25 @@
 /*
- * Created on 10.11.2003 by marc.eppelmann
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
  * 
+ * Copyright 2003 Marc Eppelmann
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
  * This represents a Implementation of the KDE/GNOME DesktopEntry.
  * which is standard from
  * "Desktop Entry Standard"
@@ -29,26 +47,6 @@
  //  X-KDE-SubstituteUID=$false
  //  X-KDE-Username=$
  *
- *
- * * File :             Unix_Shortcut.java
- * Description :        UNix-Implementaion of the shortcut API
- * Author's email :     marc.eppelmann@gmx.de
- * Website :            http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
  */
 package com.izforge.izpack.util.os;
 
@@ -64,8 +62,7 @@ import com.izforge.izpack.util.StringTool;
 /**
  * @author marc.eppelmann
  * 
- * This is the Implementaion of the RFC-Based Desktop-Link. Used in KDE and
- * GNOME.
+ * This is the Implementaion of the RFC-Based Desktop-Link. Used in KDE and GNOME.
  */
 public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 {
@@ -180,8 +177,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /**
      * Overridden Method
      * 
-     * @see com.izforge.izpack.util.os.Shortcut#initialize(int,
-     *      java.lang.String)
+     * @see com.izforge.izpack.util.os.Shortcut#initialize(int, java.lang.String)
      */
     public void initialize(int aType, String aName) throws Exception
     {
@@ -384,8 +380,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /**
      * Sets The Icon Path
      * 
-     * @see com.izforge.izpack.util.os.Shortcut#setIconLocation(java.lang.String,
-     *      int)
+     * @see com.izforge.izpack.util.os.Shortcut#setIconLocation(java.lang.String, int)
      */
     public void setIconLocation(String path, int index)
     {
@@ -503,8 +498,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /**
      * Test Method
      * 
-     * @param args
-     *            Commnandline-Args
+     * @param args Commnandline-Args
      */
     public static void main(String[] args)
     {

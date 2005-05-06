@@ -1,29 +1,24 @@
 /*
- *  $Id$
- *  COIOSHelper
- *  Copyright (C) 2005 Klaus Bartz
- *
- *  File :               RegistryImpl.java
- *  Description :        Java part of Windows registry handler.
- *                       
- *  Author's email :     bartzkau@users.berlios.de
- *  Website :            http://www.izforge.com
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2005 Klaus Bartz
  *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.coi.tools.os.win;
 
 import java.util.ArrayList;
@@ -87,8 +82,7 @@ public class RegistryImpl
     /**
      * Sets the root id to the given value.
      * 
-     * @param i
-     *            root id to be set
+     * @param i root id to be set
      */
     public void setRoot(int i)
     {
@@ -98,10 +92,8 @@ public class RegistryImpl
     /**
      * Returns the value of the given value name as RegDataContainer.
      * 
-     * @param key
-     *            key of the registry entry
-     * @param value
-     *            value name of the registry entry
+     * @param key key of the registry entry
+     * @param value value name of the registry entry
      * @return the value of the given value name as RegDataContainer
      * @throws NativeLibException
      */
@@ -114,10 +106,8 @@ public class RegistryImpl
      * Returns the value of the given value name as Object. The real type depends to the type of the
      * value.
      * 
-     * @param key
-     *            key of the registry entry
-     * @param value
-     *            value name of the registry entry
+     * @param key key of the registry entry
+     * @param value value name of the registry entry
      * @return the value of the given value name as RegDataContainer
      * @throws NativeLibException
      */
@@ -129,8 +119,7 @@ public class RegistryImpl
     /**
      * Returns all sub keys under the given key which is under the current root.
      * 
-     * @param key
-     *            key for which the sub keys should be detected
+     * @param key key for which the sub keys should be detected
      * @return all sub keys under the given key which is under the current root
      * @throws NativeLibException
      */
@@ -142,8 +131,7 @@ public class RegistryImpl
     /**
      * Returns all value names under the given key which is under the current root.
      * 
-     * @param key
-     *            key for which the values should be detected
+     * @param key key for which the values should be detected
      * @return all value names under the given key which is under the current root
      * @throws NativeLibException
      */
@@ -155,8 +143,7 @@ public class RegistryImpl
     /**
      * Creates the given key under the current root.
      * 
-     * @param key
-     *            key to be created
+     * @param key key to be created
      * @throws NativeLibException
      */
     public void createKey(String key) throws NativeLibException
@@ -167,8 +154,7 @@ public class RegistryImpl
     /**
      * Creates the given key under the given root.
      * 
-     * @param key
-     *            key to be created
+     * @param key key to be created
      * @throws NativeLibException
      */
     public void createKey(int root, String key) throws NativeLibException
@@ -190,8 +176,7 @@ public class RegistryImpl
     /**
      * Returns whether the given key under the current root exist or not.
      * 
-     * @param key
-     *            key to be tested
+     * @param key key to be tested
      * @return true if thekey exist, else false
      * @throws NativeLibException
      */
@@ -203,10 +188,8 @@ public class RegistryImpl
     /**
      * Returns whether the given key under the given root exist or not.
      * 
-     * @param root
-     *            to be used
-     * @param key
-     *            key to be tested
+     * @param root to be used
+     * @param key key to be tested
      * @return true if thekey exist, else false
      * @throws NativeLibException
      */
@@ -227,10 +210,8 @@ public class RegistryImpl
     /**
      * Returns whether the given value exist under the current root or not.
      * 
-     * @param key
-     *            key of the value for which should be tested
-     * @param value
-     *            value to be tested
+     * @param key key of the value for which should be tested
+     * @param value value to be tested
      * @return true if the value exist, else false
      * @throws NativeLibException
      */
@@ -253,12 +234,9 @@ public class RegistryImpl
      * Sets the given contents to the given registry value. If a sub key or the registry value does
      * not exist, it will be created. REG_SZ is used as registry value type.
      * 
-     * @param key
-     *            the registry key which should be used or created
-     * @param value
-     *            the registry value into which the contents should be set
-     * @param contents
-     *            the contents for the value
+     * @param key the registry key which should be used or created
+     * @param value the registry value into which the contents should be set
+     * @param contents the contents for the value
      * @throws NativeLibException
      */
     public void setValue(String key, String value, String contents) throws NativeLibException
@@ -271,12 +249,9 @@ public class RegistryImpl
      * Sets the given contents to the given registry value. If a sub key or the registry value does
      * not exist, it will be created. REG_MULTI_SZ is used as registry value type.
      * 
-     * @param key
-     *            the registry key which should be used or created
-     * @param value
-     *            the registry value into which the contents should be set
-     * @param contents
-     *            the contents for the value
+     * @param key the registry key which should be used or created
+     * @param value the registry value into which the contents should be set
+     * @param contents the contents for the value
      * @throws NativeLibException
      */
     public void setValue(String key, String value, String[] contents) throws NativeLibException
@@ -289,12 +264,9 @@ public class RegistryImpl
      * Sets the given contents to the given registry value. If a sub key or the registry value does
      * not exist, it will be created. REG_BINARY is used as registry value type.
      * 
-     * @param key
-     *            the registry key which should be used or created
-     * @param value
-     *            the registry value into which the contents should be set
-     * @param contents
-     *            the contents for the value
+     * @param key the registry key which should be used or created
+     * @param value the registry value into which the contents should be set
+     * @param contents the contents for the value
      * @throws NativeLibException
      */
     public void setValue(String key, String value, byte[] contents) throws NativeLibException
@@ -307,12 +279,9 @@ public class RegistryImpl
      * Sets the given contents to the given registry value. If a sub key or the registry value does
      * not exist, it will be created. REG_DWORD is used as registry value type.
      * 
-     * @param key
-     *            the registry key which should be used or created
-     * @param value
-     *            the registry value into which the contents should be set
-     * @param contents
-     *            the contents for the value
+     * @param key the registry key which should be used or created
+     * @param value the registry value into which the contents should be set
+     * @param contents the contents for the value
      * @throws NativeLibException
      */
     public void setValue(String key, String value, long contents) throws NativeLibException
@@ -325,12 +294,9 @@ public class RegistryImpl
      * registry value does not exist, it will be created. The used registry value type will be
      * determined by the type of the RegDataContainer.
      * 
-     * @param key
-     *            the registry key which should be used or created
-     * @param value
-     *            the registry value into which the contents should be set
-     * @param contents
-     *            the contents for the value
+     * @param key the registry key which should be used or created
+     * @param value the registry value into which the contents should be set
+     * @param contents the contents for the value
      * @throws NativeLibException
      */
     public void setValue(String key, String value, RegDataContainer contents)
@@ -344,14 +310,10 @@ public class RegistryImpl
      * not exist, it will be created. The used registry value type will be determined by the type of
      * the RegDataContainer.
      * 
-     * @param root
-     *            id for the root of the key
-     * @param key
-     *            the registry key which should be used or created
-     * @param value
-     *            the registry value into which the contents should be set
-     * @param contents
-     *            the contents for the value
+     * @param root id for the root of the key
+     * @param key the registry key which should be used or created
+     * @param value the registry value into which the contents should be set
+     * @param contents the contents for the value
      * @throws NativeLibException
      */
     public void setValue(int root, String key, String value, RegDataContainer contents)
@@ -382,7 +344,7 @@ public class RegistryImpl
             setValueN(root, key, value, contents);
             // Add value changing to log list
             if (value.length() == 0) // The default value ...
-                    localValue = DEFAULT_PLACEHOLDER; // Rewind will fail if last
+                localValue = DEFAULT_PLACEHOLDER; // Rewind will fail if last
             // token is
             // empty.
 
@@ -396,8 +358,7 @@ public class RegistryImpl
     /**
      * Deletes a key under the current root if it is empty, else do nothing.
      * 
-     * @param key
-     *            key to be deleted
+     * @param key key to be deleted
      * @throws NativeLibException
      */
     public void deleteKeyIfEmpty(String key) throws NativeLibException
@@ -408,10 +369,8 @@ public class RegistryImpl
     /**
      * Deletes a key if it is empty, else do nothing.
      * 
-     * @param root
-     *            id for the root of the key
-     * @param key
-     *            key to be deleted
+     * @param root id for the root of the key
+     * @param key key to be deleted
      * @throws NativeLibException
      */
     public void deleteKeyIfEmpty(int root, String key) throws NativeLibException
@@ -423,10 +382,8 @@ public class RegistryImpl
     /**
      * Deletes a value.
      * 
-     * @param key
-     *            key of the value which should be deleted
-     * @param value
-     *            value name to be deleted
+     * @param key key of the value which should be deleted
+     * @param value value name to be deleted
      * @throws NativeLibException
      */
     public void deleteValue(String key, String value) throws NativeLibException
@@ -437,10 +394,8 @@ public class RegistryImpl
     /**
      * Deletes a key with logging.
      * 
-     * @param root
-     *            id for the root of the key
-     * @param key
-     *            key to be deleted
+     * @param root id for the root of the key
+     * @param key key to be deleted
      * @throws NativeLibException
      */
     private void deleteKeyL(int root, String key) throws NativeLibException
@@ -454,12 +409,9 @@ public class RegistryImpl
     /**
      * Deletes a value with logging.
      * 
-     * @param root
-     *            id for the root of the key
-     * @param key
-     *            key of the value which should be deleted
-     * @param value
-     *            value name to be deleted
+     * @param root id for the root of the key
+     * @param key key of the value which should be deleted
+     * @param value value name to be deleted
      * @throws NativeLibException
      */
     private void deleteValueL(int root, String key, String value) throws NativeLibException
@@ -556,14 +508,10 @@ public class RegistryImpl
      * not exist, it will be created. The used registry value type will be determined by the type of
      * the RegDataContainer.
      * 
-     * @param root
-     *            id for the root of the key
-     * @param key
-     *            the registry key which should be used or created
-     * @param value
-     *            the registry value into which the contents should be set
-     * @param contents
-     *            the contents for the value
+     * @param root id for the root of the key
+     * @param key the registry key which should be used or created
+     * @param value the registry value into which the contents should be set
+     * @param contents the contents for the value
      * @throws NativeLibException
      */
     private void setValueR(int root, String key, String value, RegDataContainer contents)
@@ -578,7 +526,7 @@ public class RegistryImpl
         setValueN(root, key, value, contents);
         // Add value creation to log list
         if (value.length() == 0) // The default value ...
-                localValue = DEFAULT_PLACEHOLDER; // Rewind will fail if last token
+            localValue = DEFAULT_PLACEHOLDER; // Rewind will fail if last token
         // is
         // empty.
         StringBuffer sb = new StringBuffer();

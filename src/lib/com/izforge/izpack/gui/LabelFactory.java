@@ -1,26 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Klaus Bartz
- *
- *  File :               LabelFactory.java
- *  Description :        A LabelFactory.
- *  Author's email :     bartzkau@users.berlios.de
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.gui;
 
 import javax.swing.Icon;
@@ -29,8 +27,7 @@ import javax.swing.SwingConstants;
 
 /**
  * <p>
- * A label factory which can handle modified look like to present icons or
- * present it not.
+ * A label factory which can handle modified look like to present icons or present it not.
  * </p>
  * 
  * @author Klaus Bartz
@@ -54,8 +51,7 @@ public class LabelFactory implements SwingConstants
     /**
      * Sets the use icon state.
      * 
-     * @param b
-     *            flag for the icon state
+     * @param b flag for the icon state
      */
     public static void setUseLabelIcons(boolean b)
     {
@@ -63,12 +59,10 @@ public class LabelFactory implements SwingConstants
     }
 
     /**
-     * Returns a new JLabel with the horizontal alignment CENTER. If
-     * isUseLabelIcons is true, the given image will be set to the label, else
-     * an empty label returns.
+     * Returns a new JLabel with the horizontal alignment CENTER. If isUseLabelIcons is true, the
+     * given image will be set to the label, else an empty label returns.
      * 
-     * @param image
-     *            the image to be used as label icon
+     * @param image the image to be used as label icon
      * @return new JLabel with the given parameters
      */
     public static JLabel create(Icon image)
@@ -78,14 +72,11 @@ public class LabelFactory implements SwingConstants
     }
 
     /**
-     * Returns a new JLabel with the given horizontal alignment. If
-     * isUseLabelIcons is true, the given image will be set to the label, else
-     * an empty label returns.
+     * Returns a new JLabel with the given horizontal alignment. If isUseLabelIcons is true, the
+     * given image will be set to the label, else an empty label returns.
      * 
-     * @param image
-     *            the image to be used as label icon
-     * @param horizontalAlignment
-     *            horizontal alignment of the label
+     * @param image the image to be used as label icon
+     * @param horizontalAlignment horizontal alignment of the label
      * @return new JLabel with the given parameters
      */
     public static JLabel create(Icon image, int horizontalAlignment)
@@ -97,8 +88,7 @@ public class LabelFactory implements SwingConstants
     /**
      * Returns a new JLabel with the horizontal alignment CENTER.
      * 
-     * @param text
-     *            the text to be set
+     * @param text the text to be set
      * @return new JLabel with the given parameters
      */
     public static JLabel create(String text)
@@ -110,10 +100,8 @@ public class LabelFactory implements SwingConstants
     /**
      * Returns a new JLabel with the given horizontal alignment.
      * 
-     * @param text
-     *            the text to be set
-     * @param horizontalAlignment
-     *            horizontal alignment of the label
+     * @param text the text to be set
+     * @param horizontalAlignment horizontal alignment of the label
      * @return new JLabel with the given parameters
      */
     public static JLabel create(String text, int horizontalAlignment)
@@ -123,17 +111,13 @@ public class LabelFactory implements SwingConstants
     }
 
     /**
-     * Returns a new JLabel with the given horizontal alignment. If
-     * isUseLabelIcons is true, the given image will be set to the label. The
-     * given text will be set allways to the label. It is allowed, that image
-     * and/or text are null.
+     * Returns a new JLabel with the given horizontal alignment. If isUseLabelIcons is true, the
+     * given image will be set to the label. The given text will be set allways to the label. It is
+     * allowed, that image and/or text are null.
      * 
-     * @param text
-     *            the text to be set
-     * @param image
-     *            the image to be used as label icon
-     * @param horizontalAlignment
-     *            horizontal alignment of the label
+     * @param text the text to be set
+     * @param image the image to be used as label icon
+     * @param horizontalAlignment horizontal alignment of the label
      * @return new JLabel with the given parameters
      */
     public static JLabel create(String text, Icon image, int horizontalAlignment)

@@ -1,29 +1,24 @@
 /*
- *  $Id$
- *  COIOSHelper
- *  Copyright (C) 2005 Klaus Bartz
- *
- *  File :               RegDataContainer.java
- *  Description :        Container for registry data.
- *                       
- *  Author's email :     bartzkau@users.berlios.de
- *  Website :            http://www.izforge.com
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2005 Klaus Bartz
  *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.coi.tools.os.win;
 
 import java.io.Serializable;
@@ -36,10 +31,12 @@ import java.io.Serializable;
  * </p>
  * 
  * @author Klaus Bartz
- *  
+ * 
  */
 public class RegDataContainer implements Cloneable, Serializable
 {
+
+    private static final long serialVersionUID = 3979265850388066865L;
 
     /*
      * Registry value types, extracted from winnt.h
@@ -83,8 +80,7 @@ public class RegDataContainer implements Cloneable, Serializable
      * Creates a RegDataContainer for a special type The data self is not set. Valid types are
      * 
      * @param type
-     * @throws IllegalArgumentException
-     *             if the type is not valid
+     * @throws IllegalArgumentException if the type is not valid
      */
     public RegDataContainer(int type) throws IllegalArgumentException
     {
@@ -97,8 +93,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Creates a RegDataContainer for type REG_DWORD with the given data
      * 
-     * @param data
-     *            data which should be used with this object
+     * @param data data which should be used with this object
      */
     public RegDataContainer(long data)
     {
@@ -110,8 +105,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Creates a RegDataContainer for type REG_SZ with the given data
      * 
-     * @param data
-     *            data which should be used with this object
+     * @param data data which should be used with this object
      */
     public RegDataContainer(String data)
     {
@@ -123,8 +117,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Creates a RegDataContainer for type REG_MULTI_SZ with the given data
      * 
-     * @param data
-     *            data which should be used with this object
+     * @param data data which should be used with this object
      */
     public RegDataContainer(String[] data)
     {
@@ -136,8 +129,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Creates a RegDataContainer for type REG_BINARY with the given data
      * 
-     * @param data
-     *            data which should be used with this object
+     * @param data data which should be used with this object
      */
     public RegDataContainer(byte[] data)
     {
@@ -203,8 +195,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Sets the binary data to the given byte array.
      * 
-     * @param bytes
-     *            data to be set
+     * @param bytes data to be set
      */
     public void setBinData(byte[] bytes)
     {
@@ -214,8 +205,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Sets the dword data to the given value.
      * 
-     * @param i
-     *            data to be set
+     * @param i data to be set
      */
     public void setDwordData(long i)
     {
@@ -225,8 +215,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Sets the multi string data to the given string array.
      * 
-     * @param strings
-     *            data to be set
+     * @param strings data to be set
      */
     public void setMultiStringData(String[] strings)
     {
@@ -236,8 +225,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Sets the string data to the given value.
      * 
-     * @param string
-     *            data to be set
+     * @param string data to be set
      */
     public void setStringData(String string)
     {
@@ -247,8 +235,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Sets the type.
      * 
-     * @param i
-     *            type to be set
+     * @param i type to be set
      */
     public void setType(int i)
     {
@@ -258,8 +245,7 @@ public class RegDataContainer implements Cloneable, Serializable
     /**
      * Verifies whether the given int represents a valid type or not.
      * 
-     * @param type
-     *            value to be verified
+     * @param type value to be verified
      * @return whether the given int represents a valid type or not
      */
     public boolean isValidType(int type)
@@ -346,7 +332,7 @@ public class RegDataContainer implements Cloneable, Serializable
                         if (multiStringData[i] != null)
                         {
                             if (!multiStringData[i].equals(other.multiStringData[i]))
-                                    return (false);
+                                return (false);
                         }
                         else if (other.multiStringData[i] == null) return (false);
                     }

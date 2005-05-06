@@ -1,29 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2003 Jonathan Halliday, Julien Ponge
- *
- *  File :               InstallerBase.java
- *  Description :        Utility functions shared by the GUI and headless installers.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2003 Jonathan Halliday
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.io.File;
@@ -46,8 +41,8 @@ import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
- * Common utility functions for the GUI and text installers. (Do not import
- * swing/awt classes to this class.)
+ * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
+ * this class.)
  * 
  * @author Jonathan Halliday
  * @author Julien Ponge
@@ -56,23 +51,20 @@ public class InstallerBase
 {
 
     /**
-     * The base name of the XML file that specifies the custom langpack.
-     * Searched is for the file with the name expanded by _ISO3.
+     * The base name of the XML file that specifies the custom langpack. Searched is for the file
+     * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
 
     /**
-     * Loads the installation data. Also sets environment variables to
-     * <code>installdata</code>. All system properties are available as
-     * $SYSTEM_<variable> where <variable> is the actual name _BUT_ with all
-     * separators replaced by '_'. Properties with null values are never stored.
+     * Loads the installation data. Also sets environment variables to <code>installdata</code>.
+     * All system properties are available as $SYSTEM_<variable> where <variable> is the actual
+     * name _BUT_ with all separators replaced by '_'. Properties with null values are never stored.
      * Example: $SYSTEM_java_version or $SYSTEM_os_name
      * 
-     * @param installdata
-     *            Where to store the installation data.
+     * @param installdata Where to store the installation data.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     public void loadInstallData(AutomatedInstallData installdata) throws Exception
     {
@@ -203,11 +195,10 @@ public class InstallerBase
     }
 
     /**
-     * Add the contents of a custom langpack (if exist) to the previos loaded
-     * comman langpack. If not exist, trace an info and do nothing more.
+     * Add the contents of a custom langpack (if exist) to the previos loaded comman langpack. If
+     * not exist, trace an info and do nothing more.
      * 
-     * @param idata
-     *            install data to be used
+     * @param idata install data to be used
      */
     protected void addCustomLangpack(AutomatedInstallData idata)
     {
@@ -279,11 +270,9 @@ public class InstallerBase
     }
 
     /**
-     * Loads custom data like listener and lib references if exist and fills the
-     * installdata.
+     * Loads custom data like listener and lib references if exist and fills the installdata.
      * 
-     * @param installdata
-     *            installdata into which the custom action data should be stored
+     * @param installdata installdata into which the custom action data should be stored
      * @throws Exception
      */
     private void loadCustomData(AutomatedInstallData installdata) throws Exception

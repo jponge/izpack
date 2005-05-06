@@ -1,26 +1,23 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Thomas Guenter, Klaus Bartz
- *
- *  File :               AntAction.java
- *  Description :        Data class for ant action listeners.
- *  Author's email :     bartzkau@users.berlios.de
- *  Website :            http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * Copyright 2004 Thomas Guenter
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.event;
@@ -118,10 +115,8 @@ public class AntAction extends ActionBase
     /**
      * Performs all defined actions.
      * 
-     * @param uninstall
-     *            An install/uninstall switch. If this is <tt>true</tt> only
-     *            the uninstall actions, otherwise only the install actions are
-     *            being performed.
+     * @param uninstall An install/uninstall switch. If this is <tt>true</tt> only the uninstall
+     * actions, otherwise only the install actions are being performed.
      * 
      * @see #performInstallAction() for calling all install actions.
      * @see #performUninstallAction() for calling all uninstall actions.
@@ -194,8 +189,7 @@ public class AntAction extends ActionBase
     /**
      * Sets the build file to be used to the given string.
      * 
-     * @param buildFile
-     *            build file path to be used
+     * @param buildFile build file path to be used
      */
     public void setBuildFile(String buildFile)
     {
@@ -215,8 +209,7 @@ public class AntAction extends ActionBase
     /**
      * Sets the logfile path to the given string.
      * 
-     * @param logFile
-     *            to be set
+     * @param logFile to be set
      */
     public void setLogFile(String logFile)
     {
@@ -236,8 +229,7 @@ public class AntAction extends ActionBase
     /**
      * Adds one property file path to the internal list of property file paths.
      * 
-     * @param propertyFile
-     *            to be added
+     * @param propertyFile to be added
      */
     public void addPropertyFile(String propertyFile)
     {
@@ -245,11 +237,9 @@ public class AntAction extends ActionBase
     }
 
     /**
-     * Sets the property file path list to the given list. Old settings will be
-     * lost.
+     * Sets the property file path list to the given list. Old settings will be lost.
      * 
-     * @param propertyFiles
-     *            list of property file paths to be set
+     * @param propertyFiles list of property file paths to be set
      */
     public void setPropertyFiles(List propertyFiles)
     {
@@ -267,11 +257,9 @@ public class AntAction extends ActionBase
     }
 
     /**
-     * Sets the internal properties to the given properties. Old settings will
-     * be lost.
+     * Sets the internal properties to the given properties. Old settings will be lost.
      * 
-     * @param properties
-     *            properties to be set
+     * @param properties properties to be set
      */
     public void setProperties(Properties properties)
     {
@@ -281,10 +269,8 @@ public class AntAction extends ActionBase
     /**
      * Sets the given value to the property identified by the given name.
      * 
-     * @param name
-     *            key of the property
-     * @param value
-     *            value to be used for the property
+     * @param name key of the property
+     * @param value value to be used for the property
      */
     public void setProperty(String name, String value)
     {
@@ -294,8 +280,7 @@ public class AntAction extends ActionBase
     /**
      * Returns the value for the property identified by the given name.
      * 
-     * @param name
-     *            name of the property
+     * @param name name of the property
      * @return value of the property
      */
     public String getProperty(String name)
@@ -316,8 +301,7 @@ public class AntAction extends ActionBase
     /**
      * Sets whether the associated ant task should be performed quiet or not.
      * 
-     * @param quiet
-     *            quiet state to set
+     * @param quiet quiet state to set
      */
     public void setQuiet(boolean quiet)
     {
@@ -335,11 +319,9 @@ public class AntAction extends ActionBase
     }
 
     /**
-     * Sets the targets which should be performed at installation time. Old
-     * settings are lost.
+     * Sets the targets which should be performed at installation time. Old settings are lost.
      * 
-     * @param targets
-     *            list of targets
+     * @param targets list of targets
      */
     public void setTargets(ArrayList targets)
     {
@@ -347,11 +329,9 @@ public class AntAction extends ActionBase
     }
 
     /**
-     * Adds the given target to the target list which should be performed at
-     * installation time.
+     * Adds the given target to the target list which should be performed at installation time.
      * 
-     * @param target
-     *            target to be add
+     * @param target target to be add
      */
     public void addTarget(String target)
     {
@@ -369,11 +349,9 @@ public class AntAction extends ActionBase
     }
 
     /**
-     * Sets the targets which should be performed at uninstallation time. Old
-     * settings are lost.
+     * Sets the targets which should be performed at uninstallation time. Old settings are lost.
      * 
-     * @param targets
-     *            list of targets
+     * @param targets list of targets
      */
     public void setUninstallTargets(ArrayList targets)
     {
@@ -381,11 +359,9 @@ public class AntAction extends ActionBase
     }
 
     /**
-     * Adds the given target to the target list which should be performed at
-     * uninstallation time.
+     * Adds the given target to the target list which should be performed at uninstallation time.
      * 
-     * @param target
-     *            target to be add
+     * @param target target to be add
      */
     public void addUninstallTarget(String target)
     {
@@ -405,8 +381,7 @@ public class AntAction extends ActionBase
     /**
      * Sets the verbose state.
      * 
-     * @param verbose
-     *            state to be set
+     * @param verbose state to be set
      */
     public void setVerbose(boolean verbose)
     {

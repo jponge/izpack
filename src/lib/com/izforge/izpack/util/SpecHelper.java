@@ -1,26 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Klaus Bartz
- *
- *  File :               SpecHelper.java
- *  Description :        Helper for XML specifications.
- *  Author's email :     klaus.bartz@coi.de
- *  Author's Website :   http://www.coi.de/
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.util;
@@ -42,8 +38,7 @@ import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.ResourceManager;
 
 /**
- * This class contains some helper methods to simplify handling of xml
- * specification files.
+ * This class contains some helper methods to simplify handling of xml specification files.
  * 
  * @author Klaus Bartz
  * 
@@ -75,11 +70,9 @@ public class SpecHelper
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the XML specification given by the file name. The result is stored
-     * in spec.
+     * Reads the XML specification given by the file name. The result is stored in spec.
      * 
-     * @exception Exception
-     *                for any problems in reading the specification
+     * @exception Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     public void readSpec(String specFileName) throws Exception
@@ -89,11 +82,9 @@ public class SpecHelper
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the XML specification given by the file name. The result is stored
-     * in spec.
+     * Reads the XML specification given by the file name. The result is stored in spec.
      * 
-     * @exception Exception
-     *                for any problems in reading the specification
+     * @exception Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     public void readSpec(String specFileName, VariableSubstitutor substitutor) throws Exception
@@ -124,11 +115,9 @@ public class SpecHelper
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the XML specification given by the input stream. The result is
-     * stored in spec.
+     * Reads the XML specification given by the input stream. The result is stored in spec.
      * 
-     * @exception Exception
-     *                for any problems in reading the specification
+     * @exception Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     public void readSpec(InputStream input) throws Exception
@@ -138,11 +127,9 @@ public class SpecHelper
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the XML specification given by the input stream. The result is
-     * stored in spec.
+     * Reads the XML specification given by the input stream. The result is stored in spec.
      * 
-     * @exception Exception
-     *                for any problems in reading the specification
+     * @exception Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     public void readSpec(InputStream input, VariableSubstitutor substitutor) throws Exception
@@ -167,8 +154,7 @@ public class SpecHelper
     /**
      * Gets the stream to a resource.
      * 
-     * @param res
-     *            The resource id.
+     * @param res The resource id.
      * @return The resource value, null if not found
      */
     public InputStream getResource(String res)
@@ -187,8 +173,7 @@ public class SpecHelper
     /**
      * Returns a XML element which represents the pack for the given name.
      * 
-     * @param packDestName
-     *            name of the pack which should be returned
+     * @param packDestName name of the pack which should be returned
      * @return a XML element which represents the pack for the given name
      */
     public XMLElement getPackForName(String packDestName)
@@ -209,13 +194,11 @@ public class SpecHelper
     }
 
     /**
-     * Create parse error with consistent messages. Includes file name and line #
-     * of parent. It is an error for 'parent' to be null.
+     * Create parse error with consistent messages. Includes file name and line # of parent. It is
+     * an error for 'parent' to be null.
      * 
-     * @param parent
-     *            The element in which the error occured
-     * @param message
-     *            Brief message explaining error
+     * @param parent The element in which the error occured
+     * @param message Brief message explaining error
      */
     public void parseError(XMLElement parent, String message) throws InstallerException
     {
@@ -253,14 +236,11 @@ public class SpecHelper
     }
 
     /**
-     * Returns a Vector with all leafs of the tree which is described with
-     * childdef.
+     * Returns a Vector with all leafs of the tree which is described with childdef.
      * 
-     * @param root
-     *            the XMLElement which is the current root for the search
-     * @param childdef
-     *            a String array which describes the tree; the last element
-     *            contains the leaf name
+     * @param root the XMLElement which is the current root for the search
+     * @param childdef a String array which describes the tree; the last element contains the leaf
+     * name
      * @return a Vector of XMLElements of all leafs founded under root
      */
     public Vector getAllSubChildren(XMLElement root, String[] childdef)
@@ -269,16 +249,13 @@ public class SpecHelper
     }
 
     /**
-     * Returns a Vector with all leafs of the tree which is described with
-     * childdef beginning at the given depth.
+     * Returns a Vector with all leafs of the tree which is described with childdef beginning at the
+     * given depth.
      * 
-     * @param root
-     *            the XMLElement which is the current root for the search
-     * @param childdef
-     *            a String array which describes the tree; the last element
-     *            contains the leaf name
-     * @param depth
-     *            depth to start in childdef
+     * @param root the XMLElement which is the current root for the search
+     * @param childdef a String array which describes the tree; the last element contains the leaf
+     * name
+     * @param depth depth to start in childdef
      * @return a Vector of XMLElements of all leafs founded under root
      */
     private Vector getSubChildren(XMLElement root, String[] childdef, int depth)
@@ -306,14 +283,11 @@ public class SpecHelper
     }
 
     /**
-     * Creates an temp file in to the substitutor the substituted contents of
-     * input writes; close it and (re)open it as FileInputStream. The file will
-     * be deleted on exit.
+     * Creates an temp file in to the substitutor the substituted contents of input writes; close it
+     * and (re)open it as FileInputStream. The file will be deleted on exit.
      * 
-     * @param input
-     *            the opened input stream which contents should be substituted
-     * @param substitutor
-     *            substitutor which should substitute the contents of input
+     * @param input the opened input stream which contents should be substituted
+     * @param substitutor substitutor which should substitute the contents of input
      * @return a file input stream of the created temporary file
      * @throws Exception
      */
@@ -336,16 +310,12 @@ public class SpecHelper
     }
 
     /**
-     * Returns whether the value to the given attribute is "yes" or not. If the
-     * attribute does not exist, or the value is not "yes" and not "no", the
-     * default value is returned.
+     * Returns whether the value to the given attribute is "yes" or not. If the attribute does not
+     * exist, or the value is not "yes" and not "no", the default value is returned.
      * 
-     * @param element
-     *            the XML element which contains the attribute
-     * @param attribute
-     *            the name of the attribute
-     * @param defaultValue
-     *            the default value
+     * @param element the XML element which contains the attribute
+     * @param attribute the name of the attribute
+     * @param defaultValue the default value
      * @return whether the value to the given attribute is "yes" or not
      */
     public boolean isAttributeYes(XMLElement element, String attribute, boolean defaultValue)
@@ -358,13 +328,11 @@ public class SpecHelper
     }
 
     /**
-     * Returns the attribute for the given attribute name. If no attribute
-     * exist, an InstallerException with a detail message is thrown.
+     * Returns the attribute for the given attribute name. If no attribute exist, an
+     * InstallerException with a detail message is thrown.
      * 
-     * @param element
-     *            XML element which should contain the attribute
-     * @param attrName
-     *            key of the attribute
+     * @param element XML element which should contain the attribute
+     * @param attrName key of the attribute
      * @return the attribute as string
      * @throws Exception
      */

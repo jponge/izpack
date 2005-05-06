@@ -1,27 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001 Johannes Lehtinen
- *
- *  File :               VariableSubstitutor.java
- *  Description :        Variable substitutor backend.
- *  Author's email :     johannes.lehtinen@iki.fi
- *  Author's Website :   http://www.iki.fi/jle/
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2001 Johannes Lehtinen
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.util;
 
 import java.io.IOException;
@@ -39,16 +36,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Substitutes variables occurring in an input stream or a string. This
- * implementation supports a generic variable value mapping and escapes the
- * possible special characters occurring in the substituted values. The file
- * types specifically supported are plain text files (no escaping), Java
- * properties files, and XML files. A valid variable name matches the regular
- * expression [a-zA-Z][a-zA-Z0-9_]* and names are case sensitive. Variables are
- * referenced either by $NAME or ${NAME} (the latter syntax being useful in
- * situations like ${NAME}NOTPARTOFNAME). If a referenced variable is undefined
- * then it is not substituted but the corresponding part of the stream is copied
- * as is.
+ * Substitutes variables occurring in an input stream or a string. This implementation supports a
+ * generic variable value mapping and escapes the possible special characters occurring in the
+ * substituted values. The file types specifically supported are plain text files (no escaping),
+ * Java properties files, and XML files. A valid variable name matches the regular expression
+ * [a-zA-Z][a-zA-Z0-9_]* and names are case sensitive. Variables are referenced either by $NAME or
+ * ${NAME} (the latter syntax being useful in situations like ${NAME}NOTPARTOFNAME). If a referenced
+ * variable is undefined then it is not substituted but the corresponding part of the stream is
+ * copied as is.
  * 
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
@@ -96,12 +91,10 @@ public class VariableSubstitutor implements Serializable
     }
 
     /**
-     * Constructs a new substitutor using the specified variable value mappings.
-     * The environment hashtable is copied by reference. Braces are not required
-     * by default
+     * Constructs a new substitutor using the specified variable value mappings. The environment
+     * hashtable is copied by reference. Braces are not required by default
      * 
-     * @param variables
-     *            the map with variable value mappings
+     * @param variables the map with variable value mappings
      */
     public VariableSubstitutor(Map variables)
     {
@@ -125,16 +118,13 @@ public class VariableSubstitutor implements Serializable
     }
 
     /**
-     * Substitutes the variables found in the specified string. Escapes special
-     * characters using file type specific escaping if necessary.
+     * Substitutes the variables found in the specified string. Escapes special characters using
+     * file type specific escaping if necessary.
      * 
-     * @param str
-     *            the string to check for variables
-     * @param type
-     *            the escaping type or null for plain
+     * @param str the string to check for variables
+     * @param type the escaping type or null for plain
      * @return the string with substituted variables
-     * @exception IllegalArgumentException
-     *                if unknown escaping type specified
+     * @exception IllegalArgumentException if unknown escaping type specified
      */
     public String substitute(String str, String type) throws IllegalArgumentException
     {
@@ -160,23 +150,16 @@ public class VariableSubstitutor implements Serializable
     }
 
     /**
-     * Substitutes the variables found in the specified input stream. Escapes
-     * special characters using file type specific escaping if necessary.
+     * Substitutes the variables found in the specified input stream. Escapes special characters
+     * using file type specific escaping if necessary.
      * 
-     * @param in
-     *            the input stream to read
-     * @param out
-     *            the output stream to write
-     * @param type
-     *            the file type or null for plain
-     * @param encoding
-     *            the character encoding or null for default
-     * @exception IllegalArgumentException
-     *                if unknown file type specified
-     * @exception UnsupportedEncodingException
-     *                if encoding not supported
-     * @exception IOException
-     *                if an I/O error occurs
+     * @param in the input stream to read
+     * @param out the output stream to write
+     * @param type the file type or null for plain
+     * @param encoding the character encoding or null for default
+     * @exception IllegalArgumentException if unknown file type specified
+     * @exception UnsupportedEncodingException if encoding not supported
+     * @exception IOException if an I/O error occurs
      * 
      * @return the number of substitutions made
      */
@@ -214,20 +197,14 @@ public class VariableSubstitutor implements Serializable
     }
 
     /**
-     * Substitutes the variables found in the data read from the specified
-     * reader. Escapes special characters using file type specific escaping if
-     * necessary.
+     * Substitutes the variables found in the data read from the specified reader. Escapes special
+     * characters using file type specific escaping if necessary.
      * 
-     * @param reader
-     *            the reader to read
-     * @param writer
-     *            the writer used to write data out
-     * @param type
-     *            the file type or null for plain
-     * @exception IllegalArgumentException
-     *                if unknown file type specified
-     * @exception IOException
-     *                if an I/O error occurs
+     * @param reader the reader to read
+     * @param writer the writer used to write data out
+     * @param type the file type or null for plain
+     * @exception IllegalArgumentException if unknown file type specified
+     * @exception IOException if an I/O error occurs
      * 
      * @return the number of substitutions made
      */
@@ -323,8 +300,7 @@ public class VariableSubstitutor implements Serializable
     /**
      * Returns the internal constant for the specified file type.
      * 
-     * @param type
-     *            the type name or null for plain
+     * @param type the type name or null for plain
      * @return the file type constant
      */
     protected int getTypeConstant(String type)
@@ -338,13 +314,10 @@ public class VariableSubstitutor implements Serializable
     }
 
     /**
-     * Escapes the special characters in the specified string using file type
-     * specific rules.
+     * Escapes the special characters in the specified string using file type specific rules.
      * 
-     * @param str
-     *            the string to check for special characters
-     * @param type
-     *            the target file type (one of TYPE_xxx)
+     * @param str the string to check for special characters
+     * @param type the target file type (one of TYPE_xxx)
      * @return the string with the special characters properly escaped
      */
     protected String escapeSpecialChars(String str, int type)

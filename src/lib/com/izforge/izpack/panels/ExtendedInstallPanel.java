@@ -1,26 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Klaus Bartz
- *
- *  File :               ExtendedInstallPanel.java
- *  Description :        A panel to launch the installation process.
- *  Author's email :     bartzkau@users.berlios.de
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.InstallData;
@@ -28,8 +26,7 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
 /**
- * The install panel class. Launches the actual installation job with extensions
- * for custom actions.
+ * The install panel class. Launches the actual installation job with extensions for custom actions.
  * 
  * @author Klaus Bartz
  */
@@ -43,10 +40,8 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
     /**
      * The constructor.
      * 
-     * @param parent
-     *            The parent window.
-     * @param idata
-     *            The installation data.
+     * @param parent The parent window.
+     * @param idata The installation data.
      */
     public ExtendedInstallPanel(InstallerFrame parent, InstallData idata)
     {
@@ -57,7 +52,7 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.util.ExtendedUIProgressHandler#startAction(java.lang.String,
-     *      java.lang.String, java.lang.String, int)
+     * java.lang.String, java.lang.String, int)
      */
     public void restartAction(String name, String overallMsg, String tipMsg, int no_of_steps)
     {
@@ -70,10 +65,8 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
     /**
      * Normal progress indicator.
      * 
-     * @param val
-     *            The progression value.
-     * @param msg
-     *            The progression message.
+     * @param val The progression value.
+     * @param msg The progression message.
      */
     public void progress(int val, String msg)
     {
@@ -86,7 +79,7 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.util.ExtendedUIProgressHandler#progress(java.lang.String,
-     *      java.lang.String)
+     * java.lang.String)
      */
     public void progress(String stepMessage)
     {
@@ -98,12 +91,9 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
     /**
      * Pack changing.
      * 
-     * @param packName
-     *            The pack name.
-     * @param stepno
-     *            The number of the pack.
-     * @param max
-     *            The new maximum progress.
+     * @param packName The pack name.
+     * @param stepno The number of the pack.
+     * @param max The new maximum progress.
      */
     public void nextStep(String packName, int stepno, int max)
     {

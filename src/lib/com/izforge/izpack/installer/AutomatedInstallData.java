@@ -1,27 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               AutomatedInstallData.java
- *  Description :        Installer internal data.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.util.ArrayList;
@@ -37,8 +32,7 @@ import com.izforge.izpack.Info;
 import com.izforge.izpack.LocaleDatabase;
 
 /**
- * Encloses information about the install process. This implementation is not
- * thread safe.
+ * Encloses information about the install process. This implementation is not thread safe.
  * 
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
@@ -49,10 +43,9 @@ public class AutomatedInstallData
     // --- Static members -------------------------------------------------
 
     /**
-     * Names of the custom actions types with which they are stored in the
-     * installer jar file. These names are also used to identify the type of
-     * custom action in the customData map. Slashes as first char are needed to
-     * use the names as "file" name in the installer jar.
+     * Names of the custom actions types with which they are stored in the installer jar file. These
+     * names are also used to identify the type of custom action in the customData map. Slashes as
+     * first char are needed to use the names as "file" name in the installer jar.
      */
     // Attention !! Do not change the existent names and the order.
     // Add a / as first char at new types. Add new type handling in
@@ -134,8 +127,8 @@ public class AutomatedInstallData
     }
 
     /**
-     * Returns the map of variable values. Modifying this will directly affect
-     * the current value of variables.
+     * Returns the map of variable values. Modifying this will directly affect the current value of
+     * variables.
      * 
      * @return the map of variable values
      */
@@ -148,10 +141,8 @@ public class AutomatedInstallData
      * Sets a variable to the specified value. This is short hand for
      * <code>getVariables().setProperty(var, val)</code>.
      * 
-     * @param var
-     *            the name of the variable
-     * @param val
-     *            the new value of the variable
+     * @param var the name of the variable
+     * @param val the new value of the variable
      * @see #getVariable
      */
     public void setVariable(String var, String val)
@@ -160,11 +151,10 @@ public class AutomatedInstallData
     }
 
     /**
-     * Returns the current value of the specified variable. This is short hand
-     * for <code>getVariables().getProperty(var)</code>.
+     * Returns the current value of the specified variable. This is short hand for
+     * <code>getVariables().getProperty(var)</code>.
      * 
-     * @param var
-     *            the name of the variable
+     * @param var the name of the variable
      * @return the value of the variable or null if not set
      * @see #setVariable
      */
@@ -176,8 +166,7 @@ public class AutomatedInstallData
     /**
      * Sets the install path.
      * 
-     * @param path
-     *            the new install path
+     * @param path the new install path
      * @see #getInstallPath
      */
     public void setInstallPath(String path)
@@ -199,8 +188,7 @@ public class AutomatedInstallData
     /**
      * Returns the value of the named attribute.
      * 
-     * @param attr
-     *            the name of the attribute
+     * @param attr the name of the attribute
      * @return the value of the attribute or null if not set
      * @see #setAttribute
      */
@@ -210,17 +198,14 @@ public class AutomatedInstallData
     }
 
     /**
-     * Sets a named attribute. The panels and other IzPack components can attach
-     * custom attributes to InstallData to communicate with each other. For
-     * example, a set of co-operating custom panels do not need to implement a
-     * common data storage but can use InstallData singleton. The name of the
-     * attribute should include the package and class name to prevent name space
+     * Sets a named attribute. The panels and other IzPack components can attach custom attributes
+     * to InstallData to communicate with each other. For example, a set of co-operating custom
+     * panels do not need to implement a common data storage but can use InstallData singleton. The
+     * name of the attribute should include the package and class name to prevent name space
      * collisions.
      * 
-     * @param attr
-     *            the name of the attribute to set
-     * @param val
-     *            the value of the attribute or null to unset the attribute
+     * @param attr the name of the attribute to set
+     * @param val the value of the attribute or null to unset the attribute
      * @see #getAttribute
      */
     public void setAttribute(String attr, Object val)

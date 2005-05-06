@@ -29,8 +29,8 @@
 package net.n3.nanoxml;
 
 /**
- * An XMLValidationException is thrown when the XML passed to the XML parser is
- * well-formed but not valid.
+ * An XMLValidationException is thrown when the XML passed to the XML parser is well-formed but not
+ * valid.
  * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
@@ -106,20 +106,13 @@ public class XMLValidationException extends XMLException
     /**
      * Creates a new exception.
      * 
-     * @param errorType
-     *            the type of validity error
-     * @param systemID
-     *            the system ID from where the data came
-     * @param lineNr
-     *            the line number in the XML data where the exception occurred.
-     * @param elementName
-     *            the name of the offending element
-     * @param attributeName
-     *            the name of the offending attribute
-     * @param attributeValue
-     *            the value of the offending attribute
-     * @param msg
-     *            the message of the exception.
+     * @param errorType the type of validity error
+     * @param systemID the system ID from where the data came
+     * @param lineNr the line number in the XML data where the exception occurred.
+     * @param elementName the name of the offending element
+     * @param attributeName the name of the offending attribute
+     * @param attributeValue the value of the offending attribute
+     * @param msg the message of the exception.
      */
     public XMLValidationException(int errorType, String systemID, int lineNr, String elementName,
             String attributeName, String attributeValue, String msg)
@@ -145,8 +138,8 @@ public class XMLValidationException extends XMLException
     }
 
     /**
-     * Returns the name of the element in which the validation is violated. If
-     * there is no current element, null is returned.
+     * Returns the name of the element in which the validation is violated. If there is no current
+     * element, null is returned.
      */
     public String getElementName()
     {
@@ -154,8 +147,8 @@ public class XMLValidationException extends XMLException
     }
 
     /**
-     * Returns the name of the attribute in which the validation is violated. If
-     * there is no current attribute, null is returned.
+     * Returns the name of the attribute in which the validation is violated. If there is no current
+     * attribute, null is returned.
      */
     public String getAttributeName()
     {
@@ -163,8 +156,8 @@ public class XMLValidationException extends XMLException
     }
 
     /**
-     * Returns the value of the attribute in which the validation is violated.
-     * If there is no current attribute, null is returned.
+     * Returns the value of the attribute in which the validation is violated. If there is no
+     * current attribute, null is returned.
      */
     public String getAttributeValue()
     {

@@ -1,25 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Klaus Bartz
- *
- *  File :               IoHelper.java
- *  Description :        Helper for IO related stuff.
- *  Author's email :     bartzkau@users.berlios.de
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Elmar Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.util;
@@ -66,10 +63,8 @@ public class IoHelper
     /**
      * Copies the contents of inFile into outFile.
      * 
-     * @param inFile
-     *            path of file which should be copied
-     * @param outFile
-     *            path of file to create and copy the contents of inFile into
+     * @param inFile path of file which should be copied
+     * @param outFile path of file to create and copy the contents of inFile into
      */
     public static void copyFile(String inFile, String outFile) throws IOException
     {
@@ -77,15 +72,12 @@ public class IoHelper
     }
 
     /**
-     * Creates an in- and output stream for the given File objects and copies
-     * all the data from the specified input to the specified output.
+     * Creates an in- and output stream for the given File objects and copies all the data from the
+     * specified input to the specified output.
      * 
-     * @param inFile
-     *            File object for input
-     * @param outFile
-     *            File object for output
-     * @exception IOException
-     *                if an I/O error occurs
+     * @param inFile File object for input
+     * @param outFile File object for output
+     * @exception IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile) throws IOException
     {
@@ -93,18 +85,14 @@ public class IoHelper
     }
 
     /**
-     * Creates an in- and output stream for the given File objects and copies
-     * all the data from the specified input to the specified output. If
-     * permissions is not null, a chmod will be done on the output file.
+     * Creates an in- and output stream for the given File objects and copies all the data from the
+     * specified input to the specified output. If permissions is not null, a chmod will be done on
+     * the output file.
      * 
-     * @param inFile
-     *            File object for input
-     * @param outFile
-     *            File object for output
-     * @param permissions
-     *            permissions for the output file
-     * @exception IOException
-     *                if an I/O error occurs
+     * @param inFile File object for input
+     * @param outFile File object for output
+     * @param permissions permissions for the output file
+     * @exception IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions) throws IOException
     {
@@ -112,18 +100,14 @@ public class IoHelper
     }
 
     /**
-     * Creates an in- and output stream for the given File objects and copies
-     * all the data from the specified input to the specified output. If the
-     * VariableSubstitutor is not null, a substition will be done during copy.
+     * Creates an in- and output stream for the given File objects and copies all the data from the
+     * specified input to the specified output. If the VariableSubstitutor is not null, a substition
+     * will be done during copy.
      * 
-     * @param inFile
-     *            File object for input
-     * @param outFile
-     *            File object for output
-     * @param vss
-     *            substitutor which is used during copying
-     * @exception IOException
-     *                if an I/O error occurs
+     * @param inFile File object for input
+     * @param outFile File object for output
+     * @param vss substitutor which is used during copying
+     * @exception IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, VariableSubstitutor vss)
             throws IOException
@@ -132,21 +116,16 @@ public class IoHelper
     }
 
     /**
-     * Creates an in- and output stream for the given File objects and copies
-     * all the data from the specified input to the specified output. If the
-     * VariableSubstitutor is not null, a substition will be done during copy.
-     * If permissions is not null, a chmod will be done on the output file.
+     * Creates an in- and output stream for the given File objects and copies all the data from the
+     * specified input to the specified output. If the VariableSubstitutor is not null, a substition
+     * will be done during copy. If permissions is not null, a chmod will be done on the output
+     * file.
      * 
-     * @param inFile
-     *            File object for input
-     * @param outFile
-     *            File object for output
-     * @param permissions
-     *            permissions for the output file
-     * @param vs
-     *            substitutor which is used during copying
-     * @exception IOException
-     *                if an I/O error occurs
+     * @param inFile File object for input
+     * @param outFile File object for output
+     * @param permissions permissions for the output file
+     * @param vs substitutor which is used during copying
+     * @exception IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions,
             VariableSubstitutor vs) throws IOException
@@ -155,24 +134,17 @@ public class IoHelper
     }
 
     /**
-     * Creates an in- and output stream for the given File objects and copies
-     * all the data from the specified input to the specified output. If the
-     * VariableSubstitutor is not null, a substition will be done during copy.
-     * If permissions is not null, a chmod will be done on the output file. If
-     * type is not null, that type is used as file type at substitution.
+     * Creates an in- and output stream for the given File objects and copies all the data from the
+     * specified input to the specified output. If the VariableSubstitutor is not null, a substition
+     * will be done during copy. If permissions is not null, a chmod will be done on the output
+     * file. If type is not null, that type is used as file type at substitution.
      * 
-     * @param inFile
-     *            File object for input
-     * @param outFile
-     *            File object for output
-     * @param permissions
-     *            permissions for the output file
-     * @param vs
-     *            substitutor which is used during copying
-     * @param type
-     *            file type for the substitutor
-     * @exception IOException
-     *                if an I/O error occurs
+     * @param inFile File object for input
+     * @param outFile File object for output
+     * @param permissions permissions for the output file
+     * @param vs substitutor which is used during copying
+     * @param type file type for the substitutor
+     * @exception IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions,
             VariableSubstitutor vs, String type) throws IOException
@@ -207,14 +179,12 @@ public class IoHelper
     }
 
     /**
-     * Creates a temp file with delete on exit rule. The extension is extracted
-     * from the template if possible, else the default extension is used. The
-     * contents of template will be copied into the temporary file.
+     * Creates a temp file with delete on exit rule. The extension is extracted from the template if
+     * possible, else the default extension is used. The contents of template will be copied into
+     * the temporary file.
      * 
-     * @param template
-     *            file to copy from and define file extension
-     * @param defaultExtension
-     *            file extension if no is contained in template
+     * @param template file to copy from and define file extension
+     * @param defaultExtension file extension if no is contained in template
      * @return newly created and filled temporary file
      * @throws IOException
      */
@@ -224,18 +194,14 @@ public class IoHelper
     }
 
     /**
-     * Creates a temp file with delete on exit rule. The extension is extracted
-     * from the template if possible, else the default extension is used. The
-     * contents of template will be copied into the temporary file. If the
-     * variable substitutor is not null, variables will be replaced during
-     * copying.
+     * Creates a temp file with delete on exit rule. The extension is extracted from the template if
+     * possible, else the default extension is used. The contents of template will be copied into
+     * the temporary file. If the variable substitutor is not null, variables will be replaced
+     * during copying.
      * 
-     * @param template
-     *            file to copy from and define file extension
-     * @param defaultExtension
-     *            file extension if no is contained in template
-     * @param vss
-     *            substitutor which is used during copying
+     * @param template file to copy from and define file extension
+     * @param defaultExtension file extension if no is contained in template
+     * @param vss substitutor which is used during copying
      * @return newly created and filled temporary file
      * @throws IOException
      */
@@ -253,14 +219,12 @@ public class IoHelper
     }
 
     /**
-     * Creates a temp file with delete on exit rule. The extension is extracted
-     * from the template if possible, else the default extension is used. The
-     * contents of template will be copied into the temporary file.
+     * Creates a temp file with delete on exit rule. The extension is extracted from the template if
+     * possible, else the default extension is used. The contents of template will be copied into
+     * the temporary file.
      * 
-     * @param template
-     *            file to copy from and define file extension
-     * @param defaultExtension
-     *            file extension if no is contained in template
+     * @param template file to copy from and define file extension
+     * @param defaultExtension file extension if no is contained in template
      * @return newly created and filled temporary file
      * @throws IOException
      */
@@ -272,12 +236,9 @@ public class IoHelper
     /**
      * Changes the permissions of the given file to the given POSIX permissions.
      * 
-     * @param file
-     *            the file for which the permissions should be changed
-     * @param permissions
-     *            POSIX permissions to be set
-     * @throws IOException
-     *             if an I/O error occurs
+     * @param file the file for which the permissions should be changed
+     * @param permissions POSIX permissions to be set
+     * @throws IOException if an I/O error occurs
      */
     public static void chmod(File file, String permissions) throws IOException
     {
@@ -285,16 +246,12 @@ public class IoHelper
     }
 
     /**
-     * Changes the permissions of the given file to the given POSIX permissions.
-     * This method will be raised an exception, if the OS is not UNIX.
+     * Changes the permissions of the given file to the given POSIX permissions. This method will be
+     * raised an exception, if the OS is not UNIX.
      * 
-     * @param path
-     *            the absolute path of the file for which the permissions should
-     *            be changed
-     * @param permissions
-     *            POSIX permissions to be set
-     * @throws IOException
-     *             if an I/O error occurs
+     * @param path the absolute path of the file for which the permissions should be changed
+     * @param permissions POSIX permissions to be set
+     * @throws IOException if an I/O error occurs
      */
     public static void chmod(String path, String permissions) throws IOException
     {
@@ -313,11 +270,9 @@ public class IoHelper
     }
 
     /**
-     * Returns the free (disk) space for the given path. If it is not
-     * ascertainable -1 returns.
+     * Returns the free (disk) space for the given path. If it is not ascertainable -1 returns.
      * 
-     * @param path
-     *            path for which the free space should be detected
+     * @param path path for which the free space should be detected
      * @return the free space for the given path
      */
     public static long getFreeSpace(String path)
@@ -354,16 +309,12 @@ public class IoHelper
     }
 
     /**
-     * Returns whether the given method will be supported with the given
-     * environment. Some methods of this class are not supported on all
-     * operation systems.
+     * Returns whether the given method will be supported with the given environment. Some methods
+     * of this class are not supported on all operation systems.
      * 
-     * @param method
-     *            name of the method
-     * @return true if the method will be supported with the current enivronment
-     *         else false
-     * @throws RuntimeException
-     *             if the given method name does not exist
+     * @param method name of the method
+     * @return true if the method will be supported with the current enivronment else false
+     * @throws RuntimeException if the given method name does not exist
      */
     public static boolean supported(String method)
     {
@@ -404,8 +355,7 @@ public class IoHelper
     /**
      * Returns the first existing parent directory in a path
      * 
-     * @param path
-     *            path which should be scanned
+     * @param path path which should be scanned
      * @return the first existing parent directory in a path
      */
     public static File existingParent(File path)
@@ -420,21 +370,15 @@ public class IoHelper
     }
 
     /**
-     * Extracts a long value from a string in a special manner. The string will
-     * be broken into tokens with a standard StringTokenizer. Arround the
-     * assumed place (with the given half range) the tokens are scaned reverse
-     * for a token which represents a long. if useNotIdentifier is not null,
-     * tokens which are contains this string will be ignored. The first founded
-     * long returns.
+     * Extracts a long value from a string in a special manner. The string will be broken into
+     * tokens with a standard StringTokenizer. Arround the assumed place (with the given half range)
+     * the tokens are scaned reverse for a token which represents a long. if useNotIdentifier is not
+     * null, tokens which are contains this string will be ignored. The first founded long returns.
      * 
-     * @param in
-     *            the string which should be parsed
-     * @param assumedPlace
-     *            token number which should contain the value
-     * @param halfRange
-     *            half range for detection range
-     * @param useNotIdentifier
-     *            string which determines tokens which should be ignored
+     * @param in the string which should be parsed
+     * @param assumedPlace token number which should contain the value
+     * @param halfRange half range for detection range
+     * @param useNotIdentifier string which determines tokens which should be ignored
      * @return founded long
      */
     private static long extractLong(String in, int assumedPlace, int halfRange,
@@ -485,8 +429,8 @@ public class IoHelper
     }
 
     /**
-     * Returns the primary group of the current user. This feature will be
-     * supported only on Unix. On other systems null returns.
+     * Returns the primary group of the current user. This feature will be supported only on Unix.
+     * On other systems null returns.
      * 
      * @return the primary group of the current user
      */
@@ -528,20 +472,15 @@ public class IoHelper
     }
 
     /**
-     * Returns a string resulting from replacing all occurrences of what in this
-     * string with with. In opposite to the String.replaceAll method this method
-     * do not use regular expression or other methods which are only available
-     * in JRE 1.4 and later. This method was special made to mask masked slashes
-     * to avert a conversion during path translation.
+     * Returns a string resulting from replacing all occurrences of what in this string with with.
+     * In opposite to the String.replaceAll method this method do not use regular expression or
+     * other methods which are only available in JRE 1.4 and later. This method was special made to
+     * mask masked slashes to avert a conversion during path translation.
      * 
-     * @param destination
-     *            string for which the replacing should be performed
-     * @param what
-     *            what string should be replaced
-     * @param with
-     *            with what string what should be replaced
-     * @return a new String object if what was found in the given string, else
-     *         the given string self
+     * @param destination string for which the replacing should be performed
+     * @param what what string should be replaced
+     * @param with with what string what should be replaced
+     * @return a new String object if what was found in the given string, else the given string self
      */
     public static String replaceString(String destination, String what, String with)
     {
@@ -568,8 +507,7 @@ public class IoHelper
     /**
      * Translates a relative path to a local system path.
      * 
-     * @param destination
-     *            The path to translate.
+     * @param destination The path to translate.
      * @return The translated path.
      */
     public static String translatePath(String destination, VariableSubstitutor vs)
@@ -607,13 +545,11 @@ public class IoHelper
     }
 
     /**
-     * Returns the value of the environment variable given by key. This method
-     * is a work around for VM versions which do not support getenv in an other
-     * way. At the first call all environment variables will be loaded via an
-     * exec. On Windows keys are not case sensitive.
+     * Returns the value of the environment variable given by key. This method is a work around for
+     * VM versions which do not support getenv in an other way. At the first call all environment
+     * variables will be loaded via an exec. On Windows keys are not case sensitive.
      * 
-     * @param key
-     *            variable name for which the value should be resolved
+     * @param key variable name for which the value should be resolved
      * @return the value of the environment variable given by key
      */
     public static String getenv(String key)
@@ -678,9 +614,8 @@ public class IoHelper
     }
 
     /**
-     * Extracts key and value from the given string var. The key should be
-     * separated from the value by a sign. On Windows all chars of the key are
-     * translated to upper case.
+     * Extracts key and value from the given string var. The key should be separated from the value
+     * by a sign. On Windows all chars of the key are translated to upper case.
      * 
      * @param var
      */

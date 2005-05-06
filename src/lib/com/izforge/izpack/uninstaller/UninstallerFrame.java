@@ -1,27 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               UninstallerFrame.java
- *  Description :        The uninstaller frame class.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.uninstaller;
 
 import java.awt.Color;
@@ -108,8 +103,7 @@ public class UninstallerFrame extends JFrame
     /**
      * The constructor.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     public UninstallerFrame() throws Exception
     {
@@ -205,8 +199,7 @@ public class UninstallerFrame extends JFrame
     /**
      * Centers a window on screen.
      * 
-     * @param frame
-     *            The window to center.
+     * @param frame The window to center.
      */
     private void centerFrame(Window frame)
     {
@@ -219,20 +212,13 @@ public class UninstallerFrame extends JFrame
     /**
      * Sets the parameters of a GridBagConstraints object.
      * 
-     * @param gbc
-     *            The constraints object.
-     * @param gx
-     *            The x coordinates.
-     * @param gy
-     *            The y coordinates.
-     * @param gw
-     *            The width.
-     * @param wx
-     *            The x wheight.
-     * @param wy
-     *            The y wheight.
-     * @param gh
-     *            Description of the Parameter
+     * @param gbc The constraints object.
+     * @param gx The x coordinates.
+     * @param gy The y coordinates.
+     * @param gw The width.
+     * @param wx The x wheight.
+     * @param wy The y wheight.
+     * @param gh Description of the Parameter
      */
     private void buildConstraints(GridBagConstraints gbc, int gx, int gy, int gw, int gh,
             double wx, double wy)
@@ -248,8 +234,7 @@ public class UninstallerFrame extends JFrame
     /**
      * Gets the installation path from the log file.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private void getInstallPath() throws Exception
     {
@@ -263,8 +248,7 @@ public class UninstallerFrame extends JFrame
     /**
      * Loads the icons.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private void loadIcons() throws Exception
     {
@@ -318,8 +302,7 @@ public class UninstallerFrame extends JFrame
         /**
          * We can't avoid the exit here, so don't call exit elsewhere.
          * 
-         * @param e
-         *            The event.
+         * @param e The event.
          */
         public void windowClosing(WindowEvent e)
         {
@@ -330,9 +313,8 @@ public class UninstallerFrame extends JFrame
     /**
      * The destroyer handler.
      * 
-     * This class also implements the InstallListener because the FileExecutor
-     * needs it. TODO: get rid of the InstallListener - implement generic
-     * Listener
+     * This class also implements the InstallListener because the FileExecutor needs it. TODO: get
+     * rid of the InstallListener - implement generic Listener
      * 
      * @author Julien Ponge
      * @author Tino Schwarze
@@ -344,10 +326,8 @@ public class UninstallerFrame extends JFrame
         /**
          * The destroyer starts.
          * 
-         * @param name
-         *            The name of the overall action. Not used here.
-         * @param max
-         *            The maximum value of the progress.
+         * @param name The name of the overall action. Not used here.
+         * @param max The maximum value of the progress.
          */
         public void startAction(String name, int max)
         {
@@ -368,10 +348,8 @@ public class UninstallerFrame extends JFrame
         /**
          * The destroyer progresses.
          * 
-         * @param pos
-         *            The actual position.
-         * @param message
-         *            The message.
+         * @param pos The actual position.
+         * @param message The message.
          */
         public void progress(int pos, String message)
         {
@@ -408,8 +386,7 @@ public class UninstallerFrame extends JFrame
         /**
          * The destroyer encountered an error.
          * 
-         * @param error
-         *            The error message.
+         * @param error The error message.
          */
         public void emitError(String title, String error)
         {
@@ -420,12 +397,9 @@ public class UninstallerFrame extends JFrame
         /**
          * Ask the user a question.
          * 
-         * @param title
-         *            Message title.
-         * @param question
-         *            The question.
-         * @param choices
-         *            The set of choices to present.
+         * @param title Message title.
+         * @param question The question.
+         * @param choices The set of choices to present.
          * 
          * @return The user's choice.
          * 
@@ -439,14 +413,10 @@ public class UninstallerFrame extends JFrame
         /**
          * Ask the user a question.
          * 
-         * @param title
-         *            Message title.
-         * @param question
-         *            The question.
-         * @param choices
-         *            The set of choices to present.
-         * @param default_choice
-         *            The default choice. (-1 = no default choice)
+         * @param title Message title.
+         * @param question The question.
+         * @param choices The set of choices to present.
+         * @param default_choice The default choice. (-1 = no default choice)
          * 
          * @return The user's choice.
          * @see AbstractUIHandler#askQuestion(String, String, int, int)
@@ -485,8 +455,7 @@ public class UninstallerFrame extends JFrame
         /**
          * Action handling method.
          * 
-         * @param e
-         *            The event.
+         * @param e The event.
          */
         public void actionPerformed(ActionEvent e)
         {
@@ -501,13 +470,15 @@ public class UninstallerFrame extends JFrame
             }
         }
     }
-  /**
-   * Returns the langpack.
-   * @return Returns the langpack.
-   */
-  public static LocaleDatabase getLangpack()
-  {
-    return langpack;
-  }
+
+    /**
+     * Returns the langpack.
+     * 
+     * @return Returns the langpack.
+     */
+    public static LocaleDatabase getLangpack()
+    {
+        return langpack;
+    }
 
 }

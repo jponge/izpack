@@ -6,7 +6,7 @@
     julien.ponge@gmail.com
 
     IzPack is a powerfull Java installer builder released under the terms of
-the GNU GPL version 2 of the licence, or any later version.
+the Apache License Version 2.0.
 
     It is able to create lightweight and modular installers. You can extend 
 its capacities through a plugin-like architecture to make it better suit your

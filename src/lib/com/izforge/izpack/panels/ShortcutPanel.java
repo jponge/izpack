@@ -1,29 +1,22 @@
 /*
- * $Id$
- *
- * IzPack
- * File is Copyright (C) 2002 Elmar Grom
- *
- * File :               ShortcutPanel.java
- * Description :        A panel to prompt the user to select a program group
- *                      and to accept creation of a desktop shortcut. This
- *                      panel creates shortcuts.
- * Author's email :     elmar@grom.net
- * Author's Website :   http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Elmar Grom
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.panels;
@@ -88,22 +81,20 @@ import com.izforge.izpack.util.os.Shortcut;
 
 /*---------------------------------------------------------------------------*/
 /**
- * This class implements a panel for the creation of shortcuts. The panel
- * prompts the user to select a program group for shortcuts, accept the creation
- * of desktop shortcuts and actually creates the shortcuts.
+ * This class implements a panel for the creation of shortcuts. The panel prompts the user to select
+ * a program group for shortcuts, accept the creation of desktop shortcuts and actually creates the
+ * shortcuts.
  * 
  * <h4>Important</h4>
- * It is neccesary that the installation has been completed before this panel is
- * called. To successfully create shortcuts this panel needs to have the
- * following in place: <br>
+ * It is neccesary that the installation has been completed before this panel is called. To
+ * successfully create shortcuts this panel needs to have the following in place: <br>
  * <br>
  * <ul>
  * <li>the launcher files that the shortcuts point to must exist
  * <li>it must be known which packs are installed
  * <li>where the launcher for the uninstaller is located
  * </ul>
- * It is ok to present other panels after this one, as long as these conditions
- * are met.
+ * It is ok to present other panels after this one, as long as these conditions are met.
  * 
  * @see com.izforge.izpack.util.os.ShellLink
  * 
@@ -153,9 +144,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private static final String SEPARATOR_LINE = "--------------------------------------------------------------------------------";
 
     /**
-     * The default file name for the text file in which the shortcut information
-     * should be stored, in case shortcuts can not be created on a particular
-     * target system.
+     * The default file name for the text file in which the shortcut information should be stored,
+     * in case shortcuts can not be created on a particular target system.
      */
     private static final String TEXT_FILE_NAME = "Shortcuts.txt";
 
@@ -269,32 +259,28 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private JList targetList;
 
     /**
-     * UI element to present the default name for the program group and to
-     * support editing of this name.
+     * UI element to present the default name for the program group and to support editing of this
+     * name.
      */
     private JTextField programGroup;
 
     /**
-     * UI element to allow the user to revert to the default name of the program
-     * group
+     * UI element to allow the user to revert to the default name of the program group
      */
     private JButton defaultButton;
 
     /**
-     * UI element to allow the user to save a text file with the shortcut
-     * information
+     * UI element to allow the user to save a text file with the shortcut information
      */
     private JButton saveButton;
 
     /**
-     * UI element to allow the user to decide if shortcuts should be placed on
-     * the desktop or not.
+     * UI element to allow the user to decide if shortcuts should be placed on the desktop or not.
      */
     private JCheckBox allowDesktopShortcut;
 
     /**
-     * UI element instruct this panel to create shortcuts for the current user
-     * only
+     * UI element instruct this panel to create shortcuts for the current user only
      */
     private JRadioButton currentUser;
 
@@ -308,8 +294,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private GridBagConstraints constraints;
 
     /**
-     * The default name to use for the program group. This comes from the XML
-     * specification.
+     * The default name to use for the program group. This comes from the XML specification.
      */
     private String suggestedProgramGroup;
 
@@ -317,10 +302,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private String groupName;
 
     /**
-     * The location for placign the program group. This is the same as the
-     * location (type) of a shortcut, only that it applies to the program group.
-     * Note that there are only two locations that make sense as location for a
-     * program group: <br>
+     * The location for placign the program group. This is the same as the location (type) of a
+     * shortcut, only that it applies to the program group. Note that there are only two locations
+     * that make sense as location for a program group: <br>
      * 
      * <ul>
      * <li> applications
@@ -334,8 +318,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private XMLElement spec;
 
     /**
-     * Set to <code>true</code> by <code>analyzeShortcutSpec()</code> if
-     * there are any desktop shortcuts to create.
+     * Set to <code>true</code> by <code>analyzeShortcutSpec()</code> if there are any desktop
+     * shortcuts to create.
      */
     private boolean hasDesktopShortcuts = false;
 
@@ -346,40 +330,37 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private Shortcut shortcut;
 
     /**
-     * A list of <code>ShortcutData</code> objects. Each object is the
-     * complete specification for one shortcut that must be created.
+     * A list of <code>ShortcutData</code> objects. Each object is the complete specification for
+     * one shortcut that must be created.
      */
     private Vector shortcuts = new Vector();
 
     /**
-     * Holds a list of all the shortcut files that have been created. <b>Note:
-     * </b> this variable contains valid data only after
-     * <code>createShortcuts()</code> has been called. This list is created so
-     * that the files can be added to the uninstaller.
+     * Holds a list of all the shortcut files that have been created. <b>Note: </b> this variable
+     * contains valid data only after <code>createShortcuts()</code> has been called. This list is
+     * created so that the files can be added to the uninstaller.
      */
     private Vector files = new Vector();
 
     /**
-     * If <code>true</code> it indicates that there are shortcuts to create.
-     * The value is set by <code>analyzeShortcutSpec()</code>
+     * If <code>true</code> it indicates that there are shortcuts to create. The value is set by
+     * <code>analyzeShortcutSpec()</code>
      */
     private boolean shortcutsToCreate = false;
 
     /**
-     * If <code>true</code> it indicates that the spec file is existing and
-     * could be read.
+     * If <code>true</code> it indicates that the spec file is existing and could be read.
      */
     private boolean haveShortcutSpec = false;
 
     /**
-     * This is set to true if the shortcut spec instructs to simulate running on
-     * an operating system that is not supported.
+     * This is set to true if the shortcut spec instructs to simulate running on an operating system
+     * that is not supported.
      */
     private boolean simulteNotSupported = false;
 
     /**
-     * Avoids bogus behaviour when the user goes back then returns to this
-     * panel.
+     * Avoids bogus behaviour when the user goes back then returns to this panel.
      */
     private boolean firstTime = true;
 
@@ -389,10 +370,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * Constructor.
      * 
-     * @param parent
-     *            reference to the application frame
-     * @param installData
-     *            shared information about the installation
+     * @param parent reference to the application frame
+     * @param installData shared information about the installation
      */
     /*
      * --------------------------------------------------------------------------
@@ -432,11 +411,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method represents the <code>ActionListener</code> interface,
-     * invoked when an action occurs.
+     * This method represents the <code>ActionListener</code> interface, invoked when an action
+     * occurs.
      * 
-     * @param event
-     *            the action event.
+     * @param event the action event.
      */
     /*--------------------------------------------------------------------------*/
     public void actionPerformed(ActionEvent event)
@@ -492,11 +470,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns <code>true</code> when all selections have valid settings. This
-     * indicates that it is legal to procede to the next panel.
+     * Returns <code>true</code> when all selections have valid settings. This indicates that it
+     * is legal to procede to the next panel.
      * 
-     * @return <code>true</code> if it is legal to procede to the next panel,
-     *         otherwise <code>false</code>.
+     * @return <code>true</code> if it is legal to procede to the next panel, otherwise
+     * <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     public boolean isValidated()
@@ -566,12 +544,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method is called by the <code>groupList</code> when the user makes
-     * a selection. It updates the content of the <code>programGroup</code>
-     * with the result of the selection.
+     * This method is called by the <code>groupList</code> when the user makes a selection. It
+     * updates the content of the <code>programGroup</code> with the result of the selection.
      * 
-     * @param event
-     *            the list selection event
+     * @param event the list selection event
      */
     /*--------------------------------------------------------------------------*/
     public void valueChanged(ListSelectionEvent event)
@@ -596,8 +572,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the XML specification for the shortcuts to create. The result is
-     * stored in spec.
+     * Reads the XML specification for the shortcuts to create. The result is stored in spec.
      * 
      * 
      */
@@ -641,8 +616,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method analyzes the specifications for creating shortcuts and builds
-     * a list of all the Shortcuts that need to be created.
+     * This method analyzes the specifications for creating shortcuts and builds a list of all the
+     * Shortcuts that need to be created.
      * 
      */
     /*--------------------------------------------------------------------------*/
@@ -965,29 +940,25 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Verifies if the shortcut is required for any of the packs listed. The
-     * shortcut is required for a pack in the list if that pack is actually
-     * selected for installation. <br>
+     * Verifies if the shortcut is required for any of the packs listed. The shortcut is required
+     * for a pack in the list if that pack is actually selected for installation. <br>
      * <br>
      * <b>Note:</b><br>
-     * If the list of selected packs is empty then <code>true</code> is always
-     * returnd. The same is true if the <code>packs</code> list is empty.
+     * If the list of selected packs is empty then <code>true</code> is always returnd. The same
+     * is true if the <code>packs</code> list is empty.
      * 
-     * @param packs
-     *            a <code>Vector</code> of <code>String</code>s. Each of
-     *            the strings denotes a pack for which the schortcut should be
-     *            created if the pack is actually installed.
+     * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes
+     * a pack for which the schortcut should be created if the pack is actually installed.
      * 
-     * @return <code>true</code> if the shortcut is required for at least on
-     *         pack in the list, otherwise returns <code>false</code>.
+     * @return <code>true</code> if the shortcut is required for at least on pack in the list,
+     * otherwise returns <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
      * 
-     * The information about the installed packs comes from
-     * InstallData.selectedPacks. This assumes that this panel is presented to
-     * the user AFTER the PacksPanel.
+     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
     private boolean shortcutRequiredFor(Vector packs)
@@ -1014,8 +985,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Determines if the named attribute in true. True is represented by any of
-     * the following strings and is not case sensitive. <br>
+     * Determines if the named attribute in true. True is represented by any of the following
+     * strings and is not case sensitive. <br>
      * <ul>
      * <li>yes
      * <li>1
@@ -1023,17 +994,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * <li>on
      * </ul>
      * <br>
-     * Every other string, including the empty string as well as the
-     * non-existence of the attribute will cuase <code>false</code> to be
-     * returned.
+     * Every other string, including the empty string as well as the non-existence of the attribute
+     * will cuase <code>false</code> to be returned.
      * 
-     * @param element
-     *            the <code>XMLElement</code> to search for the attribute.
-     * @param name
-     *            the name of the attribute to test.
+     * @param element the <code>XMLElement</code> to search for the attribute.
+     * @param name the name of the attribute to test.
      * 
-     * @return <code>true</code> if the attribute value equals one of the
-     *         pre-defined strings, <code>false</code> otherwise.
+     * @return <code>true</code> if the attribute value equals one of the pre-defined strings,
+     * <code>false</code> otherwise.
      */
     /*--------------------------------------------------------------------------*/
     private boolean attributeIsTrue(XMLElement element, String name)
@@ -1059,14 +1027,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Replaces any ocurrence of '/' or '\' in a path string with the correct
-     * version for the operating system.
+     * Replaces any ocurrence of '/' or '\' in a path string with the correct version for the
+     * operating system.
      * 
-     * @param path
-     *            a system path
+     * @param path a system path
      * 
-     * @return a path string that uniformely uses the proper version of the
-     *         separator character.
+     * @return a path string that uniformely uses the proper version of the separator character.
      */
     /*--------------------------------------------------------------------------*/
     private String fixSeparatorChar(String path)
@@ -1081,14 +1047,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * This method creates the UI for this panel.
      * 
-     * @param groups
-     *            A <code>Vector</code> that contains <code>Strings</code>
-     *            with all the names of the existing program groups. These will
-     *            be placed in the <code>groupList</code>.
-     * @param currentUserList
-     *            if <code>true</code> it indicates that the list of groups is
-     *            valid for the current user, otherwise it is considered valid
-     *            for all users.
+     * @param groups A <code>Vector</code> that contains <code>Strings</code> with all the names
+     * of the existing program groups. These will be placed in the <code>groupList</code>.
+     * @param currentUserList if <code>true</code> it indicates that the list of groups is valid
+     * for the current user, otherwise it is considered valid for all users.
      */
     /*--------------------------------------------------------------------------*/
     private void buildUI(Vector groups, boolean currentUserList)
@@ -1218,14 +1180,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method creates an alternative UI for this panel. This UI can be used
-     * when the creation of shortcuts is not supported on the target system. It
-     * displays an apology for the inability to create shortcuts on this system,
-     * along with information about the intended targets. In addition, there is
-     * a button that allows the user to save more complete information in a text
-     * file. Based on this information the user might be able to create the
-     * necessary shortcut him or herself. At least there will be information
-     * about how to launch the application.
+     * This method creates an alternative UI for this panel. This UI can be used when the creation
+     * of shortcuts is not supported on the target system. It displays an apology for the inability
+     * to create shortcuts on this system, along with information about the intended targets. In
+     * addition, there is a button that allows the user to save more complete information in a text
+     * file. Based on this information the user might be able to create the necessary shortcut him
+     * or herself. At least there will be information about how to launch the application.
      */
     /*--------------------------------------------------------------------------*/
     private void buildAlternateUI()
@@ -1320,8 +1280,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Overriding the superclass implementation. This method returns the size of
-     * the container.
+     * Overriding the superclass implementation. This method returns the size of the container.
      * 
      * @return the size of the container
      */
@@ -1518,20 +1477,18 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Adds iformation about the shortcuts that have been created during the
-     * installation to the XML tree.
+     * Adds iformation about the shortcuts that have been created during the installation to the XML
+     * tree.
      * 
-     * @param panelRoot
-     *            the root of the XML tree
+     * @param panelRoot the root of the XML tree
      */
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
      * 
-     * The information needed to create shortcuts has been collected in the
-     * Vector 'shortcuts'. Take the data from there and package it in XML form
-     * for storage by the installer. The group name is only stored once in a
-     * separate XML element, since there is only one.
+     * The information needed to create shortcuts has been collected in the Vector 'shortcuts'. Take
+     * the data from there and package it in XML form for storage by the installer. The group name
+     * is only stored once in a separate XML element, since there is only one.
      * --------------------------------------------------------------------------
      */
     public void makeXMLData(XMLElement panelRoot)
@@ -1591,21 +1548,18 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Creates shortcuts based on teh information in <code>panelRoot</code>
-     * without UI.
+     * Creates shortcuts based on teh information in <code>panelRoot</code> without UI.
      * 
-     * @param panelRoot
-     *            the root of the XML tree
+     * @param panelRoot the root of the XML tree
      */
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
      * 
-     * Reconstitute the information needed to create shortcuts from XML data
-     * that was previously stored by the installer through makeXMLData(). Create
-     * a new Vector containing this data and stroe it in 'shortcuts' for use by
-     * createShortcuts(). Once this has been completed, call createShortcuts()
-     * to complete the operation.
+     * Reconstitute the information needed to create shortcuts from XML data that was previously
+     * stored by the installer through makeXMLData(). Create a new Vector containing this data and
+     * stroe it in 'shortcuts' for use by createShortcuts(). Once this has been completed, call
+     * createShortcuts() to complete the operation.
      * --------------------------------------------------------------------------
      */
     public void runAutomated(XMLElement panelRoot)

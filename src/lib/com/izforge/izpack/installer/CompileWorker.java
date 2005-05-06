@@ -1,27 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge, Tino Schwarze
- *
- *  File :               CompilePanel.java
- *  Description :        A panel to compile files after installation
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2003 Tino Schwarze
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.io.File;
@@ -96,10 +93,8 @@ public class CompileWorker implements Runnable
     /**
      * The constructor.
      * 
-     * @param idata
-     *            The installation data.
-     * @param handler
-     *            The handler to notify of progress.
+     * @param idata The installation data.
+     * @param handler The handler to notify of progress.
      */
     public CompileWorker(AutomatedInstallData idata, CompileHandler handler) throws IOException
     {
@@ -128,8 +123,7 @@ public class CompileWorker implements Runnable
      * 
      * The compiler is checked before compilation starts.
      * 
-     * @param compiler
-     *            compiler to use (not checked)
+     * @param compiler compiler to use (not checked)
      */
     public void setCompiler(String compiler)
     {
@@ -768,17 +762,15 @@ public class CompileWorker implements Runnable
          * This performs two steps:
          * <ol>
          * <li>check whether we can successfully call "compiler -help"</li>
-         * <li>check whether we can successfully call "compiler -help
-         * arguments" (not all compilers return an error here)</li>
+         * <li>check whether we can successfully call "compiler -help arguments" (not all compilers
+         * return an error here)</li>
          * </ol>
          * 
-         * On failure, the method CompileHandler#errorCompile is called with a
-         * descriptive error message.
+         * On failure, the method CompileHandler#errorCompile is called with a descriptive error
+         * message.
          * 
-         * @param compiler
-         *            the compiler to use
-         * @param arguments
-         *            additional arguments to pass to the compiler
+         * @param compiler the compiler to use
+         * @param arguments additional arguments to pass to the compiler
          * @return false on error
          */
         public CompileResult checkCompiler(String compiler, ArrayList arguments)

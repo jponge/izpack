@@ -1,27 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               GUIInstaller.java
- *  Description :        The graphical installer class.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.awt.Color;
@@ -97,8 +92,7 @@ public class GUIInstaller extends InstallerBase
     /**
      * The constructor.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     public GUIInstaller() throws Exception
     {
@@ -145,8 +139,7 @@ public class GUIInstaller extends InstallerBase
     /**
      * Checks the Java version.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private void checkJavaVersion() throws Exception
     {
@@ -172,8 +165,7 @@ public class GUIInstaller extends InstallerBase
     /**
      * Loads the suitable langpack.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private void loadLangPack() throws Exception
     {
@@ -224,8 +216,7 @@ public class GUIInstaller extends InstallerBase
      * Returns an ArrayList of the available langpacks ISO3 codes.
      * 
      * @return The available langpacks list.
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private List getAvailableLangPacks() throws Exception
     {
@@ -241,8 +232,7 @@ public class GUIInstaller extends InstallerBase
     /**
      * Loads the suitable L&F.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     protected void loadLookAndFeel() throws Exception
     {
@@ -382,8 +372,7 @@ public class GUIInstaller extends InstallerBase
     /**
      * Loads the GUI.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private void loadGUI() throws Exception
     {
@@ -398,11 +387,9 @@ public class GUIInstaller extends InstallerBase
     }
 
     /**
-     * Returns whether flags should be used in the language selection dialog or
-     * not.
+     * Returns whether flags should be used in the language selection dialog or not.
      * 
-     * @return whether flags should be used in the language selection dialog or
-     *         not
+     * @return whether flags should be used in the language selection dialog or not
      */
     protected boolean useFlags()
     {
@@ -413,9 +400,8 @@ public class GUIInstaller extends InstallerBase
     }
 
     /**
-     * Returns the type in which the language should be displayed in the
-     * language selction dialog. Possible are "iso3", "native" and
-     * "usingDefault".
+     * Returns the type in which the language should be displayed in the language selction dialog.
+     * Possible are "iso3", "native" and "usingDefault".
      * 
      * @return language display type
      */
@@ -434,10 +420,9 @@ public class GUIInstaller extends InstallerBase
     }
 
     /**
-     * Used to prompt the user for the language. Languages can be displayed in
-     * iso3 or the native notation or the notation of the default locale.
-     * Revising to native notation is based on code from Christian Murphy (patch
-     * #395).
+     * Used to prompt the user for the language. Languages can be displayed in iso3 or the native
+     * notation or the notation of the default locale. Revising to native notation is based on code
+     * from Christian Murphy (patch #395).
      * 
      * @author Julien Ponge
      * @author Christian Murphy
@@ -466,8 +451,7 @@ public class GUIInstaller extends InstallerBase
         /**
          * The constructor.
          * 
-         * @param items
-         *            The items to display in the box.
+         * @param items The items to display in the box.
          */
         public LanguageDialog(JFrame frame, Object[] items)
         {
@@ -554,8 +538,7 @@ public class GUIInstaller extends InstallerBase
         /**
          * Revises iso3 language items depending on the language display type.
          * 
-         * @param items
-         *            item array to be revised
+         * @param items item array to be revised
          * @return the revised array
          */
         private Object[] reviseItems(Object[] items)
@@ -574,15 +557,12 @@ public class GUIInstaller extends InstallerBase
         }
 
         /**
-         * Expands the given iso3 codes to language names. If a testFont is
-         * given, the codes are tested whether they can displayed or not. If
-         * not, or no font given, the language name will be returned as written
-         * in the default language of this VM.
+         * Expands the given iso3 codes to language names. If a testFont is given, the codes are
+         * tested whether they can displayed or not. If not, or no font given, the language name
+         * will be returned as written in the default language of this VM.
          * 
-         * @param items
-         *            item array to be expanded to the language name
-         * @param testFont
-         *            font to test wheter a name is displayable
+         * @param items item array to be expanded to the language name
+         * @param testFont font to test wheter a name is displayable
          * @return aray of expanded items
          */
         private Object[] expandItems(Object[] items, Font testFont)
@@ -605,15 +585,12 @@ public class GUIInstaller extends InstallerBase
         }
 
         /**
-         * Expands the given iso3 code to a language name. If a testFont is
-         * given, the code will be tested whether it is displayable or not. If
-         * not, or no font given, the language name will be returned as written
-         * in the default language of this VM.
+         * Expands the given iso3 code to a language name. If a testFont is given, the code will be
+         * tested whether it is displayable or not. If not, or no font given, the language name will
+         * be returned as written in the default language of this VM.
          * 
-         * @param item
-         *            item to be expanded to the language name
-         * @param testFont
-         *            font to test wheter the name is displayable
+         * @param item item to be expanded to the language name
+         * @param testFont font to test wheter the name is displayable
          * @return expanded item
          */
         private Object expandItem(Object item, Font testFont)
@@ -679,8 +656,7 @@ public class GUIInstaller extends InstallerBase
         /**
          * Sets the selection.
          * 
-         * @param item
-         *            The item to be selected.
+         * @param item The item to be selected.
          */
         public void setSelection(Object item)
         {
@@ -705,8 +681,7 @@ public class GUIInstaller extends InstallerBase
         /**
          * Closer.
          * 
-         * @param e
-         *            The event.
+         * @param e The event.
          */
         public void actionPerformed(ActionEvent e)
         {
@@ -724,8 +699,7 @@ public class GUIInstaller extends InstallerBase
             /**
              * We can't avoid the exit here, so don't call exit anywhere else.
              * 
-             * @param e
-             *            the event.
+             * @param e the event.
              */
             public void windowClosing(WindowEvent e)
             {
@@ -758,16 +732,11 @@ public class GUIInstaller extends InstallerBase
         /**
          * Returns a suitable cell.
          * 
-         * @param list
-         *            The list.
-         * @param value
-         *            The object.
-         * @param index
-         *            The index.
-         * @param isSelected
-         *            true if it is selected.
-         * @param cellHasFocus
-         *            Description of the Parameter
+         * @param list The list.
+         * @param value The object.
+         * @param index The index.
+         * @param isSelected true if it is selected.
+         * @param cellHasFocus Description of the Parameter
          * @return The cell.
          */
         public Component getListCellRendererComponent(JList list, Object value, int index,

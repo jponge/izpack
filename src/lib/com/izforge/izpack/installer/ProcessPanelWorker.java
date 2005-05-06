@@ -1,27 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge, Tino Schwarze
- *
- *  File :               CompilePanel.java
- *  Description :        A panel to compile files after installation
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Tino Schwarze
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.io.BufferedReader;
@@ -90,10 +87,8 @@ public class ProcessPanelWorker implements Runnable
     /**
      * The constructor.
      * 
-     * @param idata
-     *            The installation data.
-     * @param handler
-     *            The handler to notify of progress.
+     * @param idata The installation data.
+     * @param handler The handler to notify of progress.
      */
     public ProcessPanelWorker(AutomatedInstallData idata, AbstractUIProcessHandler handler)
             throws IOException
@@ -312,8 +307,7 @@ public class ProcessPanelWorker implements Runnable
     {
 
         /**
-         * @param handler
-         *            The UI handler for user interaction and to send output to.
+         * @param handler The UI handler for user interaction and to send output to.
          * @return true on success, false if processing should stop
          */
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs);
@@ -505,8 +499,8 @@ public class ProcessPanelWorker implements Runnable
 
     /**
      * Tries to create a class that has an empty contstructor and a method
-     * run(AbstractUIProcessHandler, String[]) If found, it calls the method and
-     * processes all returned exceptions
+     * run(AbstractUIProcessHandler, String[]) If found, it calls the method and processes all
+     * returned exceptions
      */
     private static class ExecutableClass implements Processable
     {
@@ -595,26 +589,23 @@ public class ProcessPanelWorker implements Runnable
 
     /*------------------------ ExecuteForPack PATCH -------------------------*/
     /*
-     * Verifies if the job is required for any of the packs listed. The job is
-     * required for a pack in the list if that pack is actually selected for
-     * installation. <br><br> <b>Note:</b><br> If the list of selected packs
-     * is empty then <code>true</code> is always returned. The same is true if
-     * the <code>packs</code> list is empty.
+     * Verifies if the job is required for any of the packs listed. The job is required for a pack
+     * in the list if that pack is actually selected for installation. <br><br> <b>Note:</b><br>
+     * If the list of selected packs is empty then <code>true</code> is always returned. The same
+     * is true if the <code>packs</code> list is empty.
      * 
-     * @param packs a <code>Vector</code> of <code>String</code>s. Each of
-     * the strings denotes a pack for which the schortcut should be created if
-     * the pack is actually installed.
+     * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes
+     * a pack for which the schortcut should be created if the pack is actually installed.
      * 
-     * @return <code>true</code> if the shortcut is required for at least on
-     * pack in the list, otherwise returns <code>false</code>.
+     * @return <code>true</code> if the shortcut is required for at least on pack in the list,
+     * otherwise returns <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     /*
      * @design
      * 
-     * The information about the installed packs comes from
-     * InstallData.selectedPacks. This assumes that this panel is presented to
-     * the user AFTER the PacksPanel.
+     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * that this panel is presented to the user AFTER the PacksPanel.
      * 
      * /*--------------------------------------------------------------------------
      */

@@ -1,26 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2003 Julien Ponge, Tino Schwarze
- *
- *  File :               CompilePanel.java
- *  Description :        A panel to compile files after installation
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2003 Tino Schwarze
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.izforge.izpack.panels;
 
@@ -116,10 +112,8 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * The constructor.
      * 
-     * @param parent
-     *            The parent window.
-     * @param idata
-     *            The installation data.
+     * @param parent The parent window.
+     * @param idata The installation data.
      */
     public CompilePanel(InstallerFrame parent, InstallData idata) throws IOException
     {
@@ -350,8 +344,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * Release the GUI - allow input.
      * 
-     * @param allowconfig
-     *            allow the user to enter new configuration
+     * @param allowconfig allow the user to enter new configuration
      */
     protected void releaseGUI(boolean allowconfig)
     {
@@ -370,8 +363,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * An error was encountered.
      * 
-     * @param error
-     *            The error information.
+     * @param error The error information.
      * @see com.izforge.izpack.installer.CompileHandler
      */
     public void handleCompileError(CompileResult error)
@@ -442,10 +434,8 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * Normal progress indicator.
      * 
-     * @param val
-     *            The progression value.
-     * @param msg
-     *            The progression message.
+     * @param val The progression value.
+     * @param msg The progression message.
      */
     public void progress(int val, String msg)
     {
@@ -457,12 +447,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * Job changing.
      * 
-     * @param jobName
-     *            The job name.
-     * @param max
-     *            The new maximum progress.
-     * @param jobNo
-     *            The job number.
+     * @param jobName The job name.
+     * @param max The new maximum progress.
+     * @param jobNo The job number.
      */
     public void nextStep(String jobName, int max, int jobNo)
     {
@@ -516,9 +503,8 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * Show a special dialog for compiler errors.
      * 
-     * This dialog is neccessary because we have lots of information if
-     * compilation failed. We'd also like the user to chose whether to ignore
-     * the error or not.
+     * This dialog is neccessary because we have lots of information if compilation failed. We'd
+     * also like the user to chose whether to ignore the error or not.
      */
     protected class CompilerErrorDialog extends JDialog implements ActionListener
     {
@@ -549,8 +535,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         }
 
         /**
-         * This method is called from within the constructor to initialize the
-         * form.
+         * This method is called from within the constructor to initialize the form.
          * 
          * Generated with help from NetBeans IDE.
          */

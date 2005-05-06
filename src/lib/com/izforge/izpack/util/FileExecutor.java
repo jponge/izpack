@@ -1,27 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2002 Olexij Tkatchenko
- *
- *  File :               FileExecutor.java
- *  Description :        File execution class.
- *  Author's email :     ot@parcs.de
- *  Website :            http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Olexij Tkatchenko
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.util;
 
 import java.io.BufferedReader;
@@ -40,10 +37,10 @@ import java.util.List;
 import com.izforge.izpack.ExecutableFile;
 
 /**
- * Executes a bunch of files. This class is intended to do a system dependent
- * installation postprocessing. Executable file can be any file installed with
- * current package. After execution the file can be optionally removed. Before
- * execution on Unix systems execution flag will be set on processed file.
+ * Executes a bunch of files. This class is intended to do a system dependent installation
+ * postprocessing. Executable file can be any file installed with current package. After execution
+ * the file can be optionally removed. Before execution on Unix systems execution flag will be set
+ * on processed file.
  * 
  * @author Olexij Tkatchenko <ot@parcs.de>
  */
@@ -51,9 +48,8 @@ public class FileExecutor
 {
 
     /**
-     * This is a grabber for stdout and stderr. It will be launched once at
-     * command execution end terminates if the apropriate stream runs out of
-     * data.
+     * This is a grabber for stdout and stderr. It will be launched once at command execution end
+     * terminates if the apropriate stream runs out of data.
      * 
      * @author Olexij Tkatchenko <ot@parcs.de>
      */
@@ -122,12 +118,10 @@ public class FileExecutor
     }
 
     /**
-     * Constructs a new executor. The executable files specified must have
-     * pretranslated paths (variables expanded and file separator characters
-     * converted if necessary).
+     * Constructs a new executor. The executable files specified must have pretranslated paths
+     * (variables expanded and file separator characters converted if necessary).
      * 
-     * @param files
-     *            the executable files to process
+     * @param files the executable files to process
      */
     public FileExecutor(Collection files)
     {
@@ -145,11 +139,9 @@ public class FileExecutor
     /**
      * Executed a system command and waits for completion.
      * 
-     * @param params
-     *            system command as string array
-     * @param output
-     *            contains output of the command index 0 = standard output index
-     *            1 = standard error
+     * @param params system command as string array
+     * @param output contains output of the command index 0 = standard output index 1 = standard
+     * error
      * @return exit status of process
      */
     public int executeCommand(String[] params, String[] output)
@@ -241,10 +233,8 @@ public class FileExecutor
     /**
      * Executes files specified at construction time.
      * 
-     * @param currentStage
-     *            the stage of the installation
-     * @param handler
-     *            The AbstractUIHandler to notify on errors.
+     * @param currentStage the stage of the installation
+     * @param handler The AbstractUIHandler to notify on errors.
      * 
      * @return 0 on success, else the exit status of the last failed command
      */

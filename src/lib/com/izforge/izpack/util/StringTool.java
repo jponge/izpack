@@ -1,30 +1,24 @@
 /*
- * Created on 11.11.2003
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
- * $Id$
- * IzPack
- * Copyright (C) 2002 by Marc Eppelmann
- *
- * File :               StringTool.java
- * Description :        Extended implemenation of Pythons string.replace and more...
- * Author's email :     marc.eppelmann@gmx.de
- * Website :            http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2003 Marc Eppelmann
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.util;
 
 import java.io.File;
@@ -54,8 +48,7 @@ public class StringTool
     /**
      * Test method
      * 
-     * @param args
-     *            Commandline Args
+     * @param args Commandline Args
      */
     public static void main(String[] args)
     {
@@ -66,12 +59,9 @@ public class StringTool
     /**
      * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>
      * 
-     * @param value
-     *            original String
-     * @param from
-     *            Search Pattern
-     * @param to
-     *            Replace with this
+     * @param value original String
+     * @param from Search Pattern
+     * @param to Replace with this
      * 
      * @return the replaced String
      */
@@ -83,14 +73,10 @@ public class StringTool
     /**
      * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>
      * 
-     * @param value
-     *            original String
-     * @param from
-     *            Search Pattern
-     * @param to
-     *            Replace with this
-     * @param aCaseSensitiveFlag
-     *            set to true be case sensitive.
+     * @param value original String
+     * @param from Search Pattern
+     * @param to Replace with this
+     * @param aCaseSensitiveFlag set to true be case sensitive.
      * 
      * @return the replaced String
      */
@@ -136,14 +122,12 @@ public class StringTool
     /**
      * Normalizes a Windows or Unix Path.
      * 
-     * Reason: Javas File accepts / or \ for Pathes. Batches or ShellScripts
-     * does it not!
+     * Reason: Javas File accepts / or \ for Pathes. Batches or ShellScripts does it not!
      * 
      * TODO: implement support for MAC < MacOSX
      * 
      * @param destination
-     * @param fileSeparator
-     *            a target-system fileseparator
+     * @param fileSeparator a target-system fileseparator
      * 
      * @return the normalized path
      */
@@ -175,13 +159,10 @@ public class StringTool
     }
 
     /**
-     * Normalizes a mixed Windows/Unix Path. Does Only work for Windows or Unix
-     * Pathes Reason: Java.File accepts / or \ for Pathes. Batches or
-     * ShellScripts does it not!
+     * Normalizes a mixed Windows/Unix Path. Does Only work for Windows or Unix Pathes Reason:
+     * Java.File accepts / or \ for Pathes. Batches or ShellScripts does it not!
      * 
-     * @param destination
-     *            accepted mixed form by java.File like
-     *            "C:/a/mixed\path\accepted/by\Java"
+     * @param destination accepted mixed form by java.File like "C:/a/mixed\path\accepted/by\Java"
      * 
      * @return the normalized Path
      */

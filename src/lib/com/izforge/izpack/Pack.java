@@ -1,27 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               Pack.java
- *  Description :        Contains informations about a pack.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack;
 
 import java.io.Serializable;
@@ -85,16 +80,11 @@ public class Pack implements Serializable
     /**
      * The constructor.
      * 
-     * @param name
-     *            The pack name.
-     * @param description
-     *            The pack description.
-     * @param osConstraints
-     *            the OS constraint (or null for any OS)
-     * @param required
-     *            Indicates wether the pack is required or not.
-     * @param preselected
-     *            This pack will be selected automatically.
+     * @param name The pack name.
+     * @param description The pack description.
+     * @param osConstraints the OS constraint (or null for any OS)
+     * @param required Indicates wether the pack is required or not.
+     * @param preselected This pack will be selected automatically.
      */
     public Pack(String name, String id, String description, List osConstraints, List dependencies,
             boolean required, boolean preselected, boolean loose)
@@ -128,11 +118,10 @@ public class Pack implements Serializable
     }
 
     /**
-     * This adds a reverse dependency. With a reverse dependency we imply a
-     * child dependency or the dependents on this pack
+     * This adds a reverse dependency. With a reverse dependency we imply a child dependency or the
+     * dependents on this pack
      * 
-     * @param name
-     *            The name of the pack that depents to this pack
+     * @param name The name of the pack that depents to this pack
      */
     public void addRevDep(String name)
     {
@@ -176,8 +165,7 @@ public class Pack implements Serializable
     /**
      * Convert bytes into appropiate mesaurements.
      * 
-     * @param bytes
-     *            A number of bytes to convert to a String.
+     * @param bytes A number of bytes to convert to a String.
      * @return The String-converted value.
      */
     public static String toByteUnitsString(int bytes)

@@ -1,26 +1,22 @@
 /*
- * $Id$
- * IzPack
- * Copyright (C) 2002 by Elmar Grom
- *
- * File :               TargetFactory.java
- * Description :        provides factory methods and related functionality for OS specific isntantiations
- * Author's email :     elmar@grom.net
- * Website :            http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Elmar Grom
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.util;
@@ -33,11 +29,10 @@ import java.util.StringTokenizer;
 
 /*---------------------------------------------------------------------------*/
 /**
- * The <code>TargetFactory</code> serves as a central mechanism to instantiate
- * OS specific class flavors, provide OS specific file extension types, default
- * install directories and similar functionality. In addition it provides
- * services that are related to OS versions and flavors. For a tutorial on using
- * some of the features in this class see the <A
+ * The <code>TargetFactory</code> serves as a central mechanism to instantiate OS specific class
+ * flavors, provide OS specific file extension types, default install directories and similar
+ * functionality. In addition it provides services that are related to OS versions and flavors. For
+ * a tutorial on using some of the features in this class see the <A
  * HREF=doc-files/TargetFactory.html>TargetFactory Tutorial</A>.
  * 
  * @version 0.0.1 / 1/3/2002
@@ -51,13 +46,11 @@ import java.util.StringTokenizer;
  * 
  * OS OS Name Version Architecture Native Report (ver)
  * ----------------------------------------------------------------------------------------------------------
- * Windows 95 Windows 98 Windows 98 4.10 x86 Windows 98 [Version 4.10.1998]
- * Windows-ME Windows Me 4.90 x86 Windows Millennium [Version 4.90.3000]
- * Windows-NT 3.5 Windows-NT 4.0 Windows NT 4.0 x86 Windows NT Version 4.0
- * Windows 2000 Windows 2000 5.0 x86 Microsoft Windows 2000 [Version 5.00.2195]
- * Windows-XP Windows 2000 5.1 x86 Microsoft Windows XP [Version 5.1.2600]
- * Windows-XP Windows XP 5.1 x86 Mac Mac OS-X Linux Linux 2.4.7-10 i386 Linux
- * Linux 2.4.18-4GB i386 Solaris
+ * Windows 95 Windows 98 Windows 98 4.10 x86 Windows 98 [Version 4.10.1998] Windows-ME Windows Me
+ * 4.90 x86 Windows Millennium [Version 4.90.3000] Windows-NT 3.5 Windows-NT 4.0 Windows NT 4.0 x86
+ * Windows NT Version 4.0 Windows 2000 Windows 2000 5.0 x86 Microsoft Windows 2000 [Version
+ * 5.00.2195] Windows-XP Windows 2000 5.1 x86 Microsoft Windows XP [Version 5.1.2600] Windows-XP
+ * Windows XP 5.1 x86 Mac Mac OS-X Linux Linux 2.4.7-10 i386 Linux Linux 2.4.18-4GB i386 Solaris
  * 
  * ---------------------------------------------------------------------------
  */
@@ -85,8 +78,8 @@ public class TargetFactory
     public static final int STANDARD = 0;
 
     /**
-     * Used to identify the Windows-NT class of operating systems in terms of an
-     * OS flavor. It is reported for Windows-NT, 2000 and XP.
+     * Used to identify the Windows-NT class of operating systems in terms of an OS flavor. It is
+     * reported for Windows-NT, 2000 and XP.
      */
     public static final int NT = 1;
 
@@ -102,9 +95,9 @@ public class TargetFactory
     public static final int OTHER = 1;
 
     /**
-     * The extensions used for native libraries on various operating systems.
-     * The string positions correspond to the basic operating system indexes.
-     * The following values are legal to use : <br>
+     * The extensions used for native libraries on various operating systems. The string positions
+     * correspond to the basic operating system indexes. The following values are legal to use :
+     * <br>
      * <br>
      * <ul>
      * <li>WINDOWS
@@ -116,10 +109,9 @@ public class TargetFactory
     static final String[] LIBRARY_EXTENSION = { "dll", "so", "", ""};
 
     /**
-     * The os specific class prefixes for classes that implement different
-     * versions for the various operating systems. The string positions
-     * correspond to the basic operating system indexes. The following values
-     * are legal to use : <br>
+     * The os specific class prefixes for classes that implement different versions for the various
+     * operating systems. The string positions correspond to the basic operating system indexes. The
+     * following values are legal to use : <br>
      * <br>
      * <ul>
      * <li>WINDOWS
@@ -131,9 +123,9 @@ public class TargetFactory
     static final String[] CLASS_PREFIX = { "Win_", "Mac_", "Unix_", ""};
 
     /**
-     * The os favor specific class prefixes for classes the implement different
-     * versions for various os favors. The string positions correspond to the
-     * flavor indexes. The following values are legal to use : <br>
+     * The os favor specific class prefixes for classes the implement different versions for various
+     * os favors. The string positions correspond to the flavor indexes. The following values are
+     * legal to use : <br>
      * <br>
      * <ul>
      * <li>STANDARD
@@ -144,9 +136,8 @@ public class TargetFactory
     static final String[] CLASS_FLAVOR_PREFIX = { "", "NT_", "X_"};
 
     /**
-     * The list of processor architecture specific prefixes. The string
-     * positions correspond to the architecture indexes. The following values
-     * are leegal to use : <br>
+     * The list of processor architecture specific prefixes. The string positions correspond to the
+     * architecture indexes. The following values are leegal to use : <br>
      * <br>
      * <ul>
      * <li>X86
@@ -159,11 +150,10 @@ public class TargetFactory
     };
 
     /**
-     * The list of default install path fragments. Depending on the operating
-     * system, a path fragment might represent either a part of the default
-     * install path or the entire path to use. For MS-Windows it is always only
-     * a part of the full install path. The string positions correspond to the
-     * basic operating system indexes. The following values are leegal to use :
+     * The list of default install path fragments. Depending on the operating system, a path
+     * fragment might represent either a part of the default install path or the entire path to use.
+     * For MS-Windows it is always only a part of the full install path. The string positions
+     * correspond to the basic operating system indexes. The following values are leegal to use :
      * <br>
      * <br>
      * <ul>
@@ -178,16 +168,14 @@ public class TargetFactory
             File.separator + "apps" + File.separator};
 
     /**
-     * This is a list of keys to use when looking for resources that define the
-     * default install path to use. The list is organized as two dimensional
-     * array of <code>String</code>s. To access the array, denote the first
-     * dimension with the operating system index and the second dimension with
-     * the flavor index. For example to access the key for Windows-NT use
-     * <code>INSTALL_PATH_RESOURCE_KEY[WINDOWS][NT]</code> The array uses a
-     * sparse population, that is, not all array locations actually contain a
-     * key. Only locations for which a real operating system/flavor combination
-     * exists are populated. For example, there is no such thing as
-     * <code>INSTALL_PATH_RESOURCE_KEY[UNIX][X]</code>
+     * This is a list of keys to use when looking for resources that define the default install path
+     * to use. The list is organized as two dimensional array of <code>String</code>s. To access
+     * the array, denote the first dimension with the operating system index and the second
+     * dimension with the flavor index. For example to access the key for Windows-NT use
+     * <code>INSTALL_PATH_RESOURCE_KEY[WINDOWS][NT]</code> The array uses a sparse population,
+     * that is, not all array locations actually contain a key. Only locations for which a real
+     * operating system/flavor combination exists are populated. For example, there is no such thing
+     * as <code>INSTALL_PATH_RESOURCE_KEY[UNIX][X]</code>
      */
     static final String[][] INSTALL_PATH_RESOURCE_KEY = {
     // Standard NT X
@@ -204,8 +192,8 @@ public class TargetFactory
     // Variable Declarations
     // ------------------------------------------------------------------------
     /**
-     * The reference to the single instance of <code>TargetFactory</code>.
-     * Used in static methods in place of <code>this</code>.
+     * The reference to the single instance of <code>TargetFactory</code>. Used in static methods
+     * in place of <code>this</code>.
      */
     private static TargetFactory me = null;
 
@@ -229,8 +217,7 @@ public class TargetFactory
     /*
      * $ @design
      * 
-     * Identify the following about the target system: - OS type - architecture -
-     * version
+     * Identify the following about the target system: - OS type - architecture - version
      * 
      * and store this information for later use.
      * --------------------------------------------------------------------------
@@ -307,13 +294,12 @@ public class TargetFactory
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method returns an OS and OS flavor specific instance of the
-     * requested class. <br>
+     * This method returns an OS and OS flavor specific instance of the requested class. <br>
      * <br>
      * <b>Class Naming Rules</b><br>
-     * Class versions must be named with the OS and OS flavor as prefix. The
-     * prefixes are simply concatenated, with the OS prefix first and the flavor
-     * prefix second. Use the following OS specific prefixes:<br>
+     * Class versions must be named with the OS and OS flavor as prefix. The prefixes are simply
+     * concatenated, with the OS prefix first and the flavor prefix second. Use the following OS
+     * specific prefixes:<br>
      * <br>
      * <TABLE BORDER=1>
      * <TR>
@@ -352,39 +338,32 @@ public class TargetFactory
      * <br>
      * <b>Naming Example:</b> <br>
      * <br>
-     * For the class <code>MyClass</code>, the specific version for Windows
-     * NT must be in the same package as <code>MyClass</code> and the name
-     * must be <code>Win_NT_MyClass</code>. A version that should be
-     * instantiated for any non-NT flavor would be called
-     * <code>Win_MyClass</code>. This would also be the version instantiated
-     * on Windows NT if the version <code>Win_NT_MyClass</code> does not
-     * exist. <br>
+     * For the class <code>MyClass</code>, the specific version for Windows NT must be in the
+     * same package as <code>MyClass</code> and the name must be <code>Win_NT_MyClass</code>. A
+     * version that should be instantiated for any non-NT flavor would be called
+     * <code>Win_MyClass</code>. This would also be the version instantiated on Windows NT if the
+     * version <code>Win_NT_MyClass</code> does not exist. <br>
      * <br>
      * <b>The Loading Process</b> <br>
      * <br>
-     * The process is completed after the first successful attempt to load a
-     * class. <br>
+     * The process is completed after the first successful attempt to load a class. <br>
      * <ol>
      * <li>load a version that is OS and OS-Flavor specific
      * <li>load a version that is OS specific
      * <li>load the base version (without OS or OS-Flavor prefix)
      * </ol>
      * <br>
-     * See the <A HREF=doc-files/TargetFactory.html>TargetFactory Tutorial</A>
-     * for more information.<br>
+     * See the <A HREF=doc-files/TargetFactory.html>TargetFactory Tutorial</A> for more
+     * information.<br>
      * <br>
      * 
-     * @param name
-     *            the fully qualified name of the class to load without the
-     *            extension.
+     * @param name the fully qualified name of the class to load without the extension.
      * 
-     * @return An instance of the requested class. Note that specific
-     *         initialization that can not be accomplished in the default
-     *         constructor still needs to be performed before the object can be
-     *         used.
+     * @return An instance of the requested class. Note that specific initialization that can not be
+     * accomplished in the default constructor still needs to be performed before the object can be
+     * used.
      * 
-     * @exception Exception
-     *                if all attempts to instantiate class fail
+     * @exception Exception if all attempts to instantiate class fail
      */
     /*--------------------------------------------------------------------------*/
     public Object makeObject(String name) throws Exception
@@ -425,29 +404,26 @@ public class TargetFactory
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns true if the version in the parameter string is higher than the
-     * version of the target os.
+     * Returns true if the version in the parameter string is higher than the version of the target
+     * os.
      * 
-     * @param version
-     *            the version number to compare to
+     * @param version the version number to compare to
      * 
-     * @return <code>false</code> if the version of the target system is
-     *         higher, otherwise <code>true</code>
+     * @return <code>false</code> if the version of the target system is higher, otherwise
+     * <code>true</code>
      */
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
      * 
-     * Version numbers are assumed to be constructed as follows: - a list of one
-     * or more numbers, separated by periods as in X.X.X. ... or periods and
-     * dashes as in X.X.X-Y. ... - the numbers follow the decimal number system -
-     * the left most number is of highest significance
+     * Version numbers are assumed to be constructed as follows: - a list of one or more numbers,
+     * separated by periods as in X.X.X. ... or periods and dashes as in X.X.X-Y. ... - the numbers
+     * follow the decimal number system - the left most number is of highest significance
      * 
-     * The process compares each set of numbers, beginning at the most
-     * significant and working down the ranks (this is working left to right).
-     * The process is stopped as soon as the pair of numbers compaired is not
-     * equal. If the numer for the target system is higher, flase is returned,
-     * otherwise true.
+     * The process compares each set of numbers, beginning at the most significant and working down
+     * the ranks (this is working left to right). The process is stopped as soon as the pair of
+     * numbers compaired is not equal. If the numer for the target system is higher, flase is
+     * returned, otherwise true.
      * --------------------------------------------------------------------------
      */
     public boolean versionIsHigher(String version) throws Exception
@@ -482,8 +458,7 @@ public class TargetFactory
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the index number for the target operating system that was
-     * detected.
+     * Returns the index number for the target operating system that was detected.
      * 
      * @return an index number for the OS
      * 
@@ -499,8 +474,8 @@ public class TargetFactory
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the index number for the operating system flavor that was
-     * detected on the target system.
+     * Returns the index number for the operating system flavor that was detected on the target
+     * system.
      * 
      * @return an index for the OS flavor
      * 
@@ -516,8 +491,7 @@ public class TargetFactory
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns an index number that identified the processor architecture of the
-     * target system.
+     * Returns an index number that identified the processor architecture of the target system.
      * 
      * @return an index for the processor architecture
      * 
@@ -532,12 +506,11 @@ public class TargetFactory
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the file extension customarily used on the target OS for
-     * dynamically loadable libraries.
+     * Returns the file extension customarily used on the target OS for dynamically loadable
+     * libraries.
      * 
-     * @return a <code>String</code> containing the customary library
-     *         extension for the target OS. Note that the string might be empty
-     *         if there no such specific extension for the target OS.
+     * @return a <code>String</code> containing the customary library extension for the target OS.
+     * Note that the string might be empty if there no such specific extension for the target OS.
      */
     /*--------------------------------------------------------------------------*/
     public String getNativeLibraryExtension()
@@ -547,29 +520,25 @@ public class TargetFactory
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the system dependent default install path. This is typically used
-     * to suggest an istall path to the end user, when performing an
-     * installation. The default install path is assembled form the OS specific
-     * path fragment specified in <code>INSTALL_PATH_FRAGMENT</code>,
-     * possibly a drive letter and the application name. The user the option to
-     * define resources that define default paths which differ from the path
-     * fragments defined here. The following resource names will be recognized
-     * by this method: <br>
+     * Returns the system dependent default install path. This is typically used to suggest an
+     * istall path to the end user, when performing an installation. The default install path is
+     * assembled form the OS specific path fragment specified in <code>INSTALL_PATH_FRAGMENT</code>,
+     * possibly a drive letter and the application name. The user the option to define resources
+     * that define default paths which differ from the path fragments defined here. The following
+     * resource names will be recognized by this method: <br>
      * <br>
      * <ul>
      * <li><code>TargetPanel.dir.windows</code>
      * <li><code>TargetPanel.dir.macosx</code>
      * <li><code>TargetPanel.dir.unix</code>
      * <li><code>TargetPanel.dir</code> plus the all lower case version of
-     * <code>System.getProperty ("os.name")</code>, with all spaces replaced
-     * by an underscore ('_').
+     * <code>System.getProperty ("os.name")</code>, with all spaces replaced by an underscore
+     * ('_').
      * <li><code>TargetPanel.dir</code>
      * </ul>
      * 
-     * @param appName
-     *            the name of the application to install. If no specific
-     *            resource has been set, then this name will be appended to the
-     *            OS specific default path fragment.
+     * @param appName the name of the application to install. If no specific resource has been set,
+     * then this name will be appended to the OS specific default path fragment.
      * 
      * @return the default install path for the target system
      */
@@ -577,14 +546,12 @@ public class TargetFactory
     /*
      * $ @design
      * 
-     * First try to read a path string from a resource file. This approach
-     * allows the user to customize the default install path that is suggested
-     * to the end user by IzPack. There are a number of choices for the naming
-     * of this resource, so we need to go through a few steps in order to
-     * exhaust the different possibilities. If this was not successful we use
-     * the default install path that is defined for the operating system we are
-     * running on. This path should be expanded by the application name to form
-     * the full path that to returne.
+     * First try to read a path string from a resource file. This approach allows the user to
+     * customize the default install path that is suggested to the end user by IzPack. There are a
+     * number of choices for the naming of this resource, so we need to go through a few steps in
+     * order to exhaust the different possibilities. If this was not successful we use the default
+     * install path that is defined for the operating system we are running on. This path should be
+     * expanded by the application name to form the full path that to returne.
      * --------------------------------------------------------------------------
      */
     public String getDefaultInstallPath(String appName)
@@ -695,8 +662,8 @@ public class TargetFactory
     }
 
     /**
-     * Gets a prefix alias for the current platform. "Win_" on Windows Systems
-     * "Win_NT_" on WinNT4, 2000, XP Mac on Mac Mac_X on macosx and Unix_
+     * Gets a prefix alias for the current platform. "Win_" on Windows Systems "Win_NT_" on WinNT4,
+     * 2000, XP Mac on Mac Mac_X on macosx and Unix_
      * 
      * @return a prefix alias for the current platform
      */

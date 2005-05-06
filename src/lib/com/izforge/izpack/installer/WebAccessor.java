@@ -1,27 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2002 Johannes Lehtinen
- *
- *  File :               WebAccessor.java
- *  Description :        Prompt user for proxies and passwords
- *  Author's email :     mchenryc@acm.org
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Johannes Lehtinen
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.awt.BorderLayout;
@@ -47,8 +44,8 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 /**
- * Dialogs for password authentication and firewall specification, when needed,
- * during web installation.
+ * Dialogs for password authentication and firewall specification, when needed, during web
+ * installation.
  * 
  * @author Chadwick McHenry
  * @version 1.0
@@ -98,12 +95,10 @@ public class WebAccessor
     }
 
     /**
-     * Create a WebAccessor that prompts for proxies and passwords using a
-     * JDialog.
+     * Create a WebAccessor that prompts for proxies and passwords using a JDialog.
      * 
-     * @param parent
-     *            determines the frame in which the dialog is displayed; if the
-     *            parentComponent has no Frame, a default Frame is used
+     * @param parent determines the frame in which the dialog is displayed; if the parentComponent
+     * has no Frame, a default Frame is used
      */
     public WebAccessor(Component parent)
     {
@@ -116,11 +111,9 @@ public class WebAccessor
     }
 
     /**
-     * Opens a URL connection and returns it's InputStream for the specified
-     * URL.
+     * Opens a URL connection and returns it's InputStream for the specified URL.
      * 
-     * @param url
-     *            the url to open the stream to.
+     * @param url the url to open the stream to.
      * @return an input stream ready to read, or null on failure
      */
     public InputStream openInputStream(URL url)
@@ -263,8 +256,7 @@ public class WebAccessor
     }
 
     /**
-     * Only to be called after an initial error has indicated a connection
-     * problem
+     * Only to be called after an initial error has indicated a connection problem
      */
     private JPanel getProxyPanel()
     {

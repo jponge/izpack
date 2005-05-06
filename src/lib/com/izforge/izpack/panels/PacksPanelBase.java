@@ -1,31 +1,26 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               PacksPanel.java
- *  Description :        Base panel to select the packs to install.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  Portions are Copyright (C) 2002 Marcus Wolschon
- *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
- *  Portions are Copyright (C) 2004 Klaus Bartz
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Marcus Wolschon
+ * Copyright 2002 Jan Blok
+ * Copyright 2004 Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import java.awt.Color;
@@ -73,11 +68,10 @@ import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.IoHelper;
 
 /**
- * The base class for Packs panels. It brings the common member and methods of
- * the different packs panels together. This class handles the common logic of
- * pack selection. The derived class should be create the layout and other
- * specific actions. There are some helper methods to simplify layout creation
- * in the derived class.
+ * The base class for Packs panels. It brings the common member and methods of the different packs
+ * panels together. This class handles the common logic of pack selection. The derived class should
+ * be create the layout and other specific actions. There are some helper methods to simplify layout
+ * creation in the derived class.
  * 
  * @author Julien Ponge
  * @author Klaus Bartz
@@ -127,10 +121,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /**
      * The constructor.
      * 
-     * @param parent
-     *            The parent window.
-     * @param idata
-     *            The installation data.
+     * @param parent The parent window.
+     * @param idata The installation data.
      */
     public PacksPanelBase(InstallerFrame parent, InstallData idata)
     {
@@ -151,8 +143,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     }
 
     /**
-     * The Implementation of this method should create the layout for the
-     * current class.
+     * The Implementation of this method should create the layout for the current class.
      */
     abstract protected void createNormalLayout();
 
@@ -238,8 +229,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /**
      * Asks to make the XML panel data.
      * 
-     * @param panelRoot
-     *            The XML tree to write the data in.
+     * @param panelRoot The XML tree to write the data in.
      */
     public void makeXMLData(XMLElement panelRoot)
     {
@@ -302,19 +292,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * Layout helper method:<br>
-     * Creates an label with a message given by msgId and an icon given by the
-     * iconId. If layout and constraints are not null, the label will be added
-     * to layout with the given constraints. The label will be added to this
-     * object.
+     * Creates an label with a message given by msgId and an icon given by the iconId. If layout and
+     * constraints are not null, the label will be added to layout with the given constraints. The
+     * label will be added to this object.
      * 
-     * @param msgId
-     *            identifier for the IzPack langpack
-     * @param iconId
-     *            identifier for the IzPack icons
-     * @param layout
-     *            layout to be used
-     * @param constraints
-     *            constraints to be used
+     * @param msgId identifier for the IzPack langpack
+     * @param iconId identifier for the IzPack icons
+     * @param layout layout to be used
+     * @param constraints constraints to be used
      * @return the created label
      */
     protected JLabel createLabel(String msgId, String iconId, GridBagLayout layout,
@@ -328,18 +313,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     }
 
     /**
-     * Creates a panel containing a anonymous label on the left with the message
-     * for the given msgId and a label on the right side with initial no text.
-     * The right label will be returned. If layout and constraints are not null,
-     * the label will be added to layout with the given constraints. The panel
-     * will be added to this object.
+     * Creates a panel containing a anonymous label on the left with the message for the given msgId
+     * and a label on the right side with initial no text. The right label will be returned. If
+     * layout and constraints are not null, the label will be added to layout with the given
+     * constraints. The panel will be added to this object.
      * 
-     * @param msgId
-     *            identifier for the IzPack langpack
-     * @param layout
-     *            layout to be used
-     * @param constraints
-     *            constraints to be used
+     * @param msgId identifier for the IzPack langpack
+     * @param layout layout to be used
+     * @param constraints constraints to be used
      * @return the created (right) label
      */
     protected JLabel createPanelWithLabel(String msgId, GridBagLayout layout,
@@ -359,21 +340,16 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     }
 
     /**
-     * Creates a text area with standard settings and the title given by the
-     * msgId. If scroller is not null, the create text area will be added to the
-     * scroller and the scroller to this object, else the text area will be
-     * added directly to this object. If layout and constraints are not null,
-     * the text area or scroller will be added to layout with the given
-     * constraints. The text area will be returned.
+     * Creates a text area with standard settings and the title given by the msgId. If scroller is
+     * not null, the create text area will be added to the scroller and the scroller to this object,
+     * else the text area will be added directly to this object. If layout and constraints are not
+     * null, the text area or scroller will be added to layout with the given constraints. The text
+     * area will be returned.
      * 
-     * @param msgId
-     *            identifier for the IzPack langpack
-     * @param scroller
-     *            the scroller to be used
-     * @param layout
-     *            layout to be used
-     * @param constraints
-     *            constraints to be used
+     * @param msgId identifier for the IzPack langpack
+     * @param scroller the scroller to be used
+     * @param layout layout to be used
+     * @param constraints constraints to be used
      * @return the created text area
      */
     protected JTextArea createTextArea(String msgId, JScrollPane scroller, GridBagLayout layout,
@@ -411,17 +387,12 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     }
 
     /**
-     * Creates the table for the packs. All parameters are required. The table
-     * will be returned.
+     * Creates the table for the packs. All parameters are required. The table will be returned.
      * 
-     * @param width
-     *            of the table
-     * @param scroller
-     *            the scroller to be used
-     * @param layout
-     *            layout to be used
-     * @param constraints
-     *            constraints to be used
+     * @param width of the table
+     * @param scroller the scroller to be used
+     * @param layout layout to be used
+     * @param constraints constraints to be used
      * @return the created table
      */
     protected JTable createPacksTable(int width, JScrollPane scroller, GridBagLayout layout,
@@ -464,9 +435,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     }
 
     /**
-     * Called when the panel becomes active. If a derived class implements this
-     * method also, it is recomanded to call this method with the super operator
-     * first.
+     * Called when the panel becomes active. If a derived class implements this method also, it is
+     * recomanded to call this method with the super operator first.
      * 
      */
     public void panelActivate()
@@ -607,7 +577,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
         /**
          * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable,
-         *      java.lang.Object, boolean, int, int)
+         * java.lang.Object, boolean, int, int)
          */
         public Component getTableCellEditorComponent(JTable table, Object value,
                 boolean isSelected, int row, int column)

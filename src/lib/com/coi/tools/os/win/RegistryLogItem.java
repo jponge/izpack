@@ -1,29 +1,24 @@
 /*
- *  $Id$
- *  COIOSHelper
- *  Copyright (C) 2005 Klaus Bartz
- *
- *  File :               RegistryLogItem.java
- *  Description :        Container for registry data.
- *                       
- *  Author's email :     bartzkau@users.berlios.de
- *  Website :            http://www.izforge.com
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2005 Klaus Bartz
  *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.coi.tools.os.win;
 
 import java.io.Serializable;
@@ -33,10 +28,15 @@ import java.io.Serializable;
  * registry data used at rewinding the registry changes.
  * 
  * @author Klaus Bartz
- *  
+ * 
  */
 public class RegistryLogItem implements Cloneable, Serializable
 {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 3618134559108444211L;
 
     /** Types of log items */
     public static final int REMOVED_KEY = 1;
@@ -72,20 +72,14 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Constructor with settings.
      * 
-     * @param type
-     *            type of loging item. Possible are REMOVED_KEY, CREATED_KEY, REMOVED_VALUE,
-     *            CREATED_VALUE and CHANGED_VALUE
-     * @param root
-     *            id for the registry root
-     * @param key
-     *            key name of the item which should be logged
-     * @param valueName
-     *            name of the value of the item which should be logged if it is a value type, else
-     *            null
-     * @param newValue
-     *            new value of the registry entry if it is a value type, else null
-     * @param oldValue
-     *            old value of the registry entry if it is a value type, else null
+     * @param type type of loging item. Possible are REMOVED_KEY, CREATED_KEY, REMOVED_VALUE,
+     * CREATED_VALUE and CHANGED_VALUE
+     * @param root id for the registry root
+     * @param key key name of the item which should be logged
+     * @param valueName name of the value of the item which should be logged if it is a value type,
+     * else null
+     * @param newValue new value of the registry entry if it is a value type, else null
+     * @param oldValue old value of the registry entry if it is a value type, else null
      */
     public RegistryLogItem(int type, int root, String key, String valueName,
             RegDataContainer newValue, RegDataContainer oldValue)
@@ -161,8 +155,7 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Sets the key name to the given string
      * 
-     * @param string
-     *            to be used as key name
+     * @param string to be used as key name
      */
     public void setKey(String string)
     {
@@ -172,8 +165,7 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Sets the new value to the given RegDataContainer.
      * 
-     * @param container
-     *            to be used as new value
+     * @param container to be used as new value
      */
     public void setNewValue(RegDataContainer container)
     {
@@ -183,8 +175,7 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Sets the old value to the given RegDataContainer.
      * 
-     * @param container
-     *            to be used as old value
+     * @param container to be used as old value
      */
     public void setOldValue(RegDataContainer container)
     {
@@ -194,8 +185,7 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Sets the root id for this logging item.
      * 
-     * @param i
-     *            root id to be used for this logging item
+     * @param i root id to be used for this logging item
      */
     public void setRoot(int i)
     {
@@ -205,8 +195,7 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Sets the type id for this logging item.
      * 
-     * @param i
-     *            type id to be used for this logging item
+     * @param i type id to be used for this logging item
      */
     public void setType(int i)
     {
@@ -216,8 +205,7 @@ public class RegistryLogItem implements Cloneable, Serializable
     /**
      * Sets the value name to the given string
      * 
-     * @param string
-     *            to be used as value name
+     * @param string to be used as value name
      */
     public void setValueName(String string)
     {

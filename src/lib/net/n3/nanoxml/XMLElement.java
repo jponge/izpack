@@ -34,8 +34,7 @@ import java.util.Properties;
 import java.util.Vector;
 
 /**
- * XMLElement is an XML element. The standard NanoXML builder generates a tree
- * of such elements.
+ * XMLElement is an XML element. The standard NanoXML builder generates a tree of such elements.
  * 
  * @see net.n3.nanoxml.StdXMLBuilder
  * 
@@ -96,8 +95,7 @@ public class XMLElement implements Serializable
     /**
      * Creates an empty element.
      * 
-     * @param name
-     *            the name of the element.
+     * @param name the name of the element.
      */
     public XMLElement(String name)
     {
@@ -107,12 +105,9 @@ public class XMLElement implements Serializable
     /**
      * Creates an empty element.
      * 
-     * @param name
-     *            the name of the element.
-     * @param systemID
-     *            the system ID of the XML data where the element starts.
-     * @param lineNr
-     *            the line in the XML data where the element starts.
+     * @param name the name of the element.
+     * @param systemID the system ID of the XML data where the element starts.
+     * @param lineNr the line in the XML data where the element starts.
      */
     public XMLElement(String name, String systemID, int lineNr)
     {
@@ -150,8 +145,7 @@ public class XMLElement implements Serializable
     /**
      * Sets the name.
      * 
-     * @param name
-     *            the non-null name.
+     * @param name the non-null name.
      */
     public void setName(String name)
     {
@@ -163,8 +157,7 @@ public class XMLElement implements Serializable
     /**
      * Adds a child element.
      * 
-     * @param child
-     *            the non-null child to add.
+     * @param child the non-null child to add.
      */
     public void addChild(XMLElement child)
     {
@@ -187,8 +180,7 @@ public class XMLElement implements Serializable
     /**
      * Removes a child element.
      * 
-     * @param child
-     *            the non-null child to remove.
+     * @param child the non-null child to remove.
      */
     public void removeChild(XMLElement child)
     {
@@ -200,8 +192,7 @@ public class XMLElement implements Serializable
     /**
      * Removes the child located at a certain index.
      * 
-     * @param index
-     *            the index of the child, where the first child has index 0.
+     * @param index the index of the child, where the first child has index 0.
      */
     public void removeChildAtIndex(int index)
     {
@@ -263,8 +254,7 @@ public class XMLElement implements Serializable
      * 
      * @return the non-null child
      * 
-     * @throws java.lang.ArrayIndexOutOfBoundsException
-     *             if the index is out of bounds.
+     * @throws java.lang.ArrayIndexOutOfBoundsException if the index is out of bounds.
      */
     public XMLElement getChildAtIndex(int index) throws ArrayIndexOutOfBoundsException
     {
@@ -274,8 +264,7 @@ public class XMLElement implements Serializable
     /**
      * Searches a child element.
      * 
-     * @param name
-     *            the name of the child to search for.
+     * @param name the name of the child to search for.
      * 
      * @return the child element, or null if no such child was found.
      */
@@ -297,8 +286,7 @@ public class XMLElement implements Serializable
     /**
      * Returns a vector of all child elements named <I>name</I>.
      * 
-     * @param name
-     *            the name of the children to search for.
+     * @param name the name of the children to search for.
      * 
      * @return the non-null vector of child elements.
      */
@@ -324,8 +312,7 @@ public class XMLElement implements Serializable
     /**
      * Returns the value of an attribute.
      * 
-     * @param name
-     *            the non-null name of the attribute.
+     * @param name the non-null name of the attribute.
      * 
      * @return the value, or null if the attribute does not exist.
      */
@@ -337,10 +324,8 @@ public class XMLElement implements Serializable
     /**
      * Returns the value of an attribute.
      * 
-     * @param name
-     *            the non-null name of the attribute.
-     * @param defaultValue
-     *            the default value of the attribute.
+     * @param name the non-null name of the attribute.
+     * @param defaultValue the default value of the attribute.
      * 
      * @return the value, or defaultValue if the attribute does not exist.
      */
@@ -352,10 +337,8 @@ public class XMLElement implements Serializable
     /**
      * Sets an attribute.
      * 
-     * @param name
-     *            the non-null name of the attribute.
-     * @param value
-     *            the non-null value of the attribute.
+     * @param name the non-null name of the attribute.
+     * @param value the non-null value of the attribute.
      */
     public void setAttribute(String name, String value)
     {
@@ -365,8 +348,7 @@ public class XMLElement implements Serializable
     /**
      * Removes an attribute.
      * 
-     * @param name
-     *            the non-null name of the attribute.
+     * @param name the non-null name of the attribute.
      */
     public void removeAttribute(String name)
     {
@@ -429,10 +411,9 @@ public class XMLElement implements Serializable
     }
 
     /**
-     * Return the #PCDATA content of the element. If the element has a
-     * combination of #PCDATA content and child elements, the #PCDATA sections
-     * can be retrieved as unnamed child objects. In this case, this method
-     * returns null.
+     * Return the #PCDATA content of the element. If the element has a combination of #PCDATA
+     * content and child elements, the #PCDATA sections can be retrieved as unnamed child objects.
+     * In this case, this method returns null.
      * 
      * @return the content.
      */
@@ -442,11 +423,10 @@ public class XMLElement implements Serializable
     }
 
     /**
-     * Sets the #PCDATA content. It is an error to call this method with a
-     * non-null value if there are child objects.
+     * Sets the #PCDATA content. It is an error to call this method with a non-null value if there
+     * are child objects.
      * 
-     * @param content
-     *            the (possibly null) content.
+     * @param content the (possibly null) content.
      */
     public void setContent(String content)
     {

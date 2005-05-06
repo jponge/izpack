@@ -36,8 +36,8 @@ import java.util.Properties;
 import java.util.Stack;
 
 /**
- * NonValidator processes the DTD and handles entity definitions. It does not do
- * any validation itself.
+ * NonValidator processes the DTD and handles entity definitions. It does not do any validation
+ * itself.
  * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
@@ -61,8 +61,7 @@ public class NonValidator implements IXMLValidator
     protected int peLevel;
 
     /**
-     * Contains the default values for attributes for the different element
-     * types.
+     * Contains the default values for attributes for the different element types.
      */
     protected Hashtable attributeDefaultValues;
 
@@ -98,8 +97,7 @@ public class NonValidator implements IXMLValidator
     /**
      * Sets the parameter entity resolver.
      * 
-     * @param resolver
-     *            the entity resolver.
+     * @param resolver the entity resolver.
      */
     public void setParameterEntityResolver(IXMLEntityResolver resolver)
     {
@@ -117,20 +115,14 @@ public class NonValidator implements IXMLValidator
     }
 
     /**
-     * Parses the DTD. The validator object is responsible for reading the full
-     * DTD.
+     * Parses the DTD. The validator object is responsible for reading the full DTD.
      * 
-     * @param publicID
-     *            the public ID, which may be null.
-     * @param reader
-     *            the reader to read the DTD from.
-     * @param entityResolver
-     *            the entity resolver.
-     * @param external
-     *            true if the DTD is external.
+     * @param publicID the public ID, which may be null.
+     * @param reader the reader to read the DTD from.
+     * @param entityResolver the entity resolver.
+     * @param external true if the DTD is external.
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong.
+     * @throws java.lang.Exception if something went wrong.
      */
     public void parseDTD(String publicID, IXMLReader reader, IXMLEntityResolver entityResolver,
             boolean external) throws Exception
@@ -173,13 +165,10 @@ public class NonValidator implements IXMLValidator
     /**
      * Processes an element in the DTD.
      * 
-     * @param reader
-     *            the reader to read data from
-     * @param entityResolver
-     *            the entity resolver
+     * @param reader the reader to read data from
+     * @param entityResolver the entity resolver
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong.
+     * @throws java.lang.Exception if something went wrong.
      */
     protected void processElement(IXMLReader reader, IXMLEntityResolver entityResolver)
             throws Exception
@@ -220,13 +209,10 @@ public class NonValidator implements IXMLValidator
     /**
      * Processes a conditional section.
      * 
-     * @param reader
-     *            the reader to read data from
-     * @param entityResolver
-     *            the entity resolver
+     * @param reader the reader to read data from
+     * @param entityResolver the entity resolver
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong.
+     * @throws java.lang.Exception if something went wrong.
      */
     protected void processConditionalSection(IXMLReader reader, IXMLEntityResolver entityResolver)
             throws Exception
@@ -296,13 +282,10 @@ public class NonValidator implements IXMLValidator
     /**
      * Processes an ignore section.
      * 
-     * @param reader
-     *            the reader to read data from
-     * @param entityResolver
-     *            the entity resolver
+     * @param reader the reader to read data from
+     * @param entityResolver the entity resolver
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong.
+     * @throws java.lang.Exception if something went wrong.
      */
     protected void processIgnoreSection(IXMLReader reader, IXMLEntityResolver entityResolver)
             throws Exception
@@ -331,13 +314,10 @@ public class NonValidator implements IXMLValidator
     /**
      * Processes an ATTLIST element.
      * 
-     * @param reader
-     *            the reader to read data from
-     * @param entityResolver
-     *            the entity resolver
+     * @param reader the reader to read data from
+     * @param entityResolver the entity resolver
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong.
+     * @throws java.lang.Exception if something went wrong.
      */
     protected void processAttList(IXMLReader reader, IXMLEntityResolver entityResolver)
             throws Exception
@@ -409,13 +389,10 @@ public class NonValidator implements IXMLValidator
     /**
      * Processes an ENTITY element.
      * 
-     * @param reader
-     *            the reader to read data from
-     * @param entityResolver
-     *            the entity resolver
+     * @param reader the reader to read data from
+     * @param entityResolver the entity resolver
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong.
+     * @throws java.lang.Exception if something went wrong.
      */
     protected void processEntity(IXMLReader reader, IXMLEntityResolver entityResolver)
             throws Exception
@@ -496,16 +473,11 @@ public class NonValidator implements IXMLValidator
     /**
      * Indicates that an element has been started.
      * 
-     * @param name
-     *            the name of the element.
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemId
-     *            the system ID associated with the namespace
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param name the name of the element.
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      */
     public void elementStarted(String name, String nsPrefix, String nsSystemId, String systemId,
             int lineNr)
@@ -527,16 +499,11 @@ public class NonValidator implements IXMLValidator
     /**
      * Indicates that the current element has ended.
      * 
-     * @param name
-     *            the name of the element.
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemId
-     *            the system ID associated with the namespace
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param name the name of the element.
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      */
     public void elementEnded(String name, String nsPrefix, String nsSystemId, String systemId,
             int lineNr)
@@ -545,22 +512,16 @@ public class NonValidator implements IXMLValidator
     }
 
     /**
-     * This method is called when the attributes of an XML element have been
-     * processed. If there are attributes with a default value which have not
-     * been specified yet, they have to be put into <I>extraAttributes</I>.
+     * This method is called when the attributes of an XML element have been processed. If there are
+     * attributes with a default value which have not been specified yet, they have to be put into
+     * <I>extraAttributes</I>.
      * 
-     * @param name
-     *            the name of the element.
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemId
-     *            the system ID associated with the namespace
-     * @param extraAttributes
-     *            where to put extra attributes.
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param name the name of the element.
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param extraAttributes where to put extra attributes.
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      */
     public void elementAttributesProcessed(String name, String nsPrefix, String nsSystemId,
             Properties extraAttributes, String systemId, int lineNr)
@@ -578,18 +539,12 @@ public class NonValidator implements IXMLValidator
     /**
      * Indicates that an attribute has been added to the current element.
      * 
-     * @param key
-     *            the name of the attribute.
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemId
-     *            the system ID associated with the namespace
-     * @param value
-     *            the value of the attribute.
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param key the name of the attribute.
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param value the value of the attribute.
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      */
     public void attributeAdded(String key, String nsPrefix, String nsSystemId, String value,
             String systemId, int lineNr)
@@ -605,10 +560,8 @@ public class NonValidator implements IXMLValidator
     /**
      * Indicates that a new #PCDATA element has been encountered.
      * 
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      */
     public void PCDataAdded(String systemId, int lineNr)
     {

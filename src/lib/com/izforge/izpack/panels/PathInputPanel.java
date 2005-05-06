@@ -1,26 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Klaus Bartz
- *
- *  File :               PathInputPanel.java
- *  Description :        A base panel to handle selection of a paths.
- *  Author's email :     bartzkau@users.berlios.de
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import java.awt.GridBagConstraints;
@@ -79,10 +77,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * The constructor.
      * 
-     * @param parent
-     *            The parent window.
-     * @param idata
-     *            The installation data.
+     * @param parent The parent window.
+     * @param idata The installation data.
      */
     public PathInputPanel(InstallerFrame parent, InstallData idata)
     {
@@ -128,9 +124,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
     }
 
     /**
-     * This method does nothing. It is called from ctor of PathInputPanel, to
-     * give in a derived class the possibility to add more components under the
-     * path input components.
+     * This method does nothing. It is called from ctor of PathInputPanel, to give in a derived
+     * class the possibility to add more components under the path input components.
      */
     public void createLayoutBottom()
     {
@@ -139,8 +134,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * Actions-handling method.
      * 
-     * @param e
-     *            The event.
+     * @param e The event.
      */
     public void actionPerformed(ActionEvent e)
     {
@@ -222,10 +216,9 @@ public class PathInputPanel extends IzPanel implements ActionListener
     }
 
     /**
-     * Returns whether the chosen path is true or not. If existFiles are not
-     * null, the existence of it under the choosen path are detected. This
-     * method can be also implemented in derived classes to handle special
-     * verification of the path.
+     * Returns whether the chosen path is true or not. If existFiles are not null, the existence of
+     * it under the choosen path are detected. This method can be also implemented in derived
+     * classes to handle special verification of the path.
      * 
      * @return true if existFiles are exist or not defined, else false
      */
@@ -253,8 +246,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * Sets the must exist state. If it is true, the path must exist.
      * 
-     * @param b
-     *            must exist state
+     * @param b must exist state
      */
     public void setMustExist(boolean b)
     {
@@ -262,8 +254,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
     }
 
     /**
-     * Returns the array of strings which are described the files which must
-     * exist.
+     * Returns the array of strings which are described the files which must exist.
      * 
      * @return paths of files which must exist
      */
@@ -275,8 +266,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * Sets the paths of files which must exist under the chosen path.
      * 
-     * @param strings
-     *            paths of files which must exist under the chosen path
+     * @param strings paths of files which must exist under the chosen path
      */
     public void setExistFiles(String[] strings)
     {
@@ -284,8 +274,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
     }
 
     /**
-     * Loads up the "dir" resource associated with TargetPanel. Acceptable dir
-     * resource names: <code>
+     * Loads up the "dir" resource associated with TargetPanel. Acceptable dir resource names:
+     * <code>
      *   TargetPanel.dir.macosx
      *   TargetPanel.dir.mac
      *   TargetPanel.dir.windows
@@ -295,9 +285,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
      *     with any spaces replace with underscores
      *   TargetPanel.dir (generic that will be applied if none of above is found)
      *   </code>
-     * As with all IzPack resources, each the above ids should be associated
-     * with a separate filename, which is set in the install.xml file at compile
-     * time.
+     * As with all IzPack resources, each the above ids should be associated with a separate
+     * filename, which is set in the install.xml file at compile time.
      */
     public static void loadDefaultInstallDir(InstallerFrame parentFrame)
     {
@@ -426,8 +415,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
     /**
      * Sets the default for the installation directory to the given string.
      * 
-     * @param string
-     *            path for default for the installation directory
+     * @param string path for default for the installation directory
      */
     public static void setDefaultInstallDir(String string)
     {

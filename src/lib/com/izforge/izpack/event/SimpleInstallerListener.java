@@ -1,26 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Klaus Bartz
- *
- *  File :               SimpleInstallerListener.java
- *  Description :        Simple custom action listener implementation for install time.
- *  Author's email :     klaus.bartz@coi.de
- *  Author's Website :   http://www.coi.de/
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.event;
@@ -38,13 +34,11 @@ import com.izforge.izpack.util.SpecHelper;
 
 /**
  * <p>
- * This class implements all methods of interface InstallerListener, but do not
- * do anything. It can be used as base class to save implementation of unneeded
- * methods.
+ * This class implements all methods of interface InstallerListener, but do not do anything. It can
+ * be used as base class to save implementation of unneeded methods.
  * </p>
  * <p>
- * Additional there are some common helper methods which are used from the base
- * class SpecHelper.
+ * Additional there are some common helper methods which are used from the base class SpecHelper.
  * </p>
  * 
  * @author Klaus Bartz
@@ -76,8 +70,8 @@ public class SimpleInstallerListener implements InstallerListener
     }
 
     /**
-     * Constructs a simple installer listener. If useSpecHelper is true, a
-     * specification helper will be created.
+     * Constructs a simple installer listener. If useSpecHelper is true, a specification helper will
+     * be created.
      * 
      * @param useSpecHelper
      * 
@@ -92,7 +86,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#handleFile(java.io.File,
-     *      com.izforge.izpack.PackFile)
+     * com.izforge.izpack.PackFile)
      */
     public void afterFile(File file, PackFile pf) throws Exception
     {
@@ -104,7 +98,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#handleDir(java.io.File,
-     *      com.izforge.izpack.PackFile)
+     * com.izforge.izpack.PackFile)
      */
     public void afterDir(File dir, PackFile pf) throws Exception
     {
@@ -116,7 +110,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     *      com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception
@@ -129,8 +123,8 @@ public class SimpleInstallerListener implements InstallerListener
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.compiler.InstallerListener#afterPack(com.izforge.izpack.Pack,
-     *      int, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * @see com.izforge.izpack.compiler.InstallerListener#afterPack(com.izforge.izpack.Pack, int,
+     * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
@@ -142,7 +136,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     *      int, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * int, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
             AbstractUIProgressHandler handler) throws Exception
@@ -166,8 +160,8 @@ public class SimpleInstallerListener implements InstallerListener
     /*
      * (non-Javadoc)
      * 
-     * @see com.izforge.izpack.compiler.InstallerListener#beforePack(com.izforge.izpack.Pack,
-     *      int, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * @see com.izforge.izpack.compiler.InstallerListener#beforePack(com.izforge.izpack.Pack, int,
+     * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
             throws Exception
@@ -191,7 +185,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.installer.InstallerListener#beforeFile(java.io.File,
-     *      com.izforge.izpack.PackFile)
+     * com.izforge.izpack.PackFile)
      */
     public void beforeFile(File file, PackFile pf) throws Exception
     {
@@ -203,7 +197,7 @@ public class SimpleInstallerListener implements InstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.installer.InstallerListener#beforeDir(java.io.File,
-     *      com.izforge.izpack.PackFile)
+     * com.izforge.izpack.PackFile)
      */
     public void beforeDir(File dir, PackFile pf) throws Exception
     {
@@ -224,8 +218,7 @@ public class SimpleInstallerListener implements InstallerListener
     /**
      * Sets the given specification helper to the current used helper.
      * 
-     * @param helper
-     *            specification helper which should be used
+     * @param helper specification helper which should be used
      */
     public void setSpecHelper(SpecHelper helper)
     {
@@ -245,8 +238,7 @@ public class SimpleInstallerListener implements InstallerListener
     /**
      * Sets the installdata object.
      * 
-     * @param data
-     *            installdata object which should be set to current
+     * @param data installdata object which should be set to current
      */
     public void setInstalldata(AutomatedInstallData data)
     {
@@ -254,11 +246,9 @@ public class SimpleInstallerListener implements InstallerListener
     }
 
     /**
-     * Returns the count of listeners which are registered as progress bar
-     * caller.
+     * Returns the count of listeners which are registered as progress bar caller.
      * 
-     * @return the count of listeners which are registered as progress bar
-     *         caller
+     * @return the count of listeners which are registered as progress bar caller
      */
     public static int getProgressBarCallerCount()
     {
@@ -299,12 +289,10 @@ public class SimpleInstallerListener implements InstallerListener
     }
 
     /**
-     * Returns the language dependant message from the resource
-     * CustomActionsLang.xml or the common language pack for the given id. If no
-     * string will be found, the id returns.
+     * Returns the language dependant message from the resource CustomActionsLang.xml or the common
+     * language pack for the given id. If no string will be found, the id returns.
      * 
-     * @param id
-     *            string id for which the message should be resolved
+     * @param id string id for which the message should be resolved
      * @return the related language dependant message
      */
     protected String getMsg(String id)

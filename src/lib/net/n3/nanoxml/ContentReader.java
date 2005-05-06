@@ -32,8 +32,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * This reader reads data from another reader until a certain string is
- * encountered.
+ * This reader reads data from another reader until a certain string is encountered.
  * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Version$
@@ -84,20 +83,14 @@ class ContentReader extends Reader
     /**
      * Creates the reader.
      * 
-     * @param reader
-     *            the encapsulated reader
-     * @param entityResolver
-     *            resolves entities
-     * @param escapeChar
-     *            escape character (&amp; or %)
-     * @param delimiter
-     *            the delimiter, as a backwards string, that will indicate the
-     *            end of the stream
-     * @param useLowLevelReader
-     *            true if &amp; needs to be left untouched; false if entities
-     *            need to be processed
-     * @param prefix
-     *            chars that are already read
+     * @param reader the encapsulated reader
+     * @param entityResolver resolves entities
+     * @param escapeChar escape character (&amp; or %)
+     * @param delimiter the delimiter, as a backwards string, that will indicate the end of the
+     * stream
+     * @param useLowLevelReader true if &amp; needs to be left untouched; false if entities need to
+     * be processed
+     * @param prefix chars that are already read
      */
     ContentReader(IXMLReader reader, IXMLEntityResolver entityResolver, char escapeChar,
             char[] delimiter, boolean useLowLevelReader, String prefix)
@@ -127,17 +120,13 @@ class ContentReader extends Reader
     /**
      * Reads a block of data.
      * 
-     * @param buffer
-     *            where to put the read data
-     * @param offset
-     *            first position in buffer to put the data
-     * @param size
-     *            maximum number of chars to read
+     * @param buffer where to put the read data
+     * @param offset first position in buffer to put the data
+     * @param size maximum number of chars to read
      * 
      * @return the number of chars read, or -1 if at EOF
      * 
-     * @throws java.io.IOException
-     *             if an error occurred reading the data
+     * @throws java.io.IOException if an error occurred reading the data
      */
     public int read(char[] buffer, int offset, int size) throws IOException
     {
@@ -231,8 +220,7 @@ class ContentReader extends Reader
     /**
      * Skips remaining data and closes the stream.
      * 
-     * @throws java.io.IOException
-     *             if an error occurred reading the data
+     * @throws java.io.IOException if an error occurred reading the data
      */
     public void close() throws IOException
     {

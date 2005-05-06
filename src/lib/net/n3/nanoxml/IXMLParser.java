@@ -40,8 +40,7 @@ public interface IXMLParser
     /**
      * Sets the reader from which the parser retrieves its data.
      * 
-     * @param reader
-     *            the reader
+     * @param reader the reader
      */
     public void setReader(IXMLReader reader);
 
@@ -55,8 +54,7 @@ public interface IXMLParser
     /**
      * Sets the builder which creates the logical structure of the XML data.
      * 
-     * @param builder
-     *            the builder
+     * @param builder the builder
      */
     public void setBuilder(IXMLBuilder builder);
 
@@ -70,8 +68,7 @@ public interface IXMLParser
     /**
      * Sets the validator that validates the XML data.
      * 
-     * @param validator
-     *            the validator
+     * @param validator the validator
      */
     public void setValidator(IXMLValidator validator);
 
@@ -85,8 +82,7 @@ public interface IXMLParser
     /**
      * Sets the entity resolver.
      * 
-     * @param resolver
-     *            the non-null resolver
+     * @param resolver the non-null resolver
      */
     public void setResolver(IXMLEntityResolver resolver);
 
@@ -102,8 +98,7 @@ public interface IXMLParser
      * 
      * @return the logical structure built by the builder
      * 
-     * @throws net.n3.nanoxml.XMLException
-     *             if an error occurred reading or parsing the data
+     * @throws net.n3.nanoxml.XMLException if an error occurred reading or parsing the data
      */
     public Object parse() throws XMLException;
 

@@ -1,25 +1,22 @@
 /*
- * $Id$
- * Copyright (C) 2002 Elmar Grom
- *
- * File :               UserInputPanel.java
- * Description :        A panel to collect input form the end user.
- * Author's email :     elmar@grom.net
- * Author's Website :   http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Elmar Grom
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.panels;
@@ -74,9 +71,9 @@ import com.izforge.izpack.util.VariableSubstitutor;
 
 /*---------------------------------------------------------------------------*/
 /**
- * This panel is designed to collect user input during the installation process.
- * The panel is initially blank and is populated with input elements based on
- * the XML specification in a resource file.
+ * This panel is designed to collect user input during the installation process. The panel is
+ * initially blank and is populated with input elements based on the XML specification in a resource
+ * file.
  * 
  * 
  * @version 0.0.1 / 10/19/02
@@ -86,34 +83,30 @@ import com.izforge.izpack.util.VariableSubstitutor;
 /*
  * $ @design
  * 
- * Each field is specified in its own node, containing attributes and data. When
- * this class is instantiated, the specification is read and analyzed. Each
- * field node is processed based on its type. An specialized member function is
- * called for each field type that creates the necessary UI elements. All UI
- * elements are stored in the uiElements vector. Elements are packaged in an
- * object array that must follow this pattern:
+ * Each field is specified in its own node, containing attributes and data. When this class is
+ * instantiated, the specification is read and analyzed. Each field node is processed based on its
+ * type. An specialized member function is called for each field type that creates the necessary UI
+ * elements. All UI elements are stored in the uiElements vector. Elements are packaged in an object
+ * array that must follow this pattern:
  * 
- * index 0 - a String object, that specifies the field type. This is identical
- * to the string used to identify the field type in the XML file. index 1 - a
- * String object that contains the variable name for substitution. index 2 - the
- * constraints object that should be used for positioning the UI element index 3 -
- * the UI element itself index 4 - a Vector containg a list of pack for which
- * the item should be created. This is used by buildUI() to decide if the item
- * should be added to the UI.
+ * index 0 - a String object, that specifies the field type. This is identical to the string used to
+ * identify the field type in the XML file. index 1 - a String object that contains the variable
+ * name for substitution. index 2 - the constraints object that should be used for positioning the
+ * UI element index 3 - the UI element itself index 4 - a Vector containg a list of pack for which
+ * the item should be created. This is used by buildUI() to decide if the item should be added to
+ * the UI.
  * 
- * In some cases additional entries are used. The use depends on the specific
- * needs of the type of input field.
+ * In some cases additional entries are used. The use depends on the specific needs of the type of
+ * input field.
  * 
- * When the panel is activated, the method buildUI() walks the list of UI
- * elements adds them to the panel together with the matching constraint.
+ * When the panel is activated, the method buildUI() walks the list of UI elements adds them to the
+ * panel together with the matching constraint.
  * 
- * When an attempt is made to move on to another panel, the method readInput()
- * walks the list of UI elements again and calls specialized methods that know
- * how to read the user input from each of the UI elemnts and set the associated
- * varaible.
+ * When an attempt is made to move on to another panel, the method readInput() walks the list of UI
+ * elements again and calls specialized methods that know how to read the user input from each of
+ * the UI elemnts and set the associated varaible.
  * 
- * The actual variable substitution is not performed by this panel but by the
- * variable substitutor.
+ * The actual variable substitution is not performed by this panel but by the variable substitutor.
  * 
  * To Do: ------ * make sure all header documentation is complete and correct
  * --------------------------------------------------------------------------
@@ -320,11 +313,10 @@ public class UserInputPanel extends IzPanel
     private boolean uiBuilt = false;
 
     /**
-     * If there is a possibility that some UI elements will not get added we can
-     * not allow to go back to the PacksPanel, because the process of building
-     * the UI is not reversable. This variable keeps track if any packs have
-     * been defined and will be used to make a decision for locking the
-     * 'previous' button.
+     * If there is a possibility that some UI elements will not get added we can not allow to go
+     * back to the PacksPanel, because the process of building the UI is not reversable. This
+     * variable keeps track if any packs have been defined and will be used to make a decision for
+     * locking the 'previous' button.
      */
     private boolean packsDefined = false;
 
@@ -345,8 +337,8 @@ public class UserInputPanel extends IzPanel
     private Vector passwordGroups = new Vector();
 
     /**
-     * used for temporary storage of references to password groups that have
-     * already been read in a given read cycle.
+     * used for temporary storage of references to password groups that have already been read in a
+     * given read cycle.
      */
     private Vector passwordGroupsRead = new Vector();
 
@@ -375,10 +367,8 @@ public class UserInputPanel extends IzPanel
     /**
      * Constructs a <code>UserInputPanel</code>.
      * 
-     * @param parent
-     *            reference to the application frame
-     * @param installData
-     *            shared information about the installation
+     * @param parent reference to the application frame
+     * @param installData shared information about the installation
      */
     /*--------------------------------------------------------------------------*/
     public UserInputPanel(InstallerFrame parent, InstallData installData)
@@ -493,9 +483,9 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Indicates wether the panel has been validated or not. The installer won't
-     * let the user go further through the installation process until the panel
-     * is validated. Default behavior is to return true.
+     * Indicates wether the panel has been validated or not. The installer won't let the user go
+     * further through the installation process until the panel is validated. Default behavior is to
+     * return true.
      * 
      * @return A boolean stating wether the panel has been validated or not.
      */
@@ -551,12 +541,10 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Asks the panel to set its own XML data that can be brought back for an
-     * automated installation process. Use it as a blackbox if your panel needs
-     * to do something even in automated mode.
+     * Asks the panel to set its own XML data that can be brought back for an automated installation
+     * process. Use it as a blackbox if your panel needs to do something even in automated mode.
      * 
-     * @param panelRoot
-     *            The XML root element of the panels blackbox tree.
+     * @param panelRoot The XML root element of the panels blackbox tree.
      */
     /*--------------------------------------------------------------------------*/
     public void makeXMLData(XMLElement panelRoot)
@@ -630,11 +618,9 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the input data from all UI elements and sets the associated
-     * variables.
+     * Reads the input data from all UI elements and sets the associated variables.
      * 
-     * @return <code>true</code> if the operation is successdul, otherwise
-     *         <code>false</code>.
+     * @return <code>true</code> if the operation is successdul, otherwise <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readInput()
@@ -710,11 +696,9 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the XML specification for the panel layout. The result is stored in
-     * spec.
+     * Reads the XML specification for the panel layout. The result is stored in spec.
      * 
-     * @exception Exception
-     *                for any problems in reading the specification
+     * @exception Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     private void readSpec() throws Exception
@@ -778,13 +762,11 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Adds the title to the panel. There can only be one title, if mutiple
-     * titles are defined, they keep overwriting what has already be defined, so
-     * that the last definition is the one that prevails.
+     * Adds the title to the panel. There can only be one title, if mutiple titles are defined, they
+     * keep overwriting what has already be defined, so that the last definition is the one that
+     * prevails.
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the title.
+     * @param spec a <code>XMLElement</code> containing the specification for the title.
      */
     /*--------------------------------------------------------------------------*/
     private void addTitle(XMLElement spec)
@@ -827,9 +809,7 @@ public class UserInputPanel extends IzPanel
     /**
      * Adds a rule field to the list of UI elements.
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the rule field.
+     * @param spec a <code>XMLElement</code> containing the specification for the rule field.
      */
     /*--------------------------------------------------------------------------*/
     private void addRuleField(XMLElement spec)
@@ -976,16 +956,13 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the data from the rule input field and sets the associated
-     * variable.
+     * Reads the data from the rule input field and sets the associated variable.
      * 
-     * @param field
-     *            the object array that holds the details of the field.
+     * @param field the object array that holds the details of the field.
      * 
-     * @return <code>true</code> if there was no problem reading the data or
-     *         if there was an irrecovarable problem. If there was a problem
-     *         that can be corrected by the operator, an error dialog is popped
-     *         up and <code>false</code> is returned.
+     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readRuleField(Object[] field)
@@ -1034,9 +1011,7 @@ public class UserInputPanel extends IzPanel
     /**
      * Adds a text field to the list of UI elements
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the text field.
+     * @param spec a <code>XMLElement</code> containing the specification for the text field.
      */
     /*--------------------------------------------------------------------------*/
     private void addTextField(XMLElement spec)
@@ -1114,13 +1089,11 @@ public class UserInputPanel extends IzPanel
     /**
      * Reads data from the text field and sets the associated variable.
      * 
-     * @param field
-     *            the object array that holds the details of the field.
+     * @param field the object array that holds the details of the field.
      * 
-     * @return <code>true</code> if there was no problem reading the data or
-     *         if there was an irrecovarable problem. If there was a problem
-     *         that can be corrected by the operator, an error dialog is popped
-     *         up and <code>false</code> is returned.
+     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readTextField(Object[] field)
@@ -1154,22 +1127,22 @@ public class UserInputPanel extends IzPanel
      * <pre>
      * 
      *  
-     *   &lt;field type=&quot;combo&quot; variable=&quot;testVariable&quot;&gt;
-     *     &lt;description text=&quot;Description for the combo box&quot; id=&quot;a key for translated text&quot;/&gt;
-     *     &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
-     *       &lt;choice text=&quot;choice 1&quot; id=&quot;&quot; value=&quot;combo box 1&quot;/&gt;
-     *       &lt;choice text=&quot;choice 2&quot; id=&quot;&quot; value=&quot;combo box 2&quot; set=&quot;true&quot;/&gt;
-     *       &lt;choice text=&quot;choice 3&quot; id=&quot;&quot; value=&quot;combo box 3&quot;/&gt;
-     *       &lt;choice text=&quot;choice 4&quot; id=&quot;&quot; value=&quot;combo box 4&quot;/&gt;
-     *     &lt;/spec&gt;
-     *   &lt;/field&gt;
+     *   
+     *    &lt;field type=&quot;combo&quot; variable=&quot;testVariable&quot;&gt;
+     *      &lt;description text=&quot;Description for the combo box&quot; id=&quot;a key for translated text&quot;/&gt;
+     *      &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
+     *        &lt;choice text=&quot;choice 1&quot; id=&quot;&quot; value=&quot;combo box 1&quot;/&gt;
+     *        &lt;choice text=&quot;choice 2&quot; id=&quot;&quot; value=&quot;combo box 2&quot; set=&quot;true&quot;/&gt;
+     *        &lt;choice text=&quot;choice 3&quot; id=&quot;&quot; value=&quot;combo box 3&quot;/&gt;
+     *        &lt;choice text=&quot;choice 4&quot; id=&quot;&quot; value=&quot;combo box 4&quot;/&gt;
+     *      &lt;/spec&gt;
+     *    &lt;/field&gt;
+     *    
      *   
      *  
      * </pre>
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the combo box.
+     * @param spec a <code>XMLElement</code> containing the specification for the combo box.
      */
     /*--------------------------------------------------------------------------*/
     private void addComboBox(XMLElement spec)
@@ -1277,16 +1250,13 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the content of the combobox field and substitutes the associated
-     * variable.
+     * Reads the content of the combobox field and substitutes the associated variable.
      * 
-     * @param field
-     *            the object array that holds the details of the field.
+     * @param field the object array that holds the details of the field.
      * 
-     * @return <code>true</code> if there was no problem reading the data or
-     *         if there was an irrecovarable problem. If there was a problem
-     *         that can be corrected by the operator, an error dialog is popped
-     *         up and <code>false</code> is returned.
+     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readComboBox(Object[] field)
@@ -1320,23 +1290,24 @@ public class UserInputPanel extends IzPanel
      * <pre>
      * 
      *  
-     *   &lt;field type=&quot;radio&quot; variable=&quot;testVariable&quot;&gt;
-     *     &lt;description text=&quot;Description for the radio buttons&quot; id=&quot;a key for translated text&quot;/&gt;
-     *     &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
-     *       &lt;choice text=&quot;radio 1&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
-     *       &lt;choice text=&quot;radio 2&quot; id=&quot;&quot; value=&quot;&quot; set=&quot;true&quot;/&gt;
-     *       &lt;choice text=&quot;radio 3&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
-     *       &lt;choice text=&quot;radio 4&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
-     *       &lt;choice text=&quot;radio 5&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
-     *     &lt;/spec&gt;
-     *   &lt;/field&gt;
+     *   
+     *    &lt;field type=&quot;radio&quot; variable=&quot;testVariable&quot;&gt;
+     *      &lt;description text=&quot;Description for the radio buttons&quot; id=&quot;a key for translated text&quot;/&gt;
+     *      &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
+     *        &lt;choice text=&quot;radio 1&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
+     *        &lt;choice text=&quot;radio 2&quot; id=&quot;&quot; value=&quot;&quot; set=&quot;true&quot;/&gt;
+     *        &lt;choice text=&quot;radio 3&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
+     *        &lt;choice text=&quot;radio 4&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
+     *        &lt;choice text=&quot;radio 5&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
+     *      &lt;/spec&gt;
+     *    &lt;/field&gt;
+     *    
      *   
      *  
      * </pre>
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the radio button set.
+     * @param spec a <code>XMLElement</code> containing the specification for the radio button
+     * set.
      */
     /*--------------------------------------------------------------------------*/
     private void addRadioButton(XMLElement spec)
@@ -1406,16 +1377,13 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the content of the radio button field and substitutes the
-     * associated variable.
+     * Reads the content of the radio button field and substitutes the associated variable.
      * 
-     * @param field
-     *            the object array that holds the details of the field.
+     * @param field the object array that holds the details of the field.
      * 
-     * @return <code>true</code> if there was no problem reading the data or
-     *         if there was an irrecovarable problem. If there was a problem
-     *         that can be corrected by the operator, an error dialog is popped
-     *         up and <code>false</code> is returned.
+     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readRadioButton(Object[] field)
@@ -1451,22 +1419,23 @@ public class UserInputPanel extends IzPanel
      * <pre>
      * 
      *  
-     *   &lt;field type=&quot;password&quot; variable=&quot;testVariable&quot;&gt;
-     *     &lt;description align=&quot;left&quot; txt=&quot;Please enter your password&quot; id=&quot;a key for translated text&quot;/&gt;
-     *     &lt;spec&gt;
-     *       &lt;pwd txt=&quot;Password&quot; id=&quot;key for the label&quot; size=&quot;10&quot; set=&quot;&quot;/&gt;
-     *       &lt;pwd txt=&quot;Retype password&quot; id=&quot;another key for the label&quot; size=&quot;10&quot; set=&quot;&quot;/&gt;
-     *     &lt;/spec&gt;
-     *     &lt;validator class=&quot;com.izforge.sample.PWDValidator&quot; txt=&quot;Both versions of the password must match&quot; id=&quot;key for the error text&quot;/&gt;
-     *     &lt;processor class=&quot;com.izforge.sample.PWDEncryptor&quot;/&gt;
-     *   &lt;/field&gt;
+     *   
+     *    &lt;field type=&quot;password&quot; variable=&quot;testVariable&quot;&gt;
+     *      &lt;description align=&quot;left&quot; txt=&quot;Please enter your password&quot; id=&quot;a key for translated text&quot;/&gt;
+     *      &lt;spec&gt;
+     *        &lt;pwd txt=&quot;Password&quot; id=&quot;key for the label&quot; size=&quot;10&quot; set=&quot;&quot;/&gt;
+     *        &lt;pwd txt=&quot;Retype password&quot; id=&quot;another key for the label&quot; size=&quot;10&quot; set=&quot;&quot;/&gt;
+     *      &lt;/spec&gt;
+     *      &lt;validator class=&quot;com.izforge.sample.PWDValidator&quot; txt=&quot;Both versions of the password must match&quot; id=&quot;key for the error text&quot;/&gt;
+     *      &lt;processor class=&quot;com.izforge.sample.PWDEncryptor&quot;/&gt;
+     *    &lt;/field&gt;
+     *    
      *   
      *  
      * </pre>
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the set of password fields.
+     * @param spec a <code>XMLElement</code> containing the specification for the set of password
+     * fields.
      */
     /*--------------------------------------------------------------------------*/
     private void addPasswordField(XMLElement spec)
@@ -1561,16 +1530,13 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the content of the password field and substitutes the associated
-     * variable.
+     * Reads the content of the password field and substitutes the associated variable.
      * 
-     * @param field
-     *            a password group that manages one or more passord fields.
+     * @param field a password group that manages one or more passord fields.
      * 
-     * @return <code>true</code> if there was no problem reading the data or
-     *         if there was an irrecovarable problem. If there was a problem
-     *         that can be corrected by the operator, an error dialog is popped
-     *         up and <code>false</code> is returned.
+     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readPasswordField(Object[] field)
@@ -1610,9 +1576,7 @@ public class UserInputPanel extends IzPanel
     /**
      * Adds a chackbox to the list of UI elements.
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the checkbox.
+     * @param spec a <code>XMLElement</code> containing the specification for the checkbox.
      */
     /*--------------------------------------------------------------------------*/
     private void addCheckBox(XMLElement spec)
@@ -1668,16 +1632,13 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the content of the checkbox field and substitutes the associated
-     * variable.
+     * Reads the content of the checkbox field and substitutes the associated variable.
      * 
-     * @param field
-     *            the object array that holds the details of the field.
+     * @param field the object array that holds the details of the field.
      * 
-     * @return <code>true</code> if there was no problem reading the data or
-     *         if there was an irrecovarable problem. If there was a problem
-     *         that can be corrected by the operator, an error dialog is popped
-     *         up and <code>false</code> is returned.
+     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readCheckBox(Object[] field)
@@ -1731,20 +1692,20 @@ public class UserInputPanel extends IzPanel
      * <pre>
      * 
      *  
-     *   &lt;field type=&quot;search&quot; variable=&quot;testVariable&quot;&gt;
-     *     &lt;description text=&quot;Description for the search field&quot; id=&quot;a key for translated text&quot;/&gt;
-     *     &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot; filename=&quot;the_file_to_search&quot; result=&quot;directory&quot; /&gt; &lt;!-- values for result: directory, file --&gt;
-     *       &lt;choice dir=&quot;directory1&quot; set=&quot;true&quot; /&gt; &lt;!-- default value --&gt;
-     *       &lt;choice dir=&quot;dir2&quot; /&gt;
-     *     &lt;/spec&gt;
-     *   &lt;/field&gt;
+     *   
+     *    &lt;field type=&quot;search&quot; variable=&quot;testVariable&quot;&gt;
+     *      &lt;description text=&quot;Description for the search field&quot; id=&quot;a key for translated text&quot;/&gt;
+     *      &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot; filename=&quot;the_file_to_search&quot; result=&quot;directory&quot; /&gt; &lt;!-- values for result: directory, file --&gt;
+     *        &lt;choice dir=&quot;directory1&quot; set=&quot;true&quot; /&gt; &lt;!-- default value --&gt;
+     *        &lt;choice dir=&quot;dir2&quot; /&gt;
+     *      &lt;/spec&gt;
+     *    &lt;/field&gt;
+     *    
      *   
      *  
      * </pre>
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the search field
+     * @param spec a <code>XMLElement</code> containing the specification for the search field
      */
     /*--------------------------------------------------------------------------*/
     private void addSearch(XMLElement spec)
@@ -1918,16 +1879,13 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Reads the content of the search field and substitutes the associated
-     * variable.
+     * Reads the content of the search field and substitutes the associated variable.
      * 
-     * @param field
-     *            the object array that holds the details of the field.
+     * @param field the object array that holds the details of the field.
      * 
-     * @return <code>true</code> if there was no problem reading the data or
-     *         if there was an irrecovarable problem. If there was a problem
-     *         that can be corrected by the operator, an error dialog is popped
-     *         up and <code>false</code> is returned.
+     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readSearch(Object[] field)
@@ -1965,9 +1923,7 @@ public class UserInputPanel extends IzPanel
     /**
      * Adds text to the list of UI elements
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the text.
+     * @param spec a <code>XMLElement</code> containing the specification for the text.
      */
     /*--------------------------------------------------------------------------*/
     private void addText(XMLElement spec)
@@ -1982,10 +1938,8 @@ public class UserInputPanel extends IzPanel
     /**
      * Adds a dummy field to the list of UI elements to act as spacer.
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing other specifications.
-     *            At present this information is not used but might be in future
-     *            versions.
+     * @param spec a <code>XMLElement</code> containing other specifications. At present this
+     * information is not used but might be in future versions.
      */
     /*--------------------------------------------------------------------------*/
     private void addSpace(XMLElement spec)
@@ -2006,9 +1960,7 @@ public class UserInputPanel extends IzPanel
     /**
      * Adds a dividing line to the list of UI elements act as separator.
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing additional
-     *            specifications.
+     * @param spec a <code>XMLElement</code> containing additional specifications.
      */
     /*--------------------------------------------------------------------------*/
     private void addDivider(XMLElement spec)
@@ -2046,9 +1998,7 @@ public class UserInputPanel extends IzPanel
     /**
      * Adds a description to the list of UI elements.
      * 
-     * @param spec
-     *            a <code>XMLElement</code> containing the specification for
-     *            the description.
+     * @param spec a <code>XMLElement</code> containing the specification for the description.
      */
     /*--------------------------------------------------------------------------*/
     private void addDescription(XMLElement spec, Vector forPacks, Vector forOs)
@@ -2094,22 +2044,18 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Retrieves the value of a boolean attribute. If the attribute is found and
-     * the values equals the value of the constant <code>TRUE</code> then true
-     * is returned. If it equals <code>FALSE</code> the false is returned. In
-     * all other cases, including when the attribute is not found, the default
-     * value is returned.
+     * Retrieves the value of a boolean attribute. If the attribute is found and the values equals
+     * the value of the constant <code>TRUE</code> then true is returned. If it equals
+     * <code>FALSE</code> the false is returned. In all other cases, including when the attribute
+     * is not found, the default value is returned.
      * 
-     * @param element
-     *            the <code>XMLElement</code> to search for the attribute.
-     * @param attribute
-     *            the attribute to search for
-     * @param defaultValue
-     *            the default value to use if the attribute does not exist or a
-     *            illegal value was discovered.
+     * @param element the <code>XMLElement</code> to search for the attribute.
+     * @param attribute the attribute to search for
+     * @param defaultValue the default value to use if the attribute does not exist or a illegal
+     * value was discovered.
      * 
-     * @return <code>true</code> if the attribute is found and the value
-     *         equals the the constant <code>TRUE</code>. <<code> if the
+     * @return <code>true</code> if the attribute is found and the value equals the the constant
+     * <code>TRUE</code>. <<code> if the
      *            attribute is <code>FALSE</code>. In all other cases the
      *            default value is returned.
      */
@@ -2140,19 +2086,15 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Retrieves the value of an integer attribute. If the attribute is not
-     * found or the value is non-numeric then the default value is returned.
+     * Retrieves the value of an integer attribute. If the attribute is not found or the value is
+     * non-numeric then the default value is returned.
      * 
-     * @param element
-     *            the <code>XMLElement</code> to search for the attribute.
-     * @param attribute
-     *            the attribute to search for
-     * @param defaultValue
-     *            the default value to use in case the attribute does not exist.
+     * @param element the <code>XMLElement</code> to search for the attribute.
+     * @param attribute the attribute to search for
+     * @param defaultValue the default value to use in case the attribute does not exist.
      * 
-     * @return the value of the attribute. If the attribute is not found or the
-     *         content is not a legal integer, then the default value is
-     *         returned.
+     * @return the value of the attribute. If the attribute is not found or the content is not a
+     * legal integer, then the default value is returned.
      */
     /*--------------------------------------------------------------------------*/
     private int getInt(XMLElement element, String attribute, int defaultValue)
@@ -2174,19 +2116,15 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Retrieves the value of a floating point attribute. If the attribute is
-     * not found or the value is non-numeric then the default value is returned.
+     * Retrieves the value of a floating point attribute. If the attribute is not found or the value
+     * is non-numeric then the default value is returned.
      * 
-     * @param element
-     *            the <code>XMLElement</code> to search for the attribute.
-     * @param attribute
-     *            the attribute to search for
-     * @param defaultValue
-     *            the default value to use in case the attribute does not exist.
+     * @param element the <code>XMLElement</code> to search for the attribute.
+     * @param attribute the attribute to search for
+     * @param defaultValue the default value to use in case the attribute does not exist.
      * 
-     * @return the value of the attribute. If the attribute is not found or the
-     *         content is not a legal integer, then the default value is
-     *         returned.
+     * @return the value of the attribute. If the attribute is not found or the content is not a
+     * legal integer, then the default value is returned.
      */
     /*--------------------------------------------------------------------------*/
     private float getFloat(XMLElement element, String attribute, float defaultValue)
@@ -2208,15 +2146,14 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Extracts the text from an <code>XMLElement</code>. The text must be
-     * defined in the resource file under the key defined in the <code>id</code>
-     * attribute or as value of the attribute <code>text</code>.
+     * Extracts the text from an <code>XMLElement</code>. The text must be defined in the
+     * resource file under the key defined in the <code>id</code> attribute or as value of the
+     * attribute <code>text</code>.
      * 
-     * @param element
-     *            the <code>XMLElement</code> from which to extract the text.
+     * @param element the <code>XMLElement</code> from which to extract the text.
      * 
-     * @return The text defined in the <code>XMLElement</code>. If no text
-     *         can be located, <code>null</code> is returned.
+     * @return The text defined in the <code>XMLElement</code>. If no text can be located,
+     * <code>null</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private String getText(XMLElement element)
@@ -2252,18 +2189,15 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Retreives the alignment setting for the <code>XMLElement</code>. The
-     * default value in case the <code>ALIGNMENT</code> attribute is not found
-     * or the value is illegal is <code>TwoColumnConstraints.LEFT</code>.
+     * Retreives the alignment setting for the <code>XMLElement</code>. The default value in case
+     * the <code>ALIGNMENT</code> attribute is not found or the value is illegal is
+     * <code>TwoColumnConstraints.LEFT</code>.
      * 
-     * @param element
-     *            the <code>XMLElement</code> from which to extract the
-     *            alignment setting.
+     * @param element the <code>XMLElement</code> from which to extract the alignment setting.
      * 
-     * @return the alignement setting for the <code>XMLElement</code>. The
-     *         value is either <code>TwoColumnConstraints.LEFT</code>,
-     *         <code>TwoColumnConstraints.CENTER</code> or
-     *         <code>TwoColumnConstraints.RIGHT</code>.
+     * @return the alignement setting for the <code>XMLElement</code>. The value is either
+     * <code>TwoColumnConstraints.LEFT</code>, <code>TwoColumnConstraints.CENTER</code> or
+     * <code>TwoColumnConstraints.RIGHT</code>.
      * 
      * @see com.izforge.izpack.gui.TwoColumnConstraints
      */
@@ -2294,20 +2228,16 @@ public class UserInputPanel extends IzPanel
     }
 
     /**
-     * Verifies if an item is required for the operating system the installer
-     * executed. The configuration for this feature is: <br/> &lt;os
-     * family="unix"/&gt; <br>
+     * Verifies if an item is required for the operating system the installer executed. The
+     * configuration for this feature is: <br/> &lt;os family="unix"/&gt; <br>
      * <br>
      * <b>Note:</b><br>
-     * If the list of the os is empty then <code>true</code> is always
-     * returnd.
+     * If the list of the os is empty then <code>true</code> is always returnd.
      * 
-     * @param os
-     *            The <code>Vector</code> of <code>String</code>s.
-     *            containing the os names
+     * @param os The <code>Vector</code> of <code>String</code>s. containing the os names
      * 
-     * @return <code>true</code> if the item is required for the os, otherwise
-     *         returns <code>false</code>.
+     * @return <code>true</code> if the item is required for the os, otherwise returns
+     * <code>false</code>.
      */
     public boolean itemRequiredForOs(Vector os)
     {
@@ -2337,29 +2267,25 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Verifies if an item is required for any of the packs listed. An item is
-     * required for a pack in the list if that pack is actually selected for
-     * installation. <br>
+     * Verifies if an item is required for any of the packs listed. An item is required for a pack
+     * in the list if that pack is actually selected for installation. <br>
      * <br>
      * <b>Note:</b><br>
-     * If the list of selected packs is empty then <code>true</code> is always
-     * returnd. The same is true if the <code>packs</code> list is empty.
+     * If the list of selected packs is empty then <code>true</code> is always returnd. The same
+     * is true if the <code>packs</code> list is empty.
      * 
-     * @param packs
-     *            a <code>Vector</code> of <code>String</code>s. Each of
-     *            the strings denotes a pack for which an item should be created
-     *            if the pack is actually installed.
+     * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes
+     * a pack for which an item should be created if the pack is actually installed.
      * 
-     * @return <code>true</code> if the item is required for at least one pack
-     *         in the list, otherwise returns <code>false</code>.
+     * @return <code>true</code> if the item is required for at least one pack in the list,
+     * otherwise returns <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
      * 
-     * The information about the installed packs comes from
-     * InstallData.selectedPacks. This assumes that this panel is presented to
-     * the user AFTER the PacksPanel.
+     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
     private boolean itemRequiredFor(Vector packs)
@@ -2400,29 +2326,25 @@ public class UserInputPanel extends IzPanel
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Verifies if an item is required for any of the packs listed. An item is
-     * required for a pack in the list if that pack is actually NOT selected for
-     * installation. <br>
+     * Verifies if an item is required for any of the packs listed. An item is required for a pack
+     * in the list if that pack is actually NOT selected for installation. <br>
      * <br>
      * <b>Note:</b><br>
-     * If the list of selected packs is empty then <code>true</code> is always
-     * returnd. The same is true if the <code>packs</code> list is empty.
+     * If the list of selected packs is empty then <code>true</code> is always returnd. The same
+     * is true if the <code>packs</code> list is empty.
      * 
-     * @param packs
-     *            a <code>Vector</code> of <code>String</code>s. Each of
-     *            the strings denotes a pack for which an item should be created
-     *            if the pack is actually installed.
+     * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes
+     * a pack for which an item should be created if the pack is actually installed.
      * 
-     * @return <code>true</code> if the item is required for at least one pack
-     *         in the list, otherwise returns <code>false</code>.
+     * @return <code>true</code> if the item is required for at least one pack in the list,
+     * otherwise returns <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
      * 
-     * The information about the installed packs comes from
-     * InstallData.selectedPacks. This assumes that this panel is presented to
-     * the user AFTER the PacksPanel.
+     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
     private boolean itemRequiredForUnselected(Vector packs)
@@ -2480,13 +2402,10 @@ public class UserInputPanel extends IzPanel
 
         /*--------------------------------------------------------------------------*/
         /**
-         * Constructs a new Text/Value pair, initialized with the text and a
-         * value.
+         * Constructs a new Text/Value pair, initialized with the text and a value.
          * 
-         * @param text
-         *            the text that this object should represent
-         * @param value
-         *            the value that should be associated with this object
+         * @param text the text that this object should represent
+         * @param value the value that should be associated with this object
          */
         /*--------------------------------------------------------------------------*/
         public TextValuePair(String text, String value)
@@ -2499,8 +2418,7 @@ public class UserInputPanel extends IzPanel
         /**
          * Sets the text
          * 
-         * @param text
-         *            the text for this object
+         * @param text the text for this object
          */
         /*--------------------------------------------------------------------------*/
         public void setText(String text)
@@ -2512,8 +2430,7 @@ public class UserInputPanel extends IzPanel
         /**
          * Sets the value of this object
          * 
-         * @param value
-         *            the value for this object
+         * @param value the value for this object
          */
         /*--------------------------------------------------------------------------*/
         public void setValue(String value)
@@ -2550,9 +2467,8 @@ public class UserInputPanel extends IzPanel
     /**
      * This class encapsulates a lot of search field functionality.
      * 
-     * A search field supports searching directories and files on the target
-     * system. This is a helper class to manage all data belonging to a search
-     * field.
+     * A search field supports searching directories and files on the target system. This is a
+     * helper class to manage all data belonging to a search field.
      */
     /*---------------------------------------------------------------------------*/
 
@@ -2592,28 +2508,21 @@ public class UserInputPanel extends IzPanel
 
         /*---------------------------------------------------------------------------*/
         /**
-         * Constructor - initializes the object, adds it as action listener to
-         * the "autodetect" button.
+         * Constructor - initializes the object, adds it as action listener to the "autodetect"
+         * button.
          * 
-         * @param filename
-         *            the name of the file to search for (might be null for
-         *            searching directories)
-         * @param checkFilename
-         *            the name of the file to check when searching for
-         *            directories (the checkFilename is appended to a found
-         *            directory to figure out whether it is the right directory)
-         * @param combobox
-         *            the <code>JComboBox</code> holding the list of choices;
-         *            it should be editable and contain only Strings
-         * @param autobutton
-         *            the autodetection button for triggering autodetection
-         * @param browsebutton
-         *            the browse button to look for the file
-         * @param search_type
-         *            what to search for - TYPE_FILE or TYPE_DIRECTORY
-         * @param result_type
-         *            what to return as the result - RESULT_FILE or
-         *            RESULT_DIRECTORY or RESULT_PARENTDIR
+         * @param filename the name of the file to search for (might be null for searching
+         * directories)
+         * @param checkFilename the name of the file to check when searching for directories (the
+         * checkFilename is appended to a found directory to figure out whether it is the right
+         * directory)
+         * @param combobox the <code>JComboBox</code> holding the list of choices; it should be
+         * editable and contain only Strings
+         * @param autobutton the autodetection button for triggering autodetection
+         * @param browsebutton the browse button to look for the file
+         * @param search_type what to search for - TYPE_FILE or TYPE_DIRECTORY
+         * @param result_type what to return as the result - RESULT_FILE or RESULT_DIRECTORY or
+         * RESULT_PARENTDIR
          */
         /*---------------------------------------------------------------------------*/
         public SearchField(String filename, String checkFilename, InstallerFrame parent,
@@ -2636,8 +2545,8 @@ public class UserInputPanel extends IzPanel
         }
 
         /**
-         * Check whether the given combobox belongs to this searchfield. This is
-         * used when reading the results.
+         * Check whether the given combobox belongs to this searchfield. This is used when reading
+         * the results.
          */
         public boolean belongsTo(JComboBox combobox)
         {
@@ -2689,8 +2598,7 @@ public class UserInputPanel extends IzPanel
             Vector items = new Vector();
 
             /*
-             * Check if the user has entered data into the ComboBox and add it
-             * to the Itemlist
+             * Check if the user has entered data into the ComboBox and add it to the Itemlist
              */
             String selected = (String) this.pathComboBox.getSelectedItem();
             boolean found = false;
@@ -2827,8 +2735,8 @@ public class UserInputPanel extends IzPanel
         /**
          * Return the result of the search according to result type.
          * 
-         * Sometimes, the whole path of the file is wanted, sometimes only the
-         * directory where the file is in, sometimes the parent directory.
+         * Sometimes, the whole path of the file is wanted, sometimes only the directory where the
+         * file is in, sometimes the parent directory.
          * 
          * @return null on error
          */

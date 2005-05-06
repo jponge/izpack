@@ -1,28 +1,25 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Thomas Guenter, Klaus Bartz
- *
- *  File :               AntActionInstallerListener.java
- *  Description :        Installer listener for ant custom actions.
- *  Author's email :     bartzkau@users.berlios.de
- *  Website :            http://www.izforge.com
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * Copyright 2004 Thomas Guenter
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.event;
 
 import java.util.ArrayList;
@@ -43,13 +40,11 @@ import com.izforge.izpack.util.SpecHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
- * Installer listener for performing ANT actions. The definition what should be
- * done will be made in a specification file which is referenced by the resource
- * id "AntActionsSpec.xml". There should be an entry in the install.xml file in
- * the sub ELEMENT "res" of ELEMENT "resources" which references it. The
- * specification of the xml file is done in the DTD antaction.dtd. The xml file
- * specifies, for what pack what ant call should be performed at what time of
- * installation.
+ * Installer listener for performing ANT actions. The definition what should be done will be made in
+ * a specification file which is referenced by the resource id "AntActionsSpec.xml". There should be
+ * an entry in the install.xml file in the sub ELEMENT "res" of ELEMENT "resources" which references
+ * it. The specification of the xml file is done in the DTD antaction.dtd. The xml file specifies,
+ * for what pack what ant call should be performed at what time of installation.
  * 
  * @author Thomas Guenter
  * @author Klaus Bartz
@@ -93,8 +88,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.installer.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     *      java.lang.Integer,
-     *      com.izforge.izpack.util.AbstractUIProgressHandler)
+     * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
             AbstractUIProgressHandler handler) throws Exception
@@ -155,8 +149,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.installer.InstallerListener#beforePack(com.izforge.izpack.Pack,
-     *      java.lang.Integer,
-     *      com.izforge.izpack.util.AbstractUIProgressHandler)
+     * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
             throws Exception
@@ -168,8 +161,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.installer.InstallerListener#afterPack(com.izforge.izpack.Pack,
-     *      java.lang.Integer,
-     *      com.izforge.izpack.util.AbstractUIProgressHandler)
+     * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception
     {
@@ -180,7 +172,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     *      com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception
@@ -218,13 +210,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     /**
      * Returns the defined actions for the given pack in the requested order.
      * 
-     * @param packName
-     *            name of the pack for which the actions should be returned
-     * @param order
-     *            order to be used; valid are <i>beforepack</i> and
-     *            <i>afterpack</i>
-     * @return a list which contains all defined actions for the given pack and
-     *         order
+     * @param packName name of the pack for which the actions should be returned
+     * @param order order to be used; valid are <i>beforepack</i> and <i>afterpack</i>
+     * @return a list which contains all defined actions for the given pack and order
      */
     // -------------------------------------------------------
     protected ArrayList getActions(String packName, String order)
@@ -240,11 +228,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     /**
      * Performs all actions which are defined for the given pack and order.
      * 
-     * @param packName
-     *            name of the pack for which the actions should be performed
-     * @param order
-     *            order to be used; valid are <i>beforepack</i> and
-     *            <i>afterpack</i>
+     * @param packName name of the pack for which the actions should be performed
+     * @param order order to be used; valid are <i>beforepack</i> and <i>afterpack</i>
      * @throws InstallerException
      */
     private void performAllActions(String packName, String order, AbstractUIProgressHandler handler)
@@ -281,8 +266,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     /**
      * Returns an ant call which is defined in the given XML element.
      * 
-     * @param el
-     *            XML element which contains the description of an ant call
+     * @param el XML element which contains the description of an ant call
      * @return an ant call which is defined in the given XML element
      * @throws InstallerException
      */

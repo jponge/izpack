@@ -1,26 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Klaus Bartz
- *
- *  File :               PathSelectionPanel.java
- *  Description :        A sub panel to handle selection of a paths.
- *  Author's email :     bartzkau@users.berlios.de
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import java.awt.Dimension;
@@ -41,13 +39,12 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.IzPanel;
 
 /**
- * This is a sub panel which contains a text field and a browse button for path
- * selection. This is NOT an IzPanel, else it is made to use in an IzPanel for
- * any path selection. If the IzPanel parent implements ActionListener, the
- * ActionPerformed method will be called, if PathSelectionPanel.ActionPerformed
- * was called with a source other than the browse button. This can be used to
- * perform parentFrame.navigateNext in the IzPanel parent. An example
- * implementation is done in com.izforge.izpack.panels.PathInputPanel.
+ * This is a sub panel which contains a text field and a browse button for path selection. This is
+ * NOT an IzPanel, else it is made to use in an IzPanel for any path selection. If the IzPanel
+ * parent implements ActionListener, the ActionPerformed method will be called, if
+ * PathSelectionPanel.ActionPerformed was called with a source other than the browse button. This
+ * can be used to perform parentFrame.navigateNext in the IzPanel parent. An example implementation
+ * is done in com.izforge.izpack.panels.PathInputPanel.
  * 
  * @author Klaus Bartz
  * 
@@ -75,13 +72,10 @@ public class PathSelectionPanel extends JPanel implements ActionListener
     private InstallData idata;
 
     /**
-     * The constructor. Be aware, parent is the parent IzPanel, not the
-     * installer frame.
+     * The constructor. Be aware, parent is the parent IzPanel, not the installer frame.
      * 
-     * @param parent
-     *            The parent IzPanel.
-     * @param idata
-     *            The installer internal data.
+     * @param parent The parent IzPanel.
+     * @param idata The installer internal data.
      */
     public PathSelectionPanel(IzPanel parent, InstallData idata)
     {
@@ -138,8 +132,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener
     /**
      * Actions-handling method.
      * 
-     * @param e
-     *            The event.
+     * @param e The event.
      */
     public void actionPerformed(ActionEvent e)
     {
@@ -183,8 +176,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener
     /**
      * Sets the contents of the text field to the given path.
      * 
-     * @param path
-     *            the path to be set
+     * @param path the path to be set
      */
     public void setPath(String path)
     {
@@ -192,9 +184,8 @@ public class PathSelectionPanel extends JPanel implements ActionListener
     }
 
     /**
-     * Returns the text input field for the path. This methode can be used to
-     * differ in a ActionPerformed method of the parent between the browse
-     * button and the text field.
+     * Returns the text input field for the path. This methode can be used to differ in a
+     * ActionPerformed method of the parent between the browse button and the text field.
      * 
      * @return the text input field for the path
      */

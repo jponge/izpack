@@ -31,8 +31,7 @@ package net.n3.nanoxml;
 import java.util.Properties;
 
 /**
- * ValidatorPlugin allows the application to insert additional validators into
- * NanoXML.
+ * ValidatorPlugin allows the application to insert additional validators into NanoXML.
  * 
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
@@ -73,8 +72,7 @@ public class ValidatorPlugin implements IXMLValidator
     /**
      * Sets the delegate.
      * 
-     * @param delegate
-     *            the delegate
+     * @param delegate the delegate
      */
     public void setDelegate(IXMLValidator delegate)
     {
@@ -84,8 +82,7 @@ public class ValidatorPlugin implements IXMLValidator
     /**
      * Sets the parameter entity resolver.
      * 
-     * @param resolver
-     *            the entity resolver.
+     * @param resolver the entity resolver.
      */
     public void setParameterEntityResolver(IXMLEntityResolver resolver)
     {
@@ -103,20 +100,14 @@ public class ValidatorPlugin implements IXMLValidator
     }
 
     /**
-     * Parses the DTD. The validator object is responsible for reading the full
-     * DTD.
+     * Parses the DTD. The validator object is responsible for reading the full DTD.
      * 
-     * @param publicID
-     *            the public ID, which may be null.
-     * @param reader
-     *            the reader to read the DTD from.
-     * @param entityResolver
-     *            the entity resolver.
-     * @param external
-     *            true if the DTD is external.
+     * @param publicID the public ID, which may be null.
+     * @param reader the reader to read the DTD from.
+     * @param entityResolver the entity resolver.
+     * @param external true if the DTD is external.
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong.
+     * @throws java.lang.Exception if something went wrong.
      */
     public void parseDTD(String publicID, IXMLReader reader, IXMLEntityResolver entityResolver,
             boolean external) throws Exception
@@ -127,19 +118,13 @@ public class ValidatorPlugin implements IXMLValidator
     /**
      * Indicates that an element has been started.
      * 
-     * @param name
-     *            the name of the element.
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemId
-     *            the system ID associated with the namespace
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param name the name of the element.
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      * 
-     * @throws java.lang.Exception
-     *             if the element could not be validated.
+     * @throws java.lang.Exception if the element could not be validated.
      */
     public void elementStarted(String name, String nsPrefix, String nsSystemId, String systemId,
             int lineNr) throws Exception
@@ -150,19 +135,13 @@ public class ValidatorPlugin implements IXMLValidator
     /**
      * Indicates that the current element has ended.
      * 
-     * @param name
-     *            the name of the element.
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemId
-     *            the system ID associated with the namespace
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param name the name of the element.
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      * 
-     * @throws java.lang.Exception
-     *             if the element could not be validated.
+     * @throws java.lang.Exception if the element could not be validated.
      */
     public void elementEnded(String name, String nsPrefix, String nsSystemId, String systemId,
             int lineNr) throws Exception
@@ -173,21 +152,14 @@ public class ValidatorPlugin implements IXMLValidator
     /**
      * Indicates that an attribute has been added to the current element.
      * 
-     * @param name
-     *            the name of the element.
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemId
-     *            the system ID associated with the namespace
-     * @param extraAttributes
-     *            where to put extra attributes.
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param name the name of the element.
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param extraAttributes where to put extra attributes.
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      * 
-     * @throws java.lang.Exception
-     *             if the attribute could not be validated.
+     * @throws java.lang.Exception if the attribute could not be validated.
      */
     public void elementAttributesProcessed(String name, String nsPrefix, String nsSystemId,
             Properties extraAttributes, String systemId, int lineNr) throws Exception
@@ -197,25 +169,18 @@ public class ValidatorPlugin implements IXMLValidator
     }
 
     /**
-     * This method is called when the attributes of an XML element have been
-     * processed. If there are attributes with a default value which have not
-     * been specified yet, they have to be put into <I>extraAttributes</I>.
+     * This method is called when the attributes of an XML element have been processed. If there are
+     * attributes with a default value which have not been specified yet, they have to be put into
+     * <I>extraAttributes</I>.
      * 
-     * @param key
-     *            the name of the attribute.
-     * @param nsPrefix
-     *            the prefix used to identify the namespace
-     * @param nsSystemId
-     *            the system ID associated with the namespace
-     * @param value
-     *            the value of the attribute.
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param key the name of the attribute.
+     * @param nsPrefix the prefix used to identify the namespace
+     * @param nsSystemId the system ID associated with the namespace
+     * @param value the value of the attribute.
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      * 
-     * @throws java.lang.Exception
-     *             if the element could not be validated.
+     * @throws java.lang.Exception if the element could not be validated.
      */
     public void attributeAdded(String key, String nsPrefix, String nsSystemId, String value,
             String systemId, int lineNr) throws Exception
@@ -226,13 +191,10 @@ public class ValidatorPlugin implements IXMLValidator
     /**
      * Indicates that a new #PCDATA element has been encountered.
      * 
-     * @param systemId
-     *            the system ID of the XML data of the element.
-     * @param lineNr
-     *            the line number in the XML data of the element.
+     * @param systemId the system ID of the XML data of the element.
+     * @param lineNr the line number in the XML data of the element.
      * 
-     * @throws java.lang.Exception
-     *             if the element could not be validated.
+     * @throws java.lang.Exception if the element could not be validated.
      */
     public void PCDataAdded(String systemId, int lineNr) throws Exception
     {
@@ -242,17 +204,12 @@ public class ValidatorPlugin implements IXMLValidator
     /**
      * Throws an XMLValidationException to indicate that an element is missing.
      * 
-     * @param systemID
-     *            the system ID of the XML data of the element
-     * @param lineNr
-     *            the line number in the XML data of the element
-     * @param parentElementName
-     *            the name of the parent element
-     * @param missingElementName
-     *            the name of the missing element
+     * @param systemID the system ID of the XML data of the element
+     * @param lineNr the line number in the XML data of the element
+     * @param parentElementName the name of the parent element
+     * @param missingElementName the name of the missing element
      * 
-     * @throws net.n3.nanoxml.XMLValidationException
-     *             of course :-)
+     * @throws net.n3.nanoxml.XMLValidationException of course :-)
      */
     public void missingElement(String systemID, int lineNr, String parentElementName,
             String missingElementName) throws XMLValidationException
@@ -261,20 +218,14 @@ public class ValidatorPlugin implements IXMLValidator
     }
 
     /**
-     * Throws an XMLValidationException to indicate that an element is
-     * unexpected.
+     * Throws an XMLValidationException to indicate that an element is unexpected.
      * 
-     * @param systemID
-     *            the system ID of the XML data of the element
-     * @param lineNr
-     *            the line number in the XML data of the element
-     * @param parentElementName
-     *            the name of the parent element
-     * @param unexpectedElementName
-     *            the name of the missing element
+     * @param systemID the system ID of the XML data of the element
+     * @param lineNr the line number in the XML data of the element
+     * @param parentElementName the name of the parent element
+     * @param unexpectedElementName the name of the missing element
      * 
-     * @throws net.n3.nanoxml.XMLValidationException
-     *             of course :-)
+     * @throws net.n3.nanoxml.XMLValidationException of course :-)
      */
     public void unexpectedElement(String systemID, int lineNr, String parentElementName,
             String unexpectedElementName) throws XMLValidationException
@@ -283,20 +234,14 @@ public class ValidatorPlugin implements IXMLValidator
     }
 
     /**
-     * Throws an XMLValidationException to indicate that an attribute is
-     * missing.
+     * Throws an XMLValidationException to indicate that an attribute is missing.
      * 
-     * @param systemID
-     *            the system ID of the XML data of the element
-     * @param lineNr
-     *            the line number in the XML data of the element
-     * @param elementName
-     *            the name of the element
-     * @param attributeName
-     *            the name of the missing attribute
+     * @param systemID the system ID of the XML data of the element
+     * @param lineNr the line number in the XML data of the element
+     * @param elementName the name of the element
+     * @param attributeName the name of the missing attribute
      * 
-     * @throws net.n3.nanoxml.XMLValidationException
-     *             of course :-)
+     * @throws net.n3.nanoxml.XMLValidationException of course :-)
      */
     public void missingAttribute(String systemID, int lineNr, String elementName,
             String attributeName) throws XMLValidationException
@@ -305,20 +250,14 @@ public class ValidatorPlugin implements IXMLValidator
     }
 
     /**
-     * Throws an XMLValidationException to indicate that an attribute is
-     * unexpected.
+     * Throws an XMLValidationException to indicate that an attribute is unexpected.
      * 
-     * @param systemID
-     *            the system ID of the XML data of the element
-     * @param lineNr
-     *            the line number in the XML data of the element
-     * @param elementName
-     *            the name of the element
-     * @param attributeName
-     *            the name of the unexpected attribute
+     * @param systemID the system ID of the XML data of the element
+     * @param lineNr the line number in the XML data of the element
+     * @param elementName the name of the element
+     * @param attributeName the name of the unexpected attribute
      * 
-     * @throws net.n3.nanoxml.XMLValidationException
-     *             of course :-)
+     * @throws net.n3.nanoxml.XMLValidationException of course :-)
      */
     public void unexpectedAttribute(String systemID, int lineNr, String elementName,
             String attributeName) throws XMLValidationException
@@ -327,22 +266,15 @@ public class ValidatorPlugin implements IXMLValidator
     }
 
     /**
-     * Throws an XMLValidationException to indicate that an attribute has an
-     * invalid value.
+     * Throws an XMLValidationException to indicate that an attribute has an invalid value.
      * 
-     * @param systemID
-     *            the system ID of the XML data of the element
-     * @param lineNr
-     *            the line number in the XML data of the element
-     * @param elementName
-     *            the name of the element
-     * @param attributeName
-     *            the name of the attribute
-     * @param attributeValue
-     *            the value of the attribute
+     * @param systemID the system ID of the XML data of the element
+     * @param lineNr the line number in the XML data of the element
+     * @param elementName the name of the element
+     * @param attributeName the name of the attribute
+     * @param attributeValue the value of the attribute
      * 
-     * @throws net.n3.nanoxml.XMLValidationException
-     *             of course :-)
+     * @throws net.n3.nanoxml.XMLValidationException of course :-)
      */
     public void invalidAttributeValue(String systemID, int lineNr, String elementName,
             String attributeName, String attributeValue) throws XMLValidationException
@@ -352,18 +284,13 @@ public class ValidatorPlugin implements IXMLValidator
     }
 
     /**
-     * Throws an XMLValidationException to indicate that a #PCDATA element was
-     * missing.
+     * Throws an XMLValidationException to indicate that a #PCDATA element was missing.
      * 
-     * @param systemID
-     *            the system ID of the XML data of the element
-     * @param lineNr
-     *            the line number in the XML data of the element
-     * @param parentElementName
-     *            the name of the parent element
+     * @param systemID the system ID of the XML data of the element
+     * @param lineNr the line number in the XML data of the element
+     * @param parentElementName the name of the parent element
      * 
-     * @throws net.n3.nanoxml.XMLValidationException
-     *             of course :-)
+     * @throws net.n3.nanoxml.XMLValidationException of course :-)
      */
     public void missingPCData(String systemID, int lineNr, String parentElementName)
             throws XMLValidationException
@@ -372,18 +299,13 @@ public class ValidatorPlugin implements IXMLValidator
     }
 
     /**
-     * Throws an XMLValidationException to indicate that a #PCDATA element was
-     * unexpected.
+     * Throws an XMLValidationException to indicate that a #PCDATA element was unexpected.
      * 
-     * @param systemID
-     *            the system ID of the XML data of the element
-     * @param lineNr
-     *            the line number in the XML data of the element
-     * @param parentElementName
-     *            the name of the parent element
+     * @param systemID the system ID of the XML data of the element
+     * @param lineNr the line number in the XML data of the element
+     * @param parentElementName the name of the parent element
      * 
-     * @throws net.n3.nanoxml.XMLValidationException
-     *             of course :-)
+     * @throws net.n3.nanoxml.XMLValidationException of course :-)
      */
     public void unexpectedPCData(String systemID, int lineNr, String parentElementName)
             throws XMLValidationException
@@ -394,21 +316,14 @@ public class ValidatorPlugin implements IXMLValidator
     /**
      * Throws an XMLValidationException.
      * 
-     * @param systemID
-     *            the system ID of the XML data of the element
-     * @param lineNr
-     *            the line number in the XML data of the element
-     * @param message
-     *            the error message
-     * @param elementName
-     *            the name of the element (may be null)
-     * @param attributeName
-     *            the name of the attribute (may be null)
-     * @param attributeValue
-     *            the value of the attribute (may be null)
+     * @param systemID the system ID of the XML data of the element
+     * @param lineNr the line number in the XML data of the element
+     * @param message the error message
+     * @param elementName the name of the element (may be null)
+     * @param attributeName the name of the attribute (may be null)
+     * @param attributeValue the value of the attribute (may be null)
      * 
-     * @throws net.n3.nanoxml.XMLValidationException
-     *             of course :-)
+     * @throws net.n3.nanoxml.XMLValidationException of course :-)
      */
     public void validationError(String systemID, int lineNr, String message, String elementName,
             String attributeName, String attributeValue) throws XMLValidationException

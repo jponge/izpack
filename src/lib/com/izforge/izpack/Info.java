@@ -1,35 +1,29 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               Info.java
- *  Description :        The information class for an installation.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Contains some informations for an installer, as defined in the <info> section
- * of the XML files.
+ * Contains some informations for an installer, as defined in the <info> section of the XML files.
  * 
  * @author Julien Ponge
  */
@@ -73,8 +67,7 @@ public class Info implements Serializable
     /**
      * Sets the application name.
      * 
-     * @param appName
-     *            The new application name.
+     * @param appName The new application name.
      */
     public void setAppName(String appName)
     {
@@ -94,8 +87,7 @@ public class Info implements Serializable
     /**
      * Sets the version.
      * 
-     * @param appVersion
-     *            The application version.
+     * @param appVersion The application version.
      */
     public void setAppVersion(String appVersion)
     {
@@ -115,8 +107,7 @@ public class Info implements Serializable
     /**
      * Adds an author to the authors list.
      * 
-     * @param author
-     *            The author to add.
+     * @param author The author to add.
      */
     public void addAuthor(Author author)
     {
@@ -136,8 +127,7 @@ public class Info implements Serializable
     /**
      * Sets the application URL.
      * 
-     * @param appURL
-     *            The application URL.
+     * @param appURL The application URL.
      */
     public void setAppURL(String appURL)
     {
@@ -157,8 +147,7 @@ public class Info implements Serializable
     /**
      * Sets the minimum Java version required.
      * 
-     * @param javaVersion
-     *            The Java version.
+     * @param javaVersion The Java version.
      */
     public void setJavaVersion(String javaVersion)
     {
@@ -178,8 +167,7 @@ public class Info implements Serializable
     /**
      * Sets the installer name.
      * 
-     * @param installerBase
-     *            The new installer name.
+     * @param installerBase The new installer name.
      */
     public void setInstallerBase(String installerBase)
     {
@@ -199,8 +187,7 @@ public class Info implements Serializable
     /**
      * Sets the webDir URL.
      * 
-     * @param url
-     *            The application URL.
+     * @param url The application URL.
      */
     public void setWebDirURL(String url)
     {
@@ -210,8 +197,8 @@ public class Info implements Serializable
     /**
      * Gets the webDir URL if it has been specified
      * 
-     * @return The webDir URL from which the installer is retrieved, or
-     *         <tt>null</tt> if non has been set.
+     * @return The webDir URL from which the installer is retrieved, or <tt>null</tt> if non has
+     * been set.
      */
     public String getWebDirURL()
     {
@@ -221,8 +208,7 @@ public class Info implements Serializable
     /**
      * Sets the name of the uninstaller.
      * 
-     * @param name
-     *            the name of the uninstaller.
+     * @param name the name of the uninstaller.
      */
     public void setUninstallerName(String name)
     {
@@ -278,10 +264,8 @@ public class Info implements Serializable
         /**
          * The constructor.
          * 
-         * @param name
-         *            The author name.
-         * @param email
-         *            The author email.
+         * @param name The author name.
+         * @param email The author email.
          */
         public Author(String name, String email)
         {
@@ -292,8 +276,7 @@ public class Info implements Serializable
         /**
          * Gets a String representation of the author.
          * 
-         * @return The String representation of the author, in the form : name
-         *         <email> .
+         * @return The String representation of the author, in the form : name <email> .
          */
         public String toString()
         {
@@ -315,8 +298,7 @@ public class Info implements Serializable
     /**
      * Sets the installation subpath.
      * 
-     * @param string
-     *            subpath to be set
+     * @param string subpath to be set
      */
     public void setInstallationSubPath(String string)
     {
@@ -336,8 +318,7 @@ public class Info implements Serializable
     /**
      * Sets the summary log file path.
      * 
-     * @param summaryLogFilePath
-     *            the summary log file path to set
+     * @param summaryLogFilePath the summary log file path to set
      */
     public void setSummaryLogFilePath(String summaryLogFilePath)
     {

@@ -1,27 +1,22 @@
 /*
- * $Id$
- * IzPack
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
- *  Copyright (C) 2001-2003 Tino Schwarze, Julien Ponge
- *
- *  File :               AbstractUIHandler.java
- *  Description :        An interface for user interaction.
- *  Author's email :     tino.schwarze@informatik.tu-chemnitz.de
- *  Author's Website :   http://www.tisc.de
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2003 Tino Schwarze
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.util;
@@ -29,9 +24,8 @@ package com.izforge.izpack.util;
 /**
  * This interface describes basic functionality neccessary for user interaction.
  * 
- * All methods or functions which perform work and need to notify or ask the
- * user use a listener for such purposes. This way, we can separate UI from
- * function.
+ * All methods or functions which perform work and need to notify or ask the user use a listener for
+ * such purposes. This way, we can separate UI from function.
  * 
  */
 
@@ -41,22 +35,18 @@ public interface AbstractUIHandler
     /**
      * Notify the user about something.
      * 
-     * The difference between notification and warning is that a notification
-     * should not need user interaction and can savely be ignored.
+     * The difference between notification and warning is that a notification should not need user
+     * interaction and can savely be ignored.
      * 
-     * @param message
-     *            The notification.
+     * @param message The notification.
      */
     public void emitNotification(String message);
 
     /**
      * Warn the user about something.
      * 
-     * @param title
-     *            The message title (used for dialog name, might not be
-     *            displayed)
-     * @param message
-     *            The warning message.
+     * @param title The message title (used for dialog name, might not be displayed)
+     * @param message The warning message.
      * @return true if the user decided not to continue
      */
     public boolean emitWarning(String title, String message);
@@ -64,11 +54,8 @@ public interface AbstractUIHandler
     /**
      * Notify the user of some error.
      * 
-     * @param title
-     *            The message title (used for dialog name, might not be
-     *            displayed)
-     * @param message
-     *            The error message.
+     * @param title The message title (used for dialog name, might not be displayed)
+     * @param message The error message.
      * @return true if the user decided not to continue
      */
     public void emitError(String title, String message);
@@ -89,13 +76,9 @@ public interface AbstractUIHandler
     /**
      * Ask the user a question.
      * 
-     * @param title
-     *            The title of the question (useful for dialogs). Might be null.
-     * @param question
-     *            The question.
-     * @param choices
-     *            The set of choices to present. Either CHOICES_YES_NO or
-     *            CHOICES_YES_NO_CANCEL
+     * @param title The title of the question (useful for dialogs). Might be null.
+     * @param question The question.
+     * @param choices The set of choices to present. Either CHOICES_YES_NO or CHOICES_YES_NO_CANCEL
      * 
      * @return The user's choice. (ANSWER_CANCEL, ANSWER_YES or ANSWER_NO)
      */
@@ -104,16 +87,10 @@ public interface AbstractUIHandler
     /**
      * Ask the user a question.
      * 
-     * @param title
-     *            The title of the question (useful for dialogs). Might be null.
-     * @param question
-     *            The question.
-     * @param choices
-     *            The set of choices to present. Either CHOICES_YES_NO or
-     *            CHOICES_YES_NO_CANCEL
-     * @param default_choice
-     *            The default choice. One of ANSWER_CANCEL, ANSWER_YES or
-     *            ANSWER_NO.
+     * @param title The title of the question (useful for dialogs). Might be null.
+     * @param question The question.
+     * @param choices The set of choices to present. Either CHOICES_YES_NO or CHOICES_YES_NO_CANCEL
+     * @param default_choice The default choice. One of ANSWER_CANCEL, ANSWER_YES or ANSWER_NO.
      * 
      * @return The user's choice. (ANSWER_CANCEL, ANSWER_YES or ANSWER_NO)
      */

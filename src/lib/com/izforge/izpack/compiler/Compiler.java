@@ -1,36 +1,27 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2001 Johannes Lehtinen
+ * Copyright 2002 Paul Wilkinson
+ * Copyright 2004 Gaganis Giorgos
  *
- *  File :               Compiler.java
- *  Description :        The IzPack compiler.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  Portions are Copyright (c) 2001 Johannes Lehtinen
- *  johannes.lehtinen@iki.fi
- *  http://www.iki.fi/jle/
- *
- *  Portions are Copyright (c) 2002 Paul Wilkinson
- *  paulw@wilko.com
- *
- *  Portions are Copyright (C) 2004 Gaganis Giorgos (geogka@it.teithe.gr)
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.compiler;
 
 import java.io.BufferedInputStream;
@@ -149,14 +140,10 @@ public class Compiler extends Thread
     /**
      * The constructor.
      * 
-     * @param filename
-     *            The XML filename.
-     * @param basedir
-     *            The base directory.
-     * @param kind
-     *            The installer kind.
-     * @param output
-     *            The installer filename.
+     * @param filename The XML filename.
+     * @param basedir The base directory.
+     * @param kind The installer kind.
+     * @param output The installer filename.
      */
     public Compiler(String filename, String basedir, String kind, String output)
     {
@@ -177,8 +164,7 @@ public class Compiler extends Thread
     /**
      * Sets the packager listener.
      * 
-     * @param listener
-     *            The listener.
+     * @param listener The listener.
      */
     public void setPackagerListener(PackagerListener listener)
     {
@@ -227,8 +213,7 @@ public class Compiler extends Thread
     /**
      * Compiles the installation.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     public void executeCompiler() throws Exception
     {
@@ -291,8 +276,7 @@ public class Compiler extends Thread
     /**
      * Get the value of a property currerntly known to izpack.
      * 
-     * @param name
-     *            the name of the property
+     * @param name the name of the property
      * @return the value of the property, or null
      */
     public String getProperty(String name)
@@ -301,13 +285,10 @@ public class Compiler extends Thread
     }
 
     /**
-     * Add a name value pair to the project property set. Overwriting any
-     * existing value.
+     * Add a name value pair to the project property set. Overwriting any existing value.
      * 
-     * @param name
-     *            the name of the property
-     * @param value
-     *            the value to set
+     * @param name the name of the property
+     * @param value the value to set
      * @return true
      */
     public boolean setProperty(String name, String value)
@@ -318,13 +299,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Add a name value pair to the project property set. It is <i>not</i>
-     * replaced it is already in the set of properties.
+     * Add a name value pair to the project property set. It is <i>not</i> replaced it is already
+     * in the set of properties.
      * 
-     * @param name
-     *            the name of the property
-     * @param value
-     *            the value to set
+     * @param name the name of the property
+     * @param value the value to set
      * @return true if the property was not already set
      */
     public boolean addProperty(String name, String value)
@@ -341,11 +320,9 @@ public class Compiler extends Thread
     /**
      * Returns the GUIPrefs.
      * 
-     * @param data
-     *            The XML data.
+     * @param data The XML data.
      * @return The GUIPrefs.
-     * @exception CompilerException
-     *                Description of the Exception
+     * @exception CompilerException Description of the Exception
      */
     protected void addGUIPrefs(XMLElement data) throws CompilerException
     {
@@ -428,8 +405,7 @@ public class Compiler extends Thread
     /**
      * Add project specific external jar files to the installer.
      * 
-     * @param data
-     *            The XML data.
+     * @param data The XML data.
      */
     protected void addJars(XMLElement data) throws Exception
     {
@@ -464,8 +440,7 @@ public class Compiler extends Thread
     /**
      * Add native libraries to the installer.
      * 
-     * @param data
-     *            The XML data.
+     * @param data The XML data.
      */
     protected void addNativeLibraries(XMLElement data) throws Exception
     {
@@ -520,8 +495,7 @@ public class Compiler extends Thread
     /**
      * Add packs and their contents to the installer.
      * 
-     * @param data
-     *            The XML data.
+     * @param data The XML data.
      */
     protected void addPacks(XMLElement data) throws CompilerException
     {
@@ -837,9 +811,9 @@ public class Compiler extends Thread
     }
 
     /**
-     * Checks whether the dependencies stated in the configuration file are
-     * correct. Specifically it checks that no pack point to a non existent pack
-     * and also that there are no circular dependencies in the packs.
+     * Checks whether the dependencies stated in the configuration file are correct. Specifically it
+     * checks that no pack point to a non existent pack and also that there are no circular
+     * dependencies in the packs.
      */
     public void checkDependencies(List packs) throws CompilerException
     {
@@ -859,15 +833,12 @@ public class Compiler extends Thread
     }
 
     /**
-     * We use the dfs graph search algorithm to check whether the graph is
-     * acyclic as described in: Thomas H. Cormen, Charles Leiserson, Ronald
-     * Rivest and Clifford Stein. Introduction to algorithms 2nd Edition
-     * 540-549,MIT Press, 2001
+     * We use the dfs graph search algorithm to check whether the graph is acyclic as described in:
+     * Thomas H. Cormen, Charles Leiserson, Ronald Rivest and Clifford Stein. Introduction to
+     * algorithms 2nd Edition 540-549,MIT Press, 2001
      * 
-     * @param packs
-     *            The graph
-     * @param names
-     *            The name map
+     * @param packs The graph
+     * @param names The name map
      */
     private int dfs(List packs, Map names)
     {
@@ -946,20 +917,13 @@ public class Compiler extends Thread
     /**
      * Recursive method to add files in a pack.
      * 
-     * @param file
-     *            The file to add.
-     * @param targetdir
-     *            The relative path to the parent.
-     * @param osList
-     *            The target OS constraints.
-     * @param override
-     *            Overriding behaviour.
-     * @param pack
-     *            Pack to be packed into
-     * @param additionals
-     *            Map which contains additional data
-     * @exception FileNotFoundException
-     *                if the file does not exist
+     * @param file The file to add.
+     * @param targetdir The relative path to the parent.
+     * @param osList The target OS constraints.
+     * @param override Overriding behaviour.
+     * @param pack Pack to be packed into
+     * @param additionals Map which contains additional data
+     * @exception FileNotFoundException if the file does not exist
      */
     protected void addRecursively(File file, String targetdir, List osList, int override,
             PackInfo pack, Map additionals) throws IOException
@@ -982,13 +946,10 @@ public class Compiler extends Thread
     }
 
     /**
-     * Parse panels and their paramters, locate the panels resources and add to
-     * the Packager.
+     * Parse panels and their paramters, locate the panels resources and add to the Packager.
      * 
-     * @param data
-     *            The XML data.
-     * @exception CompilerException
-     *                Description of the Exception
+     * @param data The XML data.
+     * @exception CompilerException Description of the Exception
      */
     protected void addPanels(XMLElement data) throws CompilerException
     {
@@ -1035,10 +996,8 @@ public class Compiler extends Thread
     /**
      * Adds the resources.
      * 
-     * @param data
-     *            The XML data.
-     * @exception CompilerException
-     *                Description of the Exception
+     * @param data The XML data.
+     * @exception CompilerException Description of the Exception
      */
     protected void addResources(XMLElement data) throws CompilerException
     {
@@ -1105,10 +1064,8 @@ public class Compiler extends Thread
     /**
      * Adds the ISO3 codes of the langpacks and associated resources.
      * 
-     * @param data
-     *            The XML data.
-     * @exception CompilerException
-     *                Description of the Exception
+     * @param data The XML data.
+     * @exception CompilerException Description of the Exception
      */
     protected void addLangpacks(XMLElement data) throws CompilerException
     {
@@ -1141,10 +1098,8 @@ public class Compiler extends Thread
     /**
      * Builds the Info class from the XML tree.
      * 
-     * @param data
-     *            The XML data. return The Info.
-     * @exception Exception
-     *                Description of the Exception
+     * @param data The XML data. return The Info.
+     * @exception Exception Description of the Exception
      */
     protected void addInfo(XMLElement data) throws Exception
     {
@@ -1235,20 +1190,22 @@ public class Compiler extends Thread
      * <pre>
      * 
      *  
-     *      &lt;variables&gt;
-     *        &lt;variable name=&quot;nom&quot; value=&quot;value&quot;/&gt;
-     *        &lt;variable name=&quot;foo&quot; value=&quot;pippo&quot;/&gt;
-     *      &lt;/variables&gt;
+     *   
      *    
+     *        &lt;variables&gt;
+     *          &lt;variable name=&quot;nom&quot; value=&quot;value&quot;/&gt;
+     *          &lt;variable name=&quot;foo&quot; value=&quot;pippo&quot;/&gt;
+     *        &lt;/variables&gt;
+     *      
+     *    
+     *   
      *  
      * </pre>
      * 
      * variable declared in this can be referred to in parsable files.
      * 
-     * @param data
-     *            The XML data.
-     * @exception CompilerException
-     *                Description of the Exception
+     * @param data The XML data.
+     * @exception CompilerException Description of the Exception
      */
     protected void addVariables(XMLElement data) throws CompilerException
     {
@@ -1278,24 +1235,26 @@ public class Compiler extends Thread
      * <pre>
      * 
      *  
-     *      &lt;properties&gt;
-     *        &lt;property name=&quot;app.name&quot; value=&quot;Property Laden Installer&quot;/&gt;
-     *        &lt;!-- Ant styles 'location' and 'refid' are not yet supported --&gt;
-     *        &lt;property file=&quot;filename-relative-to-install?&quot;/&gt;
-     *        &lt;property file=&quot;filename-relative-to-install?&quot; prefix=&quot;prefix&quot;/&gt;
-     *        &lt;!-- Ant style 'url' and 'resource' are not yet supported --&gt;
-     *        &lt;property environment=&quot;prefix&quot;/&gt;
-     *      &lt;/properties&gt;
+     *   
      *    
+     *        &lt;properties&gt;
+     *          &lt;property name=&quot;app.name&quot; value=&quot;Property Laden Installer&quot;/&gt;
+     *          &lt;!-- Ant styles 'location' and 'refid' are not yet supported --&gt;
+     *          &lt;property file=&quot;filename-relative-to-install?&quot;/&gt;
+     *          &lt;property file=&quot;filename-relative-to-install?&quot; prefix=&quot;prefix&quot;/&gt;
+     *          &lt;!-- Ant style 'url' and 'resource' are not yet supported --&gt;
+     *          &lt;property environment=&quot;prefix&quot;/&gt;
+     *        &lt;/properties&gt;
+     *      
+     *    
+     *   
      *  
      * </pre>
      * 
      * variable declared in this can be referred to in parsable files.
      * 
-     * @param data
-     *            The XML data.
-     * @exception CompilerException
-     *                Description of the Exception
+     * @param data The XML data.
+     * @exception CompilerException Description of the Exception
      */
     protected void substituteProperties(XMLElement data) throws CompilerException
     {
@@ -1357,10 +1316,8 @@ public class Compiler extends Thread
      * Returns the XMLElement representing the installation XML file.
      * 
      * @return The XML tree.
-     * @exception CompilerException
-     *                For problems with the installation file
-     * @exception IOException
-     *                for errors reading the installation file
+     * @exception CompilerException For problems with the installation file
+     * @exception IOException for errors reading the installation file
      */
     protected XMLElement getXMLTree() throws CompilerException, IOException
     {
@@ -1432,18 +1389,13 @@ public class Compiler extends Thread
     }
 
     /**
-     * Look for a project specified resources, which, if not absolute, are
-     * sought relative to the projects basedir. The path should use '/' as the
-     * fileSeparator. If the resource is not found, a CompilerException is
-     * thrown indicating fault in the parent element.
+     * Look for a project specified resources, which, if not absolute, are sought relative to the
+     * projects basedir. The path should use '/' as the fileSeparator. If the resource is not found,
+     * a CompilerException is thrown indicating fault in the parent element.
      * 
-     * @param path
-     *            the relative path (using '/' as separator) to the resource.
-     * @param desc
-     *            the description of the resource used to report errors
-     * @param parent
-     *            the XMLElement the resource is specified in, used to report
-     *            errors
+     * @param path the relative path (using '/' as separator) to the resource.
+     * @param desc the description of the resource used to report errors
+     * @param parent the XMLElement the resource is specified in, used to report errors
      * @return a URL to the resource.
      */
     private URL findProjectResource(String path, String desc, XMLElement parent)
@@ -1469,19 +1421,14 @@ public class Compiler extends Thread
     }
 
     /**
-     * Look for an IzPack resource either in the compiler jar, or within
-     * IZPACK_HOME. The path must not be absolute. The path must use '/' as the
-     * fileSeparator (it's used to access the jar file). If the resource is not
-     * found, a CompilerException is thrown indicating fault in the parent
-     * element.
+     * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
+     * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
+     * file). If the resource is not found, a CompilerException is thrown indicating fault in the
+     * parent element.
      * 
-     * @param path
-     *            the relative path (using '/' as separator) to the resource.
-     * @param desc
-     *            the description of the resource used to report errors
-     * @param parent
-     *            the XMLElement the resource is specified in, used to report
-     *            errors
+     * @param path the relative path (using '/' as separator) to the resource.
+     * @param desc the description of the resource used to report errors
+     * @param parent the XMLElement the resource is specified in, used to report errors
      * @return a URL to the resource.
      */
     private URL findIzPackResource(String path, String desc, XMLElement parent)
@@ -1510,11 +1457,10 @@ public class Compiler extends Thread
     }
 
     /**
-     * Create parse error with consistent messages. Includes file name. For use
-     * When parent is unknown.
+     * Create parse error with consistent messages. Includes file name. For use When parent is
+     * unknown.
      * 
-     * @param message
-     *            Brief message explaining error
+     * @param message Brief message explaining error
      */
     protected void parseError(String message) throws CompilerException
     {
@@ -1523,13 +1469,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Create parse error with consistent messages. Includes file name and line #
-     * of parent. It is an error for 'parent' to be null.
+     * Create parse error with consistent messages. Includes file name and line # of parent. It is
+     * an error for 'parent' to be null.
      * 
-     * @param parent
-     *            The element in which the error occured
-     * @param message
-     *            Brief message explaining error
+     * @param parent The element in which the error occured
+     * @param message Brief message explaining error
      */
     protected void parseError(XMLElement parent, String message) throws CompilerException
     {
@@ -1538,13 +1482,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Create a chained parse error with consistent messages. Includes file name
-     * and line # of parent. It is an error for 'parent' to be null.
+     * Create a chained parse error with consistent messages. Includes file name and line # of
+     * parent. It is an error for 'parent' to be null.
      * 
-     * @param parent
-     *            The element in which the error occured
-     * @param message
-     *            Brief message explaining error
+     * @param parent The element in which the error occured
+     * @param message Brief message explaining error
      */
     protected void parseError(XMLElement parent, String message, Throwable cause)
             throws CompilerException
@@ -1554,13 +1496,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Create a parse warning with consistent messages. Includes file name and
-     * line # of parent. It is an error for 'parent' to be null.
+     * Create a parse warning with consistent messages. Includes file name and line # of parent. It
+     * is an error for 'parent' to be null.
      * 
-     * @param parent
-     *            The element in which the warning occured
-     * @param message
-     *            Warning message
+     * @param parent The element in which the warning occured
+     * @param message Warning message
      */
     protected void parseWarn(XMLElement parent, String message)
     {
@@ -1568,13 +1508,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Call getFirstChildNamed on the parent, producing a meaningful error
-     * message on failure. It is an error for 'parent' to be null.
+     * Call getFirstChildNamed on the parent, producing a meaningful error message on failure. It is
+     * an error for 'parent' to be null.
      * 
-     * @param parent
-     *            The element to search for a child
-     * @param name
-     *            Name of the child element to get
+     * @param parent The element to search for a child
+     * @param name Name of the child element to get
      */
     protected XMLElement requireChildNamed(XMLElement parent, String name) throws CompilerException
     {
@@ -1585,12 +1523,10 @@ public class Compiler extends Thread
     }
 
     /**
-     * Call getContent on an element, producing a meaningful error message if
-     * not present, or empty, or a valid URL. It is an error for 'element' to be
-     * null.
+     * Call getContent on an element, producing a meaningful error message if not present, or empty,
+     * or a valid URL. It is an error for 'element' to be null.
      * 
-     * @param element
-     *            The element to get content of
+     * @param element The element to get content of
      */
     protected URL requireURLContent(XMLElement element) throws CompilerException
     {
@@ -1607,11 +1543,10 @@ public class Compiler extends Thread
     }
 
     /**
-     * Call getContent on an element, producing a meaningful error message if
-     * not present, or empty. It is an error for 'element' to be null.
+     * Call getContent on an element, producing a meaningful error message if not present, or empty.
+     * It is an error for 'element' to be null.
      * 
-     * @param element
-     *            The element to get content of
+     * @param element The element to get content of
      */
     protected String requireContent(XMLElement element) throws CompilerException
     {
@@ -1622,14 +1557,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Call getAttribute on an element, producing a meaningful error message if
-     * not present, or empty. It is an error for 'element' or 'attribute' to be
-     * null.
+     * Call getAttribute on an element, producing a meaningful error message if not present, or
+     * empty. It is an error for 'element' or 'attribute' to be null.
      * 
-     * @param element
-     *            The element to get the attribute value of
-     * @param attribute
-     *            The name of the attribute to get
+     * @param element The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
     protected String requireAttribute(XMLElement element, String attribute)
             throws CompilerException
@@ -1642,15 +1574,12 @@ public class Compiler extends Thread
     }
 
     /**
-     * Get a required attribute of an element, ensuring it is an integer. A
-     * meaningful error message is generated as a CompilerException if not
-     * present or parseable as an int. It is an error for 'element' or
-     * 'attribute' to be null.
+     * Get a required attribute of an element, ensuring it is an integer. A meaningful error message
+     * is generated as a CompilerException if not present or parseable as an int. It is an error for
+     * 'element' or 'attribute' to be null.
      * 
-     * @param element
-     *            The element to get the attribute value of
-     * @param attribute
-     *            The name of the attribute to get
+     * @param element The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
     protected int requireIntAttribute(XMLElement element, String attribute)
             throws CompilerException
@@ -1671,14 +1600,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Call getAttribute on an element, producing a meaningful error message if
-     * not present, or one of "yes" or "no". It is an error for 'element' or
-     * 'attribute' to be null.
+     * Call getAttribute on an element, producing a meaningful error message if not present, or one
+     * of "yes" or "no". It is an error for 'element' or 'attribute' to be null.
      * 
-     * @param element
-     *            The element to get the attribute value of
-     * @param attribute
-     *            The name of the attribute to get
+     * @param element The element to get the attribute value of
+     * @param attribute The name of the attribute to get
      */
     protected boolean requireYesNoAttribute(XMLElement element, String attribute)
             throws CompilerException
@@ -1694,16 +1620,12 @@ public class Compiler extends Thread
     }
 
     /**
-     * Call getAttribute on an element, producing a meaningful warning if not
-     * "yes" or "no". If the 'element' or 'attribute' are null, the default
-     * value is returned.
+     * Call getAttribute on an element, producing a meaningful warning if not "yes" or "no". If the
+     * 'element' or 'attribute' are null, the default value is returned.
      * 
-     * @param element
-     *            The element to get the attribute value of
-     * @param attribute
-     *            The name of the attribute to get
-     * @param defaultValue
-     *            Value returned if attribute not present or invalid
+     * @param element The element to get the attribute value of
+     * @param attribute The name of the attribute to get
+     * @param defaultValue Value returned if attribute not present or invalid
      */
     protected boolean validateYesNoAttribute(XMLElement element, String attribute,
             boolean defaultValue)
@@ -1725,8 +1647,7 @@ public class Compiler extends Thread
     /**
      * The main method if the compiler is invoked by a command-line call.
      * 
-     * @param args
-     *            The arguments passed on the command-line.
+     * @param args The arguments passed on the command-line.
      */
     public static void main(String[] args)
     {
@@ -1889,16 +1810,13 @@ public class Compiler extends Thread
     // ------------- Listener stuff ------------------------- START ------------
 
     /**
-     * This method parses install.xml for defined listeners and put them in the
-     * right position. If posible, the listeners will be validated. Listener
-     * declaration is a fragmention in install.xml like : <listeners> <listener
-     * compiler="PermissionCompilerListener"
+     * This method parses install.xml for defined listeners and put them in the right position. If
+     * posible, the listeners will be validated. Listener declaration is a fragmention in
+     * install.xml like : <listeners> <listener compiler="PermissionCompilerListener"
      * installer="PermissionInstallerListener"/> </<listeners>
      * 
-     * @param data
-     *            the XML data
-     * @exception Exception
-     *                Description of the Exception
+     * @param data the XML data
+     * @exception Exception Description of the Exception
      */
     private void addCustomListeners(XMLElement data) throws Exception
     {
@@ -1932,11 +1850,10 @@ public class Compiler extends Thread
     }
 
     /**
-     * Returns a list which contains the pathes of all files which are included
-     * in the given url. This method expects as the url param a jar.
+     * Returns a list which contains the pathes of all files which are included in the given url.
+     * This method expects as the url param a jar.
      * 
-     * @param url
-     *            url of the jar file
+     * @param url url of the jar file
      * @return full qualified paths of the contained files
      * @throws Exception
      */
@@ -1957,15 +1874,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Returns the qualified class name for the given class. This method expects
-     * as the url param a jar file which contains the given class. It scans the
-     * zip entries of the jar file.
+     * Returns the qualified class name for the given class. This method expects as the url param a
+     * jar file which contains the given class. It scans the zip entries of the jar file.
      * 
-     * @param url
-     *            url of the jar file which contains the class
-     * @param className
-     *            short name of the class for which the full name should be
-     *            resolved
+     * @param url url of the jar file which contains the class
+     * @param className short name of the class for which the full name should be resolved
      * @return full qualified class name
      * @throws Exception
      */
@@ -2000,14 +1913,11 @@ public class Compiler extends Thread
     }
 
     /**
-     * Returns the compiler listener which is defined in the xml element. As xml
-     * element a "listner" node will be expected. Additional it is expected,
-     * that "findIzPackResource" returns an url based on
-     * "bin/customActions/[className].jar". The class will be loaded via an
-     * URLClassLoader.
+     * Returns the compiler listener which is defined in the xml element. As xml element a "listner"
+     * node will be expected. Additional it is expected, that "findIzPackResource" returns an url
+     * based on "bin/customActions/[className].jar". The class will be loaded via an URLClassLoader.
      * 
-     * @param var
-     *            the xml element of the "listener" node
+     * @param var the xml element of the "listener" node
      * @return instance of the defined compiler listener
      * @throws Exception
      */
@@ -2073,11 +1983,10 @@ public class Compiler extends Thread
     }
 
     /**
-     * Add a CompilerListener. A registered CompilerListener will be called at
-     * every enhancmend point of compiling.
+     * Add a CompilerListener. A registered CompilerListener will be called at every enhancmend
+     * point of compiling.
      * 
-     * @param pe
-     *            CompilerListener which should be added
+     * @param pe CompilerListener which should be added
      */
     private void addCompilerListener(CompilerListener pe)
     {
@@ -2087,12 +1996,9 @@ public class Compiler extends Thread
     /**
      * Calls all defined compile listeners notify method with the given data
      * 
-     * @param callerName
-     *            name of the calling method as string
-     * @param state
-     *            CompileListener.BEGIN or END
-     * @param data
-     *            current install data
+     * @param callerName name of the calling method as string
+     * @param state CompileListener.BEGIN or END
+     * @param data current install data
      * @throws CompilerException
      */
     private void notifyCompilerListener(String callerName, int state, XMLElement data)
@@ -2107,11 +2013,9 @@ public class Compiler extends Thread
     }
 
     /**
-     * Calls the reviseAdditionalDataMap method of all registered
-     * CompilerListener's.
+     * Calls the reviseAdditionalDataMap method of all registered CompilerListener's.
      * 
-     * @param f
-     *            file releated XML node
+     * @param f file releated XML node
      * @return a map with the additional attributes
      */
     private Map getAdditionals(XMLElement f) throws CompilerException
@@ -2142,6 +2046,7 @@ public class Compiler extends Thread
      */
     static class CmdlinePackagerListener implements PackagerListener
     {
+
         /**
          * Print a message to the console at default priority (MSG_INFO).
          * 
@@ -2160,23 +2065,23 @@ public class Compiler extends Thread
         public void packagerMsg(String info, int priority)
         {
             final String prefix;
-            switch(priority)
+            switch (priority)
             {
-                case MSG_DEBUG:
-                    prefix = "[ DEBUG ] ";
-                    break;
-                case MSG_ERR:
-                    prefix = "[ ERROR ] ";
-                    break;
-                case MSG_WARN:
-                    prefix = "[ WARNING ] ";
-                    break;
-                case MSG_INFO:
-                case MSG_VERBOSE:
-                default: // don't die, but don't prepend anything
-                    prefix = "";
+            case MSG_DEBUG:
+                prefix = "[ DEBUG ] ";
+                break;
+            case MSG_ERR:
+                prefix = "[ ERROR ] ";
+                break;
+            case MSG_WARN:
+                prefix = "[ WARNING ] ";
+                break;
+            case MSG_INFO:
+            case MSG_VERBOSE:
+            default: // don't die, but don't prepend anything
+                prefix = "";
             }
-            
+
             System.out.println(prefix + info);
         }
 

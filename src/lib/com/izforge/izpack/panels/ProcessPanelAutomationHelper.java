@@ -1,27 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2003 Jonathan Halliday, Julien Ponge
- *
- *  File :               CompilePanelAutomationHelper.java
- *  Description :        Automation support functions for CompilePanel.
- *  Author's email :     jonathan.halliday@arjuna.com
- *  Author's Website :   http://www.arjuna.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2003 Jonathan Halliday
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.panels;
 
 import java.io.IOException;
@@ -53,10 +50,8 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Save data for running automated.
      * 
-     * @param installData
-     *            installation parameters
-     * @param panelRoot
-     *            unused.
+     * @param installData installation parameters
+     * @param panelRoot unused.
      */
     public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
     {
@@ -67,8 +62,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * Perform the installation actions.
      * 
-     * @param panelRoot
-     *            The panel XML tree root.
+     * @param panelRoot The panel XML tree root.
      */
     public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {

@@ -1,29 +1,24 @@
 /*
- *  $Id$
- *  COIOSHelper
- *  Copyright (C) 2005 Klaus Bartz
- *
- *  File :               COIOSHelper.java
- *  Description :        This class handles the COIOSHelper.dll.
- *                       
- *  Author's email :     bartzkau@users.berlios.de
- *  Website :            http://www.izforge.com
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2005 Klaus Bartz
  *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.coi.tools.os.izpack;
 
 import com.izforge.izpack.util.Librarian;
@@ -35,7 +30,7 @@ import com.izforge.izpack.util.NativeLibraryClient;
  * singelton class.
  * 
  * @author Klaus Bartz
- *  
+ * 
  */
 public class COIOSHelper
 {
@@ -81,8 +76,8 @@ public class COIOSHelper
      * It is used by the librarian to free the native library before physically deleting it from its
      * temporary loaction. A call to this method will freeze the application irrecoverably!
      * 
-     * @param name
-     *            the name of the library to free. Use only the name and extension but not the path.
+     * @param name the name of the library to free. Use only the name and extension but not the
+     * path.
      * 
      * @see com.izforge.izpack.util.NativeLibraryClient#freeLibrary
      */
@@ -104,8 +99,7 @@ public class COIOSHelper
      * Add a NativeLibraryClient as dependant to this object. The method tries to load the shared
      * library COIOSHelper which should contain native methods for the dependant.
      * 
-     * @param dependant
-     *            to be added
+     * @param dependant to be added
      */
     public void addDependant(NativeLibraryClient dependant) throws Exception
     {

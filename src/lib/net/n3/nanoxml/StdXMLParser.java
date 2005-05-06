@@ -72,8 +72,7 @@ public class StdXMLParser implements IXMLParser
     private IXMLEntityResolver entityResolver;
 
     /**
-     * The validator that will process entity references and validate the XML
-     * data.
+     * The validator that will process entity references and validate the XML data.
      */
     private IXMLValidator validator;
 
@@ -103,8 +102,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Sets the builder which creates the logical structure of the XML data.
      * 
-     * @param builder
-     *            the non-null builder
+     * @param builder the non-null builder
      */
     public void setBuilder(IXMLBuilder builder)
     {
@@ -124,8 +122,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Sets the validator that validates the XML data.
      * 
-     * @param validator
-     *            the non-null validator
+     * @param validator the non-null validator
      */
     public void setValidator(IXMLValidator validator)
     {
@@ -145,8 +142,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Sets the entity resolver.
      * 
-     * @param resolver
-     *            the non-null resolver
+     * @param resolver the non-null resolver
      */
     public void setResolver(IXMLEntityResolver resolver)
     {
@@ -166,8 +162,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Sets the reader from which the parser retrieves its data.
      * 
-     * @param reader
-     *            the reader
+     * @param reader the reader
      */
     public void setReader(IXMLReader reader)
     {
@@ -189,8 +184,7 @@ public class StdXMLParser implements IXMLParser
      * 
      * @return the logical structure built by the builder
      * 
-     * @throws net.n3.nanoxml.XMLException
-     *             if an error occurred reading or parsing the data
+     * @throws net.n3.nanoxml.XMLException if an error occurred reading or parsing the data
      */
     public Object parse() throws XMLException
     {
@@ -213,8 +207,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Scans the XML data for elements.
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong
+     * @throws java.lang.Exception if something went wrong
      */
     protected void scanData() throws Exception
     {
@@ -245,11 +238,9 @@ public class StdXMLParser implements IXMLParser
     /**
      * Scans an XML tag.
      * 
-     * @param allowCDATA
-     *            true if CDATA sections are allowed at this point
+     * @param allowCDATA true if CDATA sections are allowed at this point
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong
+     * @throws java.lang.Exception if something went wrong
      */
     protected void scanSomeTag(boolean allowCDATA) throws Exception
     {
@@ -274,8 +265,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Processes a "processing instruction".
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong
+     * @throws java.lang.Exception if something went wrong
      */
     protected void processPI() throws Exception
     {
@@ -294,14 +284,11 @@ public class StdXMLParser implements IXMLParser
     }
 
     /**
-     * Processes a tag that starts with a bang
-     * (&lt;&#x21;&#x2e;&#x2e;&#x2e;&gt;).
+     * Processes a tag that starts with a bang (&lt;&#x21;&#x2e;&#x2e;&#x2e;&gt;).
      * 
-     * @param allowCDATA
-     *            true if CDATA sections are allowed at this point
+     * @param allowCDATA true if CDATA sections are allowed at this point
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong
+     * @throws java.lang.Exception if something went wrong
      */
     protected void processSpecialTag(boolean allowCDATA) throws Exception
     {
@@ -334,8 +321,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Processes a CDATA section.
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong
+     * @throws java.lang.Exception if something went wrong
      */
     protected void processCDATA() throws Exception
     {
@@ -356,8 +342,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Processes a document type declaration.
      * 
-     * @throws java.lang.Exception
-     *             if an error occurred reading or parsing the data
+     * @throws java.lang.Exception if an error occurred reading or parsing the data
      */
     protected void processDocType() throws Exception
     {
@@ -412,8 +397,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Processes a regular element.
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong
+     * @throws java.lang.Exception if something went wrong
      */
     protected void processElement() throws Exception
     {
@@ -542,8 +526,7 @@ public class StdXMLParser implements IXMLParser
     /**
      * Processes an attribute of an element.
      * 
-     * @throws java.lang.Exception
-     *             if something went wrong
+     * @throws java.lang.Exception if something went wrong
      */
     protected void processAttribute() throws Exception
     {

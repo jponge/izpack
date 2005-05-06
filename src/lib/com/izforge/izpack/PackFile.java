@@ -1,4 +1,25 @@
 /*
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2001 Johannes Lehtinen
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
  *  $Id$
  *  IzPack
  *  Copyright (C) 2001 Johannes Lehtinen
@@ -31,8 +52,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Encloses information about a packed file. This class abstracts the way file
- * data is stored to package.
+ * Encloses information about a packed file. This class abstracts the way file data is stored to
+ * package.
  * 
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
@@ -81,16 +102,11 @@ public class PackFile implements Serializable
     /**
      * Constructs and initializes from a source file.
      * 
-     * @param src
-     *            file which this PackFile describes
-     * @param target
-     *            the path to install the file to
-     * @param osList
-     *            OS constraints
-     * @param override
-     *            what to do when the file already exists
-     * @throws FileNotFoundException
-     *             if the specified file does not exist.
+     * @param src file which this PackFile describes
+     * @param target the path to install the file to
+     * @param osList OS constraints
+     * @param override what to do when the file already exists
+     * @throws FileNotFoundException if the specified file does not exist.
      */
     public PackFile(File src, String target, List osList, int override)
             throws FileNotFoundException
@@ -114,18 +130,12 @@ public class PackFile implements Serializable
     /**
      * Constructs and initializes from a source file.
      * 
-     * @param src
-     *            file which this PackFile describes
-     * @param target
-     *            the path to install the file to
-     * @param osList
-     *            OS constraints
-     * @param override
-     *            what to do when the file already exists
-     * @param additionals
-     *            additional attributes
-     * @throws FileNotFoundException
-     *             if the specified file does not exist.
+     * @param src file which this PackFile describes
+     * @param target the path to install the file to
+     * @param osList OS constraints
+     * @param override what to do when the file already exists
+     * @param additionals additional attributes
+     * @throws FileNotFoundException if the specified file does not exist.
      */
     public PackFile(File src, String target, List osList, int override, Map additionals)
             throws FileNotFoundException

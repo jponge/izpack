@@ -1,26 +1,24 @@
 /*
- *  $Id$
- *  IzPackTask
- *  Copyright (C) 2002 Paul Wilkinson
- *
- *  File :               IzPacktask.java
- *  Description :        An ant task to invoke the IZPack compiler.
- *  Author's email :     paulw@wilko.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Paul Wilkinson
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.ant;
 
 import java.util.Enumeration;
@@ -57,8 +55,7 @@ public class IzPackTask extends Task implements PackagerListener
     private InstallerType installerType;
 
     /**
-     * Holds value of property izPackDir. This should point at the IzPack
-     * directory
+     * Holds value of property izPackDir. This should point at the IzPack directory
      */
     private String izPackDir;
 
@@ -97,25 +94,26 @@ public class IzPackTask extends Task implements PackagerListener
     public void packagerMsg(String str, int priority)
     {
         final int antPriority;
-        switch(priority) // No guarantee of a direct conversion. It's an enum
+        switch (priority)
+        // No guarantee of a direct conversion. It's an enum
         {
-            case MSG_DEBUG:
-                antPriority = Project.MSG_DEBUG;
-                break;
-            case MSG_ERR:
-                antPriority = Project.MSG_ERR;
-                break;
-            case MSG_INFO:
-                antPriority = Project.MSG_INFO;
-                break;
-            case MSG_VERBOSE:
-                antPriority = Project.MSG_VERBOSE;
-                break;
-            case MSG_WARN:
-                antPriority = Project.MSG_WARN;
-                break;
-            default: // rather than die...
-                antPriority = Project.MSG_INFO;
+        case MSG_DEBUG:
+            antPriority = Project.MSG_DEBUG;
+            break;
+        case MSG_ERR:
+            antPriority = Project.MSG_ERR;
+            break;
+        case MSG_INFO:
+            antPriority = Project.MSG_INFO;
+            break;
+        case MSG_VERBOSE:
+            antPriority = Project.MSG_VERBOSE;
+            break;
+        case MSG_WARN:
+            antPriority = Project.MSG_WARN;
+            break;
+        default: // rather than die...
+            antPriority = Project.MSG_INFO;
         }
         log(str, antPriority);
     }
@@ -137,8 +135,7 @@ public class IzPackTask extends Task implements PackagerListener
     /**
      * Packages.
      * 
-     * @exception BuildException
-     *                Description of the Exception
+     * @exception BuildException Description of the Exception
      */
     public void execute() throws org.apache.tools.ant.BuildException
     {
@@ -195,8 +192,7 @@ public class IzPackTask extends Task implements PackagerListener
     /**
      * Setter for property input.
      * 
-     * @param input
-     *            New value of property input.
+     * @param input New value of property input.
      */
     public void setInput(String input)
     {
@@ -206,8 +202,7 @@ public class IzPackTask extends Task implements PackagerListener
     /**
      * Setter for property basedir.
      * 
-     * @param basedir
-     *            New value of property basedir.
+     * @param basedir New value of property basedir.
      */
     public void setBasedir(String basedir)
     {
@@ -217,8 +212,7 @@ public class IzPackTask extends Task implements PackagerListener
     /**
      * Setter for property output.
      * 
-     * @param output
-     *            New value of property output.
+     * @param output New value of property output.
      */
     public void setOutput(String output)
     {
@@ -228,8 +222,7 @@ public class IzPackTask extends Task implements PackagerListener
     /**
      * Setter for property installerType.
      * 
-     * @param installerType
-     *            New value of property installerType.
+     * @param installerType New value of property installerType.
      */
     public void setInstallerType(InstallerType installerType)
     {
@@ -239,8 +232,7 @@ public class IzPackTask extends Task implements PackagerListener
     /**
      * Setter for property izPackDir.
      * 
-     * @param izPackDir
-     *            New value of property izPackDir.
+     * @param izPackDir New value of property izPackDir.
      */
     public void setIzPackDir(String izPackDir)
     {

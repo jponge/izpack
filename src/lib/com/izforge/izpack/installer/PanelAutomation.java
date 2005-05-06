@@ -1,38 +1,34 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2003 Jonathan Halliday, Julien Ponge
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
  *
- *  File :               PanelAutomation.java
- *  Description :        Automation (silent install) Interface.
- *  Author's email :     jonathan.halliday@arjuna.com
- *  Author's Website :   http://www.arjuna.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Copyright 2003 Jonathan Halliday
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import net.n3.nanoxml.XMLElement;
 
 /**
- * Defines the Interface that must be implemented for running Panels in
- * automated (or "silent", "headless") install mode.
+ * Defines the Interface that must be implemented for running Panels in automated (or "silent",
+ * "headless") install mode.
  * 
- * Implementing classes MUST NOT link against awt/swing classes. Thus the Panels
- * cannot implement this interface directly, they should use e.g. helper classes
- * instead.
+ * Implementing classes MUST NOT link against awt/swing classes. Thus the Panels cannot implement
+ * this interface directly, they should use e.g. helper classes instead.
  * 
  * @see AutomatedInstaller
  * @author Jonathan Halliday
@@ -42,26 +38,20 @@ public interface PanelAutomation
 {
 
     /**
-     * Asks the panel to set its own XML data that can be brought back for an
-     * automated installation process. Use it as a blackbox if your panel needs
-     * to do something even in automated mode.
+     * Asks the panel to set its own XML data that can be brought back for an automated installation
+     * process. Use it as a blackbox if your panel needs to do something even in automated mode.
      * 
-     * @param installData
-     *            The installation data
-     * @param panelRoot
-     *            The XML root element of the panels blackbox tree.
+     * @param installData The installation data
+     * @param panelRoot The XML root element of the panels blackbox tree.
      */
     public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot);
 
     /**
-     * Makes the panel work in automated mode. Default is to do nothing, but any
-     * panel doing something 'effective' during the installation process should
-     * implement this method.
+     * Makes the panel work in automated mode. Default is to do nothing, but any panel doing
+     * something 'effective' during the installation process should implement this method.
      * 
-     * @param installData
-     *            The installation data
-     * @param panelRoot
-     *            The XML root element of the panels blackbox tree.
+     * @param installData The installation data
+     * @param panelRoot The XML root element of the panels blackbox tree.
      */
     public void runAutomated(AutomatedInstallData installData, XMLElement panelRoot);
 }

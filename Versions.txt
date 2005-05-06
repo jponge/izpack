@@ -2,6 +2,7 @@
 
   > 3.8.0 (build N/A)
 
+- IzPack is now released under the terms of the Apache Software License 2.0.
 - Fixing bug with comboboxes. There was no text shown if you do not use a
   processor to generate the choices. At now you can us the id or txt attribute
   (Thorsten Kamann)

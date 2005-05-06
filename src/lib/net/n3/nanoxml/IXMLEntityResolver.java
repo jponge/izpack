@@ -42,37 +42,29 @@ public interface IXMLEntityResolver
     /**
      * Adds an internal entity.
      * 
-     * @param name
-     *            the name of the entity.
-     * @param value
-     *            the value of the entity.
+     * @param name the name of the entity.
+     * @param value the value of the entity.
      */
     public void addInternalEntity(String name, String value);
 
     /**
      * Adds an external entity.
      * 
-     * @param name
-     *            the name of the entity.
-     * @param publicID
-     *            the public ID of the entity, which may be null.
-     * @param systemID
-     *            the system ID of the entity.
+     * @param name the name of the entity.
+     * @param publicID the public ID of the entity, which may be null.
+     * @param systemID the system ID of the entity.
      */
     public void addExternalEntity(String name, String publicID, String systemID);
 
     /**
      * Returns a Java reader containing the value of an entity.
      * 
-     * @param xmlReader
-     *            the current XML reader
-     * @param name
-     *            the name of the entity.
+     * @param xmlReader the current XML reader
+     * @param name the name of the entity.
      * 
      * @return the reader, or null if the entity could not be resolved.
      * 
-     * @throws net.n3.nanoxml.XMLParseException
-     *             If an exception occurred while resolving the entity.
+     * @throws net.n3.nanoxml.XMLParseException If an exception occurred while resolving the entity.
      */
     public Reader getEntity(IXMLReader xmlReader, String name) throws XMLParseException;
 

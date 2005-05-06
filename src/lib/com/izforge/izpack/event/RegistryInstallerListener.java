@@ -1,28 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2005 Klaus Bartz
- *
- *  File :               RegistryInstallerListener.java
- *  Description :        Custom action for handle registry related
- *                       stuff at installation time (Active only on windows). 
- *  Author's email :     bartzkau@users.berlios.de
- *  Website :            http://www.izforge.com
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.event;
@@ -39,9 +33,9 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.Unpacker;
-import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.SpecHelper;
+import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 import com.izforge.izpack.util.os.WrappedNativeLibException;
@@ -54,7 +48,7 @@ import com.izforge.izpack.util.os.WrappedNativeLibException;
  * appl/install/IzPack/resources/registry.dtd.
  * 
  * @author Klaus Bartz
- *  
+ * 
  */
 public class RegistryInstallerListener extends NativeInstallerListener
 {
@@ -96,7 +90,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
-     *      int, com.izforge.izpack.util.AbstractUIProgressHandler)
+     * int, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
             AbstractUIProgressHandler handler) throws Exception
@@ -109,7 +103,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
-     *      com.izforge.izpack.util.AbstractUIProgressHandler)
+     * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception
@@ -156,7 +150,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
             // CustomAction.
             List info = rh.getLoggingInfo();
             if (info != null)
-                    UninstallData.getInstance().addAdditionalData("registryEntries", info);
+                UninstallData.getInstance().addAdditionalData("registryEntries", info);
 
         }
         catch (Exception e)
@@ -171,8 +165,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
     /**
      * Performs the registry settings for the given pack.
      * 
-     * @param pack
-     *            XML elemtent which contains the registry settings for one pack
+     * @param pack XML elemtent which contains the registry settings for one pack
      * @throws Exception
      */
     private void performPack(XMLElement pack, VariableSubstitutor substitutor) throws Exception
@@ -207,10 +200,8 @@ public class RegistryInstallerListener extends NativeInstallerListener
     /**
      * Perform the setting of one value.
      * 
-     * @param regEntry
-     *            element which contains the description of the value to be set
-     * @param substitutor
-     *            variable substitutor to be used for revising the regEntry contents
+     * @param regEntry element which contains the description of the value to be set
+     * @param substitutor variable substitutor to be used for revising the regEntry contents
      */
     private void performValueSetting(XMLElement regEntry, VariableSubstitutor substitutor)
             throws Exception
@@ -297,7 +288,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
             { // Unfortenly byte is signed ...
                 int tval = Integer.parseInt(st.nextToken(), 16);
                 if (tval < 0 || tval > 0xff)
-                        throw new NumberFormatException("Value out of range.");
+                    throw new NumberFormatException("Value out of range.");
                 if (tval > 0x7f) tval -= 0x100;
                 value = (byte) tval;
             }
@@ -316,10 +307,8 @@ public class RegistryInstallerListener extends NativeInstallerListener
     /**
      * Perform the setting of one key.
      * 
-     * @param regEntry
-     *            element which contains the description of the key to be created
-     * @param substitutor
-     *            variable substitutor to be used for revising the regEntry contents
+     * @param regEntry element which contains the description of the key to be created
+     * @param substitutor variable substitutor to be used for revising the regEntry contents
      */
     private void performKeySetting(XMLElement regEntry, VariableSubstitutor substitutor)
             throws Exception

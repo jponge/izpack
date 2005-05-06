@@ -1,27 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2002 Olexij Tkatchenko
- *
- *  File :               OsConstraint.java
- *  Description :        A constraint on the OS to perform some action on.
- *  Author's email :     ot@parcs.de
- *  Website :            http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Olexij Tkatchenko
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.util;
 
 import java.util.ArrayList;
@@ -31,11 +28,11 @@ import java.util.List;
 import net.n3.nanoxml.XMLElement;
 
 /**
- * Encapsulates OS constraints specified on creation time and allows to check
- * them against the current OS.
+ * Encapsulates OS constraints specified on creation time and allows to check them against the
+ * current OS.
  * 
- * For example, this is used for &lt;executable&gt;s to check whether the
- * executable is suitable for the current OS.
+ * For example, this is used for &lt;executable&gt;s to check whether the executable is suitable for
+ * the current OS.
  * 
  * @author Olexij Tkatchenko <ot@parcs.de>
  */
@@ -60,19 +57,12 @@ public class OsConstraint implements java.io.Serializable
     private String arch;
 
     /**
-     * Constructs a new instance. Please remember, MacOSX belongs to Unix
-     * family.
+     * Constructs a new instance. Please remember, MacOSX belongs to Unix family.
      * 
-     * @param family
-     *            The OS family (unix, windows or mac).
-     * @param name
-     *            The exact OS name.
-     * @param version
-     *            The exact OS version (check property <code>os.version</code>
-     *            for values).
-     * @param arch
-     *            The machine architecture (check property <code>os.arch</code>
-     *            for values).
+     * @param family The OS family (unix, windows or mac).
+     * @param name The exact OS name.
+     * @param version The exact OS version (check property <code>os.version</code> for values).
+     * @param arch The machine architecture (check property <code>os.arch</code> for values).
      */
     public OsConstraint(String family, String name, String version, String arch)
     {
@@ -126,8 +116,7 @@ public class OsConstraint implements java.io.Serializable
     /**
      * Extract a list of OS constraints from given element.
      * 
-     * @param element
-     *            parent XMLElement
+     * @param element parent XMLElement
      * @return List of OsConstraint (or empty List if no constraints found)
      */
     static public List getOsList(XMLElement element)
@@ -156,12 +145,10 @@ public class OsConstraint implements java.io.Serializable
     /**
      * Helper function: Scan a list of OsConstraints for a match.
      * 
-     * @param constraint_list
-     *            List of OsConstraint to check
+     * @param constraint_list List of OsConstraint to check
      * 
-     * @return true if one of the OsConstraints matched the current system or
-     *         constraint_list is null (no constraints), false if none of the
-     *         OsConstraints matched
+     * @return true if one of the OsConstraints matched the current system or constraint_list is
+     * null (no constraints), false if none of the OsConstraints matched
      */
     public static boolean oneMatchesCurrentSystem(List constraint_list)
     {
@@ -193,14 +180,11 @@ public class OsConstraint implements java.io.Serializable
     }
 
     /**
-     * Helper function: Check whether the given XMLElement is "suitable" for the
-     * current OS.
+     * Helper function: Check whether the given XMLElement is "suitable" for the current OS.
      * 
-     * @param el
-     *            The XMLElement to check for OS constraints.
+     * @param el The XMLElement to check for OS constraints.
      * 
-     * @return true if there were no OS constraints or the constraints matched
-     *         the current OS.
+     * @return true if there were no OS constraints or the constraints matched the current OS.
      * 
      */
     public static boolean oneMatchesCurrentSystem(XMLElement el)

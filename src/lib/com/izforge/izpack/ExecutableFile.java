@@ -1,27 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001,2002 Olexij Tkatchenko
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2001,2002 Olexij Tkatchenko
  *
- *  File :               Pack.java
- *  Description :        Contains informations about a pack.
- *  Author's email :     ot@parcs.de
- *  Author's Website :   N/A
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack;
 
 import java.io.Serializable;
@@ -29,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Encloses information about a executable file. This class abstracts the way to
- * do a system dependent postprocessing of installation.
+ * Encloses information about a executable file. This class abstracts the way to do a system
+ * dependent postprocessing of installation.
  * 
  * @author Olexij Tkatchenko <ot@parcs.de>
  */
@@ -81,8 +78,8 @@ public class ExecutableFile implements Serializable
     public List osList = null;
 
     /**
-     * Indicates the file should be kept after executing. Default is false for
-     * backward compatibility.
+     * Indicates the file should be kept after executing. Default is false for backward
+     * compatibility.
      */
     public boolean keepFile;
 
@@ -102,14 +99,10 @@ public class ExecutableFile implements Serializable
     /**
      * Constructs and initializes a new instance.
      * 
-     * @param path
-     *            the file path
-     * @param executionStage
-     *            when to execute
-     * @param onFailure
-     *            what to do if execution fails
-     * @param osList
-     *            list of operating systems to run on
+     * @param path the file path
+     * @param executionStage when to execute
+     * @param onFailure what to do if execution fails
+     * @param osList list of operating systems to run on
      */
     public ExecutableFile(String path, int executionStage, int onFailure, java.util.List osList,
             boolean keepFile)

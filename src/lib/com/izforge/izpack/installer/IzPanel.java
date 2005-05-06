@@ -1,26 +1,20 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               IzPanel.java
- *  Description :        The class for the panels.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.izforge.izpack.installer;
 
@@ -46,9 +40,8 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.MultiLineLabel;
 
 /**
- * Defines the base class for the IzPack panels. Any panel should be a subclass
- * of it and should belong to the <code>com.izforge.izpack.panels</code>
- * package.
+ * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
+ * belong to the <code>com.izforge.izpack.panels</code> package.
  * 
  * @author Julien Ponge
  */
@@ -64,8 +57,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     protected Component initialFocus = null;
 
     /**
-     * The installer internal data (actually a melting-pot class with all-public
-     * fields.
+     * The installer internal data (actually a melting-pot class with all-public fields.
      */
     protected InstallData idata;
 
@@ -84,10 +76,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /**
      * The constructor.
      * 
-     * @param parent
-     *            The parent IzPack installer frame.
-     * @param idata
-     *            The installer internal data.
+     * @param parent The parent IzPack installer frame.
+     * @param idata The installer internal data.
      */
     public IzPanel(InstallerFrame parent, InstallData idata)
     {
@@ -98,9 +88,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Indicates wether the panel has been validated or not. The installer won't
-     * let the user go further through the installation process until the panel
-     * is validated. Default behaviour is to return <code>true</code>.
+     * Indicates wether the panel has been validated or not. The installer won't let the user go
+     * further through the installation process until the panel is validated. Default behaviour is
+     * to return <code>true</code>.
      * 
      * @return A boolean stating wether the panel has been validated or not.
      */
@@ -110,30 +100,27 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * This method is called when the panel becomes active. Default is to do
-     * nothing : feel free to implement what you need in your subclasses. A
-     * panel becomes active when the user reaches it during the installation
-     * process.
+     * This method is called when the panel becomes active. Default is to do nothing : feel free to
+     * implement what you need in your subclasses. A panel becomes active when the user reaches it
+     * during the installation process.
      */
     public void panelActivate()
     {
     }
 
     /**
-     * This method is called when the panel gets desactivated, when the user
-     * switches to the next panel. By default it doesn't do anything.
+     * This method is called when the panel gets desactivated, when the user switches to the next
+     * panel. By default it doesn't do anything.
      */
     public void panelDeactivate()
     {
     }
 
     /**
-     * Asks the panel to set its own XML data that can be brought back for an
-     * automated installation process. Use it as a blackbox if your panel needs
-     * to do something even in automated mode.
+     * Asks the panel to set its own XML data that can be brought back for an automated installation
+     * process. Use it as a blackbox if your panel needs to do something even in automated mode.
      * 
-     * @param panelRoot
-     *            The XML root element of the panels blackbox tree.
+     * @param panelRoot The XML root element of the panels blackbox tree.
      */
     public void makeXMLData(XMLElement panelRoot)
     {
@@ -142,12 +129,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /**
      * Ask the user a question.
      * 
-     * @param title
-     *            Message title.
-     * @param question
-     *            The question.
-     * @param choices
-     *            The set of choices to present.
+     * @param title Message title.
+     * @param question The question.
+     * @param choices The set of choices to present.
      * 
      * @return The user's choice.
      * 
@@ -161,14 +145,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /**
      * Ask the user a question.
      * 
-     * @param title
-     *            Message title.
-     * @param question
-     *            The question.
-     * @param choices
-     *            The set of choices to present.
-     * @param default_choice
-     *            The default choice. (-1 = no default choice)
+     * @param title Message title.
+     * @param question The question.
+     * @param choices The set of choices to present.
+     * @param default_choice The default choice. (-1 = no default choice)
      * 
      * @return The user's choice.
      * @see AbstractUIHandler#askQuestion(String, String, int, int)
@@ -197,8 +177,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /**
      * Notify the user about something.
      * 
-     * @param message
-     *            The notification.
+     * @param message The notification.
      */
     public void emitNotification(String message)
     {
@@ -208,8 +187,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /**
      * Warn the user about something.
      * 
-     * @param message
-     *            The warning message.
+     * @param message The warning message.
      */
     public boolean emitWarning(String title, String message)
     {
@@ -221,8 +199,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /**
      * Notify the user of some error.
      * 
-     * @param message
-     *            The error message.
+     * @param message The error message.
      */
     public void emitError(String title, String message)
     {
@@ -230,11 +207,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Returns the component which should be get the focus at activation of this
-     * panel.
+     * Returns the component which should be get the focus at activation of this panel.
      * 
-     * @return the component which should be get the focus at activation of this
-     *         panel
+     * @return the component which should be get the focus at activation of this panel
      */
     public Component getInitialFocus()
     {
@@ -242,11 +217,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Sets the component which should be get the focus at activation of this
-     * panel.
+     * Sets the component which should be get the focus at activation of this panel.
      * 
-     * @param component
-     *            which should be get the focus at activation of this panel
+     * @param component which should be get the focus at activation of this panel
      */
     public void setInitialFocus(Component component)
     {
@@ -254,15 +227,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Calls the langpack of parent InstallerFrame for the String
-     * <tt>RuntimeClassName.subkey</tt>. Do not add a point infront of
-     * subkey, it is always added in this method.
+     * Calls the langpack of parent InstallerFrame for the String <tt>RuntimeClassName.subkey</tt>.
+     * Do not add a point infront of subkey, it is always added in this method.
      * 
-     * @param subkey
-     *            the subkey for the string which should be returned
-     * @param alternateClass
-     *            the short name of the class which should be used if no string
-     *            is present with the runtime class name
+     * @param subkey the subkey for the string which should be returned
+     * @param alternateClass the short name of the class which should be used if no string is
+     * present with the runtime class name
      * @return the founded string
      */
     public String getI18nStringForClass(String subkey, String alternateClass)
@@ -296,17 +266,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     // ------------- Helper for common used components ----- START ---
 
     /**
-     * Creates a label via LabelFactory with the given ids and the given
-     * horizontal alignment. If the icon id is null, the label will be created
-     * also. The strings are the ids for the text in langpack and the icon in
-     * icons of the installer frame.
+     * Creates a label via LabelFactory with the given ids and the given horizontal alignment. If
+     * the icon id is null, the label will be created also. The strings are the ids for the text in
+     * langpack and the icon in icons of the installer frame.
      * 
-     * @param textId
-     *            id string for the text
-     * @param iconId
-     *            id string for the icon
-     * @param pos
-     *            horizontal alignment
+     * @param textId id string for the text
+     * @param iconId id string for the icon
+     * @param pos horizontal alignment
      * @return the newly created label
      */
     public JLabel createLabel(String textId, String iconId, int pos)
@@ -319,12 +285,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Creates a multi line label with the language dependent text given by the
-     * text id. The strings is the id for the text in langpack of the installer
-     * frame. The horizontal alignment will be LEFT.
+     * Creates a multi line label with the language dependent text given by the text id. The strings
+     * is the id for the text in langpack of the installer frame. The horizontal alignment will be
+     * LEFT.
      * 
-     * @param textId
-     *            id string for the text
+     * @param textId id string for the text
      * @return the newly created multi line label
      */
     public MultiLineLabel createMultiLineLabelLang(String textId)
@@ -333,11 +298,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Creates a multi line label with the given text. The horizontal alignment
-     * will be LEFT.
+     * Creates a multi line label with the given text. The horizontal alignment will be LEFT.
      * 
-     * @param text
-     *            text to be used in the label
+     * @param text text to be used in the label
      * @return the newly created multi line label
      */
     public MultiLineLabel createMultiLineLabel(String text)
@@ -346,17 +309,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Creates a label via LabelFactory with the given text, the given icon id
-     * and the given horizontal alignment. If the icon id is null, the label
-     * will be created also. The strings are the ids for the text in langpack
-     * and the icon in icons of the installer frame.
+     * Creates a label via LabelFactory with the given text, the given icon id and the given
+     * horizontal alignment. If the icon id is null, the label will be created also. The strings are
+     * the ids for the text in langpack and the icon in icons of the installer frame.
      * 
-     * @param text
-     *            text to be used in the label
-     * @param iconId
-     *            id string for the icon
-     * @param pos
-     *            horizontal alignment
+     * @param text text to be used in the label
+     * @param iconId id string for the icon
+     * @param pos horizontal alignment
      * @return the created multi line label
      */
     public MultiLineLabel createMultiLineLabel(String text, String iconId, int pos)
@@ -398,8 +357,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /**
      * Sets the default GridBagConstraints of this panel to the given object.
      * 
-     * @param constraints
-     *            which should be set as default for this object
+     * @param constraints which should be set as default for this object
      */
     public void setDefaultGridBagConstraints(GridBagConstraints constraints)
     {
@@ -418,16 +376,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Returns a newly created GridBagConstraints with the given values and the
-     * values from the defaultGridBagConstraints for the other parameters.
+     * Returns a newly created GridBagConstraints with the given values and the values from the
+     * defaultGridBagConstraints for the other parameters.
      * 
-     * @param gridx
-     *            value to be used for the new constraint
-     * @param gridy
-     *            value to be used for the new constraint
-     * @return newly created GridBagConstraints with the given values and the
-     *         values from the defaultGridBagConstraints for the other
-     *         parameters
+     * @param gridx value to be used for the new constraint
+     * @param gridy value to be used for the new constraint
+     * @return newly created GridBagConstraints with the given values and the values from the
+     * defaultGridBagConstraints for the other parameters
      */
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy)
     {
@@ -439,20 +394,15 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Returns a newly created GridBagConstraints with the given values and the
-     * values from the defaultGridBagConstraints for the other parameters.
+     * Returns a newly created GridBagConstraints with the given values and the values from the
+     * defaultGridBagConstraints for the other parameters.
      * 
-     * @param gridx
-     *            value to be used for the new constraint
-     * @param gridy
-     *            value to be used for the new constraint
-     * @param gridwidth
-     *            value to be used for the new constraint
-     * @param gridheight
-     *            value to be used for the new constraint
-     * @return newly created GridBagConstraints with the given values and the
-     *         values from the defaultGridBagConstraints for the other
-     *         parameters
+     * @param gridx value to be used for the new constraint
+     * @param gridy value to be used for the new constraint
+     * @param gridwidth value to be used for the new constraint
+     * @param gridheight value to be used for the new constraint
+     * @return newly created GridBagConstraints with the given values and the values from the
+     * defaultGridBagConstraints for the other parameters
      */
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy, int gridwidth,
             int gridheight)
@@ -464,11 +414,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Returns a newly created GridBagConstraints for the next column of the
-     * current layout row.
+     * Returns a newly created GridBagConstraints for the next column of the current layout row.
      * 
-     * @return a newly created GridBagConstraints for the next column of the
-     *         current layout row
+     * @return a newly created GridBagConstraints for the next column of the current layout row
      * 
      */
     public GridBagConstraints getNextXGridBagConstraints()
@@ -479,15 +427,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Returns a newly created GridBagConstraints for the next column of the
-     * current layout row using the given parameters.
+     * Returns a newly created GridBagConstraints for the next column of the current layout row
+     * using the given parameters.
      * 
-     * @param gridwidth
-     *            width for this constraint
-     * @param gridheight
-     *            height for this constraint
-     * @return a newly created GridBagConstraints for the next column of the
-     *         current layout row using the given parameters
+     * @param gridwidth width for this constraint
+     * @param gridheight height for this constraint
+     * @return a newly created GridBagConstraints for the next column of the current layout row
+     * using the given parameters
      */
     private GridBagConstraints getNextXGridBagConstraints(int gridwidth, int gridheight)
     {
@@ -498,8 +444,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Returns a newly created GridBagConstraints with column 0 for the next
-     * row.
+     * Returns a newly created GridBagConstraints with column 0 for the next row.
      * 
      * @return a newly created GridBagConstraints with column 0 for the next row
      * 
@@ -513,15 +458,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Returns a newly created GridBagConstraints with column 0 for the next row
-     * using the given parameters.
+     * Returns a newly created GridBagConstraints with column 0 for the next row using the given
+     * parameters.
      * 
-     * @param gridwidth
-     *            width for this constraint
-     * @param gridheight
-     *            height for this constraint
-     * @return a newly created GridBagConstraints with column 0 for the next row
-     *         using the given parameters
+     * @param gridwidth width for this constraint
+     * @param gridheight height for this constraint
+     * @return a newly created GridBagConstraints with column 0 for the next row using the given
+     * parameters
      */
     public GridBagConstraints getNextYGridBagConstraints(int gridwidth, int gridheight)
     {
@@ -533,9 +476,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Start layout determining. If it is needed, a dummy component will be
-     * created as first row. This will be done, if the IzPack variable
-     * <code>IzPanel.LayoutType</code> has the value "BOTTOM".
+     * Start layout determining. If it is needed, a dummy component will be created as first row.
+     * This will be done, if the IzPack variable <code>IzPanel.LayoutType</code> has the value
+     * "BOTTOM".
      */
     public void startGridBagLayout()
     {
@@ -562,9 +505,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * Complete layout determining. If it is needed, a dummy component will be
-     * created as last row. This will be done, if the IzPack variable
-     * <code>IzPanel.LayoutType</code> has the value "TOP".
+     * Complete layout determining. If it is needed, a dummy component will be created as last row.
+     * This will be done, if the IzPack variable <code>IzPanel.LayoutType</code> has the value
+     * "TOP".
      */
     public void completeGridBagLayout()
     {
@@ -586,11 +529,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
     // ------------------- Summary stuff -------------------- START ---
     /**
-     * This method will be called from the SummaryPanel to get the summary of
-     * this class which should be placed in the SummaryPanel. The returned text
-     * should not contain a caption of this item. The caption will be requested
-     * from the method getCaption. If <code>null</code> returns, no summary
-     * for this panel will be generated. Default behaviour is to return
+     * This method will be called from the SummaryPanel to get the summary of this class which
+     * should be placed in the SummaryPanel. The returned text should not contain a caption of this
+     * item. The caption will be requested from the method getCaption. If <code>null</code>
+     * returns, no summary for this panel will be generated. Default behaviour is to return
      * <code>null</code>.
      * 
      * @return the summary for this class
@@ -601,12 +543,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     }
 
     /**
-     * This method will be called from the SummaryPanel to get the caption for
-     * this class which should be placed in the SummaryPanel. If
-     * <code>null</code> returns, no summary for this panel will be generated.
-     * Default behaviour is to return the string given by langpack for the key
-     * <code>&lt;current class name>.summaryCaption&gt;</code> if exist, else
-     * the string &quot;summaryCaption.&lt;ClassName&gt;&quot;.
+     * This method will be called from the SummaryPanel to get the caption for this class which
+     * should be placed in the SummaryPanel. If <code>null</code> returns, no summary for this
+     * panel will be generated. Default behaviour is to return the string given by langpack for the
+     * key <code>&lt;current class name>.summaryCaption&gt;</code> if exist, else the string
+     * &quot;summaryCaption.&lt;ClassName&gt;&quot;.
      * 
      * @return the caption for this class
      */

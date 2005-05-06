@@ -54,8 +54,7 @@ public class XMLWriter
     /**
      * Creates a new XML writer.
      * 
-     * @param writer
-     *            where to write the output to.
+     * @param writer where to write the output to.
      */
     public XMLWriter(Writer writer)
     {
@@ -72,8 +71,7 @@ public class XMLWriter
     /**
      * Creates a new XML writer.
      * 
-     * @param stream
-     *            where to write the output to.
+     * @param stream where to write the output to.
      */
     public XMLWriter(OutputStream stream)
     {
@@ -92,8 +90,7 @@ public class XMLWriter
     /**
      * Writes an XML element.
      * 
-     * @param xml
-     *            the non-null XML element to write.
+     * @param xml the non-null XML element to write.
      */
     public void write(XMLElement xml) throws IOException
     {
@@ -103,10 +100,8 @@ public class XMLWriter
     /**
      * Writes an XML element.
      * 
-     * @param xml
-     *            the non-null XML element to write.
-     * @param prettyPrint
-     *            if spaces need to be inserted to make the output more readable
+     * @param xml the non-null XML element to write.
+     * @param prettyPrint if spaces need to be inserted to make the output more readable
      */
     public void write(XMLElement xml, boolean prettyPrint) throws IOException
     {
@@ -116,12 +111,9 @@ public class XMLWriter
     /**
      * Writes an XML element.
      * 
-     * @param xml
-     *            the non-null XML element to write.
-     * @param prettyPrint
-     *            if spaces need to be inserted to make the output more readable
-     * @param indent
-     *            how many spaces to indent the element.
+     * @param xml the non-null XML element to write.
+     * @param prettyPrint if spaces need to be inserted to make the output more readable
+     * @param indent how many spaces to indent the element.
      */
     public void write(XMLElement xml, boolean prettyPrint, int indent) throws IOException
     {
@@ -223,8 +215,7 @@ public class XMLWriter
     /**
      * Writes a string encoding reserved characters.
      * 
-     * @param str
-     *            the string to write.
+     * @param str the string to write.
      */
     private void writeEncoded(String str)
     {

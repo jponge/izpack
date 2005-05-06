@@ -1,26 +1,22 @@
 /*
- * $Id$
- * IzPack
- * Copyright (C) 2002 by Elmar Grom
- *
- * File :               Librarian.java
- * Description :        Supports the loading of native libraries
- * Author's email :     elmar@grom.net
- * Website :            http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Elmar Grom
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.util;
@@ -39,15 +35,14 @@ import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
 /**
- * This class handles loading of native libraries. There must only be one
- * instance of <code>Librarian</code> per Java runtime, therefore this class
- * is implemented as a 'Singleton'. <br>
+ * This class handles loading of native libraries. There must only be one instance of
+ * <code>Librarian</code> per Java runtime, therefore this class is implemented as a 'Singleton'.
  * <br>
- * <code>Librarian</code> is capable of loading native libraries from a
- * variety of different source locations. However, you should place your library
- * files in the 'native' directory. The primary reason for supporting different
- * source locations is to facilitate testing in a development environment,
- * without the need to actually packing the application into a *.jar file.
+ * <br>
+ * <code>Librarian</code> is capable of loading native libraries from a variety of different
+ * source locations. However, you should place your library files in the 'native' directory. The
+ * primary reason for supporting different source locations is to facilitate testing in a
+ * development environment, without the need to actually packing the application into a *.jar file.
  * 
  * @version 1.0 / 1/30/02
  * @author Elmar Grom
@@ -67,15 +62,13 @@ public class Librarian implements CleanupClient
     private static final String FILE_PROTOCOL = "file";
 
     /**
-     * The key used to retrieve the location of temporary files form the system
-     * properties.
+     * The key used to retrieve the location of temporary files form the system properties.
      */
     private static final String TEMP_LOCATION_KEY = "java.io.tmpdir";
 
     /**
-     * The extension appended to the client name when searching for it as a
-     * resource. Since the client is an object, the extension should always be
-     * '.class'
+     * The extension appended to the client name when searching for it as a resource. Since the
+     * client is an object, the extension should always be '.class'
      */
     private static final String CLIENT_EXTENSION = ".class";
 
@@ -90,36 +83,34 @@ public class Librarian implements CleanupClient
     // ------------------------------------------------------------------------
 
     /**
-     * The reference to the single instance of <code>Librarian</code>. Used
-     * in static methods in place of <code>this</code>.
+     * The reference to the single instance of <code>Librarian</code>. Used in static methods in
+     * place of <code>this</code>.
      */
     private static Librarian me = null;
 
     /**
-     * A list that is used to track all libraries that have been loaded. This
-     * list is used to ensure that each library is loaded only once.
+     * A list that is used to track all libraries that have been loaded. This list is used to ensure
+     * that each library is loaded only once.
      */
     private Vector trackList = new Vector();
 
     /**
-     * A list of references to clients that use libraries that were extracted
-     * from a *.jar file. This is needed because the clients need to be called
-     * for freeing their libraries.
+     * A list of references to clients that use libraries that were extracted from a *.jar file.
+     * This is needed because the clients need to be called for freeing their libraries.
      */
     private Vector clients = new Vector();
 
     /**
-     * A list of library names as they appear in the temporary directory. This
-     * is needed to free each library through the client. The index of each name
-     * corresponds to the index of the respective client in the
-     * <code>clients</code> list.
+     * A list of library names as they appear in the temporary directory. This is needed to free
+     * each library through the client. The index of each name corresponds to the index of the
+     * respective client in the <code>clients</code> list.
      */
     private Vector libraryNames = new Vector();
 
     /**
-     * A list of fully qualified library names. This is needed to delete the
-     * temporary library files after use. The index of each name corresponds to
-     * the index of the respective client in the <code>clients</code> list.
+     * A list of fully qualified library names. This is needed to delete the temporary library files
+     * after use. The index of each name corresponds to the index of the respective client in the
+     * <code>clients</code> list.
      */
     private Vector temporaryFileNames = new Vector();
 
@@ -131,13 +122,12 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This class is implemented as a 'Singleton'. Therefore the constructor is
-     * private to prevent instantiation of this class. Use
-     * <code>getInstance()</code> to obtain an instance for use. <br>
+     * This class is implemented as a 'Singleton'. Therefore the constructor is private to prevent
+     * instantiation of this class. Use <code>getInstance()</code> to obtain an instance for use.
      * <br>
-     * For more information about the 'Singleton' pattern I highly recommend the
-     * book Design Patterns by Gamma, Helm, Johnson and Vlissides ISBN
-     * 0-201-63361-2.
+     * <br>
+     * For more information about the 'Singleton' pattern I highly recommend the book Design
+     * Patterns by Gamma, Helm, Johnson and Vlissides ISBN 0-201-63361-2.
      */
     /*--------------------------------------------------------------------------*/
     private Librarian()
@@ -165,50 +155,43 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Loads the requested library. If the library is already loaded, this
-     * method returns immediately, without an attempt to load the library again.
+     * Loads the requested library. If the library is already loaded, this method returns
+     * immediately, without an attempt to load the library again. <br>
      * <br>
-     * <br>
-     * <b>Invocation Example:</b> This assumes that the call is made from the
-     * class that links with the library. If this is not the case,
-     * <code>this</code> must be replaced by the reference of the class that
-     * links with the library. <br>
+     * <b>Invocation Example:</b> This assumes that the call is made from the class that links with
+     * the library. If this is not the case, <code>this</code> must be replaced by the reference
+     * of the class that links with the library. <br>
      * <br>
      * <code>
      * Librarian.getInstance ().loadLibrary ("MyLibrary", this);
-     * </code>
-     * <br>
+     * </code> <br>
      * <br>
      * Loading of a native library file works as follows:<br>
      * <ul>
      * <li>If the library is already loaded there is nothing to do.
-     * <li>An attempt is made to load the library by its name. If there is no
-     * system path set to the library, this attempt will fail.
-     * <li>If the client is located on the local file system, an attempt is
-     * made to load the library from the local files system as well.
-     * <li>If the library is located inside a *.jar file, it is extracted to
-     * 'java.io.tmpdir' and an attempt is made to load it from there.
+     * <li>An attempt is made to load the library by its name. If there is no system path set to
+     * the library, this attempt will fail.
+     * <li>If the client is located on the local file system, an attempt is made to load the
+     * library from the local files system as well.
+     * <li>If the library is located inside a *.jar file, it is extracted to 'java.io.tmpdir' and
+     * an attempt is made to load it from there.
      * </ul>
      * <br>
      * <br>
-     * Loading from the local file system and from the *.jar file is attempted
-     * for the following potential locations of the library in this order:<br>
+     * Loading from the local file system and from the *.jar file is attempted for the following
+     * potential locations of the library in this order:<br>
      * <ol>
      * <li>The same directory where the client is located
      * <li>The native library directory
      * </ol>
      * 
-     * @param name
-     *            the name of the library. A file extension and path are not
-     *            needed, in fact if supplied, both is stripped off. A specific
-     *            extension is appended.
-     * @param client
-     *            the object that made the load request
+     * @param name the name of the library. A file extension and path are not needed, in fact if
+     * supplied, both is stripped off. A specific extension is appended.
+     * @param client the object that made the load request
      * 
      * @see #setNativeDirectory
      * 
-     * @exception Exception
-     *                if all attempts to load the library fail.
+     * @exception Exception if all attempts to load the library fail.
      */
     /*--------------------------------------------------------------------------*/
     public synchronized void loadLibrary(String name, NativeLibraryClient client) throws Exception
@@ -298,14 +281,13 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Verifies if the library has already been loaded and keeps track of all
-     * libraries that are verified.
+     * Verifies if the library has already been loaded and keeps track of all libraries that are
+     * verified.
      * 
-     * @param name
-     *            name of the library to verify
+     * @param name name of the library to verify
      * 
-     * @return <code>true</code> if the library had already been loaded,
-     *         otherwise <code>false</code>.
+     * @return <code>true</code> if the library had already been loaded, otherwise
+     * <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     private boolean loaded(String name)
@@ -325,8 +307,7 @@ public class Librarian implements CleanupClient
     /**
      * Strips the extension of the library name, if it has one.
      * 
-     * @param name
-     *            the name of the library
+     * @param name the name of the library
      * 
      * @return the name without an extension
      */
@@ -357,23 +338,17 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Makes an attempt to extract the named library from the jar file and to
-     * store it on the local file system for temporary use. If the attempt is
-     * successful, the fully qualified file name of the library on the local
-     * file system is returned.
+     * Makes an attempt to extract the named library from the jar file and to store it on the local
+     * file system for temporary use. If the attempt is successful, the fully qualified file name of
+     * the library on the local file system is returned.
      * 
-     * @param name
-     *            the simple name of the library
-     * @param destination
-     *            the fully qualified name of the destination file.
-     * @param client
-     *            the class that made the load request.
+     * @param name the simple name of the library
+     * @param destination the fully qualified name of the destination file.
+     * @param client the class that made the load request.
      * 
-     * @exception Exception
-     *                if the library can not be extracted from the *.jar file.
-     * @exception FileNotFoundException
-     *                if the *.jar file does not exist. The way things operate
-     *                here, this should actually never happen.
+     * @exception Exception if the library can not be extracted from the *.jar file.
+     * @exception FileNotFoundException if the *.jar file does not exist. The way things operate
+     * here, this should actually never happen.
      */
     /*--------------------------------------------------------------------------*/
     private void extractFromJar(String name, String destination, NativeLibraryClient client)
@@ -445,14 +420,11 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the complete path (including file name) for the native library,
-     * assuming the native library is located in the same directory from which
-     * the client was loaded.
+     * Returns the complete path (including file name) for the native library, assuming the native
+     * library is located in the same directory from which the client was loaded.
      * 
-     * @param name
-     *            the simple name of the library
-     * @param clientURL
-     *            a URL that points to the client class
+     * @param name the simple name of the library
+     * @param clientURL a URL that points to the client class
      * 
      * @return the path to the client
      */
@@ -476,14 +448,11 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the complete path (including file name) for the native library,
-     * assuming the native library is located in a directory where native
-     * libraries are ordinarily expected.
+     * Returns the complete path (including file name) for the native library, assuming the native
+     * library is located in a directory where native libraries are ordinarily expected.
      * 
-     * @param name
-     *            the simple name of the library
-     * @param client
-     *            the class that made the load request.
+     * @param name the simple name of the library
+     * @param client the class that made the load request.
      * 
      * @return the path to the location of the native libraries.
      */
@@ -506,11 +475,10 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Revises the given path to a file compatible path. In fact this method
-     * replaces URI-like entries with it chars (e.g. %20 with a space).
+     * Revises the given path to a file compatible path. In fact this method replaces URI-like
+     * entries with it chars (e.g. %20 with a space).
      * 
-     * @param in
-     *            path to be revised
+     * @param in path to be revised
      * @return revised path
      */
     /*--------------------------------------------------------------------------*/
@@ -549,15 +517,12 @@ public class Librarian implements CleanupClient
     /**
      * Opens an <code>InputStream</code> to the native library.
      * 
-     * @param name
-     *            the simple name of the library
-     * @param client
-     *            the class that made the load request.
+     * @param name the simple name of the library
+     * @param client the class that made the load request.
      * 
      * @return an <code>InputStream</code> from which the library can be read.
      * 
-     * @exception Exception
-     *                if the library can not be located.
+     * @exception Exception if the library can not be located.
      */
     /*--------------------------------------------------------------------------*/
     private InputStream openInputStream(String name, NativeLibraryClient client) throws Exception
@@ -596,20 +561,18 @@ public class Librarian implements CleanupClient
     /**
      * Builds a temporary file name for the native library.
      * 
-     * @param name
-     *            the file name of the library
+     * @param name the file name of the library
      * 
-     * @return a fully qualified file name that can be used to store the file on
-     *         the local file system.
+     * @return a fully qualified file name that can be used to store the file on the local file
+     * system.
      */
     /*--------------------------------------------------------------------------*/
     /*
      * $ @design
      * 
-     * Avoid overwriting any existing files on the user's system. If by some
-     * remote chance a file by the same name should exist on the user's system,
-     * modify the temporary file name until a version is found that is unique on
-     * the system and thus won't interfere.
+     * Avoid overwriting any existing files on the user's system. If by some remote chance a file by
+     * the same name should exist on the user's system, modify the temporary file name until a
+     * version is found that is unique on the system and thus won't interfere.
      * --------------------------------------------------------------------------
      */
     private String getTempFileName(String name)
@@ -645,14 +608,12 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the directory where <code>Librarian</code> will search for native
-     * files. Directories are denoted relative to the root, where the root is
-     * the same location where the top level Java package directory is located
-     * (usually called <code>com</code>). The default directory is
-     * <code>native</code>.
+     * Sets the directory where <code>Librarian</code> will search for native files. Directories
+     * are denoted relative to the root, where the root is the same location where the top level
+     * Java package directory is located (usually called <code>com</code>). The default directory
+     * is <code>native</code>.
      * 
-     * @param directory
-     *            the directory where native files are located.
+     * @param directory the directory where native files are located.
      */
     /*--------------------------------------------------------------------------*/
     public void setNativeDirectory(String directory)
@@ -669,8 +630,8 @@ public class Librarian implements CleanupClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method attempts to remove all native libraries that have been
-     * temporarily created from the system.
+     * This method attempts to remove all native libraries that have been temporarily created from
+     * the system.
      */
     /*--------------------------------------------------------------------------*/
     public void cleanUp()

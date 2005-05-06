@@ -1,26 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2004 Klaus Bartz
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Klaus Bartz
  *
- *  File :               CustomData.java
- *  Description :        Custom data description.
- *  Author's email :     klaus.bartz@coi.de
- *  Author's Website :   http://www.coi.de/
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack;
@@ -45,9 +41,8 @@ public class CustomData implements Serializable
     public static final int UNINSTALLER_LISTENER = 1;
 
     /**
-     * Identifier for custom data typ "uninstaller lib". This is used for binary
-     * libs (DLLs or SHLs or SOs or ...) which will be needed from the
-     * uninstaller.
+     * Identifier for custom data typ "uninstaller lib". This is used for binary libs (DLLs or SHLs
+     * or SOs or ...) which will be needed from the uninstaller.
      */
     public static final int UNINSTALLER_LIB = 2;
 
@@ -55,16 +50,15 @@ public class CustomData implements Serializable
     public static final int UNINSTALLER_JAR = 3;
 
     /**
-     * The contens of the managed custom data. If it is a listener or a
-     * uninstaller jar, all contained files are listed with it complete sub
-     * path. If it is a uninstaller native library, this value is the path in
-     * the installer jar.
+     * The contens of the managed custom data. If it is a listener or a uninstaller jar, all
+     * contained files are listed with it complete sub path. If it is a uninstaller native library,
+     * this value is the path in the installer jar.
      */
     public List contents;
 
     /**
-     * Full qualified name of the managed listener. If type is not a listener,
-     * this value is undefined.
+     * Full qualified name of the managed listener. If type is not a listener, this value is
+     * undefined.
      */
     public String listenerName;
 
@@ -72,27 +66,22 @@ public class CustomData implements Serializable
     public List osConstraints = null;
 
     /**
-     * Type of this custom action data; possible are INSTALLER_LISTENER,
-     * UNINSTALLER_LISTENER, UNINSTALLER_LIB and UNINSTALLER_JAR.
+     * Type of this custom action data; possible are INSTALLER_LISTENER, UNINSTALLER_LISTENER,
+     * UNINSTALLER_LIB and UNINSTALLER_JAR.
      */
     public int type = 0;
 
     /**
-     * Constructs an CustomData object with the needed values. If a listener
-     * will be managed with this object, the full qualified name of the listener
-     * self must be set as listener name. If a listener or a jar file for
-     * uninstall will be managed, all needed files (class, properties and so on)
-     * must be referenced in the contents with the path which they have in the
-     * installer jar file.
+     * Constructs an CustomData object with the needed values. If a listener will be managed with
+     * this object, the full qualified name of the listener self must be set as listener name. If a
+     * listener or a jar file for uninstall will be managed, all needed files (class, properties and
+     * so on) must be referenced in the contents with the path which they have in the installer jar
+     * file.
      * 
-     * @param listenerName
-     *            path of the listener
-     * @param contents
-     *            also needed objects referenced with the path in install.jar
-     * @param osConstraints
-     *            target operation system of this custom action
-     * @param type
-     *            type of this custom data
+     * @param listenerName path of the listener
+     * @param contents also needed objects referenced with the path in install.jar
+     * @param osConstraints target operation system of this custom action
+     * @param type type of this custom data
      */
     public CustomData(String listenerName, List contents, List osConstraints, int type)
     {

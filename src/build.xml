@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
 
 <project name="IzPack" default="all" basedir="..">
-
+	
 <!--
-  $Id$
   build.xml first written by Pierre Dittgen (pierre.dittgen@criltelecom.com)
   This file is intended to be used with ant (http://jakarta.apache.org/ant),
   a java/xml makefile utility.
@@ -152,8 +151,8 @@
 
     <!-- Define directories -->
     <property file="src/ant.properties"/>
-    <property name="ver" value="3.7"/>
-    <property name="rel" value="2"/>
+    <property name="ver" value="3.8"/>
+    <property name="rel" value="0-M1"/>
 
     <property name="src.dir" value="${basedir}/src/lib"/>
     <property name="img.dir" value="${basedir}/src/img"/>

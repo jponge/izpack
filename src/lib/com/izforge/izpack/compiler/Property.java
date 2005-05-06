@@ -1,25 +1,22 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               Property.java
- *  Description :        Property handling at compile time.
- *  Author's email :     mchenryc@acm.org
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2004 Chadwick McHenry
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.compiler;
@@ -40,30 +37,29 @@ import org.apache.tools.ant.taskdefs.Execute;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
- * Sets a property by name, or set of properties (from file or resource) in the
- * project. This is modeled after ant properties
+ * Sets a property by name, or set of properties (from file or resource) in the project. This is
+ * modeled after ant properties
  * <p>
  * 
- * Properties are immutable: once a property is set it cannot be changed. They
- * are most definately not variable.
+ * Properties are immutable: once a property is set it cannot be changed. They are most definately
+ * not variable.
  * <p>
  * 
  * There are five ways to set properties:
  * <ul>
  * <li>By supplying both the <i>name</i> and <i>value</i> attributes.</li>
- * <li>By setting the <i>file</i> attribute with the filename of the property
- * file to load. This property file has the format as defined by the file used
- * in the class java.util.Properties.</li>
- * <li>By setting the <i>environment</i> attribute with a prefix to use.
- * Properties will be defined for every environment variable by prefixing the
- * supplied name and a period to the name of the variable.</li>
+ * <li>By setting the <i>file</i> attribute with the filename of the property file to load. This
+ * property file has the format as defined by the file used in the class java.util.Properties.</li>
+ * <li>By setting the <i>environment</i> attribute with a prefix to use. Properties will be
+ * defined for every environment variable by prefixing the supplied name and a period to the name of
+ * the variable.</li>
  * </ul>
  * 
  * Combinations of the above are considered an error.
  * <p>
  * 
- * The value part of the properties being set, might contain references to other
- * properties. These references are resolved when the properties are set.
+ * The value part of the properties being set, might contain references to other properties. These
+ * references are resolved when the properties are set.
  * <p>
  * 
  * This also holds for properties loaded from a property file.
@@ -72,25 +68,21 @@ import com.izforge.izpack.util.VariableSubstitutor;
  * Properties are case sensitive.
  * <p>
  * 
- * When specifying the environment attribute, it's value is used as a prefix to
- * use when retrieving environment variables. This functionality is currently
- * only implemented on select platforms.
+ * When specifying the environment attribute, it's value is used as a prefix to use when retrieving
+ * environment variables. This functionality is currently only implemented on select platforms.
  * <p>
  * 
- * Thus if you specify environment=&quot;myenv&quot; you will be able to access
- * OS-specific environment variables via property names &quot;myenv.PATH&quot;
- * or &quot;myenv.TERM&quot;.
+ * Thus if you specify environment=&quot;myenv&quot; you will be able to access OS-specific
+ * environment variables via property names &quot;myenv.PATH&quot; or &quot;myenv.TERM&quot;.
  * <p>
  * 
- * Note also that properties are case sensitive, even if the environment
- * variables on your operating system are not, e.g. it will be ${env.Path} not
- * ${env.PATH} on Windows 2000.
+ * Note also that properties are case sensitive, even if the environment variables on your operating
+ * system are not, e.g. it will be ${env.Path} not ${env.PATH} on Windows 2000.
  * <p>
  * 
- * Note that when specifying either the <code>prefix</code> or
- * <code>environment</code> attributes, if you supply a property name with a
- * final &quot;.&quot; it will not be doubled. ie environment=&quot;myenv.&quot;
- * will still allow access of environment variables through
+ * Note that when specifying either the <code>prefix</code> or <code>environment</code>
+ * attributes, if you supply a property name with a final &quot;.&quot; it will not be doubled. ie
+ * environment=&quot;myenv.&quot; will still allow access of environment variables through
  * &quot;myenv.PATH&quot; and &quot;myenv.TERM&quot;.
  * <p>
  */
@@ -151,8 +143,8 @@ public class Property
     }
 
     /**
-     * set the property in the project to the value. if the task was give a
-     * file, resource or env attribute here is where it is loaded
+     * set the property in the project to the value. if the task was give a file, resource or env
+     * attribute here is where it is loaded
      */
     public void execute() throws CompilerException
     {
@@ -183,14 +175,13 @@ public class Property
     /**
      * load properties from a file
      * 
-     * @param file
-     *            file to load
+     * @param file file to load
      */
     protected void loadFile(File file) throws CompilerException
     {
         Properties props = new Properties();
         compiler.getPackagerListener().packagerMsg("Loading " + file.getAbsolutePath(),
-                                                   PackagerListener.MSG_VERBOSE);
+                PackagerListener.MSG_VERBOSE);
         try
         {
             if (file.exists())
@@ -222,14 +213,13 @@ public class Property
     /**
      * load the environment values
      * 
-     * @param prefix
-     *            prefix to place before them
+     * @param prefix prefix to place before them
      */
     protected void loadEnvironment(String prefix) throws CompilerException
     {
         Properties props = new Properties();
         compiler.getPackagerListener().packagerMsg("Loading Environment " + prefix,
-                                                   PackagerListener.MSG_VERBOSE);
+                PackagerListener.MSG_VERBOSE);
         Vector osEnv = Execute.getProcEnvironment();
         for (Enumeration e = osEnv.elements(); e.hasMoreElements();)
         {
@@ -238,7 +228,7 @@ public class Property
             if (pos == -1)
             {
                 compiler.getPackagerListener().packagerMsg("Ignoring " + prefix,
-                                                           PackagerListener.MSG_WARN);
+                        PackagerListener.MSG_WARN);
             }
             else
             {
@@ -251,10 +241,8 @@ public class Property
     /**
      * Add a name value pair to the project property set
      * 
-     * @param name
-     *            name of property
-     * @param value
-     *            value to set
+     * @param name name of property
+     * @param value value to set
      */
     protected void addProperty(String name, String value)
     {
@@ -287,8 +275,7 @@ public class Property
     /**
      * resolve properties inside a properties object
      * 
-     * @param props
-     *            properties to resolve
+     * @param props properties to resolve
      */
     private void resolveAllProperties(Properties props) throws CompilerException
     {

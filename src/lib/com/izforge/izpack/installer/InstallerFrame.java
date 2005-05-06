@@ -1,29 +1,24 @@
 /*
- *  $Id$
- *  IzPack
- *  Copyright (C) 2001-2004 Julien Ponge
- *
- *  File :               InstallerFrame.java
- *  Description :        The Installer frame class.
- *  Author's email :     julien@izforge.com
- *  Author's Website :   http://www.izforge.com
- *
- *  Portions are Copyright (C) 2002 Jan Blok (jblok@profdata.nl - PDM - www.profdata.nl)
- *
- *  This program is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU General Public License
- *  as published by the Free Software Foundation; either version 2
- *  of the License, or any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Jan Blok
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package com.izforge.izpack.installer;
 
 import java.awt.BorderLayout;
@@ -145,12 +140,9 @@ public class InstallerFrame extends JFrame
     /**
      * The constructor (normal mode).
      * 
-     * @param title
-     *            The window title.
-     * @param installdata
-     *            The installation data.
-     * @exception Exception
-     *                Description of the Exception
+     * @param title The window title.
+     * @param installdata The installation data.
+     * @exception Exception Description of the Exception
      */
     public InstallerFrame(String title, InstallData installdata) throws Exception
     {
@@ -174,8 +166,7 @@ public class InstallerFrame extends JFrame
     /**
      * Loads the panels.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private void loadPanels() throws Exception
     {
@@ -220,8 +211,7 @@ public class InstallerFrame extends JFrame
     /**
      * Loads the icons.
      * 
-     * @exception Exception
-     *                Description of the Exception
+     * @exception Exception Description of the Exception
      */
     private void loadIcons() throws Exception
     {
@@ -391,8 +381,7 @@ public class InstallerFrame extends JFrame
     /**
      * Switches the current panel.
      * 
-     * @param last
-     *            Description of the Parameter
+     * @param last Description of the Parameter
      */
     protected void switchPanel(int last)
     {
@@ -452,8 +441,8 @@ public class InstallerFrame extends JFrame
                 }
 
                 /*
-                 * On editable text components position the caret to the end of
-                 * the cust existent text.
+                 * On editable text components position the caret to the end of the cust existent
+                 * text.
                  */
                 if (inFoc instanceof JTextComponent)
                 {
@@ -652,8 +641,7 @@ public class InstallerFrame extends JFrame
     /**
      * Gets the stream to a resource.
      * 
-     * @param res
-     *            The resource id.
+     * @param res The resource id.
      * @return The resource value, null if not found
      */
     public InputStream getResource(String res) throws Exception
@@ -682,8 +670,7 @@ public class InstallerFrame extends JFrame
     /**
      * Centers a window on screen.
      * 
-     * @param frame
-     *            The window tp center.
+     * @param frame The window tp center.
      */
     public void centerFrame(Window frame)
     {
@@ -706,20 +693,13 @@ public class InstallerFrame extends JFrame
     /**
      * Sets the parameters of a GridBagConstraints object.
      * 
-     * @param gbc
-     *            The constraints object.
-     * @param gx
-     *            The x coordinates.
-     * @param gy
-     *            The y coordinates.
-     * @param gw
-     *            The width.
-     * @param wx
-     *            The x wheight.
-     * @param wy
-     *            The y wheight.
-     * @param gh
-     *            Description of the Parameter
+     * @param gbc The constraints object.
+     * @param gx The x coordinates.
+     * @param gy The y coordinates.
+     * @param gw The width.
+     * @param wx The x wheight.
+     * @param wy The y wheight.
+     * @param gh Description of the Parameter
      */
     public void buildConstraints(GridBagConstraints gbc, int gx, int gy, int gw, int gh, double wx,
             double wy)
@@ -787,8 +767,7 @@ public class InstallerFrame extends JFrame
     /**
      * Recursive files wiper.
      * 
-     * @param file
-     *            The file to wipe.
+     * @param file The file to wipe.
      */
     private void cleanWipe(File file)
     {
@@ -805,8 +784,7 @@ public class InstallerFrame extends JFrame
     /**
      * Launches the installation.
      * 
-     * @param listener
-     *            The installation listener.
+     * @param listener The installation listener.
      */
     public void install(AbstractUIProgressHandler listener)
     {
@@ -817,12 +795,9 @@ public class InstallerFrame extends JFrame
     /**
      * Writes an XML tree.
      * 
-     * @param root
-     *            The XML tree to write out.
-     * @param out
-     *            The stream to write on.
-     * @exception Exception
-     *                Description of the Exception
+     * @param root The XML tree to write out.
+     * @param out The stream to write on.
+     * @exception Exception Description of the Exception
      */
     public void writeXMLTree(XMLElement root, OutputStream out) throws Exception
     {
@@ -831,8 +806,7 @@ public class InstallerFrame extends JFrame
     }
 
     /**
-     * Changes the quit button text. If <tt>text</tt> is null, the default
-     * quit text is used.
+     * Changes the quit button text. If <tt>text</tt> is null, the default quit text is used.
      */
     public void setQuitButtonText(String text)
     {
@@ -841,8 +815,8 @@ public class InstallerFrame extends JFrame
     }
 
     /*
-     * FocusTraversalPolicy objects to handle keybord blocking; the declaration
-     * os Object allows to use a pre version 1.4 VM.
+     * FocusTraversalPolicy objects to handle keybord blocking; the declaration os Object allows to
+     * use a pre version 1.4 VM.
      */
     private Object usualFTP = null;
 
@@ -955,8 +929,7 @@ public class InstallerFrame extends JFrame
         /**
          * Actions handler.
          * 
-         * @param e
-         *            The event.
+         * @param e The event.
          */
         public void actionPerformed(ActionEvent e)
         {
@@ -985,8 +958,7 @@ public class InstallerFrame extends JFrame
         /**
          * We can't avoid the exit here, so don't call exit anywhere else.
          * 
-         * @param e
-         *            The event.
+         * @param e The event.
          */
         public void windowClosing(WindowEvent e)
         {
@@ -1015,8 +987,7 @@ public class InstallerFrame extends JFrame
         /**
          * Only accepts the block panel
          * 
-         * @param aComp
-         *            the component to check
+         * @param aComp the component to check
          * @return true if aComp is the block panel
          */
         protected boolean accept(Component aComp)

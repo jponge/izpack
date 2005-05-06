@@ -1,26 +1,22 @@
 /*
- * $Id$
- * IzPack
- * Copyright (C) 2002 by Elmar Grom
- *
- * File :               Win_Shortcut.java
- * Description :        mapping class for the shortcut API
- * Author's email :     elmar@grom.net
- * Website :            http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Elmar Grom
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.util.os;
@@ -30,8 +26,7 @@ import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
 /**
- * This is the Microsoft Windows specific implementation of
- * <code>Shortcut</code>.
+ * This is the Microsoft Windows specific implementation of <code>Shortcut</code>.
  * 
  * @version 0.0.1 / 3/4/02
  * @author Elmar Grom
@@ -51,21 +46,18 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method initializes the object. It is used as a replacement for the
-     * constructor because of the way it is instantiated through the
-     * <code>TargetFactory</code>.
+     * This method initializes the object. It is used as a replacement for the constructor because
+     * of the way it is instantiated through the <code>TargetFactory</code>.
      * 
-     * @param type
-     *            the type or classification of the program group in which the
-     *            link should exist. The following types are recognized: <br>
-     *            <ul>
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
-     *            </ul>
-     * @param name
-     *            the name of the shortcut.
+     * @param type the type or classification of the program group in which the link should exist.
+     * The following types are recognized: <br>
+     * <ul>
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
+     * </ul>
+     * @param name the name of the shortcut.
      */
     public void initialize(int type, String name) throws Exception
     {
@@ -96,10 +88,9 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the base path of the shortcut depending on type. The base path is
-     * the directory that the short cut, (or its program group) will be created
-     * in. For instance, on Windows NT, a shortcut with user-type ALL_USERS, and
-     * link-type DESKTOP might have the base path
+     * Returns the base path of the shortcut depending on type. The base path is the directory that
+     * the short cut, (or its program group) will be created in. For instance, on Windows NT, a
+     * shortcut with user-type ALL_USERS, and link-type DESKTOP might have the base path
      * "C:\Program&nbsp;Files\All&nbsp;Users\Desktop"
      * 
      * @see #setLinkType(int)
@@ -113,18 +104,14 @@ public class Win_Shortcut extends Shortcut
     }
 
     /**
-     * Returns a list of currently existing program groups, based on the
-     * requested type. For example if the type is <code>APPLICATIONS</code>
-     * then all the names of the program groups in the Start Menu\Programs menu
-     * would be returned.
+     * Returns a list of currently existing program groups, based on the requested type. For example
+     * if the type is <code>APPLICATIONS</code> then all the names of the program groups in the
+     * Start Menu\Programs menu would be returned.
      * 
-     * @param userType
-     *            the type of user for the program group set. (as
-     *            Shortcut.utype)
+     * @param userType the type of user for the program group set. (as Shortcut.utype)
      * 
-     * @return a <code>Vector</code> of <code>String</code> objects that
-     *         represent the names of the existing program groups. It is
-     *         theoretically possible that this list is empty.
+     * @return a <code>Vector</code> of <code>String</code> objects that represent the names of
+     * the existing program groups. It is theoretically possible that this list is empty.
      * 
      * @see #APPLICATIONS
      * @see #START_MENU
@@ -181,10 +168,9 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the fully qualified file name under which the link is saved on
-     * disk. <b>Note:</b> this method returns valid results only if the
-     * instance was created from a file on disk or after a successful save
-     * operation.
+     * Returns the fully qualified file name under which the link is saved on disk. <b>Note:</b>
+     * this method returns valid results only if the instance was created from a file on disk or
+     * after a successful save operation.
      * 
      * @return the fully qualified file name for the shell link
      */
@@ -195,16 +181,14 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the path of the directory where the link file is stored, if it
-     * was necessary during the previous save operation to create the directory.
-     * This method returns <code>null</code> if no save operation was carried
-     * out or there was no need to create a directory during the previous save
-     * operation.
+     * Returns the path of the directory where the link file is stored, if it was necessary during
+     * the previous save operation to create the directory. This method returns <code>null</code>
+     * if no save operation was carried out or there was no need to create a directory during the
+     * previous save operation.
      * 
-     * @return the path of the directory where the link file is stored or
-     *         <code>null</code> if no save operation was carried out or there
-     *         was no need to create a directory during the previous save
-     *         operation.
+     * @return the path of the directory where the link file is stored or <code>null</code> if no
+     * save operation was carried out or there was no need to create a directory during the previous
+     * save operation.
      */
     public String getDirectoryCreated()
     {
@@ -213,11 +197,9 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns <code>true</code> if the target OS supports current user and
-     * all users.
+     * Returns <code>true</code> if the target OS supports current user and all users.
      * 
-     * @return <code>true</code> if the target OS supports current and all
-     *         users.
+     * @return <code>true</code> if the target OS supports current and all users.
      */
     public boolean multipleUsers()
     {
@@ -233,9 +215,8 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Signals that this flavor of
-     * <code>{@link com.izforge.izpack.util.os.Shortcut}</code> supports the
-     * creation of shortcuts.
+     * Signals that this flavor of <code>{@link com.izforge.izpack.util.os.Shortcut}</code>
+     * supports the creation of shortcuts.
      * 
      * @return always <code>true</code>
      */
@@ -246,11 +227,9 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the command line arguments that will be passed to the target when
-     * the link is activated.
+     * Sets the command line arguments that will be passed to the target when the link is activated.
      * 
-     * @param arguments
-     *            the command line arguments
+     * @param arguments the command line arguments
      */
     public void setArguments(String arguments)
     {
@@ -259,11 +238,9 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the description string that is used to identify the link in a menu
-     * or on the desktop.
+     * Sets the description string that is used to identify the link in a menu or on the desktop.
      * 
-     * @param description
-     *            the descriptiojn string
+     * @param description the descriptiojn string
      */
     public void setDescription(String description)
     {
@@ -272,14 +249,11 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the location of the icon that is shown for the shortcut on the
-     * desktop.
+     * Sets the location of the icon that is shown for the shortcut on the desktop.
      * 
-     * @param path
-     *            a fully qualified file name of a file that contains the icon.
-     * @param index
-     *            the index of the specific icon to use in the file. If there is
-     *            only one icon in the file, use an index of 0.
+     * @param path a fully qualified file name of a file that contains the icon.
+     * @param index the index of the specific icon to use in the file. If there is only one icon in
+     * the file, use an index of 0.
      */
     public void setIconLocation(String path, int index)
     {
@@ -301,8 +275,7 @@ public class Win_Shortcut extends Shortcut
     /**
      * Sets the name of the program group this ShellLinbk should be placed in.
      * 
-     * @param groupName
-     *            the name of the program group
+     * @param groupName the name of the program group
      */
     public void setProgramGroup(String groupName)
     {
@@ -311,26 +284,23 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the show command that is passed to the target application when the
-     * link is activated. The show command determines if the the window will be
-     * restored to the previous size, minimized, maximized or visible at all.
-     * <br>
+     * Sets the show command that is passed to the target application when the link is activated.
+     * The show command determines if the the window will be restored to the previous size,
+     * minimized, maximized or visible at all. <br>
      * <br>
      * <b>Note:</b><br>
-     * Using <code>HIDE</code> will cause the target window not to show at
-     * all. There is not even a button on the taskbar. This is a very useful
-     * setting when batch files are used to launch a Java application as it will
-     * then appear to run just like any native Windows application.<br>
+     * Using <code>HIDE</code> will cause the target window not to show at all. There is not even
+     * a button on the taskbar. This is a very useful setting when batch files are used to launch a
+     * Java application as it will then appear to run just like any native Windows application.<br>
      * 
      * 
-     * @param show
-     *            the show command. Valid settings are: <br>
-     *            <ul>
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#HIDE}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#NORMAL}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
-     *            </ul>
+     * @param show the show command. Valid settings are: <br>
+     * <ul>
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#HIDE}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#NORMAL}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
+     * </ul>
      * 
      * @see #getShowCommand internally maps from Shortcut.XXX to ShellLink.XXX
      */
@@ -362,8 +332,7 @@ public class Win_Shortcut extends Shortcut
     }
 
     /*
-     * returns current showCommand. internally maps from ShellLink.XXX to
-     * Shortcut.XXX
+     * returns current showCommand. internally maps from ShellLink.XXX to Shortcut.XXX
      * 
      */
     public int getShowCommand()
@@ -394,8 +363,7 @@ public class Win_Shortcut extends Shortcut
     /**
      * Sets the absolute path to the shortcut target.
      * 
-     * @param path
-     *            the fully qualified file name of the target
+     * @param path the fully qualified file name of the target
      */
     public void setTargetPath(String path)
     {
@@ -406,8 +374,7 @@ public class Win_Shortcut extends Shortcut
     /**
      * Sets the working directory for the link target.
      * 
-     * @param dir
-     *            the working directory
+     * @param dir the working directory
      */
     public void setWorkingDirectory(String dir)
     {
@@ -429,9 +396,8 @@ public class Win_Shortcut extends Shortcut
     /**
      * Sets the name shown in a menu or on the desktop for the link.
      * 
-     * @param name
-     *            The name that the link should display on a menu or on the
-     *            desktop. Do not include a file extension.
+     * @param name The name that the link should display on a menu or on the desktop. Do not include
+     * a file extension.
      */
     public void setLinkName(String name)
     {
@@ -478,19 +444,16 @@ public class Win_Shortcut extends Shortcut
     /**
      * Sets the type of link
      * 
-     * @param type
-     *            The type of link desired. The following values can be set:<br>
-     *            (note APPLICATION on Windows is 'Start Menu\Programs')
-     *            APPLICATION is a Mac term.
-     *            <ul>
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
-     *            </ul>
+     * @param type The type of link desired. The following values can be set:<br>
+     * (note APPLICATION on Windows is 'Start Menu\Programs') APPLICATION is a Mac term.
+     * <ul>
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
+     * </ul>
      * 
-     * @exception IllegalArgumentException
-     *                if an an invalid type is passed
+     * @exception IllegalArgumentException if an an invalid type is passed
      */
     public void setLinkType(int type) throws IllegalArgumentException
     {
@@ -548,8 +511,7 @@ public class Win_Shortcut extends Shortcut
     /**
      * Sets the user type for the link
      * 
-     * @param type
-     *            the type of user for the link.
+     * @param type the type of user for the link.
      * 
      * @see Shortcut#CURRENT_USER
      * @see Shortcut#ALL_USERS
@@ -579,8 +541,7 @@ public class Win_Shortcut extends Shortcut
     /**
      * Saves this link.
      * 
-     * @exception Exception
-     *                if problems are encountered
+     * @exception Exception if problems are encountered
      */
     public void save() throws Exception
     {
@@ -604,11 +565,10 @@ public class Win_Shortcut extends Shortcut
      * 
      * @param hotkey
      * 
-     * incoming 2 byte hotkey is: high byte modifier: SHIFT = 0x01 CONTROL= 0x02
-     * ALT = 0x04 EXT = 0x08
+     * incoming 2 byte hotkey is: high byte modifier: SHIFT = 0x01 CONTROL= 0x02 ALT = 0x04 EXT =
+     * 0x08
      * 
-     * lower byte contains ascii letter. ie 0x0278 represents CTRL+x 0x068a
-     * represents CTRL+ALT+z
+     * lower byte contains ascii letter. ie 0x0278 represents CTRL+x 0x068a represents CTRL+ALT+z
      */
     public void setHotkey(int hotkey)
     {

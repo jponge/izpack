@@ -1,27 +1,22 @@
 /*
- * $Id$
- * Copyright (C) 2003 Elmar Grom
- *
- * File :               PasswordGroup.java
- * Description :        This class supports handling of multiple
- *                      related password fields. The primary use
- *                      is in the UserInputPanel.
- * Author's email :     elmar@grom.net
- * Author's Website :   http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2003 Elmar Grom
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.panels;
@@ -32,9 +27,9 @@ import javax.swing.JPasswordField;
 
 /*---------------------------------------------------------------------------*/
 /**
- * This class can be used to manage multiple related password fields. This is
- * used in the <code>UserInputPanel</code> to manage communication with the
- * validator and processor for password fields.
+ * This class can be used to manage multiple related password fields. This is used in the
+ * <code>UserInputPanel</code> to manage communication with the validator and processor for
+ * password fields.
  * 
  * @see com.izforge.izpack.panels.UserInputPanel
  * 
@@ -58,18 +53,13 @@ public class PasswordGroup implements ProcessingClient
     /**
      * Creates a passowrd group to manage one or more password fields.
      * 
-     * @param validator
-     *            A string that specifies a class that provides a password
-     *            validation service. The class must implement the
-     *            <code>Validator</code> interface. If an attempt to
-     *            instantiate this class fails, no validation will be performed.
-     * @param processor
-     *            A string that specifies a class that provides a password
-     *            processing service, such as password encryption. The class
-     *            must implement the <code>Processor</code> interface. If an
-     *            attempt to instantiate this class fails, no processing will be
-     *            performed. Insted the contents of the first field will be
-     *            returned.
+     * @param validator A string that specifies a class that provides a password validation service.
+     * The class must implement the <code>Validator</code> interface. If an attempt to instantiate
+     * this class fails, no validation will be performed.
+     * @param processor A string that specifies a class that provides a password processing service,
+     * such as password encryption. The class must implement the <code>Processor</code> interface.
+     * If an attempt to instantiate this class fails, no processing will be performed. Insted the
+     * contents of the first field will be returned.
      */
     /*--------------------------------------------------------------------------*/
     public PasswordGroup(String validator, String processor)
@@ -115,14 +105,11 @@ public class PasswordGroup implements ProcessingClient
     /**
      * Returns the contents of the field indicated by <code>index</code>.
      * 
-     * @param index
-     *            the index of the sub-field from which the contents is
-     *            requested.
+     * @param index the index of the sub-field from which the contents is requested.
      * 
      * @return the contents of the indicated sub-field.
      * 
-     * @exception IndexOutOfBoundsException
-     *                if the index is out of bounds.
+     * @exception IndexOutOfBoundsException if the index is out of bounds.
      */
     /*--------------------------------------------------------------------------*/
     public String getFieldContents(int index) throws IndexOutOfBoundsException
@@ -135,11 +122,9 @@ public class PasswordGroup implements ProcessingClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Adds a <code>JPasswordField</code> to the group of fields being managed
-     * by this object.
+     * Adds a <code>JPasswordField</code> to the group of fields being managed by this object.
      * 
-     * @param field
-     *            <code>JPasswordField</code> to add
+     * @param field <code>JPasswordField</code> to add
      */
     /*--------------------------------------------------------------------------*/
     public void addField(JPasswordField field)
@@ -152,12 +137,11 @@ public class PasswordGroup implements ProcessingClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method validates the group content. Validating is performed through
-     * a user supplied service class that provides the validation rules.
+     * This method validates the group content. Validating is performed through a user supplied
+     * service class that provides the validation rules.
      * 
-     * @return <code>true</code> if the validation passes or no implementation
-     *         of a validation rule exists. Otherwise <code>false</code> is
-     *         returned.
+     * @return <code>true</code> if the validation passes or no implementation of a validation
+     * rule exists. Otherwise <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     public boolean validateContents()
@@ -174,9 +158,9 @@ public class PasswordGroup implements ProcessingClient
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the password. If a processing service class was supplied it will
-     * be used to process the password before it is returned, otherwise the
-     * content of the first field will be returned.
+     * Returns the password. If a processing service class was supplied it will be used to process
+     * the password before it is returned, otherwise the content of the first field will be
+     * returned.
      * 
      * @return the password
      */

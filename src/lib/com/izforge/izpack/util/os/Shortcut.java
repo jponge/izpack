@@ -1,26 +1,22 @@
 /*
- * $Id$
- * IzPack
- * Copyright (C) 2002 by Elmar Grom
- *
- * File :               Shortcut.java
- * Description :        mapping class for the shortcut API
- * Author's email :     elmar@grom.net
- * Website :            http://www.izforge.com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2002 Elmar Grom
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.izforge.izpack.util.os;
@@ -29,9 +25,9 @@ import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
 /**
- * This class represents a shortcut in a operating system independent way. OS
- * specific subclasses are used to implement the necessary mapping from this
- * generic API to the classes that reflect the system dependent AIP.
+ * This class represents a shortcut in a operating system independent way. OS specific subclasses
+ * are used to implement the necessary mapping from this generic API to the classes that reflect the
+ * system dependent AIP.
  * 
  * @see com.izforge.izpack.util.TargetFactory
  * 
@@ -56,8 +52,8 @@ public class Shortcut
     public static final int HIDE = 0;
 
     /**
-     * Show the window 'normal' when starting. Usually restores the window
-     * properties at the last shut-down.
+     * Show the window 'normal' when starting. Usually restores the window properties at the last
+     * shut-down.
      */
     public static final int NORMAL = 1;
 
@@ -74,15 +70,11 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * This method initializes the object. It is used as a replacement for the
-     * contructor because of the way it is instantiated through the
-     * <code>TargetFactory</code>.
+     * This method initializes the object. It is used as a replacement for the contructor because of
+     * the way it is instantiated through the <code>TargetFactory</code>.
      * 
-     * @param type
-     *            the type or classification of the program group in which the
-     *            link should exist.
-     * @param name
-     *            the name of the shortcut.
+     * @param type the type or classification of the program group in which the link should exist.
+     * @param name the name of the shortcut.
      */
     public void initialize(int type, String name) throws Exception
     {
@@ -90,10 +82,9 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the base path of the shortcut depending on type. The base path is
-     * the directory that the short cut, (or its program group) will be created
-     * in. For instance, on Windows NT, a shortcut with user-type ALL_USERS, and
-     * link-type DESKTOP might have the base path
+     * Returns the base path of the shortcut depending on type. The base path is the directory that
+     * the short cut, (or its program group) will be created in. For instance, on Windows NT, a
+     * shortcut with user-type ALL_USERS, and link-type DESKTOP might have the base path
      * "C:\Program&nbsp;Files\All&nbsp;Users\Desktop"
      * 
      * @see #setLinkType(int)
@@ -106,17 +97,14 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns a list of currently existing program groups, based on the
-     * requested type. For example if the type is <code>APPLICATIONS</code>
-     * then all the names of the program groups in the Start Menu\Programs menu
-     * would be returned.
+     * Returns a list of currently existing program groups, based on the requested type. For example
+     * if the type is <code>APPLICATIONS</code> then all the names of the program groups in the
+     * Start Menu\Programs menu would be returned.
      * 
-     * @param userType
-     *            the type of user for the program group set.
+     * @param userType the type of user for the program group set.
      * 
-     * @return a <code>Vector</code> of <code>String</code> objects that
-     *         represent the names of the existing program groups. It is
-     *         theoretically possible that this list is empty.
+     * @return a <code>Vector</code> of <code>String</code> objects that represent the names of
+     * the existing program groups. It is theoretically possible that this list is empty.
      * 
      * @see #APPLICATIONS
      * @see #START_MENU
@@ -128,11 +116,10 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Subclass implementations return the fully qualified file name under which
-     * the link is saved on disk. <b>Note:</b> this method returns valid
-     * results only if the instance was created from a file on disk or after a
-     * successful save operation. An instance of this class returns an empty
-     * string.
+     * Subclass implementations return the fully qualified file name under which the link is saved
+     * on disk. <b>Note:</b> this method returns valid results only if the instance was created
+     * from a file on disk or after a successful save operation. An instance of this class returns
+     * an empty string.
      * 
      * @return an empty <code>String</code>
      */
@@ -143,11 +130,10 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Subclass implementations return the path of the directory where the link
-     * file is stored, if it was necessary during the previous save operation to
-     * create the directory. This method returns <code>null</code> if no save
-     * operation was carried out or there was no need to create a directory
-     * during the previous save operation.
+     * Subclass implementations return the path of the directory where the link file is stored, if
+     * it was necessary during the previous save operation to create the directory. This method
+     * returns <code>null</code> if no save operation was carried out or there was no need to
+     * create a directory during the previous save operation.
      * 
      * @return this implementation returns always <code>null</code>.
      */
@@ -158,11 +144,9 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns <code>true</code> if the target OS supports current user and
-     * all users.
+     * Returns <code>true</code> if the target OS supports current user and all users.
      * 
-     * @return <code>true</code> if the target OS supports current and all
-     *         users.
+     * @return <code>true</code> if the target OS supports current and all users.
      */
     public boolean multipleUsers()
     {
@@ -171,20 +155,18 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Determines if a specific instance of this class supports the creation of
-     * shortcuts. The use of this method might seem odd, since one would not
-     * implement a flavor of this class that does not actually support the
-     * creation of shortcuts. In other words all flavors will in all probability
-     * return true. The only version that can be expected to return false is
-     * this class itself, since it has no actual implementation for shortcut
-     * creation. This is left to OS specific flavors. If the installer is
-     * launched on a unsupported OS there will be no appropriate flavor of this
-     * class, which will cause this class itself to be instantiated. The client
-     * code can now determine by calling this method if the active OS is
-     * supported and take appropriate action.
+     * Determines if a specific instance of this class supports the creation of shortcuts. The use
+     * of this method might seem odd, since one would not implement a flavor of this class that does
+     * not actually support the creation of shortcuts. In other words all flavors will in all
+     * probability return true. The only version that can be expected to return false is this class
+     * itself, since it has no actual implementation for shortcut creation. This is left to OS
+     * specific flavors. If the installer is launched on a unsupported OS there will be no
+     * appropriate flavor of this class, which will cause this class itself to be instantiated. The
+     * client code can now determine by calling this method if the active OS is supported and take
+     * appropriate action.
      * 
-     * @return <code>true</code> if the creation of shortcuts is supported,
-     *         <code>flase</code> if this is not supported.
+     * @return <code>true</code> if the creation of shortcuts is supported, <code>flase</code>
+     * if this is not supported.
      */
     public boolean supported()
     {
@@ -193,11 +175,9 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the command line arguments that will be passed to the target when
-     * the link is activated.
+     * Sets the command line arguments that will be passed to the target when the link is activated.
      * 
-     * @param arguments
-     *            the command line arguments
+     * @param arguments the command line arguments
      */
     public void setArguments(String arguments)
     {
@@ -205,11 +185,9 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the description string that is used to identify the link in a menu
-     * or on the desktop.
+     * Sets the description string that is used to identify the link in a menu or on the desktop.
      * 
-     * @param description
-     *            the descriptiojn string
+     * @param description the descriptiojn string
      */
     public void setDescription(String description)
     {
@@ -217,14 +195,11 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the location of the icon that is shown for the shortcut on the
-     * desktop.
+     * Sets the location of the icon that is shown for the shortcut on the desktop.
      * 
-     * @param path
-     *            a fully qualified file name of a file that contains the icon.
-     * @param index
-     *            the index of the specific icon to use in the file. If there is
-     *            only one icon in the file, use an index of 0.
+     * @param path a fully qualified file name of a file that contains the icon.
+     * @param index the index of the specific icon to use in the file. If there is only one icon in
+     * the file, use an index of 0.
      */
     public void setIconLocation(String path, int index)
     {
@@ -245,8 +220,7 @@ public class Shortcut
     /**
      * Sets the name of the program group this ShellLinbk should be placed in.
      * 
-     * @param groupName
-     *            the name of the program group
+     * @param groupName the name of the program group
      */
     public void setProgramGroup(String groupName)
     {
@@ -254,25 +228,22 @@ public class Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Sets the show command that is passed to the target application when the
-     * link is activated. The show command determines if the the window will be
-     * restored to the previous size, minimized, maximized or visible at all.
-     * <br>
+     * Sets the show command that is passed to the target application when the link is activated.
+     * The show command determines if the the window will be restored to the previous size,
+     * minimized, maximized or visible at all. <br>
      * <br>
      * <b>Note:</b><br>
-     * Using <code>HIDE</code> will cause the target window not to show at
-     * all. There is not even a button on the taskbar. This is a very useful
-     * setting when batch files are used to launch a Java application as it will
-     * then appear to run just like any native Windows application.<br>
+     * Using <code>HIDE</code> will cause the target window not to show at all. There is not even
+     * a button on the taskbar. This is a very useful setting when batch files are used to launch a
+     * Java application as it will then appear to run just like any native Windows application.<br>
      * 
-     * @param show
-     *            the show command. Valid settings are: <br>
-     *            <ul>
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#HIDE}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#NORMAL}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
-     *            </ul>
+     * @param show the show command. Valid settings are: <br>
+     * <ul>
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#HIDE}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#NORMAL}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
+     * </ul>
      * 
      * @see #getShowCommand
      */
@@ -292,8 +263,7 @@ public class Shortcut
     /**
      * Sets the absolute path to the shortcut target.
      * 
-     * @param path
-     *            the fully qualified file name of the target
+     * @param path the fully qualified file name of the target
      */
     public void setTargetPath(String path)
     {
@@ -303,8 +273,7 @@ public class Shortcut
     /**
      * Sets the working directory for the link target.
      * 
-     * @param dir
-     *            the working directory
+     * @param dir the working directory
      */
     public void setWorkingDirectory(String dir)
     {
@@ -325,9 +294,8 @@ public class Shortcut
     /**
      * Sets the name shown in a menu or on the desktop for the link.
      * 
-     * @param name
-     *            The name that the link should display on a menu or on the
-     *            desktop. Do not include a file extension.
+     * @param name The name that the link should display on a menu or on the desktop. Do not include
+     * a file extension.
      */
     public void setLinkName(String name)
     {
@@ -353,17 +321,15 @@ public class Shortcut
     /**
      * Sets the type of link
      * 
-     * @param type
-     *            The type of link desired. The following values can be set:<br>
-     *            <ul>
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
-     *            <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
-     *            </ul>
+     * @param type The type of link desired. The following values can be set:<br>
+     * <ul>
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
+     * <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
+     * </ul>
      * 
-     * @exception IllegalArgumentException
-     *                if an an invalid type is passed
+     * @exception IllegalArgumentException if an an invalid type is passed
      */
     public void setLinkType(int type) throws IllegalArgumentException
     {
@@ -373,8 +339,7 @@ public class Shortcut
     /**
      * Sets the user type for the link
      * 
-     * @param type
-     *            the type of user for the link.
+     * @param type the type of user for the link.
      * 
      * @see #CURRENT_USER
      * @see #ALL_USERS
@@ -400,8 +365,7 @@ public class Shortcut
     /**
      * Saves this link.
      * 
-     * @exception Exception
-     *                if problems are encountered
+     * @exception Exception if problems are encountered
      */
     public void save() throws Exception
     {
