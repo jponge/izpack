@@ -776,8 +776,8 @@
         </copy>
         <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
             <fileset dir="${dist-files.dir}">
-                <include name="izpack-fe*"/>
                 <include name="compile*"/>
+                <include name="lcp.bat"/>
             </fileset>
         </copy>
 
