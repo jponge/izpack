@@ -22,14 +22,15 @@
 package com.izforge.izpack.ant;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
-import org.apache.tools.ant.taskdefs.Property;
 import org.apache.tools.ant.types.EnumeratedAttribute;
+import org.apache.tools.ant.types.PropertySet;
 
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.PackagerListener;
@@ -178,6 +179,18 @@ public class IzPackTask extends Task implements PackagerListener
             }
         }
 
+        if (inheritAll == true)
+        {
+            Hashtable projectProps = getProject().getProperties();
+            Enumeration e = projectProps.keys();
+            while (e.hasMoreElements())
+            {
+                String name = (String) e.nextElement();
+                String value = (String) projectProps.get(name);
+                c.addProperty(name, value);
+            }            
+        }
+
         try
         {
             c.executeCompiler();
@@ -255,7 +268,31 @@ public class IzPackTask extends Task implements PackagerListener
     {
         if (properties == null) properties = new Properties();
 
-        properties.setProperty(property.getName(), property.getValue());
+        property.execute(); // don't call perform(), so no build events triggered
+
+        Properties props = property.getProperties();
+        Enumeration e = props.keys();
+        while (e.hasMoreElements())
+        {
+            String name = (String) e.nextElement();
+            String value = props.getProperty(name);
+            log("Adding property: " + property.getClass() + name+"=" + value,
+                Project.MSG_VERBOSE);
+
+            properties.setProperty(name, value);
+        }
+    }
+
+    /**
+     * A set of properties to pass from the build environment to the install compile
+     *
+     * @param ps The propertyset collection of properties
+     */
+    public void addConfiguredPropertyset(PropertySet ps)
+    {
+        if (properties == null) properties = new Properties();
+
+        properties.putAll(ps.getProperties());
     }
 
     /**
