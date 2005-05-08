@@ -28,8 +28,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -151,7 +151,7 @@ public class SudoPanel extends IzPanel implements ActionListener
             fos.close();
 
             // execute
-            HashMap vars = new HashMap();
+            Properties vars = new Properties();
             vars.put("password", pass);
 
             List oses = new ArrayList();

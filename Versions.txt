@@ -21,7 +21,8 @@
 - Bugfix in JDKPathPanel: now it is possible to select an out-of-version
   JDK (Klaus Bartz).
 - Properties can be substituted at compile time from the environment,
-  command line, java properties, ant, or <property> tag (Chad McHenry).
+  command line, java properties, ant, or <property> tag (Chad McHenry
+  and Scott Stark).
 - New Turkish langpack (Levent Bayindir).
 - Mac OS X: better Swing integration.
 - Configurable notation of language names in the language selection dialog 

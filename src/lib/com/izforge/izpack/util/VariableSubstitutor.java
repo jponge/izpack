@@ -34,6 +34,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Substitutes variables occurring in an input stream or a string. This implementation supports a
@@ -56,7 +57,7 @@ public class VariableSubstitutor implements Serializable
     private static final long serialVersionUID = 3907213762447685687L;
 
     /** The variable value mappings */
-    protected transient Map variables;
+    protected transient Properties variables;
 
     /** Whether braces are required for substitution. */
     protected boolean bracesRequired = false;
@@ -96,7 +97,7 @@ public class VariableSubstitutor implements Serializable
      * 
      * @param variables the map with variable value mappings
      */
-    public VariableSubstitutor(Map variables)
+    public VariableSubstitutor(Properties variables)
     {
         this.variables = variables;
     }
@@ -276,7 +277,7 @@ public class VariableSubstitutor implements Serializable
                     varvalue = IoHelper.getenv(name.substring(4, name.length() - 1));
                 }
                 else
-                    varvalue = (String) variables.get(name);
+                    varvalue = variables.getProperty(name);
 
                 subs++;
             }
