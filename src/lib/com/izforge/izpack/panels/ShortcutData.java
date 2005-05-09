@@ -43,6 +43,8 @@ public class ShortcutData implements Cloneable
 
     public int type;
 
+    public int userType;
+
     public boolean addToGroup = false;
 
     public String subgroup;
@@ -69,6 +71,8 @@ public class ShortcutData implements Cloneable
 
     public String deskTopEntryLinux_X_KDE_SubstituteUID;
 
+    public Boolean createForAll;
+
     /*--------------------------------------------------------------------------*/
     /**
      * Returns a clone (copy) of this object.
@@ -82,6 +86,7 @@ public class ShortcutData implements Cloneable
         ShortcutData result = new ShortcutData();
 
         result.type = type;
+        result.userType = userType;
         result.iconIndex = iconIndex;
         result.initialState = initialState;
         result.addToGroup = addToGroup;
@@ -100,6 +105,7 @@ public class ShortcutData implements Cloneable
         result.deskTopEntryLinux_URL = cloneString(deskTopEntryLinux_URL);
         result.deskTopEntryLinux_Encoding = cloneString(deskTopEntryLinux_Encoding);
         result.deskTopEntryLinux_X_KDE_SubstituteUID = cloneString(deskTopEntryLinux_X_KDE_SubstituteUID);
+        result.createForAll = new Boolean(createForAll.booleanValue());
         return (result);
     }
 
