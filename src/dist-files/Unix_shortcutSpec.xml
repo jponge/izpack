@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
+<!-- 
+	Notes: 
+	Since there is no dtd (yet), here is a short explanation
+	of the last change.
+	- Each Shortcut has now a optional attribute
+
+	createForAll 
+	 
+	As root you can create Shortcuts for all users or even only for yourself.
+	This can be the case i.e. for the uninstaller.
+	If you whant to do so, set createForAll to true otherwise to false, which is the default.
+	
+	! If not explicite set or present the default is false.	
+-->
 
 <shortcuts>
 
@@ -29,7 +43,7 @@
    </shortcut -->
 
    <shortcut
-     name="IzPack Documentation"
+     name="IzPack Html-Documentation"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -37,13 +51,14 @@
      startup="no"
      target="konqueror"
      workingDirectory=""
-     commandLine=""
+     commandLine="$INSTALL_PATH/doc/izpack/html/izpack-doc.html"
      initialState="noShow"
      iconFile="help"
      iconIndex="0" 
      url="$INSTALL_PATH/doc/izpack/html/izpack-doc.html"                                
-     type="Link"
-     encoding="UTF-8"   
+     type="Application"
+     encoding="UTF-8" 
+   createForAll="true"  
      description="IzPack user documentation (HTML format)">
      
      <createForPack name="Documentation-HTML"/>
@@ -51,7 +66,7 @@
 
 
    <shortcut
-     name="Documentation"
+     name="IzPack PDF-Documentation"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -66,6 +81,7 @@
      url="$INSTALL_PATH/doc/izpack/pdf/izpack-doc.pdf"                                
      type="Application"
      encoding="UTF-8"   
+   createForAll="true"
      description="IzPack user documentation (PDF format)">
      
      <createForPack name="Documentation-PDF"/>
@@ -88,7 +104,9 @@
      workingDirectory=""
      type="Application"
      encoding="UTF-8"
+   createForAll="false"
      description="IzPack uninstaller">
+
      <createForPack name="Core" />
    </shortcut>
    
