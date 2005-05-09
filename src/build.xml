@@ -3,6 +3,8 @@
 <project name="IzPack" default="all" basedir="..">
 	
 <!--
+  $Id$
+  
   build.xml first written by Pierre Dittgen (pierre.dittgen@criltelecom.com)
   This file is intended to be used with ant (http://jakarta.apache.org/ant),
   a java/xml makefile utility.
@@ -825,5 +827,9 @@
 
     <!-- Makes everything, from compilation to generating an installer. -->
     <target name="dist" depends="all,generate.installer"/>
+	
+	
+	<!-- convenient :) makes a complete dist an installer and run them. -->
+	<target name="dist+run" depends="all, generate.installer, run.installer"/>		
 
 </project>
