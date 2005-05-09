@@ -167,7 +167,7 @@ public class ShellLink implements NativeLibraryClient
     /** the extension that must be used for link files */
     private static final String LINK_EXTENSION = ".lnk";
 
-    /** the constant to use for selecting the current user. */
+    /** CURRENT_USER = 0; the constant to use for selecting the current user. */
     public static final int CURRENT_USER = 0;
 
     /** the constant to use for selecting the all users. */
