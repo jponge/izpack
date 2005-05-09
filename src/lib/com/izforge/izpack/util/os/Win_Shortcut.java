@@ -168,7 +168,7 @@ public class Win_Shortcut extends Shortcut
 
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the fully qualified file name under which the link is saved on disk. <b>Note:</b>
+     * Returns the fully qualified file name under which the link is saved on disk. <b>Note: </b>
      * this method returns valid results only if the instance was created from a file on disk or
      * after a successful save operation.
      * 
@@ -288,10 +288,10 @@ public class Win_Shortcut extends Shortcut
      * The show command determines if the the window will be restored to the previous size,
      * minimized, maximized or visible at all. <br>
      * <br>
-     * <b>Note:</b><br>
+     * <b>Note: </b> <br>
      * Using <code>HIDE</code> will cause the target window not to show at all. There is not even
      * a button on the taskbar. This is a very useful setting when batch files are used to launch a
-     * Java application as it will then appear to run just like any native Windows application.<br>
+     * Java application as it will then appear to run just like any native Windows application. <br>
      * 
      * 
      * @param show the show command. Valid settings are: <br>
@@ -333,7 +333,7 @@ public class Win_Shortcut extends Shortcut
 
     /*
      * returns current showCommand. internally maps from ShellLink.XXX to Shortcut.XXX
-     * 
+     *  
      */
     public int getShowCommand()
     {
@@ -444,7 +444,7 @@ public class Win_Shortcut extends Shortcut
     /**
      * Sets the type of link
      * 
-     * @param type The type of link desired. The following values can be set:<br>
+     * @param type The type of link desired. The following values can be set: <br>
      * (note APPLICATION on Windows is 'Start Menu\Programs') APPLICATION is a Mac term.
      * <ul>
      * <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
@@ -573,6 +573,16 @@ public class Win_Shortcut extends Shortcut
     public void setHotkey(int hotkey)
     {
         shortcut.setHotkey(hotkey);
+    }
+
+    /**
+     * Gets the Folders where to place the program-groups and their shortcuts - for the given usertype.     *  
+     * 
+     * @see com.izforge.izpack.util.os.Shortcut#getProgramsFolder(int)
+     */
+    public String getProgramsFolder(int current_user)
+    {
+        return shortcut.getLinkPath(current_user);
     }
 }
 /*---------------------------------------------------------------------------*/
