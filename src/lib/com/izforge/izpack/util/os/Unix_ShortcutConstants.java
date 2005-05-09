@@ -95,4 +95,10 @@ public interface Unix_ShortcutConstants
 
     /** $URL = "$URL" */
     public final static String $URL = "$URL";
+    
+    /** $E_QUOT = "$E_QUOT": QuotationMark-Placeholder for the "<b>E</b>xec"-line */
+    public final static String $E_QUOT = "$E_QUOT";
+    
+    /** $P_QUOT = "$P_QUOT" QuotationMark-Placeholder for the "<b>P</b>ath/workingDir"-line */
+    public final static String $P_QUOT = "$P_QUOT";
 }
