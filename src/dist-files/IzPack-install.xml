@@ -38,7 +38,7 @@
             <author name="Marc Eppelmann (contributor)" email="marc.eppelmann@gmx.de" />
             <author name="Michael Hagedorn (contributor)" email="michael.hagedorn@gmx.de" />
             <author name="Jan Pavlovic (contributor)" email="xpavlov@fi.muni.cz" />
-	    <author name="Oscar Sierra (contributor)" email="o.sierra@ieee.org" />
+	        <author name="Oscar Sierra (contributor)" email="o.sierra@ieee.org" />
             <author name="Per Abich (contributor)" email="perabich@users.berlios.de" />
             <author name="Alexey Makhmutov (contributor)" email="alexmach@mail.ru" />
             <author name="Anthony Xin Chen (contributor)" email="mail@4techie.net" />
@@ -59,6 +59,10 @@
             <os family="unix" />
         </laf>
     </guiprefs>
+	
+	<variables>
+	  <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
+    </variables>
 
     <!-- We include every langpack -->
     <locale>
@@ -113,7 +117,7 @@
 
     <!-- The panels in a classic order -->
     <panels>
-        <panel classname="HelloPanel"/>
+        <panel classname="HelloPanel"/>		
         <panel classname="HTMLInfoPanel"/>
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
