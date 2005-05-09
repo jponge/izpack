@@ -68,6 +68,9 @@ public class Shortcut
     /** identifies the user type as valid for all users */
     public static final int ALL_USERS = 2;
 
+    /** indicates that this shortcut should be created for all users or only me **/
+    private Boolean createForAll;
+
     /*--------------------------------------------------------------------------*/
     /**
      * This method initializes the object. It is used as a replacement for the contructor because of
@@ -454,6 +457,40 @@ public class Shortcut
     public void setURL(String string)
     {
     }
+
+    /** 
+     * Gets the Programs Folder for the given User.     
+     * This is where to create subfolders or to place or create shortcuts.   
+     *
+     * @param current_user one of current or all 
+     *
+     * @return The Foldername or null on unsupported platforms.
+     */
+    public String getProgramsFolder( int current_user )
+    {
+      return null;
+    }
+
+    /** 
+     * Sets the flag which indicates, that this should created for all. 
+     *
+     * @param aCreateForAll A Flag - Set to true, if to create for All.
+     */
+    public void setCreateForAll( Boolean aCreateForAll )
+    {
+      this.createForAll = new Boolean( aCreateForAll.booleanValue(  ) );
+    }
+
+    /** 
+     * Gets the create for All Flag
+     *
+     * @return Returns True if this should be for all.
+     */
+    public Boolean getCreateForAll(  )
+    {
+      return createForAll;
+    }
+    
 
 }
 /*---------------------------------------------------------------------------*/
