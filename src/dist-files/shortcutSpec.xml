@@ -49,6 +49,8 @@
      startup="no"
      target="$INSTALL_PATH\doc\izpack\pdf\izpack-doc.pdf"
      commandLine=""
+	 iconFile="%SystemRoot%\system32\SHELL32.dll"
+     iconIndex="23" 
      description="IzPack user documentation (PDF format)">
      
      <createForPack name="Documentation-PDF" />
@@ -61,8 +63,10 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH\Uninstaller\uninstaller.jar"
+     target="$INSTALL_PATH\Uninstaller\uninstaller.jar"     
      commandLine=""
+	 iconFile="%SystemRoot%\system32\SHELL32.dll"
+     iconIndex="31" 
      description="IzPack uninstaller">
      
      <createForPack name="Core" />
