@@ -837,7 +837,7 @@
     <!-- Makes everything, from compilation to generating an installer. -->
     <target name="dist" depends="all,generate.installer"/>
     
-    <!-- Makes everything, from Cleaning to generating an both installers: normal and reg support. -->
+    <!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
     <target name="cleandistreg" depends="clean,all,generate.installer,generate.installer-reg"/>
 	
 	
