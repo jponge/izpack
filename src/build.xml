@@ -117,6 +117,15 @@
     25.10.2004: (by Klaus Bartz)
         "Standard" CustomActions AntActionInstallerListener and
         AntActionUninstallerListener added
+    03.05.2005: (by Klaus Bartz)
+        Target generated.installer-reg added:
+        Creates an installer for IzPack with registry support
+    09.05.2005: (by Marc Eppelman)
+        Target dist+run added:
+        convenient :) makes a complete dist an installer and run them
+    11.05.2005: (by Fabrice Mirabile)
+        Target cleandistreg added:
+        Clean, Regenerate installer and installer with reg support. Avoid use of bad jars during installation.
 
   Mini-HowTo:
 
@@ -827,6 +836,9 @@
 
     <!-- Makes everything, from compilation to generating an installer. -->
     <target name="dist" depends="all,generate.installer"/>
+    
+    <!-- Makes everything, from Cleaning to generating an both installers: normal and reg support. -->
+    <target name="cleandistreg" depends="clean,all,generate.installer,generate.installer-reg"/>
 	
 	
 	<!-- convenient :) makes a complete dist an installer and run them. -->
