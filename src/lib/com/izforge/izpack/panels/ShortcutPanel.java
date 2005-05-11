@@ -1,7 +1,8 @@
 /*
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
- * http://www.izforge.com/izpack/ http://developer.berlios.de/projects/izpack/
+ * http://www.izforge.com/izpack/ 
+ * http://developer.berlios.de/projects/izpack/
  * 
  * Copyright 2002 Elmar Grom
  * 
@@ -111,7 +112,11 @@ import com.izforge.izpack.util.os.Shortcut;
 // - need a clean way to get pack name
 public class ShortcutPanel extends IzPanel implements ActionListener, ListSelectionListener
 {
-
+    /** 	 
+     * 	 
+     */ 	 
+    private static final long serialVersionUID = 3256722870838112311L;
+    
     /** a VectorList of Files wich should be make executable */
     private Vector execFiles = new Vector();
 
@@ -620,7 +625,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         }
         else
         {
-            ; //parent.skipPanel ();
+          parent.skipPanel ();
         }
     }
 
@@ -1823,33 +1828,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         createShortcuts();
     }
 
-    /*
-     * The Initial-State of the Button is diabled, bacause it makle no sense to go back.
-     * 
-     * @see com.izforge.izpack.installer.IzPanel#forceLockPrevButton()
-     */
-    public boolean forceLockPrevButton()
-    {
-        return true;
-    }
 
-
-    /**
-     * If there is No Shortcut-Specification, this must be skipped.
-     * 
-     * @see com.izforge.izpack.installer.IzPanel#isToBeSkipped()
-     */
-
-    /*
-     * (Kein Javadoc)
-     * 
-     * @see com.izforge.izpack.installer.IzPanel#forceLockNextButton()
-     */
-    public boolean forceLockNextButton()
-    {
-        // TODO Automatisch erstellter Methoden-Stub
-        return true;
-    }
 }
 
 /*---------------------------------------------------------------------------*/
