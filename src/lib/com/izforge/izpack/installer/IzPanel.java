@@ -244,7 +244,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
         buf.append(curClassName).append(".").append(subkey);
         String fullkey = buf.toString();
         String retval = parent.langpack.getString(fullkey);
-        if (retval == null || retval.equals(fullkey))
+        if (retval == null || retval.startsWith(fullkey))
         {
             buf.delete(0, buf.length());
             buf.append(alternateClass).append(".").append(subkey);
