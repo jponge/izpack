@@ -266,6 +266,27 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     // ------------- Helper for common used components ----- START ---
 
     /**
+     * Creates a label via LabelFactory using iconId, pos and method getI18nStringForClass for
+     * resolving the text to be used. If the icon id is null, the label will be created also.
+     * 
+     * @param subkey the subkey which should be used for resolving the text
+     * @param alternateClass the short name of the class which should be used if no string is
+     * present with the runtime class name
+     * @param iconId id string for the icon
+     * @param pos horizontal alignment
+     * @return the newly created label
+     */
+    public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos)
+    {
+        ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
+        String msg = getI18nStringForClass(subkey, alternateClass);
+        JLabel label = LabelFactory.create(msg, ii, pos);
+        if (label != null) label.setFont(getControlTextFont());
+        return (label);
+
+    }
+
+    /**
      * Creates a label via LabelFactory with the given ids and the given horizontal alignment. If
      * the icon id is null, the label will be created also. The strings are the ids for the text in
      * langpack and the icon in icons of the installer frame.
@@ -278,12 +299,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     public JLabel createLabel(String textId, String iconId, int pos)
     {
         ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
-        JLabel label = LabelFactory.create(parent.langpack.getString(textId), ii, pos);
+        JLabel label = LabelFactory.create(parent.langpack.getString(textId),ii, pos);
         if (label != null) label.setFont(getControlTextFont());
         return (label);
 
     }
-
     /**
      * Creates a multi line label with the language dependent text given by the text id. The strings
      * is the id for the text in langpack of the installer frame. The horizontal alignment will be

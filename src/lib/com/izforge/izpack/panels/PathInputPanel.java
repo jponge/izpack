@@ -108,7 +108,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
         gbConstraint.gridwidth = GridBagConstraints.RELATIVE;
         gbConstraint.insets = new Insets(0, 0, 10, 0);
         // Create component and add it to this panel.
-        JLabel infoLabel = createLabel(getI18nStringForClass("info", "TargetPanel"), "open",
+        JLabel infoLabel = createLabel("info", "TargetPanel", "open",
                 JLabel.LEFT);
         add(infoLabel, gbConstraint);
         // Create path selection components and add they to this panel.
