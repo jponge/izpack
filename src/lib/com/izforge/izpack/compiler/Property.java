@@ -244,8 +244,10 @@ public class Property
      * @param name name of property
      * @param value value to set
      */
-    protected void addProperty(String name, String value)
+    protected void addProperty(String name, String value) throws CompilerException
     {
+        value = compiler.replaceProperties(value);
+
         compiler.addProperty(name, value);
     }
 
@@ -260,8 +262,6 @@ public class Property
         {
             String name = (String) e.nextElement();
             String value = props.getProperty(name);
-
-            value = compiler.replaceProperties(value);
 
             if (prefix != null)
             {
