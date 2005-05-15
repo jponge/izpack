@@ -266,7 +266,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     }
 
     /**
-     * Overridden Compatibility Method. returns all directories in $USER/.kde/share/applink
+     * Overridden compatibility method. Returns all directories in $USER/.kde/share/applink.
      * 
      * @see com.izforge.izpack.util.os.Shortcut#getProgramGroups(int)
      */
@@ -297,7 +297,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     }
 
     /**
-     * Gets the Programsfolder for the given User (non-Javadoc)
+     * Gets the Programsfolder for the given User (non-Javadoc).
      * 
      * @see com.izforge.izpack.util.os.Shortcut#getProgramsFolder(int)
      */
@@ -330,9 +330,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     }
 
     /**
-     * Gets the name of the applink folder for the currently used distribution. result = "applnk"
-     * result += "-redhat" for redhat. result += "-mdk" for mandrake and for all others returns
-     * result
+     * Gets the name of the applink folder for the currently used distribution. Currently
+     * "applnk-redhat for RedHat, "applnk-mdk" for Mandrake, and simply "applnk" for all others.
      * 
      * @return result
      */
@@ -414,7 +413,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         {
             target = System.getProperty("user.home") + FS + "Desktop" + FS + this.itsName
                     + DESKTOP_EXT;
-            this.itsFileName = new String(target);
+            this.itsFileName = target;
 
             File source = writeShortCut(target, shortCutDef);
 
@@ -468,7 +467,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             File kdeHomeShareApplnk = getKdeShareApplnkFolder(this.getUserType());
             target = kdeHomeShareApplnk.toString() + FS + this.itsGroupName + FS + this.itsName
                     + DESKTOP_EXT;
-            this.itsFileName = new String(target);
+            this.itsFileName = target;
 
             if (rootUser4All && !create4All) { return; }
             writeShortCut(target, shortCutDef);
@@ -703,11 +702,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /**
      * Creates the Shortcut String which will be stored as File.
      * 
-     * @return
+     * @return contents of the shortcut file
      */
     public String replace()
     {
-        String result = new String(template);
+        String result = template;
         Enumeration enum = props.keys();
 
         while (enum.hasMoreElements())

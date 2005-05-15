@@ -78,17 +78,18 @@ public class ShellLink implements NativeLibraryClient
 
     /**
      * Show the window minimized when starting. The window will not show but a corresponding button
-     * in the task bar will.
+     * in the task bar will. <p>
+     *
+     * Newer IShellLink only allows Normal, MinNoActive, Maximized.
      */
-    /** newer IShellLink only allows Normal, MinNoActive, Maximized. */
     public static final int MINIMIZED = 2;
 
     /** Show the window maximized when starting. */
     public static final int MAXIMIZED = 3;
 
     /**
-     * Show the window minimized when starting. note- for win98 and newer, use MINNOACTIVE instead
-     * of MINIMIZED
+     * Show the window minimized when starting. Note: for win98 and newer, use MINNOACTIVE instead
+     * of MINIMIZED.
      */
     public static final int MINNOACTIVE = 7;
 

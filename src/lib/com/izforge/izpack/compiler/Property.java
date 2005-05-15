@@ -143,8 +143,8 @@ public class Property
     }
 
     /**
-     * set the property in the project to the value. if the task was give a file, resource or env
-     * attribute here is where it is loaded
+     * Set the property in the project to the value. If the task was give a file, resource or env
+     * attribute here is where it is loaded.
      */
     public void execute() throws CompilerException
     {

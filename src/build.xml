@@ -199,9 +199,12 @@
     <!-- paths -->
     <path id="classpath">
         <fileset id="ext.libs" dir="${basedir}/lib">
+            <!-- older ant jar, which izpack distributes and uses for fileset behavior -->
             <include name="ant.jar" />
             <include name="jakarta-regexp-1.3.jar" />
         </fileset>
+        <!-- current ant jar, for compiling IzPackTask which uses modern ant features -->
+        <fileset dir="${ant.home}/lib" includes="ant.jar"/>
     </path>
 
     <!-- Checking target -->

@@ -1206,8 +1206,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * 
      * @param groups A <code>Vector</code> that contains <code>Strings</code> with all the names
      * of the existing program groups. These will be placed in the <code>groupList</code>.
-     * @param currentUserList if <code>true</code> it indicates that the list of groups is valid
-     * for the current user, otherwise it is considered valid for all users.
      */
 
     /*--------------------------------------------------------------------------*/

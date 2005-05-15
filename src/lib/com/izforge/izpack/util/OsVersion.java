@@ -123,8 +123,8 @@ public final class OsVersion
     }
 
     /**
-     * Searches CaseSensitive ! if the given SearchString occurs in the File with the 1st given
-     * Filename
+     * Searches case sensitively, and returns true if the given SearchString occurs in the
+     * first File with the given Filename.
      * 
      * @param aFileName A files name
      * @param aSearchString the string search for
@@ -192,7 +192,7 @@ public final class OsVersion
      * 
      * @param fileName A file to read from.
      * 
-     * @return
+     * @return List of individual line of the specified file. List may be empty but not null.
      * 
      * @throws IOException
      */
@@ -237,7 +237,7 @@ public final class OsVersion
     /**
      * Gets the etc Release Filename
      * 
-     * @return
+     * @return name of the file the release info is stored in for Linux distributions
      */
     private static String getReleaseFileName()
     {
@@ -265,7 +265,7 @@ public final class OsVersion
     /**
      * Gets the Details of a Linux Distribution
      * 
-     * @return
+     * @return description string of the Linux distribution
      */
     private static String getLinuxDistribution()
     {

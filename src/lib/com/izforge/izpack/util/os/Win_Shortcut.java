@@ -576,7 +576,8 @@ public class Win_Shortcut extends Shortcut
     }
 
     /**
-     * Gets the Folders where to place the program-groups and their shortcuts - for the given usertype.     *  
+     * Gets the Folders where to place the program-groups and their shortcuts, for the given
+     * usertype.
      * 
      * @see com.izforge.izpack.util.os.Shortcut#getProgramsFolder(int)
      */
