@@ -28,6 +28,7 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsVersion;
 
 /**
  * Panel which asks for the JDK path.
@@ -60,7 +61,8 @@ public class JDKPathPanel extends PathInputPanel
     {
         super(parent, idata);
         setMustExist(true);
-        setExistFiles(JDKPathPanel.testFiles);
+        if(!OsVersion.IS_OSX)
+          setExistFiles(JDKPathPanel.testFiles);
         setMinVersion(idata.getVariable("JDKPathPanel.minVersion"));
         setMaxVersion(idata.getVariable("JDKPathPanel.maxVersion"));
         setVariableName("JDKPath");
@@ -166,12 +168,9 @@ public class JDKPathPanel extends PathInputPanel
             int assumedPlace, int halfRange, String useNotIdentifier)
     {
         StringTokenizer st = new StringTokenizer(in, " \t\n\r\f\"");
-        int length = st.countTokens();
         int i;
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
-        int praeScan = 0;
-        praeScan = assumedPlace - halfRange;
         for (i = 0; i < assumedPlace - halfRange; ++i)
             if (st.hasMoreTokens()) st.nextToken(); // Forget this entries.
 
@@ -211,8 +210,8 @@ public class JDKPathPanel extends PathInputPanel
             if (!current.hasMoreTokens()) return (false);
             String cur = current.nextToken();
             String nee = needed.nextToken();
-            int curVal = 0;
-            int neededVal = 0;
+            int curVal;
+            int neededVal;
             try
             {
                 curVal = Integer.parseInt(cur);
