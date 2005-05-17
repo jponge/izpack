@@ -28,7 +28,7 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.FileExecutor;
-import.com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.OsVersion;
 
 /**
  * Panel which asks for the JDK path.
