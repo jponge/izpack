@@ -2,7 +2,7 @@
 rem %1 = file name of your own choice
 
 IF !%1==! goto USAGE
-
+javac .\com\izforge\izpack\sample\*.java
 jar cf %1 .\com\izforge\izpack\sample\*.class 
 goto ok
 
