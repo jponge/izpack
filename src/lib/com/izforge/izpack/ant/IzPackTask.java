@@ -30,6 +30,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.EnumeratedAttribute;
+import org.apache.tools.ant.types.PropertySet;
 
 import com.izforge.izpack.compiler.Compiler;
 import com.izforge.izpack.compiler.PackagerListener;
@@ -287,7 +288,7 @@ public class IzPackTask extends Task implements PackagerListener
      *
      * @param ps The propertyset collection of properties
      */
-    public void addConfiguredPropertyset(Property ps)
+    public void addConfiguredPropertyset(PropertySet ps)
     {
         if (properties == null) properties = new Properties();
 
