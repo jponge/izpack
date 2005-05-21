@@ -130,9 +130,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         // Load langpack.
         try
         {
-            String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
-            this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(
-                    resource));
+            this.langpack = parent.langpack;
         }
         catch (Throwable exception)
         {}

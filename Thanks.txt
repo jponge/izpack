@@ -99,3 +99,4 @@ IzPack for your projects ;-)
 - Stefano Gamma: createForUnselectedPack, show a userinputapanel if a pack is not selected.
 - Fabrice Mirabile : for the patches.
 - Scott Starsk : for the patches.
+- Stefan Heidrich : for the PacksPanel langpack loading patch.
