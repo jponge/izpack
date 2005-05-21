@@ -94,6 +94,8 @@ IzPack for your projects ;-)
 - Nils Nordman : for the Swedish updates.
 - Juan Alvarez : for the Spanish updates.
 - Andreas Breiter : for various patches.
-- Johannes Gutleber : for the ExecuteForPack, processing dependency on a selected pack
-- Vitor Rodrigues : fox Fixes on shortcuts for RedHat and Mandrake
-- Stefano Gamma: createForUnselectedPack, show a userinputapanel if a pack is not selected
+- Johannes Gutleber : for the ExecuteForPack, processing dependency on a selected pack.
+- Vitor Rodrigues : fox Fixes on shortcuts for RedHat and Mandrake.
+- Stefano Gamma: createForUnselectedPack, show a userinputapanel if a pack is not selected.
+- Fabrice Mirabile : for the patches.
+- Scott Starsk : for the patches.

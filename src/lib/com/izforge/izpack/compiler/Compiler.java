@@ -1838,7 +1838,10 @@ public class Compiler extends Thread
                 String className = xmlAction.getAttribute(typeNames[i]);
                 if (className != null)
                 {
-                    String jarPath = "bin/customActions/" + className + ".jar";
+                    // Check for a jar attribute on the listener
+                    String jarPath = xmlAction.getAttribute("jar");
+                    if( jarPath == null )
+                        jarPath = "bin/customActions/" + className + ".jar";
                     URL url = findIzPackResource(jarPath, "CustomAction jar file", xmlAction);
                     CustomData ca = new CustomData(getFullClassName(url, className),
                             getContainedFilePaths(url), OsConstraint.getOsList(xmlAction), types[i]);

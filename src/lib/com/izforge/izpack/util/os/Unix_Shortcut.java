@@ -50,21 +50,20 @@
  */
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.StringTool;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.StringTool;
 
 /**
  * This is the Implementation of the RFC-Based Desktop-Link. Used in KDE and GNOME.

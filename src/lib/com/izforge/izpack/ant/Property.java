@@ -23,7 +23,6 @@ package com.izforge.izpack.ant;
 
 import java.util.Properties;
 
-import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 
 /**

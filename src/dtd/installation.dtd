@@ -92,6 +92,7 @@ $Id$
         <!ATTLIST listener compiler CDATA #IMPLIED>
         <!ATTLIST listener installer CDATA #IMPLIED>
         <!ATTLIST listener uninstaller CDATA #IMPLIED>
+        <!ATTLIST listener jar CDATA #IMPLIED>
 
 <!-- The packs section (indicates the packs to create) -->
 <!ELEMENT packs (pack+)>

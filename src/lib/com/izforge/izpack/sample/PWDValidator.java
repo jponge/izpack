@@ -21,7 +21,8 @@
 
 package   com.izforge.izpack.sample;
 
-import    com.izforge.izpack.panels.*;
+import com.izforge.izpack.panels.ProcessingClient;
+import com.izforge.izpack.panels.Validator;
 
 /*---------------------------------------------------------------------------*/
 /**
