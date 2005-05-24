@@ -104,12 +104,14 @@ public class Property
 
     protected XMLElement xmlProp;
 
+    protected CompilerConfig config;
     protected Compiler compiler;
 
-    public Property(XMLElement xmlProp, Compiler comp)
+    public Property(XMLElement xmlProp, CompilerConfig config)
     {
         this.xmlProp = xmlProp;
-        compiler = comp;
+        this.config = config;
+        this.compiler = config.getCompiler();
         name = xmlProp.getAttribute("name");
         value = xmlProp.getAttribute("value");
         env = xmlProp.getAttribute("environment");
@@ -151,17 +153,17 @@ public class Property
         if (name != null)
         {
             if (value == null)
-                compiler.parseError(xmlProp, "You must specify a value with the name attribute");
+                config.parseError(xmlProp, "You must specify a value with the name attribute");
         }
         else
         {
             if (file == null && env == null)
-                compiler.parseError(xmlProp,
+                config.parseError(xmlProp,
                         "You must specify file, or environment when not using the name attribute");
         }
 
         if (file == null && prefix != null)
-            compiler.parseError(xmlProp, "Prefix is only valid when loading from a file ");
+            config.parseError(xmlProp, "Prefix is only valid when loading from a file ");
 
         if ((name != null) && (value != null))
             addProperty(name, value);
@@ -180,7 +182,7 @@ public class Property
     protected void loadFile(File file) throws CompilerException
     {
         Properties props = new Properties();
-        compiler.getPackagerListener().packagerMsg("Loading " + file.getAbsolutePath(),
+        config.getPackagerListener().packagerMsg("Loading " + file.getAbsolutePath(),
                 PackagerListener.MSG_VERBOSE);
         try
         {
@@ -199,14 +201,14 @@ public class Property
             }
             else
             {
-                compiler.getPackagerListener().packagerMsg(
+                config.getPackagerListener().packagerMsg(
                         "Unable to find property file: " + file.getAbsolutePath(),
                         PackagerListener.MSG_VERBOSE);
             }
         }
         catch (IOException ex)
         {
-            compiler.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex);
+            config.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(), ex);
         }
     }
 
@@ -218,7 +220,7 @@ public class Property
     protected void loadEnvironment(String prefix) throws CompilerException
     {
         Properties props = new Properties();
-        compiler.getPackagerListener().packagerMsg("Loading Environment " + prefix,
+        config.getPackagerListener().packagerMsg("Loading Environment " + prefix,
                 PackagerListener.MSG_VERBOSE);
         Vector osEnv = Execute.getProcEnvironment();
         for (Enumeration e = osEnv.elements(); e.hasMoreElements();)
@@ -227,7 +229,7 @@ public class Property
             int pos = entry.indexOf('=');
             if (pos == -1)
             {
-                compiler.getPackagerListener().packagerMsg("Ignoring " + prefix,
+                config.getPackagerListener().packagerMsg("Ignoring " + prefix,
                         PackagerListener.MSG_WARN);
             }
             else
@@ -303,7 +305,7 @@ public class Property
                 }
                 catch (IOException ex)
                 {
-                    compiler.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
+                    config.parseError(xmlProp, "Faild to load file: " + file.getAbsolutePath(),
                             ex);
                 }
             }
