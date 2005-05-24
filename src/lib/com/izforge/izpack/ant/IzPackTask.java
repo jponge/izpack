@@ -32,7 +32,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.PropertySet;
 
-import com.izforge.izpack.compiler.Compiler;
+import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.PackagerListener;
 
 /**
@@ -42,6 +42,8 @@ import com.izforge.izpack.compiler.PackagerListener;
  */
 public class IzPackTask extends Task implements PackagerListener
 {
+    /** The embedded installation configuration */
+    private ConfigHolder config;
 
     /** Holds value of property input. */
     private String input;
@@ -70,10 +72,21 @@ public class IzPackTask extends Task implements PackagerListener
     public IzPackTask()
     {
         basedir = null;
+        config = null;
         input = null;
         output = null;
         installerType = null;
         izPackDir = null;
+    }
+
+    /**
+     * Called by ant to create the object for the config nested element.
+     * @return a holder object for the config nested element.
+     */
+    public ConfigHolder createConfig()
+    {
+        config = new ConfigHolder(getProject());
+        return config;
     }
 
     /**
@@ -140,7 +153,8 @@ public class IzPackTask extends Task implements PackagerListener
      */
     public void execute() throws org.apache.tools.ant.BuildException
     {
-        if (input == null)
+        // Either the input attribute or config element must be specified
+        if (input == null && config == null)
             throw new BuildException(ResourceBundle.getBundle(
                     "com/izforge/izpack/ant/langpacks/messages").getString(
                     "input_must_be_specified"));
@@ -162,11 +176,20 @@ public class IzPackTask extends Task implements PackagerListener
         // BuildException(java.util.ResourceBundle.getBundle("com/izforge/izpack/ant/langpacks/messages").getString("izPackDir_must_be_specified"));
 
         String kind = (installerType == null ? null : installerType.getValue());
-        Compiler c = new Compiler(input, basedir, kind, output);// Create the
-        // compiler
-        Compiler.IZPACK_HOME = izPackDir;
 
-        c.setPackagerListener(this);// Listen to the compiler messages
+        CompilerConfig c = null;
+        if( config != null )
+        {
+            // Pass in the embedded configuration
+            String configText = config.getText();
+            c = new CompilerConfig(basedir, kind, output, this, configText);
+        }
+        else
+        {
+            // Pass in the external configuration referenced by the input attribute
+            c = new CompilerConfig(input, basedir, kind, output, this);            
+        }
+        CompilerConfig.setIzpackHome(izPackDir);
 
         if (properties != null)
         {
@@ -305,7 +328,7 @@ public class IzPackTask extends Task implements PackagerListener
 
         public String[] getValues()
         {
-            return new String[] { Compiler.STANDARD, Compiler.WEB};
+            return new String[] { CompilerConfig.STANDARD, CompilerConfig.WEB};
         }
     }
 }
