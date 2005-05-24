@@ -2,8 +2,10 @@
 
   > 3.8.0 (build N/A)
 
+- Compiler refactor into an xml parser and xml independent compiler + Pack
+  group, installGroups (patch #439/440 - Scott Stark).
 - IzPack is now released under the terms of the Apache Software License 2.0.
-- Support for a jar attribute on the listener element (patch #432 - Scott Starsk).
+- Support for a jar attribute on the listener element (patch #432 - Scott Stark).
 - PacksPanels: translations loading fix (patch #446 - Stefan Heidrich).
 - Fixing bug with comboboxes. There was no text shown if you do not use a
   processor to generate the choices. At now you can us the id or txt attribute
