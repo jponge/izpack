@@ -161,6 +161,14 @@ public class Packager
      **********************************************************************************************/
 
     /**
+     * Get the PackagerListener.
+     * @return the current PackagerListener
+     */
+    public PackagerListener getPackagerListener()
+    {
+        return listener;
+    }
+    /**
      * Adds a listener.
      * 
      * @param listener The listener.
