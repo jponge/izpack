@@ -32,7 +32,9 @@ Then you can invoke \IzPack with the \texttt{izpack} task which takes the
 following parameters:
 \begin{itemize}
 
-  \item \texttt{input} : the XML installation file
+  \item \texttt{input} : the XML installation file. The installation can be
+  specified as an external file, or embedded using a \texttt{config} child
+  element (see section~\ref{embedconfig}).
   \item \texttt{output} : the output jar installer file
   \item \texttt{installerType} : optional. \texttt{standard} or
     \texttt{web}. If \texttt{web}, the \texttt{<webdir>} attribute
@@ -57,6 +59,46 @@ Here is a sample of the task invocation:\\
         izPackDir="${dist.dir}/"/>
 \end{verbatim}
 \normalsize
+
+% The nested config element
+\section{Embedding the installation file using a config element}
+\label{embedconfig}
+
+Instead of using the install attribute to specify an external installation
+document, you can embed the installation config as a child of the izpack task
+using a \texttt{config} child element with a \texttt{CDATA} section. For
+example:
+
+\footnotesize
+\begin{verbatim}
+<property name="jboss.home.url" value="http://www.jboss.com/" />
+...
+
+<!-- Call IzPack with an embedded install using the config element -->
+<izpack output="${dist.dir}/IzPack-install.jar"
+        installerType="standard"
+        basedir="${dist.dir}"
+        izPackDir="${dist.dir}/">
+        <config><![CDATA[
+<installation version="1.0">
+   <info>
+      <appname>JBossAS</appname>
+      <appversion>4.0.2</appversion>
+      <appsubpath>jboss-4.0.2</appsubpath>
+      <authors>
+         <author name="JBoss Inc." email="sales@jboss.com"/>
+      </authors>
+      <url>@{jboss.home.url}</url>
+      <javaversion>1.4</javaversion>
+   </info>
+...
+        ]]></config>
+</izpack>
+\end{verbatim}
+\normalsize
+
+Property references of the form \texttt{@\{x\}} are replaced by the associated
+\texttt{x} ant property if it is defined.
 
 % System properties as variables
 \section{System properties as variable}
