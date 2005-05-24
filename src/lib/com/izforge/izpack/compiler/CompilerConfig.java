@@ -28,6 +28,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -1305,8 +1306,7 @@ public class CompilerConfig extends Thread
         {
             File file = new File(filename).getAbsoluteFile();
             if (!file.canRead()) throw new CompilerException("Invalid file: " + file);
-
-            reader = StdXMLReader.fileReader(filename);
+            reader = new StdXMLReader(new FileInputStream(filename));
             // add izpack built in property
             compiler.setProperty("izpack.file", file.toString());
         }
