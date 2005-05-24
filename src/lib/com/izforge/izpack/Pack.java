@@ -22,7 +22,9 @@ package com.izforge.izpack;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.izforge.izpack.compiler.PackInfo;
 
@@ -43,6 +45,19 @@ public class Pack implements Serializable
 
     /** The langpack id */
     public String id;
+
+    /** An association of this pack to zero or more installation groups. An
+     * installation group is just a named collection of packs to allow for
+     * different pack collections to be selected, for example: minimal,
+     * default, all.
+     */
+    public Set installGroups = new HashSet();
+
+    /** The group the pack is associated with. The pack group identifies
+     * packs with common functionality to allow for grouping of packs in a
+     * tree in the TargetPanel for example.
+     */
+    public String group;
 
     /** The pack description. */
     public String description;
