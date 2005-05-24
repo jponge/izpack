@@ -107,6 +107,49 @@ public class PackInfo
         return pack.preselected;
     }
 
+    /**
+     * Get the pack group.
+     * @return Get the pack group, null if there is no group.
+     */
+    public String getGroup()
+    {
+        return pack.group;
+    }
+    /**
+     * Set the pack group.
+     * @param group the group to associate the pack with.
+     */
+    public void setGroup(String group)
+    {
+        pack.group = group;
+    }
+
+    /**
+     * Add an install group to the pack.
+     * @param group the install group to associate the pack with.
+     */
+    public void addInstallGroup(String group)
+    {
+        pack.installGroups.add(group);
+    }
+    /**
+     * See if the pack is associated with the given install group.
+     * @param group the install group name to check
+     * @return true if the given group is associated with the pack.
+     */
+    public boolean hasInstallGroup(String group)
+    {
+        return pack.installGroups.contains(group);
+    }
+    /**
+     * Get the install group names.
+     * @return Set<String> for the install groups
+     */
+    public Set getInstallGroups()
+    {
+        return pack.installGroups;
+    }
+
     public Pack getPack()
     {
         return pack;
