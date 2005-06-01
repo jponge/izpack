@@ -152,6 +152,18 @@
     <str id="CompilePanel.additional_arguments" txt="Extra compiler parameters:" />
 
     <str id="ProcessPanel.heading" txt="Bezig" />
+
+    <!-- Strings for the summary of panels --- START -->
+    <str id="SummaryPanel.info" txt="Gereed voor installatie. Belangrijke gegevens staan hieronder opgesomd. Druk op &quot;Volgende&quot; om de installatie te starten, "/>
+    <str id="TargetPanel.summaryCaption" txt="Installatie pad"/>
+    <str id="JDKPathPanel.summaryCaption" txt="JDK pad"/>
+    <str id="PacksPanel.summaryCaption" txt="Gekozen installatiepakketten"/>
+    <str id="ImgPacksPanel.summaryCaption" txt="Gekozen installatie pakketten"/>
+    <!-- Strings for the summary of panels --- END -->
+
+    <!-- Strings for the Registry -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Kan registersleutel {0}\\{1} niet openen."/>
+    
     <!-- Add your own panels specific strings here if you need -->
 
 </langpack>
