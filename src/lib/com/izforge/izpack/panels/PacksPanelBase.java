@@ -32,6 +32,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -66,6 +67,7 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Debug;
 
 /**
  * The base class for Packs panels. It brings the common member and methods of the different packs
@@ -131,9 +133,13 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         try
         {
             this.langpack = parent.langpack;
+            InputStream inputStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
+            this.langpack.add(inputStream);
         }
         catch (Throwable exception)
-        {}
+        {
+            Debug.trace(exception);
+        }
         // init the map
         computePacks(idata.availablePacks);
 
