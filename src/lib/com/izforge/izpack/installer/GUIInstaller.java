@@ -89,6 +89,9 @@ public class GUIInstaller extends InstallerBase
             { "nor", "no"}, { "pol", "pl"}, { "por", "pt"}, { "rom", "or"}, { "rus", "ru"},
             { "spa", "es"}, { "svk", "sk"}, { "swe", "sv"}, { "tur", "tr"}, { "ukr", "uk"}};
 
+    /** holds language to ISO-3 language code translation */
+    private static HashMap isoTable;
+
     /**
      * The constructor.
      * 
@@ -445,9 +448,6 @@ public class GUIInstaller extends InstallerBase
         /** iso3Toiso2 expanded ? */
         private boolean isoMapExpanded = false;
 
-        /** holds language to ISO-3 language code translation */
-        private HashMap isoTable;
-
         /**
          * The constructor.
          * 
@@ -745,6 +745,7 @@ public class GUIInstaller extends InstallerBase
             // We put the label
             String iso3 = (String) value;
             setText(iso3);
+            if (isoTable != null) iso3 = (String) isoTable.get(iso3);
             if (isSelected)
             {
                 setForeground(list.getSelectionForeground());
@@ -756,6 +757,7 @@ public class GUIInstaller extends InstallerBase
                 setBackground(list.getBackground());
             }
             // We put the icon
+
             if (!icons.containsKey(iso3))
             {
                 ImageIcon icon;
