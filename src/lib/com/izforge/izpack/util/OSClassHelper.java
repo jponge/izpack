@@ -77,7 +77,12 @@ public class OSClassHelper
             e.printStackTrace();
             // Do nothing, class not bound.
         }
-        Debug.trace("Ctor ReflectionHelper for " + className + " is good: " + good());
+        catch (Exception e4)
+        {   // If the native lib is not found an unqualified Exception will be raised.
+            Debug.trace("Ctor OSClassHelper for " + className + ": worker not available (" + e4.getMessage() + ").");;
+            return;
+        }
+        Debug.trace("Ctor OSClassHelper for " + className + " is good: " + good());
 
     }
 
