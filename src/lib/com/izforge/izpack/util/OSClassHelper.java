@@ -79,7 +79,7 @@ public class OSClassHelper
         }
         catch (Exception e4)
         {   // If the native lib is not found an unqualified Exception will be raised.
-            Debug.trace("Ctor OSClassHelper for " + className + ": worker not available (" + e4.getMessage() + ").");;
+            Debug.trace("Ctor OSClassHelper for " + className + ": worker not available (" + e4.getMessage() + ").");
             return;
         }
         Debug.trace("Ctor OSClassHelper for " + className + " is good: " + good());
