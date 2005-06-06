@@ -98,7 +98,7 @@ public class LocaleDatabase extends TreeMap
         // At a change of the return value at val == null the method
         // com.izforge.izpack.installer.IzPanel.getI18nStringForClass
         // should be also addapted.
-        if (val == null) val = key + "(???)";
+        if (val == null) val = key;
         return val;
     }
 }

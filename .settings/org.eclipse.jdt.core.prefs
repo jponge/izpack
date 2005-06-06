@@ -1,4 +1,4 @@
-#Fri May 06 20:18:41 CEST 2005
+#Thu Jun 02 22:13:36 CEST 2005
 eclipse.preferences.version=1
 org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=disabled
 org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.2
@@ -19,6 +19,7 @@ org.eclipse.jdt.core.formatter.alignment_for_arguments_in_qualified_allocation_e
 org.eclipse.jdt.core.formatter.alignment_for_binary_expression=16
 org.eclipse.jdt.core.formatter.alignment_for_compact_if=16
 org.eclipse.jdt.core.formatter.alignment_for_conditional_expression=80
+org.eclipse.jdt.core.formatter.alignment_for_enum_constants=0
 org.eclipse.jdt.core.formatter.alignment_for_expressions_in_array_initializer=16
 org.eclipse.jdt.core.formatter.alignment_for_multiple_fields=16
 org.eclipse.jdt.core.formatter.alignment_for_parameters_in_constructor_declaration=16
@@ -249,3 +250,4 @@ org.eclipse.jdt.core.formatter.number_of_empty_lines_to_preserve=1
 org.eclipse.jdt.core.formatter.put_empty_statement_on_new_line=true
 org.eclipse.jdt.core.formatter.tabulation.char=space
 org.eclipse.jdt.core.formatter.tabulation.size=4
+org.eclipse.jdt.core.formatter.use_tabs_only_for_leading_indentations=false

@@ -30,7 +30,7 @@ public class LocaleDatabaseTest extends TestCase
                 .getResourceAsStream("testing-langpack.xml"));
 
         TestCase.assertEquals("String Text", db.getString("string"));
-        TestCase.assertEquals("none(???)", db.getString("none"));
+        TestCase.assertEquals("none", db.getString("none"));
     }
 
 }
