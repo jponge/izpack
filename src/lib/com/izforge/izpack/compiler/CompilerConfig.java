@@ -1909,9 +1909,12 @@ public class CompilerConfig extends Thread
     }
 
     /**
-     * Returns the compiler listener which is defined in the xml element. As xml element a "listner"
-     * node will be expected. Additional it is expected, that "findIzPackResource" returns an url
-     * based on "bin/customActions/[className].jar". The class will be loaded via an URLClassLoader.
+     * Returns the compiler listener which is defined in the xml element. As
+     * xml element a "listner" node will be expected. Additional it is expected,
+     * that either "findIzPackResource" returns an url based on
+     * "bin/customActions/[className].jar", or that the listener element has
+     * a jar attribute specifying the listener jar path. The class will be
+     * loaded via an URLClassLoader.
      * 
      * @param var the xml element of the "listener" node
      * @return instance of the defined compiler listener
@@ -1926,8 +1929,12 @@ public class CompilerConfig extends Thread
         Object instance = null;
         if (className == null) return (null);
 
-        // CustomAction files come in jars packaged IzPack
-        String jarPath = "bin/customActions/" + className + ".jar";
+        // CustomAction files come in jars packaged IzPack, or they can be
+        // specified via a jar attribute on the listener
+        String jarPath = var.getAttribute("jar");
+        jarPath = compiler.replaceProperties(jarPath);
+        if( jarPath == null )
+            jarPath = "bin/customActions/" + className + ".jar";
         URL url = findIzPackResource(jarPath, "CustomAction jar file", var);
         String fullName = getFullClassName(url, className);
         if (url != null)
