@@ -85,10 +85,16 @@
     <str id="ImgPacksPanel.packs" txt="Die folgenden Pakete stehen zur Verfügung:"/>
     <str id="ImgPacksPanel.snap" txt="Hier ist der zugehörige Schnappschuss:"/>
     <str id="ImgPacksPanel.checkbox" txt=" Installiere dieses Paket"/>
-    <str id="ShortcutPanel.regular.list" txt="Wählen Sie eine Programmgruppe für die Verknüpfung:"/>
-    <str id="ShortcutPanel.regular.default" txt="Wiederherstellen"/>
-    <str id="ShortcutPanel.regular.desktop" txt="Verknüpfung auf dem Desktop einrichten"/>
-    <str id="ShortcutPanel.regular.create" txt="Verknüpfung erstellen"/>
+    <str id="ShortcutPanel.headline" txt="Verknüpfungen einrichten"/>
+    
+    <str id="ShortcutPanel.regular.list" txt="Wählen Sie eine Programmgruppe für die Verknüpfung:"/>	
+	<str id="ShortcutPanel.regular.default" txt="Standard"/>
+    <str id="ShortcutPanel.regular.desktop" txt="zusätzliche Verknüpfungen auf dem Desktop erstellen"/>
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Start-Menü"/>
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menü"/>
+	                                                            <!-- StartMenu is a placeholder will be replaced at runtime -->
+    <str id="ShortcutPanel.regular.create" txt="Verknüpfungen im StartMenu erstellen"/>
+	
     <str id="ShortcutPanel.regular.userIntro" txt="Erstelle Verknüpfung für:"/>
     <str id="ShortcutPanel.regular.currentUser" txt="aktuellen Benutzer"/>
     <str id="ShortcutPanel.regular.allUsers" txt="alle Benutzer"/>
