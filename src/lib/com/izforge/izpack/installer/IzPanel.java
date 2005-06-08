@@ -72,6 +72,45 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
     /** Current y position of grid. */
     protected int gridyCounter = -1;
+    
+    /** i.e. "com.izforge.izpack.panels.HelloPanel" */
+    protected String myFullClassname;
+
+    /** myClassname=i.e "FinishPanel" */
+    protected String myClassname;
+
+    /** i.e. "FinishPanel." useFull for getString() */
+    protected String myPrefix;
+
+    /** internal headline string */
+    protected String headline;
+    
+    /** internal layout */
+    protected GridBagLayout izPanelLayout;
+    
+    /** internal headline Label */
+    protected JLabel headLineLabel;
+    
+    /** HEADLINE = "headline" */
+    public final static String HEADLINE = "headline";
+    
+    /** X_ORIGIN = 0 */
+    public final static int X_ORIGIN = 0;
+
+    /** Y_ORIGIN = 0 */
+    public final static int Y_ORIGIN = 0;
+    /** D = "." ( dot ) */
+    public final static String D = ".";
+
+    /** d = D */
+    public final static String d = D;
+    
+    /** COLS_1 = 1 */
+    public final static int COLS_1 = 1;
+
+    /** ROWS_1 = 1 */
+    public final static int ROWS_1 = 1;
+
 
     /**
      * The constructor.
@@ -81,10 +120,178 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      */
     public IzPanel(InstallerFrame parent, InstallData idata)
     {
-        super();
+      super();
+      init( parent, idata );
+    }
+    
+    /**
+     * Creates a new IzPanel object.
+     *
+     * @param parent the Parent Frame
+     * @param idata Installers Runtime Data Set
+     * @param iconName The Headline IconName
+     */
+    public IzPanel( InstallerFrame parent, InstallData idata, String iconName )
+    {
+      this( parent, idata, iconName, -1 );
+    }    
+    
+    /**
+     * The constructor with Icon.
+     *
+     * @param parent The parent IzPack installer frame.
+     * @param idata The installer internal data.
+     * @param iconName A iconname to show as left oriented headline-leading Icon.
+     * @param instance An instance counter
+     */
+    public IzPanel( InstallerFrame parent, InstallData idata, String iconName, int instance )
+    {
+      super(  );
+      init( parent, idata );
 
-        this.idata = idata;
-        this.parent = parent;
+      setLayout(  );
+      buildHeadline( iconName, instance );
+      gridyCounter++;
+    }
+    
+    /** 
+     * Build the Headline
+     *
+     * @param imageIconName an Iconname
+     * @param instanceNumber an panel instance
+     *
+     * @return true if successful build
+     */
+    protected boolean buildHeadline( String imageIconName, int instanceNumber )
+    {
+      boolean result = false;
+
+      // TODO: proteced instancenumber
+      // TODO: is to be validated
+      // TODO: 
+      // TODO: first Test if a Resource for your protected Instance exists.
+      String headline;
+      String headlineSearchBaseKey = myClassname + d + "headline";
+
+      if( instanceNumber > -1 )
+      {
+        String instanceSearchKey = headlineSearchBaseKey + d + Integer.toString( instanceNumber );
+
+        String instanceHeadline = getString( instanceSearchKey );
+
+        //System.out.println( "found headline: " + instanceHeadline  +  d + S + ": "+  instanceNumber );
+        if( ! instanceSearchKey.equals( instanceHeadline ) )
+        {
+          headline = instanceHeadline;
+        }
+        else
+        {
+          headline = getString( headlineSearchBaseKey );
+        }
+      }
+      else
+      {
+        headline = getString( headlineSearchBaseKey );
+      }
+
+      if( headline != null )
+      {
+        if( ( imageIconName != null ) && ! "".equals( imageIconName ) )
+        {
+          headLineLabel = new JLabel( headline, getImageIcon( imageIconName ), JLabel.TRAILING );
+        }
+        else
+        {
+          headLineLabel = new JLabel( headline );
+        }
+
+        Font  font  = headLineLabel.getFont(  );
+        float size  = font.getSize(  );
+        int   style = 0;
+        font = font.deriveFont( style, ( size * 1.5f ) );
+        headLineLabel.setFont( font );
+
+        GridBagConstraints gbc = getNewGridBagConstraints( X_ORIGIN, Y_ORIGIN, COLS_1, ROWS_1 );
+        gbc.weightx =  0.0;
+        gbc.weighty = 1.0;        
+        
+        gbc.fill   = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets( 0, 0, 5, 0 );
+        izPanelLayout.setConstraints( headLineLabel, gbc );
+        headLineLabel.setName( HEADLINE );
+        add( headLineLabel );
+      }
+
+      return result;
+    }
+    
+    /** 
+     * Gets a language Resource String from the parent, which  holds these global resource.
+     *
+     * @param key The Search key
+     *
+     * @return The Languageresource or the key if not found.
+     */
+    public String getString( String key )
+    {
+      return parent.langpack.getString( key );
+    }
+    
+    /** 
+     * Gets a named image icon
+     *
+     * @param iconName a valid image icon
+     *
+     * @return the icon
+     */
+    public ImageIcon getImageIcon( String iconName )
+    {
+      return parent.icons.getImageIcon( iconName );
+    }
+
+
+    
+    /** 
+     * Inits and sets teh internal LayoutObjects.
+     *
+     * @return true if finshed.
+     */
+    protected boolean setLayout(  )
+    {
+      izPanelLayout        = new GridBagLayout(  );
+      defaultGridBagConstraints = new GridBagConstraints(  );
+
+      setLayout( izPanelLayout );
+
+      return true;
+    }
+    
+
+    /** 
+     * Gets and fills the classname fields
+     */
+    protected void getClassName(  )
+    {
+      myFullClassname = getClass(  ).getName(  );
+      myClassname     = myFullClassname.substring( myFullClassname.lastIndexOf( "." ) + 1 );
+      myPrefix        = myClassname + ".";
+    }
+    
+    /** 
+     * Internal init method
+     *
+     * @param parent the parent frame
+     * @param idata installers runtime dataset
+     */
+    protected void init( InstallerFrame parent, InstallData idata )
+    { 
+      getClassName(  );
+      
+      this.idata           = idata;
+      this.parent          = parent;
+      
+      gridyCounter = -1;
     }
 
     /**
