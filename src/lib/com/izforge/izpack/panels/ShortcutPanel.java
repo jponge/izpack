@@ -59,6 +59,7 @@ import net.n3.nanoxml.XMLElement;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -1210,22 +1211,19 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
 
     /*--------------------------------------------------------------------------*/
-    private void buildUI(File groups)//, boolean currentUserList)
+    private void buildUI(File groups)
     {
-        itsProgramFolder = groups;
-        
-        //listLabel.setFont( listLabel.getFont().getSize()  ); 
+        itsProgramFolder = groups;        
+         
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 3;
         constraints.gridheight = 1;
         constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        /*constraints.insets = new Insets(5, 5, 5, 5);*/
+        constraints.weighty = 1.0;        
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
-        /*layout.addLayoutComponent(listLabel, constraints);
-        add(listLabel);*/
+        /**/
         
 
         // Add a CheckBox which enables the user to entirely supress shortcut creation.  
@@ -1250,31 +1248,46 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // this should only be created if needed and requested
         // in the definition file.
         // ----------------------------------------------------
-        String initialAllowedValue = idata.getVariable( "DesktopShortcutCheckboxEnabled" );
-        boolean initialAllowedFlag = false;
-        if( initialAllowedValue==null) initialAllowedFlag= false;
-        else if( Boolean.TRUE.toString().equals(initialAllowedValue) ) 
-            initialAllowedFlag=true;
-                     
-        allowDesktopShortcut = new JCheckBox(parent.langpack
-                .getString("ShortcutPanel.regular.desktop"), initialAllowedFlag);
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 3;
-        constraints.gridheight = 1;
-        constraints.weighty = 0.2;
         if (hasDesktopShortcuts)
         {
-            layout.addLayoutComponent(allowDesktopShortcut, constraints);
-            add(allowDesktopShortcut);
+          String initialAllowedValue = idata.getVariable( "DesktopShortcutCheckboxEnabled" );
+          boolean initialAllowedFlag = false;
+          if( initialAllowedValue==null) 
+            initialAllowedFlag= false;
+          else if( Boolean.TRUE.toString().equals(initialAllowedValue) ) 
+            initialAllowedFlag=true;
+                     
+          allowDesktopShortcut = new JCheckBox(parent.langpack
+                .getString("ShortcutPanel.regular.desktop"), initialAllowedFlag);
+          constraints.gridx = 0;
+          constraints.gridy = 2;
+          constraints.gridwidth = 3;
+          constraints.gridheight = 1;
+          constraints.weighty = 0.2;
+        
+          layout.addLayoutComponent(allowDesktopShortcut, constraints);
+          add(allowDesktopShortcut);
         }
         
-
+        listLabel = LabelFactory.create(parent.langpack.getString("ShortcutPanel.regular.list"),
+                JLabel.LEADING);
+        
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.weightx = 0.2;
+        constraints.weighty = 0.2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.anchor = GridBagConstraints.WEST;
+        
+        layout.addLayoutComponent(listLabel, constraints);
+        add(listLabel);
         // ----------------------------------------------------
         // list box to list all of already existing folders as program groups
         // at the intended destination
         // ----------------------------------------------------
-        addSelectionList( groups, 0, 3, 2, 1, GridBagConstraints.BOTH ); 
+        addSelectionList( groups, 0, 4, 2, 1, GridBagConstraints.BOTH ); 
 
         // ----------------------------------------------------
         // radio buttons to select current user or all users.
@@ -1300,7 +1313,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             usersPanel.setBorder(border);
 
             constraints.gridx = 2;
-            constraints.gridy = 3;
+            constraints.gridy = 4;
             constraints.gridwidth = 1;
             constraints.gridheight = 1;
             constraints.weighty = 1.0;
@@ -1318,7 +1331,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         programGroup = new JTextField(suggestedProgramGroup, 40); // 40?
 
         constraints.gridx = 0;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.gridwidth = 2;
         constraints.gridheight = 1;
         constraints.weighty = 1.0;
@@ -1336,7 +1349,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         defaultButton.addActionListener(this);
 
         constraints.gridx = 2;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;       
         constraints.fill = GridBagConstraints.NONE;
