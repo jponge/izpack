@@ -725,7 +725,6 @@ public class SelfModifier
      * --------------------------------------------------------------------- Apache ant code
      * ---------------------------------------------------------------------
      */
-    // TODO: comply with licensing issues
     // This was stolen (and specialized from much more modular code) from the
     // jakarta ant class org.apache.tools.ant.taskdefs.condition.Os
     // See the javaCommand() method.
