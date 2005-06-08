@@ -59,7 +59,6 @@ import net.n3.nanoxml.XMLElement;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -68,7 +67,10 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.StringTool;
 import com.izforge.izpack.util.TargetFactory;
+import com.izforge.izpack.util.UnixHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.os.Shortcut;
 
@@ -446,9 +448,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
     public ShortcutPanel(InstallerFrame parent, InstallData installData)
     {
-        super(parent, installData);
-
-        // read the XML file
+        super(parent, installData, "link16x16");
+        
         try
         {
             readShortcutSpec();
@@ -1212,56 +1213,68 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private void buildUI(File groups)//, boolean currentUserList)
     {
         itsProgramFolder = groups;
-        layout = new GridBagLayout();
-        constraints = new GridBagConstraints();
-        setLayout(layout);
-
-        // ----------------------------------------------------
-        // label a the top of the panel, that gives the
-        // basic instructions
-        // ----------------------------------------------------
-        listLabel = LabelFactory.create(parent.langpack.getString("ShortcutPanel.regular.list"),
-                JLabel.LEADING);
-
+        
+        //listLabel.setFont( listLabel.getFont().getSize()  ); 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = 1;
+        constraints.gridwidth = 3;
         constraints.gridheight = 1;
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
-        constraints.insets = new Insets(5, 5, 5, 5);
+        /*constraints.insets = new Insets(5, 5, 5, 5);*/
         constraints.fill = GridBagConstraints.NONE;
         constraints.anchor = GridBagConstraints.WEST;
-        layout.addLayoutComponent(listLabel, constraints);
-        add(listLabel);
+        /*layout.addLayoutComponent(listLabel, constraints);
+        add(listLabel);*/
+        
+
+        // Add a CheckBox which enables the user to entirely supress shortcut creation.  
+        String menuKind = parent.langpack.getString("ShortcutPanel.regular.StartMenu:Start-Menu");
+        if( OsVersion.IS_UNIX && UnixHelper.kdeIsInstalled() )
+            menuKind = parent.langpack.getString("ShortcutPanel.regular.StartMenu:K-Menu");
+        
+        createShortcuts = new JCheckBox( StringTool.replace( parent.langpack.getString("ShortcutPanel.regular.create"), "StartMenu", menuKind ),
+                true);
+        createShortcuts.addActionListener(this);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 2;
+        constraints.gridheight = 1;   
+        constraints.weighty = 0.2;
+        layout.addLayoutComponent(createShortcuts, constraints);
+        add(createShortcuts);
+        
+        // ----------------------------------------------------
+        // check box to allow the user to decide if a desktop
+        // shortcut should be created.
+        // this should only be created if needed and requested
+        // in the definition file.
+        // ----------------------------------------------------
+        String initialAllowedValue = idata.getVariable( "DesktopShortcutCheckboxEnabled" );
+        boolean initialAllowedFlag = false;
+        if( initialAllowedValue==null) initialAllowedFlag= false;
+        else if( Boolean.TRUE.toString().equals(initialAllowedValue) ) 
+            initialAllowedFlag=true;
+                     
+        allowDesktopShortcut = new JCheckBox(parent.langpack
+                .getString("ShortcutPanel.regular.desktop"), initialAllowedFlag);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.gridwidth = 3;
+        constraints.gridheight = 1;
+        constraints.weighty = 0.2;
+        if (hasDesktopShortcuts)
+        {
+            layout.addLayoutComponent(allowDesktopShortcut, constraints);
+            add(allowDesktopShortcut);
+        }
+        
 
         // ----------------------------------------------------
         // list box to list all of already existing folders as program groups
         // at the intended destination
         // ----------------------------------------------------
-        Vector dirEntries = new Vector();
-
-        File[] entries = groups.listFiles();
-        for (int idx = 0; idx < entries.length; idx++)
-        {
-            if (entries[idx].isDirectory())
-            {
-                dirEntries.add(entries[idx].getName());
-            }
-        }
-        groupList = new JList(dirEntries);
-        groupList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        groupList.getSelectionModel().addListSelectionListener(this);
-
-        JScrollPane scrollPane = new JScrollPane(groupList);
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        layout.addLayoutComponent(scrollPane, constraints);
-        add(scrollPane);
+        addSelectionList( groups, 0, 3, 2, 1, GridBagConstraints.BOTH ); 
 
         // ----------------------------------------------------
         // radio buttons to select current user or all users.
@@ -1286,10 +1299,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     .getString("ShortcutPanel.regular.userIntro"));
             usersPanel.setBorder(border);
 
-            constraints.gridx = 1;
-            constraints.gridy = 1;
+            constraints.gridx = 2;
+            constraints.gridy = 3;
             constraints.gridwidth = 1;
             constraints.gridheight = 1;
+            constraints.weighty = 1.0;
+            constraints.weightx = 1.0;
             constraints.fill = GridBagConstraints.NONE;
             layout.addLayoutComponent(usersPanel, constraints);
             add(usersPanel);
@@ -1303,9 +1318,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         programGroup = new JTextField(suggestedProgramGroup, 40); // 40?
 
         constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 1;
+        constraints.gridy = 4;
+        constraints.gridwidth = 2;
         constraints.gridheight = 1;
+        constraints.weighty = 1.0;
+        constraints.weightx = 10.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         layout.addLayoutComponent(programGroup, constraints);
         add(programGroup);
@@ -1318,50 +1335,49 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 .getString("ShortcutPanel.regular.default"), idata.buttonsHColor);
         defaultButton.addActionListener(this);
 
-        constraints.gridx = 1;
-        constraints.gridy = 2;
+        constraints.gridx = 2;
+        constraints.gridy = 4;
         constraints.gridwidth = 1;
-        constraints.gridheight = 1;
+        constraints.gridheight = 1;       
         constraints.fill = GridBagConstraints.NONE;
         layout.addLayoutComponent(defaultButton, constraints);
         add(defaultButton);
-
-        // ----------------------------------------------------
-        // check box to allow the user to decide if a desktop
-        // shortcut should be created.
-        // this should only be created if needed and requested
-        // in the definition file.
-        // ----------------------------------------------------
-        boolean initialAllowedFlag = idata.getVariable("DesktopShortcutCheckboxEnabled") == null ? false
-                : true;
-        allowDesktopShortcut = new JCheckBox(parent.langpack
-                .getString("ShortcutPanel.regular.desktop"), initialAllowedFlag);
-
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-
-        if (hasDesktopShortcuts)
-        {
-            layout.addLayoutComponent(allowDesktopShortcut, constraints);
-            add(allowDesktopShortcut);
-        }
-        // TODO add here
-        createShortcuts = new JCheckBox(parent.langpack.getString("ShortcutPanel.regular.create"),
-                true);
-        createShortcuts.addActionListener(this);
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-
-        if (hasDesktopShortcuts)
-        {
-            layout.addLayoutComponent(createShortcuts, constraints);
-            add(createShortcuts);
-        }
     }
+    
+    /**
+     * 
+     * @param groups
+     */
+    private void addSelectionList(File groups, int aGridx, int aGridy, int aGridwidth, int aGridheight, int aFill)
+    {
+        Vector dirEntries = new Vector();
+
+        File[] entries = groups.listFiles();
+        for (int idx = 0; idx < entries.length; idx++)
+        {
+            if (entries[idx].isDirectory())
+            {
+                dirEntries.add(entries[idx].getName());
+            }
+        }
+        groupList = new JList(dirEntries);
+        groupList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        groupList.getSelectionModel().addListSelectionListener(this);
+
+        JScrollPane scrollPane = new JScrollPane(groupList);
+
+        constraints.gridx = aGridx;
+        constraints.gridy = aGridy;
+        constraints.gridwidth = aGridwidth;
+        constraints.gridheight = aGridheight;
+        constraints.weightx = 10.0;
+        constraints.weighty = 1.5;
+        constraints.insets = new Insets(5, 5, 5, 5);
+        constraints.fill = aFill;
+        layout.addLayoutComponent(scrollPane, constraints);
+        add(scrollPane);
+    }
+
 
     /*--------------------------------------------------------------------------*/
 
