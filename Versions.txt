@@ -2,6 +2,8 @@
 
   > 3.8.0 (build N/A)
 
+- Patch for InstallerFrame to support user confirmation after pressing 
+   windows "X" closing button
 - Update the IzPackTask to support an embedded xml installation document that
   replaces @{x} property references with the corresponding ant property.
   (patch #442 - Scott Stark).

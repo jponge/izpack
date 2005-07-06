@@ -66,6 +66,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.WindowConstants; //added to create the alert windows when pressing the cross button
 import javax.swing.text.JTextComponent;
 
 import net.n3.nanoxml.NonValidator;
@@ -91,6 +92,7 @@ import com.izforge.izpack.util.OsConstraint;
  * The IzPack installer frame.
  * 
  * @author Julien Ponge created October 27, 2002
+ * @author Fabrice Mirabile added fix for alert window on cross button, July 06 2005
  */
 public class InstallerFrame extends JFrame
 {
@@ -258,7 +260,8 @@ public class InstallerFrame extends JFrame
     /** Builds the GUI. */
     private void buildGUI()
     {
-        // Sets the frame icon
+        this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //patch 06/07/2005, Fabrice Mirabile
+	    // Sets the frame icon
         setIconImage(icons.getImageIcon("JFrameIcon").getImage());
 
         // Prepares the glass pane to block the gui interaction when needed
@@ -952,14 +955,23 @@ public class InstallerFrame extends JFrame
      * 
      * @author julien created October 27, 2002
      */
-    class WindowHandler extends WindowAdapter
-    {
-
-        /**
+	class WindowHandler extends WindowAdapter
+	{
+		/**
+		* Window close is pressed, 
+		* @param  e  The event.
+		*/
+		public void windowClosing(WindowEvent e)
+		{
+			// We ask for confirmation
+			exit();
+		}
+		
+		/** OLD VERSION
          * We can't avoid the exit here, so don't call exit anywhere else.
          * 
          * @param e The event.
-         */
+         
         public void windowClosing(WindowEvent e)
         {
             if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
@@ -973,8 +985,8 @@ public class InstallerFrame extends JFrame
                         langpack.getString("installer.warning"), JOptionPane.ERROR_MESSAGE);
             wipeAborted();
             Housekeeper.getInstance().shutDown(0);
-        }
-    }
+        }*/
+	}
 
     /**
      * A FocusTraversalPolicy that only allows the block panel to have the focus
