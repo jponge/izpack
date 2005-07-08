@@ -50,6 +50,7 @@
 - Registry support on Windows (Klaus Bartz).
 - Most IzPackTask output for ant is only dumped in VERBOSE mode (Chad McHenry).
 - Introduction of a JUnit test suite.
+- Scripts for easier built of password validation and encrytion addon classes (Fabrice Mirabile)
 
   > 3.7.3 (build N/A)
 
