@@ -1,3 +1,9 @@
+
+rem Script for generating Password class.
+rem created on July 2005
+rem @author Fabrice Mirabile
+
+
 @echo off
 rem %1 = file name of your own choice
 

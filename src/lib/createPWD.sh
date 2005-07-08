@@ -1,3 +1,7 @@
+# Script for generating Password class
+# created on July 2005
+# @author Fabrice Mirabile
+
 #!/bin/sh
 
 echo "Enter the name of the jar you want to create:"
