@@ -23,29 +23,9 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.7.2 (build 2005.04.22)</appversion>
+        <appversion>3.8.0-M1 (build unreleased)</appversion>
         <authors>
-            <author name="Julien Ponge (maintainer, original developer)" email="julien@izforge.com" />
-            <author name="Klaus Bartz (developer)" email="klaus.bartz@coi.de" />
-            <author name="Gaganis Giorgos (developer)" email="geogka@it.teithe.gr" />
-            <author name="Erik Artzmark (contributor)" email="ekartzmark@ticom-geo.com" />
-            <author name="Borje Jonsson (contributor)" email="borje.jonsson@pa-konsult.se" />
-            <author name="Redhuan Daniel Oon (contributor)" email="redhuanoon@yahoo.com" />
-            <author name="Mohammed Sourouri (contributor)" email="soumoh@nith.no" />
-            <author name="Xi Ping Wang (contributor)" email="xiping.wang@gmail.com" />
-            <author name="David Carmona Perez (contributor)" email="dperezcar@fcc.es" />
-            <author name="Filip Brcic (contributor)" email="brcha@users.sourceforge.net" />
-            <author name="Marc Eppelmann (contributor)" email="marc.eppelmann@gmx.de" />
-            <author name="Michael Hagedorn (contributor)" email="michael.hagedorn@gmx.de" />
-            <author name="Jan Pavlovic (contributor)" email="xpavlov@fi.muni.cz" />
-	        <author name="Oscar Sierra (contributor)" email="o.sierra@ieee.org" />
-            <author name="Per Abich (contributor)" email="perabich@users.berlios.de" />
-            <author name="Alexey Makhmutov (contributor)" email="alexmach@mail.ru" />
-            <author name="Anthony Xin Chen (contributor)" email="mail@4techie.net" />
-            <author name="Fabrice Mirabile (contributor)" email="miraodb@users.berlios.de" />
-            <author name="Nils Nordman (contributor)" email="nino@users.berlios.de" />
-            <author name="Juan Alvarez (contributor)" email="jaferrando@users.berlios.de" />
-            <author name="Andreas Breiter (contributor)" email="abreiter@users.berlios.de" />
+        	<author email="" name="(will be filled for the RCs)" />
             <author email="(see Thanks.txt)" name="Many other developers and contributors to the previous releases" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
@@ -55,9 +35,14 @@
 
     <!-- Flexible and in the screen proportions -->
     <guiprefs height="600" resizable="yes" width="800">
-        <laf name="metouia">
+<!-- MlF is buggy on 1.5
+       <laf name="metouia">
             <os family="unix" />
         </laf>
+-->
+       <laf name="looks">
+            <os family="unix" />
+       </laf>
     </guiprefs>
 	
 	<variables>
