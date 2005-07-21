@@ -55,6 +55,8 @@
 - standalone-compiler.jar no longer has duplicate entries (bug #3928).
 - Building process: Java source and target compatibility enforced to 1.4.
 - IzPack installer: use JGoodies Looks on *nix as MlF is buggy on 1.5.
+- "Made with IzPack label": enforce a specific font for the label, making it
+  look finally good with JGoodies Looks.
 
   > 3.7.2 (build 2005.04.22)
 

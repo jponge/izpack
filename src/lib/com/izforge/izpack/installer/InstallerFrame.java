@@ -25,6 +25,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -66,7 +67,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
-import javax.swing.WindowConstants; //added to create the alert windows when pressing the cross button
+import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
 import net.n3.nanoxml.NonValidator;
@@ -126,9 +128,6 @@ public class InstallerFrame extends JFrame
 
     /** The quit button. */
     protected JButton quitButton;
-
-    /** The 'made with izpack' label, please KEEP IT THERE. */
-    private JLabel madewithLabel;
 
     /** Image */
     private JLabel iconLabel;
@@ -295,7 +294,8 @@ public class InstallerFrame extends JFrame
         navPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(8, 8,
                 8, 8), BorderFactory.createTitledBorder(new EtchedLineBorder(), langpack
                 .getString("installer.madewith")
-                + " ")));
+                + " ", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
+                new Font("Dialog", Font.PLAIN, 10))));
         navPanel.add(Box.createHorizontalGlue());
 
         prevButton = ButtonFactory.createButton(langpack.getString("installer.prev"), icons
