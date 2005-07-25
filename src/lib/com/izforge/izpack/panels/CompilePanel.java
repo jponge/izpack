@@ -649,7 +649,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             this.commandText.setText(error.getCmdline());
             this.stdOutText.setText(error.getStdout());
             this.stdErrText.setText(error.getStderr());
-            super.show();
+            super.setVisible(true);
         }
 
         public int getResult()

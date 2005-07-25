@@ -195,9 +195,9 @@ public class GUIInstaller extends InstallerBase
             picker.setSelection(Locale.getDefault().getISO3Country().toLowerCase());
             picker.setModal(true);
             picker.toFront();
-            frame.show();
-            frame.hide();
-            picker.show();
+            frame.setVisible(true);
+            frame.setVisible(false);
+            picker.setVisible(true);
 
             selectedPack = (String) picker.getSelection();
             if (selectedPack == null) throw new Exception("installation canceled");
