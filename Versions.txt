@@ -57,6 +57,7 @@
 - IzPack installer: use JGoodies Looks on *nix as MlF is buggy on 1.5.
 - "Made with IzPack label": enforce a specific font for the label, making it
   look finally good with JGoodies Looks.
+- ImgPacksPanel: removed the useless/ugly border around the description area.
 
   > 3.7.2 (build 2005.04.22)
 

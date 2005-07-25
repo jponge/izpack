@@ -32,6 +32,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -69,9 +70,6 @@ public class ImgPacksPanel extends PacksPanelBase
 
     /** The img label. */
     private JLabel imgLabel;
-
-    /** The current image index. */
-    private int index = 0;
 
     /** The layout. */
     private GridBagLayout layout;
@@ -147,6 +145,7 @@ public class ImgPacksPanel extends PacksPanelBase
         // Create the description area with a scroller.
         descriptionScroller = new JScrollPane();
         descriptionScroller.setPreferredSize(new Dimension(200, 60));
+        descriptionScroller.setBorder(BorderFactory.createEmptyBorder());
 
         parent.buildConstraints(gbConstraints, 1, 3, 1, 1, 0.50, 0.50);
         descriptionArea = createTextArea("PacksPanel.description", descriptionScroller, layout,
