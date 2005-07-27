@@ -326,7 +326,7 @@ public class SelfModifier
             p.getOutputStream().close();
 
             // even if it returns an error code, it was at least found
-            int eval = p.waitFor();
+            p.waitFor();
         }
         catch (InterruptedException ie)
         {

@@ -44,7 +44,6 @@ public class HostAddressValidator implements Validator
         String host = "";
         int port = 0;
         boolean retValue = false;
-        int numfields = client.getNumFields();
 
         try
         {

@@ -346,7 +346,6 @@ public class StdXMLReader implements IXMLReader
      */
     public StdXMLReader(InputStream stream) throws IOException
     {
-        PushbackInputStream pbstream = new PushbackInputStream(stream);
         StringBuffer charsRead = new StringBuffer();
         Reader reader = this.stream2reader(stream, charsRead);
         this.currentLineReader = new LineNumberReader(reader);

@@ -65,15 +65,6 @@ public class Compiler extends Thread
     /** The IzPack home directory. */
     public static String IZPACK_HOME = ".";
 
-    /** Constant for checking attributes. */
-    private static boolean YES = true;
-
-    /** Constant for checking attributes. */
-    private static boolean NO = false;
-
-    /** The IzPack home directory specified or found on startup. */
-    private static File home = new File(IZPACK_HOME);
-
     /** The base directory. */
     protected String basedir;
 
@@ -102,7 +93,6 @@ public class Compiler extends Thread
     public static void setIzpackHome(String izHome)
     {
         IZPACK_HOME = izHome;
-        home = new File(izHome);
     }
 
     /**
@@ -605,7 +595,6 @@ public class Compiler extends Thread
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry = null;
-        String fullName = null;
         ArrayList fullNames = new ArrayList();
         while ((zentry = jis.getNextEntry()) != null)
         {
@@ -630,7 +619,6 @@ public class Compiler extends Thread
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry = null;
-        String fullName = null;
         while ((zentry = jis.getNextEntry()) != null)
         {
             String name = zentry.getName();

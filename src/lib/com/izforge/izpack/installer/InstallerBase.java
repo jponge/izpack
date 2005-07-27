@@ -158,12 +158,12 @@ public class InstallerBase
 
         if (null != variables)
         {
-            Enumeration enum = variables.keys();
+            Enumeration enumeration = variables.keys();
             String varName;
             String varValue;
-            while (enum.hasMoreElements())
+            while (enumeration.hasMoreElements())
             {
-                varName = (String) enum.nextElement();
+                varName = (String) enumeration.nextElement();
                 varValue = variables.getProperty(varName);
                 installdata.setVariable(varName, varValue);
             }

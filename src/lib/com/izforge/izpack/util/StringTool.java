@@ -89,11 +89,8 @@ public class StringTool
             to = "";
         }
 
-        String searchData = value;
-
         if (!aCaseSensitiveFlag)
         {
-            searchData = value.toLowerCase();
             from = from.toLowerCase();
         }
 

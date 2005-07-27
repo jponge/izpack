@@ -49,7 +49,6 @@ public class SummaryProcessor
 
     private static String HEAD_END = "</h1>\n";
 
-    private static String NULL_PAGE;
     static
     {
         // Initialize HTML header and footer.
@@ -60,7 +59,6 @@ public class SummaryProcessor
                 "div.body {\n  font-size: 100%;\n  margin: 0mm 2mm 0  8mm;\n  padding: 0;\n}\n")
                 .append("</STYLE>\n</head>\n<body>\n");
         HTML_HEADER = sb.toString();
-        NULL_PAGE = HTML_HEADER + HTML_FOOTER;
     }
 
     /**

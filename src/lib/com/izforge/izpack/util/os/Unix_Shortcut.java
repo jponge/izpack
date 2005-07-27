@@ -706,11 +706,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     public String replace()
     {
         String result = template;
-        Enumeration enum = props.keys();
+        Enumeration enumeration = props.keys();
 
-        while (enum.hasMoreElements())
+        while (enumeration.hasMoreElements())
         {
-            String key = (String) enum.nextElement();
+            String key = (String) enumeration.nextElement();
 
             result = StringTool.replace(result, key, props.getProperty(key));
         }

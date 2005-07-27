@@ -112,8 +112,6 @@ public class CompilerConfig extends Thread
      * List of CompilerListeners which should be called at packaging
      */
     protected List compilerListeners = new ArrayList();
-    /** */
-    private boolean compileFailed;
 
     /**
      * Set the IzPack home directory
@@ -1086,7 +1084,6 @@ public class CompilerConfig extends Thread
         XMLElement root = requireChildNamed(data, "info");
 
         Info info = new Info();
-        String temp = null;
         info.setAppName(requireContent(requireChildNamed(root, "appname")));
         info.setAppVersion(requireContent(requireChildNamed(root, "appversion")));
         // We get the installation subpath
@@ -1456,7 +1453,6 @@ public class CompilerConfig extends Thread
      */
     protected void parseError(String message) throws CompilerException
     {
-        this.compileFailed = true;
         throw new CompilerException(filename + ":" + message);
     }
 
@@ -1469,7 +1465,6 @@ public class CompilerConfig extends Thread
      */
     protected void parseError(XMLElement parent, String message) throws CompilerException
     {
-        this.compileFailed = true;
         throw new CompilerException(filename + ":" + parent.getLineNr() + ": " + message);
     }
 
@@ -1483,7 +1478,6 @@ public class CompilerConfig extends Thread
     protected void parseError(XMLElement parent, String message, Throwable cause)
             throws CompilerException
     {
-        this.compileFailed = true;
         throw new CompilerException(filename + ":" + parent.getLineNr() + ": " + message, cause);
     }
 
@@ -1857,7 +1851,6 @@ public class CompilerConfig extends Thread
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry = null;
-        String fullName = null;
         ArrayList fullNames = new ArrayList();
         while ((zentry = jis.getNextEntry()) != null)
         {
@@ -1882,7 +1875,6 @@ public class CompilerConfig extends Thread
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry = null;
-        String fullName = null;
         while ((zentry = jis.getNextEntry()) != null)
         {
             String name = zentry.getName();
@@ -1922,8 +1914,6 @@ public class CompilerConfig extends Thread
      */
     private Object[] getCompilerListenerInstance(XMLElement var) throws Exception
     {
-        final String defaultRootPath = "com.izforge.izpack.";
-        final String defaultCompilerPath = "compiler.";
         String className = var.getAttribute("compiler");
         Class listener = null;
         Object instance = null;

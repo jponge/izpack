@@ -144,11 +144,11 @@ public class XMLWriter
         {
             this.writer.print('<');
             this.writer.print(xml.getName());
-            Enumeration enum = xml.enumerateAttributeNames();
+            Enumeration enumeration = xml.enumerateAttributeNames();
 
-            while (enum.hasMoreElements())
+            while (enumeration.hasMoreElements())
             {
-                String key = (String) enum.nextElement();
+                String key = (String) enumeration.nextElement();
                 String value = xml.getAttribute(key);
                 this.writer.print(" " + key + "=\"");
                 this.writeEncoded(value);
@@ -175,11 +175,11 @@ public class XMLWriter
                     writer.println();
                 }
 
-                enum = xml.enumerateChildren();
+                enumeration = xml.enumerateChildren();
 
-                while (enum.hasMoreElements())
+                while (enumeration.hasMoreElements())
                 {
-                    XMLElement child = (XMLElement) enum.nextElement();
+                    XMLElement child = (XMLElement) enumeration.nextElement();
                     this.write(child, prettyPrint, indent + 4);
                 }
 

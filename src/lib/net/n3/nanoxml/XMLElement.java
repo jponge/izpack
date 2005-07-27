@@ -270,11 +270,11 @@ public class XMLElement implements Serializable
      */
     public XMLElement getFirstChildNamed(String name)
     {
-        Enumeration enum = this.children.elements();
+        Enumeration enumeration = this.children.elements();
 
-        while (enum.hasMoreElements())
+        while (enumeration.hasMoreElements())
         {
-            XMLElement child = (XMLElement) enum.nextElement();
+            XMLElement child = (XMLElement) enumeration.nextElement();
             String cName = child.getName();
 
             if (cName != null && cName.equals(name)) { return child; }
@@ -293,11 +293,11 @@ public class XMLElement implements Serializable
     public Vector getChildrenNamed(String name)
     {
         Vector result = new Vector(this.children.size());
-        Enumeration enum = this.children.elements();
+        Enumeration enumeration = this.children.elements();
 
-        while (enum.hasMoreElements())
+        while (enumeration.hasMoreElements())
         {
-            XMLElement child = (XMLElement) enum.nextElement();
+            XMLElement child = (XMLElement) enumeration.nextElement();
             String cName = child.getName();
 
             if (cName != null && cName.equals(name))

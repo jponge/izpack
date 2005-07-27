@@ -469,7 +469,6 @@ public class Packager
             ObjectOutputStream objOut = new ObjectOutputStream(dos);
 
             // We write the actual pack files
-            long packageBytes = 0;
             objOut.writeInt(packInfo.getPackFiles().size());
 
             Iterator iter = packInfo.getPackFiles().iterator();

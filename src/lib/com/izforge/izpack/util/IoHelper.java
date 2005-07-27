@@ -49,7 +49,7 @@ public class IoHelper
     // ------------------------------------------------------------------------
 
     /** Placeholder during translatePath computing */
-    private static final String MASKED_SLASH_PLACEHOLDER = "�&_&�";
+    private static final String MASKED_SLASH_PLACEHOLDER = "~&_&~";
 
     private static Properties envVars = null;
 
@@ -278,7 +278,6 @@ public class IoHelper
     public static long getFreeSpace(String path)
     {
         long retval = -1;
-        int state;
         if (OsVersion.IS_WINDOWS)
         {
             String command = "cmd.exe";
@@ -286,7 +285,7 @@ public class IoHelper
             String[] params = { command, "/C", "\"dir /D /-C \"" + path + "\"\""};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
-            state = fe.executeCommand(params, output);
+            fe.executeCommand(params, output);
             retval = extractLong(output[0], -3, 3, "%");
         }
         else if (OsVersion.IS_SUNOS)
@@ -294,7 +293,7 @@ public class IoHelper
             String[] params = { "df", "-k", path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
-            state = fe.executeCommand(params, output);
+            fe.executeCommand(params, output);
             retval = extractLong(output[0], -3, 3, "%") * 1024;
         }
         else if (OsVersion.IS_UNIX)
@@ -302,7 +301,7 @@ public class IoHelper
             String[] params = { "df", "-Pk", path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
-            state = fe.executeCommand(params, output);
+            fe.executeCommand(params, output);
             retval = extractLong(output[0], -3, 3, "%") * 1024;
         }
         return retval;
@@ -390,15 +389,6 @@ public class IoHelper
         int i;
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
-        int praeScan = 0;
-        if (assumedPlace < 0)
-        { // Measured from end.
-            praeScan = length - halfRange + assumedPlace;
-        }
-        else
-        { // Messured from start.
-            praeScan = assumedPlace - halfRange;
-        }
         for (i = 0; i < length - halfRange + assumedPlace; ++i)
             st.nextToken(); // Forget this entries.
 
@@ -565,8 +555,6 @@ public class IoHelper
      */
     private static void loadEnv()
     {
-        String retval = null;
-        int state;
         String[] output = new String[2];
         String[] params;
         if (OsVersion.IS_WINDOWS)
@@ -583,13 +571,12 @@ public class IoHelper
             params = paramst;
         }
         FileExecutor fe = new FileExecutor();
-        state = fe.executeCommand(params, output);
+        fe.executeCommand(params, output);
         if (output[0].length() <= 0) return;
         String lineSep = System.getProperty("line.separator");
         StringTokenizer st = new StringTokenizer(output[0], lineSep);
         envVars = new Properties();
         String var = null;
-        int index = 0;
         while (st.hasMoreTokens())
         {
             String line = st.nextToken();

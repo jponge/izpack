@@ -355,7 +355,6 @@ public class StdXMLParser implements IXMLParser
         XMLUtil.skipWhitespace(this.reader, '&', null, null);
         String systemID = null;
         StringBuffer publicID = new StringBuffer();
-        String rootElement = XMLUtil.scanIdentifier(this.reader, '&', this.entityResolver);
         XMLUtil.skipWhitespace(this.reader, '&', null, null);
         char ch = XMLUtil.read(this.reader, null, '&', this.entityResolver);
 
@@ -435,11 +434,11 @@ public class StdXMLParser implements IXMLParser
         Properties extraAttributes = new Properties();
         this.validator.elementAttributesProcessed(name, prefix, null, extraAttributes, this.reader
                 .getSystemID(), this.reader.getLineNr());
-        Enumeration enum = extraAttributes.keys();
+        Enumeration enumeration = extraAttributes.keys();
 
-        while (enum.hasMoreElements())
+        while (enumeration.hasMoreElements())
         {
-            String key = (String) enum.nextElement();
+            String key = (String) enumeration.nextElement();
             String value = extraAttributes.getProperty(key);
             String attPrefix = null;
             colonIndex = key.indexOf(':');

@@ -662,13 +662,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * @return a newly created GridBagConstraints for the next column of the current layout row
      * using the given parameters
      */
-    private GridBagConstraints getNextXGridBagConstraints(int gridwidth, int gridheight)
-    {
-        GridBagConstraints retval = getNextXGridBagConstraints();
-        retval.gridwidth = gridwidth;
-        retval.gridheight = gridheight;
-        return (retval);
-    }
+//    private GridBagConstraints getNextXGridBagConstraints(int gridwidth, int gridheight)
+//    {
+//        GridBagConstraints retval = getNextXGridBagConstraints();
+//        retval.gridwidth = gridwidth;
+//        retval.gridheight = gridheight;
+//        return (retval);
+//    }
 
     /**
      * Returns a newly created GridBagConstraints with column 0 for the next row.

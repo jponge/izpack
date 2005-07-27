@@ -84,11 +84,6 @@ public class XMLValidationException extends XMLException
     public static final int MISC_ERROR = 0;
 
     /**
-     * Which error occurred.
-     */
-    private int errorType;
-
-    /**
      * The name of the element where the exception occurred.
      */
     private String elementName;

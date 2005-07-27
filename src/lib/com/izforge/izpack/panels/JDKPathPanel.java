@@ -168,12 +168,9 @@ public class JDKPathPanel extends PathInputPanel
             int assumedPlace, int halfRange, String useNotIdentifier)
     {
         StringTokenizer st = new StringTokenizer(in, " \t\n\r\f\"");
-        int length = st.countTokens();
         int i;
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
-        int praeScan = 0;
-        praeScan = assumedPlace - halfRange;
         for (i = 0; i < assumedPlace - halfRange; ++i)
             if (st.hasMoreTokens()) st.nextToken(); // Forget this entries.
 

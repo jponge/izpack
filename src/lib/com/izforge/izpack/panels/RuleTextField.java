@@ -68,8 +68,6 @@ public class RuleTextField extends JTextField
 
     private int editLength;
 
-    private int type;
-
     private boolean unlimitedEdit;
 
     private Toolkit toolkit;
@@ -83,7 +81,6 @@ public class RuleTextField extends JTextField
 
         columns = digits;
         this.toolkit = toolkit;
-        this.type = type;
         this.editLength = editLength;
         this.unlimitedEdit = unlimitedEdit;
         rule = new Rule();

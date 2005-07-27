@@ -148,10 +148,6 @@ public final class OsVersion
             boolean caseInSensitiveSearch)
     {
         boolean result = false;
-
-        String searchString = new String(caseInSensitiveSearch ? aSearchString.toLowerCase()
-                : aSearchString);
-
         ArrayList etcReleaseContent = new ArrayList();
 
         try

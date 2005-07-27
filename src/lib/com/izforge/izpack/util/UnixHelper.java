@@ -47,8 +47,6 @@ public class UnixHelper
      */
     public static boolean kdeIsInstalled()
     {
-        boolean result = false;
-
         FileExecutor fe = new FileExecutor();
 
         String[] execOut = new String[2];

@@ -524,10 +524,8 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     private void setFields(String data)
     {
         StringTokenizer tokenizer = new StringTokenizer(data);
-        StringTokenizer tokenizer1 = null;
         String token;
         String indexString;
-        String processorClass;
         int index;
         boolean process = false;
         String[] vals = null;

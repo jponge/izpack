@@ -50,12 +50,6 @@ public class SummaryPanel extends IzPanel
      */
     private static final long serialVersionUID = 3832626166401282361L;
 
-    /** The layout. */
-    private GridBagLayout layout;
-
-    /** The layout constraints. */
-    private GridBagConstraints gbConstraints;
-
     /** The text area. */
     private JEditorPane textArea;
 

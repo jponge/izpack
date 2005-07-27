@@ -527,11 +527,11 @@ public class NonValidator implements IXMLValidator
             Properties extraAttributes, String systemId, int lineNr)
     {
         Properties props = (Properties) this.currentElements.pop();
-        Enumeration enum = props.keys();
+        Enumeration enumeration = props.keys();
 
-        while (enum.hasMoreElements())
+        while (enumeration.hasMoreElements())
         {
-            String key = (String) enum.nextElement();
+            String key = (String) enumeration.nextElement();
             extraAttributes.put(key, props.get(key));
         }
     }

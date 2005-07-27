@@ -126,21 +126,21 @@ public class Destroyer extends Thread
      * 
      * @exception Exception Description of the Exception
      */
-    private void askUninstallerRemoval() throws Exception
-    {
-        // Initialisations
-        InputStream in = Destroyer.class.getResourceAsStream("/jarlocation.log");
-        InputStreamReader inReader = new InputStreamReader(in);
-        BufferedReader reader = new BufferedReader(inReader);
-
-        // We delete
-        File jar = new File(reader.readLine());
-        File path = new File(reader.readLine());
-        File inst = new File(installPath);
-        jar.deleteOnExit();
-        path.deleteOnExit();
-        inst.deleteOnExit();
-    }
+//    private void askUninstallerRemoval() throws Exception
+//    {
+//        // Initialisations
+//        InputStream in = Destroyer.class.getResourceAsStream("/jarlocation.log");
+//        InputStreamReader inReader = new InputStreamReader(in);
+//        BufferedReader reader = new BufferedReader(inReader);
+//
+//        // We delete
+//        File jar = new File(reader.readLine());
+//        File path = new File(reader.readLine());
+//        File inst = new File(installPath);
+//        jar.deleteOnExit();
+//        path.deleteOnExit();
+//        inst.deleteOnExit();
+//    }
 
     /**
      * Returns an ArrayList of the files to delete.

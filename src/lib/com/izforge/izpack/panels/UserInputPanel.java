@@ -198,8 +198,6 @@ public class UserInputPanel extends IzPanel
 
     private static final String TOP = "top";
 
-    private static final String BOTTOM = "bottom";
-
     private static final String ITALICS = "italic";
 
     private static final String BOLD = "bold";
@@ -309,8 +307,6 @@ public class UserInputPanel extends IzPanel
     private static int instanceCount = 0;
 
     protected int instanceNumber = 0;
-
-    private boolean uiBuilt = false;
 
     /**
      * If there is a possibility that some UI elements will not get added we can not allow to go
@@ -531,8 +527,6 @@ public class UserInputPanel extends IzPanel
         // }
 
         buildUI();
-        uiBuilt = true;
-
         if (packsDefined)
         {
             parentFrame.lockPrevButton();
@@ -1318,8 +1312,6 @@ public class UserInputPanel extends IzPanel
         String value = null;
 
         XMLElement element = null;
-        JLabel label;
-
         ButtonGroup group = new ButtonGroup();
 
         TwoColumnConstraints constraints = new TwoColumnConstraints();
@@ -1341,9 +1333,6 @@ public class UserInputPanel extends IzPanel
 
         if (element != null)
         {
-            // TODO: label is never added to the UI
-            label = new JLabel(getText(element));
-
             Vector choices = element.getChildrenNamed(RADIO_CHOICE);
 
             if (choices == null) { return; }
@@ -2097,22 +2086,22 @@ public class UserInputPanel extends IzPanel
      * legal integer, then the default value is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private int getInt(XMLElement element, String attribute, int defaultValue)
-    {
-        int result = defaultValue;
-
-        if ((attribute != null) && (attribute.length() > 0))
-        {
-            try
-            {
-                result = Integer.parseInt(element.getAttribute(attribute));
-            }
-            catch (Throwable exception)
-            {}
-        }
-
-        return (result);
-    }
+//    private int getInt(XMLElement element, String attribute, int defaultValue)
+//    {
+//        int result = defaultValue;
+//
+//        if ((attribute != null) && (attribute.length() > 0))
+//        {
+//            try
+//            {
+//                result = Integer.parseInt(element.getAttribute(attribute));
+//            }
+//            catch (Throwable exception)
+//            {}
+//        }
+//
+//        return (result);
+//    }
 
     /*--------------------------------------------------------------------------*/
     /**
