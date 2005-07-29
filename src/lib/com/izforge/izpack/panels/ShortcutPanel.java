@@ -1366,6 +1366,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         Vector dirEntries = new Vector();
 
         File[] entries = groups.listFiles();
+        
+        // Quickfix prevent NullPointer on non default compliant Linux - KDEs
+        // i.e Mandrake 2005 LE stores from now also in "applnk" instead in prior "applnk-mdk": 
+        if( entries != null )        
         for (int idx = 0; idx < entries.length; idx++)
         {
             if (entries[idx].isDirectory())
