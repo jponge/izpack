@@ -54,9 +54,6 @@ public class UnixHelper
         int execResult = fe.executeCommand(
                 new String[] { "/usr/bin/env", "konqueror", "--version"}, execOut);
 
-        System.out.println(execOut[0] + "\n\n");
-        System.out.println(execOut[1]);
-
         return execResult == 0;
     }
 }
