@@ -148,6 +148,10 @@ public final class OsVersion
             boolean caseInSensitiveSearch)
     {
         boolean result = false;
+        
+        String searchString = new String(caseInSensitiveSearch ? aSearchString.toLowerCase()
+                : aSearchString);
+        
         ArrayList etcReleaseContent = new ArrayList();
 
         try
@@ -171,7 +175,7 @@ public final class OsVersion
                 currentline = currentline.toLowerCase();
             }
 
-            if (currentline.indexOf(aSearchString) > -1)
+            if (currentline.indexOf(searchString) > -1)
             {
                 result = true;
 
