@@ -1,7 +1,11 @@
 [ The list of the different public versions of IzPack ]
 
   > 3.8.0 (build N/A)
-  
+- All default values for the InputPanel (the values of the set attribute)
+  can conatins variables at now.  All
+  variables will be replaces by the VariableSubstitutor (Thorsten Kamann)
+- The resources of the target panel can contains variables at now. All
+  variables will be replaces by the VariableSubstitutor (Thorsten Kamann)
 - Fixed chinese Flag.
 - Patch for InstallerFrame to support user confirmation after pressing 
   windows "X" closing button.
