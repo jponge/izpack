@@ -38,6 +38,9 @@ import javax.swing.event.CaretListener;
 
 import org.apache.regexp.RE;
 
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.util.VariableSubstitutor;
+
 /*---------------------------------------------------------------------------*/
 /**
  * This class assists the user in entering serial numbers. <BR>
@@ -136,6 +139,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
     private int resultFormat = DEFAULT;
 
+    private InstallData idata = null;
     /**
      * Holds an instance of the <code>Validator</code> if one was specified and available
      */
@@ -185,9 +189,10 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      */
     /*--------------------------------------------------------------------------*/
     public RuleInputField(String format, String preset, String separator, String validator,
-            Map validatorParams, String processor, int resultFormat, Toolkit toolkit)
+            Map validatorParams, String processor, int resultFormat, Toolkit toolkit,
+            InstallData idata)
     {
-        this(format, preset, separator, validator, processor, resultFormat, toolkit);
+        this(format, preset, separator, validator, processor, resultFormat, toolkit, idata);
         this.validatorParams = validatorParams;
         this.hasParams = true;
     }
@@ -221,11 +226,12 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      */
     /*--------------------------------------------------------------------------*/
     public RuleInputField(String format, String preset, String separator, String validator,
-            String processor, int resultFormat, Toolkit toolkit)
+            String processor, int resultFormat, Toolkit toolkit, InstallData idata)
     {
         this.toolkit = toolkit;
         this.separator = separator;
         this.resultFormat = resultFormat;
+        this.idata = idata;
 
         com.izforge.izpack.gui.FlowLayout layout = new com.izforge.izpack.gui.FlowLayout();
         layout.setAlignment(com.izforge.izpack.gui.FlowLayout.LEFT);
@@ -554,6 +560,8 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                     {
                         process = true;
                     }
+                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    val = vs.substitute(val, null);
                     vals[i] = val;
                     i++;
                     ((JTextField) inputFields.elementAt(index)).setText(val);

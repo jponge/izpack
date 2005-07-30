@@ -927,12 +927,12 @@ public class UserInputPanel extends IzPanel
         if (hasParams)
         {
             field = new RuleInputField(layout, set, separator, validator, validateParamMap,
-                    processor, resultFormat, getToolkit());
+                    processor, resultFormat, getToolkit(), idata);
         }
         else
         {
             field = new RuleInputField(layout, set, separator, validator, processor, resultFormat,
-                    getToolkit());
+                    getToolkit(), idata);
 
         }
         TwoColumnConstraints constraints = new TwoColumnConstraints();
@@ -1034,7 +1034,13 @@ public class UserInputPanel extends IzPanel
                 {
                     set = "";
                 }
+            }else{
+                if (set != null && !"".equals(set)){
+                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    set = vs.substitute(set, null);
+                }
             }
+                
             try
             {
                 size = Integer.parseInt(element.getAttribute(TEXT_SIZE));
@@ -1182,6 +1188,11 @@ public class UserInputPanel extends IzPanel
                     {
                         set = "";
                     }
+                    if (set != null && !"".equals(set)){
+                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        set = vs.substitute(set, null);
+                    }
+                    
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
                     int counter = 0;
                     while (tokenizer.hasMoreTokens())
@@ -1204,6 +1215,10 @@ public class UserInputPanel extends IzPanel
                     String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
                     if (set != null)
                     {
+                        if (set != null && !"".equals(set)){
+                            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                            set = vs.substitute(set, null);
+                        }
                         if (set.equals(TRUE))
                         {
                             field.setSelectedIndex(i);
@@ -1351,6 +1366,10 @@ public class UserInputPanel extends IzPanel
                 String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
                 if (set != null)
                 {
+                    if (set != null && !"".equals(set)){
+                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        set = vs.substitute(set, null);
+                    }
                     if (set.equals(TRUE))
                     {
                         choice.setSelected(true);
@@ -1483,6 +1502,10 @@ public class UserInputPanel extends IzPanel
             {
                 fieldSpec = (XMLElement) inputs.elementAt(i);
                 String set = fieldSpec.getAttribute(SET);
+                if (set != null && !"".equals(set)){
+                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    set = vs.substitute(set, null);
+                }
                 JLabel label = new JLabel(getText(fieldSpec));
                 try
                 {
@@ -1593,6 +1616,10 @@ public class UserInputPanel extends IzPanel
 
         if (set != null)
         {
+            if (set != null && !"".equals(set)){
+                VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                set = vs.substitute(set, null);
+            }
             if (set.equals(FALSE))
             {
                 checkbox.setSelected(false);
@@ -1785,6 +1812,10 @@ public class UserInputPanel extends IzPanel
                 String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
                 if (set != null)
                 {
+                    if (set != null && !"".equals(set)){
+                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        set = vs.substitute(set, null);
+                    }
                     if (set.equals(TRUE))
                     {
                         combobox.setSelectedIndex(i);
