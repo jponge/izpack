@@ -42,6 +42,7 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * Base class for panels which asks for paths.
@@ -288,7 +289,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
      * As with all IzPack resources, each the above ids should be associated with a separate
      * filename, which is set in the install.xml file at compile time.
      */
-    public static void loadDefaultInstallDir(InstallerFrame parentFrame)
+    public static void loadDefaultInstallDir(InstallerFrame parentFrame,
+            InstallData idata)
     {
         // Load only once ...
         if (getDefaultInstallDir() != null) return;
@@ -354,6 +356,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 if (!line.equals("")) break;
             }
             defaultInstallDir = line;
+            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+            defaultInstallDir = vs.substitute(defaultInstallDir, null);
         }
         catch (Exception e)
         {

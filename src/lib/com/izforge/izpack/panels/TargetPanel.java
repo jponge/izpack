@@ -49,7 +49,7 @@ public class TargetPanel extends PathInputPanel
     {
         super(parent, idata);
         // load the default directory info (if present)
-        loadDefaultInstallDir(parent);
+        loadDefaultInstallDir(parent, idata);
         if (getDefaultInstallDir() != null)
         {
             // override the system default that uses app name (which is set in
@@ -73,7 +73,7 @@ public class TargetPanel extends PathInputPanel
      */
     public void loadDefaultDir()
     {
-        super.loadDefaultInstallDir(parent);
+        super.loadDefaultInstallDir(parent, idata);
     }
 
     /**
