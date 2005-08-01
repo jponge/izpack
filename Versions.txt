@@ -1,6 +1,8 @@
 [ The list of the different public versions of IzPack ]
 
   > 3.8.0 (build N/A)
+- Added 2 processor classes having the ability to fill a combobox 
+  with all available unix user and groups (Thorsten Kamann)
 - All default values for the InputPanel (the values of the set attribute)
   can conatins variables at now.  All
   variables will be replaces by the VariableSubstitutor (Thorsten Kamann)
