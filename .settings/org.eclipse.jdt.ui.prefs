@@ -1,4 +1,4 @@
-#Wed May 04 23:05:45 CEST 2005
+#Mon Aug 08 18:45:49 EST 2005
 comment_clear_blank_lines=false
 comment_format_comments=true
 comment_format_header=true
@@ -11,5 +11,6 @@ comment_new_line_for_parameter=false
 comment_separate_root_tags=true
 eclipse.preferences.version=1
 formatter_settings_version=8
+internal.default.compliance=user
 org.eclipse.jdt.ui.javadoc=false
 org.eclipse.jdt.ui.text.custom_code_templates=<?xml version\="1.0" encoding\="UTF-8"?>\n<templates/>
