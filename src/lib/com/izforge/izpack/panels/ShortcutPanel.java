@@ -1221,7 +1221,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         constraints.gridheight = 1;
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;        
-        constraints.fill = GridBagConstraints.NONE;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.WEST;
         /**/
         
