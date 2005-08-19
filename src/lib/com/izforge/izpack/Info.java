@@ -1,5 +1,4 @@
 /*
- * $Id$
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -60,11 +59,6 @@ public class Info implements Serializable
     /** The path of the summary log file */
     private String summaryLogFilePath = "$INSTALL_PATH/Uninstaller/InstallSummary.htm";
 
-    /** The full qualified name of the class which should be
-     *  used for decoding the packs.
-     */
-    private String packDecoderClassName = null;
-    
     /** The constructor, deliberatly void. */
     public Info()
     {
@@ -329,23 +323,5 @@ public class Info implements Serializable
     public void setSummaryLogFilePath(String summaryLogFilePath)
     {
         this.summaryLogFilePath = summaryLogFilePath;
-    }
-    /**
-     * Returns the full qualified class name of the class which
-     * should be used for decoding the packs.
-     * @return Returns the packDecoderClassName.
-     */
-    public String getPackDecoderClassName()
-    {
-        return packDecoderClassName;
-    }
-    /**
-     * Sets the full qualified class name of the class which
-     * should be used for decoding the packs.
-     * @param packDecoderClassName The packDecoderClassName to set.
-     */
-    public void setPackDecoderClassName(String packDecoderClassName)
-    {
-        this.packDecoderClassName = packDecoderClassName;
     }
 }
