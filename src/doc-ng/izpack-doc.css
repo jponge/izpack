@@ -2,6 +2,7 @@
 .MATH    { font-family: "Century Schoolbook", serif; }
 .MATH I  { font-family: "Century Schoolbook", serif; font-style: italic }
 .BOLDMATH { font-family: "Century Schoolbook", serif; font-weight: bold }
+.underlined { text-decoration: underline }
 
 /* implement both fixed-size and relative sizes */
 SMALL.XTINY		{ font-size : xx-small }
@@ -29,9 +30,22 @@ TD.eqno			{ }	/* equation-number cells */
 
 /* document-specific styles come next */
 
+td.XHTMLStrictvalid
+{
+	border-style: none;
+	caption-side: right;
+}
+
 img.alignbottom
 {
 	border-style: none;
+	vertical-align: bottom;
+}
+
+img.alignbottom1
+{
+	border-width: 1;
+	border-style: solid;
 	vertical-align: bottom;
 }
 
