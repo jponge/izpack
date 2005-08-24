@@ -284,9 +284,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
         while (st.hasMoreTokens())
         {
             byte value = 0;
+            String token = st.nextToken().trim();
             try
             { // Unfortenly byte is signed ...
-                int tval = Integer.parseInt(st.nextToken(), 16);
+                int tval = Integer.parseInt(token, 16);
                 if (tval < 0 || tval > 0xff)
                     throw new NumberFormatException("Value out of range.");
                 if (tval > 0x7f) tval -= 0x100;
