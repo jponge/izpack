@@ -30,12 +30,6 @@ TD.eqno			{ }	/* equation-number cells */
 
 /* document-specific styles come next */
 
-td.XHTMLStrictvalid
-{
-	border-style: none;
-	caption-side: right;
-}
-
 img.alignbottom
 {
 	border-style: none;
@@ -60,14 +54,42 @@ caption.alignbottom
 	vertical-align: bottom;
 }
 
+div.centertextleft
+{
+	text-align: left;
+}
+
 div.center
 {
+
 	text-align: center;
+}
+
+table.center
+{
+	margin-left:auto; 
+	margin-right:auto;
 }
 
 td.textright
 {
 	text-align: right;
+}
+
+td.textleft
+{
+	text-align: left;
+}
+
+td.XHTMLStrictvalid
+{
+	border-style: none;
+	caption-side: right;
+}
+
+th.textleft
+{
+	text-align: left;
 }
 
 p.underlinebold
