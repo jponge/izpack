@@ -28,7 +28,7 @@ $Id$
              with what contents. The type of contents will be implicit determined
              by the setting. Only one setting of the types are valid.
         -->
-        <!ELEMENT value (multi*)>
+        <!ELEMENT value (bin*, multi*)>
             <!-- Name of the value to be set or modified-->
             <!ATTLIST value name CDATA #REQUIRED>
             <!-- The key path under which the value should be placed 
@@ -45,12 +45,11 @@ $Id$
             <!ATTLIST value string CDATA #IMPLIED>
             <!-- Contents for value of type DWORD -->
             <!ATTLIST value dword CDATA #IMPLIED>
-            <!-- Contents for value of type MULTI_STRING with one entry -->
-            <!ATTLIST value multi CDATA #IMPLIED>
             <!-- Contents for value of type BINARY written as comma separated list of hex  -->
-            <!ATTLIST value bin CDATA #IMPLIED>
-            <!-- Contents for value of type MULTI_STRING with more than one entry -->
-            <!ELEMENT multi (data*)>
-                <!ELEMENT data (#PCDATA)>
+            <!ELEMENT bin EMPTY>
+                <!ATTLIST bin data CDATA #REQUIRED>
+            <!-- Contents for value of type MULTI_STRING -->
+            <!ELEMENT multi EMPTY>
+                <!ATTLIST multi data CDATA #REQUIRED>
             
         
