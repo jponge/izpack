@@ -17,7 +17,7 @@
 
 <shortcuts>
 
-  <programGroup defaultName="IzForge/IzPack" location="applications"/>
+  <programGroup defaultName="IzForge/IzPack@build.number@" location="applications"/>
 
 
     <!-- Disabled since there is no Frontend
@@ -43,7 +43,7 @@
    </shortcut -->
 
    <shortcut
-     name="IzPack Html-Documentation"
+     name="IzPack@ver@ Html Documentation"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -59,14 +59,14 @@
      type="Application"
      encoding="UTF-8" 
    createForAll="true"  
-     description="IzPack user documentation (HTML format)">
+     description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) user documentation">
      
      <createForPack name="Documentation-HTML"/>
    </shortcut>
 
 
    <shortcut
-     name="IzPack PDF-Documentation"
+     name="IzPack@ver@ PDF Documentation"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -82,14 +82,14 @@
      type="Application"
      encoding="UTF-8"   
    createForAll="true"
-     description="IzPack user documentation (PDF format)">
+     description="This opens Adobe (Acrobat) Reader (if available) to look into or print the IzPack @build.number@ (PDF) user documentation">
      
      <createForPack name="Documentation-PDF"/>
    </shortcut>
    
       
    <shortcut
-     name="Uninstaller"
+     name="Izpack@ver@ Uninstaller"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -105,7 +105,7 @@
      type="Application"
      encoding="UTF-8"
    createForAll="false"
-     description="IzPack uninstaller">
+     description="This uninstalls IzPack @build.number@">
 
      <createForPack name="Core" />
    </shortcut>
