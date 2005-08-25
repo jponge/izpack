@@ -114,9 +114,9 @@
     </panels>
 
     <!-- The listeners section for CustomActions -->
-	<listeners>
-		<listener installer="SummaryLoggerInstallerListener"/>
-	</listeners>
+    <listeners>
+        <listener installer="SummaryLoggerInstallerListener"/>
+    </listeners>
 
     <!-- The packs section -->
     <packs>

@@ -1,4 +1,5 @@
 /*
+ * $Id$
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.coi.tools.os.win.NativeLibException;
+import com.coi.tools.os.win.RegDataContainer;
 import com.coi.tools.os.win.RegistryImpl;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.ResourceManager;
@@ -163,7 +165,7 @@ public class RegistryHandler extends OSClassHelper
      * @return requested value if exist, else the default value
      * @throws NativeLibException
      */
-    public Object getValue(String key, String value, Object defaultVal) throws NativeLibException
+    public RegDataContainer getValue(String key, String value, RegDataContainer defaultVal) throws NativeLibException
     {
         return (null);
     }
@@ -225,7 +227,7 @@ public class RegistryHandler extends OSClassHelper
      * @return requested value if exist, else an exception
      * @throws NativeLibException
      */
-    public Object getValue(String key, String value) throws NativeLibException
+    public RegDataContainer getValue(String key, String value) throws NativeLibException
     {
         return (null);
     }

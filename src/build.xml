@@ -442,6 +442,18 @@
 		<build-panel name="HelloPanel">
 			<include name="com/izforge/izpack/panels/HelloPanel.java" />
 		</build-panel>
+		<build-panel name="CheckedHelloPanel">
+			<include name="com/izforge/izpack/panels/CheckedHelloPanel.java" />
+			<include name="com/izforge/izpack/panels/HelloPanel.java" />
+			<include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
+			<include name="com/izforge/izpack/util/OSClassHelper.java" />
+			<include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
+			<include name="com/coi/tools/os/win/NativeLibException.java" />
+			<include name="com/coi/tools/os/win/Reg*.java" />
+			<include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
+			<include name="com/coi/tools/os/izpack/Registry.java" />
+			<include name="com/coi/tools/os/izpack/COIOSHelper.java" />
+		</build-panel>
 		<build-panel name="InfoPanel">
 			<include name="com/izforge/izpack/panels/InfoPanel.java" />
 		</build-panel>

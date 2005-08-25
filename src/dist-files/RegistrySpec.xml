@@ -25,11 +25,27 @@
 			string="$APP_URL"/>
       </pack>
 	<pack name="Core">
-		<!-- globals -->
 		<value name="Path" 
 			keypath="SOFTWARE\IzForge\IzPack\$APP_VER"  
 			root="HKLM" 
 			string="$INSTALL_PATH"/>
+		<value name="DWORD" 
+			keypath="SOFTWARE\IzForge\IzPack\$APP_VER"  
+			root="HKLM" 
+			dword="42"/>
+		<value name="BIN" 
+			keypath="SOFTWARE\IzForge\IzPack\$APP_VER"  
+			root="HKLM" >
+			<bin data="42, 49, 4e, 20, 54, 45, 53, 54" />
+			<bin data="42, 49, 4e, 20, 54, 45, 53, 54" />
+		</value>
+		<value name="MULTI" 
+			keypath="SOFTWARE\IzForge\IzPack\$APP_VER"  
+			root="HKLM" >
+			<multi data="A multi string with three elements" />
+			<multi data="Element two"/>
+			<multi data="Element three"/>
+		</value>
 	</pack>
 	<pack name="Documentation-HTML">
 			<key keypath="SOFTWARE\IzForge\IzPack\$APP_VER\Documentation\HTML" root="HKLM"/>

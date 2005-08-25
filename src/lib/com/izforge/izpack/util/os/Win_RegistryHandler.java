@@ -1,4 +1,5 @@
 /*
+ * $Id$
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -25,6 +26,7 @@ import java.util.List;
 
 import com.coi.tools.os.izpack.Registry;
 import com.coi.tools.os.win.NativeLibException;
+import com.coi.tools.os.win.RegDataContainer;
 
 /**
  * This is the Microsoft Windows specific implementation of <code>RegistryHandler</code>.
@@ -124,7 +126,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * @return requested value if exist, else the default value
      * @throws Exception
      */
-    public Object getValue(String key, String value, Object defaultVal) throws NativeLibException
+    public RegDataContainer getValue(String key, String value, RegDataContainer defaultVal) throws NativeLibException
     {
         if (!good()) return (null);
         if (valueExist(key, value)) return (getValue(key, value));
@@ -192,7 +194,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * @return requested value if exist, else an exception
      * @throws Exception
      */
-    public Object getValue(String key, String value) throws NativeLibException
+    public RegDataContainer getValue(String key, String value) throws NativeLibException
     {
         if (!good()) return (null);
         return (regWorker.getValue(key, value));
