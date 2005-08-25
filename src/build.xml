@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
-
 <project name="IzPack" default="all" basedir="..">
 
 	<!--
@@ -163,9 +161,12 @@
 	<!--<property name="build.compiler" value="jikes" />-->
 
 	<!-- Define directories -->
+	<property name="cwd"          value="${basedir}"/>
+	
 	<property file="src/ant.properties" />
 	<property name="ver" value="3.8" />
 	<property name="rel" value="0-M1" />
+	<property name="build.number" value="${ver}.${rel}"/>
 
 	<property name="src.dir" value="${basedir}/src/lib" />
 	<property name="img.dir" value="${basedir}/src/img" />
@@ -222,11 +223,10 @@
 	</target>
 
 	<!-- Creates the classes directory -->
-	<target name="prepare">
+	<target name="prepare" depends="time">
 		<mkdir dir="${build.dir}" />
 		<mkdir dir="${basedir}/lib" />
-		<mkdir dir="${dist.dir}" />
-		<tstamp />
+		<mkdir dir="${dist.dir}" />		
 	</target>
 
 	<!-- Compiles the compiler src files -->
@@ -695,7 +695,7 @@
 	<!-- ====================================================================== -->
 
 	<!-- Performs some cleanups -->
-	<target name="clean">
+	<target name="clean" description="cleans up the dist">
 		<echo message="Cleaning-up" />
 		<delete includeEmptyDirs="true" quiet="true">
 			<fileset dir="${build.dir}" />
@@ -716,13 +716,14 @@
 				<include name="uninstaller-ext.jar" />
 			</fileset>
 		</delete>
+		<delete includeEmptyDirs="true" dir="${basedir}/doc/izpack"/>			
 	</target>
 
 	<!-- Builds all compilation targets -->
-	<target name="all" depends="build.compiler,build.installer,build.uninstaller,build.uninstaller-ext,build.panels,build.listeners,build.standalone-compiler" />
+	<target name="all" depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" />
 
 	<!-- Builds the Javadoc -->
-	<target name="build.javadoc" depends="prepare">
+	<target name="build.javadoc" depends="prepare" description="Builds the javadoc">
 		<mkdir dir="${build.dir}/javadoc" />
 		<javadoc destdir="${build.dir}/javadoc" access="private" classpathref="classpath">
 			<packageset dir="${src.dir}">
@@ -735,6 +736,30 @@
 			</fileset>
 		</copy>
 	</target>
+	
+	<target name="build.docu" description="Builds the customer documentation">
+		<echo message="build the customer documentation"/>
+		<exec dir="${basedir}/src/doc" os="Linux" executable="make">		
+		</exec>	
+		<copy todir="${doc.dir}/izpack/html">
+		  <fileset dir="${basedir}/src/doc/html">
+	        <include name="**/*" />
+		  </fileset>
+	    </copy>
+		<copy todir="${doc.dir}/izpack/pdf">
+          <fileset dir="${basedir}/src/doc/pdf">
+             <include name="**/*" />
+          </fileset>
+        </copy>
+	</target>
+	
+	<target name="create.docu" depends="build.javadoc, build.docu" description="Creates the javadoc-api and customer documentation" >
+		
+		
+	
+	</target>
+	
+
 
 	<!-- Creates an installer for IzPack -->
 	<target name="generate.installer.worker">
@@ -742,7 +767,11 @@
 		<!-- Allows us to use the IzPack Ant task -->
 		<taskdef name="izpack" classpath="${basedir}/lib/compiler.jar" classname="com.izforge.izpack.ant.IzPackTask" />
 
-		<!-- Copies the files to the dist directory -->
+		<echo message="Copies the recent changed native files to the ${basedir}/bin directory"/>
+		
+		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release/ShellLink.dll" verbose="true" overwrite="yes"/>
+		
+		<echo message="Copies the general files to the dist directory"/>
 		<copy todir="${dist.dir}" includeEmptyDirs="yes">
 			<fileset dir="${basedir}">
 				<include name="bin/**" />
@@ -754,12 +783,14 @@
 				<include name="*.txt" />
 			</fileset>
 		</copy>
+    <echo message="Copies the langpacks to the dist directory"/>
 		<copy todir="${dist.dir}/bin" includeEmptyDirs="yes">
 			<fileset dir="${basedir}">
 				<include name="langpacks/**" />
 			</fileset>
 		</copy>
-		<copy todir="${dist.dir}" includeEmptyDirs="yes">
+    <echo message="Copies the license images and specs to the dist directory"/>
+		<copy todir="${dist.dir}" includeEmptyDirs="yes"> 
 			<fileset dir="${dist-files.dir}">
 				<include name="useNativeLAF" />
 				<include name="*.jpg" />
@@ -772,6 +803,14 @@
 				<include name="RegistrySpec.xml" />
 			</fileset>
 		</copy>
+		
+		<replace file="${dist.dir}/shortcutSpec.xml" token="@build.number@" value="${build.number}" summary="yes"/>
+		<replace file="${dist.dir}/shortcutSpec.xml" token="@ver@" value="${ver}" summary="yes"/>
+
+		<replace file="${dist.dir}/Unix_shortcutSpec.xml" token="@build.number@" value="${build.number}" summary="yes"/>
+		<replace file="${dist.dir}/Unix_shortcutSpec.xml" token="@ver@" value="${ver}" summary="yes"/>
+		
+    <echo message="Copies the bin files to the dist directory"/>
 		<copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
 			<fileset dir="${dist-files.dir}">
 				<include name="compile*" />
@@ -782,10 +821,12 @@
 		<!-- We call IzPack -->
 		<echo message="Makes the installer using IzPack" level="verbose" />
 		<izpack input="${dist.dir}/${installer.xmlfile}" output="${dist.dir}/${installer.name}${ver}.${rel}.jar" installerType="standard" basedir="${dist.dir}" izPackDir="${dist.dir}/" />
-
 	</target>
+	
 
-	<!-- Creates a normal installer for IzPack -->
+	<!-- ================================= 
+	   Creates a normal installer for IzPack 
+	  ================================= -->
 	<target name="generate.installer">
 		<antcall target="generate.installer.worker">
 			<param name="installer.xmlfile" value="IzPack-install.xml" />
@@ -815,16 +856,72 @@
 
 	<!-- Runs a testing installer. -->
 	<target name="run.installer">
-		<java jar="${basedir}/_dist/IzPack-install-${ver}.${rel}.jar" fork="true" />
+		<java jar="${basedir}/_dist/IzPack-install-${build.number}.jar" fork="true" />
 	</target>
 
 	<!-- Makes everything, from compilation to generating an installer. -->
-	<target name="dist" depends="all,generate.installer" />
+	<target name="quickdist" depends="all, generate.installer" description="makes a installer without docu"/>
+	
+	<!-- Makes everything, from compilation, customer and javadoc to generating an installer. -->
+	<target name="dist" depends="all, create.docu, generate.installer" description="makes a complete installer"/>
 
 	<!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
 	<target name="cleandistreg" depends="clean,all,generate.installer,generate.installer-reg" />
 
+	<!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->
+	<target name="quickdist+run" depends="quickdist, run.installer" description="makes a quickdist installer and runs them"/>
+	
 	<!-- convenient :) makes a complete dist an installer and run them. -->
-	<target name="dist+run" depends="all, generate.installer, run.installer" />
+	<target name="dist+run" depends="dist, run.installer" description="makes a complete installer and runs them"/>
+	
+	<!-- ** splashscreen **
+	  shows some ANT specific- and JAVA-
+	  but Platform and Project-independed Properties.
+	================================================================ -->
+	<target name="splashscreen" depends="time" description="shows the used environment and project settings">
+	  
+		<property name="console_line"
+		          value="**************************************************"/>
+	  <!-- Task splash/ ?? -->
+	  <echo message="${console_line}"/>
+	  <echo message="* ${ant.version}"/> <!-- N2H: Test if this is the right ANT-Version (implementation of an own JAVA-Class which compares BuildNumbers) -->
+	  <echo message="*   Java JRE version ${ant.java.version} ${java.vm.vendor}"/>   <!-- 1.3 -->
+	  <exec executable="${java.home}/bin/java">
+	  <arg line="-version"/>
+	  </exec>
+	  <echo message="${console_line}"/>
+	  <echo message="*  processing file ....... '${ant.file}'"/>           <!-- D:\ToDo\_2002-11\AntTest\build.xml -->
+	  <echo message="*  in base-directory ..... '${basedir}'"/>            <!-- D:\ToDo\_2002-11\AntTest -->
+	  <echo message="*  building project ...... '${ant.project.name}'"/>   <!-- CIS -->
+	  <echo message="*  working in directory .. '${cwd}'"/>
+	  <echo message="${console_line}"/>	  
+	</target>
+	
+	
+    <!-- ================================= 
+          target: ShellLink.Javah              
+         ================================= -->
+    <target name="ShellLink.Javah" depends="compile.installer" description="--> rebuilds the shelllink jni *.h header file">
+        <javah class="com.izforge.izpack.util.os.ShellLink" destdir="${basedir}/src/native/ShellLink">
+        	<classpath path="${build.dir}"/>        	
+        </javah>
+    </target>
+
+	
+	<!-- ================================= 
+         target: time - takes a timestamp           
+        ================================= -->
+	<target name="time">
+	  <tstamp/>
+	</target>
+	
+	
+	<!-- ================================= 
+          target: dump.properties - dumps the curent properties into the $os_$timestamp.properties file             
+         ================================= -->	
+	<target name="dump.properties" depends="time" description="dump.environment (for debug)">	  
+	  <echoproperties destfile="${basedir}/ant_properties_at_${os.name}-${os.arch}-${os.version}_at_${DSTAMP}-${TSTAMP}.txt"/>
+	</target>
+    
 
 </project>
