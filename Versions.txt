@@ -55,6 +55,7 @@
 - createForUnselectedPack, show a userinputapanel if a pack is not selected 
   (Fabrice Mirabile, thanks to Stefano Gamma)
 - Registry support on Windows (Klaus Bartz).
+- New CheckedHelloPanel which checks already installed product (Klaus Bartz).
 - Most IzPackTask output for ant is only dumped in VERBOSE mode (Chad McHenry).
 - Introduction of a JUnit test suite.
 - Scripts for easier built of password validation and encrytion addon classes (Fabrice Mirabile)
