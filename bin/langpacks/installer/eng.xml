@@ -29,6 +29,10 @@
     <str id="HelloPanel.authors" txt="This software is developed by: "/>
     <str id="HelloPanel.url" txt="The homepage is at: "/>
     
+    <str id="CheckedHelloPanel.productAlreadyExist0" txt="This product is already installed on this computer under the path "/>
+    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Are you sure you want to install another entity?"/>
+    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="The uninstall key will be named: " />
+
     <str id="LicencePanel.info" txt="Please read the following license agreement carefully:"/>
     <str id="LicencePanel.agree" txt="I accept the terms of this license agreement."/>
     <str id="LicencePanel.notagree" txt="I do not accept the terms of this license agreement."/>

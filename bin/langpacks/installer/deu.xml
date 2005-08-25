@@ -25,6 +25,11 @@
     <str id="HelloPanel.welcome2" txt="!"/>
     <str id="HelloPanel.authors" txt="Der(die) Autor(en) dieser Software ist(sind): "/>
     <str id="HelloPanel.url" txt="Die Homepage für diese Software: "/>
+
+    <str id="CheckedHelloPanel.productAlreadyExist0" txt="Das Produkt ist bereits auf Ihrem Computer unter "/>
+    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" installiert. Soll eine weitere Version installiert werden?"/>
+    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="Der Deinstallationschlüssel lautet wie folgt: " />
+
     <str id="LicencePanel.info" txt="Bitte lesen Sie die folgenden Lizenzvereinbarungen durch:"/>
     <str id="LicencePanel.agree" txt="Ja, ich stimme diesen Lizenzvereinbarungen zu."/>
     <str id="LicencePanel.notagree" txt="Nein, ich stimme diesen Lizenzvereinbarungen nicht zu."/>
