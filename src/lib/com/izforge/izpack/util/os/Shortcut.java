@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.util.os;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
@@ -333,8 +334,9 @@ public class Shortcut
      * </ul>
      * 
      * @exception IllegalArgumentException if an an invalid type is passed
+     * @throws UnsupportedEncodingException 
      */
-    public void setLinkType(int type) throws IllegalArgumentException
+    public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException
     {
     }
 

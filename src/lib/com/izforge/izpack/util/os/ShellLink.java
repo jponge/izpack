@@ -22,6 +22,7 @@
 package com.izforge.izpack.util.os;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.NativeLibraryClient;
@@ -188,14 +189,14 @@ public class ShellLink implements NativeLibraryClient
      * on the circumstances. It can be set during object construction or from native code. It will
      * point to the location where links of the most recently requested type are stored.
      */
-    private String currentUserLinkPath = "";
+    private byte[] currentUserLinkPath;
 
     /**
      * Path to the location where links for all users are stored. The exact content depends on the
      * circumstances. It can be set during object construction or from native code. It will point to
      * the location where links of the most recently requested type are stored.
      */
-    private String allUsersLinkPath = "";
+    private byte[] allUsersLinkPath;
 
     private String groupName = "";
 
@@ -381,11 +382,11 @@ public class ShellLink implements NativeLibraryClient
 
         if (userType == CURRENT_USER)
         {
-            currentUserLinkPath = name.substring(0, pathEnd);
+            currentUserLinkPath = name.substring(0, pathEnd).getBytes("UTF-16");
         }
         else
         {
-            allUsersLinkPath = name.substring(0, pathEnd);
+            allUsersLinkPath = name.substring(0, pathEnd).getBytes("UTF-16");
         }
 
         linkFileName = fullLinkName(userType);
@@ -790,8 +791,9 @@ public class ShellLink implements NativeLibraryClient
      * </ul>
      * 
      * @exception IllegalArgumentException if an an invalid type is passed
+     * @throws UnsupportedEncodingException 
      */
-    public void setLinkType(int type) throws IllegalArgumentException
+    public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException
     {
         if ((type < MIN_TYPE) || (type > MAX_TYPE)) { throw (new IllegalArgumentException(
                 "illegal value for type")); }
@@ -866,14 +868,32 @@ public class ShellLink implements NativeLibraryClient
      */
     public String getLinkPath(int userType)
     {
+        String result = null;
         if (userType == CURRENT_USER)
         {
-            return (currentUserLinkPath);
+            try
+            {
+                result = new String( currentUserLinkPath, "UTF-16" );
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         else
         {
-            return (allUsersLinkPath);
+            try
+            {
+                result = new String(allUsersLinkPath, "UTF-16");
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
+        return result;
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1029,7 +1049,17 @@ public class ShellLink implements NativeLibraryClient
      */
     public String getcurrentUserLinkPath()
     {
-        return (currentUserLinkPath);
+        String result =null;
+        try
+        {
+            result = new String( currentUserLinkPath, "UTF-16");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } 
+        return result;
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1040,7 +1070,17 @@ public class ShellLink implements NativeLibraryClient
      */
     public String getallUsersLinkPath()
     {
-        return (allUsersLinkPath);
+        String result = null;
+        try
+        {
+            result = new String(allUsersLinkPath, "UTF-16");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return result;
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1130,24 +1170,25 @@ public class ShellLink implements NativeLibraryClient
      * is thrown.
      * 
      * @throws IllegalArgumentException
+     * @throws UnsupportedEncodingException 
      */
-    private void setAllLinkPaths() throws IllegalArgumentException
+    private void setAllLinkPaths() throws IllegalArgumentException, UnsupportedEncodingException
     {
         // sets currentUsersLinkPath and allUsersLinkPath
         GetFullLinkPath(CURRENT_USER, linkType);
         GetFullLinkPath(ALL_USERS, linkType);
 
         // be sure userType is valid. Override initial choice if not.
-        if (userType == CURRENT_USER && currentUserLinkPath.length() == 0)
+        if (userType == CURRENT_USER && new String(currentUserLinkPath, "UTF-16").length() == 0)
         {
             userType = ALL_USERS;
         }
-        else if (userType == ALL_USERS && allUsersLinkPath.length() == 0)
+        else if (userType == ALL_USERS && new String( allUsersLinkPath, "UTF-16").length() == 0)
         {
             userType = CURRENT_USER;
         }
 
-        if (allUsersLinkPath.length() == 0 && currentUserLinkPath.length() == 0) { throw (new IllegalArgumentException(
+        if ( new String(allUsersLinkPath, "UTF-16").length() == 0 && new String(currentUserLinkPath, "UTF-16").length() == 0) { throw (new IllegalArgumentException(
                 "linkType " + linkType + " is invalid.")); }
     }
 
