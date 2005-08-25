@@ -46,7 +46,7 @@ public class StringTool
     // **************************************************************************************
 
     /**
-     * Test method
+     * Standalone callable Test method
      * 
      * @param args Commandline Args
      */
@@ -167,4 +167,30 @@ public class StringTool
     {
         return (normalizePath(destination, null));
     }
+    
+    /**
+     * Converts an String Array to a space separated String w/o any check 
+     * @param args The StringArray
+     * @return the space separated result.
+     */
+    public static String stringArrayToSpaceSeparatedString( String[] args )
+    {
+      String result = "";
+        for( int idx = 0; idx < args.length; idx++ )
+        {
+          result += args[ idx ]+ " ";
+        }
+      return result;
+    }
+
+    public static String getPlatformEncoding()
+    {
+        // TODO Auto-generated method stub
+        return System.getProperty( "file.encoding" );
+    }
+    public static String UTF16()
+    {
+        return "UTF-16";
+    }
+    
 }
