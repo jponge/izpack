@@ -206,6 +206,7 @@ public class CheckedHelloPanel extends HelloPanel
                 {
                     setUniqueUninstallKey();
                     abortInstallation = false;
+                    parent.unlockNextButton();
                 }
             }
             catch (Exception e)
@@ -252,6 +253,9 @@ public class CheckedHelloPanel extends HelloPanel
                 emitNotification(parent.langpack
                         .getString("CheckedHelloPanel.infoOverUninstallKey")
                         + newUninstallName);
+                // Now a little hack if the registry spec file contains
+                // the pack "UninstallStuff".
+                idata.setVariable("UNINSTALL_NAME", newUninstallName);
                 break;
             }
             uninstallModifier++;
