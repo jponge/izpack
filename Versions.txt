@@ -55,7 +55,7 @@
 - createForUnselectedPack, show a userinputapanel if a pack is not selected 
   (Fabrice Mirabile, thanks to Stefano Gamma)
 - Registry support on Windows (Klaus Bartz).
-- New CheckedHelloPanel which checks already installed product (Klaus Bartz).
+- New CheckedHelloPanel which checks already installed products (Klaus Bartz).
 - Most IzPackTask output for ant is only dumped in VERBOSE mode (Chad McHenry).
 - Introduction of a JUnit test suite.
 - Scripts for easier built of password validation and encrytion addon classes (Fabrice Mirabile)
@@ -65,6 +65,8 @@
 - "Made with IzPack label": enforce a specific font for the label, making it
   look finally good with JGoodies Looks.
 - ImgPacksPanel: removed the useless/ugly border around the description area.
+- New compressor pack added to support different compression algorithm for the
+  packs; initial supported are "raw", "deflate" and "bzip2" (Klaus Bartz).
 
   > 3.7.2 (build 2005.04.22)
 
