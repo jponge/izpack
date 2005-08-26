@@ -1,4 +1,5 @@
 /*
+ * $Id$
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -33,6 +34,7 @@ import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.PropertySet;
 
 import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.PackagerListener;
 
 /**
@@ -53,6 +55,12 @@ public class IzPackTask extends Task implements PackagerListener
 
     /** Holds value of property output. */
     private String output;
+
+    /** Holds value of property compression. */
+    private String compression;
+
+    /** Holds value of property compression. */
+    private int compressionLevel;
 
     /** Holds value of property installerType. */
     private InstallerType installerType;
@@ -77,6 +85,8 @@ public class IzPackTask extends Task implements PackagerListener
         output = null;
         installerType = null;
         izPackDir = null;
+        compression = "default";
+        compressionLevel = -1;
     }
 
     /**
@@ -178,16 +188,21 @@ public class IzPackTask extends Task implements PackagerListener
         String kind = (installerType == null ? null : installerType.getValue());
 
         CompilerConfig c = null;
-        if( config != null )
-        {
-            // Pass in the embedded configuration
-            String configText = config.getText();
-            c = new CompilerConfig(basedir, kind, output, this, configText);
+        String configText = null;
+        if(config != null )
+        {// Pass in the embedded configuration
+            configText = config.getText();
+            input = null;
         }
-        else
+        try
         {
-            // Pass in the external configuration referenced by the input attribute
-            c = new CompilerConfig(input, basedir, kind, output, this);            
+            // else use external configuration referenced by the input attribute
+            c = new CompilerConfig(input, basedir, kind, output, 
+                    compression, compressionLevel, this, configText);
+        }
+        catch (CompilerException e1)
+        {
+            throw new BuildException(e1);
         }
         CompilerConfig.setIzpackHome(izPackDir);
 
@@ -282,6 +297,23 @@ public class IzPackTask extends Task implements PackagerListener
     public void setInheritAll(boolean value)
     {
         inheritAll = value;
+    }
+
+    /**
+     * Setter for property compression.
+     * @param compression The type compression to set for pack compression.
+     */
+    public void setCompression(String compression)
+    {
+        this.compression = compression;
+    }
+
+    /**
+     * @param compressionLevel The compressionLevel to set.
+     */
+    public void setCompressionLevel(int compressionLevel)
+    {
+        this.compressionLevel = compressionLevel;
     }
 
     /**

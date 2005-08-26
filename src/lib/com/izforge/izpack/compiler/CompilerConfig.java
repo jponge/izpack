@@ -1,4 +1,5 @@
 /*
+ * $Id$
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -129,12 +130,11 @@ public class CompilerConfig extends Thread
      * @param basedir The base directory.
      * @param kind The installer kind.
      * @param output The installer filename.
+     * @throws CompilerException
      */
-    public CompilerConfig(String filename, String basedir, String kind, String output)
+    public CompilerConfig(String filename, String basedir, String kind, String output) throws CompilerException
     {
-        this.filename = filename;
-        this.basedir = basedir;
-        this.compiler = new Compiler(basedir, kind, output);
+        this(filename, basedir, kind, output, (PackagerListener) null);
     }
     /**
      * The constructor.
@@ -144,14 +144,29 @@ public class CompilerConfig extends Thread
      * @param kind The installer kind.
      * @param output The installer filename.
      * @param listener The PackagerListener.
+     * @throws CompilerException
      */
-    public CompilerConfig(String filename, String basedir, String kind, String output, PackagerListener listener)
+    public CompilerConfig(String filename, String basedir, String kind, String output, PackagerListener listener) 
+    throws CompilerException
     {
-        this.filename = filename;
-        this.basedir = basedir;
-        this.compiler = new Compiler(basedir, kind, output);
-        compiler.setPackagerListener(listener);
+        this(filename,basedir,kind,output, "default", listener);
     }
+
+    /**
+     * @param filename The XML filename.
+     * @param basedir The base directory.
+     * @param kind The installer kind.
+     * @param output The installer filename.
+     * @param compr_format The compression format to be used for packs.
+     * @param listener The PackagerListener.
+     * @throws CompilerException
+     */
+    public CompilerConfig(String filename, String base, String kind, String output, String compr_format, 
+            PackagerListener listener) throws CompilerException
+    {
+        this(filename,base,kind,output, compr_format,listener, (String) null);
+    }
+
     /**
      * 
      * @param basedir The base directory.
@@ -159,15 +174,52 @@ public class CompilerConfig extends Thread
      * @param output The installer filename.
      * @param listener The PackagerListener.
      * @param installText The install xml configuration text
+     * @throws CompilerException
      */
     public CompilerConfig(String basedir, String kind, String output, PackagerListener listener,
-            String installText)
+            String installText) throws CompilerException
     {
+        this((String) null, basedir, kind, output, "default", listener, installText);
+    }
+    /**
+     * 
+     * @param filename The XML filename.
+     * @param basedir The base directory.
+     * @param kind The installer kind.
+     * @param output The installer filename.
+     * @param compr_format The compression format to be used for packs.
+     * @param listener The PackagerListener.
+     * @param installText The install xml configuration text
+     * @throws CompilerException
+     */
+    public CompilerConfig(String filename, String basedir, String kind, String output, String compr_format, 
+            PackagerListener listener, String installText) throws CompilerException
+    {
+        this( filename, basedir, kind, output, compr_format, -1, listener, installText);
+    }
+
+    /**
+     * @param filename The XML filename.
+     * @param basedir The base directory.
+     * @param kind The installer kind.
+     * @param output The installer filename.
+     * @param compr_format The compression format to be used for packs.
+     * @param compr_level Compression level to be used if supported.
+     * @param listener The PackagerListener.
+     * @param installText The install xml configuration text
+    * @throws CompilerException
+     */
+    public CompilerConfig(String filename, String basedir, String kind, String output, String compr_format, 
+            int compr_level, PackagerListener listener, String installText) throws CompilerException
+    {
+        this.filename = filename;
         this.installText = installText;
         this.basedir = basedir;
-        this.compiler = new Compiler(basedir, kind, output);
+        this.compiler = new Compiler(basedir, kind, output, compr_format, compr_level);
         compiler.setPackagerListener(listener);
     }
+
+
 
     /**
      * Add a name value pair to the project property set. It is <i>not</i>
@@ -1660,6 +1712,8 @@ public class CompilerConfig extends Thread
             String base = ".";
             String kind = "standard";
             String output;
+            String compr_format = "default";
+            int compr_level = -1;
 
             // First check
             int nArgs = args.length;
@@ -1700,6 +1754,10 @@ public class CompilerConfig extends Thread
                 System.out.println("               default is standard");
                 System.out.println("   -o (out)  : indicates the output file name");
                 System.out.println("               default is the xml file name\n");
+                System.out.println("   -c (compression)  : indicates the compression format to be used for packs");
+                System.out.println("               default is the internal deflate compression\n");
+                System.out.println("   -l (compression-level)  : indicates the level for the used compression format");
+                System.out.println("                if supported. Only integer are valid\n");
 
                 System.out
                         .println("   When using vm option -DSTACKTRACE=true there is all kind of debug info ");
@@ -1750,6 +1808,24 @@ public class CompilerConfig extends Thread
                             else
                                 throw new Exception("output argument missing");
                             break;
+                        case 'c':
+                            if ((pos + 1) < nArgs)
+                            {
+                                pos++;
+                                compr_format = args[pos];
+                            }
+                            else
+                                throw new Exception("compression format argument missing");
+                            break;
+                        case 'l':
+                            if ((pos + 1) < nArgs)
+                            {
+                                pos++;
+                                compr_level = Integer.parseInt(args[pos]);
+                            }
+                            else
+                                throw new Exception("compression level argument missing");
+                            break;
                         default:
                             throw new Exception("unknown argument");
                         }
@@ -1759,15 +1835,18 @@ public class CompilerConfig extends Thread
                         throw new Exception("bad argument");
 
                 // Outputs what we are going to do
-                System.out.println("-> Processing : " + filename);
-                System.out.println("-> Output     : " + output);
-                System.out.println("-> Base path  : " + base);
-                System.out.println("-> Kind       : " + kind);
+                System.out.println("-> Processing  : " + filename);
+                System.out.println("-> Output      : " + output);
+                System.out.println("-> Base path   : " + base);
+                System.out.println("-> Kind        : " + kind);
+                System.out.println("-> Compression : " + compr_format);
+                System.out.println("-> Compr. level: " + compr_level);
                 System.out.println("");
 
                 // Calls the compiler
                 CmdlinePackagerListener listener = new CmdlinePackagerListener();
-                CompilerConfig compiler = new CompilerConfig(filename, base, kind, output, listener);
+                CompilerConfig compiler = new CompilerConfig(filename, base, kind, output, 
+                        compr_format, compr_level, listener, (String) null);
                 compiler.executeCompiler();
 
                 // Waits

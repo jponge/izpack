@@ -1,4 +1,5 @@
 /*
+ * $Id$
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -101,8 +103,39 @@ public class Compiler extends Thread
      * @param basedir The base directory.
      * @param kind The installer kind.
      * @param output The installer filename.
+     * @throws CompilerException
      */
-    public Compiler(String basedir, String kind, String output)
+    public Compiler(String basedir, String kind, String output) throws CompilerException
+    {
+        this(basedir,kind,output,"default");
+    }
+
+    /**
+     * The constructor.
+     * 
+     * @param basedir The base directory.
+     * @param kind The installer kind.
+     * @param output The installer filename.
+     * @param compr_format The format which should be used for the packs.
+     * @throws CompilerException
+     */
+    public Compiler(String basedir, String kind, String output, String compr_format) throws CompilerException
+    {
+        this(basedir,kind,output, compr_format, -1);
+    }
+
+    /**
+     * The constructor.
+     * 
+     * @param basedir The base directory.
+     * @param kind The installer kind.
+     * @param output The installer filename.
+     * @param compr_format The format which should be used for the packs.
+     * @param compr_level Compression level to be used if supported.
+     * @throws CompilerException
+     */
+    public Compiler(String basedir, String kind, String output, 
+            String compr_format, int compr_level) throws CompilerException
     {
         // Default initialisation
         this.basedir = basedir;
@@ -117,9 +150,11 @@ public class Compiler extends Thread
         setProperty("izpack.version", IZPACK_VERSION);
         setProperty("basedir", basedir);
 
-        packager = new Packager();
+        packager = new Packager(compr_format, compr_level);
+        packager.getCompressor().setCompiler(this);
     }
 
+    
     /**
      * Retrieves the packager listener
      */
@@ -192,6 +227,23 @@ public class Compiler extends Thread
      */
     public void createInstaller() throws Exception
     {
+        // Add the class files from the chosen compressor.
+        if( packager.getCompressor().getContainerPaths() != null )
+        {
+            String [] containerPaths = packager.getCompressor().getContainerPaths();
+            String [][] decoderClassNames = packager.getCompressor().getDecoderClassNames();
+            for( int i = 0; i < containerPaths.length; ++i)
+            {
+                URL compressorURL = null;
+                if( containerPaths[i] != null )
+                    compressorURL = findIzPackResource(containerPaths[i],"pack compression Jar file");
+                if( decoderClassNames[i] != null && decoderClassNames[i].length > 0)
+                    addJarContent(compressorURL, Arrays.asList(decoderClassNames[i]));
+            }
+            
+            
+        }
+  
         // We ask the packager to create the installer
         packager.createInstaller(new File(output));
         this.compileFailed = false;
@@ -283,6 +335,14 @@ public class Compiler extends Thread
     public void addJarContent(URL content)
     {
         packager.addJarContent(content);
+    }
+    /**
+     * Add jar content to the installation.
+     * @param content 
+     */
+    public void addJarContent(URL content, List files)
+    {
+        packager.addJarContent(content, files);
     }
     /**
      * Add a custom jar to the installation.
@@ -508,7 +568,7 @@ public class Compiler extends Thread
      * @param parent the XMLElement the resource is specified in, used to report errors
      * @return a URL to the resource.
      */
-    private URL findIzPackResource(String path, String desc)
+    public URL findIzPackResource(String path, String desc)
             throws CompilerException
     {
         URL url = getClass().getResource("/" + path);
@@ -539,12 +599,12 @@ public class Compiler extends Thread
      * 
      * @param message Brief message explaining error
      */
-    protected void parseError(String message) throws CompilerException
+    public void parseError(String message) throws CompilerException
     {
         this.compileFailed = true;
         throw new CompilerException(message);
     }
-    protected void parseError(String message, Throwable how) throws CompilerException
+    public void parseError(String message, Throwable how) throws CompilerException
     {
         this.compileFailed = true;
         throw new CompilerException(message, how);

@@ -234,9 +234,11 @@
 		<javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" source="${compat.source}" target="${compat.target}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
 			<include name="com/izforge/izpack/*.java" />
 			<include name="com/izforge/izpack/compiler/*.java" />
+			<include name="com/izforge/izpack/compressor/*.java" />
 			<include name="com/izforge/izpack/ant/*.java" />
 			<include name="com/izforge/izpack/util/Debug.java" />
 			<include name="com/izforge/izpack/util/OsConstraint.java" />
+			<include name="com/izforge/izpack/util/JarOutputStream.java" />
 			<include name="net/n3/nanoxml/*.java" />
 		</javac>
 		<copy todir="${build.dir}/com/izforge/izpack/ant/langpacks">
@@ -255,11 +257,13 @@
 			<fileset dir="${build.dir}">
 				<include name="com/izforge/izpack/*.class" />
 				<include name="com/izforge/izpack/compiler/*.class" />
+				<include name="com/izforge/izpack/compressor/*.class" />
 				<include name="com/izforge/izpack/util/OsConstraint.class" />
 				<include name="com/izforge/izpack/util/Debug.class" />
 				<include name="com/izforge/izpack/util/*Validator.class" />
 				<include name="com/izforge/izpack/util/*Processor.class" />
 				<include name="com/izforge/izpack/util/VariableSubstitutor.class" />
+				<include name="com/izforge/izpack/util/JarOutputStream.class" />
 				<include name="com/izforge/izpack/ant/*.class" />
 				<include name="com/izforge/izpack/ant/langpacks/*.properties" />
 				<include name="com/izforge/izpack/event/CompilerListener.class" />
@@ -300,6 +304,7 @@
 				<include name="lib/liquidlnf.jar" />
 				<include name="lib/metouia.jar" />
 				<include name="lib/looks.jar" />
+				<include name="lib/ant.jar" />
 				<exclude name="**/CVS" />
 			</fileset>
 		</jar>
@@ -820,7 +825,7 @@
 
 		<!-- We call IzPack -->
 		<echo message="Makes the installer using IzPack" level="verbose" />
-		<izpack input="${dist.dir}/${installer.xmlfile}" output="${dist.dir}/${installer.name}${ver}.${rel}.jar" installerType="standard" basedir="${dist.dir}" izPackDir="${dist.dir}/" />
+		<izpack input="${dist.dir}/${installer.xmlfile}" output="${dist.dir}/${installer.name}${ver}.${rel}.jar" installerType="standard" basedir="${dist.dir}" izPackDir="${dist.dir}/" compression="default" compressionlevel="9" />
 	</target>
 	
 

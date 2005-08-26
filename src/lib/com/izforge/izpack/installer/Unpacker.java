@@ -1,4 +1,5 @@
 /*
+ * $Id$
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -21,6 +22,8 @@
 
 package com.izforge.izpack.installer;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -855,7 +859,9 @@ public class Unpacker extends Thread
 
         // We open our final jar file
         FileOutputStream out = new FileOutputStream(jar);
-        ZipOutputStream outJar = new ZipOutputStream(out);
+        // Intersect a buffer else byte for byte will be written to the file.
+        BufferedOutputStream bos = new BufferedOutputStream(out);
+        ZipOutputStream outJar = new ZipOutputStream(bos);
         idata.uninstallOutJar = outJar;
         outJar.setLevel(9);
         udata.addFile(jar);
@@ -941,6 +947,26 @@ public class Unpacker extends Thread
             // TODO: Fails miserably when pack jars are not found, so this is
             // temporary
             if (in == null) throw new FileNotFoundException(url.toString());
+        }
+        if( in != null && idata.info.getPackDecoderClassName() != null )
+        {
+            Class decoder = Class.forName(idata.info.getPackDecoderClassName());
+            Class[] paramsClasses = new Class[1];
+            paramsClasses[0] = Class.forName("java.io.InputStream");
+            Constructor constructor = decoder.getDeclaredConstructor(paramsClasses);
+            // Our first used decoder input stream (bzip2) reads byte for byte from
+            // the source. Therefore we put a buffering stream between it and the
+            // source.
+            InputStream buffer = new BufferedInputStream(in);
+            Object[] params = { buffer };
+            Object instance = null;
+            instance = constructor.newInstance( params);
+            if (!InputStream.class.isInstance(instance))
+                throw new InstallerException(  "'" + idata.info.getPackDecoderClassName()
+                        + "' must be derived from "
+                        + InputStream.class.toString());
+            in = (InputStream) instance;
+
         }
         return in;
     }
