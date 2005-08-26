@@ -216,6 +216,9 @@ public class CheckedHelloPanel extends HelloPanel
             }
 
         }
+        RegistryHandler rh = RegistryDefaultHandler.getInstance();
+        if( rh != null )
+            idata.setVariable("UNINSTALL_NAME", rh.getUninstallName());
     }
 
     /**
@@ -255,7 +258,6 @@ public class CheckedHelloPanel extends HelloPanel
                         + newUninstallName);
                 // Now a little hack if the registry spec file contains
                 // the pack "UninstallStuff".
-                idata.setVariable("UNINSTALL_NAME", newUninstallName);
                 break;
             }
             uninstallModifier++;
