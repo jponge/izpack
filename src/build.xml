@@ -775,6 +775,8 @@
 
 		<echo message="Copies the recent changed native files to the ${basedir}/bin directory"/>
 		
+		<mkdir dir="${basedir}/bin/native/izpack"/>
+		
 		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release/ShellLink.dll" verbose="true" overwrite="yes"/>
 		
 		<echo message="Copies the general files to the dist directory"/>
@@ -872,7 +874,7 @@
 	<target name="dist" depends="all, create.docu, generate.installer" description="makes a complete installer"/>
 
 	<!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
-	<target name="cleandistreg" depends="clean, dist, generate.installer-reg" />
+	<target name="cleandistreg" depends="clean, dist, generate.installer-reg" description="creates a full dist with Win32 uninstall registry support"/>
 
 	<!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->
 	<target name="quickdist+run" depends="quickdist, run.installer" description="makes a quickdist installer and runs them"/>
