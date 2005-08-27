@@ -231,7 +231,7 @@
 
 	<!-- Compiles the compiler src files -->
 	<target name="compile.compiler" depends="prepare">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" source="${compat.source}" target="${compat.target}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
+		<javac srcdir="${src.dir}" classpath="${basedir}/lib/jakarta-regexp-1.3.jar" destdir="${build.dir}" optimize="on" source="${compat.source}" target="${compat.target}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
 			<include name="com/izforge/izpack/*.java" />
 			<include name="com/izforge/izpack/compiler/*.java" />
 			<include name="com/izforge/izpack/compressor/*.java" />
@@ -375,12 +375,11 @@
 				<include name="com/izforge/izpack/uninstaller/*.class" />
 				<include name="com/izforge/izpack/ExecutableFile.class" />
 				<include name="com/izforge/izpack/util/AbstractUI*.class" />
-				<include name="com/izforge/izpack/util/FileExecutor*.class" />
 				<include name="com/izforge/izpack/util/Console.class" />
 				<include name="com/izforge/izpack/util/Debug.class" />
 				<include name="com/izforge/izpack/util/Os*.class" />
-				<include name="com/izforge/izpack/util/StringConstants.class" />
-				<include name="com/izforge/izpack/util/StringTool.class" />
+				<include name="com/izforge/izpack/util/String*.class" />
+				<include name="com/izforge/izpack/util/File*.class" />
 				<exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
 				<include name="net/n3/nanoxml/*.class" />
 			</fileset>
@@ -873,7 +872,7 @@
 	<target name="dist" depends="all, create.docu, generate.installer" description="makes a complete installer"/>
 
 	<!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
-	<target name="cleandistreg" depends="clean,all,generate.installer,generate.installer-reg" />
+	<target name="cleandistreg" depends="clean, dist, generate.installer-reg" />
 
 	<!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->
 	<target name="quickdist+run" depends="quickdist, run.installer" description="makes a quickdist installer and runs them"/>
