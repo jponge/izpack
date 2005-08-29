@@ -112,7 +112,9 @@ public interface PackCompressor
      * Returns whether a buffered output stream should be used
      * intermediate between the output stream of this compressor
      * and the destination.
-     * @return
+     * @return wether a buffered output stream should be used
+     * intermediate between the output stream of this compressor
+     * and the destination.
      */
     boolean needsBufferedOutputStream();
     

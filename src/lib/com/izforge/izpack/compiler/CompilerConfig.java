@@ -154,7 +154,6 @@ public class CompilerConfig extends Thread
 
     /**
      * @param filename The XML filename.
-     * @param basedir The base directory.
      * @param kind The installer kind.
      * @param output The installer filename.
      * @param compr_format The compression format to be used for packs.
@@ -330,7 +329,6 @@ public class CompilerConfig extends Thread
      * Returns the GUIPrefs.
      * 
      * @param data The XML data.
-     * @return The GUIPrefs.
      * @exception CompilerException Description of the Exception
      */
     protected void addGUIPrefs(XMLElement data) throws CompilerException

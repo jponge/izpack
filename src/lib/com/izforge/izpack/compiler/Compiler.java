@@ -565,7 +565,6 @@ public class Compiler extends Thread
      * 
      * @param path the relative path (using '/' as separator) to the resource.
      * @param desc the description of the resource used to report errors
-     * @param parent the XMLElement the resource is specified in, used to report errors
      * @return a URL to the resource.
      */
     public URL findIzPackResource(String path, String desc)
@@ -627,11 +626,14 @@ public class Compiler extends Thread
     /**
      * This method parses install.xml for defined listeners and put them in the right position. If
      * posible, the listeners will be validated. Listener declaration is a fragmention in
-     * install.xml like : <listeners> <listener compiler="PermissionCompilerListener"
-     * installer="PermissionInstallerListener"/> </<listeners>
+     * install.xml like : &lt;listeners&gt; &lt;listener compiler="PermissionCompilerListener"
+     * installer="PermissionInstallerListener"/1gt; &lt;/listeners&gt;
      * 
-     * @param data the XML data
-     * @exception Exception Description of the Exception
+     * @param type The listener type.
+     * @param className The class name.
+     * @param jarPath The jar path.
+     * @param constraints The list of constraints.
+     * @throws Exception Thrown in case an error occurs.
      */
     public void addCustomListener(int type, String className, String jarPath, List constraints) throws Exception
     {

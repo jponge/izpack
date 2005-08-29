@@ -56,7 +56,6 @@ public class Win_RegistryHandler extends RegistryHandler
      * @param key the registry key which should be used or created
      * @param value the registry value into which the contents should be set
      * @param contents the contents for the value
-     * @return an string array which contains the names of the keys and values which are created
      * @throws NativeLibException
      * @throws NativeLibException
      */
@@ -74,7 +73,6 @@ public class Win_RegistryHandler extends RegistryHandler
      * @param key the registry key which should be used or created
      * @param value the registry value into which the contents should be set
      * @param contents the contents for the value
-     * @return an string array which contains the names of the keys and values which are created
      * @throws NativeLibException
      */
     public void setValue(String key, String value, String[] contents) throws NativeLibException
@@ -91,7 +89,6 @@ public class Win_RegistryHandler extends RegistryHandler
      * @param key the registry key which should be used or created
      * @param value the registry value into which the contents should be set
      * @param contents the contents for the value
-     * @return an string array which contains the names of the keys and values which are created
      * @throws NativeLibException
      */
     public void setValue(String key, String value, byte[] contents) throws NativeLibException
@@ -108,7 +105,6 @@ public class Win_RegistryHandler extends RegistryHandler
      * @param key the registry key which should be used or created
      * @param value the registry value into which the contents should be set
      * @param contents the contents for the value
-     * @return an string array which contains the names of the keys and values which are created
      * @throws NativeLibException
      */
     public void setValue(String key, String value, long contents) throws NativeLibException

@@ -95,7 +95,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
     /**
      * Creates a new <code>JarOutputStream</code> with no manifest.
      * Will use random access if possible.
-     * @param the file object with which the output stream
+     * @param arg0 the file object with which the output stream
      * should be created
      * @throws java.io.IOException
      */
