@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+<title>CookBooks</title>
+<meta name="description" content="CookBooks" />
+<meta name="keywords" content="izpack-doc" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+
+<link rel="STYLESHEET" href="izpack-doc.css" />
+<link rel="previous" href="node9.html" />
+<link rel="up" href="izpack-doc.html" />
+</head>
+
+<body >
+	<!--Navigation Panel-->
+	<table width="100%">
+	<tr>
+	<td><a name="whatever" href="node10.html"><img class="alignbottom" width="37" height="24" alt="next" src="next.png" /></a> <a name="tex2html592" href="izpack-doc.html"><img class="alignbottom"
+	width="26" height="24" alt="up" src="up.png" /></a> <a name="tex2html588" href="node9.html"><img src="prev.png" alt="previous" width="63" height="24" class="alignbottom" /></a> <a name="tex2html594"
+	href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents" src="contents.png" /></a></td>
+	<td class="textright" rowspan="2"><a href="http://validator.w3.org/check?uri=referer"><img class="alignmiddle" src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid Xhtml 1.0!" height="31" width=
+	"88" /></a> <a href="http://jigsaw.w3.org/css-validator/"><img class="alignmiddle" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!" height="31" width="88" /></a></td>
+	</tr>
+	
+	<tr>
+	<td><b>Next:</b> <a name="whatever2" href="node10.html">The Apache License Version 2.0</a> <b>Up:</b> <a name="tex2html593" href="izpack-doc.html">izpack-doc</a> <b>Previous:</b> <a name="tex2html589"
+	href="node9.html">Custom Actions</a> <b><a name="tex2html595" href="node1.html">Contents</a></b></td>
+	</tr>
+	</table>
+	<!--End of Navigation Panel-->
+
+	<!--Table of Child-Links--> 
+<p><br /><a name="CHILD_linkS"><strong>Subsections</strong></a> </p>
+
+<ul>
+<li><a name="listmainTitle1" href="node13.html#mainTitle1">CookBooks</a>
+	<ul>
+		<li><a name="listcookbook1" href="node13.html#cookbook1">How To create an ODBC connection with IzPack (by Fabrice Mirabile)</a>
+			<ul>
+				<li><a name="listcookbook12" href="node13.html#cookbook11">Problem</a></li>
+				<li><a name="listcookbook12" href="node13.html#cookbook12">Solution</a></li>
+				<li><a name="listcookbook13" href="node13.html#cookbook13">Discussion</a></li>
+			</ul>
+		</li>
+		<li><a name="listcookbook2" href="node13.html#cookbook2">Work around for pack and process dependence</a>
+			<ul>
+				<li><a name="listcookbook21" href="node13.html#cookbook21">Problem</a></li>
+				<li><a name="listcookbook22" href="node13.html#cookbook22">Solution</a></li>
+				<li><a name="listcookbook23" href="node13.html#cookbook23">Discussion</a></li>
+			</ul>
+		</li>
+	</ul>
+</li>
+</ul>
+
+<!--End of Table of Child-Links-->
+<hr />
+<h1><a name="mainTitle1">
+CookBooks</a>
+</h1>
+
+<h2><a name="cookbook1">1. How To create an ODBC connection with IzPack (by Fabrice Mirabile)</a></h2>
+<h3><a name="cookbook11">a. Problem</a></h3>
+<p>ODBC can be used as a layer between app servers and databases. It is quite convienent to setup an ODBC connection at installation time when the installer can actually retrieve all info needed for such setup. How can we achieve that? And for which OS ?</p>
+
+
+<h3><a name="cookbook12">b. Solution</a></h3>
+<p>After looking at many solutions, I found one that is very convenient in the sense that it applies to both Windows and UNIX environment.<br />
+
+In fact, the Windows ODBC Manager applet offers two type of setup:<br /></p>
+<ul>
+	<li>The system source</li>
+	<li>The file source</li>
+</ul>
+<p>Basically, the system source writes in the registry and unfortunately does something else that I couldn't figure out.<br />
+However, the file source is very similar to ODBC.ini under UNIX.<br />
+In ODBC.ini, you can define all connections into this file. For windows it's a bit different as you will have as many files as connections. But even though, there's a trick!<br />
+</p>
+<p>
+	A fileDSN (the name given to this type of connection) for a connection to an Oracle database will look like this :
+</p>
+<p>
+<tt>
+[ODBC]<br />
+DRIVER=Oracle in OraHome92<br />
+UID=%{UID}<br />
+PWD=%{PWD}<br />
+DBQ=%{DBName}<br />
+SERVER=%{DBName}<br />
+</tt>
+</p>
+<p>
+Therefore you can realize straightforwardly that by changing the UID and PWD you will make your connection point to any schemas you want.
+</p>
+<p>
+In my company's software, we use ODBC to make the connection between the application and the database. Therefore, we use a batch to launch the server with a bunch of parameters. One of them is the ODBC DSN. This one, using fileDSN, should be defined as follows:
+</p>
+<p>SET DSN=filedsn=$INSTALL_PATH\whateveryoulike.dsn</p>
+
+<p>
+A very nice trick is to put in this batch the UID and the PWD so that it's not needed in the file directly and therefore you make the installer create different batch loaders for different Schemas !
+<br />
+That's very usefull when you have on the same DB many schema and you want the same application server to access both of them without reinstalling the whole thing !
+</p>
+
+<p>
+In the following discussion, I'll show you an example on how to prepare the installer for creating a file at the root of the installation path which will permit to connect to an Oracle DataBase.<br />	
+</p>
+
+<h3><a name="cookbook13">c. Discussion</a></h3>
+<p>
+<b>Install.xml:</b></p>
+<p>
+&lt;file src="dsn.dsn" targetdir="$INSTALL_PATH"/&gt;<br />
+&lt;parsable type="shell" targetfile="$INSTALL_PATH/whateveryoulike.dsn"/&gt;</p>
+<p>
+<b>UserInputSpec.xml:</b></p>
+<pre>
+&lt;userInput&gt;
+	&lt;panel order="0"&gt;
+		&lt;field type="staticText" align="left" txt="Server Only: Enter the settings for the ODBC Connection (DSN) environment variable:" id="staticText3.text"/&gt;
+		&lt;field type="divider" align="center"/&gt;
+		&lt;field type="text" variable="UID"&gt;
+			&lt;description align="left" txt="" id="description2.text"/&gt;
+			&lt;spec txt="-&gt; Enter UID:" id="text.label" size="15" set=""/&gt;
+		&lt;/field&gt;
+		&lt;field type="divider" align="center"/&gt;
+		&lt;field type="password" variable="PWD"&gt;
+			&lt;description align="left" txt="" id="description3.text"/&gt;
+			&lt;spec&gt;
+			&lt;pwd txt="-&gt; Type the password for the connection:" id="pwd.label" size="10" set=""/&gt;
+				&lt;pwd txt="-&gt; Retype the password for the connection:" id="pwd.label2" size="10" set=""/&gt;
+			&lt;/spec&gt;
+			&lt;validator class="com.izforge.sample.PWDValidator" txt="Both versions of the password must match" id="error.label"/&gt;
+			&lt;processor class="com.izforge.sample.PWDEncryptor"/&gt;
+		&lt;/field&gt;
+		&lt;field type="space" align="center"/&gt;
+		&lt;field type="divider" align="center"/&gt;
+		&lt;field type="space" align="center"/&gt;
+		&lt;field type="text" variable="DBName"&gt;
+			&lt;description align="left" txt="" id="description4.text"/&gt;
+			&lt;spec txt="-&gt; Enter the name of the Database:" id="text.label" size="15" set=""/&gt;
+		&lt;/field&gt;
+		&lt;field type="text" variable="DBPortNo"&gt;
+			&lt;description align="left" txt="-&gt; Enter the port number for the database connection" id="description5.text"/&gt;
+			&lt;spec txt="(usually 1521 for oracle and 1433 for MS SQL Server)" id="text.label" size="15" set=""/&gt;
+		&lt;/field&gt;
+	&lt;/panel&gt;
+&lt;/userInput&gt;
+</pre>
+
+<p><b>BatchLoader.bat:</b></p>
+<pre>
+SET DSN=filedsn=$INSTALL_PATH\whateveryoulike.dsn;UID=$UID;PWD=$PWD
+start $INSTALL_PATH\yourpath\yourapp
+</pre>
+
+<p><b>whateveryoulike.dsn:</b></p>
+<pre>
+[ODBC]
+DRIVER=Oracle in OraHome92
+DBQ=%{DBName}
+SERVER=%{DBName}
+</pre>
+
+<p>Now during the installation the user will be prompt for the parameters (UID, PWD...) and the file will be parsed.</p>
+
+<p>Pretty simple !</p>
+
+<p>What about SQL Server or other db you would say ? Well, there's many ways to do it, a simple would be to have a skeleton for kind of db and then during the userinput ask for the database type (DB2, SQLSERVER,ORACLE...) and switch to the corresponding file before parsing.</p>
+
+<p>Let's imagine you choose SQL Server in the userinputpanel, then instead of copying whateveryoulike.dsn, you can copy whateveryoulikeforMS.dsn which looks like this:
+</p>
+
+<pre>
+[ODBC]
+DRIVER=SQL Server
+WSID=%{DBName}
+APP=Microsoft Open Database Connectivity
+SERVER=%{DBName}
+</pre>
+
+<p>In our installer, we create four packs, one for each DataBase. These packs copy the corresponding file and parse them. Again, pretty simple !</p>
+
+<p>Another remark, is that in this way if you choose more than one pack you could setup more than one connection at once on different DB as long as UID and PWD are the same. If not you'll need a little trick...</p>
+
+<p>I hope this helps and if anyone has a question, don't hesitate to contact me via <a href="http://developer.berlios.de/sendmessage.php?touser=12462">http://developer.berlios.de/sendmessage.php?touser=12462</a> or post into the user/devel list.</p>
+
+
+<h2><a name="cookbook2">2. Work around for pack and process dependence</a></h2>
+<h3><a name="cookbook21">a. Problem</a></h3>
+<p>A brief description of the problem that the recipe resolves.</p>
+
+<h3><a name="cookbook22">b. Solution</a></h3>
+<p>A brief description of the solution (recipe).</p>
+
+<h3><a name="cookbook23">c .Discussion</a></h3>
+<p>This section is the meat of the recipe and usually includes an in-depth description of the solution, screenshots, code samples, and a  step-by-step process that the user needs to follow in order to implement the solution.</p>
+
+<!--Navigation Panel-->
+	<table width="100%">
+	<tr>
+	<td><a name="whatever" href="node10.html"><img class="alignbottom" width="37" height="24" alt="next" src="next.png" /></a> <a name="tex2html592" href="izpack-doc.html"><img class="alignbottom"
+	width="26" height="24" alt="up" src="up.png" /></a> <a name="tex2html588" href="node9.html"><img src="prev.png" alt="previous" width="63" height="24" class="alignbottom" /></a> <a name="tex2html594"
+	href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents" src="contents.png" /></a></td>
+	<td class="textright" rowspan="2"><a href="http://validator.w3.org/check?uri=referer"><img class="alignmiddle" src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid Xhtml 1.0!" height="31" width=
+	"88" /></a> <a href="http://jigsaw.w3.org/css-validator/"><img class="alignmiddle" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!" height="31" width="88" /></a></td>
+	</tr>
+	
+	<tr>
+	<td><b>Next:</b> <a name="whatever2" href="node10.html">The Apache License Version 2.0</a> <b>Up:</b> <a name="tex2html593" href="izpack-doc.html">izpack-doc</a> <b>Previous:</b> <a name="tex2html589"
+	href="node9.html">Custom Actions</a> <b><a name="tex2html595" href="node1.html">Contents</a></b></td>
+	</tr>
+	</table>
+	<!--End of Navigation Panel-->
+<address>
+Julien Ponge
+2005-05-24
+</address>
+</body>
+</html>
