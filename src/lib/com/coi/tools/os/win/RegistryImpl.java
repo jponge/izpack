@@ -375,7 +375,7 @@ public class RegistryImpl
      */
     public void deleteKeyIfEmpty(int root, String key) throws NativeLibException
     {
-        if (isKeyEmpty(root, key) && this.keyExist(root, key)) deleteKeyL(root, key);
+        if (keyExist(root, key) && isKeyEmpty(root, key) ) deleteKeyL(root, key);
 
     }
 
