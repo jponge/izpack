@@ -5,144 +5,144 @@
 <langpack>
 
     <!-- General installer strings -->
-    <str id="installer.title" txt="IzPack - Â°Â²Ã—Â° "/>
-    <str id="installer.next" txt="ÃÃ‚Ã’Â»Â²Â½"/>
-    <str id="installer.prev" txt="Ã‰ÃÃ’Â»Â²Â½"/>
-    <str id="installer.quit" txt="ÃÃ‹Â³Ã¶"/>
-    <str id="installer.madewith" txt="(Ã“Ã‰IzPackÃ–Ã†Ã—Ã·Ã‰ÃºÂ³Ã‰ - http://www.izforge.com/)"/>
-    <str id="installer.quit.title" txt="ÃŠÃ‡Â·Ã±ÃˆÂ·Â¶Â¨ÃÃ‹Â³Ã¶?"/>
-    <str id="installer.quit.message" txt="Â½Â«ÃˆÂ¡ÃÃ»Â¸ÃƒÂ°Â²Ã—Â°Â¹Ã½Â³ÃŒ !"/>
-    <str id="installer.warning" txt="Â¾Â¯Â¸Ã¦ !"/>
-    <str id="installer.yes" txt="ÃŠÃ‡"/>
-    <str id="installer.no" txt="Â·Ã±"/>
-    <str id="installer.cancel" txt="ÃˆÂ¡ÃÃ»"/> 
-    <str id="installer.error" txt="Â´Ã­ÃŽÃ³"/>
+    <str id="installer.title" txt="IzPack - °²×° "/>
+    <str id="installer.next" txt="ÏÂÒ»²½"/>
+    <str id="installer.prev" txt="ÉÏÒ»²½"/>
+    <str id="installer.quit" txt="ÍË³ö"/>
+    <str id="installer.madewith" txt="(ÓÉIzPackÖÆ×÷Éú³É - http://www.izforge.com/)"/>
+    <str id="installer.quit.title" txt="ÊÇ·ñÈ·¶¨ÍË³ö?"/>
+    <str id="installer.quit.message" txt="½«È¡Ïû¸Ã°²×°¹ý³Ì !"/>
+    <str id="installer.warning" txt="¾¯¸æ !"/>
+    <str id="installer.yes" txt="ÊÇ"/>
+    <str id="installer.no" txt="·ñ"/>
+    <str id="installer.cancel" txt="È¡Ïû"/> 
+    <str id="installer.error" txt="´íÎó"/>
     
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="Â½Â«ÃÂ¶Ã”Ã˜Ã’Ã‘Â°Â²Ã—Â°ÂµÃ„Ã“Â¦Ã“ÃƒÂ³ÃŒÃÃ² !"/>
-    <str id="uninstaller.destroytarget" txt=" Ã‡Â¿Ã–Ã†Ã‰Â¾Â³Ã½ "/>
-    <str id="uninstaller.uninstall" txt="ÃÂ¶Ã”Ã˜"/>
+    <str id="uninstaller.warning" txt="½«Ð¶ÔØÒÑ°²×°µÄÓ¦ÓÃ³ÌÐò !"/>
+    <str id="uninstaller.destroytarget" txt=" Ç¿ÖÆÉ¾³ý "/>
+    <str id="uninstaller.uninstall" txt="Ð¶ÔØ"/>
     
     <!-- The strings for the 'official' IzPack plugins -->
-    <str id="HelloPanel.welcome1" txt="Â»Â¶Ã“Â­Â°Â²Ã—Â°"/>
+    <str id="HelloPanel.welcome1" txt="»¶Ó­°²×°"/>
     <str id="HelloPanel.welcome2" txt=" !"/>
-    <str id="HelloPanel.authors" txt="Â¸ÃƒÃˆÃ­Â¼Ã¾Ã—Ã·Ã•ÃŸ : "/>
-    <str id="HelloPanel.url" txt="Ã–Ã·Ã’Â³ : "/>
+    <str id="HelloPanel.authors" txt="¸ÃÈí¼þ×÷Õß : "/>
+    <str id="HelloPanel.url" txt="Ö÷Ò³ : "/>
     
-    <str id="LicencePanel.info" txt="Ã‡Ã«Ã—ÃÃÂ¸Ã”Ã„Â¶ÃÃ’Ã”ÃÃ‚ÃÃ­Â¿Ã‰ÃÂ­Ã’Ã©:"/>
-    <str id="LicencePanel.agree" txt="ÃŽÃ’Â½Ã“ÃŠÃœÂ¸ÃƒÃÃ­Â¿Ã‰ÃÂ­Ã’Ã©ÂµÃ„ÃŒÃµÂ¿Ã®."/>
-    <str id="LicencePanel.notagree" txt="ÃŽÃ’Â²Â»Â½Ã“ÃŠÃœÂ¸ÃƒÃÃ­Â¿Ã‰ÃÂ­Ã’Ã©ÂµÃ„ÃŒÃµÂ¿Ã®."/>
-    <str id="LicencePanel.yes" txt="ÃŠÃ‡"/>
-    <str id="LicencePanel.no" txt="Â·Ã±"/>
+    <str id="LicencePanel.info" txt="Çë×ÐÏ¸ÔÄ¶ÁÒÔÏÂÐí¿ÉÐ­Òé:"/>
+    <str id="LicencePanel.agree" txt="ÎÒ½ÓÊÜ¸ÃÐí¿ÉÐ­ÒéµÄÌõ¿î."/>
+    <str id="LicencePanel.notagree" txt="ÎÒ²»½ÓÊÜ¸ÃÐí¿ÉÐ­ÒéµÄÌõ¿î."/>
+    <str id="LicencePanel.yes" txt="ÊÇ"/>
+    <str id="LicencePanel.no" txt="·ñ"/>
     
-    <str id="InfoPanel.info" txt="Ã‡Ã«Ã”Ã„Â¶ÃÃ’Ã”ÃÃ‚ÃÃ…ÃÂ¢ :"/>
+    <str id="InfoPanel.info" txt="ÇëÔÄ¶ÁÒÔÏÂÐÅÏ¢ :"/>
     
-    <str id="TargetPanel.info" txt="Ã‘Â¡Ã”Ã±Â°Â²Ã—Â°Ã‚Â·Â¾Â¶ :"/>
-    <str id="TargetPanel.browse" txt="Ã¤Â¯Ã€Ã€ ..."/>
+    <str id="TargetPanel.info" txt="Ñ¡Ôñ°²×°Â·¾¶ :"/>
+    <str id="TargetPanel.browse" txt="ä¯ÀÀ ..."/>
     <str id="TargetPanel.warn" 
-         txt="Ã„Â¿Ã‚Â¼Ã’Ã‘Â¾Â­Â´Ã¦Ã”Ãš ! Â¿Ã‰Ã„ÃœÂ¸Â²Â¸Ã‡ÃÃ–Â´Ã¦ÃŽÃ„Â¼Ã¾Â£Â¬ÃŠÃ‡Â·Ã±ÃˆÂ·Â¶Â¨Ã”ÃšÂ´Ã‹Â°Â²Ã—Â°?"/>
+         txt="Ä¿Â¼ÒÑ¾­´æÔÚ ! ¿ÉÄÜ¸²¸ÇÏÖ´æÎÄ¼þ£¬ÊÇ·ñÈ·¶¨ÔÚ´Ë°²×°?"/>
     <str id="TargetPanel.empty_target"
-         txt="Ã„Ã£ÃƒÂ»Ã“ÃÃ–Â¸Â¶Â¨Ã„Â¿Â±ÃªÃ‚Â·Â¾Â¶! ÃŠÃ‡Â·Ã±Ã•Ã½ÃˆÂ·?"/>
-	<str id="TargetPanel.createdir" txt="Ã„Â¿Â±ÃªÃ„Â¿Ã‚Â¼Â½Â«Â´Â´Â½Â¨Ã”Ãš :" />
+         txt="ÄãÃ»ÓÐÖ¸¶¨Ä¿±êÂ·¾¶! ÊÇ·ñÕýÈ·?"/>
+	<str id="TargetPanel.createdir" txt="Ä¿±êÄ¿Â¼½«´´½¨ÔÚ :" />
     <str id="TargetPanel.nodir" 
-         txt="Â¸ÃƒÃŽÃ„Â¼Ã¾Â²Â»ÃŠÃ‡Ã„Â¿Ã‚Â¼! Ã‡Ã«Ã‘Â¡Ã”Ã±Ã’Â»Â¸Ã¶Ã„Â¿Ã‚Â¼!"/>
+         txt="¸ÃÎÄ¼þ²»ÊÇÄ¿Â¼! ÇëÑ¡ÔñÒ»¸öÄ¿Â¼!"/>
     <str id="TargetPanel.notwritable" 
-         txt="Ã„Â¿Ã‚Â¼ÃŽÃžÂ·Â¨ÃÂ´ÃˆÃ«! Ã‡Ã«Ã‘Â¡Ã”Ã±Ã†Ã¤Ã‹Ã»Ã„Â¿Ã‚Â¼!"/>
+         txt="Ä¿Â¼ÎÞ·¨Ð´Èë! ÇëÑ¡ÔñÆäËûÄ¿Â¼!"/>
     
-    <str id="PacksPanel.info" txt="Ã‘Â¡Ã”Ã±Ã„Ã£Ã’ÂªÂ°Â²Ã—Â°ÂµÃ„Â°Ã¼ :"/>
-    <str id="PacksPanel.tip" txt="Ã—Â¢Ã’Ã¢: Â»Ã’Ã‰Â«Ã‘Â¡ÃÃ®ÃŠÃ‡Â±Ã˜Ã‘Â¡ÂµÃ„."/>
-    <str id="PacksPanel.space" txt="Ã—ÃœÃÃ¨Ã‡Ã³Â¿Ã•Â¼Ã¤: "/>
-    <str id="PacksPanel.freespace" txt="Ã“ÃÃÂ§Â¿Ã•Â¼Ã¤: "/>
-    <str id="PacksPanel.description" txt="ÃƒÃ¨ÃŠÃ¶"/>
-    <str id="PacksPanel.dependencyList" txt="Ã‹Ã¹Ã‘Â¡Â°Ã¼ÃÃ¨Ã’ÂªÂ°Â²Ã—Â°Ã’Ã”ÃÃ‚Â°Ã¼"/>
-    <str id="ImgPacksPanel.dependencyList" txt="Ã’Ã€Ã€Âµ"/>
-	<str id="PacksPanel.notEnoughSpace" txt="Â°Â²Ã—Â°Ã’ÂªÃ‡Ã³ÂµÃ„Â´Ã…Ã…ÃŒÂ¿Ã•Â¼Ã¤Â³Â¬Â³Ã¶ÃÃ‹Â¿Ã‰Ã“ÃƒÂµÃ„Â´Ã…Ã…ÃŒÂ¿Ã•Â¼Ã¤."/>
+    <str id="PacksPanel.info" txt="Ñ¡ÔñÄãÒª°²×°µÄ°ü :"/>
+    <str id="PacksPanel.tip" txt="×¢Òâ: »ÒÉ«Ñ¡ÏîÊÇ±ØÑ¡µÄ."/>
+    <str id="PacksPanel.space" txt="×ÜÐèÇó¿Õ¼ä: "/>
+    <str id="PacksPanel.freespace" txt="ÓÐÐ§¿Õ¼ä: "/>
+    <str id="PacksPanel.description" txt="ÃèÊö"/>
+    <str id="PacksPanel.dependencyList" txt="ËùÑ¡°üÐèÒª°²×°ÒÔÏÂ°ü"/>
+    <str id="ImgPacksPanel.dependencyList" txt="ÒÀÀµ"/>
+	<str id="PacksPanel.notEnoughSpace" txt="°²×°ÒªÇóµÄ´ÅÅÌ¿Õ¼ä³¬³öÁË¿ÉÓÃµÄ´ÅÅÌ¿Õ¼ä."/>
     <str id="PacksPanel.notAscertainable" txt="not ascertainable"/>
     
-    <str id="InstallPanel.info" txt="ÂµÃ£Â»Ã· 'Â°Â²Ã—Â° !' Â¿ÂªÃŠÂ¼Â°Â²Ã—Â°Â½Ã¸Â³ÃŒ"/>
-    <str id="InstallPanel.install" txt="Â°Â²Ã—Â° !"/>
-    <str id="InstallPanel.tip" txt="Â°Ã¼Â°Â²Ã—Â°Â¹Ã½Â³ÃŒ :"/>
+    <str id="InstallPanel.info" txt="µã»÷ '°²×° !' ¿ªÊ¼°²×°½ø³Ì"/>
+    <str id="InstallPanel.install" txt="°²×° !"/>
+    <str id="InstallPanel.tip" txt="°ü°²×°¹ý³Ì :"/>
     <str id="InstallPanel.begin" txt="[Nothing]"/>
-    <str id="InstallPanel.finished" txt="[ÃÃªÂ³Ã‰]"/>
+    <str id="InstallPanel.finished" txt="[Íê³É]"/>
     <str id="InstallPanel.progress" txt="Overall installation progress :"/>
-    <str id="InstallPanel.overwrite.title" txt="ÃŽÃ„Â¼Ã¾Ã’Ã‘Â¾Â­Â´Ã¦Ã”Ãš"/>
-    <str id="InstallPanel.overwrite.question" txt="Ã’Ã”ÃÃ‚ÃŽÃ„Â¼Ã¾Ã’Ã‘Â¾Â­Â´Ã¦Ã”Ãš. ÃŠÃ‡Â·Ã±Â½Ã¸ÃÃÂ¸Â²Â¸Ã‡?"/>
+    <str id="InstallPanel.overwrite.title" txt="ÎÄ¼þÒÑ¾­´æÔÚ"/>
+    <str id="InstallPanel.overwrite.question" txt="ÒÔÏÂÎÄ¼þÒÑ¾­´æÔÚ. ÊÇ·ñ½øÐÐ¸²¸Ç?"/>
     
-    <str id="FinishPanel.success" txt="Â°Â²Ã—Â°Â³Ã‰Â¹Â¦."/>
-    <str id="FinishPanel.done" txt="ÃÃªÂ³Ã‰"/>
-    <str id="FinishPanel.fail" txt="Â°Â²Ã—Â°ÃŠÂ§Â°Ãœ!"/>
-    <str id="FinishPanel.uninst.info" txt="ÃÂ¶Ã”Ã˜Â³ÃŒÃÃ²Ã’Ã‘Â¾Â­Â´Â´Â½Â¨Ã”Ãš:"/>
-    <str id="FinishPanel.auto" txt="Ã‰ÃºÂ³Ã‰Ã—Ã”Â¶Â¯Â°Â²Ã—Â°Â½Ã…Â±Â¾"/>
+    <str id="FinishPanel.success" txt="°²×°³É¹¦."/>
+    <str id="FinishPanel.done" txt="Íê³É"/>
+    <str id="FinishPanel.fail" txt="°²×°Ê§°Ü!"/>
+    <str id="FinishPanel.uninst.info" txt="Ð¶ÔØ³ÌÐòÒÑ¾­´´½¨ÔÚ:"/>
+    <str id="FinishPanel.auto" txt="Éú³É×Ô¶¯°²×°½Å±¾"/>
     <str id="FinishPanel.auto.tip" 
-         txt="ÃŠÂ¹Ã“ÃƒÂ¸ÃƒÂ½Ã…Â±Â¾Â¿Ã‰Ã’Ã”Ã”ÃšÃ†Ã¤Ã‹Ã»Â¼Ã†Ã‹Ã£Â»ÃºÃ‰ÃÂ·Â´Â¸Â´Â±Â¾Â´ÃŽÂ°Â²Ã—Â°."/>
+         txt="Ê¹ÓÃ¸Ã½Å±¾¿ÉÒÔÔÚÆäËû¼ÆËã»úÉÏ·´¸´±¾´Î°²×°."/>
     
-    <str id="ImgPacksPanel.packs" txt="ÂµÂ±Ã‡Â°Â¿Ã‰Ã‘Â¡Â°Ã¼ÃˆÃ§ÃÃ‚ :"/>
-    <str id="ImgPacksPanel.snap" txt="Â°Ã¼Â¿Ã¬Ã•Ã•  :"/>
-    <str id="ImgPacksPanel.checkbox" txt=" Â°Â²Ã—Â°Â¸ÃƒÂ°Ã¼"/>
+    <str id="ImgPacksPanel.packs" txt="µ±Ç°¿ÉÑ¡°üÈçÏÂ :"/>
+    <str id="ImgPacksPanel.snap" txt="°ü¿ìÕÕ  :"/>
+    <str id="ImgPacksPanel.checkbox" txt=" °²×°¸Ã°ü"/>
     
-    <str id="ShortcutPanel.regular.list" txt="Ã‘Â¡Ã”Ã±Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½ÂµÃ„Â³ÃŒÃÃ²Ã—Ã©:"/>
-    <str id="ShortcutPanel.regular.default" txt="Ã–Ã˜Ã–Ãƒ"/>
-    <str id="ShortcutPanel.regular.desktop" txt="Ã”ÃšÃ—Ã€ÃƒÃ¦Â´Â´Â½Â¨Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½"/>
-    <str id="ShortcutPanel.regular.create" txt="Â´Â´Â½Â¨Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½"/>
-    <str id="ShortcutPanel.regular.userIntro" txt="Â´Â´Â½Â¨Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½:"/>
-    <str id="ShortcutPanel.regular.currentUser" txt="ÂµÂ±Ã‡Â°Ã“ÃƒÂ»Â§"/>
-    <str id="ShortcutPanel.regular.allUsers" txt="Ã‹Ã¹Ã“ÃÃ“ÃƒÂ»Â§"/>
+    <str id="ShortcutPanel.regular.list" txt="Ñ¡Ôñ¿ì½Ý·½Ê½µÄ³ÌÐò×é:"/>
+    <str id="ShortcutPanel.regular.default" txt="ÖØÖÃ"/>
+    <str id="ShortcutPanel.regular.desktop" txt="ÔÚ×ÀÃæ´´½¨¿ì½Ý·½Ê½"/>
+    <str id="ShortcutPanel.regular.create" txt="´´½¨¿ì½Ý·½Ê½"/>
+    <str id="ShortcutPanel.regular.userIntro" txt="´´½¨¿ì½Ý·½Ê½:"/>
+    <str id="ShortcutPanel.regular.currentUser" txt="µ±Ç°ÓÃ»§"/>
+    <str id="ShortcutPanel.regular.allUsers" txt="ËùÓÐÓÃ»§"/>
 
-    <str id="ShortcutPanel.alternate.apology" txt="ÂºÃœÃ’Ã…ÂºÂ¶IzPackÂ²Â»Ã–Â§Â³Ã–Ã”ÃšÂµÂ±Ã‡Â°Â²Ã™Ã—Ã·ÃÂµÃÂ³Ã‰ÃÂ´Â´Â½Â¨Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½. Â´Â´Â½Â¨Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½Â£Â¬Ã‡Ã«Â²ÃŽÂ¿Â¼Â²Ã™Ã—Ã·ÃÂµÃÂ³ÃŠÃ–Â²Ã¡."/>
+    <str id="ShortcutPanel.alternate.apology" txt="ºÜÒÅº¶IzPack²»Ö§³ÖÔÚµ±Ç°²Ù×÷ÏµÍ³ÉÏ´´½¨¿ì½Ý·½Ê½. ´´½¨¿ì½Ý·½Ê½£¬Çë²Î¿¼²Ù×÷ÏµÍ³ÊÖ²á."/>
     <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
-    <str id="ShortcutPanel.alternate.textFileExplanation" txt="ÃŽÂªÃÃ‹Ã’Ã”ÂºÃ³Â²ÃŽÂ¿Â¼Â£Â¬Ã„Ã£Â¿Ã‰Ã’Ã”Â°Ã‘Ã“Â¦Ã“ÃƒÂ³ÃŒÃÃ²Ã„Â¿Â±ÃªÂµÃ„ÃÃªÃÂ¸ÃÃ…ÃÂ¢Â±Â£Â´Ã¦Ã”ÃšÃŽÃ„Â±Â¾ÃŽÃ„Â¼Ã¾."/>
-    <str id="ShortcutPanel.alternate.saveButton" txt="Â±Â£Â´Ã¦ÃŽÃ„Â±Â¾ÃŽÃ„Â¼Ã¾"/>
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="ÎªÁËÒÔºó²Î¿¼£¬Äã¿ÉÒÔ°ÑÓ¦ÓÃ³ÌÐòÄ¿±êµÄÏêÏ¸ÐÅÏ¢±£´æÔÚÎÄ±¾ÎÄ¼þ."/>
+    <str id="ShortcutPanel.alternate.saveButton" txt="±£´æÎÄ±¾ÎÄ¼þ"/>
     
-    <str id="ShortcutPanel.textFile.header" txt="Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½ÃÃ…ÃÂ¢\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. Â¸ÃƒÃÃ…ÃÂ¢ÃˆÃƒÃŠÃ–Â¶Â¯Â´Â´Â½Â¨Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½Â³Ã‰ÃŽÂªÂ¿Ã‰Ã„Ãœ.\n"/>
+    <str id="ShortcutPanel.textFile.header" txt="¿ì½Ý·½Ê½ÐÅÏ¢\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. ¸ÃÐÅÏ¢ÈÃÊÖ¶¯´´½¨¿ì½Ý·½Ê½³ÉÎª¿ÉÄÜ.\n"/>
     
-    <str id="ShortcutPanel.textFile.name"         txt="Â¿Ã¬Â½ÃÂ·Â½ÃŠÂ½          : "/>
+    <str id="ShortcutPanel.textFile.name"         txt="¿ì½Ý·½Ê½          : "/>
     <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
-    <str id="ShortcutPanel.textFile.description"  txt="ÃƒÃ¨ÃŠÃ¶              : "/>
-    <str id="ShortcutPanel.textFile.target"       txt="Â¿Ã¬Â½ÃÃ„Â¿Â±Ãª          : "/>
-    <str id="ShortcutPanel.textFile.command"      txt="ÃƒÃ¼ÃÃ®ÃÃ            : "/>
-    <str id="ShortcutPanel.textFile.iconName"     txt="ÃÂ¼Â±ÃªÃŽÃ„Â¼Ã¾          : "/>
-    <str id="ShortcutPanel.textFile.iconIndex"    txt="ÃÂ¼Â±ÃªÃ‹Ã·Ã’Ã½          : "/>
-    <str id="ShortcutPanel.textFile.work"         txt="Â¹Â¤Ã—Ã·Ã„Â¿Ã‚Â¼          : "/>
+    <str id="ShortcutPanel.textFile.description"  txt="ÃèÊö              : "/>
+    <str id="ShortcutPanel.textFile.target"       txt="¿ì½ÝÄ¿±ê          : "/>
+    <str id="ShortcutPanel.textFile.command"      txt="ÃüÁîÐÐ            : "/>
+    <str id="ShortcutPanel.textFile.iconName"     txt="Í¼±êÎÄ¼þ          : "/>
+    <str id="ShortcutPanel.textFile.iconIndex"    txt="Í¼±êË÷Òý          : "/>
+    <str id="ShortcutPanel.textFile.work"         txt="¹¤×÷Ä¿Â¼          : "/>
 
-    <str id="ShortcutPanel.location.desktop"      txt="Ã—Ã€ÃƒÃ¦"/>
-    <str id="ShortcutPanel.location.applications" txt="Ã“Â¦Ã“ÃƒÂ³ÃŒÃÃ²Â²Ã‹ÂµÂ¥"/>
-    <str id="ShortcutPanel.location.startMenu"    txt="Â¿ÂªÃŠÂ¼Â²Ã‹ÂµÂ¥"/>
-    <str id="ShortcutPanel.location.startup"      txt="Ã†Ã´Â¶Â¯Â³ÃŒÃÃ²Ã—Ã©"/>
+    <str id="ShortcutPanel.location.desktop"      txt="×ÀÃæ"/>
+    <str id="ShortcutPanel.location.applications" txt="Ó¦ÓÃ³ÌÐò²Ëµ¥"/>
+    <str id="ShortcutPanel.location.startMenu"    txt="¿ªÊ¼²Ëµ¥"/>
+    <str id="ShortcutPanel.location.startup"      txt="Æô¶¯³ÌÐò×é"/>
     
-    <str id="UserInputPanel.error.caption"        txt="Ã‚Â¼ÃˆÃ«ÃŽÃŠÃŒÃ¢"/>
-    <str id="UserInputPanel.search.autodetect"    txt="Ã—Ã”Â¶Â¯Â¼Ã¬Â²Ã¢"/>
+    <str id="UserInputPanel.error.caption"        txt="Â¼ÈëÎÊÌâ"/>
+    <str id="UserInputPanel.search.autodetect"    txt="×Ô¶¯¼ì²â"/>
 
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
-    <str id="UserInputPanel.search.autodetect.failed.message"    txt="Ã—Ã”Â¶Â¯Â¼Ã¬Â²Ã¢ÃŠÂ§Â°Ãœ."/>
-    <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Ã—Ã”Â¶Â¯Â¼Ã¬Â²Ã¢ÃŠÂ§Â°Ãœ."/>
-    <str id="UserInputPanel.search.autodetect.tooltip"           txt="Ã”ÃšÂ¸Ã¸Â¶Â¨Ã‚Â·Â¾Â¶Ã–ÃÂ¼Ã¬Â²Ã©ÃŽÃ„Â¼Ã¾Â»Ã²Ã„Â¿Ã‚Â¼."/>
-    <str id="UserInputPanel.search.location"           txt="ÃŠÃ¤ÃˆÃ«{0}ÂµÃ„Ã‚Â·Â¾Â¶."/>
+    <str id="UserInputPanel.search.autodetect.failed.message"    txt="×Ô¶¯¼ì²âÊ§°Ü."/>
+    <str id="UserInputPanel.search.autodetect.failed.caption"    txt="×Ô¶¯¼ì²âÊ§°Ü."/>
+    <str id="UserInputPanel.search.autodetect.tooltip"           txt="ÔÚ¸ø¶¨Â·¾¶ÖÐ¼ì²éÎÄ¼þ»òÄ¿Â¼."/>
+    <str id="UserInputPanel.search.location"           txt="ÊäÈë{0}µÄÂ·¾¶."/>
     <str id="UserInputPanel.search.location.checkedfile" txt="The existence of {0} is checked."/>
-    <str id="UserInputPanel.search.browse"           txt="Ã¤Â¯Ã€Ã€..."/>
-    <str id="UserInputPanel.search.wrongselection.message"   txt="Ã„Ã£Ã‘Â¡Ã”Ã±ÂµÃ„ÃŽÃ„Â¼Ã¾Â»Ã²Ã„Â¿Ã‚Â¼Â²Â»Â´Ã¦Ã”ÃšÂ»Ã²Ã•ÃŸÂ²Â»Ã•Ã½ÃˆÂ·."/>
-    <str id="UserInputPanel.search.wrongselection.caption"   txt="ÃŽÃžÃÂ§Ã‘Â¡ÃÃ®."/>
+    <str id="UserInputPanel.search.browse"           txt="ä¯ÀÀ..."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="ÄãÑ¡ÔñµÄÎÄ¼þ»òÄ¿Â¼²»´æÔÚ»òÕß²»ÕýÈ·."/>
+    <str id="UserInputPanel.search.wrongselection.caption"   txt="ÎÞÐ§Ñ¡Ïî."/>
 
-    <str id="CompilePanel.heading" txt="Â±Ã Ã’Ã«" />
-    <str id="CompilePanel.tip" txt="ÃˆÃŽÃŽÃ±Â±Ã Ã’Ã«Â½Ã¸Â³ÃŒ:" />
-    <str id="CompilePanel.browse" txt="Ã¤Â¯Ã€Ã€..." />
-    <str id="CompilePanel.browse.approve" txt="Ã—Ã·ÃŽÂªÂ±Ã Ã’Ã«Ã†Ã·ÃŠÂ¹Ã“Ãƒ" />
-    <str id="CompilePanel.start" txt="Â¿ÂªÃŠÂ¼" />
-    <str id="CompilePanel.progress.initial" txt="[Â°Â´Â¿ÂªÃŠÂ¼Â°Â´Ã…Â¥]" />
-    <str id="CompilePanel.progress.finished" txt="[ÃÃªÂ³Ã‰]" />
+    <str id="CompilePanel.heading" txt="±àÒë" />
+    <str id="CompilePanel.tip" txt="ÈÎÎñ±àÒë½ø³Ì:" />
+    <str id="CompilePanel.browse" txt="ä¯ÀÀ..." />
+    <str id="CompilePanel.browse.approve" txt="×÷Îª±àÒëÆ÷Ê¹ÓÃ" />
+    <str id="CompilePanel.start" txt="¿ªÊ¼" />
+    <str id="CompilePanel.progress.initial" txt="[°´¿ªÊ¼°´Å¥]" />
+    <str id="CompilePanel.progress.finished" txt="[Íê³É]" />
     <str id="CompilePanel.progress.overall" txt="Overall compilation progress:" />
-    <str id="CompilePanel.error" txt="Â±Ã Ã’Ã«ÃŠÂ§Â°Ãœ" />
-    <str id="CompilePanel.error.reconfigure" txt="Ã–Ã˜ÃÃ‚Ã‰Ã¨Ã–Ãƒ" />
-    <str id="CompilePanel.error.ignore" txt="ÂºÃ¶Ã‚Ã”" />
-    <str id="CompilePanel.error.abort" txt="Ã–Ã•Ã–Â¹" />
-    <str id="CompilePanel.error.seebelow" txt="Ã’Ã”ÃÃ‚Â²Ã©Â¿Â´Â³Ã¶Â´Ã­ÃƒÃ¼ÃÃ®ÂºÃÃÃ Â¹Ã˜ÃŠÃ¤Â³Ã¶." />
-    <str id="CompilePanel.error.nofiles" txt="Â²Ã©Ã‘Â¯Â±Ã Ã’Ã«ÃŽÃ„Â¼Ã¾ÃŠÂ±Â³Ã¶ÃÃ–Â´Ã­ÃŽÃ³." />
-    <str id="CompilePanel.error.compilernotfound" txt="Â±Ã Ã’Ã«Ã†Ã·Â²Â»Ã„ÃœÃ”Ã‹ÃÃ." />
-    <str id="CompilePanel.error.invalidarguments" txt="Â±Ã Ã’Ã«Ã†Ã·Â²Â»Ã„ÃœÂ´Â¦Ã€Ã­ÃŒÃ¡Â¹Â©ÂµÃ„Â²ÃŽÃŠÃ½." />
-    <str id="CompilePanel.error.noclassfile" txt="Â±Ã Ã’Ã«Ã†Ã·ÃƒÂ»Ã“ÃÃŽÂªÃ”Â´Â´ÃºÃ‚Ã«ÃŽÃ„Â¼Ã¾Ã‰ÃºÂ³Ã‰ÃÃ Â¹Ã˜Ã€Ã ÃŽÃ„Â¼Ã¾ " />
-    <str id="CompilePanel.choose_compiler" txt="ÃŠÂ¹Ã“ÃƒÂµÃ„Â±Ã Ã’Ã«Ã†Ã·:" />
-    <str id="CompilePanel.additional_arguments" txt="Â¶Ã®ÃÃ¢ÂµÃ„Â±Ã Ã’Ã«Ã†Ã·Â²ÃŽÃŠÃ½:" />
+    <str id="CompilePanel.error" txt="±àÒëÊ§°Ü" />
+    <str id="CompilePanel.error.reconfigure" txt="ÖØÐÂÉèÖÃ" />
+    <str id="CompilePanel.error.ignore" txt="ºöÂÔ" />
+    <str id="CompilePanel.error.abort" txt="ÖÕÖ¹" />
+    <str id="CompilePanel.error.seebelow" txt="ÒÔÏÂ²é¿´³ö´íÃüÁîºÍÏà¹ØÊä³ö." />
+    <str id="CompilePanel.error.nofiles" txt="²éÑ¯±àÒëÎÄ¼þÊ±³öÏÖ´íÎó." />
+    <str id="CompilePanel.error.compilernotfound" txt="±àÒëÆ÷²»ÄÜÔËÐÐ." />
+    <str id="CompilePanel.error.invalidarguments" txt="±àÒëÆ÷²»ÄÜ´¦ÀíÌá¹©µÄ²ÎÊý." />
+    <str id="CompilePanel.error.noclassfile" txt="±àÒëÆ÷Ã»ÓÐÎªÔ´´úÂëÎÄ¼þÉú³ÉÏà¹ØÀàÎÄ¼þ " />
+    <str id="CompilePanel.choose_compiler" txt="Ê¹ÓÃµÄ±àÒëÆ÷:" />
+    <str id="CompilePanel.additional_arguments" txt="¶îÍâµÄ±àÒëÆ÷²ÎÊý:" />
 
-    <str id="ProcessPanel.heading" txt="Â´Â¦Ã€Ã­Ã–Ã" />
+    <str id="ProcessPanel.heading" txt="´¦ÀíÖÐ" />
 
     <!-- Add your own panels specific strings here if you need -->
 
