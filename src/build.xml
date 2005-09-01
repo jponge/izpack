@@ -745,28 +745,12 @@
 	</target>
 	
 	<target name="build.docu" description="Builds the customer documentation">
-		<echo message="build the customer documentation"/>
-		<exec dir="${basedir}/src/doc" os="Linux" executable="make">		
-		</exec>	
-		<copy todir="${doc.dir}/izpack/html">
-		  <fileset dir="${basedir}/src/doc/html">
-	        <include name="**/*" />
-		  </fileset>
-	    </copy>
-		<copy todir="${doc.dir}/izpack/pdf">
-          <fileset dir="${basedir}/src/doc/pdf">
-             <include name="**/*" />
-          </fileset>
-        </copy>
+		
 	</target>
 	
 	<target name="create.docu" depends="build.javadoc, build.docu" description="Creates the javadoc-api and customer documentation" >
-		
-		
 	
 	</target>
-	
-
 
 	<!-- Creates an installer for IzPack -->
 	<target name="generate.installer.worker">
