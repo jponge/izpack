@@ -160,6 +160,10 @@ public class RegistryImpl
     public void createKey(int root, String key) throws NativeLibException
     {
         int pathEnd = key.lastIndexOf('\\');
+        if( pathEnd < 0 )
+        {
+            throw new NativeLibException("Keys directly under the root are not allowed!");
+        }
         String subkey = key.substring(0, pathEnd);
         if (!exist(root, subkey))
         { // Create missing sub keys
