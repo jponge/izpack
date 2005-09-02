@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-
+#include "UnicodeHelper.h"
 #include <windows.h>
 #include <jni.h>
 #include "com_coi_tools_os_izpack_COIOSHelper.h"
@@ -57,13 +57,13 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_izpack_COIOSHelper_FreeLibrary
 	(JNIEnv *env, jobject obj, jstring name)
 {
 	// convert the name from Java string type
-	const char *libraryName = env->GetStringUTFChars (name, 0);
+	const TCHAR *libraryName = env->GET_STRING_CHARS (name, 0);
 
 	// get a module handle 
 	HMODULE handle = GetModuleHandle (libraryName);
 
 	// release the string object
-	env->ReleaseStringUTFChars (name, libraryName);
+	env->RELEASE_STRING_CHARS (name, libraryName);
 	
 	// destroy the acl factory
 	// now we are rady to free the library

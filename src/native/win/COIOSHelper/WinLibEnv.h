@@ -59,14 +59,14 @@ class WinLibEnv
 		static ExceptionNameRecord ExceptionNameMap[];
 		unsigned long	win32Error;
 		unsigned long	externCode;
-		char	*win32ErrorText;
+		TCHAR	*win32ErrorText;
 		int		winLibError;
-		char	*winLibErrorText;
+		TCHAR	*winLibErrorText;
 		JNIEnv 	*jniEnv;
 		jobject jniObj;
 		WinLibEnvStatus_e	status;
 		char	*exceptionTypeName;
-		char    *args[STD_ARRAY_LENGTH];
+		TCHAR    *args[STD_ARRAY_LENGTH];
 		int		currentArg;
 		void getOSMessage();
 		ExceptionNameRecord *getExceptionNameRecord( char *exName );	
@@ -78,21 +78,21 @@ class WinLibEnv
 		jboolean	good() { return(status < WLES_WARNING ? true : false);};
 		JNIEnv *getJNIEnv() { return(jniEnv);};
 
-		void	setError( char *err, char *errType);
-		void	setError( char *err) { setError(err, ExceptionNameMap[1].getShortName());};
-		void	setError( char *err,  unsigned long errCode) { setError( err ); win32Error = errCode;};
+		void	setError( TCHAR *err, char *errType);
+		void	setError( TCHAR *err) { setError(err, ExceptionNameMap[1].getShortName());};
+		void	setError( TCHAR *err,  unsigned long errCode) { setError( err ); win32Error = errCode;};
 		void	setError( int err) 
 			{ winLibError = err; status = WLES_ERROR;exceptionTypeName = ExceptionNameMap[1].getShortName();};
 		
 		void	setErrorWithOS( int err ) { setError(err); win32Error = GetLastError();};
-		void	setErrorWithOS( char *err) { setErrorWithOS( err, ExceptionNameMap[1].getShortName() );};
-		void	setErrorWithOS( char *err,  char *errType) 
+		void	setErrorWithOS( TCHAR *err) { setErrorWithOS( err, ExceptionNameMap[1].getShortName() );};
+		void	setErrorWithOS( TCHAR *err,  char *errType) 
 			{ setError( err, errType );win32Error = GetLastError();};
 
-		void	addArg( const char *arg1 );
-		void	addArgs( const char *arg1, const char *arg2) { addArg(arg1); addArg(arg2); };
-		void	addArgs( const char *arg1, const char *arg2, const char *arg3) { addArgs(arg1, arg2); addArg(arg3); };
-		void	addArgs( const char *arg1, const char *arg2, const char *arg3, const char *arg4) 
+		void	addArg( const TCHAR *arg1 );
+		void	addArgs( const TCHAR *arg1, const TCHAR *arg2) { addArg(arg1); addArg(arg2); };
+		void	addArgs( const TCHAR *arg1, const TCHAR *arg2, const TCHAR *arg3) { addArgs(arg1, arg2); addArg(arg3); };
+		void	addArgs( const TCHAR *arg1, const TCHAR *arg2, const TCHAR *arg3, const TCHAR *arg4) 
 			{ addArgs(arg1, arg2); addArgs(arg3, arg4); };
 
 		void	reset();

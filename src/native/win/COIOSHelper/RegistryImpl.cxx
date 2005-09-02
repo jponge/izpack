@@ -19,6 +19,7 @@
  * limitations under the License.
  */
 
+#include "UnicodeHelper.h"
 #include "com_coi_tools_os_win_RegistryImpl.h"
 #include <windows.h>
 #include "COIOSHelper.h"
@@ -53,10 +54,10 @@ JNIEXPORT jboolean JNICALL Java_com_coi_tools_os_win_RegistryImpl_exist
 	jboolean  retval = false;
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
 		retval = regKeyExist(&libEnv,  jRoot, key );
 
-		env->ReleaseStringUTFChars( jKey, key);
+		env->RELEASE_STRING_CHARS( jKey, key);
 	}
 	libEnv.verifyAndThrowAtError();
 	return( retval  );
@@ -75,9 +76,9 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_createKeyN
 	WinLibEnv libEnv( env, obj );
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
 		createRegKey(&libEnv,  jRoot, key );
-		env->ReleaseStringUTFChars( jKey, key);
+		env->RELEASE_STRING_CHARS( jKey, key);
 	}
 	libEnv.verifyAndThrowAtError();
 }
@@ -96,9 +97,9 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_setValueN
 	WinLibEnv *plibEnv = &libEnv;
 	if( libEnv.verifyNullObjects(jKey, jValue, jContents ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
-		const char *value = env->GetStringUTFChars( jValue , 0);
-		const char *buf = NULL;
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		const TCHAR *value = env->GET_STRING_CHARS( jValue , 0);
+		const TCHAR *buf = NULL;
 		jint type	= 0;
 				int i;
 		LPBYTE contents = NULL;
@@ -110,21 +111,21 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_setValueN
 		jboolean isCopy = false;
 		jstring *jMultiStr = NULL;
 		jint multiSize = 0;
-		const char ** intermedMulti = NULL;;
+		const TCHAR ** intermedMulti = NULL;;
 		while( 1 )
 		{
 			jmethodID	mid = NULL;
 			jclass clazz	= env->GetObjectClass( jContents );
 			if( clazz == NULL )	// oops, class not bound ??
-				ERROR_BREAK("registry.MissingRegDataContainer", plibEnv);
+				ERROR_BREAK(_T("registry.MissingRegDataContainer"), plibEnv);
 			if( (mid = env->GetMethodID( clazz, "getType", "()I" ) ) == NULL )
-				ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
+				ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
 			type = env->CallIntMethod( jContents, mid );
 			switch( type )
 			{
 			case REG_DWORD:
 				if( (mid = env->GetMethodID( clazz, "getDwordData", "()J" ) ) == NULL )
-					ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
+					ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
 				ddata  = (DWORD) env->CallLongMethod( jContents, mid );
 				contents = (LPBYTE) &ddata;
 				length = 4;
@@ -132,51 +133,52 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_setValueN
 			case REG_SZ:
 			case REG_EXPAND_SZ:
 				if( (mid = env->GetMethodID( clazz, "getStringData", "()Ljava/lang/String;" ) ) == NULL )
-					ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
+					ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
 				if( (jStr = (jstring) env->CallObjectMethod( jContents, mid )) == NULL )
-					ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
-				buf = env->GetStringUTFChars( jStr , 0);
+					ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
+				buf = env->GET_STRING_CHARS( jStr , 0);
 				contents = (LPBYTE) buf;
-				length	= strlen( buf) + 1;
+				length	= (_tcslen( buf) + 1) * sizeof(TCHAR);
 				break;
 			case REG_BINARY:
 				if( (mid = env->GetMethodID( clazz, "getBinData", "()[B" ) ) == NULL )
-					ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
+					ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
 				if( (jBin = (jbyteArray) env->CallObjectMethod( jContents, mid )) == NULL )
-					ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
+					ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
 				contents = (LPBYTE) env->GetByteArrayElements( jBin, &isCopy );
 				length	= (DWORD) env->GetArrayLength( jBin );
 				break;
 			case REG_MULTI_SZ:
 				if( (mid = env->GetMethodID( clazz, "getMultiStringData", "()[Ljava/lang/String;" ) ) == NULL )
-					ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
+					ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
 				if( (jObj = (jobjectArray) env->CallObjectMethod( jContents, mid)) == NULL )
-					ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
+					ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
 				multiSize = env->GetArrayLength( jObj );
 				LPBYTE pos;
 				jMultiStr = new jstring[multiSize];
-				intermedMulti = new const char *[multiSize];
-				length = 2;
+				intermedMulti = new const TCHAR *[multiSize];
+				length = 2 ;
 				for( i = 0; i < multiSize; ++i )
 				{
 					jMultiStr[i] = (jstring) env->GetObjectArrayElement( jObj, i );
-					intermedMulti[i] = env->GetStringUTFChars( jMultiStr[i], 0);
-					length += strlen( intermedMulti[i] ) + 1;
+					intermedMulti[i] = env->GET_STRING_CHARS( jMultiStr[i], 0);
+					length += _tcslen( intermedMulti[i] ) + 1 ;
 				}
-				pos = contents = (LPBYTE) new char[length];
+				pos = contents = (LPBYTE) new TCHAR[length];
 				int monoLength; 
 				for( i = 0; i < multiSize; ++i )
 				{
-					monoLength = strlen(intermedMulti[i] ) + 1;
+					monoLength = (_tcslen(intermedMulti[i] ) + 1) * sizeof(TCHAR);
 					memcpy( pos, intermedMulti[i], monoLength);
 					pos += monoLength;
 				}
 				*pos++	= 0;
 				*pos	= 0;
+				length *= sizeof(TCHAR);
 
 				break;
 			default:
-				ERROR_BREAK("registry.DataTypeNotSupported", plibEnv);
+				ERROR_BREAK(_T("registry.DataTypeNotSupported"), plibEnv);
 
 			}
 			if( ! libEnv.good() )	// Today not necessary, but may be someone add a line ...
@@ -187,7 +189,7 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_setValueN
 			setRegValue(plibEnv, jRoot, key, value, type, contents, length );
 
 		if( buf )
-			env->ReleaseStringUTFChars( jStr, buf);
+			env->RELEASE_STRING_CHARS( jStr, buf);
 		if( jBin )
 		{
 			env->ReleaseByteArrayElements( jBin, (jbyte *) contents, JNI_ABORT  );
@@ -196,7 +198,7 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_setValueN
 		{
 			for( i = 0; i < multiSize; ++i )
 			{
-				env->ReleaseStringUTFChars(jMultiStr[i], intermedMulti[i]);
+				env->RELEASE_STRING_CHARS(jMultiStr[i], intermedMulti[i]);
 				env->DeleteLocalRef( jMultiStr[i] );
 			}
 			delete [] jMultiStr;
@@ -204,8 +206,8 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_setValueN
 			delete contents;
 
 		}
-		env->ReleaseStringUTFChars( jKey, key);
-		env->ReleaseStringUTFChars( jValue, value);
+		env->RELEASE_STRING_CHARS( jKey, key);
+		env->RELEASE_STRING_CHARS( jValue, value);
 	}
 	libEnv.verifyAndThrowAtError();
 	return;
@@ -224,11 +226,11 @@ JNIEXPORT jint JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueType
 	jint  retval = 0;
 	if( libEnv.verifyNullObjects(jKey, jValue ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
-		const char *value = env->GetStringUTFChars( jValue , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		const TCHAR *value = env->GET_STRING_CHARS( jValue , 0);
 		retval = getRegValueType(&libEnv,  jRoot, key, value );
-		env->ReleaseStringUTFChars( jKey, key);
-		env->ReleaseStringUTFChars( jValue, value);
+		env->RELEASE_STRING_CHARS( jKey, key);
+		env->RELEASE_STRING_CHARS( jValue, value);
 	}
 	libEnv.verifyAndThrowAtError();
 	return( retval );
@@ -249,8 +251,8 @@ JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValue
 	jobject retval = NULL;
 	if( libEnv.verifyNullObjects(jKey, jValue ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
-		const char *value = env->GetStringUTFChars( jValue , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		const TCHAR *value = env->GET_STRING_CHARS( jValue , 0);
 		DWORD type;
 		DWORD length;
 
@@ -261,11 +263,11 @@ JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValue
 			jmethodID	mid = NULL;
 			jclass 		clazz = NULL;
 			if( (clazz = env->FindClass("com/coi/tools/os/win/RegDataContainer") ) == NULL )
-				ERROR_BREAK("registry.MissingRegDataContainer", plibEnv);
+				ERROR_BREAK(_T("registry.MissingRegDataContainer"), plibEnv);
 			if( strlen( TYPE_INIT_SIGNATURE_TABLE[type] ) < 1 )
-				ERROR_BREAK("registry.UnsupportedDataType", plibEnv);
+				ERROR_BREAK(_T("registry.UnsupportedDataType"), plibEnv);
 			if( (mid = env->GetMethodID( clazz, "<init>", TYPE_INIT_SIGNATURE_TABLE[type]  ) ) == NULL )
-				ERROR_BREAK("registry.MalformedRegDataContainer", plibEnv);
+				ERROR_BREAK(_T("registry.MalformedRegDataContainer"), plibEnv);
 
 			switch( type )
 			{
@@ -277,7 +279,7 @@ JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValue
 				break;
 			case REG_SZ:
 			case REG_EXPAND_SZ:
-				retval = env->NewObject( clazz, mid,  env->NewStringUTF( (char *) winData) ); 
+				retval = env->NewObject( clazz, mid,  env->NEW_STRING( (TCHAR *) winData) ); 
 				break;
 			case REG_BINARY:
 				{
@@ -288,22 +290,22 @@ JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValue
 				break;
 			case REG_MULTI_SZ:
 				{
-					char *pos = (char *) winData;
+					TCHAR *pos = (TCHAR *) winData;
 					int count = 0;
 					jclass	claString;
 					while( *pos )
 					{
 						count++;
-						pos += strlen(pos) + 1;
+						pos += _tcslen(pos) + 1;
 					}
 					if( (claString = env->FindClass("java/lang/String") ) == NULL )
-						ERROR_BREAK("registry.StringClassNotFound", plibEnv);
+						ERROR_BREAK(_T("registry.StringClassNotFound"), plibEnv);
 					jobjectArray joa = env->NewObjectArray( count, claString, 0 );
-					pos = (char *) winData;
+					pos = (TCHAR *) winData;
 					for( int i = 0; i < count; ++i )
 					{
-						env->SetObjectArrayElement( joa, i, env->NewStringUTF( pos ) );
-						pos += strlen(pos) + 1;
+						env->SetObjectArrayElement( joa, i, env->NEW_STRING( pos ) );
+						pos += _tcslen(pos) + 1;
 					}
 					retval = env->NewObject( clazz, mid,  joa ); 
 				}
@@ -315,8 +317,8 @@ JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValue
 		}
 		if( winData )
 			delete [] winData;
-		env->ReleaseStringUTFChars( jKey, key);
-		env->ReleaseStringUTFChars( jValue, value);
+		env->RELEASE_STRING_CHARS( jKey, key);
+		env->RELEASE_STRING_CHARS( jValue, value);
 	}
 	libEnv.verifyAndThrowAtError();
 	return( retval );
@@ -334,11 +336,11 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_deleteValueN
 	WinLibEnv libEnv( env, obj );
 	if( libEnv.verifyNullObjects(jKey, jValue ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
-		const char *value = env->GetStringUTFChars( jValue , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		const TCHAR *value = env->GET_STRING_CHARS( jValue , 0);
 		deleteRegValue(&libEnv,  jRoot, key, value );
-		env->ReleaseStringUTFChars( jKey, key);
-		env->ReleaseStringUTFChars( jValue, value);
+		env->RELEASE_STRING_CHARS( jKey, key);
+		env->RELEASE_STRING_CHARS( jValue, value);
 	}
 	libEnv.verifyAndThrowAtError();
 }
@@ -356,10 +358,10 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_deleteKeyN
 	WinLibEnv libEnv( env, obj );
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
 
 		deleteRegKey(&libEnv,  jRoot, key );
-		env->ReleaseStringUTFChars( jKey, key);
+		env->RELEASE_STRING_CHARS( jKey, key);
 	}
 	libEnv.verifyAndThrowAtError();
 }
@@ -378,10 +380,10 @@ JNIEXPORT jboolean JNICALL Java_com_coi_tools_os_win_RegistryImpl_isKeyEmpty
 	jboolean retval = false;
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
 
 		retval = isKeyEmpty(&libEnv,  jRoot, key );
-		env->ReleaseStringUTFChars( jKey, key);
+		env->RELEASE_STRING_CHARS( jKey, key);
 	}
 	libEnv.verifyAndThrowAtError();
 	return( retval );
@@ -400,11 +402,11 @@ JNIEXPORT jint JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyCount
 	DWORD	subkeys = 0;
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
 		DWORD	values = 1;
 
 		determineCounts(&libEnv,  jRoot, key, &subkeys, &values  );
-		env->ReleaseStringUTFChars( jKey, key);
+		env->RELEASE_STRING_CHARS( jKey, key);
 	}
 	libEnv.verifyAndThrowAtError();
 	return( subkeys );
@@ -423,11 +425,11 @@ JNIEXPORT jint JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueCount
 	DWORD	values = 0;
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
 		DWORD	subkeys = 1;
 
 		determineCounts(&libEnv,  jRoot, key, &subkeys, &values  );
-		env->ReleaseStringUTFChars( jKey, key);
+		env->RELEASE_STRING_CHARS( jKey, key);
 	}
 	libEnv.verifyAndThrowAtError();
 	return( values );
@@ -447,12 +449,12 @@ JNIEXPORT jstring JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyName
 	WinLibEnv libEnv( env, obj );
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
-		char *name = getSubkeyName(&libEnv,  jRoot, key, jKeyId  );
-		env->ReleaseStringUTFChars( jKey, key);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		TCHAR *name = getSubkeyName(&libEnv,  jRoot, key, jKeyId  );
+		env->RELEASE_STRING_CHARS( jKey, key);
 		libEnv.verifyAndThrowAtError();
 		if( libEnv.good() )	
-			retval = env->NewStringUTF( name );
+			retval = env->NEW_STRING( name );
 		if( name )
 			delete [] name;
 	}
@@ -474,12 +476,12 @@ JNIEXPORT jstring JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueName
 	WinLibEnv libEnv( env, obj );
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
-		char *name = getValueName(&libEnv,  jRoot, key, jKeyId  );
-		env->ReleaseStringUTFChars( jKey, key);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		TCHAR *name = getValueName(&libEnv,  jRoot, key, jKeyId  );
+		env->RELEASE_STRING_CHARS( jKey, key);
 		libEnv.verifyAndThrowAtError();
 		if( libEnv.good() )	
-			retval = env->NewStringUTF( name );
+			retval = env->NEW_STRING( name );
 		if( name )
 			delete [] name;
 	}
@@ -502,9 +504,9 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyN
 	jobjectArray  newArr = NULL;
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
 		jclass clazz;
-		char **names;
+		TCHAR **names;
 		LONG length = 0;
 		jstring utf_str;
 		int i;
@@ -514,7 +516,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyN
 			newArr = env->NewObjectArray( length, clazz, NULL);
 			for( i = 0; i < length; ++i )
 			{
-				utf_str = env->NewStringUTF( names[i] );
+				utf_str = env->NEW_STRING( names[i] );
 				env->SetObjectArrayElement( newArr, i, utf_str);
 				env->DeleteLocalRef( utf_str );
 				delete [] names[i];
@@ -524,7 +526,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyN
 			delete [] names;
 			//LocalFree( groups );
 		}
-		env->ReleaseStringUTFChars( jKey, key);
+		env->RELEASE_STRING_CHARS( jKey, key);
 	}
 	libEnv.verifyAndThrowAtError();
 	if( libEnv.good() )	
@@ -546,9 +548,9 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueNa
 	jobjectArray  newArr = NULL;
 	if( libEnv.verifyNullObjects(jKey ))
 	{
-		const char *key = env->GetStringUTFChars( jKey , 0);
+		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
 		jclass clazz;
-		char **names;
+		TCHAR **names;
 		LONG length = 0;
 		jstring utf_str;
 		int i;
@@ -558,7 +560,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueNa
 			newArr = env->NewObjectArray( length, clazz, NULL);
 			for( i = 0; i < length; ++i )
 			{
-				utf_str = env->NewStringUTF( names[i] );
+				utf_str = env->NEW_STRING( names[i] );
 				env->SetObjectArrayElement( newArr, i, utf_str);
 				env->DeleteLocalRef( utf_str );
 				delete [] names[i];
@@ -568,7 +570,7 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueNa
 			delete [] names;
 			//LocalFree( groups );
 		}
-		env->ReleaseStringUTFChars( jKey, key);
+		env->RELEASE_STRING_CHARS( jKey, key);
 	}
 	libEnv.verifyAndThrowAtError();
 	if( libEnv.good() )	

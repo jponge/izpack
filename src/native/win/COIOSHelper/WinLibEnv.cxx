@@ -20,6 +20,7 @@
  */
 
 
+#include "UnicodeHelper.h"
 #include "jni.h"
 #include <windows.h>
 #include "WinLibEnv.h"
@@ -117,15 +118,15 @@ WinLibEnv *WinLibEnv::clone()
 		ret->setError( winLibErrorText, exceptionTypeName);
 	if( win32ErrorText )
 	{
-		ret->win32ErrorText = new char[ strlen(win32ErrorText) + 2];
-		strcpy( ret->win32ErrorText,win32ErrorText );
+		ret->win32ErrorText = new TCHAR[ _tcslen(win32ErrorText) + 2];
+		_tcscpy( ret->win32ErrorText,win32ErrorText );
 	}
 	for( int i = 0; i < STD_ARRAY_LENGTH; ++i)
 	{
 		if(  args[i] )
 		{
-			ret->args[i] = new char[ strlen(args[i]) + 2];
-			strcpy( ret->args[i], args[i] );
+			ret->args[i] = new TCHAR[ _tcslen(args[i]) + 2];
+			_tcscpy( ret->args[i], args[i] );
 		}
 	}
 	return( ret);
@@ -148,8 +149,8 @@ void WinLibEnv::takeAcross( WinLibEnv *from)
 		winLibErrorText = NULL;
 	if( from->win32ErrorText )
 	{
-		win32ErrorText = new char[ strlen(from->win32ErrorText) + 2];
-		strcpy( win32ErrorText,from->win32ErrorText );
+		win32ErrorText = new TCHAR[ _tcslen(from->win32ErrorText) + 2];
+		_tcscpy( win32ErrorText,from->win32ErrorText );
 	}
 	else
 		win32ErrorText = NULL;
@@ -157,8 +158,8 @@ void WinLibEnv::takeAcross( WinLibEnv *from)
 	{
 		if(  from->args[i] )
 		{
-			args[i] = new char[ strlen(from->args[i]) + 2];
-			strcpy( args[i], from->args[i] );
+			args[i] = new TCHAR[ _tcslen(from->args[i]) + 2];
+			_tcscpy( args[i], from->args[i] );
 		}
 	}
 }
@@ -167,14 +168,14 @@ void WinLibEnv::takeAcross( WinLibEnv *from)
 // Sets an error. Previos existent string will be deleted.
 // The given messages will be copied.
 // --------------------------------------------------------------------------
-void WinLibEnv::setError( char *err, char *errType )
+void WinLibEnv::setError( TCHAR *err, char *errType )
 {
 	status = WLES_ERROR;
 	exceptionTypeName = errType;
 	if( winLibErrorText )
 		delete [] winLibErrorText;
-	winLibErrorText = new char[ strlen(err) + 2];
-	strcpy( winLibErrorText, err );
+	winLibErrorText = new TCHAR[ _tcslen(err) + 2];
+	_tcscpy( winLibErrorText, err );
 
 }
 
@@ -182,12 +183,12 @@ void WinLibEnv::setError( char *err, char *errType )
 // Adds a copy of the given string into the internal argument array.
 // Only 16 arguments are supported, more will be ignored.
 // --------------------------------------------------------------------------
-void WinLibEnv::addArg( const char *arg )
+void WinLibEnv::addArg( const TCHAR *arg )
 {
 	if( currentArg > STD_ARRAY_LENGTH || ! arg)
 		return;
-	args[currentArg] = new char[ strlen(arg) + 2];
-	strcpy( args[currentArg++], arg );
+	args[currentArg] = new TCHAR[ _tcslen(arg) + 2];
+	_tcscpy( args[currentArg++], arg );
 }
 
 
@@ -214,8 +215,8 @@ void WinLibEnv::getOSMessage()
 	}
 	if( win32ErrorText )
 		delete [] win32ErrorText;
-	win32ErrorText = new char[ strlen((LPTSTR) lpMsgBuf) + 2];
-	strcpy( win32ErrorText, (LPTSTR) lpMsgBuf );
+	win32ErrorText = new TCHAR[ _tcslen((LPTSTR) lpMsgBuf) + 2];
+	_tcscpy( win32ErrorText, (LPTSTR) lpMsgBuf );
 	// Free the buffer.
 	LocalFree( lpMsgBuf );	
 	
@@ -230,7 +231,7 @@ jboolean WinLibEnv::verifyNullObjects(jobject obj1, jobject obj2, jobject obj3, 
 {
 	if( obj1 == NULL || obj2 == NULL || obj3 == NULL || obj4 == NULL )
 	{
-		setError( "", "NullPointerException" );
+		setError( _T(""), "NullPointerException" );
 		return( false );
 	}
 	return( true );
@@ -271,9 +272,9 @@ jboolean WinLibEnv::verifyAndThrowAtError()
 			break;
 		// 4. Transform given error messages to Java.
 		if( winLibErrorText )
-			jliberr = jniEnv->NewStringUTF( winLibErrorText );
+			jliberr = jniEnv->NEW_STRING( winLibErrorText );
 		else
-			jliberr = jniEnv->NewStringUTF( "" );
+			jliberr = jniEnv->NEW_STRING( _T("") );
 		// 5. Handle exception dependant to the type id. Create throw object.
 		// This is the place to add more different exceptions. It is not necessary
 		// to define a different type id for every exception, else only for one which has
@@ -297,7 +298,7 @@ jboolean WinLibEnv::verifyAndThrowAtError()
 				if( win32Error )
 					getOSMessage();
 				if( win32ErrorText )
-					jwin32 = jniEnv->NewStringUTF( win32ErrorText );
+					jwin32 = jniEnv->NEW_STRING( win32ErrorText );
 				throwObj = (jthrowable) jniEnv->NewObject( clazz, mid, winLibError, 
 					win32Error, jliberr, jwin32 );
 				// Set additional arguments to the throw object if exist.
@@ -305,7 +306,7 @@ jboolean WinLibEnv::verifyAndThrowAtError()
 				for( int i = 0; i < currentArg; ++i )
 				{
 					if( args[i] )
-						jarg = jniEnv->NewStringUTF( args[i] );
+						jarg = jniEnv->NEW_STRING( args[i] );
 					else
 						jarg = NULL;
 					if( jarg == NULL )

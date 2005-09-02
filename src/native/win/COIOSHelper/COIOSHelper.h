@@ -19,6 +19,7 @@
  * limitations under the License.
  */
 
+
 #include <jni.h>
 #include "WinLibEnv.h"
 
@@ -50,20 +51,20 @@
 
 // in RegistryInternal.c
 
-extern jboolean regKeyExist(WinLibEnv *libEnv, int root, const char *key );
-extern void setRegValue(WinLibEnv *libEnv, int root, const char *key, 
-	const char *value, jint type, LPBYTE contents, jint length );
-extern void createRegKey(WinLibEnv *libEnv, int root, const char *key );
-extern jint getRegValueType( WinLibEnv *libEnv, int root, const char *key , const char *value );
-extern LPBYTE getRegValue( WinLibEnv *libEnv, int root, const char *key , const char *value, DWORD *type, DWORD *length);
-extern void deleteRegValue(WinLibEnv *libEnv, int root, const char *key, const char *value );
-extern void deleteRegKey(WinLibEnv *libEnv, int root, const char *key );
-extern jboolean isKeyEmpty(WinLibEnv *libEnv, int root, const char *key );
-extern void determineCounts( WinLibEnv *libEnv, int root, const char *key, DWORD *subkeys, DWORD *values );
-extern char *getSubkeyName( WinLibEnv *libEnv, int root, const char *key , int valueId );
-extern char *getValueName( WinLibEnv *libEnv, int root, const char *key , int keyId );
-extern int getValueNames( WinLibEnv *libEnv, int root, const char *key , char ***names  );
-extern int getSubkeyNames( WinLibEnv *libEnv, int root, const char *key , char ***names  );
+extern jboolean regKeyExist(WinLibEnv *libEnv, int root, const TCHAR *key );
+extern void setRegValue(WinLibEnv *libEnv, int root, const TCHAR *key, 
+	const TCHAR *value, jint type, LPBYTE contents, jint length );
+extern void createRegKey(WinLibEnv *libEnv, int root, const TCHAR *key );
+extern jint getRegValueType( WinLibEnv *libEnv, int root, const TCHAR *key , const TCHAR *value );
+extern LPBYTE getRegValue( WinLibEnv *libEnv, int root, const TCHAR *key , const TCHAR *value, DWORD *type, DWORD *length);
+extern void deleteRegValue(WinLibEnv *libEnv, int root, const TCHAR *key, const TCHAR *value );
+extern void deleteRegKey(WinLibEnv *libEnv, int root, const TCHAR *key );
+extern jboolean isKeyEmpty(WinLibEnv *libEnv, int root, const TCHAR *key );
+extern void determineCounts( WinLibEnv *libEnv, int root, const TCHAR *key, DWORD *subkeys, DWORD *values );
+extern TCHAR *getSubkeyName( WinLibEnv *libEnv, int root, const TCHAR *key , int valueId );
+extern TCHAR *getValueName( WinLibEnv *libEnv, int root, const TCHAR *key , int keyId );
+extern int getValueNames( WinLibEnv *libEnv, int root, const TCHAR *key , TCHAR ***names  );
+extern int getSubkeyNames( WinLibEnv *libEnv, int root, const TCHAR *key , TCHAR ***names  );
 
 
 
