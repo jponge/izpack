@@ -126,6 +126,8 @@
         Clean, Regenerate installer and installer with reg support. Avoid use of bad jars during installation.
     18.07.2005: (by Julien Ponge)
     	Enforce source / target compatibility, now 1.4 / 1.4.
+    02.09.2005: (by Klaus Bartz)
+    	Unicode support of ShellLink.
 
   Mini-HowTo:
 
@@ -761,8 +763,11 @@
 		<echo message="Copies the recent changed native files to the ${basedir}/bin directory"/>
 		
 		<mkdir dir="${basedir}/bin/native/izpack"/>
-		
+		<!-- If unicode support of ShellLink.dll will be not used, change between  next and secound line -->
+		<!--
 		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release/ShellLink.dll" verbose="true" overwrite="yes"/>
+		-->
+		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release_Unicode/ShellLink.dll" verbose="true" overwrite="yes"/>
 		
 		<echo message="Copies the general files to the dist directory"/>
 		<copy todir="${dist.dir}" includeEmptyDirs="yes">
