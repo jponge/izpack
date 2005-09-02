@@ -103,8 +103,8 @@ $Id$
         <!ATTLIST pack preselected (yes|no) "yes">
         <!ATTLIST pack os CDATA #IMPLIED>
         <!ATTLIST pack loose (true|false) "false">
-        <!ATTLIST pack group CDATA>
-        <!ATTLIST pack installGroups CDATA>
+        <!ATTLIST pack group CDATA #IMPLIED>
+        <!ATTLIST pack installGroups CDATA #IMPLIED>
         <!ELEMENT description (#PCDATA)>
         <!ELEMENT file (os*, additionaldata*)>
             <!ATTLIST file src CDATA #REQUIRED>
