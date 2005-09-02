@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!-- 
-    Registry definition file for Xtrend AdminClients Installation.
+	ATTENTION!!! do not edit with an editor which do not handle UTF-8 in a right manner!!
+	Storing with a wrong editor can crash this file!
+    Registry definition file for IzPack Installation.
     $Id$
 -->
 
@@ -29,6 +31,9 @@
 			string="$APP_URL"/>
       </pack>
 	<pack name="Core">
+		<key
+			keypath="SOFTWARE\IzForge\IzPack\$UNINSTALL_NAME\ЮникодТестКлюч"  
+			root="HKLM" />
 		<value name="Path" 
 			keypath="SOFTWARE\IzForge\IzPack\$UNINSTALL_NAME"  
 			root="HKLM" 
@@ -50,6 +55,16 @@
 			<multi data="Element two"/>
 			<multi data="Element three"/>
 		</value>
+		<value name="ЮникодМногострочныйТест" 
+			keypath="SOFTWARE\IzForge\IzPack\$UNINSTALL_NAME"  
+			root="HKLM">
+			<multi data="первая строчка" />
+			<multi data="вторая строчка" />
+		</value>
+		<value name="ЮникодТестСтрока" 
+			keypath="SOFTWARE\IzForge\IzPack\$UNINSTALL_NAME"  
+			root="HKLM" 
+			string="это тестовая строка для поддержки юникода"/>
 	</pack>
 	<pack name="Documentation-HTML">
 			<key keypath="SOFTWARE\IzForge\IzPack\$UNINSTALL_NAME\Documentation\HTML" root="HKLM"/>

@@ -763,11 +763,13 @@
 		<echo message="Copies the recent changed native files to the ${basedir}/bin directory"/>
 		
 		<mkdir dir="${basedir}/bin/native/izpack"/>
-		<!-- If unicode support of ShellLink.dll will be not used, change between  next and secound line -->
+		<!-- If unicode support of ShellLink.dll will be not used, change between  both copy blocks -->
 		<!--
 		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release/ShellLink.dll" verbose="true" overwrite="yes"/>
+		<copy todir="${basedir}/bin/native/3rdparty" file="${basedir}/src/native/win/COIOSHelper/Release/COIOSHelper.dll" verbose="true" overwrite="yes"/>
 		-->
 		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release_Unicode/ShellLink.dll" verbose="true" overwrite="yes"/>
+		<copy todir="${basedir}/bin/native/3rdparty" file="${basedir}/src/native/win/COIOSHelper/Release_Unicode/COIOSHelper.dll" verbose="true" overwrite="yes"/>
 		
 		<echo message="Copies the general files to the dist directory"/>
 		<copy todir="${dist.dir}" includeEmptyDirs="yes">
