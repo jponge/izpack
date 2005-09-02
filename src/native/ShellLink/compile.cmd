@@ -39,6 +39,17 @@ echo (Re-)Compiling...
 nmake /f %ShellLinkMak% CFG="ShellLink - Win32 Release"
 
 echo.
+echo cleaning up...
+
+nmake /f %ShellLinkMak% CFG="ShellLink - Win32 Release Unicode" CLEAN
+
+echo.
+echo (Re-)Compiling...
+
+
+nmake /f %ShellLinkMak% CFG="ShellLink - Win32 Release Unicode"
+
+echo.
 echo Pause, to check the current build
 echo.
 pause
