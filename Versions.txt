@@ -69,6 +69,7 @@
   packs; initial supported are "raw", "deflate" and "bzip2" (Klaus Bartz).
 - New documentation in XHTML Strict 1.0 + CSS (Fabrice Mirabile)
 - New documentation in DocBook (Fabrice Mirabile)
+- Unicode port of shortcuts and registry stuff (Klaus Bartz)
 
   > 3.7.2 (build 2005.04.22)
 
