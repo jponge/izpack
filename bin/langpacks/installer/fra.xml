@@ -118,6 +118,9 @@
     <str id="ShortcutPanel.location.applications" txt="Menu applications"/>
     <str id="ShortcutPanel.location.startMenu"    txt="Menu démarrer"/>
     <str id="ShortcutPanel.location.startup"      txt="Groupe de démarrage"/>
+    <str id="ShortcutPanel.headline" txt="Configuration des raccourcis"/>
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Menu demarrer"/>
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="Menu K"/>
 
     <!-- UserInputPanel strings -->
     <str id="UserInputPanel.error.caption"        txt="Problème de saisie"/>
@@ -164,6 +167,11 @@
     
     <!-- Strings for the Registry -->
     <str id="functionFailed.RegOpenKeyEx" txt="Impossible d'ouvrir la clé de registre {0}\\{1}."/>
+    
+    <!-- CheckedHelloPanel strings -->
+    <str id="CheckedHelloPanel.productAlreadyExist0" txt="Ce logiciel est deja installe depuis le chemin "/>
+    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Etes-vous certain de vouloir installer une autre entite ?" />
+    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="La cle de desinstallation sera : " />
     
     <!-- Add your own panels specific strings here if you need -->
     
