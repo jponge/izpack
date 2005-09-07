@@ -1,6 +1,6 @@
 <project name="IzPack" default="all" basedir="..">
 
-	<!--
+    <!--
   $Id$
   
   build.xml first written by Pierre Dittgen (pierre.dittgen@criltelecom.com)
@@ -159,537 +159,612 @@
     ant clean
   -->
 
-	<!-- Compiler to use put your own here (jikes, modern, gcj, ...) -->
-	<!--<property name="build.compiler" value="jikes" />-->
+    <!-- Compiler to use put your own here (jikes, modern, gcj, ...) -->
+    <!--<property name="build.compiler" value="jikes" />-->
 
-	<!-- Define directories -->
-	<property name="cwd"          value="${basedir}"/>
-	
-	<property file="src/ant.properties" />
-	<property name="ver" value="3.8" />
-	<property name="rel" value="0-M1" />
-	<property name="build.number" value="${ver}.${rel}"/>
+    <!-- Define directories -->
+    <property name="cwd" value="${basedir}" />
 
-	<property name="src.dir" value="${basedir}/src/lib" />
-	<property name="img.dir" value="${basedir}/src/img" />
-	<property name="bin.dir" value="${basedir}/bin" />
-	<property name="doc.dir" value="${basedir}/doc" />
+    <property file="src/ant.properties" />
+    <property name="ver" value="3.8" />
+    <property name="rel" value="0-M1" />
+    <property name="build.number" value="${ver}.${rel}" />
 
-	<property name="langpacks.subdir" value="langpacks" />
-	<property name="langpacks.dir" value="${basedir}/bin/${langpacks.subdir}" />
+    <property name="src.dir" value="${basedir}/src/lib" />
+    <property name="img.dir" value="${basedir}/src/img" />
+    <property name="bin.dir" value="${basedir}/bin" />
+    <property name="doc.dir" value="${basedir}/doc" />
 
-	<property name="build.subdir" value="_build" />
-	<property name="build.dir" value="${basedir}/${build.subdir}" />
+    <property name="langpacks.subdir" value="langpacks" />
+    <property name="langpacks.dir" value="${basedir}/bin/${langpacks.subdir}" />
 
-	<property name="dist.subdir" value="_dist" />
-	<property name="dist.dir" value="${basedir}/${dist.subdir}" />
-	<property name="dist-files.dir" value="${basedir}/src/dist-files" />
+    <property name="build.subdir" value="_build" />
+    <property name="build.dir" value="${basedir}/${build.subdir}" />
 
-	<!-- Define Main-Classes -->
-	<property name="compiler.class" value="com.izforge.izpack.compiler.Compiler" />
-	<property name="installer.class" value="com.izforge.izpack.installer.Installer" />
-	<property name="uninstaller.class" value="com.izforge.izpack.uninstaller.Uninstaller" />
+    <property name="dist.subdir" value="_dist" />
+    <property name="dist.dir" value="${basedir}/${dist.subdir}" />
+    <property name="dist-files.dir" value="${basedir}/src/dist-files" />
 
-	<!-- Define file paths -->
-	<property name="compiler.jar" value="${basedir}/lib/compiler.jar" />
-	<property name="standalone-compiler.jar" value="${basedir}/lib/standalone-compiler.jar" />
-	<property name="installer.jar" value="${basedir}/lib/installer.jar" />
-	<property name="uninstaller.jar" value="${basedir}/lib/uninstaller.jar" />
-	<property name="uninstaller-ext.jar" value="${basedir}/lib/uninstaller-ext.jar" />
-	<property name="izevent.jar" value="${basedir}/lib/izevent.jar" />
+    <!-- Define Main-Classes -->
+    <property name="compiler.class" value="com.izforge.izpack.compiler.Compiler" />
+    <property name="installer.class" value="com.izforge.izpack.installer.Installer" />
+    <property name="uninstaller.class" value="com.izforge.izpack.uninstaller.Uninstaller" />
 
-	<!-- Compilation parameters -->
-	<property name="debug" value="true" />
-	<property name="debuglevel" value="lines,vars,source" />
-	<property name="compat.source" value="1.4" />
-	<property name="compat.target" value="1.4" />
+    <!-- Define file paths -->
+    <property name="compiler.jar" value="${basedir}/lib/compiler.jar" />
+    <property name="standalone-compiler.jar" value="${basedir}/lib/standalone-compiler.jar" />
+    <property name="installer.jar" value="${basedir}/lib/installer.jar" />
+    <property name="uninstaller.jar" value="${basedir}/lib/uninstaller.jar" />
+    <property name="uninstaller-ext.jar" value="${basedir}/lib/uninstaller-ext.jar" />
+    <property name="izevent.jar" value="${basedir}/lib/izevent.jar" />
+
+    <!-- Compilation parameters -->
+    <property name="debug" value="true" />
+    <property name="debuglevel" value="lines,vars,source" />
+    <property name="compat.source" value="1.4" />
+    <property name="compat.target" value="1.4" />
 
 
-	<!-- paths -->
-	<path id="classpath">
-		<fileset id="ext.libs" dir="${basedir}/lib">
-			<!-- older ant jar, which izpack distributes and uses for fileset behavior -->
-			<include name="ant.jar" />
-			<include name="jakarta-regexp-1.3.jar" />
-		</fileset>
-		<!-- current ant jar, for compiling IzPackTask which uses modern ant features -->
-		<fileset dir="${ant.home}/lib" includes="ant.jar" />
-	</path>
+    <!-- paths -->
+    <path id="classpath">
+        <fileset id="ext.libs" dir="${basedir}/lib">
+            <!-- older ant jar, which izpack distributes and uses for fileset behavior -->
+            <include name="ant.jar" />
+            <include name="jakarta-regexp-1.3.jar" />
+        </fileset>
+        <!-- current ant jar, for compiling IzPackTask which uses modern ant features -->
+        <fileset dir="${ant.home}/lib" includes="ant.jar" />
+    </path>
 
-	<!-- Checking target -->
-	<target name="check">
-		<echo message="basedir=${basedir}" />
-		<echo message="dist.dir=${dist.dir}" />
-		<echo message="build.dir=${build.dir}" />
-		<echo message="debug=${debug}" />
-	</target>
+    <!-- Checking target -->
+    <target name="check">
+        <echo message="basedir=${basedir}" />
+        <echo message="dist.dir=${dist.dir}" />
+        <echo message="build.dir=${build.dir}" />
+        <echo message="debug=${debug}" />
+    </target>
 
-	<!-- Creates the classes directory -->
-	<target name="prepare" depends="time">
-		<mkdir dir="${build.dir}" />
-		<mkdir dir="${basedir}/lib" />
-		<mkdir dir="${dist.dir}" />		
-	</target>
+    <!-- Creates the classes directory -->
+    <target name="prepare" depends="time">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${basedir}/lib" />
+        <mkdir dir="${dist.dir}" />
+    </target>
 
-	<!-- Compiles the compiler src files -->
-	<target name="compile.compiler" depends="prepare">
-		<javac srcdir="${src.dir}" classpath="${basedir}/lib/jakarta-regexp-1.3.jar" destdir="${build.dir}" optimize="on" source="${compat.source}" target="${compat.target}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
-			<include name="com/izforge/izpack/*.java" />
-			<include name="com/izforge/izpack/compiler/*.java" />
-			<include name="com/izforge/izpack/compressor/*.java" />
-			<include name="com/izforge/izpack/ant/*.java" />
-			<include name="com/izforge/izpack/util/Debug.java" />
-			<include name="com/izforge/izpack/util/OsConstraint.java" />
-			<include name="com/izforge/izpack/util/JarOutputStream.java" />
-			<include name="net/n3/nanoxml/*.java" />
-		</javac>
-		<copy todir="${build.dir}/com/izforge/izpack/ant/langpacks">
-			<fileset dir="${src.dir}/com/izforge/izpack/ant/langpacks" />
-		</copy>
-	</target>
+    <!-- Compiles the compiler src files -->
+    <target name="compile.compiler" depends="prepare">
+        <javac srcdir="${src.dir}"
+               classpath="${basedir}/lib/jakarta-regexp-1.3.jar"
+               destdir="${build.dir}"
+               optimize="on"
+               source="${compat.source}"
+               target="${compat.target}"
+               deprecation="on"
+               debug="${debug}"
+               debuglevel="${debuglevel}">
+            <include name="com/izforge/izpack/*.java" />
+            <include name="com/izforge/izpack/compiler/*.java" />
+            <include name="com/izforge/izpack/compressor/*.java" />
+            <include name="com/izforge/izpack/ant/*.java" />
+            <include name="com/izforge/izpack/util/Debug.java" />
+            <include name="com/izforge/izpack/util/OsConstraint.java" />
+            <include name="com/izforge/izpack/util/JarOutputStream.java" />
+            <include name="net/n3/nanoxml/*.java" />
+        </javac>
+        <copy todir="${build.dir}/com/izforge/izpack/ant/langpacks">
+            <fileset dir="${src.dir}/com/izforge/izpack/ant/langpacks" />
+        </copy>
+    </target>
 
-	<!-- Package compiler.jar -->
-	<target name="build.compiler" depends="compile.compiler">
-		<jar jarfile="${compiler.jar}">
-			<manifest>
-				<attribute name="Built-By" value="IzPack" />
-				<attribute name="Class-Path" value="ant.jar" />
-				<attribute name="Main-Class" value="${compiler.class}" />
-			</manifest>
-			<fileset dir="${build.dir}">
-				<include name="com/izforge/izpack/*.class" />
-				<include name="com/izforge/izpack/compiler/*.class" />
-				<include name="com/izforge/izpack/compressor/*.class" />
-				<include name="com/izforge/izpack/util/OsConstraint.class" />
-				<include name="com/izforge/izpack/util/Debug.class" />
-				<include name="com/izforge/izpack/util/*Validator.class" />
-				<include name="com/izforge/izpack/util/*Processor.class" />
-				<include name="com/izforge/izpack/util/VariableSubstitutor.class" />
-				<include name="com/izforge/izpack/util/JarOutputStream.class" />
-				<include name="com/izforge/izpack/ant/*.class" />
-				<include name="com/izforge/izpack/ant/langpacks/*.properties" />
-				<include name="com/izforge/izpack/event/CompilerListener.class" />
-				<include name="com/izforge/izpack/event/SimpleCompilerListener.class" />
-				<include name="net/n3/nanoxml/*.class" />
-			</fileset>
-		</jar>
-	</target>
+    <!-- Package compiler.jar -->
+    <target name="build.compiler" depends="compile.compiler">
+        <jar jarfile="${compiler.jar}">
+            <manifest>
+                <attribute name="Built-By" value="IzPack" />
+                <attribute name="Class-Path" value="ant.jar" />
+                <attribute name="Main-Class" value="${compiler.class}" />
+            </manifest>
+            <fileset dir="${build.dir}">
+                <include name="com/izforge/izpack/*.class" />
+                <include name="com/izforge/izpack/compiler/*.class" />
+                <include name="com/izforge/izpack/compressor/*.class" />
+                <include name="com/izforge/izpack/util/OsConstraint.class" />
+                <include name="com/izforge/izpack/util/Debug.class" />
+                <include name="com/izforge/izpack/util/*Validator.class" />
+                <include name="com/izforge/izpack/util/*Processor.class" />
+                <include name="com/izforge/izpack/util/VariableSubstitutor.class" />
+                <include name="com/izforge/izpack/util/JarOutputStream.class" />
+                <include name="com/izforge/izpack/ant/*.class" />
+                <include name="com/izforge/izpack/ant/langpacks/*.properties" />
+                <include name="com/izforge/izpack/event/CompilerListener.class" />
+                <include name="com/izforge/izpack/event/SimpleCompilerListener.class" />
+                <include name="net/n3/nanoxml/*.class" />
+            </fileset>
+        </jar>
+    </target>
 
-	<!-- Package standalone-compiler.jar -->
-	<target name="build.standalone-compiler" depends="compile.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners">
-		<jar jarfile="${standalone-compiler.jar}" duplicate="preserve">
-			<manifest>
-				<attribute name="Built-By" value="IzPack" />
-				<attribute name="Class-Path" value="ant.jar" />
-				<attribute name="Main-Class" value="${compiler.class}" />
-			</manifest>
-			<zipfileset src="${installer.jar}" />
-			<zipfileset src="${compiler.jar}">
-				<!-- skip files already included via installer.jar -->
-				<exclude name="com/izforge/izpack/*.class" />
-				<exclude name="com/izforge/izpack/installer/*.class" />
-				<exclude name="com/izforge/izpack/util/*.class" />
-				<exclude name="net/n3/nanoxml/*.class" />
-			</zipfileset>
-			<zipfileset src="lib/ant.jar" />
-			<fileset dir="${basedir}">
-				<include name="bin/langpacks/flags/*" />
-				<include name="bin/langpacks/installer/*" />
-				<include name="bin/native/izpack/*" />
-				<include name="bin/native/3rdparty/*" />
-				<include name="bin/panels/*Panel.jar" />
-				<include name="bin/customActions/*.jar" />
-				<include name="lib/uninstaller.jar" />
-				<include name="lib/uninstaller-ext.jar" />
-				<include name="lib/installer.jar" />
-				<include name="lib/kunststoff.jar" />
-				<include name="lib/liquidlnf.jar" />
-				<include name="lib/metouia.jar" />
-				<include name="lib/looks.jar" />
-				<include name="lib/ant.jar" />
-				<exclude name="**/CVS" />
-			</fileset>
-		</jar>
-	</target>
+    <!-- Package standalone-compiler.jar -->
+    <target name="build.standalone-compiler"
+            depends="compile.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners">
+        <jar jarfile="${standalone-compiler.jar}" duplicate="preserve">
+            <manifest>
+                <attribute name="Built-By" value="IzPack" />
+                <attribute name="Class-Path" value="ant.jar" />
+                <attribute name="Main-Class" value="${compiler.class}" />
+            </manifest>
+            <zipfileset src="${installer.jar}" />
+            <zipfileset src="${compiler.jar}">
+                <!-- skip files already included via installer.jar -->
+                <exclude name="com/izforge/izpack/*.class" />
+                <exclude name="com/izforge/izpack/installer/*.class" />
+                <exclude name="com/izforge/izpack/util/*.class" />
+                <exclude name="net/n3/nanoxml/*.class" />
+            </zipfileset>
+            <zipfileset src="lib/ant.jar" />
+            <fileset dir="${basedir}">
+                <include name="bin/langpacks/flags/*" />
+                <include name="bin/langpacks/installer/*" />
+                <include name="bin/native/izpack/*" />
+                <include name="bin/native/3rdparty/*" />
+                <include name="bin/panels/*Panel.jar" />
+                <include name="bin/customActions/*.jar" />
+                <include name="lib/uninstaller.jar" />
+                <include name="lib/uninstaller-ext.jar" />
+                <include name="lib/installer.jar" />
+                <include name="lib/kunststoff.jar" />
+                <include name="lib/liquidlnf.jar" />
+                <include name="lib/metouia.jar" />
+                <include name="lib/looks.jar" />
+                <include name="lib/ant.jar" />
+                <exclude name="**/CVS" />
+            </fileset>
+        </jar>
+    </target>
 
-	<!-- Compiles the installer src files -->
-	<target name="compile.installer" depends="prepare">
-		<javac srcdir="${src.dir}" classpath="${basedir}/lib/jakarta-regexp-1.3.jar" destdir="${build.dir}" optimize="on" source="${compat.source}" target="${compat.target}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
-			<include name="com/izforge/izpack/*.java" />
-			<include name="com/izforge/izpack/gui/*.java" />
-			<include name="com/izforge/izpack/installer/*.java" />
-			<include name="com/izforge/izpack/util/*.java" />
-			<include name="com/izforge/izpack/util/os/*.java" />
-			<include name="net/n3/nanoxml/*.java" />
-		</javac>
-	</target>
+    <!-- Compiles the installer src files -->
+    <target name="compile.installer" depends="prepare">
+        <javac srcdir="${src.dir}"
+               classpath="${basedir}/lib/jakarta-regexp-1.3.jar"
+               destdir="${build.dir}"
+               optimize="on"
+               source="${compat.source}"
+               target="${compat.target}"
+               deprecation="on"
+               debug="${debug}"
+               debuglevel="${debuglevel}">
+            <include name="com/izforge/izpack/*.java" />
+            <include name="com/izforge/izpack/gui/*.java" />
+            <include name="com/izforge/izpack/installer/*.java" />
+            <include name="com/izforge/izpack/util/*.java" />
+            <include name="com/izforge/izpack/util/os/*.java" />
+            <include name="net/n3/nanoxml/*.java" />
+        </javac>
+    </target>
 
-	<!-- Package installer.jar -->
-	<target name="build.installer" depends="compile.installer">
-		<jar jarfile="${installer.jar}">
-			<manifest>
-				<attribute name="Built-By" value="IzPack" />
-				<attribute name="Class-Path" value="" />
-				<attribute name="Main-Class" value="${installer.class}" />
-			</manifest>
-			<fileset dir="${build.dir}">
-				<include name="com/izforge/izpack/*.class" />
-				<include name="com/izforge/izpack/gui/*.class" />
-				<include name="com/izforge/izpack/installer/*.class" />
-				<include name="com/izforge/izpack/util/*.class" />
-				<include name="com/izforge/izpack/util/os/*.class" />
-				<include name="net/n3/nanoxml/*.class" />
-			</fileset>
-			<zipfileset src="${basedir}/lib/jakarta-regexp-1.3.jar">
-				<include name="org/apache/regexp/*.class" />
-			</zipfileset>
-			<fileset dir="${src.dir}">
-				<include name="com/izforge/izpack/installer/*.xml" />
-				<include name="com/izforge/izpack/installer/*.properties" />
-			</fileset>
-			<fileset dir="${img.dir}/installer" />
-		</jar>
-	</target>
+    <!-- Package installer.jar -->
+    <target name="build.installer" depends="compile.installer">
+        <jar jarfile="${installer.jar}">
+            <manifest>
+                <attribute name="Built-By" value="IzPack" />
+                <attribute name="Class-Path" value="" />
+                <attribute name="Main-Class" value="${installer.class}" />
+            </manifest>
+            <fileset dir="${build.dir}">
+                <include name="com/izforge/izpack/*.class" />
+                <include name="com/izforge/izpack/gui/*.class" />
+                <include name="com/izforge/izpack/installer/*.class" />
+                <include name="com/izforge/izpack/util/*.class" />
+                <include name="com/izforge/izpack/util/os/*.class" />
+                <include name="net/n3/nanoxml/*.class" />
+            </fileset>
+            <zipfileset src="${basedir}/lib/jakarta-regexp-1.3.jar">
+                <include name="org/apache/regexp/*.class" />
+            </zipfileset>
+            <fileset dir="${src.dir}">
+                <include name="com/izforge/izpack/installer/*.xml" />
+                <include name="com/izforge/izpack/installer/*.properties" />
+            </fileset>
+            <fileset dir="${img.dir}/installer" />
+        </jar>
+    </target>
 
-	<!-- Compiles the uninstaller src files -->
-	<target name="compile.uninstaller" depends="prepare">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" source="${compat.source}" target="${compat.target}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
-			<include name="com/izforge/izpack/LocaleDatabase.java" />
-			<include name="com/izforge/izpack/gui/*.java" />
-			<include name="com/izforge/izpack/util/*.java" />
-			<include name="com/izforge/izpack/uninstaller/*.java" />
-			<exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
-			<include name="net/n3/nanoxml/*.java" />
-		</javac>
-	</target>
+    <!-- Compiles the uninstaller src files -->
+    <target name="compile.uninstaller" depends="prepare">
+        <javac srcdir="${src.dir}"
+               destdir="${build.dir}"
+               optimize="on"
+               source="${compat.source}"
+               target="${compat.target}"
+               deprecation="on"
+               debug="${debug}"
+               debuglevel="${debuglevel}">
+            <include name="com/izforge/izpack/LocaleDatabase.java" />
+            <include name="com/izforge/izpack/gui/*.java" />
+            <include name="com/izforge/izpack/util/*.java" />
+            <include name="com/izforge/izpack/uninstaller/*.java" />
+            <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
+            <include name="net/n3/nanoxml/*.java" />
+        </javac>
+    </target>
 
-	<!-- Package uninstaller.jar -->
-	<target name="build.uninstaller" depends="compile.uninstaller">
-		<jar jarfile="${uninstaller.jar}">
-			<manifest>
-				<attribute name="Built-By" value="IzPack" />
-				<attribute name="Class-Path" value="" />
-				<attribute name="Main-Class" value="${uninstaller.class}" />
-			</manifest>
-			<fileset dir="${build.dir}">
-				<include name="com/izforge/izpack/LocaleDatabase.class" />
-				<include name="com/izforge/izpack/gui/*.class" />
-				<include name="com/izforge/izpack/uninstaller/*.class" />
-				<include name="com/izforge/izpack/ExecutableFile.class" />
-				<include name="com/izforge/izpack/util/AbstractUI*.class" />
-				<include name="com/izforge/izpack/util/Console.class" />
-				<include name="com/izforge/izpack/util/Debug.class" />
-				<include name="com/izforge/izpack/util/Os*.class" />
-				<include name="com/izforge/izpack/util/String*.class" />
-				<include name="com/izforge/izpack/util/File*.class" />
-				<exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
-				<include name="net/n3/nanoxml/*.class" />
-			</fileset>
-			<fileset dir="${img.dir}/uninstaller" />
-		</jar>
-	</target>
+    <!-- Package uninstaller.jar -->
+    <target name="build.uninstaller" depends="compile.uninstaller">
+        <jar jarfile="${uninstaller.jar}">
+            <manifest>
+                <attribute name="Built-By" value="IzPack" />
+                <attribute name="Class-Path" value="" />
+                <attribute name="Main-Class" value="${uninstaller.class}" />
+            </manifest>
+            <fileset dir="${build.dir}">
+                <include name="com/izforge/izpack/LocaleDatabase.class" />
+                <include name="com/izforge/izpack/gui/*.class" />
+                <include name="com/izforge/izpack/uninstaller/*.class" />
+                <include name="com/izforge/izpack/ExecutableFile.class" />
+                <include name="com/izforge/izpack/util/AbstractUI*.class" />
+                <include name="com/izforge/izpack/util/Console.class" />
+                <include name="com/izforge/izpack/util/Debug.class" />
+                <include name="com/izforge/izpack/util/Os*.class" />
+                <include name="com/izforge/izpack/util/String*.class" />
+                <include name="com/izforge/izpack/util/File*.class" />
+                <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
+                <include name="net/n3/nanoxml/*.class" />
+            </fileset>
+            <fileset dir="${img.dir}/uninstaller" />
+        </jar>
+    </target>
 
-	<!-- Compiles the extended uninstaller src files -->
-	<target name="compile.uninstaller-ext" depends="prepare">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" source="${compat.source}" target="${compat.target}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}">
-			<include name="com/izforge/izpack/util/os/*.java" />
-			<exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
-			<include name="net/n3/nanoxml/*.java" />
-		</javac>
-	</target>
-	<!-- Package extended uninstaller.jar used if one ore more native libs are
+    <!-- Compiles the extended uninstaller src files -->
+    <target name="compile.uninstaller-ext" depends="prepare">
+        <javac srcdir="${src.dir}"
+               destdir="${build.dir}"
+               optimize="on"
+               source="${compat.source}"
+               target="${compat.target}"
+               deprecation="on"
+               debug="${debug}"
+               debuglevel="${debuglevel}">
+            <include name="com/izforge/izpack/util/os/*.java" />
+            <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
+            <include name="net/n3/nanoxml/*.java" />
+        </javac>
+    </target>
+    <!-- Package extended uninstaller.jar used if one ore more native libs are
          declared for uninstallation -->
-	<target name="build.uninstaller-ext" depends="compile.uninstaller-ext">
-		<jar jarfile="${uninstaller-ext.jar}">
-			<fileset dir="${build.dir}">
-				<include name="com/izforge/izpack/util/Librarian.class" />
-				<include name="com/izforge/izpack/util/Housekeeper.class" />
-				<include name="com/izforge/izpack/util/TargetFactory.class" />
-				<include name="com/izforge/izpack/util/FreeThread.class" />
-				<include name="com/izforge/izpack/util/CleanupClient.class" />
-				<include name="com/izforge/izpack/util/NativeLibraryClient.class" />
-				<!-- Add helper etc. you need for uninstallation -->
-			</fileset>
-		</jar>
-	</target>
+    <target name="build.uninstaller-ext" depends="compile.uninstaller-ext">
+        <jar jarfile="${uninstaller-ext.jar}">
+            <fileset dir="${build.dir}">
+                <include name="com/izforge/izpack/util/Librarian.class" />
+                <include name="com/izforge/izpack/util/Housekeeper.class" />
+                <include name="com/izforge/izpack/util/TargetFactory.class" />
+                <include name="com/izforge/izpack/util/FreeThread.class" />
+                <include name="com/izforge/izpack/util/CleanupClient.class" />
+                <include name="com/izforge/izpack/util/NativeLibraryClient.class" />
+                <!-- Add helper etc. you need for uninstallation -->
+            </fileset>
+        </jar>
+    </target>
 
-	<!-- 
+    <!-- 
          ======================================================================
            Create Panel Modules
          ======================================================================
     -->
 
-	<!-- Macro to compile a panel's classes and create it's jar file -->
-	<macrodef name="build-panel">
-		<attribute name="name" description="The panels jar will get this name" />
-		<attribute name="srcdir" default="${src.dir}" description="Source directory. Defaults to izpack src dir" />
-		<element name="panel-fileset" implicit="yes" description="include and exclude elements indicating panel sources" />
-		<sequential>
-			<echo message="build-panel: @{name}" />
-			<mkdir dir="${bin.dir}/panels/@{name}" />
-			<!-- sourcepath is cleared so there's no mistaking what goes into the Panel -->
-			<javac srcdir="@{srcdir}" destdir="${bin.dir}/panels/@{name}" classpath="${installer.jar}" sourcepath="" optimize="on" deprecation="on" debug="${debug}" source="${compat.source}" target="${compat.target}" debuglevel="${debuglevel}">
-				<panel-fileset />
-			</javac>
-			<jar jarfile="${bin.dir}/panels/@{name}.jar" basedir="${bin.dir}/panels/@{name}" />
-		</sequential>
-	</macrodef>
+    <!-- Macro to compile a panel's classes and create it's jar file -->
+    <macrodef name="build-panel">
+        <attribute name="name" description="The panels jar will get this name" />
+        <attribute name="srcdir"
+                   default="${src.dir}"
+                   description="Source directory. Defaults to izpack src dir" />
+        <element name="panel-fileset"
+                 implicit="yes"
+                 description="include and exclude elements indicating panel sources" />
+        <sequential>
+            <echo message="build-panel: @{name}" />
+            <mkdir dir="${bin.dir}/panels/@{name}" />
+            <!-- sourcepath is cleared so there's no mistaking what goes into the Panel -->
+            <javac srcdir="@{srcdir}"
+                   destdir="${bin.dir}/panels/@{name}"
+                   classpath="${installer.jar}"
+                   sourcepath=""
+                   optimize="on"
+                   deprecation="on"
+                   debug="${debug}"
+                   source="${compat.source}"
+                   target="${compat.target}"
+                   debuglevel="${debuglevel}">
+                <panel-fileset />
+            </javac>
+            <jar jarfile="${bin.dir}/panels/@{name}.jar" basedir="${bin.dir}/panels/@{name}" />
+        </sequential>
+    </macrodef>
 
-	<!-- Compile all panels and put them at the right location -->
-	<!-- 
+    <!-- Compile all panels and put them at the right location -->
+    <!-- 
          If you add a another, and the build fails because it can't find a class, 
          be sure to explicitly include the .java file in the nested fileset.
          This also acts as a check to help limit dependancies.
     -->
-	<target name="build.panels" depends="build.installer">
-		<mkdir dir="${bin.dir}/panels" />
+    <target name="build.panels" depends="build.installer">
+        <mkdir dir="${bin.dir}/panels" />
 
-		<build-panel name="FinishPanel">
-			<include name="com/izforge/izpack/panels/FinishPanel.java" />
-		</build-panel>
-		<build-panel name="HelloPanel">
-			<include name="com/izforge/izpack/panels/HelloPanel.java" />
-		</build-panel>
-		<build-panel name="CheckedHelloPanel">
-			<include name="com/izforge/izpack/panels/CheckedHelloPanel.java" />
-			<include name="com/izforge/izpack/panels/HelloPanel.java" />
-			<include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
-			<include name="com/izforge/izpack/util/OSClassHelper.java" />
-			<include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
-			<include name="com/coi/tools/os/win/NativeLibException.java" />
-			<include name="com/coi/tools/os/win/Reg*.java" />
-			<include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
-			<include name="com/coi/tools/os/izpack/Registry.java" />
-			<include name="com/coi/tools/os/izpack/COIOSHelper.java" />
-		</build-panel>
-		<build-panel name="InfoPanel">
-			<include name="com/izforge/izpack/panels/InfoPanel.java" />
-		</build-panel>
-		<build-panel name="InstallPanel">
-			<include name="com/izforge/izpack/panels/InstallPanel.java" />
-			<include name="com/izforge/izpack/panels/InstallPanelAutomationHelper.java" />
-		</build-panel>
-		<build-panel name="ExtendedInstallPanel">
-			<include name="com/izforge/izpack/panels/ExtendedInstallPanel.java" />
-			<include name="com/izforge/izpack/panels/ExtendedInstallPanelAutomationHelper.java" />
-			<include name="com/izforge/izpack/panels/InstallPanel.java" />
-		</build-panel>
-		<build-panel name="LicencePanel">
-			<include name="com/izforge/izpack/panels/LicencePanel.java" />
-		</build-panel>
-		<build-panel name="PacksPanel">
-			<include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java" />
-			<include name="com/izforge/izpack/panels/ImgPacksPanelBase.java" />
-			<include name="com/izforge/izpack/panels/PacksModel.java" />
-			<include name="com/izforge/izpack/panels/PacksPanel.java" />
-			<include name="com/izforge/izpack/panels/PacksPanelAutomationHelper.java" />
-			<include name="com/izforge/izpack/panels/PacksPanelBase.java" />
-			<include name="com/izforge/izpack/panels/PacksPanelInterface.java" />
-		</build-panel>
-		<build-panel name="ImgPacksPanel">
-			<include name="com/izforge/izpack/panels/ImgPacksPanel.java" />
-			<include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java" />
-			<include name="com/izforge/izpack/panels/PacksModel.java" />
-			<include name="com/izforge/izpack/panels/PacksPanelBase.java" />
-			<include name="com/izforge/izpack/panels/PacksPanelInterface.java" />
-		</build-panel>
-		<build-panel name="HTMLLicencePanel">
-			<include name="com/izforge/izpack/panels/HTMLLicencePanel.java" />
-		</build-panel>
-		<build-panel name="HTMLInfoPanel">
-			<include name="com/izforge/izpack/panels/HTMLInfoPanel.java" />
-		</build-panel>
-		<build-panel name="TargetPanel">
-			<include name="com/izforge/izpack/panels/PathInputPanel.java" />
-			<include name="com/izforge/izpack/panels/PathSelectionPanel.java" />
-			<include name="com/izforge/izpack/panels/TargetPanel.java" />
-			<include name="com/izforge/izpack/panels/TargetPanelAutomationHelper.java" />
-		</build-panel>
-		<build-panel name="JDKPathPanel">
-			<include name="com/izforge/izpack/panels/JDKPathPanel.java" />
-			<include name="com/izforge/izpack/panels/PathInputPanel.java" />
-			<include name="com/izforge/izpack/panels/PathSelectionPanel.java" />
-		</build-panel>
-		<build-panel name="XInfoPanel">
-			<include name="com/izforge/izpack/panels/XInfoPanel.java" />
-		</build-panel>
-		<build-panel name="ShortcutPanel">
-			<include name="com/izforge/izpack/panels/ShortcutData.java" />
-			<include name="com/izforge/izpack/panels/ShortcutPanel.java" />
-		</build-panel>
-		<build-panel name="UserInputPanel">
-			<include name="com/izforge/izpack/panels/PasswordGroup.java" />
-			<include name="com/izforge/izpack/panels/ProcessingClient.java" />
-			<include name="com/izforge/izpack/panels/Processor.java" />
-			<include name="com/izforge/izpack/panels/RuleInputField.java" />
-			<include name="com/izforge/izpack/panels/RuleTextField.java" />
-			<include name="com/izforge/izpack/panels/UserInputPanel.java" />
-			<include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java" />
-			<include name="com/izforge/izpack/panels/Validator.java" />
-		</build-panel>
-		<build-panel name="ConditionalUserInputPanel">
-			<include name="com/izforge/izpack/panels/ConditionalUserInputPanel.java" />
-			<include name="com/izforge/izpack/panels/PasswordGroup.java" />
-			<include name="com/izforge/izpack/panels/ProcessingClient.java" />
-			<include name="com/izforge/izpack/panels/Processor.java" />
-			<include name="com/izforge/izpack/panels/RuleInputField.java" />
-			<include name="com/izforge/izpack/panels/RuleTextField.java" />
-			<include name="com/izforge/izpack/panels/UserInputPanel.java" />
-			<include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java" />
-			<include name="com/izforge/izpack/panels/Validator.java" />
-		</build-panel>
-		<build-panel name="CompilePanel">
-			<include name="com/izforge/izpack/panels/CompilePanel.java" />
-			<include name="com/izforge/izpack/panels/CompilePanelAutomationHelper.java" />
-		</build-panel>
-		<build-panel name="ProcessPanel">
-			<include name="com/izforge/izpack/panels/ProcessPanel.java" />
-			<include name="com/izforge/izpack/panels/ProcessPanelAutomationPanel.java" />
-		</build-panel>
-		<build-panel name="SudoPanel">
-			<include name="com/izforge/izpack/panels/SudoPanel.java" />
-		</build-panel>
-		<build-panel name="SimpleFinishPanel">
-			<include name="com/izforge/izpack/panels/SimpleFinishPanel.java" />
-		</build-panel>
-		<build-panel name="SummaryPanel">
-			<include name="com/izforge/izpack/panels/SummaryPanel.java" />
-		</build-panel>
-	</target>
+        <build-panel name="FinishPanel">
+            <include name="com/izforge/izpack/panels/FinishPanel.java" />
+        </build-panel>
+        <build-panel name="HelloPanel">
+            <include name="com/izforge/izpack/panels/HelloPanel.java" />
+        </build-panel>
+        <build-panel name="CheckedHelloPanel">
+            <include name="com/izforge/izpack/panels/CheckedHelloPanel.java" />
+            <include name="com/izforge/izpack/panels/HelloPanel.java" />
+            <include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
+            <include name="com/izforge/izpack/util/OSClassHelper.java" />
+            <include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
+            <include name="com/coi/tools/os/win/NativeLibException.java" />
+            <include name="com/coi/tools/os/win/Reg*.java" />
+            <include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
+            <include name="com/coi/tools/os/izpack/Registry.java" />
+            <include name="com/coi/tools/os/izpack/COIOSHelper.java" />
+        </build-panel>
+        <build-panel name="InfoPanel">
+            <include name="com/izforge/izpack/panels/InfoPanel.java" />
+        </build-panel>
+        <build-panel name="InstallPanel">
+            <include name="com/izforge/izpack/panels/InstallPanel.java" />
+            <include name="com/izforge/izpack/panels/InstallPanelAutomationHelper.java" />
+        </build-panel>
+        <build-panel name="ExtendedInstallPanel">
+            <include name="com/izforge/izpack/panels/ExtendedInstallPanel.java" />
+            <include name="com/izforge/izpack/panels/ExtendedInstallPanelAutomationHelper.java" />
+            <include name="com/izforge/izpack/panels/InstallPanel.java" />
+        </build-panel>
+        <build-panel name="LicencePanel">
+            <include name="com/izforge/izpack/panels/LicencePanel.java" />
+        </build-panel>
+        <build-panel name="PacksPanel">
+            <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java" />
+            <include name="com/izforge/izpack/panels/ImgPacksPanelBase.java" />
+            <include name="com/izforge/izpack/panels/PacksModel.java" />
+            <include name="com/izforge/izpack/panels/PacksPanel.java" />
+            <include name="com/izforge/izpack/panels/PacksPanelAutomationHelper.java" />
+            <include name="com/izforge/izpack/panels/PacksPanelBase.java" />
+            <include name="com/izforge/izpack/panels/PacksPanelInterface.java" />
+        </build-panel>
+        <build-panel name="ImgPacksPanel">
+            <include name="com/izforge/izpack/panels/ImgPacksPanel.java" />
+            <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java" />
+            <include name="com/izforge/izpack/panels/PacksModel.java" />
+            <include name="com/izforge/izpack/panels/PacksPanelBase.java" />
+            <include name="com/izforge/izpack/panels/PacksPanelInterface.java" />
+        </build-panel>
+        <build-panel name="HTMLLicencePanel">
+            <include name="com/izforge/izpack/panels/HTMLLicencePanel.java" />
+        </build-panel>
+        <build-panel name="HTMLInfoPanel">
+            <include name="com/izforge/izpack/panels/HTMLInfoPanel.java" />
+        </build-panel>
+        <build-panel name="TargetPanel">
+            <include name="com/izforge/izpack/panels/PathInputPanel.java" />
+            <include name="com/izforge/izpack/panels/PathSelectionPanel.java" />
+            <include name="com/izforge/izpack/panels/TargetPanel.java" />
+            <include name="com/izforge/izpack/panels/TargetPanelAutomationHelper.java" />
+        </build-panel>
+        <build-panel name="JDKPathPanel">
+            <include name="com/izforge/izpack/panels/JDKPathPanel.java" />
+            <include name="com/izforge/izpack/panels/PathInputPanel.java" />
+            <include name="com/izforge/izpack/panels/PathSelectionPanel.java" />
+        </build-panel>
+        <build-panel name="XInfoPanel">
+            <include name="com/izforge/izpack/panels/XInfoPanel.java" />
+        </build-panel>
+        <build-panel name="ShortcutPanel">
+            <include name="com/izforge/izpack/panels/ShortcutData.java" />
+            <include name="com/izforge/izpack/panels/ShortcutPanel.java" />
+        </build-panel>
+        <build-panel name="UserInputPanel">
+            <include name="com/izforge/izpack/panels/PasswordGroup.java" />
+            <include name="com/izforge/izpack/panels/ProcessingClient.java" />
+            <include name="com/izforge/izpack/panels/Processor.java" />
+            <include name="com/izforge/izpack/panels/RuleInputField.java" />
+            <include name="com/izforge/izpack/panels/RuleTextField.java" />
+            <include name="com/izforge/izpack/panels/UserInputPanel.java" />
+            <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java" />
+            <include name="com/izforge/izpack/panels/Validator.java" />
+        </build-panel>
+        <build-panel name="ConditionalUserInputPanel">
+            <include name="com/izforge/izpack/panels/ConditionalUserInputPanel.java" />
+            <include name="com/izforge/izpack/panels/PasswordGroup.java" />
+            <include name="com/izforge/izpack/panels/ProcessingClient.java" />
+            <include name="com/izforge/izpack/panels/Processor.java" />
+            <include name="com/izforge/izpack/panels/RuleInputField.java" />
+            <include name="com/izforge/izpack/panels/RuleTextField.java" />
+            <include name="com/izforge/izpack/panels/UserInputPanel.java" />
+            <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java" />
+            <include name="com/izforge/izpack/panels/Validator.java" />
+        </build-panel>
+        <build-panel name="CompilePanel">
+            <include name="com/izforge/izpack/panels/CompilePanel.java" />
+            <include name="com/izforge/izpack/panels/CompilePanelAutomationHelper.java" />
+        </build-panel>
+        <build-panel name="ProcessPanel">
+            <include name="com/izforge/izpack/panels/ProcessPanel.java" />
+            <include name="com/izforge/izpack/panels/ProcessPanelAutomationPanel.java" />
+        </build-panel>
+        <build-panel name="SudoPanel">
+            <include name="com/izforge/izpack/panels/SudoPanel.java" />
+        </build-panel>
+        <build-panel name="SimpleFinishPanel">
+            <include name="com/izforge/izpack/panels/SimpleFinishPanel.java" />
+        </build-panel>
+        <build-panel name="SummaryPanel">
+            <include name="com/izforge/izpack/panels/SummaryPanel.java" />
+        </build-panel>
+    </target>
 
-	<!-- 
+    <!-- 
          ======================================================================
            Create Listener Modules
          ======================================================================
     -->
 
-	<!-- Compiles the base custom action classes which should placed into
+    <!-- Compiles the base custom action classes which should placed into
          izevent.jar  -->
-	<target name="compile.listener-base">
-		<javac srcdir="${src.dir}" destdir="${build.dir}" optimize="on" source="${compat.source}" target="${compat.target}" deprecation="on" debug="${debug}" debuglevel="${debuglevel}" classpath="${installer.jar};${compiler.jar}">
-			<include name="com/izforge/izpack/event/ActionBase.java" />
-			<include name="com/izforge/izpack/event/Simple*nstallerListener.java" />
-			<include name="com/izforge/izpack/event/InstallerListener.java" />
-			<include name="com/izforge/izpack/event/UninstallerListener.java" />
-			<include name="com/izforge/izpack/util/IoHelper.java" />
-		</javac>
-	</target>
-	<!-- Package izevent.jar  -->
-	<target name="build.listener-base" depends="compile.listener-base">
-		<jar jarfile="${izevent.jar}">
-			<fileset dir="${build.dir}">
-				<include name="com/izforge/izpack/event/*.class" />
-				<include name="com/izforge/izpack/util/IoHelper.class" />
-				<exclude name="com/izforge/izpack/event/*Compiler*.class" />
-			</fileset>
-		</jar>
-	</target>
+    <target name="compile.listener-base">
+        <javac srcdir="${src.dir}"
+               destdir="${build.dir}"
+               optimize="on"
+               source="${compat.source}"
+               target="${compat.target}"
+               deprecation="on"
+               debug="${debug}"
+               debuglevel="${debuglevel}"
+               classpath="${installer.jar};${compiler.jar}">
+            <include name="com/izforge/izpack/event/ActionBase.java" />
+            <include name="com/izforge/izpack/event/Simple*nstallerListener.java" />
+            <include name="com/izforge/izpack/event/InstallerListener.java" />
+            <include name="com/izforge/izpack/event/UninstallerListener.java" />
+            <include name="com/izforge/izpack/util/IoHelper.java" />
+        </javac>
+    </target>
+    <!-- Package izevent.jar  -->
+    <target name="build.listener-base" depends="compile.listener-base">
+        <jar jarfile="${izevent.jar}">
+            <fileset dir="${build.dir}">
+                <include name="com/izforge/izpack/event/*.class" />
+                <include name="com/izforge/izpack/util/IoHelper.class" />
+                <exclude name="com/izforge/izpack/event/*Compiler*.class" />
+            </fileset>
+        </jar>
+    </target>
 
 
-	<!-- Macro to compile a listener's classes and create its jar file -->
-	<macrodef name="build-listener">
-		<attribute name="name" description="The listener jar will get this name" />
-		<attribute name="srcdir" default="${src.dir}" description="Source directory. Defaults to izpack src dir" />
-		<attribute name="izeventExcludes" description="excludes patter for files in the ${izevent.jar} file" />
-		<element name="listener-fileset" implicit="yes" description="include and exclude elements indicating listener sources" />
-		<sequential>
-			<echo message="build-listener: @{name}" />
-			<mkdir dir="${bin.dir}/customActions/@{name}" />
-			<!-- sourcepath is cleared so there's no mistaking what goes into the Listener -->
-			<javac srcdir="@{srcdir}" destdir="${bin.dir}/customActions/@{name}" classpath="${installer.jar};${compiler.jar};${izevent.jar}" sourcepath="" optimize="on" deprecation="on" debug="${debug}" source="${compat.source}" target="${compat.target}" debuglevel="${debuglevel}">
-				<listener-fileset />
-			</javac>
-			<jar jarfile="${bin.dir}/customActions/@{name}.jar" basedir="${bin.dir}/customActions/@{name}">
-				<!-- also include files from the previously built ${izevent.jar} -->
-				<zipfileset src="${izevent.jar}" excludes="@{izeventExcludes}" />
-			</jar>
-		</sequential>
-	</macrodef>
+    <!-- Macro to compile a listener's classes and create its jar file -->
+    <macrodef name="build-listener">
+        <attribute name="name" description="The listener jar will get this name" />
+        <attribute name="srcdir"
+                   default="${src.dir}"
+                   description="Source directory. Defaults to izpack src dir" />
+        <attribute name="izeventExcludes"
+                   description="excludes patter for files in the ${izevent.jar} file" />
+        <element name="listener-fileset"
+                 implicit="yes"
+                 description="include and exclude elements indicating listener sources" />
+        <sequential>
+            <echo message="build-listener: @{name}" />
+            <mkdir dir="${bin.dir}/customActions/@{name}" />
+            <!-- sourcepath is cleared so there's no mistaking what goes into the Listener -->
+            <javac srcdir="@{srcdir}"
+                   destdir="${bin.dir}/customActions/@{name}"
+                   classpath="${installer.jar};${compiler.jar};${izevent.jar}"
+                   sourcepath=""
+                   optimize="on"
+                   deprecation="on"
+                   debug="${debug}"
+                   source="${compat.source}"
+                   target="${compat.target}"
+                   debuglevel="${debuglevel}">
+                <listener-fileset />
+            </javac>
+            <jar jarfile="${bin.dir}/customActions/@{name}.jar"
+                 basedir="${bin.dir}/customActions/@{name}">
+                <!-- also include files from the previously built ${izevent.jar} -->
+                <zipfileset src="${izevent.jar}" excludes="@{izeventExcludes}" />
+            </jar>
+        </sequential>
+    </macrodef>
 
-	<!-- Convenience macro to call build-listener for compiler listeners -->
-	<macrodef name="build-compiler-listener">
-		<attribute name="name" />
-		<attribute name="srcdir" default="${src.dir}" />
-		<element name="compiler-fileset" implicit="yes" description="include and exclude elements indicating listener sources" />
-		<sequential>
-			<build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Installer*,**/*Uninstaller*">
-				<compiler-fileset />
-			</build-listener>
-		</sequential>
-	</macrodef>
+    <!-- Convenience macro to call build-listener for compiler listeners -->
+    <macrodef name="build-compiler-listener">
+        <attribute name="name" />
+        <attribute name="srcdir" default="${src.dir}" />
+        <element name="compiler-fileset"
+                 implicit="yes"
+                 description="include and exclude elements indicating listener sources" />
+        <sequential>
+            <build-listener name="@{name}"
+                            srcdir="@{srcdir}"
+                            izeventExcludes="**/*Installer*,**/*Uninstaller*">
+                <compiler-fileset />
+            </build-listener>
+        </sequential>
+    </macrodef>
 
-	<!-- Convenience macro to call build-listener for installer listeners -->
-	<macrodef name="build-installer-listener">
-		<attribute name="name" />
-		<attribute name="srcdir" default="${src.dir}" />
-		<element name="installer-fileset" implicit="yes" description="include and exclude elements indicating listener sources" />
-		<sequential>
-			<build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Uninstaller*">
-				<installer-fileset />
-			</build-listener>
-		</sequential>
-	</macrodef>
+    <!-- Convenience macro to call build-listener for installer listeners -->
+    <macrodef name="build-installer-listener">
+        <attribute name="name" />
+        <attribute name="srcdir" default="${src.dir}" />
+        <element name="installer-fileset"
+                 implicit="yes"
+                 description="include and exclude elements indicating listener sources" />
+        <sequential>
+            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Uninstaller*">
+                <installer-fileset />
+            </build-listener>
+        </sequential>
+    </macrodef>
 
-	<!-- Convenience macro to call build-listener for uninstaller listeners -->
-	<macrodef name="build-uninstaller-listener">
-		<attribute name="name" />
-		<attribute name="srcdir" default="${src.dir}" />
-		<element name="uninstaller-fileset" implicit="yes" description="include and exclude elements indicating listener sources" />
-		<sequential>
-			<build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Installer*">
-				<uninstaller-fileset />
-			</build-listener>
-		</sequential>
-	</macrodef>
+    <!-- Convenience macro to call build-listener for uninstaller listeners -->
+    <macrodef name="build-uninstaller-listener">
+        <attribute name="name" />
+        <attribute name="srcdir" default="${src.dir}" />
+        <element name="uninstaller-fileset"
+                 implicit="yes"
+                 description="include and exclude elements indicating listener sources" />
+        <sequential>
+            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Installer*">
+                <uninstaller-fileset />
+            </build-listener>
+        </sequential>
+    </macrodef>
 
-	<!-- Compile all custom actions (listener) and put them at the right location -->
-	<!-- 
+    <!-- Compile all custom actions (listener) and put them at the right location -->
+    <!-- 
          If you add a another, and the build fails because it can't find a class, 
          be sure to explicitly include the .java file in the nested fileset.
          This also acts as a check to help limit dependancies.
     -->
-	<target name="build.listeners" depends="build.compiler,build.installer,build.listener-base">
-		<build-installer-listener name="AntActionInstallerListener">
-			<include name="com/izforge/izpack/event/AntActionInstallerListener.java" />
-			<include name="com/izforge/izpack/event/AntAction.java" />
-		</build-installer-listener>
+    <target name="build.listeners" depends="build.compiler,build.installer,build.listener-base">
+        <build-installer-listener name="AntActionInstallerListener">
+            <include name="com/izforge/izpack/event/AntActionInstallerListener.java" />
+            <include name="com/izforge/izpack/event/AntAction.java" />
+        </build-installer-listener>
 
-		<build-uninstaller-listener name="AntActionUninstallerListener">
-			<include name="com/izforge/izpack/event/AntActionUninstallerListener.java" />
-			<include name="com/izforge/izpack/event/AntAction.java" />
-		</build-uninstaller-listener>
+        <build-uninstaller-listener name="AntActionUninstallerListener">
+            <include name="com/izforge/izpack/event/AntActionUninstallerListener.java" />
+            <include name="com/izforge/izpack/event/AntAction.java" />
+        </build-uninstaller-listener>
 
-		<build-installer-listener name="SummaryLoggerInstallerListener">
-			<include name="com/izforge/izpack/event/SummaryLoggerInstallerListener.java" />
-		</build-installer-listener>
+        <build-installer-listener name="SummaryLoggerInstallerListener">
+            <include name="com/izforge/izpack/event/SummaryLoggerInstallerListener.java" />
+        </build-installer-listener>
 
-		<build-installer-listener name="RegistryInstallerListener">
-			<include name="com/izforge/izpack/event/RegistryInstallerListener.java" />
-			<include name="com/izforge/izpack/event/NativeInstallerListener.java" />
-			<include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
-			<include name="com/izforge/izpack/util/OSClassHelper.java" />
-			<include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
-			<include name="com/coi/tools/os/win/NativeLibException.java" />
-			<include name="com/coi/tools/os/win/Reg*.java" />
-			<include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
-			<include name="com/coi/tools/os/izpack/Registry.java" />
-			<include name="com/coi/tools/os/izpack/COIOSHelper.java" />
-		</build-installer-listener>
+        <build-installer-listener name="RegistryInstallerListener">
+            <include name="com/izforge/izpack/event/RegistryInstallerListener.java" />
+            <include name="com/izforge/izpack/event/NativeInstallerListener.java" />
+            <include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
+            <include name="com/izforge/izpack/util/OSClassHelper.java" />
+            <include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
+            <include name="com/coi/tools/os/win/NativeLibException.java" />
+            <include name="com/coi/tools/os/win/Reg*.java" />
+            <include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
+            <include name="com/coi/tools/os/izpack/Registry.java" />
+            <include name="com/coi/tools/os/izpack/COIOSHelper.java" />
+        </build-installer-listener>
 
-		<build-uninstaller-listener name="RegistryUninstallerListener">
-			<include name="com/izforge/izpack/event/RegistryUninstallerListener.java" />
-			<include name="com/izforge/izpack/event/NativeUninstallerListener.java" />
-			<include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
-			<include name="com/izforge/izpack/util/OSClassHelper.java" />
-			<include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
-			<include name="com/coi/tools/os/win/NativeLibException.java" />
-			<include name="com/coi/tools/os/win/Reg*.java" />
-			<include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
-			<include name="com/coi/tools/os/izpack/Registry.java" />
-			<include name="com/coi/tools/os/izpack/COIOSHelper.java" />
-		</build-uninstaller-listener>
+        <build-uninstaller-listener name="RegistryUninstallerListener">
+            <include name="com/izforge/izpack/event/RegistryUninstallerListener.java" />
+            <include name="com/izforge/izpack/event/NativeUninstallerListener.java" />
+            <include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
+            <include name="com/izforge/izpack/util/OSClassHelper.java" />
+            <include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
+            <include name="com/coi/tools/os/win/NativeLibException.java" />
+            <include name="com/coi/tools/os/win/Reg*.java" />
+            <include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
+            <include name="com/coi/tools/os/izpack/Registry.java" />
+            <include name="com/coi/tools/os/izpack/COIOSHelper.java" />
+        </build-uninstaller-listener>
 
-		<!-- CUSTOM ACTION test START
+        <!-- CUSTOM ACTION test START
         <build-compiler-listener name="ChmodCompilerListener">
             <include name="com/myCompany/tools/install/listener/ChmodCompilerListener.java"/>
         </build-compiler-listener>
@@ -698,230 +773,280 @@
             <include name="com/myCompany/tools/install/listener/ChmodInstallerListener.java"/>
         </build-installer-listener>
         COSTOM ACTION test END -->
-	</target>
+    </target>
 
-	<!-- ====================================================================== -->
+    <!-- ====================================================================== -->
 
-	<!-- Performs some cleanups -->
-	<target name="clean" description="cleans up the dist">
-		<echo message="Cleaning-up" />
-		<delete includeEmptyDirs="true" quiet="true">
-			<fileset dir="${build.dir}" />
-			<fileset dir="${dist.dir}" />
-			<fileset dir="${basedir}/bin/panels/">
-				<include name="**/*" />
-			</fileset>
-			<fileset dir="${basedir}/bin/customActions/">
-				<include name="**/*" />
-			</fileset>
-			<fileset dir="${basedir}/lib/">
-				<include name="compiler.jar" />
-				<include name="izevent.jar" />
-				<include name="standalone-compiler.jar" />
-				<include name="frontend.jar" />
-				<include name="installer.jar" />
-				<include name="uninstaller.jar" />
-				<include name="uninstaller-ext.jar" />
-			</fileset>
-		</delete>
-		<delete dir="${basedir}/bin/native/izpack"/>
-		<delete includeEmptyDirs="true" dir="${basedir}/doc/izpack"/>			
-	</target>
+    <!-- Performs some cleanups -->
+    <target name="clean" description="cleans up the dist">
+        <echo message="Cleaning-up" />
+        <delete includeEmptyDirs="true" quiet="true">
+            <fileset dir="${build.dir}" />
+            <fileset dir="${dist.dir}" />
+            <fileset dir="${basedir}/bin/panels/">
+                <include name="**/*" />
+            </fileset>
+            <fileset dir="${basedir}/bin/customActions/">
+                <include name="**/*" />
+            </fileset>
+            <fileset dir="${basedir}/lib/">
+                <include name="compiler.jar" />
+                <include name="izevent.jar" />
+                <include name="standalone-compiler.jar" />
+                <include name="frontend.jar" />
+                <include name="installer.jar" />
+                <include name="uninstaller.jar" />
+                <include name="uninstaller-ext.jar" />
+            </fileset>
+        </delete>
+        <delete dir="${basedir}/bin/native/izpack" />
+        <delete includeEmptyDirs="true" dir="${basedir}/doc/izpack" />
+    </target>
 
-	<!-- Builds all compilation targets -->
-	<target name="all" depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" />
+    <!-- Builds all compilation targets -->
+    <target name="all"
+            depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" />
 
-	<!-- Builds the Javadoc -->
-	<target name="build.javadoc" depends="prepare" description="Builds the javadoc">
-		<mkdir dir="${build.dir}/javadoc" />
-		<javadoc destdir="${build.dir}/javadoc" access="private" classpathref="classpath">
-			<packageset dir="${src.dir}">
-				<exclude name="**/CVS" />
-			</packageset>
-		</javadoc>
-		<copy todir="${doc.dir}/izpack/javadoc">
-			<fileset dir="${build.dir}/javadoc">
-				<include name="**/*" />
-			</fileset>
-		</copy>
-	</target>
-	
-	<target name="build.docu" description="Builds the customer documentation">
-		
-	</target>
-	
-	<target name="create.docu" depends="build.javadoc, build.docu" description="Creates the javadoc-api and customer documentation" >
-	
-	</target>
+    <!-- Builds the Javadoc -->
+    <target name="build.javadoc" depends="prepare" description="Builds the javadoc">
+        <mkdir dir="${build.dir}/javadoc" />
+        <javadoc destdir="${build.dir}/javadoc" access="private" classpathref="classpath">
+            <packageset dir="${src.dir}">
+                <exclude name="**/CVS" />
+            </packageset>
+        </javadoc>
+        <copy todir="${doc.dir}/izpack/javadoc">
+            <fileset dir="${build.dir}/javadoc">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+    </target>
 
-	<!-- Creates an installer for IzPack -->
-	<target name="generate.installer.worker">
+    <target name="build.docu" description="Builds the customer documentation">
+        <mkdir dir="${doc.dir}/izpack/xhtml" />
+        <copy todir="${doc.dir}/izpack/xhtml">
+            <fileset dir="${basedir}/src/doc-ng/XHTML">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+    </target>
 
-		<!-- Allows us to use the IzPack Ant task -->
-		<taskdef name="izpack" classpath="${basedir}/lib/compiler.jar" classname="com.izforge.izpack.ant.IzPackTask" />
+    <target name="create.docu"
+            depends="build.javadoc, build.docu"
+            description="Creates the javadoc-api and customer documentation">
 
-		<echo message="Copies the recent changed native files to the ${basedir}/bin directory"/>
-		
-		<mkdir dir="${basedir}/bin/native/izpack"/>
-		<!-- If unicode support of ShellLink.dll will be not used, change between  both copy blocks -->
-		<!--
+    </target>
+
+    <!-- Creates an installer for IzPack -->
+    <target name="generate.installer.worker">
+
+        <!-- Allows us to use the IzPack Ant task -->
+        <taskdef name="izpack"
+                 classpath="${basedir}/lib/compiler.jar"
+                 classname="com.izforge.izpack.ant.IzPackTask" />
+
+        <echo message="Copies the recent changed native files to the ${basedir}/bin directory" />
+
+        <mkdir dir="${basedir}/bin/native/izpack" />
+        <!-- If unicode support of ShellLink.dll will be not used, change between  both copy blocks -->
+        <!--
 		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release/ShellLink.dll" verbose="true" overwrite="yes"/>
 		<copy todir="${basedir}/bin/native/3rdparty" file="${basedir}/src/native/win/COIOSHelper/Release/COIOSHelper.dll" verbose="true" overwrite="yes"/>
 		-->
-		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release_Unicode/ShellLink.dll" verbose="true" overwrite="yes"/>
-		<copy todir="${basedir}/bin/native/3rdparty" file="${basedir}/src/native/win/COIOSHelper/Release_Unicode/COIOSHelper.dll" verbose="true" overwrite="yes"/>
-		
-		<echo message="Copies the general files to the dist directory"/>
-		<copy todir="${dist.dir}" includeEmptyDirs="yes">
-			<fileset dir="${basedir}">
-				<include name="bin/**" />
-				<include name="lib/*.jar" />
-				<include name="doc/**" />
-				<include name="legal/**" />
-				<include name="src/**" />
-				<include name="sample/**" />
-				<include name="*.txt" />
-			</fileset>
-		</copy>
-    <echo message="Copies the langpacks to the dist directory"/>
-		<copy todir="${dist.dir}/bin" includeEmptyDirs="yes">
-			<fileset dir="${basedir}">
-				<include name="langpacks/**" />
-			</fileset>
-		</copy>
-    <echo message="Copies the license images and specs to the dist directory"/>
-		<copy todir="${dist.dir}" includeEmptyDirs="yes"> 
-			<fileset dir="${dist-files.dir}">
-				<include name="useNativeLAF" />
-				<include name="*.jpg" />
-				<include name="*.png" />
-				<include name="*.html" />
-				<include name="Licence.txt" />
-				<include name="IzPack-install*.xml" />
-				<include name="shortcutSpec.xml" />
-				<include name="Unix_shortcutSpec.xml" />
-				<include name="RegistrySpec.xml" />
-			</fileset>
-		</copy>
-		
-		<replace file="${dist.dir}/shortcutSpec.xml" token="@build.number@" value="${build.number}" summary="yes"/>
-		<replace file="${dist.dir}/shortcutSpec.xml" token="@ver@" value="${ver}" summary="yes"/>
+        <copy todir="${basedir}/bin/native/izpack"
+              file="${basedir}/src/native/ShellLink/Release_Unicode/ShellLink.dll"
+              verbose="true"
+              overwrite="yes" />
+        <copy todir="${basedir}/bin/native/3rdparty"
+              file="${basedir}/src/native/win/COIOSHelper/Release_Unicode/COIOSHelper.dll"
+              verbose="true"
+              overwrite="yes" />
 
-		<replace file="${dist.dir}/Unix_shortcutSpec.xml" token="@build.number@" value="${build.number}" summary="yes"/>
-		<replace file="${dist.dir}/Unix_shortcutSpec.xml" token="@ver@" value="${ver}" summary="yes"/>
-		
-    <echo message="Copies the bin files to the dist directory"/>
-		<copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
-			<fileset dir="${dist-files.dir}">
-				<include name="compile*" />
-				<include name="lcp.bat" />
-			</fileset>
-		</copy>
+        <echo message="Copies the general files to the dist directory" />
+        <copy todir="${dist.dir}" includeEmptyDirs="yes">
+            <fileset dir="${basedir}">
+                <include name="bin/**" />
+                <include name="lib/*.jar" />
+                <include name="doc/**" />
+                <include name="legal/**" />
+                <include name="src/**" />
+                <include name="sample/**" />
+                <include name="*.txt" />
+            </fileset>
+        </copy>
+        <echo message="Copies the langpacks to the dist directory" />
+        <copy todir="${dist.dir}/bin" includeEmptyDirs="yes">
+            <fileset dir="${basedir}">
+                <include name="langpacks/**" />
+            </fileset>
+        </copy>
+        <echo message="Copies the license images and specs to the dist directory" />
+        <copy todir="${dist.dir}" includeEmptyDirs="yes">
+            <fileset dir="${dist-files.dir}">
+                <include name="useNativeLAF" />
+                <include name="*.jpg" />
+                <include name="*.png" />
+                <include name="*.html" />
+                <include name="Licence.txt" />
+                <include name="IzPack-install*.xml" />
+                <include name="shortcutSpec.xml" />
+                <include name="Unix_shortcutSpec.xml" />
+                <include name="RegistrySpec.xml" />
+            </fileset>
+        </copy>
 
-		<!-- We call IzPack -->
-		<echo message="Makes the installer using IzPack" level="verbose" />
-		<izpack input="${dist.dir}/${installer.xmlfile}" output="${dist.dir}/${installer.name}${ver}.${rel}.jar" installerType="standard" basedir="${dist.dir}" izPackDir="${dist.dir}/" compression="bzip2" compressionlevel="9" />
-	</target>
-	
+        <replace file="${dist.dir}/shortcutSpec.xml"
+                 token="@build.number@"
+                 value="${build.number}"
+                 summary="yes" />
+        <replace file="${dist.dir}/shortcutSpec.xml" token="@ver@" value="${ver}" summary="yes" />
 
-	<!-- ================================= 
+        <replace file="${dist.dir}/Unix_shortcutSpec.xml"
+                 token="@build.number@"
+                 value="${build.number}"
+                 summary="yes" />
+        <replace file="${dist.dir}/Unix_shortcutSpec.xml"
+                 token="@ver@"
+                 value="${ver}"
+                 summary="yes" />
+
+        <echo message="Copies the bin files to the dist directory" />
+        <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
+            <fileset dir="${dist-files.dir}">
+                <include name="compile*" />
+                <include name="lcp.bat" />
+            </fileset>
+        </copy>
+
+        <!-- We call IzPack -->
+        <echo message="Makes the installer using IzPack" level="verbose" />
+        <izpack input="${dist.dir}/${installer.xmlfile}"
+                output="${dist.dir}/${installer.name}${ver}.${rel}.jar"
+                installerType="standard"
+                basedir="${dist.dir}"
+                izPackDir="${dist.dir}/"
+                compression="bzip2"
+                compressionlevel="9" />
+    </target>
+
+
+    <!-- ================================= 
 	   Creates a normal installer for IzPack 
 	  ================================= -->
-	<target name="generate.installer">
-		<antcall target="generate.installer.worker">
-			<param name="installer.xmlfile" value="IzPack-install.xml" />
-			<param name="installer.name" value="IzPack-install-" />
-		</antcall>
-	</target>
+    <target name="generate.installer">
+        <antcall target="generate.installer.worker">
+            <param name="installer.xmlfile" value="IzPack-install.xml" />
+            <param name="installer.name" value="IzPack-install-" />
+        </antcall>
+    </target>
 
-	<!-- Creates an installer for IzPack with registry support -->
-	<target name="generate.installer-reg">
-		<antcall target="generate.installer.worker">
-			<param name="installer.xmlfile" value="IzPack-install-reg.xml" />
-			<param name="installer.name" value="IzPack-install-reg-" />
-		</antcall>
-	</target>
+    <!-- Creates an installer for IzPack with registry support -->
+    <target name="generate.installer-reg">
+        <antcall target="generate.installer.worker">
+            <param name="installer.xmlfile" value="IzPack-install-reg.xml" />
+            <param name="installer.name" value="IzPack-install-reg-" />
+        </antcall>
+    </target>
 
-	<!--
+    <!--
         Fixes CR/LF by applying the Unix convention (\n for endlines).
         It also fixes the encoding problems by moving it to UTF-8.
     -->
-	<target name="fix.crlf">
-		<fixcrlf srcDir="${src.dir}" eol="lf" eof="remove" encoding="UTF-8">
-			<include name="**/*.java" />
-			<include name="**/*.xml" />
-			<include name="**/*.properties" />
-		</fixcrlf>
-	</target>
+    <target name="fix.crlf">
+        <fixcrlf srcDir="${src.dir}" eol="lf" eof="remove" encoding="UTF-8">
+            <include name="**/*.java" />
+            <include name="**/*.xml" />
+            <include name="**/*.properties" />
+        </fixcrlf>
+    </target>
 
-	<!-- Runs a testing installer. -->
-	<target name="run.installer">
-		<java jar="${basedir}/_dist/IzPack-install-${build.number}.jar" fork="true" />
-	</target>
+    <!-- Runs a testing installer. -->
+    <target name="run.installer">
+        <java jar="${basedir}/_dist/IzPack-install-${build.number}.jar" fork="true" />
+    </target>
 
-	<!-- Makes everything, from compilation to generating an installer. -->
-	<target name="quickdist" depends="all, generate.installer" description="makes a installer without docu"/>
-	
-	<!-- Makes everything, from compilation, customer and javadoc to generating an installer. -->
-	<target name="dist" depends="all, create.docu, generate.installer" description="makes a complete installer"/>
+    <!-- Makes everything, from compilation to generating an installer. -->
+    <target name="quickdist"
+            depends="all, generate.installer"
+            description="makes a installer without docu" />
 
-	<!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
-	<target name="cleandistreg" depends="clean, dist, generate.installer-reg" description="creates a full dist with Win32 uninstall registry support"/>
+    <!-- Makes everything, from compilation, customer and javadoc to generating an installer. -->
+    <target name="dist"
+            depends="all, create.docu, generate.installer"
+            description="makes a complete installer" />
 
-	<!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->
-	<target name="quickdist+run" depends="quickdist, run.installer" description="makes a quickdist installer and runs them"/>
-	
-	<!-- convenient :) makes a complete dist an installer and run them. -->
-	<target name="dist+run" depends="dist, run.installer" description="makes a complete installer and runs them"/>
-	
-	<!-- ** splashscreen **
+    <!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
+    <target name="cleandistreg"
+            depends="clean, dist, generate.installer-reg"
+            description="creates a full dist with Win32 uninstall registry support" />
+
+    <!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->
+    <target name="quickdist+run"
+            depends="quickdist, run.installer"
+            description="makes a quickdist installer and runs them" />
+
+    <!-- convenient :) makes a complete dist an installer and run them. -->
+    <target name="dist+run"
+            depends="dist, run.installer"
+            description="makes a complete installer and runs them" />
+
+    <!-- ** splashscreen **
 	  shows some ANT specific- and JAVA-
 	  but Platform and Project-independed Properties.
 	================================================================ -->
-	<target name="splashscreen" depends="time" description="shows the used environment and project settings">
-	  
-		<property name="console_line"
-		          value="**************************************************"/>
-	  <!-- Task splash/ ?? -->
-	  <echo message="${console_line}"/>
-	  <echo message="* ${ant.version}"/> <!-- N2H: Test if this is the right ANT-Version (implementation of an own JAVA-Class which compares BuildNumbers) -->
-	  <echo message="*   Java JRE version ${ant.java.version} ${java.vm.vendor}"/>   <!-- 1.3 -->
-	  <exec executable="${java.home}/bin/java">
-	  <arg line="-version"/>
-	  </exec>
-	  <echo message="${console_line}"/>
-	  <echo message="*  processing file ....... '${ant.file}'"/>           <!-- D:\ToDo\_2002-11\AntTest\build.xml -->
-	  <echo message="*  in base-directory ..... '${basedir}'"/>            <!-- D:\ToDo\_2002-11\AntTest -->
-	  <echo message="*  building project ...... '${ant.project.name}'"/>   <!-- CIS -->
-	  <echo message="*  working in directory .. '${cwd}'"/>
-	  <echo message="${console_line}"/>	  
-	</target>
-	
-	
+    <target name="splashscreen"
+            depends="time"
+            description="shows the used environment and project settings">
+
+        <property name="console_line" value="**************************************************" />
+        <!-- Task splash/ ?? -->
+        <echo message="${console_line}" />
+        <echo message="* ${ant.version}" />
+        <!-- N2H: Test if this is the right ANT-Version (implementation of an own JAVA-Class which compares BuildNumbers) -->
+        <echo message="*   Java JRE version ${ant.java.version} ${java.vm.vendor}" />
+        <!-- 1.3 -->
+        <exec executable="${java.home}/bin/java">
+            <arg line="-version" />
+        </exec>
+        <echo message="${console_line}" />
+        <echo message="*  processing file ....... '${ant.file}'" />
+        <!-- D:\ToDo\_2002-11\AntTest\build.xml -->
+        <echo message="*  in base-directory ..... '${basedir}'" />
+        <!-- D:\ToDo\_2002-11\AntTest -->
+        <echo message="*  building project ...... '${ant.project.name}'" />
+        <!-- CIS -->
+        <echo message="*  working in directory .. '${cwd}'" />
+        <echo message="${console_line}" />
+    </target>
+
+
     <!-- ================================= 
           target: ShellLink.Javah              
          ================================= -->
-    <target name="ShellLink.Javah" depends="compile.installer" description="--> rebuilds the shelllink jni *.h header file">
-        <javah class="com.izforge.izpack.util.os.ShellLink" destdir="${basedir}/src/native/ShellLink">
-        	<classpath path="${build.dir}"/>        	
+    <target name="ShellLink.Javah"
+            depends="compile.installer"
+            description="--> rebuilds the shelllink jni *.h header file">
+        <javah class="com.izforge.izpack.util.os.ShellLink"
+               destdir="${basedir}/src/native/ShellLink">
+            <classpath path="${build.dir}" />
         </javah>
     </target>
 
-	
-	<!-- ================================= 
+
+    <!-- ================================= 
          target: time - takes a timestamp           
         ================================= -->
-	<target name="time">
-	  <tstamp/>
-	</target>
-	
-	
-	<!-- ================================= 
+    <target name="time">
+        <tstamp />
+    </target>
+
+
+    <!-- ================================= 
           target: dump.properties - dumps the curent properties into the $os_$timestamp.properties file             
-         ================================= -->	
-	<target name="dump.properties" depends="time" description="dump.environment (for debug)">	  
-	  <echoproperties destfile="${basedir}/ant_properties_at_${os.name}-${os.arch}-${os.version}_at_${DSTAMP}-${TSTAMP}.txt"/>
-	</target>
-    
+         ================================= -->
+    <target name="dump.properties" depends="time" description="dump.environment (for debug)">
+        <echoproperties destfile="${basedir}/ant_properties_at_${os.name}-${os.arch}-${os.version}_at_${DSTAMP}-${TSTAMP}.txt" />
+    </target>
+
 
 </project>

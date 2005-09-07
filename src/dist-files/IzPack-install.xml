@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.8.0-M1 (build unreleased)</appversion>
+        <appversion>3.8.0-M1 (build unofficial)</appversion>
         <authors>
         	<author email="" name="(will be filled for the RCs)" />
             <author email="(see Thanks.txt)" name="Many other developers and contributors to the previous releases" />
@@ -35,11 +35,6 @@
 
     <!-- Flexible and in the screen proportions -->
     <guiprefs height="600" resizable="yes" width="800">
-<!-- MlF is buggy on 1.5
-       <laf name="metouia">
-            <os family="unix" />
-        </laf>
--->
        <laf name="looks">
             <os family="unix" />
        </laf>
@@ -85,10 +80,15 @@
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0" />
         <res src="doc-html.png" id="ImgPacksPanel.img.1" />
+<!--    
         <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />
         <res src="doc-nanoxml.png" id="ImgPacksPanel.img.3" />
+
         <res src="sample.png" id="ImgPacksPanel.img.4" />
         <res src="src.png" id="ImgPacksPanel.img.5" />
+-->
+	    <res src="sample.png" id="ImgPacksPanel.img.2" />
+        <res src="src.png" id="ImgPacksPanel.img.3" />
         <res src="border1.png" id="Installer.image.0"/>
         <res src="border2.png" id="Installer.image.1"/>
         <res src="border3.png" id="Installer.image.2"/>
@@ -133,15 +133,15 @@
             <executable targetfile="$INSTALL_PATH/bin/compile" stage="never"/>
         </pack>
 
-              <!-- The documentation -->
-        <pack name="Documentation-HTML" required="no">
-            <description>The IzPack documentation (HTML version) + Javadoc.</description>
+        <!-- The documentation -->
+        <pack name="Documentation" required="no">
+            <description>The IzPack documentation (XHTML version) + Javadocs.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-              <include name="doc/izpack/html/**/*" />
+              <include name="doc/izpack/xhtml/**/*" />
               <include name="doc/izpack/javadoc/**/*" />
             </fileset>
         </pack>
-        <pack name="Documentation-PDF" required="no">
+<!--        <pack name="Documentation-PDF" required="no">
             <description>The IzPack documentation (PDF version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
               <include name="doc/izpack/pdf/**/*" />
@@ -153,6 +153,7 @@
               <include name="doc/nanoxml**/*" />
             </fileset>
         </pack>
+-->
 
         <!-- A trivial sample to get started -->
         <pack name="Sample" required="no">
