@@ -33,14 +33,14 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH\doc\izpack\html\izpack-doc.html"
+     target="$INSTALL_PATH\doc\izpack\xhtml\index.html"
      commandLine=""
      description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) user documentation">
           
      <createForPack name="Documentation-HTML" />
    </shortcut>
    
-  
+<!--  
    <shortcut
      name="IzPack@ver@ PDF Documentation"
      programGroup="yes"
@@ -56,6 +56,7 @@
      
      <createForPack name="Documentation-PDF" />
    </shortcut>
+-->
    
    <shortcut
      name="Izpack@ver@ Uninstaller"

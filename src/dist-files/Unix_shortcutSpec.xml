@@ -51,11 +51,11 @@
      startup="no"
      target="konqueror"
      workingDirectory=""
-     commandLine="$INSTALL_PATH/doc/izpack/html/izpack-doc.html"
+     commandLine="$INSTALL_PATH/doc/izpack/xhtml/index.html"
      initialState="noShow"
      iconFile="help"
      iconIndex="0" 
-     url="$INSTALL_PATH/doc/izpack/html/izpack-doc.html"                                
+     url="$INSTALL_PATH/doc/izpack/xhtml/index.html"                                
      type="Application"
      encoding="UTF-8" 
    createForAll="true"  
@@ -64,7 +64,7 @@
      <createForPack name="Documentation-HTML"/>
    </shortcut>
 
-
+<!--
    <shortcut
      name="IzPack@ver@ PDF Documentation"
      programGroup="yes"
@@ -86,7 +86,7 @@
      
      <createForPack name="Documentation-PDF"/>
    </shortcut>
-   
+-->   
       
    <shortcut
      name="Izpack@ver@ Uninstaller"
