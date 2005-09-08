@@ -195,7 +195,7 @@ public class GUIInstaller extends InstallerBase
             picker.setSelection(Locale.getDefault().getISO3Country().toLowerCase());
             picker.setModal(true);
             picker.toFront();
-            frame.setVisible(true);
+            //frame.setVisible(true);
             frame.setVisible(false);
             picker.setVisible(true);
 
