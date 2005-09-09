@@ -128,6 +128,8 @@
     	Enforce source / target compatibility, now 1.4 / 1.4.
     02.09.2005: (by Klaus Bartz)
     	Unicode support of ShellLink.
+    09.09.2005: (Marc.Eppelmann)
+		Added start.sh to the shipped files in bin-folder.
 
   Mini-HowTo:
 
@@ -913,8 +915,9 @@
         <echo message="Copies the bin files to the dist directory" />
         <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
             <fileset dir="${dist-files.dir}">
-                <include name="compile*" />
+                <include name="compile*" />            	
                 <include name="lcp.bat" />
+            	<include name="start.sh"/>
             </fileset>
         </copy>
 
