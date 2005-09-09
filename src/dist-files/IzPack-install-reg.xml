@@ -85,10 +85,13 @@
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0" />
         <res src="doc-html.png" id="ImgPacksPanel.img.1" />
-        <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />
+        <res src="javadocs.png" id="ImgPacksPanel.img.2" />
         <res src="doc-nanoxml.png" id="ImgPacksPanel.img.3" />
-        <res src="sample.png" id="ImgPacksPanel.img.4" />
-        <res src="src.png" id="ImgPacksPanel.img.5" />
+<!--    
+        <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />
+-->
+	      <res src="sample.png"  id="ImgPacksPanel.img.4" />
+        <res src="src.png"     id="ImgPacksPanel.img.5" />
         <res src="border1.png" id="Installer.image.0"/>
         <res src="border2.png" id="Installer.image.1"/>
         <res src="border3.png" id="Installer.image.2"/>
@@ -135,26 +138,36 @@
               <include name="legal/**/*" />
             </fileset>
             <executable targetfile="$INSTALL_PATH/bin/compile" stage="never"/>
+            <executable targetfile="$INSTALL_PATH/bin/start.sh" stage="never"/>
         </pack>
 
-              <!-- The documentation -->
-        <pack name="Documentation-HTML" required="no">
-            <description>The IzPack documentation (HTML version) + Javadoc.</description>
+        <!-- The documentation -->
+        <pack name="XHTML Documentation" required="no">
+            <description>The IzPack documentation (XHTML version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-              <include name="doc/izpack/html/**/*" />
+              <include name="doc/izpack/xhtml/**/*" />              
+            </fileset>
+        </pack>
+        <pack name="Java Documentation" required="no">
+            <description>The IzPack Java documentation (Javadocs for IzPack developers).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">              
               <include name="doc/izpack/javadoc/**/*" />
             </fileset>
         </pack>
-        <pack name="Documentation-PDF" required="no">
+<!--    
+      Disabled while doc-ng not provides a pdf ...
+  
+        <pack name="PDF Documentation" required="no">
             <description>The IzPack documentation (PDF version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
               <include name="doc/izpack/pdf/**/*" />
             </fileset>
         </pack>
-        <pack name="Documentation-NanoXML" required="no">
+-->
+        <pack name="NanoXML Documentation" required="no">
             <description>NanoXML documentation (for IzPack developers).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-              <include name="doc/nanoxml**/*" />
+              <include name="doc/nanoxml/**/*" />
             </fileset>
         </pack>
 
