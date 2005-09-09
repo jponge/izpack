@@ -27,7 +27,7 @@
 -->
 
    <shortcut
-     name="IzPack@ver@ Html Documentation"
+     name="IzPack@ver@ XHtml Documentation"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -37,10 +37,39 @@
      commandLine=""
      description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) user documentation">
           
-     <createForPack name="Documentation-HTML" />
+     <createForPack name="XHTML Documentation" />
    </shortcut>
-   
-<!--  
+  
+   <shortcut
+     name="IzPack@ver@ Java Documentation"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\doc\izpack\javadoc\index.html"
+     commandLine=""
+     description="This opens a WebBrowser to look into the IzPack @build.number@ (Java) developer documentation">
+          
+     <createForPack name="Java Documentation" />
+   </shortcut>
+  
+   <shortcut
+     name="NanoXML Documentation"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="no"
+     startup="no"
+     target="$INSTALL_PATH\doc\nanoxml\NanoXML-Java.pdf"
+     commandLine=""
+     iconFile="%SystemRoot%\system32\SHELL32.dll"
+     iconIndex="23" 
+     description="This opens Adobe (Acrobat) Reader (if available) to look into or print the NanoXML (PDF) developer documentation">
+          
+     <createForPack name="NanoXML Documentation" />
+   </shortcut>   
+  
    <shortcut
      name="IzPack@ver@ PDF Documentation"
      programGroup="yes"
@@ -50,14 +79,12 @@
      startup="no"
      target="$INSTALL_PATH\doc\izpack\pdf\izpack-doc.pdf"
      commandLine=""
-	 iconFile="%SystemRoot%\system32\SHELL32.dll"
+	   iconFile="%SystemRoot%\system32\SHELL32.dll"
      iconIndex="23" 
      description="This opens Adobe (Acrobat) Reader (if available) to look into or print the IzPack @build.number@ (PDF) user documentation">
      
-     <createForPack name="Documentation-PDF" />
+     <createForPack name="PDF Documentation" />
    </shortcut>
--->
-   
    <shortcut
      name="Izpack@ver@ Uninstaller"
      programGroup="yes"

@@ -43,13 +43,13 @@
    </shortcut -->
 
    <shortcut
-     name="IzPack@ver@ Html Documentation"
+     name="IzPack@ver@ XHtml Documentation"
      programGroup="yes"
      desktop="yes"
      applications="no"
      startMenu="yes"
      startup="no"
-     target="konqueror"
+     target="$INSTALL_PATH/bin/start.sh"
      workingDirectory=""
      commandLine="$INSTALL_PATH/doc/izpack/xhtml/index.html"
      initialState="noShow"
@@ -61,10 +61,52 @@
    createForAll="true"  
      description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) user documentation">
      
-     <createForPack name="Documentation-HTML"/>
+     <createForPack name="XHTML Documentation"/>
+   </shortcut>
+  
+     <shortcut
+     name="IzPack@ver@ Java Documentation"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="$INSTALL_PATH/bin/start.sh"
+     workingDirectory=""
+     commandLine="$INSTALL_PATH/doc/izpack/javadoc/index.html"
+     initialState="noShow"
+     iconFile="help"
+     iconIndex="0" 
+     url="$INSTALL_PATH/doc/izpack/javadoc/index.html"                                
+     type="Application"
+     encoding="UTF-8" 
+   createForAll="true"  
+     description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) Java documentation">
+     
+     <createForPack name="Java Documentation"/>
+   </shortcut>
+  
+   <shortcut
+     name="NanoXML Documentation"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="acroread"
+     workingDirectory=""
+     commandLine="$INSTALL_PATH/doc/nanoxml/NanoXML-Java.pdf"
+     initialState="noShow"
+     iconFile="acroread"
+     iconIndex="0"                                      
+     type="Application"
+     encoding="UTF-8"   
+     createForAll="true"
+     description="This opens Adobe (Acrobat) Reader (if available) to look into or print the NanoXML (PDF) user documentation">
+     
+     <createForPack name="NanoXML Documentation"/>
    </shortcut>
 
-<!--
    <shortcut
      name="IzPack@ver@ PDF Documentation"
      programGroup="yes"
@@ -77,16 +119,15 @@
      commandLine="$INSTALL_PATH/doc/izpack/pdf/izpack-doc.pdf"
      initialState="noShow"
      iconFile="acroread"
-     iconIndex="0" 
-     url="$INSTALL_PATH/doc/izpack/pdf/izpack-doc.pdf"                                
+     iconIndex="0"                                   
      type="Application"
      encoding="UTF-8"   
    createForAll="true"
      description="This opens Adobe (Acrobat) Reader (if available) to look into or print the IzPack @build.number@ (PDF) user documentation">
      
-     <createForPack name="Documentation-PDF"/>
+     <createForPack name="PDF Documentation"/>
    </shortcut>
--->   
+   
       
    <shortcut
      name="Izpack@ver@ Uninstaller"
