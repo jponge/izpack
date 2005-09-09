@@ -1693,10 +1693,9 @@ public class CompilerConfig extends Thread
         System.out.println("");
         System.out.println("< compiler specifications version : " + VERSION + " >");
         System.out.println("");
-        System.out.println("- Copyright (C) 2001-2004 Julien Ponge");
+        System.out.println("- Copyright (C) 2001-2005 Julien Ponge");
         System.out.println("- Visit http://www.izforge.com/ for the latests releases");
-        System.out.println("- Released under the terms of the GNU GPL either version 2");
-        System.out.println("  of the licence, or any later version.");
+        System.out.println("- Released under the terms of the Apache Software License version 2.0.");
         System.out.println("");
 
         // exit code 1 means: error
