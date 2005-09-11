@@ -596,7 +596,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         analyzeShortcutSpec();
 
-        if (shortcutsToCreate)
+        if (shortcutsToCreate && !OsVersion.IS_OSX)
         {
             if (shortcut.supported() && !simulteNotSupported)
             {

@@ -169,7 +169,7 @@ public class Shortcut
      * client code can now determine by calling this method if the active OS is supported and take
      * appropriate action.
      * 
-     * @return <code>true</code> if the creation of shortcuts is supported, <code>flase</code>
+     * @return <code>true</code> if the creation of shortcuts is supported, <code>false</code>
      * if this is not supported.
      */
     public boolean supported()

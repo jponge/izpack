@@ -58,7 +58,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
     public static final boolean IS_MAC = StringTool.startsWith(OS_NAME, MAC );
     
     /** True if this is the Mac OS X. */
-    public static final boolean IS_OSX = IS_MAC && OS_NAME.endsWith( "X" );
+    public static final boolean IS_OSX = StringTool.startsWithIgnoreCase(OS_NAME, MACOSX);
 
     /** True if this is Windows. */
     public static final boolean IS_WINDOWS = StringTool.startsWith(OS_NAME, WINDOWS );

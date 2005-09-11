@@ -35,6 +35,9 @@ public interface OsVersionConstants
 
   /** MAC = "Mac" */
   public final static String MAC = "Mac";
+  
+  /** Mac OS X */
+  public final static String MACOSX = "mac os x";
 
   /** WINDOWS = "Windows" */
   public final static String WINDOWS = "Windows";
