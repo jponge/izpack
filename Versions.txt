@@ -67,9 +67,10 @@
 - ImgPacksPanel: removed the useless/ugly border around the description area.
 - New compressor pack added to support different compression algorithm for the
   packs; initial supported are "raw", "deflate" and "bzip2" (Klaus Bartz).
-- New documentation in XHTML Strict 1.0 + CSS (Fabrice Mirabile)
-- New documentation in DocBook (Fabrice Mirabile)
-- Unicode port of shortcuts and registry stuff (Klaus Bartz)
+- New documentation in XHTML Strict 1.0 + CSS (Fabrice Mirabile).
+- New documentation in DocBook (Fabrice Mirabile).
+- Unicode port of shortcuts and registry stuff (Klaus Bartz).
+- New Mac OS X icon (.icns).
 
   > 3.7.2 (build 2005.04.22)
 

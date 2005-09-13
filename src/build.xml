@@ -801,6 +801,7 @@
                 <include name="uninstaller-ext.jar" />
             </fileset>
         </delete>
+    	    <delete file="bin/native/3rdparty/COIOSHelper.dll" />
         <delete dir="${basedir}/bin/native/izpack" />
         <delete includeEmptyDirs="true" dir="${basedir}/doc/izpack" />
     </target>
