@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.8.0-M1 (build unofficial)</appversion>
+        <appversion>3.8.0-M2 (build unofficial)</appversion>
         <authors>
         	<author email="" name="(will be filled for the RCs)" />
             <author email="(see Thanks.txt)" name="Many other developers and contributors to the previous releases" />
