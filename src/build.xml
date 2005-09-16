@@ -929,7 +929,7 @@
                 installerType="standard"
                 basedir="${dist.dir}"
                 izPackDir="${dist.dir}/"
-                compression="raw"
+                compression="bzip2"
                 compressionlevel="9" />
     </target>
 
