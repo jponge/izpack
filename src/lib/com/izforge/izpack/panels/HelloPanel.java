@@ -112,7 +112,7 @@ public class HelloPanel extends IzPanel
             for (int i = 0; i < size; i++)
             {
                 Info.Author a = (Info.Author) authors.get(i);
-                String email = (a.getEmail() != null) ? (" <" + a.getEmail() + ">") : "";
+                String email = (a.getEmail() != null && a.getEmail().length() > 0) ? (" <" + a.getEmail() + ">") : "";
                 label = LabelFactory.create(" - " + a.getName() + email, parent.icons
                         .getImageIcon("empty"), JLabel.TRAILING);
                 centerPanel.add(label);
