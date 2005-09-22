@@ -23,10 +23,27 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.8.0-M2 (build unofficial)</appversion>
+        <appversion>3.8.0-RC1 (build unofficial)</appversion>
         <authors>
-        	<author email="" name="(will be filled for the RCs)" />
-            <author email="(see Thanks.txt)" name="Many other developers and contributors to the previous releases" />
+            <author email="" name="Julien Ponge (maintainer and original developer)" />
+
+            <author email="" name="Klaus Bartz (developer)" />
+            <author email="" name="Elmar Grom (developer)" /> 
+            <author email="" name="Chad McHenry (developer)" />
+            <author email="" name="Fabrice Mirabile (developer)" />
+            <author email="" name="Scott Stark (developer)" />
+            
+            <author email="" name="Levent Bayindir (contributor)" />                        
+            <author email="" name="Andreas Breiter (contributor)" />
+            <author email="" name="Stefano Gamma (contributor)" />
+            <author email="" name="Thomas Girard (contributor)" />
+            <author email="" name="Johannes Gutleber (contributor)" />
+            <author email="" name="Stefan Heidrich (contributor)" />            
+            <author email="" name="Christian Murphy (contributor)" />
+            <author email="" name="Vitor Rodrigues (contributor)" />
+            <author email="" name="Oscar Sierra (contributor)" />
+
+            <author email="" name="... the many other developers and contributors to the previous releases (see Thanks.txt)" />
         </authors>
         <url>http://www.izforge.com/izpack/</url>
         <javaversion>1.4</javaversion>
