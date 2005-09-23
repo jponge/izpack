@@ -360,6 +360,16 @@ public class RegistryImpl
     }
 
     /**
+     * Deletes a key under the current root if exist and it is empty, else throw an exception.
+     * 
+     * @param key key to be deleted
+     * @throws NativeLibException
+     */
+    public void deleteKey(String key) throws NativeLibException
+    {
+        deleteKeyL(currentRoot, key);
+    }
+    /**
      * Deletes a key under the current root if it is empty, else do nothing.
      * 
      * @param key key to be deleted
