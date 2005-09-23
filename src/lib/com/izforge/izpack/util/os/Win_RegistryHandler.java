@@ -209,6 +209,42 @@ public class Win_RegistryHandler extends RegistryHandler
     }
 
     /**
+     * Deletes the given key if exist, else throws an exception.
+     * @param key key to be deleted
+     * @throws NativeLibException
+     */
+    public void deleteKey( String key) throws NativeLibException
+    {
+        if (!good()) return;
+        regWorker.deleteKey(key);
+    }
+    
+    /**
+     * Deletes a key under the current root if it is empty, else do nothing.
+     * 
+     * @param key key to be deleted
+     * @throws NativeLibException
+     */
+    public void deleteKeyIfEmpty(String key) throws NativeLibException
+    {
+        if (!good()) return;
+        regWorker.deleteKeyIfEmpty(key);
+    }
+    
+    /**
+     * Deletes a value.
+     * 
+     * @param key key of the value which should be deleted
+     * @param value value name to be deleted
+     * @throws NativeLibException
+     */
+    public void deleteValue(String key, String value) throws NativeLibException
+    {
+        if (!good()) return;
+        regWorker.deleteValue(key, value);
+    }
+
+    /**
      * Sets the root for the next registry access.
      * 
      * @param i an integer which refers to a HKEY

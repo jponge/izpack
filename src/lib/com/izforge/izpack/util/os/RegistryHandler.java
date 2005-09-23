@@ -239,6 +239,39 @@ public class RegistryHandler extends OSClassHelper
     {
         return;
     }
+    
+    /**
+     * Deletes the given key if exist, else throws an exception.
+     * @param key key to be deleted
+     * @throws NativeLibException
+     */
+    public void deleteKey( String key) throws NativeLibException
+    {
+        return;
+    }
+
+    /**
+     * Deletes a key under the current root if it is empty, else do nothing.
+     * 
+     * @param key key to be deleted
+     * @throws NativeLibException
+     */
+    public void deleteKeyIfEmpty(String key) throws NativeLibException
+    {
+        return;
+    }
+    
+    /**
+     * Deletes a value.
+     * 
+     * @param key key of the value which should be deleted
+     * @param value value name to be deleted
+     * @throws NativeLibException
+     */
+    public void deleteValue(String key, String value) throws NativeLibException
+    {
+        return;
+    }
 
     /**
      * Sets the root for the next registry access.
