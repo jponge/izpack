@@ -169,7 +169,7 @@
 
     <property file="src/ant.properties" />
     <property name="ver" value="3.8" />
-    <property name="rel" value="0-M2" />
+    <property name="rel" value="0-RC1" />
     <property name="build.number" value="${ver}.${rel}" />
 
     <property name="src.dir" value="${basedir}/src/lib" />
@@ -489,7 +489,18 @@
     -->
     <target name="build.panels" depends="build.installer">
         <mkdir dir="${bin.dir}/panels" />
-
+				<!-- My cutsom Panels -->
+				<build-panel name="NonBlankTargetPanel">
+	          <include name="com/izforge/izpack/panels/PathInputPanel.java"/>
+	          <include name="com/izforge/izpack/panels/PathSelectionPanel.java"/>
+	          <include name="com/izforge/izpack/panels/TargetPanel.java"/>
+	          <include name="com/izforge/izpack/panels/TargetPanelAutomationHelper.java"/>
+	          <include name="com/izforge/izpack/panels/NonBlankTargetPanel.java"/>
+	      </build-panel>
+	      <build-panel name="AxiomDBDataPanel">
+	          <include name="com/izforge/izpack/panels/AxiomDBDataPanel.java"/>
+	      </build-panel>
+				<!-- End of My cutsom Panels -->
         <build-panel name="FinishPanel">
             <include name="com/izforge/izpack/panels/FinishPanel.java" />
         </build-panel>
