@@ -24,7 +24,7 @@ fi
 
 for lp in $langpacks; do
     echo "Result for langpack $lp:"
-    result=
+    result=""
     count=0
     for i in `awk '{print $2}' eng.xml | grep 'id="'`; do
         MATCH=`grep "$i" $lp`;
@@ -38,8 +38,13 @@ for lp in $langpacks; do
     else
         echo "    $count IDs missing!"
         if [ a$verbose = "atrue" ] ; then
+            i=2
             for line in ${result[*]} ; do
                 echo "    $line"
+                if [ $i -gt $count ] ; then
+                    break
+                fi
+                i=$i+1
             done;
         fi
     fi
