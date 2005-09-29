@@ -71,6 +71,7 @@
 - New documentation in DocBook (Fabrice Mirabile).
 - Unicode port of shortcuts and registry stuff (Klaus Bartz).
 - New Mac OS X icon (.icns).
+- Added the American Locale XML and Flad (Fabrice Mirabile thanks to Joe Favero)
 
   > 3.7.2 (build 2005.04.22)
 
