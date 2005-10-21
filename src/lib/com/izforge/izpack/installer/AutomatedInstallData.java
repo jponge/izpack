@@ -112,8 +112,25 @@ public class AutomatedInstallData
 
     /** The attributes used by the panels */
     protected Map attributes;
+    
+    /** This class should be a singleton. Therefore
+     * the one possible object will be stored in this 
+     * static member.
+     */
+    private static AutomatedInstallData self = null;
+    
+    /**
+     * Returns the one possible object of this class.
+     * @return the one possible object of this class
+     */
+    public static AutomatedInstallData getInstance()
+    {
+        return( self);
+    }
 
-    /** Constructs a new instance of this class. */
+    /** Constructs a new instance of this class. 
+     * Only one should be possible, at a scound call a RuntimeException
+     * will be raised. */
     public AutomatedInstallData()
     {
         availablePacks = new ArrayList();
@@ -124,6 +141,9 @@ public class AutomatedInstallData
         variables = new Properties();
         attributes = new HashMap();
         customData = new HashMap();
+        if( self != null )
+            throw new RuntimeException("Panic!! second call of the InstallData Ctor!!");
+        self = this;
     }
 
     /**
