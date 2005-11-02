@@ -42,6 +42,7 @@
             <author email="" name="Christian Murphy (contributor)" />
             <author email="" name="Vitor Rodrigues (contributor)" />
             <author email="" name="Oscar Sierra (contributor)" />
+            <author email="" name="Nicolas Deschaume (contributor)" />
 
             <author email="" name="... the many other developers and contributors to the previous releases (see Thanks.txt)" />
         </authors>
@@ -97,7 +98,7 @@
     <resources>
         <res src="install-readme.html" id="HTMLInfoPanel.info"/>
         <res src="Licence.txt" id="LicencePanel.licence"/>
-        <res src="langsel.jpg" id="installer.langsel.img"/>
+        <res src="splash-sydney.png" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0" />
