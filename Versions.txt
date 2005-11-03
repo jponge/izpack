@@ -1,7 +1,8 @@
 [ The list of the different public versions of IzPack ]
-
-  > 3.8.1 (build xxxx.xx.xx)
-- Added Greek language support (FM thx to Panayotis Katsaloulis for the translation)
+ 
+ > 3.8.1 (build xxxx.xx.xx)
+- Added Greek language support (Fabrice Mirabile, thx to Panayotis Katsaloulis for the translation and flag)
+- New splashscreen artwork (Nicolas Deschaume).
 
   > 3.8.0 (build 2005.10.27)
 - Added 2 processor classes having the ability to fill a combobox 
