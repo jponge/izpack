@@ -2736,7 +2736,7 @@ public class UserInputPanel extends IzPanel
                     this.pathComboBox.setSelectedItem(f.getAbsolutePath());
 
                     // use any given directory directly
-                    if (!this.pathMatches(f.getAbsolutePath()))
+                    if (this.resultType != TYPE_FILE && !this.pathMatches(f.getAbsolutePath()))
                     {
                         JOptionPane.showMessageDialog(parent, parent.langpack
                                 .getString("UserInputPanel.search.wrongselection.message"),

@@ -5,6 +5,8 @@
 - New splashscreen artwork (Nicolas Deschaume).
 - Added IPAdress and ClassPath variable (Fabrice Mirabile)
 - Added HostName variable (FM, thx to Oliver Kiddle)
+- Fixes for IPAdress (FM)
+- Patch for WebAccessor: indeterminate progress bar (Julian Payne)
 
   > 3.8.0 (build 2005.10.27)
 - Added 2 processor classes having the ability to fill a combobox 

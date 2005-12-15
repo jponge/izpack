@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.net.InetAddress;
 
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.Info;
@@ -140,18 +141,19 @@ public class InstallerBase
         
         // We determine the hostname and IPAdress
         String hostname;
-        byte[] IPAddress;
+        String IPAddress;
         
         try {
             InetAddress addr = InetAddress.getLocalHost();
     
 		        // Get IP Address
-		        IPAddress = addr.getAddress();
+		        IPAddress = addr.getHostAddress();
 		    
 		        // Get hostname
 		        hostname = addr.getHostName();
         } catch (Exception e) {
             hostname = "";
+            IPAddress = "";
         }
         
 				

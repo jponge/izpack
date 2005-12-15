@@ -136,7 +136,7 @@
     <str id="UserInputPanel.search.location"           txt="Enter location of {0}."/>
     <str id="UserInputPanel.search.location.checkedfile" txt="The existence of {0} is checked."/>
     <str id="UserInputPanel.search.browse"           txt="Browse..."/>
-    <str id="UserInputPanel.search.wrongselection.message"   txt="The file or directory you choose either does not exist or is not appropiate."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="The file or directory you chose either does not exist or is not appropiate."/>
     <str id="UserInputPanel.search.wrongselection.caption"   txt="Invalid selection."/>
 
     <str id="CompilePanel.heading" txt="Compilation" />
