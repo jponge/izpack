@@ -228,7 +228,8 @@ public class RegistryImpl
         catch (NativeLibException ne)
         {
             String em = ne.getLibMessage();
-            if (em.equals("functionFailed.RegOpenKeyEx")) { return (false); }
+            if (em.equals("functionFailed.RegOpenKeyEx")
+                    || em.equals("functionFailed.RegQueryValueEx")) { return (false); }
             throw (ne);
         }
         return (true);
