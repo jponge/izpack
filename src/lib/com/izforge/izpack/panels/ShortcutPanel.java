@@ -969,6 +969,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     {
         if (!create) return;
         ShortcutData data;
+        String tmpgn;
 
         for (int i = 0; i < shortcuts.size(); i++)
         {
@@ -976,7 +977,18 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             try
             {
-                groupName = groupName + data.subgroup;
+                //The cloning guarantees that data.subgroup will not be null.
+                //See ShortcutData.cloneString
+                if (data.subgroup.length() > 0 
+                        && (data.subgroup.charAt(0) == '/' || data.subgroup.charAt(0) == '\\'))
+                {
+                    tmpgn = groupName + data.subgroup;
+                }
+                else
+                {
+                    tmpgn = groupName + File.separator + data.subgroup;
+                }
+                
                 shortcut.setUserType(itsUserType);
                 shortcut.setLinkName(data.name);
                 shortcut.setLinkType(data.type);
@@ -999,7 +1011,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                 if (data.addToGroup)
                 {
-                    shortcut.setProgramGroup(groupName);
+                    shortcut.setProgramGroup(tmpgn);
                 }
                 else
                 {

@@ -23,9 +23,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -529,9 +531,9 @@ public class GUIInstaller extends InstallerBase
                 setSize(getPreferredSize());
 
             Dimension frameSize = getSize();
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            setLocation((screenSize.width - frameSize.width) / 2,
-                    (screenSize.height - frameSize.height) / 2 - 10);
+            Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+            setLocation(center.x - frameSize.width / 2,
+                    center.y - frameSize.height / 2 - 10);
             setResizable(true);
         }
 

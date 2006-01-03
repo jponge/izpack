@@ -93,7 +93,8 @@ public class InstallerBase
 
         // We put the Info data as variables
         installdata.setVariable(ScriptParser.APP_NAME, inf.getAppName());
-        installdata.setVariable(ScriptParser.APP_URL, inf.getAppURL());
+        if (inf.getAppURL() != null)
+            installdata.setVariable(ScriptParser.APP_URL, inf.getAppURL());
         installdata.setVariable(ScriptParser.APP_VER, inf.getAppVersion());
 
         // We read the panels order data
