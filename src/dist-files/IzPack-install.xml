@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.8.0 (build 2005.10.27)</appversion>
+        <appversion>3.8.1 (build 2006.01.xx)</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)" />
 
@@ -43,6 +43,9 @@
             <author email="" name="Vitor Rodrigues (contributor)" />
             <author email="" name="Oscar Sierra (contributor)" />
             <author email="" name="Nicolas Deschaume (contributor)" />
+            <author email="" name="Oliver Kiddle (contributor)" />
+            <author email="" name="Julian Payne (contributor)" />
+            <author email="" name="Panayotis Katsaloulis (contributor)" />
 
             <author email=""
                 name="... the many other developers and contributors to the previous releases (see Thanks.txt)" />

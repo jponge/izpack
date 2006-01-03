@@ -169,7 +169,7 @@
 
     <property file="src/ant.properties" />
     <property name="ver" value="3.8" />
-    <property name="rel" value="0" />
+    <property name="rel" value="1" />
     <property name="build.number" value="${ver}.${rel}" />
 
     <property name="src.dir" value="${basedir}/src/lib" />
@@ -929,7 +929,7 @@
                 installerType="standard"
                 basedir="${dist.dir}"
                 izPackDir="${dist.dir}/"
-                compression="bzip2"
+                compression="raw"
                 compressionlevel="9" />
     </target>
 

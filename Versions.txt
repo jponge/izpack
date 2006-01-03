@@ -1,12 +1,13 @@
 [ The list of the different public versions of IzPack ]
 
   > 3.8.1 (build xxxx.xx.xx)
-- Added Greek language support (Fabrice Mirabile, thx to Panayotis Katsaloulis for the translation and flag)
+- Added Greek language support (Fabrice Mirabile, thx to Panayotis Katsaloulis
+  for the translation and flag).
 - New splashscreen artwork (Nicolas Deschaume).
-- Added IPAdress and ClassPath variable (Fabrice Mirabile)
-- Added HostName variable (FM, thx to Oliver Kiddle)
-- Fixes for IPAdress (FM)
-- Patch for WebAccessor: indeterminate progress bar (Julian Payne)
+- Added IPAdress and ClassPath variable (Fabrice Mirabile).
+- Added HostName variable (Fabrice Mirabile, thanks to Oliver Kiddle).
+- Fixes for IPAdress (Fabrice Mirabile).
+- Patch for WebAccessor: indeterminate progress bar (Julian Payne).
 
   > 3.8.0 (build 2005.10.27)
 - Added 2 processor classes having the ability to fill a combobox 
