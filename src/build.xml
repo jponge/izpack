@@ -979,7 +979,7 @@
 
     <!-- Makes everything, from compilation, customer and javadoc to generating an installer. -->
     <target name="dist"
-            depends="all, create.docu, generate.installer"
+            depends="all, create.docu, generate.installer, generate.installer-reg"
             description="makes a complete installer" />
 
     <!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->

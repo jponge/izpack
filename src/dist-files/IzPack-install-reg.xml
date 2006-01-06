@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.8.1 (build 2006.01.xx)</appversion>
+        <appversion>3.8.1 (build 2006.01.06)</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)" />
 
@@ -48,6 +48,8 @@
             <author email="" name="Panayotis Katsaloulis (contributor)" />
             <author email="" name="Ari Voutilainen (contributor)" />
             <author email="" name="Weiji Guo (contributor)" />
+            <author email="" name="Hal Vaughan (contributor)" />
+            <author email="" name="Dongsu Jang (contributor)" />
 
             <author email=""
                 name="... the many other developers and contributors to the previous releases (see Thanks.txt)" />
@@ -94,6 +96,7 @@
         <langpack iso3="chn"/>
         <langpack iso3="scg"/>
         <langpack iso3="cze"/>
+        <langpack iso3="kor"/>
     </locale>
 
     <!-- The resources needed by the various panels -->
