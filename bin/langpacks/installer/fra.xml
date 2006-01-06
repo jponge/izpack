@@ -36,6 +36,9 @@
     <str id="LicencePanel.yes" txt="Oui"/>
     <str id="LicencePanel.no" txt="Non"/>
     
+    <!-- PrinterSelect Panel -->
+    <str id="PrinterSelectPanel.select_printer" txt="Sélectionner l'imprimante à utiliser durant l'installation et les tests." />
+    
     <!-- InfoPanel strings -->
     <str id="InfoPanel.info" txt="Veuillez lire les informations suivantes :"/>
     

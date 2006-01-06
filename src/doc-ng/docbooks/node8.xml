@@ -316,7 +316,11 @@
     <para>
       Sometimes it is desirable to separate different entities visually. This can be accomplished by inserting a space or a divider. A space simply inserts a vertical separation of the average height
       of a single line entity, such as a line of text or a an input field. A divider inserts the same amount of space but also draws a division line which can be either aligned at the top or bottom
-      of the separation. <literal>&lt;space&gt;</literal>, <literal>&lt;divider&gt;</literal>
+      of the separation.
+    </para>
+    <para>
+    	<literal>&lt;field type="divider" /&gt;</literal><?db2html element="br"?>
+    	<literal>&lt;field type="space" /&gt;</literal>
     </para>
     <para>
       ..... maybe i should draw the line myself and add no additional space at all ...

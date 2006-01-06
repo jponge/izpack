@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <!-- The Russian langpack -->
-<!-- Last edited by Alexey Makhmutov (aka Lerm) at 25.02.2005 -->
+<!-- Last edited by Alexey Makhmutov (aka Lerm) at 03.09.2005 -->
 
 <langpack>
 
@@ -29,6 +29,10 @@
     <str id="HelloPanel.welcome2"       txt=" !"/>
     <str id="HelloPanel.authors"        txt="Авторы программы: "/>
     <str id="HelloPanel.url"            txt="Домашняя страница программы: "/>
+
+    <str id="CheckedHelloPanel.productAlreadyExist0" txt="Этот продукт уже установлен на данном компьютере в каталоге "/>
+    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Вы действительно хотите установить еще одну копию?"/>
+    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="Запись для программы удаления будет названа: "/>
 
     <str id="LicencePanel.info"     txt="Пожалуйста, внимательно прочитайте лицензию:"/>
     <str id="LicencePanel.agree"    txt="Я согласен с условиями лицензии."/>
@@ -85,9 +89,12 @@
     <str id="ImgPacksPanel.snap"     txt="Снимок экрана:"/>
     <str id="ImgPacksPanel.checkbox" txt=" Установить набор"/>
 
+    <str id="ShortcutPanel.headline"            txt="Настройки ярлыков"/>
     <str id="ShortcutPanel.regular.list"        txt="Выберите программную группу для ярлыков:"/>
     <str id="ShortcutPanel.regular.default"     txt="Сбросить"/>
     <str id="ShortcutPanel.regular.desktop"     txt="Создать ярлыки на рабочем столе"/>
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Start-Menu"/>
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu"     txt="K-Menu"/>
     <str id="ShortcutPanel.regular.create"      txt="Создать ярлыки"/>
     <str id="ShortcutPanel.regular.userIntro"   txt="создать ярлык для:"/>
     <str id="ShortcutPanel.regular.currentUser" txt="текущий пользователь"/>
@@ -155,6 +162,9 @@
     <str id="PacksPanel.summaryCaption"    txt="Выбранные наборы для установки"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Выбранные наборы для установки"/>
     <!-- Strings for the summary of panels - END -->
+
+    <!-- Strings for the Registry -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Невозможно открыть запись реестра {0}\\{1}."/>
 
     <!-- Add your own panels specific strings here if you need -->
 

@@ -1,6 +1,24 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.8.0 (build N/A)
+  > 3.8.1 (build 2006.01.06)
+- Added Greek language support (Fabrice Mirabile, thanks to Panayotis
+  Katsaloulis for the translation and flag).
+- New splashscreen artwork (Nicolas Deschaume).
+- Added IPAdress and ClassPath variable (Fabrice Mirabile).
+- Added HostName variable (Fabrice Mirabile, thanks to Oliver Kiddle).
+- Fixes for IPAdress (Fabrice Mirabile).
+- Patch for WebAccessor: indeterminate progress bar (Julian Payne).
+- Finish language support update (Ari Voutilainen).
+- Script parser fix when no application URL is given.
+- Fix for installer spanning screens with xinerama.
+- Fix for bug #4551 (Weiji Guo).
+- Subgrouping of shortcuts (Weiji Guo).
+- Added Korean language support (Fabrice Mirabile, thanks to Dongsu Jang).
+- Added new panel SelectedPrinterPanel which allows the user to chose any local
+  printer installed and set it to the $SELECTED_PRINTER variable. (Hal Vaughan 
+  and Fabrice Mirabile).
+
+  > 3.8.0 (build 2005.10.27)
 - Added 2 processor classes having the ability to fill a combobox 
   with all available unix user and groups (Thorsten Kamann)
 - All default values for the InputPanel (the values of the set attribute)

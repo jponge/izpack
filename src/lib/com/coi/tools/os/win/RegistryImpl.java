@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -228,7 +228,8 @@ public class RegistryImpl
         catch (NativeLibException ne)
         {
             String em = ne.getLibMessage();
-            if (em.equals("functionFailed.RegOpenKeyEx")) { return (false); }
+            if (em.equals("functionFailed.RegOpenKeyEx")
+                    || em.equals("functionFailed.RegQueryValueEx")) { return (false); }
             throw (ne);
         }
         return (true);
