@@ -102,3 +102,4 @@ IzPack for your projects ;-)
 - Stefan Heidrich : for the PacksPanel langpack loading patch.
 - Oliver Kiddle: for the patches
 - Julian Payne: for the patch on WebAccessor
+- Hal Vaughan: for the patches

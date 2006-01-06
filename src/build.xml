@@ -496,6 +496,9 @@
         <build-panel name="HelloPanel">
             <include name="com/izforge/izpack/panels/HelloPanel.java" />
         </build-panel>
+        <build-panel name="SelectPrinterPanel">
+	          <include name="com/izforge/izpack/panels/SelectPrinterPanel.java"/>
+	      </build-panel>
         <build-panel name="CheckedHelloPanel">
             <include name="com/izforge/izpack/panels/CheckedHelloPanel.java" />
             <include name="com/izforge/izpack/panels/HelloPanel.java" />
