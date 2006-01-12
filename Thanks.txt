@@ -100,6 +100,6 @@ IzPack for your projects ;-)
 - Fabrice Mirabile : for the patches.
 - Scott Starsk : for the patches.
 - Stefan Heidrich : for the PacksPanel langpack loading patch.
-- Oliver Kiddle: for the patches
+- Oliver Kiddle: for the patches and fixes
 - Julian Payne: for the patch on WebAccessor
 - Hal Vaughan: for the patches

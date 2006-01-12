@@ -109,27 +109,38 @@
         Clean up of CustomActions added.
         New uninstaller-ext.jar with native helper stuff for native libs
            in uninstaller.
+    
     14.10.2004: (by Klaus Bartz)
         New izevent.jar with the base classes of the custom action stuff
           to support creation of custom action jars without IzPack source tree
+    
     25.10.2004: (by Klaus Bartz)
         "Standard" CustomActions AntActionInstallerListener and
         AntActionUninstallerListener added
+    
     03.05.2005: (by Klaus Bartz)
         Target generated.installer-reg added:
         Creates an installer for IzPack with registry support
+    
     09.05.2005: (by Marc Eppelman)
         Target dist+run added:
         convenient :) makes a complete dist an installer and run them
+    
     11.05.2005: (by Fabrice Mirabile)
         Target cleandistreg added:
         Clean, Regenerate installer and installer with reg support. Avoid use of bad jars during installation.
+    
     18.07.2005: (by Julien Ponge)
     	Enforce source / target compatibility, now 1.4 / 1.4.
+    
     02.09.2005: (by Klaus Bartz)
     	Unicode support of ShellLink.
+    
     09.09.2005: (Marc.Eppelmann)
 		Added start.sh to the shipped files in bin-folder.
+		
+		10.01.2006: (by Fabrice Mirabile)
+		Added the splashscreen to the cleandistreg target
 
   Mini-HowTo:
 
@@ -984,7 +995,7 @@
 
     <!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
     <target name="cleandistreg"
-            depends="clean, dist, generate.installer-reg"
+            depends="clean, splashscreen, dist, generate.installer-reg"
             description="creates a full dist with Win32 uninstall registry support" />
 
     <!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->

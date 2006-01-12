@@ -2621,6 +2621,10 @@ public class UserInputPanel extends IzPanel
              * Check if the user has entered data into the ComboBox and add it to the Itemlist
              */
             String selected = (String) this.pathComboBox.getSelectedItem();
+            if (selected == null)
+            {
+                return false;
+            }
             boolean found = false;
             for (int x = 0; x < this.pathComboBox.getItemCount(); x++)
             {
