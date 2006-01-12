@@ -164,6 +164,7 @@ public class InstallerBase
         installdata.setVariable(ScriptParser.JAVA_HOME, System.getProperty("java.home"));
         installdata.setVariable(ScriptParser.CLASS_PATH, System.getProperty("java.class.path"));
         installdata.setVariable(ScriptParser.USER_HOME, System.getProperty("user.home"));
+        installdata.setVariable(ScriptParser.USER_NAME, System.getProperty("user.name"));
         installdata.setVariable(ScriptParser.IP_ADDRESS, IPAddress);
         installdata.setVariable(ScriptParser.HOST_NAME, hostname);
         installdata.setVariable(ScriptParser.FILE_SEPARATOR, File.separator);
