@@ -2728,7 +2728,7 @@ public class UserInputPanel extends IzPanel
             {
                 JFileChooser chooser = new JFileChooser();
 
-                if (this.searchType == RESULT_DIRECTORY)
+                if (this.resultType != TYPE_FILE)
                     chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
                 int result = chooser.showOpenDialog(this.parent);
