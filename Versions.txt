@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.8.1 (build 2006.mm.dd)
+  > 3.8.2 (build 2006.mm.dd)
 - Fix for ComboBox in SearchField of UserInputPanel returning java.lang.reflect.InvocationTargetException
   if no options added.(Fabrice Mirabile, thanks to Oliver Kiddle)
 - Added TroubleShooting for ShellLink.dll missing in help (DocBook and XHTML) (Fabrice Mirabile)
