@@ -400,7 +400,7 @@ public class Unpacker extends Thread
 
                                     int answer = handler.askQuestion(idata.langpack
                                             .getString("InstallPanel.overwrite.title")
-                                            + pathFile.getName(), idata.langpack
+                                            + " - " + pathFile.getName(), idata.langpack
                                             .getString("InstallPanel.overwrite.question")
                                             + pathFile.getAbsolutePath(),
                                             AbstractUIHandler.CHOICES_YES_NO, def_choice);
