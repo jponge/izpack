@@ -1,4 +1,6 @@
 [ The list of the different public versions of IzPack ]
+
+- Fixed getFreeSpace() on Tru64 machines (Marc Eppelmann, thanks to dinh.le@samcef.com)
  
  > 3.8.1 (build xxxx.xx.xx)
 - Added Greek language support (Fabrice Mirabile, thx to Panayotis Katsaloulis for the translation and flag)
