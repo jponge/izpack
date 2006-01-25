@@ -29,6 +29,10 @@ public interface OsVersionConstants
 
   /** SUNOS = "SunOS" */
   public final static String SUNOS = "SunOS";
+  
+  /** TRU64 = "OSF1" */   
+  public final static String TRU64 = "OSF1";
+  public final static String OSF1 = TRU64;
 
   /** OS_2 = "OS/2" */
   public final static String OS_2 = "OS/2";
