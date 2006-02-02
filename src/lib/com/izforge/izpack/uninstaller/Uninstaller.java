@@ -21,6 +21,7 @@ package com.izforge.izpack.uninstaller;
 
 import java.lang.reflect.Method;
 
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
@@ -56,16 +57,21 @@ public class Uninstaller
 
     public static void uninstall(String[] args)
     {
-        try
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            new UninstallerFrame();
-        }
-        catch (Exception err)
-        {
-            System.err.println("- Error -");
-            err.printStackTrace();
-            System.exit(0);
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                try
+                {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    new UninstallerFrame();
+                }
+                catch (Exception err)
+                {
+                    System.err.println("- Error -");
+                    err.printStackTrace();
+                    System.exit(0);
+                }
+            }
+        });
     }
 }

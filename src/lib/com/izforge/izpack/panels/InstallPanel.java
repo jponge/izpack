@@ -27,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
@@ -155,12 +156,18 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     /** The unpacker starts. */
     public void startAction(String name, int noOfJobs)
     {
-        parent.blockGUI();
-        // figure out how many packs there are to install
         this.noOfPacks = noOfJobs;
-        this.overallProgressBar.setMinimum(0);
-        this.overallProgressBar.setMaximum(this.noOfPacks);
-        this.overallProgressBar.setString("0 / " + Integer.toString(this.noOfPacks));
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                parent.blockGUI();
+                
+                // figure out how many packs there are to install
+                overallProgressBar.setMinimum(0);
+                overallProgressBar.setMaximum(noOfPacks);
+                overallProgressBar.setString("0 / " + Integer.toString(noOfPacks));
+            }
+        });
     }
 
     /**
@@ -179,30 +186,36 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     /** The unpacker stops. */
     public void stopAction()
     {
-        parent.releaseGUI();
-        parent.lockPrevButton();
-        // With custom actions it is possible, that the current value
-        // is not max - 1. Therefore we use always max for both
-        // progress bars to signal finish state.
-        this.overallProgressBar.setValue(this.overallProgressBar.getMaximum());
-        int ppbMax = packProgressBar.getMaximum();
-        if (ppbMax < 1)
-        {
-            ppbMax = 1;
-            packProgressBar.setMaximum(ppbMax);
-        }
-        this.packProgressBar.setValue(ppbMax);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                parent.releaseGUI();
+                parent.lockPrevButton();
+                
+                // With custom actions it is possible, that the current value
+                // is not max - 1. Therefore we use always max for both
+                // progress bars to signal finish state.
+                overallProgressBar.setValue(overallProgressBar.getMaximum());
+                int ppbMax = packProgressBar.getMaximum();
+                if (ppbMax < 1)
+                {
+                    ppbMax = 1;
+                    packProgressBar.setMaximum(ppbMax);
+                }
+                packProgressBar.setValue(ppbMax);
 
-        this.packProgressBar.setString(parent.langpack.getString("InstallPanel.finished"));
-        this.packProgressBar.setEnabled(false);
-        String no_of_packs = Integer.toString(this.noOfPacks);
-        this.overallProgressBar.setString(no_of_packs + " / " + no_of_packs);
-        this.overallProgressBar.setEnabled(false);
-        this.packOpLabel.setText(" ");
-        this.packOpLabel.setEnabled(false);
-        idata.canClose = true;
-        this.validated = true;
-        if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) parent.unlockNextButton();
+                packProgressBar.setString(parent.langpack.getString("InstallPanel.finished"));
+                packProgressBar.setEnabled(false);
+                String no_of_packs = Integer.toString(noOfPacks);
+                overallProgressBar.setString(no_of_packs + " / " + no_of_packs);
+                overallProgressBar.setEnabled(false);
+                packOpLabel.setText(" ");
+                packOpLabel.setEnabled(false);
+                idata.canClose = true;
+                validated = true;
+                if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) parent.unlockNextButton();
+            }
+        });
     }
 
     /**
@@ -211,10 +224,15 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
      * @param val The progression value.
      * @param msg The progression message.
      */
-    public void progress(int val, String msg)
+    public void progress(final int val, final String msg)
     {
-        this.packProgressBar.setValue(val + 1);
-        packOpLabel.setText(msg);
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                packProgressBar.setValue(val + 1);
+                packOpLabel.setText(msg);
+            }
+        });
     }
 
     /**
@@ -224,15 +242,20 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
      * @param stepno The number of the pack.
      * @param max The new maximum progress.
      */
-    public void nextStep(String packName, int stepno, int max)
+    public void nextStep(final String packName, final int stepno, final int max)
     {
-        this.packProgressBar.setValue(0);
-        this.packProgressBar.setMinimum(0);
-        this.packProgressBar.setMaximum(max);
-        this.packProgressBar.setString(packName);
-        this.overallProgressBar.setValue(stepno - 1);
-        this.overallProgressBar.setString(Integer.toString(stepno) + " / "
-                + Integer.toString(this.noOfPacks));
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                packProgressBar.setValue(0);
+                packProgressBar.setMinimum(0);
+                packProgressBar.setMaximum(max);
+                packProgressBar.setString(packName);
+                overallProgressBar.setValue(stepno - 1);
+                overallProgressBar.setString(Integer.toString(stepno) + " / "
+                        + Integer.toString(noOfPacks));                
+            }
+        });
     }
 
     /** Called when the panel becomes active. */

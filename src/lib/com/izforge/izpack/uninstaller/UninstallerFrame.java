@@ -48,6 +48,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import com.izforge.izpack.LocaleDatabase;
@@ -330,20 +331,30 @@ public class UninstallerFrame extends JFrame
          * @param name The name of the overall action. Not used here.
          * @param max The maximum value of the progress.
          */
-        public void startAction(String name, int max)
+        public void startAction(final String name, final int max)
         {
-            progressBar.setMinimum(0);
-            progressBar.setMaximum(max);
-            blockGUI();
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run()
+                {
+                    progressBar.setMinimum(0);
+                    progressBar.setMaximum(max);
+                    blockGUI();                    
+                }
+            });
         }
 
         /** The destroyer stops. */
         public void stopAction()
         {
-            progressBar.setString(langpack.getString("InstallPanel.finished"));
-            targetDestroyCheckbox.setEnabled(false);
-            destroyButton.setEnabled(false);
-            releaseGUI();
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run()
+                {
+                    progressBar.setString(langpack.getString("InstallPanel.finished"));
+                    targetDestroyCheckbox.setEnabled(false);
+                    destroyButton.setEnabled(false);
+                    releaseGUI();
+                }
+            });
         }
 
         /**
@@ -352,10 +363,15 @@ public class UninstallerFrame extends JFrame
          * @param pos The actual position.
          * @param message The message.
          */
-        public void progress(int pos, String message)
+        public void progress(final int pos, final String message)
         {
-            progressBar.setValue(pos);
-            progressBar.setString(message);
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run()
+                {
+                    progressBar.setValue(pos);
+                    progressBar.setString(message);
+                }
+            });
         }
 
         public void nextStep(String step_name, int step_no, int no_of_substeps)

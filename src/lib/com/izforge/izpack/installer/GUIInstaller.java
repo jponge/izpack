@@ -56,6 +56,7 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
@@ -116,7 +117,19 @@ public class GUIInstaller extends InstallerBase
         checkJavaVersion();
 
         // Loads the suitable langpack
-        loadLangPack();
+        SwingUtilities.invokeAndWait(new Runnable() {
+            public void run()
+            {
+                try
+                {
+                    loadLangPack();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // create the resource manager (after the language selection!)
         ResourceManager.create(this.installdata);
@@ -125,7 +138,19 @@ public class GUIInstaller extends InstallerBase
         addCustomLangpack(installdata);
 
         // We launch the installer GUI
-        loadGUI();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                try
+                {
+                    loadGUI();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
