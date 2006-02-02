@@ -5,7 +5,9 @@
   if no options added.(Fabrice Mirabile, thanks to Oliver Kiddle)
 - Fix for the header of the window runs the message into
 the filename (Fabrice Mirabile, thanks to Oliver Kiddle)
-- Added TroubleShooting for ShellLink.dll missing in help (DocBook and XHTML) (Fabrice Mirabile)
+- Added TroubleShooting for ShellLink.dll missing in help (DocBook and XHTML) (Fabrice Mirabile).
+- Swing threading fixes (Julien Ponge).
+
 
   > 3.8.1 (build 2006.01.06)
 - Added Greek language support (Fabrice Mirabile, thanks to Panayotis
