@@ -85,7 +85,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
 
     /** True if SuSE Linux was detected */
     public static final boolean IS_SUSE_LINUX = IS_LINUX
-            && FileUtil.fileContains( getReleaseFileName(), SUSE );
+            && FileUtil.fileContains( getReleaseFileName(), SUSE, true );  /*  caseInsensitive , since 'SUSE' 10 */
 
     /** True if Debian Linux or derived was detected */
     public static final boolean IS_DEBIAN_LINUX = (IS_LINUX
