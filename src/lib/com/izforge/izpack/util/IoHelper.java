@@ -296,6 +296,14 @@ public class IoHelper
             fe.executeCommand(params, output);
             retval = extractLong(output[0], -3, 3, "%") * 1024;
         }
+        else if (OsVersion.IS_HPUX)
+        {
+            String[] params = { "bdf", path };
+            String[] output = new String[2];
+            FileExecutor fe = new FileExecutor();
+            fe.executeCommand(params, output);
+            retval = extractLong(output[0], -3, 3, "%") * 1024;
+        }
         else if (OsVersion.IS_UNIX)
         {
             String[] params = { "df", "-Pk", path};
