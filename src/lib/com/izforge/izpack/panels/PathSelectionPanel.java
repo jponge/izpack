@@ -193,5 +193,16 @@ public class PathSelectionPanel extends JPanel implements ActionListener
     {
         return textField;
     }
+    
+     /**
+     * Returns the browse button object for modification or for use
+     * with a different ActionListener.
+     *
+     * @return the browse button to open the JFileChooser
+     */
+    public JButton getBrowseButton()
+    {
+    return browseButton;
+    }
 
 }
