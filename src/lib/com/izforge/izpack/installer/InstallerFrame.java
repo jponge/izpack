@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -26,9 +26,10 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
+import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -397,7 +398,10 @@ public class InstallerFrame extends JFrame
             panelsContainer.setVisible(false);
             IzPanel panel = (IzPanel) installdata.panels.get(installdata.curPanelNumber);
             IzPanel l_panel = (IzPanel) installdata.panels.get(last);
-            l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
+            //instead of writing data here which leads to duplicated entries in
+            //auto-installation script (bug # 4551), let's make data only immediately before
+            //writing out that script.
+            //l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
 
             if (installdata.curPanelNumber == 0)
             {
@@ -677,10 +681,10 @@ public class InstallerFrame extends JFrame
      */
     public void centerFrame(Window frame)
     {
+        Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         Dimension frameSize = frame.getSize();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation((screenSize.width - frameSize.width) / 2,
-                (screenSize.height - frameSize.height) / 2 - 10);
+        frame.setLocation(center.x - frameSize.width / 2,
+                center.y - frameSize.height / 2 - 10);
     }
 
     /**
@@ -805,7 +809,14 @@ public class InstallerFrame extends JFrame
     public void writeXMLTree(XMLElement root, OutputStream out) throws Exception
     {
         XMLWriter writer = new XMLWriter(out);
-        writer.write(root);
+        //fix bug# 4551
+        //writer.write(root);
+        for (int i = 0; i < installdata.panels.size(); i++)
+        {
+            IzPanel panel = (IzPanel)installdata.panels.get(i);
+            panel.makeXMLData(installdata.xmlData.getChildAtIndex(i));
+        }
+        writer.write(installdata.xmlData);
     }
 
     /**

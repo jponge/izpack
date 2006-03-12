@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -42,6 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
+import javax.swing.JProgressBar;
 
 /**
  * Dialogs for password authentication and firewall specification, when needed, during web
@@ -120,8 +121,13 @@ public class WebAccessor
     {
         // TODO: i18n everything
         Object[] options = { soloCancelOption};
-        JOptionPane pane = new JOptionPane("Connecting to the Internet",
-                JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, null, options,
+        
+        JProgressBar progressBar = new JProgressBar(1, 100);
+        progressBar.setIndeterminate(true);
+        Object[] contents = { "Connecting to the Internet", progressBar };
+        JOptionPane pane = new JOptionPane(contents, 
+        				JOptionPane.INFORMATION_MESSAGE, 
+        				JOptionPane.DEFAULT_OPTION, null, options,
                 options[0]);
         dialog = pane.createDialog(parent, "Accessing Install Files");
         pane.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

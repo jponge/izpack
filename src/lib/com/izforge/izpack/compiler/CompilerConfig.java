@@ -1,6 +1,6 @@
 /*
  * $Id$
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -1693,7 +1693,7 @@ public class CompilerConfig extends Thread
         System.out.println("");
         System.out.println("< compiler specifications version : " + VERSION + " >");
         System.out.println("");
-        System.out.println("- Copyright (C) 2001-2005 Julien Ponge");
+        System.out.println("- Copyright (C) 2001-2006 Julien Ponge");
         System.out.println("- Visit http://www.izforge.com/ for the latests releases");
         System.out.println("- Released under the terms of the Apache Software License version 2.0.");
         System.out.println("");
@@ -1714,23 +1714,14 @@ public class CompilerConfig extends Thread
 
             // First check
             int nArgs = args.length;
-            if (nArgs < 3) throw new Exception("no arguments given");
+            if (nArgs < 1) throw new Exception("no arguments given");
 
-            // We get the IzPack home directory
-            int stdArgsIndex;
+            // We get the IzPack home directory 
             String home = ".";
-            if (args[0].equalsIgnoreCase("-HOME"))
-            {
-                stdArgsIndex = 2;
-                home = args[1];
-            }
-            else
-            {
-                stdArgsIndex = 0;
-                String izHome = System.getProperty("IZPACK_HOME");
-                if (izHome != null) home = izHome;
-            }
-
+            String izHome = System.getProperty("IZPACK_HOME");
+						if (izHome != null) home = izHome;
+						
+						
             File homeFile = new File(home);
             if (!homeFile.exists() && homeFile.isDirectory())
             {
@@ -1740,7 +1731,7 @@ public class CompilerConfig extends Thread
             Compiler.setIzpackHome(home);
 
             // The users wants to know the command line parameters
-            if (args[stdArgsIndex].equalsIgnoreCase("-?"))
+            if (args[0].equalsIgnoreCase("-?"))
             {
                 System.out.println("-> Command line parameters are : (xml file) [args]");
                 System.out.println("   (xml file): the xml file describing the installation");
@@ -1756,9 +1747,9 @@ public class CompilerConfig extends Thread
                 System.out.println("   -l (compression-level)  : indicates the level for the used compression format");
                 System.out.println("                if supported. Only integer are valid\n");
 
-                System.out
-                        .println("   When using vm option -DSTACKTRACE=true there is all kind of debug info ");
+                System.out.println("   When using vm option -DSTACKTRACE=true there is all kind of debug info ");
                 System.out.println("");
+                exitCode = 0;
             }
             else
             {
@@ -1767,12 +1758,12 @@ public class CompilerConfig extends Thread
 
                 // We get the input file name and we initialize the output file
                 // name
-                filename = args[stdArgsIndex];
+                filename = args[0];
                 // default jar files names are based on input file name
                 output = filename.substring(0, filename.length() - 3) + "jar";
 
                 // We parse the other ones
-                int pos = stdArgsIndex + 1;
+                int pos = 1;
                 while (pos < nArgs)
                     if ((args[pos].startsWith("-")) && (args[pos].length() == 2))
                     {

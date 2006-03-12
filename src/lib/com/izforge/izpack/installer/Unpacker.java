@@ -1,6 +1,6 @@
 /*
  * $Id$
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -400,7 +400,7 @@ public class Unpacker extends Thread
 
                                     int answer = handler.askQuestion(idata.langpack
                                             .getString("InstallPanel.overwrite.title")
-                                            + pathFile.getName(), idata.langpack
+                                            + " - " + pathFile.getName(), idata.langpack
                                             .getString("InstallPanel.overwrite.question")
                                             + pathFile.getAbsolutePath(),
                                             AbstractUIHandler.CHOICES_YES_NO, def_choice);

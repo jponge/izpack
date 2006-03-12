@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -23,9 +23,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,6 +56,7 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;
@@ -114,7 +117,19 @@ public class GUIInstaller extends InstallerBase
         checkJavaVersion();
 
         // Loads the suitable langpack
-        loadLangPack();
+        SwingUtilities.invokeAndWait(new Runnable() {
+            public void run()
+            {
+                try
+                {
+                    loadLangPack();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         // create the resource manager (after the language selection!)
         ResourceManager.create(this.installdata);
@@ -123,7 +138,19 @@ public class GUIInstaller extends InstallerBase
         addCustomLangpack(installdata);
 
         // We launch the installer GUI
-        loadGUI();
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                try
+                {
+                    loadGUI();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -529,9 +556,9 @@ public class GUIInstaller extends InstallerBase
                 setSize(getPreferredSize());
 
             Dimension frameSize = getSize();
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            setLocation((screenSize.width - frameSize.width) / 2,
-                    (screenSize.height - frameSize.height) / 2 - 10);
+            Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
+            setLocation(center.x - frameSize.width / 2,
+                    center.y - frameSize.height / 2 - 10);
             setResizable(true);
         }
 

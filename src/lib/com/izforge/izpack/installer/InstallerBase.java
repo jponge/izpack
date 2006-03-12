@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.net.InetAddress;
 
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.Info;
@@ -92,7 +93,8 @@ public class InstallerBase
 
         // We put the Info data as variables
         installdata.setVariable(ScriptParser.APP_NAME, inf.getAppName());
-        installdata.setVariable(ScriptParser.APP_URL, inf.getAppURL());
+        if (inf.getAppURL() != null)
+            installdata.setVariable(ScriptParser.APP_URL, inf.getAppURL());
         installdata.setVariable(ScriptParser.APP_VER, inf.getAppVersion());
 
         // We read the panels order data
@@ -137,11 +139,34 @@ public class InstallerBase
                 dir = System.getProperty("user.home");
             }
         }
+        
+        // We determine the hostname and IPAdress
+        String hostname;
+        String IPAddress;
+        
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+    
+		        // Get IP Address
+		        IPAddress = addr.getHostAddress();
+		    
+		        // Get hostname
+		        hostname = addr.getHostName();
+        } catch (Exception e) {
+            hostname = "";
+            IPAddress = "";
+        }
+        
+				
+
         installdata.setVariable("APPLICATIONS_DEFAULT_ROOT", dir);
         dir = dir + File.separator;
         installdata.setVariable(ScriptParser.JAVA_HOME, System.getProperty("java.home"));
+        installdata.setVariable(ScriptParser.CLASS_PATH, System.getProperty("java.class.path"));
         installdata.setVariable(ScriptParser.USER_HOME, System.getProperty("user.home"));
         installdata.setVariable(ScriptParser.USER_NAME, System.getProperty("user.name"));
+        installdata.setVariable(ScriptParser.IP_ADDRESS, IPAddress);
+        installdata.setVariable(ScriptParser.HOST_NAME, hostname);
         installdata.setVariable(ScriptParser.FILE_SEPARATOR, File.separator);
 
         Enumeration e = System.getProperties().keys();

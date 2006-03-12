@@ -1,11 +1,31 @@
 [ The list of the different public versions of IzPack ]
 
-- Fixed getFreeSpace() on Tru64 machines (Marc Eppelmann, thanks to dinh.le@samcef.com)
- 
- > 3.8.1 (build xxxx.xx.xx)
-- Added Greek language support (Fabrice Mirabile, thx to Panayotis Katsaloulis for the translation and flag)
+  > 3.9.0 (build 2006.mm.dd)
+- Fix for ComboBox in SearchField of UserInputPanel returning java.lang.reflect.InvocationTargetException
+  if no options added.(Fabrice Mirabile, thanks to Oliver Kiddle)
+- Fix for the header of the window runs the message into
+  the filename (Fabrice Mirabile, thanks to Oliver Kiddle)
+- Added TroubleShooting for ShellLink.dll missing in help (DocBook and XHTML) (Fabrice Mirabile).
+- Swing threading fixes (Julien Ponge).
+
+
+  > 3.8.1 (build 2006.01.06)
+- Added Greek language support (Fabrice Mirabile, thanks to Panayotis
+  Katsaloulis for the translation and flag).
 - New splashscreen artwork (Nicolas Deschaume).
-- Added Korean language support (Fabrice Mirabile, thanks to Dongsu Jang)
+- Added IPAdress and ClassPath variable (Fabrice Mirabile).
+- Added HostName variable (Fabrice Mirabile, thanks to Oliver Kiddle).
+- Fixes for IPAdress (Fabrice Mirabile).
+- Patch for WebAccessor: indeterminate progress bar (Julian Payne).
+- Finish language support update (Ari Voutilainen).
+- Script parser fix when no application URL is given.
+- Fix for installer spanning screens with xinerama.
+- Fix for bug #4551 (Weiji Guo).
+- Subgrouping of shortcuts (Weiji Guo).
+- Added Korean language support (Fabrice Mirabile, thanks to Dongsu Jang).
+- Added new panel SelectedPrinterPanel which allows the user to chose any local
+  printer installed and set it to the $SELECTED_PRINTER variable. (Hal Vaughan 
+  and Fabrice Mirabile).
 
   > 3.8.0 (build 2005.10.27)
 - Added 2 processor classes having the ability to fill a combobox 

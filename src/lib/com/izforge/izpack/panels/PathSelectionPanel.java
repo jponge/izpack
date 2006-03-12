@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -192,6 +192,17 @@ public class PathSelectionPanel extends JPanel implements ActionListener
     public JTextField getPathInputField()
     {
         return textField;
+    }
+    
+     /**
+     * Returns the browse button object for modification or for use
+     * with a different ActionListener.
+     *
+     * @return the browse button to open the JFileChooser
+     */
+    public JButton getBrowseButton()
+    {
+    return browseButton;
     }
 
 }

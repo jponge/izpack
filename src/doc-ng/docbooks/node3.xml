@@ -267,7 +267,38 @@ select "Add External JARs..."<?db2html element="br"?>
 select %INSTALLER_DEST%\install.jar (may be, that's the trick...)<?db2html element="br"?>
 install.jar must be under the project entry<?db2html element="br"?>
 
-For 2.x :<?db2html element="br"?>
+
+<para>BUGS and TROUBLESHOOTING</para>
+<programlisting>
+If you get this error when running the application 
+could not create shortcut instance
+java.lang.Exception: error loading library
+	at com.izforge.izpack.util.Librarian.loadLibrary(Librarian.java:249)
+	at com.izforge.izpack.util.os.ShellLink.initialize(ShellLink.java:461)
+	at com.izforge.izpack.util.os.ShellLink.&lt;init&gt;(ShellLink.java:349)
+	at com.izforge.izpack.util.os.Win_Shortcut.initialize(Win_Shortcut.java:79)
+	at com.izforge.izpack.panels.ShortcutPanel.&lt;init&gt;(ShortcutPanel.java:473)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at com.izforge.izpack.installer.InstallerFrame.loadPanels(InstallerFrame.java:203)
+	at com.izforge.izpack.installer.InstallerFrame.&lt;init&gt;(InstallerFrame.java:160)
+	at com.izforge.izpack.installer.GUIInstaller.loadGUI(GUIInstaller.java:391)
+	at com.izforge.izpack.installer.GUIInstaller.&lt;init&gt;(GUIInstaller.java:128)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at java.lang.Class.newInstance0(Unknown Source)
+	at java.lang.Class.newInstance(Unknown Source)
+	at com.izforge.izpack.installer.Installer.main(Installer.java:62)
+</programlisting>
+then it means you forgot to put the shelllink.dll into the correct source folder
+in that case, copy %IZPACK_HOME%\bin\native\izpack\ShellLink.dll  to<?db2html element="br"?>
+%IZPACK_HOME%\src\lib\com\izforge\izpack\util\os\ShellLink.dll<?db2html element="br"?><?db2html element="br"?>
+
+
 copy %IZPACK_HOME%\bin\native\izpack\ShellLink.dll  to<?db2html element="br"?>
 %IZPACK_HOME%\src\lib\com\izforge\izpack\util\os\ShellLink.dll<?db2html element="br"?><?db2html element="br"?>
 

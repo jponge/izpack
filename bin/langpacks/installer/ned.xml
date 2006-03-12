@@ -29,10 +29,6 @@
     <str id="HelloPanel.authors" txt="Deze software is ontwikkeld door : "/>
     <str id="HelloPanel.url" txt="De homepagina staat op : "/>
     
-    <str id="CheckedHelloPanel.productAlreadyExist0" txt="Dit product is al geinstalleerd op deze computer in de map "/>
-    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Weet u zeker dat u een extra versie wilt installeren?"/>
-    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="De de-installatie zal als naam krijgen: " />
-
     <str id="LicencePanel.info" txt="Lees a.u.b. de volgende licentie overeenkomst :"/>
     <str id="LicencePanel.agree" txt="Ik accepteer de voorwaarden van deze licentie"/>
     <str id="LicencePanel.notagree" txt="Ik accepteer de voorwaarden van deze licentie niet"/>
@@ -93,13 +89,9 @@
     <str id="ImgPacksPanel.checkbox" txt=" Installeer dit pakket"/>
     <str id="ImgPacksPanel.dependencyList" txt="Afhankelijkheden"/>
 
-    <str id="ShortcutPanel.headline" txt="Instellen snelkoppelingen"/>    
     <str id="ShortcutPanel.regular.list" txt="Selecteer een programma groep voor de snelkoppelingen:"/>
     <str id="ShortcutPanel.regular.default" txt="Standaardwaarde"/>
     <str id="ShortcutPanel.regular.desktop" txt="Maak snelkoppelingen op de desktop."/>
-    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Start-Menu"/>
-    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
-
     <str id="ShortcutPanel.regular.create" txt="Maak Snelkoppelingen"/>
     <str id="ShortcutPanel.regular.userIntro" txt="Maak snelkoppeling voor:"/>
     <str id="ShortcutPanel.regular.currentUser" txt="huidige gebruiker "/>
@@ -161,13 +153,13 @@
 
     <str id="ProcessPanel.heading" txt="Bezig" />
 
-    <!-- Strings for the summary of panels - START -->
+    <!-- Strings for the summary of panels --- START -->
     <str id="SummaryPanel.info" txt="Gereed voor installatie. Belangrijke gegevens staan hieronder opgesomd. Druk op &quot;Volgende&quot; om de installatie te starten, "/>
     <str id="TargetPanel.summaryCaption" txt="Installatie pad"/>
     <str id="JDKPathPanel.summaryCaption" txt="JDK pad"/>
     <str id="PacksPanel.summaryCaption" txt="Gekozen installatiepakketten"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Gekozen installatie pakketten"/>
-    <!-- Strings for the summary of panels - END -->
+    <!-- Strings for the summary of panels --- END -->
 
     <!-- Strings for the Registry -->
     <str id="functionFailed.RegOpenKeyEx" txt="Kan registersleutel {0}\\{1} niet openen."/>

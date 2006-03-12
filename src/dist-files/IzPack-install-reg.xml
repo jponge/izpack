@@ -2,9 +2,9 @@
     $Id$
 
     IzPack installer XML file with registry custom actions.
-    
+
     By Julien PONGE
-    
+
     In order to build an installer for IzPack, let's create a directory
     named '_dist' in the IzPack root directory. Then copy the files from
     'src/dist-files' into '_dist'. Copy your IzPack image, that is all
@@ -12,7 +12,7 @@
     you'll get bin/, lib/, ... and text files like Versions.txt and so
     on. Now you can invoke the IzPack compiler and it will generate the
     installer.
-    
+
     Alternatively, you can use the IzPack Ant makefile and run 'ant dist'. It's
     much simpler :-)
 -->
@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.8.0 (build 2005.10.27)</appversion>
+        <appversion>3.8.1 (build 2006.01.06)</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)" />
 
@@ -42,6 +42,14 @@
             <author email="" name="Christian Murphy (contributor)" />
             <author email="" name="Vitor Rodrigues (contributor)" />
             <author email="" name="Oscar Sierra (contributor)" />
+            <author email="" name="Nicolas Deschaume (contributor)" />
+            <author email="" name="Oliver Kiddle (contributor)" />
+            <author email="" name="Julian Payne (contributor)" />
+            <author email="" name="Panayotis Katsaloulis (contributor)" />
+            <author email="" name="Ari Voutilainen (contributor)" />
+            <author email="" name="Weiji Guo (contributor)" />
+            <author email="" name="Hal Vaughan (contributor)" />
+            <author email="" name="Dongsu Jang (contributor)" />
 
             <author email=""
                 name="... the many other developers and contributors to the previous releases (see Thanks.txt)" />
@@ -64,76 +72,77 @@
 
     <!-- We include every langpack -->
     <locale>
-        <langpack iso3="eng" />
-        <langpack iso3="fra" />
-        <langpack iso3="deu" />
-        <langpack iso3="ita" />
-        <langpack iso3="jpn" />
-        <langpack iso3="spa" />
-        <langpack iso3="dan" />
+        <langpack iso3="eng"/>
+        <langpack iso3="fra"/>
+        <langpack iso3="deu"/>
+        <langpack iso3="ita"/>
+        <langpack iso3="jpn"/>
+        <langpack iso3="spa"/>
+        <langpack iso3="dan"/>
         <langpack iso3="ell" />
-        <langpack iso3="cat" />
-        <langpack iso3="ned" />
-        <langpack iso3="fin" />
-        <langpack iso3="swe" />
-        <langpack iso3="por" />
-        <langpack iso3="pol" />
-        <langpack iso3="rus" />
-        <langpack iso3="ukr" />
-        <langpack iso3="hun" />
-        <langpack iso3="svk" />
-        <langpack iso3="rom" />
-        <langpack iso3="mys" />
-        <langpack iso3="nor" />
-        <langpack iso3="chn" />
-        <langpack iso3="scg" />
-        <langpack iso3="cze" />
+        <langpack iso3="cat"/>
+        <langpack iso3="ned"/>
+        <langpack iso3="fin"/>
+        <langpack iso3="swe"/>
+        <langpack iso3="por"/>
+        <langpack iso3="pol"/>
+        <langpack iso3="rus"/>
+        <langpack iso3="ukr"/>
+        <langpack iso3="hun"/>
+        <langpack iso3="svk"/>
+        <langpack iso3="rom"/>
+        <langpack iso3="mys"/>
+        <langpack iso3="nor"/>
+        <langpack iso3="chn"/>
+        <langpack iso3="scg"/>
+        <langpack iso3="cze"/>
+        <langpack iso3="kor"/>
     </locale>
 
     <!-- The resources needed by the various panels -->
     <resources>
-        <res src="install-readme.html" id="HTMLInfoPanel.info" />
-        <res src="Licence.txt" id="LicencePanel.licence" />
-        <res src="langsel.jpg" id="installer.langsel.img" />
-        <res src="shortcutSpec.xml" id="shortcutSpec.xml" />
-        <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml" />
+        <res src="install-readme.html" id="HTMLInfoPanel.info"/>
+        <res src="Licence.txt" id="LicencePanel.licence"/>
+        <res src="splash-sydney.png" id="installer.langsel.img"/>
+        <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
+        <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0" />
         <res src="doc-html.png" id="ImgPacksPanel.img.1" />
         <res src="javadocs.png" id="ImgPacksPanel.img.2" />
         <res src="doc-nanoxml.png" id="ImgPacksPanel.img.3" />
-        <!--    
-            <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />        
-        -->
-        <res src="sample.png" id="ImgPacksPanel.img.4" />
-        <res src="src.png" id="ImgPacksPanel.img.5" />
-        <res src="border1.png" id="Installer.image.0" />
-        <res src="border2.png" id="Installer.image.1" />
-        <res src="border3.png" id="Installer.image.2" />
-        <res src="border4.png" id="Installer.image.3" />
-        <res src="border5.png" id="Installer.image.4" />
-        <res src="border5.png" id="Installer.image.5" />
-        <res src="border6.png" id="Installer.image.6" />
-        <res src="border7.png" id="Installer.image.7" />
-        <res src="border8.png" id="Installer.image.8" />
+<!--    
+        <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />
+-->
+	      <res src="sample.png"  id="ImgPacksPanel.img.4" />
+        <res src="src.png"     id="ImgPacksPanel.img.5" />
+        <res src="border1.png" id="Installer.image.0"/>
+        <res src="border2.png" id="Installer.image.1"/>
+        <res src="border3.png" id="Installer.image.2"/>
+        <res src="border4.png" id="Installer.image.3"/>
+        <res src="border5.png" id="Installer.image.4"/>
+        <res src="border5.png" id="Installer.image.5"/>
+        <res src="border6.png" id="Installer.image.6"/>
+        <res src="border7.png" id="Installer.image.7"/>
+        <res src="border8.png" id="Installer.image.8"/>
         <res src="RegistrySpec.xml" id="RegistrySpec.xml"/>
     </resources>
 
     <!-- The panels in a classic order -->
     <panels>
-        <panel classname="CheckedHelloPanel" />
-        <panel classname="HTMLInfoPanel" />
-        <panel classname="LicencePanel" />
-        <panel classname="TargetPanel" />
-        <panel classname="ImgPacksPanel" />
-        <panel classname="SummaryPanel" />
-        <panel classname="InstallPanel" />
-        <panel classname="ShortcutPanel" />
-        <panel classname="SimpleFinishPanel" />
+        <panel classname="CheckedHelloPanel"/>
+        <panel classname="HTMLInfoPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="ImgPacksPanel"/>
+        <panel classname="SummaryPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="ShortcutPanel"/>
+        <panel classname="SimpleFinishPanel"/>
     </panels>
 
     <!-- The listeners section for CustomActions -->
     <listeners>
-        <listener installer="SummaryLoggerInstallerListener" />
+        <listener installer="SummaryLoggerInstallerListener"/>
         <listener installer="RegistryInstallerListener" uninstaller="RegistryUninstallerListener">
             <os family="windows"/>
         </listener>
@@ -146,53 +155,50 @@
         <pack name="Core" required="yes">
             <description>The IzPack core files.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="*.txt" />
-                <include name="bin/**/*" />
-                <include name="lib/**/*" />
-                <include name="legal/**/*" />
+              <include name="*.txt" />
+              <include name="bin/**/*" />
+              <include name="lib/**/*" />
+              <include name="legal/**/*" />
             </fileset>
-            <executable targetfile="$INSTALL_PATH/bin/compile" stage="never" />
-            <executable targetfile="$INSTALL_PATH/bin/start.sh" stage="never" />
+            <executable targetfile="$INSTALL_PATH/bin/compile" stage="never"/>
+            <executable targetfile="$INSTALL_PATH/bin/start.sh" stage="never"/>
         </pack>
 
         <!-- The documentation -->
         <pack name="XHTML Documentation" required="no">
             <description>The IzPack documentation (XHTML version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="doc/izpack/xhtml/**/*" />
+              <include name="doc/izpack/xhtml/**/*" />              
             </fileset>
         </pack>
         <pack name="Java Documentation" required="no">
-            <description>
-                The IzPack Java documentation (Javadocs for IzPack developers).
-            </description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="doc/izpack/javadoc/**/*" />
+            <description>The IzPack Java documentation (Javadocs for IzPack developers).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">              
+              <include name="doc/izpack/javadoc/**/*" />
             </fileset>
         </pack>
-        <!--
-            Disabled while doc-ng not provides a pdf ...
-            
-            <pack name="PDF Documentation" required="no">
+<!--    
+      Disabled while doc-ng not provides a pdf ...
+  
+        <pack name="PDF Documentation" required="no">
             <description>The IzPack documentation (PDF version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-            <include name="doc/izpack/pdf/**/*" />
+              <include name="doc/izpack/pdf/**/*" />
             </fileset>
-            </pack>
-        -->
+        </pack>
+-->
         <pack name="NanoXML Documentation" required="no">
             <description>NanoXML documentation (for IzPack developers).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="doc/nanoxml/**/*" />
+              <include name="doc/nanoxml/**/*" />
             </fileset>
         </pack>
-
 
         <!-- A trivial sample to get started -->
         <pack name="Sample" required="no">
             <description>A sample installation.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="sample/**/*" />
+              <include name="sample/**/*" />
             </fileset>
         </pack>
 
@@ -200,18 +206,18 @@
         <pack name="Sources" required="no">
             <description>The full IzPack source code.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="src/**/*" />
-                <exclude name="src/*.manifest" />
+              <include name="src/**/*" />
+              <exclude name="src/*.manifest" />
             </fileset>
         </pack>
 
     </packs>
 
-    <!-- The native libraries to add -->
+     <!-- The native libraries to add -->
     <native type="3rdparty" name="COIOSHelper.dll" stage="both">
         <os family="windows"/>
     </native>
-    <native type="izpack" name="ShellLink.dll" />
+    <native type="izpack" name="ShellLink.dll"/>
 
 
 </installation>

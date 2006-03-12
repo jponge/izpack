@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -21,6 +21,7 @@ package com.izforge.izpack.uninstaller;
 
 import java.lang.reflect.Method;
 
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
@@ -56,16 +57,21 @@ public class Uninstaller
 
     public static void uninstall(String[] args)
     {
-        try
-        {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            new UninstallerFrame();
-        }
-        catch (Exception err)
-        {
-            System.err.println("- Error -");
-            err.printStackTrace();
-            System.exit(0);
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                try
+                {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                    new UninstallerFrame();
+                }
+                catch (Exception err)
+                {
+                    System.err.println("- Error -");
+                    err.printStackTrace();
+                    System.exit(0);
+                }
+            }
+        });
     }
 }

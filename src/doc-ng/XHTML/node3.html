@@ -278,7 +278,7 @@ second one did launch it.
 <h1><a name="section00350000000000000000">How to develop and debug IpPack using Eclipse</a></h1>
 <p>
 (thanks to Bartz Klaus)<br /><br />
-Here are the steps needed to develop and debug IzPack with Eclipse:
+Here are the steps needed to develop adn debug IzPack with Eclipse:
 </p>
 <ol>
 <li class="disc"><h2><a name="section00351000000000000000">IzPack Installation</a></h2>
@@ -338,10 +338,35 @@ select the tab "Classpath"<br />
 select "User classes" (2.x) or "User Entries" (3.x)<br />
 select "Add External JARs..."<br />
 select %INSTALLER_DEST%\install.jar (may be, that's the trick...)<br />
-install.jar must be under the project entry<br />
+install.jar must be under the project entry<br /><br />
 
-For 2.x :<br />
-copy %IZPACK_HOME%\bin\native\izpack\ShellLink.dll  to<br />
+<p class="underlinebold">BUGS and TROUBLESHOOTING:</p>
+If you get this error when running the application <br />
+could not create shortcut instance<br /><br />
+java.lang.Exception: error loading library<br />
+at com.izforge.izpack.util.Librarian.loadLibrary(Librarian.java:249)<br />
+at com.izforge.izpack.util.os.ShellLink.initialize(ShellLink.java:461)<br />
+at com.izforge.izpack.util.os.ShellLink.&lt;init&gt;(ShellLink.java:349)<br />
+at com.izforge.izpack.util.os.Win_Shortcut.initialize(Win_Shortcut.java:79)<br />
+at com.izforge.izpack.panels.ShortcutPanel.&lt;init&gt;(ShortcutPanel.java:473)<br />
+at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)<br />
+at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)<br />
+at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)<br />
+at java.lang.reflect.Constructor.newInstance(Unknown Source)<br />
+at com.izforge.izpack.installer.InstallerFrame.loadPanels(InstallerFrame.java:203)<br />
+at com.izforge.izpack.installer.InstallerFrame.&lt;init&gt;(InstallerFrame.java:160)<br />
+at com.izforge.izpack.installer.GUIInstaller.loadGUI(GUIInstaller.java:391)<br />
+at com.izforge.izpack.installer.GUIInstaller.&lt;init&gt;(GUIInstaller.java:128)<br />
+at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)<br />
+at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)<br />
+at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)<br />
+at java.lang.reflect.Constructor.newInstance(Unknown Source)<br />
+at java.lang.Class.newInstance0(Unknown Source)<br />
+at java.lang.Class.newInstance(Unknown Source)<br />
+at com.izforge.izpack.installer.Installer.main(Installer.java:62)<br /><br />
+
+then it means you forgot to put the shelllink.dll into the correct source folder
+in that case, copy %IZPACK_HOME%\bin\native\izpack\ShellLink.dll  to<br />
 %IZPACK_HOME%\src\lib\com\izforge\izpack\util\os\ShellLink.dll<br /><br />
 
 Now you can debug the installation. With 2.x you can edit on demand,<br />

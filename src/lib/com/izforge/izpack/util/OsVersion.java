@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/ http://developer.berlios.de/projects/izpack/
  * 
@@ -50,9 +50,6 @@ public final class OsVersion implements OsVersionConstants, StringConstants
 
     /** True if this is SunOS. */
     public static final boolean IS_SUNOS = StringTool.startsWithIgnoreCase(OS_NAME, SUNOS );
-    
-    /** True if this is Tru64. */
-    public static final boolean IS_TRU64 = StringTool.startsWithIgnoreCase(OS_NAME, TRU64 );
 
     /** True if this is OS/2. */
     public static final boolean IS_OS2 = StringTool.startsWith(OS_NAME, OS_2 );
@@ -88,7 +85,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
 
     /** True if SuSE Linux was detected */
     public static final boolean IS_SUSE_LINUX = IS_LINUX
-            && FileUtil.fileContains( getReleaseFileName(), SUSE, true ); /*  caseInsensitive , since 'SUSE' 10 */
+            && FileUtil.fileContains( getReleaseFileName(), SUSE, true );  /*  caseInsensitive , since 'SUSE' 10 */
 
     /** True if Debian Linux or derived was detected */
     public static final boolean IS_DEBIAN_LINUX = (IS_LINUX
