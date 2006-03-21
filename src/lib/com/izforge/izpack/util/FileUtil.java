@@ -106,8 +106,8 @@ public class FileUtil
   {
     boolean result = false;
 
-    String  searchString = new String( caseInSensitiveSearch
-                                       ? aSearchString.toLowerCase() : aSearchString );
+    String  searchString = caseInSensitiveSearch
+            ? aSearchString.toLowerCase() : aSearchString;
 
     ArrayList fileContent = new ArrayList();
 
@@ -127,7 +127,7 @@ public class FileUtil
     {
       String currentline = (String) linesIter.next(  );
 
-      if( caseInSensitiveSearch == true )
+      if(caseInSensitiveSearch )
       {
         currentline = currentline.toLowerCase(  );
       }

@@ -58,20 +58,11 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
      */
     private static final long serialVersionUID = 3257848774955905587L;
 
-    /** The layout. */
-    private BoxLayout layout;
-
-    /** The select label. */
-    private JLabel selectLabel;
-
     /** The ComboBox to list the printers. */
-	 private JComboBox cbPrinters;
-
-    /** List of print services. */
-	 private PrintService[] pServices;
+     private JComboBox cbPrinters;
 
     /** Install data variables. */
-	 private InstallData iData;
+     private InstallData iData;
 
     /**
      * The constructor.
@@ -95,13 +86,13 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
 
         // We initialize our 'real' layout
         JPanel centerPanel = new JPanel();
-        layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
+        BoxLayout layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
         centerPanel.setLayout(layout);
         superLayout.addLayoutComponent(centerPanel, gbConstraints);
         add(centerPanel);
 
         cbPrinters = new JComboBox();
-    	pServices = PrintServiceLookup.lookupPrintServices(null, null);
+    	PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
     	iData.setVariable("SELECTED_PRINTER", pServices[0].getName());
     	for (int i = 0; i < pServices.length; i++)
     	{
@@ -115,7 +106,7 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
         centerPanel.add(Box.createVerticalStrut(10));
         
         str = parent.langpack.getString("PrinterSelectPanel.select_printer");
-        selectLabel = LabelFactory.create(str, JLabel.LEADING);
+        JLabel selectLabel = LabelFactory.create(str, JLabel.LEADING);
         selectLabel.setAlignmentX(JLabel.LEADING);
         centerPanel.add(selectLabel);
 
@@ -130,7 +121,6 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
     {
     	String sPrinter = (String) cbPrinters.getSelectedItem();
     	iData.setVariable("SELECTED_PRINTER", sPrinter);
-    	return;
     }
 
     /**

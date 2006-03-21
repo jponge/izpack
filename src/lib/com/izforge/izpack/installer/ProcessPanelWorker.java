@@ -70,13 +70,9 @@ public class ProcessPanelWorker implements Runnable
 
     private VariableSubstitutor vs;
 
-    private XMLElement spec;
-
     protected AbstractUIProcessHandler handler;
 
     private ArrayList jobs = new ArrayList();
-
-    private Thread processingThread = null;
 
     private static PrintWriter logfile = null;
 
@@ -120,11 +116,12 @@ public class ProcessPanelWorker implements Runnable
         parser.setBuilder(new StdXMLBuilder());
         parser.setValidator(new NonValidator());
 
+        XMLElement spec;
         try
         {
             parser.setReader(new StdXMLReader(input));
 
-            this.spec = (XMLElement) parser.parse();
+            spec = (XMLElement) parser.parse();
         }
         catch (Exception e)
         {
@@ -133,7 +130,7 @@ public class ProcessPanelWorker implements Runnable
             return false;
         }
 
-        if (!this.spec.hasChildren()) return false;
+        if (!spec.hasChildren()) return false;
 
         // Handle logfile
         XMLElement lfd = spec.getFirstChildNamed("logfiledir");
@@ -142,7 +139,7 @@ public class ProcessPanelWorker implements Runnable
             logfiledir = lfd.getContent();
         }
 
-        for (Iterator job_it = this.spec.getChildrenNamed("job").iterator(); job_it.hasNext();)
+        for (Iterator job_it = spec.getChildrenNamed("job").iterator(); job_it.hasNext();)
         {
             XMLElement job_el = (XMLElement) job_it.next();
 
@@ -298,9 +295,9 @@ public class ProcessPanelWorker implements Runnable
     /** Start the compilation in a separate thread. */
     public void startThread()
     {
-        this.processingThread = new Thread(this, "processing thread");
+        Thread processingThread = new Thread(this, "processing thread");
         // will call this.run()
-        this.processingThread.start();
+        processingThread.start();
     }
 
     interface Processable
@@ -424,7 +421,7 @@ public class ProcessPanelWorker implements Runnable
             catch (InterruptedException e)
             {}
 
-            if (t.isAlive() == false) return;
+            if (!t.isAlive()) return;
 
             t.interrupt();
             long hardTimeout = 500;

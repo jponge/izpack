@@ -59,7 +59,7 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener
         {
             String progress = getMsg("CustomActions.progress");
             String tip = getMsg("CustomActions.tip");
-            if (tip.equals("CustomActions.tip") || progress.equals("CustomActions.progress"))
+            if ("CustomActions.tip".equals(tip) || "CustomActions.progress".equals(progress))
             {
                 Debug
                         .trace("No messages found for custom action progress bar interactions; skiped.");

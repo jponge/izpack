@@ -115,12 +115,10 @@ public class RegistryHandler extends OSClassHelper
      */
     public void setValue(String key, String value, String contents) throws NativeLibException
     {
-        return;
     }
 
     public void setValue(String key, String value, String[] contents) throws NativeLibException
     {
-        return;
     }
 
     /**
@@ -135,7 +133,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void setValue(String key, String value, byte[] contents) throws NativeLibException
     {
-        return;
     }
 
     /**
@@ -150,7 +147,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void setValue(String key, String value, long contents) throws NativeLibException
     {
-        return;
     }
 
     /**
@@ -237,7 +233,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void createKey(String key) throws NativeLibException
     {
-        return;
     }
     
     /**
@@ -247,7 +242,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void deleteKey( String key) throws NativeLibException
     {
-        return;
     }
 
     /**
@@ -258,7 +252,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void deleteKeyIfEmpty(String key) throws NativeLibException
     {
-        return;
     }
     
     /**
@@ -270,7 +263,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void deleteValue(String key, String value) throws NativeLibException
     {
-        return;
     }
 
     /**
@@ -281,7 +273,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void setRoot(int i) throws NativeLibException
     {
-        return;
     }
 
     /**
@@ -302,7 +293,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void activateLogging() throws NativeLibException
     {
-        return;
     }
 
     /**
@@ -312,7 +302,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void suspendLogging() throws NativeLibException
     {
-        return;
     }
 
     /**
@@ -322,7 +311,6 @@ public class RegistryHandler extends OSClassHelper
      */
     public void resetLogging() throws NativeLibException
     {
-        return;
     }
 
     public List getLoggingInfo() throws NativeLibException
@@ -332,17 +320,14 @@ public class RegistryHandler extends OSClassHelper
 
     public void setLoggingInfo(List info) throws NativeLibException
     {
-        return;
     }
 
     public void addLoggingInfo(List info) throws NativeLibException
     {
-        return;
     }
 
     public void rewind() throws NativeLibException
     {
-        return;
     }
 
     public String getUninstallName()

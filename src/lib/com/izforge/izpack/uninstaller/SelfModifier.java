@@ -297,7 +297,7 @@ public class SelfModifier
 
         Class[] params = method.getParameterTypes();
         if (params.length != 1 || !params[0].isArray()
-                || !params[0].getComponentType().getName().equals("java.lang.String"))
+                || !"java.lang.String".equals(params[0].getComponentType().getName()))
             throw new IllegalArgumentException("Method must accept String array");
 
         Class clazz = method.getDeclaringClass();
@@ -437,7 +437,7 @@ public class SelfModifier
         String resource = clazz.getName().replace('.', '/') + ".class";
 
         URL url = ClassLoader.getSystemResource(resource);
-        if (!url.getProtocol().equals("jar")) return null;
+        if (!"jar".equals(url.getProtocol())) return null;
 
         String path = url.getFile();
         // starts at "file:..." (use getPath() as of 1.3)

@@ -220,7 +220,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
         rh.setRoot(rootId);
 
         String override = regEntry.getAttribute(REG_OVERRIDE, "true");
-        if (!override.equalsIgnoreCase("true"))
+        if (!"true".equalsIgnoreCase(override))
         { // Do not set value if override is not true and the value exist.
 
             if (rh.getValue(keypath, name, null) != null) return;
@@ -327,10 +327,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
     private int resolveRoot(XMLElement regEntry, String root, VariableSubstitutor substitutor)
             throws Exception
     {
-        root = substitutor.substitute(root, null);
-        Integer tmp = (Integer) RegistryHandler.ROOT_KEY_MAP.get(root);
+        String root1 = substitutor.substitute(root, null);
+        Integer tmp = (Integer) RegistryHandler.ROOT_KEY_MAP.get(root1);
         if (tmp != null) return (tmp.intValue());
-        getSpecHelper().parseError(regEntry, "Unknown value (" + root + ")for registry root.");
+        getSpecHelper().parseError(regEntry, "Unknown value (" + root1 + ")for registry root.");
         return 0;
     }
 

@@ -105,7 +105,7 @@ public class ShortcutData implements Cloneable
         result.deskTopEntryLinux_URL = cloneString(deskTopEntryLinux_URL);
         result.deskTopEntryLinux_Encoding = cloneString(deskTopEntryLinux_Encoding);
         result.deskTopEntryLinux_X_KDE_SubstituteUID = cloneString(deskTopEntryLinux_X_KDE_SubstituteUID);
-        result.createForAll = new Boolean(createForAll.booleanValue());
+        result.createForAll = Boolean.valueOf(createForAll.booleanValue());
         return (result);
     }
 
@@ -128,7 +128,7 @@ public class ShortcutData implements Cloneable
         }
         else
         {
-            return (new String(original));
+            return (original);
         }
     }
 }

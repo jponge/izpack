@@ -49,15 +49,6 @@ public class XInfoPanel extends IzPanel
      */
     private static final long serialVersionUID = 3257009856274970416L;
 
-    /** The layout. */
-    private GridBagLayout layout;
-
-    /** The layout constraints. */
-    private GridBagConstraints gbConstraints;
-
-    /** The info label. */
-    private JLabel infoLabel;
-
     /** The text area. */
     private JTextArea textArea;
 
@@ -75,13 +66,13 @@ public class XInfoPanel extends IzPanel
         super(parent, idata);
 
         // We initialize our layout
-        layout = new GridBagLayout();
-        gbConstraints = new GridBagConstraints();
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints gbConstraints = new GridBagConstraints();
         setLayout(layout);
 
         // We add the components
 
-        infoLabel = LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
+        JLabel infoLabel = LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
                 .getImageIcon("edit"), JLabel.TRAILING);
         parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
         gbConstraints.insets = new Insets(5, 5, 5, 5);

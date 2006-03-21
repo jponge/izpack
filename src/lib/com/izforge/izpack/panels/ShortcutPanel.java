@@ -310,14 +310,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     // Variable Declarations
     // ------------------------------------------------------------------------
 
-    /** UI element to label the list of existing program groups */
-    private JLabel listLabel;
-
     /** UI element to present the list of existing program groups for selection */
     private JList groupList;
-
-    /** UI element for listing the intended shortcut targets */
-    private JList targetList;
 
     /**
      * UI element to present the default name for the program group and to support editing of this
@@ -363,19 +357,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /** The name chosen by the user for the program group, */
     private String groupName;
-
-    /**
-     * The location for placign the program group. This is the same as the location (type) of a
-     * shortcut, only that it applies to the program group. Note that there are only two locations
-     * that make sense as location for a program group: <br>
-     * 
-     * <ul>
-     * <li>applications</li>
-     * <li>start manu</li>
-     * </ul>
-     *  
-     */
-    private int groupLocation;
 
     /** The parsed result from reading the XML specification from the file */
     private XMLElement spec;
@@ -426,8 +407,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * Avoids bogus behaviour when the user goes back then returns to this panel.
      */
     private boolean firstTime = true;
-
-    private File itsProgramFolder;
 
     private int itsUserType;
 
@@ -784,6 +763,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             location = SPEC_VALUE_APPLICATIONS;
         }
 
+        int groupLocation;
         if (location.equals(SPEC_VALUE_APPLICATIONS))
         {
             groupLocation = Shortcut.APPLICATIONS;
@@ -832,7 +812,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             data.deskTopEntryLinux_X_KDE_SubstituteUID = shortcutSpec.getAttribute(
                     SPEC_ATTRIBUTE_KDE_SUBST_UID, "");
 
-            data.createForAll = new Boolean(shortcutSpec.getAttribute(CREATE_FOR_ALL, "false"));
+            data.createForAll = Boolean.valueOf(shortcutSpec.getAttribute(CREATE_FOR_ALL, "false"));
             //** EndOf LINUX **//
             temp = fixSeparatorChar(shortcutSpec.getAttribute(SPEC_ATTRIBUTE_TARGET, ""));
             data.target = substitutor.substitute(temp, null);
@@ -1064,7 +1044,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             }
             catch (Throwable exception)
             {
-                continue;
             }
         }
 
@@ -1176,19 +1155,19 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     {
         String value = element.getAttribute(name, "").toUpperCase();
 
-        if (value.equals("YES"))
+        if ("YES".equals(value))
         {
             return (true);
         }
-        else if (value.equals("TRUE"))
+        else if ("TRUE".equals(value))
         {
             return (true);
         }
-        else if (value.equals("ON"))
+        else if ("ON".equals(value))
         {
             return (true);
         }
-        else if (value.equals("1")) { return (true); }
+        else if ("1".equals(value)) { return (true); }
 
         return (false);
     }
@@ -1225,7 +1204,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*--------------------------------------------------------------------------*/
     private void buildUI(File groups)
     {
-        itsProgramFolder = groups;        
+        File itsProgramFolder = groups;
          
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -1280,8 +1259,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
           layout.addLayoutComponent(allowDesktopShortcut, constraints);
           add(allowDesktopShortcut);
         }
-        
-        listLabel = LabelFactory.create(parent.langpack.getString("ShortcutPanel.regular.list"),
+
+        JLabel listLabel = LabelFactory.create(parent.langpack.getString("ShortcutPanel.regular.list"),
                 JLabel.LEADING);
         
         constraints.gridx = 0;
@@ -1471,7 +1450,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             targets.add(((ShortcutData) shortcuts.elementAt(i)).target);
         }
 
-        targetList = new JList(targets);
+        JList targetList = new JList(targets);
 
         JScrollPane scrollPane = new JScrollPane(targetList);
 

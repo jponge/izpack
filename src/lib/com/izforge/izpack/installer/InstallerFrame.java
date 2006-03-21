@@ -532,7 +532,7 @@ public class InstallerFrame extends JFrame
                 {
                     String key = (String) keys.next();
                     Object contents = additionalData.get(key);
-                    if (key.equals("__uninstallLibs__"))
+                    if ("__uninstallLibs__".equals(key))
                     {
                         Iterator nativeLibIter = ((List) contents).iterator();
                         while (nativeLibIter != null && nativeLibIter.hasNext())
@@ -552,7 +552,7 @@ public class InstallerFrame extends JFrame
                             outJar.closeEntry();
                         }
                     }
-                    else if (key.equals("uninstallerListeners") || key.equals("uninstallerJars"))
+                    else if ("uninstallerListeners".equals(key) || "uninstallerJars".equals(key))
                     { // It is a ArrayList of ArrayLists which contains the
                         // full
                         // package paths of all needed class files.
@@ -767,7 +767,7 @@ public class InstallerFrame extends JFrame
             f.delete();
         }
         String fullCleanup = installdata.getVariable("InstallerFrame.cleanAllAtInterrupt");
-        if (fullCleanup == null || !fullCleanup.equalsIgnoreCase("no"))
+        if (fullCleanup == null || !"no".equalsIgnoreCase(fullCleanup))
             cleanWipe(new File(installdata.getInstallPath()));
     }
 
@@ -824,8 +824,9 @@ public class InstallerFrame extends JFrame
      */
     public void setQuitButtonText(String text)
     {
-        if (text == null) text = langpack.getString("installer.quit");
-        quitButton.setText(text);
+        String text1 = text;
+        if (text1 == null) text1 = langpack.getString("installer.quit");
+        quitButton.setText(text1);
     }
 
     /*

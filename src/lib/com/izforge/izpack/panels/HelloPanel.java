@@ -50,18 +50,6 @@ public class HelloPanel extends IzPanel
      */
     private static final long serialVersionUID = 3257848774955905587L;
 
-    /** The layout. */
-    private BoxLayout layout;
-
-    /** The welcome label. */
-    private JLabel welcomeLabel;
-
-    /** The application authors label. */
-    private JLabel appAuthorsLabel;
-
-    /** The application URL label. */
-    private JLabel appURLLabel;
-
     /**
      * The constructor.
      * 
@@ -82,7 +70,7 @@ public class HelloPanel extends IzPanel
 
         // We initialize our 'real' layout
         JPanel centerPanel = new JPanel();
-        layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
+        BoxLayout layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
         centerPanel.setLayout(layout);
         superLayout.addLayoutComponent(centerPanel, gbConstraints);
         add(centerPanel);
@@ -94,7 +82,7 @@ public class HelloPanel extends IzPanel
 
         str = parent.langpack.getString("HelloPanel.welcome1") + idata.info.getAppName() + " "
                 + idata.info.getAppVersion() + parent.langpack.getString("HelloPanel.welcome2");
-        welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
+        JLabel welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
         centerPanel.add(welcomeLabel);
 
         centerPanel.add(Box.createVerticalStrut(20));
@@ -104,7 +92,7 @@ public class HelloPanel extends IzPanel
         if (size > 0)
         {
             str = parent.langpack.getString("HelloPanel.authors");
-            appAuthorsLabel = LabelFactory.create(str, parent.icons.getImageIcon("information"),
+            JLabel appAuthorsLabel = LabelFactory.create(str, parent.icons.getImageIcon("information"),
                     JLabel.TRAILING);
             centerPanel.add(appAuthorsLabel);
 
@@ -124,7 +112,7 @@ public class HelloPanel extends IzPanel
         if (idata.info.getAppURL() != null)
         {
             str = parent.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
-            appURLLabel = LabelFactory.create(str, parent.icons.getImageIcon("bookmark"),
+            JLabel appURLLabel = LabelFactory.create(str, parent.icons.getImageIcon("bookmark"),
                     JLabel.TRAILING);
             centerPanel.add(appURLLabel);
         }

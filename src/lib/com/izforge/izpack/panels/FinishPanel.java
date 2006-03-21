@@ -53,9 +53,6 @@ public class FinishPanel extends IzPanel implements ActionListener
 
     private static final long serialVersionUID = 3257282535107998009L;
 
-    /** The layout. */
-    private BoxLayout layout;
-
     /** The automated installers generation button. */
     private JButton autoButton;
 
@@ -87,7 +84,7 @@ public class FinishPanel extends IzPanel implements ActionListener
 
         // We initialize our 'real' layout
         centerPanel = new JPanel();
-        layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
+        BoxLayout layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
         centerPanel.setLayout(layout);
         superLayout.addLayoutComponent(centerPanel, gbConstraints);
         add(centerPanel);

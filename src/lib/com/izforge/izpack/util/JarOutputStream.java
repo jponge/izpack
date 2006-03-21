@@ -234,7 +234,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
      */
     private static void set16(byte[] b, int off, int value) 
     {
-		b[off+0] = (byte)value;
+		b[off] = (byte)value;
 		b[off+1] = (byte)(value >> 8);
     }
 

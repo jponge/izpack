@@ -718,7 +718,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
         String todo = idata.getVariable("IzPanel.LayoutType");
         if (todo == null) // No command, no work.
             return;
-        if (todo.equals("BOTTOM"))
+        if ("BOTTOM".equals(todo))
         { // Make a header to push the rest to the bottom.
             Filler dummy = new Filler();
             GridBagConstraints gbConstraint = getNextYGridBagConstraints();
@@ -741,7 +741,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
         String todo = idata.getVariable("IzPanel.LayoutType");
         if (todo == null) // No command, no work.
             return;
-        if (todo.equals("TOP"))
+        if ("TOP".equals(todo))
         { // Make a footer to push the rest to the top.
             Filler dummy = new Filler();
             GridBagConstraints gbConstraint = getNextYGridBagConstraints();

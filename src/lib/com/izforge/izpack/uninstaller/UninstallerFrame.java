@@ -75,9 +75,6 @@ public class UninstallerFrame extends JFrame
     /** The language pack. */
     protected static LocaleDatabase langpack;
 
-    /** The warning label. */
-    private JLabel warningLabel;
-
     /** The target destroy checkbox. */
     protected JCheckBox targetDestroyCheckbox;
 
@@ -89,12 +86,6 @@ public class UninstallerFrame extends JFrame
 
     /** The quit button. */
     protected JButton quitButton;
-
-    /** The layout. */
-    private GridBagLayout layout;
-
-    /** the layout constraints. */
-    private GridBagConstraints gbConstraints;
 
     /** The buttons hover color. */
     private Color buttonsHColor = new Color(230, 230, 230);
@@ -137,9 +128,9 @@ public class UninstallerFrame extends JFrame
     {
         // We initialize our layout
         JPanel contentPane = (JPanel) getContentPane();
-        layout = new GridBagLayout();
+        GridBagLayout layout = new GridBagLayout();
         contentPane.setLayout(layout);
-        gbConstraints = new GridBagConstraints();
+        GridBagConstraints gbConstraints = new GridBagConstraints();
         gbConstraints.insets = new Insets(5, 5, 5, 5);
 
         // We prepare our action handler
@@ -157,7 +148,7 @@ public class UninstallerFrame extends JFrame
 
         // We put our components
 
-        warningLabel = new JLabel(langpack.getString("uninstaller.warning"), icons
+        JLabel warningLabel = new JLabel(langpack.getString("uninstaller.warning"), icons
                 .getImageIcon("warning"), JLabel.TRAILING);
         buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
         gbConstraints.anchor = GridBagConstraints.WEST;

@@ -153,7 +153,7 @@ public class Pack implements Serializable
     {
         String text = "";
         if (dependencies == null) return text;
-        String name = null;
+        String name;
         for (int i = 0; i < dependencies.size() - 1; i++)
         {
             name = (String) dependencies.get(i);

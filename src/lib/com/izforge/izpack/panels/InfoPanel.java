@@ -43,21 +43,6 @@ public class InfoPanel extends IzPanel
 
     private static final long serialVersionUID = 3833748780590905399L;
 
-    /** The layout. */
-    private GridBagLayout layout;
-
-    /** The layout constraints. */
-    private GridBagConstraints gbConstraints;
-
-    /** The info label. */
-    private JLabel infoLabel;
-
-    /** The text area. */
-    private JTextArea textArea;
-
-    /** The scrolling container. */
-    private JScrollPane scroller;
-
     /** The info string. */
     private String info;
 
@@ -72,8 +57,8 @@ public class InfoPanel extends IzPanel
         super(parent, idata);
 
         // We initialize our layout
-        layout = new GridBagLayout();
-        gbConstraints = new GridBagConstraints();
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints gbConstraints = new GridBagConstraints();
         setLayout(layout);
 
         // We load the text
@@ -81,7 +66,7 @@ public class InfoPanel extends IzPanel
 
         // We add the components
 
-        infoLabel = LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
+        JLabel infoLabel = LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
                 .getImageIcon("edit"), JLabel.TRAILING);
         parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.1);
         gbConstraints.insets = new Insets(5, 5, 5, 5);
@@ -90,10 +75,10 @@ public class InfoPanel extends IzPanel
         layout.addLayoutComponent(infoLabel, gbConstraints);
         add(infoLabel);
 
-        textArea = new JTextArea(info);
+        JTextArea textArea = new JTextArea(info);
         textArea.setCaretPosition(0);
         textArea.setEditable(false);
-        scroller = new JScrollPane(textArea);
+        JScrollPane scroller = new JScrollPane(textArea);
         parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 1.0, 0.9);
         gbConstraints.fill = GridBagConstraints.BOTH;
         gbConstraints.anchor = GridBagConstraints.CENTER;

@@ -136,7 +136,7 @@ class PacksModel extends AbstractTableModel
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
-            if (pack.required == true) propRequirement(pack.name);
+            if (pack.required) propRequirement(pack.name);
         }
     }
 
@@ -205,14 +205,7 @@ class PacksModel extends AbstractTableModel
         {
             return false;
         }
-        else if (columnIndex == 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        else return columnIndex == 0;
     }
 
     /*

@@ -112,15 +112,9 @@ public class Debug
   public static String LOGFILENAME = LOGFILE_PREFIX + System.currentTimeMillis(  ) +
                                      LOGFILE_EXTENSION;
 
-  /** internal used File writer */
-  private static BufferedWriter fw;
-
-  /** internal used Printfile writer */
-  private static PrintWriter logfile;
-
-  /**
-   * The log initializion bloc.
-   */
+    /**
+     * The log initializion bloc.
+     */
   static
   {
     boolean st = false;
@@ -172,7 +166,7 @@ public class Debug
     if( LOG )
     {
       System.out.println( DLOG + " enabled." );
-      logfile = createLogFile(  );
+      PrintWriter logfile = createLogFile();
 
       Debug.log( Installer.class.getName(  ) + " LogFile created at " +
                  new Date( System.currentTimeMillis(  ) ) );
@@ -255,12 +249,13 @@ public class Debug
   public static void log( Object o )
   {
     //if LOG was given 
-    if( LOG == true )
+    if(LOG )
     {
-      if( ( logfile = getLogFile(  ) ) == null )
-      {
-        logfile = createLogFile(  );
-      }
+        PrintWriter logfile;
+        if( ( logfile = getLogFile(  ) ) == null )
+        {
+          logfile = createLogFile(  );
+        }
 
       if( logfile != null )
       {
@@ -314,26 +309,27 @@ public class Debug
 
     File out = new File( tempDir, logfilename );
 
-    if( tempDirFile.canWrite(  ) )
-    {
-      try
+      PrintWriter logfile;
+      if( tempDirFile.canWrite(  ) )
       {
-        fw      = new BufferedWriter( new OutputStreamWriter( new FileOutputStream( out ),
-                                                              "UTF-8" ) );
-        logfile = setLogFile( new PrintWriter( fw ) );
+        try
+        {
+            BufferedWriter fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(out),
+                    "UTF-8"));
+          logfile = setLogFile( new PrintWriter( fw ) );
+        }
+        catch( Exception e )
+        {
+          logfile = null;
+          e.printStackTrace(  );
+        }
       }
-      catch( Exception e )
+      else
       {
         logfile = null;
-        e.printStackTrace(  );
+        System.err.println( "Fatal: cannot write File: '" + logfilename + "' into: " +
+                            tempDirFile );
       }
-    }
-    else
-    {
-      logfile = null;
-      System.err.println( "Fatal: cannot write File: '" + logfilename + "' into: " +
-                          tempDirFile );
-    }
 
     return logfile;
   }
@@ -428,7 +424,7 @@ public class Debug
    */
   public static PrintWriter getLogFile(  )
   {
-    logfile = (PrintWriter) System.getProperties(  ).get( IZPACK_LOGFILE );
+    PrintWriter logfile = (PrintWriter) System.getProperties().get(IZPACK_LOGFILE);
 
     return logfile;
   }
@@ -443,7 +439,7 @@ public class Debug
   {
     System.getProperties(  ).put( IZPACK_LOGFILE, aLogFile );
 
-    logfile = (PrintWriter) System.getProperties(  ).get( IZPACK_LOGFILE );
+    PrintWriter logfile = (PrintWriter) System.getProperties().get(IZPACK_LOGFILE);
 
     if( logfile == null )
     {

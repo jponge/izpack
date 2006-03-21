@@ -344,4 +344,12 @@ public class RegDataContainer implements Cloneable, Serializable
         return (false);
     }
 
+    public int hashCode()
+    {
+        int result;
+        result = (int) (dwordData ^ (dwordData >>> 32));
+        result = 29 * result + (stringData != null ? stringData.hashCode() : 0);
+        result = 29 * result + type;
+        return result;
+    }
 }

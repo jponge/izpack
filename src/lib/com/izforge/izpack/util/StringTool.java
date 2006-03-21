@@ -207,7 +207,7 @@ public class StringTool
     
         for (int idx = 0; idx < aStringList.size(); idx++)
         {
-            temp.append(aStringList.get(idx) + "\n");
+            temp.append(aStringList.get(idx)).append("\n");
         }
     
         return temp.toString();

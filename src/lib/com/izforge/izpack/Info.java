@@ -34,7 +34,8 @@ public class Info implements Serializable
     static final long serialVersionUID = 13288410782044775L;
 
     /** The application name and version */
-    private String appName = "", appVersion = "";
+    private String appName = "";
+    private String appVersion = "";
 
     /** The installation subpath */
     private String installationSubPath = null;

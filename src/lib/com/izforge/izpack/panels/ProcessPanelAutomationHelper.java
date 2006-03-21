@@ -41,8 +41,6 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
         AbstractUIProcessHandler
 {
 
-    private ProcessPanelWorker worker = null;
-
     private int noOfJobs = 0;
 
     private int currentJob = 0;
@@ -68,9 +66,9 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     {
         try
         {
-            this.worker = new ProcessPanelWorker(idata, this);
+            ProcessPanelWorker worker = new ProcessPanelWorker(idata, this);
 
-            this.worker.run();
+            worker.run();
         }
         catch (IOException e)
         {

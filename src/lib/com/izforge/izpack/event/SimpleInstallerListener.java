@@ -91,7 +91,6 @@ public class SimpleInstallerListener implements InstallerListener
     public void afterFile(File file, PackFile pf) throws Exception
     {
         // Do nothing
-        ;
     }
 
     /*
@@ -103,7 +102,6 @@ public class SimpleInstallerListener implements InstallerListener
     public void afterDir(File dir, PackFile pf) throws Exception
     {
         // Do nothing
-        ;
     }
 
     /*
@@ -117,7 +115,6 @@ public class SimpleInstallerListener implements InstallerListener
     {
 
         // Do nothing
-        ;
     }
 
     /*
@@ -167,7 +164,6 @@ public class SimpleInstallerListener implements InstallerListener
             throws Exception
     {
         // Do nothing
-        ;
     }
 
     /*
@@ -190,7 +186,6 @@ public class SimpleInstallerListener implements InstallerListener
     public void beforeFile(File file, PackFile pf) throws Exception
     {
         // Do nothing
-        ;
     }
 
     /*
@@ -202,7 +197,6 @@ public class SimpleInstallerListener implements InstallerListener
     public void beforeDir(File dir, PackFile pf) throws Exception
     {
         // Do nothing
-        ;
     }
 
     /**

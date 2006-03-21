@@ -88,7 +88,7 @@ public class OSClassHelper
 
     public boolean good()
     {
-        return (worker != null ? true : false);
+        return (worker != null);
     }
 
     public boolean verify(AutomatedInstallData idata) throws Exception

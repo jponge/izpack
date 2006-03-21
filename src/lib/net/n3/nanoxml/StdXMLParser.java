@@ -275,7 +275,7 @@ public class StdXMLParser implements IXMLParser
         Reader reader = new ContentReader(this.reader, this.entityResolver, '&',
                 StdXMLParser.END_OF_PI, true, "");
 
-        if (!target.equalsIgnoreCase("xml"))
+        if (!"xml".equalsIgnoreCase(target))
         {
             this.builder.newProcessingInstruction(target, reader);
         }
@@ -314,7 +314,6 @@ public class StdXMLParser implements IXMLParser
 
         case '-':
             XMLUtil.skipComment(this.reader, this.entityResolver);
-            return;
         }
     }
 

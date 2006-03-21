@@ -64,7 +64,7 @@ public class LocaleDatabase extends TreeMap
         XMLElement data = (XMLElement) parser.parse();
 
         // We check the data
-        if (!data.getName().equalsIgnoreCase("langpack"))
+        if (!"langpack".equalsIgnoreCase(data.getName()))
             throw new Exception("this is not an IzPack XML langpack file");
 
         // We fill the Hashtable
@@ -74,7 +74,7 @@ public class LocaleDatabase extends TreeMap
         {
             XMLElement e = (XMLElement) children.get(i);
             String text = e.getContent();
-            if (text != null && !text.equals(""))
+            if (text != null && !"".equals(text))
             {
                 put(e.getAttribute("id"), text.trim());
             }

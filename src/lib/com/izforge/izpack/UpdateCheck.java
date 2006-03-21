@@ -75,7 +75,7 @@ public class UpdateCheck implements Serializable
     {
         this.includesList = includes;
         this.excludesList = excludes;
-        this.caseSensitive = ((casesensitive != null) && casesensitive.equalsIgnoreCase("yes"));
+        this.caseSensitive = ((casesensitive != null) && "yes".equalsIgnoreCase(casesensitive));
     }
 
 }

@@ -556,7 +556,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                         val = val.substring(0, val.indexOf(":"));
                     }
 
-                    if (!className.equals("") && !process)
+                    if (!"".equals(className) && !process)
                     {
                         process = true;
                     }
@@ -595,7 +595,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                             val = val.substring(0, val.indexOf(":"));
                         }
 
-                        if (!className.equals(""))
+                        if (!"".equals(className))
                         {
                             Processor p = (Processor) Class.forName(className).newInstance();
                             presult = p.process(this);
@@ -606,7 +606,6 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                 }
                 catch (Throwable exception)
                 {
-                    ;
                 }
             }
         }
@@ -793,23 +792,23 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                 // test the first token for a valid type identifier
                 // if it's valid assign the token to the type.
                 // ------------------------------------------------
-                if (token.equals("N"))
+                if ("N".equals(token))
                 {
                     type = RuleTextField.N;
                 }
-                else if (token.equals("H"))
+                else if ("H".equals(token))
                 {
                     type = RuleTextField.H;
                 }
-                else if (token.equals("A"))
+                else if ("A".equals(token))
                 {
                     type = RuleTextField.A;
                 }
-                else if (token.equals("O"))
+                else if ("O".equals(token))
                 {
                     type = RuleTextField.O;
                 }
-                else if (token.equals("AN"))
+                else if ("AN".equals(token))
                 {
                     type = RuleTextField.AN;
                 }
@@ -845,7 +844,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                 }
                 catch (Throwable exception)
                 {
-                    if (token.equals("U"))
+                    if ("U".equals(token))
                     {
                         unlimitedEdit = true;
                     }

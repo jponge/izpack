@@ -56,14 +56,9 @@ public class LicencePanel extends IzPanel implements ActionListener
     /** The license text. */
     private String licence;
 
-    /** The text area. */
-    private JTextArea textArea;
-
     /** The radio buttons. */
-    private JRadioButton yesRadio, noRadio;
-
-    /** The scrolling container. */
-    private JScrollPane scroller;
+    private JRadioButton yesRadio;
+    private JRadioButton noRadio;
 
     /**
      * The constructor.
@@ -89,13 +84,13 @@ public class LicencePanel extends IzPanel implements ActionListener
 
         add(Box.createRigidArea(new Dimension(0, 3)));
 
-        textArea = new JTextArea(licence);
+        JTextArea textArea = new JTextArea(licence);
         textArea.setMargin(new Insets(2, 2, 2, 2));
         textArea.setCaretPosition(0);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        scroller = new JScrollPane(textArea);
+        JScrollPane scroller = new JScrollPane(textArea);
         scroller.setAlignmentX(LEFT_ALIGNMENT);
         add(scroller);
 

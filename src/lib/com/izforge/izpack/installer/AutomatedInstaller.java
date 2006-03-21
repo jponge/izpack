@@ -246,7 +246,6 @@ public class AutomatedInstaller extends InstallerBase
                     System.err.println("ERROR: automated installation failed for panel "
                             + panelClassName);
                     e.printStackTrace();
-                    continue;
                 }
 
             }

@@ -478,7 +478,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
         // We clip the panel
         Dimension dim = parent.getPanelsContainerSize();
-        dim.width = dim.width - (dim.width / 4);
+        dim.width -= (dim.width / 4);
         dim.height = 150;
         setMinimumSize(dim);
         setMaximumSize(dim);

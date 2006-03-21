@@ -96,15 +96,15 @@ public class OsConstraint implements java.io.Serializable
         }
         if (match && family != null)
         {
-            if (family.equals("windows"))
+            if ("windows".equals(family))
             {
                 match = OsVersion.IS_WINDOWS;
             }
-            else if (family.equals("mac") || family.equals("osx"))
+            else if ("mac".equals(family) || "osx".equals(family))
             {
                 match = OsVersion.IS_OSX;
             }
-            else if (family.equals("unix"))
+            else if ("unix".equals(family))
             {
                 match = OsVersion.IS_UNIX;
             }
@@ -236,10 +236,10 @@ public class OsConstraint implements java.io.Serializable
     {
         StringBuffer retval = new StringBuffer();
         retval.append("[Os ");
-        retval.append(" family " + family);
-        retval.append(" name " + name);
-        retval.append(" version " + version);
-        retval.append(" arch " + arch);
+        retval.append(" family ").append(family);
+        retval.append(" name ").append(name);
+        retval.append(" version ").append(version);
+        retval.append(" arch ").append(arch);
         retval.append(" ]");
         return retval.toString();
     }

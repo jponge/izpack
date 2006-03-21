@@ -45,7 +45,7 @@ public class RegistryDefaultHandler
         super();
     }
 
-    public synchronized static final RegistryHandler getInstance()
+    public synchronized static RegistryHandler getInstance()
     {
         if (!initialized)
         {

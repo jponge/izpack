@@ -353,7 +353,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             {
                 line = line.trim();
                 // use the first non-blank line
-                if (!line.equals("")) break;
+                if (!"".equals(line)) break;
             }
             defaultInstallDir = line;
             VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());

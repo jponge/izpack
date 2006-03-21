@@ -160,7 +160,7 @@ public class InstallerBase
 				
 
         installdata.setVariable("APPLICATIONS_DEFAULT_ROOT", dir);
-        dir = dir + File.separator;
+        dir += File.separator;
         installdata.setVariable(ScriptParser.JAVA_HOME, System.getProperty("java.home"));
         installdata.setVariable(ScriptParser.CLASS_PATH, System.getProperty("java.class.path"));
         installdata.setVariable(ScriptParser.USER_HOME, System.getProperty("user.home"));

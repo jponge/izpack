@@ -36,7 +36,7 @@ public class IsPortValidator implements Validator
     {
         int port = 0;
 
-        if (client.getFieldContents(0).equals("")) { return false; }
+        if ("".equals(client.getFieldContents(0))) { return false; }
 
         try
         {

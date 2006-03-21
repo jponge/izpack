@@ -264,7 +264,7 @@ public class StdXMLReader implements IXMLReader
                 break;
             }
 
-            if (key.toString().equals("encoding")) { return str.substring(index, index2); }
+            if ("encoding".equals(key.toString())) { return str.substring(index, index2); }
 
             index = index2 + 1;
         }

@@ -325,7 +325,7 @@ public class IoHelper
      */
     public static boolean supported(String method)
     {
-        if (method.equals("getFreeSpace"))
+        if ("getFreeSpace".equals(method))
         {
             if (OsVersion.IS_UNIX) return true;
             if (OsVersion.IS_WINDOWS)
@@ -335,19 +335,19 @@ public class IoHelper
                 return (true);
             }
         }
-        else if (method.equals("chmod"))
+        else if ("chmod".equals(method))
         {
             if (OsVersion.IS_UNIX) return true;
         }
-        else if (method.equals("copyFile"))
+        else if ("copyFile".equals(method))
         {
             return true;
         }
-        else if (method.equals("getPrimaryGroup"))
+        else if ("getPrimaryGroup".equals(method))
         {
             if (OsVersion.IS_UNIX) return true;
         }
-        else if (method.equals("getenv"))
+        else if ("getenv".equals(method))
         {
             return true;
         }

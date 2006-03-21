@@ -55,14 +55,7 @@ public class PortValidator implements Validator
             {
                 inet = InetAddress.getByName(host);
                 ServerSocket socket = new ServerSocket(Integer.parseInt(value), 0, inet);
-                if (socket.getLocalPort() > 0)
-                {
-                    retValue = true;
-                }
-                else
-                {
-                    retValue = false;
-                }
+                retValue = socket.getLocalPort() > 0;
                 if (!retValue)
                 {
                     break;

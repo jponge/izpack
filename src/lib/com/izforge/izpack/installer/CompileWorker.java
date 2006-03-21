@@ -67,9 +67,6 @@ public class CompileWorker implements Runnable
 
     private VariableSubstitutor vs;
 
-    /** We spawn a thread to perform compilation. */
-    private Thread compilationThread;
-
     private XMLElement spec;
 
     private AutomatedInstallData idata;
@@ -102,7 +99,7 @@ public class CompileWorker implements Runnable
         this.handler = handler;
         this.vs = new VariableSubstitutor(idata.getVariables());
 
-        this.compilationThread = null;
+        Thread compilationThread = null;
 
         if (!readSpec()) throw new IOException("Error reading compilation specification");
     }
@@ -168,9 +165,9 @@ public class CompileWorker implements Runnable
     /** Start the compilation in a separate thread. */
     public void startThread()
     {
-        this.compilationThread = new Thread(this, "compilation thread");
+        Thread compilationThread = new Thread(this, "compilation thread");
         // will call this.run()
-        this.compilationThread.start();
+        compilationThread.start();
     }
 
     /**
@@ -387,16 +384,16 @@ public class CompileWorker implements Runnable
         {
             XMLElement child = (XMLElement) toplevel_tags.nextElement();
 
-            if (child.getName().equals("classpath"))
+            if ("classpath".equals(child.getName()))
             {
                 changeClassPath(ourclasspath, child);
             }
-            else if (child.getName().equals("job"))
+            else if ("job".equals(child.getName()))
             {
                 CompilationJob subjob = collectJobsRecursive(child, ourclasspath);
                 if (subjob != null) this.jobs.add(subjob);
             }
-            else if (child.getName().equals("directory"))
+            else if ("directory".equals(child.getName()))
             {
                 String name = child.getAttribute("name");
 
@@ -409,7 +406,7 @@ public class CompileWorker implements Runnable
                 }
 
             }
-            else if (child.getName().equals("file"))
+            else if ("file".equals(child.getName()))
             {
                 String name = child.getAttribute("name");
 
@@ -422,7 +419,7 @@ public class CompileWorker implements Runnable
                 }
 
             }
-            else if (child.getName().equals("packdepency"))
+            else if ("packdepency".equals(child.getName()))
             {
                 String name = child.getAttribute("name");
 
@@ -622,7 +619,7 @@ public class CompileWorker implements Runnable
             if (classpath_str.length() > 0)
             {
                 args.add("-classpath");
-                cmdline_len = cmdline_len + 11;
+                cmdline_len += 11;
                 args.add(classpath_str);
                 cmdline_len += classpath_str.length() + 1;
             }

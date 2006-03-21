@@ -434,7 +434,7 @@ public class CompilerConfig extends Thread
             // wiil be only observed for the uninstaller.
             String stage = el.getAttribute("stage");
             if (stage != null
-                    && (stage.equalsIgnoreCase("both") || stage.equalsIgnoreCase("uninstall")))
+                    && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
             {
                 CustomData ca = new CustomData(null, getContainedFilePaths(url), null,
                         CustomData.UNINSTALLER_JAR);
@@ -473,7 +473,7 @@ public class CompilerConfig extends Thread
             String stage = el.getAttribute("stage");
             List constraints = OsConstraint.getOsList(el);
             if (stage != null
-                    && (stage.equalsIgnoreCase("both") || stage.equalsIgnoreCase("uninstall")))
+                    && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
             {
                 ArrayList al = new ArrayList();
                 al.add(name);
@@ -1007,7 +1007,6 @@ public class CompilerConfig extends Thread
             }
             catch (Exception e)
             {
-                ;
             }
             if (fullClassName != null)
                 panel.className = fullClassName;
@@ -1399,23 +1398,23 @@ public class CompilerConfig extends Thread
         String override_val = f.getAttribute("override");
         if (override_val != null)
         {
-            if (override_val.equalsIgnoreCase("true"))
+            if ("true".equalsIgnoreCase(override_val))
             {
                 override = PackFile.OVERRIDE_TRUE;
             }
-            else if (override_val.equalsIgnoreCase("false"))
+            else if ("false".equalsIgnoreCase(override_val))
             {
                 override = PackFile.OVERRIDE_FALSE;
             }
-            else if (override_val.equalsIgnoreCase("asktrue"))
+            else if ("asktrue".equalsIgnoreCase(override_val))
             {
                 override = PackFile.OVERRIDE_ASK_TRUE;
             }
-            else if (override_val.equalsIgnoreCase("askfalse"))
+            else if ("askfalse".equalsIgnoreCase(override_val))
             {
                 override = PackFile.OVERRIDE_ASK_FALSE;
             }
-            else if (override_val.equalsIgnoreCase("update"))
+            else if ("update".equalsIgnoreCase(override_val))
             {
                 override = PackFile.OVERRIDE_UPDATE;
             }
@@ -1646,8 +1645,8 @@ public class CompilerConfig extends Thread
             throws CompilerException
     {
         String value = requireAttribute(element, attribute);
-        if (value.equalsIgnoreCase("yes")) return true;
-        if (value.equalsIgnoreCase("no")) return false;
+        if ("yes".equalsIgnoreCase(value)) return true;
+        if ("no".equalsIgnoreCase(value)) return false;
 
         parseError(element, "<" + element.getName() + "> invalid attribute '" + attribute
                 + "': Expected (yes|no)");
@@ -1669,8 +1668,8 @@ public class CompilerConfig extends Thread
         if (element == null) return defaultValue;
 
         String value = element.getAttribute(attribute, (defaultValue ? "yes" : "no"));
-        if (value.equalsIgnoreCase("yes")) return true;
-        if (value.equalsIgnoreCase("no")) return false;
+        if ("yes".equalsIgnoreCase(value)) return true;
+        if ("no".equalsIgnoreCase(value)) return false;
 
         // TODO: should this be an error if it's present but "none of the
         // above"?
@@ -1731,7 +1730,7 @@ public class CompilerConfig extends Thread
             Compiler.setIzpackHome(home);
 
             // The users wants to know the command line parameters
-            if (args[0].equalsIgnoreCase("-?"))
+            if ("-?".equalsIgnoreCase(args[0]))
             {
                 System.out.println("-> Command line parameters are : (xml file) [args]");
                 System.out.println("   (xml file): the xml file describing the installation");

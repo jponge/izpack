@@ -48,9 +48,6 @@ public class SimpleFinishPanel extends IzPanel
      */
     private static final long serialVersionUID = 3689911781942572085L;
 
-    /** The layout. */
-    private BoxLayout layout;
-
     /** The center panel. */
     protected JPanel centerPanel;
 
@@ -79,7 +76,7 @@ public class SimpleFinishPanel extends IzPanel
 
         // We initialize our 'real' layout
         centerPanel = new JPanel();
-        layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
+        BoxLayout layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
         centerPanel.setLayout(layout);
         superLayout.addLayoutComponent(centerPanel, gbConstraints);
         add(centerPanel);

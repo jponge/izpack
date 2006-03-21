@@ -344,8 +344,6 @@ public class UserInputPanel extends IzPanel
     /** Holds all user inputs for use in automated installation */
     private Vector entries = new Vector();
 
-    private TwoColumnLayout layout;
-
     private LocaleDatabase langpack = null;
 
     /*--------------------------------------------------------------------------*/
@@ -377,7 +375,7 @@ public class UserInputPanel extends IzPanel
 
         // ----------------------------------------------------
         // ----------------------------------------------------
-        layout = new TwoColumnLayout(10, 5, 30, 25, TwoColumnLayout.LEFT);
+        TwoColumnLayout layout = new TwoColumnLayout(10, 5, 30, 25, TwoColumnLayout.LEFT);
         setLayout(layout);
 
         // ----------------------------------------------------
@@ -573,7 +571,7 @@ public class UserInputPanel extends IzPanel
                 try
                 {
                     if (uiElement[POS_DISPLAYED] == null
-                            || uiElement[POS_DISPLAYED].toString().equals("false"))
+                            || "false".equals(uiElement[POS_DISPLAYED].toString()))
                     {
                         add((JComponent) uiElement[POS_FIELD], uiElement[POS_CONSTRAINTS]);
                     }
@@ -593,7 +591,7 @@ public class UserInputPanel extends IzPanel
                 try
                 {
                     if (uiElement[POS_DISPLAYED] != null
-                            && uiElement[POS_DISPLAYED].toString().equals("true"))
+                            && "true".equals(uiElement[POS_DISPLAYED].toString()))
                     {
                         remove((JComponent) uiElement[POS_FIELD]);
                     }
@@ -780,11 +778,11 @@ public class UserInputPanel extends IzPanel
 
             if (bold)
             {
-                style = style + Font.BOLD;
+                style += Font.BOLD;
             }
             if (italic)
             {
-                style = style + Font.ITALIC;
+                style += Font.ITALIC;
             }
 
             font = font.deriveFont(style, (size * multiplier));
@@ -982,7 +980,7 @@ public class UserInputPanel extends IzPanel
             try
             {
                 message = langpack.getString((String) field[POS_MESSAGE]);
-                if (message.equals(""))
+                if ("".equals(message))
                 {
                     message = (String) field[POS_MESSAGE];
                 }
@@ -2268,19 +2266,22 @@ public class UserInputPanel extends IzPanel
             String family = ((XMLElement) os.elementAt(i)).getAttribute(FAMILY);
             boolean match = false;
 
-            if (family.equals("windows"))
+            if ("windows".equals(family))
             {
                 match = OsVersion.IS_WINDOWS;
             }
-            else if (family.equals("mac"))
+            else if ("mac".equals(family))
             {
                 match = OsVersion.IS_OSX;
             }
-            else if (family.equals("unix"))
+            else if ("unix".equals(family))
             {
                 match = OsVersion.IS_UNIX;
             }
-            return match;
+            if (match)
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -2699,9 +2700,8 @@ public class UserInputPanel extends IzPanel
             }
 
             // if the user entered something else, it's not listed as an item
-            if (this.pathMatches((String) this.pathComboBox.getSelectedItem())) { return true; }
+            return this.pathMatches((String) this.pathComboBox.getSelectedItem());
 
-            return false;
         }
 
         /*--------------------------------------------------------------------------*/

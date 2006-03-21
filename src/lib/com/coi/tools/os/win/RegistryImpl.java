@@ -206,7 +206,7 @@ public class RegistryImpl
         catch (NativeLibException ne)
         {
             String em = ne.getLibMessage();
-            if (em.equals("functionFailed.RegOpenKeyEx")) { return (false); }
+            if ("functionFailed.RegOpenKeyEx".equals(em)) { return (false); }
             throw (ne);
         }
     }
@@ -228,8 +228,8 @@ public class RegistryImpl
         catch (NativeLibException ne)
         {
             String em = ne.getLibMessage();
-            if (em.equals("functionFailed.RegOpenKeyEx")
-                    || em.equals("functionFailed.RegQueryValueEx")) { return (false); }
+            if ("functionFailed.RegOpenKeyEx".equals(em)
+                    || "functionFailed.RegQueryValueEx".equals(em)) { return (false); }
             throw (ne);
         }
         return (true);
@@ -338,8 +338,8 @@ public class RegistryImpl
             catch (NativeLibException ne)
             {
                 String em = ne.getLibMessage();
-                if (em.equals("functionFailed.RegOpenKeyEx")
-                        || em.equals("functionFailed.RegQueryValueEx"))
+                if ("functionFailed.RegOpenKeyEx".equals(em)
+                        || "functionFailed.RegQueryValueEx".equals(em))
                 {
                     setValueR(root, key, value, contents);
                     return;
@@ -357,7 +357,6 @@ public class RegistryImpl
                     localValue, contents, oldContents);
             log(rli);
         }
-        return;
     }
 
     /**

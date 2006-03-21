@@ -65,17 +65,8 @@ public class ImgPacksPanel extends PacksPanelBase
     /** The images to display. */
     private ArrayList images;
 
-    /** The description scroll. */
-    private JScrollPane descriptionScroller;
-
     /** The img label. */
     private JLabel imgLabel;
-
-    /** The layout. */
-    private GridBagLayout layout;
-
-    /** The layout constraints. */
-    private GridBagConstraints gbConstraints;
 
     /**
      * The constructor.
@@ -96,8 +87,8 @@ public class ImgPacksPanel extends PacksPanelBase
     protected void createNormalLayout()
     {
         preLoadImages();
-        layout = new GridBagLayout();
-        gbConstraints = new GridBagConstraints();
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints gbConstraints = new GridBagConstraints();
         setLayout(layout);
 
         // Create constraint for first component as standard constraint.
@@ -143,7 +134,7 @@ public class ImgPacksPanel extends PacksPanelBase
         }
 
         // Create the description area with a scroller.
-        descriptionScroller = new JScrollPane();
+        JScrollPane descriptionScroller = new JScrollPane();
         descriptionScroller.setPreferredSize(new Dimension(200, 60));
         descriptionScroller.setBorder(BorderFactory.createEmptyBorder());
 
@@ -188,7 +179,8 @@ public class ImgPacksPanel extends PacksPanelBase
      */
     private Dimension getPreferredSizeFromImages()
     {
-        int maxWidth = 80, maxHeight = 60;
+        int maxWidth = 80;
+        int maxHeight = 60;
         ImageIcon icon;
 
         for (Iterator it = images.iterator(); it.hasNext();)

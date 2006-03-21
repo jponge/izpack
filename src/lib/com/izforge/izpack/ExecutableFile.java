@@ -130,38 +130,38 @@ public class ExecutableFile implements Serializable
     public String toString()
     {
         StringBuffer retval = new StringBuffer();
-        retval.append("path = " + path);
+        retval.append("path = ").append(path);
         retval.append("\n");
-        retval.append("mainClass = " + mainClass);
+        retval.append("mainClass = ").append(mainClass);
         retval.append("\n");
-        retval.append("type = " + type);
+        retval.append("type = ").append(type);
         retval.append("\n");
-        retval.append("executionStage = " + executionStage);
+        retval.append("executionStage = ").append(executionStage);
         retval.append("\n");
-        retval.append("onFailure = " + onFailure);
+        retval.append("onFailure = ").append(onFailure);
         retval.append("\n");
-        retval.append("argList: " + argList);
+        retval.append("argList: ").append(argList);
         retval.append("\n");
         if (argList != null)
         {
             for (int i = 0; i < argList.size(); i++)
             {
-                retval.append("\targ: " + argList.get(i));
+                retval.append("\targ: ").append(argList.get(i));
                 retval.append("\n");
             }
         }
         retval.append("\n");
-        retval.append("osList = " + osList);
+        retval.append("osList = ").append(osList);
         retval.append("\n");
         if (osList != null)
         {
             for (int i = 0; i < osList.size(); i++)
             {
-                retval.append("\tos: " + osList.get(i));
+                retval.append("\tos: ").append(osList.get(i));
                 retval.append("\n");
             }
         }
-        retval.append("keepFile = " + keepFile);
+        retval.append("keepFile = ").append(keepFile);
         retval.append("\n");
         return retval.toString();
     }

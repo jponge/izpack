@@ -128,7 +128,7 @@ public class JDKPathPanel extends PathInputPanel
         pathSelectionPanel.setPath(chosenPath);
         String var = idata.getVariable("JDKPathPanel.skipIfValid");
         // Should we skip this panel?
-        if (chosenPath.length() > 0 && var != null && var.equalsIgnoreCase("yes"))
+        if (chosenPath.length() > 0 && var != null && "yes".equalsIgnoreCase(var))
         {
             idata.setVariable(getVariableName(), chosenPath);
             parent.skipPanel();
@@ -136,7 +136,7 @@ public class JDKPathPanel extends PathInputPanel
 
     }
 
-    private final boolean verifyVersion()
+    private boolean verifyVersion()
     {
         String min = getMinVersion();
         String max = getMaxVersion();
@@ -164,7 +164,7 @@ public class JDKPathPanel extends PathInputPanel
         return (true);
     }
 
-    private final boolean compareVersions(String in, String template, boolean isMin,
+    private boolean compareVersions(String in, String template, boolean isMin,
             int assumedPlace, int halfRange, String useNotIdentifier)
     {
         StringTokenizer st = new StringTokenizer(in, " \t\n\r\f\"");

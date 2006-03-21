@@ -45,12 +45,6 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
 
     private static final long serialVersionUID = 3257282547959410992L;
 
-    /** The layout. */
-    private GridBagLayout layout;
-
-    /** The layout constraints. */
-    private GridBagConstraints gbConstraints;
-
     /** The tip label. */
     protected JLabel tipLabel;
 
@@ -83,8 +77,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
         super(parent, idata);
 
         // We initialize our layout
-        layout = new GridBagLayout();
-        gbConstraints = new GridBagConstraints();
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints gbConstraints = new GridBagConstraints();
         setLayout(layout);
 
         int row = 1;
@@ -263,7 +257,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     {
         // We clip the panel
         Dimension dim = parent.getPanelsContainerSize();
-        dim.width = dim.width - (dim.width / 4);
+        dim.width -= (dim.width / 4);
         dim.height = 150;
         setMinimumSize(dim);
         setMaximumSize(dim);

@@ -102,7 +102,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
      */
     private static String getReleaseFileName()
     {
-        String result = new String();
+        String result = "";
 
         File[] etcList = new File("/etc").listFiles();
         
@@ -227,19 +227,19 @@ public final class OsVersion implements OsVersionConstants, StringConstants
     public static String getOsDetails()
     {
         StringBuffer result = new StringBuffer();
-        result.append( "OS_NAME=" + OS_NAME + NL );
+        result.append("OS_NAME=").append(OS_NAME).append(NL);
 
         if( IS_UNIX )
         {
             if( IS_LINUX )
             {
-              result.append( getLinuxDistribution() + NL );
+                result.append(getLinuxDistribution()).append(NL);
             }
             else
             {
                 try
                 {
-                  result.append( FileUtil.getFileContent( getReleaseFileName() ) + NL );
+                    result.append(FileUtil.getFileContent(getReleaseFileName())).append(NL);
                 }
                 catch (IOException e)
                 {
@@ -250,8 +250,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
 
         if( IS_WINDOWS )
         {
-            result.append( System.getProperty( OSNAME ) + SP
-                    + System.getProperty( "sun.os.patch.level", "" ) + NL );
+            result.append(System.getProperty(OSNAME)).append(SP).append(System.getProperty("sun.os.patch.level", "")).append(NL);
         }
         return result.toString();
     }

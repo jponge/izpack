@@ -286,17 +286,15 @@ public class GUIInstaller extends InstallerBase
         // Resolve whether button icons should be used or not.
         boolean useButtonIcons = true;
         if (installdata.guiPrefs.modifier.containsKey("useButtonIcons")
-                && ((String) installdata.guiPrefs.modifier.get("useButtonIcons"))
-                        .equalsIgnoreCase("no")) useButtonIcons = false;
+                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier.get("useButtonIcons"))) useButtonIcons = false;
         ButtonFactory.useButtonIcons(useButtonIcons);
         boolean useLabelIcons = true;
         if (installdata.guiPrefs.modifier.containsKey("useLabelIcons")
-                && ((String) installdata.guiPrefs.modifier.get("useLabelIcons"))
-                        .equalsIgnoreCase("no")) useLabelIcons = false;
+                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier.get("useLabelIcons"))) useLabelIcons = false;
         LabelFactory.setUseLabelIcons(useLabelIcons);
         if (laf == null)
         {
-            if (!syskey.equals("mac"))
+            if (!"mac".equals(syskey))
             {
                 String syslaf = UIManager.getSystemLookAndFeelClassName();
                 UIManager.setLookAndFeel(syslaf);
@@ -316,7 +314,7 @@ public class GUIInstaller extends InstallerBase
         }
 
         // Kunststoff (http://www.incors.org/)
-        if (laf.equals("kunststoff"))
+        if ("kunststoff".equals(laf))
         {
             ButtonFactory.useHighlightButtons();
             // Reset the use button icons state because useHighlightButtons
@@ -341,7 +339,7 @@ public class GUIInstaller extends InstallerBase
         }
 
         // Liquid (http://liquidlnf.sourceforge.net/)
-        if (laf.equals("liquid"))
+        if ("liquid".equals(laf))
         {
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
             lnf = "liquid";
@@ -350,7 +348,7 @@ public class GUIInstaller extends InstallerBase
             if (params.containsKey("decorate.frames"))
             {
                 String value = (String) params.get("decorate.frames");
-                if (value.equals("yes"))
+                if ("yes".equals(value))
                 {
                     JFrame.setDefaultLookAndFeelDecorated(true);
                 }
@@ -358,7 +356,7 @@ public class GUIInstaller extends InstallerBase
             if (params.containsKey("decorate.dialogs"))
             {
                 String value = (String) params.get("decorate.dialogs");
-                if (value.equals("yes"))
+                if ("yes".equals(value))
                 {
                     JDialog.setDefaultLookAndFeelDecorated(true);
                 }
@@ -368,7 +366,7 @@ public class GUIInstaller extends InstallerBase
         }
 
         // Metouia (http://mlf.sourceforge.net/)
-        if (laf.equals("metouia"))
+        if ("metouia".equals(laf))
         {
             UIManager.setLookAndFeel("net.sourceforge.mlf.metouia.MetouiaLookAndFeel");
             lnf = "metouia";
@@ -376,7 +374,7 @@ public class GUIInstaller extends InstallerBase
         }
 
         // JGoodies Looks (http://looks.dev.java.net/)
-        if (laf.equals("looks"))
+        if ("looks".equals(laf))
         {
             Map variants = new TreeMap();
             variants.put("extwin", "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel");
@@ -424,7 +422,7 @@ public class GUIInstaller extends InstallerBase
     protected boolean useFlags()
     {
         if (installdata.guiPrefs.modifier.containsKey("useFlags")
-                && ((String) installdata.guiPrefs.modifier.get("useFlags")).equalsIgnoreCase("no"))
+                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier.get("useFlags")))
             return (false);
         return (true);
     }
@@ -465,9 +463,6 @@ public class GUIInstaller extends InstallerBase
 
         /** The combo box. */
         private JComboBox comboBox;
-
-        /** The ok button. */
-        private JButton okButton;
 
         /** The ISO3 to ISO2 HashMap */
         private HashMap iso3Toiso2 = null;
@@ -539,7 +534,7 @@ public class GUIInstaller extends InstallerBase
             layout.addLayoutComponent(comboBox, gbConstraints);
             contentPane.add(comboBox);
 
-            okButton = new JButton("OK");
+            JButton okButton = new JButton("OK");
             okButton.addActionListener(this);
             gbConstraints.fill = GridBagConstraints.NONE;
             gbConstraints.gridy = 4;

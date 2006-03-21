@@ -504,7 +504,7 @@ public class ShellLink implements NativeLibraryClient
     /**
      * Destructor, releases COM and frees native resources.
      */
-    protected void finalize()
+    protected void finalize() throws Throwable
     {
         releaseInterface();
 
@@ -513,6 +513,7 @@ public class ShellLink implements NativeLibraryClient
             releaseCOM();
             initializeSucceeded = false;
         }
+        super.finalize();
     }
 
     /*--------------------------------------------------------------------------*/

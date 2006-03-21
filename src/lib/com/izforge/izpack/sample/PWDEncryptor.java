@@ -66,16 +66,16 @@ public class PWDEncryptor implements Processor
       temp = password [i] - 57;
       if (i > 0)
       {
-        temp = temp + password [i - 1];
+          temp += password[i - 1];
       }
 
       if ((temp % 3) == 0)
       {
-        temp = temp + 13;
+          temp += 13;
       }
       if (temp < 0)
       {
-        temp = temp + 193;
+          temp += 193;
       }
     
       result [i] = (char)temp;

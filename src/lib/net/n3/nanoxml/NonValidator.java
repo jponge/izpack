@@ -362,7 +362,7 @@ public class NonValidator implements IXMLValidator
                 String str = XMLUtil.scanIdentifier(reader, '%', this.parameterEntityResolver);
                 XMLUtil.skipWhitespace(reader, '%', null, null);
 
-                if (!str.equals("FIXED"))
+                if (!"FIXED".equals(str))
                 {
                     XMLUtil.skipWhitespace(reader, '%', null, null);
                     ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);

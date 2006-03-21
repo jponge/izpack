@@ -109,35 +109,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /** internal String createdDirectory */
     private String createdDirectory;
 
-    /** internal int itsShow */
-    private int itsShow;
-
     /** internal int itsUserType */
     private int itsUserType;
 
-    /** internal int itsType */
-    private int itsType;
-
-    /** internal int itsIconIndex */
-    private int itsIconIndex;
-
-    /** internal String itsWorkingDirectory */
-    private String itsWorkingDirectory;
-
     /** internal String itsGroupName */
     private String itsGroupName;
-
-    /** internal String itsTargetPath */
-    private String itsTargetPath;
-
-    /** internal String itsIconPath */
-    private String itsIconPath;
-
-    /** internal String itsDescription */
-    private String itsDescription;
-
-    /** internal String itsArguments */
-    private String itsArguments;
 
     /** internal String itsName */
     private String itsName;
@@ -152,7 +128,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     private Properties props;
 
     /** forAll = new Boolean(false): A flag to indicate that this should created for all users. */
-    private Boolean forAll = new Boolean(false);
+    private Boolean forAll = Boolean.FALSE;
 
     //~ Constructors
     // *********************************************************************************************************************************************
@@ -169,17 +145,17 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         hlp.append("[Desktop Entry]" + N);
 
         hlp.append("Comment=" + $Comment + N);
-        hlp.append("Comment[" + userLanguage + "]=" + $Comment + N);
+        hlp.append("Comment[").append(userLanguage).append("]=" + $Comment + N);
         hlp.append("Encoding=" + $Encoding + N);
         
         hlp.append("Exec="+ $E_QUOT + $Exec + $E_QUOT + S + $Arguments + N);
         hlp.append("GenericName=" + $GenericName + N);
 
-        hlp.append("GenericName[" + userLanguage + "]=" + $GenericName + N);
+        hlp.append("GenericName[").append(userLanguage).append("]=" + $GenericName + N);
         hlp.append("Icon=" + $Icon + N);
         hlp.append("MimeType=" + $MimeType + N);
         hlp.append("Name=" + $Name + N);
-        hlp.append("Name[" + userLanguage + "]=" + $Name + N);
+        hlp.append("Name[").append(userLanguage).append("]=" + $Name + N);
 
         hlp.append("Path="+ $P_QUOT + $Path + $P_QUOT + N);
         hlp.append("ServiceTypes=" + $ServiceTypes + N);
@@ -193,8 +169,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         hlp.append("X-KDE-SubstituteUID=" + $X_KDE_SubstituteUID + N);
         hlp.append("X-KDE-Username=" + $X_KDE_Username + N);
         hlp.append(N);
-        hlp.append(C + "created by" + S + getClass().getName() + S + rev + N );
-        hlp.append(C + version );
+        hlp.append(C + "created by" + S).append(getClass().getName()).append(S).append(rev).append(N);
+        hlp.append(C).append(version);
 
         template = hlp.toString();
 
@@ -229,7 +205,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void initialize(int aType, String aName) throws Exception
     {
-        this.itsType = aType;
+        int itsType = aType;
         this.itsName = aName;
         props.put($Name, aName);
     }
@@ -302,7 +278,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public String getProgramsFolder(int current_user)
     {
-        String result = new String();
+        String result = "";
 
         // 
         result = getKdeShareApplnkFolder(current_user).toString();
@@ -375,7 +351,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         }
         else
         {
-            result = new File(System.getProperty("user.home").toString() + File.separator + ".kde");
+            result = new File(System.getProperty("user.home") + File.separator + ".kde");
         }
         return result;
     }
@@ -511,8 +487,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     private File writeShortCut(String target, String shortCutDef)
     {
-        File targetPath = new File(target.toString().substring(0,
-                target.toString().lastIndexOf(File.separatorChar)));
+        File targetPath = new File(target.substring(0,
+                target.lastIndexOf(File.separatorChar)));
 
         if (!targetPath.exists())
         {
@@ -574,7 +550,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setArguments(String args)
     {
-        this.itsArguments = args;
+        String itsArguments = args;
         props.put($Arguments, args);
     }
 
@@ -585,7 +561,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setDescription(String description)
     {
-        this.itsDescription = description;
+        String itsDescription = description;
         props.put($Comment, description);
     }
 
@@ -596,8 +572,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setIconLocation(String path, int index)
     {
-        this.itsIconPath = path;
-        this.itsIconIndex = index;
+        String itsIconPath = path;
+        int itsIconIndex = index;
         props.put($Icon, path);
 
         //
@@ -621,7 +597,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setLinkType(int aType) throws IllegalArgumentException
     {
-        this.itsType = aType;
+        int itsType = aType;
     }
 
     /**
@@ -641,7 +617,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setShowCommand(int show)
     {
-        this.itsShow = show;
+        int itsShow = show;
     }
 
     /**
@@ -651,7 +627,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setTargetPath(String aPath)
     {
-        this.itsTargetPath = aPath;
+        String itsTargetPath = aPath;
         
         StringTokenizer whiteSpaceTester = new StringTokenizer( aPath );
         
@@ -678,7 +654,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void setWorkingDirectory(String aDirectory)
     {
-        this.itsWorkingDirectory = aDirectory;
+        String itsWorkingDirectory = aDirectory;
         
         StringTokenizer whiteSpaceTester = new StringTokenizer( aDirectory );
         

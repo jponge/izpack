@@ -87,7 +87,6 @@ public class NativeLibException extends Exception
             mre.printStackTrace();
         }
         messageResourceBundles.put(bundlePath, bd);
-        return;
 
     }
 

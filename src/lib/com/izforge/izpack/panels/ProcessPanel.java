@@ -81,8 +81,6 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     /** Where the output is displayed */
     private JTextArea outputPane;
 
-    private JScrollPane outputScrollPane;
-
     /**
      * The constructor.
      * 
@@ -124,8 +122,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
 
         this.outputPane = new JTextArea();
         this.outputPane.setEditable(false);
-        this.outputScrollPane = new JScrollPane(this.outputPane);
-        subpanel.add(this.outputScrollPane);
+        JScrollPane outputScrollPane = new JScrollPane(this.outputPane);
+        subpanel.add(outputScrollPane);
 
         add(subpanel, BorderLayout.CENTER);
     }
@@ -208,7 +206,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     {
         // We clip the panel
         Dimension dim = parent.getPanelsContainerSize();
-        dim.width = dim.width - (dim.width / 4);
+        dim.width -= (dim.width / 4);
         dim.height = 150;
         setMinimumSize(dim);
         setMaximumSize(dim);

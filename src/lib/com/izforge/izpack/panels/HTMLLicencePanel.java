@@ -53,20 +53,12 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
      */
     private static final long serialVersionUID = 3256728385458746416L;
 
-    /** The layout. */
-    private GridBagLayout layout;
-
-    /** The layout constraints. */
-    private GridBagConstraints gbConstraints;
-
-    /** The info label. */
-    private JLabel infoLabel;
-
     /** The text area. */
     private JEditorPane textArea;
 
     /** The radio buttons. */
-    private JRadioButton yesRadio, noRadio;
+    private JRadioButton yesRadio;
+    private JRadioButton noRadio;
 
     /**
      * The constructor.
@@ -79,8 +71,8 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         super(parent, idata);
 
         // We initialize our layout
-        layout = new GridBagLayout();
-        gbConstraints = new GridBagConstraints();
+        GridBagLayout layout = new GridBagLayout();
+        GridBagConstraints gbConstraints = new GridBagConstraints();
         setLayout(layout);
 
         // We load the licence
@@ -88,7 +80,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
         // We put our components
 
-        infoLabel = LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
+        JLabel infoLabel = LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
                 parent.icons.getImageIcon("history"), JLabel.TRAILING);
         parent.buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
         gbConstraints.insets = new Insets(5, 5, 5, 5);

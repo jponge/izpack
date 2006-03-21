@@ -255,11 +255,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             Pack pack = (Pack) idata.availablePacks.get(i);
             String desc = "";
             String key = pack.id + ".description";
-            if (langpack != null && pack.id != null && !pack.id.equals(""))
+            if (langpack != null && pack.id != null && !"".equals(pack.id))
             {
                 desc = langpack.getString(key);
             }
-            if (desc.equals("") || key.equals(desc))
+            if ("".equals(desc) || key.equals(desc))
             {
                 desc = pack.description;
             }
@@ -278,11 +278,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 Pack childPack = (Pack) names.get(name);
                 String childName = "";
                 String key = childPack.id;
-                if (langpack != null && childPack.id != null && !childPack.id.equals(""))
+                if (langpack != null && childPack.id != null && !"".equals(childPack.id))
                 {
                     childName = langpack.getString(key);
                 }
-                if (childName.equals("") || key.equals(childName))
+                if ("".equals(childName) || key.equals(childName))
                 {
                     childName = childPack.name;
                 }
@@ -531,7 +531,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             }
             first = false;
             Pack pack = (Pack) iter.next();
-            if (langpack != null && pack.id != null && !pack.id.equals(""))
+            if (langpack != null && pack.id != null && !"".equals(pack.id))
             {
                 retval.append(langpack.getString(pack.id));
             }

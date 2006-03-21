@@ -38,9 +38,6 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
         AbstractUIProgressHandler
 {
 
-    // state var for thread sync.
-    private boolean done = false;
-
     private int noOfPacks = 0;
 
     /**
@@ -63,7 +60,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
     {
         Unpacker unpacker = new Unpacker(idata, this);
         unpacker.start();
-        done = false;
+        boolean done = false;
         while (!done && unpacker.isAlive())
         {
             try
@@ -96,7 +93,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
     public void stopAction()
     {
         System.out.println("[ Unpacking finished. ]");
-        done = true;
+        boolean done = true;
     }
 
     /**

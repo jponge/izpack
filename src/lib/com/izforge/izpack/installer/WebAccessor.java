@@ -341,5 +341,5 @@ public class WebAccessor
 
             return new PasswordAuthentication(nameField.getText(), passField.getPassword());
         }
-    };
+    }
 }

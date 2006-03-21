@@ -612,7 +612,7 @@ public class TargetFactory
                 while (line != null)
                 {
                     line = line.trim();
-                    if (!line.equals(""))
+                    if (!"".equals(line))
                     {
                         break;
                     }
@@ -637,7 +637,7 @@ public class TargetFactory
         // if we were unable to obtain a path from a resource,
         // use the default for the traget operating system.
         // ----------------------------------------------------
-        if (path == null || path.equals(""))
+        if (path == null || "".equals(path))
         {
             path = "";
 

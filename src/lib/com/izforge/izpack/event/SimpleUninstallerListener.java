@@ -55,7 +55,6 @@ public class SimpleUninstallerListener implements UninstallerListener
     public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception
     {
         // Do nothing
-        ;
     }
 
     /*
@@ -67,7 +66,6 @@ public class SimpleUninstallerListener implements UninstallerListener
     public void beforeDelete(File file, AbstractUIProgressHandler handler) throws Exception
     {
         // Do nothing
-        ;
     }
 
     /*
@@ -79,7 +77,6 @@ public class SimpleUninstallerListener implements UninstallerListener
     public void afterDelete(File file, AbstractUIProgressHandler handler) throws Exception
     {
         // Do nothing
-        ;
     }
 
     /*
@@ -91,7 +88,6 @@ public class SimpleUninstallerListener implements UninstallerListener
     public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception
     {
         // Do nothing
-        ;
     }
 
     /*

@@ -217,7 +217,7 @@ public class IzPackTask extends Task implements PackagerListener
             }
         }
 
-        if (inheritAll == true)
+        if (inheritAll)
         {
             Hashtable projectProps = getProject().getProperties();
             Enumeration e = projectProps.keys();

@@ -72,10 +72,8 @@ public class RuleTextField extends JTextField
 
     private Toolkit toolkit;
 
-    private Rule rule;
-
     public RuleTextField(int digits, int editLength, int type, boolean unlimitedEdit,
-            Toolkit toolkit)
+                         Toolkit toolkit)
     {
         super(digits + 1);
 
@@ -83,14 +81,14 @@ public class RuleTextField extends JTextField
         this.toolkit = toolkit;
         this.editLength = editLength;
         this.unlimitedEdit = unlimitedEdit;
-        rule = new Rule();
+        Rule rule = new Rule();
         rule.setRuleType(type, editLength, unlimitedEdit);
         setDocument(rule);
     }
 
     protected Document createDefaultModel()
     {
-        rule = new Rule();
+        Rule rule = new Rule();
         return (rule);
     }
 

@@ -426,7 +426,7 @@ public class TwoColumnLayout implements LayoutManager2
                 positionComponent(y, i, LEFT, parent);
                 positionComponent((y + offset), i, RIGHT, parent);
 
-                y = y + leftHeight;
+                y += leftHeight;
             }
             else if (leftHeight < rightHeight)
             {
@@ -435,14 +435,14 @@ public class TwoColumnLayout implements LayoutManager2
                 positionComponent((y + offset), i, LEFT, parent);
                 positionComponent(y, i, RIGHT, parent);
 
-                y = y + rightHeight;
+                y += rightHeight;
             }
             else
             {
                 positionComponent(y, i, LEFT, parent);
                 positionComponent(y, i, RIGHT, parent);
 
-                y = y + leftHeight;
+                y += leftHeight;
             }
         }
     }
@@ -531,8 +531,8 @@ public class TwoColumnLayout implements LayoutManager2
                 // --------------------------------------------------
                 if (constraints.indent)
                 {
-                    width = width - indent;
-                    x = x + indent;
+                    width -= indent;
+                    x += indent;
                 }
 
                 component.setBounds(x, y, width, height);
@@ -566,7 +566,7 @@ public class TwoColumnLayout implements LayoutManager2
 
                 if (constraints.indent)
                 {
-                    temp = temp + indent;
+                    temp += indent;
                 }
 
                 if (temp > width)
@@ -611,7 +611,7 @@ public class TwoColumnLayout implements LayoutManager2
 
                 if (constraints.indent)
                 {
-                    temp = temp + indent;
+                    temp += indent;
                 }
 
                 if (temp > width)
@@ -630,7 +630,7 @@ public class TwoColumnLayout implements LayoutManager2
 
         for (int i = 0; i < rows(); i++)
         {
-            height = height + rowHeight(i);
+            height += rowHeight(i);
         }
 
         return (height);

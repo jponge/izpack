@@ -309,11 +309,11 @@ public class Unpacker extends Thread
                 final Pack pack = ((Pack) packs.get(i));
                 String stepname = pack.name;// the message to be passed to the
                 // installpanel
-                if (langpack != null && !(pack.id == null || pack.id.equals("")))
+                if (langpack != null && !(pack.id == null || "".equals(pack.id)))
                 {
 
                     final String name = langpack.getString(pack.id);
-                    if (name != null && !name.equals(""))
+                    if (name != null && !"".equals(name))
                     {
                         stepname = name;
                     }
@@ -783,7 +783,7 @@ public class Unpacker extends Thread
                     case '*': {
                         if (pos == element.length())
                         {
-                            element_re.append("[^" + File.separator + "]*");
+                            element_re.append("[^").append(File.separator).append("]*");
                             break;
                         }
 
@@ -798,7 +798,7 @@ public class Unpacker extends Thread
                         }
                         else
                         {
-                            element_re.append("[^" + File.separator + "]*");
+                            element_re.append("[^").append(File.separator).append("]*");
                             // lookahead stays there
                         }
                         break;

@@ -152,7 +152,7 @@ public class FileExecutor
         {
             for (int i = 0; i < params.length; i++)
             {
-                retval.append("\tparams: " + params[i]);
+                retval.append("\tparams: ").append(params[i]);
                 retval.append("\n");
             }
         }

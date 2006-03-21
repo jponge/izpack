@@ -59,14 +59,7 @@ public class HostAddressValidator implements Validator
         {
             inet = InetAddress.getByName(host);
             ServerSocket socket = new ServerSocket(port, 0, inet);
-            if (socket.getLocalPort() > 0)
-            {
-                retValue = true;
-            }
-            else
-            {
-                retValue = false;
-            }
+            retValue = socket.getLocalPort() > 0;
             socket.close();
         }
         catch (Exception ex)

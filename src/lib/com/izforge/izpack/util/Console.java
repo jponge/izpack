@@ -296,7 +296,7 @@ class ConsoleWrite implements Runnable
     {
         textArea.write(str);
     }
-};
+}
 
 class ConsoleWriter extends java.io.OutputStream
 {
@@ -351,7 +351,7 @@ class ConsoleWriter extends java.io.OutputStream
         buffer.setLength(0);
         SwingUtilities.invokeLater(new ConsoleWrite(textArea, str));
     }
-};
+}
 
 class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
 {
@@ -362,8 +362,6 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
     private static final long serialVersionUID = 3258410625414475827L;
 
     private ConsoleWriter console1;
-
-    private ConsoleWriter console2;
 
     private PrintStream out;
 
@@ -390,7 +388,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
         super();
         history = new java.util.Vector();
         console1 = new ConsoleWriter(this);
-        console2 = new ConsoleWriter(this);
+        ConsoleWriter console2 = new ConsoleWriter(this);
         out = new PrintStream(console1);
         err = new PrintStream(console2);
         PipedOutputStream outPipe = new PipedOutputStream();
@@ -629,4 +627,4 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
         return err;
     }
 
-};
+}
