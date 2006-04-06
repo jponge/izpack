@@ -139,8 +139,11 @@
     09.09.2005: (Marc.Eppelmann)
 		Added start.sh to the shipped files in bin-folder.
 		
-		10.01.2006: (by Fabrice Mirabile)
+	10.01.2006: (by Fabrice Mirabile)
 		Added the splashscreen to the cleandistreg target
+		
+	06.04.2006: (Marc Eppelmann)
+	    Inserted the fix.crlf target in the depends-list of target "all" to prevent encoding problems.
 
   Mini-HowTo:
 
@@ -822,7 +825,7 @@
 
     <!-- Builds all compilation targets -->
     <target name="all"
-            depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" />
+            depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler, fix.crlf" />
 
     <!-- Builds the Javadoc -->
     <target name="build.javadoc" depends="prepare" description="Builds the javadoc">
@@ -976,6 +979,10 @@
             <include name="**/*.xml" />
             <include name="**/*.properties" />
         </fixcrlf>
+    	<fixcrlf srcdir="${src.dir}">
+    		<include name="**/*.sh"/>
+    		<include name="dist/compile"/>
+    	</fixcrlf>
     </target>
 
     <!-- Runs a testing installer. -->
