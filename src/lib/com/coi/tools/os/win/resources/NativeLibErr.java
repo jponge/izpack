@@ -31,7 +31,6 @@ import java.util.ListResourceBundle;
  */
 public class NativeLibErr extends ListResourceBundle
 {
-
     private static final Object[][] contents = {
             { "libInternal.OsErrNumPraefix", " System error number is: "},
             { "libInternal.OsErrStringPraefix", " System error text is: "},
