@@ -749,17 +749,20 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     public void caretUpdate(CaretEvent event)
     {
-        String text = activeField.getText();
-        int fieldSize = activeField.getEditLength();
-        int caretPosition = activeField.getCaretPosition();
-        int selection = activeField.getSelectionEnd() - activeField.getSelectionStart();
-
-        if ((!inputFields.lastElement().equals(activeField)) && (!activeField.unlimitedEdit()))
+        if (activeField != null)
         {
-            if ((text.length() == fieldSize) && (selection == 0) && (caretPosition == fieldSize)
-                    && !backstep)
+            String text = activeField.getText();
+            int fieldSize = activeField.getEditLength();
+            int caretPosition = activeField.getCaretPosition();
+            int selection = activeField.getSelectionEnd() - activeField.getSelectionStart();
+    
+            if ((!inputFields.lastElement().equals(activeField)) && (!activeField.unlimitedEdit()))
             {
-                activeField.transferFocus();
+                if ((text.length() == fieldSize) && (selection == 0) && (caretPosition == fieldSize)
+                        && !backstep)
+                {
+                    activeField.transferFocus();
+                }
             }
         }
     }
