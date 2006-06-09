@@ -1,4 +1,5 @@
 /*
+ * $Id:$
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -129,6 +130,9 @@ public class InstallerFrame extends JFrame
 
     /** The quit button. */
     protected JButton quitButton;
+    
+    /** Registered GUICreationListener. */
+    protected ArrayList guiListener;
 
     /** Image */
     private JLabel iconLabel;
@@ -149,6 +153,7 @@ public class InstallerFrame extends JFrame
     public InstallerFrame(String title, InstallData installdata) throws Exception
     {
         super(title);
+        guiListener = new ArrayList();
         this.installdata = installdata;
         this.langpack = installdata.langpack;
 
@@ -349,6 +354,19 @@ public class InstallerFrame extends JFrame
 
         loadImage(0);
         getRootPane().setDefaultButton(nextButton);
+        callGUIListener(GUIListener.GUI_BUILDED, navPanel);
+    }
+
+    private void callGUIListener(int what)
+    {
+        callGUIListener(what, null);
+    }
+
+    private void callGUIListener(int what, Object param)
+    {
+        Iterator iter = guiListener.iterator();
+        while(iter.hasNext())
+            ((GUIListener) iter.next()).guiActionPerformed(what, param);
     }
 
     private void loadImage(int panelNo)
@@ -464,6 +482,7 @@ public class InstallerFrame extends JFrame
             panelsContainer.setVisible(true);
             loadImage(installdata.curPanelNumber);
             isBack = false;
+            callGUIListener(GUIListener.PANEL_SWITCHED);
         }
         catch (Exception err)
         {
@@ -849,6 +868,8 @@ public class InstallerFrame extends JFrame
         if (blockFTP == null) blockFTP = new BlockFocusTraversalPolicy();
         setFocusTraversalPolicy((java.awt.FocusTraversalPolicy) blockFTP);
         getGlassPane().requestFocus();
+        callGUIListener(GUIListener.GUI_BLOCKED);
+
     }
 
     /** Releases GUI interaction. */
@@ -860,6 +881,7 @@ public class InstallerFrame extends JFrame
         // No traversal handling before VM version 1.4
         if (JAVA_SPECIFICATION_VERSION < 1.35) return;
         setFocusTraversalPolicy((java.awt.FocusTraversalPolicy) usualFTP);
+        callGUIListener(GUIListener.GUI_RELEASED);
     }
 
     /** Locks the 'previous' button. */
@@ -1018,5 +1040,25 @@ public class InstallerFrame extends JFrame
         {
             return aComp == getGlassPane();
         }
+    }
+
+    
+    /**
+     * Returns the gui creation listener list.
+     * @return the gui creation listener list
+     */
+    public List getGuiListener()
+    {
+        return guiListener;
+    }
+
+    
+    /**
+     * Add a listener to the listener list.
+     * @param listener to be added as gui creation listener
+     */
+    public void addGuiListener(GUIListener listener)
+    {
+        guiListener.add(listener);
     }
 }
