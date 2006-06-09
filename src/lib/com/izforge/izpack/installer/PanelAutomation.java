@@ -52,6 +52,8 @@ public interface PanelAutomation
      * 
      * @param installData The installation data
      * @param panelRoot The XML root element of the panels blackbox tree.
+     * 
+     * @return true if the automated work was performed successful, false if it failed critically.
      */
-    public void runAutomated(AutomatedInstallData installData, XMLElement panelRoot);
+    public boolean runAutomated(AutomatedInstallData installData, XMLElement panelRoot);
 }

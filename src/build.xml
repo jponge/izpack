@@ -555,6 +555,7 @@
             <include name="com/izforge/izpack/panels/PacksModel.java" />
             <include name="com/izforge/izpack/panels/PacksPanelBase.java" />
             <include name="com/izforge/izpack/panels/PacksPanelInterface.java" />
+            <include name="com/izforge/izpack/panels/PacksPanelAutomationHelper.java" />
         </build-panel>
         <build-panel name="HTMLLicencePanel">
             <include name="com/izforge/izpack/panels/HTMLLicencePanel.java" />
@@ -607,7 +608,7 @@
         </build-panel>
         <build-panel name="ProcessPanel">
             <include name="com/izforge/izpack/panels/ProcessPanel.java" />
-            <include name="com/izforge/izpack/panels/ProcessPanelAutomationPanel.java" />
+            <include name="com/izforge/izpack/panels/ProcessPanelAutomationHelper.java" />
         </build-panel>
         <build-panel name="SudoPanel">
             <include name="com/izforge/izpack/panels/SudoPanel.java" />

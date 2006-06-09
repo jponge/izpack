@@ -61,18 +61,23 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
      * Perform the installation actions.
      * 
      * @param panelRoot The panel XML tree root.
+     * 
+     * @return true if processes were run successfully.
      */
-    public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
         try
         {
             ProcessPanelWorker worker = new ProcessPanelWorker(idata, this);
 
             worker.run();
+            
+            return this.worker.getResult();
         }
         catch (IOException e)
         {
             e.printStackTrace();
+            return false;
         }
 
     }

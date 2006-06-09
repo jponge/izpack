@@ -60,6 +60,9 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
     // ------------------------------------------------------
     private Map entries;
 
+    /**
+     * Default constructor, used during automated installation.
+     */
     public UserInputPanelAutomationHelper()
     {
         this.entries = null;
@@ -94,11 +97,11 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         // add all entries
         // ----------------------------------------------------
-        Iterator keys = entries.keySet().iterator();
+        Iterator keys = this.entries.keySet().iterator();
         while (keys.hasNext())
         {
             String key = (String) keys.next();
-            String value = (String) entries.get(key);
+            String value = (String) this.entries.get(key);
 
             dataElement = new XMLElement(AUTO_KEY_ENTRY);
             dataElement.setAttribute(AUTO_ATTRIBUTE_KEY, key);
@@ -113,8 +116,10 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
      * 
      * @param idata The installation data.
      * @param panelRoot The XML root element of the panels blackbox tree.
+     * 
+     * @return true if the variables were found and set.
      */
-    public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
         XMLElement userInput;
         XMLElement dataElement;
@@ -126,11 +131,11 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         userInput = panelRoot.getFirstChildNamed(AUTO_KEY_USER_INPUT);
 
-        if (userInput == null) { return; }
+        if (userInput == null) { return false; }
 
         Vector userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
 
-        if (userEntries == null) { return; }
+        if (userEntries == null) { return false; }
 
         // ----------------------------------------------------
         // retieve each entry and substitute the associated
@@ -145,5 +150,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
             Debug.trace("UserInputPanel: setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);
         }
+        
+        return true;
     }
 }

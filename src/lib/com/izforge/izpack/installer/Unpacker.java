@@ -107,6 +107,9 @@ public class Unpacker extends Thread
 
     public static final String INTERRUPTED = "interruppted";
 
+    /** The result of the operation. */
+    private boolean result = true;
+    
     /**
      * The constructor.
      * 
@@ -247,6 +250,7 @@ public class Unpacker extends Thread
             if (doIt != null && (doIt.equals(INTERRUPT) || doIt.equals(INTERRUPTED)))
             {
                 instances.put(this, INTERRUPTED);
+                this.result = false;
                 return (true);
             }
             return (false);
@@ -348,6 +352,7 @@ public class Unpacker extends Thread
                                     handler.emitError("Error creating directories",
                                             "Could not create directory\n" + dest.getPath());
                                     handler.stopAction();
+                                    this.result = false;
                                     return;
                                 }
                             }
@@ -451,7 +456,7 @@ public class Unpacker extends Thread
                             int maxBytes = (int) Math.min(pf.length() - bytesCopied, buffer.length);
                             int bytesInBuffer = pis.read(buffer, 0, maxBytes);
                             if (bytesInBuffer == -1)
-                                throw new IOException("Unexpected end of stream");
+                                throw new IOException("Unexpected end of stream (installer corrupted?)");
 
                             out.write(buffer, 0, bytesInBuffer);
 
@@ -541,7 +546,10 @@ public class Unpacker extends Thread
             // We use the file executor
             FileExecutor executor = new FileExecutor(executables);
             if (executor.executeFiles(ExecutableFile.POSTINSTALL, handler) != 0)
+            {
                 handler.emitError("File execution failed", "The installation was not completed");
+                this.result = false;
+            }
 
             if (performInterrupted())
             { // Interrupt was initiated; perform it.
@@ -575,6 +583,7 @@ public class Unpacker extends Thread
             handler.stopAction();
             handler.emitError("An error occured", err.toString());
             err.printStackTrace();
+            this.result = false;
         }
         finally
         {
@@ -582,6 +591,16 @@ public class Unpacker extends Thread
         }
     }
 
+    /**
+     * Return the state of the operation.
+     * 
+     * @return true if the operation was successful, false otherwise.
+     */
+    public boolean getResult()
+    {
+        return this.result;
+    }
+    
     /**
      * @param updatechecks
      */

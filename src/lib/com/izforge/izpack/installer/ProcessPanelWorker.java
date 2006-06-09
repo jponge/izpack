@@ -74,6 +74,8 @@ public class ProcessPanelWorker implements Runnable
 
     private ArrayList jobs = new ArrayList();
 
+    private boolean result = true;
+    
     private static PrintWriter logfile = null;
 
     private String logfiledir = null;
@@ -281,11 +283,11 @@ public class ProcessPanelWorker implements Runnable
 
             this.handler.startProcess(pj.name);
 
-            boolean result = pj.run(this.handler, this.vs);
+            this.result = pj.run(this.handler, this.vs);
 
             this.handler.finishProcess();
 
-            if (!result) break;
+            if (!this.result) break;
         }
 
         this.handler.finishProcessing();
@@ -300,6 +302,16 @@ public class ProcessPanelWorker implements Runnable
         processingThread.start();
     }
 
+    /**
+     * Return the result of the process execution.
+     * 
+     * @return true if all processes succeeded, false otherwise.
+     */
+    public boolean getResult()
+    {
+        return this.result;
+    }
+    
     interface Processable
     {
 

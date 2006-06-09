@@ -55,8 +55,10 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * Perform the installation actions.
      * 
      * @param panelRoot The panel XML tree root.
+     * 
+     * @return true if the installation was successful.
      */
-    public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
         Unpacker unpacker = new Unpacker(idata, this);
         unpacker.start();
@@ -72,6 +74,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
                 // ignore it, we're waiting for the unpacker to finish...
             }
         }
+        return unpacker.getResult();
     }
 
     /**

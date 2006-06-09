@@ -63,17 +63,18 @@ public class Installer
             }
             else
             {
-                new AutomatedInstaller(args[0]);
+                AutomatedInstaller ai = new AutomatedInstaller(args[0]);
+                // this method will also exit!
+                ai.doInstall();
             }
         }
         catch (Exception e)
         {
-            System.err.println("- Error -");
+            System.err.println("- ERROR -");
             System.err.println(e.toString());
             e.printStackTrace();
-            System.exit(0);
+            System.exit(1);
         }
     }
 
-    
 }

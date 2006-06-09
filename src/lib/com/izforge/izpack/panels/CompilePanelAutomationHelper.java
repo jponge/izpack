@@ -68,7 +68,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * 
      * @param panelRoot The panel XML tree root.
      */
-    public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
         XMLElement compiler_xml = panelRoot.getFirstChildNamed("compiler");
 
@@ -79,7 +79,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         if (compiler == null)
         {
             System.out.println("invalid automation data: could not find compiler");
-            return;
+            return false;
         }
 
         XMLElement args_xml = panelRoot.getFirstChildNamed("arguments");
@@ -91,7 +91,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         if (args_xml == null)
         {
             System.out.println("invalid automation data: could not find compiler arguments");
-            return;
+            return false;
         }
 
         try
@@ -101,10 +101,13 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
             this.worker.setCompilerArguments(args);
 
             this.worker.run();
+            
+            return this.worker.getResult().isSuccess();
         }
         catch (IOException e)
         {
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -135,8 +138,8 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         System.err.println(error.getStdout());
         System.err.println("stderr of compiler:");
         System.err.println(error.getStderr());
-        // do not abort compilation, just continue
-        error.setAction(CompileResult.ACTION_CONTINUE);
+        // abort instantly and make installation fail
+        error.setAction(CompileResult.ACTION_ABORT);
     }
 
     /**

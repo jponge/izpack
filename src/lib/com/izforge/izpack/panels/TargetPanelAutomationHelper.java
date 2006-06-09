@@ -61,11 +61,14 @@ public class TargetPanelAutomationHelper implements PanelAutomation
      * 
      * @param idata The installation data.
      * @param panelRoot The XML tree to read the data from.
+     * 
+     * @return always true.
      */
-    public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
         // We set the installation path
         XMLElement ipath = panelRoot.getFirstChildNamed("installpath");
         idata.setInstallPath(ipath.getContent());
+        return true;
     }
 }

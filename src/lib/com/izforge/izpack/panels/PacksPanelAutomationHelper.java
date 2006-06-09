@@ -66,14 +66,16 @@ public class PacksPanelAutomationHelper implements PanelAutomation
      * 
      * @param idata The installation data.
      * @param panelRoot The root of the panel data.
+     * 
+     * @return true if all packs were found and selected, false if something was wrong.
      */
-    public void runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
-        // We first get the <selected> child (new from version 3.7.0).
-        XMLElement selectedPacks = panelRoot.getFirstChildNamed("selected");
         // We get the packs markups
-        Vector pm = selectedPacks.getChildrenNamed("pack");
+        Vector pm = panelRoot.getChildrenNamed("pack");
 
+        boolean result = true;
+        
         // We figure out the selected ones
         int size = pm.size();
         idata.selectedPacks.clear();
@@ -88,8 +90,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
 
                 // be liberal in what we accept
                 // (For example, this allows auto-installer files to be fitted
-                // to automatically
-                // generated installers, yes I need this! tisc.)
+                // to automatically generated installers, yes I need this! tschwarze.)
                 if (index_str != null)
                 {
                     try
@@ -103,12 +104,14 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                         {
                             System.err.println("Invalid pack index \"" + index_str + "\" in line "
                                     + el.getLineNr());
+                            result = false;
                         }
                     }
                     catch (NumberFormatException e)
                     {
                         System.err.println("Invalid pack index \"" + index_str + "\" in line "
                                 + el.getLineNr());
+                        result = false;
                     }
                 }
                 else
@@ -138,6 +141,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                         {
                             System.err.println("Could not find selected pack named \"" + name
                                     + "\" in line " + el.getLineNr());
+                            result = false;
                         }
 
                     }
@@ -148,6 +152,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
 
         }
 
+        return result;
     }
 
 }
