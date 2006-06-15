@@ -72,7 +72,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
 
             worker.run();
             
-            return this.worker.getResult();
+            return worker.getResult();
         }
         catch (IOException e)
         {
