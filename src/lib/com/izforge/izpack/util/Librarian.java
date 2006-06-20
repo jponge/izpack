@@ -1,4 +1,5 @@
 /*
+ * $Id:$ 
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -24,6 +25,7 @@ package com.izforge.izpack.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -77,6 +79,10 @@ public class Librarian implements CleanupClient
 
     /** The block size used for reading and writing data, 4k. */
     private static final int BLOCK_SIZE = 4096;
+
+    /** VM version needed to select clean up method. */
+    private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
+            .getProperty("java.specification.version"));
 
     // ------------------------------------------------------------------------
     // Variable Declarations
@@ -204,6 +210,16 @@ public class Librarian implements CleanupClient
         // ----------------------------------------------------
         if (loaded(libraryName)) { return; }
 
+        
+        if( System.getProperty("DLL_PATH") != null )
+        {
+            String path = System.getProperty("DLL_PATH") + "/" + name + extension;
+            path = path.replace('/', File.separatorChar);
+            Debug.trace("Try to load library " + path);
+            System.load(path);
+            return;
+            
+        }
         // ----------------------------------------------------
         // First try a straight load
         // ----------------------------------------------------
@@ -632,9 +648,40 @@ public class Librarian implements CleanupClient
     /**
      * This method attempts to remove all native libraries that have been temporarily created from
      * the system.
+     * The used method for clean up depends on the VM version.
+     * If the ersion is 1.5.x or higher this process should be exit in one second, else
+     * the native libraries will be not deleted.
+     * Tests with the different methods produces hinds that the
+     * FreeLibraryAndExitThread (handle, 0) call in the dlls are the 
+     * reason for VM crashes (version 1.5.x). May be this is a bug in the VM.
+     * But never seen a docu that this behavior is compatible with a VM.
+     * Since more than a year all 1.5 versions produce this crash. Therfore we make
+     * now a work around for it.
+     * But the idea to exit the thread for removing the file locking to give the
+     * possibility to delete the dlls are really nice. Therefore we use it with
+     * VMs which are compatible with it.  (Klaus Bartz 2006.06.20)
      */
     /*--------------------------------------------------------------------------*/
     public void cleanUp()
+    {
+        if (JAVA_SPECIFICATION_VERSION < 1.5)
+            oldCleanUp();
+        else
+            newCleanUp();
+
+    }
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * This method attempts to remove all native libraries that have been temporarily created from
+     * the system.
+     * This method will be invoked if the VM has version 1.4.x or less. Version 1.5.x or higher
+     * uses newCleanUp.
+     * This method starts a new thread which calls a method in the dll which should unload the
+     * dll. The thread never returns. 
+     */
+    /*--------------------------------------------------------------------------*/
+    private void oldCleanUp()
     {
         for (int i = 0; i < clients.size(); i++)
         {
@@ -667,6 +714,32 @@ public class Librarian implements CleanupClient
             catch (Throwable exception)
             {} // nothing I can do
         }
+    }
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * This method attempts to remove all native libraries that have been temporarily created from
+     * the system. This method will be invoked if the VM has version 1.5.x or higher. Version 1.4.x
+     * or less uses oldCleanUp. This method calls LibraryRemover which starts a new process which
+     * waits a little bit for exit of this process and tries than to delete the given files.
+     */
+    /*--------------------------------------------------------------------------*/
+    private void newCleanUp()
+    {
+        // This method will be used the SelfModifier stuff of uninstall 
+        // instead of killing the thread in the dlls which provokes a 
+        // segmentation violation with a 1.5 (also known as 5.0) VM.
+
+        try
+        {
+            LibraryRemover.invoke(temporaryFileNames);
+        }
+        catch (IOException e1)
+        {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
     }
 }
 /*---------------------------------------------------------------------------*/
