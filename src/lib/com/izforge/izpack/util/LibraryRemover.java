@@ -63,7 +63,7 @@ public class LibraryRemover
      * jar file. No slash in front should be used; no dot else slashes should be used;
      * extension (.class) will be required.
      */
-    private static final String[] SANDBOX_CONTENT = { "com/izforge/izpack/util/LibrianRemover.class"};
+    private static final String[] SANDBOX_CONTENT = { "com/izforge/izpack/util/LibraryRemover.class"};
 
     /** System property name of base for log and sandbox of secondary processes. */
     private static final String BASE_KEY = "lib.rem.base";
