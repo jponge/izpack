@@ -144,7 +144,11 @@
 		
 	06.04.2006: (Marc Eppelmann)
 	    Inserted the fix.crlf target in the depends-list of target "all" to prevent encoding problems.
-
+	    
+	26.06.2006: (Marc Eppelmann)
+	    Extracted / Reordered some dist related targets to prevent double copy actions.
+        Also fixed the fix.crlf basedir
+        
   Mini-HowTo:
 
   To compile and package the compiler.jar jar file, type:
@@ -826,7 +830,7 @@
 
     <!-- Builds all compilation targets -->
     <target name="all"
-            depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler, fix.crlf" />
+            depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" description="base: compiles a developer version"/>
 
     <!-- Builds the Javadoc -->
     <target name="build.javadoc" depends="prepare" description="Builds the javadoc">
@@ -857,15 +861,23 @@
             description="Creates the javadoc-api and customer documentation">
 
     </target>
-
-    <!-- Creates an installer for IzPack -->
-    <target name="generate.installer.worker">
-
+	
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: taskdef                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="taskdef.dist">
         <!-- Allows us to use the IzPack Ant task -->
         <taskdef name="izpack"
                  classpath="${basedir}/lib/compiler.jar"
                  classname="com.izforge.izpack.ant.IzPackTask" />
-
+    </target>
+	
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: copy.natives                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="copy.dist.natives">
         <echo message="Copies the recent changed native files to the ${basedir}/bin directory" />
 
         <mkdir dir="${basedir}/bin/native/izpack" />
@@ -882,7 +894,13 @@
               file="${basedir}/src/native/win/COIOSHelper/Release_Unicode/COIOSHelper.dll"
               verbose="true"
               overwrite="yes" />
+    </target>
 
+    
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: copy.distfiles                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="copy.dist.files">
         <echo message="Copies the general files to the dist directory" />
         <copy todir="${dist.dir}" includeEmptyDirs="yes">
             <fileset dir="${basedir}">
@@ -915,7 +933,21 @@
                 <include name="RegistrySpec.xml" />
             </fileset>
         </copy>
+        <echo message="Copies the bin files to the dist directory" />
+        <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
+            <fileset dir="${dist-files.dir}">
+                <include name="compile*" />            	
+                <include name="lcp.bat" />
+            	<include name="start.sh"/>
+            </fileset>
+        </copy>
+    </target>
 
+    
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: replace.dist.buildnumber                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="replace.dist.buildnumber">
         <replace file="${dist.dir}/shortcutSpec.xml"
                  token="@build.number@"
                  value="${build.number}"
@@ -930,15 +962,10 @@
                  token="@ver@"
                  value="${ver}"
                  summary="yes" />
+    </target>
 
-        <echo message="Copies the bin files to the dist directory" />
-        <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
-            <fileset dir="${dist-files.dir}">
-                <include name="compile*" />            	
-                <include name="lcp.bat" />
-            	<include name="start.sh"/>
-            </fileset>
-        </copy>
+    <!-- Creates an installer for IzPack -->
+    <target name="exec.izpack.compiler">
 
         <!-- We call IzPack -->
         <echo message="Makes the installer using IzPack" level="verbose" />
@@ -949,22 +976,40 @@
                 izPackDir="${dist.dir}/"
                 compression="raw"
                 compressionlevel="9" />
+    	<echo>
+sucessfully created:
+${dist.dir}/${installer.name}${ver}.${rel}.jar    		
+    	</echo>
     </target>
-
+	
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: prepare.install.dist                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="prepare.install.dist" depends="taskdef.dist, copy.dist.natives, copy.dist.files, replace.dist.buildnumber, fix.crlf">
+            
+    </target>
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: generate.simple.and.reg.installer                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="generate.simple.and.reg.installer" depends="generate.installer, generate.installer-reg">
+            
+    </target>
 
     <!-- ================================= 
 	   Creates a normal installer for IzPack 
 	  ================================= -->
-    <target name="generate.installer">
-        <antcall target="generate.installer.worker">
+    <target name="generate.installer" depends="prepare.install.dist">
+        <antcall target="exec.izpack.compiler">
             <param name="installer.xmlfile" value="IzPack-install.xml" />
             <param name="installer.name" value="IzPack-install-" />
         </antcall>
     </target>
 
     <!-- Creates an installer for IzPack with registry support -->
-    <target name="generate.installer-reg">
-        <antcall target="generate.installer.worker">
+    <target name="generate.installer-reg" depends="prepare.install.dist">
+        <antcall target="exec.izpack.compiler">
             <param name="installer.xmlfile" value="IzPack-install-reg.xml" />
             <param name="installer.name" value="IzPack-install-reg-" />
         </antcall>
@@ -975,14 +1020,26 @@
         It also fixes the encoding problems by moving it to UTF-8.
     -->
     <target name="fix.crlf">
-        <fixcrlf srcDir="${src.dir}" eol="lf" eof="remove" encoding="UTF-8">
+        <property name="dist.src.dir" location="${dist.dir}/src"/>
+    	<property name="dist.bin.dir" location="${dist.dir}/bin"/>
+        <echo>
+Fixing linefeeds for several files in:
+ "${dist.src.dir}"
+   and
+ "${dist.bin.dir}"
+        </echo>
+        <fixcrlf srcDir="${dist.src.dir}" eol="lf" eof="remove" encoding="UTF-8">
             <include name="**/*.java" />
             <include name="**/*.xml" />
             <include name="**/*.properties" />
         </fixcrlf>
-    	<fixcrlf srcdir="${src.dir}">
-    		<include name="**/*.sh"/>
-    		<include name="dist/compile"/>
+    	<fixcrlf srcdir="${dist.dir}" eol="unix" eof="remove">
+            <include name="**/*.sh"/>
+    	    <include name="dist-files/compile"/>
+        </fixcrlf>
+    	<fixcrlf srcdir="${dist.bin.dir}" eol="unix" eof="remove">
+    	  <include name="**/*.sh"/>
+    	  <include name="compile"/>	    	
     	</fixcrlf>
     </target>
 
@@ -998,7 +1055,7 @@
 
     <!-- Makes everything, from compilation, customer and javadoc to generating an installer. -->
     <target name="dist"
-            depends="all, create.docu, generate.installer, generate.installer-reg"
+            depends="all, create.docu, generate.simple.and.reg.installer"
             description="makes a complete installer" />
 
     <!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
