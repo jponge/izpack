@@ -60,19 +60,28 @@ function detectDesktop() {
 
 function lookForRunningGecko(){
   if command -v firefox &>/dev/null; then
-    if command firefox -remote "ping()" &>/dev/null; then
-      echo firefox # firefox -remote \"openurl("$1",new-tab)\"
+    tempfile=`mktemp`
+  	
+    firefox -remote "ping()" 2> $tempfile
+    
+  	if [ -s $tempfile ]; then
+      rm $tempfile
+      echo "none" # is not running :-)
+      return 1
+  	else
+  	  rm $tempfile      
+  	  echo firefox # is running :-)
       return 0
-    fi
+  	fi    
   fi    # firefox "$1"
   if command -v mozilla &>/dev/null; then
     #if mozilla -remote "ping()" 
     if command mozilla -remote "ping()" &>/dev/null; then
-      echo mozilla # firefox -remote \"openurl("$1",new-tab)\"
+      echo mozilla # is running :-)
       return 0
     fi
   fi
-  echo none
+  echo "none"
   
   return 1
 }
@@ -97,7 +106,7 @@ if [[ "$gecko" = "none" ]]; then # try open a new instance if found:
   fi
 else 
   echo "Launching: $gecko"
-  $gecko -remote "openurl($1,new-tab)" &
+  $gecko -remote "openurl($1)" &
 fi
 
 
