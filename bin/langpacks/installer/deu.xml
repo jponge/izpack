@@ -26,6 +26,8 @@
     <str id="HelloPanel.authors" txt="Der(die) Autor(en) dieser Software ist(sind): "/>
     <str id="HelloPanel.url" txt="Die Homepage für diese Software: "/>
 
+	<str id="PrinterSelectPanel.select_printer" txt="Wählen Sie den Drucker für die erste Einrichtung und Prüfung." />
+
     <str id="CheckedHelloPanel.productAlreadyExist0" txt="Das Produkt ist bereits auf Ihrem Computer unter "/>
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" installiert. Soll eine weitere Version installiert werden?"/>
     <str id="CheckedHelloPanel.infoOverUninstallKey" txt="Der Deinstallationschlüssel lautet wie folgt: " />
