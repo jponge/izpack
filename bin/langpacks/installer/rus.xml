@@ -29,6 +29,8 @@
     <str id="HelloPanel.welcome2"       txt=" !"/>
     <str id="HelloPanel.authors"        txt="Авторы программы: "/>
     <str id="HelloPanel.url"            txt="Домашняя страница программы: "/>
+    
+    <str id="PrinterSelectPanel.select_printer" txt="Укажите принтер для установки и тестовой печати." />
 
     <str id="CheckedHelloPanel.productAlreadyExist0" txt="Этот продукт уже установлен на данном компьютере в каталоге "/>
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Вы действительно хотите установить еще одну копию?"/>
