@@ -163,7 +163,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private static final String SPEC_KEY_SHORTCUT = "shortcut";
 
     /** SPEC_KEY_PACKS = "createForPack" */
-
+    private static final String SPEC_KEY_PACKS = "createForPack";
     // ------------------------------------------------------
     // spec file key attributes
     // ------------------------------------------------------
@@ -952,6 +952,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 data.target = "";
             }
             // the shortcut is not actually required for any of the selected packs
+             
+            // the shortcut is not actually required for any of the selected packs               // the shortcut is not actually required for any of the selected packs
+            Vector forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);     
+     
+            if (!shortcutRequiredFor(forPacks))      
+            {    
+                continue;    
+            }
             // --------------------------------------------------
             // This section is executed if we don't skip.
             // --------------------------------------------------
