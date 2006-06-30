@@ -76,6 +76,9 @@ public class VariableSubstitutor implements Serializable
 
     /** A constant for file type. Plain file with '@' start char. */
     protected final static int TYPE_AT = 4;
+    
+    /** PLAIN = "plain" */
+    public final static String PLAIN = "plain";
 
     /** A mapping of file type names to corresponding integer constants. */
     protected final static Map typeNameToConstantMap;
@@ -196,6 +199,59 @@ public class VariableSubstitutor implements Serializable
 
         return subs;
     }
+    
+    /** 
+     * Substitute method Variant that gets An Input Stream and returns A String
+     *
+     * @param in The Input Stream, with Placeholders
+     * @param out The Substituted String
+     * @param type The used FormatType
+     * @param encoding The used encoding Type
+     * @param hidePasswd Set to true, to hide Password masked Placeholders in Logfile
+     *
+     * @throws IllegalArgumentException If a wrong input was given.
+     * @throws UnsupportedEncodingException If the file comes with a wrong Encoding
+     * @throws IOException If an I/O Error occurs.
+     */
+    public String substitute( InputStream in,  String type
+                             )
+                    throws IllegalArgumentException, UnsupportedEncodingException, 
+                           IOException
+    {
+      // Check if file type specific default encoding known
+      String encoding =  PLAIN;
+      {
+        int t = getTypeConstant( type );
+
+        switch( t )
+        {
+          case TYPE_JAVA_PROPERTIES:
+            encoding = "ISO-8859-1";
+
+            break;
+
+          case TYPE_XML:
+            encoding = "UTF-8";
+
+            break;
+        }
+      }
+
+      // Create the reader and writer
+      InputStreamReader  reader = ( ( encoding != null )
+                                    ? new InputStreamReader( in, encoding )
+                                    : new InputStreamReader( in ) );
+      StringWriter writer =  new StringWriter( ) ;
+
+      // Copy the data and substitute variables
+      substitute( reader, writer, type );
+
+      // Flush the writer so that everything gets written out
+      writer.flush(  );
+      
+      return writer.getBuffer().toString();
+    }
+
 
     /**
      * Substitutes the variables found in the data read from the specified reader. Escapes special
