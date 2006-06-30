@@ -55,6 +55,8 @@ public class ExecutableFile implements Serializable
     public final static int WARN = 1;
 
     public final static int ASK = 2;
+    
+    public final static int IGNORE = 3;
 
     /** The file path */
     public String path;
