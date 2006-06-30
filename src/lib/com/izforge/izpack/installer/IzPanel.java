@@ -37,6 +37,7 @@ import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.MultiLineLabel;
 
 /**
@@ -152,10 +153,15 @@ public class IzPanel extends JPanel implements AbstractUIHandler
       setLayout(  );
       buildHeadline( iconName, instance );
       gridyCounter++;
-    }
+    }   
     
     /** 
-     * Build the Headline
+     * Build the Headline of a Panel.
+     * Allows also to display a leading Icon for the PanelHeadline.
+     * This Icon can also be different if the panel has more than one Instances. 
+     * The UserInputPanel is one of these Candidates.
+     * 
+     * @author marc.eppelmann&#064;gmx.de
      *
      * @param imageIconName an Iconname
      * @param instanceNumber an panel instance
@@ -171,15 +177,19 @@ public class IzPanel extends JPanel implements AbstractUIHandler
       // TODO: 
       // TODO: first Test if a Resource for your protected Instance exists.
       String headline;
-      String headlineSearchBaseKey = myClassname + d + "headline";
+      String headlineSearchBaseKey = myClassname + d + "headline"; // Results for example in "ShortcutPanel.headline" : 
 
-      if( instanceNumber > -1 )
+      if( instanceNumber > -1 )  // Search for Results for example in "ShortcutPanel.headline.1, 2, 3 etc." :
       {
-        String instanceSearchKey = headlineSearchBaseKey + d + Integer.toString( instanceNumber );
+        String instanceSearchKey = headlineSearchBaseKey + d +
+                                   Integer.toString( instanceNumber );
 
         String instanceHeadline = getString( instanceSearchKey );
 
-        //System.out.println( "found headline: " + instanceHeadline  +  d + S + ": "+  instanceNumber );
+        if( Debug.isLOG() ) 
+        { 
+          System.out.println( "found headline: " + instanceHeadline  +  d + " for instance # " +  instanceNumber ); 
+        }
         if( ! instanceSearchKey.equals( instanceHeadline ) )
         {
           headline = instanceHeadline;
@@ -198,7 +208,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler
       {
         if( ( imageIconName != null ) && ! "".equals( imageIconName ) )
         {
-          headLineLabel = new JLabel( headline, getImageIcon( imageIconName ), JLabel.TRAILING );
+          headLineLabel = new JLabel( headline, getImageIcon( imageIconName ),
+                                      JLabel.LEADING );
         }
         else
         {
@@ -211,20 +222,25 @@ public class IzPanel extends JPanel implements AbstractUIHandler
         font = font.deriveFont( style, ( size * 1.5f ) );
         headLineLabel.setFont( font );
 
-        GridBagConstraints gbc = getNewGridBagConstraints( X_ORIGIN, Y_ORIGIN, COLS_1, ROWS_1 );
-        gbc.weightx =  0.0;
-        gbc.weighty = 1.0;        
-        
-        gbc.fill   = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets( 0, 0, 5, 0 );
-        izPanelLayout.setConstraints( headLineLabel, gbc );
+        GridBagConstraints gbc = new GridBagConstraints(  );
+
+        gbc.gridx      = 0;
+        gbc.gridy      = 0;
+        gbc.gridwidth  = 1;
+        gbc.gridheight = 1;
+
+        gbc.fill   = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets( 0, 0, 0, 0 );
         headLineLabel.setName( HEADLINE );
+        izPanelLayout.setConstraints( headLineLabel, gbc );
+
         add( headLineLabel );
       }
 
       return result;
     }
+
     
     /** 
      * Gets a language Resource String from the parent, which  holds these global resource.
