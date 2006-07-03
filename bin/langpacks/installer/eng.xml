@@ -4,6 +4,28 @@
 
 <langpack>
 
+    <!-- Heading messages START -->
+    <str id="CheckedHelloPanel.headline" txt="Welcome"/>
+    <str id="CompilePanel.headline" txt="Compile Java Sources"/>
+    <str id="ConditionalUserInputPanel.headline" txt="User Data Input"/>
+    <str id="ExtendedInstallPanel.headline" txt="Installation and Configuration"/>
+    <str id="FinishPanel.headline" txt="Installation Finished"/>
+    <str id="HelloPanel.headline" txt="Welcome"/>
+    <str id="HTMLInfoPanel.headline" txt="Informations"/>
+    <str id="HTMLLicencePanel.headline" txt="Rights of Use"/>
+    <str id="ImgPacksPanel.headline" txt="Select Installation Packages"/>
+    <str id="InfoPanel.headline" txt="Informations"/>
+    <str id="InstallPanel.headline" txt="Installation"/>
+    <str id="JDKPathPanel.headline" txt="Assignment JDK Path"/>
+    <str id="LicencePanel.headline" txt="Rights of Use"/>
+    <str id="PacksPanel.headline" txt="Select Installation Packages"/>
+    <str id="ProcessPanel.headline" txt="Perform External Processes"/>
+    <str id="ShortcutPanel.headline" txt="Shortcut Creation"/>
+    <str id="SimpleFinishPanel.headline" txt="Installation Finished"/>
+    <str id="SummaryPanel.headline" txt="Summary of Installation and Configuration Data"/>
+    <str id="TargetPanel.headline" txt="Assignment Target Path"/>
+    <str id="UserInputPanel.headline" txt="User Data Input"/>
+    
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Installation of "/>
     <str id="installer.next" txt="Next"/>
@@ -17,11 +39,15 @@
     <str id="installer.no" txt="No"/>
     <str id="installer.cancel" txt="Cancel"/> 
     <str id="installer.error" txt="Error"/>
+    <str id="installer.help" txt="Help"/>
+    <str id="installer.step" txt="Step"/>
+    <str id="installer.of" txt="of"/>
     
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="This will remove the installed application(s)!"/>
     <str id="uninstaller.destroytarget" txt=" Force the deletion of "/>
     <str id="uninstaller.uninstall" txt="Uninstall"/>
+    
     <!-- The strings for the 'official' IzPack plugins -->
     <str id="HelloPanel.welcome1" txt="Welcome to the installation of "/>
     <str id="HelloPanel.welcome2" txt="!"/>
@@ -29,7 +55,7 @@
     <str id="HelloPanel.url" txt="The homepage is at: "/>
     
     <str id="PrinterSelectPanel.select_printer" txt="Select the printer to use for initial setup and testing." />
-    
+
     <str id="CheckedHelloPanel.productAlreadyExist0" txt="This product is already installed on this computer under the path "/>
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Are you sure you want to install another entity?"/>
     <str id="CheckedHelloPanel.infoOverUninstallKey" txt="The uninstall key will be named: " />
@@ -51,7 +77,7 @@
          txt="The directory already exists! Are you sure you want to install here and possibly overwrite existing files?"/>
     <str id="TargetPanel.empty_target"
          txt="You have not specified a target location! Is this correct?"/>
-		<str id="TargetPanel.createdir" txt="The target directory will be created: " />
+	<str id="TargetPanel.createdir" txt="The target directory will be created: " />
     <str id="TargetPanel.nodir" 
          txt="This file is not a directory! Please choose a directory!"/>
     <str id="TargetPanel.notwritable" 
@@ -68,9 +94,11 @@
     <str id="PacksPanel.space" txt="Total space Required: "/>
     <str id="PacksPanel.freespace" txt="Available space: "/>
     <str id="PacksPanel.description" txt="Description"/>
-    <str id="PacksPanel.dependencyList" txt="The selected package requires the following packs to be installed"/>
+    <str id="PacksPanel.dependencyList" 
+        txt="The selected package requires the following packs to be installed"/>
     <str id="ImgPacksPanel.dependencyList" txt="Dependencies"/>
-		<str id="PacksPanel.notEnoughSpace" txt="Disk space required for the installation exceeds available disk space."/>
+	<str id="PacksPanel.notEnoughSpace" 
+	    txt="Disk space required for the installation exceeds available disk space."/>
     <str id="PacksPanel.notAscertainable" txt="not ascertainable"/>
     
     <str id="InstallPanel.info" txt="Click 'Install!' to begin the installation process"/>
@@ -112,7 +140,6 @@
     <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
     
     <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
-    
     <str id="ShortcutPanel.textFile.name"         txt="Shortcut          : "/>
     <str id="ShortcutPanel.textFile.location"     txt="Intended Location : "/>
     <str id="ShortcutPanel.textFile.description"  txt="Description       : "/>
@@ -135,9 +162,9 @@
     <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Autodetection failed."/>
     <str id="UserInputPanel.search.autodetect.tooltip"           txt="Check for the file or directory in the paths given above."/>
     <str id="UserInputPanel.search.location"           txt="Enter location of {0}."/>
-    <str id="UserInputPanel.search.location.checkedfile" txt="The existence of {0} has been checked."/>
+    <str id="UserInputPanel.search.location.checkedfile" txt="The existence of {0} is checked."/>
     <str id="UserInputPanel.search.browse"           txt="Browse..."/>
-    <str id="UserInputPanel.search.wrongselection.message"   txt="The file or directory you chose either does not exist or is not appropriate."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="The file or directory you choose either does not exist or is not appropiate."/>
     <str id="UserInputPanel.search.wrongselection.caption"   txt="Invalid selection."/>
 
     <str id="CompilePanel.heading" txt="Compilation" />
@@ -173,6 +200,8 @@
     <!-- Strings for the Registry -->
     <str id="functionFailed.RegOpenKeyEx" txt="Cannot open registry key {0}\\{1}."/>
     
-    <!-- Add your own panels specific strings here if you need -->
+    <!-- Add your own panels specific strings here if you need or use a custom
+         langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
+    -->     
 
 </langpack>

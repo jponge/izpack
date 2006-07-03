@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
 <!-- The German langpack -->
+
 <langpack>
+
+    <!-- Heading messages START -->
+    <str id="CheckedHelloPanel.headline" txt="Willkommensmaske"/>
+    <str id="CompilePanel.headline" txt="Java Source-Dateien kompilieren"/>
+    <str id="ConditionalUserInputPanel.headline" txt="Benutzerdaten eingaben"/>
+    <str id="ExtendedInstallPanel.headline" txt="Installation und Konfiguration"/>
+    <str id="FinishPanel.headline" txt="Installation abgeschlossen"/>
+    <str id="HelloPanel.headline" txt="Willkommensmaske"/>
+    <str id="HTMLInfoPanel.headline" txt="Informationen"/>
+    <str id="HTMLLicencePanel.headline" txt="Nutzungsrechte"/>
+    <str id="ImgPacksPanel.headline" txt="Auswahl der Installationspakete"/>
+    <str id="InfoPanel.headline" txt="Informationen"/>
+    <str id="InstallPanel.headline" txt="Installation"/>
+    <str id="JDKPathPanel.headline" txt="JDK-Pfad festlegen"/>
+    <str id="LicencePanel.headline" txt="Nutzungsrechte"/>
+    <str id="PacksPanel.headline" txt="Auswahl der Installationspakete"/>
+    <str id="ProcessPanel.headline" txt="Externe Prozesse ausführen"/>
+    <str id="ShortcutPanel.headline" txt="Verknüpfungen erstellen"/>
+    <str id="SimpleFinishPanel.headline" txt="Installation abgeschlossen"/>
+    <str id="SummaryPanel.headline" txt="Zusammenfassung der Konfigurarionsdaten"/>
+    <str id="TargetPanel.headline" txt="Installationspfad festlegen"/>
+    <str id="UserInputPanel.headline" txt="Benutzerdaten eingaben"/>
+    
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Installation von "/>
     <str id="installer.next" txt="Weiter"/>
@@ -14,6 +39,9 @@
     <str id="installer.no" txt="Nein"/>
     <str id="installer.cancel" txt="Abbruch"/>
     <str id="installer.error" txt="Fehler"/>
+    <str id="installer.help" txt="Hilfe"/>
+    <str id="installer.step" txt="Schritt"/>
+    <str id="installer.of" txt="von"/>
 
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Jetzt werden die installierten Anwendungen entfernt!"/>
@@ -26,7 +54,7 @@
     <str id="HelloPanel.authors" txt="Der(die) Autor(en) dieser Software ist(sind): "/>
     <str id="HelloPanel.url" txt="Die Homepage für diese Software: "/>
 
-	<str id="PrinterSelectPanel.select_printer" txt="Wählen Sie den Drucker für die erste Einrichtung und Prüfung." />
+    <str id="PrinterSelectPanel.select_printer" txt="Wählen Sie den Drucker für die erste Einrichtung und Prüfung." />
 
     <str id="CheckedHelloPanel.productAlreadyExist0" txt="Das Produkt ist bereits auf Ihrem Computer unter "/>
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" installiert. Soll eine weitere Version installiert werden?"/>
@@ -89,11 +117,12 @@
     <str id="FinishPanel.auto" txt="Automatisches Installationsskript generieren"/>
     <str id="FinishPanel.auto.tip"
          txt="Generiert eine Datei mit der die gleiche Installation automatisch auf einem anderen Computer durchgeführt werden kann."/>
+
     <str id="ImgPacksPanel.packs" txt="Die folgenden Pakete stehen zur Verfügung:"/>
     <str id="ImgPacksPanel.snap" txt="Hier ist der zugehörige Schnappschuss:"/>
     <str id="ImgPacksPanel.checkbox" txt=" Installiere dieses Paket"/>
+
     <str id="ShortcutPanel.headline" txt="Verknüpfungen einrichten"/>
-    
     <str id="ShortcutPanel.regular.list" txt="Wählen Sie eine Programmgruppe für die Verknüpfung:"/>	
 	<str id="ShortcutPanel.regular.default" txt="Standard"/>
     <str id="ShortcutPanel.regular.desktop" txt="zusätzliche Verknüpfungen auf dem Desktop erstellen"/>
@@ -101,14 +130,15 @@
     <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menü"/>
 	                                                            <!-- StartMenu is a placeholder will be replaced at runtime -->
     <str id="ShortcutPanel.regular.create" txt="Verknüpfungen im StartMenu erstellen"/>
-	
     <str id="ShortcutPanel.regular.userIntro" txt="Erstelle Verknüpfung für:"/>
     <str id="ShortcutPanel.regular.currentUser" txt="aktuellen Benutzer"/>
     <str id="ShortcutPanel.regular.allUsers" txt="alle Benutzer"/>
+
     <str id="ShortcutPanel.alternate.apology" txt="Leider wird die Erzeugung von Verknüpfungen durch IzPack unter diesem Betriebssystem noch nicht unterstützt. Bitte ziehen Sie das Handbuch Ihres Betriebssystems zu Rate, um manuell Verknüpfungen zu erstellen."/>
     <str id="ShortcutPanel.alternate.targetsLabel" txt="Die folgende Liste enthält Einträge, die der Hersteller dieser Software Ihnen mitteilen möchte, um Ihnen die Arbeit dennoch etwas zu erleichtern."/>
     <str id="ShortcutPanel.alternate.textFileExplanation" txt="Sie können detaillierte Informationen über diese Einträge in einer Textdatei abspeichern, um sie später abrufen zu können."/>
     <str id="ShortcutPanel.alternate.saveButton" txt="In einer Textdatei abspeichern"/>
+
     <str id="ShortcutPanel.textFile.header" txt="Informationen über Verknüpfungen\n================================\n\nDie folgenden Abschnitte beschreiben die beabsichtigten Verknüpfungen. Diese\nInformation sollte es möglich machen, Verknüpfungen manuell zu erstellen.\n"/>
     <str id="ShortcutPanel.textFile.name"         txt="Name der Verknüpfung : "/>
     <str id="ShortcutPanel.textFile.location"     txt="Vorgesehener Platz   : "/>
@@ -118,6 +148,7 @@
     <str id="ShortcutPanel.textFile.iconName"     txt="Bilddatei            : "/>
     <str id="ShortcutPanel.textFile.iconIndex"    txt="Bildindex            : "/>
     <str id="ShortcutPanel.textFile.work"         txt="Arbeitsverzeichnis   : "/>
+
     <str id="ShortcutPanel.location.desktop"      txt="Desktop"/>
     <str id="ShortcutPanel.location.applications" txt="Programm Menü"/>
     <str id="ShortcutPanel.location.startMenu"    txt="Start Menü"/>
@@ -169,8 +200,9 @@
     <!-- Strings for the Registry -->
     <str id="functionFailed.RegOpenKeyEx" txt="Der Registry-Schlüssel {0}\\{1} konnte nicht geöffnet werden."/>
     
-
-    <!-- Add your own panels specific strings here if you need -->
+    <!-- Add your own panels specific strings here if you need or use a custom
+         langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
+    -->     
 
 </langpack>
 
