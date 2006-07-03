@@ -39,6 +39,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.MultiLineLabel;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -91,6 +92,21 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     
     /** internal headline Label */
     protected JLabel headLineLabel;
+    
+    /** Is this panel general hidden or not */
+    protected boolean hidden;
+    
+    /** Layout anchor declared in the xml file
+     *  with the guiprefs modifier "layoutAnchor"
+     */ 
+    protected static int ANCHOR = -1;
+    
+    /** Gap which should be used for (multiline) labels 
+     *  to create a consistent view. The value will
+     *  be configurable by guiprefs modifier "labelGap".  
+     */
+    protected static int LABEL_GAP = -1;
+    private final static int LABEL_GAP_DEFAULT = 5;
     
     /** HEADLINE = "headline" */
     public final static String HEADLINE = "headline";
@@ -153,10 +169,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
       setLayout(  );
       buildHeadline( iconName, instance );
       gridyCounter++;
-    }   
+    }
     
     /** 
-     * Build the Headline of a Panel.
+     * Build the IzPanel internal Headline. If an external headline#
+     * is used, this method returns immediately with false.
      * Allows also to display a leading Icon for the PanelHeadline.
      * This Icon can also be different if the panel has more than one Instances. 
      * The UserInputPanel is one of these Candidates.
@@ -171,6 +188,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     protected boolean buildHeadline( String imageIconName, int instanceNumber )
     {
       boolean result = false;
+      if( parent.isHeading(this))
+          return(false);
 
       // TODO: proteced instancenumber
       // TODO: is to be validated
@@ -240,7 +259,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
       return result;
     }
-
     
     /** 
      * Gets a language Resource String from the parent, which  holds these global resource.
@@ -452,6 +470,28 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /**
      * Calls the langpack of parent InstallerFrame for the String <tt>RuntimeClassName.subkey</tt>.
      * Do not add a point infront of subkey, it is always added in this method.
+     * If <tt>RuntimeClassName.subkey</tt> is not found, the super class name will be used
+     * until it is <tt>IzPanel</tt>. If no key will be found, null returns.
+     * 
+     * @param subkey the subkey for the string which should be returned
+     * @return the founded string
+     */
+    public String getI18nStringForClass(String subkey)
+    {
+        String retval = null;
+        Class clazz = this.getClass();
+        while (retval == null && !clazz.getName().endsWith(".IzPanel"))
+        {
+            retval = getI18nStringForClass(clazz.getName(), subkey, null);
+            clazz = clazz.getSuperclass();
+        }
+        return (retval);
+    }
+
+    /**
+     * Calls the langpack of parent InstallerFrame for the String <tt>RuntimeClassName.subkey</tt>.
+     * Do not add a point infront of subkey, it is always added in this method.
+     * If no key will be found the key or - if alternate class is null - null returns.
      * 
      * @param subkey the subkey for the string which should be returned
      * @param alternateClass the short name of the class which should be used if no string is
@@ -460,7 +500,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      */
     public String getI18nStringForClass(String subkey, String alternateClass)
     {
-        String curClassName = this.getClass().getName();
+        return( getI18nStringForClass(getClass().getName(), subkey, alternateClass));
+
+    }
+
+    private String getI18nStringForClass(String curClassName, String subkey, String alternateClass)
+    {
+
         int nameStart = curClassName.lastIndexOf('.') + 1;
         curClassName = curClassName.substring(nameStart, curClassName.length());
         StringBuffer buf = new StringBuffer();
@@ -469,13 +515,20 @@ public class IzPanel extends JPanel implements AbstractUIHandler
         String retval = parent.langpack.getString(fullkey);
         if (retval == null || retval.startsWith(fullkey))
         {
+            if (alternateClass == null) return (null);
             buf.delete(0, buf.length());
             buf.append(alternateClass).append(".").append(subkey);
             retval = parent.langpack.getString(buf.toString());
         }
+        if (retval != null && retval.indexOf('$') > -1)
+        {
+            VariableSubstitutor substitutor = new VariableSubstitutor(idata.getVariables());
+            retval = substitutor.substitute(retval, null);
+        }
         return (retval);
     }
-
+    
+        
     /**
      * Returns the parent of this IzPanel (which is a InstallerFrame).
      * 
@@ -720,54 +773,123 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
     /**
      * Start layout determining. If it is needed, a dummy component will be created as first row.
-     * This will be done, if the IzPack variable <code>IzPanel.LayoutType</code> has the value
-     * "BOTTOM".
+     * This will be done, if the IzPack guiprefs modifier with the key "layoutAnchor" has the value
+     * "SOUTH" or "SOUTHWEST". The earlier used value "BOTTOM" and the declaration via the IzPack
+     * variable <code>IzPanel.LayoutType</code> are also supported.
      */
     public void startGridBagLayout()
     {
         if (gridBagLayoutStarted) return;
         gridBagLayoutStarted = true;
         GridBagLayout layout = new GridBagLayout();
-        defaultGridBagConstraints.insets = new Insets(0, 0, 20, 0);
+        defaultGridBagConstraints.insets = new Insets(0, 0, getLabelGap(), 0);
         defaultGridBagConstraints.anchor = GridBagConstraints.WEST;
         setLayout(layout);
-        String todo = idata.getVariable("IzPanel.LayoutType");
-        if (todo == null) // No command, no work.
-            return;
-        if ("BOTTOM".equals(todo))
-        { // Make a header to push the rest to the bottom.
+        switch (getAnchor())
+        {
+        case GridBagConstraints.SOUTH:
+        case GridBagConstraints.SOUTHWEST:
+            // Make a header to push the rest to the bottom.
             Filler dummy = new Filler();
             GridBagConstraints gbConstraint = getNextYGridBagConstraints();
             gbConstraint.weighty = 1.0;
             gbConstraint.fill = GridBagConstraints.BOTH;
             gbConstraint.anchor = GridBagConstraints.WEST;
             this.add(dummy, gbConstraint);
+            break;
+        default:
+            break;
         }
-
         // TODO: impl for layout type CENTER, ...
     }
 
     /**
      * Complete layout determining. If it is needed, a dummy component will be created as last row.
-     * This will be done, if the IzPack variable <code>IzPanel.LayoutType</code> has the value
-     * "TOP".
+     * This will be done, if the IzPack guiprefs modifier with the key "layoutAnchor" has the value
+     * "NORTH" or "NORTHWEST". The earlier used value "TOP" and the declaration via the IzPack
+     * variable <code>IzPanel.LayoutType</code> are also supported.
      */
     public void completeGridBagLayout()
     {
-        String todo = idata.getVariable("IzPanel.LayoutType");
-        if (todo == null) // No command, no work.
-            return;
-        if ("TOP".equals(todo))
-        { // Make a footer to push the rest to the top.
+        switch (getAnchor())
+        {
+        case GridBagConstraints.NORTH:
+        case GridBagConstraints.NORTHWEST:
+            // Make a footer to push the rest to the top.
             Filler dummy = new Filler();
             GridBagConstraints gbConstraint = getNextYGridBagConstraints();
             gbConstraint.weighty = 1.0;
             gbConstraint.fill = GridBagConstraints.BOTH;
             gbConstraint.anchor = GridBagConstraints.WEST;
-            this.add(dummy, gbConstraint);
+            add(dummy, gbConstraint);
+            break;
+        default:
+            break;
         }
     }
 
+    /**
+     * Returns the anchor as value declared in GridBagConstraints. Possible are NORTH,
+     * NORTHWEST, SOUTH, SOUTHWEST and CENTER. The values can be configured in the
+     * xml description file with the variable "IzPanel.LayoutType". The old values
+     * "TOP" and "BOTTOM" from the xml file are mapped to NORTH and SOUTH.
+     *  
+     * @return
+     */
+    public static int getAnchor()
+    {
+        if( ANCHOR >= 0)
+            return(ANCHOR);
+        AutomatedInstallData idata = AutomatedInstallData.getInstance();  
+        String todo;
+        if (idata instanceof InstallData
+                && ((InstallData) idata).guiPrefs.modifier.containsKey("layoutAnchor"))
+            todo = (String) ((InstallData) idata).guiPrefs.modifier.get("layoutAnchor");
+        else
+            todo = idata.getVariable("IzPanel.LayoutType");
+        if (todo == null) // No command, no work.
+            ANCHOR = GridBagConstraints.NONE;
+        else if("TOP".equals(todo) || "NORTH".equals(todo))
+            ANCHOR = GridBagConstraints.NORTH;
+        else if("BOTTOM".equals(todo) || "SOUTH".equals(todo))
+            ANCHOR = GridBagConstraints.SOUTH;
+        else if("SOUTHWEST".equals(todo))
+            ANCHOR = GridBagConstraints.SOUTHWEST;
+        else if("NORTHWEST".equals(todo))
+            ANCHOR = GridBagConstraints.NORTHWEST;
+        return(ANCHOR);
+    }
+    
+    /**
+     * Returns the gap which should be used for (multiline) labels 
+     *  to create a consistent view. The value will
+     *  be configurable by the guiprefs modifier "labelGap".
+     * @return
+     */
+    public static int getLabelGap()
+    {
+        if( LABEL_GAP >= 0)
+            return( LABEL_GAP );
+        LABEL_GAP = LABEL_GAP_DEFAULT;
+        AutomatedInstallData idata = AutomatedInstallData.getInstance();  
+        String var = null;
+        if (idata instanceof InstallData
+                && ((InstallData) idata).guiPrefs.modifier.containsKey("labelGap"))
+            var = (String) ((InstallData) idata).guiPrefs.modifier.get("labelGap");
+        if( var != null)
+        {
+            try
+            {
+                LABEL_GAP = Integer.parseInt(var);
+            }
+            catch(NumberFormatException nfe)
+            {
+                // Do nothing else use the default value. 
+                // Need to set it again at this position??
+            }
+        }
+        return( LABEL_GAP);
+    }
     // ------------------- Layout stuff -------------------- END ---
 
     // ------------------- Summary stuff -------------------- START ---
@@ -809,5 +931,32 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
     }
     // ------------------- Inner classes ------------------- END ---
+
+    
+    /**
+     * Returns whether this panel will be hidden general or not.
+     * A hidden panel will be not counted  in the step counter and
+     * for panel icons.
+     * @return whether this panel will be hidden general or not
+     */
+    /**
+     * @return
+     */
+    public boolean isHidden()
+    {
+        return hidden;
+    }
+
+    
+    /**
+     * Set whether this panel should be hidden or not.
+     * A hidden panel will be not counted  in the step counter and
+     * for panel icons.
+     * @param hidden flag to be set
+     */
+    public void setHidden(boolean hidden)
+    {
+        this.hidden = hidden;
+    }
 
 }

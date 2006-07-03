@@ -1,5 +1,5 @@
 /*
- * $Id:$
+ * $Id$
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -23,6 +23,7 @@
 package com.izforge.izpack.installer;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -43,6 +44,7 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -64,10 +66,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
@@ -107,6 +112,12 @@ public class InstallerFrame extends JFrame
     private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
             .getProperty("java.specification.version"));
 
+    private static final String ICON_RESOURCE = "Installer.image";
+
+    private static final String HEADING_ICON_RESOURCE = "Heading.image";
+
+//    private static final int HEADINGLINES = 1;
+
     /** The language pack. */
     public LocaleDatabase langpack;
 
@@ -130,16 +141,29 @@ public class InstallerFrame extends JFrame
 
     /** The quit button. */
     protected JButton quitButton;
+
+    /** Mapping from "raw" panel number to visible panel number. */
+    protected ArrayList visiblePanelMapping;
     
-    /** Registered GUICreationListener. */
+   /** Registered GUICreationListener. */
     protected ArrayList guiListener;
 
+    /** Heading major text. */
+    protected JLabel[] headingLabels;
+
+    /** Panel which contains the heading text and/or icon */
+    protected JPanel headingPanel;
+
+    /** The heading counter component. */
+    protected JComponent headingCounterComponent;
+    
     /** Image */
     private JLabel iconLabel;
 
     /** Count for discarded interrupt trials. */
     private int interruptCount = 1;
-
+    
+ 
     /** Maximum of discarded interrupt trials. */
     private static final int MAX_INTERRUPT = 3;
 
@@ -154,6 +178,7 @@ public class InstallerFrame extends JFrame
     {
         super(title);
         guiListener = new ArrayList();
+        visiblePanelMapping = new ArrayList();
         this.installdata = installdata;
         this.langpack = installdata.langpack;
 
@@ -192,6 +217,8 @@ public class InstallerFrame extends JFrame
         Object[] params = { this, installdata};
 
         // We load each of them
+        int curVisPanelNumber = 0;
+        int lastVis = 0;
         for (i = 0; i < size; i++)
         {
             // We add the panel
@@ -208,11 +235,20 @@ public class InstallerFrame extends JFrame
             object = constructor.newInstance(params);
             panel = (IzPanel) object;
             installdata.panels.add(panel);
+            if (panel.isHidden())
+                visiblePanelMapping.add(i, new Integer(-1));
+            else
+            {
+                visiblePanelMapping.add(i, new Integer(curVisPanelNumber));
+                curVisPanelNumber++;
+                lastVis = i;
+            }
 
             // We add the XML data panel root
             XMLElement panelRoot = new XMLElement(className);
             installdata.xmlData.addChild(panelRoot);
         }
+        visiblePanelMapping.add(i,new Integer(lastVis));
     }
 
     /**
@@ -266,7 +302,7 @@ public class InstallerFrame extends JFrame
     private void buildGUI()
     {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //patch 06/07/2005, Fabrice Mirabile
-	    // Sets the frame icon
+        // Sets the frame icon
         setIconImage(icons.getImageIcon("JFrameIcon").getImage());
 
         // Prepares the glass pane to block the gui interaction when needed
@@ -326,16 +362,7 @@ public class InstallerFrame extends JFrame
 
         try
         {
-            ResourceManager rm = ResourceManager.getInstance();
-            ImageIcon icon;
-            try
-            {
-                icon = rm.getImageIconResource("Installer.image");
-            }
-            catch (Exception e) // This is not that clean ...
-            {
-                icon = rm.getImageIconResource("Installer.image.0");
-            }
+            ImageIcon icon = loadIcon(ICON_RESOURCE, 0, true);
             if (icon != null)
             {
                 JPanel imgPanel = new JPanel();
@@ -352,9 +379,10 @@ public class InstallerFrame extends JFrame
             // ignore
         }
 
-        loadImage(0);
+        loadAndShowImage(0);
         getRootPane().setDefaultButton(nextButton);
         callGUIListener(GUIListener.GUI_BUILDED, navPanel);
+        createHeading(navPanel);
     }
 
     private void callGUIListener(int what)
@@ -365,26 +393,58 @@ public class InstallerFrame extends JFrame
     private void callGUIListener(int what, Object param)
     {
         Iterator iter = guiListener.iterator();
-        while(iter.hasNext())
+        while (iter.hasNext())
             ((GUIListener) iter.next()).guiActionPerformed(what, param);
     }
 
-    private void loadImage(int panelNo)
+    private ImageIcon loadIcon(String resPrefix, int PanelNo, boolean tryBaseIcon)
+            throws ResourceNotFoundException, IOException
     {
+        ResourceManager rm = ResourceManager.getInstance();
+        ImageIcon icon = null;
+        if (tryBaseIcon)
+        {
+            try
+            {
+                icon = rm.getImageIconResource(resPrefix);
+            }
+            catch (Exception e) // This is not that clean ...
+            {
+                icon = rm.getImageIconResource(resPrefix + "." + PanelNo);
+            }
+        }
+        else
+            icon = rm.getImageIconResource(resPrefix + "." + PanelNo);
+        return (icon);
+    }
+
+    private void loadAndShowImage(int panelNo)
+    {
+        loadAndShowImage(iconLabel, ICON_RESOURCE, panelNo);
+    }
+
+    private void loadAndShowImage(JLabel iLabel, String resPrefix, int panelNo)
+    {
+        ImageIcon icon = null;
         try
         {
-            ResourceManager rm = ResourceManager.getInstance();
-            ImageIcon icon = rm.getImageIconResource("Installer.image." + panelNo);
-            if (icon != null)
-            {
-                iconLabel.setVisible(false);
-                iconLabel.setIcon(icon);
-                iconLabel.setVisible(true);
-            }
+            icon = loadIcon(resPrefix, panelNo, false);
         }
         catch (Exception e)
         {
+            try
+            {
+                icon = loadIcon(resPrefix, panelNo, true);
+            }
+            catch (Exception e1)
+            {}
             // ignore
+        }
+        if (icon != null)
+        {
+            iLabel.setVisible(false);
+            iLabel.setIcon(icon);
+            iLabel.setVisible(true);
         }
     }
 
@@ -420,15 +480,17 @@ public class InstallerFrame extends JFrame
             //auto-installation script (bug # 4551), let's make data only immediately before
             //writing out that script.
             //l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
-
-            if (installdata.curPanelNumber == 0)
+            
+            // No previos button in the first visible panel
+            if (((Integer) visiblePanelMapping.get(installdata.curPanelNumber)).intValue() == 0)
             {
                 prevButton.setVisible(false);
                 lockPrevButton();
                 unlockNextButton(); // if we push the button back at the license
                 // panel
             }
-            else if (installdata.curPanelNumber == installdata.panels.size() - 1)
+            // Only the exit button in the last panel.
+            else if (((Integer) visiblePanelMapping.get(installdata.panels.size())).intValue() == installdata.curPanelNumber)
             {
                 prevButton.setVisible(false);
                 nextButton.setVisible(false);
@@ -478,9 +540,11 @@ public class InstallerFrame extends JFrame
                     }
                 }
             }
+            performHeading(panel);
             panel.panelActivate();
             panelsContainer.setVisible(true);
-            loadImage(installdata.curPanelNumber);
+            loadAndShowImage(((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
+                    .intValue());
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
         }
@@ -1060,5 +1124,236 @@ public class InstallerFrame extends JFrame
     public void addGuiListener(GUIListener listener)
     {
         guiListener.add(listener);
+    }
+
+
+    private void createHeadingLabels(int headingLines, Color back)
+    {
+        // headingLabels are an array which contains the labels for header (0),
+        // description lines and the icon (last).
+        headingLabels = new JLabel[headingLines + 1];
+        headingLabels[0] = new JLabel("");
+        // First line ist the "main heading" which should be bold.
+        headingLabels[0].setFont(headingLabels[0].getFont().deriveFont(Font.BOLD));
+        if (installdata.guiPrefs.modifier.containsKey("headingFontSize"))
+        {
+            float fontSize = Float.parseFloat((String) installdata.guiPrefs.modifier
+                    .get("headingFontSize"));
+            if (fontSize > 0.0 && fontSize <= 5.0)
+            {
+                float currentSize = headingLabels[0].getFont().getSize2D();
+                headingLabels[0].setFont(headingLabels[0].getFont().deriveFont(
+                        currentSize * fontSize));
+            }
+        }
+        for (int i = 1; i < headingLines; ++i)
+        {
+            // Minor headings should be a little bit more to the right.
+            headingLabels[i].setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
+        }
+
+    }
+
+    private void createHeadingCounter(Color back, JPanel navPanel, JPanel leftHeadingPanel)
+    {
+        int i;
+        String counterPos = "inHeading";
+        if (installdata.guiPrefs.modifier.containsKey("headingPanelCounterPos"))
+            counterPos = (String) installdata.guiPrefs.modifier.get("headingPanelCounterPos");
+        if (installdata.guiPrefs.modifier.containsKey("headingPanelCounter"))
+        {
+            headingCounterComponent = null;
+            if ("progressbar".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+                    .get("headingPanelCounter")))
+            {
+                JProgressBar headingProgressBar = new JProgressBar();
+                headingProgressBar.setStringPainted(true);
+                headingProgressBar.setString("");
+                headingProgressBar.setValue(0);
+                headingCounterComponent = headingProgressBar;
+            }
+            else if ("text".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+                    .get("headingPanelCounter")))
+            {
+                JLabel headingCountPanels = new JLabel(" ");
+                headingCounterComponent = headingCountPanels;
+                headingCounterComponent.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
+            }
+            if ("inHeading".equals(counterPos))
+            {
+                leftHeadingPanel.add(headingCounterComponent);
+            }
+
+            else if ("inNavigationPanel".equals(counterPos))
+            {
+                Component[] comps = navPanel.getComponents();
+                for (i = 0; i < comps.length; ++i)
+                {
+                    if (comps[i].equals(prevButton)) break;
+                }
+                if (i <= comps.length)
+                {
+                    navPanel.add(Box.createHorizontalGlue(), i);
+                    navPanel.add(headingCounterComponent, i);
+                }
+
+            }
+        }
+    }
+
+    private JPanel createHeadingIcon(Color back)
+    {
+        // the icon
+        ImageIcon icon = null;
+        try
+        {
+            icon = loadIcon(HEADING_ICON_RESOURCE, 0, true);
+        }
+        catch (Exception e)
+        {
+            // ignore
+        }
+        JPanel imgPanel = new JPanel();
+        imgPanel.setLayout(new BoxLayout(imgPanel, BoxLayout.Y_AXIS));
+        imgPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        if (back != null) imgPanel.setBackground(back);
+        JLabel iconLab = new JLabel(icon);
+        imgPanel.add(iconLab, BorderLayout.EAST);
+        headingLabels[headingLabels.length - 1] = iconLab;
+        return (imgPanel);
+
+    }
+
+    private void createHeading(JPanel navPanel)
+    {
+        headingPanel = null;
+        if (!isHeading(null)) return;
+        int headingLines = 1;
+        // The number of lines can be determined in the config xml file.
+        // The first is the header, additonals are descriptions for the header.
+        if (installdata.guiPrefs.modifier.containsKey("headingLineCount"))
+            headingLines = Integer.parseInt((String) installdata.guiPrefs.modifier
+                    .get("headingLineCount"));
+        Color back = null;
+        int i = 0;
+        // It is possible to determine the used background color of the heading panel.
+        if (installdata.guiPrefs.modifier.containsKey("headingBackgroundColor"))
+            back = Color.decode((String) installdata.guiPrefs.modifier
+                    .get("headingBackgroundColor"));
+
+        // We create the text labels and the needed panels. From inner to outer.
+        // Labels
+        createHeadingLabels(headingLines, back);
+        // Panel which contains the labels
+        JPanel leftHeadingPanel = new JPanel();
+        if (back != null) leftHeadingPanel.setBackground(back);
+        leftHeadingPanel.setLayout(new BoxLayout(leftHeadingPanel, BoxLayout.Y_AXIS));
+        for (i = 0; i < headingLines; ++i)
+            leftHeadingPanel.add(headingLabels[i]);
+        // HeadingPanel counter: this is a label or a progress bar which can be placed
+        // in the leftHeadingPanel or in the navigation bar. It is facultative. If
+        // exist, it shows the current panel number and the amount of panels.
+        createHeadingCounter(back, navPanel, leftHeadingPanel);
+        // It is possible to place an icon on the right side of the heading panel.
+        JPanel imgPanel = createHeadingIcon(back);
+
+        // The panel for text and icon.
+        JPanel northPanel = new JPanel();
+        if (back != null) northPanel.setBackground(back);
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.X_AXIS));
+        northPanel.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 0));
+        northPanel.add(leftHeadingPanel);
+        northPanel.add(Box.createHorizontalGlue());
+        northPanel.add(imgPanel);
+        headingPanel = new JPanel(new BorderLayout());
+        headingPanel.add(northPanel);
+        headingPanel.add(new JSeparator(), BorderLayout.SOUTH);
+
+        //contentPane.add(northPanel, BorderLayout.NORTH);
+        contentPane.add(headingPanel, BorderLayout.NORTH);
+
+    }
+
+    /**
+     * Returns whether this installer frame uses with the given panel a
+     * separated heading panel or not. Be aware, this is an other heading
+     * as given by the IzPanel which will be placed in the IzPanel.
+     * This heading will be placed if the gui preferences contains an 
+     * modifier with the key "useHeadingPanel" and the value "yes" and
+     * there is a message with the key "&lt;class name&gt;.headline".
+     * @param caller the IzPanel for which heading should be resolved
+     * @return whether an heading panel will be used or not
+     */
+    public boolean isHeading(IzPanel caller)
+    {
+        if (!installdata.guiPrefs.modifier.containsKey("useHeadingPanel")
+                || !((String) installdata.guiPrefs.modifier.get("useHeadingPanel"))
+                        .equalsIgnoreCase("yes")) return (false);
+        if (caller == null) return (true);
+        return (caller.getI18nStringForClass("headline", null) != null);
+
+    }
+
+    private void performHeading(IzPanel panel)
+    {
+        int i;
+        int headingLines = 1;
+        if (installdata.guiPrefs.modifier.containsKey("headingLineCount"))
+            headingLines = Integer.parseInt((String) installdata.guiPrefs.modifier
+                    .get("headingLineCount"));
+
+        if (headingLabels == null) return;
+        String headline = panel.getI18nStringForClass("headline");
+        if (headline == null)
+        {
+            headingPanel.setVisible(false);
+            return;
+        }
+        for (i = 0; i <= headingLines; ++i)
+            if (headingLabels[i] != null) headingLabels[i].setVisible(false);
+        String info;
+        String key = "info";
+        for (i = 0; i < headingLines - 1; ++i)
+        {
+            info = panel.getI18nStringForClass(key);
+            if (info == null) info = " ";
+            if (info.endsWith(":"))
+            {
+                info = info.substring(0, info.length() - 1) + ".";
+            }
+            headingLabels[i + 1].setText(info);
+            headingLabels[i + 1].setVisible(true);
+            key = "info" + Integer.toString(i);
+        }
+        // Do not forgett the first headline.
+        headingLabels[0].setText(headline);
+        headingLabels[0].setVisible(true);
+        int curPanelNo = ((Integer) visiblePanelMapping.get(installdata.curPanelNumber)).intValue();
+        if (headingCounterComponent != null)
+        {
+            int visPanelsCount = ((Integer) visiblePanelMapping.get(((Integer) visiblePanelMapping
+                    .get(installdata.panels.size())).intValue())).intValue();
+
+            StringBuffer buf = new StringBuffer();
+            buf.append(langpack.getString("installer.step")).append(" ").append(curPanelNo + 1)
+                    .append(" ").append(langpack.getString("installer.of")).append(" ").append(
+                            visPanelsCount + 1);
+            if (headingCounterComponent instanceof JProgressBar)
+            {
+                JProgressBar headingProgressBar = (JProgressBar) headingCounterComponent;
+                headingProgressBar.setMaximum(visPanelsCount + 1);
+                headingProgressBar.setValue(curPanelNo + 1);
+                headingProgressBar.setString(buf.toString());
+            }
+            else
+                ((JLabel) headingCounterComponent).setText(buf.toString());
+        }
+        if (headingLabels[headingLines] != null)
+        {
+            loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
+            headingLabels[headingLines].setVisible(true);
+        }
+        headingPanel.setVisible(true);
+
     }
 }
