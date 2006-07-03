@@ -19,11 +19,13 @@
 
 package com.izforge.izpack.panels;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -66,20 +68,25 @@ public class SimpleFinishPanel extends IzPanel
 
         vs = new VariableSubstitutor(idata.getVariables());
 
-        // The 'super' layout
-        GridBagLayout superLayout = new GridBagLayout();
-        setLayout(superLayout);
-        GridBagConstraints gbConstraints = new GridBagConstraints();
+        // Changed to layout handling of IzPanel to support different anchors.
+        // (Klaus Bartz, 2006.06.30)
+        GridBagConstraints gbConstraints = getNextYGridBagConstraints();
+
         gbConstraints.insets = new Insets(0, 0, 0, 0);
         gbConstraints.fill = GridBagConstraints.NONE;
-        gbConstraints.anchor = GridBagConstraints.CENTER;
-
+        if (getAnchor() == GridBagConstraints.NONE || getAnchor() == GridBagConstraints.CENTER)
+            gbConstraints.anchor = GridBagConstraints.CENTER;
+        else
+        {
+            gbConstraints.weightx = 1.0;
+            gbConstraints.anchor = getAnchor();
+        }
         // We initialize our 'real' layout
         centerPanel = new JPanel();
         BoxLayout layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
         centerPanel.setLayout(layout);
-        superLayout.addLayoutComponent(centerPanel, gbConstraints);
-        add(centerPanel);
+        add(centerPanel, gbConstraints);
+        completeGridBagLayout();
     }
 
     /**
