@@ -52,6 +52,15 @@ href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents"
 
 <li><a name="tex2html432" href="node5.html#SECTION00560000000000000000">Picture in the installer</a></li>
 
+<li><a href="node5.html#modifyingGui">Modifying the GUI</a></li>
+<ul>
+<li><a href="node5.html#modifyingLangDialog">Modifying Language Selection Dialog</a></li>
+
+<li><a href="node5.html#modifyingPanels">Modifying IzPack Panels</a></li>
+
+<li><a href="node5.html#headingPanels">Using a Separated Heading Panel</a></li>
+</ul>
+
 <li><a name="tex2html433" href="node5.html#SECTION00570000000000000000">Web Installers</a></li>
 
 <li><a name="tex2html434" href="node5.html#SECTION00580000000000000000">More Internationalization</a> 
@@ -197,7 +206,294 @@ will do that. If the resource isn't specified, no picture will be displayed at a
 You can also give a specific picture for a specific panel by using the <tt>Installer.image.n</tt> resource names where <img width="16" height="16" class="alignbottom" src="img5.png" alt=
 "$n$" /> is the panel index. For instance if you want a specific picture for the third panel, use <tt>Installer.image.2</tt> since the indexes start from 0.<br />
 </p>
+    <h1><a id="modifyingGui" name="modifyingGui">Modifying the GUI</a></h1>
 
+    <p>There are some options to modify the graphic user interface. Most of them are managed with
+    key/value pairs of the element &lt;modifier&gt; which will be located in the element <a
+    href="node4.html#SECTION00434000000000000000">&lt;guprefs&gt;</a> in the installation
+    description file.</p>
+
+    <h2><a id="modifyingLangDialog" name="modifyingLangDialog">Modifying Language Selection
+    Dialog</a></h2>
+
+    <p>Additonal to the picture in the language selection dialog it is possible to modify flags and
+    the type of showing the language name. Following different views (without an images to reduce
+    space).</p>
+
+    <div class="center">
+      <a id="archinstaller" name="archinstaller"></a> 
+
+      <table class="a" cellspacing="10">
+        <colgroup>
+          <col style="width: 40%" />
+          <col style="width: 20%" />
+          <col style="width: 40%" />
+        </colgroup>
+
+        <thead>
+          <tr>
+            <td>
+              <p>Standard language selection dialog</p>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+              <p>Alternate language selection dialog</p>
+            </td>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><img class="alignmiddle" src="stdLangSel.png" width="215" height="136" alt=""
+            border="0" /> </td>
+
+            <td>
+            </td>
+
+            <td><img class="alignmiddle" src="modLangSel.png" width="154" height="133" alt=""
+            border="0" /> </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul>
+      <li>
+        <tt>useFlags</tt>:<br>
+        possible are "yes" or "no". Default is "yes". If it is set to "no", no flag will be
+        displayed in the language selection dialog. For "no" it is recomanded to define also
+        langDisplayType other then "iso3".
+      </li>
+
+      <li>
+        <tt>langDisplayType</tt>:<br>
+        possible are "iso3", "native" and "default". Default is "iso3". With "iso3" the text for a
+        language will be displayed as ISO 639-2:1998 code. With "native" the notation of the
+        language will be used if possible, else the notation of the default locale. Using "default"
+        will be presented the language in the notation of the default locale of the VM.
+      </li>
+    </ul>
+
+    <h2><a id="modifyingPanels" name="modifyingPanels">Modifying IzPack Panels</a></h2>
+
+    <p>There are some graphic elements and behavior which are prefered by some people and deprecate
+    by other. The following keys are related to the hole installation (all panels).
+
+    <ul>
+      <li>
+        <tt>useButtonIcons</tt>:<br>
+        possible are "yes" or "no". Default is "yes". If it is set to "no", all buttons which are
+        created via the ButtonFactory contains no icon also a icon id was submitted. Directly
+        created buttons are not affected.
+      </li>
+
+      <li>
+        <tt>useLabelIcons</tt>:<br>
+        possible are "yes" or "no". Default is "yes". If it is set to "no", all labels which are
+        created via the LabelFactory contains no icon also a icon id was submitted. Directly
+        created labels are not affected.
+      </li>
+
+      <li>
+        <tt>layoutAnchor</tt>:<br>
+        layout anchor for IzPanels. Valid are "NORTH", "NORTHWEST", "SOUTHWEST", "SOUTH" and
+        "CENTER". Only panels which are using the GridBagLayout helper methods of IzPanels are
+        supported. These are not all standard panels.
+      </li>
+
+      <li>
+        <tt>labelGap</tt>:<br>
+        standard gap between labels (in reality this will be a footer under the label). Only panels
+        which are using the IzPack factory for labels are supported. These are not all standard
+        panels.
+      </li>
+    </ul>
+
+    <h2><a id="headingPanels" name="headingPanels">Using a Separated Heading Panel</a></h2>
+
+    <p>Some standard panels have headings (e.g. ShortcutPanel). These headings are integrated in
+    the IzPanel. In oposite to this following heading will be done in a separated panel potential
+    for all panels with the same design. There is no need to modify existent java classes else
+    declaration of some key/value pairs are enough.</p>
+
+    <p>There can be one real headline and one or more info lines. The headline will be written
+    bold, the fontsize can be changed. Info lines will be indented and written with the normal used
+    font. The heading message has to be written into the langpack (or custom langpack) file with
+    the key <tt>&lt;panel class name&gt;.headline</tt>. Examples can be seen in <tt>eng.xml</tt>.
+	May be the entries for standard panels are not present in other languages.
+    Messages for info lines have the key <tt>&lt;panel class name&gt;.headinfo&lt;info line
+    number&gt;</tt>. First info line has number zero. If no or empty headline messages will be 
+	declared in the chosen language no heading panel will be shown. This behavior can be used to 
+    suppress heading for special panels.</p>
+	<p>It is possible to place an icon on the right side of the heading. To do this a simple 
+	resource entry will be needed:</p>
+	<pre>&lt;resources&gt;
+  ...
+  &lt;res id="Heading.image" src="[my path in the source tree]"/&gt;
+  ...
+&lt;/resources&gt;
+</pre>
+
+    <p>There are some guiprefs modifier keys to use and modify heading (see above). Additonal it is
+    possible to count the generell not hidden panels in the heading or navigation panel.</p>
+
+    <ul>
+      <li>
+        <tt>useHeadingPanel</tt>:<br>
+        generell switch for heading. If this key does not exist or does not have the value "yes" no
+        heading panel will be shown.
+      </li>
+
+      <li>
+        <tt>headingLineCount</tt>:<br>
+        number of heading lines. If no info lines should be shown the value should be one (not
+        zero).
+      </li>
+
+      <li>
+        <tt>headingFontSize</tt>:<br>
+        a float value used as multiplier for the standard font size.
+      </li>
+
+      <li>
+        <tt>headingBackgroundColor</tt>:<br>
+        background color of the heading panel as integer. Often used is 0x00ffffff (white).
+      </li>
+
+      <li>
+        <tt>headingPanelCounter</tt>:<br>
+        draw a panel counting. Possible values are "text" or "progressbar". inHeading the
+        progressbar will be not the best choice.
+      </li>
+
+      <li>
+        <tt>headingPanelCounterPos</tt>:<br>
+        declares where the counter will be shown. Possible are "inHeading" or
+        "inNavigationPanel".
+      </li>
+    </ul>
+
+    <p>A normal IzPack GUI looks like</p>
+
+    <div class="center">
+      <a id="archinstaller" name="archinstaller"></a> 
+
+      <table>
+        <caption class="alignbottom">
+          <i>Normal look of an IzPack frame (TargetPanel)</i>
+        </caption>
+
+        <tr>
+          <td>
+            <div>
+              <img src="stdTargetPanel.jpg" width="640" height="480" alt="" border="0" />
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <p>Key/value pairs to create IzPack installation with heading, no button and label icons and a
+    panel text counter in the heading panel.</p>
+<pre>
+&lt;guiprefs width="640" height="480" resizable="no"&gt;
+  &lt;modifier key="useButtonIcons" value="no"/&gt;
+  &lt;modifier key="useLabelIcons" value="no"/&gt;
+  &lt;modifier key="labelGap" value="2"/&gt;    
+  &lt;modifier key="useHeadingPanel" value="yes"/&gt;
+  &lt;modifier key="headingLineCount" value="1"/&gt;
+  &lt;modifier key="headingFontSize" value="1.5"/&gt;
+  &lt;modifier key="headingBackgroundColor" value="0x00ffffff"/&gt;
+  &lt;modifier key="headingPanelCounter" value="text"/&gt;
+  &lt;modifier key="headingPanelCounterPos" value="inHeading"/&gt;
+&lt;/guiprefs&gt;
+</pre>
+
+    <div class="center">
+      <a id="archinstaller" name="archinstaller"></a> 
+
+      <table>
+        <caption class="alignbottom">
+          <i>IzPack frame (TargetPanel) with heading panel and a text counter in the heading panel
+          <br />
+           (with panel image).</i>
+        </caption>
+
+        <tr>
+          <td>
+            <div>
+              <img class="alignmiddle" src="modTargetPanel3.png" width="600" height="480" alt=""
+              border="0" />
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <br />
+
+    <div class="center">
+      <a id="archinstaller" name="archinstaller"></a> 
+
+      <table>
+        <caption class="alignbottom">
+          <i>IzPack frame (TargetPanel) with heading panel and a text counter in the heading panel
+          <br />
+           (no panel image).</i>
+        </caption>
+
+        <tr>
+          <td>
+            <div>
+              <img class="alignmiddle" src="modTargetPanel.png" width="600" height="480" alt=""
+              border="0" />
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <p>Changed key/value pairs to create IzPack installation with heading, no button and label
+    icons and a panel progressbar counter in the navigation panel.</p>
+
+    <p>Key/value pairs for modifying IzPack GUI (references for panel images removed):</p>
+<pre>
+&lt;guiprefs width="640" height="480" resizable="no"&gt;
+  &lt;modifier key="useButtonIcons" value="no"/&gt;
+  &lt;modifier key="useLabelIcons" value="no"/&gt;
+  &lt;modifier key="labelGap" value="2"/&gt;    
+  &lt;modifier key="useHeadingPanel" value="yes"/&gt;
+  &lt;modifier key="headingLineCount" value="1"/&gt;
+  &lt;modifier key="headingFontSize" value="1.5"/&gt;
+  &lt;modifier key="headingBackgroundColor" value="0x00ffffff"/&gt;
+  &lt;modifier key="headingPanelCounter" value="progressbar"/&gt;
+  &lt;modifier key="headingPanelCounterPos" value="inNavigationPanel"/&gt;
+&lt;/guiprefs&gt;
+</pre>
+
+    <div class="center">
+      <a id="archinstaller" name="archinstaller"></a> 
+
+      <table>
+        <caption class="alignbottom">
+          <i>IzPack frame (TargetPanel) with heading panel and a progressbar counter in the
+          <br />
+           navigation panel (no panel image).</i>
+        </caption>
+
+        <tr>
+          <td>
+            <div>
+              <img class="alignmiddle" src="modTargetPanel2.png" width="600" height="480" alt=""
+              border="0" />
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
 <h1><a name="SECTION00570000000000000000"></a> <a name="webinstaller"></a><br />
 Web Installers</h1>
 

@@ -470,38 +470,9 @@ value</tt>.</li>
 &lt;/guiprefs&gt;
 </pre>
 
-<p>Starting from IzPack 3.7, some characteristics can be customized with the <tt>&lt;modifier&gt;</tt> tag which contains following attributes:</p>
-
-<ul>
-<li><tt>key</tt>: a well defined key of the characteristic which should be changed.</li>
-
-<li><tt>value</tt> the value for the key.</li>
-</ul>
-<p>Following key value pairs are defined:</p>
-<ul>
-<li><tt>useButtonIcons</tt>: possible are "yes" or "no". Default is "yes". If it is set to "no", all buttons which are created via the ButtonFactory contains no icon also a icon id was submitted.
-Directly created buttons are not affected.</li>
-
-<li><tt>useLabelIcons</tt>: possible are "yes" or "no". Default is "yes". If it is set to "no", all labels which are created via the LabelFactory contains no icon also a icon id was submitted.
-Directly created labels are not affected.</li>
-
-<li><tt>useFlags</tt>: possible are "yes" or "no". Default is "yes". If it is set to "no", no flag will be displayed in the language selection dialog. For "no" it is recomanded to define also
-langDisplayType other then "iso3".</li>
-
-<li><tt>langDisplayType</tt>: possible are "iso3", "native" and "default". Default is "iso3". With "iso3" the text for a language will be displayed as ISO 639-2:1998 code. With "native" the notation
-of the language will be used if possible, else the notation of the default locale. Using "default" will be presented the language in the notation of the default locale of the VM.</li>
-</ul>
-
-<p>Here is a small sample:</p>
-
-<pre>
-&lt;guiprefs width="640" height="480" resizable="no"&gt;
-    &lt;modifier key="useButtonIcons" value="no"/&gt;
-    &lt;modifier key="useLabelIcons" value="no"/&gt;
-    &lt;modifier key="useFlags" value="no"/&gt;
-    &lt;modifier key="langDisplayType" value="native"/&gt;
-&lt;/guiprefs&gt;
-</pre>
+<p>Starting from IzPack 3.7, some characteristics can be customized with the <tt>&lt;modifier&gt;</tt> tag. There is a
+separate description in the <a href="node5.html">Advanced Features</a> chapter paragraph 
+<a href="node5.html#modifyingGui">Modifying the GUI</a>.</p>
 
 <h2><a name="SECTION00435000000000000000"></a> <a name="localization-element"></a><br />
 The Localization Element <tt>&lt;locale&gt;</tt></h2>
