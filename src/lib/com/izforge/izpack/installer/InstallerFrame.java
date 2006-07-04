@@ -1312,10 +1312,9 @@ public class InstallerFrame extends JFrame
         for (i = 0; i <= headingLines; ++i)
             if (headingLabels[i] != null) headingLabels[i].setVisible(false);
         String info;
-        String key = "info";
         for (i = 0; i < headingLines - 1; ++i)
         {
-            info = panel.getI18nStringForClass(key);
+            info = panel.getI18nStringForClass("headinfo" + Integer.toString(i));
             if (info == null) info = " ";
             if (info.endsWith(":"))
             {
@@ -1323,7 +1322,6 @@ public class InstallerFrame extends JFrame
             }
             headingLabels[i + 1].setText(info);
             headingLabels[i + 1].setVisible(true);
-            key = "info" + Integer.toString(i);
         }
         // Do not forgett the first headline.
         headingLabels[0].setText(headline);

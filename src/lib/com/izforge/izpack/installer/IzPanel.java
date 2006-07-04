@@ -857,6 +857,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler
             ANCHOR = GridBagConstraints.SOUTHWEST;
         else if("NORTHWEST".equals(todo))
             ANCHOR = GridBagConstraints.NORTHWEST;
+        else if("CENTER".equals(todo))
+            ANCHOR = GridBagConstraints.CENTER;
         return(ANCHOR);
     }
     
