@@ -83,6 +83,7 @@
     <str id="TargetPanel.createdir"
          txt="Das folgende Verzeichnis wird erstellt:" />
 
+    <str id="JDKPathPanel.extendedIntro" txt="Für den Betrieb des Produktes wird ein JDK zwischen Version ${JDKPathPanel.minVersion} und ${JDKPathPanel.maxVersion} benötigt. Eine Java-Runtime-Umgebung (JRE) ist nicht ausreichend."/>
     <str id="JDKPathPanel.intro" txt="Für den Betrieb des Produktes wird ein JDK benötigt. Eine Java-Runtime-Umgebung (JRE) ist nicht ausreichend."/>
     <str id="JDKPathPanel.info" txt="Pfad des JDK-Verzeichnisses:"/>
     <str id="JDKPathPanel.badVersion1" txt="Der gewählte JDK hat die falsche Version (vorhanden: "/>

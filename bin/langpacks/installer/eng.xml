@@ -83,6 +83,7 @@
     <str id="TargetPanel.notwritable" 
          txt="This directory can not be written! Please choose another directory!"/>
     
+    <str id="JDKPathPanel.extendedIntro" txt="The installed application needs a JDK between version ${JDKPathPanel.minVersion} and ${JDKPathPanel.maxVersion}. A java runtime environment (JRE) will be not sufficient."/>
     <str id="JDKPathPanel.intro" txt="The installed application needs a JDK. A java runtime environment (JRE) will be not sufficient."/>
     <str id="JDKPathPanel.info" txt="Select the JDK path:"/>
     <str id="JDKPathPanel.badVersion1" txt="The chosen JDK has the wrong version (available: "/>

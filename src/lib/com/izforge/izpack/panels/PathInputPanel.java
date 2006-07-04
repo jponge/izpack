@@ -92,9 +92,19 @@ public class PathInputPanel extends IzPanel implements ActionListener
         // Customize the default GridBagConstraints.
         GridBagConstraints gbConstraint = getDefaultGridBagConstraints();
         gbConstraint.gridwidth = GridBagConstraints.REMAINDER;
+        if(getAnchor() == GridBagConstraints.NORTH || getAnchor() == GridBagConstraints.NORTHWEST)
+            gbConstraint.weightx = 1.0;
+        else
+            gbConstraint.weightx = 0.0;
         this.setDefaultGridBagConstraints(gbConstraint);
-        String introText = getI18nStringForClass("intro", "PathInputPanel");
-        if (introText == null || introText.startsWith("PathInputPanel.intro")) introText = "";
+        String introText = getI18nStringForClass("extendedIntro", "PathInputPanel");
+        if (introText == null || introText.endsWith("extendedIntro")
+                || introText.indexOf('$') > -1 )
+        {
+            introText = getI18nStringForClass("intro", "PathInputPanel");
+            if (introText == null || introText.endsWith("intro"))
+                introText = "";
+        }
         // Intro
         // Create and customize constraint for it.
         // row 0 column 0
