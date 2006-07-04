@@ -104,12 +104,12 @@ public class XMLHelper
   }
 
   /** 
-   * The Opposit of AttributeIsTrue
+   * The Opposit of AttributeIsTrue()
    *
-   * @param element
-   * @param name
+   * @param element the element to inspect
+   * @param name the attribute to inspect
    *
-   * @return
+   * @return returns true if name attribute of the given element contains &quot;false&quot;  
    */
   public static boolean attributeIsFalse( XMLElement element, String name )
   {
