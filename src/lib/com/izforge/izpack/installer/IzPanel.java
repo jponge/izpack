@@ -178,7 +178,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * This Icon can also be different if the panel has more than one Instances. 
      * The UserInputPanel is one of these Candidates.
      * 
-     * @author marc.eppelmann&#064;gmx.de
+     * by marc.eppelmann&#064;gmx.de
      *
      * @param imageIconName an Iconname
      * @param instanceNumber an panel instance
@@ -834,7 +834,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * xml description file with the variable "IzPanel.LayoutType". The old values
      * "TOP" and "BOTTOM" from the xml file are mapped to NORTH and SOUTH.
      *  
-     * @return
+     * @return the anchor defined in the IzPanel.LayoutType variable.
      */
     public static int getAnchor()
     {
@@ -866,7 +866,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * Returns the gap which should be used for (multiline) labels 
      *  to create a consistent view. The value will
      *  be configurable by the guiprefs modifier "labelGap".
-     * @return
+     * @return the label gap depend on the xml-configurable guiprefs modifier "labelGap"
      */
     public static int getLabelGap()
     {
@@ -942,7 +942,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * @return whether this panel will be hidden general or not
      */
     /**
-     * @return
+     * @return true if hidden - false otherwise 
      */
     public boolean isHidden()
     {
