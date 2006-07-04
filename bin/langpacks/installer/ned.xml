@@ -3,6 +3,27 @@
 <!-- The Dutch langpack -->
 
 <langpack>
+    <!-- Heading messages START -->
+    <str id="CheckedHelloPanel.headline" txt="Welkom"/>
+    <str id="CompilePanel.headline" txt="Compileer Java Sources"/>
+    <str id="ConditionalUserInputPanel.headline" txt="Invoer gebruiker gegevens"/>
+    <str id="ExtendedInstallPanel.headline" txt="Installatie en Configuratie"/>
+    <str id="FinishPanel.headline" txt="Installatie Gereed"/>
+    <str id="HelloPanel.headline" txt="Welkom"/>
+    <str id="HTMLInfoPanel.headline" txt="Informatie"/>
+    <str id="HTMLLicencePanel.headline" txt="Licentieovereenkomst"/>
+    <str id="ImgPacksPanel.headline" txt="Selecteer Installatie pakketten"/>
+    <str id="InfoPanel.headline" txt="Informatie"/>
+    <str id="InstallPanel.headline" txt="Installatie"/>
+    <str id="JDKPathPanel.headline" txt="Instellen JDK pad"/>
+    <str id="LicencePanel.headline" txt="Licentieovereenkomst"/>
+    <str id="PacksPanel.headline" txt="Selecteer Installatie Pakketten"/>
+    <str id="ProcessPanel.headline" txt="Uitvoeren externe programma's"/>
+    <str id="ShortcutPanel.headline" txt="Aanmaken Snelkoppelingen"/>
+    <str id="SimpleFinishPanel.headline" txt="Installatie Gereed"/>
+    <str id="SummaryPanel.headline" txt="Overzicht van Installatie en Configuratiegegevens"/>
+    <str id="TargetPanel.headline" txt="Instellen Installatie locatie"/>
+    <str id="UserInputPanel.headline" txt="Invoer gebruiker gegevens"/>
 
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Installatie van "/>
@@ -17,6 +38,10 @@
     <str id="installer.no" txt="Nee"/>
     <str id="installer.cancel" txt="Annuleer"/> 
     <str id="installer.error" txt="Fout"/>
+    <str id="installer.help" txt="Help"/>
+    <str id="installer.step" txt="Stap"/>
+    <str id="installer.of" txt="van"/>
+    
     
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Dit zal de geïnstalleerde programma(s) verwijderen !"/>
@@ -58,6 +83,7 @@
     <str id="TargetPanel.notwritable" 
          txt="Schrijven in deze map niet mogelijk! Kies s.v.p. een andere map!"/>
     
+    <str id="JDKPathPanel.extendedIntro" txt="Het programma heeft een Java Development Kit (JDK) met een versienummer tussen ${JDKPathPanel.minVersion} en ${JDKPathPanel.maxVersion}. Een Java Runtime Environment (JRE) is niet voldoende."/>
     <str id="JDKPathPanel.intro" txt="Het programma heeft een JDK nodig. Een Java Runtime omgeving (JRE) zal niet voldoende zijn."/>
     <str id="JDKPathPanel.info" txt="Selecteer het JDK pad:"/>
     <str id="JDKPathPanel.badVersion1" txt="De JDK van uw keuze heeft een verkeerde versie (beschikbaar: "/>
