@@ -1030,7 +1030,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * 
      * @param shortcutSpec
      * 
-     * @return
+     * @return true if condtion is resolved positive - currently unimplemented: returns always true.
      */
     private boolean checkConditions(XMLElement shortcutSpec)
     {
@@ -1455,18 +1455,18 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     }
 
     /**
-     * DOCUMENT ME!
+     * Adds the grouplist to the panel
      * 
-     * @param Entries
-     * @param ListModel DOCUMENT ME!
-     * @param aJList DOCUMENT ME!
-     * @param aGridx DOCUMENT ME!
-     * @param aGridy DOCUMENT ME!
-     * @param aGridwidth DOCUMENT ME!
-     * @param aGridheight DOCUMENT ME!
-     * @param aFill DOCUMENT ME!
+     * @param Entries the entries to display
+     * @param ListModel the model to use
+     * @param aJList the JList to use 
+     * @param aGridx The X position in the gridbag layout.
+     * @param aGridy The Y position in the gridbag layout.
+     * @param aGridwidth the gridwith to use in the gridbag layout.
+     * @param aGridheight the gridheight to use in the gridbag layout.
+     * @param aFill the FILL to use in the gridbag layout.
      * 
-     * @return
+     * @return the filled JList
      */
     private JList addList(Vector Entries, int ListModel, JList aJList, int aGridx, int aGridy,
             int aGridwidth, int aGridheight, int aFill)

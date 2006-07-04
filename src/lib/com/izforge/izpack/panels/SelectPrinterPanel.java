@@ -68,7 +68,7 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
      * The constructor.
      *
      * @param parent The parent.
-     * @param iData The installation data.
+     * @param id The installation data.
      */
     public SelectPrinterPanel(InstallerFrame parent, InstallData id)
     {
