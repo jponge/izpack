@@ -204,14 +204,13 @@ public class VariableSubstitutor implements Serializable
      * Substitute method Variant that gets An Input Stream and returns A String
      *
      * @param in The Input Stream, with Placeholders
-     * @param out The Substituted String
      * @param type The used FormatType
-     * @param encoding The used encoding Type
-     * @param hidePasswd Set to true, to hide Password masked Placeholders in Logfile
      *
      * @throws IllegalArgumentException If a wrong input was given.
      * @throws UnsupportedEncodingException If the file comes with a wrong Encoding
      * @throws IOException If an I/O Error occurs.
+     * 
+     * @return the substituted result as string
      */
     public String substitute( InputStream in,  String type
                              )
