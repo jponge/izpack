@@ -105,6 +105,8 @@ public class LicencePanel extends IzPanel implements ActionListener
         group.add(noRadio);
         add(noRadio);
         noRadio.addActionListener(this);
+        
+        setInitialFocus(noRadio);
     }
 
     /** Loads the licence text. */
