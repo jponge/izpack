@@ -71,8 +71,6 @@ public class PackCompressorFactory
      * The used symbolic name will be handled case insensitive.
      * @param pc an instance of the pack compressor which describes 
      * encoder and decoder for a special compression format
-     * @throws CompilerException if the symbol already exist or if
-     * the compressor is not valid
      */
     public static void catchedRegister(PackCompressor pc) 
     {

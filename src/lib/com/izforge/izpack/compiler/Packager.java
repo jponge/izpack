@@ -279,7 +279,6 @@ public class Packager
      * Sets the GUI preferences.
      * 
      * @param prefs The new gUIPrefs value
-     * @exception Exception Description of the Exception
      */
     public void setGUIPrefs(GUIPrefs prefs)
     {
@@ -347,7 +346,6 @@ public class Packager
      * @param iso3 The ISO3 code.
      * @param xmlURL The location of the xml local info
      * @param flagURL The location of the flag image resource
-     * @exception Exception Description of the Exception
      */
     public void addLangPack(String iso3, URL xmlURL, URL flagURL)
     {
@@ -364,7 +362,6 @@ public class Packager
      * 
      * @param resId The resource Id.
      * @param url The location of the data
-     * @exception Exception Description of the Exception
      */
     public void addResource(String resId, URL url)
     {

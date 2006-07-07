@@ -147,7 +147,7 @@ public class ResourceManager
      * @param resource The resource to load
      * @return an InputStream contains the requested resource
      * @exception ResourceNotFoundException Description of the Exception
-     * @throws ResourceManager.ResourceNotFoundException thrown if there is no resource found
+     * @throws ResourceNotFoundException thrown if there is no resource found
      */
     public InputStream getInputStream(String resource) throws ResourceNotFoundException
     {
@@ -162,7 +162,7 @@ public class ResourceManager
      * @param resource the resource to load
      * @return A languagedependen URL spezifies the requested resource
      * @exception ResourceNotFoundException Description of the Exception
-     * @throws ResourceManager.ResourceNotFoundException thrown if there is no resource found
+     * @throws ResourceNotFoundException thrown if there is no resource found
      */
     public URL getURL(String resource) throws ResourceNotFoundException
     {

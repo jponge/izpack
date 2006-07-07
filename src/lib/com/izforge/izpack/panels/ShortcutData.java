@@ -78,7 +78,7 @@ public class ShortcutData implements Cloneable
      * Returns a clone (copy) of this object.
      * 
      * @return a copy of this object
-     * @throws CloneNotSupportedException
+     * @throws OutOfMemoryError
      */
     /*--------------------------------------------------------------------------*/
     public Object clone() throws OutOfMemoryError

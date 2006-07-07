@@ -120,7 +120,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * @param value the registry value from which the contents should be requested
      * @param defaultVal value to be used if no value exist in the registry
      * @return requested value if exist, else the default value
-     * @throws Exception
+     * @throws NativeLibException
      */
     public RegDataContainer getValue(String key, String value, RegDataContainer defaultVal) throws NativeLibException
     {
@@ -134,7 +134,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * 
      * @param key key to be evaluated
      * @return whether a key exist or not
-     * @throws Exception
+     * @throws NativeLibException
      */
     public boolean keyExist(String key) throws NativeLibException
     {
@@ -148,7 +148,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * @param key key to be used as path for the value
      * @param value value name to be evaluated
      * @return whether a the given value under the given key exist or not
-     * @throws Exception
+     * @throws NativeLibException
      */
     public boolean valueExist(String key, String value) throws NativeLibException
     {
@@ -161,7 +161,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * 
      * @param key key to be used as path for the sub keys
      * @return all keys which are defined under the given key
-     * @throws Exception
+     * @throws NativeLibException
      */
     public String[] getSubkeys(String key) throws NativeLibException
     {
@@ -174,7 +174,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * 
      * @param key key to be used as path for the value names
      * @return all value names which are defined under the given key
-     * @throws Exception
+     * @throws NativeLibException
      */
     public String[] getValueNames(String key) throws NativeLibException
     {
@@ -188,7 +188,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * @param key the registry key which should be used
      * @param value the registry value from which the contents should be requested
      * @return requested value if exist, else an exception
-     * @throws Exception
+     * @throws NativeLibException
      */
     public RegDataContainer getValue(String key, String value) throws NativeLibException
     {
@@ -200,7 +200,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * Creates the given key in the registry.
      * 
      * @param key key to be created
-     * @throws Exception
+     * @throws NativeLibException
      */
     public void createKey(String key) throws NativeLibException
     {
@@ -248,7 +248,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * Sets the root for the next registry access.
      * 
      * @param i an integer which refers to a HKEY
-     * @throws Exception
+     * @throws NativeLibException
      */
     public void setRoot(int i) throws NativeLibException
     {
@@ -260,7 +260,7 @@ public class Win_RegistryHandler extends RegistryHandler
      * Return the root as integer (HKEY_xxx).
      * 
      * @return the root as integer
-     * @throws Exception
+     * @throws NativeLibException
      */
     public int getRoot() throws NativeLibException
     {
@@ -271,7 +271,7 @@ public class Win_RegistryHandler extends RegistryHandler
     /**
      * Activates logging of registry changes.
      * 
-     * @throws Exception
+     * @throws NativeLibException
      */
     public void activateLogging() throws NativeLibException
     {
@@ -282,7 +282,7 @@ public class Win_RegistryHandler extends RegistryHandler
     /**
      * Suspends logging of registry changes.
      * 
-     * @throws Exception
+     * @throws NativeLibException
      */
     public void suspendLogging() throws NativeLibException
     {
@@ -293,7 +293,7 @@ public class Win_RegistryHandler extends RegistryHandler
     /**
      * Resets logging of registry changes.
      * 
-     * @throws Exception
+     * @throws NativeLibException
      */
     public void resetLogging() throws NativeLibException
     {

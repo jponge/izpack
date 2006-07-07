@@ -19,13 +19,10 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;

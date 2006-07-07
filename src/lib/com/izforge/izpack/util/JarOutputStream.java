@@ -112,7 +112,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
      * time.
      *
      * @param ze the ZIP/JAR entry to be written
-     * @exception ZipException if a ZIP error has occurred
+     * @exception java.util.zip.ZipException if a ZIP error has occurred
      * @exception IOException if an I/O error has occurred
      */
     public void putNextEntry(org.apache.tools.zip.ZipEntry ze) throws IOException 

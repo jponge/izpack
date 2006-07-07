@@ -334,7 +334,7 @@ public class SpecHelper
      * @param element XML element which should contain the attribute
      * @param attrName key of the attribute
      * @return the attribute as string
-     * @throws Exception
+     * @throws InstallerException
      */
     public String getRequiredAttribute(XMLElement element, String attrName)
             throws InstallerException

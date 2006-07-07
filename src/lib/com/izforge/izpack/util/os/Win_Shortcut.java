@@ -638,8 +638,6 @@ public class Win_Shortcut extends Shortcut
     /**
      * Gets the Folders where to place the program-groups and their shortcuts, for the given
      * usertype.
-     * @throws UnsupportedEncodingException 
-     * 
      * @see com.izforge.izpack.util.os.Shortcut#getProgramsFolder(int)
      */
     public String getProgramsFolder(int current_user) 
