@@ -1,4 +1,5 @@
 /*
+ * $Id:$
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -68,6 +69,7 @@ import com.izforge.izpack.gui.IzPackMetalTheme;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * The IzPack graphical installer class.
@@ -408,9 +410,20 @@ public class GUIInstaller extends InstallerBase
         UIManager.put("OptionPane.noButtonText", installdata.langpack.getString("installer.no"));
         UIManager.put("OptionPane.cancelButtonText", installdata.langpack
                 .getString("installer.cancel"));
-
-        String title = installdata.langpack.getString("installer.title")
-                + this.installdata.info.getAppName();
+        String title;
+        // Use a alternate message if defined.
+        final String key = "installer.reversetitle";
+        String message = installdata.langpack.getString(key);
+        // message equal to key -> no message defined.
+        if (message.indexOf(key) > -1)
+            title = installdata.langpack.getString("installer.title")
+                    + installdata.info.getAppName();
+        else
+        {   // Attention! The alternate message has to contain the hole message including
+            // $APP_NAME and may be $APP_VER.
+            VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
+            title = vs.substitute(message, null);
+        }
         new InstallerFrame(title, this.installdata);
     }
 

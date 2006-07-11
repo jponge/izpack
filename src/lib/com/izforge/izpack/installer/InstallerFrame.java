@@ -96,6 +96,7 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * The IzPack installer frame.
@@ -819,9 +820,21 @@ public class InstallerFrame extends JFrame
                 interruptCount++;
                 return;
             }
-            int res = JOptionPane.showConfirmDialog(this, langpack
-                    .getString("installer.quit.message"), langpack
-                    .getString("installer.quit.title"), JOptionPane.YES_NO_OPTION);
+            // Use a alternate message and title if defined.
+            final String mkey = "installer.quit.reversemessage";
+            final String tkey = "installer.quit.reversetitle";
+            String message = langpack.getString(mkey);
+            String title = langpack.getString(tkey);
+            // message equal to key -> no alternate message defined.
+            if (message.indexOf(mkey) > -1) message = langpack.getString("installer.quit.message");
+            // title equal to key -> no alternate title defined.
+            if (title.indexOf(tkey) > -1) title = langpack.getString("installer.quit.title");
+            // Now replace variables in message or title.
+            VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
+            message = vs.substitute(message, null);
+            title = vs.substitute(title, null);
+            int res = JOptionPane
+                    .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
             if (res == JOptionPane.YES_OPTION)
             {
                 wipeAborted();
