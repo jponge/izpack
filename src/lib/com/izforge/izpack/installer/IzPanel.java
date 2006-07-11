@@ -1,4 +1,5 @@
 /*
+ * $Id:$
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -101,12 +102,40 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      */ 
     protected static int ANCHOR = -1;
     
-    /** Gap which should be used for (multiline) labels 
-     *  to create a consistent view. The value will
-     *  be configurable by guiprefs modifier "labelGap".  
+    /** Identifier for using no gaps */
+    public final static int NO_GAP = 0;
+
+    /** Identifier for gaps between labels */
+    public final static int LABEL_GAP = 1;
+
+    /** Identifier for gaps between paragraphs */
+    public final static int PARAGRAPH_GAP = 2;
+
+    /** Identifier for gaps between labels and text fields */
+    public final static int LABEL_TO_TEXT_GAP = 3;
+
+    /** Identifier for gaps between labels and controls like radio buttons/groups */
+    public final static int LABEL_TO_CONTROL_GAP = 4;
+
+    /** Identifier for gaps between text fields and labels*/
+    public final static int TEXT_TO_LABEL_GAP = 5;
+
+    /** Identifier for gaps between controls like radio buttons/groups and labels*/
+    public final static int CONTROL_TO_LABEL_GAP = 6;
+
+    /**
+     * Look-up table for gap identifier to gap names. The gap names can be used in the XML
+     * installation configuration file. Be aware that case sensitivity should be used.
      */
-    protected static int LABEL_GAP = -1;
-    private final static int LABEL_GAP_DEFAULT = 5;
+    public final static String[] GAP_NAME_LOOK_UP = { "noGap", "labelGap", "paragraphGap",
+            "labelToTextGap", "labelToControlGap", "textToLabelGap", "controlToLabelGap"};
+
+    /**
+     * Current defined gaps. Here are the defaults which can be overwritten at the first call to
+     * method getGap. The gap type will be determined by the array index and has to be synchron to
+     * the gap identifier and the indices of array GAP_NAME_LOOK_UP
+     */
+    protected static int[] GAPS = { 0, 5, 5, 5, 5, 5, 5, 5, -1};
     
     /** HEADLINE = "headline" */
     public final static String HEADLINE = "headline";
@@ -866,31 +895,52 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * Returns the gap which should be used for (multiline) labels 
      *  to create a consistent view. The value will
      *  be configurable by the guiprefs modifier "labelGap".
-     * @return the label gap depend on the xml-configurable guiprefs modifier "labelGap"
+     * @return the label gap depend on the xml-configurable guiprefs modifier "labelGap" 
      */
     public static int getLabelGap()
     {
-        if( LABEL_GAP >= 0)
-            return( LABEL_GAP );
-        LABEL_GAP = LABEL_GAP_DEFAULT;
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();  
+        return (getGap(LABEL_GAP));
+    }
+
+    /**
+     * Returns the gap which should be used between the given gui objects. The
+     * value will be configurable by guiprefs modifiers. Valid values are all
+     * entries in the static String array GAP_NAME_LOOK_UP of this class.
+     * There are constant ints for the indexes of this array.
+     * 
+     * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
+     * 
+     * @return the gap depend on the xml-configurable guiprefs modifier
+     */
+    public static int getGap(int gapId)
+    {
+        if (gapId < 0 || gapId >= GAPS.length - 2)
+            throw new IllegalArgumentException("gapId out of range.");
+        if (GAPS[GAPS.length - 1] >= 0) return (GAPS[gapId]);
+        AutomatedInstallData idata = AutomatedInstallData.getInstance();
+        if (!(idata instanceof InstallData)) return (GAPS[gapId]);
         String var = null;
-        if (idata instanceof InstallData
-                && ((InstallData) idata).guiPrefs.modifier.containsKey("labelGap"))
-            var = (String) ((InstallData) idata).guiPrefs.modifier.get("labelGap");
-        if( var != null)
+        for (int i = 0; i < GAP_NAME_LOOK_UP.length; ++i)
         {
-            try
+            if (((InstallData) idata).guiPrefs.modifier.containsKey(GAP_NAME_LOOK_UP[i]))
             {
-                LABEL_GAP = Integer.parseInt(var);
+                var = (String) ((InstallData) idata).guiPrefs.modifier.get(GAP_NAME_LOOK_UP[i]);
+                if (var != null)
+                {
+                    try
+                    {
+                        GAPS[i] = Integer.parseInt(var);
+                    }
+                    catch (NumberFormatException nfe)
+                    {
+                        // Do nothing else use the default value.
+                        // Need to set it again at this position??
+                    }
+                }
             }
-            catch(NumberFormatException nfe)
-            {
-                // Do nothing else use the default value. 
-                // Need to set it again at this position??
-            }
+
         }
-        return( LABEL_GAP);
+        return (GAPS[gapId]);
     }
     // ------------------- Layout stuff -------------------- END ---
 
@@ -940,9 +990,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * A hidden panel will be not counted  in the step counter and
      * for panel icons.
      * @return whether this panel will be hidden general or not
-     */
-    /**
-     * @return true if hidden - false otherwise 
      */
     public boolean isHidden()
     {
