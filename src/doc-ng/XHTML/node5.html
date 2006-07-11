@@ -59,6 +59,9 @@ href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents"
 <li><a href="node5.html#modifyingPanels">Modifying IzPack Panels</a></li>
 
 <li><a href="node5.html#headingPanels">Using a Separated Heading Panel</a></li>
+
+<li><a href="node5.html#quitDialog">Alternative Cancel Dialog</a></li>
+
 </ul>
 
 <li><a name="tex2html433" href="node5.html#SECTION00570000000000000000">Web Installers</a></li>
@@ -221,7 +224,7 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
     space).</p>
 
     <div class="center">
-      <a id="archinstaller" name="archinstaller"></a> 
+      <a id="langSelectExample" name="langSelectExample"></a> 
 
       <table class="a" cellspacing="10">
         <colgroup>
@@ -240,7 +243,7 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
             </td>
 
             <td>
-              <p>Alternate language selection dialog</p>
+              <p>Alternative language selection dialog</p>
             </td>
           </tr>
         </thead>
@@ -305,12 +308,52 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
       </li>
 
       <li>
+        <tt>noGap</tt>:<br>
+        used by some panels as distance between the panel top border and the first control.
+      </li>
+
+      <li>
         <tt>labelGap</tt>:<br>
-        standard gap between labels (in reality this will be a footer under the label). Only panels
+        standard gap between labels (in reality this will be a header over the label). Only panels
         which are using the IzPack factory for labels are supported. These are not all standard
         panels.
       </li>
+
+      <li>
+        <tt>paragraphGap</tt>:<br>
+        used by some panels as distance between paragraphs or controls which should have
+		more gap as normal labels.
+      </li>
+
+      <li>
+        <tt>labelToTextGap</tt>:<br>
+        used by some panels as distance between labels and text fields.
+      </li>
+
+      <li>
+        <tt>labelToControlGap</tt>:<br>
+        used by some panels as distance between labels and controls like combo boxes,
+		radio buttons, check boxes.
+      </li>
+
+      <li>
+        <tt>textToLabelGap</tt>:<br>
+        used by some panels as distance between text fields and labels.
+      </li>
+
+      <li>
+        <tt>controlToLabelGap</tt>:<br>
+        used by some panels as distance between controls and labels.
+      </li>
     </ul>
+	<p>It is possible to use an alternatively frame title. Normaly the title has the aspect
+	"IzPack - Installation of " + $APP_NAME. If the langpack key <tt>installer.reversetitle</tt>
+	is defined, the value of that key will be used instead of the key <tt>installer.title</tt>.
+	There is no string added, but it is possible to use IzPack variables. The 
+	<a href="#example3">third heading example</a> contains such a alternatively frame title.
+	It is only possible to use predefined variables like $APP_NAME because the
+	title will be created before the frame will be shown. It is common to use the
+	name of the installation toolkit in the frame title. </p>
 
     <h2><a id="headingPanels" name="headingPanels">Using a Separated Heading Panel</a></h2>
 
@@ -376,10 +419,10 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
       </li>
     </ul>
 
-    <p>A normal IzPack GUI looks like</p>
+    <p><a name="example1"></a>A normal IzPack GUI looks like</p>
 
     <div class="center">
-      <a id="archinstaller" name="archinstaller"></a> 
+      <a id="exampleImg1" name="exampleImg1"></a> 
 
       <table>
         <caption class="alignbottom">
@@ -396,10 +439,10 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
       </table>
     </div>
 
-    <p>Key/value pairs to create IzPack installation with heading, no button and label icons and a
+    <p><a name="example2"></a>Key/value pairs to create IzPack installation with heading, no button and label icons and a
     panel text counter in the heading panel.</p>
 <pre>
-&lt;guiprefs width="640" height="480" resizable="no"&gt;
+&lt;guiprefs width="600" height="480" resizable="no"&gt;
   &lt;modifier key="useButtonIcons" value="no"/&gt;
   &lt;modifier key="useLabelIcons" value="no"/&gt;
   &lt;modifier key="labelGap" value="2"/&gt;    
@@ -414,13 +457,13 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
 </pre>
 
     <div class="center">
-      <a id="archinstaller" name="archinstaller"></a> 
+      <a id="exampleImg2" name="exampleImg2"></a> 
 
       <table>
         <caption class="alignbottom">
           <i>IzPack frame (TargetPanel) with heading panel and a text counter in the heading panel
           <br />
-           (with panel image).</i>
+           with panel image.</i>
         </caption>
 
         <tr>
@@ -436,14 +479,36 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
 
     <br />
 
+    <p><a name="example3"></a>Changed resources and langpack keys to create IzPack installation with 
+	alternatively frame title, heading, no button and label icons and a text counter in the heading 
+	panel.</p>
+	<pre>In install.xml 
+&lt;installation version="1.0"&gt;
+  ...
+  &lt;resources&gt;
+    ...
+    &lt;res src="border4.png" id="Installer.image.3"/&gt; REMOVED
+    ...
+  &lt;/resources&gt;
+&lt;/installation&gt;
+
+Add in &lt;ISO3&gt;.xml or CustomLangpack.xml_&lt;ISO3&gt;
+&lt;langpack&gt;
+  ...
+  &lt;str id="installer.reversetitle" txt="$APP_NAME $APP_VER - IzPack Wizard "/&gt;
+  ...
+&lt;/langpack&gt;
+
+	</pre>
+	<p></p>
     <div class="center">
-      <a id="archinstaller" name="archinstaller"></a> 
+      <a id="exampleImg3" name="exampleImg3"></a> 
 
       <table>
         <caption class="alignbottom">
           <i>IzPack frame (TargetPanel) with heading panel and a text counter in the heading panel
           <br />
-           (no panel image).</i>
+           with alternative frame title, no panel image.</i>
         </caption>
 
         <tr>
@@ -457,7 +522,7 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
       </table>
     </div>
 
-    <p>Changed key/value pairs to create IzPack installation with heading, no button and label
+    <p><a name="example4"></a>Changed key/value pairs to create IzPack installation with heading, no button and label
     icons and a panel progressbar counter in the navigation panel.</p>
 
     <p>Key/value pairs for modifying IzPack GUI (references for panel images removed):</p>
@@ -477,13 +542,13 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
 </pre>
 
     <div class="center">
-      <a id="archinstaller" name="archinstaller"></a> 
+      <a id="exampleImg4" name="exampleImg4"></a> 
 
       <table>
         <caption class="alignbottom">
           <i>IzPack frame (TargetPanel) with heading panel and a progressbar counter in the
           <br />
-           navigation panel (no panel image).</i>
+           navigation panel without panel image.</i>
         </caption>
 
         <tr>
@@ -496,6 +561,64 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
         </tr>
       </table>
     </div>
+    <h2><a id="quitDialog" name="quitDialog">Alternative Cancel Dialog</a></h2>
+	<p>The cancel dialog will be shown if the cancel button or the close button of the frame was
+	pushed. In the standard dialog the title contains the question and the message an affirmation.
+	In other dialogs often the title is a common heading and the question will be called in the
+	dialog as message. The standard behavior will be modified if the messages <tt>installer.quit.reversemessage</tt>
+	and <tt>installer.quit.reversetitle</tt>are declared.</p>
+<pre>
+Add in &lt;ISO3&gt;.xml or CustomLangpack.xml_&lt;ISO3&gt;
+&lt;langpack&gt;
+  ...
+  &lt;str id="installer.quit.reversemessage" txt="Are you sure you want to cancel installation?"/&gt;
+  &lt;str id="installer.quit.reversetitle" txt="$APP_NAME $APP_VER"/&gt;
+  ...
+&lt;/langpack&gt;
+</pre>
+</pre>
+    <div class="center">
+      <a id="quitExample" name="quitExample"></a> 
+
+      <table class="a" cellspacing="10">
+        <colgroup>
+          <col style="width: 40%" />
+          <col style="width: 20%" />
+          <col style="width: 40%" />
+        </colgroup>
+
+        <thead>
+          <tr>
+            <td>
+              <p>Standard cancel dialog</p>
+            </td>
+
+            <td>
+            </td>
+
+            <td>
+              <p>Alternative cancel dialog</p>
+            </td>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><img class="alignmiddle" src="normQuitDialog.png" width="268" height="115" 
+			alt="" border="0">
+			 </td>
+
+            <td>
+            </td>
+
+            <td><img class="alignmiddle" src="revQuitDialog.png" width="283" height="115"
+			 alt="" border="0">
+			</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+	
 <h1><a name="SECTION00570000000000000000"></a> <a name="webinstaller"></a><br />
 Web Installers</h1>
 
@@ -515,7 +638,7 @@ fully qualified URL for a direcory on the web server.<br />
   &lt;url&gt;http://www.superextractor.com/&lt;/url&gt;
   &lt;webdir&gt;http://www.superextractor.com/download&lt;/url&gt;
 &lt;/info&gt;
-</pre>
+
 
 <p>You can force creation of a standard installer even if <tt>webdir</tt> is specified, by specifically creating a <tt>standard</tt> installer from the command line invocation or ant task (see <a
 name="ant-integration"></a>).</p>
