@@ -17,6 +17,7 @@
   1.5 (also known as 5.0) (Klaus Bartz).
 - Updated russian langpack (Fabrice Mirabile)
 - Fixed indent of ShortcutPanels Headline (Marc Eppelmann)
+- Made available all IzPack Variable in the ShortCut Specs (Marc Eppelmann)
 - Configurable heading panel added to InstallerFrame (Klaus Bartz).
 - Panels counter (text or progressbar) useable in the heading or 
   navigation panel (Klaus Bartz).
