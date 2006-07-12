@@ -5,26 +5,26 @@
 <langpack>
 
     <!-- Heading messages START -->
-    <str id="CheckedHelloPanel.headline" txt="Willkommensmaske"/>
+    <str id="CheckedHelloPanel.headline" txt="Willkommen"/>
     <str id="CompilePanel.headline" txt="Java Source-Dateien kompilieren"/>
-    <str id="ConditionalUserInputPanel.headline" txt="Benutzerdaten eingaben"/>
+    <str id="ConditionalUserInputPanel.headline" txt="Benutzerdaten"/>
     <str id="ExtendedInstallPanel.headline" txt="Installation und Konfiguration"/>
     <str id="FinishPanel.headline" txt="Installation abgeschlossen"/>
-    <str id="HelloPanel.headline" txt="Willkommensmaske"/>
+    <str id="HelloPanel.headline" txt="Willkommen"/>
     <str id="HTMLInfoPanel.headline" txt="Informationen"/>
-    <str id="HTMLLicencePanel.headline" txt="Nutzungsrechte"/>
-    <str id="ImgPacksPanel.headline" txt="Auswahl der Installationspakete"/>
+    <str id="HTMLLicencePanel.headline" txt="Lizenzvereinbarungen"/>
+    <str id="ImgPacksPanel.headline" txt="Auswahl Installationspakete"/>
     <str id="InfoPanel.headline" txt="Informationen"/>
     <str id="InstallPanel.headline" txt="Installation"/>
-    <str id="JDKPathPanel.headline" txt="JDK-Pfad festlegen"/>
-    <str id="LicencePanel.headline" txt="Nutzungsrechte"/>
-    <str id="PacksPanel.headline" txt="Auswahl der Installationspakete"/>
+    <str id="JDKPathPanel.headline" txt="JDK-Pfad"/>
+    <str id="LicencePanel.headline" txt="Lizenzvereinbarungen"/>
+    <str id="PacksPanel.headline" txt="Auswahl Installationspakete"/>
     <str id="ProcessPanel.headline" txt="Externe Prozesse ausführen"/>
-    <str id="ShortcutPanel.headline" txt="Verknüpfungen erstellen"/>
+    <str id="ShortcutPanel.headline" txt="Verknüpfungen"/>
     <str id="SimpleFinishPanel.headline" txt="Installation abgeschlossen"/>
-    <str id="SummaryPanel.headline" txt="Zusammenfassung der Konfigurarionsdaten"/>
-    <str id="TargetPanel.headline" txt="Installationspfad festlegen"/>
-    <str id="UserInputPanel.headline" txt="Benutzerdaten eingaben"/>
+    <str id="SummaryPanel.headline" txt="Zusammenfassung Konfigurarionsdaten"/>
+    <str id="TargetPanel.headline" txt="Installationspfad"/>
+    <str id="UserInputPanel.headline" txt="Benutzerdaten"/>
     
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Installation von "/>

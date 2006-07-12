@@ -7,24 +7,24 @@
     <!-- Heading messages START -->
     <str id="CheckedHelloPanel.headline" txt="Welcome"/>
     <str id="CompilePanel.headline" txt="Compile Java Sources"/>
-    <str id="ConditionalUserInputPanel.headline" txt="User Data Input"/>
+    <str id="ConditionalUserInputPanel.headline" txt="User Data"/>
     <str id="ExtendedInstallPanel.headline" txt="Installation and Configuration"/>
     <str id="FinishPanel.headline" txt="Installation Finished"/>
     <str id="HelloPanel.headline" txt="Welcome"/>
     <str id="HTMLInfoPanel.headline" txt="Informations"/>
-    <str id="HTMLLicencePanel.headline" txt="Rights of Use"/>
+    <str id="HTMLLicencePanel.headline" txt="Licensing Agreements"/>
     <str id="ImgPacksPanel.headline" txt="Select Installation Packages"/>
     <str id="InfoPanel.headline" txt="Informations"/>
     <str id="InstallPanel.headline" txt="Installation"/>
-    <str id="JDKPathPanel.headline" txt="Assignment JDK Path"/>
-    <str id="LicencePanel.headline" txt="Rights of Use"/>
+    <str id="JDKPathPanel.headline" txt="JDK Path"/>
+    <str id="LicencePanel.headline" txt="Licensing Agreements"/>
     <str id="PacksPanel.headline" txt="Select Installation Packages"/>
     <str id="ProcessPanel.headline" txt="Perform External Processes"/>
-    <str id="ShortcutPanel.headline" txt="Shortcut Creation"/>
+    <str id="ShortcutPanel.headline" txt="Shortcuts"/>
     <str id="SimpleFinishPanel.headline" txt="Installation Finished"/>
-    <str id="SummaryPanel.headline" txt="Summary of Installation and Configuration Data"/>
-    <str id="TargetPanel.headline" txt="Assignment Target Path"/>
-    <str id="UserInputPanel.headline" txt="User Data Input"/>
+    <str id="SummaryPanel.headline" txt="Summary Configuration Data"/>
+    <str id="TargetPanel.headline" txt="Target Path"/>
+    <str id="UserInputPanel.headline" txt="User Data"/>
     
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Installation of "/>
