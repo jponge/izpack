@@ -296,15 +296,17 @@ public class Compiler extends Thread
     }
 
     /**
-     * Add a name value pair to the project property set. Overwriting any existing value.
+     * Add a name value pair to the project property set. Overwriting any existing value except system properties.
      * 
      * @param name the name of the property
      * @param value the value to set
-     * @return true
+     * @return an indicator if the name value pair was added.
      */
     public boolean setProperty(String name, String value)
     {
-        // TODO: don't allow overwriting of system properties
+        if (System.getProperties().containsKey(name)) {
+            return false;
+        }
         properties.put(name, value);
         return true;
     }
