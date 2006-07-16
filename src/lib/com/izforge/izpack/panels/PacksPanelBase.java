@@ -74,7 +74,7 @@ import com.izforge.izpack.util.Debug;
  * panels together. This class handles the common logic of pack selection. The derived class should
  * be create the layout and other specific actions. There are some helper methods to simplify layout
  * creation in the derived class.
- * 
+ *
  * @author Julien Ponge
  * @author Klaus Bartz
  */
@@ -83,48 +83,72 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 {
 
     // Common used Swing fields
-    /** The free space label. */
+    /**
+     * The free space label.
+     */
     protected JLabel freeSpaceLabel;
 
-    /** The space label. */
+    /**
+     * The space label.
+     */
     protected JLabel spaceLabel;
 
-    /** The tip label. */
+    /**
+     * The tip label.
+     */
     protected JTextArea descriptionArea;
 
-    /** The dependencies label. */
+    /**
+     * The dependencies label.
+     */
     protected JTextArea dependencyArea;
 
-    /** The packs table. */
+    /**
+     * The packs table.
+     */
     protected JTable packsTable;
 
-    /** The tablescroll. */
+    /**
+     * The tablescroll.
+     */
     protected JScrollPane tableScroller;
 
     // Non-GUI fields
-    /** Map that connects names with pack objects */
+    /**
+     * Map that connects names with pack objects
+     */
     private Map names;
 
-    /** The bytes of the current pack. */
+    /**
+     * The bytes of the current pack.
+     */
     protected int bytes = 0;
 
-    /** The free bytes of the current selected disk. */
+    /**
+     * The free bytes of the current selected disk.
+     */
     protected long freeBytes = 0;
 
-    /** Are there dependencies in the packs */
+    /**
+     * Are there dependencies in the packs
+     */
     protected boolean dependenciesExist = false;
 
-    /** The packs locale database. */
+    /**
+     * The packs locale database.
+     */
     private LocaleDatabase langpack = null;
 
-    /** The name of the XML file that specifies the panel langpack */
+    /**
+     * The name of the XML file that specifies the panel langpack
+     */
     private static final String LANG_FILE_NAME = "packsLang.xml";
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public PacksPanelBase(InstallerFrame parent, InstallData idata)
     {
@@ -202,20 +226,20 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             String msg = null;
             freeBytes = IoHelper.getFreeSpace(IoHelper.existingParent(
-                    new File(idata.getInstallPath())).getAbsolutePath());
-            if (freeBytes > 0x000000007fffffff)
-                msg = " > 2 GB";
-            else if (freeBytes < 0)
-                msg = parent.langpack.getString("PacksPanel.notAscertainable");
+                    new
+                            File(idata.getInstallPath())).getAbsolutePath());
+            if (freeBytes < 0)
+                msg =
+                        parent.langpack.getString("PacksPanel.notAscertainable");
             else
-                msg = Pack.toByteUnitsString((int) freeBytes);
+                msg = Pack.toByteUnitsString(freeBytes);
             freeSpaceLabel.setText(msg);
         }
     }
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return true if the needed space is less than the free space, else false
      */
     public boolean isValidated()
@@ -232,7 +256,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * Asks to make the XML panel data.
-     * 
+     *
      * @param panelRoot The XML tree to write the data in.
      */
     public void makeXMLData(XMLElement panelRoot)
@@ -299,15 +323,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * Creates an label with a message given by msgId and an icon given by the iconId. If layout and
      * constraints are not null, the label will be added to layout with the given constraints. The
      * label will be added to this object.
-     * 
-     * @param msgId identifier for the IzPack langpack
-     * @param iconId identifier for the IzPack icons
-     * @param layout layout to be used
+     *
+     * @param msgId       identifier for the IzPack langpack
+     * @param iconId      identifier for the IzPack icons
+     * @param layout      layout to be used
      * @param constraints constraints to be used
      * @return the created label
      */
     protected JLabel createLabel(String msgId, String iconId, GridBagLayout layout,
-            GridBagConstraints constraints)
+                                 GridBagConstraints constraints)
     {
         JLabel label = LabelFactory.create(parent.langpack.getString(msgId), parent.icons
                 .getImageIcon(iconId), JLabel.TRAILING);
@@ -321,14 +345,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * and a label on the right side with initial no text. The right label will be returned. If
      * layout and constraints are not null, the label will be added to layout with the given
      * constraints. The panel will be added to this object.
-     * 
-     * @param msgId identifier for the IzPack langpack
-     * @param layout layout to be used
+     *
+     * @param msgId       identifier for the IzPack langpack
+     * @param layout      layout to be used
      * @param constraints constraints to be used
      * @return the created (right) label
      */
     protected JLabel createPanelWithLabel(String msgId, GridBagLayout layout,
-            GridBagConstraints constraints)
+                                          GridBagConstraints constraints)
     {
         JPanel panel = new JPanel();
         JLabel label = new JLabel();
@@ -349,15 +373,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * else the text area will be added directly to this object. If layout and constraints are not
      * null, the text area or scroller will be added to layout with the given constraints. The text
      * area will be returned.
-     * 
-     * @param msgId identifier for the IzPack langpack
-     * @param scroller the scroller to be used
-     * @param layout layout to be used
+     *
+     * @param msgId       identifier for the IzPack langpack
+     * @param scroller    the scroller to be used
+     * @param layout      layout to be used
      * @param constraints constraints to be used
      * @return the created text area
      */
     protected JTextArea createTextArea(String msgId, JScrollPane scroller, GridBagLayout layout,
-            GridBagConstraints constraints)
+                                       GridBagConstraints constraints)
     {
         JTextArea area = new JTextArea();
         area.setMargin(new Insets(2, 2, 2, 2));
@@ -392,15 +416,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * Creates the table for the packs. All parameters are required. The table will be returned.
-     * 
-     * @param width of the table
-     * @param scroller the scroller to be used
-     * @param layout layout to be used
+     *
+     * @param width       of the table
+     * @param scroller    the scroller to be used
+     * @param layout      layout to be used
      * @param constraints constraints to be used
      * @return the created table
      */
     protected JTable createPacksTable(int width, JScrollPane scroller, GridBagLayout layout,
-            GridBagConstraints constraints)
+                                      GridBagConstraints constraints)
     {
 
         JTable table = new JTable();
@@ -423,7 +447,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * Computes pack related data like the names or the dependencies state.
-     * 
+     *
      * @param packs
      */
     private void computePacks(List packs)
@@ -441,7 +465,6 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /**
      * Called when the panel becomes active. If a derived class implements this method also, it is
      * recomanded to call this method with the super operator first.
-     * 
      */
     public void panelActivate()
     {
@@ -453,7 +476,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             CheckBoxEditorRenderer packSelectedEditor = new CheckBoxEditorRenderer(true);
             packsTable.getColumnModel().getColumn(0).setCellEditor(packSelectedEditor);
             packsTable.getColumnModel().getColumn(0).setMaxWidth(40);
-            DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer() {
+            DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer()
+            {
 
                 /**
                  * 
@@ -465,7 +489,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 }
             };
             packsTable.getColumnModel().getColumn(1).setCellRenderer(renderer1);
-            DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer() {
+            DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer()
+            {
 
                 /**
                  * 
@@ -561,7 +586,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         }
 
         public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column)
+                                                       boolean isSelected, boolean hasFocus, int row, int column)
         {
             if (isSelected)
             {
@@ -581,10 +606,10 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
         /**
          * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable,
-         * java.lang.Object, boolean, int, int)
+         *      Object, boolean, int, int)
          */
         public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column)
+                                                     boolean isSelected, int row, int column)
         {
             return getTableCellRendererComponent(table, value, isSelected, false, row, column);
         }

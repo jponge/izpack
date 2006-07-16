@@ -21,6 +21,9 @@
 - Configurable heading panel added to InstallerFrame (Klaus Bartz).
 - Panels counter (text or progressbar) useable in the heading or 
   navigation panel (Klaus Bartz).
+- PacksPanels: fixed disk space requirements (Ryan Shillington, via Julien
+  Ponge).
+- Compiler fix (Ryan Shillington, via Julien Ponge).
 
   > 3.8.1 (build 2006.01.06)
 - Added Greek language support (Fabrice Mirabile, thanks to Panayotis

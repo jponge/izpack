@@ -1955,8 +1955,7 @@ public class CompilerConfig extends Thread
             {
                 pos = name.indexOf(className);
             }
-            if (name.length() == pos + className.length() + 6) // "Main" class
-            // found
+            if (pos != -1 && name.length() == pos + className.length() + 6) // "Main" class found
             {
                 jis.close();
                 return (name.substring(0, lastPos));

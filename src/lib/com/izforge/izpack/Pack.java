@@ -183,7 +183,7 @@ public class Pack implements Serializable
      * @param bytes A number of bytes to convert to a String.
      * @return The String-converted value.
      */
-    public static String toByteUnitsString(int bytes)
+    public static String toByteUnitsString(long bytes)
     {
         if (bytes < KILOBYTES)
             return String.valueOf(bytes) + " bytes";
