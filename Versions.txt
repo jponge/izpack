@@ -21,6 +21,7 @@
 - Configurable heading panel added to InstallerFrame (Klaus Bartz).
 - Panels counter (text or progressbar) useable in the heading or 
   navigation panel (Klaus Bartz).
+- Fixed logfile for AntActions (Eric Rose).
 - PacksPanels: fixed disk space requirements (Ryan Shillington, via Julien
   Ponge).
 - Compiler fix (Ryan Shillington, via Julien Ponge).

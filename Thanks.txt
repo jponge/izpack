@@ -103,4 +103,6 @@ IzPack for your projects ;-)
 - Oliver Kiddle: for the patches and fixes
 - Julian Payne: for the patch on WebAccessor
 - Hal Vaughan: for the patches
+- Eric Rose: for the patch related to the logfile of AntActions.
 - Ryan Shillington: for the patches
+

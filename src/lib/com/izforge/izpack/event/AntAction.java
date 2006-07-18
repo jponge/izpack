@@ -24,6 +24,8 @@ package com.izforge.izpack.event;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -396,8 +398,26 @@ public class AntAction extends ActionBase
         else if (quiet) msgOutputLevel = 1;
         BuildLogger logger = new DefaultLogger();
         logger.setMessageOutputLevel(msgOutputLevel);
-        logger.setOutputPrintStream(System.out);
-        logger.setErrorPrintStream(System.err);
+        if (logFile != null)
+        {
+            PrintStream printStream;
+            try
+            {
+                printStream = new PrintStream(new FileOutputStream(logFile));
+                logger.setOutputPrintStream(printStream);
+                logger.setErrorPrintStream(printStream);
+            }
+            catch (FileNotFoundException e)
+            {
+                logger.setOutputPrintStream(System.out);
+                logger.setErrorPrintStream(System.err);
+            }
+        }
+        else
+        {
+            logger.setOutputPrintStream(System.out);
+            logger.setErrorPrintStream(System.err);
+        }
         return logger;
     }
 
