@@ -278,7 +278,10 @@ The following variables are built-in :
 
 <li><tt>$FILE_SEPARATOR</tt> : the file separator on the installation system</li>
 
-<li><tt>$DESKTOPSHORTCUTCHECKBOXENABLED</tt> : When set to true, it automatically checks the "Create Desktop Shortcuts" button.</li>
+<li><tt>$desktopshortcutcheckboxenabled</tt> : When set to true, it automatically checks the "Create Desktop Shortcuts" button. To see how to use it, go to <a name="tex2html378" href="node4.html#SECTION00433000000000000000">The Variables Element <tt>&lt;variables&gt;</tt></a></li>
+
+<li><tt>$InstallerFrame.logfilePath</tt> : The path to the install log. If set to defauly then the "$INSTALL_PATH/uninstall/install.log" path will be used. To see how to use it, go to <a name="tex2html378" href="node4.html#SECTION00433000000000000000">The Variables Element <tt>&lt;variables&gt;</tt></a></li>
+
 </ul>
 
 <h2><a name="SECTION00422000000000000000">Environment Variables</a></h2>
@@ -386,6 +389,19 @@ the files to parse. The variable substitutor will then replace it with the corre
 &lt;variables&gt;
   &lt;variable name="app-version" value="1.4"/&gt;
   &lt;variable name="released-on" value="08/03/2002"/&gt;
+&lt;/variables&gt;
+</pre>
+
+<p class="ita" >Here's a precise sample on how to use desktopshortcutcheckboxenabled and InstallerFrame.logfilePath variables:<br />
+</p>
+<pre>
+&lt;variables&gt;
+  &lt;variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH/My-install.log"/&gt; 
+  	&lt;!-- This means that the log name will be My-install and that it will be stored at the root of the installation. --&gt;
+  	&lt;!-- Any path is fine. If value is set to "Default" then "$INSTALL_PATH/uninstall/install.log" is used. --&gt;
+  	&lt;!-- And if variable isn't defined then no log is written. --&gt;
+  &lt;variable name="desktopshortcutcheckboxenabled" value="true"/&gt; 
+  	&lt;!-- This automatically checks the "Create Desktop Shortcuts" button. Default value is "False". --&gt;
 &lt;/variables&gt;
 </pre>
 

@@ -98,6 +98,11 @@ p.underlinebold
 	font-weight:bold;
 }
 
+p.ita
+{
+	font-style: italic;
+}
+
 li.disc
 {
 	list-style-type: disc;
