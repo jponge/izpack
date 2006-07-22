@@ -172,7 +172,7 @@ public class ShellLink implements NativeLibraryClient
     /** CURRENT_USER = 0; the constant to use for selecting the current user. */
     public static final int CURRENT_USER = 0;
 
-    /** the constant to use for selecting the all users. */
+    /** ALL_USERS = 1; the constant to use for selecting the all users. */
     public static final int ALL_USERS = 1;
 
     // ------------------------------------------------------------------------
