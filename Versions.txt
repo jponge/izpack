@@ -25,6 +25,7 @@
 - PacksPanels: fixed disk space requirements (Ryan Shillington, via Julien
   Ponge).
 - Compiler fix (Ryan Shillington, via Julien Ponge).
+- fixed Shotcut(s)(Panel) for Administrators on Win32 (Marc Eppelmann)
 
   > 3.8.1 (build 2006.01.06)
 - Added Greek language support (Fabrice Mirabile, thanks to Panayotis
