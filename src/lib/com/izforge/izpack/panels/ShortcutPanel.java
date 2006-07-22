@@ -654,9 +654,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 else
                 {
                     itsUserType = Shortcut.CURRENT_USER;
-                }
-
-                System.out.println(getProgramsFolder(Shortcut.CURRENT_USER));
+                }                
 
                 buildUI(getProgramsFolder(isRootUser ? Shortcut.ALL_USERS : Shortcut.CURRENT_USER));
 
@@ -1291,13 +1289,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /*--------------------------------------------------------------------------*/
     private void buildUI(File groups)
-    {
-        // System.out.println( "BuildUI for" + groups );
-
-        // constraints.gridx = 1;
-        // constraints.gridy = line+1;
-        // constraints.gridwidth = 3;
-        // constraints.gridheight = 1;
+    {        
         constraints.insets = new Insets(10, 10, 0, 0);
 
         // Add a CheckBox which enables the user to entirely supress shortcut creation.
