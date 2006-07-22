@@ -41,32 +41,34 @@ public class Shortcut
     // ------------------------------------------------------------------------
     // Constant Definitions
     // ------------------------------------------------------------------------
+    /** APPLICATIONS = 1 */
     public static final int APPLICATIONS = 1;
-
+    /** START_MENU = 2 */
     public static final int START_MENU = 2;
-
+    /** DESKTOP = 3 */
     public static final int DESKTOP = 3;
-
+    /** START_UP = 4 */
     public static final int START_UP = 4;
 
-    /** Hide the window when starting. */
+    /** HIDE = 0 (Hide the window when starting.) */
     public static final int HIDE = 0;
 
     /**
+     * NORMAL = 1
      * Show the window 'normal' when starting. Usually restores the window properties at the last
      * shut-down.
      */
     public static final int NORMAL = 1;
-
+    /** MINIMIZED = 2 */
     public static final int MINIMIZED = 2;
 
-    /** Show the window maximized when starting. */
+    /** MAXIMIZED = 3 (Show the window maximized when starting.) */
     public static final int MAXIMIZED = 3;
 
-    /** identifies the user type as the current user */
+    /** CURRENT_USER = 1 (identifies the user type as the current user) */
     public static final int CURRENT_USER = 1;
 
-    /** identifies the user type as valid for all users */
+    /**  ALL_USERS = 2 (identifies the user type as valid for all users) */
     public static final int ALL_USERS = 2;
 
     /** indicates that this shortcut should be created for all users or only me **/
