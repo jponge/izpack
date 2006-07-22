@@ -642,10 +642,19 @@ public class Win_Shortcut extends Shortcut
      */
     public String getProgramsFolder(int current_user) 
     {
+        /** CURRENT_USER = 0; the constant to use for selecting the current user. */
+        int USER = 0;
+        
+        if( current_user == Shortcut.CURRENT_USER )
+            USER = ShellLink.CURRENT_USER;
+        
+        else if( current_user == Shortcut.ALL_USERS )
+            USER = ShellLink.ALL_USERS;       
+        
         String result = null;
         try
         {
-            result = new String( shortcut.getLinkPath(current_user).getBytes( StringTool.getPlatformEncoding() ), StringTool.getPlatformEncoding() );
+            result = new String( shortcut.getLinkPath(USER).getBytes( StringTool.getPlatformEncoding() ), StringTool.getPlatformEncoding() );
         }
         catch (UnsupportedEncodingException e)
         {
