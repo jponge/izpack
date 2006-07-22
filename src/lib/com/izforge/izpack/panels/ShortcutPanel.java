@@ -17,34 +17,6 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.ResourceNotFoundException;
-import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.MultiLineLabel;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.TargetFactory;
-import com.izforge.izpack.util.UnixHelper;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.os.Shortcut;
-
-// import com.izforge.izpack.util.xml.Condition;
-import com.izforge.izpack.util.xml.XMLHelper;
-
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLBuilder;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLElement;
-
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -52,11 +24,9 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -78,6 +48,33 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLBuilder;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.ResourceNotFoundException;
+import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.MultiLineLabel;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.StringTool;
+import com.izforge.izpack.util.TargetFactory;
+import com.izforge.izpack.util.UnixHelper;
+import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.os.Shortcut;
+import com.izforge.izpack.util.xml.XMLHelper;
+
 //
 // import com.izforge.izpack.panels.ShortcutData;
 
@@ -91,7 +88,7 @@ import javax.swing.event.ListSelectionListener;
  * @version $Revision$
  */
 public class ShortcutPanel extends IzPanel implements ActionListener, ListSelectionListener // ,//
-                                                                                            // ShortcutConstants
+// ShortcutConstants
 
 {
 
@@ -164,6 +161,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /** SPEC_KEY_PACKS = "createForPack" */
     private static final String SPEC_KEY_PACKS = "createForPack";
+
     // ------------------------------------------------------
     // spec file key attributes
     // ------------------------------------------------------
@@ -464,10 +462,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     {
         Object eventSource = event.getSource();
 
-        /*if (eventSource != null)
-        {
-            System.out.println("Instance Of : " + eventSource.getClass().getName());
-        }*/
+        /*
+         * if (eventSource != null) { System.out.println("Instance Of : " +
+         * eventSource.getClass().getName()); }
+         */
 
         // ----------------------------------------------------
         // create shortcut for the current user was selected
@@ -622,7 +620,32 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             {
                 File allUsersProgramsFolder = getProgramsFolder(Shortcut.ALL_USERS);
 
-                isRootUser = allUsersProgramsFolder.canWrite();
+                Debug.log("All UsersProgramsFolder: '" + allUsersProgramsFolder + "'");
+
+                File forceTest = new File(allUsersProgramsFolder + File.separator
+                        + System.getProperty("user.name") + System.currentTimeMillis());
+
+                try
+                {
+                    isRootUser = forceTest.createNewFile();
+                }
+                catch (Exception e)
+                {
+                    isRootUser = false;
+                    Debug.log("IOException: " + "'" + e.getLocalizedMessage() + "'");
+                    Debug.log("You cannot create '" + forceTest + "'");
+
+                }
+
+                if (forceTest.exists())
+                {
+                    Debug.log("Delete temporary File: '" + forceTest + "'");
+                    forceTest.delete();
+                }
+
+                String perm = isRootUser ? "can" : "cannot";
+
+                Debug.log("You " + perm + " write into '" + allUsersProgramsFolder + "'");
 
                 if (isRootUser)
                 {
@@ -632,6 +655,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 {
                     itsUserType = Shortcut.CURRENT_USER;
                 }
+
+                System.out.println(getProgramsFolder(Shortcut.CURRENT_USER));
 
                 buildUI(getProgramsFolder(isRootUser ? Shortcut.ALL_USERS : Shortcut.CURRENT_USER));
 
@@ -929,7 +954,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 data.initialState = Shortcut.NORMAL;
             }
 
-            //LOG System.out.println("data.initialState: " + data.initialState);
+            // LOG System.out.println("data.initialState: " + data.initialState);
 
             // --------------------------------------------------
             // if the minimal data requirements are met to create
@@ -952,13 +977,14 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 data.target = "";
             }
             // the shortcut is not actually required for any of the selected packs
-             
-            // the shortcut is not actually required for any of the selected packs               // the shortcut is not actually required for any of the selected packs
-            Vector forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);     
-     
-            if (!shortcutRequiredFor(forPacks))      
-            {    
-                continue;    
+
+            // the shortcut is not actually required for any of the selected packs // the shortcut
+            // is not actually required for any of the selected packs
+            Vector forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);
+
+            if (!shortcutRequiredFor(forPacks))
+            {
+                continue;
             }
             // --------------------------------------------------
             // This section is executed if we don't skip.
@@ -1266,7 +1292,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*--------------------------------------------------------------------------*/
     private void buildUI(File groups)
     {
-        itsProgramFolder = groups;
+        // System.out.println( "BuildUI for" + groups );
 
         // constraints.gridx = 1;
         // constraints.gridy = line+1;
@@ -1394,10 +1420,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             allUsers = new JRadioButton(
                     parent.langpack.getString("ShortcutPanel.regular.allUsers"), isRootUser);
 
-            if (!isRootUser)
-            {
-                allUsers.setEnabled(false);
-            }
+            Debug.log("allUsers.setEnabled(), I'm Root: " + isRootUser);
+
+            allUsers.setEnabled(isRootUser);
 
             allUsers.addActionListener(this);
             usersGroup.add(allUsers);
@@ -1459,7 +1484,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * 
      * @param Entries the entries to display
      * @param ListModel the model to use
-     * @param aJList the JList to use 
+     * @param aJList the JList to use
      * @param aGridx The X position in the gridbag layout.
      * @param aGridy The Y position in the gridbag layout.
      * @param aGridwidth the gridwith to use in the gridbag layout.
