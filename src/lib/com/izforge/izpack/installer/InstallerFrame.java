@@ -44,6 +44,8 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
@@ -95,6 +97,7 @@ import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 
@@ -558,6 +561,30 @@ public class InstallerFrame extends JFrame
     /** Writes the uninstalldata. */
     private void writeUninstallData()
     {
+        // Show whether a separated logfile should be also written or not.
+        String logfile = installdata.getVariable("InstallerFrame.logfilePath");
+        BufferedWriter extLogWriter = null;
+        if (logfile != null)
+        {
+            if( logfile.toLowerCase().startsWith("default"))
+                logfile = "$INSTALL_PATH/Uninstaller/install.log";
+            logfile = IoHelper.translatePath(logfile, new VariableSubstitutor(installdata.getVariables()));
+            File outFile = new File(logfile);
+            if( ! outFile.getParentFile().exists())
+                outFile.getParentFile().mkdirs();
+            FileOutputStream out = null;
+            try
+            {
+                out = new FileOutputStream(outFile);
+            }
+            catch (FileNotFoundException e)
+            {
+                Debug.trace("Cannot create logfile!");
+                Debug.error(e);
+            }
+            if( out != null)
+                extLogWriter = new BufferedWriter(new OutputStreamWriter(out));
+        }
         try
         {
             // We get the data
@@ -573,12 +600,32 @@ public class InstallerFrame extends JFrame
             logWriter.write(installdata.getInstallPath());
             logWriter.newLine();
             Iterator iter = files.iterator();
-            while (iter.hasNext())
-            {
-                logWriter.write((String) iter.next());
-                if (iter.hasNext()) logWriter.newLine();
+            if (extLogWriter != null)
+            { // Write intern (in uninstaller.jar) and extern log file.
+                while (iter.hasNext())
+                {
+                    String txt = (String) iter.next();
+                    logWriter.write(txt);
+                    extLogWriter.write(txt);
+                    if (iter.hasNext())
+                    {
+                        logWriter.newLine();
+                        extLogWriter.newLine();
+                    }
+                }
+                logWriter.flush();
+                extLogWriter.flush();
+                extLogWriter.close();
             }
-            logWriter.flush();
+            else
+            {
+                while (iter.hasNext())
+                {
+                    logWriter.write((String) iter.next());
+                    if (iter.hasNext()) logWriter.newLine();
+                }
+                logWriter.flush();
+            }
             outJar.closeEntry();
 
             // We write the uninstaller jar file log
