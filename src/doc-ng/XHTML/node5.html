@@ -52,17 +52,14 @@ href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents"
 
 <li><a name="tex2html432" href="node5.html#SECTION00560000000000000000">Picture in the installer</a></li>
 
-<li><a href="node5.html#modifyingGui">Modifying the GUI</a></li>
-<ul>
-<li><a href="node5.html#modifyingLangDialog">Modifying Language Selection Dialog</a></li>
-
-<li><a href="node5.html#modifyingPanels">Modifying IzPack Panels</a></li>
-
-<li><a href="node5.html#headingPanels">Using a Separated Heading Panel</a></li>
-
-<li><a href="node5.html#quitDialog">Alternative Cancel Dialog</a></li>
-
-</ul>
+<li><a href="node5.html#modifyingGui">Modifying the GUI</a>
+	<ul>
+		<li><a href="node5.html#modifyingLangDialog">Modifying Language Selection Dialog</a></li>
+		<li><a href="node5.html#modifyingPanels">Modifying IzPack Panels</a></li>
+		<li><a href="node5.html#headingPanels">Using a Separated Heading Panel</a></li>
+		<li><a href="node5.html#quitDialog">Alternative Cancel Dialog</a></li>
+	</ul>
+</li>
 
 <li><a href="node5.html#Logging">Logging the Installation</a></li>
 
@@ -252,14 +249,10 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
 
         <tbody>
           <tr>
-            <td><img class="alignmiddle" src="stdLangSel.png" width="215" height="136" alt=""
-            border="0" /> </td>
-
+            <td><img class="alignmiddle" src="stdLangSel.png" width="215" height="136" alt="" /> </td>
             <td>
             </td>
-
-            <td><img class="alignmiddle" src="modLangSel.png" width="154" height="133" alt=""
-            border="0" /> </td>
+            <td><img class="alignmiddle" src="modLangSel.png" width="154" height="133" alt="" /> </td>
           </tr>
         </tbody>
       </table>
@@ -267,14 +260,14 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
 
     <ul>
       <li>
-        <tt>useFlags</tt>:<br>
+        <tt>useFlags</tt>:<br />
         possible are "yes" or "no". Default is "yes". If it is set to "no", no flag will be
         displayed in the language selection dialog. For "no" it is recomanded to define also
         langDisplayType other then "iso3".
       </li>
 
       <li>
-        <tt>langDisplayType</tt>:<br>
+        <tt>langDisplayType</tt>:<br />
         possible are "iso3", "native" and "default". Default is "iso3". With "iso3" the text for a
         language will be displayed as ISO 639-2:1998 code. With "native" the notation of the
         language will be used if possible, else the notation of the default locale. Using "default"
@@ -286,65 +279,65 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
 
     <p>There are some graphic elements and behavior which are prefered by some people and deprecate
     by other. The following keys are related to the hole installation (all panels).
-
+		</p>
     <ul>
       <li>
-        <tt>useButtonIcons</tt>:<br>
+        <tt>useButtonIcons</tt>:<br />
         possible are "yes" or "no". Default is "yes". If it is set to "no", all buttons which are
         created via the ButtonFactory contains no icon also a icon id was submitted. Directly
         created buttons are not affected.
       </li>
 
       <li>
-        <tt>useLabelIcons</tt>:<br>
+        <tt>useLabelIcons</tt>:<br />
         possible are "yes" or "no". Default is "yes". If it is set to "no", all labels which are
         created via the LabelFactory contains no icon also a icon id was submitted. Directly
         created labels are not affected.
       </li>
 
       <li>
-        <tt>layoutAnchor</tt>:<br>
+        <tt>layoutAnchor</tt>:<br />
         layout anchor for IzPanels. Valid are "NORTH", "NORTHWEST", "SOUTHWEST", "SOUTH" and
         "CENTER". Only panels which are using the GridBagLayout helper methods of IzPanels are
         supported. These are not all standard panels.
       </li>
 
       <li>
-        <tt>noGap</tt>:<br>
+        <tt>noGap</tt>:<br />
         used by some panels as distance between the panel top border and the first control.
       </li>
 
       <li>
-        <tt>labelGap</tt>:<br>
+        <tt>labelGap</tt>:<br />
         standard gap between labels (in reality this will be a header over the label). Only panels
         which are using the IzPack factory for labels are supported. These are not all standard
         panels.
       </li>
 
       <li>
-        <tt>paragraphGap</tt>:<br>
+        <tt>paragraphGap</tt>:<br />
         used by some panels as distance between paragraphs or controls which should have
 		more gap as normal labels.
       </li>
 
       <li>
-        <tt>labelToTextGap</tt>:<br>
+        <tt>labelToTextGap</tt>:<br />
         used by some panels as distance between labels and text fields.
       </li>
 
       <li>
-        <tt>labelToControlGap</tt>:<br>
+        <tt>labelToControlGap</tt>:<br />
         used by some panels as distance between labels and controls like combo boxes,
 		radio buttons, check boxes.
       </li>
 
       <li>
-        <tt>textToLabelGap</tt>:<br>
+        <tt>textToLabelGap</tt>:<br />
         used by some panels as distance between text fields and labels.
       </li>
 
       <li>
-        <tt>controlToLabelGap</tt>:<br>
+        <tt>controlToLabelGap</tt>:<br />
         used by some panels as distance between controls and labels.
       </li>
     </ul>
@@ -387,35 +380,35 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
 
     <ul>
       <li>
-        <tt>useHeadingPanel</tt>:<br>
+        <tt>useHeadingPanel</tt>:<br />
         generell switch for heading. If this key does not exist or does not have the value "yes" no
         heading panel will be shown.
       </li>
 
       <li>
-        <tt>headingLineCount</tt>:<br>
+        <tt>headingLineCount</tt>:<br />
         number of heading lines. If no info lines should be shown the value should be one (not
         zero).
       </li>
 
       <li>
-        <tt>headingFontSize</tt>:<br>
+        <tt>headingFontSize</tt>:<br />
         a float value used as multiplier for the standard font size.
       </li>
 
       <li>
-        <tt>headingBackgroundColor</tt>:<br>
+        <tt>headingBackgroundColor</tt>:<br />
         background color of the heading panel as integer. Often used is 0x00ffffff (white).
       </li>
 
       <li>
-        <tt>headingPanelCounter</tt>:<br>
+        <tt>headingPanelCounter</tt>:<br />
         draw a panel counting. Possible values are "text" or "progressbar". inHeading the
         progressbar will be not the best choice.
       </li>
 
       <li>
-        <tt>headingPanelCounterPos</tt>:<br>
+        <tt>headingPanelCounterPos</tt>:<br />
         declares where the counter will be shown. Possible are "inHeading" or
         "inNavigationPanel".
       </li>
@@ -434,7 +427,7 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
         <tr>
           <td>
             <div>
-              <img src="stdTargetPanel.jpg" width="640" height="480" alt="" border="0" />
+              <img src="stdTargetPanel.jpg" width="640" height="480" alt="" />
             </div>
           </td>
         </tr>
@@ -471,15 +464,12 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
         <tr>
           <td>
             <div>
-              <img class="alignmiddle" src="modTargetPanel3.png" width="600" height="480" alt=""
-              border="0" />
+              <img class="alignmiddle" src="modTargetPanel3.png" width="600" height="480" alt="" />
             </div>
           </td>
         </tr>
       </table>
     </div>
-
-    <br />
 
     <p><a name="example3"></a>Changed resources and langpack keys to create IzPack installation with 
 	alternatively frame title, heading, no button and label icons and a text counter in the heading 
@@ -516,8 +506,7 @@ Add in &lt;ISO3&gt;.xml or CustomLangpack.xml_&lt;ISO3&gt;
         <tr>
           <td>
             <div>
-              <img class="alignmiddle" src="modTargetPanel.png" width="600" height="480" alt=""
-              border="0" />
+              <img class="alignmiddle" src="modTargetPanel.png" width="600" height="480" alt="" />
             </div>
           </td>
         </tr>
@@ -556,8 +545,7 @@ Add in &lt;ISO3&gt;.xml or CustomLangpack.xml_&lt;ISO3&gt;
         <tr>
           <td>
             <div>
-              <img class="alignmiddle" src="modTargetPanel2.png" width="600" height="480" alt=""
-              border="0" />
+              <img class="alignmiddle" src="modTargetPanel2.png" width="600" height="480" alt="" />
             </div>
           </td>
         </tr>
@@ -577,7 +565,6 @@ Add in &lt;ISO3&gt;.xml or CustomLangpack.xml_&lt;ISO3&gt;
   &lt;str id="installer.quit.reversetitle" txt="$APP_NAME $APP_VER"/&gt;
   ...
 &lt;/langpack&gt;
-</pre>
 </pre>
     <div class="center">
       <a id="quitExample" name="quitExample"></a> 
@@ -606,15 +593,13 @@ Add in &lt;ISO3&gt;.xml or CustomLangpack.xml_&lt;ISO3&gt;
 
         <tbody>
           <tr>
-            <td><img class="alignmiddle" src="normQuitDialog.png" width="268" height="115" 
-			alt="" border="0">
+            <td><img class="alignmiddle" src="normQuitDialog.png" width="268" height="115" alt="" />
 			 </td>
 
             <td>
             </td>
 
-            <td><img class="alignmiddle" src="revQuitDialog.png" width="283" height="115"
-			 alt="" border="0">
+            <td><img class="alignmiddle" src="revQuitDialog.png" width="283" height="115" alt="" />
 			</td>
           </tr>
         </tbody>
@@ -662,7 +647,7 @@ fully qualified URL for a direcory on the web server.<br />
   &lt;url&gt;http://www.superextractor.com/&lt;/url&gt;
   &lt;webdir&gt;http://www.superextractor.com/download&lt;/url&gt;
 &lt;/info&gt;
-
+</pre>
 
 <p>You can force creation of a standard installer even if <tt>webdir</tt> is specified, by specifically creating a <tt>standard</tt> installer from the command line invocation or ant task (see <a
 name="ant-integration"></a>).</p>
