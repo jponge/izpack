@@ -152,7 +152,10 @@
 			<li><a href="#RegListExamples">Examples</a></li>
 		</ul>
       </li>
-    </ul>
+      <li>
+         <a href="node9.html#SECTION00970000000000000000">Summary Logger (InstallerListener)</a> 
+      </li>
+   </ul>
     <!--End of Table of Child-Links-->
     <hr />
     <h1>
@@ -614,12 +617,12 @@ java -jar install.jar
       </li>
 
       <li>
-        <tt>verbose</tt>: optional. To output verbose information or not. Possible are yes or no. Default is
+        <a name="AntActionVerbose"></a><tt>verbose</tt>: optional. To output verbose information or not. Possible are yes or no. Default is
         no.
       </li>
 
       <li>
-        <tt>logfile</tt>: optional. Path of the file for logging should be performed. The logfile should be not
+        <a name="AntActionLogFile"></a><tt>logfile</tt>: optional. Path of the file for logging should be performed. The logfile should be not
         marked for uninstallation otherwise it will be deleted too.
       </li>
 
@@ -935,6 +938,31 @@ values under a "private" key. Compare with the "normal" installation definition 
 <p><tt>RegistrySpec.xml</tt> will be referred by <tt>IzPack-install-reg.xml</tt> as resource.
 It contains the special pack named <tt>UninstallStuff</tt> for Izpack and defines some additional
 keys and values.</p>
+<h1>
+  <a name="SECTION00970000000000000000">Summary Logger (InstallerListener)</a>
+</h1>
+<p>The listener <tt>SummaryLoggerInstallerListener</tt> can be used to log the <a href="node4.html#SECTION004418000000000000000">summary of panels</a> into a file.
+To use it, add following element to the listener section of your installation config file.</p>
+	<pre>
+&lt;listeners&gt;
+    &lt;listener installer="SummaryLoggerInstallerListener"
+        uninstaller="SummaryLoggerInstallerListener" &gt;
+        &lt;os family="windows"/&gt;
+    &lt;/listener&gt;
+&lt;/listeners&gt;
+</pre>
+<p>The default path is</p>
+<pre>$INSTALL_PATH/Uninstaller/InstallSummary.htm</pre>
+<p>It can be changed with the subelement <tt>summarylogfilepath</tt> of the element <tt>info</tt>
+of the installation description file. As example:</p>
+<pre>
+&lt;info&gt;
+    ...
+    &lt;summarylogfilepath&gt;
+        $INSTALL_PATH/Uninstaller/MySummary.htm
+    &lt;/summarylogfilepath&gt;
+&lt;/info&gt;
+</pre>
     <hr />
   <!--Navigation Panel-->
 	<table width="100%">

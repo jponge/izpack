@@ -160,6 +160,8 @@ href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents"
 <li><a name="tex2html415" href="node4.html#SECTION004416000000000000000">SelectPrinterPanel</a></li>
 
 <li><a name="tex2html416" href="node4.html#SECTION004417000000000000000">DataCheckPanel</a></li>
+
+<li><a name="tex2html417" href="node4.html#SECTION004418000000000000000">SummaryPanel</a></li>
 </ul>
 </li>
 </ul>
@@ -280,7 +282,7 @@ The following variables are built-in :
 
 <li><tt>$desktopshortcutcheckboxenabled</tt> : When set to true, it automatically checks the "Create Desktop Shortcuts" button. To see how to use it, go to <a name="tex2html378" href="node4.html#SECTION00433000000000000000">The Variables Element <tt>&lt;variables&gt;</tt></a></li>
 
-<li><tt>$InstallerFrame.logfilePath</tt> : The path to the install log. If set to defauly then the "$INSTALL_PATH/uninstall/install.log" path will be used. To see how to use it, go to <a name="tex2html378" href="node4.html#SECTION00433000000000000000">The Variables Element <tt>&lt;variables&gt;</tt></a></li>
+<li><a name="InstLogFile"></a><tt>$InstallerFrame.logfilePath</tt> : The path to the install log. This file contains the paths of all installed files. If set to "default" then the "$INSTALL_PATH/Uninstaller/install.log" path will be used. To see how to use it, go to <a name="tex2html378" href="node4.html#SECTION00433000000000000000">The Variables Element <tt>&lt;variables&gt;</tt></a>. If this variable is not set, no install.log will be created.</li>
 
 </ul>
 
@@ -352,8 +354,8 @@ comparison against the <tt>java.version</tt> System property on the install mach
 
 <li><tt>&lt;webdir&gt;</tt> : Causes a ``web installer'' to be created, and specifies the URL packages are retrieved from at install time. The content of the tag must be a properly formed URL. See
 section&nbsp;<a href="node5.html#webinstaller">3.7</a> for more details.</li>
+<li><tt>&lt;summarylogfilepath&gt;</tt> : specifies the path for the logfile of the <a href="node9.html#SECTION00970000000000000000">SummaryLoggerInstallerListener</a>.</li>
 </ul>
-
 <p>Here is an example of a typical <tt>&lt;info&gt;</tt> section :<br />
 </p>
 
@@ -1190,7 +1192,7 @@ run( AbstractUIProcessHandler handler, String[] args]);
 <blockquote><p>It can do everything i need and more. In particular, it allows me to write a process extension and still be able to provide feedback to the user through the feedback panel, and to add new
 functionality to the installer, after its been built.</p></blockquote>
 
-<p>New with version 3.7 is the possibility to tee output that is written to the ProcessPanel's textarea into an optional logfile. Using this feature is pretty much straightforward, you only have to
+<p><a name="ProcessPanelLogFile"></a>New with version 3.7 is the possibility to tee output that is written to the ProcessPanel's textarea into an optional logfile. Using this feature is pretty much straightforward, you only have to
 add a line in <tt>ProcessPanel.Spec.xml</tt> that will tell IzPack the location, where the logfile should be stored.</p>
 
 <p>Variable substitution is performed, so you can use <tt>$INSTALL_PATH</tt> as example.</p>
@@ -1273,6 +1275,16 @@ JDKPath
 <p>
 It will automatically give you a full list of all the variables and packs whenever the panel is made active.</p>
 </p>
+<h2><a name="SECTION004418000000000000000">SummaryPanel</a></h2>
+
+<p>This panel gives a summary of all shown panels. The best place for it is just infront of the InstallPanel. Normaly it contains a warning that this is the last 
+panel before installation. The panel contains a scrollable HTML text area to display the summary. The informations are collected from each panel by calling the methods
+<tt>getSummaryCaption</tt> and <tt>getSummaryBody</tt>. <tt>getSummaryCaption</tt> is implemented in <tt>IzPanel</tt> with a panel name default text.
+<tt>getSummaryBody</tt> has to be implemented in all panels which should be presented in the summary. If the secound method is not implemented, no summary of this
+panel will be shown.
+</p>
+<p>Additional it is possibel to <a href="node9.html#SECTION00970000000000000000">log the contents</a> of the summary panel into a HTML file.</p>
+
 <hr />
 <!--Navigation Panel-->
 <table width="100%">

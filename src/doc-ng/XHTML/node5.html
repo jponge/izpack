@@ -64,6 +64,8 @@ href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents"
 
 </ul>
 
+<li><a href="node5.html#Logging">Logging the Installation</a></li>
+
 <li><a name="tex2html433" href="node5.html#SECTION00570000000000000000">Web Installers</a></li>
 
 <li><a name="tex2html434" href="node5.html#SECTION00580000000000000000">More Internationalization</a> 
@@ -619,6 +621,28 @@ Add in &lt;ISO3&gt;.xml or CustomLangpack.xml_&lt;ISO3&gt;
       </table>
     </div>
 	
+<h1><a name="Logging">Logging the Installation</a></h1>
+<p>Logging was made as copruduct at implementing other features. There was no common design for it.
+Therefor there is no one way to made logging of any kind else for each group a different logging stuff exist.
+Not nice, but reality.</p>
+<dl>
+<dt><tt>Debug Informations</tt></dt>
+<dd>There is a rudimental <a href="node3.html#section00356000000000000000">debug stuff</a> in IzPack. The class <tt>com.izforge.izpack.util.Debug</tt> is used by
+some other classes to write debug informations on stdout. The class can be used by custom panels or actions or
+other custom classes. To activate it, add <tt>-DTRACE=TRUE</tt> infront of -jar of the installer call.</dd>
+<dt><tt>Summary of Panels</tt></dt>
+<dd>There is a <a href="node4.html#SECTION004418000000000000000">summary panel</a> which shows some informations of previos shown panels.
+The same contents can be written to a <a href="node9.html#SECTION00970000000000000000">summary log file</a>.</dd>
+<dt><tt>Logging of Installed File Set</tt></dt>
+<dd>The files which are installed are logged into the uninstaller jar file to be used at uninstallation. The contents can be
+also duplicated into a <a href="node4.html#InstLogFile">logfile</a>.</dd>
+<dt><tt>Logging of the Process Panel</tt></dt>
+<dd>The <a href="node4.html#SECTION004414000000000000000">process panel</a> logs informations of each performed process in a scrollable text area. The contents
+can be duplicated into a <a href="node4.html#ProcessPanelLogFile">logfile</a> where the used directory can be selected (but not the logfile name).</dd>
+<dt><tt>Logging of Ant Actions</tt></dt>
+<dd>It is possible to perform ant actions with the <a href="node9.html#SECTION00950000000000000000">AntActionInstallerListener</a>.
+The grade of <a href="node9.html#AntActionVerbose">logging</a> and the path of a <a href="node9.html#AntActionLogFile">logfile</a> can by determinded.</dd>
+</dl>
 <h1><a name="SECTION00570000000000000000"></a> <a name="webinstaller"></a><br />
 Web Installers</h1>
 
