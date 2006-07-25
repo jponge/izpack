@@ -26,6 +26,9 @@
   Ponge).
 - Compiler fix (Ryan Shillington, via Julien Ponge).
 - fixed Shotcut(s)(Panel) for Administrators on Win32 (Marc Eppelmann)
+- Fixes on Launcher, handling stuff (Julien Ponge)
+- MAC OS: Launcher is built as universal (ie, i386/ppc) binary  (Julien Ponge)
+- MAC OS: Qt is embedded in the application bundle  (Julien Ponge)
 
   > 3.8.1 (build 2006.01.06)
 - Added Greek language support (Fabrice Mirabile, thanks to Panayotis
