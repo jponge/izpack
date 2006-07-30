@@ -105,4 +105,5 @@ IzPack for your projects ;-)
 - Hal Vaughan: for the patches
 - Eric Rose: for the patch related to the logfile of AntActions.
 - Ryan Shillington: for the patches
+- Amit Bhayani & JBoss: for the patches
 

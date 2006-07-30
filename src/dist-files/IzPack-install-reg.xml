@@ -29,10 +29,13 @@
 
             <author email="" name="Klaus Bartz (developer)"/>
             <author email="" name="Fabrice Mirabile (developer)"/>
+            <author email="" name="Marc Eppelmann (developer)" />
 
             <author email="" name="Oliver Kiddle (contributor)"/>
             <author email="" name="Cesar Martinez Izquierdo (contributor)"/>
-            <author email="" name="(Ryan Shillington" />
+            <author email="" name="Ryan Shillington (contributor)" />
+            <author email="" name="Eric Rose (contributor)" />
+            <author email="" name="Amit Bhayani @JBoss/RedHat (contributors)" />
 
             <author email=""
                 name="... the many other developers and contributors to the previous releases (see Thanks.txt)" />

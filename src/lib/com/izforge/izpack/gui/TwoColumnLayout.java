@@ -21,14 +21,7 @@
 
 package com.izforge.izpack.gui;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.LayoutManager2;
-import java.awt.Stroke;
+import java.awt.*;
 import java.util.Vector;
 
 /**
@@ -875,12 +868,52 @@ public class TwoColumnLayout implements LayoutManager2
     }
 
     /**
-     * This functionality is not supported
+     * This functionality removes the TwoColumnConstraints from Vectors
+     * so that alignment of components on UserInputPanel doesn't get
+     * dirty
      * 
      * @param comp the component to be removed
      */
     public void removeLayoutComponent(Component comp)
     {
+        Vector left = components[LEFT];
+        Vector right = components[RIGHT];
+
+        for (int i = 0; i < left.size(); i++)
+        {
+            TwoColumnConstraints constraints = (TwoColumnConstraints) left.get(i);
+            if (constraints == null)
+            {
+                continue;
+            }
+            Component ctemp = constraints.component;
+            if (ctemp != null && ctemp.equals(comp))
+            {
+                if (constraints.position == TwoColumnConstraints.BOTH || constraints.position == TwoColumnConstraints.WESTONLY)
+                {
+                    right.remove(i);
+                }
+                break;
+            }
+        }
+
+        for (int j = 0; j < right.size(); j++)
+        {
+            TwoColumnConstraints constraints = (TwoColumnConstraints) right.get(j);
+            if (constraints == null)
+            {
+                continue;
+            }
+            Component ctemp = constraints.component;
+            if (ctemp != null && ctemp.equals(comp))
+            {
+                if (constraints.position == TwoColumnConstraints.BOTH || constraints.position == TwoColumnConstraints.EASTONLY)
+                {
+                    left.remove(j);
+                }
+                break;
+            }
+        }
     }
 
     /**
