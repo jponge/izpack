@@ -1,5 +1,5 @@
 /*
- * $Id:$
+ * $Id$
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -45,17 +45,27 @@ import com.izforge.izpack.util.VariableSubstitutor;
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
  * belong to the <code>com.izforge.izpack.panels</code> package.
+ * Since IzPack version 3.9 the layout handling will be delegated to the class
+ * LayoutHelper which can be accessed by <code>getLayoutHelper</code>.
+ * There are some layout helper methods in this class which will be exist some time longer,
+ * but they are deprecated. At a redesign or new panel use the layout helper.
+ * There is a special layout manager for IzPanels. This layout manager will be supported
+ * by the layout helper. There are some points which should be observed at layouting.
+ * One point e.g. is the anchor. All IzPanels have to be able to use different anchors, as
+ * minimum CENTER and NORTHWEST. 
+ * To use a consistent appearance use this special layout manger and not others.
  * 
  * @author Julien Ponge
+ * @author Klaus Bartz
  */
 public class IzPanel extends JPanel implements AbstractUIHandler
 {
 
     private static final long serialVersionUID = 3256442495255786038L;
 
-    /** Indicates whether grid bag layout was started or not */
-    protected boolean gridBagLayoutStarted = false;
-
+    /** The helper object which handles layout */
+    protected LayoutHelper layoutHelper;
+    
     /** The component which should get the focus at activation */
     protected Component initialFocus = null;
 
@@ -66,15 +76,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
     /** The parent IzPack installer frame. */
     protected InstallerFrame parent;
-
-    /** The default grid bag constraint. */
-    protected GridBagConstraints defaultGridBagConstraints = new GridBagConstraints();
-
-    /** Current x position of grid. */
-    protected int gridxCounter = -1;
-
-    /** Current y position of grid. */
-    protected int gridyCounter = -1;
     
     /** i.e. "com.izforge.izpack.panels.HelloPanel" */
     protected String myFullClassname;
@@ -88,54 +89,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /** internal headline string */
     protected String headline;
     
-    /** internal layout */
-    protected GridBagLayout izPanelLayout;
-    
     /** internal headline Label */
     protected JLabel headLineLabel;
     
     /** Is this panel general hidden or not */
     protected boolean hidden;
-    
-    /** Layout anchor declared in the xml file
-     *  with the guiprefs modifier "layoutAnchor"
-     */ 
-    protected static int ANCHOR = -1;
-    
-    /** Identifier for using no gaps */
-    public final static int NO_GAP = 0;
-
-    /** Identifier for gaps between labels */
-    public final static int LABEL_GAP = 1;
-
-    /** Identifier for gaps between paragraphs */
-    public final static int PARAGRAPH_GAP = 2;
-
-    /** Identifier for gaps between labels and text fields */
-    public final static int LABEL_TO_TEXT_GAP = 3;
-
-    /** Identifier for gaps between labels and controls like radio buttons/groups */
-    public final static int LABEL_TO_CONTROL_GAP = 4;
-
-    /** Identifier for gaps between text fields and labels*/
-    public final static int TEXT_TO_LABEL_GAP = 5;
-
-    /** Identifier for gaps between controls like radio buttons/groups and labels*/
-    public final static int CONTROL_TO_LABEL_GAP = 6;
-
-    /**
-     * Look-up table for gap identifier to gap names. The gap names can be used in the XML
-     * installation configuration file. Be aware that case sensitivity should be used.
-     */
-    public final static String[] GAP_NAME_LOOK_UP = { "noGap", "labelGap", "paragraphGap",
-            "labelToTextGap", "labelToControlGap", "textToLabelGap", "controlToLabelGap"};
-
-    /**
-     * Current defined gaps. Here are the defaults which can be overwritten at the first call to
-     * method getGap. The gap type will be determined by the array index and has to be synchron to
-     * the gap identifier and the indices of array GAP_NAME_LOOK_UP
-     */
-    protected static int[] GAPS = { 0, 5, 5, 5, 5, 5, 5, 5, -1};
     
     /** HEADLINE = "headline" */
     public final static String HEADLINE = "headline";
@@ -194,10 +152,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     {
       super(  );
       init( parent, idata );
-
-      setLayout(  );
       buildHeadline( iconName, instance );
-      gridyCounter++;
     }
     
     /** 
@@ -281,7 +236,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets( 0, 0, 0, 0 );
         headLineLabel.setName( HEADLINE );
-        izPanelLayout.setConstraints( headLineLabel, gbc );
+        ((GridBagLayout) getLayout()).addLayoutComponent( headLineLabel, gbc );
 
         add( headLineLabel );
       }
@@ -315,19 +270,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
 
     
-    /** 
-     * Inits and sets teh internal LayoutObjects.
-     *
-     * @return true if finshed.
+    /**
+     * Inits and sets the internal layout helper object.
      */
-    protected boolean setLayout(  )
+    protected void initLayoutHelper()
     {
-      izPanelLayout        = new GridBagLayout(  );
-      defaultGridBagConstraints = new GridBagConstraints(  );
-
-      setLayout( izPanelLayout );
-
-      return true;
+        layoutHelper = new LayoutHelper(this);
     }
     
 
@@ -353,8 +301,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler
       
       this.idata           = idata;
       this.parent          = parent;
-      
-      gridyCounter = -1;
+      initLayoutHelper(  );
+
     }
 
     /**
@@ -672,32 +620,32 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * Returns the default GridBagConstraints of this panel.
      * 
      * @return the default GridBagConstraints of this panel
+     * @deprecated use <code>getLayoutHelper().getDefaulConstraints</code> instead
      */
     public GridBagConstraints getDefaultGridBagConstraints()
     {
-        startGridBagLayout();
-        return defaultGridBagConstraints;
+        return(GridBagConstraints) ( layoutHelper.getDefaultConstraints());
     }
 
     /**
      * Sets the default GridBagConstraints of this panel to the given object.
      * 
      * @param constraints which should be set as default for this object
+     * @deprecated use <code>getLayoutHelper().setDefaultConstraints</code> instead
      */
     public void setDefaultGridBagConstraints(GridBagConstraints constraints)
     {
-        startGridBagLayout();
-        defaultGridBagConstraints = constraints;
+        layoutHelper.setDefaultConstraints(constraints);
     }
 
     /**
      * Resets the grid counters which are used at getNextXGridBagConstraints and
      * getNextYGridBagConstraints.
+     * @deprecated use <code>getLayoutHelper().resetGridCounter</code> instead
      */
     public void resetGridCounter()
     {
-        gridxCounter = -1;
-        gridyCounter = -1;
+        layoutHelper.resetGridCounter();
     }
 
     /**
@@ -708,14 +656,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * @param gridy value to be used for the new constraint
      * @return newly created GridBagConstraints with the given values and the values from the
      * defaultGridBagConstraints for the other parameters
+     * @deprecated use <code>getLayoutHelper().getNewConstraints</code> instead
      */
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy)
     {
-        GridBagConstraints retval = (GridBagConstraints) getDefaultGridBagConstraints().clone();
-        retval.gridx = gridx;
-        retval.gridy = gridy;
-        return (retval);
-
+        return(GridBagConstraints) ( layoutHelper.getNewConstraints(gridx, gridy));
     }
 
     /**
@@ -728,14 +673,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * @param gridheight value to be used for the new constraint
      * @return newly created GridBagConstraints with the given values and the values from the
      * defaultGridBagConstraints for the other parameters
+     * @deprecated use <code>getLayoutHelper().getNewConstraints</code> instead
      */
     public GridBagConstraints getNewGridBagConstraints(int gridx, int gridy, int gridwidth,
             int gridheight)
     {
-        GridBagConstraints retval = getNewGridBagConstraints(gridx, gridy);
-        retval.gridwidth = gridwidth;
-        retval.gridheight = gridheight;
-        return (retval);
+        return(GridBagConstraints) (layoutHelper.getNewConstraints(gridx, gridy, gridwidth, gridheight));
     }
 
     /**
@@ -743,43 +686,23 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * 
      * @return a newly created GridBagConstraints for the next column of the current layout row
      * 
+     * @deprecated use <code>getLayoutHelper().getNextXConstraints</code> instead
      */
     public GridBagConstraints getNextXGridBagConstraints()
     {
-        gridxCounter++;
-        GridBagConstraints retval = getNewGridBagConstraints(gridxCounter, gridyCounter);
-        return (retval);
+        return(GridBagConstraints) (layoutHelper.getNextXConstraints());
     }
-
-    /**
-     * Returns a newly created GridBagConstraints for the next column of the current layout row
-     * using the given parameters.
-     * 
-     * @param gridwidth width for this constraint
-     * @param gridheight height for this constraint
-     * @return a newly created GridBagConstraints for the next column of the current layout row
-     * using the given parameters
-     */
-//    private GridBagConstraints getNextXGridBagConstraints(int gridwidth, int gridheight)
-//    {
-//        GridBagConstraints retval = getNextXGridBagConstraints();
-//        retval.gridwidth = gridwidth;
-//        retval.gridheight = gridheight;
-//        return (retval);
-//    }
 
     /**
      * Returns a newly created GridBagConstraints with column 0 for the next row.
      * 
      * @return a newly created GridBagConstraints with column 0 for the next row
      * 
+     * @deprecated use <code>getLayoutHelper().getNextYConstraints</code> instead
      */
     public GridBagConstraints getNextYGridBagConstraints()
     {
-        gridyCounter++;
-        gridxCounter = 0;
-        GridBagConstraints retval = getNewGridBagConstraints(0, gridyCounter);
-        return (retval);
+        return(GridBagConstraints) (layoutHelper.getNextYConstraints());
     }
 
     /**
@@ -790,14 +713,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * @param gridheight height for this constraint
      * @return a newly created GridBagConstraints with column 0 for the next row using the given
      * parameters
+     * @deprecated use <code>getLayoutHelper().getNextYConstraints</code> instead
      */
     public GridBagConstraints getNextYGridBagConstraints(int gridwidth, int gridheight)
     {
-        startGridBagLayout();
-        GridBagConstraints retval = getNextYGridBagConstraints();
-        retval.gridwidth = gridwidth;
-        retval.gridheight = gridheight;
-        return (retval);
+        return(GridBagConstraints) (layoutHelper.getNextYConstraints(gridwidth, gridheight));
     }
 
     /**
@@ -805,31 +725,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * This will be done, if the IzPack guiprefs modifier with the key "layoutAnchor" has the value
      * "SOUTH" or "SOUTHWEST". The earlier used value "BOTTOM" and the declaration via the IzPack
      * variable <code>IzPanel.LayoutType</code> are also supported.
+     * @deprecated use <code>getLayoutHelper().startLayout</code> instead
      */
     public void startGridBagLayout()
     {
-        if (gridBagLayoutStarted) return;
-        gridBagLayoutStarted = true;
-        GridBagLayout layout = new GridBagLayout();
-        defaultGridBagConstraints.insets = new Insets(0, 0, getLabelGap(), 0);
-        defaultGridBagConstraints.anchor = GridBagConstraints.WEST;
-        setLayout(layout);
-        switch (getAnchor())
-        {
-        case GridBagConstraints.SOUTH:
-        case GridBagConstraints.SOUTHWEST:
-            // Make a header to push the rest to the bottom.
-            Filler dummy = new Filler();
-            GridBagConstraints gbConstraint = getNextYGridBagConstraints();
-            gbConstraint.weighty = 1.0;
-            gbConstraint.fill = GridBagConstraints.BOTH;
-            gbConstraint.anchor = GridBagConstraints.WEST;
-            this.add(dummy, gbConstraint);
-            break;
-        default:
-            break;
-        }
-        // TODO: impl for layout type CENTER, ...
+        layoutHelper.startLayout(new GridBagLayout());
     }
 
     /**
@@ -837,111 +737,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler
      * This will be done, if the IzPack guiprefs modifier with the key "layoutAnchor" has the value
      * "NORTH" or "NORTHWEST". The earlier used value "TOP" and the declaration via the IzPack
      * variable <code>IzPanel.LayoutType</code> are also supported.
+     * @deprecated use <code>getLayoutHelper().completeLayout</code> instead
      */
     public void completeGridBagLayout()
     {
-        switch (getAnchor())
-        {
-        case GridBagConstraints.NORTH:
-        case GridBagConstraints.NORTHWEST:
-            // Make a footer to push the rest to the top.
-            Filler dummy = new Filler();
-            GridBagConstraints gbConstraint = getNextYGridBagConstraints();
-            gbConstraint.weighty = 1.0;
-            gbConstraint.fill = GridBagConstraints.BOTH;
-            gbConstraint.anchor = GridBagConstraints.WEST;
-            add(dummy, gbConstraint);
-            break;
-        default:
-            break;
-        }
+        layoutHelper.completeLayout();
     }
 
-    /**
-     * Returns the anchor as value declared in GridBagConstraints. Possible are NORTH,
-     * NORTHWEST, SOUTH, SOUTHWEST and CENTER. The values can be configured in the
-     * xml description file with the variable "IzPanel.LayoutType". The old values
-     * "TOP" and "BOTTOM" from the xml file are mapped to NORTH and SOUTH.
-     *  
-     * @return the anchor defined in the IzPanel.LayoutType variable.
-     */
-    public static int getAnchor()
-    {
-        if( ANCHOR >= 0)
-            return(ANCHOR);
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();  
-        String todo;
-        if (idata instanceof InstallData
-                && ((InstallData) idata).guiPrefs.modifier.containsKey("layoutAnchor"))
-            todo = (String) ((InstallData) idata).guiPrefs.modifier.get("layoutAnchor");
-        else
-            todo = idata.getVariable("IzPanel.LayoutType");
-        if (todo == null) // No command, no work.
-            ANCHOR = GridBagConstraints.NONE;
-        else if("TOP".equals(todo) || "NORTH".equals(todo))
-            ANCHOR = GridBagConstraints.NORTH;
-        else if("BOTTOM".equals(todo) || "SOUTH".equals(todo))
-            ANCHOR = GridBagConstraints.SOUTH;
-        else if("SOUTHWEST".equals(todo))
-            ANCHOR = GridBagConstraints.SOUTHWEST;
-        else if("NORTHWEST".equals(todo))
-            ANCHOR = GridBagConstraints.NORTHWEST;
-        else if("CENTER".equals(todo))
-            ANCHOR = GridBagConstraints.CENTER;
-        return(ANCHOR);
-    }
-    
-    /**
-     * Returns the gap which should be used for (multiline) labels 
-     *  to create a consistent view. The value will
-     *  be configurable by the guiprefs modifier "labelGap".
-     * @return the label gap depend on the xml-configurable guiprefs modifier "labelGap" 
-     */
-    public static int getLabelGap()
-    {
-        return (getGap(LABEL_GAP));
-    }
-
-    /**
-     * Returns the gap which should be used between the given gui objects. The
-     * value will be configurable by guiprefs modifiers. Valid values are all
-     * entries in the static String array GAP_NAME_LOOK_UP of this class.
-     * There are constant ints for the indexes of this array.
-     * 
-     * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
-     * 
-     * @return the gap depend on the xml-configurable guiprefs modifier
-     */
-    public static int getGap(int gapId)
-    {
-        if (gapId < 0 || gapId >= GAPS.length - 2)
-            throw new IllegalArgumentException("gapId out of range.");
-        if (GAPS[GAPS.length - 1] >= 0) return (GAPS[gapId]);
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof InstallData)) return (GAPS[gapId]);
-        String var = null;
-        for (int i = 0; i < GAP_NAME_LOOK_UP.length; ++i)
-        {
-            if (((InstallData) idata).guiPrefs.modifier.containsKey(GAP_NAME_LOOK_UP[i]))
-            {
-                var = (String) ((InstallData) idata).guiPrefs.modifier.get(GAP_NAME_LOOK_UP[i]);
-                if (var != null)
-                {
-                    try
-                    {
-                        GAPS[i] = Integer.parseInt(var);
-                    }
-                    catch (NumberFormatException nfe)
-                    {
-                        // Do nothing else use the default value.
-                        // Need to set it again at this position??
-                    }
-                }
-            }
-
-        }
-        return (GAPS[gapId]);
-    }
     // ------------------- Layout stuff -------------------- END ---
 
     // ------------------- Summary stuff -------------------- START ---
@@ -1006,6 +808,17 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     public void setHidden(boolean hidden)
     {
         this.hidden = hidden;
+    }
+
+    
+    /**
+     * Returns the used layout helper. Can be used in a derived class
+     * to create custom layout.
+     * @return the used layout helper
+     */
+    public LayoutHelper getLayoutHelper()
+    {
+        return layoutHelper;
     }
 
 }

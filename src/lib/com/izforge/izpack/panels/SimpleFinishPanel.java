@@ -32,6 +32,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.LayoutHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
@@ -71,12 +72,13 @@ public class SimpleFinishPanel extends IzPanel
 
         gbConstraints.insets = new Insets(0, 0, 0, 0);
         gbConstraints.fill = GridBagConstraints.NONE;
-        if (getAnchor() == GridBagConstraints.NONE || getAnchor() == GridBagConstraints.CENTER)
+        if (LayoutHelper.getAnchor() == GridBagConstraints.NONE
+                || LayoutHelper.getAnchor() == GridBagConstraints.CENTER)
             gbConstraints.anchor = GridBagConstraints.CENTER;
         else
         {
             gbConstraints.weightx = 1.0;
-            gbConstraints.anchor = getAnchor();
+            gbConstraints.anchor = LayoutHelper.getAnchor();
         }
         // We initialize our 'real' layout
         centerPanel = new JPanel();

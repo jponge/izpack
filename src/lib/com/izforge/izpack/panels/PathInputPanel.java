@@ -36,6 +36,7 @@ import javax.swing.JLabel;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.LayoutHelper;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
@@ -92,7 +93,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
         // Customize the default GridBagConstraints.
         GridBagConstraints gbConstraint = getDefaultGridBagConstraints();
         gbConstraint.gridwidth = GridBagConstraints.REMAINDER;
-        if(getAnchor() == GridBagConstraints.NORTH || getAnchor() == GridBagConstraints.NORTHWEST)
+        if (LayoutHelper.getAnchor() == GridBagConstraints.NORTH
+                || LayoutHelper.getAnchor() == GridBagConstraints.NORTHWEST)
             gbConstraint.weightx = 1.0;
         else
             gbConstraint.weightx = 0.0;

@@ -79,12 +79,12 @@ public class FinishPanel extends IzPanel implements ActionListener
 
         gbConstraints.insets = new Insets(0, 0, 0, 0);
         gbConstraints.fill = GridBagConstraints.NONE;
-        if (getAnchor() == GridBagConstraints.NONE || getAnchor() == GridBagConstraints.CENTER)
+        if (getLayoutHelper().getAnchor() == GridBagConstraints.NONE || getLayoutHelper().getAnchor() == GridBagConstraints.CENTER)
             gbConstraints.anchor = GridBagConstraints.CENTER;
         else
         {
             gbConstraints.weightx = 1.0;
-            gbConstraints.anchor = getAnchor();
+            gbConstraints.anchor = getLayoutHelper().getAnchor();
         }
         
 
