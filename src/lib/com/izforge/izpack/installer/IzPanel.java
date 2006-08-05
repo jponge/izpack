@@ -19,28 +19,16 @@
  */
 package com.izforge.izpack.installer;
 
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.LookAndFeel;
-import javax.swing.UIManager;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.VariableSubstitutor;
+import net.n3.nanoxml.XMLElement;
+
+import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import java.awt.*;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -115,6 +103,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler
     /** ROWS_1 = 1 */
     public final static int ROWS_1 = 1;
 
+    protected GridBagConstraints defaultGridBagConstraints;
 
     /**
      * The constructor.
