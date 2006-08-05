@@ -32,6 +32,7 @@
 - Added a variable for install log, InstallerFrame.logfilePath (Klaus Bartz)
 - Added the docu for install log (Fabrice Mirabile).
 - TwoColumnLayout fix (Amit Bhayani @JBoss/RedHat).
+- Documentation figures refreshment (Julien Ponge).
 
   > 3.8.1 (build 2006.01.06)
 - Added Greek language support (Fabrice Mirabile, thanks to Panayotis
