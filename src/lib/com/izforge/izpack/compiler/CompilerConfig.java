@@ -1891,7 +1891,12 @@ public class CompilerConfig extends Thread
         int start = np.indexOf(self);
         np = np.substring(0, start);
         if( np.endsWith("!"))
+        {   // Where shut IZPACK_HOME at the standalone-compiler be??
+            // No idea.
+            if(np.endsWith("standalone-compiler.jar!"))
+                return(".");
             np = np.substring(0, np.length() - 1);
+        }
         File root = null;
         if( URI.create(np).isAbsolute())
             root = new File(URI.create(np));
