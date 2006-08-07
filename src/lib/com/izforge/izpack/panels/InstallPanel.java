@@ -20,14 +20,13 @@
 package com.izforge.izpack.panels;
 
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -74,64 +73,30 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     public InstallPanel(InstallerFrame parent, InstallData idata)
     {
         super(parent, idata);
-        // Changed to layout handling of IzPanel to support different anchors.
-        // (Klaus Bartz, 2006.06.30)
-        GridBagConstraints gbConstraints = getDefaultGridBagConstraints();
-        gbConstraints.gridx = 0;
-        gbConstraints.gridy = 0;
-        gbConstraints.gridwidth = 2;
-        gbConstraints.gridheight = 1;
-        gbConstraints.weightx = 1.0;
-        gbConstraints.weighty = 0.0;
-        setDefaultGridBagConstraints(gbConstraints);
-
+        getLayoutHelper().startLayout(new IzPanelLayout());
         this.tipLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.tip"),
-        parent.icons.getImageIcon("information"), JLabel.TRAILING);
-        gbConstraints = getNextYGridBagConstraints();
-        gbConstraints.fill = GridBagConstraints.NONE;
-        gbConstraints.anchor = GridBagConstraints.NORTHWEST;
-        add(this.tipLabel, gbConstraints);
+                parent.icons.getImageIcon("information"), LEADING);
+        add(this.tipLabel);
+        packOpLabel = LabelFactory.create(" ", LEADING);
+        add(packOpLabel, NEXT_LINE);
 
-        this.packOpLabel = LabelFactory.create(" ", JLabel.TRAILING);
-        gbConstraints = getNextYGridBagConstraints();
-        gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-        add(this.packOpLabel, gbConstraints);
-
-        this.packProgressBar = new JProgressBar();
-        this.packProgressBar.setStringPainted(true);
-        this.packProgressBar.setString(parent.langpack.getString("InstallPanel.begin"));
-        this.packProgressBar.setValue(0);
-        gbConstraints = getNextYGridBagConstraints();
-        gbConstraints.anchor = GridBagConstraints.NORTH;
-        gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-        add(this.packProgressBar, gbConstraints);
-
+        packProgressBar = new JProgressBar();
+        packProgressBar.setStringPainted(true);
+        packProgressBar.setString(parent.langpack.getString("InstallPanel.begin"));
+        packProgressBar.setValue(0);
+        add(packProgressBar, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         // make sure there is some space between the progress bars
-        JSeparator sep = new JSeparator();
-        Dimension dim = new Dimension(0, 10);
-        sep.setPreferredSize(dim);
-        sep.setMinimumSize(dim);
-        sep.setMaximumSize(dim);
-        gbConstraints = getNextYGridBagConstraints();
-        add(sep, gbConstraints);
+        add(IzPanelLayout.createParagraphGap());
 
-        this.overallOpLabel = LabelFactory.create(parent.langpack
-                .getString("InstallPanel.progress"), parent.icons.getImageIcon("information"),
-                JLabel.TRAILING);
-        gbConstraints = getNextYGridBagConstraints();
-        gbConstraints.anchor = GridBagConstraints.NORTHWEST;
-        gbConstraints.fill = GridBagConstraints.NONE;
-        add(this.overallOpLabel, gbConstraints);
+        overallOpLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.progress"),
+                parent.icons.getImageIcon("information"), LEADING);
+        add(this.overallOpLabel, NEXT_LINE);
 
-        this.overallProgressBar = new JProgressBar();
-        this.overallProgressBar.setStringPainted(true);
-        this.overallProgressBar.setString("");
-        this.overallProgressBar.setValue(0);
-        gbConstraints = getNextYGridBagConstraints();
-        gbConstraints.anchor = GridBagConstraints.NORTH;
-        gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-        add(this.overallProgressBar, gbConstraints);
-        completeGridBagLayout();
+        overallProgressBar = new JProgressBar();
+        overallProgressBar.setStringPainted(true);
+        overallProgressBar.setString("");
+        overallProgressBar.setValue(0);
+        add(this.overallProgressBar, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
     }
 
     /**

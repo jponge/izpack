@@ -19,23 +19,18 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -55,9 +50,6 @@ public class FinishPanel extends IzPanel implements ActionListener
     /** The automated installers generation button. */
     private JButton autoButton;
 
-    /** The center panel. */
-    private JPanel centerPanel;
-
     /** The variables substitutor. */
     private VariableSubstitutor vs;
 
@@ -73,27 +65,7 @@ public class FinishPanel extends IzPanel implements ActionListener
 
         vs = new VariableSubstitutor(idata.getVariables());
 
-        // Changed to layout handling of IzPanel to support different anchors.
-        // (Klaus Bartz, 2006.06.30)
-        GridBagConstraints gbConstraints = getNextYGridBagConstraints();
-
-        gbConstraints.insets = new Insets(0, 0, 0, 0);
-        gbConstraints.fill = GridBagConstraints.NONE;
-        if (getLayoutHelper().getAnchor() == GridBagConstraints.NONE || getLayoutHelper().getAnchor() == GridBagConstraints.CENTER)
-            gbConstraints.anchor = GridBagConstraints.CENTER;
-        else
-        {
-            gbConstraints.weightx = 1.0;
-            gbConstraints.anchor = getLayoutHelper().getAnchor();
-        }
-        
-
-        // We initialize our 'real' layout
-        centerPanel = new JPanel();
-        BoxLayout layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
-        centerPanel.setLayout(layout);
-        add(centerPanel, gbConstraints);
-        completeGridBagLayout();
+        getLayoutHelper().startLayout(new IzPanelLayout());
     }
 
     /**
@@ -115,33 +87,32 @@ public class FinishPanel extends IzPanel implements ActionListener
         if (idata.installSuccess)
         {
             // We set the information
-            centerPanel.add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("information"), JLabel.TRAILING));
-            centerPanel.add(Box.createVerticalStrut(20));
-
+            add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
+                    parent.icons.getImageIcon("information"), LEADING));
+            add(IzPanelLayout.createParagraphGap());
             if (idata.uninstallOutJar != null)
             {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
-                centerPanel.add(LabelFactory.create(parent.langpack
+                add(LabelFactory.create(parent.langpack
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("information"), JLabel.TRAILING));
-                centerPanel.add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
-                        JLabel.TRAILING));
+                        .getImageIcon("information"), LEADING), NEXT_LINE);
+                add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
+                        LEADING), NEXT_LINE);
             }
 
             // We add the autoButton
-            centerPanel.add(Box.createVerticalStrut(20));
+            add(IzPanelLayout.createParagraphGap());
             autoButton = ButtonFactory.createButton(parent.langpack.getString("FinishPanel.auto"),
                     parent.icons.getImageIcon("edit"), idata.buttonsHColor);
             autoButton.setToolTipText(parent.langpack.getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
-            centerPanel.add(autoButton);
+            add(autoButton, NEXT_LINE);
         }
         else
-            centerPanel.add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
-                    parent.icons.getImageIcon("information"), JLabel.TRAILING));
+            add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
+                    parent.icons.getImageIcon("information"), LEADING), NEXT_LINE);
     }
 
     /**

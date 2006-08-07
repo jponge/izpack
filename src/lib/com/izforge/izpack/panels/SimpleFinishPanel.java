@@ -19,20 +19,15 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.io.File;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.LayoutHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
@@ -63,29 +58,8 @@ public class SimpleFinishPanel extends IzPanel
     public SimpleFinishPanel(InstallerFrame parent, InstallData idata)
     {
         super(parent, idata);
-
         vs = new VariableSubstitutor(idata.getVariables());
-
-        // Changed to layout handling of IzPanel to support different anchors.
-        // (Klaus Bartz, 2006.06.30)
-        GridBagConstraints gbConstraints = getNextYGridBagConstraints();
-
-        gbConstraints.insets = new Insets(0, 0, 0, 0);
-        gbConstraints.fill = GridBagConstraints.NONE;
-        if (LayoutHelper.getAnchor() == GridBagConstraints.NONE
-                || LayoutHelper.getAnchor() == GridBagConstraints.CENTER)
-            gbConstraints.anchor = GridBagConstraints.CENTER;
-        else
-        {
-            gbConstraints.weightx = 1.0;
-            gbConstraints.anchor = LayoutHelper.getAnchor();
-        }
-        // We initialize our 'real' layout
-        centerPanel = new JPanel();
-        BoxLayout layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
-        centerPanel.setLayout(layout);
-        add(centerPanel, gbConstraints);
-        completeGridBagLayout();
+        getLayoutHelper().startLayout(new IzPanelLayout());
     }
 
     /**
@@ -106,28 +80,28 @@ public class SimpleFinishPanel extends IzPanel
         parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
         if (idata.installSuccess)
         {
+            
             // We set the information
-            centerPanel.add(LabelFactory.create(parent.icons.getImageIcon("check")));
-            centerPanel.add(Box.createVerticalStrut(20));
-            centerPanel.add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("information"), JLabel.TRAILING));
-            centerPanel.add(Box.createVerticalStrut(20));
-
+            add(LabelFactory.create(parent.icons.getImageIcon("check")));
+            add(IzPanelLayout.createParagraphGap());
+            add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
+                    parent.icons.getImageIcon("information"), LEADING), NEXT_LINE);
+            add(IzPanelLayout.createParagraphGap());
             if (idata.uninstallOutJar != null)
             {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
-                centerPanel.add(LabelFactory.create(parent.langpack
+                add(LabelFactory.create(parent.langpack
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("information"), JLabel.TRAILING));
-                centerPanel.add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
-                        JLabel.TRAILING));
+                        .getImageIcon("information"), LEADING), NEXT_LINE);
+                add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
+                        LEADING), NEXT_LINE);
             }
         }
         else
             centerPanel.add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
-                    parent.icons.getImageIcon("information"), JLabel.TRAILING));
+                    parent.icons.getImageIcon("information"),  LEADING));
 
     }
 

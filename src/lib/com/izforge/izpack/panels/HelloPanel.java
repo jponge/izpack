@@ -21,18 +21,14 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.ArrayList;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import com.izforge.izpack.Info;
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -56,36 +52,33 @@ public class HelloPanel extends IzPanel
      * @param parent The parent.
      * @param idata The installation data.
      */
-    public HelloPanel(InstallerFrame parent, InstallData idata)
+    public HelloPanel(InstallerFrame parent, InstallData idata) 
     {
         super(parent, idata);
 
-        // The 'super' layout
-        GridBagLayout superLayout = new GridBagLayout();
-        setLayout(superLayout);
-        GridBagConstraints gbConstraints = new GridBagConstraints();
-        gbConstraints.insets = new Insets(0, 0, 0, 0);
-        gbConstraints.fill = GridBagConstraints.NONE;
-        gbConstraints.anchor = GridBagConstraints.CENTER;
-
-        // We initialize our 'real' layout
-        JPanel centerPanel = new JPanel();
-        BoxLayout layout = new BoxLayout(centerPanel, BoxLayout.Y_AXIS);
-        centerPanel.setLayout(layout);
-        superLayout.addLayoutComponent(centerPanel, gbConstraints);
-        add(centerPanel);
-
+        // Layout handling. This panel was changed from a mixed layout handling
+        // with GridBagLayout and BoxLayout to IzPanelLayout. It can be used as an
+        // example how to use the IzPanelLayout. For this there are some comments
+        // which are excrescent for a "normal" panel.
+        // Set a IzPanelLayout as layout for this panel.
+        // This have to be the first line during layout if IzPanelLayout will be used.
+        getLayoutHelper().startLayout(new IzPanelLayout());
+        
         // We create and put the labels
         String str;
-
-        centerPanel.add(Box.createVerticalStrut(10));
-
         str = parent.langpack.getString("HelloPanel.welcome1") + idata.info.getAppName() + " "
                 + idata.info.getAppVersion() + parent.langpack.getString("HelloPanel.welcome2");
-        JLabel welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"), JLabel.TRAILING);
-        centerPanel.add(welcomeLabel);
-
-        centerPanel.add(Box.createVerticalStrut(20));
+        JLabel welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"),  LEADING);
+        // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
+        // given, a default will be used. It starts in the first line.
+        add(welcomeLabel);
+        // Yes, there exist also a strut for the IzPanelLayout.
+        // But the strut will be only used for one cell. A vertical strut will be use
+        // NEXT_ROW, a horizontal NEXT_COLUMN. For more information see the java doc.
+//        add(IzPanelLayout.createVerticalStrut(20));
+        // But for a strut you have to define a fixed height. Alternative it is possible
+        // to create a paragraph gap which is configurable.
+        add(IzPanelLayout.createParagraphGap());
 
         ArrayList authors = idata.info.getAuthors();
         int size = authors.size();
@@ -93,8 +86,17 @@ public class HelloPanel extends IzPanel
         {
             str = parent.langpack.getString("HelloPanel.authors");
             JLabel appAuthorsLabel = LabelFactory.create(str, parent.icons.getImageIcon("information"),
-                    JLabel.TRAILING);
-            centerPanel.add(appAuthorsLabel);
+                    LEADING);
+            // If nothing will be sad to the IzPanelLayout the position of an add will be
+            // determined in the default constraint. For labels it is CURRENT_ROW, NEXT_COLUMN.
+            // But at this point we would place the label in the next row. It is possible
+            // to create an IzPanelConstraint with this options, but it is also possible to
+            // use simple the NEXT_LINE object as constraint. Attention!! Do not use
+            // LayoutConstants.NEXT_ROW else LayoutConstants.NEXT_LINE because NEXT_ROW is an
+            // int and with it an other add method will be used without any warning (there the
+            // parameter will be used as position of the component in the panel, not the 
+            // layout manager.
+            add(appAuthorsLabel, LayoutConstants.NEXT_LINE);
 
             JLabel label;
             for (int i = 0; i < size; i++)
@@ -102,19 +104,18 @@ public class HelloPanel extends IzPanel
                 Info.Author a = (Info.Author) authors.get(i);
                 String email = (a.getEmail() != null && a.getEmail().length() > 0) ? (" <" + a.getEmail() + ">") : "";
                 label = LabelFactory.create(" - " + a.getName() + email, parent.icons
-                        .getImageIcon("empty"), JLabel.TRAILING);
-                centerPanel.add(label);
+                        .getImageIcon("empty"), LEADING);
+                add(label, NEXT_LINE);
             }
-
-            centerPanel.add(Box.createVerticalStrut(20));
+            add(IzPanelLayout.createParagraphGap());
         }
 
         if (idata.info.getAppURL() != null)
         {
             str = parent.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
             JLabel appURLLabel = LabelFactory.create(str, parent.icons.getImageIcon("bookmark"),
-                    JLabel.TRAILING);
-            centerPanel.add(appURLLabel);
+                    LEADING);
+            add(appURLLabel, LayoutConstants.NEXT_LINE);
         }
     }
 

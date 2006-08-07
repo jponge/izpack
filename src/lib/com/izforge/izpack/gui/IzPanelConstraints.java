@@ -24,6 +24,10 @@ package com.izforge.izpack.gui;
 import java.awt.Component;
 import java.awt.Rectangle;
 
+/**
+ * Constraints class for the layout manager <code>IzPanelLayout</code>.
+ * 
+ */
 public class IzPanelConstraints implements Cloneable, LayoutConstants
 {
 
@@ -32,17 +36,9 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
      * method getGap. The gap type will be determined by the array index and has to be synchron to
      * the gap identifier and the indices of array GAP_NAME_LOOK_UP
      */
-    protected static int[] DEFAULT_Y_GAPS = { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, -1, 0};
+    private int xCellAlignment = IzPanelLayout.DEFAULT_X_ALIGNMENT[0];
 
-    protected static int[] DEFAULT_X_GAPS = { 0, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, -1, 0};
-    
-    protected static int[] DEFAULT_X_ALIGNMENT = { LEFT, LEFT, LEFT, LEFT};
-
-    protected static int[] DEFAULT_Y_ALIGNMENT = { CENTER, CENTER, CENTER, CENTER};
-
-    private int xCellAlignment = DEFAULT_X_ALIGNMENT[0];
-
-    private int yCellAlignment = DEFAULT_Y_ALIGNMENT[0];
+    private int yCellAlignment = IzPanelLayout.DEFAULT_Y_ALIGNMENT[0];
 
     private int xPos = 0;
 
@@ -52,50 +48,92 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     private int yWeight = 1;
 
-    private int xGap = DEFAULT_X_GAPS[-LABEL_GAP];
+    private int xGap = IzPanelLayout.DEFAULT_X_GAPS[-LABEL_GAP];
 
-    private int yGap = DEFAULT_Y_GAPS[-LABEL_GAP];
+    private int yGap = IzPanelLayout.DEFAULT_Y_GAPS[-LABEL_GAP];
 
     private double stretch = 0.0;
-    
+
     private Rectangle bounds;
 
     /** for private use by the layout manager */
     Component component = null;
 
-    public static IzPanelConstraints LABEL_CONSTRAINT = new IzPanelConstraints();
+    // public static IzPanelConstraints LABEL_CONSTRAINT = new IzPanelConstraints();
 
-
+    /**
+     * Returns the declared stretch value.
+     * 
+     * @return the declared stretch value
+     */
     public double getStretch()
     {
         return stretch;
     }
 
+    /**
+     * Sets the given value as stretch value.
+     * 
+     * @param stretch value to be set
+     */
     public void setStretch(double stretch)
     {
         this.stretch = stretch;
     }
 
+    /**
+     * Returns the declared x gap value.
+     * 
+     * @return the declared x gap value
+     */
     public int getXGap()
     {
         return xGap;
     }
 
+    /**
+     * Sets the given value as x gap.
+     * 
+     * @param gap value to be set
+     */
     public void setXGap(int gap)
     {
         xGap = gap;
     }
 
+    /**
+     * Returns the declared y gap value.
+     * 
+     * @return the declared y gap value
+     */
     public int getYGap()
     {
         return yGap;
     }
 
+    /**
+     * Sets the given value as y gap.
+     * 
+     * @param gap value to be set
+     */
     public void setYGap(int gap)
     {
         yGap = gap;
     }
 
+    /**
+     * Constructor with all existent parameters.
+     * 
+     * @param xCellAlignment value to be used as x alignment
+     * @param yCellAlignment value to be used as y alignment
+     * @param xPos x position to be used
+     * @param yPos y position to be used
+     * @param xWeight weight at x direction
+     * @param yWeight weight at y direction
+     * @param xGap gap for x direction
+     * @param yGap gap for y direction
+     * @param stretch stretch value for the x direction
+     */
     public IzPanelConstraints(int xCellAlignment, int yCellAlignment, int xPos, int yPos,
             int xWeight, int yWeight, int xGap, int yGap, double stretch)
     {
@@ -110,8 +148,12 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
         setStretch(stretch);
     }
 
+    /**
+     * Default constructor
+     */
     public IzPanelConstraints()
     {
+        super();
     }
 
     /*
@@ -133,75 +175,145 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
         }
     }
 
+    /**
+     * Returns the alignment for the x direction.
+     * 
+     * @return the alignment for the x direction
+     */
     public int getXCellAlignment()
     {
         return xCellAlignment;
     }
 
+    /**
+     * Sets the alignment for the x direction. Possible values are LEFT, RIGHT and CENTER.
+     * 
+     * @param cellAlignment to be used
+     */
     public void setXCellAlignment(int cellAlignment)
     {
         xCellAlignment = cellAlignment;
     }
 
+    /**
+     * Returns the x position (column number).
+     * 
+     * @return the x position (column number)
+     */
     public int getXPos()
     {
         return xPos;
     }
 
+    /**
+     * Sets the x position to be used.
+     * 
+     * @param pos position to be used
+     */
     public void setXPos(int pos)
     {
         xPos = pos;
     }
 
+    /**
+     * Returns the weight for the x direction. The weight determines how many cells are occupied by
+     * the component.
+     * 
+     * @return the weight for the x direction
+     */
     public int getXWeight()
     {
         return xWeight;
     }
 
+    /**
+     * Sets the weight value for the x direction.
+     * 
+     * @param weight to be used for the x direction
+     */
     public void setXWeight(int weight)
     {
         xWeight = weight;
     }
 
+    /**
+     * Returns the alignment for the y direction.
+     * 
+     * @return the alignment for the y direction
+     */
     public int getYCellAlignment()
     {
         return yCellAlignment;
     }
 
+    /**
+     * Sets the alignment for the y direction. Possible values are TOP, BOTTOM and CENTER.
+     * 
+     * @param cellAlignment to be used
+     */
     public void setYCellAlignment(int cellAlignment)
     {
         yCellAlignment = cellAlignment;
     }
 
+    /**
+     * Returns the y position (row number).
+     * 
+     * @return the y position (row number)
+     */
     public int getYPos()
     {
         return yPos;
     }
 
+    /**
+     * Sets the y position to be used.
+     * 
+     * @param pos position to be used
+     */
     public void setYPos(int pos)
     {
         yPos = pos;
     }
 
+    /**
+     * Returns the weight for the y direction. The weight determines how many cells are occupied by
+     * the component.
+     * 
+     * @return the weight for the y direction
+     */
     public int getYWeight()
     {
         return yWeight;
     }
 
+    /**
+     * Sets the weight value for the y direction.
+     * 
+     * @param weight to be used for the y direction
+     */
     public void setYWeight(int weight)
     {
         yWeight = weight;
     }
 
-    
+    /**
+     * Returns the bounds which should be used by the corresponding component. This will be used by
+     * the layout manager at a fast layouting.
+     * 
+     * @return used bounds
+     */
     public Rectangle getBounds()
     {
-        if(bounds != null )
-            return(Rectangle) (bounds.clone());
-        return( new Rectangle());
+        if (bounds != null) return (Rectangle) (bounds.clone());
+        return (new Rectangle());
     }
 
-    
+    /**
+     * Sets the bounds which should be used for the component.
+     * 
+     * @param bounds bounds to be used
+     */
     public void setBounds(Rectangle bounds)
     {
         this.bounds = (Rectangle) bounds.clone();

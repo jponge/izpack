@@ -21,7 +21,6 @@
  */
 package com.izforge.izpack.installer;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -71,43 +70,70 @@ public class LayoutHelper implements LayoutConstants
 
     protected static int X_STRETCH_TYPE = -1;
 
-    /**
-     * Look-up table for gap identifier to gap names. The gap names can be used in the XML
-     * installation configuration file. Be aware that case sensitivity should be used.
-     */
-    public final static String[] GAP_NAME_LOOK_UP = { "noGap", "labelGap", "paragraphGap",
-            "textGab", "controlGap", "labelToTextGap", "labelToControlGap", "textToLabelGap",
-            "controlToLabelGap", "controlToTextGap", "textToControlGap", "topGap"};
+    protected static double FULL_LINE_STRETCH_DEFAULT = -1.0;
 
     /**
-     * Current defined gaps. Here are the defaults which can be overwritten at the first call to
-     * method getGap. The gap type will be determined by the array index and has to be synchron to
-     * the gap identifier and the indices of array GAP_NAME_LOOK_UP
+     * Look-up table for gap identifier to gap names for the x direction. The gap names can be used
+     * in the XML installation configuration file. Be aware that case sensitivity should be used.
      */
-    protected static int[] GAPS = { 0, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, -1, 0, -1};
+    public final static String[] X_GAP_NAME_LOOK_UP = { "noXGap", "labelXGap", "paragraphXGap",
+            "textXGab", "controlXGap", "labelToTextXGap", "labelToControlXGap", "textToLabelXGap",
+            "controlToLabelXGap", "controlToTextXGap", "textToControlXGap", "firstXGap"};
 
+    /**
+     * Look-up table for gap identifier to gap names for the y direction. The gap names can be used
+     * in the XML installation configuration file. Be aware that case sensitivity should be used.
+     */
+    public final static String[] Y_GAP_NAME_LOOK_UP = { "noYGap", "labelYGap", "paragraphYGap",
+            "textYGab", "controlYGap", "labelToTextYGap", "labelToControlYGap", "textToLabelYGap",
+            "controlToLabelYGap", "controlToTextYGap", "textToControlYGap", "firstYGap"};
+
+    /** Identifier of x gap for all default x gaps. */
+    public final static String ALL_X_GAP = "allXGap";
+
+    /** Identifier of x gap for all default y gaps. */
+    public final static String ALL_Y_GAP = "allYGap";
+
+    /**
+     * Only useable constructor. Creates a layout manager for special purpose.
+     * 
+     * @param parent for which this layout manager will be used
+     */
     public LayoutHelper(IzPanel parent)
     {
+        this();
         this.parent = parent;
         izPanelLayout = new GridBagLayout();
         parent.setLayout(izPanelLayout);
         gridyCounter++;
     }
 
+    /**
+     * The default constructor is only useable by derived classes.
+     */
+    protected LayoutHelper()
+    {
+        super();
+    }
+
+    /**
+     * Returns whether the used layout is a GridBagLayout or not.
+     * 
+     * @return whether the used layout is a GridBagLayout or not
+     */
     private boolean isGridBag()
     {
         return (izPanelLayout instanceof GridBagLayout);
     }
 
+    /**
+     * Returns whether the used layout is an IzPanelLayout or not.
+     * 
+     * @return whether the used layout is an IzPanelLayout or not
+     */
     private boolean isIzPanel()
     {
         return (izPanelLayout instanceof IzPanelLayout);
-    }
-
-    // ----------------------------------------------------------------------
-    public void add(Component comp)
-    {
-
     }
 
     // ------------------- Common Layout stuff -------------------- START ---
@@ -117,6 +143,8 @@ public class LayoutHelper implements LayoutConstants
      * This will be done, if the IzPack guiprefs modifier with the key "layoutAnchor" has the value
      * "SOUTH" or "SOUTHWEST". The earlier used value "BOTTOM" and the declaration via the IzPack
      * variable <code>IzPanel.LayoutType</code> are also supported.
+     * 
+     * @param layout layout to be used by this layout helper
      */
     public void startLayout(LayoutManager2 layout)
     {
@@ -131,10 +159,16 @@ public class LayoutHelper implements LayoutConstants
         if (isIzPanel()) startIzPanelLayout();
     }
 
+    /**
+     * Special start method for IzPanelLayout. Called from <code>startLayout</code>.
+     */
     private void startIzPanelLayout()
     {
         IzPanelLayout.setAnchor(getAnchor());
         IzPanelLayout.setXStretchType(getXStretchType());
+        IzPanelLayout.setFullLineStretch(getFullLineStretch());
+        getXGap(LABEL_GAP); // This call triggers resolving external setting if not already done.
+        getYGap(LABEL_GAP); // This call triggers resolving external setting if not already done.
         parent.setLayout(izPanelLayout);
 
     }
@@ -306,7 +340,7 @@ public class LayoutHelper implements LayoutConstants
         if (izPanelLayout == null || !(izPanelLayout instanceof GridBagLayout))
             izPanelLayout = new GridBagLayout();
         GridBagConstraints dgbc = new GridBagConstraints();
-        dgbc.insets = new Insets(0, 0, getGap(LABEL_GAP), 0);
+        dgbc.insets = new Insets(0, 0, getYGap(LABEL_GAP), 0);
         dgbc.anchor = GridBagConstraints.WEST;
         defaultConstraints = dgbc;
         parent.setLayout(izPanelLayout);
@@ -394,32 +428,53 @@ public class LayoutHelper implements LayoutConstants
     }
 
     /**
-     * Returns the gap which should be used between the given gui objects. The value will be
-     * configurable by guiprefs modifiers. Valid values are all entries in the static String array
-     * GAP_NAME_LOOK_UP of this class. There are constant ints for the indexes of this array.
+     * Returns the gap which should be used between the given gui objects for the x direction. The
+     * value will be configurable by guiprefs modifiers. Valid values are all entries in the static
+     * String array X_GAP_NAME_LOOK_UP of this class. There are constant ints for the indexes of this
+     * array.
      * 
      * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
      * 
      * @return the gap depend on the xml-configurable guiprefs modifier
      */
-    public static int getGap(int gapId)
+    public static int getXGap(int gapId)
     {
-        if (gapId < 0) gapId = -gapId;
-        if (gapId >= GAPS.length - 2) throw new IllegalArgumentException("gapId out of range.");
-        if (GAPS[GAPS.length - 1] >= 0) return (GAPS[gapId]);
+        gapId = IzPanelLayout.verifyGapId(gapId);
+        if (IzPanelLayout.getDefaultXGap(GAP_LOAD_MARKER) >= 0)
+            return (IzPanelLayout.getDefaultXGap(gapId));
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof InstallData)) return (GAPS[gapId]);
+        if (!(idata instanceof InstallData)) return (IzPanelLayout.getDefaultXGap(gapId));
         String var = null;
-        for (int i = 0; i < GAP_NAME_LOOK_UP.length; ++i)
+        InstallData id = (InstallData) idata;
+        int commonDefault = -1;
+        if (id.guiPrefs.modifier.containsKey(ALL_X_GAP))
         {
-            if (((InstallData) idata).guiPrefs.modifier.containsKey(GAP_NAME_LOOK_UP[i]))
+            try
             {
-                var = (String) ((InstallData) idata).guiPrefs.modifier.get(GAP_NAME_LOOK_UP[i]);
+                commonDefault = Integer.parseInt((String) id.guiPrefs.modifier.get(ALL_X_GAP));
+            }
+            catch (NumberFormatException nfe)
+            {
+                // Do nothing else use the default value.
+                // Need to set it again at this position??
+            }
+
+        }
+        for (int i = 0; i < X_GAP_NAME_LOOK_UP.length; ++i)
+        {
+            int currentDefault = 0;
+            if (commonDefault >= 0)
+            {
+                currentDefault = commonDefault;
+            }
+            else
+            {
+                var = (String) id.guiPrefs.modifier.get(X_GAP_NAME_LOOK_UP[i]);
                 if (var != null)
                 {
                     try
                     {
-                        GAPS[i] = Integer.parseInt(var);
+                        currentDefault = Integer.parseInt(var);
                     }
                     catch (NumberFormatException nfe)
                     {
@@ -428,16 +483,91 @@ public class LayoutHelper implements LayoutConstants
                     }
                 }
             }
+            IzPanelLayout.setDefaultXGap(currentDefault, i);
+        }
+        IzPanelLayout.setDefaultXGap(0, GAP_LOAD_MARKER); // Mark external settings allready
+        // loaded.
+        return (IzPanelLayout.getDefaultXGap(gapId));
+    }
+    /**
+     * Returns the gap which should be used between the given gui objects for the y direction. The
+     * value will be configurable by guiprefs modifiers. Valid values are all entries in the static
+     * String array Y_GAP_NAME_LOOK_UP of this class. There are constant ints for the indexes of this
+     * array.
+     * 
+     * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
+     * 
+     * @return the gap depend on the xml-configurable guiprefs modifier
+     */
+    public static int getYGap(int gapId)
+    {
+        gapId = IzPanelLayout.verifyGapId(gapId);
+        if (IzPanelLayout.getDefaultYGap(GAP_LOAD_MARKER) >= 0)
+            return (IzPanelLayout.getDefaultYGap(gapId));
+        AutomatedInstallData idata = AutomatedInstallData.getInstance();
+        if (!(idata instanceof InstallData)) return (IzPanelLayout.getDefaultYGap(gapId));
+        String var = null;
+        InstallData id = (InstallData) idata;
+        int commonDefault = -1;
+        if (id.guiPrefs.modifier.containsKey(ALL_Y_GAP))
+        {
+            try
+            {
+                commonDefault = Integer.parseInt((String) id.guiPrefs.modifier.get(ALL_Y_GAP));
+            }
+            catch (NumberFormatException nfe)
+            {
+                // Do nothing else use the default value.
+                // Need to set it again at this position??
+            }
 
         }
-        GAPS[GAPS.length - 1] = 0; // Mark external settings allready loaded.
-        return (GAPS[gapId]);
+        for (int i = 0; i < Y_GAP_NAME_LOOK_UP.length; ++i)
+        {
+            int currentDefault = 0;
+            if (commonDefault >= 0)
+            {
+                currentDefault = commonDefault;
+            }
+            else
+            {
+                var = (String) id.guiPrefs.modifier.get(Y_GAP_NAME_LOOK_UP[i]);
+                if (var != null)
+                {
+                    try
+                    {
+                        currentDefault = Integer.parseInt(var);
+                    }
+                    catch (NumberFormatException nfe)
+                    {
+                        // Do nothing else use the default value.
+                        // Need to set it again at this position??
+                    }
+                }
+            }
+            IzPanelLayout.setDefaultYGap(currentDefault, i);
+        }
+        IzPanelLayout.setDefaultYGap(0, GAP_LOAD_MARKER); // Mark external settings allready
+        // loaded.
+        return (IzPanelLayout.getDefaultYGap(gapId));
     }
 
+    /**
+     * Returns the used stretch type for the x direction. Possible are NO_STRETCH, RELATIVE_STRETCH
+     * and ABSOLUTE_STRETCH. The stretch type will be used at rows where one or more components has
+     * a stretch value greater than 0.0 in the constraints. If NO_STRETCH is used, no stretch will
+     * be performed. If ABSOLUTE_STRETCH is used, parts of the unused area are given to the
+     * components depending on the unmodified stretch value. At RELATIVE_STRETCH first the hole
+     * stretch for a row will be computed. Relative to this value the unused area will be splited.<br>
+     * The default type is ABSOLUTE_STRETCH. With the modifier "layoutXStretchType" of the "info"
+     * section of the installation configuration file this can be changed.
+     * 
+     * @return used stretch type
+     */
     public static int getXStretchType()
     {
-        X_STRETCH_TYPE = ABSOLUTE_STRETCH;
         if (X_STRETCH_TYPE > -1) return (X_STRETCH_TYPE);
+        X_STRETCH_TYPE = ABSOLUTE_STRETCH;
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
         if (!(idata instanceof InstallData)) return (RELATIVE_STRETCH);
         String var = null;
@@ -456,7 +586,40 @@ public class LayoutHelper implements LayoutConstants
             }
         }
         return (X_STRETCH_TYPE);
+    }
 
+    /**
+     * Returns the default value for stretching to a full line. With the modifier
+     * "layoutFullLineStretch" of the "info" section of the installation configuration file this can
+     * be changed. Valid are doubles for the value. This setting is possible to give panels a chance
+     * to center the controls in x direction also a control uses stretching.
+     * 
+     * @return the default value for stretching to a full line
+     */
+    public static double getFullLineStretch()
+    {
+        if (FULL_LINE_STRETCH_DEFAULT >= 0.0) return (FULL_LINE_STRETCH_DEFAULT);
+        FULL_LINE_STRETCH_DEFAULT = 0.7;
+        AutomatedInstallData idata = AutomatedInstallData.getInstance();
+        if (!(idata instanceof InstallData)) return (FULL_LINE_STRETCH_DEFAULT);
+        String var = null;
+        if (((InstallData) idata).guiPrefs.modifier.containsKey("layoutFullLineStretch"))
+        {
+            var = (String) ((InstallData) idata).guiPrefs.modifier.get("layoutFullLineStretch");
+            if (var != null)
+            {
+                try
+                {
+                    FULL_LINE_STRETCH_DEFAULT = Double.parseDouble(var);
+                }
+                catch (NumberFormatException nfe)
+                {
+                    // Do nothing else use the default value.
+                    // Need to set it again at this position??
+                }
+            }
+        }
+        return (FULL_LINE_STRETCH_DEFAULT);
     }
 
     /**
