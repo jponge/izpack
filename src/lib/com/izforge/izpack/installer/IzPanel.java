@@ -20,6 +20,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.MultiLineLabel;
@@ -46,7 +47,7 @@ import java.awt.*;
  * @author Julien Ponge
  * @author Klaus Bartz
  */
-public class IzPanel extends JPanel implements AbstractUIHandler
+public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstants
 {
 
     private static final long serialVersionUID = 3256442495255786038L;
@@ -102,8 +103,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler
 
     /** ROWS_1 = 1 */
     public final static int ROWS_1 = 1;
-
-    protected GridBagConstraints defaultGridBagConstraints;
 
     /**
      * The constructor.

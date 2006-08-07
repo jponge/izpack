@@ -22,6 +22,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.LayoutManager2;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -440,7 +441,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         super(parent, installData, "link16x16");
 
         layout = (GridBagLayout) super.getLayout();
-        constraints = super.defaultGridBagConstraints;
+        Object con = getLayoutHelper().getDefaultConstraints();
+        if( con instanceof GridBagConstraints)
+            constraints = (GridBagConstraints) con;
+        else 
+            con = new GridBagConstraints();
         setLayout(super.getLayout());
     }
 
