@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -98,6 +99,11 @@ public class CompilerConfig extends Thread
 
     /** Constant for checking attributes. */
     private static boolean NO = false;
+
+    private final static String IZ_TEST_FILE = "ShellLink.dll";
+
+    private final static String IZ_TEST_SUBDIR = "bin" + File.separator + "native" + File.separator
+            + "izpack";
 
     /** The xml install file */
     private String filename;
@@ -1699,7 +1705,11 @@ public class CompilerConfig extends Thread
 
         // exit code 1 means: error
         int exitCode = 1;
-
+        String home = ".";
+        // We get the IzPack home directory 
+        String izHome = System.getProperty("IZPACK_HOME");
+        if (izHome != null) home = izHome;
+                    
         // We analyse the command line parameters
         try
         {
@@ -1715,38 +1725,30 @@ public class CompilerConfig extends Thread
             int nArgs = args.length;
             if (nArgs < 1) throw new Exception("no arguments given");
 
-            // We get the IzPack home directory 
-            String home = ".";
-            String izHome = System.getProperty("IZPACK_HOME");
-						if (izHome != null) home = izHome;
-						
-						
-            File homeFile = new File(home);
-            if (!homeFile.exists() && homeFile.isDirectory())
-            {
-                System.err.println("IZPACK_HOME (" + home + ") doesn't exist");
-                System.exit(-1);
-            }
-            Compiler.setIzpackHome(home);
-
             // The users wants to know the command line parameters
             if ("-?".equalsIgnoreCase(args[0]))
             {
                 System.out.println("-> Command line parameters are : (xml file) [args]");
                 System.out.println("   (xml file): the xml file describing the installation");
-                System.out
-                        .println("   -b (base) : indicates the base path that the compiler will use for filenames");
-                System.out.println("               default is the current path");
+                System.out.println("   -h (IzPack home) : the root path of IzPack. This will be needed");
+                System.out.println("               if the compiler is not called in the root directory  of IzPack.");
+                System.out.println("               Do not forget quotations if there are blanks in the path.");
+                         System.out
+                          .println("   -b (base) : indicates the base path that the compiler will use for filenames");
+                System.out.println("               of sources. Default is the current path. Attend to -h.");
                 System.out.println("   -k (kind) : indicates the kind of installer to generate");
                 System.out.println("               default is standard");
                 System.out.println("   -o (out)  : indicates the output file name");
                 System.out.println("               default is the xml file name\n");
-                System.out.println("   -c (compression)  : indicates the compression format to be used for packs");
+                System.out
+                        .println("   -c (compression)  : indicates the compression format to be used for packs");
                 System.out.println("               default is the internal deflate compression\n");
-                System.out.println("   -l (compression-level)  : indicates the level for the used compression format");
+                System.out
+                        .println("   -l (compression-level)  : indicates the level for the used compression format");
                 System.out.println("                if supported. Only integer are valid\n");
 
-                System.out.println("   When using vm option -DSTACKTRACE=true there is all kind of debug info ");
+                System.out
+                        .println("   When using vm option -DSTACKTRACE=true there is all kind of debug info ");
                 System.out.println("");
                 exitCode = 0;
             }
@@ -1813,6 +1815,15 @@ public class CompilerConfig extends Thread
                             else
                                 throw new Exception("compression level argument missing");
                             break;
+                        case 'h':
+                            if ((pos + 1) < nArgs)
+                            {
+                                pos++;
+                                home = args[pos];
+                            }
+                            else
+                                throw new Exception("IzPack home path argument missing");
+                            break;
                         default:
                             throw new Exception("unknown argument");
                         }
@@ -1821,6 +1832,7 @@ public class CompilerConfig extends Thread
                     else
                         throw new Exception("bad argument");
 
+                home = resolveIzPackHome(home);
                 // Outputs what we are going to do
                 System.out.println("-> Processing  : " + filename);
                 System.out.println("-> Output      : " + output);
@@ -1828,7 +1840,12 @@ public class CompilerConfig extends Thread
                 System.out.println("-> Kind        : " + kind);
                 System.out.println("-> Compression : " + compr_format);
                 System.out.println("-> Compr. level: " + compr_level);
+                System.out.println("-> IzPack home : " + home);
                 System.out.println("");
+
+                
+                Compiler.setIzpackHome(home);
+
 
                 // Calls the compiler
                 CmdlinePackagerListener listener = new CmdlinePackagerListener();
@@ -1859,6 +1876,38 @@ public class CompilerConfig extends Thread
         System.exit(exitCode);
     }
 
+    private static String resolveIzPackHome(String home)
+    {
+        File test = new File(home, IZ_TEST_SUBDIR + File.separator + IZ_TEST_FILE);
+        if( test != null && test.exists())
+            return( home);
+        // Try to resolve the path using compiler.jar which also should be under
+        // IZPACK_HOME.
+        String self = Compiler.class.getName();
+        self = self.replace('.', '/');
+        self = "/" + self + ".class";
+        URL url = Compiler.class.getResource(self);
+        String np = url.getFile();
+        int start = np.indexOf(self);
+        np = np.substring(0, start);
+        if( np.endsWith("!"))
+            np = np.substring(0, np.length() - 1);
+        File root = null;
+        if( URI.create(np).isAbsolute())
+            root = new File(URI.create(np));
+        else 
+            root = new File(np);
+        while(true)
+        {
+            if( root == null )
+                throw new IllegalArgumentException("No valid IzPack home directory found");
+            test =  new File(root, IZ_TEST_SUBDIR + File.separator + IZ_TEST_FILE);
+            if( test.exists())
+                return(root.getAbsolutePath());
+            root = root.getParentFile();
+        }
+    }
+
     // -------------------------------------------------------------------------
     // ------------- Listener stuff ------------------------- START ------------
 
@@ -1876,7 +1925,6 @@ public class CompilerConfig extends Thread
         // We get the listeners
         XMLElement root = data.getFirstChildNamed("listeners");
         if (root == null) return;
-
         Iterator iter = root.getChildrenNamed("listener").iterator();
         while (iter.hasNext())
         {
