@@ -319,8 +319,9 @@ give a name e.g. "CompileMyInstall"<br />
 select in "Main" the project "IzPack"<br />
 select as "main class" "Compile" (from package com.izforge.izpack.compiler)<br />
 As "Program arguments" put in (for %SOME_THING% use your local value)<br />
--HOME %IZPACK_HOME% %SRC_ROOT%\%CONFIG_SUBPATH%\install.xml -b %SRC_ROOT% -o %INSTALLER_DEST%\install.jar<br /><br />
-
+%SRC_ROOT%\%CONFIG_SUBPATH%\install.xml -b %SRC_ROOT% -o %INSTALLER_DEST%\install.jar<br />
+As "VM arguments" put in<br />
+"-DIZPACK_HOME=n:\home\bartzkau\work\xt150_forIzPack\izpack-src"<br /><br />
 No you can debug the compiling of your installation.<br /><br /></li>
 
 <li class="disc"><h2><a name="section00356000000000000000">Debug installation</a></h2>
