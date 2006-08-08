@@ -76,17 +76,19 @@ public class LayoutHelper implements LayoutConstants
      * Look-up table for gap identifier to gap names for the x direction. The gap names can be used
      * in the XML installation configuration file. Be aware that case sensitivity should be used.
      */
-    public final static String[] X_GAP_NAME_LOOK_UP = { "noXGap", "labelXGap", "paragraphXGap",
-            "textXGab", "controlXGap", "labelToTextXGap", "labelToControlXGap", "textToLabelXGap",
-            "controlToLabelXGap", "controlToTextXGap", "textToControlXGap", "firstXGap"};
+    public final static String[] X_GAP_NAME_LOOK_UP = { "noXGap", "labelXGap", "textXGab",
+            "controlXGap", "paragraphXGap", "labelToTextXGap", "labelToControlXGap",
+            "textToLabelXGap", "controlToLabelXGap", "controlToTextXGap", "textToControlXGap",
+            "firstXGap"};
 
     /**
      * Look-up table for gap identifier to gap names for the y direction. The gap names can be used
      * in the XML installation configuration file. Be aware that case sensitivity should be used.
      */
-    public final static String[] Y_GAP_NAME_LOOK_UP = { "noYGap", "labelYGap", "paragraphYGap",
-            "textYGab", "controlYGap", "labelToTextYGap", "labelToControlYGap", "textToLabelYGap",
-            "controlToLabelYGap", "controlToTextYGap", "textToControlYGap", "firstYGap"};
+    public final static String[] Y_GAP_NAME_LOOK_UP = { "noYGap", "labelYGap", "textYGab",
+            "controlYGap", "paragraphYGap", "labelToTextYGap", "labelToControlYGap",
+            "textToLabelYGap", "controlToLabelYGap", "controlToTextYGap", "textToControlYGap",
+            "firstYGap"};
 
     /** Identifier of x gap for all default x gaps. */
     public final static String ALL_X_GAP = "allXGap";

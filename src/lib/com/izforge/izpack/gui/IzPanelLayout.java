@@ -60,6 +60,14 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
     private Insets oldParentInsets;
 
+    protected static int[] DEFAULT_Y_GAPS = { -1, 0, 5, 5, 10, 5, 5, 5,     5, 5, 5, 5, 5, 5, 0};
+
+    protected static int[] DEFAULT_X_GAPS = { -1, 0, 0, 0, 0, 0, 10, 10,    10, 10, 10, 10, 10, 0};
+
+    protected static int[] DEFAULT_X_ALIGNMENT = { LEFT, LEFT, LEFT, LEFT};
+
+    protected static int[] DEFAULT_Y_ALIGNMENT = { CENTER, CENTER, CENTER, CENTER};
+
     /** Array with some default constraints. */
     private static IzPanelConstraints DEFAULT_CONSTRAINTS[] = {
             // Default constraints for labels.
@@ -85,14 +93,6 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                     NEXT_ROW, 10, 10, CONTROL_GAP, CONTROL_GAP, FULL_LINE_STRETCH),
 
     };
-
-    protected static int[] DEFAULT_Y_GAPS = { -1, 0, 5, 5, 10, 5, 5, 5,     5, 5, 5, 5, 5, 5, 0};
-
-    protected static int[] DEFAULT_X_GAPS = { -1, 0, 0, 0, 0, 0, 10, 10,    10, 10, 10, 10, 10, 0};
-
-    protected static int[] DEFAULT_X_ALIGNMENT = { LEFT, LEFT, LEFT, LEFT};
-
-    protected static int[] DEFAULT_Y_ALIGNMENT = { CENTER, CENTER, CENTER, CENTER};
 
     /** Anchor to be used for the controls in all panels. */
     private static int ANCHOR = CENTER;
@@ -626,10 +626,10 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                         offset += curPixel;
                         if (needsReEvaluation(colConstraints[i].component))
                         {
-                            if (oldDim.height != colConstraints[i].component.getPreferredSize().height
-                                    && oldOnceAgain == onceAgain) onceAgain++;
+                            if (oldOnceAgain == onceAgain) onceAgain++;
                         }
                     }
+
                 }
                 // Seems so that height has changed. Reevaluate only one time else it is possible
                 // to go in a endless loop.
@@ -777,7 +777,6 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     public void addLayoutComponent(Component comp, Object constraints)
     {
         if (comp == null) throw new NullPointerException("component has to be not null");
-        IzPanelConstraints cc;
         if (!(constraints instanceof IzPanelConstraints))
         {
             Object oldVal = constraints;
@@ -792,10 +791,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 ((IzPanelConstraints) constraints).setXPos(0);
                 ((IzPanelConstraints) constraints).setYPos(NEXT_ROW);
             }
-            cc = (IzPanelConstraints) constraints;
         }
-        else
-            cc = (IzPanelConstraints) ((IzPanelConstraints) constraints).clone();
+        IzPanelConstraints cc = (IzPanelConstraints) ((IzPanelConstraints) constraints).clone();
         cc.component = comp;
         int i;
         // Modify positions if constraint value is one of the symbolic ints.
@@ -1080,7 +1077,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     public static int verifyGapId(int gapId)
     {
         if (gapId < 0) gapId = -gapId;
-        if (gapId <= GAP_LOAD_MARKER || gapId >= DEFAULT_X_GAPS.length)
+        if ( gapId >= DEFAULT_X_GAPS.length)
             throw new IndexOutOfBoundsException("gapId is not in the default gap container.");
         return (gapId);
     }
