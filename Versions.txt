@@ -29,9 +29,13 @@
 - Fixes on Launcher, handling stuff (Julien Ponge)
 - MAC OS: Launcher is built as universal (ie, i386/ppc) binary  (Julien Ponge)
 - MAC OS: Qt is embedded in the application bundle  (Julien Ponge)
-- Added a variable for install log, InstallerFrame.logfilePath (Klaus Bartz)
+- Added a variable for install log, InstallerFrame.logfilePath (Klaus Bartz).
 - Added the docu for install log (Fabrice Mirabile).
 - TwoColumnLayout fix (Amit Bhayani @JBoss/RedHat).
+- New compiler (packager) comandline argument -h for IZPACK_HOME; try to 
+  automatic resolving of IZPACK_HOME if not specified (Klaus Bartz).
+- New layout manager (IzPanelLayout) for simplify layouting of IzPanels. 
+  Configurable anchor, gaps, stretch rules etc. (Klaus Bartz).
 - Documentation figures refreshment (Julien Ponge).
 
   > 3.8.1 (build 2006.01.06)
