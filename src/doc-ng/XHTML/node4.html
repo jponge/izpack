@@ -189,7 +189,7 @@ having such a feature. Here is a list of free editors that work well :</p>
 	<li>JEdit : <tt><a name="tex2html201" href="http://www.eclipse.org/">http://www.eclipse.org/</a></tt></li>
 </ul>
 <p>For the first one, JetBrains has granted us an Open Source License. All project members can ask the Licence Key to one of the project manager.</p>
-<p>The second one is a well know open source (Just like us :-)) IDE. We provide a tutorial on how to develop/debug IzPack using Eclipse in the chapter Getting Started -> How to develop and debug IpPack using Eclipse</p>
+<p>The second one is a well know open source (Just like us :-)) IDE. We provide a tutorial on how to develop/debug IzPack using Eclipse in the chapter <a name="GetStarted-HowToDevDebug" href="node3.html#section00350000000000000000">Getting Started -> How to develop and debug IpPack using Eclipse</a></p>
 
 <h2><a name="SECTION00412000000000000000">Writing XML</a></h2>
 
@@ -1040,13 +1040,23 @@ because only the contained files of the jar are added to the installer jar, not 
 <h2><a name="SECTION00442000000000000000">InfoPanel and HTMLInfoPanel</a></h2>
 
 <p>This is a kind of 'README' panel. It presents text of any length. The text is specified by the <tt>(HTML)InfoPanel.info</tt> resource. Starting from IzPack 3.7.0, variables substitution is
-allowed.<br />
+allowed.<br />To add an image to the HTMLInfoPanel you simply need to add a ressource to your install.xml with an ID decided by you, then you can call this image by refering it by this same ID.<br />
 </p>
+<pre>
+e.g.:
+In install.xml:
+&lt;resources&gt;
+  &lt;res src="logo.jpg" id="GHGHGH"/&gt;
+  .....
+
+And in file.html:
+&lt;img src="GHGHGH" /&gt;
+</pre>
 
 <h2><a name="SECTION00443000000000000000">LicencePanel and HTMLLicencePanel</a></h2>
 
 <p>Note:<i>  There is a mistake in the name - it should be LicensePanel. In France the word is Licence ... and one of my diploma is a 'Licence' so ...:</i> -)<br /></p>
-
+<p>Adding images to HTMLLicencePanel works exactly the same way as with HTMLInfoPanel.</p>
 
 <p>These panels can prompt the user to acknowledge a license agreement. They block unless the user selects the 'agree' option. To specify the license agreement text you have to use the <tt>
 (HTML)LicencePanel.licence</tt> resource.<br />
@@ -1289,7 +1299,7 @@ panel before installation. The panel contains a scrollable HTML text area to dis
 <tt>getSummaryBody</tt> has to be implemented in all panels which should be presented in the summary. If the secound method is not implemented, no summary of this
 panel will be shown.
 </p>
-<p>Additional it is possibel to <a href="node9.html#SECTION00970000000000000000">log the contents</a> of the summary panel into a HTML file.</p>
+<p>Additional it is possible to <a href="node9.html#SECTION00970000000000000000">log the contents</a> of the summary panel into a HTML file.</p>
 
 <hr />
 <!--Navigation Panel-->
