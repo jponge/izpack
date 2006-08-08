@@ -1011,7 +1011,7 @@ public class CompilerConfig extends Thread
             {
                 fullClassName = getFullClassName(url, className);
             }
-            catch (Exception e)
+            catch (IOException e)
             {
             }
             if (fullClassName != null)
@@ -1988,9 +1988,9 @@ public class CompilerConfig extends Thread
      * @param url url of the jar file which contains the class
      * @param className short name of the class for which the full name should be resolved
      * @return full qualified class name
-     * @throws Exception
+     * @throws IOException 
      */
-    private String getFullClassName(URL url, String className) throws Exception
+    private String getFullClassName(URL url, String className) throws IOException //throws Exception
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry = null;
@@ -2004,15 +2004,22 @@ public class CompilerConfig extends Thread
             }
             name = name.replace('/', '.');
             int pos = -1;
+            int nonCasePos = -1;
             if (className != null)
             {
                 pos = name.indexOf(className);
+                nonCasePos = name.toLowerCase().indexOf(className.toLowerCase());
             }
             if (pos != -1 && name.length() == pos + className.length() + 6) // "Main" class found
             {
                 jis.close();
                 return (name.substring(0, lastPos));
             }
+            
+            if (nonCasePos != -1 && name.length() == nonCasePos + className.length() + 6)
+                // "Main" class with different case found
+                throw new IllegalArgumentException("Fatal error! The declared panel name in the xml file ("
+                        + className + ") differs in case to the founded class file (" + name + ").");
         }
         jis.close();
         return (null);

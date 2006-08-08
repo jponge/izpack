@@ -231,7 +231,7 @@ public class InstallerFrame extends JFrame
             if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) continue;
             className = (String) p.className;
             String praefix = "com.izforge.izpack.panels.";
-            if (className.compareTo(".") > -1)
+            if (className.indexOf('.') > -1)
             // Full qualified class name
                 praefix = "";
             objectClass = Class.forName(praefix + className);
