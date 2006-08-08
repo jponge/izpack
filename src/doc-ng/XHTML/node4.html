@@ -1023,7 +1023,7 @@ because only the contained files of the jar are added to the installer jar, not 
 <h1><a name="SECTION00440000000000000000">The Available Panels</a></h1>
 
 <p>In this section i will introduce the various panels available in IzPack. The usage for most is pretty simple and described right here. The more elaborate ones are explained in more detail in the
-<i>Advanced Features</i> chapter or in their own chapter. The panels are listed by their class name. This is the name that must be used with the <tt>classname</tt> attribute (case-sensitive).<br />
+<i>Advanced Features</i> chapter or in their own chapter. The panels are listed by their class name. This is the name that must be used with the <tt>classname</tt> attribute. Please be aware that the classname is Case-Sensitive, meaning that if the case from the install.xml and the founded class file differs the installation will break. In this last case, the installer will Throw an IllegalArgumentException in the compiler if the declared class name in the xml file differs in case from the founded class file.<br />
 </p>
 
 <h2><a name="SECTION00441000000000000000">HelloPanel</a></h2>
