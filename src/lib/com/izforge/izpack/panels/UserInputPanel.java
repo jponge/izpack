@@ -894,21 +894,23 @@ public class UserInputPanel extends IzPanel
             // If so, then add them to validateParamMap.
             // ----------------------------------------------------------
             validateParams = element.getChildrenNamed(RULE_PARAM);
-            if (validateParams != null && validateParams.size() > 0 && validateParamMap == null)
+            if (validateParams != null && validateParams.size() > 0) 
             {
-
-                validateParamMap = new HashMap();
                 hasParams = true;
+                
+                if (validateParamMap == null)
+                    validateParamMap = new HashMap();
 
+                for (Iterator it = validateParams.iterator(); it.hasNext();)
+                {
+                    element = (XMLElement) it.next();
+                    paramName = element.getAttribute(RULE_PARAM_NAME);
+                    paramValue = element.getAttribute(RULE_PARAM_VALUE);
+                    validateParamMap.put(paramName, paramValue);
+                }
+                
             }
 
-            for (Iterator it = validateParams.iterator(); it.hasNext();)
-            {
-                element = (XMLElement) it.next();
-                paramName = element.getAttribute(RULE_PARAM_NAME);
-                paramValue = element.getAttribute(RULE_PARAM_VALUE);
-                validateParamMap.put(paramName, paramValue);
-            }
         }
 
         element = spec.getFirstChildNamed(PROCESSOR);
