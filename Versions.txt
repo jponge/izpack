@@ -39,6 +39,7 @@
 - Documentation figures refreshment (Julien Ponge).
 - Throw an IllegalArgumentException in the compiler if the declared panel
   name differs in case from the founded class name (Klaus Bartz).
+- Fixed minor logic bug - prevent possible NPE (Tino Schwarze)
 
   > 3.8.1 (build 2006.01.06)
 - Added Greek language support (Fabrice Mirabile, thanks to Panayotis
