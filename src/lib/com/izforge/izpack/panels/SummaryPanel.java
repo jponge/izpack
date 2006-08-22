@@ -21,17 +21,13 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
 import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.SummaryProcessor;
 
 /**
@@ -61,33 +57,21 @@ public class SummaryPanel extends IzPanel
      */
     public SummaryPanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata);
-        // We initialize our layout
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints gbConstraints = new GridBagConstraints();
-        setLayout(layout);
-        MultiLineLabel introLabel = createMultiLineLabelLang("SummaryPanel.info");
-        parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
-        gbConstraints.insets = new Insets(0, 0, 20, 0);
-        gbConstraints.fill = GridBagConstraints.NONE;
-        gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-        add(introLabel, gbConstraints);
-
+        super(parent, idata, new IzPanelLayout());
+        add(createMultiLineLabelLang("SummaryPanel.info"));
         try
         {
             textArea = new JEditorPane();
             textArea.setContentType("text/html");
             textArea.setEditable(false);
             JScrollPane scroller = new JScrollPane(textArea);
-            parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 1.0, 1.0);
-            gbConstraints.anchor = GridBagConstraints.CENTER;
-            gbConstraints.fill = GridBagConstraints.BOTH;
-            add(scroller, gbConstraints);
+            add(scroller, NEXT_LINE);
         }
         catch (Exception err)
         {
             err.printStackTrace();
         }
+        getLayoutHelper().completeLayout();
     }
 
     /*

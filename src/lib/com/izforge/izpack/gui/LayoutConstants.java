@@ -71,8 +71,23 @@ public interface LayoutConstants extends SwingConstants
     /** Identifier for gaps for filler. */
     final static int NO_GAP = -13;
 
+    /** Identifier for gaps for filler. */
+    final static int FILLER1_GAP = -14;
+
+    /** Identifier for gaps for filler. */
+    final static int FILLER2_GAP = -15;
+
+    /** Identifier for gaps for filler. */
+    final static int FILLER13_GAP = -16;
+
+    /** Identifier for gaps for filler. */
+    final static int FILLER4_GAP = -17;
+
+    /** Identifier for gaps for filler. */
+    final static int FILLER5_GAP = -18;
+
     /** Identifier for gaps to be evaluated automatically at a late time. */
-    final static int AUTOMATIC_GAP = -14;
+    final static int AUTOMATIC_GAP = -19;
 
     /** Identifier for gaps load marker. */
     final static int GAP_LOAD_MARKER = 0;
@@ -117,32 +132,72 @@ public interface LayoutConstants extends SwingConstants
     public static final int CONTROL_CONSTRAINT = 2;
 
     /** Identifier for the default multi line label constraints. */
-    public static final int MULTILINE_LABEL_CONSTRAINT = 3;
+    public static final int FULL_LINE_COMPONENT_CONSTRAINT = 3;
+
+    /**
+     * Identifier for the default constraints for controls/container which are variable in x and y
+     * dimension.
+     */
+    public static final int XY_VARIABLE_CONSTRAINT = 4;
 
     /** Identifier for the default constraint used by a filler with x direction. */
-    public static final int XDUMMY_CONSTRAINT = 4;
+    public static final int XDUMMY_CONSTRAINT = 5;
 
     /** Identifier for the default constraint used by a filler with y direction. */
-    public static final int YDUMMY_CONSTRAINT = 5;
+    public static final int YDUMMY_CONSTRAINT = 6;
 
     /** Identifier for the default constraint used by a filler with y direction. */
-    public static final int FULL_LINE_CONTROL_CONSTRAINT = 6;
+    public static final int FULL_LINE_CONTROL_CONSTRAINT = 7;
 
-    /** Constant used to specify that no action should be done. Useable for X_STRETCH. */
+    /** Constant used to specify that no action should be done. Useable for X- and Y_STRETCH. */
     public static final int NO_STRETCH = 0;
 
-    /** X_STRETCH constant used to specify relative weighting of stretch factors. */
+    /** X- and Y_STRETCH constant used to specify relative weighting of stretch factors. */
     public static final int RELATIVE_STRETCH = 1;
 
-    /** X_STRETCH constant used to specify absolute weighting of stretch factors. */
+    /** X- and Y_STRETCH constant used to specify absolute weighting of stretch factors. */
     public static final int ABSOLUTE_STRETCH = 2;
 
-    /** X_STRETCH "symbolic" value to signal that the configurable default stretch value should be used. */
+    /**
+     * X_STRETCH "symbolic" value to signal that the configurable default stretch value should be
+     * used.
+     */
     public static final double FULL_LINE_STRETCH = -1.0;
+
+    /**
+     * Y_STRETCH "symbolic" value to signal that the configurable default stretch value should be
+     * used.
+     */
+    public static final double FULL_COLUMN_STRETCH = -2.0;
 
     /**
      * Object constant used as "constraint" at add a component to the IzPanel to signal that this
      * component should be place in the next line.
      */
     public static final String NEXT_LINE = "nextLine";
+
+    /**
+     * Flag used in the IzPanelLayout manager to trigger expansion of all components to the netto
+     * width of a column.
+     */
+    public static final int NO_FILL_OUT_COLUMN = 0;
+
+    /**
+     * Flag used in the IzPanelLayout manager to trigger expansion of all components to the netto
+     * width of a column.
+     */
+    public static final int FILL_OUT_COLUMN_WIDTH = 1;
+
+    /**
+     * Flag used in the IzPanelLayout manager to trigger expansion of all components to the netto
+     * width of a column.
+     */
+    public static final int FILL_OUT_COLUMN_HEIGHT = 2;
+
+    /**
+     * Flag used in the IzPanelLayout manager to trigger expansion of all components to the netto
+     * width of a column.
+     */
+    public static final int FILL_OUT_COLUMN_SIZE = 3;
+
 }

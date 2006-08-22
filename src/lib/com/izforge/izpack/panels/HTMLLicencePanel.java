@@ -19,21 +19,18 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -68,27 +65,14 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
      */
     public HTMLLicencePanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata);
-
-        // We initialize our layout
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints gbConstraints = new GridBagConstraints();
-        setLayout(layout);
-
+        super(parent, idata, new IzPanelLayout());
         // We load the licence
         loadLicence();
 
         // We put our components
 
-        JLabel infoLabel = LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
-                parent.icons.getImageIcon("history"), JLabel.TRAILING);
-        parent.buildConstraints(gbConstraints, 0, 0, 2, 1, 1.0, 0.0);
-        gbConstraints.insets = new Insets(5, 5, 5, 5);
-        gbConstraints.fill = GridBagConstraints.NONE;
-        gbConstraints.anchor = GridBagConstraints.WEST;
-        layout.addLayoutComponent(infoLabel, gbConstraints);
-        add(infoLabel);
-
+        add(LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
+                parent.icons.getImageIcon("history"),  LEADING), NEXT_LINE);
         try
         {
             textArea = new JEditorPane();
@@ -96,11 +80,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
             textArea.addHyperlinkListener(this);
             JScrollPane scroller = new JScrollPane(textArea);
             textArea.setPage(loadLicence());
-            parent.buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 1.0);
-            gbConstraints.anchor = GridBagConstraints.CENTER;
-            gbConstraints.fill = GridBagConstraints.BOTH;
-            layout.addLayoutComponent(scroller, gbConstraints);
-            add(scroller);
+            add(scroller, NEXT_LINE);
         }
         catch (Exception err)
         {
@@ -111,23 +91,15 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
         yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
         group.add(yesRadio);
-        parent.buildConstraints(gbConstraints, 0, 2, 1, 1, 1.0, 0.0);
-        gbConstraints.anchor = GridBagConstraints.WEST;
-        gbConstraints.fill = GridBagConstraints.NONE;
-        layout.addLayoutComponent(yesRadio, gbConstraints);
-        add(yesRadio);
+        add(yesRadio, NEXT_LINE);
         yesRadio.addActionListener(this);
 
         noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.notagree"), true);
         group.add(noRadio);
-        parent.buildConstraints(gbConstraints, 0, 3, 1, 1, 1.0, 0.0);
-        gbConstraints.anchor = GridBagConstraints.WEST;
-        gbConstraints.fill = GridBagConstraints.NONE;
-        gbConstraints.insets = new Insets(0, 5, 5, 5);
-        layout.addLayoutComponent(noRadio, gbConstraints);
-        add(noRadio);
+        add(noRadio, NEXT_LINE);
         noRadio.addActionListener(this);
         setInitialFocus(textArea);
+        getLayoutHelper().completeLayout();
     }
 
     /**
@@ -174,8 +146,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
             parent.exit();
             return false;
         }
-        else
-            return (yesRadio.isSelected());
+        return (yesRadio.isSelected());
     }
 
     /**
@@ -191,7 +162,9 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
                 textArea.setPage(e.getURL());
         }
         catch (Exception err)
-        {}
+        {
+            // TODO: Extend exception handling.
+        }
     }
 
     /** Called when the panel becomes active. */

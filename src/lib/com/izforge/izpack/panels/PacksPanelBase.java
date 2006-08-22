@@ -28,7 +28,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -66,8 +65,8 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
-import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
 
 /**
  * The base class for Packs panels. It brings the common member and methods of the different packs
@@ -334,7 +333,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                                  GridBagConstraints constraints)
     {
         JLabel label = LabelFactory.create(parent.langpack.getString(msgId), parent.icons
-                .getImageIcon(iconId), JLabel.TRAILING);
+                .getImageIcon(iconId), TRAILING);
         if (layout != null && constraints != null) layout.addLayoutComponent(label, constraints);
         add(label);
         return (label);
@@ -384,7 +383,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                                        GridBagConstraints constraints)
     {
         JTextArea area = new JTextArea();
-        area.setMargin(new Insets(2, 2, 2, 2));
+        //area.setMargin(new Insets(2, 2, 2, 2));
         area.setAlignmentX(LEFT_ALIGNMENT);
         area.setCaretPosition(0);
         area.setEditable(false);
@@ -393,6 +392,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
         area.setBorder(BorderFactory.createTitledBorder(parent.langpack.getString(msgId)));
+        area.setFont(getControlTextFont());
 
         if (layout != null && constraints != null)
         {
@@ -486,6 +486,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
                 public void setBorder(Border b)
                 {
+                    // TODO: border support?
                 }
             };
             packsTable.getColumnModel().getColumn(1).setCellRenderer(renderer1);
@@ -499,6 +500,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
                 public void setBorder(Border b)
                 {
+                    // TODO: border support?
                 }
 
                 // public void setFont(Font f)
@@ -506,7 +508,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 // super.setFont(new Font("Monospaced",Font.PLAIN,11));
                 // }
             };
-            renderer2.setHorizontalAlignment(JLabel.RIGHT);
+            renderer2.setHorizontalAlignment(RIGHT);
             packsTable.getColumnModel().getColumn(2).setCellRenderer(renderer2);
             packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
 
@@ -577,10 +579,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
         private JCheckBox display;
 
+        /**
+         * Creates a check box renderer. If useAsEditor is set,
+         * an action listener will be added, else not.
+         * @param useAsEditor
+         */
         public CheckBoxEditorRenderer(boolean useAsEditor)
         {
             display = new JCheckBox();
-            display.setHorizontalAlignment(JLabel.CENTER);
+            display.setHorizontalAlignment(CENTER);
             if (useAsEditor) display.addActionListener(this);
 
         }

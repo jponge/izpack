@@ -114,6 +114,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      * 
      * @param parent The parent window.
      * @param idata The installation data.
+     * @throws IOException 
      */
     public CompilePanel(InstallerFrame parent, InstallData idata) throws IOException
     {
@@ -188,7 +189,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         Iterator it = this.worker.getAvailableCompilers().iterator();
 
         while (it.hasNext())
-            compilerComboBox.addItem((String) it.next());
+            compilerComboBox.addItem(it.next());
 
         subpanel.add(compilerComboBox, gridBagConstraints);
 
@@ -220,7 +221,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         it = this.worker.getAvailableArguments().iterator();
 
         while (it.hasNext())
-            argumentsComboBox.addItem((String) it.next());
+            argumentsComboBox.addItem(it.next());
 
         subpanel.add(argumentsComboBox, gridBagConstraints);
 
@@ -389,11 +390,13 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
     }
 
-    /** The compiler starts. */
-    public void startAction(String name, int noOfJobs)
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.util.AbstractUIProgressHandler#startAction(java.lang.String, int)
+     */
+    public void startAction(String name, int noOfJobs1)
     {
-        this.noOfJobs = noOfJobs;
-        overallProgressBar.setMaximum(noOfJobs);
+        this.noOfJobs = noOfJobs1;
+        overallProgressBar.setMaximum(noOfJobs1);
         parent.lockPrevButton();
     }
 
@@ -474,7 +477,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         compilerComboBox.removeAllItems();
 
         while (it.hasNext())
-            compilerComboBox.addItem((String) it.next());
+            compilerComboBox.addItem(it.next());
 
         // We clip the panel
         Dimension dim = parent.getPanelsContainerSize();
@@ -526,7 +529,10 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         /** visual goodie: button hightlight color */
         private java.awt.Color buttonHColor = null;
 
-        /** Creates new form compilerErrorDialog */
+        /** Creates new form compilerErrorDialog 
+         * @param parent parent to be used
+         * @param title String to be used as title
+         * @param buttonHColor highlight color to be used*/
         public CompilerErrorDialog(java.awt.Frame parent, String title, java.awt.Color buttonHColor)
         {
             super(parent, title, true);
@@ -563,7 +569,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
                 public void windowClosing(java.awt.event.WindowEvent evt)
                 {
-                    closeDialog(evt);
+                    closeDialog();
                 }
             });
 
@@ -636,13 +642,19 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             pack();
         }
 
-        /** Closes the dialog */
-        protected void closeDialog(java.awt.event.WindowEvent evt)
+        /** 
+         * Close the panel.
+         */
+        protected void closeDialog()
         {
             setVisible(false);
             dispose();
         }
 
+        /**
+         * Shows the given errors
+         * @param error error messages to be shown
+         */
         public void show(CompileResult error)
         {
             this.errorMessageText.setText(error.getMessage());
@@ -652,6 +664,10 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             super.setVisible(true);
         }
 
+        /**
+         * Returns the result of this dialog.
+         * @return the result of this dialog
+         */
         public int getResult()
         {
             return this.result;

@@ -19,17 +19,14 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.net.URL;
 
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -57,24 +54,11 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
      */
     public HTMLInfoPanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata);
-
-        // We initialize our layout
-        GridBagLayout layout = new GridBagLayout();
-        GridBagConstraints gbConstraints = new GridBagConstraints();
-        setLayout(layout);
-
+        super(parent, idata,new IzPanelLayout());
         // We add the components
 
-        JLabel infoLabel = LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
-                .getImageIcon("edit"), JLabel.TRAILING);
-        parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
-        gbConstraints.insets = new Insets(5, 5, 5, 5);
-        gbConstraints.fill = GridBagConstraints.NONE;
-        gbConstraints.anchor = GridBagConstraints.SOUTHWEST;
-        layout.addLayoutComponent(infoLabel, gbConstraints);
-        add(infoLabel);
-
+        add(LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
+                .getImageIcon("edit"),  LEADING), NEXT_LINE);
         try
         {
             textArea = new JEditorPane();
@@ -82,16 +66,13 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
             textArea.addHyperlinkListener(this);
             JScrollPane scroller = new JScrollPane(textArea);
             textArea.setPage(loadInfo());
-            parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 1.0, 1.0);
-            gbConstraints.anchor = GridBagConstraints.CENTER;
-            gbConstraints.fill = GridBagConstraints.BOTH;
-            layout.addLayoutComponent(scroller, gbConstraints);
-            add(scroller);
+            add(scroller, NEXT_LINE);
         }
         catch (Exception err)
         {
             err.printStackTrace();
         }
+        getLayoutHelper().completeLayout();
     }
 
     /**
@@ -136,6 +117,8 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
                 textArea.setPage(e.getURL());
         }
         catch (Exception err)
-        {}
+        {
+            //TODO: Handle exception.
+        }
     }
 }

@@ -21,19 +21,15 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.Dimension;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -68,45 +64,37 @@ public class LicencePanel extends IzPanel implements ActionListener
      */
     public LicencePanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata);
-
-        // We initialize our layout
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+        super(parent, idata, new IzPanelLayout());
         // We load the licence
         loadLicence();
 
         // We put our components
 
-        JLabel infoLabel = LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
-                parent.icons.getImageIcon("history"), JLabel.TRAILING);
-        add(infoLabel);
-
-        add(Box.createRigidArea(new Dimension(0, 3)));
-
+        add(LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
+                parent.icons.getImageIcon("history"),  LEADING), NEXT_LINE);
         JTextArea textArea = new JTextArea(licence);
-        textArea.setMargin(new Insets(2, 2, 2, 2));
         textArea.setCaretPosition(0);
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
         JScrollPane scroller = new JScrollPane(textArea);
         scroller.setAlignmentX(LEFT_ALIGNMENT);
-        add(scroller);
+        add(scroller, NEXT_LINE);
 
         ButtonGroup group = new ButtonGroup();
 
         yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
         group.add(yesRadio);
-        add(yesRadio);
+        add(yesRadio, NEXT_LINE);
         yesRadio.addActionListener(this);
 
         noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.notagree"), true);
         group.add(noRadio);
-        add(noRadio);
+        add(noRadio, NEXT_LINE);
         noRadio.addActionListener(this);
         
         setInitialFocus(noRadio);
+        getLayoutHelper().completeLayout();
     }
 
     /** Loads the licence text. */
@@ -149,8 +137,7 @@ public class LicencePanel extends IzPanel implements ActionListener
             parent.exit();
             return false;
         }
-        else
-            return (yesRadio.isSelected());
+        return (yesRadio.isSelected());
     }
 
     /** Called when the panel becomes active. */

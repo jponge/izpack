@@ -61,11 +61,9 @@ public class FinishPanel extends IzPanel implements ActionListener
      */
     public FinishPanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata);
+        super(parent, idata, new IzPanelLayout());
 
         vs = new VariableSubstitutor(idata.getVariables());
-
-        getLayoutHelper().startLayout(new IzPanelLayout());
     }
 
     /**
@@ -88,7 +86,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         {
             // We set the information
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("information"), LEADING));
+                    parent.icons.getImageIcon("information"), LEADING), NEXT_LINE);
             add(IzPanelLayout.createParagraphGap());
             if (idata.uninstallOutJar != null)
             {
@@ -113,6 +111,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         else
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("information"), LEADING), NEXT_LINE);
+        getLayoutHelper().completeLayout(); // Call, or call not?
     }
 
     /**

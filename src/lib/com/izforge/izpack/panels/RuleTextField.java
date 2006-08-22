@@ -77,7 +77,7 @@ public class RuleTextField extends JTextField
     {
         super(digits + 1);
 
-        columns = digits;
+        setColumns(digits);
         this.toolkit = toolkit;
         this.editLength = editLength;
         this.unlimitedEdit = unlimitedEdit;

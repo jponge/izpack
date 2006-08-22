@@ -22,7 +22,7 @@
     <str id="ProcessPanel.headline" txt="Externe Prozesse ausführen"/>
     <str id="ShortcutPanel.headline" txt="Verknüpfungen"/>
     <str id="SimpleFinishPanel.headline" txt="Installation abgeschlossen"/>
-    <str id="SummaryPanel.headline" txt="Zusammenfassung Konfigurarionsdaten"/>
+    <str id="SummaryPanel.headline" txt="Zusammenfassung Konfigurationsdaten"/>
     <str id="TargetPanel.headline" txt="Installationspfad"/>
     <str id="UserInputPanel.headline" txt="Benutzerdaten"/>
     

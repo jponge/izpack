@@ -98,6 +98,9 @@ public class CheckedHelloPanel extends HelloPanel
             // 2. If we are not so much interessted at the type, we can get the value
             // as Object. A DWORD is then a Long Object not a long primitive type.
             Object valObj = rh.getValue(keyName, "UninstallString").getDataAsObject();
+            if(valObj instanceof String  ) // Only to inhibit warnings about local variable never read.
+                valString = (String) valObj;
+
 
             // 3. If we are not secure about the type we should differ between possible
             // types.
@@ -237,6 +240,8 @@ public class CheckedHelloPanel extends HelloPanel
         // We know, that the product is already installed, else we
         // would not in this method. First we get the
         // "default" uninstall key.
+        if(oldVal > 100 ) // Only to inhibit warnings about local variable never read.
+            return;
         String uninstallName = rh.getUninstallName();
         int uninstallModifier = 1;
         while (true)

@@ -35,8 +35,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.IzPanelConstraints;
+import com.izforge.izpack.gui.IzPanelLayout;
+import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.LayoutHelper;
 
 /**
  * This is a sub panel which contains a text field and a browse button for path selection. This is
@@ -49,7 +53,7 @@ import com.izforge.izpack.installer.IzPanel;
  * @author Klaus Bartz
  * 
  */
-public class PathSelectionPanel extends JPanel implements ActionListener
+public class PathSelectionPanel extends JPanel implements ActionListener, LayoutConstants
 {
 
     /**
@@ -90,31 +94,30 @@ public class PathSelectionPanel extends JPanel implements ActionListener
      */
     protected void createLayout()
     {
-        GridBagLayout layout = new GridBagLayout();
-
-        setLayout(layout);
+        // We woulduse the IzPanelLayout also in this "sub"panel.
+        // In an IzPanel there are support of this layout manager at
+        // more than one places. In this panel not, therefore we have
+        // to make all things needed.
+        // First create a layout helper.
+        LayoutHelper layoutHelper = new LayoutHelper(this);
+        // Start the layout.
+        layoutHelper.startLayout(new IzPanelLayout());
+        // One of the rare points we need explicit a constraints.
+        IzPanelConstraints ipc = IzPanelLayout.getDefaultConstraint(TEXT_CONSTRAINT);
+        // The text field should be stretched.
+        ipc.setXStretch(1.0);
         textField = new JTextField(idata.getInstallPath(), 40);
         textField.addActionListener(this);
         parent.setInitialFocus(textField);
-        GridBagConstraints gbConstraints = new GridBagConstraints();
-        parent.getInstallerFrame().buildConstraints(gbConstraints, 0, 1,
-                GridBagConstraints.RELATIVE, 1, 1.0, 0.0);
-        gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gbConstraints.anchor = GridBagConstraints.WEST;
-        gbConstraints.insets = new Insets(0, 0, 0, 10);
-        layout.addLayoutComponent(textField, gbConstraints);
-        add(textField);
-
+        add(textField,ipc);
+        // We would have place between text field and button.
+        add(IzPanelLayout.createHorizontalFiller(3));
+        // No explicit constraints for the button (else implicit) because
+        // defaults are OK.
         browseButton = ButtonFactory.createButton(parent.getInstallerFrame().langpack
                 .getString("TargetPanel.browse"), parent.getInstallerFrame().icons
                 .getImageIcon("open"), idata.buttonsHColor);
         browseButton.addActionListener(this);
-        parent.getInstallerFrame().buildConstraints(gbConstraints, 1, 1,
-                GridBagConstraints.REMAINDER, 1, 0.0, 0.0);
-        gbConstraints.fill = GridBagConstraints.HORIZONTAL;
-        gbConstraints.anchor = GridBagConstraints.EAST;
-        gbConstraints.insets = new Insets(0, 0, 0, 5);
-        layout.addLayoutComponent(browseButton, gbConstraints);
         add(browseButton);
     }
 
@@ -193,16 +196,15 @@ public class PathSelectionPanel extends JPanel implements ActionListener
     {
         return textField;
     }
-    
-     /**
-     * Returns the browse button object for modification or for use
-     * with a different ActionListener.
-     *
+
+    /**
+     * Returns the browse button object for modification or for use with a different ActionListener.
+     * 
      * @return the browse button to open the JFileChooser
      */
     public JButton getBrowseButton()
     {
-    return browseButton;
+        return browseButton;
     }
 
 }

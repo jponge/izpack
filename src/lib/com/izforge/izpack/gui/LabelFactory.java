@@ -98,6 +98,19 @@ public class LabelFactory implements SwingConstants
     }
 
     /**
+     * Returns a new JLabel or FullLineLabel with the horizontal alignment CENTER.
+     * 
+     * @param text the text to be set
+     * @param isFullLine determines whether a FullLineLabel or a JLabel should be created
+     * @return new JLabel or FullLineLabel with the given parameters
+     */
+    public static JLabel create(String text, boolean isFullLine)
+    {
+        return (create(text, CENTER, isFullLine));
+
+    }
+
+    /**
      * Returns a new JLabel with the given horizontal alignment.
      * 
      * @param text the text to be set
@@ -107,6 +120,20 @@ public class LabelFactory implements SwingConstants
     public static JLabel create(String text, int horizontalAlignment)
     {
         return (create(text, null, horizontalAlignment));
+
+    }
+
+    /**
+     * Returns a new JLabel or FullLineLabel with the given horizontal alignment.
+     * 
+     * @param text the text to be set
+     * @param horizontalAlignment horizontal alignment of the label
+     * @param isFullLine determines whether a FullLineLabel or a JLabel should be created
+     * @return new JLabel or FullLineLabel with the given parameters
+     */
+    public static JLabel create(String text, int horizontalAlignment, boolean isFullLine)
+    {
+        return (create(text, null, horizontalAlignment, isFullLine));
 
     }
 
@@ -122,17 +149,74 @@ public class LabelFactory implements SwingConstants
      */
     public static JLabel create(String text, Icon image, int horizontalAlignment)
     {
+        return( create(text, image, horizontalAlignment, false));
+    }
+    
+    /**
+     * Returns a new JLabel or FullLineLabel with the given horizontal alignment. If isUseLabelIcons
+     * is true, the given image will be set to the label. The given text will be set allways to the
+     * label. It is allowed, that image and/or text are null.
+     * 
+     * @param text the text to be set
+     * @param image the image to be used as label icon
+     * @param horizontalAlignment horizontal alignment of the label
+     * @param isFullLine determines whether a FullLineLabel or a JLabel should be created
+     * @return new JLabel or FullLineLabel with the given parameters
+     */
+    public static JLabel create(String text, Icon image, int horizontalAlignment, boolean isFullLine)
+    {
         JLabel retval = null;
         if (image != null && isUseLabelIcons())
         {
-            retval = new JLabel(image);
+            if (isFullLine)
+                retval = new FullLineLabel(image);
+            else
+                retval = new JLabel(image);
         }
         else
         {
-            retval = new JLabel();
+            if (isFullLine)
+                retval = new FullLineLabel();
+            else
+                retval = new JLabel();
         }
         if (text != null) retval.setText(text);
         retval.setHorizontalAlignment(horizontalAlignment);
         return (retval);
     }
+
+    /**
+     * This class is only needed to signal a different layout handling. There is no additonal
+     * functionality related to a JLabel. Only the needed constructors are implemented.
+     * A FullLineLabel gets from the IzPanelLayout as default a constraints for a full line.
+     * Therefore the width of this label do not determine the width of a column as a JLable
+     * it do.
+     * 
+     * @author Klaus Bartz
+     * 
+     */
+    public static class FullLineLabel extends JLabel
+    {
+
+        /**
+         * Creates a <code>JLabel</code> instance with the specified image.
+         * The label is centered vertically and horizontally
+         * in its display area.
+         *
+         * @param image  The image to be displayed by the label.
+         */
+        public FullLineLabel(Icon image)
+        {
+            super(image);
+        }
+
+        /**
+         * Default constructor.
+         */
+        public FullLineLabel()
+        {
+            super();
+        }
+    }
+
 }

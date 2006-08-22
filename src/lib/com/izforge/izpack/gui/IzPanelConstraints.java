@@ -52,33 +52,56 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     private int yGap = IzPanelLayout.DEFAULT_Y_GAPS[-LABEL_GAP];
 
-    private double stretch = 0.0;
+    private double xStretch = 0.0;
+
+    private double yStretch = 0.0;
 
     private Rectangle bounds;
 
     /** for private use by the layout manager */
     Component component = null;
 
-    // public static IzPanelConstraints LABEL_CONSTRAINT = new IzPanelConstraints();
-
+    /** for private use by the layout manager */
+    int preferredHeight = 0;
+    
     /**
-     * Returns the declared stretch value.
+     * Returns the declared stretch value in x direction.
      * 
-     * @return the declared stretch value
+     * @return the declared stretch value in x direction
      */
-    public double getStretch()
+    public double getXStretch()
     {
-        return stretch;
+        return xStretch;
     }
 
     /**
-     * Sets the given value as stretch value.
+     * Sets the given value as stretch value for x direction.
      * 
      * @param stretch value to be set
      */
-    public void setStretch(double stretch)
+    public void setXStretch(double stretch)
     {
-        this.stretch = stretch;
+        this.xStretch = stretch;
+    }
+
+    /**
+     * Returns the declared stretch value in y direction.
+     * 
+     * @return the declared stretch value in y direction
+     */
+    public double getYStretch()
+    {
+        return yStretch;
+    }
+
+    /**
+     * Sets the given value as stretch value for y direction.
+     * 
+     * @param stretch value to be set
+     */
+    public void setYStretch(double stretch)
+    {
+        this.yStretch = stretch;
     }
 
     /**
@@ -132,10 +155,11 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
      * @param yWeight weight at y direction
      * @param xGap gap for x direction
      * @param yGap gap for y direction
-     * @param stretch stretch value for the x direction
+     * @param xStretch stretch value for the x direction
+     * @param yStretch stretch value for the y direction
      */
     public IzPanelConstraints(int xCellAlignment, int yCellAlignment, int xPos, int yPos,
-            int xWeight, int yWeight, int xGap, int yGap, double stretch)
+            int xWeight, int yWeight, int xGap, int yGap, double xStretch, double yStretch)
     {
         this.xCellAlignment = xCellAlignment;
         this.yCellAlignment = yCellAlignment;
@@ -145,7 +169,8 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
         this.yWeight = yWeight;
         setXGap(xGap);
         setYGap(yGap);
-        setStretch(stretch);
+        setXStretch(xStretch);
+        setYStretch(yStretch);
     }
 
     /**

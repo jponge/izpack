@@ -26,6 +26,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager2;
 
+import javax.swing.JComponent;
+
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
@@ -46,7 +48,7 @@ import com.izforge.izpack.installer.IzPanel.Filler;
 public class LayoutHelper implements LayoutConstants
 {
 
-    IzPanel parent;
+    JComponent parent;
 
     /** Indicates whether grid bag layout was started or not */
     protected boolean layoutStarted = false;
@@ -70,25 +72,35 @@ public class LayoutHelper implements LayoutConstants
 
     protected static int X_STRETCH_TYPE = -1;
 
+    protected static int Y_STRETCH_TYPE = -1;
+
     protected static double FULL_LINE_STRETCH_DEFAULT = -1.0;
+
+    protected static double FULL_COLUMN_STRETCH_DEFAULT = -1.0;
+
+    protected static Double INITIAL_STRETCH_DEFAULT = new Double(1.0);
+
+    protected static Double DOUBLE_ZERO = new Double(0.0);
 
     /**
      * Look-up table for gap identifier to gap names for the x direction. The gap names can be used
      * in the XML installation configuration file. Be aware that case sensitivity should be used.
      */
-    public final static String[] X_GAP_NAME_LOOK_UP = { "noXGap", "labelXGap", "textXGab",
+    public final static String[] X_GAP_NAME_LOOK_UP = { "INTERNAL_USED", "labelXGap", "textXGab",
             "controlXGap", "paragraphXGap", "labelToTextXGap", "labelToControlXGap",
             "textToLabelXGap", "controlToLabelXGap", "controlToTextXGap", "textToControlXGap",
-            "firstXGap"};
+            "firstXGap", "INTERNAL_USED", "INTERNAL_USED", "filler1XGap", "filler2XGap",
+            "filler3XGap", "filler4XGap", "filler5XGap"};
 
     /**
      * Look-up table for gap identifier to gap names for the y direction. The gap names can be used
      * in the XML installation configuration file. Be aware that case sensitivity should be used.
      */
-    public final static String[] Y_GAP_NAME_LOOK_UP = { "noYGap", "labelYGap", "textYGab",
+    public final static String[] Y_GAP_NAME_LOOK_UP = { "INTERNAL_USED", "labelYGap", "textYGab",
             "controlYGap", "paragraphYGap", "labelToTextYGap", "labelToControlYGap",
             "textToLabelYGap", "controlToLabelYGap", "controlToTextYGap", "textToControlYGap",
-            "firstYGap"};
+            "firstYGap", "INTERNAL_USED", "INTERNAL_USED", "filler1YGap", "filler2YGap",
+            "filler3YGap", "filler4YGap", "filler5YGap"};
 
     /** Identifier of x gap for all default x gaps. */
     public final static String ALL_X_GAP = "allXGap";
@@ -101,7 +113,7 @@ public class LayoutHelper implements LayoutConstants
      * 
      * @param parent for which this layout manager will be used
      */
-    public LayoutHelper(IzPanel parent)
+    public LayoutHelper(JComponent parent)
     {
         this();
         this.parent = parent;
@@ -168,11 +180,13 @@ public class LayoutHelper implements LayoutConstants
     {
         IzPanelLayout.setAnchor(getAnchor());
         IzPanelLayout.setXStretchType(getXStretchType());
+        IzPanelLayout.setYStretchType(getYStretchType());
         IzPanelLayout.setFullLineStretch(getFullLineStretch());
+        IzPanelLayout.setFullColumnStretch(getFullColumnStretch());
         getXGap(LABEL_GAP); // This call triggers resolving external setting if not already done.
         getYGap(LABEL_GAP); // This call triggers resolving external setting if not already done.
         parent.setLayout(izPanelLayout);
-
+        // parent.add(IzPanelLayout.createGap(TOP_GAP, VERTICAL));
     }
 
     /**
@@ -432,8 +446,8 @@ public class LayoutHelper implements LayoutConstants
     /**
      * Returns the gap which should be used between the given gui objects for the x direction. The
      * value will be configurable by guiprefs modifiers. Valid values are all entries in the static
-     * String array X_GAP_NAME_LOOK_UP of this class. There are constant ints for the indexes of this
-     * array.
+     * String array X_GAP_NAME_LOOK_UP of this class. There are constant ints for the indexes of
+     * this array.
      * 
      * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
      * 
@@ -491,11 +505,12 @@ public class LayoutHelper implements LayoutConstants
         // loaded.
         return (IzPanelLayout.getDefaultXGap(gapId));
     }
+
     /**
      * Returns the gap which should be used between the given gui objects for the y direction. The
      * value will be configurable by guiprefs modifiers. Valid values are all entries in the static
-     * String array Y_GAP_NAME_LOOK_UP of this class. There are constant ints for the indexes of this
-     * array.
+     * String array Y_GAP_NAME_LOOK_UP of this class. There are constant ints for the indexes of
+     * this array.
      * 
      * @param gapId index in array GAP_NAME_LOOK_UP for the needed gap
      * 
@@ -570,24 +585,48 @@ public class LayoutHelper implements LayoutConstants
     {
         if (X_STRETCH_TYPE > -1) return (X_STRETCH_TYPE);
         X_STRETCH_TYPE = ABSOLUTE_STRETCH;
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof InstallData)) return (RELATIVE_STRETCH);
-        String var = null;
-        if (((InstallData) idata).guiPrefs.modifier.containsKey("layoutXStretchType"))
+        String var = ((String) getModifierValue(null, "RELATIVE_STRETCH", null,
+                "layoutXStretchType"));
+        if (var != null)
         {
-            var = (String) ((InstallData) idata).guiPrefs.modifier.get("layoutXStretchType");
-            if (var != null)
-            {
-                if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var))
-                    X_STRETCH_TYPE = RELATIVE_STRETCH;
-                else if ("ABSOLUTE_STRETCH".equalsIgnoreCase(var)
-                        || "ABSOLUTE".equalsIgnoreCase(var))
-                    X_STRETCH_TYPE = ABSOLUTE_STRETCH;
-                else if ("NO_STRETCH".equalsIgnoreCase(var) || "NO".equalsIgnoreCase(var))
-                    X_STRETCH_TYPE = NO_STRETCH;
-            }
+            if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var))
+                X_STRETCH_TYPE = RELATIVE_STRETCH;
+            else if ("ABSOLUTE_STRETCH".equalsIgnoreCase(var) || "ABSOLUTE".equalsIgnoreCase(var))
+                X_STRETCH_TYPE = ABSOLUTE_STRETCH;
+            else if ("NO_STRETCH".equalsIgnoreCase(var) || "NO".equalsIgnoreCase(var))
+                X_STRETCH_TYPE = NO_STRETCH;
         }
         return (X_STRETCH_TYPE);
+    }
+
+    /**
+     * Returns the used stretch type for the y direction. Possible are NO_STRETCH, RELATIVE_STRETCH
+     * and ABSOLUTE_STRETCH. The stretch type will be used at rows where one or more components has
+     * a stretch value greater than 0.0 in the constraints. If NO_STRETCH is used, no stretch will
+     * be performed. If ABSOLUTE_STRETCH is used, parts of the unused area are given to the
+     * components depending on the unmodified stretch value. At RELATIVE_STRETCH first the hole
+     * stretch for a row will be computed. Relative to this value the unused area will be splited.<br>
+     * The default type is ABSOLUTE_STRETCH. With the modifier "layoutYStretchType" of the "info"
+     * section of the installation configuration file this can be changed.
+     * 
+     * @return used stretch type
+     */
+    public static int getYStretchType()
+    {
+        if (Y_STRETCH_TYPE > -1) return (Y_STRETCH_TYPE);
+        Y_STRETCH_TYPE = ABSOLUTE_STRETCH;
+        String var = ((String) getModifierValue(null, "RELATIVE_STRETCH", null,
+                "layoutYStretchType"));
+        if (var != null)
+        {
+            if ("RELATIVE_STRETCH".equalsIgnoreCase(var) || "RELATIVE".equalsIgnoreCase(var))
+                Y_STRETCH_TYPE = RELATIVE_STRETCH;
+            else if ("ABSOLUTE_STRETCH".equalsIgnoreCase(var) || "ABSOLUTE".equalsIgnoreCase(var))
+                Y_STRETCH_TYPE = ABSOLUTE_STRETCH;
+            else if ("NO_STRETCH".equalsIgnoreCase(var) || "NO".equalsIgnoreCase(var))
+                Y_STRETCH_TYPE = NO_STRETCH;
+        }
+        return (Y_STRETCH_TYPE);
     }
 
     /**
@@ -598,21 +637,57 @@ public class LayoutHelper implements LayoutConstants
      * 
      * @return the default value for stretching to a full line
      */
+
     public static double getFullLineStretch()
     {
-        if (FULL_LINE_STRETCH_DEFAULT >= 0.0) return (FULL_LINE_STRETCH_DEFAULT);
-        FULL_LINE_STRETCH_DEFAULT = 0.7;
-        AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof InstallData)) return (FULL_LINE_STRETCH_DEFAULT);
-        String var = null;
-        if (((InstallData) idata).guiPrefs.modifier.containsKey("layoutFullLineStretch"))
+        FULL_LINE_STRETCH_DEFAULT = ((Double) getModifierValue(
+                new Double(FULL_LINE_STRETCH_DEFAULT), INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
+                "layoutFullLineStretch")).doubleValue();
+        return (FULL_LINE_STRETCH_DEFAULT);
+    }
+
+    /**
+     * Returns the default value for stretching to a full column. With the modifier
+     * "layoutFullColumnStretch" of the "info" section of the installation configuration file this
+     * can be changed. Valid are doubles for the value. This setting is possible to give panels a
+     * chance to center the controls in y direction also a control uses stretching.
+     * 
+     * @return the default value for stretching to a full column
+     */
+
+    public static double getFullColumnStretch()
+    {
+        FULL_COLUMN_STRETCH_DEFAULT = ((Double) getModifierValue(new Double(
+                FULL_COLUMN_STRETCH_DEFAULT), INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
+                "layoutFullColumnStretch")).doubleValue();
+        return (FULL_COLUMN_STRETCH_DEFAULT);
+    }
+
+    private static Object getModifierValue(Object currentVal, Object defaultVal, Object readLimit,
+            String key)
+    {
+        if (defaultVal instanceof Integer)
+            if (((Integer) currentVal).intValue() >= ((Integer) readLimit).intValue())
+                return (currentVal);
+        if (defaultVal instanceof Double)
         {
-            var = (String) ((InstallData) idata).guiPrefs.modifier.get("layoutFullLineStretch");
+            if (((Double) currentVal).doubleValue() >= ((Double) readLimit).doubleValue())
+                return (currentVal);
+        }
+        Object retval = defaultVal;
+        AutomatedInstallData idata = AutomatedInstallData.getInstance();
+        if (!(idata instanceof InstallData)) return (retval);
+        String var = null;
+        if (((InstallData) idata).guiPrefs.modifier.containsKey(key))
+        {
+            var = (String) ((InstallData) idata).guiPrefs.modifier.get(key);
             if (var != null)
             {
                 try
                 {
-                    FULL_LINE_STRETCH_DEFAULT = Double.parseDouble(var);
+                    if (defaultVal instanceof Integer) return (new Integer(Integer.parseInt(var)));
+                    if (defaultVal instanceof Double) { return (new Double(Double.parseDouble(var))); }
+                    return (var);
                 }
                 catch (NumberFormatException nfe)
                 {
@@ -621,7 +696,7 @@ public class LayoutHelper implements LayoutConstants
                 }
             }
         }
-        return (FULL_LINE_STRETCH_DEFAULT);
+        return (retval);
     }
 
     /**

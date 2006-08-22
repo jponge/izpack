@@ -30,9 +30,15 @@ import java.awt.LayoutManager2;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
 
+import com.izforge.izpack.panels.PathSelectionPanel;
 import com.izforge.izpack.util.MultiLineLabel;
 
 /**
@@ -60,9 +66,15 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
     private Insets oldParentInsets;
 
-    protected static int[] DEFAULT_Y_GAPS = { -1, 0, 5, 5, 10, 5, 5, 5,     5, 5, 5, 5, 5, 5, 0};
+    private int columnFillOutRule;
 
-    protected static int[] DEFAULT_X_GAPS = { -1, 0, 0, 0, 0, 0, 10, 10,    10, 10, 10, 10, 10, 0};
+    private double[] overallYStretch = { -1.0, 0.0};
+
+    protected static int[] DEFAULT_Y_GAPS = { -1, 0, 5, 5, 10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 12,
+            9, 6, 3, 0};
+
+    protected static int[] DEFAULT_X_GAPS = { -1, 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 10, 10, 15,
+            12, 9, 6, 3, 0};
 
     protected static int[] DEFAULT_X_ALIGNMENT = { LEFT, LEFT, LEFT, LEFT};
 
@@ -72,25 +84,32 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     private static IzPanelConstraints DEFAULT_CONSTRAINTS[] = {
             // Default constraints for labels.
             new IzPanelConstraints(DEFAULT_LABEL_ALIGNMENT, DEFAULT_LABEL_ALIGNMENT, NEXT_COLUMN,
-                    CURRENT_ROW, 1, 1, LABEL_GAP, LABEL_GAP, 0.0),
+                    CURRENT_ROW, 1, 1, AUTOMATIC_GAP, AUTOMATIC_GAP, 0.0, 0.0),
             // Default constraints for text fields.
             new IzPanelConstraints(DEFAULT_TEXT_ALIGNMENT, DEFAULT_TEXT_ALIGNMENT, NEXT_COLUMN,
-                    CURRENT_ROW, 1, 1, TEXT_GAP, TEXT_GAP, 0.0),
-            // Default constraints for other controls.
+                    CURRENT_ROW, 1, 1, AUTOMATIC_GAP, AUTOMATIC_GAP, 0.0, 0.0),
+            // Default constraints for other controls using two columns if possible.
             new IzPanelConstraints(DEFAULT_CONTROL_ALIGNMENT, DEFAULT_CONTROL_ALIGNMENT,
-                    NEXT_COLUMN, CURRENT_ROW, 1, 1, CONTROL_GAP, CONTROL_GAP, 0.0),
-            // Default constraints for multi line labels.
+                    NEXT_COLUMN, CURRENT_ROW, 1, 1, AUTOMATIC_GAP, AUTOMATIC_GAP, 0.0, 0.0),
+            // Default constraints for full line controls.
             new IzPanelConstraints(DEFAULT_LABEL_ALIGNMENT, DEFAULT_LABEL_ALIGNMENT, 0, NEXT_ROW,
-                    10, 10, LABEL_GAP, LABEL_GAP, FULL_LINE_STRETCH),
+                    Byte.MAX_VALUE, Byte.MAX_VALUE, AUTOMATIC_GAP, AUTOMATIC_GAP,
+                    FULL_LINE_STRETCH, 0.0),
+            // Default constraints for constraints for controls/container which are variable in x
+            // and y dimension.
+            new IzPanelConstraints(DEFAULT_LABEL_ALIGNMENT, DEFAULT_LABEL_ALIGNMENT, 0, NEXT_ROW,
+                    Byte.MAX_VALUE, Byte.MAX_VALUE, AUTOMATIC_GAP, AUTOMATIC_GAP,
+                    FULL_LINE_STRETCH, FULL_COLUMN_STRETCH),
             // Default constraints for x filler.
             new IzPanelConstraints(DEFAULT_LABEL_ALIGNMENT, DEFAULT_LABEL_ALIGNMENT, NEXT_COLUMN,
-                    CURRENT_ROW, 1, 1, 0, 0, 0.0),
+                    CURRENT_ROW, 1, 1, 0, 0, 0.0, 0.0),
             // Default constraints for y filler.
             new IzPanelConstraints(DEFAULT_LABEL_ALIGNMENT, DEFAULT_LABEL_ALIGNMENT, 0, NEXT_ROW,
-                    1, 1, 0, 0, 0.0),
+                    1, 1, 0, 0, 0.0, 0.0),
             // Default constraints for other controls using the full line.
             new IzPanelConstraints(DEFAULT_CONTROL_ALIGNMENT, DEFAULT_CONTROL_ALIGNMENT, 0,
-                    NEXT_ROW, 10, 10, CONTROL_GAP, CONTROL_GAP, FULL_LINE_STRETCH),
+                    NEXT_ROW, Byte.MAX_VALUE, Byte.MAX_VALUE, AUTOMATIC_GAP, AUTOMATIC_GAP,
+                    FULL_LINE_STRETCH, 0.0),
 
     };
 
@@ -99,20 +118,47 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
     private static int X_STRETCH_TYPE = RELATIVE_STRETCH;
 
-    private static double FULL_LINE_STRETCH_DEFAULT = 0.7;
+    private static int Y_STRETCH_TYPE = RELATIVE_STRETCH;
+
+    private static double FULL_LINE_STRETCH_DEFAULT = 1.0;
+
+    private static double FULL_COLUMN_STRETCH_DEFAULT = 1.0;
+
+    private static int DEFAULT_TEXTFIELD_LENGTH = 12;
 
     private static final int[][] GAP_INTERMEDIAER_LOOKUP = {
-            { LABEL_GAP, LABEL_TO_TEXT_GAP, LABEL_TO_CONTROL_GAP, LABEL_GAP},
-            { TEXT_TO_LABEL_GAP, TEXT_GAP, TEXT_TO_CONTROL_GAP, TEXT_GAP},
-            { CONTROL_TO_LABEL_GAP, CONTROL_TO_TEXT_GAP, CONTROL_GAP, CONTROL_GAP},
-            { NO_GAP, NO_GAP, NO_GAP, NO_GAP}};
+            { LABEL_GAP, LABEL_TO_TEXT_GAP, LABEL_TO_CONTROL_GAP, LABEL_GAP, LABEL_TO_CONTROL_GAP,
+                    LABEL_GAP, LABEL_GAP},
+            { TEXT_TO_LABEL_GAP, TEXT_GAP, TEXT_TO_CONTROL_GAP, TEXT_TO_LABEL_GAP,
+                    TEXT_TO_CONTROL_GAP, TEXT_GAP, TEXT_GAP},
+            { CONTROL_TO_LABEL_GAP, CONTROL_TO_TEXT_GAP, CONTROL_GAP, CONTROL_TO_LABEL_GAP,
+                    CONTROL_GAP, CONTROL_GAP, CONTROL_GAP},
+            { LABEL_GAP, LABEL_TO_TEXT_GAP, LABEL_TO_CONTROL_GAP, LABEL_GAP, LABEL_TO_CONTROL_GAP,
+                    LABEL_GAP, LABEL_GAP},
+            { CONTROL_TO_LABEL_GAP, CONTROL_TO_TEXT_GAP, CONTROL_GAP, CONTROL_TO_LABEL_GAP,
+                    CONTROL_GAP, CONTROL_GAP, CONTROL_GAP},
+            { NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP},
+            { NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP},
+            { NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP, NO_GAP}};
 
     /**
      * Default constructor
      */
     public IzPanelLayout()
     {
+        this(NO_FILL_OUT_COLUMN);
+    }
+
+    /**
+     * Creates an layout manager which consider the given column fill out rule. Valid rules are
+     * NO_FILL_OUT_COLUMN, FILL_OUT_COLUMN_WIDTH, FILL_OUT_HEIGHT and FILL_OUT_COLUMN_SIZE
+     * 
+     * @param colFillOutRule
+     */
+    public IzPanelLayout(int colFillOutRule)
+    {
         super();
+        columnFillOutRule = colFillOutRule;
     }
 
     /**
@@ -129,6 +175,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 : FillerComponent.class;
         int interId = GAP_INTERMEDIAER_LOOKUP[getIntermediarId(curConst.component.getClass(), null)][getIntermediarId(
                 nextClass, null)];
+        if (interId < 0) interId = -interId;
         return (DEFAULT_Y_GAPS[interId]);
 
     }
@@ -147,6 +194,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 : FillerComponent.class;
         int interId = GAP_INTERMEDIAER_LOOKUP[getIntermediarId(curConst.component.getClass(), null)][getIntermediarId(
                 nextClass, null)];
+        if (interId < 0) interId = -interId;
         return (DEFAULT_X_GAPS[interId]);
 
     }
@@ -163,7 +211,13 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
         if (comp != null)
         {
-            if (MultiLineLabel.class.isAssignableFrom(clazz)) return (3);
+            if (MultiLineLabel.class.isAssignableFrom(clazz)
+                    || LabelFactory.FullLineLabel.class.isAssignableFrom(clazz))
+                return (FULL_LINE_COMPONENT_CONSTRAINT);
+            if (PathSelectionPanel.class.isAssignableFrom(clazz)
+                    || JCheckBox.class.isAssignableFrom(clazz)
+                    || JRadioButton.class.isAssignableFrom(clazz))
+                return (FULL_LINE_CONTROL_CONSTRAINT);
             if (FillerComponent.class.isAssignableFrom(clazz)
                     || javax.swing.Box.Filler.class.isAssignableFrom(clazz))
             {
@@ -172,21 +226,22 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 {
                     size.height = 0;
                     comp.setSize(size);
-                    return (4);
+                    return (XDUMMY_CONSTRAINT);
                 }
                 else if (size.width >= Short.MAX_VALUE || size.width <= 0)
                 {
                     size.width = 0;
                     comp.setSize(size);
-                    return (5);
+                    return (YDUMMY_CONSTRAINT);
                 }
             }
         }
-        if (JLabel.class.isAssignableFrom(clazz)) return (0);
-        if (JTextComponent.class.isAssignableFrom(clazz)) return (1);
-        if (FillerComponent.class.isAssignableFrom(clazz)) return (3);
-        if (javax.swing.Box.Filler.class.isAssignableFrom(clazz)) return (3);
-        return (2); // Other controls.
+        if (JScrollPane.class.isAssignableFrom(clazz)) return (XY_VARIABLE_CONSTRAINT);
+        if (JLabel.class.isAssignableFrom(clazz)) return (LABEL_CONSTRAINT);
+        if (JTextComponent.class.isAssignableFrom(clazz)) return (TEXT_CONSTRAINT);
+        if (FillerComponent.class.isAssignableFrom(clazz)) return (XDUMMY_CONSTRAINT);
+        if (javax.swing.Box.Filler.class.isAssignableFrom(clazz)) return (XDUMMY_CONSTRAINT);
+        return (CONTROL_CONSTRAINT); // Other controls.
     }
 
     /*
@@ -303,36 +358,153 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         int height = 0;
         for (int i = 0; i < components.size(); ++i)
         {
-            int retval = cellSize(row, i).height;
-            if (retval > height) height = retval;
+            int curHeight = getCellSize(i, row, null).height;
+            if (curHeight > height) height = curHeight;
         }
         return (height);
     }
 
     /**
+     * Measures and returns the minimum height required to render the components in the indicated
+     * row.
+     * 
+     * @param row the index of the row to measure
+     * @param maxOverallHeight
+     * @param minOverallHeight
+     * @return minimum height of a row
+     */
+    private int rowHeight(int row, int minOverallHeight, int maxOverallHeight)
+    {
+        // First determine minimum row height and whether there is a y stretch or not.
+        int height = 0;
+        double[] yStretch = getOverallYStretch();
+        if (yStretch[0] <= 0.0) return (rowHeight(row));
+        double maxStretch = 0.0;
+        double[] stretchParts = new double[components.size()];
+        for (int i = 0; i < components.size(); ++i)
+        {
+            IzPanelConstraints constraints = getConstraints(i, row);
+            double stretch = constraints.getYStretch();
+            stretchParts[i] = stretch;
+            if (stretch > maxStretch) maxStretch = stretch;
+            int curHeight = getCellSize(i, row, constraints).height;
+            if (curHeight > height) height = curHeight;
+        }
+        if (maxOverallHeight <= minOverallHeight) return (height);
+        // We have a y stretch and place. Let us disperse it.
+        int pixels = (int) (maxOverallHeight - yStretch[1] - minOverallHeight);
+        int stretchPart = (int) (pixels * maxStretch);
+        if (stretchPart > 0)
+        {
+            height += stretchPart;
+            for (int i = 0; i < components.size(); ++i)
+            {
+                if (stretchParts[i] < 0.00000001) continue;
+                IzPanelConstraints constraints = getConstraints(i, row);
+                Dimension size = constraints.component.getPreferredSize();
+                if (size.height * (1.0 + stretchParts[i]) < height)
+                    size.height = (int) (size.height * (1.0 + stretchParts[i]));
+                else
+                    size.height = height;
+                if (constraints.component instanceof JScrollPane)
+                {   // This is a hack for text areas which uses word wrap. At tests
+                    // they have a preferred width of 100 pixel which breaks the layout.
+
+                    if (((JScrollPane) constraints.component).getViewport().getView() instanceof JTextArea)
+                    {
+                        if (((JTextArea) ((JScrollPane) constraints.component).getViewport()
+                                .getView()).getLineWrap()) size.width = 1000;
+                    }
+                }
+                ((JComponent) constraints.component).setPreferredSize(size);
+
+            }
+
+        }
+        return (height);
+    }
+
+    /**
+     * Returns the sum of the maximum y stretch of each row.
+     * 
+     * @return the sum of the maximum y stretch of each row
+     */
+    private double[] getOverallYStretch()
+    {
+        if (overallYStretch[0] >= 0.0) return (overallYStretch); // Stretch already computed.
+        overallYStretch[0] = 0.0;
+        for (int row = 0; row < rows(); ++row)
+        {
+            double maxStretch = 0.0;
+            double maxGap = 0.0;
+            for (int i = 0; i < components.size(); ++i)
+            {
+                IzPanelConstraints constraints = getConstraints(i, row);
+                resolveDefaultSettings(i, row);
+                if (constraints.getYStretch() == FULL_COLUMN_STRETCH)
+                    constraints.setYStretch(IzPanelLayout.getFullColumnStretch());
+                double curStretch = constraints.getYStretch();
+                if (curStretch > maxStretch) maxStretch = curStretch;
+                double curYGap = constraints.getYGap();
+                if (curYGap > maxGap) maxGap = curYGap;
+            }
+            overallYStretch[0] += maxStretch;
+            overallYStretch[1] += maxGap;
+        }
+        // Modify y stretch depending on the current Y-Stretch type.
+        if (overallYStretch[0] > 0.0)
+        {
+            switch (IzPanelLayout.getYStretchType())
+            {
+            case RELATIVE_STRETCH:
+                break;
+            case ABSOLUTE_STRETCH:
+                overallYStretch[0] = 1.0;
+                break;
+            case NO_STRETCH:
+            default:
+                overallYStretch[0] = 0.0;
+                break;
+            }
+        }
+
+        return (overallYStretch);
+    }
+
+    /**
      * Measures and returns the minimum size required to render the component in the indicated row
-     * and column.
+     * and column. The constraints can be null.
      * 
      * @param row the index of the row to measure
      * @param column the column of the component
+     * @param constraints constraints of current component
      * @return size of the given cell
      */
-    private Dimension cellSize(int row, int column)
+    private Dimension getCellSize(int column, int row, IzPanelConstraints constraints)
     {
         Dimension retval = new Dimension();
         Component component;
-        IzPanelConstraints constraints;
 
         try
         {
-            constraints = getConstraint(column, row);
+            if (constraints == null) constraints = getConstraints(column, row);
             if (constraints != null)
             {
                 component = constraints.component;
-                Dimension dim = component.getMinimumSize();
-                retval.height = dim.height;
-                retval.width = dim.width;
+                // Some components returns the needed size with getPreferredSize
+                // some with getMinimumSize. Therefore following code...
+                Dimension dim = component.getPreferredSize();
+                Dimension dim2 = component.getMinimumSize();
+                retval.height = (dim.height > dim2.height) ? dim.height : dim2.height;
+                retval.width = (dim.width > dim2.width) ? dim.width : dim2.width;
+                if (component instanceof JScrollPane)
+                { // But at a JScrollPane we have to use the minimum size because
+                    // preferred size is the size of the view.
+                    retval.height = dim2.height;
+                    retval.width = dim2.width;
+                }
                 if (needsReEvaluation(component)) retval.width = 0;
+
             }
         }
         catch (Throwable exception)
@@ -358,10 +530,19 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     private int minimumColumnWidth(int column)
     {
         int maxWidth = 0;
+        Dimension[] cs = new Dimension[rows()];
         for (int i = 0; i < rows(); ++i)
         {
-            Dimension cs = cellSize(i, column);
-            if (maxWidth < cs.width) maxWidth = cs.width;
+            IzPanelConstraints constraints = getConstraints(column, i);
+            cs[i] = getCellSize(column, i, constraints);
+            if (constraints.getXWeight() <= 1) if (maxWidth < cs[i].width) maxWidth = cs[i].width;
+        }
+        if (maxWidth == 0)
+        {
+            for (int i = 0; i < rows(); ++i)
+            {
+                if (maxWidth < cs[i].width) maxWidth = cs[i].width;
+            }
         }
         return (maxWidth);
     }
@@ -386,7 +567,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      * @param row row of the component
      * @return the constraint object of the component at the given place
      */
-    private IzPanelConstraints getConstraint(int col, int row)
+    private IzPanelConstraints getConstraints(int col, int row)
     {
         if (col >= columns() || row >= rows()) return (null);
         Object obj = components.get(col);
@@ -398,17 +579,41 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             }
             catch (Throwable t)
             {
-                return (null);
+                obj = null;
             }
+            if (obj != null) return ((IzPanelConstraints) obj);
+            // no constraints is possible if no valid component
+            // was added under this component.
+            // Put dummy components into the array.
+
+            ArrayList colA = (ArrayList) components.get(col);
+            for (int curRow = colA.size(); row >= curRow; ++curRow)
+            {
+
+                IzPanelConstraints currentConst = IzPanelLayout
+                        .getDefaultConstraint(XDUMMY_CONSTRAINT);
+                currentConst.setXPos(col);
+                currentConst.setYPos(curRow);
+                currentConst.component = new FillerComponent();
+                try
+                {
+                    ((ArrayList) components.get(col)).add(row, currentConst);
+                }
+                catch (Throwable t)
+                {
+                    return (null);
+                }
+            }
+            return (getConstraints(col, row));
         }
-        if (obj != null) return ((IzPanelConstraints) obj);
         return (null);
     }
 
     private int getAdaptedXPos(int xpos, int curWidth, Dimension curDim,
             IzPanelConstraints currentConst)
     {
-        int adaptedXPos = xpos + currentConst.getXGap();
+        int adaptedXPos = xpos;// currentConst.getXGap();
+        if ((columnFillOutRule & FILL_OUT_COLUMN_WIDTH) > 0) return (adaptedXPos);
         switch (currentConst.getXCellAlignment())
         {
         case LEFT:
@@ -423,34 +628,36 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
         }
         return (adaptedXPos);
-
     }
 
     private int getAdaptedYPos(int ypos, int curHeight, Dimension curDim,
             IzPanelConstraints currentConst)
     {
-        int adaptedYPos = ypos + currentConst.getYGap();
+        int adaptedYPos = ypos;// + currentConst.getYGap();
+        if ((columnFillOutRule & FILL_OUT_COLUMN_HEIGHT) > 0) return (adaptedYPos);
+        int height = curDim.height;
         switch (currentConst.getYCellAlignment())
         {
         case TOP:
             break;
         case BOTTOM:
-            adaptedYPos += curHeight - curDim.height;
+            adaptedYPos += curHeight - height;
             break;
         case CENTER:
         default:
-            adaptedYPos += (curHeight - curDim.height) / 2;
+            adaptedYPos += (curHeight - height) / 2;
             break;
 
         }
+        if (adaptedYPos < ypos) return (ypos);
         return (adaptedYPos);
     }
 
     private void resolveDefaultSettings(int col, int row)
     {
-        IzPanelConstraints currentConst = getConstraint(col, row);
-        IzPanelConstraints nextYConst = getConstraint(col, row + 1);
-        IzPanelConstraints nextXConst = getConstraint(col + 1, row);
+        IzPanelConstraints currentConst = getConstraints(col, row);
+        IzPanelConstraints nextYConst = getConstraints(col, row + 1);
+        IzPanelConstraints nextXConst = getConstraints(col + 1, row);
         if (currentConst == null) return;
         int gap = currentConst.getYGap();
         if (gap == AUTOMATIC_GAP)
@@ -499,7 +706,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         Dimension realSizeDim = parent.getSize();
         Insets insets = parent.getInsets();
 
-        int rowHeight;
+        int rowHeight = 0;
         int onceAgain = 0;
         int[] generellOffset = new int[] { 0, 0};
         // int generellYOffset = 0;
@@ -508,6 +715,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         int overallHeight = 0;
         int anchorNeedsReEval = 0;
         Rectangle curRect = new Rectangle();
+        int minOverallHeight = minimumOverallHeight();
+        int maxOverallHeight = realSizeDim.height - insets.top - insets.bottom;
         while (anchorNeedsReEval < 2)
         {
             int ypos = insets.top;
@@ -521,15 +730,15 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             {
                 int outerRowHeight = 0;
                 int xpos = insets.left;
-                rowHeight = rowHeight(row);
+                // rowHeight = rowHeight(row, minOverallHeight, maxOverallHeight);
                 int col = 0;
                 IzPanelConstraints[] colConstraints = new IzPanelConstraints[columns()];
                 int usedWidth = 0;
                 Dimension curDim;
                 while (col < columns())
                 {
-                    resolveDefaultSettings(col, row);
-                    IzPanelConstraints currentConst = getConstraint(col, row);
+                    if (col == 0) rowHeight = rowHeight(row, minOverallHeight, maxOverallHeight);
+                    IzPanelConstraints currentConst = getConstraints(col, row);
                     colConstraints[col] = currentConst;
                     Component currentComp = currentConst.component;
                     curDim = currentComp.getPreferredSize();
@@ -540,7 +749,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                         int weight = currentConst.getXWeight();
                         while (weight > 1 && col < columns())
                         {
-                            colConstraints[col] = getConstraint(col, row);
+                            colConstraints[col] = getConstraints(col, row);
                             if (!(colConstraints[col].component instanceof FillerComponent)) break;
                             curWidth += minimumColumnWidth(col);
                             col++;
@@ -550,10 +759,18 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                     // width known
                     int adaptedXPos = getAdaptedXPos(xpos, curWidth, curDim, currentConst);
                     int adaptedYPos = getAdaptedYPos(ypos, rowHeight, curDim, currentConst);
+                    // currentComp.setBounds(adaptedXPos + generellOffset[0], adaptedYPos
+                    // + currentConst.getYGap() + generellOffset[1], curWidth, rowHeight);
+                    // + generellOffset[1], curWidth, rowHeight);
+                    int useWidth = curDim.width;
+                    int useHeight = curDim.height;
+                    if ((columnFillOutRule & FILL_OUT_COLUMN_WIDTH) > 0) useWidth = curWidth;
+                    if ((columnFillOutRule & FILL_OUT_COLUMN_HEIGHT) > 0) useHeight = rowHeight;
+                    if (curWidth < useWidth) useWidth = curWidth;
+                    // First setBounds using computed offsets and the size which exist previous.
                     currentComp.setBounds(adaptedXPos + generellOffset[0], adaptedYPos
-                            + currentConst.getYGap() + generellOffset[1], curWidth, rowHeight);
+                            + generellOffset[1], useWidth, useHeight);
                     currentComp.getBounds(curRect);
-
                     if (!(currentComp instanceof FillerComponent))
                     {
                         if (curRect.x < minWidth) minWidth = curRect.x;
@@ -564,7 +781,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                     curMax = (int) curRect.getMaxY();
                     currentConst.setBounds(curRect);
                     if (curMax - minHeight > overallHeight) overallHeight = curMax - minHeight;
-                    xpos += currentComp.getSize().width + currentConst.getXGap();
+                    // xpos += currentComp.getSize().width + currentConst.getXGap();
+                    xpos += curWidth + currentConst.getXGap();
                     usedWidth += curWidth;
                     if (outerRowHeight < rowHeight + currentConst.getYGap())
                         outerRowHeight = rowHeight + currentConst.getYGap();
@@ -576,9 +794,9 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 // Determine hole stretch of this row.
                 for (i = 0; i < colConstraints.length; ++i)
                 {
-                    if (colConstraints[i].getStretch() == FULL_LINE_STRETCH)
-                        colConstraints[i].setStretch(IzPanelLayout.getFullLineStretch());
-                    rowStretch += colConstraints[i].getStretch();
+                    if (colConstraints[i].getXStretch() == FULL_LINE_STRETCH)
+                        colConstraints[i].setXStretch(IzPanelLayout.getFullLineStretch());
+                    rowStretch += colConstraints[i].getXStretch();
                 }
                 // Modify rowStretch depending on the current X-Stretch type.
                 if (rowStretch > 0.0)
@@ -605,12 +823,10 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                     int oldOnceAgain = onceAgain;
                     for (i = 0; i < colConstraints.length; ++i)
                     {
-                        int curPixel = (int) ((colConstraints[i].getStretch() / rowStretch) * pixel);
+                        int curPixel = (int) ((colConstraints[i].getXStretch() / rowStretch) * pixel);
 
                         Rectangle curBounds = colConstraints[i].component.getBounds();
                         int newWidth = curPixel + curBounds.width;
-                        Dimension oldDim = colConstraints[i].component.getPreferredSize();
-
                         colConstraints[i].component.setBounds(curBounds.x + offset, curBounds.y,
                                 newWidth, curBounds.height);
                         colConstraints[i].component.getBounds(curRect);
@@ -636,7 +852,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
                 if (onceAgain == 1) continue;
                 onceAgain = 0;
-                ypos = ypos + outerRowHeight;
+                ypos += outerRowHeight;
                 row++;
             }
             anchorNeedsReEval += resolveGenerellOffsets(generellOffset, realSizeDim, insets,
@@ -651,7 +867,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         {
             for (int col = 0; col < columns(); ++col)
             {
-                IzPanelConstraints currentConst = getConstraint(col, row);
+                IzPanelConstraints currentConst = getConstraints(col, row);
                 if (currentConst != null)
                     currentConst.component.setBounds(currentConst.getBounds());
 
@@ -728,7 +944,9 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      */
     private boolean needsReEvaluation(Component comp)
     {
-        return (comp instanceof com.izforge.izpack.util.MultiLineLabel);
+        if ((comp instanceof com.izforge.izpack.util.MultiLineLabel)
+                || (comp instanceof com.izforge.izpack.panels.PathSelectionPanel)) return (true);
+        return (false);
     }
 
     /*
@@ -771,28 +989,31 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         return (minimumLayoutSize(target));
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.awt.LayoutManager2#addLayoutComponent(java.awt.Component, java.lang.Object)
      */
     public void addLayoutComponent(Component comp, Object constraints)
     {
         if (comp == null) throw new NullPointerException("component has to be not null");
+        IzPanelConstraints cc;
         if (!(constraints instanceof IzPanelConstraints))
         {
-            Object oldVal = constraints;
             if ((comp instanceof FillerComponent)
                     && ((FillerComponent) comp).getConstraints() != null)
-                constraints = ((FillerComponent) comp).getConstraints();
+                cc = (IzPanelConstraints) ((FillerComponent) comp).getConstraints().clone();
             else
-                constraints = IzPanelLayout.DEFAULT_CONSTRAINTS[getIntermediarId(comp.getClass(),
-                        comp)];
-            if (NEXT_LINE.equals(oldVal))
+                cc = (IzPanelConstraints) IzPanelLayout.DEFAULT_CONSTRAINTS[getIntermediarId(comp
+                        .getClass(), comp)].clone();
+            if (NEXT_LINE.equals(constraints))
             {
-                ((IzPanelConstraints) constraints).setXPos(0);
-                ((IzPanelConstraints) constraints).setYPos(NEXT_ROW);
+                cc.setXPos(0);
+                cc.setYPos(NEXT_ROW);
             }
         }
-        IzPanelConstraints cc = (IzPanelConstraints) ((IzPanelConstraints) constraints).clone();
+        else
+            cc = (IzPanelConstraints) ((IzPanelConstraints) constraints).clone();
         cc.component = comp;
         int i;
         // Modify positions if constraint value is one of the symbolic ints.
@@ -806,26 +1027,37 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         cc.setXPos(xPos);
         // Now we know real x and y position. If needed, expand array or
         // array of array.
-        if (components.size() <= cc.getXPos())
+        int perfCol = cc.getXWeight() < Byte.MAX_VALUE ? cc.getXWeight() : 1;
+        if (components.size() < cc.getXPos() + perfCol)
         {
-            for (i = components.size() - 1; i < cc.getXPos(); ++i)
+            for (i = components.size() - 1; i < cc.getXPos() + perfCol - 1; ++i)
                 components.add(new ArrayList());
         }
-        ArrayList xComp = (ArrayList) components.get(xPos);
-
-        if (xComp.size() <= yPos)
+        IzPanelConstraints curConst = cc;
+        for (int j = 0; j < perfCol; ++j)
         {
-            for (i = xComp.size() - 1; i < yPos - 1; ++i)
+            ArrayList xComp = (ArrayList) components.get(xPos);
+            if (xComp.size() < yPos)
             {
-                IzPanelConstraints dc = getDefaultConstraint(XDUMMY_CONSTRAINT);
-                dc.component = new FillerComponent();
-                xComp.add(dc);
+                for (i = xComp.size() - 1; i < yPos - 1; ++i)
+                {
+                    IzPanelConstraints dc = getDefaultConstraint(XDUMMY_CONSTRAINT);
+                    dc.component = new FillerComponent();
+                    xComp.add(dc);
 
+                }
+            }
+
+            xComp.add(yPos, curConst);
+            if (j < perfCol - 1)
+            {
+                curConst = getDefaultConstraint(XDUMMY_CONSTRAINT);
+                curConst.component = new FillerComponent();
+                xPos++;
             }
         }
-
-        xComp.add(yPos, cc);
-        if (currentYPos < xComp.size() - 1) currentYPos = xComp.size() - 1;
+        int xcsize = ((ArrayList) components.get(xPos)).size() - 1;
+        if (currentYPos < xcsize) currentYPos = xcsize;
         currentXPos = xPos;
 
     }
@@ -862,19 +1094,77 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 
     /**
      * Returns a filler component which has self the size 0|0. Additional there is a constraints
-     * which has the x position 0,y position NEXT_ROW, x and y weight 10, stretch 1.0 and the gaps
-     * PARAGRAPH_GAP. The result will be that a gap will be inserted into the layout at the current
-     * place with the height equal to the defined paragraph gap. Use NEXT_LINE (or NEXT_ROW in the
-     * constraints) for the next added control, else the layout will be confused.
+     * which has the x position 0,y position NEXT_ROW, x and y weight 10, x-stretch 1.0 and the y
+     * gap PARAGRAPH_GAP. Add the returned component to the IzPanel. Use NEXT_LINE (or NEXT_ROW in
+     * the constraints) for the next added control, else the layout will be confused.
      * 
      * @return a filler component with the height of the defined paragraph gap
      */
     public static Component createParagraphGap()
     {
-        return (new FillerComponent(new Dimension(0, 0), new IzPanelConstraints(
-                DEFAULT_CONTROL_ALIGNMENT, DEFAULT_CONTROL_ALIGNMENT, 0, NEXT_ROW, 10, 10,
-                PARAGRAPH_GAP, PARAGRAPH_GAP, 1.0)));
+        return (createGap(PARAGRAPH_GAP, VERTICAL));
+    }
 
+    /**
+     * Returns a filler component which has self the size 0|0. Additional there is a constraints
+     * which has the x position 0,y position NEXT_ROW, x and y weight 10, x-stretch 1.0 and the y
+     * gap FILLER&lt;given filler number&gt;_GAP. Add the returned component to the IzPanel. Use
+     * NEXT_LINE (or NEXT_ROW in the constraints) for the next added control, else the layout will
+     * be confused. Attention! fillerNumber determines not directly the size of filler else the
+     * filler type. The size can be determined in the config file as modifier in the info section
+     * defining from filler1YGap to filler5YGap.
+     * 
+     * @param fillerNumber number of the filler which should be used
+     * @return a filler component with the height of the defined paragraph gap
+     */
+    public static Component createVerticalFiller(int fillerNumber)
+    {
+        // The symbolic numbers all are negative. Therefore a higher filler needs
+        // a less number.
+        return (createGap(FILLER1_GAP + 1 - fillerNumber, VERTICAL));
+    }
+
+    /**
+     * Returns a filler component which has self the size 0|0. Additional there is a constraints
+     * which has the position NEXT_COLUMN ,y position CURRENT_ROW, x and y weight 1, stretch 0.0 and
+     * the gap FILLER&lt;given filler number&gt;_GAP. Add the returned component to the IzPanel.
+     * Attention! fillerNumber determines not directly the size of filler else the filler type. The
+     * size can be determined in the config file as modifier in the info section defining from
+     * filler1XGap to filler5XGap.
+     * 
+     * @param fillerNumber number of the filler which should be used
+     * @return a filler component with the width of the defined paragraph gap
+     */
+    public static Component createHorizontalFiller(int fillerNumber)
+    {
+        // The symbolic numbers all are negative. Therefore a higher filler needs
+        // a less number.
+        return (createGap(FILLER1_GAP + 1 - fillerNumber, HORIZONTAL));
+    }
+
+    /**
+     * Returns a filler component which has self the size 0|0. Additional there is a constraints
+     * which has the gap defined for the given gap type. If direction is HORIZONTAL, the x position
+     * is NEXT_COLUMN ,y position CURRENT_ROW, x and y weight 1, stretch 0.0. If direction is
+     * VERTICAL, the x position will by 0,y position NEXT_ROW, x and y weight 10, x-stretch 1.0. Add
+     * the returned component to the IzPanel. The result will be that a gap will be inserted into
+     * the layout at the current place with the width equal to the defined paragraph gap.
+     * 
+     * @param gapType type of gap to be used
+     * @param direction direction to be used
+     * 
+     * @return a filler component with the width of the defined paragraph gap
+     */
+
+    public static Component createGap(int gapType, int direction)
+    {
+        if (direction == HORIZONTAL)
+            return (new FillerComponent(new Dimension(0, 0), new IzPanelConstraints(
+                    DEFAULT_CONTROL_ALIGNMENT, DEFAULT_CONTROL_ALIGNMENT, NEXT_COLUMN, CURRENT_ROW,
+                    1, 1, gapType, 0, 0.0, 0.0)));
+        return (new FillerComponent(new Dimension(0, 0), new IzPanelConstraints(
+                DEFAULT_CONTROL_ALIGNMENT, DEFAULT_CONTROL_ALIGNMENT, 0, NEXT_ROW, 10, 10, 0,
+                gapType, 1.0, 0.0)));
     }
 
     /**
@@ -1046,6 +1336,28 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     }
 
     /**
+     * Returns the current used type of stretching for the Y-direction. Possible values are NO,
+     * RELATIVE and ABSOLUTE.
+     * 
+     * @return the current used type of stretching for the Y-direction
+     */
+    public static int getYStretchType()
+    {
+        return Y_STRETCH_TYPE;
+    }
+
+    /**
+     * Sets the type of stretching to be used for the Y-Direction. Possible values are NO, RELATIVE
+     * and ABSOLUTE.
+     * 
+     * @param y_stretch constant to be used for stretch type
+     */
+    public static void setYStretchType(int y_stretch)
+    {
+        Y_STRETCH_TYPE = y_stretch;
+    }
+
+    /**
      * Returns the value which should be used stretching to a full line.
      * 
      * @return the value which should be used stretching to a full line
@@ -1067,17 +1379,38 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     }
 
     /**
-     * Verifies whether a gap id is valid or not. If the id is less than
-     * zero, the sign will be removed. If the id is out of range, an
-     * IndexOutOfBoundsException will be thrown. The return value is the verified 
-     * unsigned id.
+     * Returns the value which should be used stretching to a full column.
+     * 
+     * @return the value which should be used stretching to a full column
+     */
+    public static double getFullColumnStretch()
+    {
+        return FULL_COLUMN_STRETCH_DEFAULT;
+    }
+
+    /**
+     * Sets the value which should be used as default for stretching to a full column.
+     * 
+     * @param fullStretch value to be used as full column stretching default
+     */
+    public static void setFullColumnStretch(double fullStretch)
+    {
+        FULL_COLUMN_STRETCH_DEFAULT = fullStretch;
+
+    }
+
+    /**
+     * Verifies whether a gap id is valid or not. If the id is less than zero, the sign will be
+     * removed. If the id is out of range, an IndexOutOfBoundsException will be thrown. The return
+     * value is the verified unsigned id.
+     * 
      * @param gapId to be verified
      * @return the verified gap id
      */
     public static int verifyGapId(int gapId)
     {
         if (gapId < 0) gapId = -gapId;
-        if ( gapId >= DEFAULT_X_GAPS.length)
+        if (gapId >= DEFAULT_X_GAPS.length)
             throw new IndexOutOfBoundsException("gapId is not in the default gap container.");
         return (gapId);
     }
@@ -1128,6 +1461,26 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     {
         gapId = verifyGapId(gapId);
         DEFAULT_Y_GAPS[gapId] = gap;
+    }
+
+    /**
+     * Returns the default length used by textfields.
+     * 
+     * @return the default length used by textfields
+     */
+    public static int getDefaultTextfieldLength()
+    {
+        return DEFAULT_TEXTFIELD_LENGTH;
+    }
+
+    /**
+     * Sets the value for the default length of textfields.
+     * 
+     * @param val to be set as default length for textfields
+     */
+    public static void setDefaultTextfieldLength(int val)
+    {
+        DEFAULT_TEXTFIELD_LENGTH = val;
     }
 
 }

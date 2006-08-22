@@ -21,8 +21,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -31,17 +29,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import javax.swing.JLabel;
-
+import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.LayoutHelper;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
 
@@ -84,21 +79,11 @@ public class PathInputPanel extends IzPanel implements ActionListener
      */
     public PathInputPanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata);
+        super(parent, idata, new IzPanelLayout());
         // Set default values
         emptyTargetMsg = getI18nStringForClass("empty_target", "TargetPanel");
         warnMsg = getI18nStringForClass("warn", "TargetPanel");
-        // if( this.class.)
-
-        // Customize the default GridBagConstraints.
-        GridBagConstraints gbConstraint = getDefaultGridBagConstraints();
-        gbConstraint.gridwidth = GridBagConstraints.REMAINDER;
-        if (LayoutHelper.getAnchor() == GridBagConstraints.NORTH
-                || LayoutHelper.getAnchor() == GridBagConstraints.NORTHWEST)
-            gbConstraint.weightx = 1.0;
-        else
-            gbConstraint.weightx = 0.0;
-        this.setDefaultGridBagConstraints(gbConstraint);
+         
         String introText = getI18nStringForClass("extendedIntro", "PathInputPanel");
         if (introText == null || introText.endsWith("extendedIntro")
                 || introText.indexOf('$') > -1 )
@@ -108,40 +93,25 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 introText = "";
         }
         // Intro
-        // Create and customize constraint for it.
         // row 0 column 0
-        gbConstraint = getNextYGridBagConstraints();
-        // Create component and add it to this panel.
-        MultiLineLabel introLabel = createMultiLineLabel(introText);
-        add(introLabel, gbConstraint);
+        add(createMultiLineLabel(introText));
         // Label for input
-        // Create and customize constraint for it.
-        // row 1 column 0; is the next Y
-        gbConstraint = getNextYGridBagConstraints();
-        gbConstraint.gridwidth = GridBagConstraints.RELATIVE;
-        gbConstraint.insets = new Insets(0, 0, 10, 0);
-        // Create component and add it to this panel.
-        JLabel infoLabel = createLabel("info", "TargetPanel", "open",
-                JLabel.LEFT);
-        add(infoLabel, gbConstraint);
+        // row 1 column 0.
+        add(createLabel("info", "TargetPanel", "open",
+                LEFT, true), NEXT_LINE);
         // Create path selection components and add they to this panel.
         pathSelectionPanel = new PathSelectionPanel(this, idata);
-        gbConstraint = getNextYGridBagConstraints();
-        gbConstraint.gridwidth = GridBagConstraints.REMAINDER;
-        gbConstraint.fill = GridBagConstraints.HORIZONTAL;
-        gbConstraint.insets = new Insets(0, 0, 0, 0);
-        add(pathSelectionPanel, gbConstraint);
+        add(pathSelectionPanel, NEXT_LINE);
         createLayoutBottom();
-        // Place a footer as last component, if
-        completeGridBagLayout();
-    }
-
+        getLayoutHelper().completeLayout();
+        }
     /**
      * This method does nothing. It is called from ctor of PathInputPanel, to give in a derived
      * class the possibility to add more components under the path input components.
      */
     public void createLayoutBottom()
     {
+        // Derived classes implements additional elements.
     }
 
     /**
@@ -178,10 +148,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
                         .getString("PathInputPanel.required"));
                 return false;
             }
-            else
-            {
-                ok = emitWarning(parent.langpack.getString("installer.warning"), emptyTargetMsg);
-            }
+            ok = emitWarning(parent.langpack.getString("installer.warning"), emptyTargetMsg);
         }
         if (!ok) return ok;
 
@@ -301,8 +268,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
      * As with all IzPack resources, each the above ids should be associated with a separate
      * filename, which is set in the install.xml file at compile time.
      */
-    public static void loadDefaultInstallDir(InstallerFrame parentFrame,
-            InstallData idata)
+    public static void loadDefaultInstallDir(InstallerFrame parentFrame, InstallData idata)
     {
         // Load only once ...
         if (getDefaultInstallDir() != null) return;
@@ -414,8 +380,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
             }
             return true;
         }
-        else
-            return existParent.canWrite();
+        return existParent.canWrite();
     }
 
     /**

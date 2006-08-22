@@ -75,6 +75,8 @@ public class JDKPathPanel extends PathInputPanel
      */
     public boolean isValidated()
     {
+        if(idata.getVariable("PANEL_LAYOUT_TEST") != null)
+            return(true);
         if (super.isValidated())
         {
             if (verifyVersion())

@@ -57,9 +57,8 @@ public class SimpleFinishPanel extends IzPanel
      */
     public SimpleFinishPanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata);
+        super(parent, idata, new IzPanelLayout());
         vs = new VariableSubstitutor(idata.getVariables());
-        getLayoutHelper().startLayout(new IzPanelLayout());
     }
 
     /**
@@ -102,6 +101,7 @@ public class SimpleFinishPanel extends IzPanel
         else
             centerPanel.add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("information"),  LEADING));
+        getLayoutHelper().completeLayout(); // Call, or call not?
 
     }
 

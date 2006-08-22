@@ -112,8 +112,23 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public IzPanel(InstallerFrame parent, InstallData idata)
     {
+      this( parent, idata, (LayoutManager2) null);  
+    }
+    
+    /**
+     * Creates a new IzPanel object with the given layout manager. Valid layout manager are the
+     * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout.
+     * If lm is null, no layout manager will be created or initialized. 
+     * @param parent The parent IzPack installer frame.
+     * @param idata The installer internal data.
+     * @param lm layout manager to be used with this IzPanel
+     */
+    public IzPanel(InstallerFrame parent, InstallData idata, LayoutManager2 lm)
+    {
       super();
       init( parent, idata );
+      if( lm != null )
+          getLayoutHelper().startLayout(lm);
     }
     
     /**
@@ -138,8 +153,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public IzPanel( InstallerFrame parent, InstallData idata, String iconName, int instance )
     {
-      super(  );
-      init( parent, idata );
+      this(parent, idata);
       buildHeadline( iconName, instance );
     }
     
@@ -200,7 +214,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         if( ( imageIconName != null ) && ! "".equals( imageIconName ) )
         {
           headLineLabel = new JLabel( headline, getImageIcon( imageIconName ),
-                                      JLabel.LEADING );
+                                      SwingConstants.LEADING );
         }
         else
         {
@@ -528,6 +542,31 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     /**
+     * Creates a label via LabelFactory using iconId, pos and method getI18nStringForClass for
+     * resolving the text to be used. If the icon id is null, the label will be created also. If
+     * isFullLine true a LabelFactory.FullLineLabel will be created instead of a JLabel. The
+     * difference between both classes are a different layout handling.
+     * 
+     * @param subkey the subkey which should be used for resolving the text
+     * @param alternateClass the short name of the class which should be used if no string is
+     * present with the runtime class name
+     * @param iconId id string for the icon
+     * @param pos horizontal alignment
+     * @param isFullLine determines whether a FullLineLabel or a JLabel should be created
+     * @return the newly created label
+     */
+    public JLabel createLabel(String subkey, String alternateClass, String iconId, int pos,
+            boolean isFullLine)
+    {
+        ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
+        String msg = getI18nStringForClass(subkey, alternateClass);
+        JLabel label = LabelFactory.create(msg, ii, pos, isFullLine);
+        if (label != null) label.setFont(getControlTextFont());
+        return (label);
+
+    }
+
+    /**
      * Creates a label via LabelFactory with the given ids and the given horizontal alignment. If
      * the icon id is null, the label will be created also. The strings are the ids for the text in
      * langpack and the icon in icons of the installer frame.
@@ -539,12 +578,31 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public JLabel createLabel(String textId, String iconId, int pos)
     {
+        return (createLabel(textId, iconId, pos, false));
+    }
+
+    /**
+     * Creates a label via LabelFactory with the given ids and the given horizontal alignment. If
+     * the icon id is null, the label will be created also. The strings are the ids for the text in
+     * langpack and the icon in icons of the installer frame. If isFullLine true a
+     * LabelFactory.FullLineLabel will be created instead of a JLabel. The difference between both
+     * classes are a different layout handling.
+     * 
+     * @param textId id string for the text
+     * @param iconId id string for the icon
+     * @param pos horizontal alignment
+     * @param isFullLine determines whether a FullLineLabel or a JLabel should be created
+     * @return the newly created label
+     */
+    public JLabel createLabel(String textId, String iconId, int pos, boolean isFullLine)
+    {
         ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
-        JLabel label = LabelFactory.create(parent.langpack.getString(textId),ii, pos);
+        JLabel label = LabelFactory.create(parent.langpack.getString(textId), ii, pos, isFullLine);
         if (label != null) label.setFont(getControlTextFont());
         return (label);
 
     }
+
     /**
      * Creates a multi line label with the language dependent text given by the text id. The strings
      * is the id for the text in langpack of the installer frame. The horizontal alignment will be
@@ -566,7 +624,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public MultiLineLabel createMultiLineLabel(String text)
     {
-        return (createMultiLineLabel(text, null, JLabel.LEFT));
+        return (createMultiLineLabel(text, null, SwingConstants.LEFT));
     }
 
     /**
@@ -760,7 +818,18 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public String getSummaryCaption()
     {
-        return (getI18nStringForClass("summaryCaption", this.getClass().getName()));
+        String caption;
+        if (parent.isHeading(this)
+                && idata.guiPrefs.modifier.containsKey("useHeadingForSummary")
+                && ((String) idata.guiPrefs.modifier.get("useHeadingForSummary"))
+                        .equalsIgnoreCase("yes"))
+        {
+            caption = getI18nStringForClass("headline", this.getClass().getName());
+        }
+        else
+            caption = getI18nStringForClass("summaryCaption", this.getClass().getName());
+
+        return (caption);
     }
 
     // ------------------- Summary stuff -------------------- END ---
