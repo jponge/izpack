@@ -48,10 +48,10 @@ public class FinishPanel extends IzPanel implements ActionListener
     private static final long serialVersionUID = 3257282535107998009L;
 
     /** The automated installers generation button. */
-    private JButton autoButton;
+    protected JButton autoButton;
 
     /** The variables substitutor. */
-    private VariableSubstitutor vs;
+    protected VariableSubstitutor vs;
 
     /**
      * The constructor.
@@ -82,6 +82,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         parent.lockNextButton();
         parent.lockPrevButton();
         parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
+        parent.setQuitButtonIcon("done");
         if (idata.installSuccess)
         {
             // We set the information
@@ -158,7 +159,7 @@ public class FinishPanel extends IzPanel implements ActionListener
      * @param destination The path to translate.
      * @return The translated path.
      */
-    private String translatePath(String destination)
+    protected String translatePath(String destination)
     {
         // Parse for variables
         destination = vs.substitute(destination, null);

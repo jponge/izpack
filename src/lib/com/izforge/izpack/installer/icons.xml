@@ -5,6 +5,7 @@
     <icon res="/img/leftarrow.png" id="stepback"/>
     <icon res="/img/rightarrow.png" id="stepforward"/>
     <icon res="/img/stop.png" id="stop"/>
+    <icon res="/img/done.png" id="done"/>
     <icon res="/img/kcontrol.png" id="host"/>
     <icon res="/img/info.png" id="information"/>
     <icon res="/img/contents.png" id="history"/>

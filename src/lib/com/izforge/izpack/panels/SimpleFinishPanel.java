@@ -77,6 +77,7 @@ public class SimpleFinishPanel extends IzPanel
         parent.lockNextButton();
         parent.lockPrevButton();
         parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
+        parent.setQuitButtonIcon("done");
         if (idata.installSuccess)
         {
             

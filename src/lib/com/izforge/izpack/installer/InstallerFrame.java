@@ -972,6 +972,16 @@ public class InstallerFrame extends JFrame
         quitButton.setText(text1);
     }
 
+    public void setQuitButtonIcon(String iconName)
+    {
+        String useButtonIcons = (String) installdata.guiPrefs.modifier.get("useButtonIcons");
+
+        if ( useButtonIcons == null || "yes".equalsIgnoreCase(useButtonIcons))
+        {
+            quitButton.setIcon(icons.getImageIcon(iconName));
+        }
+    }
+
     /*
      * FocusTraversalPolicy objects to handle keybord blocking; the declaration os Object allows to
      * use a pre version 1.4 VM.
