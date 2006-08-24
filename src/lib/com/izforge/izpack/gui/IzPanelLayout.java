@@ -396,16 +396,15 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         int stretchPart = (int) (pixels * maxStretch);
         if (stretchPart > 0)
         {
-            height += stretchPart;
             for (int i = 0; i < components.size(); ++i)
             {
                 if (stretchParts[i] < 0.00000001) continue;
                 IzPanelConstraints constraints = getConstraints(i, row);
                 Dimension size = constraints.component.getPreferredSize();
-                if (size.height * (1.0 + stretchParts[i]) < height)
-                    size.height = (int) (size.height * (1.0 + stretchParts[i]));
+                if (size.height + stretchPart * stretchParts[i] < height)
+                    size.height = (int) (height + stretchPart * stretchParts[i]);
                 else
-                    size.height = height;
+                    size.height = height + stretchPart;
                 if (constraints.component instanceof JScrollPane)
                 {   // This is a hack for text areas which uses word wrap. At tests
                     // they have a preferred width of 100 pixel which breaks the layout.
@@ -419,6 +418,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 ((JComponent) constraints.component).setPreferredSize(size);
 
             }
+            height += stretchPart;
 
         }
         return (height);

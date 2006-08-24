@@ -86,11 +86,21 @@ public class OSClassHelper
 
     }
 
+    /**
+     * Return whether the helper can do the work or not.
+     * @return whether the helper can do the work or not
+     */
     public boolean good()
     {
         return (worker != null);
     }
 
+    /**
+     * Verifies the helper.
+     * @param idata current install data
+     * @return whether the helper is good or not
+     * @throws Exception
+     */
     public boolean verify(AutomatedInstallData idata) throws Exception
     {
         installdata = idata;
