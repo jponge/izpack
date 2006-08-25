@@ -21,8 +21,6 @@ package com.izforge.izpack.panels;
 
 import java.io.File;
 
-import javax.swing.JPanel;
-
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
@@ -42,9 +40,6 @@ public class SimpleFinishPanel extends IzPanel
      * 
      */
     private static final long serialVersionUID = 3689911781942572085L;
-
-    /** The center panel. */
-    protected JPanel centerPanel;
 
     /** The variables substitutor. */
     private VariableSubstitutor vs;
@@ -100,7 +95,7 @@ public class SimpleFinishPanel extends IzPanel
             }
         }
         else
-            centerPanel.add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
+            add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("information"),  LEADING));
         getLayoutHelper().completeLayout(); // Call, or call not?
 

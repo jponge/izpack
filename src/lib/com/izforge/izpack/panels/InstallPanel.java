@@ -75,9 +75,9 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
         super(parent, idata, new IzPanelLayout());
         this.tipLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.tip"),
                 parent.icons.getImageIcon("information"), LEADING);
-        add(this.tipLabel, NEXT_LINE);
+        add(this.tipLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         packOpLabel = LabelFactory.create(" ", LEADING);
-        add(packOpLabel, NEXT_LINE);
+        add(packOpLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
 
         packProgressBar = new JProgressBar();
         packProgressBar.setStringPainted(true);
@@ -89,7 +89,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
 
         overallOpLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.progress"),
                 parent.icons.getImageIcon("information"), LEADING);
-        add(this.overallOpLabel, NEXT_LINE);
+        add(this.overallOpLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
 
         overallProgressBar = new JProgressBar();
         overallProgressBar.setStringPainted(true);
