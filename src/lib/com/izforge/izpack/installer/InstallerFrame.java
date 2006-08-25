@@ -75,6 +75,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
@@ -229,7 +230,7 @@ public class InstallerFrame extends JFrame
             Panel p = (Panel) panelsOrder.get(i);
 
             if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) continue;
-            className = (String) p.className;
+            className = p.className;
             String praefix = "com.izforge.izpack.panels.";
             if (className.indexOf('.') > -1)
             // Full qualified class name
@@ -311,10 +312,10 @@ public class InstallerFrame extends JFrame
 
         // Prepares the glass pane to block the gui interaction when needed
         JPanel glassPane = (JPanel) getGlassPane();
-        glassPane.addMouseListener(new MouseAdapter() {});
-        glassPane.addMouseMotionListener(new MouseMotionAdapter() {});
-        glassPane.addKeyListener(new KeyAdapter() {});
-        glassPane.addFocusListener(new FocusAdapter() {});
+        glassPane.addMouseListener(new MouseAdapter() {/* Nothing todo */});
+        glassPane.addMouseMotionListener(new MouseMotionAdapter() {/* Nothing todo */});
+        glassPane.addKeyListener(new KeyAdapter() {/* Nothing todo */});
+        glassPane.addFocusListener(new FocusAdapter() {/* Nothing todo */});
 
         // We set the layout & prepare the constraint object
         contentPane = (JPanel) getContentPane();
@@ -441,8 +442,9 @@ public class InstallerFrame extends JFrame
                 icon = loadIcon(resPrefix, panelNo, true);
             }
             catch (Exception e1)
-            {}
-            // ignore
+            {
+                // ignore
+            }
         }
         if (icon != null)
         {
@@ -499,9 +501,6 @@ public class InstallerFrame extends JFrame
                 prevButton.setVisible(false);
                 nextButton.setVisible(false);
                 lockNextButton();
-
-                // Set the default button to the only visible button.
-                getRootPane().setDefaultButton(quitButton);
             }
             else
             {
@@ -510,6 +509,23 @@ public class InstallerFrame extends JFrame
                 unlockPrevButton();
                 unlockNextButton();
             }
+            // With VM version >= 1.5 setting default button one time will not work.
+            // Therefore we set it every panel switch and that also later. But in
+            // the moment it seems so that the quit button will not used as default button.
+            // No idea why... (Klaus Bartz, 06.09.25)
+            SwingUtilities.invokeLater(new Runnable() {
+
+                public void run()
+                {
+                    JButton cdb = null;
+                    if( nextButton.isEnabled() )
+                        cdb = nextButton;
+                    else if( quitButton.isEnabled() )
+                        cdb = quitButton;
+                    getRootPane().setDefaultButton(cdb);
+                }
+            });
+            
 
             // Change panels container to the current one.
             panelsContainer.remove(l_panel);
@@ -521,16 +537,22 @@ public class InstallerFrame extends JFrame
                 // was added to the panels container, else the focus hint will
                 // be ignored.
                 // Give a hint for the initial focus to the system.
-                Component inFoc = panel.getInitialFocus();
+                final Component inFoc = panel.getInitialFocus();
                 if (JAVA_SPECIFICATION_VERSION < 1.35)
                 {
                     inFoc.requestFocus();
                 }
                 else
-                {
-                    inFoc.requestFocusInWindow();
-                }
+                {   // On java VM version >= 1.5 it works only if 
+                    // invoke later will be used.
+                    SwingUtilities.invokeLater(new Runnable() {
 
+                        public void run()
+                        {
+                            inFoc.requestFocusInWindow();
+                        }
+                    });
+                }
                 /*
                  * On editable text components position the caret to the end of the cust existent
                  * text.
@@ -781,6 +803,7 @@ public class InstallerFrame extends JFrame
      * 
      * @param res The resource id.
      * @return The resource value, null if not found
+     * @throws Exception 
      */
     public InputStream getResource(String res) throws Exception
     {
@@ -964,6 +987,7 @@ public class InstallerFrame extends JFrame
 
     /**
      * Changes the quit button text. If <tt>text</tt> is null, the default quit text is used.
+     * @param text text to be used for changes
      */
     public void setQuitButtonText(String text)
     {
@@ -972,6 +996,10 @@ public class InstallerFrame extends JFrame
         quitButton.setText(text1);
     }
 
+    /**
+     * Sets a new icon into the quit button if icons should be used, else nothing will be done.
+     * @param iconName name of the icon to be used
+     */
     public void setQuitButtonIcon(String iconName)
     {
         String useButtonIcons = (String) installdata.guiPrefs.modifier.get("useButtonIcons");
