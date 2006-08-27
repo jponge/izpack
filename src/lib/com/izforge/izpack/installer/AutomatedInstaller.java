@@ -43,6 +43,7 @@ import net.n3.nanoxml.XMLElement;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
 
@@ -179,6 +180,7 @@ public class AutomatedInstaller extends InstallerBase
     {
         // TODO: i18n
         System.out.println("[ Starting automated installation ]");
+        Debug.log("[ Starting automated installation ]");
 
         try
         {
@@ -190,6 +192,7 @@ public class AutomatedInstaller extends InstallerBase
             while (panelsIterator.hasNext())
             {
                 Panel p = (Panel) panelsIterator.next();
+                
                 String praefix = "com.izforge.izpack.panels.";
                 if (p.className.compareTo(".") > -1)
                 // Full qualified class name
@@ -199,14 +202,19 @@ public class AutomatedInstaller extends InstallerBase
                 String panelClassName = p.className;
                 String automationHelperClassName = praefix + panelClassName + "AutomationHelper";
                 Class automationHelperClass = null;
+                
+                Debug.log( "AutomationHelper:" + automationHelperClassName );
                 // determine if the panel supports automated install
                 try
                 {
+                    
                     automationHelperClass = Class.forName(automationHelperClassName);
+                    
                 }
                 catch (ClassNotFoundException e)
                 {
                     // this is OK - not all panels have/need automation support.
+                    Debug.log( "ClassNotFoundException-skip :" + automationHelperClassName );
                     continue;
                 }
     
@@ -216,12 +224,13 @@ public class AutomatedInstaller extends InstallerBase
                 {
                     try
                     {
+                        Debug.log( "Instantiate :" + automationHelperClassName );
                         automationHelperInstance = (PanelAutomation) automationHelperClass
                                 .newInstance();
                     }
                     catch (Exception e)
                     {
-                        System.err.println("ERROR: no default constructor for "
+                        Debug.log("ERROR: no default constructor for "
                                 + automationHelperClassName + ", skipping...");
                         continue;
                     }
@@ -247,17 +256,22 @@ public class AutomatedInstaller extends InstallerBase
                 {
                     try
                     {
+                        Debug.log( "automationHelperInstance.runAutomated :" + automationHelperClassName + " entered." );
                         if (! automationHelperInstance.runAutomated(this.idata, panelRoot))
                         {
                             // make installation fail instantly
                             this.result = false;
                             return;
                         }
+                        else
+                        {
+                          Debug.log( "automationHelperInstance.runAutomated :" + automationHelperClassName + " successfully done." );  
+                        }
                     }
                     catch (Exception e)
                     {
-                        System.err.println("ERROR: automated installation failed for panel "
-                                + panelClassName);
+                        Debug.log( "ERROR: automated installation failed for panel "
+                                + panelClassName );
                         e.printStackTrace();
                         this.result = false;
                         continue;
