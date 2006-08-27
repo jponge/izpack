@@ -80,16 +80,16 @@ public class Debug
     /** System.Property Key: IZPACK_LOGFILE = "izpack.logfile" */
     public static final String IZPACK_LOGFILE = "izpack.logfile";
 
-    /** WITHOUT_DATE = 0 */
+    /** LOG_WITHOUT_DATE = 0 */
     public static final int LOG_WITHOUT_DATE = 0;
 
-    /** WITH_DATE = 1 */
+    /** LOG_WITH_DATE = 1 */
     public static final int LOG_WITH_DATE = 1;
 
-    /** WITH_TIME_STAMP = 2 */
+    /** LOG_WITH_TIME_STAMP = 2 */
     public static final int LOG_WITH_TIME_STAMP = 2;
 
-    /** LOG_WITH_DATE | LOG_WITH_TIME_STAMP = 3 */
+    /** LOG_WITH_TIME_AND_DATE= LOG_WITH_DATE | LOG_WITH_TIME_STAMP = 3 */
     public static final int LOG_WITH_TIME_AND_DATE = LOG_WITH_DATE | LOG_WITH_TIME_STAMP;
 
     /** internally initial unintialized TRACE-flag */
