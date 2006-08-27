@@ -59,6 +59,7 @@ import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -100,25 +101,25 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     // ~ Static fields/initializers *********************************************************
 
     /** SPEC_ATTRIBUTE_KDE_SUBST_UID = "KdeSubstUID" */
-    private final static String SPEC_ATTRIBUTE_KDE_SUBST_UID = "KdeSubstUID";
+    public final static String SPEC_ATTRIBUTE_KDE_SUBST_UID = "KdeSubstUID";
 
     /** SPEC_ATTRIBUTE_URL = "url" */
-    private final static String SPEC_ATTRIBUTE_URL = "url";
+    public final static String SPEC_ATTRIBUTE_URL = "url";
 
     /** SPEC_ATTRIBUTE_TYPE = "type" */
-    private final static String SPEC_ATTRIBUTE_TYPE = "type";
+    public final static String SPEC_ATTRIBUTE_TYPE = "type";
 
     /** SPEC_ATTRIBUTE_TERMINAL_OPTIONS = "terminalOptions" */
-    private final static String SPEC_ATTRIBUTE_TERMINAL_OPTIONS = "terminalOptions";
+    public final static String SPEC_ATTRIBUTE_TERMINAL_OPTIONS = "terminalOptions";
 
     /** SPEC_ATTRIBUTE_TERMINAL = "terminal" */
-    private final static String SPEC_ATTRIBUTE_TERMINAL = "terminal";
+    public final static String SPEC_ATTRIBUTE_TERMINAL = "terminal";
 
     /** SPEC_ATTRIBUTE_MIMETYPE = "mimetype" */
-    private final static String SPEC_ATTRIBUTE_MIMETYPE = "mimetype";
+    public final static String SPEC_ATTRIBUTE_MIMETYPE = "mimetype";
 
     /** SPEC_ATTRIBUTE_ENCODING = "encoding" */
-    private final static String SPEC_ATTRIBUTE_ENCODING = "encoding";
+    public final static String SPEC_ATTRIBUTE_ENCODING = "encoding";
 
     /** LOCATION_APPLICATIONS=applications */
     private static final String LOCATION_APPLICATIONS = "applications";
@@ -242,50 +243,52 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /**   */
 
-    /** AUTO_KEY_PROGRAM_GROUP = "programGroup" */
-    private static final String AUTO_KEY_PROGRAM_GROUP = "programGroup";
+    /** AUTO_KEY_PROGRAM_GROUP = SPEC_KEY_PROGRAM_GROUP = "programGroup" */
+    public static final String AUTO_KEY_PROGRAM_GROUP = SPEC_KEY_PROGRAM_GROUP;
 
-    /** AUTO_KEY_SHORTCUT = "shortcut" */
-    private static final String AUTO_KEY_SHORTCUT = "shortcut";
+    /** AUTO_KEY_SHORTCUT = SPEC_KEY_SHORTCUT = "shortcut" */
+    public static final String AUTO_KEY_SHORTCUT = SPEC_KEY_SHORTCUT;
 
     // ------------------------------------------------------
     // automatic script keys attributes
     // ------------------------------------------------------
 
     /** AUTO_ATTRIBUTE_NAME = "name" */
-    private static final String AUTO_ATTRIBUTE_NAME = "name";
+    public static final String AUTO_ATTRIBUTE_NAME = "name";
 
     /** AUTO_ATTRIBUTE_GROUP = "group" */
-    private static final String AUTO_ATTRIBUTE_GROUP = "group";
+    public static final String AUTO_ATTRIBUTE_GROUP = "group";
 
     /** AUTO_ATTRIBUTE_TYPE "type" */
-    private static final String AUTO_ATTRIBUTE_TYPE = "type";
+    public static final String AUTO_ATTRIBUTE_TYPE = "type";
 
     /** AUTO_ATTRIBUTE_COMMAND = "commandLine" */
-    private static final String AUTO_ATTRIBUTE_COMMAND = "commandLine";
+    public static final String AUTO_ATTRIBUTE_COMMAND = "commandLine";
 
     /** AUTO_ATTRIBUTE_DESCRIPTION = "description" */
-    private static final String AUTO_ATTRIBUTE_DESCRIPTION = "description";
+    public static final String AUTO_ATTRIBUTE_DESCRIPTION = "description";
 
     /** AUTO_ATTRIBUTE_ICON = "icon" */
-    private static final String AUTO_ATTRIBUTE_ICON = "icon";
+    public static final String AUTO_ATTRIBUTE_ICON = "icon";
 
     /** AUTO_ATTRIBUTE_ICON_INDEX = "iconIndex" */
-    private static final String AUTO_ATTRIBUTE_ICON_INDEX = "iconIndex";
+    public static final String AUTO_ATTRIBUTE_ICON_INDEX = "iconIndex";
 
     /** AUTO_ATTRIBUTE_INITIAL_STATE = "initialState" */
-    private static final String AUTO_ATTRIBUTE_INITIAL_STATE = "initialState";
+    public static final String AUTO_ATTRIBUTE_INITIAL_STATE = "initialState";
 
     /** AUTO_ATTRIBUTE_TARGET = "target" */
-    private static final String AUTO_ATTRIBUTE_TARGET = "target";
+    public static final String AUTO_ATTRIBUTE_TARGET = "target";
 
     /** AUTO_ATTRIBUTE_WORKING_DIR = "workingDirectory" */
-    private static final String AUTO_ATTRIBUTE_WORKING_DIR = "workingDirectory";
+    public static final String AUTO_ATTRIBUTE_WORKING_DIR = "workingDirectory";
 
     // permission flags
 
     /** CREATE_FOR_ALL = "createForAll" */
-    private static final String CREATE_FOR_ALL = "createForAll";
+    public static final String CREATE_FOR_ALL = "createForAll";
+
+    private static ShortcutPanel self = null;
 
     /** internal flag: create */
     static boolean create;
@@ -408,6 +411,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /** itsUserType */
     private int itsUserType;
+    
+    /** USER_TYPE = "usertype" to store this information in the automated.xml  */
+    public final static String USER_TYPE = "usertype";
 
     /** shortCuts */
     private Vector shortCuts;
@@ -447,6 +453,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         else 
             con = new GridBagConstraints();
         setLayout(super.getLayout());
+        
+        if( self != null )
+          throw new RuntimeException( this.getClass().getName() + " is not allowed to instantiate more than once!" );
+        
+        self = this;
     }
 
     // ~ Methods ****************************************************************************
@@ -1088,7 +1099,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*--------------------------------------------------------------------------*/
     private void createShortcuts()
     {
-        if (!create) { return; }
+        if (!create) { Debug.log( this.getClass().getName() + "::createShortcuts():create=" + create ); return; }
 
         ShortcutData data;
 
@@ -1837,11 +1848,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*--------------------------------------------------------------------------*/
 
     /**
-     * Adds iformation about the shortcuts that have been created during the installation to the XML
-     * tree.
-     * 
-     * @param panelRoot the root of the XML tree
-     */
+     * Returns Instance of themself 
+     */    
+    public static ShortcutPanel getInstance(  )
+    {
+       return self; 
+    }
 
     /*--------------------------------------------------------------------------*/
     /*
@@ -1852,7 +1864,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * is only stored once in a separate XML element, since there is only one.
      * --------------------------------------------------------------------------
      */
-    public void makeXMLData(XMLElement panelRoot)
+    public void makeXMLData( XMLElement panelRoot )
     {
         // ----------------------------------------------------
         // if there are no shortcuts to create, shortcuts are
@@ -1860,8 +1872,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // not supported, then we have nothing to add. Just
         // return
         // ----------------------------------------------------
+        Debug.log( "entering makeXMLData" );
+        
+        
         if (!shortcutsToCreate || !shortcut.supported() || (groupName == null)
-                || simulteNotSupported) { return; }
+                || simulteNotSupported || ! create ) { Debug.log( "abort makeXMLData!" ); return; }
 
         ShortcutData data;
         XMLElement dataElement;
@@ -1878,6 +1893,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         for (int i = 0; i < shortcuts.size(); i++)
         {
+            Debug.log( "entering makeXMLData" );
             data = (ShortcutData) shortcuts.elementAt(i);
             dataElement = new XMLElement(AUTO_KEY_SHORTCUT);
 
@@ -1895,6 +1911,24 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     .toString(data.initialState));
             dataElement.setAttribute(AUTO_ATTRIBUTE_TARGET, data.target);
             dataElement.setAttribute(AUTO_ATTRIBUTE_WORKING_DIR, data.workingDirectory);
+            
+            
+            dataElement.setAttribute( SPEC_ATTRIBUTE_ENCODING, data.deskTopEntryLinux_Encoding );
+            dataElement.setAttribute( SPEC_ATTRIBUTE_MIMETYPE, data.deskTopEntryLinux_MimeType );
+            dataElement.setAttribute( SPEC_ATTRIBUTE_TERMINAL, data.deskTopEntryLinux_Terminal );
+            dataElement.setAttribute( SPEC_ATTRIBUTE_TERMINAL_OPTIONS, data.deskTopEntryLinux_TerminalOptions );
+            dataElement.setAttribute( SPEC_ATTRIBUTE_TYPE, data.deskTopEntryLinux_Type );
+
+            dataElement.setAttribute( SPEC_ATTRIBUTE_URL, data.deskTopEntryLinux_URL );
+
+            dataElement.setAttribute( SPEC_ATTRIBUTE_KDE_SUBST_UID, data.deskTopEntryLinux_X_KDE_SubstituteUID );
+
+            dataElement.setAttribute( CREATE_FOR_ALL, data.createForAll.toString() );// ? Boolean.TRUE : Boolean.FALSE).toString() );
+            dataElement.setAttribute( USER_TYPE, Integer.toString( data.userType ) );
+
+            
+            
+            //TODO: Add Linux.Attibutes
 
             // ----------------------------------------------
             // add the shortcut only if it is either not on
@@ -1928,63 +1962,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * createShortcuts() to complete the operation.
      * --------------------------------------------------------------------------
      */
-    public void runAutomated(XMLElement panelRoot)
-    {
-        // ----------------------------------------------------
-        // if shortcuts are not supported, then we can not
-        // create shortcuts, even if there was any install
-        // data. Just return.
-        // ----------------------------------------------------
-        if (!shortcut.supported()) { return; }
 
-        if (!OsConstraint.oneMatchesCurrentSystem(panelRoot)) { return; }
-
-        shortcuts = new Vector();
-
-        Vector shortcutElements;
-        ShortcutData data;
-        XMLElement dataElement;
-
-        // ----------------------------------------------------
-        // set the name of the program group
-        // ----------------------------------------------------
-        dataElement = panelRoot.getFirstChildNamed(AUTO_KEY_PROGRAM_GROUP);
-        groupName = dataElement.getAttribute(AUTO_ATTRIBUTE_NAME);
-
-        if (groupName == null)
-        {
-            groupName = "";
-        }
-
-        // ----------------------------------------------------
-        // add the details for each of the shortcuts
-        // ----------------------------------------------------
-        shortcutElements = panelRoot.getChildrenNamed(AUTO_KEY_SHORTCUT);
-
-        for (int i = 0; i < shortcutElements.size(); i++)
-        {
-            data = new ShortcutData();
-            dataElement = (XMLElement) shortcutElements.elementAt(i);
-
-            data.name = dataElement.getAttribute(AUTO_ATTRIBUTE_NAME);
-            data.addToGroup = Boolean.valueOf(dataElement.getAttribute(AUTO_ATTRIBUTE_GROUP))
-                    .booleanValue();
-            data.type = Integer.valueOf(dataElement.getAttribute(AUTO_ATTRIBUTE_TYPE)).intValue();
-            data.commandLine = dataElement.getAttribute(AUTO_ATTRIBUTE_COMMAND);
-            data.description = dataElement.getAttribute(AUTO_ATTRIBUTE_DESCRIPTION);
-            data.iconFile = dataElement.getAttribute(AUTO_ATTRIBUTE_ICON);
-            data.iconIndex = Integer.valueOf(dataElement.getAttribute(AUTO_ATTRIBUTE_ICON_INDEX))
-                    .intValue();
-            data.initialState = Integer.valueOf(
-                    dataElement.getAttribute(AUTO_ATTRIBUTE_INITIAL_STATE)).intValue();
-            data.target = dataElement.getAttribute(AUTO_ATTRIBUTE_TARGET);
-            data.workingDirectory = dataElement.getAttribute(AUTO_ATTRIBUTE_WORKING_DIR);
-
-            shortcuts.add(data);
-        }
-
-        createShortcuts();
-    }
+    
 }
 
 /*---------------------------------------------------------------------------*/

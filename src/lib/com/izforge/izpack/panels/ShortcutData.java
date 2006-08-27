@@ -72,6 +72,8 @@ public class ShortcutData implements Cloneable
     public String deskTopEntryLinux_X_KDE_SubstituteUID;
 
     public Boolean createForAll;
+    
+     
 
     /*--------------------------------------------------------------------------*/
     /**
