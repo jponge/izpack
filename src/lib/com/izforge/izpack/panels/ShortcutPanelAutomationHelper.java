@@ -181,7 +181,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
             shortcuts.add(data);
         }
 
-        System.out.print("[ creating shortcuts ");
+        System.out.print("[ Creating shortcuts ");
 
         // ShortcutData data;
 
@@ -223,55 +223,48 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
                 try
                 {
-                    // ----------------------------------------------
-                    // save the shortcut only if it is either not on
-                    // the desktop or if it is on the desktop and
-                    // the user has signalled that it is ok to place
-                    // shortcuts on the desktop.
-                    // ----------------------------------------------
-                    if ((data.type != Shortcut.DESKTOP) || ((data.type == Shortcut.DESKTOP)))
+
+                    // save the shortcut
+
+                    System.out.print(".");
+                    System.out.flush();
+
+                    shortcut.save();
+
+                    // add the file and directory name to the file list
+                    String fileName = shortcut.getFileName();
+                    files.add(0, fileName);
+
+                    File file = new File(fileName);
+                    File base = new File(shortcut.getBasePath());
+                    Vector intermediates = new Vector();
+
+                    // String directoryName = shortcut.getDirectoryCreated ();
+                    execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
+                            ExecutableFile.IGNORE, new ArrayList(), false));
+
+                    files.add(fileName);
+
+                    while ((file = file.getParentFile()) != null)
                     {
-                        // save the shortcut
-
-                        System.out.print(".");
-                        System.out.flush();
-
-                        shortcut.save();
-
-                        // add the file and directory name to the file list
-                        String fileName = shortcut.getFileName();
-                        files.add(0, fileName);
-
-                        File file = new File(fileName);
-                        File base = new File(shortcut.getBasePath());
-                        Vector intermediates = new Vector();
-
-                        // String directoryName = shortcut.getDirectoryCreated ();
-                        execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
-                                ExecutableFile.IGNORE, new ArrayList(), false));
-
-                        files.add(fileName);
-
-                        while ((file = file.getParentFile()) != null)
+                        if (file.equals(base))
                         {
-                            if (file.equals(base))
-                            {
-                                break;
-                            }
-
-                            intermediates.add(file);
+                            break;
                         }
 
-                        if (file != null)
-                        {
-                            Enumeration filesEnum = intermediates.elements();
+                        intermediates.add(file);
+                    }
 
-                            while (filesEnum.hasMoreElements())
-                            {
-                                files.add(0, filesEnum.nextElement().toString());
-                            }
+                    if (file != null)
+                    {
+                        Enumeration filesEnum = intermediates.elements();
+
+                        while (filesEnum.hasMoreElements())
+                        {
+                            files.add(0, filesEnum.nextElement().toString());
                         }
                     }
+
                 }
                 catch (Exception exception)
                 {}
@@ -308,15 +301,18 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         {
             cannot.printStackTrace();
         }
+        System.out.println(" done. ]");
+        System.out.print("[ Add shortcuts to uninstaller ");
 
         UninstallData uninstallData = UninstallData.getInstance();
 
         for (int i = 0; i < files.size(); i++)
         {
             uninstallData.addFile((String) files.elementAt(i));
+            System.out.print(".");
+            System.out.flush();
         }
 
-        // /////parent.unlockNextButton();
         System.out.println(" done. ]");
 
         return true;
