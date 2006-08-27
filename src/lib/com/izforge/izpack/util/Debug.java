@@ -254,7 +254,7 @@ public class Debug
      * -DLOG=true -jar izpack-installer.jar
      * 
      * @param o The Object to log
-     * @param withDate if the given MASK is greater than 0, Log with Date/Timestamp
+     * @param withWhatFormat if the given MASK is greater than 0, Log with Date/Timestamp
      */
     public static void log(Object o, int withWhatFormat)
     {
@@ -312,19 +312,19 @@ public class Debug
     /**
      * Indicates that to log with Date.
      * 
-     * @param withWhat The whished Format
+     * @param withWhatFormat The whished Format
      * @return true if to log with Date
      */
     private static boolean logWithDate(int withWhatFormat)
     {
-        // TODO Auto-generated method stub
+
         return (withWhatFormat & LOG_WITH_DATE) == LOG_WITH_DATE;
     }
 
     /**
      * Indicates that to log with Timestamp.
      * 
-     * @param withWhat The whished Format
+     * @param withWhatFormat The whished Format
      * @return true if to log with Timestamp
      */
     private static boolean logWithTimeStamp(int withWhatFormat)
