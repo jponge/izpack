@@ -1,6 +1,25 @@
-/**
+/*
+ * $Id: copyright-notice-template 1421 2006-03-12 16:32:32Z jponge $
+ * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
+ * http://www.izforge.com/izpack/
+ * http://developer.berlios.de/projects/izpack/
+ * 
+ * Copyright 2006 Marc Eppelmann (marc.eppelmann&#064;gmx.de)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+ 
 package com.izforge.izpack.panels;
 
 import java.io.File;
@@ -21,19 +40,19 @@ import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.Shortcut;
 
 /**
- * @author marc.eppelmann
+ * The ShortcutPanelAutomationHelper is responsible to create Shortcuts
+ * during the automated installation.
+ * Most code comes copied from the ShortcutPanel 
+ * 
+ * @author Marc Eppelmann (marc.eppelmann&#064;gmx.de)
+ * @version $Revision: 1540 $
  * 
  */
 public class ShortcutPanelAutomationHelper implements PanelAutomation
 {
 
-    /** the one shortcut instance for reuse in many locations */
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.izforge.izpack.installer.PanelAutomation#makeXMLData(com.izforge.izpack.installer.AutomatedInstallData,
-     * net.n3.nanoxml.XMLElement)
+    /**
+     * dummy method
      */
     public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
     {
@@ -42,11 +61,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.izforge.izpack.installer.PanelAutomation#runAutomated(com.izforge.izpack.installer.AutomatedInstallData,
-     * net.n3.nanoxml.XMLElement)
+    /**
+     * Implementation of the Shortcut Specific Automation Code 
      */
     public boolean runAutomated(AutomatedInstallData installData, XMLElement panelRoot)
     {
