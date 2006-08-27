@@ -582,7 +582,7 @@
         </build-panel>
         <build-panel name="ShortcutPanel">
             <include name="com/izforge/izpack/panels/ShortcutData.java" />
-            <include name="com/izforge/izpack/panels/ShortcutPanel.java" />
+            <include name="com/izforge/izpack/panels/ShortcutPanel*.java" />
             <include name="com/izforge/izpack/util/xml/*.java" />
         </build-panel>
         <build-panel name="UserInputPanel">
