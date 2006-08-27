@@ -123,7 +123,11 @@
         <panel classname="SummaryPanel"/>
         <panel classname="InstallPanel"/>
         <panel classname="ShortcutPanel"/>
-        <panel classname="SimpleFinishPanel"/>
+        <!-- We use temporary the FinishPanel in the 3.9 Release 
+             to get Access to the [Generate an automatic installation script]-Button
+             to get feedback so quick as possible from all of users, 
+             who wants to get back this feature ;-) -->
+        <panel classname="FinishPanel"/>
     </panels>
 
     <!-- The listeners section for CustomActions -->
