@@ -65,7 +65,7 @@ public class HelloPanel extends IzPanel
      * 
      * @param parent The parent IzPack installer frame.
      * @param idata The installer internal data.
-     * @param lm layout manager to be used with this IzPanel
+     * @param layout layout manager to be used with this IzPanel
      */
 
     public HelloPanel(InstallerFrame parent, InstallData idata, LayoutManager2 layout)
