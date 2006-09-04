@@ -188,7 +188,7 @@
       <module fileurl="file://$PROJECT_DIR$/IzPack-head.iml" filepath="$PROJECT_DIR$/IzPack-head.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="false" project-jdk-name="1.5" />
+  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="false" project-jdk-name="IDEA 4267" />
   <component name="RmicSettings">
     <option name="IS_EANABLED" value="false" />
     <option name="DEBUGGING_INFO" value="true" />
@@ -196,6 +196,7 @@
     <option name="GENERATE_IIOP_STUBS" value="false" />
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
+  <component name="XSLT-Support.FileAssociationsManager" />
   <component name="libraryTable" />
   <component name="uidesigner-configuration">
     <option name="INSTRUMENT_CLASSES" value="true" />

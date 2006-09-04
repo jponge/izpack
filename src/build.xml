@@ -994,28 +994,13 @@ ${dist.dir}/${installer.name}${ver}.${rel}.jar
             
     </target>
 	
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: generate.simple.and.reg.installer                      
-         - - - - - - - - - - - - - - - - - -->
-    <target name="generate.simple.and.reg.installer" depends="generate.installer, generate.installer-reg">
-            
-    </target>
-
-    <!-- ================================= 
+    <!-- =================================
 	   Creates a normal installer for IzPack 
 	  ================================= -->
     <target name="generate.installer" depends="prepare.install.dist">
         <antcall target="exec.izpack.compiler">
             <param name="installer.xmlfile" value="IzPack-install.xml" />
             <param name="installer.name" value="IzPack-install-" />
-        </antcall>
-    </target>
-
-    <!-- Creates an installer for IzPack with registry support -->
-    <target name="generate.installer-reg" depends="prepare.install.dist">
-        <antcall target="exec.izpack.compiler">
-            <param name="installer.xmlfile" value="IzPack-install-reg.xml" />
-            <param name="installer.name" value="IzPack-install-reg-" />
         </antcall>
     </target>
 
@@ -1059,12 +1044,12 @@ Fixing linefeeds for several files in:
 
     <!-- Makes everything, from compilation, customer and javadoc to generating an installer. -->
     <target name="dist"
-            depends="all, create.docu, generate.simple.and.reg.installer"
+            depends="all, create.docu, generate.installer"
             description="makes a complete installer" />
 
     <!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
     <target name="cleandistreg"
-            depends="clean, splashscreen, dist, generate.installer-reg"
+            depends="clean, splashscreen, dist, generate.installer"
             description="creates a full dist with Win32 uninstall registry support" />
 
     <!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->
