@@ -567,6 +567,7 @@ public class InstallerFrame extends JFrame
                 }
             }
             performHeading(panel);
+            performHeadingCounter(panel);
             panel.panelActivate();
             panelsContainer.setVisible(true);
             loadAndShowImage(((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
@@ -1258,6 +1259,8 @@ public class InstallerFrame extends JFrame
         String counterPos = "inHeading";
         if (installdata.guiPrefs.modifier.containsKey("headingPanelCounterPos"))
             counterPos = (String) installdata.guiPrefs.modifier.get("headingPanelCounterPos");
+        // Do not create counter if it should be in the heading, but no heading should be used.
+        if (leftHeadingPanel == null && "inHeading".equalsIgnoreCase(counterPos)) return;
         if (installdata.guiPrefs.modifier.containsKey("headingPanelCounter"))
         {
             headingCounterComponent = null;
@@ -1325,7 +1328,6 @@ public class InstallerFrame extends JFrame
     private void createHeading(JPanel navPanel)
     {
         headingPanel = null;
-        if (!isHeading(null)) return;
         int headingLines = 1;
         // The number of lines can be determined in the config xml file.
         // The first is the header, additonals are descriptions for the header.
@@ -1338,7 +1340,13 @@ public class InstallerFrame extends JFrame
         if (installdata.guiPrefs.modifier.containsKey("headingBackgroundColor"))
             back = Color.decode((String) installdata.guiPrefs.modifier
                     .get("headingBackgroundColor"));
-
+        // Try to create counter if no heading should be used.
+        if (!isHeading(null)) 
+        { 
+            createHeadingCounter(back, navPanel, null);
+            return; 
+        }
+        
         // We create the text labels and the needed panels. From inner to outer.
         // Labels
         createHeadingLabels(headingLines, back);
@@ -1425,8 +1433,20 @@ public class InstallerFrame extends JFrame
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
         int curPanelNo = ((Integer) visiblePanelMapping.get(installdata.curPanelNumber)).intValue();
+        if (headingLabels[headingLines] != null)
+        {
+            loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
+            headingLabels[headingLines].setVisible(true);
+        }
+        headingPanel.setVisible(true);
+
+    }
+    private void performHeadingCounter(IzPanel panel)
+    {
         if (headingCounterComponent != null)
         {
+            int curPanelNo = ((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
+                    .intValue();
             int visPanelsCount = ((Integer) visiblePanelMapping.get(((Integer) visiblePanelMapping
                     .get(installdata.panels.size())).intValue())).intValue();
 
@@ -1444,12 +1464,5 @@ public class InstallerFrame extends JFrame
             else
                 ((JLabel) headingCounterComponent).setText(buf.toString());
         }
-        if (headingLabels[headingLines] != null)
-        {
-            loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
-            headingLabels[headingLines].setVisible(true);
-        }
-        headingPanel.setVisible(true);
-
     }
 }

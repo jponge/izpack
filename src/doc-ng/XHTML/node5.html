@@ -298,48 +298,104 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
       <li>
         <tt>layoutAnchor</tt>:<br />
         layout anchor for IzPanels. Valid are "NORTH", "NORTHWEST", "SOUTHWEST", "SOUTH" and
-        "CENTER". Only panels which are using the GridBagLayout helper methods of IzPanels are
-        supported. These are not all standard panels.
+        "CENTER". Only panels which are using the layout helper of IzPanels are
+        supported. These are not all standard panels. At developing custom panels it is
+		recommended to use the layout helper with an IzPanelLayout.
       </li>
-
       <li>
-        <tt>noGap</tt>:<br />
-        used by some panels as distance between the panel top border and the first control.
+	    <tt>Gaps</tt>:<br />
+		there are defined different gaps between different components of a IzPanel if
+		using IzPanelLayout. The gaps can be set also via the element &lt;modifier&gt; of
+		<a href="node4.html#SECTION00434000000000000000">&lt;guprefs&gt;</a>. It is
+		possible to declare different values for X and Y axis. This will be determined
+		in the key word name. X Gaps are insert after Y gaps under the control for which
+		the gap was declared.  
+		  
+		Following key words are defined:
+		<ul>
+		  <li>
+		    <tt>labelXGap</tt> | <tt>labelYGap</tt>:<br />
+			gap in pixel between two labels in X or Y direction.
+		  </li>
+		  <li>
+		    <tt>textXGap</tt> | <tt>textYGap</tt>:<br />
+			gap in pixel between two text fields.
+		  </li>
+		  <li>
+		    <tt>controlXGap</tt> | <tt>controlYGap</tt>:<br />
+			gap in pixel between two controls other than label or textfield.
+		  </li>
+		  <li>
+		    <tt>paragraphYGap</tt>:<br />
+			gap in pixel for a pragraph. A paragraph will be created in the panel
+			source for controls which should be separated. paragraphXGap is
+			declared, but not used.
+		  </li>
+		  <li>
+		    <tt>labelToTextXGap</tt> | <tt>labelToTextYGap</tt>:<br />
+			gap in pixel between a label (left or top) and a text field (right or bottom).
+		  </li>
+		  <li>
+		    <tt>labelToControlXGap</tt> | <tt>labelToControlYGap</tt>:<br />
+			gap in pixel between a label (left or top) and a control other than a label or a textfield.
+		  </li>
+		  <li>
+		    <tt>textToLabelXGap</tt> | <tt>textToLabelYGap</tt>:<br />
+			gap in pixel between a text field (left or top) and a label.
+		  </li>
+		  <li>
+		    <tt>controlToLabelXGap</tt> | <tt>controlToLabelYGap</tt>:<br />
+			gap in pixel between a control other than a label or a text field and a label.
+		  </li>
+		  <li>
+		    <tt>controlToTextXGap</tt> | <tt>controlToTextYGap</tt>:<br />
+			gap in pixel between  a control other than a label or a text field and a text field.
+		  </li>
+		  <li>
+		    <tt>textToControlXGap</tt> | <tt>textToControlYGap</tt>:<br />
+			gap in pixel between a text field and a control other than a label or a text field .
+		  </li>
+		  <li>
+		    <tt>firstYGap</tt>:<br />
+			gap in pixel between the top border and the first control.
+		  </li>
+		  <li>
+		    <tt>filler[N]XGap</tt> | <tt>filler[N]YGap</tt>:<br />
+			gap in pixel created by the layout manager. Filler are used by some panels.
+			[N] is a number between 1 and 5 to allow to use different filler e.g.
+			filler3XGap or filler1YGap.
+		  </li>
+		  <li>
+		    <tt>allXGap</tt> | <tt>allYGap</tt>:<br />
+			gap in pixel between all controls in X or Y direction. If this is declared
+			all gaps for which no own declaration exists gets this value. If a gap
+			has an own declaration this will be used instead. 
+		  </li>
+		</ul>
       </li>
-
-      <li>
-        <tt>labelGap</tt>:<br />
-        standard gap between labels (in reality this will be a header over the label). Only panels
-        which are using the IzPack factory for labels are supported. These are not all standard
-        panels.
-      </li>
-
-      <li>
-        <tt>paragraphGap</tt>:<br />
-        used by some panels as distance between paragraphs or controls which should have
-		more gap as normal labels.
-      </li>
-
-      <li>
-        <tt>labelToTextGap</tt>:<br />
-        used by some panels as distance between labels and text fields.
-      </li>
-
-      <li>
-        <tt>labelToControlGap</tt>:<br />
-        used by some panels as distance between labels and controls like combo boxes,
-		radio buttons, check boxes.
-      </li>
-
-      <li>
-        <tt>textToLabelGap</tt>:<br />
-        used by some panels as distance between text fields and labels.
-      </li>
-
-      <li>
-        <tt>controlToLabelGap</tt>:<br />
-        used by some panels as distance between controls and labels.
-      </li>
+	  <li>
+	    <a name="layoutStretchType"></a><tt>layoutYStretchType</tt> | <tt>layoutXStretchType</tt>:<br />
+		The IzPanelLayout manager allows to declare stretch factors for controls.
+		This means, that a control will be stratched if there is place in the line.
+		The amount of stretching will be determined by the stretch factor. But 
+		what todo if the hole stretch factor for a line or column is not 1.0?
+		To determine this these settings are exist. Valid values are "RELATIVE",
+		"ABSOLUTE" and "NO". With "NO" no stretch will be performed. with 
+		"RELATIVE" the values are normalized, with "ABSOLUTE" the values will be
+		used as they are (may be a part will be clipped if the sum is greater
+		than 1.0). 
+	  </li>
+	  <li>
+	    <tt>layoutFullLineStretch</tt> | <tt>layoutFullColumnStretch</tt>:<br />
+		As <a href="#layoutStretchType">described</a> there are controls which 
+		should be stretched. Beside fixed values there are the symbolic values
+		FULL_LINE_STRETCH and FULL_COLUMN_STRETCH which are computed at layouting.
+		E.g. MultiLineLabels has this stretch factor for x direction. But what
+		todo if a centered layout is chosen? With a control like this the lines
+		will be stretch to the hole size. With this settings it can be changed.
+		E.g. a factor of 0.7 creates a nice centered layout. The default is 1.0,
+		valid are 0.0 upto 1.0.
+	  </li>
     </ul>
 	<p>It is possible to use an alternatively frame title. Normaly the title has the aspect
 	"IzPack - Installation of " + $APP_NAME. If the langpack key <tt>installer.reversetitle</tt>
@@ -384,7 +440,12 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
         generell switch for heading. If this key does not exist or does not have the value "yes" no
         heading panel will be shown.
       </li>
-
+	  <li>
+        <tt>useHeadingForSummary</tt>:<br />
+		in the language files there are entries for the heading text ([Panel name].headline)
+		and the summary caption ([Panel name].summaryCaption). If this modifier is set to "yes",
+		the text of the heading will be also used for the summary caption.
+	  </li>
       <li>
         <tt>headingLineCount</tt>:<br />
         number of heading lines. If no info lines should be shown the value should be one (not
@@ -410,7 +471,8 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
       <li>
         <tt>headingPanelCounterPos</tt>:<br />
         declares where the counter will be shown. Possible are "inHeading" or
-        "inNavigationPanel".
+        "inNavigationPanel". If "inNavigationPanel" is chosen, the panel counter can be
+		used also no heading was selected. 
       </li>
     </ul>
 

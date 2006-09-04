@@ -50,6 +50,14 @@
         <laf name="looks">
             <os family="unix"/>
         </laf>
+        <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
+    	<modifier key="layoutAnchor" value="CENTER"/>
+    	<modifier key="headingPanelCounter" value="text"/>
+		<modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
+		<modifier key="allYGap" value="3"/>
+		<modifier key="paragraphYGap" value="10"/>	
+		<modifier key="filler1YGap" value="5"/>
+		<modifier key="filler3XGap" value="10"/>
     </guiprefs>
 
     <variables>
@@ -110,11 +118,12 @@
         <res src="border6.png" id="Installer.image.6"/>
         <res src="border7.png" id="Installer.image.7"/>
         <res src="border8.png" id="Installer.image.8"/>
+        <res src="RegistrySpec.xml" id="RegistrySpec.xml"/>
     </resources>
 
     <!-- The panels in a classic order -->
     <panels>
-        <panel classname="HelloPanel"/>
+        <panel classname="CheckedHelloPanel"/>
         <panel classname="HTMLInfoPanel"/>
         <panel classname="LicencePanel"/>
         <panel classname="TargetPanel"/>
@@ -132,6 +141,9 @@
     <!-- The listeners section for CustomActions -->
     <listeners>
         <listener installer="SummaryLoggerInstallerListener"/>
+        <listener installer="RegistryInstallerListener" uninstaller="RegistryUninstallerListener">
+            <os family="windows"/>
+        </listener>
     </listeners>
 
     <!-- The packs section -->
