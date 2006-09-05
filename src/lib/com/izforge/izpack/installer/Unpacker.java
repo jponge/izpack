@@ -22,45 +22,20 @@
 
 package com.izforge.izpack.installer;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Constructor;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
-import java.util.TreeSet;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
+import com.izforge.izpack.*;
+import com.izforge.izpack.event.InstallerListener;
+import com.izforge.izpack.util.*;
 import org.apache.regexp.RE;
 import org.apache.regexp.RECompiler;
 import org.apache.regexp.RESyntaxException;
 
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.ParsableFile;
-import com.izforge.izpack.UpdateCheck;
-import com.izforge.izpack.event.InstallerListener;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.VariableSubstitutor;
+import java.io.*;
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Unpacker class.
@@ -294,6 +269,8 @@ public class Unpacker extends Thread
             // Custom action listener stuff --- beforePacks ----
             informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, new Integer(
                     npacks), handler);
+            packs = idata.selectedPacks;
+            npacks = packs.size();
 
             // We unpack the selected packs
             for (int i = 0; i < npacks; i++)
