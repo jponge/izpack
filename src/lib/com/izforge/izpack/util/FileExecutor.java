@@ -137,6 +137,43 @@ public class FileExecutor
     }
 
     /**
+     * Gets the output of the given (console based) commandline
+     * 
+     * @param aCommandLine to execute
+     * @return the result of the command
+     */
+    public static String getExecOutput(String[] aCommandLine)
+    {
+        return getExecOutput(aCommandLine, false);
+
+    }
+
+    /**
+     * Executes the given Command and gets the result of StdOut, or if exec returns !=0:  StdErr.
+     * 
+     * @param aCommandLine aCommandLine to execute
+     * @param forceToGetStdOut if true returns stdout
+     * @return the result of the command stdout or stderr if exec returns !=0
+     */
+    public static String getExecOutput(String[] aCommandLine, boolean forceToGetStdOut)
+    {
+        FileExecutor fe = new FileExecutor();
+
+        String[] execOut = new String[2];
+
+        int execResult = fe.executeCommand(aCommandLine, execOut);
+
+        if (execResult == 0)
+
+            return execOut[0];
+
+        else if (forceToGetStdOut == true)
+            return execOut[0];
+        else
+            return execOut[1];
+    }
+
+    /**
      * Executed a system command and waits for completion.
      * 
      * @param params system command as string array
