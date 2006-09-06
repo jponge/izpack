@@ -403,7 +403,11 @@
                debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/LocaleDatabase.java" />
             <include name="com/izforge/izpack/gui/*.java" />
-            <include name="com/izforge/izpack/util/*.java" />
+            
+            <include name="com/izforge/izpack/util/*.java"/>
+            <include name="com/izforge/izpack/util/os/*.java"/>
+            <include name="com/izforge/izpack/util/os/unix/*.java"/>
+            
             <include name="com/izforge/izpack/uninstaller/*.java" />
             <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
             <include name="net/n3/nanoxml/*.java" />
@@ -422,16 +426,11 @@
                 <include name="com/izforge/izpack/LocaleDatabase.class" />
                 <include name="com/izforge/izpack/gui/*.class" />
                 <include name="com/izforge/izpack/uninstaller/*.class" />
-                <include name="com/izforge/izpack/ExecutableFile.class" />
-                <include name="com/izforge/izpack/util/AbstractUI*.class" />
-                <include name="com/izforge/izpack/util/Console.class" />
-                <include name="com/izforge/izpack/util/Debug.class" />
-                <include name="com/izforge/izpack/util/Os*.class" />
-                <include name="com/izforge/izpack/util/String*.class" />
-                <include name="com/izforge/izpack/util/File*.class" />
+                <include name="com/izforge/izpack/ExecutableFile.class" />                
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
                 <include name="net/n3/nanoxml/*.class" />
             </fileset>
+            <fileset dir="${build.dir}/com/izforge/izpack/util"/>
             <fileset dir="${img.dir}/uninstaller" />
         </jar>
     </target>
