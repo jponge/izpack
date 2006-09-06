@@ -6,7 +6,11 @@
 	of the last change.
 	- Each Shortcut has now a optional attribute
 
-	createForAll 
+	createForAll="yes|no"
+	
+	new at 2006-09-06:
+	TryExec="aTryExecCommand" will passes raw thru
+	Categories="Where to put in [K]-Menu"
 	 
 	As root you can create Shortcuts for all users or even only for yourself.
 	This can be the case i.e. for the uninstaller.
@@ -128,6 +132,17 @@
      <createForPack name="PDF Documentation"/>
    </shortcut>
    
+   <!-- Some Sample Categories and their apps
+		 examine *.desktop files in /usr/share/applications ...
+     Categories="Application;Network;WebDevelopment"    Nvu
+	 Categories="Qt;Development;GUIDesigner"    QtDesigner3
+	 Categories="Application;System;"   VwareServer-console  
+	 Categories="Network;WebBrowser"    Opera
+	 Categories="Development;Debugger"    DDD debugger
+     Categories="Development;IDE"    Eclipse IDE
+	 Categories="SystemSetup;X-SuSE-Core-System" Yast2
+	 Categories="System;Archiving" Sesam archiving
+    -->  	
       
    <shortcut
      name="Izpack@ver@ Uninstaller"
@@ -145,7 +160,15 @@
      workingDirectory=""
      type="Application"
      encoding="UTF-8"
-   createForAll="false"
+     KdeSubstUID="true"
+     KdeUsername="root"
+     createForAll="false"
+	 
+	 
+	 Categories="Development;IDE" 
+	   
+	 TryExec="java -jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
+	   
      description="This uninstalls IzPack @build.number@">
 
      <createForPack name="Core" />
