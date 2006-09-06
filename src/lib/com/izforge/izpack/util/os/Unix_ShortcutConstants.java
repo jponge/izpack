@@ -86,7 +86,7 @@ public interface Unix_ShortcutConstants
 
     /** $X_KDE_SubstituteUID = "$X_KDE_SubstituteUID" */
     public final static String $X_KDE_SubstituteUID = "$X_KDE_SubstituteUID";
-
+    
     /** $X_KDE_Username = "$X_KDE_Username" */
     public final static String $X_KDE_Username = "$X_KDE_Username";
 
@@ -101,4 +101,10 @@ public interface Unix_ShortcutConstants
     
     /** $P_QUOT = "$P_QUOT" QuotationMark-Placeholder for the "<b>P</b>ath/workingDir"-line */
     public final static String $P_QUOT = "$P_QUOT";
+
+    /** $Categories = "$Categories" */
+    public final static String $Categories = "$Categories";
+    
+    /** $TryExec = "$TryExec" */
+    public final static String $TryExec = "$TryExec";
 }
