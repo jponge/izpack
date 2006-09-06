@@ -21,10 +21,13 @@ package com.izforge.izpack.installer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+
 import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.util.os.unix.UnixUser;
 
 /**
  * Holds uninstallation data. Implemented as a singleton.
@@ -33,7 +36,6 @@ import com.izforge.izpack.ExecutableFile;
  */
 public class UninstallData
 {
-
     /** The uninstall data object. */
     private static UninstallData instance = null;
 
@@ -51,6 +53,9 @@ public class UninstallData
 
     /** Additional uninstall data like uninstaller listener list. */
     private Map additionalData;
+    
+    /** Filesmap which should removed by the root user for another user */
+    private Hashtable rootData;
 
     /** The constructor. */
     private UninstallData()
@@ -58,7 +63,10 @@ public class UninstallData
         filesList = new ArrayList();
         executablesList = new ArrayList();
         additionalData = new HashMap();
+        rootData = new Hashtable();
     }
+    
+    public final static String RootFiles = "rootfiles";
 
     /**
      * Returns the instance (it is a singleton).
@@ -171,5 +179,28 @@ public class UninstallData
     {
         additionalData.put(name, value);
     }
+
+    /**
+     * Adds the given File to delete as Root for the given User.
+     * 
+     * @param aFilePath The file to delete.
+     * @param aUser a User to delete for
+     */
+    public void addRootAsUserFile( String aFilePath, UnixUser aUser )
+    {    
+        rootData.put(aFilePath, aUser);
+    }
+    
+    /**
+     * Returns the root data.
+     * 
+     * @return root data
+     */
+    public Hashtable getRootData()
+    {
+        return rootData;
+    }
+    
+    
 
 }
