@@ -70,6 +70,14 @@ public class ShortcutData implements Cloneable
     public String deskTopEntryLinux_Encoding;
 
     public String deskTopEntryLinux_X_KDE_SubstituteUID;
+    
+    public String deskTopEntryLinux_X_KDE_UserName;
+    
+    /** Linux Common Menu Categories */
+    public String Categories ;
+    
+    /** Linux Common Menu TryExec */
+    public String TryExec;
 
     public Boolean createForAll;
     
@@ -107,6 +115,11 @@ public class ShortcutData implements Cloneable
         result.deskTopEntryLinux_URL = cloneString(deskTopEntryLinux_URL);
         result.deskTopEntryLinux_Encoding = cloneString(deskTopEntryLinux_Encoding);
         result.deskTopEntryLinux_X_KDE_SubstituteUID = cloneString(deskTopEntryLinux_X_KDE_SubstituteUID);
+        result.deskTopEntryLinux_X_KDE_UserName = cloneString(deskTopEntryLinux_X_KDE_UserName);
+        
+        result.Categories = cloneString(Categories);
+        result.TryExec = cloneString(TryExec);
+        
         result.createForAll = Boolean.valueOf(createForAll.booleanValue());
         return (result);
     }

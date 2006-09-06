@@ -72,9 +72,9 @@ import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.StringTool;
 import com.izforge.izpack.util.TargetFactory;
-import com.izforge.izpack.util.UnixHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.os.Shortcut;
+import com.izforge.izpack.util.os.unix.UnixHelper;
 import com.izforge.izpack.util.xml.XMLHelper;
 
 //
@@ -99,7 +99,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private static final long serialVersionUID = 3256722870838112311L;
 
     // ~ Static fields/initializers *********************************************************
-
+    
+    /** SPEC_ATTRIBUTE_KDE_USERNAME ="KdeUsername" */
+    public final static String SPEC_ATTRIBUTE_KDE_USERNAME ="KdeUsername";
+    
     /** SPEC_ATTRIBUTE_KDE_SUBST_UID = "KdeSubstUID" */
     public final static String SPEC_ATTRIBUTE_KDE_SUBST_UID = "KdeSubstUID";
 
@@ -126,6 +129,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /** LOCATION_START_MENU = "startMenu" */
     private static final String LOCATION_START_MENU = "startMenu";
+    
+    /** SPEC_CATEGORIES = "categories" */   
+    private static final String SPEC_CATEGORIES = "categories";
+    
+    /** SPEC_TRYEXEC = "tryexec" */
+    private static final String SPEC_TRYEXEC = "tryexec";
+    
 
     /**
      * SEPARATOR_LINE =
@@ -925,7 +935,16 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             data.deskTopEntryLinux_URL = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_URL, "");
 
             data.deskTopEntryLinux_X_KDE_SubstituteUID = shortcutSpec.getAttribute(
-                    SPEC_ATTRIBUTE_KDE_SUBST_UID, "");
+                    SPEC_ATTRIBUTE_KDE_SUBST_UID, "false");
+            
+            data.deskTopEntryLinux_X_KDE_UserName = shortcutSpec.getAttribute(
+                    SPEC_ATTRIBUTE_KDE_USERNAME, "root");
+            
+            data.Categories = shortcutSpec.getAttribute(
+                    SPEC_CATEGORIES, "Application;Development");
+            
+            data.TryExec = shortcutSpec.getAttribute(
+                    SPEC_TRYEXEC, "");
 
             data.createForAll = new Boolean(shortcutSpec.getAttribute(CREATE_FOR_ALL, "false"));
 
@@ -1127,8 +1146,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 shortcut.setTerminalOptions(data.deskTopEntryLinux_TerminalOptions);
                 shortcut.setType(data.deskTopEntryLinux_Type);
                 shortcut.setKdeSubstUID(data.deskTopEntryLinux_X_KDE_SubstituteUID);
+                shortcut.setKdeUserName(data.deskTopEntryLinux_X_KDE_UserName);
                 shortcut.setURL(data.deskTopEntryLinux_URL);
+                shortcut.setTryExec(data.TryExec);
+                shortcut.setCategories(data.Categories);
                 shortcut.setCreateForAll(data.createForAll);
+                
+                shortcut.setUninstaller( UninstallData.getInstance() );
 
                 if (data.addToGroup)
                 {
@@ -1922,10 +1946,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             dataElement.setAttribute( SPEC_ATTRIBUTE_URL, data.deskTopEntryLinux_URL );
 
             dataElement.setAttribute( SPEC_ATTRIBUTE_KDE_SUBST_UID, data.deskTopEntryLinux_X_KDE_SubstituteUID );
+            dataElement.setAttribute( SPEC_CATEGORIES, data.Categories );
+            dataElement.setAttribute( SPEC_TRYEXEC, data.TryExec );
 
             dataElement.setAttribute( CREATE_FOR_ALL, data.createForAll.toString() );// ? Boolean.TRUE : Boolean.FALSE).toString() );
             dataElement.setAttribute( USER_TYPE, Integer.toString( data.userType ) );
-
+            
             
             
             //TODO: Add Linux.Attibutes
