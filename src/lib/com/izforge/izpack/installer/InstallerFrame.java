@@ -54,7 +54,9 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -101,6 +103,7 @@ import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.os.unix.UnixUser;
 
 /**
  * The IzPack installer frame.
@@ -788,6 +791,31 @@ public class InstallerFrame extends JFrame
                     }
                 }
             }
+            // write the files which should be deleted by root for another user
+            
+            // TODO:
+            outJar.putNextEntry(new ZipEntry(UninstallData.RootFiles));
+            ObjectOutputStream rootStream = new ObjectOutputStream(outJar);
+            
+            Hashtable rootData = udata.getRootData();
+            
+            Enumeration e = rootData.keys();
+            
+            rootStream.writeInt(rootData.size());
+            
+            while (e.hasMoreElements())
+            {
+                //File file = iter.next();
+                String file = (String) e.nextElement();
+                
+                rootStream.writeObject(file);
+                
+                UnixUser uu = (UnixUser) rootData.get(file);
+                
+                rootStream.writeObject(uu);
+            }
+            rootStream.flush();
+            outJar.closeEntry();
 
             // Cleanup
             outJar.flush();
