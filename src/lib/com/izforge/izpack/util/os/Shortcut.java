@@ -24,6 +24,8 @@ package com.izforge.izpack.util.os;
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
+import com.izforge.izpack.installer.UninstallData;
+
 /*---------------------------------------------------------------------------*/
 /**
  * This class represents a shortcut in a operating system independent way. OS specific subclasses
@@ -43,10 +45,13 @@ public class Shortcut
     // ------------------------------------------------------------------------
     /** APPLICATIONS = 1 */
     public static final int APPLICATIONS = 1;
+
     /** START_MENU = 2 */
     public static final int START_MENU = 2;
+
     /** DESKTOP = 3 */
     public static final int DESKTOP = 3;
+
     /** START_UP = 4 */
     public static final int START_UP = 4;
 
@@ -54,11 +59,11 @@ public class Shortcut
     public static final int HIDE = 0;
 
     /**
-     * NORMAL = 1
-     * Show the window 'normal' when starting. Usually restores the window properties at the last
-     * shut-down.
+     * NORMAL = 1 Show the window 'normal' when starting. Usually restores the window properties at
+     * the last shut-down.
      */
     public static final int NORMAL = 1;
+
     /** MINIMIZED = 2 */
     public static final int MINIMIZED = 2;
 
@@ -68,11 +73,14 @@ public class Shortcut
     /** CURRENT_USER = 1 (identifies the user type as the current user) */
     public static final int CURRENT_USER = 1;
 
-    /**  ALL_USERS = 2 (identifies the user type as valid for all users) */
+    /** ALL_USERS = 2 (identifies the user type as valid for all users) */
     public static final int ALL_USERS = 2;
 
-    /** indicates that this shortcut should be created for all users or only me **/
+    /** indicates that this shortcut should be created for all users or only me * */
     private Boolean createForAll;
+
+    /** internal field UninstallData uninstaller */
+    protected UninstallData uninstaller;
 
     /*--------------------------------------------------------------------------*/
     /**
@@ -336,7 +344,7 @@ public class Shortcut
      * </ul>
      * 
      * @exception IllegalArgumentException if an an invalid type is passed
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
      */
     public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException
     {
@@ -445,9 +453,18 @@ public class Shortcut
     }
 
     /**
-     * This sets the KdeSubstUID
+     * This sets the KdeUserName
      * 
-     * @param string
+     * @param string The UserName
+     */
+    public void setKdeUserName(String string)
+    {
+    }
+
+    /**
+     * This sets the setKdeSubstUID
+     * 
+     * @param string exactly &quot;true&quot; or &quot;false&quot; or nothing
      */
     public void setKdeSubstUID(String string)
     {
@@ -462,39 +479,66 @@ public class Shortcut
     {
     }
 
-    /** 
-     * Gets the Programs Folder for the given User.     
-     * This is where to create subfolders or to place or create shortcuts.   
-     *
-     * @param current_user one of current or all 
-     *
+    /**
+     * Gets the Programs Folder for the given User. This is where to create subfolders or to place
+     * or create shortcuts.
+     * 
+     * @param current_user one of current or all
+     * 
      * @return The Foldername or null on unsupported platforms.
      */
-    public String getProgramsFolder( int current_user )
+    public String getProgramsFolder(int current_user)
     {
-      return null;
+        return null;
     }
 
-    /** 
-     * Sets the flag which indicates, that this should created for all. 
-     *
+    /**
+     * Sets the flag which indicates, that this should created for all.
+     * 
      * @param aCreateForAll A Flag - Set to true, if to create for All.
      */
-    public void setCreateForAll( Boolean aCreateForAll )
+    public void setCreateForAll(Boolean aCreateForAll)
     {
-      this.createForAll = Boolean.valueOf(aCreateForAll.booleanValue());
+        this.createForAll = Boolean.valueOf(aCreateForAll.booleanValue());
     }
 
-    /** 
+    /**
      * Gets the create for All Flag
-     *
+     * 
      * @return Returns True if this should be for all.
      */
-    public Boolean getCreateForAll(  )
+    public Boolean getCreateForAll()
     {
-      return createForAll;
+        return createForAll;
     }
-    
+
+    /**
+     * Sets the Categories Field On Unixes
+     * 
+     * @param theCategories the categories
+     */
+    public void setCategories(String theCategories)
+    {
+    }
+
+    /**
+     * Sets the TryExecField on Unixes.
+     * 
+     * @param aTryExec the try exec command
+     */
+    public void setTryExec(String aTryExec)
+    {
+    }
+
+    /**
+     * Sets the Uninstaller field with the unique Uninstaller Instance.
+     * 
+     * @param theUninstaller the unique instance
+     */
+    public void setUninstaller(UninstallData theUninstaller)
+    {
+        uninstaller = theUninstaller;
+    }
 
 }
 /*---------------------------------------------------------------------------*/
