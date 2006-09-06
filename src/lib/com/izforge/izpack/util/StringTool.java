@@ -168,34 +168,36 @@ public class StringTool
     {
         return (normalizePath(destination, null));
     }
-    
+
     /**
-     * Converts an String Array to a space separated String w/o any check 
+     * Converts an String Array to a space separated String w/o any check
+     * 
      * @param args The StringArray
      * @return the space separated result.
      */
-    public static String stringArrayToSpaceSeparatedString( String[] args )
+    public static String stringArrayToSpaceSeparatedString(String[] args)
     {
-      String result = "";
-        for( int idx = 0; idx < args.length; idx++ )
+        String result = "";
+        for (int idx = 0; idx < args.length; idx++)
         {
-          result += args[ idx ]+ " ";
+            result += args[idx] + " ";
         }
-      return result;
+        return result;
     }
 
     public static String getPlatformEncoding()
     {
         // TODO Auto-generated method stub
-        return System.getProperty( "file.encoding" );
+        return System.getProperty("file.encoding");
     }
+
     public static String UTF16()
     {
         return "UTF-16";
     }
 
     /**
-     * Transforms a (Array)List of Strings into a printable Stringlist
+     * Transforms a (Array)List of Strings into a line.separator="\n" separated Stringlist.
      * 
      * @param aStringList
      * 
@@ -203,13 +205,28 @@ public class StringTool
      */
     public static String stringArrayListToString(ArrayList aStringList)
     {
+        return stringArrayListToString(aStringList, null);
+    }
+
+    /**
+     * Transforms a (Array)List of Strings into an aLineSeparator separated Stringlist.
+     * 
+     * @param aStringList
+     * 
+     * @return a printable list
+     */
+    public static String stringArrayListToString(ArrayList aStringList, String aLineSeparator)
+    {
+        String LineSeparator = aLineSeparator;
+        if (LineSeparator == null) LineSeparator = System.getProperty("line.separator", "\n");
+
         StringBuffer temp = new StringBuffer();
-    
+
         for (int idx = 0; idx < aStringList.size(); idx++)
         {
-            temp.append(aStringList.get(idx)).append("\n");
+            temp.append(aStringList.get(idx)).append(LineSeparator);
         }
-    
+
         return temp.toString();
     }
 
@@ -236,7 +253,8 @@ public class StringTool
      */
     public static boolean startsWithIgnoreCase(String str, String prefix)
     {
-        return (str != null) && (prefix!=null) && str.toUpperCase().startsWith(prefix.toUpperCase());
+        return (str != null) && (prefix != null)
+                && str.toUpperCase().startsWith(prefix.toUpperCase());
     }
-    
+
 }
