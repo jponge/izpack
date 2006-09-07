@@ -626,6 +626,10 @@
         <build-panel name="SummaryPanel">
             <include name="com/izforge/izpack/panels/SummaryPanel.java" />
         </build-panel>
+        <build-panel name="InstallationGroupPanel">
+         <include name="com/izforge/izpack/panels/InstallationGroupPanel.java"/>
+         <include name="com/izforge/izpack/panels/InstallationGroupPanelAutomationHelper.java"/>
+        </build-panel>
     </target>
 
     <!-- 

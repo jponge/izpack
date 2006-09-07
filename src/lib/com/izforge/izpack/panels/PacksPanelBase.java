@@ -67,6 +67,7 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * The base class for Packs panels. It brings the common member and methods of the different packs
@@ -269,7 +270,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
      */
     public void valueChanged(ListSelectionEvent e)
-    {
+    {    
+    	VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+    	
         int i = packsTable.getSelectedRow();
         if (i < 0) return;
         // Operations for the description
@@ -286,6 +289,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             {
                 desc = pack.description;
             }
+            desc = vs.substitute(desc, null);
             descriptionArea.setText(desc);
         }
         // Operation for the dependency listing
