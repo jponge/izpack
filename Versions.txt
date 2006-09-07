@@ -55,7 +55,9 @@
   "/usr/share/applications"   and "/usr/share/pixmaps" folders to display 
   these in the commons [start].menu (Marc Eppelmann)
 - New InstallationGroupPanel for grouping packs together (Amit Bhayani, Scott Starks,
-  Alex Pinkin @JBoss/RedHat).
+  Alex Pinkin @JBoss/RedHat, via Julien Ponge).
+- Variable substitution in the description-elements of the PacksPanel (Dennis Reil, via
+  Julien Ponge).
 
   > 3.8.1 (build 2006.01.06)
 - Added Greek language support (Fabrice Mirabile, thanks to Panayotis
