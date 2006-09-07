@@ -30,7 +30,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="JUnit" level="application" />
+    <orderEntry type="library" name="Junit" level="application" />
     <orderEntryProperties />
   </component>
 </module>

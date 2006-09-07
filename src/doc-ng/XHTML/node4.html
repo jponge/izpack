@@ -162,6 +162,8 @@ href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents"
 <li><a name="tex2html416" href="node4.html#SECTION004417000000000000000">DataCheckPanel</a></li>
 
 <li><a name="tex2html417" href="node4.html#SECTION004418000000000000000">SummaryPanel</a></li>
+
+<li><a name="tex2html418" href="node4.html#SECTION004419000000000000000">InstallationGroupPanel</a></li>
 </ul>
 </li>
 </ul>
@@ -1300,6 +1302,45 @@ panel before installation. The panel contains a scrollable HTML text area to dis
 panel will be shown.
 </p>
 <p>Additional it is possible to <a href="node9.html#SECTION00970000000000000000">log the contents</a> of the summary panel into a HTML file.</p>
+
+<h2><a name="SECTION004419000000000000000">InstallationGroupPanel</a></h2>
+<p> This Panel groups the pack together. A panel which displays the available <em>installGroups</em> found on the packs to
+    allow the user to select a subset of the packs based on the pack <em>installGroups</em> attribute. This panel will be
+    skipped if there are no pack elements with an <em>installGroups</em> attribute. For example
+    <pre>
+    &lt;installation version="1.0"&gt;
+       (...)
+        &lt;panels&gt;
+            (...)
+            &lt;panel classname="InstallationGroupPanel"/&gt;
+            &lt;panel classname="PacksPanel"/&gt;
+            (...)
+        &lt;/panels&gt;
+
+        &lt;packs&gt;
+            &lt;pack name="Base"
+                installGroups="Group1" required="yes"&gt;
+                (...)
+            &lt;/pack&gt;
+            &lt;pack name="Docs"
+                installGroups="Group1,Group2" required="no"&gt;
+                (...)
+            &lt;/pack&gt;
+            &lt;pack name="Sources"
+                installGroups="Group3,Group2" required="no"&gt;
+                (...)
+            &lt;/pack&gt;
+        &lt;/packs&gt;
+    &lt;/installation&gt;
+    </pre>
+
+    In above example when InstallationGroupPanel is displayed, it contains three radios named Group1, Group2 and Group3.
+    Depending on what user selects respective Packs will be displayed in PacksPanel. InstallationGroupPanel will look
+    for description corresponding to key InstallationGroupPanel.description.Group1,
+    InstallationGroupPanel.description.Group2 etc in installation langpacks and displays this description for each of
+    the Group_i.
+
+</p>
 
 <hr />
 <!--Navigation Panel-->

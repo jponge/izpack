@@ -47,13 +47,15 @@
 - Merged normal installer and registry-enabled installers (Julien Ponge).
 - A potential null pointer exception has been discovered in Unpacker with a
   custom action. (Dennis Reil, via Julien Ponge).
-- implemented  the X-KDE subsitute user - shortcut attribute (see Unix_shortcutSpec.xml) 
+- Implemented the X-KDE subsitute user - shortcut attribute (see Unix_shortcutSpec.xml)
   (Marc Eppelmann).
-- write Desktop shortcuts to all known local and ypbinded users "desktop" folders. 
+- Write Desktop shortcuts to all known local and ypbinded users "desktop" folders.
   (Marc Eppelmann)
-- write common shortcuts and their icons to the new freedesktop.org common 
+- Write common shortcuts and their icons to the new freedesktop.org common
   "/usr/share/applications"   and "/usr/share/pixmaps" folders to display 
   these in the commons [start].menu (Marc Eppelmann)
+- New InstallationGroupPanel for grouping packs together (Amit Bhayani, Scott Starks,
+  Alex Pinkin @JBoss/RedHat).
 
   > 3.8.1 (build 2006.01.06)
 - Added Greek language support (Fabrice Mirabile, thanks to Panayotis
