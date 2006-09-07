@@ -17,6 +17,9 @@
     <str id="installer.no" txt="Non"/>
     <str id="installer.cancel" txt="Annuler"/> 
     <str id="installer.error" txt="Erreur"/>
+    <str id="installer.help" txt="Aide"/>
+    <str id="installer.step" txt="Etape"/>
+    <str id="installer.of" txt="sur"/>
     
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Ceci va enlever l'(es) application(s) installée(s) !"/>
