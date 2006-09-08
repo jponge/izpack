@@ -148,8 +148,8 @@
 	    Extracted / Reordered some dist related targets to prevent double copy actions.
         Also fixed the fix.crlf basedir
         
-  27.08.27: (Marc Eppelmann)
-      Embedd ShortcutPanel*.java        
+	27.08.2006: (Marc Eppelmann)
+        Embedd ShortcutPanel*.java        
       
               
   Mini-HowTo:
@@ -427,10 +427,12 @@
                 <include name="com/izforge/izpack/gui/*.class" />
                 <include name="com/izforge/izpack/uninstaller/*.class" />
                 <include name="com/izforge/izpack/ExecutableFile.class" />                
+                <include name="com/izforge/izpack/util/*.java"/>
+                <include name="com/izforge/izpack/util/os/*.java"/>
+                <include name="com/izforge/izpack/util/os/unix/*.java"/>
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
                 <include name="net/n3/nanoxml/*.class" />
             </fileset>
-            <fileset dir="${build.dir}/com/izforge/izpack/util"/>
             <fileset dir="${img.dir}/uninstaller" />
         </jar>
     </target>
@@ -981,7 +983,7 @@
                 installerType="standard"
                 basedir="${dist.dir}"
                 izPackDir="${dist.dir}/"
-                compression="raw"
+                compression="deflate"
                 compressionlevel="9" />
     	<echo>
 sucessfully created:
