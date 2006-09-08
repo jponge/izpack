@@ -427,9 +427,9 @@
                 <include name="com/izforge/izpack/gui/*.class" />
                 <include name="com/izforge/izpack/uninstaller/*.class" />
                 <include name="com/izforge/izpack/ExecutableFile.class" />                
-                <include name="com/izforge/izpack/util/*.java"/>
-                <include name="com/izforge/izpack/util/os/*.java"/>
-                <include name="com/izforge/izpack/util/os/unix/*.java"/>
+                <include name="com/izforge/izpack/util/*.class"/>
+                <include name="com/izforge/izpack/util/os/*.class"/>
+                <include name="com/izforge/izpack/util/os/unix/*.class"/>
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
                 <include name="net/n3/nanoxml/*.class" />
             </fileset>
