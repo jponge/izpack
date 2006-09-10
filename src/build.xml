@@ -190,7 +190,7 @@
 
     <property file="src/ant.properties" />
     <property name="ver" value="3.9" />
-    <property name="rel" value="0-preview1" />
+    <property name="rel" value="0-M1" />
     <property name="build.number" value="${ver}.${rel}" />
 
     <property name="src.dir" value="${basedir}/src/lib" />
@@ -427,13 +427,15 @@
                 <include name="com/izforge/izpack/gui/*.class" />
                 <include name="com/izforge/izpack/uninstaller/*.class" />
                 <include name="com/izforge/izpack/ExecutableFile.class" />                
-                <include name="com/izforge/izpack/util/*.class"/>
-                <include name="com/izforge/izpack/util/os/*.class"/>
-                <include name="com/izforge/izpack/util/os/unix/*.class"/>
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
                 <include name="net/n3/nanoxml/*.class" />
             </fileset>
-            <fileset dir="${img.dir}/uninstaller" />
+            <fileset dir="${build.dir}/com/izforge/izpack/util">
+               <include name="**/*.class"/>
+            </fileset>
+            <fileset dir="${img.dir}/uninstaller">
+              <include name="**/*"/>
+            </fileset>
         </jar>
     </target>
 
@@ -447,7 +449,11 @@
                deprecation="on"
                debug="${debug}"
                debuglevel="${debuglevel}">
-            <include name="com/izforge/izpack/util/os/*.java" />
+            <include name="com/izforge/izpack/util/*.java" />
+            <include name="com/izforge/izpack/util/os/*.java"/>
+            <include name="com/izforge/izpack/util/os/unix/*.java"/>
+            <include name="com/izforge/izpack/util/xml/*.java"/>
+          
             <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
             <include name="net/n3/nanoxml/*.java" />
         </javac>
@@ -457,13 +463,7 @@
     <target name="build.uninstaller-ext" depends="compile.uninstaller-ext">
         <jar jarfile="${uninstaller-ext.jar}">
             <fileset dir="${build.dir}">
-                <include name="com/izforge/izpack/util/Librarian.class" />
-                <include name="com/izforge/izpack/util/Housekeeper.class" />
-                <include name="com/izforge/izpack/util/TargetFactory.class" />
-                <include name="com/izforge/izpack/util/FreeThread.class" />
-                <include name="com/izforge/izpack/util/CleanupClient.class" />
-                <include name="com/izforge/izpack/util/NativeLibraryClient.class" />
-                <!-- Add helper etc. you need for uninstallation -->
+                <include name="com/izforge/izpack/util/**/*.class" />
             </fileset>
         </jar>
     </target>
