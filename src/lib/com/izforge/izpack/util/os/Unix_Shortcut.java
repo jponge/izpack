@@ -542,7 +542,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
                 rootScript.append( rm );
                 rootScript.append( S );
-                rootScript.append( tempFile.toString());                
+                rootScript.appendln( tempFile.toString());   
+                rootScript.appendln();
             }
         }
 
