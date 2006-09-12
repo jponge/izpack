@@ -430,8 +430,8 @@
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
                 <include name="net/n3/nanoxml/*.class" />
             </fileset>
-            <fileset dir="${build.dir}/com/izforge/izpack/util">
-               <include name="**/*.class"/>
+            <fileset dir="${build.dir}">
+              <include name="com/izforge/izpack/util/**/*.class"/>
             </fileset>
             <fileset dir="${img.dir}/uninstaller">
               <include name="**/*"/>
@@ -463,7 +463,7 @@
     <target name="build.uninstaller-ext" depends="compile.uninstaller-ext">
         <jar jarfile="${uninstaller-ext.jar}">
             <fileset dir="${build.dir}">
-                <include name="com/izforge/izpack/util/**/*.class" />
+                <include name="com/izforge/izpack/util/**/*.class"/>
             </fileset>
         </jar>
     </target>
