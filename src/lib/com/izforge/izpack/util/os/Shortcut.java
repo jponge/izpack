@@ -25,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.util.Debug;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -538,6 +539,25 @@ public class Shortcut
     public void setUninstaller(UninstallData theUninstaller)
     {
         uninstaller = theUninstaller;
+    }
+
+    /**
+     * Dummy Method especially for the Unix Root User. 
+     *
+     */
+    public void execPostAction()
+    {
+        //Debug.log("Call of unused execPostAction Method in " + this.getClass().getName() );
+    }
+
+    /**
+     * Clean Up Method to do some cleanups after Shortcut Creation. 
+     * <br>
+     * currently unused.
+     */
+    public void cleanUp()
+    {
+        //Debug.log("Call of unused cleanUp Method in " + this.getClass().getName() );     
     }
 
 }
