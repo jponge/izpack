@@ -55,7 +55,7 @@ public class UninstallData
     private Map additionalData;
     
     /** Filesmap which should removed by the root user for another user */
-    private Hashtable rootData;
+    private String rootScript;
 
     /** The constructor. */
     private UninstallData()
@@ -63,10 +63,11 @@ public class UninstallData
         filesList = new ArrayList();
         executablesList = new ArrayList();
         additionalData = new HashMap();
-        rootData = new Hashtable();
+        rootScript = new String();
     }
     
-    public final static String RootFiles = "rootfiles";
+    /** Constant RootFiles = "rootfiles" */
+    public final static String ROOTSCRIPT = "rootscript";
 
     /**
      * Returns the instance (it is a singleton).
@@ -183,12 +184,11 @@ public class UninstallData
     /**
      * Adds the given File to delete as Root for the given User.
      * 
-     * @param aFilePath The file to delete.
-     * @param aUser a User to delete for
+     * @param aRootUninstallScript The Script to exec as Root at uninstall.
      */
-    public void addRootAsUserFile( String aFilePath, UnixUser aUser )
+    public void addRootUninstallScript( String aRootUninstallScript )
     {    
-        rootData.put(aFilePath, aUser);
+        rootScript = new String( aRootUninstallScript );
     }
     
     /**
@@ -196,9 +196,9 @@ public class UninstallData
      * 
      * @return root data
      */
-    public Hashtable getRootData()
+    public String getRootScript()
     {
-        return rootData;
+        return rootScript;
     }
     
     
