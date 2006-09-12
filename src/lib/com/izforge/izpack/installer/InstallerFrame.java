@@ -793,27 +793,13 @@ public class InstallerFrame extends JFrame
             }
             // write the files which should be deleted by root for another user
             
-            // TODO:
-            outJar.putNextEntry(new ZipEntry(UninstallData.RootFiles));
+            outJar.putNextEntry(new ZipEntry(UninstallData.ROOTSCRIPT));
             ObjectOutputStream rootStream = new ObjectOutputStream(outJar);
             
-            Hashtable rootData = udata.getRootData();
+            String rootScript = udata.getRootScript();           
             
-            Enumeration e = rootData.keys();
+            rootStream.writeUTF(rootScript);
             
-            rootStream.writeInt(rootData.size());
-            
-            while (e.hasMoreElements())
-            {
-                //File file = iter.next();
-                String file = (String) e.nextElement();
-                
-                rootStream.writeObject(file);
-                
-                UnixUser uu = (UnixUser) rootData.get(file);
-                
-                rootStream.writeObject(uu);
-            }
             rootStream.flush();
             outJar.closeEntry();
 
