@@ -179,6 +179,28 @@
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Etes-vous certain de vouloir installer une autre entité ?" />
     <str id="CheckedHelloPanel.infoOverUninstallKey" txt="La clé de désinstallation sera : " />
     
+	<!-- Headlines -->
+    <str id="CheckedHelloPanel.headline" txt="Bienvenue" />
+    <str id="CompilePanel.headline" txt="Compiler les sources Java" />
+    <str id="ConditionalUserInputPanel.headline" txt="Donnees utilisateur" />
+    <str id="ExtendedInstallPanel.headline" txt="Installation et Configuration" />
+    <str id="FinishPanel.headline" txt="Installation Terminee" />
+    <str id="HTMLInfoPanel.headline" txt="Informations" />
+    <str id="HTMLLicencePanel.headline" txt="Accords de Licence" />
+    <str id="HelloPanel.headline" txt="Bienvenue" />
+    <str id="ImgPacksPanel.headline" txt="Selection des paquets a installer" />
+    <str id="InfoPanel.headline" txt="Informations" />
+    <str id="InstallPanel.headline" txt="Installation" />
+    <str id="JDKPathPanel.extendedIntro" txt="La version installee de l'application necessite un JDK entre la version ${JDKPathPanel.minVersion} et la version ${JDKPathPanel.maxVersion}. Un environnement d'execution Java (JRE) ne sera pas suffisant." />
+    <str id="JDKPathPanel.headline" txt="Chemin du JDK" />
+    <str id="LicencePanel.headline" txt="Accords de Licence" />
+    <str id="PacksPanel.headline" txt="Selection des paquets a installer" />
+    <str id="ProcessPanel.headline" txt="Execution de processus externes" />
+    <str id="SimpleFinishPanel.headline" txt="Installation Terminee" />
+    <str id="SummaryPanel.headline" txt="Resume des donnes de configuration" />
+    <str id="TargetPanel.headline" txt="Chemin d'installation" />
+    <str id="UserInputPanel.headline" txt="Donnees utilisateur" /> 
+	
     <!-- Add your own panels specific strings here if you need -->
     
 </langpack>
