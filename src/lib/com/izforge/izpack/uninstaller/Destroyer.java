@@ -38,9 +38,10 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.StringTool;
 import com.izforge.izpack.util.os.unix.ShellScript;
 import com.izforge.izpack.util.os.unix.UnixHelper;
-import com.izforge.izpack.util.os.unix.UnixUser;
+
 
 /**
  * The files destroyer class.
@@ -114,7 +115,7 @@ public class Destroyer extends Thread
             // Custem action listener stuff --- afterDeletion ----
             informListeners(listeners[0], UninstallerListener.AFTER_DELETION, files, handler);
 
-            removeRootFiles(getRootFiles());
+            execRootScript(getRootScript());
 
             // We make a complementary cleanup
             handler.progress(size, "[ cleanups ]");
@@ -179,6 +180,11 @@ public class Destroyer extends Thread
         return new ArrayList(files);
     }
 
+    /**
+     * Gets the List of all Executables
+     * @return The ArrayList of the Executables
+     * @throws Exception
+     */
     private ArrayList getExecutablesList() throws Exception
     {
         ArrayList executables = new ArrayList();
@@ -199,59 +205,31 @@ public class Destroyer extends Thread
      * @return The files which should remove by root for another user
      * @throws Exception
      */
-    private Hashtable getRootFiles() throws Exception
+    private String getRootScript() throws Exception
     {
-        Hashtable result = new Hashtable();
+        //String rootScript = new String();
         ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
-                + UninstallData.RootFiles));
-        int num = in.readInt();
-        for (int i = 0; i < num; i++)
-        {
-            String file = (String) in.readObject();
+                + UninstallData.ROOTSCRIPT));
+        
+        String result = in.readUTF();
 
-            UnixUser user = (UnixUser) in.readObject();
-            result.put(file, user);
-        }
+        
         return result;
     }
 
     /**
      * Removes the given files as root for the given Users
      * 
-     * @param entries The files to reomove for the users
+     * @param aRootScript The Script to exec as uninstall time by root. 
      */
-    private void removeRootFiles(Hashtable entries)
+    private void execRootScript(String aRootScript)
     {
-        Enumeration e = entries.keys();
-
-        String su = UnixHelper.getSuCommand();
-        String rm = UnixHelper.getCustomCommand("rm");
-        String S = " ";
-
-        while (e.hasMoreElements())
-        {
-            String filename = (String) e.nextElement();
-            UnixUser user = (UnixUser) entries.get(filename);
-
-            StringBuffer script = new StringBuffer();
-
-            script.append(su);
-            script.append(S);
-            script.append(user.getName());
-            script.append(S);
-            script.append("-c");
-            script.append(S);
-            script.append('"');
-            script.append(rm);
-            script.append(S);
-            script.append(filename);
-            script.append('"');
-
-            Debug.log("Executes: " + script.toString());
+        
+            Debug.log("Will Execute: " + aRootScript.toString());
 
             try
             {
-                String result = ShellScript.execAndDelete(script, File.createTempFile(
+                String result = ShellScript.execAndDelete(new StringBuffer( aRootScript ), File.createTempFile(
                         this.getClass().getName(),
                         Long.toString(System.currentTimeMillis()) + ".sh").toString());
                 Debug.log("Result: " + result);
@@ -260,8 +238,6 @@ public class Destroyer extends Thread
             {
                 Debug.log("Exeption during su remove: " + ex.getMessage());
             }
-
-        }
     }
 
     /**
