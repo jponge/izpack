@@ -1221,9 +1221,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 continue;
             }
         }
+        
+        shortcut.execPostAction();
 
-        // }
-        //
         try
         {
             if (execFiles != null)
@@ -1249,7 +1249,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             cannot.printStackTrace();
         }
 
-        // /////parent.unlockNextButton();
+        
+        shortcut.cleanUp();
     }
 
     /*--------------------------------------------------------------------------*/
