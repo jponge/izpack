@@ -1,6 +1,8 @@
 [ The list of the different public versions of IzPack ]
 
   > 3.9.0 (build 2006.mm.dd)
+- New Indonesian Langpack (Hans Aikema, thanks to Thomas Edwin Santosa)
+- Updated Dutch Langpack (Hans Aikema) 
 - Fix for ComboBox in SearchField of UserInputPanel returning
   java.lang.reflect.InvocationTargetException
   if no options added.(Fabrice Mirabile, thanks to Oliver Kiddle)
