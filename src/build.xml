@@ -149,8 +149,10 @@
         Also fixed the fix.crlf basedir
         
 	27.08.2006: (Marc Eppelmann)
-        Embedd ShortcutPanel*.java        
-      
+      Embedd ShortcutPanel*.java     
+        
+  14.09.2006: (Marc Eppelmann)   
+      Added target src.tar.gz and clean.src.tar.gz
               
   Mini-HowTo:
 
