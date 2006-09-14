@@ -835,11 +835,12 @@
     	    <delete file="bin/native/3rdparty/COIOSHelper.dll" />
         <delete dir="${basedir}/bin/native/izpack" />
         <delete includeEmptyDirs="true" dir="${basedir}/doc/izpack" />
+        <delete dir="${basedir}/_src${dist.subdir}"/>
     </target>
 
     <!-- Builds all compilation targets -->
     <target name="all"
-            depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" description="base: compiles a developer version"/>
+            depends="splashscreen, src.tar.gz, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" description="base: compiles a developer version"/>
 
     <!-- Builds the Javadoc -->
     <target name="build.javadoc" depends="prepare" description="Builds the javadoc">
@@ -1005,7 +1006,7 @@ ${dist.dir}/${installer.name}${ver}.${rel}.jar
     <target name="generate.installer" depends="prepare.install.dist">
         <antcall target="exec.izpack.compiler">
             <param name="installer.xmlfile" value="IzPack-install.xml" />
-            <param name="installer.name" value="IzPack-install-" />
+            <param name="installer.name" value="${product}-install-" />
         </antcall>
     </target>
 
@@ -1056,6 +1057,25 @@ Fixing linefeeds for several files in:
     <target name="cleandistreg"
             depends="clean, splashscreen, dist, generate.installer"
             description="creates a full dist with Win32 uninstall registry support" />
+  
+    <!-- ================================= 
+          target: clean.src.tar.gz              
+         ================================= -->
+    <target name="clean.src.tar.gz" depends="clean, src.tar.gz" description="--> creates a src.tar.gz after clean up">
+    </target>
+
+  
+    <!-- ================================= 
+          target: src.tar.gz              
+         ================================= -->
+    <target name="src.tar.gz"  description="--> creates a src.tar.gz ">
+      <mkdir dir="${basedir}/_src${dist.subdir}"/>
+      <property name="src.tar" value="${basedir}/_src${dist.subdir}/${product}.src.${ver}.${rel}.tar"/>
+      <property name="src.tar.gz" value="${src.tar}.gz"/>
+      <tar destfile="${src.tar}" basedir="${basedir}" excludes="_src${dist.subdir}/**, _dist/**, _build/**, bin/panels/**, bin/customActions/**, doc/izpack/**, eclipse-bin/**, lib/standalone-compiler.jar, lib/izevent.jar, lib/uninstaller*, lib/installer.jar, lib/compiler.jar"/> 
+      <gzip src="${src.tar}" destfile="${src.tar.gz}"/>        
+    </target>
+
 
     <!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->
     <target name="quickdist+run"
