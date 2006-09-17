@@ -55,7 +55,7 @@
         </laf>
         <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
     	<modifier key="layoutAnchor" value="CENTER"/>
-    	<modifier key="headingPanelCounter" value="text"/>
+    	<modifier key="headingPanelCounter" value="progressbar"/>
 		<modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
 		<modifier key="allYGap" value="3"/>
 		<modifier key="paragraphYGap" value="10"/>	
@@ -100,7 +100,7 @@
     <resources>
         <res src="install-readme.html" id="HTMLInfoPanel.info"/>
         <res src="Licence.txt" id="LicencePanel.licence"/>
-        <res src="splash-sydney.png" id="installer.langsel.img"/>
+        <res src="splash-3.9.png" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0"/>
