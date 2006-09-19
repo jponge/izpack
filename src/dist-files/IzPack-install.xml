@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.9.0-M1 (build 2006.09.07)</appversion>
+        <appversion>3.9.0-RC1 (build 2006.09.19)</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
@@ -39,6 +39,7 @@
             <author email="" name="Scott Starks @JBoss/RedHat (contributors)" />
             <author email="" name="Alex Pinkin @JBoss/RedHat (contributors)" />
             <author email="" name="Dennis Reil (contributor)" />
+            <author email="" name="Thomas Edwin Santosa (contributor)" />
 
             <author email=""
                     name="... the many other developers and contributors to the previous releases (see Thanks.txt)"/>

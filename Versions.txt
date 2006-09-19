@@ -17,7 +17,7 @@
 - Spanish langpack update (Cesar Martinez Izquierdo).
 - New Polish langpack (Fabrice Mirabile, thanks to Radek)
 - Fixed the createPWD.sh (Fabrice Mirabile, thanks to Radek)
-- Workaround for crashes at end of installation with java VM version
+- Workaround for crashes at end of installation with Java VM version
   1.5 (also known as 5.0) (Klaus Bartz).
 - Updated russian langpack (Fabrice Mirabile)
 - Fixed indent of ShortcutPanels Headline (Marc Eppelmann)
