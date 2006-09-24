@@ -131,10 +131,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private static final String LOCATION_START_MENU = "startMenu";
     
     /** SPEC_CATEGORIES = "categories" */   
-    private static final String SPEC_CATEGORIES = "categories";
+    public static final String SPEC_CATEGORIES = "categories";
     
     /** SPEC_TRYEXEC = "tryexec" */
-    private static final String SPEC_TRYEXEC = "tryexec";
+    public static final String SPEC_TRYEXEC = "tryexec";
     
 
     /**
@@ -1927,7 +1927,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     : Boolean.FALSE).toString());
 
             // Boolean.valueOf(data.addToGroup)
-            dataElement.setAttribute(AUTO_ATTRIBUTE_TYPE, Integer.toString(data.type));
+            if(OsVersion.IS_WINDOWS)
+            
+              dataElement.setAttribute(AUTO_ATTRIBUTE_TYPE, Integer.toString(data.type));
             dataElement.setAttribute(AUTO_ATTRIBUTE_COMMAND, data.commandLine);
             dataElement.setAttribute(AUTO_ATTRIBUTE_DESCRIPTION, data.description);
             dataElement.setAttribute(AUTO_ATTRIBUTE_ICON, data.iconFile);
@@ -1942,7 +1944,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             dataElement.setAttribute( SPEC_ATTRIBUTE_MIMETYPE, data.deskTopEntryLinux_MimeType );
             dataElement.setAttribute( SPEC_ATTRIBUTE_TERMINAL, data.deskTopEntryLinux_Terminal );
             dataElement.setAttribute( SPEC_ATTRIBUTE_TERMINAL_OPTIONS, data.deskTopEntryLinux_TerminalOptions );
-            dataElement.setAttribute( SPEC_ATTRIBUTE_TYPE, data.deskTopEntryLinux_Type );
+            if(! OsVersion.IS_WINDOWS )
+              dataElement.setAttribute( SPEC_ATTRIBUTE_TYPE, data.deskTopEntryLinux_Type );
 
             dataElement.setAttribute( SPEC_ATTRIBUTE_URL, data.deskTopEntryLinux_URL );
 

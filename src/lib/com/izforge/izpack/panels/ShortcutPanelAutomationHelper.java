@@ -1,33 +1,25 @@
 /*
  * $Id: copyright-notice-template 1421 2006-03-12 16:32:32Z jponge $
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
- * 
+ *
  * Copyright 2006 Marc Eppelmann (marc.eppelmann&#064;gmx.de)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 package com.izforge.izpack.panels;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Vector;
-
-import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.installer.AutomatedInstallData;
@@ -36,33 +28,50 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.Shortcut;
 
+import net.n3.nanoxml.XMLElement;
+
+import java.io.File;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Vector;
+
 /**
- * The ShortcutPanelAutomationHelper is responsible to create Shortcuts
- * during the automated installation.
- * Most code comes copied from the ShortcutPanel 
+ * The ShortcutPanelAutomationHelper is responsible to create Shortcuts during the automated
+ * installation. Most code comes copied from the ShortcutPanel
  * 
  * @author Marc Eppelmann (marc.eppelmann&#064;gmx.de)
  * @version $Revision: 1540 $
- * 
  */
 public class ShortcutPanelAutomationHelper implements PanelAutomation
 {
 
+    // ~ Methods ****************************************************************************
+
     /**
      * dummy method
+     * 
+     * @param idata DOCUMENT ME!
+     * @param panelRoot DOCUMENT ME!
      */
     public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
     {
         Debug.log(this.getClass().getName() + "::entering makeXMLData()");
-        // ShortcutPanel.getInstance().makeXMLData( idata, panelRoot );
 
+        // ShortcutPanel.getInstance().makeXMLData( idata, panelRoot );
     }
 
     /**
-     * Implementation of the Shortcut Specific Automation Code 
+     * Implementation of the Shortcut Specific Automation Code
+     * 
+     * @param installData DOCUMENT ME!
+     * @param panelRoot DOCUMENT ME!
+     * 
+     * @return DOCUMENT ME!
      */
     public boolean runAutomated(AutomatedInstallData installData, XMLElement panelRoot)
     {
@@ -95,6 +104,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         {
             Debug.log("Could not create shortcut instance");
             exception.printStackTrace();
+
             return true;
         }
 
@@ -106,12 +116,14 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         if (!shortcut.supported())
         {
             Debug.log("shortcuts not supported here");
+
             return true;
         }
 
         if (!OsConstraint.oneMatchesCurrentSystem(panelRoot))
         {
             Debug.log("Shortcuts Not oneMatchesCurrentSystem");
+
             return true;
         }
 
@@ -125,6 +137,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         // set the name of the program group
         // ----------------------------------------------------
         dataElement = panelRoot.getFirstChildNamed(ShortcutPanel.AUTO_KEY_PROGRAM_GROUP);
+
         String groupName = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
 
         if (groupName == null)
@@ -147,12 +160,12 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
             data.addToGroup = Boolean.valueOf(
                     dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_GROUP)).booleanValue();
 
-            try
+            if (OsVersion.IS_WINDOWS)
             {
                 data.type = Integer.valueOf(
                         dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TYPE)).intValue();
             }
-            catch (NumberFormatException e)
+            else
             {
                 Debug.log("WARN: On Linux data.type is NOT an int. Ignored.");
             }
@@ -185,7 +198,15 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
                     "");
 
             data.deskTopEntryLinux_X_KDE_SubstituteUID = dataElement.getAttribute(
-                    ShortcutPanel.SPEC_ATTRIBUTE_KDE_SUBST_UID, "");
+                    ShortcutPanel.SPEC_ATTRIBUTE_KDE_SUBST_UID, "false");
+
+            data.deskTopEntryLinux_X_KDE_UserName = dataElement.getAttribute(
+                    ShortcutPanel.SPEC_ATTRIBUTE_KDE_USERNAME, "root");
+
+            data.Categories = dataElement.getAttribute(ShortcutPanel.SPEC_CATEGORIES,
+                    "Application;Development");
+
+            data.TryExec = dataElement.getAttribute(ShortcutPanel.SPEC_TRYEXEC, "");
 
             data.createForAll = new Boolean(dataElement.getAttribute(ShortcutPanel.CREATE_FOR_ALL,
                     "false"));
@@ -193,24 +214,30 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
                     dataElement.getAttribute(ShortcutPanel.USER_TYPE, Integer
                             .toString(Shortcut.CURRENT_USER))).intValue();
             // END LINUX
-
             shortcuts.add(data);
         }
 
         System.out.print("[ Creating shortcuts ");
 
         // ShortcutData data;
-
         for (int i = 0; i < shortcuts.size(); i++)
         {
             data = (ShortcutData) shortcuts.elementAt(i);
 
             try
             {
-                groupName = groupName + data.subgroup;
+                if( data.subgroup!=null )
+                {
+                  groupName = groupName + data.subgroup;
+                }
                 shortcut.setUserType(data.userType);
                 shortcut.setLinkName(data.name);
-                shortcut.setLinkType(data.type);
+
+                if (OsVersion.IS_WINDOWS)
+                {
+                    shortcut.setLinkType(data.type);
+                }
+
                 shortcut.setArguments(data.commandLine);
                 shortcut.setDescription(data.description);
                 shortcut.setIconLocation(data.iconFile, data.iconIndex);
@@ -223,7 +250,12 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
                 shortcut.setTerminal(data.deskTopEntryLinux_Terminal);
                 shortcut.setTerminalOptions(data.deskTopEntryLinux_TerminalOptions);
-                shortcut.setType(data.deskTopEntryLinux_Type);
+
+                if (!OsVersion.IS_WINDOWS)
+                {
+                    shortcut.setType(data.deskTopEntryLinux_Type);
+                }
+
                 shortcut.setKdeSubstUID(data.deskTopEntryLinux_X_KDE_SubstituteUID);
                 shortcut.setURL(data.deskTopEntryLinux_URL);
                 shortcut.setCreateForAll(data.createForAll);
@@ -239,9 +271,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
                 try
                 {
-
                     // save the shortcut
-
                     System.out.print(".");
                     System.out.flush();
 
@@ -280,7 +310,6 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
                             files.add(0, filesEnum.nextElement().toString());
                         }
                     }
-
                 }
                 catch (Exception exception)
                 {}
@@ -317,6 +346,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         {
             cannot.printStackTrace();
         }
+
         System.out.println(" done. ]");
         System.out.print("[ Add shortcuts to uninstaller ");
 
@@ -333,5 +363,4 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
         return true;
     }
-
 }
