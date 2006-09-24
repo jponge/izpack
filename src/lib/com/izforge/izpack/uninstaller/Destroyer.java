@@ -24,10 +24,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -38,9 +38,8 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.StringTool;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.os.unix.ShellScript;
-import com.izforge.izpack.util.os.unix.UnixHelper;
 
 
 /**
@@ -114,9 +113,11 @@ public class Destroyer extends Thread
 
             // Custem action listener stuff --- afterDeletion ----
             informListeners(listeners[0], UninstallerListener.AFTER_DELETION, files, handler);
-
-            execRootScript(getRootScript());
-
+            
+            if( OsVersion.IS_UNIX )
+            {
+              execRootScript(getRootScript());
+            }
             // We make a complementary cleanup
             handler.progress(size, "[ cleanups ]");
             cleanup(new File(installPath));
@@ -127,7 +128,18 @@ public class Destroyer extends Thread
         {
             handler.stopAction();
             err.printStackTrace();
-            handler.emitError("exception caught", err.toString());
+           
+            StackTraceElement str[] = err.getStackTrace();
+            for(int idx = 0; idx < str.length;idx++)
+            {
+                 
+            }
+            
+            StringWriter trace = new StringWriter();
+            //err.printStackTrace(new PrintStream);
+            err.printStackTrace(new PrintWriter(trace));
+                        
+            handler.emitError("exception caught", err.toString() + "\n" + trace.toString() );
         }
     }
 
@@ -207,11 +219,11 @@ public class Destroyer extends Thread
      */
     private String getRootScript() throws Exception
     {
-        //String rootScript = new String();
+        String result = new String();
         ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
                 + UninstallData.ROOTSCRIPT));
         
-        String result = in.readUTF();
+        result = in.readUTF();
 
         
         return result;
@@ -224,7 +236,8 @@ public class Destroyer extends Thread
      */
     private void execRootScript(String aRootScript)
     {
-        
+        if(!"".equals(aRootScript))
+        {
             Debug.log("Will Execute: " + aRootScript.toString());
 
             try
@@ -238,6 +251,7 @@ public class Destroyer extends Thread
             {
                 Debug.log("Exeption during su remove: " + ex.getMessage());
             }
+        }        
     }
 
     /**
