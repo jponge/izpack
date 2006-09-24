@@ -17,6 +17,24 @@
 	If you whant to do so, set createForAll to true otherwise to false, which is the default.
 	
 	! If not explicite set or present the default is false.	
+	
+	New Attibute for Root Installation on Linux:	
+		 
+	Categories="Development;IDE" 
+	   
+	TryExec="java -jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
+	   
+    Here are some Sample Categories and their apps
+		 examine *.desktop files in /usr/share/applications ...
+     Categories="Application;Network;WebDevelopment"    Nvu
+	 Categories="Qt;Development;GUIDesigner"    QtDesigner3
+	 Categories="Application;System;"   VwareServer-console  
+	 Categories="Network;WebBrowser"    Opera
+	 Categories="Development;Debugger"    DDD debugger
+     Categories="Development;IDE"    Eclipse IDE
+	 Categories="SystemSetup;X-SuSE-Core-System" Yast2
+	 Categories="System;Archiving" Sesam archiving
+    
 -->
 
 <shortcuts>
@@ -55,7 +73,7 @@
      startup="no"
      target="$INSTALL_PATH/bin/start.sh"
      workingDirectory=""
-     commandLine="$INSTALL_PATH/doc/izpack/xhtml/index.html"
+     commandLine="$INSTALL_PATH/doc/izpack/xhtml/izpack-doc.html"
      initialState="noShow"
      iconFile="help"
      iconIndex="0" 
@@ -131,18 +149,7 @@
      
      <createForPack name="PDF Documentation"/>
    </shortcut>
-   
-   <!-- Some Sample Categories and their apps
-		 examine *.desktop files in /usr/share/applications ...
-     Categories="Application;Network;WebDevelopment"    Nvu
-	 Categories="Qt;Development;GUIDesigner"    QtDesigner3
-	 Categories="Application;System;"   VwareServer-console  
-	 Categories="Network;WebBrowser"    Opera
-	 Categories="Development;Debugger"    DDD debugger
-     Categories="Development;IDE"    Eclipse IDE
-	 Categories="SystemSetup;X-SuSE-Core-System" Yast2
-	 Categories="System;Archiving" Sesam archiving
-    -->  	
+
       
    <shortcut
      name="Izpack@ver@ Uninstaller"

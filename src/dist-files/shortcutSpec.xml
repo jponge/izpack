@@ -33,7 +33,7 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH\doc\izpack\xhtml\index.html"
+     target="$INSTALL_PATH\doc\izpack\xhtml\izpack-doc.html"
      commandLine=""
      description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) user documentation">
           
