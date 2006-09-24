@@ -522,9 +522,6 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                         uninstallScript.appendln('"');
                         uninstallScript.appendln();
                         //Debug.log("Uninstall will exec: " + uninstallScript.toString());
-
-                        // !TODO:DONE! move into execPostAction()
-
                     }
                     catch (Exception rex)
                     {
@@ -535,8 +532,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                         // most distros does not allow root to access any user
                         // home (ls -la /home/user drwx------)
                         // But try it anyway...
-                    }                   
-                    //!TODO:DONE! move into execPostAction()
+                    }
                 }
                 
 
