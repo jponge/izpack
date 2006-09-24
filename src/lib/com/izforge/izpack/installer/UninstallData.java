@@ -182,13 +182,13 @@ public class UninstallData
     }
 
     /**
-     * Adds the given File to delete as Root for the given User.
+     * Adds the given File to delete several Shortcuts as Root for the given Users.
      * 
      * @param aRootUninstallScript The Script to exec as Root at uninstall.
      */
     public void addRootUninstallScript( String aRootUninstallScript )
     {    
-        rootScript = new String( aRootUninstallScript );
+        rootScript = new String( aRootUninstallScript==null?"":aRootUninstallScript );
     }
     
     /**
