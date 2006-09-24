@@ -61,7 +61,7 @@ public class ShellScript
     /** lh = lf + H = "\n#" */
     private final static String lh = lf + H;
 
-    /** the explanation header for thia genreated script */
+    /** the explanation header for this generated script */
     private final static String explanation = lh + "This is an automatically generated Script."
             + lh + "Usually this can be removed if the Generator " + lh
             + "was unable to remove the script after execution." + lf;
@@ -69,7 +69,7 @@ public class ShellScript
     /** "Generated at: " + new Date().toString() */
     private static String currentDateMsg = "Generated at: " + new Date().toString();
 
-    /** the header of the shellscript */
+    /** the header of this ShellScript */
     private final static String header = lf + explanation + lf + H + Generator + lf + H + SCM_ID
             + lf + H + Author + lf + H + Revision + lf + H + currentDateMsg + lf + lf;
 
