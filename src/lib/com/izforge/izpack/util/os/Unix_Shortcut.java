@@ -50,7 +50,6 @@
  */
 package com.izforge.izpack.util.os;
 
-import com.izforge.izpack.uninstaller.Uninstaller;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
@@ -81,8 +80,6 @@ import java.util.Vector;
 public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 {
 
-    // ~ Static fields/initializers *********************************************************
-
     // ~ Static fields/initializers
     // *******************************************************************************************************************************
     /** version = "$Id$" */
@@ -111,9 +108,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
     /** QM = "\"" : <b>Q</b>uotation<b>M</b>ark */
     private final static String QM = "\"";
-
-    // ~ Instance fields ********************************************************************
-
+    
+    private static ShellScript rootScript = null;
+    private static ShellScript uninstallScript = null;
+    private static ArrayList users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
+    //private static ArrayList tempfiles = new ArrayList();
+ 
     // ~ Instance fields
     // ******************************************************************************************************************************************
     /** internal String createdDirectory */
@@ -142,7 +142,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     private Boolean forAll = Boolean.FALSE;
 
-    /** DOCUMENT ME! */
+    /** Internal Help Buffer */
     public StringBuffer hlp;
 
     // ~ Constructors ***********************************************************************
@@ -159,7 +159,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         String userLanguage = System.getProperty("user.language", "en");
 
         hlp.append("[Desktop Entry]" + N);
-        
+
         // TODO implement Attribute: X-KDE-StartupNotify=true
 
         hlp.append("Categories=" + $Categories + N);
@@ -200,6 +200,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         props = new Properties();
 
         initProps();
+        
+        if( rootScript==null )
+            rootScript = new ShellScript();
+        if( uninstallScript == null)
+            uninstallScript = new ShellScript();
     }
 
     // ~ Methods ****************************************************************************
@@ -402,6 +407,14 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     public void save() throws Exception
     {
         String FS = File.separator;
+        String chmod = UnixHelper.getCustomCommand("chmod");
+        String chown = UnixHelper.getCustomCommand("chown");
+        String rm = UnixHelper.getRmCommand();
+        String copy = UnixHelper.getCpCommand();
+        String su = UnixHelper.getSuCommand();
+        
+        String myHome=System.getProperty("user.home");
+        
         String target = null;
 
         String shortCutDef = this.replace();
@@ -412,7 +425,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         // Create The Desktop Shortcuts
         if ("".equals(this.itsGroupName) && (this.getLinkType() == Shortcut.DESKTOP))
         {
-            target = System.getProperty("user.home") + FS + "Desktop" + FS + this.itsName
+            
+            target = myHome + FS + "Desktop" + FS + this.itsName
                     + DESKTOP_EXT;
             this.itsFileName = target;
 
@@ -431,23 +445,25 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
                 copyTo(writtenDesktopFile, tempFile);
 
-                Debug.log("Wrote Tempfile: " + tempFile.toString());
-
-                String chmod = UnixHelper.getCustomCommand("chmod");
-                String chown = UnixHelper.getCustomCommand("chown");
-                String copy = UnixHelper.getCpCommand();
-                String su = UnixHelper.getSuCommand();
+                //Debug.log("Wrote Tempfile: " + tempFile.toString());               
 
                 FileExecutor.getExecOutput(new String[] { chmod, "uga+rwx", tempFile.toString()});
 
                 // su marc.eppelmann -c "/bin/cp /home/marc.eppelmann/backup.job.out.txt
                 // /home/marc.eppelmann/backup.job.out2.txt"
-                ArrayList users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
+                
+                //StringBuffer script = new StringBuffer();
+                //
 
                 for (int idx = 0; idx < users.size(); idx++)
                 {
                     UnixUser user = ((UnixUser) users.get(idx));
-
+                    
+                    if( user.getHome().equals(myHome) )
+                    {
+                       Debug.log( "need not to copy for itself: " + user.getHome() + "==" + myHome  );
+                       continue;
+                    }
                     try
                     {
                         // aHomePath = userHomesList[idx];
@@ -460,57 +476,56 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                         // by# su username
                         //
                         // This works as well
-                        // su username -c "cp /tmp/desktopfile $HOME/Desktop/link.desktop"
-                        //
-                        // copyTo(writtenDesktopFile, dest);
-                        Debug.log("Will Copy: " + tempFile.toString() + " to " + dest.toString());
-
-                        StringBuffer script = new StringBuffer();
-
-                        script.append(su);
-                        script.append(S);
-                        script.append(user.getName());
-                        script.append(S);
-                        script.append("-c");
-                        script.append(S);
-                        script.append('"');
-                        script.append(copy);
-                        script.append(S);
-                        script.append(tempFile.toString());
-                        script.append(S);
-                        script.append(dest.toString());
-                        script.append('"');
-
-                        Debug.log("Executes: " + script.toString());
-
-                        String result = ShellScript.execAndDelete(script, File.createTempFile(
-                                this.getClass().getName(),
-                                Long.toString(System.currentTimeMillis()) + ".sh").toString());
-
-                        Debug.log("Result: " + result);
-
-                        uninstaller.addRootAsUserFile(dest.toString(), user);
-
-                        /*
-                         * FileExecutor.getExecOutput(new String[] { su, user.getName(), "-c", "\"" +
-                         * copy + " " + tempFile.toString() + " " + dest.toString() + "\""});
-                         */
-                        Debug.log("Copied: " + tempFile.toString() + " to " + dest.toString());
+                        // su $username -c "cp /tmp/desktopfile $HOME/Desktop/link.desktop"
+                        // chown $username $HOME/Desktop/link.desktop
                         
-                        try
-                        {
-                            FileExecutor.getExecOutput(new String[] { chown, user.getName(),
-                                    dest.toString()});
-                        }
-                        catch (RuntimeException rexx)
-                        {
-                            System.out.println("While Chown :" + rexx.getLocalizedMessage());
-                            rexx.printStackTrace();
-                        }
+                        //Debug.log("Will Copy: " + tempFile.toString() + " to " + dest.toString());
+
+                        rootScript.append(su);
+                        rootScript.append(S);
+                        rootScript.append(user.getName());
+                        rootScript.append(S);
+                        rootScript.append("-c");
+                        rootScript.append(S);
+                        rootScript.append('"');
+                        rootScript.append(copy);
+                        rootScript.append(S);
+                        rootScript.append(tempFile.toString());
+                        rootScript.append(S);
+                        rootScript.append(StringTool.replace(dest.toString(), " ", "\\ "));
+                        rootScript.appendln('"');
+                        
+                        rootScript.append('\n');
+                        
+                        //Debug.log("Will exec: " + script.toString());
+                        
+                        rootScript.append( chown );
+                        rootScript.append( S );
+                        rootScript.append( user.getName() );
+                        rootScript.append( S );
+                        rootScript.appendln( StringTool.replace(dest.toString(), " ", "\\ ") );
+                        rootScript.append('\n');
+                        rootScript.append('\n');
+
+                        //Debug.log("Will exec: " + script.toString());
+                        
+                        uninstallScript.append(su);
+                        uninstallScript.append(S);
+                        uninstallScript.append(user.getName());
+                        uninstallScript.append(S);
+                        uninstallScript.append("-c");
+                        uninstallScript.append(S);
+                        uninstallScript.append('"');
+                        uninstallScript.append(rm);
+                        uninstallScript.append(S);
+                        uninstallScript.append(StringTool.replace(dest.toString(), " ", "\\ "));
+                        uninstallScript.appendln('"');
+                        uninstallScript.appendln();
+                        //Debug.log("Uninstall will exec: " + uninstallScript.toString());
                     }
                     catch (Exception rex)
                     {
-                        System.out.println("While Su Copy:" + rex.getLocalizedMessage());
+                        System.out.println("Error while su Copy: " + rex.getLocalizedMessage()+"\n\n");
                         rex.printStackTrace();
 
                         /* ignore */
@@ -518,17 +533,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                         // home (ls -la /home/user drwx------)
                         // But try it anyway...
                     }
+                }
+                
 
-                    
-                }
-                try
-                {
-                    tempFile.delete();
-                }
-                catch (Exception e)
-                {
-                    tempFile.deleteOnExit();
-                }
+                rootScript.append( rm );
+                rootScript.append( S );
+                rootScript.appendln( tempFile.toString());   
+                rootScript.appendln();
             }
         }
 
@@ -540,43 +551,78 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     + DESKTOP_EXT;
             this.itsFileName = target;
             writeShortCut(target, shortCutDef);
-            
+
             if (rootUser4All)
             {
                 if (create4All)
                 {
                     // write the icon pixmaps into /usr/share/pixmaps
-                    
-                    File theIcon = new File( this.getIconLocation() );
-                    File commonIcon = new File( "/usr/share/pixmaps/" + theIcon.getName() );
-                    
+
+                    File theIcon = new File(this.getIconLocation());
+                    File commonIcon = new File("/usr/share/pixmaps/" + theIcon.getName());
+
                     try
                     {
-                      copyTo( theIcon, commonIcon  );
-                      uninstaller.addFile(commonIcon.toString());
+                        copyTo(theIcon, commonIcon);
+                        uninstaller.addFile(commonIcon.toString());
                     }
-                    catch(Exception cnc)
+                    catch (Exception cnc)
                     {
-                        Debug.log("Could Not Copy: " + theIcon + " to " + commonIcon + "( "+ cnc.getMessage() +" )" );                        
+                        Debug.log("Could Not Copy: " + theIcon + " to " + commonIcon + "( "
+                                + cnc.getMessage() + " )");
                     }
 
                     // write *.desktop.file into /usr/share/applications
 
-                    String commonTarget = "/usr/share/applications/" + this.itsName
-                    + DESKTOP_EXT;
+                    String commonTarget = "/usr/share/applications/" + this.itsName + DESKTOP_EXT;
                     this.itsFileName = target;
                     File writtenFile = writeShortCut(commonTarget, shortCutDef);
-                    
+
                     uninstaller.addFile(writtenFile.toString());
-                      
+
                 }
                 else
                 {
                     // do nothing
                 }
             }
-            
+
         }
+    }
+    
+    
+    /**
+     * Post Exec Action especially for the Unix Root User.
+     * which executes the Root ShortCut Shellscript.
+     * to copy all ShellScripts to the users Desktop.
+     */
+    public void execPostAction()
+    {
+        Debug.log("Call of Impl. execPostAction Method in " + this.getClass().getName() );
+        
+        String pseudoUnique = this.getClass().getName()+ Long.toString(System.currentTimeMillis());
+        
+        String scriptFilename = null;
+        
+        try
+        {
+            scriptFilename = File.createTempFile( pseudoUnique, ".sh"  ).toString();
+        }
+        catch (IOException e)
+        {
+            scriptFilename = System.getProperty("java.io.tmpdir", "/tmp") + "/" + pseudoUnique + ".sh"; 
+            e.printStackTrace();
+        }
+        
+        rootScript.write(scriptFilename);
+        rootScript.exec();        
+        
+        Debug.log(rootScript);
+        
+        
+        Debug.log(uninstallScript);
+        
+        uninstaller.addRootUninstallScript( uninstallScript.getContentAsString() );
     }
 
     /**

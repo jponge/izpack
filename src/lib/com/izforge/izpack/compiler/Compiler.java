@@ -25,27 +25,20 @@
 
 package com.izforge.izpack.compiler;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.jar.JarInputStream;
-import java.util.zip.ZipEntry;
-
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
 
 /**
  * The IzPack compiler class. This is now a java bean style class that can be
@@ -62,7 +55,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
 public class Compiler extends Thread
 {
     /** The IzPack version. */
-    public final static String IZPACK_VERSION = "3.8.1";
+    public final static String IZPACK_VERSION = "3.9.0";
 
     /** The IzPack home directory. */
     public static String IZPACK_HOME = ".";

@@ -175,10 +175,32 @@
     <str id="functionFailed.RegOpenKeyEx" txt="Impossible d'ouvrir la clé de registre {0}\\{1}."/>
     
     <!-- CheckedHelloPanel strings -->
-    <str id="CheckedHelloPanel.productAlreadyExist0" txt="Ce logiciel est déjà installe depuis le chemin "/>
+    <str id="CheckedHelloPanel.productAlreadyExist0" txt="Ce logiciel est déjà installé depuis le chemin "/>
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Etes-vous certain de vouloir installer une autre entité ?" />
     <str id="CheckedHelloPanel.infoOverUninstallKey" txt="La clé de désinstallation sera : " />
     
+	<!-- Headlines -->
+    <str id="CheckedHelloPanel.headline" txt="Bienvenue" />
+    <str id="CompilePanel.headline" txt="Compiler les sources Java" />
+    <str id="ConditionalUserInputPanel.headline" txt="Données utilisateur" />
+    <str id="ExtendedInstallPanel.headline" txt="Installation et Configuration" />
+    <str id="FinishPanel.headline" txt="Installation Terminée" />
+    <str id="HTMLInfoPanel.headline" txt="Informations" />
+    <str id="HTMLLicencePanel.headline" txt="Accords de Licence" />
+    <str id="HelloPanel.headline" txt="Bienvenue" />
+    <str id="ImgPacksPanel.headline" txt="Sélection des paquets à installer" />
+    <str id="InfoPanel.headline" txt="Informations" />
+    <str id="InstallPanel.headline" txt="Installation" />
+    <str id="JDKPathPanel.extendedIntro" txt="La version installée de l'application nécessite un JDK entre la version ${JDKPathPanel.minVersion} et la version ${JDKPathPanel.maxVersion}. Un environnement d'execution Java (JRE) ne sera pas suffisant." />
+    <str id="JDKPathPanel.headline" txt="Chemin du JDK" />
+    <str id="LicencePanel.headline" txt="Accords de Licence" />
+    <str id="PacksPanel.headline" txt="Sélection des paquets à installer" />
+    <str id="ProcessPanel.headline" txt="Execution de processus externes" />
+    <str id="SimpleFinishPanel.headline" txt="Installation Terminée" />
+    <str id="SummaryPanel.headline" txt="Résumé des données de configuration" />
+    <str id="TargetPanel.headline" txt="Chemin d'installation" />
+    <str id="UserInputPanel.headline" txt="Données utilisateur" /> 
+	
     <!-- Add your own panels specific strings here if you need -->
     
 </langpack>

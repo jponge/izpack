@@ -148,9 +148,11 @@
 	    Extracted / Reordered some dist related targets to prevent double copy actions.
         Also fixed the fix.crlf basedir
         
-  27.08.27: (Marc Eppelmann)
-      Embedd ShortcutPanel*.java        
-      
+	27.08.2006: (Marc Eppelmann)
+      Embedd ShortcutPanel*.java     
+        
+  14.09.2006: (Marc Eppelmann)   
+      Added target src.tar.gz and clean.src.tar.gz
               
   Mini-HowTo:
 
@@ -190,7 +192,7 @@
 
     <property file="src/ant.properties" />
     <property name="ver" value="3.9" />
-    <property name="rel" value="0-preview1" />
+    <property name="rel" value="0" />
     <property name="build.number" value="${ver}.${rel}" />
 
     <property name="src.dir" value="${basedir}/src/lib" />
@@ -430,8 +432,12 @@
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
                 <include name="net/n3/nanoxml/*.class" />
             </fileset>
-            <fileset dir="${build.dir}/com/izforge/izpack/util"/>
-            <fileset dir="${img.dir}/uninstaller" />
+            <fileset dir="${build.dir}">
+              <include name="com/izforge/izpack/util/**/*.class"/>
+            </fileset>
+            <fileset dir="${img.dir}/uninstaller">
+              <include name="**/*"/>
+            </fileset>
         </jar>
     </target>
 
@@ -445,7 +451,11 @@
                deprecation="on"
                debug="${debug}"
                debuglevel="${debuglevel}">
-            <include name="com/izforge/izpack/util/os/*.java" />
+            <include name="com/izforge/izpack/util/*.java" />
+            <include name="com/izforge/izpack/util/os/*.java"/>
+            <include name="com/izforge/izpack/util/os/unix/*.java"/>
+            <include name="com/izforge/izpack/util/xml/*.java"/>
+          
             <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
             <include name="net/n3/nanoxml/*.java" />
         </javac>
@@ -455,13 +465,7 @@
     <target name="build.uninstaller-ext" depends="compile.uninstaller-ext">
         <jar jarfile="${uninstaller-ext.jar}">
             <fileset dir="${build.dir}">
-                <include name="com/izforge/izpack/util/Librarian.class" />
-                <include name="com/izforge/izpack/util/Housekeeper.class" />
-                <include name="com/izforge/izpack/util/TargetFactory.class" />
-                <include name="com/izforge/izpack/util/FreeThread.class" />
-                <include name="com/izforge/izpack/util/CleanupClient.class" />
-                <include name="com/izforge/izpack/util/NativeLibraryClient.class" />
-                <!-- Add helper etc. you need for uninstallation -->
+                <include name="com/izforge/izpack/util/**/*.class"/>
             </fileset>
         </jar>
     </target>
@@ -833,11 +837,12 @@
     	    <delete file="bin/native/3rdparty/COIOSHelper.dll" />
         <delete dir="${basedir}/bin/native/izpack" />
         <delete includeEmptyDirs="true" dir="${basedir}/doc/izpack" />
+        <delete dir="${basedir}/_src${dist.subdir}"/>
     </target>
 
     <!-- Builds all compilation targets -->
     <target name="all"
-            depends="splashscreen, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" description="base: compiles a developer version"/>
+            depends="splashscreen, src.tar.gz, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler" description="base: compiles a developer version"/>
 
     <!-- Builds the Javadoc -->
     <target name="build.javadoc" depends="prepare" description="Builds the javadoc">
@@ -981,7 +986,7 @@
                 installerType="standard"
                 basedir="${dist.dir}"
                 izPackDir="${dist.dir}/"
-                compression="raw"
+                compression="deflate"
                 compressionlevel="9" />
     	<echo>
 sucessfully created:
@@ -1003,7 +1008,7 @@ ${dist.dir}/${installer.name}${ver}.${rel}.jar
     <target name="generate.installer" depends="prepare.install.dist">
         <antcall target="exec.izpack.compiler">
             <param name="installer.xmlfile" value="IzPack-install.xml" />
-            <param name="installer.name" value="IzPack-install-" />
+            <param name="installer.name" value="${product}-install-" />
         </antcall>
     </target>
 
@@ -1054,6 +1059,23 @@ Fixing linefeeds for several files in:
     <target name="cleandistreg"
             depends="clean, splashscreen, dist, generate.installer"
             description="creates a full dist with Win32 uninstall registry support" />
+  
+    <!-- ================================= 
+          target: clean.src.tar.gz              
+         ================================= -->
+    <target name="clean.src.tar.gz" depends="clean, src.tar.gz" description="--> creates a src.tar.gz after clean up">
+    </target>
+
+  
+    <!-- ================================= 
+          target: src.tar.gz              
+         ================================= -->
+    <target name="src.tar.gz"  description="--> creates a src.tar.gz ">
+      <mkdir dir="${basedir}/_src${dist.subdir}"/>
+      <property name="src.tar.gz" value="${basedir}/_src${dist.subdir}/${product}.src.${ver}.${rel}.tar.gz"/>
+      <tar compression="gzip" destfile="${src.tar.gz}" basedir="${basedir}" excludes="_src${dist.subdir}/**, _dist/**, _build/**, bin/panels/**, bin/customActions/**, doc/izpack/**, eclipse-bin/**, lib/standalone-compiler.jar, lib/izevent.jar, lib/uninstaller*, lib/installer.jar, lib/compiler.jar"/>
+    </target>
+
 
     <!-- convenient :) makes a quick dist (w/o docu), an installer and run them. -->
     <target name="quickdist+run"

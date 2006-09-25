@@ -24,10 +24,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
@@ -38,9 +38,9 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.os.unix.ShellScript;
-import com.izforge.izpack.util.os.unix.UnixHelper;
-import com.izforge.izpack.util.os.unix.UnixUser;
+
 
 /**
  * The files destroyer class.
@@ -113,9 +113,11 @@ public class Destroyer extends Thread
 
             // Custem action listener stuff --- afterDeletion ----
             informListeners(listeners[0], UninstallerListener.AFTER_DELETION, files, handler);
-
-            removeRootFiles(getRootFiles());
-
+            
+            if( OsVersion.IS_UNIX )
+            {
+              execRootScript(getRootScript());
+            }
             // We make a complementary cleanup
             handler.progress(size, "[ cleanups ]");
             cleanup(new File(installPath));
@@ -126,7 +128,18 @@ public class Destroyer extends Thread
         {
             handler.stopAction();
             err.printStackTrace();
-            handler.emitError("exception caught", err.toString());
+           
+            StackTraceElement str[] = err.getStackTrace();
+            for(int idx = 0; idx < str.length;idx++)
+            {
+                 
+            }
+            
+            StringWriter trace = new StringWriter();
+            //err.printStackTrace(new PrintStream);
+            err.printStackTrace(new PrintWriter(trace));
+                        
+            handler.emitError("exception caught", err.toString() + "\n" + trace.toString() );
         }
     }
 
@@ -179,6 +192,11 @@ public class Destroyer extends Thread
         return new ArrayList(files);
     }
 
+    /**
+     * Gets the List of all Executables
+     * @return The ArrayList of the Executables
+     * @throws Exception
+     */
     private ArrayList getExecutablesList() throws Exception
     {
         ArrayList executables = new ArrayList();
@@ -199,59 +217,32 @@ public class Destroyer extends Thread
      * @return The files which should remove by root for another user
      * @throws Exception
      */
-    private Hashtable getRootFiles() throws Exception
+    private String getRootScript() throws Exception
     {
-        Hashtable result = new Hashtable();
+        String result = new String();
         ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
-                + UninstallData.RootFiles));
-        int num = in.readInt();
-        for (int i = 0; i < num; i++)
-        {
-            String file = (String) in.readObject();
+                + UninstallData.ROOTSCRIPT));
+        
+        result = in.readUTF();
 
-            UnixUser user = (UnixUser) in.readObject();
-            result.put(file, user);
-        }
+        
         return result;
     }
 
     /**
      * Removes the given files as root for the given Users
      * 
-     * @param entries The files to reomove for the users
+     * @param aRootScript The Script to exec as uninstall time by root. 
      */
-    private void removeRootFiles(Hashtable entries)
+    private void execRootScript(String aRootScript)
     {
-        Enumeration e = entries.keys();
-
-        String su = UnixHelper.getSuCommand();
-        String rm = UnixHelper.getCustomCommand("rm");
-        String S = " ";
-
-        while (e.hasMoreElements())
+        if(!"".equals(aRootScript))
         {
-            String filename = (String) e.nextElement();
-            UnixUser user = (UnixUser) entries.get(filename);
-
-            StringBuffer script = new StringBuffer();
-
-            script.append(su);
-            script.append(S);
-            script.append(user.getName());
-            script.append(S);
-            script.append("-c");
-            script.append(S);
-            script.append('"');
-            script.append(rm);
-            script.append(S);
-            script.append(filename);
-            script.append('"');
-
-            Debug.log("Executes: " + script.toString());
+            Debug.log("Will Execute: " + aRootScript.toString());
 
             try
             {
-                String result = ShellScript.execAndDelete(script, File.createTempFile(
+                String result = ShellScript.execAndDelete(new StringBuffer( aRootScript ), File.createTempFile(
                         this.getClass().getName(),
                         Long.toString(System.currentTimeMillis()) + ".sh").toString());
                 Debug.log("Result: " + result);
@@ -260,8 +251,7 @@ public class Destroyer extends Thread
             {
                 Debug.log("Exeption during su remove: " + ex.getMessage());
             }
-
-        }
+        }        
     }
 
     /**

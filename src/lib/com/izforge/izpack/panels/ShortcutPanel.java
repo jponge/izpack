@@ -17,12 +17,24 @@
  */
 package com.izforge.izpack.panels;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager2;
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.*;
+import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.os.Shortcut;
+import com.izforge.izpack.util.os.unix.UnixHelper;
+import com.izforge.izpack.util.xml.XMLHelper;
+import net.n3.nanoxml.*;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -31,51 +43,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLBuilder;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLElement;
-
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.ResourceNotFoundException;
-import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.MultiLineLabel;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.TargetFactory;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.os.Shortcut;
-import com.izforge.izpack.util.os.unix.UnixHelper;
-import com.izforge.izpack.util.xml.XMLHelper;
 
 //
 // import com.izforge.izpack.panels.ShortcutData;
@@ -131,10 +98,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private static final String LOCATION_START_MENU = "startMenu";
     
     /** SPEC_CATEGORIES = "categories" */   
-    private static final String SPEC_CATEGORIES = "categories";
+    public static final String SPEC_CATEGORIES = "categories";
     
     /** SPEC_TRYEXEC = "tryexec" */
-    private static final String SPEC_TRYEXEC = "tryexec";
+    public static final String SPEC_TRYEXEC = "tryexec";
     
 
     /**
@@ -701,7 +668,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         }
         else
         {
-            ; // parent.skipPanel ();
+            // Skip on OS X
+            parent.skipPanel();
         }
     }
 
@@ -1221,9 +1189,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 continue;
             }
         }
+        
+        shortcut.execPostAction();
 
-        // }
-        //
         try
         {
             if (execFiles != null)
@@ -1249,7 +1217,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             cannot.printStackTrace();
         }
 
-        // /////parent.unlockNextButton();
+        
+        shortcut.cleanUp();
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1926,7 +1895,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     : Boolean.FALSE).toString());
 
             // Boolean.valueOf(data.addToGroup)
-            dataElement.setAttribute(AUTO_ATTRIBUTE_TYPE, Integer.toString(data.type));
+            if(OsVersion.IS_WINDOWS)
+            
+              dataElement.setAttribute(AUTO_ATTRIBUTE_TYPE, Integer.toString(data.type));
             dataElement.setAttribute(AUTO_ATTRIBUTE_COMMAND, data.commandLine);
             dataElement.setAttribute(AUTO_ATTRIBUTE_DESCRIPTION, data.description);
             dataElement.setAttribute(AUTO_ATTRIBUTE_ICON, data.iconFile);
@@ -1941,7 +1912,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             dataElement.setAttribute( SPEC_ATTRIBUTE_MIMETYPE, data.deskTopEntryLinux_MimeType );
             dataElement.setAttribute( SPEC_ATTRIBUTE_TERMINAL, data.deskTopEntryLinux_Terminal );
             dataElement.setAttribute( SPEC_ATTRIBUTE_TERMINAL_OPTIONS, data.deskTopEntryLinux_TerminalOptions );
-            dataElement.setAttribute( SPEC_ATTRIBUTE_TYPE, data.deskTopEntryLinux_Type );
+            if(! OsVersion.IS_WINDOWS )
+              dataElement.setAttribute( SPEC_ATTRIBUTE_TYPE, data.deskTopEntryLinux_Type );
 
             dataElement.setAttribute( SPEC_ATTRIBUTE_URL, data.deskTopEntryLinux_URL );
 

@@ -35,6 +35,8 @@ public class ShellScript
 {
 
     // ~ Static fields/initializers *********************************************************
+
+    // ~ Static fields/initializers *********************************************************
     /** Author = "marc.eppelmann_at_gmx.de" */
     private final static String Author = "Author: marc.eppelmann_at_gmx.de";
 
@@ -59,7 +61,7 @@ public class ShellScript
     /** lh = lf + H = "\n#" */
     private final static String lh = lf + H;
 
-    /** the explanation header for thia genreated script */
+    /** the explanation header for this generated script */
     private final static String explanation = lh + "This is an automatically generated Script."
             + lh + "Usually this can be removed if the Generator " + lh
             + "was unable to remove the script after execution." + lf;
@@ -67,10 +69,11 @@ public class ShellScript
     /** "Generated at: " + new Date().toString() */
     private static String currentDateMsg = "Generated at: " + new Date().toString();
 
-    /** the header of the shellscript */
+    /** the header of this ShellScript */
     private final static String header = lf + explanation + lf + H + Generator + lf + H + SCM_ID
             + lf + H + Author + lf + H + Revision + lf + H + currentDateMsg + lf + lf;
 
+    // ~ Instance fields ********************************************************************
 
     // ~ Instance fields ********************************************************************
     /** Internal ContentBuffer of this ShellScript */
@@ -78,6 +81,8 @@ public class ShellScript
 
     /** internal field: where to write via write( itsLocation ) this shellscript. */
     private String itsLocation;
+
+    // ~ Constructors ***********************************************************************
 
     // ~ Constructors ***********************************************************************
     /**
@@ -100,6 +105,8 @@ public class ShellScript
     }
 
     // ~ Methods ****************************************************************************
+
+    // ~ Methods ****************************************************************************
     /**
      * Appends an Object or String to this ShellScript.
      * 
@@ -111,13 +118,81 @@ public class ShellScript
     }
 
     /**
+     * Appends a Char to this ShellScript.
+     * 
+     * @param aChar a char to append
+     */
+    public void append(char aChar)
+    {
+        content.append(aChar);
+    }
+
+    /**
      * Appends an Object or String to this ShellScript with unix linefeed ("\n").
      * 
      * @param anObject the Object to append
      */
     public void appendln(Object anObject)
     {
-        append(anObject + lf);
+        append(anObject);
+        append(lf);
+    }
+
+    /**
+     * Appends a Char Object or String to this ShellScript with unix linefeed ("\n").
+     * 
+     * @param aChar a char to append
+     */
+    public void appendln(char aChar)
+    {
+        append(aChar);
+        append(lf);
+    }
+
+    /**
+     * Appends an Object or String to this ShellScript with unix linefeed ("\n").
+     */
+    public void appendln()
+    {
+        append(lf);
+    }
+
+    /**
+     * gets the Content of this Script.
+     * 
+     * @return the Content
+     */
+    public StringBuffer getContent()
+    {
+        return content;
+    }
+
+    /**
+     * Gets the Content of this Script as String 
+     * 
+     * @return the script as String
+     */
+    public String getContentAsString()
+    {
+        return content.toString();
+    }
+
+    /**
+     * Dumps the ShellScript Content, and Location.
+     * Use getContentAsString() to get this ShellScripts Content 
+     * 
+     * @return The ShellScript as Object dump.
+     */
+    public String toString()
+    {
+        StringBuffer result = new StringBuffer();
+        result.append(getClass().getName());
+        result.append('\n');
+        result.append(itsLocation);
+        result.append('\n');
+        result.append(content);
+
+        return result.toString();
     }
 
     /**
@@ -272,8 +347,11 @@ public class ShellScript
          * ShellScript s = new ShellScript( ); s.append( "ls $HOME" ); s.write( System.getProperty(
          * "user.home", "." ) + File.separator + "test.sh" );
          */
-        System.out.println(ShellScript.execute(new StringBuffer("ls $HOME"), System.getProperty(
-                "user.home", ".")
-                + File.separator + Long.toString(System.currentTimeMillis()) + "test.sh"));
+
+        /*
+         * System.out.println(ShellScript.execute(new StringBuffer("ls $HOME"), System.getProperty(
+         * "user.home", ".") + File.separator + Long.toString(System.currentTimeMillis()) +
+         * "test.sh"));
+         */
     }
 }

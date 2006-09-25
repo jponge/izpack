@@ -9,6 +9,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/_build" />
       <excludeFolder url="file://$MODULE_DIR$/_dist" />
+      <excludeFolder url="file://$MODULE_DIR$/doc/izpack" />
+      <excludeFolder url="file://$MODULE_DIR$/doc/izpack/javadoc" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

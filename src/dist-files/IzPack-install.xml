@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.9.0-preview1 (build 2006.06.23)</appversion>
+        <appversion>3.9.0 (build 2006.09.25)</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
@@ -39,6 +39,7 @@
             <author email="" name="Scott Starks @JBoss/RedHat (contributors)" />
             <author email="" name="Alex Pinkin @JBoss/RedHat (contributors)" />
             <author email="" name="Dennis Reil (contributor)" />
+            <author email="" name="Thomas Edwin Santosa (contributor)" />
 
             <author email=""
                     name="... the many other developers and contributors to the previous releases (see Thanks.txt)"/>
@@ -55,7 +56,7 @@
         </laf>
         <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
     	<modifier key="layoutAnchor" value="CENTER"/>
-    	<modifier key="headingPanelCounter" value="text"/>
+    	<modifier key="headingPanelCounter" value="progressbar"/>
 		<modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
 		<modifier key="allYGap" value="3"/>
 		<modifier key="paragraphYGap" value="10"/>	
@@ -100,7 +101,7 @@
     <resources>
         <res src="install-readme.html" id="HTMLInfoPanel.info"/>
         <res src="Licence.txt" id="LicencePanel.licence"/>
-        <res src="splash-sydney.png" id="installer.langsel.img"/>
+        <res src="splash-3.9.png" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0"/>
