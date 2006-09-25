@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.9.0-RC1 (build 2006.09.19)</appversion>
+        <appversion>3.9.0 (build 2006.09.25)</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
