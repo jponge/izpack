@@ -1,6 +1,8 @@
 [ The list of the different public versions of IzPack ]
 
   > 3.9.0 (build 2006.09.25)
+- Fix NullPointerException in CompilerConfig, if you specify a 
+	compiler listener and the compiler listener class can't be found (Dennis Reil)
 - Fix Accents In French Langpack (Fabrice Mirabile)
 - Update French Langpack (Julien Ponge)
 - New Indonesian Langpack (Hans Aikema, thanks to Thomas Edwin Santosa)

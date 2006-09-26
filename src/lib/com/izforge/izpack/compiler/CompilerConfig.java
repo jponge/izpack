@@ -2052,6 +2052,10 @@ public class CompilerConfig extends Thread
             jarPath = "bin/customActions/" + className + ".jar";
         URL url = findIzPackResource(jarPath, "CustomAction jar file", var);
         String fullName = getFullClassName(url, className);
+        if (fullName == null){
+            // class not found
+            return null;
+        }
         if (url != null)
         {
             if (getClass().getResource("/" + jarPath) != null)
