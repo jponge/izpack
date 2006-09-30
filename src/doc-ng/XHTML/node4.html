@@ -153,7 +153,13 @@ href="node1.html"><img class="alignbottom" width="65" height="24" alt="contents"
 
 <li><a name="tex2html412" href="node4.html#SECTION004413000000000000000">CompilePanel</a></li>
 
-<li><a name="tex2html413" href="node4.html#SECTION004414000000000000000">ProcessPanel</a></li>
+<li><a name="tex2html413" href="node4.html#SECTION004414000000000000000">ProcessPanel</a>
+	<ul>
+		<li><a name="tex2html397" href="node4.html#SECTION004414100000000000000"><tt>&lt;executeclass&gt;</tt> - Execute Java Classes</a></li>
+		<li><a name="tex2html397" href="node4.html#SECTION004414200000000000000"><tt>&lt;executeForPack&gt;</tt> - Only execute the job for certain packs</a></li>
+		<li><a name="tex2html397" href="node4.html#SECTION004414300000000000000"><tt>&lt;logfiledir&gt;</tt> - Output of the processPanel saved to a log</a></li>
+	</ul>
+</li>
 
 <li><a name="tex2html414" href="node4.html#SECTION004415000000000000000">JDKPathPanel</a></li>
 
@@ -1189,6 +1195,7 @@ or directories.</p>
 <p>Each job may have an <tt>&lt;os&gt;</tt> attribute - see <a href="#tag:os">2.3.8</a> for details.<br />
 </p>
 
+<a name="SECTION004414100000000000000"><h3><tt>&lt;executeclass&gt;</tt> - Execute Java Classes</h3></a>
 <p>It is also possible to execute Java classes from this panel. Here's what this feature author (Alex Bradley) says:</p>
 
 <blockquote><p>i've been able to work around my requirements by extending the <tt>ProcessPanelWorker</tt> functionality to run user-specified classes. i've extended the DTD of the <tt>
@@ -1210,6 +1217,27 @@ run( AbstractUIProcessHandler handler, String[] args]);
 <blockquote><p>It can do everything i need and more. In particular, it allows me to write a process extension and still be able to provide feedback to the user through the feedback panel, and to add new
 functionality to the installer, after its been built.</p></blockquote>
 
+<p>To use the executeclass facility, you will need to create a jar file
+with your class and then add it to the installer with the
+<a href="node4.html#SECTION004310000000000000000">The Jar Merging Element</a>.</p>
+
+<a name="SECTION004414200000000000000"><h3><tt>&lt;executeForPack&gt;</tt> - Only execute the job for certain packs</h3></a>
+
+<p>This can be be used to run the job only if the pack is enabled.
+For example, the batch file will if either the <code>Sources</code>
+or <code>Executables</code> packs are selected at install time.</p>
+<pre>
+&lt;processing&gt;
+ &lt;job name="List files"&gt;
+  &lt;executeForPack name="Sources"/&gt;
+  &lt;executeForPack name="Executables"/&gt;
+  &lt;os family="windows" /&gt;
+  &lt;executefile name="$INSTALL_PATH\batch\ListFiles.bat" /&gt;
+ &lt;/job&gt;
+&lt;/processing&gt; 
+</pre>
+
+<a name="SECTION004414300000000000000"><h3><tt>&lt;logfiledir&gt;</tt> - Output of the processPanel saved to a log</h3></a>
 <p><a name="ProcessPanelLogFile"></a>New with version 3.7 is the possibility to tee output that is written to the ProcessPanel's textarea into an optional logfile. Using this feature is pretty much straightforward, you only have to
 add a line in <tt>ProcessPanel.Spec.xml</tt> that will tell IzPack the location, where the logfile should be stored.</p>
 

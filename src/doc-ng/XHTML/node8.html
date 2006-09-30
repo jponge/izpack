@@ -267,6 +267,10 @@
       a section, the entity is always created. However, if the tag exists, the entity is only created if one or more of the listed packs are selected for installation. As mentioned before, if you are
       using this feature, make sure the user input panel shows up after the packs panel.<br />
     </p>
+    <p>
+      Also, any number of <tt>&lt;createForUnselectedPack name=''a pack name'' /&gt;</tt> tags can be added to the <tt>&lt;panel&gt;</tt> and <tt>&lt;field&gt;</tt> sections. This tag has only one attribute and no
+      data. It works exactly like createForPack except that once added userinputpanel will appear for only NOT Selected packs. As mentioned earlier, you need to make sure that the user input panel shows up after the packs panel for this feature to work.<br />
+    </p>
     <h1>
       <a name="SECTION00830000000000000000">Internationalization</a>
     </h1>
