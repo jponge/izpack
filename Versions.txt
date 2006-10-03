@@ -1,5 +1,8 @@
 [ The list of the different public versions of IzPack ]
 
+	> 3.9.1 (build xxxx.xx.xx)
+- Fixed the DesktopShortcutCheckboxEnabled Builtin Variable in docu (Fabrice Mirabile))
+
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 
 	compiler listener and the compiler listener class can't be found (Dennis Reil)
