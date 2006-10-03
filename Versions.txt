@@ -1,5 +1,10 @@
 [ The list of the different public versions of IzPack ]
 
+	> 3.9.1 (build xxxx.xx.xx)
+- Added docu: executeForPack, executeclass,logfiledir  for ProcessPanel (Fabrice Mirabile)
+- Added docu: createForUnselectedPack for UserInputPanel (Fabrice Mirabile)
+
+
   > 3.9.0 (build 2006.09.25)
 - Fix Accents In French Langpack (Fabrice Mirabile)
 - Update French Langpack (Julien Ponge)
