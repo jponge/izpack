@@ -153,6 +153,9 @@
         
   14.09.2006: (Marc Eppelmann)   
       Added target src.tar.gz and clean.src.tar.gz
+      
+  10.10.2006: (Fabrice Mirabile)   
+      Fixeed target src.tar.gz and clean.src.tar.gz
               
   Mini-HowTo:
 
@@ -357,6 +360,7 @@
                deprecation="on"
                debug="${debug}"
                debuglevel="${debuglevel}">
+            <include name="com/izforge/izpack/panels/PathSelectionPanel.java" />
             <include name="com/izforge/izpack/*.java" />
             <include name="com/izforge/izpack/gui/*.java" />
             <include name="com/izforge/izpack/installer/*.java" />
@@ -375,6 +379,7 @@
                 <attribute name="Main-Class" value="${installer.class}" />
             </manifest>
             <fileset dir="${build.dir}">
+                <include name="com/izforge/izpack/panels/PathSelectionPanel.class" />
                 <include name="com/izforge/izpack/*.class" />
                 <include name="com/izforge/izpack/gui/*.class" />
                 <include name="com/izforge/izpack/installer/*.class" />
