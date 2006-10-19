@@ -3,6 +3,7 @@
 	> 3.9.1 (build xxxx.xx.xx)
 - Added docu: executeForPack, executeclass,logfiledir  for ProcessPanel (Fabrice Mirabile)
 - Added docu: createForUnselectedPack for UserInputPanel (Fabrice Mirabile)
+- Added DataCheckPanel (Fabrice Mirabile & Hal Vaughan)
 
 
   > 3.9.0 (build 2006.09.25)

@@ -153,6 +153,9 @@
         
   14.09.2006: (Marc Eppelmann)   
       Added target src.tar.gz and clean.src.tar.gz
+      
+  19.10.2006: (Fabrice Mirabile & Hal Vaughan)   
+      Added DataCheckPanel
               
   Mini-HowTo:
 
@@ -523,6 +526,9 @@
         <build-panel name="SelectPrinterPanel">
 	          <include name="com/izforge/izpack/panels/SelectPrinterPanel.java"/>
 	      </build-panel>
+	      <build-panel name="DataCheckPanel">
+				  <include name="com/izforge/izpack/panels/DataCheckPanel.java" />
+				</build-panel>
         <build-panel name="CheckedHelloPanel">
             <include name="com/izforge/izpack/panels/CheckedHelloPanel.java" />
             <include name="com/izforge/izpack/panels/HelloPanel.java" />
