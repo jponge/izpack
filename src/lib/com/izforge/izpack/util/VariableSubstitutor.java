@@ -280,6 +280,17 @@ public class VariableSubstitutor implements Serializable
 
         // Copy data and substitute variables
         int c = reader.read();
+        // Ignore BOM of UTF-8
+        if( c == 0xEF )
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                c = reader.read();
+            }
+        }
+        // Ignore quaint return values at UTF-8 BOMs. 
+        if( c > 0xFF )
+            c = reader.read();
         while (true)
         {
             // Find the next potential variable reference or EOF
