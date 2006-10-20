@@ -924,8 +924,8 @@ Slashes are handled special (see attribute <tt>targetfile</tt> of tag <tt>&lt;pa
 
 <li><tt>type</tt> : <tt>bin</tt> or <tt>jar</tt> (the default is <tt>bin</tt>)</li>
 
-<li><tt>stage</tt> : specifies when to launch : <tt>postinstall</tt> is just after the installation is done and the default value, <tt>never</tt> will never launch it (useful to set the +x flag on
-Unix). <tt>uninstall</tt> will launch the executable when the application is uninstalled. The executable is executed before any files are deleted.</li>
+<li><tt>stage</tt> : specifies when to launch : <tt>postinstall</tt> is just after the installation is done, <tt>never</tt> will never launch it (useful to set the +x flag on
+Unix). <tt>uninstall</tt> will launch the executable when the application is uninstalled. The executable is executed before any files are deleted. <tt>never</tt> is the default value.</li>
 
 <li><tt>failure</tt> : specifies what to do when an error occurs : <tt>abort</tt> will abort the installation process, <tt>ask</tt> (default) will ask the user what to do and <tt>warn</tt> will just
 tell the user that something is wrong</li>
