@@ -814,7 +814,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                         break;
                     }
                 }
-                if (realSizeDim.width - insets.right > xpos && rowStretch > 0.0)
+                if (realSizeDim.width - insets.right != xpos && rowStretch > 0.0)
                 { // Compute only if there is space to share and at least one control should be
                     // stretched.
                     int pixel = realSizeDim.width - insets.right - xpos; // How many pixel we
