@@ -933,6 +933,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             break;
 
         }
+        if(generellOffset[0] < 0 ) generellOffset[0] = 0;
+        if(generellOffset[1] < 0 ) generellOffset[1] = 0;
         return (retval);
     }
 
