@@ -1261,6 +1261,7 @@ public class InstallerFrame extends JFrame
         }
         for (int i = 1; i < headingLines; ++i)
         {
+            headingLabels[i] = new JLabel();
             // Minor headings should be a little bit more to the right.
             headingLabels[i].setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
         }
