@@ -83,7 +83,8 @@ $Id$
 
 <!-- The panels section (indicates the panels to use) -->
 <!ELEMENT panels (panel+)>
-    <!ELEMENT panel EMPTY>
+    <!ELEMENT panel (os*)>
+        <!ATTLIST panel os (unix|windows|mac) #IMPLIED>
         <!ATTLIST panel classname CDATA #REQUIRED>
 
 <!-- The listener section (indicates which listener where to use) -->
@@ -101,7 +102,7 @@ $Id$
         <!ATTLIST pack id CDATA #IMPLIED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
         <!ATTLIST pack preselected (yes|no) "yes">
-        <!ATTLIST pack os CDATA #IMPLIED>
+        <!ATTLIST pack os (unix|windows|mac) #IMPLIED>
         <!ATTLIST pack loose (true|false) "false">
         <!ATTLIST pack group CDATA #IMPLIED>
         <!ATTLIST pack installGroups CDATA #IMPLIED>

@@ -227,12 +227,13 @@ public class InstallerFrame extends JFrame
         // We load each of them
         int curVisPanelNumber = 0;
         int lastVis = 0;
+        int count = 0;
         for (i = 0; i < size; i++)
         {
             // We add the panel
             Panel p = (Panel) panelsOrder.get(i);
-
-            if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) continue;
+            if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
+                    continue;
             className = p.className;
             String praefix = "com.izforge.izpack.panels.";
             if (className.indexOf('.') > -1)
@@ -244,19 +245,19 @@ public class InstallerFrame extends JFrame
             panel = (IzPanel) object;
             installdata.panels.add(panel);
             if (panel.isHidden())
-                visiblePanelMapping.add(i, new Integer(-1));
+                visiblePanelMapping.add(count, new Integer(-1));
             else
             {
-                visiblePanelMapping.add(i, new Integer(curVisPanelNumber));
+                visiblePanelMapping.add(count, new Integer(curVisPanelNumber));
                 curVisPanelNumber++;
-                lastVis = i;
+                lastVis = count;
             }
-
+            count++;
             // We add the XML data panel root
             XMLElement panelRoot = new XMLElement(className);
             installdata.xmlData.addChild(panelRoot);
         }
-        visiblePanelMapping.add(i,new Integer(lastVis));
+        visiblePanelMapping.add(count,new Integer(lastVis));
     }
 
     /**

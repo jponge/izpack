@@ -4,6 +4,8 @@
 - Added docu: executeForPack, executeclass,logfiledir  for ProcessPanel (Fabrice Mirabile)
 - Added docu: createForUnselectedPack for UserInputPanel (Fabrice Mirabile)
 - Added DataCheckPanel (Fabrice Mirabile & Hal Vaughan)
+- Bugfix at using OS dependant panels; dtd adapted to implementation of it
+  (Klaus Bartz, thanks to Francois Guillet).
 
 
   > 3.9.0 (build 2006.09.25)
