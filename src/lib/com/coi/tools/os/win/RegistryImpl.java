@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.izforge.izpack.util.Debug;
 
 /**
  * System dependent helper for MS Windows registry handling. This class is only vaild on Windows. It
@@ -476,7 +475,6 @@ public class RegistryImpl
                     }
                     if (currentContents.equals(rli.getNewValue()))
                     {
-                        Debug.error("delete it ");
                         deleteValueN(rli.getRoot(), rli.getKey(), rli.getValueName());
                     }
                     // TODO: what todo if value has changed?
