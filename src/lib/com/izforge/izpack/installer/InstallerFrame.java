@@ -94,6 +94,7 @@ import com.izforge.izpack.CustomData;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
@@ -107,16 +108,18 @@ import com.izforge.izpack.util.os.unix.UnixUser;
 
 /**
  * The IzPack installer frame.
- * 
+ *
  * @author Julien Ponge created October 27, 2002
  * @author Fabrice Mirabile added fix for alert window on cross button, July 06 2005
+ * @author Dennis Reil, added RulesEngine November 10 2006
  */
-public class InstallerFrame extends JFrame
-{
+public class InstallerFrame extends JFrame {
 
     private static final long serialVersionUID = 3257852069162727473L;
 
-    /** VM version to use version dependent methods calls */
+    /**
+     * VM version to use version dependent methods calls
+     */
     private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
             .getProperty("java.specification.version"));
 
@@ -126,64 +129,105 @@ public class InstallerFrame extends JFrame
 
 //    private static final int HEADINGLINES = 1;
 
-    /** The language pack. */
+    /**
+     * The language pack.
+     */
     public LocaleDatabase langpack;
 
-    /** The installation data. */
+    /**
+     * The installation data.
+     */
     protected InstallData installdata;
 
-    /** The icons database. */
+    /**
+     * The icons database.
+     */
     public IconsDatabase icons;
 
-    /** The panels container. */
+    /**
+     * The panels container.
+     */
     protected JPanel panelsContainer;
 
-    /** The frame content pane. */
+    /**
+     * The frame content pane.
+     */
     protected JPanel contentPane;
 
-    /** The previous button. */
+    /**
+     * The previous button.
+     */
     protected JButton prevButton;
 
-    /** The next button. */
+    /**
+     * The next button.
+     */
     protected JButton nextButton;
 
-    /** The quit button. */
+    /**
+     * The quit button.
+     */
     protected JButton quitButton;
 
-    /** Mapping from "raw" panel number to visible panel number. */
+    /**
+     * Mapping from "raw" panel number to visible panel number.
+     */
     protected ArrayList visiblePanelMapping;
-    
-   /** Registered GUICreationListener. */
+
+    /**
+     * Registered GUICreationListener.
+     */
     protected ArrayList guiListener;
 
-    /** Heading major text. */
+    /**
+     * Heading major text.
+     */
     protected JLabel[] headingLabels;
 
-    /** Panel which contains the heading text and/or icon */
+    /**
+     * Panel which contains the heading text and/or icon
+     */
     protected JPanel headingPanel;
 
-    /** The heading counter component. */
+    /**
+     * The heading counter component.
+     */
     protected JComponent headingCounterComponent;
-    
-    /** Image */
+
+    /**
+     * Image
+     */
     private JLabel iconLabel;
 
-    /** Count for discarded interrupt trials. */
+    /**
+     * Count for discarded interrupt trials.
+     */
     private int interruptCount = 1;
-    
- 
-    /** Maximum of discarded interrupt trials. */
+
+
+    /**
+     * Maximum of discarded interrupt trials.
+     */
     private static final int MAX_INTERRUPT = 3;
 
     /**
-     * The constructor (normal mode).
-     * 
-     * @param title The window title.
-     * @param installdata The installation data.
-     * @exception Exception Description of the Exception
+     * conditions
      */
-    public InstallerFrame(String title, InstallData installdata) throws Exception
-    {
+    protected RulesEngine rules;
+
+    /**
+     * Resource name of the conditions specification
+     */
+    private static final String CONDITIONS_SPECRESOURCENAME = "conditions.xml";
+
+    /**
+     * The constructor (normal mode).
+     *
+     * @param title       The window title.
+     * @param installdata The installation data.
+     * @throws Exception Description of the Exception
+     */
+    public InstallerFrame(String title, InstallData installdata) throws Exception {
         super(title);
         guiListener = new ArrayList();
         visiblePanelMapping = new ArrayList();
@@ -193,6 +237,10 @@ public class InstallerFrame extends JFrame
         // Sets the window events handler
         addWindowListener(new WindowHandler());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        // initialize rules by loading the conditions
+        loadConditions();
+
         // Builds the GUI
         loadIcons();
         loadPanels();
@@ -204,12 +252,38 @@ public class InstallerFrame extends JFrame
     }
 
     /**
-     * Loads the panels.
-     * 
-     * @exception Exception Description of the Exception
+     *  Reads the conditions specification file and initializes the rules engine.
      */
-    private void loadPanels() throws Exception
-    {
+    protected void loadConditions() {
+        try {
+            InputStream input = this.getResource(CONDITIONS_SPECRESOURCENAME);
+
+            if (input == null) {
+                // there seem to be no conditions
+                return;
+            }
+
+            StdXMLParser parser = new StdXMLParser();
+            parser.setBuilder(new StdXMLBuilder());
+            parser.setValidator(new NonValidator());
+            parser.setReader(new StdXMLReader(input));
+
+            // get the data
+            XMLElement conditionsxml = (XMLElement) parser.parse();
+            this.rules = new RulesEngine(conditionsxml, installdata);
+        }
+        catch (Exception e) {
+            Debug.log(e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads the panels.
+     *
+     * @throws Exception Description of the Exception
+     */
+    private void loadPanels() throws Exception {
         // Initialisation
         java.util.List panelsOrder = installdata.panelsOrder;
         int i;
@@ -222,32 +296,31 @@ public class InstallerFrame extends JFrame
         Class[] paramsClasses = new Class[2];
         paramsClasses[0] = Class.forName("com.izforge.izpack.installer.InstallerFrame");
         paramsClasses[1] = Class.forName("com.izforge.izpack.installer.InstallData");
-        Object[] params = { this, installdata};
+        Object[] params = {this, installdata};
 
         // We load each of them
         int curVisPanelNumber = 0;
         int lastVis = 0;
         int count = 0;
-        for (i = 0; i < size; i++)
-        {
+        for (i = 0; i < size; i++) {
             // We add the panel
             Panel p = (Panel) panelsOrder.get(i);
             if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
-                    continue;
+                continue;
             className = p.className;
             String praefix = "com.izforge.izpack.panels.";
             if (className.indexOf('.') > -1)
-            // Full qualified class name
+                // Full qualified class name
                 praefix = "";
             objectClass = Class.forName(praefix + className);
             constructor = objectClass.getDeclaredConstructor(paramsClasses);
             object = constructor.newInstance(params);
             panel = (IzPanel) object;
+            panel.setMetadata(p);
             installdata.panels.add(panel);
             if (panel.isHidden())
                 visiblePanelMapping.add(count, new Integer(-1));
-            else
-            {
+            else {
                 visiblePanelMapping.add(count, new Integer(curVisPanelNumber));
                 curVisPanelNumber++;
                 lastVis = count;
@@ -257,16 +330,15 @@ public class InstallerFrame extends JFrame
             XMLElement panelRoot = new XMLElement(className);
             installdata.xmlData.addChild(panelRoot);
         }
-        visiblePanelMapping.add(count,new Integer(lastVis));
+        visiblePanelMapping.add(count, new Integer(lastVis));
     }
 
     /**
      * Loads the icons.
-     * 
-     * @exception Exception Description of the Exception
+     *
+     * @throws Exception Description of the Exception
      */
-    private void loadIcons() throws Exception
-    {
+    private void loadIcons() throws Exception {
         // Initialisations
         icons = new IconsDatabase();
         URL url;
@@ -287,8 +359,7 @@ public class InstallerFrame extends JFrame
         // We load the icons
         Vector children = data.getChildrenNamed("icon");
         int size = children.size();
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             icon = (XMLElement) children.get(i);
             url = InstallerFrame.class.getResource(icon.getAttribute("res"));
             img = new ImageIcon(url);
@@ -298,8 +369,7 @@ public class InstallerFrame extends JFrame
         // We load the Swing-specific icons
         children = data.getChildrenNamed("sysicon");
         size = children.size();
-        for (int i = 0; i < size; i++)
-        {
+        for (int i = 0; i < size; i++) {
             icon = (XMLElement) children.get(i);
             url = InstallerFrame.class.getResource(icon.getAttribute("res"));
             img = new ImageIcon(url);
@@ -307,19 +377,24 @@ public class InstallerFrame extends JFrame
         }
     }
 
-    /** Builds the GUI. */
-    private void buildGUI()
-    {
+    /**
+     * Builds the GUI.
+     */
+    private void buildGUI() {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //patch 06/07/2005, Fabrice Mirabile
         // Sets the frame icon
         setIconImage(icons.getImageIcon("JFrameIcon").getImage());
 
         // Prepares the glass pane to block the gui interaction when needed
         JPanel glassPane = (JPanel) getGlassPane();
-        glassPane.addMouseListener(new MouseAdapter() {/* Nothing todo */});
-        glassPane.addMouseMotionListener(new MouseMotionAdapter() {/* Nothing todo */});
-        glassPane.addKeyListener(new KeyAdapter() {/* Nothing todo */});
-        glassPane.addFocusListener(new FocusAdapter() {/* Nothing todo */});
+        glassPane.addMouseListener(new MouseAdapter() {/* Nothing todo */
+        });
+        glassPane.addMouseMotionListener(new MouseMotionAdapter() {/* Nothing todo */
+        });
+        glassPane.addKeyListener(new KeyAdapter() {/* Nothing todo */
+        });
+        glassPane.addFocusListener(new FocusAdapter() {/* Nothing todo */
+        });
 
         // We set the layout & prepare the constraint object
         contentPane = (JPanel) getContentPane();
@@ -369,11 +444,9 @@ public class InstallerFrame extends JFrame
         quitButton.addActionListener(navHandler);
         contentPane.add(navPanel, BorderLayout.SOUTH);
 
-        try
-        {
+        try {
             ImageIcon icon = loadIcon(ICON_RESOURCE, 0, true);
-            if (icon != null)
-            {
+            if (icon != null) {
                 JPanel imgPanel = new JPanel();
                 imgPanel.setLayout(new BorderLayout());
                 imgPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
@@ -383,8 +456,7 @@ public class InstallerFrame extends JFrame
                 contentPane.add(imgPanel, BorderLayout.WEST);
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // ignore
         }
 
@@ -394,73 +466,61 @@ public class InstallerFrame extends JFrame
         createHeading(navPanel);
     }
 
-    private void callGUIListener(int what)
-    {
+    private void callGUIListener(int what) {
         callGUIListener(what, null);
     }
 
-    private void callGUIListener(int what, Object param)
-    {
+    private void callGUIListener(int what, Object param) {
         Iterator iter = guiListener.iterator();
         while (iter.hasNext())
             ((GUIListener) iter.next()).guiActionPerformed(what, param);
     }
 
     private ImageIcon loadIcon(String resPrefix, int PanelNo, boolean tryBaseIcon)
-            throws ResourceNotFoundException, IOException
-    {
+            throws ResourceNotFoundException, IOException {
         ResourceManager rm = ResourceManager.getInstance();
         ImageIcon icon = null;
-        if (tryBaseIcon)
-        {
-            try
-            {
+        if (tryBaseIcon) {
+            try {
                 icon = rm.getImageIconResource(resPrefix);
             }
             catch (Exception e) // This is not that clean ...
             {
                 icon = rm.getImageIconResource(resPrefix + "." + PanelNo);
             }
-        }
-        else
+        } else
             icon = rm.getImageIconResource(resPrefix + "." + PanelNo);
         return (icon);
     }
 
-    private void loadAndShowImage(int panelNo)
-    {
+    private void loadAndShowImage(int panelNo) {
         loadAndShowImage(iconLabel, ICON_RESOURCE, panelNo);
     }
 
-    private void loadAndShowImage(JLabel iLabel, String resPrefix, int panelNo)
-    {
+    private void loadAndShowImage(JLabel iLabel, String resPrefix, int panelNo) {
         ImageIcon icon = null;
-        try
-        {
+        try {
             icon = loadIcon(resPrefix, panelNo, false);
         }
-        catch (Exception e)
-        {
-            try
-            {
+        catch (Exception e) {
+            try {
                 icon = loadIcon(resPrefix, panelNo, true);
             }
-            catch (Exception e1)
-            {
+            catch (Exception e1) {
                 // ignore
             }
         }
-        if (icon != null)
-        {
+        if (icon != null) {
             iLabel.setVisible(false);
             iLabel.setIcon(icon);
             iLabel.setVisible(true);
         }
     }
 
-    /** Shows the frame. */
-    private void showFrame()
-    {
+    /**
+     * Shows the frame.
+     */
+    private void showFrame() {
         pack();
         setSize(installdata.guiPrefs.width, installdata.guiPrefs.height);
         setResizable(installdata.guiPrefs.resizable);
@@ -472,42 +532,35 @@ public class InstallerFrame extends JFrame
 
     /**
      * Switches the current panel.
-     * 
+     *
      * @param last Description of the Parameter
      */
-    protected void switchPanel(int last)
-    {
-        try
-        {
-            if (installdata.curPanelNumber < last)
-            {
+    protected void switchPanel(int last) {
+        try {
+            if (installdata.curPanelNumber < last) {
                 isBack = true;
             }
             panelsContainer.setVisible(false);
             IzPanel panel = (IzPanel) installdata.panels.get(installdata.curPanelNumber);
-            IzPanel l_panel = (IzPanel) installdata.panels.get(last);
+            IzPanel l_panel = (IzPanel) installdata.panels.get(last);                        
             //instead of writing data here which leads to duplicated entries in
             //auto-installation script (bug # 4551), let's make data only immediately before
             //writing out that script.
-            //l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
-            
+            //l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));            
             // No previos button in the first visible panel
-            if (((Integer) visiblePanelMapping.get(installdata.curPanelNumber)).intValue() == 0)
-            {
+            if (((Integer) visiblePanelMapping.get(installdata.curPanelNumber)).intValue() == 0) {
                 prevButton.setVisible(false);
                 lockPrevButton();
                 unlockNextButton(); // if we push the button back at the license
                 // panel
             }
             // Only the exit button in the last panel.
-            else if (((Integer) visiblePanelMapping.get(installdata.panels.size())).intValue() == installdata.curPanelNumber)
-            {
+            else
+            if (((Integer) visiblePanelMapping.get(installdata.panels.size())).intValue() == installdata.curPanelNumber) {
                 prevButton.setVisible(false);
                 nextButton.setVisible(false);
                 lockNextButton();
-            }
-            else
-            {
+            } else {
                 prevButton.setVisible(true);
                 nextButton.setVisible(true);
                 unlockPrevButton();
@@ -519,40 +572,33 @@ public class InstallerFrame extends JFrame
             // No idea why... (Klaus Bartz, 06.09.25)
             SwingUtilities.invokeLater(new Runnable() {
 
-                public void run()
-                {
+                public void run() {
                     JButton cdb = null;
-                    if( nextButton.isEnabled() )
+                    if (nextButton.isEnabled())
                         cdb = nextButton;
-                    else if( quitButton.isEnabled() )
+                    else if (quitButton.isEnabled())
                         cdb = quitButton;
                     getRootPane().setDefaultButton(cdb);
                 }
             });
-            
 
             // Change panels container to the current one.
             panelsContainer.remove(l_panel);
             l_panel.panelDeactivate();
             panelsContainer.add(panel);
 
-            if (panel.getInitialFocus() != null)
-            { // Initial focus hint should be performed after current panel
+            if (panel.getInitialFocus() != null) { // Initial focus hint should be performed after current panel
                 // was added to the panels container, else the focus hint will
                 // be ignored.
                 // Give a hint for the initial focus to the system.
                 final Component inFoc = panel.getInitialFocus();
-                if (JAVA_SPECIFICATION_VERSION < 1.35)
-                {
+                if (JAVA_SPECIFICATION_VERSION < 1.35) {
                     inFoc.requestFocus();
-                }
-                else
-                {   // On java VM version >= 1.5 it works only if 
+                } else {   // On java VM version >= 1.5 it works only if
                     // invoke later will be used.
                     SwingUtilities.invokeLater(new Runnable() {
 
-                        public void run()
-                        {
+                        public void run() {
                             inFoc.requestFocusInWindow();
                         }
                     });
@@ -561,11 +607,9 @@ public class InstallerFrame extends JFrame
                  * On editable text components position the caret to the end of the cust existent
                  * text.
                  */
-                if (inFoc instanceof JTextComponent)
-                {
+                if (inFoc instanceof JTextComponent) {
                     JTextComponent inText = (JTextComponent) inFoc;
-                    if (inText.isEditable() && inText.getDocument() != null)
-                    {
+                    if (inText.isEditable() && inText.getDocument() != null) {
                         inText.setCaretPosition(inText.getDocument().getLength());
                     }
                 }
@@ -577,43 +621,39 @@ public class InstallerFrame extends JFrame
             loadAndShowImage(((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
                     .intValue());
             isBack = false;
-            callGUIListener(GUIListener.PANEL_SWITCHED);
+            callGUIListener(GUIListener.PANEL_SWITCHED);            
         }
-        catch (Exception err)
-        {
+        catch (Exception err) {
             err.printStackTrace();
         }
     }
 
-    /** Writes the uninstalldata. */
-    private void writeUninstallData()
-    {
+    /**
+     * Writes the uninstalldata.
+     */
+    private void writeUninstallData() {
         // Show whether a separated logfile should be also written or not.
         String logfile = installdata.getVariable("InstallerFrame.logfilePath");
         BufferedWriter extLogWriter = null;
-        if (logfile != null)
-        {
-            if( logfile.toLowerCase().startsWith("default"))
+        if (logfile != null) {
+            if (logfile.toLowerCase().startsWith("default"))
                 logfile = "$INSTALL_PATH/Uninstaller/install.log";
             logfile = IoHelper.translatePath(logfile, new VariableSubstitutor(installdata.getVariables()));
             File outFile = new File(logfile);
-            if( ! outFile.getParentFile().exists())
+            if (!outFile.getParentFile().exists())
                 outFile.getParentFile().mkdirs();
             FileOutputStream out = null;
-            try
-            {
+            try {
                 out = new FileOutputStream(outFile);
             }
-            catch (FileNotFoundException e)
-            {
+            catch (FileNotFoundException e) {
                 Debug.trace("Cannot create logfile!");
                 Debug.error(e);
             }
-            if( out != null)
+            if (out != null)
                 extLogWriter = new BufferedWriter(new OutputStreamWriter(out));
         }
-        try
-        {
+        try {
             // We get the data
             UninstallData udata = UninstallData.getInstance();
             List files = udata.getFilesList();
@@ -627,15 +667,12 @@ public class InstallerFrame extends JFrame
             logWriter.write(installdata.getInstallPath());
             logWriter.newLine();
             Iterator iter = files.iterator();
-            if (extLogWriter != null)
-            { // Write intern (in uninstaller.jar) and extern log file.
-                while (iter.hasNext())
-                {
+            if (extLogWriter != null) { // Write intern (in uninstaller.jar) and extern log file.
+                while (iter.hasNext()) {
                     String txt = (String) iter.next();
                     logWriter.write(txt);
                     extLogWriter.write(txt);
-                    if (iter.hasNext())
-                    {
+                    if (iter.hasNext()) {
                         logWriter.newLine();
                         extLogWriter.newLine();
                     }
@@ -643,11 +680,8 @@ public class InstallerFrame extends JFrame
                 logWriter.flush();
                 extLogWriter.flush();
                 extLogWriter.close();
-            }
-            else
-            {
-                while (iter.hasNext())
-                {
+            } else {
+                while (iter.hasNext()) {
                     logWriter.write((String) iter.next());
                     if (iter.hasNext()) logWriter.newLine();
                 }
@@ -669,8 +703,7 @@ public class InstallerFrame extends JFrame
             ObjectOutputStream execStream = new ObjectOutputStream(outJar);
             iter = udata.getExecutablesList().iterator();
             execStream.writeInt(udata.getExecutablesList().size());
-            while (iter.hasNext())
-            {
+            while (iter.hasNext()) {
                 ExecutableFile file = (ExecutableFile) iter.next();
                 execStream.writeObject(file);
             }
@@ -682,19 +715,15 @@ public class InstallerFrame extends JFrame
             // with custom uninstall data. Therefore log it to Debug,
             // but do not throw.
             Map additionalData = udata.getAdditionalData();
-            if (additionalData != null && !additionalData.isEmpty())
-            {
+            if (additionalData != null && !additionalData.isEmpty()) {
                 Iterator keys = additionalData.keySet().iterator();
                 HashSet exist = new HashSet();
-                while (keys != null && keys.hasNext())
-                {
+                while (keys != null && keys.hasNext()) {
                     String key = (String) keys.next();
                     Object contents = additionalData.get(key);
-                    if ("__uninstallLibs__".equals(key))
-                    {
+                    if ("__uninstallLibs__".equals(key)) {
                         Iterator nativeLibIter = ((List) contents).iterator();
-                        while (nativeLibIter != null && nativeLibIter.hasNext())
-                        {
+                        while (nativeLibIter != null && nativeLibIter.hasNext()) {
                             String nativeLibName = (String) ((List) nativeLibIter.next()).get(0);
                             byte[] buffer = new byte[5120];
                             long bytesCopied = 0;
@@ -702,16 +731,14 @@ public class InstallerFrame extends JFrame
                             outJar.putNextEntry(new ZipEntry("native/" + nativeLibName));
                             InputStream in = getClass().getResourceAsStream(
                                     "/native/" + nativeLibName);
-                            while ((bytesInBuffer = in.read(buffer)) != -1)
-                            {
+                            while ((bytesInBuffer = in.read(buffer)) != -1) {
                                 outJar.write(buffer, 0, bytesInBuffer);
                                 bytesCopied += bytesInBuffer;
                             }
                             outJar.closeEntry();
                         }
-                    }
-                    else if ("uninstallerListeners".equals(key) || "uninstallerJars".equals(key))
-                    { // It is a ArrayList of ArrayLists which contains the
+                    } else
+                    if ("uninstallerListeners".equals(key) || "uninstallerJars".equals(key)) { // It is a ArrayList of ArrayLists which contains the
                         // full
                         // package paths of all needed class files.
                         // First we create a new ArrayList which contains only
@@ -721,8 +748,7 @@ public class InstallerFrame extends JFrame
 
                         // Secound put the class into uninstaller.jar
                         Iterator listenerIter = ((List) contents).iterator();
-                        while (listenerIter.hasNext())
-                        {
+                        while (listenerIter.hasNext()) {
                             byte[] buffer = new byte[5120];
                             long bytesCopied = 0;
                             int bytesInBuffer;
@@ -733,17 +759,14 @@ public class InstallerFrame extends JFrame
                             if (customData.listenerName != null)
                                 subContents.add(customData.listenerName);
                             Iterator liClaIter = customData.contents.iterator();
-                            while (liClaIter.hasNext())
-                            {
+                            while (liClaIter.hasNext()) {
                                 String contentPath = (String) liClaIter.next();
                                 if (exist.contains(contentPath)) continue;
                                 exist.add(contentPath);
-                                try
-                                {
+                                try {
                                     outJar.putNextEntry(new ZipEntry(contentPath));
                                 }
-                                catch (ZipException ze)
-                                { // Ignore, or ignore not ?? May be it is a
+                                catch (ZipException ze) { // Ignore, or ignore not ?? May be it is a
                                     // exception because
                                     // a doubled entry was tried, then we should
                                     // ignore ...
@@ -752,15 +775,12 @@ public class InstallerFrame extends JFrame
                                     continue;
                                 }
                                 InputStream in = getClass().getResourceAsStream("/" + contentPath);
-                                if (in != null)
-                                {
-                                    while ((bytesInBuffer = in.read(buffer)) != -1)
-                                    {
+                                if (in != null) {
+                                    while ((bytesInBuffer = in.read(buffer)) != -1) {
                                         outJar.write(buffer, 0, bytesInBuffer);
                                         bytesCopied += bytesInBuffer;
                                     }
-                                }
-                                else
+                                } else
                                     Debug.trace("custom data not found: " + contentPath);
                                 outJar.closeEntry();
 
@@ -774,16 +794,11 @@ public class InstallerFrame extends JFrame
                         objOut.flush();
                         outJar.closeEntry();
 
-                    }
-                    else
-                    {
+                    } else {
                         outJar.putNextEntry(new ZipEntry(key));
-                        if (contents instanceof ByteArrayOutputStream)
-                        {
+                        if (contents instanceof ByteArrayOutputStream) {
                             ((ByteArrayOutputStream) contents).writeTo(outJar);
-                        }
-                        else
-                        {
+                        } else {
                             ObjectOutputStream objOut = new ObjectOutputStream(outJar);
                             objOut.writeObject(contents);
                             objOut.flush();
@@ -793,14 +808,14 @@ public class InstallerFrame extends JFrame
                 }
             }
             // write the files which should be deleted by root for another user
-            
+
             outJar.putNextEntry(new ZipEntry(UninstallData.ROOTSCRIPT));
             ObjectOutputStream rootStream = new ObjectOutputStream(outJar);
-            
-            String rootScript = udata.getRootScript();           
-            
+
+            String rootScript = udata.getRootScript();
+
             rootStream.writeUTF(rootScript);
-            
+
             rootStream.flush();
             outJar.closeEntry();
 
@@ -808,49 +823,46 @@ public class InstallerFrame extends JFrame
             outJar.flush();
             outJar.close();
         }
-        catch (Exception err)
-        {
+        catch (Exception err) {
             err.printStackTrace();
         }
     }
 
     /**
      * Gets the stream to a resource.
-     * 
+     *
      * @param res The resource id.
      * @return The resource value, null if not found
-     * @throws Exception 
+     * @throws Exception
      */
-    public InputStream getResource(String res) throws Exception
-    {
+    public InputStream getResource(String res) throws Exception {
         InputStream result;
         String basePath = "";
         ResourceManager rm = null;
 
-        try
-        {
+        try {
             rm = ResourceManager.getInstance();
             basePath = rm.resourceBasePath;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
 
         result = this.getClass().getResourceAsStream(basePath + res);
 
-        if (result == null) { throw new ResourceNotFoundException("Warning: Resource not found: "
-                + res); }
+        if (result == null) {
+            throw new ResourceNotFoundException("Warning: Resource not found: "
+                    + res);
+        }
         return result;
     }
 
     /**
      * Centers a window on screen.
-     * 
+     *
      * @param frame The window tp center.
      */
-    public void centerFrame(Window frame)
-    {
+    public void centerFrame(Window frame) {
         Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         Dimension frameSize = frame.getSize();
         frame.setLocation(center.x - frameSize.width / 2,
@@ -859,28 +871,26 @@ public class InstallerFrame extends JFrame
 
     /**
      * Returns the panels container size.
-     * 
+     *
      * @return The panels container size.
      */
-    public Dimension getPanelsContainerSize()
-    {
+    public Dimension getPanelsContainerSize() {
         return panelsContainer.getSize();
     }
 
     /**
      * Sets the parameters of a GridBagConstraints object.
-     * 
+     *
      * @param gbc The constraints object.
-     * @param gx The x coordinates.
-     * @param gy The y coordinates.
-     * @param gw The width.
-     * @param wx The x wheight.
-     * @param wy The y wheight.
-     * @param gh Description of the Parameter
+     * @param gx  The x coordinates.
+     * @param gy  The y coordinates.
+     * @param gw  The width.
+     * @param wx  The x wheight.
+     * @param wy  The y wheight.
+     * @param gh  Description of the Parameter
      */
     public void buildConstraints(GridBagConstraints gbc, int gx, int gy, int gw, int gh, double wx,
-            double wy)
-    {
+                                 double wy) {
         gbc.gridx = gx;
         gbc.gridy = gy;
         gbc.gridwidth = gw;
@@ -889,20 +899,17 @@ public class InstallerFrame extends JFrame
         gbc.weighty = wy;
     }
 
-    /** Makes a clean closing. */
-    public void exit()
-    {
-        if (installdata.canClose)
-        {
+    /**
+     * Makes a clean closing.
+     */
+    public void exit() {
+        if (installdata.canClose) {
             // this does nothing if the uninstaller was not included
             writeUninstallData();
             Housekeeper.getInstance().shutDown(0);
-        }
-        else
-        {
+        } else {
             // The installation is not over
-            if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
-            { // But we should not interrupt.
+            if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT) { // But we should not interrupt.
                 interruptCount++;
                 return;
             }
@@ -921,17 +928,17 @@ public class InstallerFrame extends JFrame
             title = vs.substitute(title, null);
             int res = JOptionPane
                     .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
-            if (res == JOptionPane.YES_OPTION)
-            {
+            if (res == JOptionPane.YES_OPTION) {
                 wipeAborted();
                 Housekeeper.getInstance().shutDown(0);
             }
         }
     }
 
-    /** Wipes the written files when you abort the installation. */
-    protected void wipeAborted()
-    {
+    /**
+     * Wipes the written files when you abort the installation.
+     */
+    protected void wipeAborted() {
         Iterator it;
 
         // We set interrupt to all running Unpacker and wait 40 sec for maximum.
@@ -942,8 +949,7 @@ public class InstallerFrame extends JFrame
         UninstallData u = UninstallData.getInstance();
         it = u.getFilesList().iterator();
         if (!it.hasNext()) return;
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             String p = (String) it.next();
             File f = new File(p);
             f.delete();
@@ -955,13 +961,11 @@ public class InstallerFrame extends JFrame
 
     /**
      * Recursive files wiper.
-     * 
+     *
      * @param file The file to wipe.
      */
-    private void cleanWipe(File file)
-    {
-        if (file.isDirectory())
-        {
+    private void cleanWipe(File file) {
+        if (file.isDirectory()) {
             File[] files = file.listFiles();
             int size = files.length;
             for (int i = 0; i < size; i++)
@@ -972,30 +976,27 @@ public class InstallerFrame extends JFrame
 
     /**
      * Launches the installation.
-     * 
+     *
      * @param listener The installation listener.
      */
-    public void install(AbstractUIProgressHandler listener)
-    {
+    public void install(AbstractUIProgressHandler listener) {
         Unpacker unpacker = new Unpacker(installdata, listener);
         unpacker.start();
     }
 
     /**
      * Writes an XML tree.
-     * 
+     *
      * @param root The XML tree to write out.
-     * @param out The stream to write on.
-     * @exception Exception Description of the Exception
+     * @param out  The stream to write on.
+     * @throws Exception Description of the Exception
      */
-    public void writeXMLTree(XMLElement root, OutputStream out) throws Exception
-    {
+    public void writeXMLTree(XMLElement root, OutputStream out) throws Exception {
         XMLWriter writer = new XMLWriter(out);
         //fix bug# 4551
         //writer.write(root);
-        for (int i = 0; i < installdata.panels.size(); i++)
-        {
-            IzPanel panel = (IzPanel)installdata.panels.get(i);
+        for (int i = 0; i < installdata.panels.size(); i++) {
+            IzPanel panel = (IzPanel) installdata.panels.get(i);
             panel.makeXMLData(installdata.xmlData.getChildAtIndex(i));
         }
         writer.write(installdata.xmlData);
@@ -1003,10 +1004,10 @@ public class InstallerFrame extends JFrame
 
     /**
      * Changes the quit button text. If <tt>text</tt> is null, the default quit text is used.
+     *
      * @param text text to be used for changes
      */
-    public void setQuitButtonText(String text)
-    {
+    public void setQuitButtonText(String text) {
         String text1 = text;
         if (text1 == null) text1 = langpack.getString("installer.quit");
         quitButton.setText(text1);
@@ -1014,14 +1015,13 @@ public class InstallerFrame extends JFrame
 
     /**
      * Sets a new icon into the quit button if icons should be used, else nothing will be done.
+     *
      * @param iconName name of the icon to be used
      */
-    public void setQuitButtonIcon(String iconName)
-    {
+    public void setQuitButtonIcon(String iconName) {
         String useButtonIcons = (String) installdata.guiPrefs.modifier.get("useButtonIcons");
 
-        if ( useButtonIcons == null || "yes".equalsIgnoreCase(useButtonIcons))
-        {
+        if (useButtonIcons == null || "yes".equalsIgnoreCase(useButtonIcons)) {
             quitButton.setIcon(icons.getImageIcon(iconName));
         }
     }
@@ -1034,9 +1034,10 @@ public class InstallerFrame extends JFrame
 
     private Object blockFTP = null;
 
-    /** Blocks GUI interaction. */
-    public void blockGUI()
-    {
+    /**
+     * Blocks GUI interaction.
+     */
+    public void blockGUI() {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         getGlassPane().setVisible(true);
         getGlassPane().setEnabled(true);
@@ -1050,9 +1051,10 @@ public class InstallerFrame extends JFrame
 
     }
 
-    /** Releases GUI interaction. */
-    public void releaseGUI()
-    {
+    /**
+     * Releases GUI interaction.
+     */
+    public void releaseGUI() {
         getGlassPane().setEnabled(false);
         getGlassPane().setVisible(false);
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -1062,206 +1064,231 @@ public class InstallerFrame extends JFrame
         callGUIListener(GUIListener.GUI_RELEASED);
     }
 
-    /** Locks the 'previous' button. */
-    public void lockPrevButton()
-    {
+    /**
+     * Locks the 'previous' button.
+     */
+    public void lockPrevButton() {
         prevButton.setEnabled(false);
     }
 
-    /** Locks the 'next' button. */
-    public void lockNextButton()
-    {
+    /**
+     * Locks the 'next' button.
+     */
+    public void lockNextButton() {
         nextButton.setEnabled(false);
     }
 
-    /** Unlocks the 'previous' button. */
-    public void unlockPrevButton()
-    {
+    /**
+     * Unlocks the 'previous' button.
+     */
+    public void unlockPrevButton() {
         prevButton.setEnabled(true);
     }
 
-    /** Unlocks the 'next' button. */
-    public void unlockNextButton()
-    {
+    /**
+     * Unlocks the 'next' button.
+     */
+    public void unlockNextButton() {
         nextButton.setEnabled(true);
         nextButton.requestFocus();
     }
 
-    /** Allows a panel to ask to be skipped. */
-    public void skipPanel()
-    {
-        if (installdata.curPanelNumber < installdata.panels.size() - 1)
-        {
-            if (isBack)
-            {
+    /**
+     * Allows a panel to ask to be skipped.
+     */
+    public void skipPanel() {
+        if (installdata.curPanelNumber < installdata.panels.size() - 1) {
+            if (isBack) {
                 installdata.curPanelNumber--;
                 switchPanel(installdata.curPanelNumber + 1);
-            }
-            else
-            {
+            } else {
                 installdata.curPanelNumber++;
                 switchPanel(installdata.curPanelNumber - 1);
             }
 
         }
     }
-
-    /** This function moves to the next panel */
-    public void navigateNext()
-    {
-        // If the button is inactive this indicates that we cannot move
-        // so we don't do the move
-        if (!nextButton.isEnabled()) return;
-        if ((installdata.curPanelNumber < installdata.panels.size() - 1)
-                && ((IzPanel) installdata.panels.get(installdata.curPanelNumber)).isValidated())
-        {
-            installdata.curPanelNumber++;
-            switchPanel(installdata.curPanelNumber - 1);
+    
+    public boolean canShow(int panelnumber){
+        IzPanel panel = (IzPanel) installdata.panels.get(panelnumber);
+        String panelid = panel.getMetadata().getPanelid();
+        Debug.trace("Current Panel: " + panelid);
+        
+        if (!this.getRules().canShowPanel(panelid, this.installdata.variables)) {
+            // skip panel, if conditions for panel aren't met           
+            Debug.log("Skip panel with panelid=" + panelid);
+            // panel should be skipped, so we have to decrement panelnumber for skipping
+            return false;
+        }  
+        else {
+            return true;
         }
     }
 
-    /** This function moves to the previous panel */
-    public void navigatePrevious()
-    {
+    /**
+     * This function moves to the next panel
+     */
+    public void navigateNext() {        
+        // If the button is inactive this indicates that we cannot move
+        // so we don't do the move        
+        if (!nextButton.isEnabled()) return;
+        this.navigateNext(installdata.curPanelNumber);        
+    }
+    
+    public void navigateNext(int last){
+        if ((installdata.curPanelNumber < installdata.panels.size() - 1)) {
+            installdata.curPanelNumber++;
+            if (!canShow(installdata.curPanelNumber)){                                        
+                this.navigateNext(last);
+                return;
+            }
+            else {                       
+                if (((IzPanel) installdata.panels.get(last)).isValidated()){
+                  switchPanel(last);
+                }
+            }
+        }
+    }
+
+    /**
+     * This function moves to the previous panel
+     */
+    public void navigatePrevious() {
         // If the button is inactive this indicates that we cannot move
         // so we don't do the move
         if (!prevButton.isEnabled()) return;
-        if ((installdata.curPanelNumber > 0))
-        {
+        this.navigatePrevious(installdata.curPanelNumber);
+    }
+    
+    public void navigatePrevious(int last){
+        if ((installdata.curPanelNumber > 0)) {
             installdata.curPanelNumber--;
-            switchPanel(installdata.curPanelNumber + 1);
+            if (!canShow(installdata.curPanelNumber)){                                        
+                this.navigatePrevious(last);
+                return;
+            }
+            else {                       
+                switchPanel(last);
+            }            
         }
     }
 
     /**
      * Handles the events from the navigation bar elements.
-     * 
+     *
      * @author Julien Ponge
      */
-    class NavigationHandler implements ActionListener
-    {
+    class NavigationHandler implements ActionListener {
 
         /**
          * Actions handler.
-         * 
+         *
          * @param e The event.
          */
-        public void actionPerformed(ActionEvent e)
-        {
+        public void actionPerformed(ActionEvent e) {
             Object source = e.getSource();
-            if (source == prevButton)
-            {
+            if (source == prevButton) {
                 navigatePrevious();
-            }
-            else if (source == nextButton)
-            {
+            } else if (source == nextButton) {
                 navigateNext();
-            }
-            else if (source == quitButton) exit();
+            } else if (source == quitButton) exit();
 
         }
     }
 
     /**
      * The window events handler.
-     * 
+     *
      * @author julien created October 27, 2002
      */
-	class WindowHandler extends WindowAdapter
-	{
-		/**
-		* Window close is pressed, 
-		* @param  e  The event.
-		*/
-		public void windowClosing(WindowEvent e)
-		{
-			// We ask for confirmation
-			exit();
-		}
-		
-		/** OLD VERSION
-         * We can't avoid the exit here, so don't call exit anywhere else.
-         * 
+    class WindowHandler extends WindowAdapter {
+        /**
+         * Window close is pressed,
+         *
          * @param e The event.
-         
+         */
+        public void windowClosing(WindowEvent e) {
+            // We ask for confirmation
+            exit();
+        }
+
+        /** OLD VERSION
+         * We can't avoid the exit here, so don't call exit anywhere else.
+         *
+         * @param e The event.
+
         public void windowClosing(WindowEvent e)
         {
-            if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
-            { // But we should not interrupt.
-                interruptCount++;
-                return;
-            }
-            // We show an alert anyway
-            if (!installdata.canClose)
-                JOptionPane.showMessageDialog(null, langpack.getString("installer.quit.message"),
-                        langpack.getString("installer.warning"), JOptionPane.ERROR_MESSAGE);
-            wipeAborted();
-            Housekeeper.getInstance().shutDown(0);
+        if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT)
+        { // But we should not interrupt.
+        interruptCount++;
+        return;
+        }
+        // We show an alert anyway
+        if (!installdata.canClose)
+        JOptionPane.showMessageDialog(null, langpack.getString("installer.quit.message"),
+        langpack.getString("installer.warning"), JOptionPane.ERROR_MESSAGE);
+        wipeAborted();
+        Housekeeper.getInstance().shutDown(0);
         }*/
-	}
+    }
 
     /**
      * A FocusTraversalPolicy that only allows the block panel to have the focus
      */
-    private class BlockFocusTraversalPolicy extends java.awt.DefaultFocusTraversalPolicy
-    {
+    private class BlockFocusTraversalPolicy extends java.awt.DefaultFocusTraversalPolicy {
 
         private static final long serialVersionUID = 3258413928261169209L;
 
         /**
          * Only accepts the block panel
-         * 
+         *
          * @param aComp the component to check
          * @return true if aComp is the block panel
          */
-        protected boolean accept(Component aComp)
-        {
+        protected boolean accept(Component aComp) {
             return aComp == getGlassPane();
         }
     }
 
-    
+
     /**
      * Returns the gui creation listener list.
+     *
      * @return the gui creation listener list
      */
-    public List getGuiListener()
-    {
+    public List getGuiListener() {
         return guiListener;
     }
 
-    
+
     /**
      * Add a listener to the listener list.
+     *
      * @param listener to be added as gui creation listener
      */
-    public void addGuiListener(GUIListener listener)
-    {
+    public void addGuiListener(GUIListener listener) {
         guiListener.add(listener);
     }
 
 
-    private void createHeadingLabels(int headingLines, Color back)
-    {
+    private void createHeadingLabels(int headingLines, Color back) {
         // headingLabels are an array which contains the labels for header (0),
         // description lines and the icon (last).
         headingLabels = new JLabel[headingLines + 1];
         headingLabels[0] = new JLabel("");
         // First line ist the "main heading" which should be bold.
         headingLabels[0].setFont(headingLabels[0].getFont().deriveFont(Font.BOLD));
-        if (installdata.guiPrefs.modifier.containsKey("headingFontSize"))
-        {
+        if (installdata.guiPrefs.modifier.containsKey("headingFontSize")) {
             float fontSize = Float.parseFloat((String) installdata.guiPrefs.modifier
                     .get("headingFontSize"));
-            if (fontSize > 0.0 && fontSize <= 5.0)
-            {
+            if (fontSize > 0.0 && fontSize <= 5.0) {
                 float currentSize = headingLabels[0].getFont().getSize2D();
                 headingLabels[0].setFont(headingLabels[0].getFont().deriveFont(
                         currentSize * fontSize));
             }
         }
-        for (int i = 1; i < headingLines; ++i)
-        {
+        for (int i = 1; i < headingLines; ++i) {
             headingLabels[i] = new JLabel();
             // Minor headings should be a little bit more to the right.
             headingLabels[i].setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
@@ -1269,47 +1296,36 @@ public class InstallerFrame extends JFrame
 
     }
 
-    private void createHeadingCounter(Color back, JPanel navPanel, JPanel leftHeadingPanel)
-    {
+    private void createHeadingCounter(Color back, JPanel navPanel, JPanel leftHeadingPanel) {
         int i;
         String counterPos = "inHeading";
         if (installdata.guiPrefs.modifier.containsKey("headingPanelCounterPos"))
             counterPos = (String) installdata.guiPrefs.modifier.get("headingPanelCounterPos");
         // Do not create counter if it should be in the heading, but no heading should be used.
         if (leftHeadingPanel == null && "inHeading".equalsIgnoreCase(counterPos)) return;
-        if (installdata.guiPrefs.modifier.containsKey("headingPanelCounter"))
-        {
+        if (installdata.guiPrefs.modifier.containsKey("headingPanelCounter")) {
             headingCounterComponent = null;
             if ("progressbar".equalsIgnoreCase((String) installdata.guiPrefs.modifier
-                    .get("headingPanelCounter")))
-            {
+                    .get("headingPanelCounter"))) {
                 JProgressBar headingProgressBar = new JProgressBar();
                 headingProgressBar.setStringPainted(true);
                 headingProgressBar.setString("");
                 headingProgressBar.setValue(0);
                 headingCounterComponent = headingProgressBar;
-            }
-            else if ("text".equalsIgnoreCase((String) installdata.guiPrefs.modifier
-                    .get("headingPanelCounter")))
-            {
+            } else if ("text".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+                    .get("headingPanelCounter"))) {
                 JLabel headingCountPanels = new JLabel(" ");
                 headingCounterComponent = headingCountPanels;
                 headingCounterComponent.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
             }
-            if ("inHeading".equals(counterPos))
-            {
+            if ("inHeading".equals(counterPos)) {
                 leftHeadingPanel.add(headingCounterComponent);
-            }
-
-            else if ("inNavigationPanel".equals(counterPos))
-            {
+            } else if ("inNavigationPanel".equals(counterPos)) {
                 Component[] comps = navPanel.getComponents();
-                for (i = 0; i < comps.length; ++i)
-                {
+                for (i = 0; i < comps.length; ++i) {
                     if (comps[i].equals(prevButton)) break;
                 }
-                if (i <= comps.length)
-                {
+                if (i <= comps.length) {
                     navPanel.add(Box.createHorizontalGlue(), i);
                     navPanel.add(headingCounterComponent, i);
                 }
@@ -1318,16 +1334,13 @@ public class InstallerFrame extends JFrame
         }
     }
 
-    private JPanel createHeadingIcon(Color back)
-    {
+    private JPanel createHeadingIcon(Color back) {
         // the icon
         ImageIcon icon = null;
-        try
-        {
+        try {
             icon = loadIcon(HEADING_ICON_RESOURCE, 0, true);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // ignore
         }
         JPanel imgPanel = new JPanel();
@@ -1341,8 +1354,7 @@ public class InstallerFrame extends JFrame
 
     }
 
-    private void createHeading(JPanel navPanel)
-    {
+    private void createHeading(JPanel navPanel) {
         headingPanel = null;
         int headingLines = 1;
         // The number of lines can be determined in the config xml file.
@@ -1357,12 +1369,11 @@ public class InstallerFrame extends JFrame
             back = Color.decode((String) installdata.guiPrefs.modifier
                     .get("headingBackgroundColor"));
         // Try to create counter if no heading should be used.
-        if (!isHeading(null)) 
-        { 
+        if (!isHeading(null)) {
             createHeadingCounter(back, navPanel, null);
-            return; 
+            return;
         }
-        
+
         // We create the text labels and the needed panels. From inner to outer.
         // Labels
         createHeadingLabels(headingLines, back);
@@ -1400,24 +1411,23 @@ public class InstallerFrame extends JFrame
      * Returns whether this installer frame uses with the given panel a
      * separated heading panel or not. Be aware, this is an other heading
      * as given by the IzPanel which will be placed in the IzPanel.
-     * This heading will be placed if the gui preferences contains an 
+     * This heading will be placed if the gui preferences contains an
      * modifier with the key "useHeadingPanel" and the value "yes" and
      * there is a message with the key "&lt;class name&gt;.headline".
+     *
      * @param caller the IzPanel for which heading should be resolved
      * @return whether an heading panel will be used or not
      */
-    public boolean isHeading(IzPanel caller)
-    {
+    public boolean isHeading(IzPanel caller) {
         if (!installdata.guiPrefs.modifier.containsKey("useHeadingPanel")
                 || !((String) installdata.guiPrefs.modifier.get("useHeadingPanel"))
-                        .equalsIgnoreCase("yes")) return (false);
+                .equalsIgnoreCase("yes")) return (false);
         if (caller == null) return (true);
         return (caller.getI18nStringForClass("headline", null) != null);
 
     }
 
-    private void performHeading(IzPanel panel)
-    {
+    private void performHeading(IzPanel panel) {
         int i;
         int headingLines = 1;
         if (installdata.guiPrefs.modifier.containsKey("headingLineCount"))
@@ -1426,20 +1436,17 @@ public class InstallerFrame extends JFrame
 
         if (headingLabels == null) return;
         String headline = panel.getI18nStringForClass("headline");
-        if (headline == null)
-        {
+        if (headline == null) {
             headingPanel.setVisible(false);
             return;
         }
         for (i = 0; i <= headingLines; ++i)
             if (headingLabels[i] != null) headingLabels[i].setVisible(false);
         String info;
-        for (i = 0; i < headingLines - 1; ++i)
-        {
+        for (i = 0; i < headingLines - 1; ++i) {
             info = panel.getI18nStringForClass("headinfo" + Integer.toString(i));
             if (info == null) info = " ";
-            if (info.endsWith(":"))
-            {
+            if (info.endsWith(":")) {
                 info = info.substring(0, info.length() - 1) + ".";
             }
             headingLabels[i + 1].setText(info);
@@ -1449,18 +1456,16 @@ public class InstallerFrame extends JFrame
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
         int curPanelNo = ((Integer) visiblePanelMapping.get(installdata.curPanelNumber)).intValue();
-        if (headingLabels[headingLines] != null)
-        {
+        if (headingLabels[headingLines] != null) {
             loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
             headingLabels[headingLines].setVisible(true);
         }
         headingPanel.setVisible(true);
 
     }
-    private void performHeadingCounter(IzPanel panel)
-    {
-        if (headingCounterComponent != null)
-        {
+
+    private void performHeadingCounter(IzPanel panel) {
+        if (headingCounterComponent != null) {
             int curPanelNo = ((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
                     .intValue();
             int visPanelsCount = ((Integer) visiblePanelMapping.get(((Integer) visiblePanelMapping
@@ -1469,16 +1474,28 @@ public class InstallerFrame extends JFrame
             StringBuffer buf = new StringBuffer();
             buf.append(langpack.getString("installer.step")).append(" ").append(curPanelNo + 1)
                     .append(" ").append(langpack.getString("installer.of")).append(" ").append(
-                            visPanelsCount + 1);
-            if (headingCounterComponent instanceof JProgressBar)
-            {
+                    visPanelsCount + 1);
+            if (headingCounterComponent instanceof JProgressBar) {
                 JProgressBar headingProgressBar = (JProgressBar) headingCounterComponent;
                 headingProgressBar.setMaximum(visPanelsCount + 1);
                 headingProgressBar.setValue(curPanelNo + 1);
                 headingProgressBar.setString(buf.toString());
-            }
-            else
+            } else
                 ((JLabel) headingCounterComponent).setText(buf.toString());
         }
+    }
+
+    /**
+     * @return the rules
+     */
+    public RulesEngine getRules() {
+      return this.rules;
+    }
+
+    /**
+     * @param rules the rules to set
+     */
+    public void setRules(RulesEngine rules) {
+      this.rules = rules;
     }
 }

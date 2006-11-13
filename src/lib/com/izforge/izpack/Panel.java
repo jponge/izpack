@@ -25,6 +25,7 @@ import java.util.List;
 
 /**
  * @author Jan Blok
+ * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class Panel implements Serializable
 {
@@ -37,4 +38,34 @@ public class Panel implements Serializable
     /** The target operation system of this panel */
     public List osConstraints = null;
 
+    /** the unique id of this panel */
+    protected String panelid;
+
+    public String getClassName() {
+      return this.className;
+    }
+
+    public void setClassName(String className) {
+      this.className = className;
+    }
+
+    public List getOsConstraints() {
+      return this.osConstraints;
+    }
+
+    public void setOsConstraints(List osConstraints) {
+      this.osConstraints = osConstraints;
+    }
+
+    public String getPanelid() {
+      if (this.panelid == null)
+      {
+        this.panelid = "UNKNOWN";
+      }
+      return this.panelid;
+    }
+
+    public void setPanelid(String panelid) {      
+      this.panelid = panelid;
+    }
 }

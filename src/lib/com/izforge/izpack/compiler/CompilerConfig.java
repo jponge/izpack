@@ -1002,7 +1002,9 @@ public class CompilerConfig extends Thread
             Panel panel = new Panel();
             panel.osConstraints = OsConstraint.getOsList(xmlPanel);
             String className = xmlPanel.getAttribute("classname");
-
+            // add an id
+            String panelid = xmlPanel.getAttribute("id");
+            panel.setPanelid(panelid);                   
             // Panel files come in jars packaged w/ IzPack
             String jarPath = "bin/panels/" + className + ".jar";
             URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel);
