@@ -48,7 +48,7 @@ public class RulesEngine {
         if ((val != null) && (val.length() > 0)) {
             return true;
         } else {
-            Debug.log("Element " + element + " has to specify an attribute " + attribute);
+            Debug.trace("Element " + element + " has to specify an attribute " + attribute);
             return false;
         }
     }
@@ -68,11 +68,11 @@ public class RulesEngine {
                 Class conditionclass = loader.loadClass(conditionclassname);
                 result = (Condition) conditionclass.newInstance();
             } catch (ClassNotFoundException e) {
-                Debug.log(conditionclassname + " not found.");
+                Debug.trace(conditionclassname + " not found.");
             } catch (InstantiationException e) {
-                Debug.log(conditionclassname + " couldn't be instantiated.");
+                Debug.trace(conditionclassname + " couldn't be instantiated.");
             } catch (IllegalAccessException e) {
-                Debug.log("Illegal access to " + conditionclassname);
+                Debug.trace("Illegal access to " + conditionclassname);
             }
             result.readFromXML(condition);
             result.setId(condid);
@@ -85,6 +85,10 @@ public class RulesEngine {
      * Read the spec for the conditions
      */
     protected void readConditions() {
+        if (this.conditionsspec == null){
+            Debug.trace("No specification for conditions found.");
+            return;
+        }
         try {
             if (this.conditionsspec.hasChildren()) {
                 // read in the condition specs
@@ -140,20 +144,20 @@ public class RulesEngine {
     public boolean isConditionTrue(String id, Properties variables) {
         Condition cond = (Condition) conditionsmap.get(id);
         if (cond == null) {
-            Debug.log("Condition (" + id + ") not found.");
+            Debug.trace("Condition (" + id + ") not found.");
             return true;
         } else {
-            Debug.log("Checking condition");
+            Debug.trace("Checking condition");
             return cond.isTrue(variables, this.installdata.selectedPacks);
         }
     }
 
     public boolean isConditionTrue(Condition cond, Properties variables) {
         if (cond == null) {
-            Debug.log("Condition not found.");
+            Debug.trace("Condition not found.");
             return true;
         } else {
-            Debug.log("Checking condition");
+            Debug.trace("Checking condition");
             return cond.isTrue(variables, this.installdata.selectedPacks);
         }
     }
@@ -167,12 +171,12 @@ public class RulesEngine {
      *         false - there is a condition and the condition was not met
      */
     public boolean canShowPanel(String panelid, Properties variables) {
-        Debug.log("can show panel with id " + panelid + " ?");
+        Debug.trace("can show panel with id " + panelid + " ?");
         if (!this.panelconditions.containsKey(panelid)) {
-            Debug.log("no condition, show panel");
+            Debug.trace("no condition, show panel");
             return true;
         }
-        Debug.log("there is a condition");
+        Debug.trace("there is a condition");
         Condition condition = (Condition) conditionsmap.get(this.panelconditions.get(panelid));
         if (condition != null) {
             return condition.isTrue(variables, this.installdata.selectedPacks);
@@ -189,12 +193,12 @@ public class RulesEngine {
      *         false - there is a condition and the condition was not met
      */
     public boolean canInstallPack(String packid, Properties variables) {
-        Debug.log("can install pack with id " + packid + "?");
+        Debug.trace("can install pack with id " + packid + "?");
         if (!this.packconditions.containsKey(packid)) {
-            Debug.log("no condition, can install pack");
+            Debug.trace("no condition, can install pack");
             return true;
         }
-        Debug.log("there is a condition");
+        Debug.trace("there is a condition");
         Condition condition = (Condition) conditionsmap.get(this.packconditions.get(packid));
         if (condition != null) {
             return condition.isTrue(variables, this.installdata.selectedPacks);
@@ -210,12 +214,12 @@ public class RulesEngine {
      * @return
      */
     public boolean canInstallPackOptional(String packid, Properties variables) {
-        Debug.log("can install pack optional with id " + packid + "?");
+        Debug.trace("can install pack optional with id " + packid + "?");
         if (!this.optionalpackconditions.containsKey(packid)) {
-            Debug.log("not in optionalpackconditions.");
+            Debug.trace("not in optionalpackconditions.");
             return false;
         } else {
-            Debug.log("optional install possible");
+            Debug.trace("optional install possible");
             return true;
         }
     }

@@ -228,7 +228,7 @@ public class InstallerFrame extends JFrame {
      * @throws Exception Description of the Exception
      */
     public InstallerFrame(String title, InstallData installdata) throws Exception {
-        super(title);
+        super(title);       
         guiListener = new ArrayList();
         visiblePanelMapping = new ArrayList();
         this.installdata = installdata;
@@ -254,13 +254,13 @@ public class InstallerFrame extends JFrame {
     /**
      *  Reads the conditions specification file and initializes the rules engine.
      */
-    protected void loadConditions() {
+    protected void loadConditions() {        
         try {
-            InputStream input = this.getResource(CONDITIONS_SPECRESOURCENAME);
-
-            if (input == null) {
-                // there seem to be no conditions
-                return;
+           InputStream input = null;
+           input  = this.getResource(CONDITIONS_SPECRESOURCENAME);
+           if (input == null) {
+               this.rules = new RulesEngine(null,installdata); 
+               return;
             }
 
             StdXMLParser parser = new StdXMLParser();
@@ -273,8 +273,9 @@ public class InstallerFrame extends JFrame {
             this.rules = new RulesEngine(conditionsxml, installdata);
         }
         catch (Exception e) {
-            Debug.log(e.getMessage());
-            e.printStackTrace();
+            Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
+            // there seem to be no conditions
+            this.rules = new RulesEngine(null,installdata);            
         }
     }
 
