@@ -51,6 +51,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import org.apache.tools.ant.DirectoryScanner;
 
@@ -629,13 +630,17 @@ public class CompilerConfig extends Thread
                 List osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
                 Map additionals = getAdditionals(f);
+                boolean unpack = src.endsWith(".zip") && "true".equalsIgnoreCase(f.getAttribute("unpack"));
 
                 File file = new File(src);
                 if (!file.isAbsolute()) file = new File(basedir, src);
 
                 try
                 {
-                    addRecursively(file, targetdir, osList, override, pack, additionals);
+                    if (unpack)
+                        addArchiveContent(file, targetdir, osList, override, pack, additionals);
+                    else
+                        addRecursively(file, targetdir, osList, override, pack, additionals);
                 }
                 catch (Exception x)
                 {
@@ -659,7 +664,7 @@ public class CompilerConfig extends Thread
 
                 try
                 {
-                    pack.addFile(file, target, osList, override, additionals);
+                     pack.addFile(file, target, osList, override, additionals);
                 }
                 catch (FileNotFoundException x)
                 {
@@ -946,6 +951,37 @@ public class CompilerConfig extends Thread
         return 0;
     }
 
+    /**
+     * Add files in an archive to a pack
+     * @param archive the archive file to unpack
+     * @parm targetdir the target directory where the content of the archive will be installed
+     * @param osList The target OS constraints.
+     * @param override Overriding behaviour.
+     * @param pack Pack to be packed into
+     * @param additionals Map which contains additional data
+     */
+    protected void addArchiveContent(File archive, String targetdir, List osList, int override, PackInfo pack, Map additionals) throws IOException {
+      
+      FileInputStream fin = new FileInputStream(archive);
+      ZipInputStream zin = new ZipInputStream(fin);
+      while (true) {
+        ZipEntry zentry = zin.getNextEntry();
+        if (zentry==null) break;
+        if (zentry.isDirectory()) continue;
+        
+        File temp = File.createTempFile("izpack", null);
+        temp.deleteOnExit();
+        
+        FileOutputStream out = new FileOutputStream(temp);
+        compiler.getPackager().copyStream(zin, out);
+        out.close();
+        
+        pack.addFile(temp, targetdir + "/" + zentry.getName(), osList, override, additionals);
+        
+      }
+      fin.close();
+    }
+    
     /**
      * Recursive method to add files in a pack.
      * 

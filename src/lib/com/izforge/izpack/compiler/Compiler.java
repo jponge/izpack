@@ -25,20 +25,26 @@
 
 package com.izforge.izpack.compiler;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
+
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-import java.util.jar.JarInputStream;
-import java.util.zip.ZipEntry;
 
 /**
  * The IzPack compiler class. This is now a java bean style class that can be
@@ -519,37 +525,6 @@ public class Compiler extends Thread
         }
         u.colour = PackInfo.BLACK;
         return 0;
-    }
-
-    /**
-     * Recursive method to add files in a pack.
-     * 
-     * @param file The file to add.
-     * @param targetdir The relative path to the parent.
-     * @param osList The target OS constraints.
-     * @param override Overriding behaviour.
-     * @param pack Pack to be packed into
-     * @param additionals Map which contains additional data
-     * @exception FileNotFoundException if the file does not exist
-     */
-    protected void addRecursively(File file, String targetdir, List osList, int override,
-            PackInfo pack, Map additionals) throws IOException
-    {
-        String targetfile = targetdir + "/" + file.getName();
-        if (!file.isDirectory())
-            pack.addFile(file, targetfile, osList, override, additionals);
-        else
-        {
-            File[] files = file.listFiles();
-            if (files.length == 0) // The directory is empty so must be added
-                pack.addFile(file, targetfile, osList, override, additionals);
-            else
-            {
-                // new targetdir = targetfile;
-                for (int i = 0; i < files.length; i++)
-                    addRecursively(files[i], targetfile, osList, override, pack, additionals);
-            }
-        }
     }
 
     /**
