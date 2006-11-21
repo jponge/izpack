@@ -461,19 +461,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         Class clazz = this.getClass();
         while (retval == null && !clazz.getName().endsWith(".IzPanel"))
         {
-            int instanceNumber = getInstanceNumber();
-            if (instanceNumber != -1) {
-                retval = getI18nStringForClass(clazz.getName(), subkey + "." + instanceNumber, null);
-                if (retval != null) return retval;
-            }
             retval = getI18nStringForClass(clazz.getName(), subkey, null);
             clazz = clazz.getSuperclass();
         }
         return (retval);
     }
 
-    protected int getInstanceNumber() { return -1; }
-    
     /**
      * Calls the langpack of parent InstallerFrame for the String <tt>RuntimeClassName.subkey</tt>.
      * Do not add a point infront of subkey, it is always added in this method.

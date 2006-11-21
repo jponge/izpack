@@ -475,8 +475,6 @@ public class UserInputPanel extends IzPanel
         }
     }
 
-    protected int getInstanceNumber() { return instanceNumber; }
-    
     /*--------------------------------------------------------------------------*/
     /**
      * Indicates wether the panel has been validated or not. The installer won't let the user go

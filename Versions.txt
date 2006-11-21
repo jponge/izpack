@@ -4,8 +4,7 @@
 
 - Fixed the DesktopShortcutCheckboxEnabled Builtin Variable in docu (Fabrice Mirabile)
 - Fixed build.xml (PathSelectionPanel without using TargetPanel) (Fabrice Mirabile)
-- UserInputPanel multiline label fix (Vladimir Ralev @JBoss/RedHat, via Julien Ponge)
-- UserInputPanel: strings customization based on the panel instance number (Stefan Wachter, via Julien Ponge)
+- UserInputPanel multiline label fix (Vladimir Ralev, JBoss/RedHat)
 
 
   > 3.9.0 (build 2006.09.25)
