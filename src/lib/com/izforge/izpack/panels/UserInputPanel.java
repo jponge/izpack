@@ -2054,8 +2054,21 @@ public class UserInputPanel extends IzPanel
                     }
                 }
 
-                MultiLineLabel label = new MultiLineLabel(description, justify);
-
+                javax.swing.JTextPane label = new javax.swing.JTextPane();
+                
+                // Not editable, but still selectable.
+                label.setEditable(false);
+                
+                // If html tags are present enable html rendering, otherwise the JTextPane
+                // looks exactly like MultiLineLabel.
+                if(description.startsWith("<html>") && description.endsWith("</html>"))
+                    label.setContentType("text/html");               
+                label.setText(description);
+                
+                // Background color and font to match the label's.
+                label.setBackground(javax.swing.UIManager.getColor("label.backgroud"));
+                label.setMargin(new java.awt.Insets(3, 0, 3, 0));
+                    
                 uiElements.add(new Object[] { null, DESCRIPTION, null, constraints, label,
                         forPacks, forOs});
             }

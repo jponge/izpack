@@ -1,8 +1,10 @@
 [ The list of the different public versions of IzPack ]
 
 	> 3.9.1 (build xxxx.xx.xx)
-- Fixed the DesktopShortcutCheckboxEnabled Builtin Variable in docu (Fabrice Mirabile))
+
+- Fixed the DesktopShortcutCheckboxEnabled Builtin Variable in docu (Fabrice Mirabile)
 - Fixed build.xml (PathSelectionPanel without using TargetPanel) (Fabrice Mirabile)
+- UserInputPanel multiline label fix (Vladimir Ralev, JBoss/RedHat)
 
 
   > 3.9.0 (build 2006.09.25)
