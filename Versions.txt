@@ -4,8 +4,8 @@
 
 - Fixed the DesktopShortcutCheckboxEnabled Builtin Variable in docu (Fabrice Mirabile)
 - Fixed build.xml (PathSelectionPanel without using TargetPanel) (Fabrice Mirabile)
-- UserInputPanel multiline label fix (Vladimir Ralev, JBoss/RedHat)
-
+- UserInputPanel multiline label fix (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
+- Fix for calling the IzPack Ant task from Maven builds (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

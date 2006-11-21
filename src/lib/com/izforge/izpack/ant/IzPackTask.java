@@ -213,6 +213,7 @@ public class IzPackTask extends Task implements PackagerListener
             {
                 String name = (String) e.nextElement();
                 String value = properties.getProperty(name);
+                value = fixPathString(value);
                 c.addProperty(name, value);
             }
         }
@@ -225,6 +226,7 @@ public class IzPackTask extends Task implements PackagerListener
             {
                 String name = (String) e.nextElement();
                 String value = (String) projectProps.get(name);
+                value = fixPathString(value);
                 c.addProperty(name, value);
             }            
         }
@@ -239,7 +241,21 @@ public class IzPackTask extends Task implements PackagerListener
             // failed
         }
     }
-
+    
+    private static String fixPathString(String path)
+    {
+       /*
+        * The following code fixes a bug in in codehaus classworlds loader,
+        * which can't handle mixed path strings like "c:\test\../lib/mylib.jar".
+        * The bug is in org.codehaus.classworlds.UrlUtils.normalizeUrlPath().
+        */
+       StringBuffer fixpath = new StringBuffer(path);
+       for(int q=0; q<fixpath.length(); q++)
+          if(fixpath.charAt(q) == '\\')
+             fixpath.setCharAt(q, '/');
+       return fixpath.toString();
+    }
+    
     /**
      * Setter for property input.
      * 
