@@ -309,6 +309,16 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
       
       this.idata           = idata;
       this.parent          = parent;
+      // To get the Panel object via idata is a hack because InstallData will
+      // be hold global data, not panel specific data. But the Panel object will
+      // be needed in the constructor of some derived classes. And to expand the
+      // constructor is also not a good way because all derived classes have to
+      // change then the signature. Also the custem IzPanels elswhere. Therefore
+      // this hack...
+      // Problems with this hack will be exist if more than one threads calls the
+      // constructors of derived clases. This is not the case.
+      this.metadata = idata.currentPanel;
+      idata.currentPanel = null;
       initLayoutHelper(  );
 
     }
@@ -497,7 +507,20 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         StringBuffer buf = new StringBuffer();
         buf.append(curClassName).append(".").append(subkey);
         String fullkey = buf.toString();
-        String retval = parent.langpack.getString(fullkey);
+        String panelid = null;
+        if( getMetadata() != null )
+        {
+            panelid = getMetadata().getPanelid();
+        }
+        String retval = null;
+        if (panelid != null)
+        {
+            buf.append(".");
+            buf.append(panelid);
+            retval = parent.langpack.getString(buf.toString());
+        }
+        if (retval == null || retval.startsWith(fullkey))
+            retval = parent.langpack.getString(fullkey);
         if (retval == null || retval.startsWith(fullkey))
         {
             if (alternateClass == null) return (null);

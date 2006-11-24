@@ -315,9 +315,11 @@ public class InstallerFrame extends JFrame {
                 praefix = "";
             objectClass = Class.forName(praefix + className);
             constructor = objectClass.getDeclaredConstructor(paramsClasses);
+            installdata.currentPanel = p; // A hack to use meta data in IzPanel constructor
+            // Do not call constructor of IzPanel or it's derived at an other place else
+            // metadata will be not set.
             object = constructor.newInstance(params);
             panel = (IzPanel) object;
-            panel.setMetadata(p);
             installdata.panels.add(panel);
             if (panel.isHidden())
                 visiblePanelMapping.add(count, new Integer(-1));

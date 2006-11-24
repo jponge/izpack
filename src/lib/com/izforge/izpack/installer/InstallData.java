@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.io.Serializable;
 
 import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.Panel;
 
 /**
  * Encloses information about the install process. This class is implemented as a singleton which
@@ -39,6 +40,12 @@ public class InstallData extends AutomatedInstallData implements Serializable
 
     /** The GUI preferences. */
     public GUIPrefs guiPrefs;
+    
+    /** Contains at IzPanel constructor call the related Panel object. This is a hack
+     *  to allow usage of the meta data stored in the Panel object during construction of
+     *  the IzPanel. Do not use this member at an other place.
+     */
+    public Panel currentPanel;
 
     /** The buttons highlighting color. */
     public Color buttonsHColor = new Color(230, 230, 230);
