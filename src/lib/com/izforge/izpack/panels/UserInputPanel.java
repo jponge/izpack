@@ -1,22 +1,19 @@
 /*
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
  * 
- * http://www.izforge.com/izpack/
- * http://developer.berlios.de/projects/izpack/
+ * http://www.izforge.com/izpack/ http://developer.berlios.de/projects/izpack/
  * 
  * Copyright 2002 Elmar Grom
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- *     
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.izforge.izpack.panels;
@@ -293,6 +290,8 @@ public class UserInputPanel extends IzPanel
 
     private static final String UNSELECTEDPACKS = "createForUnselectedPack"; // new
 
+    protected static final String ATTRIBUTE_CONDITIONID_NAME = "conditionid";
+
     // node
 
     private static final String NAME = "name";
@@ -366,12 +365,16 @@ public class UserInputPanel extends IzPanel
      */
     /*--------------------------------------------------------------------------*/
     public UserInputPanel(InstallerFrame parent, InstallData installData)
-
     {
         super(parent, installData);
-
         instanceNumber = instanceCount++;
         this.parentFrame = parent;
+    }
+
+    protected void init()
+    {
+        super.removeAll();
+        uiElements.clear();
 
         // ----------------------------------------------------
         // ----------------------------------------------------
@@ -424,7 +427,15 @@ public class UserInputPanel extends IzPanel
         {
             XMLElement field = (XMLElement) fields.elementAt(i);
             String attribute = field.getAttribute(TYPE);
-
+            String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
+            if (conditionid != null)
+            {
+                // check if condition is fulfilled
+                if (!this.parent.getRules().isConditionTrue(conditionid, idata.getVariables()))
+                {
+                    continue;
+                }
+            }
             if (attribute != null)
             {
                 if (attribute.equals(RULE_FIELD))
@@ -475,6 +486,81 @@ public class UserInputPanel extends IzPanel
         }
     }
 
+    protected void updateUIElements()
+    {
+        boolean updated = false;
+        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+
+        for (int i = 0; i < uiElements.size(); i++)
+        {
+            Object[] element = (Object[]) uiElements.get(i);
+            if (element[POS_VARIABLE] == null)
+            {
+                continue;
+            }
+            String value = idata.getVariable((String) element[POS_VARIABLE]);
+            
+            if (RADIO_FIELD.equals(element[POS_TYPE]))
+            {
+                // we have a radio field, which should be updated
+                JRadioButton choice = (JRadioButton) element[POS_FIELD];
+                if (value == null)
+                {
+                    continue;
+                }
+                if (value.equals(element[POS_TRUE]))
+                {
+                    choice.setSelected(true);
+                }
+                else
+                {
+                    choice.setSelected(false);
+                }
+                element[POS_FIELD] = choice;
+            }
+            else if (TEXT_FIELD.equals(element[POS_TYPE]))
+            {
+                // update TextField
+                JTextField textf = (JTextField) element[POS_FIELD];
+
+                // System.out.println("Textfield: " + value);
+                if (value == null)
+                {
+                    value = textf.getText();
+                }
+                textf.setText(vs.substitute(value, null));
+                element[POS_FIELD] = textf;
+            }
+            else if (CHECK_FIELD.equals(element[POS_TYPE]))
+            {
+                // TODO: HAS TO BE IMPLEMENTED
+            }
+            else if (SEARCH_FIELD.equals(element[POS_TYPE]))
+            {
+                // TODO: HAS TO BE IMPLEMENTED
+            }
+            else if (RULE_FIELD.equals(element[POS_TYPE]))
+            {
+
+                RuleInputField rulef = (RuleInputField) element[POS_FIELD];
+                // System.out.println("RuleInputField: " + value);
+                if (value == null)
+                {
+                    value = rulef.getText();
+                }               
+            }
+            // overwrite entry;
+            uiElements.set(i, element);
+            updated = true;
+        }
+        if (updated)
+        {
+            // super.removeAll();
+            super.invalidate();
+            // buildUI();
+        }
+    }
+
     /*--------------------------------------------------------------------------*/
     /**
      * Indicates wether the panel has been validated or not. The installer won't let the user go
@@ -496,6 +582,8 @@ public class UserInputPanel extends IzPanel
     /*--------------------------------------------------------------------------*/
     public void panelActivate()
     {
+        this.init();        
+                
         if (spec == null)
         {
             // TODO: translate
@@ -503,7 +591,8 @@ public class UserInputPanel extends IzPanel
                     "The specification for the user input panel could not be found. Please contact the packager.");
             parentFrame.skipPanel();
         }
-
+        //  update UI with current values of associated variables
+        updateUIElements();
         Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
         Vector forUnselectedPacks = spec.getChildrenNamed(UNSELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
@@ -528,7 +617,7 @@ public class UserInputPanel extends IzPanel
         if (packsDefined)
         {
             parentFrame.lockPrevButton();
-        }
+        }        
     }
 
     /*--------------------------------------------------------------------------*/
@@ -894,12 +983,11 @@ public class UserInputPanel extends IzPanel
             // If so, then add them to validateParamMap.
             // ----------------------------------------------------------
             validateParams = element.getChildrenNamed(RULE_PARAM);
-            if (validateParams != null && validateParams.size() > 0) 
+            if (validateParams != null && validateParams.size() > 0)
             {
                 hasParams = true;
-                
-                if (validateParamMap == null)
-                    validateParamMap = new HashMap();
+
+                if (validateParamMap == null) validateParamMap = new HashMap();
 
                 for (Iterator it = validateParams.iterator(); it.hasNext();)
                 {
@@ -908,7 +996,7 @@ public class UserInputPanel extends IzPanel
                     paramValue = element.getAttribute(RULE_PARAM_VALUE);
                     validateParamMap.put(paramName, paramValue);
                 }
-                
+
             }
 
         }
@@ -1034,13 +1122,16 @@ public class UserInputPanel extends IzPanel
                 {
                     set = "";
                 }
-            }else{
-                if (set != null && !"".equals(set)){
+            }
+            else
+            {
+                if (set != null && !"".equals(set))
+                {
                     VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
                     set = vs.substitute(set, null);
                 }
             }
-                
+
             try
             {
                 size = Integer.parseInt(element.getAttribute(TEXT_SIZE));
@@ -1125,21 +1216,21 @@ public class UserInputPanel extends IzPanel
      * This is a complete example of a valid XML specification
      * 
      * <pre>
-     * 
      *  
      *   
-     *    &lt;field type=&quot;combo&quot; variable=&quot;testVariable&quot;&gt;
-     *      &lt;description text=&quot;Description for the combo box&quot; id=&quot;a key for translated text&quot;/&gt;
-     *      &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
-     *        &lt;choice text=&quot;choice 1&quot; id=&quot;&quot; value=&quot;combo box 1&quot;/&gt;
-     *        &lt;choice text=&quot;choice 2&quot; id=&quot;&quot; value=&quot;combo box 2&quot; set=&quot;true&quot;/&gt;
-     *        &lt;choice text=&quot;choice 3&quot; id=&quot;&quot; value=&quot;combo box 3&quot;/&gt;
-     *        &lt;choice text=&quot;choice 4&quot; id=&quot;&quot; value=&quot;combo box 4&quot;/&gt;
-     *      &lt;/spec&gt;
-     *    &lt;/field&gt;
+     *    
+     *     &lt;field type=&quot;combo&quot; variable=&quot;testVariable&quot;&gt;
+     *       &lt;description text=&quot;Description for the combo box&quot; id=&quot;a key for translated text&quot;/&gt;
+     *       &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
+     *         &lt;choice text=&quot;choice 1&quot; id=&quot;&quot; value=&quot;combo box 1&quot;/&gt;
+     *         &lt;choice text=&quot;choice 2&quot; id=&quot;&quot; value=&quot;combo box 2&quot; set=&quot;true&quot;/&gt;
+     *         &lt;choice text=&quot;choice 3&quot; id=&quot;&quot; value=&quot;combo box 3&quot;/&gt;
+     *         &lt;choice text=&quot;choice 4&quot; id=&quot;&quot; value=&quot;combo box 4&quot;/&gt;
+     *       &lt;/spec&gt;
+     *     &lt;/field&gt;
+     *     
      *    
      *   
-     *  
      * </pre>
      * 
      * @param spec a <code>XMLElement</code> containing the specification for the combo box.
@@ -1188,11 +1279,12 @@ public class UserInputPanel extends IzPanel
                     {
                         set = "";
                     }
-                    if (set != null && !"".equals(set)){
+                    if (set != null && !"".equals(set))
+                    {
                         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
-                    
+
                     StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
                     int counter = 0;
                     while (tokenizer.hasMoreTokens())
@@ -1215,7 +1307,8 @@ public class UserInputPanel extends IzPanel
                     String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
                     if (set != null)
                     {
-                        if (set != null && !"".equals(set)){
+                        if (set != null && !"".equals(set))
+                        {
                             VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
                             set = vs.substitute(set, null);
                         }
@@ -1297,22 +1390,22 @@ public class UserInputPanel extends IzPanel
      * This is a complete example of a valid XML specification
      * 
      * <pre>
-     * 
      *  
      *   
-     *    &lt;field type=&quot;radio&quot; variable=&quot;testVariable&quot;&gt;
-     *      &lt;description text=&quot;Description for the radio buttons&quot; id=&quot;a key for translated text&quot;/&gt;
-     *      &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
-     *        &lt;choice text=&quot;radio 1&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
-     *        &lt;choice text=&quot;radio 2&quot; id=&quot;&quot; value=&quot;&quot; set=&quot;true&quot;/&gt;
-     *        &lt;choice text=&quot;radio 3&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
-     *        &lt;choice text=&quot;radio 4&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
-     *        &lt;choice text=&quot;radio 5&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
-     *      &lt;/spec&gt;
-     *    &lt;/field&gt;
+     *    
+     *     &lt;field type=&quot;radio&quot; variable=&quot;testVariable&quot;&gt;
+     *       &lt;description text=&quot;Description for the radio buttons&quot; id=&quot;a key for translated text&quot;/&gt;
+     *       &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
+     *         &lt;choice text=&quot;radio 1&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
+     *         &lt;choice text=&quot;radio 2&quot; id=&quot;&quot; value=&quot;&quot; set=&quot;true&quot;/&gt;
+     *         &lt;choice text=&quot;radio 3&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
+     *         &lt;choice text=&quot;radio 4&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
+     *         &lt;choice text=&quot;radio 5&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
+     *       &lt;/spec&gt;
+     *     &lt;/field&gt;
+     *     
      *    
      *   
-     *  
      * </pre>
      * 
      * @param spec a <code>XMLElement</code> containing the specification for the radio button
@@ -1366,7 +1459,8 @@ public class UserInputPanel extends IzPanel
                 String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
                 if (set != null)
                 {
-                    if (set != null && !"".equals(set)){
+                    if (set != null && !"".equals(set))
+                    {
                         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
@@ -1425,21 +1519,21 @@ public class UserInputPanel extends IzPanel
      * This is a complete example of a valid XML specification
      * 
      * <pre>
-     * 
      *  
      *   
-     *    &lt;field type=&quot;password&quot; variable=&quot;testVariable&quot;&gt;
-     *      &lt;description align=&quot;left&quot; txt=&quot;Please enter your password&quot; id=&quot;a key for translated text&quot;/&gt;
-     *      &lt;spec&gt;
-     *        &lt;pwd txt=&quot;Password&quot; id=&quot;key for the label&quot; size=&quot;10&quot; set=&quot;&quot;/&gt;
-     *        &lt;pwd txt=&quot;Retype password&quot; id=&quot;another key for the label&quot; size=&quot;10&quot; set=&quot;&quot;/&gt;
-     *      &lt;/spec&gt;
-     *      &lt;validator class=&quot;com.izforge.sample.PWDValidator&quot; txt=&quot;Both versions of the password must match&quot; id=&quot;key for the error text&quot;/&gt;
-     *      &lt;processor class=&quot;com.izforge.sample.PWDEncryptor&quot;/&gt;
-     *    &lt;/field&gt;
+     *    
+     *     &lt;field type=&quot;password&quot; variable=&quot;testVariable&quot;&gt;
+     *       &lt;description align=&quot;left&quot; txt=&quot;Please enter your password&quot; id=&quot;a key for translated text&quot;/&gt;
+     *       &lt;spec&gt;
+     *         &lt;pwd txt=&quot;Password&quot; id=&quot;key for the label&quot; size=&quot;10&quot; set=&quot;&quot;/&gt;
+     *         &lt;pwd txt=&quot;Retype password&quot; id=&quot;another key for the label&quot; size=&quot;10&quot; set=&quot;&quot;/&gt;
+     *       &lt;/spec&gt;
+     *       &lt;validator class=&quot;com.izforge.sample.PWDValidator&quot; txt=&quot;Both versions of the password must match&quot; id=&quot;key for the error text&quot;/&gt;
+     *       &lt;processor class=&quot;com.izforge.sample.PWDEncryptor&quot;/&gt;
+     *     &lt;/field&gt;
+     *     
      *    
      *   
-     *  
      * </pre>
      * 
      * @param spec a <code>XMLElement</code> containing the specification for the set of password
@@ -1502,7 +1596,8 @@ public class UserInputPanel extends IzPanel
             {
                 fieldSpec = (XMLElement) inputs.elementAt(i);
                 String set = fieldSpec.getAttribute(SET);
-                if (set != null && !"".equals(set)){
+                if (set != null && !"".equals(set))
+                {
                     VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
                     set = vs.substitute(set, null);
                 }
@@ -1616,7 +1711,8 @@ public class UserInputPanel extends IzPanel
 
         if (set != null)
         {
-            if (set != null && !"".equals(set)){
+            if (set != null && !"".equals(set))
+            {
                 VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
                 set = vs.substitute(set, null);
             }
@@ -1706,19 +1802,19 @@ public class UserInputPanel extends IzPanel
      * This is a complete example of a valid XML specification
      * 
      * <pre>
-     * 
      *  
      *   
-     *    &lt;field type=&quot;search&quot; variable=&quot;testVariable&quot;&gt;
-     *      &lt;description text=&quot;Description for the search field&quot; id=&quot;a key for translated text&quot;/&gt;
-     *      &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot; filename=&quot;the_file_to_search&quot; result=&quot;directory&quot; /&gt; &lt;!-- values for result: directory, file --&gt;
-     *        &lt;choice dir=&quot;directory1&quot; set=&quot;true&quot; /&gt; &lt;!-- default value --&gt;
-     *        &lt;choice dir=&quot;dir2&quot; /&gt;
-     *      &lt;/spec&gt;
-     *    &lt;/field&gt;
+     *    
+     *     &lt;field type=&quot;search&quot; variable=&quot;testVariable&quot;&gt;
+     *       &lt;description text=&quot;Description for the search field&quot; id=&quot;a key for translated text&quot;/&gt;
+     *       &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot; filename=&quot;the_file_to_search&quot; result=&quot;directory&quot; /&gt; &lt;!-- values for result: directory, file --&gt;
+     *         &lt;choice dir=&quot;directory1&quot; set=&quot;true&quot; /&gt; &lt;!-- default value --&gt;
+     *         &lt;choice dir=&quot;dir2&quot; /&gt;
+     *       &lt;/spec&gt;
+     *     &lt;/field&gt;
+     *     
      *    
      *   
-     *  
      * </pre>
      * 
      * @param spec a <code>XMLElement</code> containing the specification for the search field
@@ -1812,7 +1908,8 @@ public class UserInputPanel extends IzPanel
                 String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
                 if (set != null)
                 {
-                    if (set != null && !"".equals(set)){
+                    if (set != null && !"".equals(set))
+                    {
                         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
@@ -2117,23 +2214,22 @@ public class UserInputPanel extends IzPanel
      * legal integer, then the default value is returned.
      */
     /*--------------------------------------------------------------------------*/
-//    private int getInt(XMLElement element, String attribute, int defaultValue)
-//    {
-//        int result = defaultValue;
-//
-//        if ((attribute != null) && (attribute.length() > 0))
-//        {
-//            try
-//            {
-//                result = Integer.parseInt(element.getAttribute(attribute));
-//            }
-//            catch (Throwable exception)
-//            {}
-//        }
-//
-//        return (result);
-//    }
-
+    // private int getInt(XMLElement element, String attribute, int defaultValue)
+    // {
+    // int result = defaultValue;
+    //
+    // if ((attribute != null) && (attribute.length() > 0))
+    // {
+    // try
+    // {
+    // result = Integer.parseInt(element.getAttribute(attribute));
+    // }
+    // catch (Throwable exception)
+    // {}
+    // }
+    //
+    // return (result);
+    // }
     /*--------------------------------------------------------------------------*/
     /**
      * Retrieves the value of a floating point attribute. If the attribute is not found or the value
@@ -2280,10 +2376,7 @@ public class UserInputPanel extends IzPanel
             {
                 match = OsVersion.IS_UNIX;
             }
-            if (match)
-            {
-                return true;
-            }
+            if (match) { return true; }
         }
         return false;
     }
@@ -2624,10 +2717,7 @@ public class UserInputPanel extends IzPanel
              * Check if the user has entered data into the ComboBox and add it to the Itemlist
              */
             String selected = (String) this.pathComboBox.getSelectedItem();
-            if (selected == null)
-            {
-                return false;
-            }
+            if (selected == null) { return false; }
             boolean found = false;
             for (int x = 0; x < this.pathComboBox.getItemCount(); x++)
             {
