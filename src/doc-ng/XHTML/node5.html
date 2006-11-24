@@ -409,11 +409,11 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
     <h2><a id="headingPanels" name="headingPanels">Using a Separated Heading Panel</a></h2>
 
     <p>Some standard panels have headings (e.g. ShortcutPanel). These headings are integrated in
-    the IzPanel. In oposite to this following heading will be done in a separated panel potential
+    the IzPanel. In oposite to this following heading will be displayed in a separated panel potential
     for all panels with the same design. There is no need to modify existent java classes else
     declaration of some key/value pairs are enough.</p>
 
-    <p>There can be one real headline and one or more info lines. The headline will be written
+    <p>There can be one real head and zero or more info lines. The headline will be written
     bold, the fontsize can be changed. Info lines will be indented and written with the normal used
     font. The heading message has to be written into the langpack (or custom langpack) file with
     the key <tt>&lt;panel class name&gt;.headline</tt>. Examples can be seen in <tt>eng.xml</tt>.
@@ -422,6 +422,35 @@ You can also give a specific picture for a specific panel by using the <tt>Insta
     number&gt;</tt>. First info line has number zero. If no or empty headline messages will be 
 	declared in the chosen language no heading panel will be shown. This behavior can be used to 
     suppress heading for special panels.</p>
+	<p>It is also possible to declare head and info lines additonal dependent on the panelid.
+	The result is, that it is possible to declare different messages for panels which are shown
+	more than one time (e.g. the UserInputPanel. In this case the key for heading is</p>
+	<pre>&lt;panel class name&gt;.headline.&lt;panelid&gt;</pre>
+	<p>and for info lines</p>
+	<pre>&lt;panel class name&gt;.headinfo&lt;info line number&gt;.&lt;panelid&gt;</pre>
+	<p>Panelids are declared in ELEMENT %lt;panel&gt;. See <a href="node4.html#SECTION00437000000000000000">
+	The Panels Element <tt>&lt;panels&gt;</tt></a> . The standard strings are declared in the
+	standard langpack file. For customized panels it is common to write the string into the
+	custom langpack (see <a href="node7.html#SECTION00720000000000000000">
+	The Internationalization of custom panels</a>. If (as example) in <i>install.xml</i>
+	was following written:</p>
+	<pre>    &lt;panels&gt;
+        ...
+        &lt;panel classname="UserInputPanel" id="one"/&gt;
+        &lt;panel classname="UserInputPanel"id="two"/&gt;
+        ...
+    &lt;/panels&gt;</pre>
+	<p>Then the messages can be declared in <i>CustomLangpack.xml_eng</i> like</p>
+	<pre>&lt;langpack&gt;
+    ...
+    &lt;str id="UserInputPanel.headline.one" txt="User Data one"/&gt;
+    &lt;str id="UserInputPanel.headline.two" txt="User Data two"/&gt;
+    &lt;str id="UserInputPanel.headinfo0.one" txt="Info 1 one"/&gt;
+    &lt;str id="UserInputPanel.headinfo1.one" txt="Info 2 one"/&gt;
+    &lt;str id="UserInputPanel.headinfo0.two" txt="Info 1 two"/&gt;
+    &lt;str id="UserInputPanel.headinfo1.two" txt="Info 2 two"/&gt;
+    ...
+&lt;langpack&gt;</pre>
 	<p>It is possible to place an icon on the right side of the heading. To do this a simple 
 	resource entry will be needed:</p>
 	<pre>&lt;resources&gt;
