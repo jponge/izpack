@@ -7,7 +7,7 @@
 - Bugfix at using OS dependant panels; dtd adapted to implementation of it
   (Klaus Bartz, thanks to Francois Guillet).
 - Added Rulesengine, Conditions, panelconditions (Dennis Reil)
-
+- Fix DestroyButton in UninstallerFrame clickable only once (Dennis Reil)
 
   > 3.9.0 (build 2006.09.25)
 - Fix Accents In French Langpack (Fabrice Mirabile)
