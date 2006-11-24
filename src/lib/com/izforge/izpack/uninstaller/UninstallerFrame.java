@@ -472,6 +472,7 @@ public class UninstallerFrame extends JFrame
                 System.exit(0);
             else if (src == destroyButton)
             {
+                destroyButton.setEnabled(false);
                 Destroyer destroyer = new Destroyer(installPath,
                         targetDestroyCheckbox.isSelected(), new DestroyerHandler());
                 destroyer.start();
