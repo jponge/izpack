@@ -25,32 +25,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
 /**
  * System dependent helper for MS Windows registry handling. This class is only vaild on Windows. It
- * declares naitve methods which are implemented in COIOSHelper.dll
+ * declares naitve methods which are implemented in COIOSHelper.dll. The native methods uses the
+ * classes RegDataContainer and AccessControlList as in and output. Do not change the getter and
+ * setter methods of them. Do not try to implement a get or setValueACL because it will be nonsense.
+ * In the registry only keys have a ACL. not values.
  * 
  * @author Klaus Bartz
  */
-public class RegistryImpl
+public class RegistryImpl implements MSWinConstants
 {
-
-    /*
-     * Registry root values, extracted from winreg.h
-     */
-    public static final int HKEY_CLASSES_ROOT = 0x80000000;
-
-    public static final int HKEY_CURRENT_USER = 0x80000001;
-
-    public static final int HKEY_LOCAL_MACHINE = 0x80000002;
-
-    public static final int HKEY_USERS = 0x80000003;
-
-    public static final int HKEY_PERFORMANCE_DATA = 0x80000004;
-
-    public static final int HKEY_CURRENT_CONFIG = 0x80000005;
-
-    public static final int HKEY_DYN_DATA = 0x80000006;
 
     private static final String DEFAULT_PLACEHOLDER = "__#$&DEFAULT_PLACEHODER_VALUE#$?";
 
@@ -153,16 +138,15 @@ public class RegistryImpl
     /**
      * Creates the given key under the given root.
      * 
+     * @param root to be used
      * @param key key to be created
      * @throws NativeLibException
      */
     public void createKey(int root, String key) throws NativeLibException
     {
         int pathEnd = key.lastIndexOf('\\');
-        if( pathEnd < 0 )
-        {
+        if (pathEnd < 0)
             throw new NativeLibException("Keys directly under the root are not allowed!");
-        }
         String subkey = key.substring(0, pathEnd);
         if (!exist(root, subkey))
         { // Create missing sub keys
@@ -368,6 +352,7 @@ public class RegistryImpl
     {
         deleteKeyL(currentRoot, key);
     }
+
     /**
      * Deletes a key under the current root if it is empty, else do nothing.
      * 
@@ -388,7 +373,7 @@ public class RegistryImpl
      */
     public void deleteKeyIfEmpty(int root, String key) throws NativeLibException
     {
-        if (keyExist(root, key) && isKeyEmpty(root, key) ) deleteKeyL(root, key);
+        if (keyExist(root, key) && isKeyEmpty(root, key)) deleteKeyL(root, key);
 
     }
 
@@ -556,8 +541,6 @@ public class RegistryImpl
     private native void setValueN(int root, String key, String value, RegDataContainer contents)
             throws NativeLibException;
 
-    private native int getValueType(int root, String key, String value) throws NativeLibException;
-
     private native RegDataContainer getValue(int root, String key, String value)
             throws NativeLibException;
 
@@ -567,17 +550,29 @@ public class RegistryImpl
 
     private native boolean isKeyEmpty(int root, String key) throws NativeLibException;
 
-    private native int getSubkeyCount(int root, String key) throws NativeLibException;
-
-    private native int getValueCount(int root, String key) throws NativeLibException;
-
-    private native String getSubkeyName(int root, String key, int index) throws NativeLibException;
-
-    private native String getValueName(int root, String key, int index) throws NativeLibException;
-
     private native String[] getSubkeyNames(int root, String key) throws NativeLibException;
 
     private native String[] getValueNames(int root, String key) throws NativeLibException;
+
+    // Methods which are implemented in the native part but not used yet. To suppress warnings
+    // in Eclipse this methods are commented out. Comment in if needed.
+    // private native int getValueType(int root, String key, String value) throws
+    // NativeLibException;
+    //
+    // private native int getSubkeyCount(int root, String key) throws NativeLibException;
+    //
+    // private native int getValueCount(int root, String key) throws NativeLibException;
+    //
+    // private native String getSubkeyName(int root, String key, int index) throws
+    // NativeLibException;
+    //
+    // private native String getValueName(int root, String key, int index) throws
+    // NativeLibException;
+    //
+    // private native void modifyKeyACL(int root, String key, AccessControlList acl)
+    // throws NativeLibException;
+    //
+    // private native AccessControlList getKeyACL(int root, String key) throws NativeLibException;
 
     /**
      * Creates a new (empty) logging list and activates logging.
@@ -606,6 +601,8 @@ public class RegistryImpl
 
     /**
      * Returns a copy of the colected logging informations.
+     * 
+     * @return a copy of the colected logging informations
      */
     public List getLoggingInfo()
     {
@@ -626,6 +623,8 @@ public class RegistryImpl
     /**
      * Copies the contents of the given list of RegistryLogItems to a newly created internal logging
      * list.
+     * 
+     * @param info list containing RegistryLogItems to be used for logging
      */
     public void setLoggingInfo(List info)
     {
@@ -635,7 +634,8 @@ public class RegistryImpl
 
     /**
      * Adds copies of the contents of the given list of RegistryLogItems to the existent internal
-     * logging list.
+     * 
+     * @param info list containing RegistryLogItems to be used for logging logging list.
      */
     public void addLoggingInfo(List info)
     {
@@ -661,16 +661,6 @@ public class RegistryImpl
     private void log(RegistryLogItem item)
     {
         if (doLogging && logging != null) logging.add(0, item);
-    }
-
-    /**
-     * Adds the given item to the end of the logging list if logging is enabled, else do nothing.
-     * 
-     * @param item
-     */
-    private void logAtEnd(RegistryLogItem item)
-    {
-        if (doLogging && logging != null) logging.add(item);
     }
 
 }

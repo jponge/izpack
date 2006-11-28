@@ -19,8 +19,8 @@
 
 package com.izforge.izpack.panels;
 
+import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.RegDataContainer;
-import com.coi.tools.os.win.RegistryImpl;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.AbstractUIHandler;
@@ -35,7 +35,7 @@ import com.izforge.izpack.util.os.RegistryHandler;
  * 
  * @author Klaus Bartz
  */
-public class CheckedHelloPanel extends HelloPanel
+public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
 {
 
     /** Flag to break installation or not. */
@@ -81,7 +81,7 @@ public class CheckedHelloPanel extends HelloPanel
             if (uninstallName == null) break; // Should never be...
             // First we "create" the reg key.
             String keyName = RegistryHandler.UNINSTALL_ROOT + uninstallName;
-            rh.setRoot(RegistryImpl.HKEY_LOCAL_MACHINE);
+            rh.setRoot(HKEY_LOCAL_MACHINE);
             if (!rh.valueExist(keyName, "UninstallString"))
             // We assume that the application was installed with
                     // IzPack. Therefore there should be the value "UninstallString"
@@ -108,14 +108,14 @@ public class CheckedHelloPanel extends HelloPanel
             int typeOfVal = val.getType();
             switch (typeOfVal)
             {
-            case RegDataContainer.REG_EXPAND_SZ:
-            case RegDataContainer.REG_SZ:
+            case REG_EXPAND_SZ:
+            case REG_SZ:
                 valString = val.getStringData();
                 break;
-            case RegDataContainer.REG_BINARY:
-            case RegDataContainer.REG_DWORD:
-            case RegDataContainer.REG_LINK:
-            case RegDataContainer.REG_MULTI_SZ:
+            case REG_BINARY:
+            case REG_DWORD:
+            case REG_LINK:
+            case REG_MULTI_SZ:
                 throw new Exception("Bad data type of chosen registry value " + keyName);
             default:
                 throw new Exception("Unknown data type of chosen registry value " + keyName);
@@ -252,7 +252,7 @@ public class CheckedHelloPanel extends HelloPanel
                     + ")";
             // Then we "create" the reg key with it.
             String keyName = RegistryHandler.UNINSTALL_ROOT + newUninstallName;
-            rh.setRoot(RegistryImpl.HKEY_LOCAL_MACHINE);
+            rh.setRoot(HKEY_LOCAL_MACHINE);
             if (!rh.keyExist(keyName))
             { // That's the name for which we searched.
                 // Change the uninstall name in the reg helper.

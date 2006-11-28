@@ -31,6 +31,7 @@ import java.util.ListResourceBundle;
  */
 public class NativeLibErr extends ListResourceBundle
 {
+
     private static final Object[][] contents = {
             { "libInternal.OsErrNumPraefix", " System error number is: "},
             { "libInternal.OsErrStringPraefix", " System error text is: "},
@@ -52,7 +53,8 @@ public class NativeLibErr extends ListResourceBundle
 
             { "registry.ValueNotFound", "Registry value not found."},
             { "registry.KeyNotFound", "Registry key not found."},
-            { "registry.KeyExist", "Cannot create registry key {0}\\{1} because key exist already."}};
+            { "registry.KeyExist", "Cannot create registry key {0}\\{1} because key exist already."},
+            { "registry.ACLNotSupported", "In this version of COIOSHelper permission of registry keys are not supported."}};
 
     /**
      * Default constructor.

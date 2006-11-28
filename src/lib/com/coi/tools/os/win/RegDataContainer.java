@@ -4,7 +4,7 @@
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
  * 
- * Copyright 2005 Klaus Bartz
+ * Copyright 2005-2006 Klaus Bartz
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,39 +22,23 @@
 package com.coi.tools.os.win;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * <p>
  * Data container for Windows registry values. Windows registry values can contain different data
  * types. It is not possible to map they all to one Java type. Therefore this class contains the
- * different container types.
+ * different container types. DO NOT CHANGE METHODE SIGNATURES etc. without addapt the native method
+ * RegistryImpl.setValueN and RegistryImpl.getValue.
  * </p>
  * 
  * @author Klaus Bartz
  * 
  */
-public class RegDataContainer implements Cloneable, Serializable
+public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
 {
 
     private static final long serialVersionUID = 3979265850388066865L;
-
-    /*
-     * Registry value types, extracted from winnt.h
-     */
-    public static final int REG_NONE = 0; // No value type
-
-    public static final int REG_SZ = 1; // Unicode nul terminated string
-
-    public static final int REG_EXPAND_SZ = 2; // Unicode nul terminated string
-
-    // (with environment variable references)
-    public static final int REG_BINARY = 3; // Free form binary
-
-    public static final int REG_DWORD = 4; // 32-bit number
-
-    public static final int REG_LINK = 6; // Symbolic Link (unicode)
-
-    public static final int REG_MULTI_SZ = 7; // Multiple Unicode strings
 
     private static final int[] VALID_TYPES = { 0, 1, 2, 3, 4, 6, 7};
 
@@ -352,4 +336,5 @@ public class RegDataContainer implements Cloneable, Serializable
         result = 29 * result + type;
         return result;
     }
+
 }

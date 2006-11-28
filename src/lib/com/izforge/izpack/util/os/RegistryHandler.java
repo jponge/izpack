@@ -29,9 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.NativeLibException;
 import com.coi.tools.os.win.RegDataContainer;
-import com.coi.tools.os.win.RegistryImpl;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.Debug;
@@ -45,7 +45,7 @@ import com.izforge.izpack.util.OSClassHelper;
  * @author Klaus Bartz
  * 
  */
-public class RegistryHandler extends OSClassHelper
+public class RegistryHandler extends OSClassHelper implements MSWinConstants
 {
 
     public static final String UNINSTALL_ROOT = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
@@ -59,20 +59,20 @@ public class RegistryHandler extends OSClassHelper
     private static RegistryHandler defaultHandler = null;
     static
     {
-        ROOT_KEY_MAP.put("HKCR", new Integer(RegistryImpl.HKEY_CLASSES_ROOT));
-        ROOT_KEY_MAP.put("HKEY_CLASSES_ROOT", new Integer(RegistryImpl.HKEY_CLASSES_ROOT));
-        ROOT_KEY_MAP.put("HKCU", new Integer(RegistryImpl.HKEY_CURRENT_USER));
-        ROOT_KEY_MAP.put("HKEY_CURRENT_USER", new Integer(RegistryImpl.HKEY_CURRENT_USER));
-        ROOT_KEY_MAP.put("HKLM", new Integer(RegistryImpl.HKEY_LOCAL_MACHINE));
-        ROOT_KEY_MAP.put("HKEY_LOCAL_MACHINE", new Integer(RegistryImpl.HKEY_LOCAL_MACHINE));
-        ROOT_KEY_MAP.put("HKU", new Integer(RegistryImpl.HKEY_USERS));
-        ROOT_KEY_MAP.put("HKEY_USERS", new Integer(RegistryImpl.HKEY_USERS));
-        ROOT_KEY_MAP.put("HKPD", new Integer(RegistryImpl.HKEY_PERFORMANCE_DATA));
-        ROOT_KEY_MAP.put("HKEY_PERFORMANCE_DATA", new Integer(RegistryImpl.HKEY_PERFORMANCE_DATA));
-        ROOT_KEY_MAP.put("HKCC", new Integer(RegistryImpl.HKEY_CURRENT_CONFIG));
-        ROOT_KEY_MAP.put("HKEY_CURRENT_CONFIG", new Integer(RegistryImpl.HKEY_CURRENT_CONFIG));
-        ROOT_KEY_MAP.put("HKDDS", new Integer(RegistryImpl.HKEY_DYN_DATA));
-        ROOT_KEY_MAP.put("HKEY_DYN_DATA", new Integer(RegistryImpl.HKEY_DYN_DATA));
+        ROOT_KEY_MAP.put("HKCR", new Integer(HKEY_CLASSES_ROOT));
+        ROOT_KEY_MAP.put("HKEY_CLASSES_ROOT", new Integer(HKEY_CLASSES_ROOT));
+        ROOT_KEY_MAP.put("HKCU", new Integer(HKEY_CURRENT_USER));
+        ROOT_KEY_MAP.put("HKEY_CURRENT_USER", new Integer(HKEY_CURRENT_USER));
+        ROOT_KEY_MAP.put("HKLM", new Integer(HKEY_LOCAL_MACHINE));
+        ROOT_KEY_MAP.put("HKEY_LOCAL_MACHINE", new Integer(HKEY_LOCAL_MACHINE));
+        ROOT_KEY_MAP.put("HKU", new Integer(HKEY_USERS));
+        ROOT_KEY_MAP.put("HKEY_USERS", new Integer(HKEY_USERS));
+        ROOT_KEY_MAP.put("HKPD", new Integer(HKEY_PERFORMANCE_DATA));
+        ROOT_KEY_MAP.put("HKEY_PERFORMANCE_DATA", new Integer(HKEY_PERFORMANCE_DATA));
+        ROOT_KEY_MAP.put("HKCC", new Integer(HKEY_CURRENT_CONFIG));
+        ROOT_KEY_MAP.put("HKEY_CURRENT_CONFIG", new Integer(HKEY_CURRENT_CONFIG));
+        ROOT_KEY_MAP.put("HKDDS", new Integer(HKEY_DYN_DATA));
+        ROOT_KEY_MAP.put("HKEY_DYN_DATA", new Integer(HKEY_DYN_DATA));
 
     }
 
@@ -343,7 +343,7 @@ public class RegistryHandler extends OSClassHelper
         if (uninstallName == null) return (false);
         String keyName = UNINSTALL_ROOT + uninstallName;
         int oldVal = getRoot();
-        setRoot(RegistryImpl.HKEY_LOCAL_MACHINE);
+        setRoot(HKEY_LOCAL_MACHINE);
         boolean retval = keyExist(keyName);
         setRoot(oldVal);
         return (retval);
@@ -363,7 +363,7 @@ public class RegistryHandler extends OSClassHelper
                 + installdata.getVariable("INSTALL_PATH") + "\\uninstaller\\uninstaller.jar\"";
 
         int oldVal = getRoot();
-        setRoot(RegistryImpl.HKEY_LOCAL_MACHINE);
+        setRoot(HKEY_LOCAL_MACHINE);
         setValue(keyName, "DisplayName", uninstallName);
         setValue(keyName, "UninstallString", cmd);
         // Try to write the uninstaller icon out.

@@ -60,7 +60,9 @@ public class NativeLibErr_de extends ListResourceBundle
             { "registry.KeyNotFound",
                     "Der angeforderte Registry-Schl\u00fcssel wurde nicht gefunden."},
             { "registry.KeyExist",
-                    "Der Registry-Schl\u00fcssel {0}\\{1} konnte nicht angelegt werden, weil er bereits existierte."}};
+                    "Der Registry-Schl\u00fcssel {0}\\{1} konnte nicht angelegt werden, weil er bereits existierte."},
+            { "registry.ACLNotSupported",
+                    "In dieser Version von COIOSHelper werden Berechtigungen von Registry-Schl\u00fcsseln nicht unterst\u00fctzt."}};
 
     /**
      * Returns the contents array.
