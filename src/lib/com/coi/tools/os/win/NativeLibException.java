@@ -253,6 +253,11 @@ public class NativeLibException extends Exception
         return (args);
     }
 
+    /**
+     * Revise placeholder in the given message with the setted arguments 
+     * @param msg message to be revised
+     * @return revised message 
+     */
     public String reviseMsgWithArgs(String msg)
     {
         for (int i = 0; i < args.size(); ++i)

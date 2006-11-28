@@ -37,6 +37,7 @@ public class Registry extends RegistryImpl implements NativeLibraryClient
 
     /**
      * Default constructor.
+     * @exception Exception if initialize of native part fails
      */
     public Registry() throws Exception
     {

@@ -22,7 +22,6 @@
 package com.coi.tools.os.win;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * <p>
@@ -229,13 +228,13 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
     /**
      * Verifies whether the given int represents a valid type or not.
      * 
-     * @param type value to be verified
+     * @param type0 value to be verified
      * @return whether the given int represents a valid type or not
      */
-    public boolean isValidType(int type)
+    public boolean isValidType(int type0)
     {
         for (int i = 0; i < VALID_TYPES.length; ++i)
-            if (type == VALID_TYPES[i]) return (true);
+            if (type0 == VALID_TYPES[i]) return (true);
         return (false);
 
     }

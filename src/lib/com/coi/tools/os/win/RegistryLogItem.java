@@ -39,14 +39,20 @@ public class RegistryLogItem implements Cloneable, Serializable
     private static final long serialVersionUID = 3618134559108444211L;
 
     /** Types of log items */
+    
+    /** Identifier for removed key */
     public static final int REMOVED_KEY = 1;
 
+    /** Identifier for created key */
     public static final int CREATED_KEY = 2;
 
+    /** Identifier for removed value */
     public static final int REMOVED_VALUE = 3;
 
+    /** Identifier for created value */
     public static final int CREATED_VALUE = 4;
 
+    /** Identifier for changed value */
     public static final int CHANGED_VALUE = 5;
 
     private int type;

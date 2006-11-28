@@ -44,6 +44,9 @@ public class COIOSHelper
     /**
      * This method is used to free the library at the end of progam execution. After this call, any
      * instance of this class will not be usable any more!
+     * 
+     * @param name the name of the library to free. Use only the name and extension but not the
+     * path.
      */
     private native void FreeLibrary(String name);
 
@@ -57,6 +60,8 @@ public class COIOSHelper
 
     /**
      * Returns the one existent object of this class.
+     * 
+     * @return the one existent object of this class
      */
     public static synchronized COIOSHelper getInstance()
     {
@@ -100,6 +105,7 @@ public class COIOSHelper
      * library COIOSHelper which should contain native methods for the dependant.
      * 
      * @param dependant to be added
+     * @throws Exception if loadLibrary for the needed lib fails
      */
     public void addDependant(NativeLibraryClient dependant) throws Exception
     {
