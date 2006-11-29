@@ -12,6 +12,7 @@
 - Heading panel strings can be depend on the panelid (Klaus Bartz, thangs
   to Stefan Wachter).
 - Added dtd for conditions (Dennis Reil)
+- Added support for panelid in InstallerImage-Definition (Dennis Reil)
 
   > 3.9.0 (build 2006.09.25)
 - Fix Accents In French Langpack (Fabrice Mirabile)

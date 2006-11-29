@@ -54,9 +54,7 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -94,17 +92,16 @@ import com.izforge.izpack.CustomData;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Panel;
-import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.os.unix.UnixUser;
 
 /**
  * The IzPack installer frame.
@@ -396,7 +393,7 @@ public class InstallerFrame extends JFrame
     private void buildGUI()
     {
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // patch 06/07/2005,
-                                                                            // Fabrice Mirabile
+        // Fabrice Mirabile
         // Sets the frame icon
         setIconImage(icons.getImageIcon("JFrameIcon").getImage());
 
@@ -517,9 +514,68 @@ public class InstallerFrame extends JFrame
         return (icon);
     }
 
+    private ImageIcon loadIcon(String resPrefix, String panelid, boolean tryBaseIcon)
+            throws ResourceNotFoundException, IOException
+    {
+        ResourceManager rm = ResourceManager.getInstance();
+        ImageIcon icon = null;
+        if (tryBaseIcon)
+        {
+            try
+            {
+                icon = rm.getImageIconResource(resPrefix);
+            }
+            catch (Exception e) // This is not that clean ...
+            {
+                icon = rm.getImageIconResource(resPrefix + "." + panelid);
+            }
+        }
+        else
+            icon = rm.getImageIconResource(resPrefix + "." + panelid);
+        return (icon);
+    }
+
     private void loadAndShowImage(int panelNo)
     {
         loadAndShowImage(iconLabel, ICON_RESOURCE, panelNo);
+    }
+
+    private void loadAndShowImage(int panelNo, String panelid)
+    {
+        loadAndShowImage(iconLabel, ICON_RESOURCE, panelNo, panelid);
+    }
+
+    private void loadAndShowImage(JLabel iLabel, String resPrefix, int panelno, String panelid)
+    {
+        ImageIcon icon = null;
+        try
+        {
+            icon = loadIcon(resPrefix, panelid, false);
+        }
+        catch (Exception e)
+        {
+            try
+            {
+                icon = loadIcon(resPrefix, panelno, false);
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    icon = loadIcon(resPrefix, panelid, true);
+                }
+                catch (Exception e1)
+                {
+                    // ignore
+                }
+            }
+        }
+        if (icon != null)
+        {
+            iLabel.setVisible(false);
+            iLabel.setIcon(icon);
+            iLabel.setVisible(true);
+        }
     }
 
     private void loadAndShowImage(JLabel iLabel, String resPrefix, int panelNo)
@@ -663,8 +719,17 @@ public class InstallerFrame extends JFrame
             performHeadingCounter(panel);
             panel.panelActivate();
             panelsContainer.setVisible(true);
-            loadAndShowImage(((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
-                    .intValue());
+            Panel metadata = panel.getMetadata();
+            if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
+            {
+                loadAndShowImage(((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
+                        .intValue(), metadata.getPanelid());
+            }
+            else
+            {
+                loadAndShowImage(((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
+                        .intValue());
+            }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
         }
