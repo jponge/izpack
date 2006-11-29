@@ -537,8 +537,7 @@
             <include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
             <include name="com/izforge/izpack/util/OSClassHelper.java" />
             <include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
-            <include name="com/coi/tools/os/win/NativeLibException.java" />
-            <include name="com/coi/tools/os/win/Reg*.java" />
+            <include name="com/coi/tools/os/win/*.java" />
             <include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
             <include name="com/coi/tools/os/izpack/Registry.java" />
             <include name="com/coi/tools/os/izpack/COIOSHelper.java" />
@@ -787,8 +786,7 @@
             <include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
             <include name="com/izforge/izpack/util/OSClassHelper.java" />
             <include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
-            <include name="com/coi/tools/os/win/NativeLibException.java" />
-            <include name="com/coi/tools/os/win/Reg*.java" />
+            <include name="com/coi/tools/os/win/*.java" />
             <include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
             <include name="com/coi/tools/os/izpack/Registry.java" />
             <include name="com/coi/tools/os/izpack/COIOSHelper.java" />
@@ -800,8 +798,7 @@
             <include name="com/izforge/izpack/util/os/*RegistryHandler.java" />
             <include name="com/izforge/izpack/util/OSClassHelper.java" />
             <include name="com/izforge/izpack/util/os/WrappedNativeLibException.java" />
-            <include name="com/coi/tools/os/win/NativeLibException.java" />
-            <include name="com/coi/tools/os/win/Reg*.java" />
+            <include name="com/coi/tools/os/win/*.java" />
             <include name="com/coi/tools/os/win/resources/NativeLibErr*.java" />
             <include name="com/coi/tools/os/izpack/Registry.java" />
             <include name="com/coi/tools/os/izpack/COIOSHelper.java" />
