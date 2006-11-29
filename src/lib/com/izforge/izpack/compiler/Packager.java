@@ -394,12 +394,14 @@ public class Packager
     {
         addJarContent(jarURL, null);
     }
-   /**
+    /**
      * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information.
+     * copy over signed entry information. If the given file list is null the hole contents of the
+     * jar file will be copied else only the listed.
      * 
      * @param jarURL The url of the jar to add to the installer. We use a URL so the jar may be
      * nested within another.
+     * @param files to be copied
      */
     public void addJarContent(URL jarURL, List files)
     {

@@ -528,16 +528,30 @@ public class CompilerConfig extends Thread
             // Trivial initialisations
             String name = requireAttribute(el, "name");
             String id = el.getAttribute("id");
+            
             boolean loose = "true".equalsIgnoreCase(el.getAttribute("loose", "false"));
             String description = requireChildNamed(el, "description").getContent();
             boolean required = requireYesNoAttribute(el, "required");
             String group = el.getAttribute("group");
             String installGroups = el.getAttribute("installGroups");
-
-            PackInfo pack = new PackInfo(name, id, description, required, loose);
+            String excludeGroup = el.getAttribute("excludeGroup");
+            
+            if(required && excludeGroup != null)
+            {
+                parseError(el, "Pack, which has excludeGroup can not be required.", 
+                    new Exception("Pack, which has excludeGroup can not be required."));
+            }
+            
+            PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup);
             pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO:
+            
             // unverified
-            pack.setPreselected(validateYesNoAttribute(el, "preselected", YES));
+            // if the pack belongs to an excludeGroup it's not preselected by default
+            if(excludeGroup == null)
+                pack.setPreselected(validateYesNoAttribute(el, "preselected", YES));
+            else
+                pack.setPreselected(validateYesNoAttribute(el, "preselected", NO));
+            
             // Set the pack group if specified
             if (group != null)
                 pack.setGroup(group);
@@ -829,11 +843,12 @@ public class CompilerConfig extends Thread
                 pack.addDependency(depName);
 
             }
-
             // We add the pack
             compiler.addPack(pack);
         }
+        
         compiler.checkDependencies();
+        compiler.checkExcludes();
 
         notifyCompilerListener("addPacks", CompilerListener.END, data);
     }

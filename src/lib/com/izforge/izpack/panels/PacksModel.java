@@ -129,6 +129,23 @@ class PacksModel extends AbstractTableModel
                     checkValues[pos] = -2;
                 }
             }
+            // for mutual exclusion, uncheck uncompatible packs too
+            // (if available in the current installGroup)
+            
+            if(checkValues[i] > 0 && pack.excludeGroup != null)
+            {
+                for (int q = 0; q < packs.size(); q++)
+                {
+                    if(q != i)
+                    {
+                        Pack otherpack = (Pack) packs.get(q);
+                        if(pack.excludeGroup.equals(otherpack.excludeGroup))
+                        {
+                            if (checkValues[q] == 1) checkValues[q] = 0;
+                        }
+                    }
+                }
+            }
         }
         // The required ones must propagate their required status to all the
         // ones
@@ -253,6 +270,7 @@ class PacksModel extends AbstractTableModel
                 if (((Integer) aValue).intValue() == 1)
                 {
                     checkValues[rowIndex] = 1;
+                    updateExcludes(rowIndex);
                     updateDeps();
 
                     int bytes = panel.getBytes();
@@ -262,6 +280,7 @@ class PacksModel extends AbstractTableModel
                 else
                 {
                     checkValues[rowIndex] = 0;
+                    updateExcludes(rowIndex);
                     updateDeps();
 
                     int bytes = panel.getBytes();
@@ -318,7 +337,45 @@ class PacksModel extends AbstractTableModel
         }
 
     }
-
+    /*
+     * Sees which packs (if any) should be unchecked and updates checkValues
+     */
+    private void updateExcludes(int rowindex)
+    {
+        int value = checkValues [rowindex];
+        Pack pack = (Pack) packs.get(rowindex);
+        if( value > 0 && pack.excludeGroup != null)
+        {
+            for( int q = 0; q < packs.size(); q++)
+            {
+                if( rowindex != q )
+                {
+                    Pack otherpack = (Pack)packs.get(q);
+                    String name1 = otherpack.excludeGroup;
+                    String name2 = pack.excludeGroup;
+                    if( name2.equals(name1) )
+                    {
+                        if( checkValues [q] == 1) checkValues [q] = 0;
+                    }
+                }
+            }
+        }
+        this.UpdateBytes();
+    }
+    
+    private void UpdateBytes()
+    {
+        int bytes = 0;
+        for(int q=0; q<packs.size(); q++)
+        {
+            if(Math.abs(checkValues[q]) == 1)
+            {
+                Pack pack = (Pack)packs.get(q);
+                bytes += pack.nbytes;
+            }
+        }
+        panel.setBytes(bytes);
+    }
     /**
      * We use a modified dfs graph search algorithm as described in: Thomas H. Cormen, Charles
      * Leiserson, Ronald Rivest and Clifford Stein. Introduction to algorithms 2nd Edition

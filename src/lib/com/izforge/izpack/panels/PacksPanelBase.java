@@ -298,29 +298,69 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             Pack pack = (Pack) idata.availablePacks.get(i);
             List dep = pack.dependencies;
             String list = "";
+            if(dep != null  )
+            {
+                list += ( langpack == null ) ? "Dependencies: " : langpack.getString("PacksPanel.dependencies");
+            }
             for (int j = 0; dep != null && j < dep.size(); j++)
             {
                 String name = (String) dep.get(j);
-                // Internationalization code
-                Pack childPack = (Pack) names.get(name);
-                String childName = "";
-                String key = childPack.id;
-                if (langpack != null && childPack.id != null && !"".equals(childPack.id))
-                {
-                    childName = langpack.getString(key);
-                }
-                if ("".equals(childName) || key.equals(childName))
-                {
-                    childName = childPack.name;
-                }
-                // End internationalization
-                list += childName;
+                list += getI18NPackName((Pack) names.get(name));
                 if (j != dep.size() - 1) list += ", ";
             }
+            
+            //add the list of the packs to be excluded
+            String excludeslist = (langpack == null) ?"Excludes: " : langpack.getString("PacksPanel.excludes");
+            int numexcludes = 0;
+            if(pack.excludeGroup != null)
+            {
+                for(int q=0; q<idata.availablePacks.size(); q++)
+                {
+                    Pack otherpack = (Pack) idata.availablePacks.get(q);
+                    String exgroup = otherpack.excludeGroup;
+                    if(exgroup != null)
+                    {
+                        if( q != i && pack.excludeGroup.equals(exgroup))
+                        {
+                            
+                            excludeslist += getI18NPackName(otherpack) + ", ";
+                            numexcludes ++;
+                        }
+                    }
+                }
+            }
+            //concatenate
+            if(dep != null) excludeslist = "    " + excludeslist;
+            if(numexcludes > 0) list += excludeslist;
+            if(list.endsWith(", ")) list = list.substring(0, list.length()-2);
+            
+            //and display the result
             dependencyArea.setText(list);
         }
     }
 
+    /**
+     * This method tries to resolve the localized name of the given pack.
+     * If this is not possible, the name given in the installation description
+     * file in ELEMENT <pack> will be used.
+     * @param pack for which the name should be resolved
+     * @return localized name of the pack
+     */
+    private String getI18NPackName(Pack pack)
+    {
+        // Internationalization code
+        String packName = pack.name;
+        String key = pack.id;
+        if (langpack != null && pack.id != null && !"".equals(pack.id))
+        {
+            packName = langpack.getString(key);
+        }
+        if ("".equals(packName) || key.equals(packName))
+        {
+            packName = pack.name;
+        }
+        return( packName );
+    }
     /**
      * Layout helper method:<br>
      * Creates an label with a message given by msgId and an icon given by the iconId. If layout and
@@ -462,7 +502,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             Pack pack = (Pack) packs.get(i);
             names.put(pack.name, pack);
-            if (pack.dependencies != null) dependenciesExist = true;
+            if (pack.dependencies != null || pack.excludeGroup != null) dependenciesExist = true;
         }
     }
 

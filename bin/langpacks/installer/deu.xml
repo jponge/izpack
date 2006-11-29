@@ -96,8 +96,10 @@
     <str id="PacksPanel.freespace" txt="Verfügbarer Speicherplatz: "/>
     <str id="PacksPanel.description" txt="Beschreibung"/>
     <str id="PacksPanel.dependencyList" 
-    	txt="Das Paket ist von folgenden Paketen abhängig, bitte wählen Sie diese zuerst aus:"/>
-    <str id="ImgPacksPanel.dependencyList" txt="Abhängigkeiten"/>
+    	txt="Das Paket hat folgende Abhängigkeiten und/oder Ausschlüsse:"/>
+    <str id="PacksPanel.dependencies" txt="Abhängigkeiten: "/>
+    <str id="PacksPanel.excludes" txt="Ausschlüsse: "/>
+    <str id="ImgPacksPanel.dependencyList" txt="Abhängigkeiten und/oder Ausschlüsse"/>
     <str id="PacksPanel.notEnoughSpace" 
     	txt="Der erforderliche Festplattenplatz für die Installation ist größer als der zur Verfügung stehende Speicherplatz."/>
     <str id="PacksPanel.notAscertainable" txt="nicht bestimmbar"/>

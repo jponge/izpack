@@ -96,8 +96,10 @@
     <str id="PacksPanel.freespace" txt="Available space: "/>
     <str id="PacksPanel.description" txt="Description"/>
     <str id="PacksPanel.dependencyList" 
-        txt="The selected package requires the following packs to be installed"/>
-    <str id="ImgPacksPanel.dependencyList" txt="Dependencies"/>
+        txt="The selected package has the following dependencies and/or excludes"/>
+    <str id="PacksPanel.dependencies" txt="Dependencies: "/>
+    <str id="PacksPanel.excludes" txt="Excludes: "/>
+    <str id="ImgPacksPanel.dependencyList" txt="Dependencies and/or excludes"/>
 	<str id="PacksPanel.notEnoughSpace" 
 	    txt="Disk space required for the installation exceeds available disk space."/>
     <str id="PacksPanel.notAscertainable" txt="not ascertainable"/>

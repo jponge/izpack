@@ -28,6 +28,7 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
+import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
@@ -149,7 +150,8 @@ public class Compiler extends Thread
 
     
     /**
-     * Retrieves the packager listener
+     * Returns the packager listener.
+     * @return the packager listener
      */
     public PackagerListener getPackagerListener()
     {
@@ -242,27 +244,45 @@ public class Compiler extends Thread
         this.compileFailed = false;
     }
 
+    /**
+     * Returns whether the installation was successful or not.
+     * @return whether the installation was successful or not
+     */
     public boolean wasSuccessful()
     {
         return !this.compileFailed;
     }
 
-    public String replaceProperties(String value) throws CompilerException
+    /**
+     * Replaces placeholder in the given string with the associated strings.
+     * @param value to be substituted
+     * @return the substituted string
+     */
+    public String replaceProperties(String value)
     {
         return propertySubstitutor.substitute(value, "at");
     }
 
+    /**
+     * Sets GUI preferences to the packager.
+     * @param prefs preferences to be set
+     */
     public void setGUIPrefs(GUIPrefs prefs)
     {
         packager.setGUIPrefs(prefs);
     }
+    /**
+     * Sets an Info object to the packager.
+     * @param info Info object to be set
+     * @throws Exception
+     */
     public void setInfo(Info info) throws Exception
     {
         packager.setInfo(info);
     }
 
     /**
-     * Get the install packager.
+     * Returns the install packager.
      * @return the install packager.
      */
     public Packager getPackager()
@@ -270,7 +290,8 @@ public class Compiler extends Thread
         return packager;
     }
     /**
-     * Get the properties currently known to the compileer.
+     * Returns the properties currently known to the compileer.
+     * @return the properties currently known to the compileer
      */
     public Properties getProperties()
     {
@@ -331,16 +352,24 @@ public class Compiler extends Thread
     {
         packager.addJarContent(content);
     }
+
     /**
-     * Add jar content to the installation.
-     * @param content 
+     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
+     * copy over signed entry information. If the given file list is null the hole contents of the
+     * jar file will be copied else only the listed.
+     * 
+     * @param content The url of the jar to add to the installer. We use a URL so the jar may be
+     * nested within another.
+     * @param files to be copied
      */
     public void addJarContent(URL content, List files)
     {
         packager.addJarContent(content, files);
     }
+
     /**
      * Add a custom jar to the installation.
+     * 
      * @param ca
      * @param url
      */
@@ -407,16 +436,60 @@ public class Compiler extends Thread
      * Checks whether the dependencies stated in the configuration file are correct. Specifically it
      * checks that no pack point to a non existent pack and also that there are no circular
      * dependencies in the packs.
+     * @throws CompilerException 
      */
     public void checkDependencies() throws CompilerException
     {
         checkDependencies(packager.getPacksList());
+    }
+    
+    /**
+     * Checks whether the excluded packs exist. (simply calles the other function)
+     * @throws CompilerException
+     */
+    public void checkExcludes() throws CompilerException
+    {
+       checkExcludes(packager.getPacksList());
+    }
+    
+    /**
+     * This checks if there are more than one preselected packs per excludeGroup.
+     * @param packs list of packs which should be checked
+     * @throws CompilerException 
+     */
+    public void checkExcludes(List packs) throws CompilerException
+    {
+        for(int q=0; q<packs.size(); q++)
+        {
+            PackInfo packinfo1 = (PackInfo) packs.get(q);
+            Pack pack1 = packinfo1.getPack();
+            for(int w = 0; w < q; w++)
+            {
+
+                PackInfo packinfo2 = (PackInfo) packs.get(w);
+                Pack pack2 = packinfo2.getPack();
+                if(pack1.excludeGroup != null && pack2.excludeGroup != null)
+                {
+                    if(pack1.excludeGroup.equals(pack2.excludeGroup))
+                    {
+                        if(pack1.preselected && pack2.preselected)
+                        {
+                            parseError("Packs "+pack1.name+" and "+pack2.name+
+                                    " belong to the same excludeGroup "+pack1.excludeGroup+
+                            " and are both preselected. This is not allowed.");
+                        }
+                    }
+                }
+            }
+            
+        }
     }
     /**
      * Checks whether the dependencies among the given Packs. Specifically it
      * checks that no pack point to a non existent pack and also that there are no circular
      * dependencies in the packs.
      * @param packs - List<Pack> representing the packs in the installation
+     * @throws CompilerException 
      */
     public void checkDependencies(List packs) throws CompilerException
     {
@@ -442,6 +515,7 @@ public class Compiler extends Thread
      * 
      * @param packs The graph
      * @param names The name map
+     * @return -2 if back edges exist, else 0
      */
     private int dfs(List packs, Map names)
     {
@@ -460,6 +534,8 @@ public class Compiler extends Thread
 
     /**
      * This function checks for the existence of back edges.
+     * @param edges map to be checked
+     * @return -2 if back edges exist, else 0
      */
     private int checkBackEdges(Map edges)
     {
@@ -530,7 +606,7 @@ public class Compiler extends Thread
      * @param override Overriding behaviour.
      * @param pack Pack to be packed into
      * @param additionals Map which contains additional data
-     * @exception FileNotFoundException if the file does not exist
+     * @throws IOException 
      */
     protected void addRecursively(File file, String targetdir, List osList, int override,
             PackInfo pack, Map additionals) throws IOException
@@ -561,6 +637,7 @@ public class Compiler extends Thread
      * @param path the relative path (using '/' as separator) to the resource.
      * @param desc the description of the resource used to report errors
      * @return a URL to the resource.
+     * @throws CompilerException 
      */
     public URL findIzPackResource(String path, String desc)
             throws CompilerException
@@ -592,12 +669,21 @@ public class Compiler extends Thread
      * unknown.
      * 
      * @param message Brief message explaining error
+     * @throws CompilerException 
      */
     public void parseError(String message) throws CompilerException
     {
         this.compileFailed = true;
         throw new CompilerException(message);
     }
+    /**
+     * Create parse error with consistent messages. Includes file name. For use When parent is
+     * unknown.
+     * 
+     * @param message Brief message explaining error
+     * @param how throwable which was catched
+     * @throws CompilerException 
+     */
     public void parseError(String message, Throwable how) throws CompilerException
     {
         this.compileFailed = true;
@@ -726,6 +812,7 @@ public class Compiler extends Thread
          * Print a message to the console at the specified priority.
          * 
          * @param info The information.
+         * @param priority priority to be used for the message prefix
          */
         public void packagerMsg(String info, int priority)
         {

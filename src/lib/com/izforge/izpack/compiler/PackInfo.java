@@ -71,10 +71,18 @@ public class PackInfo
     /** Update check specifications in this Pack. */
     private List updateChecks = new ArrayList();
 
-    /** Constructor with required info. */
-    protected PackInfo(String name, String id, String description, boolean required, boolean loose)
+    /** Constructor with required info. 
+     * @param name name of the pack
+     * @param id id of the pack e.g. to resolve I18N
+     * @param description descripton in English
+     * @param required pack is required or not
+     * @param loose files of pack should be stored separatly or not
+     * @param excludegroup name of the exclude group 
+     */
+    protected PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup)
     {
-        pack = new Pack(name, id, description, null, null, required, true, loose);
+        boolean ispreselected = (excludegroup == null) ? true : false;
+        pack = new Pack(name, id, description, null, null, required, ispreselected, loose, excludegroup);
         colour = PackInfo.WHITE;
     }
 
@@ -86,7 +94,16 @@ public class PackInfo
     {
         pack.dependencies = dependencies;
     }
-
+    
+    /**
+     * Set the name of the group which contains the packs which exludes mutual.
+     * @param group name of the mutal exclude group
+     */
+    public void setExcludeGroup(String group)
+    {
+        pack.excludeGroup = group;
+    }
+    
     public void setOsConstraints(List osConstraints)
     {
         pack.osConstraints = osConstraints;
@@ -266,12 +283,12 @@ public class PackInfo
         }
         pack.dependencies.add(dependency);
     }
-
+    
     public List getDependencies()
     {
         return pack.dependencies;
     }
-
+    
     public String toString()
     {
         return pack.name;

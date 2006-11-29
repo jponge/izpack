@@ -106,6 +106,7 @@ $Id$
         <!ATTLIST pack loose (true|false) "false">
         <!ATTLIST pack group CDATA #IMPLIED>
         <!ATTLIST pack installGroups CDATA #IMPLIED>
+        <!ATTLIST pack excludeGroup CDATA #IMPLIED>
         <!ELEMENT description (#PCDATA)>
         <!ELEMENT file (os*, additionaldata*)>
             <!ATTLIST file src CDATA #REQUIRED>
@@ -156,7 +157,7 @@ $Id$
       <!ELEMENT updatecheck (include*, exclude*)>
       <!ELEMENT depends EMPTY>
           <!ATTLIST depends packname CDATA #REQUIRED>
-
+          
 <!-- Allows the inclusion in the installer or uninstaller of a native library -->
 <!ELEMENT native (os*)>
     <!ATTLIST native type (izpack|3rdparty) #REQUIRED>

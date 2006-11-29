@@ -38,6 +38,7 @@ public class Pack implements Serializable
 
     static final long serialVersionUID = -5458360562175088671L;
 
+    /** Flag for store files of this pack outside the installation jar file */
     public boolean loose;
 
     /** The pack name. */
@@ -52,6 +53,12 @@ public class Pack implements Serializable
      * default, all.
      */
     public Set installGroups = new HashSet();
+    
+    /** All packs in the same excludeGroup are mutually exclusive. The excludeGroup
+     * is a string and serves are key identifying each group of mutually
+     * exclusive packs.
+     */
+    public String excludeGroup = new String();
 
     /** The group the pack is associated with. The pack group identifies
      * packs with common functionality to allow for grouping of packs in a
@@ -70,7 +77,7 @@ public class Pack implements Serializable
 
     /** Reverse dependencies(childs) */
     public List revDependencies = null;
-
+    
     /** True if the pack is required. */
     public boolean required;
 
@@ -96,13 +103,17 @@ public class Pack implements Serializable
      * The constructor.
      * 
      * @param name The pack name.
+     * @param id The id of the pack which is used e.g. for I18N
      * @param description The pack description.
      * @param osConstraints the OS constraint (or null for any OS)
+     * @param dependencies dependencies of this pack
      * @param required Indicates wether the pack is required or not.
      * @param preselected This pack will be selected automatically.
+     * @param loose Flag for store files of this pack outside the installation jar file
+     * @param excludegroup associated exclude group 
      */
     public Pack(String name, String id, String description, List osConstraints, List dependencies,
-            boolean required, boolean preselected, boolean loose)
+            boolean required, boolean preselected, boolean loose, String excludegroup)
     {
         this.name = name;
         this.id = id;
@@ -112,6 +123,7 @@ public class Pack implements Serializable
         this.required = required;
         this.preselected = preselected;
         this.loose = loose;
+        this.excludeGroup = excludegroup;
         nbytes = 0;
         color = PackInfo.WHITE;
     }
@@ -126,22 +138,24 @@ public class Pack implements Serializable
         return name + " (" + description + ")";
     }
 
-    /** getter method */
+    /** getter method for dependencies
+     * @return the dependencies list*/
     public List getDependencies()
     {
         return dependencies;
     }
-
+    
+    
     /**
      * This adds a reverse dependency. With a reverse dependency we imply a child dependency or the
      * dependents on this pack
      * 
-     * @param name The name of the pack that depents to this pack
+     * @param name0 The name of the pack that depents to this pack
      */
-    public void addRevDep(String name)
+    public void addRevDep(String name0)
     {
         if (revDependencies == null) revDependencies = new ArrayList();
-        revDependencies.add(name);
+        revDependencies.add(name0);
     }
 
     /**
@@ -153,14 +167,14 @@ public class Pack implements Serializable
     {
         String text = "";
         if (dependencies == null) return text;
-        String name;
+        String name0;
         for (int i = 0; i < dependencies.size() - 1; i++)
         {
-            name = (String) dependencies.get(i);
-            text += name + ",";
+            name0 = (String) dependencies.get(i);
+            text += name0 + ",";
         }
-        name = (String) dependencies.get(dependencies.size() - 1);
-        text += name;
+        name0 = (String) dependencies.get(dependencies.size() - 1);
+        text += name0;
         return text;
 
     }
