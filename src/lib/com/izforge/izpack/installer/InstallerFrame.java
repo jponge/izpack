@@ -216,6 +216,10 @@ public class InstallerFrame extends JFrame
      * Resource name of the conditions specification
      */
     private static final String CONDITIONS_SPECRESOURCENAME = "conditions.xml";
+    /**
+     * Resource name for custom icons
+     */
+    private static final String CUSTOM_ICONS_RESOURCEFILE = "customicons.xml";
 
     /**
      * The constructor (normal mode).
@@ -241,6 +245,7 @@ public class InstallerFrame extends JFrame
 
         // Builds the GUI
         loadIcons();
+        loadCustomIcons();
         loadPanels();
         buildGUI();
 
@@ -385,6 +390,57 @@ public class InstallerFrame extends JFrame
             img = new ImageIcon(url);
             UIManager.put(icon.getAttribute("id"), img);
         }
+    }
+    
+    /**
+     * Loads custom icons into the installer.
+     * 
+     * @throws Exception
+     */
+    protected void loadCustomIcons() throws Exception {
+      // We try to load and add a custom langpack.
+      InputStream inXML = null;
+      try {
+        inXML = ResourceManager.getInstance().getInputStream(
+            CUSTOM_ICONS_RESOURCEFILE);
+      } catch (Throwable exception) {
+        Debug.trace("Resource " + CUSTOM_ICONS_RESOURCEFILE + " not defined. No custom icons available.");
+        return;
+      }
+      Debug.trace("Custom icons available.");
+      URL url;
+      ImageIcon img;
+      XMLElement icon;
+
+      // Initialises the parser
+      StdXMLParser parser = new StdXMLParser();
+      parser.setBuilder(new StdXMLBuilder());
+      parser.setReader(new StdXMLReader(inXML));
+      parser.setValidator(new NonValidator());
+
+      // We get the data
+      XMLElement data = (XMLElement) parser.parse();
+
+      // We load the icons
+      Vector children = data.getChildrenNamed("icon");
+      int size = children.size();
+      for (int i = 0; i < size; i++) {
+        icon = (XMLElement) children.get(i);
+        url = InstallerFrame.class.getResource(icon.getAttribute("res"));
+        img = new ImageIcon(url);
+        Debug.trace("Icon with id found: " + icon.getAttribute("id"));
+        icons.put(icon.getAttribute("id"), img);
+      }
+
+      // We load the Swing-specific icons
+      children = data.getChildrenNamed("sysicon");
+      size = children.size();
+      for (int i = 0; i < size; i++) {
+        icon = (XMLElement) children.get(i);
+        url = InstallerFrame.class.getResource(icon.getAttribute("res"));
+        img = new ImageIcon(url);
+        UIManager.put(icon.getAttribute("id"), img);
+      }
     }
 
     /**
