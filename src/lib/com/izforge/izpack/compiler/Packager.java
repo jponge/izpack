@@ -733,7 +733,7 @@ public class Packager
      * @return the total number of bytes copied
      * @exception IOException if an I/O error occurs
      */
-    private long copyStream(InputStream in, OutputStream out) throws IOException
+    protected long copyStream(InputStream in, OutputStream out) throws IOException
     {
         byte[] buffer = new byte[5120];
         long bytesCopied = 0;

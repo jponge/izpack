@@ -1,6 +1,7 @@
 [ The list of the different public versions of IzPack ]
 
-	> 3.9.1 (build xxxx.xx.xx)
+  > Next release
+
 - Added docu: executeForPack, executeclass,logfiledir  for ProcessPanel (Fabrice Mirabile)
 - Added docu: createForUnselectedPack for UserInputPanel (Fabrice Mirabile)
 - Added DataCheckPanel (Fabrice Mirabile & Hal Vaughan)
@@ -9,13 +10,20 @@
 - Added Rulesengine, Conditions, panelconditions (Dennis Reil)
 - Fix DestroyButton in UninstallerFrame clickable only once (Dennis Reil)
 - Added conditions to UserInputPanel-fields (Dennis Reil)
-- Heading panel strings can be depend on the panelid (Klaus Bartz, thangs
+- Heading panel strings can be depend on the panelid (Klaus Bartz, thanks
   to Stefan Wachter).
 - Added dtd for conditions (Dennis Reil)
 - Added support for panelid in InstallerImage-Definition (Dennis Reil)
 - Added support for customicons (Dennis Reil)
+- Fixed the DesktopShortcutCheckboxEnabled Builtin Variable in docu (Fabrice Mirabile)
+- Fixed build.xml (PathSelectionPanel without using TargetPanel) (Fabrice Mirabile)
+- UserInputPanel multiline label fix (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
+- Fix for calling the IzPack Ant task from Maven builds (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
+- Support for uncompressing archives and adding their content at the installer generation time (Nils Meier, via Julien Ponge)
 
   > 3.9.0 (build 2006.09.25)
+- Fix NullPointerException in CompilerConfig, if you specify a 
+	compiler listener and the compiler listener class can't be found (Dennis Reil)
 - Fix Accents In French Langpack (Fabrice Mirabile)
 - Update French Langpack (Julien Ponge)
 - New Indonesian Langpack (Hans Aikema, thanks to Thomas Edwin Santosa)

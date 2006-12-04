@@ -413,7 +413,7 @@ com.izforge.izpack.installer.Unpacker</literal> for details.</para></blockquote>
 <itemizedlist spacing="compact"><listitem><para><literal>src</literal>: the file location (relative path) - if this is a directory its content will be added recursively</para></listitem><listitem><para><literal>targetdir</literal>: the destination directory, could be something like <literal>$INSTALL_PATH/subdirX</literal></para></listitem><listitem><para><literal>os</literal>: can optionally specify a target operating system (<literal>unix, windows, mac</literal>) - this means that the file will only be installed on its target operating system</para></listitem><listitem><para><literal>override</literal>: if <literal>true</literal> then if the file is already installed, it will be overwritten. Alternative values: <literal>asktrue</literal> and <literal>askfalse</literal> - ask the user what to do and supply
 default value for non-interactive use. Another possible values is <literal>update</literal>. It means that the new file is only installed if it's modification time is newer than the modification time of the
 already existing file (note that this is not a reliable mechanism for updates - you cannot detect whether a file was altered after installation this way.) By default it is set to <literal>
-update</literal>.</para></listitem></itemizedlist>
+update</literal>.</para></listitem><listitem><para><literal>unpack</literal>: if true and the file is an archive then its content will be unpacked and added as individual files</para></listitem></itemizedlist>
 
 <para/><section id="SECTION00438610000000000000"><title><?db2html element="br"?>
 <literal>&lt;additionaldata&gt;</literal></title>
