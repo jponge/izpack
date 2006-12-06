@@ -182,12 +182,13 @@ public class ResourceManager
      * ResourceManager#getResource and then converted into text.
      * 
      * @param resource - a text resource to load
+     * @param encoding - the encoding, which should be used to read the resource
      * @return a String contains the text of the resource
      * @throws ResourceNotFoundException if the resource can not be found
      * @throws IOException if the resource can not be loaded
      */
     // Maybe we can add a text parser for this method
-    public String getTextResource(String resource) throws ResourceNotFoundException, IOException
+    public String getTextResource(String resource, String encoding) throws ResourceNotFoundException, IOException
     {
         InputStream in = null;
         try
@@ -205,7 +206,27 @@ public class ResourceManager
         while ((bytesInBuffer = in.read(buffer)) != -1)
             infoData.write(buffer, 0, bytesInBuffer);
 
-        return infoData.toString();
+        if (encoding != null){
+            return infoData.toString(encoding);
+        }
+        else {
+            return infoData.toString();
+        }
+    }
+    
+    /**
+     * Returns a text resource from the jar file. The resource is loaded by
+     * ResourceManager#getResource and then converted into text.
+     * 
+     * @param resource - a text resource to load
+     * @return a String contains the text of the resource
+     * @throws ResourceNotFoundException if the resource can not be found
+     * @throws IOException if the resource can not be loaded
+     */
+    // Maybe we can add a text parser for this method
+    public String getTextResource(String resource) throws ResourceNotFoundException, IOException
+    {
+       return this.getTextResource(resource,null);
     }
 
     /**
