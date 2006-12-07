@@ -20,6 +20,7 @@
 - UserInputPanel multiline label fix (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 - Fix for calling the IzPack Ant task from Maven builds (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 - Support for uncompressing archives and adding their content at the installer generation time (Nils Meier, via Julien Ponge)
+- Fix for default button changes when a text field receives focus in UserInputPanel (Vladimir Ralev, JBoss/RedHat, via Dennis Reil)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

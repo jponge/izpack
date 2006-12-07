@@ -724,12 +724,20 @@ public class InstallerFrame extends JFrame
 
                 public void run()
                 {
-                    JButton cdb = null;
-                    if (nextButton.isEnabled())
-                        cdb = nextButton;
-                    else if (quitButton.isEnabled()) cdb = quitButton;
-                    getRootPane().setDefaultButton(cdb);
-                }
+                   JButton cdb = null;
+                   if (nextButton.isEnabled()) {
+                     cdb = nextButton;
+                     quitButton.setDefaultCapable(false);
+                     prevButton.setDefaultCapable(false);
+                     nextButton.setDefaultCapable(true);
+                   } else if (quitButton.isEnabled()) {
+                     cdb = quitButton;
+                     quitButton.setDefaultCapable(true);
+                     prevButton.setDefaultCapable(false);
+                     nextButton.setDefaultCapable(false);
+                   }
+                   getRootPane().setDefaultButton(cdb);
+                 }
             });
 
             // Change panels container to the current one.
