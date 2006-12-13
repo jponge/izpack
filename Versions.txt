@@ -12,6 +12,8 @@
 - Added conditions to UserInputPanel-fields (Dennis Reil)
 - Heading panel strings can be depend on the panelid (Klaus Bartz, thanks
   to Stefan Wachter).
+- Registry access extended to keys and values directly under a root key
+  (Klaus Bartz, thanks to Markus Schlegel).
 - Added dtd for conditions (Dennis Reil)
 - Added support for panelid in InstallerImage-Definition (Dennis Reil)
 - Added support for customicons (Dennis Reil)

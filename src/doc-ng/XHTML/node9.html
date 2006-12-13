@@ -702,7 +702,9 @@ java -jar install.jar
 	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND</p>
 	<p>The listeners themselves are only able to write into the Windows registry at installation and
 	delet the writing at uninstall time. But it is also possible to use the registry 
-	handler as a registry reader in custom panels or costum actions.</p>
+	handler as a registry reader in custom panels or costum actions. 
+	The <a href="./node4.html#SECTION00441000000000000000a">CheckedHelloPanel</a> reads the registry and
+	can be used as example for it.</p>
 	<p>To add registry support to an installation some changes in the installation definition
 	file (often called<tt>install.xml</tt>) are to be made. First the declaration of the listener 
 	themselves:</p>
@@ -768,6 +770,17 @@ or umlauts. Be aware! If you forget to refer to <tt>registrySpec.xml</tt> in you
     structure in install.xml (for more information see also installation.dtd). Only the "things"
     included in the <tt>&lt;pack&gt;</tt> are performed, if a pack with the same name was chosen to
     be installed. Valid "things" are &lt;key&gt; &lt;value&gt;.</p>
+	<p><a name="RegRootEntry"></a> The registry stuff self allows to create keys and values directly under a registry root.
+	But Windows self allows this not on "real" roots like HKEY_LOCAL_MACHINE or HKEY_USERS. Only link like
+	roots as HKEY_CLASSES_ROOT are writeable. A try e.g. on HKLM will be cause an exception and the installation
+	fails. The error number in this case normally will be 87 with the meaning "wrong parameter", not 
+	"permission denied".</p>
+	<p>We do NOT recommend to create a key or a value directly on a registry root. IzPack
+	allows it now as a result of some user requests about it.
+	Most it is not needed. E.g. an extension entry under HKEY_CLASSES_ROOT is really an entry on
+	HKEY_LOCAL_MACHINE\Software\Classes. Why not write directly there?Reading is in opposite to writing
+	no problem.</p>
+	
 
     <h3><a name="RegListKeyElm"></a><tt>&lt;key&gt;</tt>: define a key</h3>
 
@@ -775,7 +788,9 @@ or umlauts. Be aware! If you forget to refer to <tt>registrySpec.xml</tt> in you
 
     <ul>
       <li>
-        <tt>keypath</tt> : required. The path of the key in Windows syntax without the root.
+        <tt>keypath</tt> : required. The path of the key in Windows syntax without the root.<br>
+		If the key should be placed directly under a registry root (<a href="#RegRootEntry">not recommended; 
+		often not possible)</a>) write the key name without any backslash.
       </li>
 
       <li>
@@ -790,11 +805,16 @@ or umlauts. Be aware! If you forget to refer to <tt>registrySpec.xml</tt> in you
 
     <ul>
       <li>
-        <tt>name</tt> : required. The name of the value to be set or modified without a path.
+        <tt>name</tt> : required. The name of the value to be set or modified without a path.<br>
+		The default value will be written as the empty string &quot;&quot;.
       </li>
       <li>
         <tt>keypath</tt> : required. The key path under which the value should be placed 
                  in Windows syntax without the root and value name.
+		If the key of the value should be placed directly under a registry root (if not exist,  
+		<a href="#RegRootEntry">not recommended; often not possible)</a>) write the key name without any backslash.<br>
+		If the value should be placed directly under a registry root (also not recommended and
+		often not possible) write as keypath the empty string &quot;&quot;.
       </li>
 
       <li>

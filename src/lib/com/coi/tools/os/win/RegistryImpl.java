@@ -83,6 +83,8 @@ public class RegistryImpl implements MSWinConstants
      */
     public RegDataContainer getValue(String key, String value) throws NativeLibException
     {
+        if( key == null)
+            key = "";
         return (getValue(currentRoot, key, value));
     }
 
@@ -97,6 +99,8 @@ public class RegistryImpl implements MSWinConstants
      */
     public Object getValueAsObject(String key, String value) throws NativeLibException
     {
+        if( key == null)
+            key = "";
         return (getValue(currentRoot, key, value).getDataAsObject());
     }
 
@@ -109,6 +113,8 @@ public class RegistryImpl implements MSWinConstants
      */
     public String[] getSubkeys(String key) throws NativeLibException
     {
+        if( key == null)
+            key = "";
         return (getSubkeyNames(currentRoot, key));
     }
 
@@ -121,6 +127,8 @@ public class RegistryImpl implements MSWinConstants
      */
     public String[] getValueNames(String key) throws NativeLibException
     {
+        if( key == null)
+            key = "";
         return (getValueNames(currentRoot, key));
     }
 
@@ -136,7 +144,13 @@ public class RegistryImpl implements MSWinConstants
     }
 
     /**
-     * Creates the given key under the given root.
+     * Creates the given key under the given root. 
+     * It is possible to declare keys without a sub path.
+     * This is only possible on roots which are no real roots
+     * (e.g. HKEY_CURRENT_USER which is a link to
+     * HKEY_USERS\GUID of current user). Therefore this method
+     * will be raise an exception if root is a real root and
+     * key contains no sub path.
      * 
      * @param root to be used
      * @param key key to be created
@@ -145,12 +159,13 @@ public class RegistryImpl implements MSWinConstants
     public void createKey(int root, String key) throws NativeLibException
     {
         int pathEnd = key.lastIndexOf('\\');
-        if (pathEnd < 0)
-            throw new NativeLibException("Keys directly under the root are not allowed!");
-        String subkey = key.substring(0, pathEnd);
-        if (!exist(root, subkey))
-        { // Create missing sub keys
-            createKey(root, subkey);
+        if( pathEnd > 0 )
+        {
+            String subkey = key.substring(0, pathEnd);
+            if (!exist(root, subkey))
+            { // Create missing sub keys
+                createKey(root, subkey);
+            }
         }
         // Create key
         createKeyN(root, key);
@@ -204,6 +219,8 @@ public class RegistryImpl implements MSWinConstants
      */
     public boolean valueExist(String key, String value) throws NativeLibException
     {
+        if( key == null)
+            key = "";
         try
         {
             this.getValue(currentRoot, key, value);
@@ -309,6 +326,10 @@ public class RegistryImpl implements MSWinConstants
     {
         RegDataContainer oldContents = null;
         String localValue = value;
+        if( key == null)
+            key = "";
+        if(value == null)   // We allow it for the default value...
+            value = "";
         // May be someone do not like backslashes ...
         key = key.replace('/', '\\');
 
@@ -414,6 +435,8 @@ public class RegistryImpl implements MSWinConstants
      */
     private void deleteValueL(int root, String key, String value) throws NativeLibException
     {
+        if( key == null)
+            key = "";
         RegDataContainer oldContents = getValue(currentRoot, key, value);
         RegistryLogItem rli = new RegistryLogItem(RegistryLogItem.REMOVED_VALUE, root, key, value,
                 null, oldContents);
@@ -437,6 +460,8 @@ public class RegistryImpl implements MSWinConstants
             while (iter.hasNext())
             {
                 RegistryLogItem rli = (RegistryLogItem) iter.next();
+                String rliValueName = (DEFAULT_PLACEHOLDER.equals(rli.getValueName())) ? "" : rli
+                        .getValueName();
                 switch (rli.getType())
                 {
                 case RegistryLogItem.CREATED_KEY:
@@ -447,12 +472,10 @@ public class RegistryImpl implements MSWinConstants
                     break;
                 case RegistryLogItem.CREATED_VALUE:
                     RegDataContainer currentContents = null;
-                    // Delete value only if reg entry exists and equal to the
-                    // stored
-                    // value.
+                    // Delete value only if reg entry exists and is equal to the stored value.
                     try
                     {
-                        currentContents = getValue(rli.getRoot(), rli.getKey(), rli.getValueName());
+                        currentContents = getValue(rli.getRoot(), rli.getKey(), rliValueName);
                     }
                     catch (NativeLibException nle)
                     {
@@ -460,7 +483,7 @@ public class RegistryImpl implements MSWinConstants
                     }
                     if (currentContents.equals(rli.getNewValue()))
                     {
-                        deleteValueN(rli.getRoot(), rli.getKey(), rli.getValueName());
+                        deleteValueN(rli.getRoot(), rli.getKey(), rliValueName);
                     }
                     // TODO: what todo if value has changed?
                     break;
@@ -468,11 +491,11 @@ public class RegistryImpl implements MSWinConstants
                     // Set old value only if reg entry not exists.
                     try
                     {
-                        getValue(rli.getRoot(), rli.getKey(), rli.getValueName());
+                        getValue(rli.getRoot(), rli.getKey(), rliValueName);
                     }
                     catch (NativeLibException nle)
                     {
-                        setValueN(rli.getRoot(), rli.getKey(), rli.getValueName(), rli
+                        setValueN(rli.getRoot(), rli.getKey(), rliValueName, rli
                                 .getOldValue());
                     }
                     break;
@@ -482,7 +505,7 @@ public class RegistryImpl implements MSWinConstants
                     // stored value.
                     try
                     {
-                        currentContents = getValue(rli.getRoot(), rli.getKey(), rli.getValueName());
+                        currentContents = getValue(rli.getRoot(), rli.getKey(), rliValueName);
                     }
                     catch (NativeLibException nle)
                     {
@@ -490,7 +513,7 @@ public class RegistryImpl implements MSWinConstants
                     }
                     if (currentContents.equals(rli.getNewValue()))
                     {
-                        setValueN(rli.getRoot(), rli.getKey(), rli.getValueName(), rli
+                        setValueN(rli.getRoot(), rli.getKey(), rliValueName, rli
                                 .getOldValue());
                     }
                     break;
