@@ -25,6 +25,7 @@
 - Fix for default button changes when a text field receives focus in UserInputPanel (Vladimir Ralev, JBoss/RedHat, via Dennis Reil)
 - Use the 'ProgramFiles' environment variable to detect the Windows program files folder path.
   (Markus Schlegel via Julien Ponge).
+- TargetPanel.dir setting bug fix (Markus Schlegel via Julien Ponge).
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

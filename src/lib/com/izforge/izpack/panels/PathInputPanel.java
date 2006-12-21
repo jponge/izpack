@@ -278,10 +278,23 @@ public class PathInputPanel extends IzPanel implements ActionListener
             InputStream in = null;
 
             if (OsVersion.IS_WINDOWS)
+            {
+                try
+                {
                 in = parentFrame.getResource("TargetPanel.dir.windows");
-
+                }
+                catch (ResourceNotFoundException rnfe)
+                {}//it's usual, that the resource does not exist
+            }
             else if (OsVersion.IS_OSX)
+            { 
+                try
+                {
                 in = parentFrame.getResource("TargetPanel.dir.macosx");
+                }
+                catch (ResourceNotFoundException rnfe)
+                {}//it's usual, that the resource does not exist
+            }
             else
             {
                 String os = System.getProperty("os.name");
@@ -339,6 +352,8 @@ public class PathInputPanel extends IzPanel implements ActionListener
         }
         catch (Exception e)
         {
+            //mar: what's the common way to log an exception ?
+            e.printStackTrace();
             defaultInstallDir = null;
             // leave unset to take the system default set by Installer class
         }
