@@ -383,7 +383,7 @@ public class InstallationGroupPanel extends IzPanel
             else
                 description = html;
         }
-        if (description == null)
+        if (description == null || key.equalsIgnoreCase(description))
             description = idata.getVariable(key);
         if (description == null)
             description = group + " installation";
