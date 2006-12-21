@@ -241,11 +241,32 @@ public class InstallerBase
     }
 
     /**
-     * Builds the default path for Windows (i.e Program Files/...).
-     * 
-     * @return The Windows default installation path.
+     * Get the default path for Windows (i.e Program Files/...).
+     * Windows has a Setting for this in the environment and in the registry.
+     * Just try to use the setting in the environment. If it fails for whatever reason, we take the former solution (buildWindowsDefaultPathFromProps).
+     * @return The Windows default installation path for applications.
      */
     private String buildWindowsDefaultPath()
+    {
+      try{
+        //get value from environment...
+        String prgFilesPath = IoHelper.getenv("ProgramFiles");
+        if (prgFilesPath!=null && prgFilesPath.length()>0){
+          return prgFilesPath;
+        }else{
+          return buildWindowsDefaultPathFromProps();
+        }
+      }catch(Exception x){
+        x.printStackTrace();
+        return buildWindowsDefaultPathFromProps();
+      }
+    }
+    /** 
+     * just plain wrong in case the programfiles are not stored where the developer expects them.
+     * E.g. in custom installations of large companies or if used internationalized version of windows with a language pack.
+     * @return
+     */
+    private String buildWindowsDefaultPathFromProps()
     {
         StringBuffer dpath = new StringBuffer("");
         try
