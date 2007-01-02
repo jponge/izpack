@@ -1390,6 +1390,9 @@ public class InstallerFrame extends JFrame
                 {
                     switchPanel(last);
                 }
+                else {
+                    installdata.curPanelNumber--;
+                }
             }
         }
     }
