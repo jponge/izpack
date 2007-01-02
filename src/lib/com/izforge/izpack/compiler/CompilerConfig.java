@@ -305,7 +305,9 @@ public class CompilerConfig extends Thread
 
         // We get the XML data tree
         XMLElement data = getXMLTree();
-
+        // loads the specified packager
+        loadPackagingInformation(data);
+        
         // Listeners to various events
         addCustomListeners(data);
 
@@ -325,6 +327,30 @@ public class CompilerConfig extends Thread
 
         // We ask the packager to create the installer
         compiler.createInstaller();
+    }
+
+    private void loadPackagingInformation(XMLElement data) throws CompilerException
+    {
+        notifyCompilerListener("loadPackager", CompilerListener.BEGIN, data);
+        // Initialisation
+        XMLElement root = data.getFirstChildNamed("packaging");
+        String packagerclassname = "com.izforge.izpack.compiler.Packager";
+        String unpackerclassname = "com.izforge.izpack.installer.Unpacker";
+        if (root != null){
+            XMLElement packager = root.getFirstChildNamed("packager");
+            
+            if (packager != null){
+                packagerclassname = requireAttribute(packager, "class");
+            }
+            
+            XMLElement unpacker = root.getFirstChildNamed("unpacker");
+            
+            if (unpacker != null){
+                unpackerclassname = requireAttribute(unpacker, "class");
+            }        
+        }
+        compiler.initPackager(packagerclassname);        
+        notifyCompilerListener("loadPackager", CompilerListener.END, data);        
     }
 
     public boolean wasSuccessful()
@@ -988,7 +1014,7 @@ public class CompilerConfig extends Thread
         temp.deleteOnExit();
         
         FileOutputStream out = new FileOutputStream(temp);
-        compiler.getPackager().copyStream(zin, out);
+        PackagerHelper.copyStream(zin, out);
         out.close();
         
         pack.addFile(temp, targetdir + "/" + zentry.getName(), osList, override, additionals);
@@ -2180,7 +2206,7 @@ public class CompilerConfig extends Thread
             throws CompilerException
     {
         Iterator i = compilerListeners.iterator();
-        Packager packager = compiler.getPackager();
+        IPackager packager = compiler.getPackager();
         while (i != null && i.hasNext())
         {
             CompilerListener listener = (CompilerListener) i.next();

@@ -26,8 +26,8 @@ import java.util.Map;
 import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.compiler.IPackager;
 import com.izforge.izpack.compiler.PackInfo;
-import com.izforge.izpack.compiler.Packager;
 
 /**
  * <p>
@@ -68,7 +68,7 @@ public class SimpleCompilerListener implements CompilerListener
      * @see com.izforge.izpack.compiler.CompilerListener#AfterPack(com.izforge.izpack.compiler.Compiler.Pack,
      * int, com.izforge.izpack.compiler.Packager)
      */
-    public void afterPack(PackInfo pack, int packNumber, Packager packager)
+    public void afterPack(PackInfo pack, int packNumber, IPackager packager)
             throws CompilerException
     {
     }
@@ -79,7 +79,7 @@ public class SimpleCompilerListener implements CompilerListener
      * @see com.izforge.izpack.compiler.CompilerListener#BeforePack(com.izforge.izpack.compiler.Compiler.Pack,
      * int, com.izforge.izpack.compiler.Packager)
      */
-    public void beforePack(PackInfo pack, int packNumber, Packager packager)
+    public void beforePack(PackInfo pack, int packNumber, IPackager packager)
     {
     }
 
@@ -89,7 +89,7 @@ public class SimpleCompilerListener implements CompilerListener
      * @see com.izforge.izpack.compiler.CompilerListener#notify(java.lang.String, int,
      * net.n3.nanoxml.XMLElement, com.izforge.izpack.compiler.Packager)
      */
-    public void notify(String position, int state, XMLElement data, Packager packager)
+    public void notify(String position, int state, XMLElement data, IPackager packager)
     {
     }
 

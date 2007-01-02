@@ -26,7 +26,7 @@ import java.util.Map;
 import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.Packager;
+import com.izforge.izpack.compiler.IPackager;
 
 /**
  * <p>
@@ -68,6 +68,6 @@ public interface CompilerListener
      * @param data current install data
      * @param packager current packager object
      */
-    void notify(String position, int state, XMLElement data, Packager packager);
+    void notify(String position, int state, XMLElement data, IPackager packager);
 
 }

@@ -26,6 +26,7 @@
 - Use the 'ProgramFiles' environment variable to detect the Windows program files folder path.
   (Markus Schlegel via Julien Ponge).
 - TargetPanel.dir setting bug fix (Markus Schlegel via Julien Ponge).
+- Added support for packaging selection (Dennis Reil)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

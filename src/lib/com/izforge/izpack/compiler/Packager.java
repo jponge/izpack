@@ -63,7 +63,7 @@ import com.izforge.izpack.compressor.PackCompressorFactory;
  * @author Julien Ponge
  * @author Chadwick McHenry
  */
-public class Packager
+public class Packager implements IPackager
 {
 
     /** Path to the skeleton installer. */
@@ -144,13 +144,11 @@ public class Packager
         compressor = PackCompressorFactory.get( compr_format);
         compressor.setCompressionLevel(compr_level);
     }
+    
+    
 
-    /**
-     * Create the installer, beginning with the specified jar. If the name specified does not end in
-     * ".jar", it is appended. If secondary jars are created for packs (if the Info object added has
-     * a webDirURL set), they are created in the same directory, named sequentially by inserting
-     * ".pack#" (where '#' is the pack number) ".jar" suffix: e.g. "foo.pack1.jar". If any file
-     * exists, it is overwritten.
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#createInstaller(java.io.File)
      */
     public void createInstaller(File primaryFile) throws Exception
     {
@@ -203,18 +201,15 @@ public class Packager
      * Listener assistance
      **********************************************************************************************/
 
-    /**
-     * Get the PackagerListener.
-     * @return the current PackagerListener
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#getPackagerListener()
      */
     public PackagerListener getPackagerListener()
     {
         return listener;
     }
-    /**
-     * Adds a listener.
-     * 
-     * @param listener The listener.
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#setPackagerListener(com.izforge.izpack.compiler.PackagerListener)
      */
     public void setPackagerListener(PackagerListener listener)
     {
@@ -258,11 +253,8 @@ public class Packager
      * Public methods to add data to the Installer being packed
      **********************************************************************************************/
 
-    /**
-     * Sets the informations related to this installation.
-     * 
-     * @param info The info section.
-     * @exception Exception Description of the Exception
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#setInfo(com.izforge.izpack.Info)
      */
     public void setInfo(Info info) throws Exception
     {
@@ -275,10 +267,8 @@ public class Packager
         }
     }
 
-    /**
-     * Sets the GUI preferences.
-     * 
-     * @param prefs The new gUIPrefs value
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#setGUIPrefs(com.izforge.izpack.GUIPrefs)
      */
     public void setGUIPrefs(GUIPrefs prefs)
     {
@@ -286,20 +276,16 @@ public class Packager
         guiPrefs = prefs;
     }
 
-    /**
-     * Allows access to add, remove and update the variables for the project, which are maintained
-     * in the packager.
-     * 
-     * @return map of variable names to values
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#getVariables()
      */
     public Properties getVariables()
     {
         return variables;
     }
 
-    /**
-     * Add a panel, where order is important. Only one copy of the class files neeed are inserted in
-     * the installer.
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
      */
     public void addPanelJar(Panel panel, URL jarURL)
     {
@@ -308,12 +294,8 @@ public class Packager
         // added
     }
 
-    /**
-     * Add a custom data like custom actions, where order is important. Only one copy of the class
-     * files neeed are inserted in the installer.
-     * 
-     * @param ca custom action object
-     * @param url the URL to include once
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addCustomJar(com.izforge.izpack.CustomData, java.net.URL)
      */
     public void addCustomJar(CustomData ca, URL url)
     {
@@ -322,30 +304,24 @@ public class Packager
         // added
     }
 
-    /**
-     * Adds a pack, order is mostly irrelevant.
-     * 
-     * @param pack contains all the files and items that go with a pack
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addPack(com.izforge.izpack.compiler.PackInfo)
      */
     public void addPack(PackInfo pack)
     {
         packsList.add(pack);
     }
 
-    /**
-     * Gets the packages list
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#getPacksList()
      */
     public List getPacksList()
     {
         return packsList;
     }
 
-    /**
-     * Adds a language pack.
-     * 
-     * @param iso3 The ISO3 code.
-     * @param xmlURL The location of the xml local info
-     * @param flagURL The location of the flag image resource
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addLangPack(java.lang.String, java.net.URL, java.net.URL)
      */
     public void addLangPack(String iso3, URL xmlURL, URL flagURL)
     {
@@ -357,11 +333,8 @@ public class Packager
         installerResourceURLMap.put("langpacks/" + iso3 + ".xml", xmlURL);
     }
 
-    /**
-     * Adds a resource.
-     * 
-     * @param resId The resource Id.
-     * @param url The location of the data
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addResource(java.lang.String, java.net.URL)
      */
     public void addResource(String resId, URL url)
     {
@@ -369,12 +342,8 @@ public class Packager
         installerResourceURLMap.put("res/" + resId, url);
     }
 
-    /**
-     * Adds a native library.
-     * 
-     * @param name The native library name.
-     * @param url The url to get the data from.
-     * @exception Exception Description of the Exception
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addNativeLibrary(java.lang.String, java.net.URL)
      */
     public void addNativeLibrary(String name, URL url) throws Exception
     {
@@ -383,25 +352,15 @@ public class Packager
     }
 
 
-    /**
-     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information.
-     * 
-     * @param jarURL The url of the jar to add to the installer. We use a URL so the jar may be
-     * nested within another.
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addJarContent(java.net.URL)
      */
     public void addJarContent(URL jarURL)
     {
         addJarContent(jarURL, null);
     }
-    /**
-     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information. If the given file list is null the hole contents of the
-     * jar file will be copied else only the listed.
-     * 
-     * @param jarURL The url of the jar to add to the installer. We use a URL so the jar may be
-     * nested within another.
-     * @param files to be copied
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addJarContent(java.net.URL, java.util.List)
      */
     public void addJarContent(URL jarURL, List files)
     {
@@ -410,10 +369,8 @@ public class Packager
         includedJarURLs.add(cont);
     }
 
-    /**
-     * Marks a native library to be added to the uninstaller.
-     * 
-     * @param data the describing custom action data object
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addNativeUninstallerLibrary(com.izforge.izpack.CustomData)
      */
     public void addNativeUninstallerLibrary(CustomData data)
     {
@@ -467,7 +424,7 @@ public class Packager
             String name = (String) i.next();
             InputStream in = ((URL) installerResourceURLMap.get(name)).openStream();
             primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(name));
-            copyStream(in, primaryJarStream);
+            PackagerHelper.copyStream(in, primaryJarStream);
             primaryJarStream.closeEntry();
             in.close();
         }
@@ -574,7 +531,7 @@ public class Packager
                     long pos = dos.getByteCount(); // get the position
 
                     FileInputStream inStream = new FileInputStream(file);
-                    long bytesWritten = copyStream(inStream, objOut);
+                    long bytesWritten = PackagerHelper.copyStream(inStream, objOut);
 
                     if (bytesWritten != pf.length())
                         throw new IOException("File size mismatch when reading " + file);
@@ -711,7 +668,7 @@ public class Packager
             try
             {
                 out.putNextEntry(new org.apache.tools.zip.ZipEntry(currentName));
-                copyStream(zin, out);
+                PackagerHelper.copyStream(zin, out);
                 out.closeEntry();
                 zin.closeEntry();
                 currentSet.add(currentName);
@@ -724,33 +681,18 @@ public class Packager
             }
         }
     }
-
-    /**
-     * Copies all the data from the specified input stream to the specified output stream.
-     * 
-     * @param in the input stream to read
-     * @param out the output stream to write
-     * @return the total number of bytes copied
-     * @exception IOException if an I/O error occurs
-     */
-    protected long copyStream(InputStream in, OutputStream out) throws IOException
-    {
-        byte[] buffer = new byte[5120];
-        long bytesCopied = 0;
-        int bytesInBuffer;
-        while ((bytesInBuffer = in.read(buffer)) != -1)
-        {
-            out.write(buffer, 0, bytesInBuffer);
-            bytesCopied += bytesInBuffer;
-        }
-        return bytesCopied;
-    }
-    /**
-     * Returns the current pack compressor
-     * @return Returns the current pack compressor.
+    
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#getCompressor()
      */
     public PackCompressor getCompressor()
     {
         return compressor;
+    }
+
+    public void initPackCompressor(String compr_format, int compr_level) throws CompilerException
+    {
+        compressor = PackCompressorFactory.get( compr_format);
+        compressor.setCompressionLevel(compr_level);        
     }
 }

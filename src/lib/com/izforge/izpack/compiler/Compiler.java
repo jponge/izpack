@@ -45,6 +45,7 @@ import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.compressor.PackCompressor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
 
@@ -78,7 +79,7 @@ public class Compiler extends Thread
     protected String output;
 
     /** Collects and packs files into installation jars, as told. */
-    private Packager packager = null;
+    private IPackager packager = null;
 
     /** Error code, set to true if compilation succeeded. */
     private boolean compileFailed = true;
@@ -88,6 +89,10 @@ public class Compiler extends Thread
 
     /** Replaces the properties in the install.xml file prior to compiling */
     private VariableSubstitutor propertySubstitutor;
+    
+    private String compr_format;
+    private int compr_level;
+    private PackagerListener packagerlistener;
 
     /**
      * Set the IzPack home directory
@@ -150,11 +155,33 @@ public class Compiler extends Thread
         // add izpack built in property
         setProperty("izpack.version", IZPACK_VERSION);
         setProperty("basedir", basedir);
-
-        packager = new Packager(compr_format, compr_level);
-        packager.getCompressor().setCompiler(this);
+        
+        this.compr_format = compr_format;
+        this.compr_level = compr_level;
     }
 
+    /**
+     * Initializes the given packager class
+     * @param classname
+     * @throws CompilerException
+     */
+    public void initPackager(String classname) throws CompilerException{
+        try {
+            packager = PackagerFactory.getPackager(classname);
+            packager.initPackCompressor(this.compr_format, this.compr_level);
+            PackCompressor compressor = packager.getCompressor();
+            if (compressor != null){
+                compressor.setCompiler(this);
+            }
+            if (this.packagerlistener != null){
+                packager.setPackagerListener(this.packagerlistener);
+            }
+        }
+        catch (Exception e){
+            Debug.trace(e);
+            throw new CompilerException("Error loading packager class: " +  classname);
+        }
+    }
     
     /**
      * Returns the packager listener.
@@ -171,7 +198,12 @@ public class Compiler extends Thread
      */
     public void setPackagerListener(PackagerListener listener)
     {
-        packager.setPackagerListener(listener);
+        if (packager != null){
+            packager.setPackagerListener(listener);
+        }
+        else {
+            this.packagerlistener = listener;
+        }
     }
 
     /**
@@ -292,7 +324,7 @@ public class Compiler extends Thread
      * Returns the install packager.
      * @return the install packager.
      */
-    public Packager getPackager()
+    public IPackager getPackager()
     {
         return packager;
     }
