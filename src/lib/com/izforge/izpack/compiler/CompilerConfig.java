@@ -349,7 +349,10 @@ public class CompilerConfig extends Thread
                 unpackerclassname = requireAttribute(unpacker, "class");
             }        
         }
-        compiler.initPackager(packagerclassname);        
+        compiler.initPackager(packagerclassname);  
+        if (root != null){
+            compiler.getPackager().addConfigurationInformation(root);
+        }
         notifyCompilerListener("loadPackager", CompilerListener.END, data);        
     }
 

@@ -23,6 +23,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 
+import net.n3.nanoxml.XMLElement;
+
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
@@ -169,9 +171,15 @@ public interface IPackager
     public abstract PackCompressor getCompressor();     
     
     /**
-     * 
+     * Initializes a pack compressor if supported by the packager
      * @param compr_format
      * @param compr_level
      */
     public abstract void initPackCompressor(String compr_format, int compr_level) throws CompilerException;
+    
+    /**
+     * Adds configuration information to the packager.
+     * @param data - the xml-element packaging from the install.xml
+     */
+    public abstract void addConfigurationInformation(XMLElement data);
 }

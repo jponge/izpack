@@ -39,6 +39,8 @@ import java.util.zip.Deflater;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
+import net.n3.nanoxml.XMLElement;
+
 // The declarations for ZipOutputStreams will be done
 // as full qualified to clear at the use point that
 // we do not use the standard class else the extended
@@ -694,5 +696,11 @@ public class Packager implements IPackager
     {
         compressor = PackCompressorFactory.get( compr_format);
         compressor.setCompressionLevel(compr_level);        
+    }
+
+    public void addConfigurationInformation(XMLElement data)
+    {
+        // TODO Auto-generated method stub
+        
     }
 }
