@@ -61,6 +61,7 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
@@ -291,6 +292,12 @@ public class UserInputPanel extends IzPanel
     private static final String UNSELECTEDPACKS = "createForUnselectedPack"; // new
 
     protected static final String ATTRIBUTE_CONDITIONID_NAME = "conditionid";
+    
+    protected static final String VARIABLE_NODE = "variable";
+
+    protected static final String ATTRIBUTE_VARIABLE_NAME = "name";
+
+    protected static final String ATTRIBUTE_VARIABLE_VALUE = "value";
 
     // node
 
@@ -416,6 +423,9 @@ public class UserInputPanel extends IzPanel
             return;
         }
 
+        // refresh variables specified in spec
+        updateVariables();
+        
         // ----------------------------------------------------
         // process all field nodes. Each field node is analyzed
         // for its type, then an appropriate memeber function
@@ -2909,6 +2919,56 @@ public class UserInputPanel extends IzPanel
         }
 
     } // private class SearchFile
+    
+    protected void updateVariables()
+    {
+        /**
+         * Look if there are new variables defined
+         */
+        Vector variables = spec.getChildrenNamed(VARIABLE_NODE);
+        RulesEngine rules = parent.getRules();
+
+        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        for (int i = 0; i < variables.size(); i++)
+        {
+            XMLElement variable = (XMLElement) variables.elementAt(i);
+            String vname = variable.getAttribute(ATTRIBUTE_VARIABLE_NAME);
+            String vvalue = variable.getAttribute(ATTRIBUTE_VARIABLE_VALUE);
+            String conditionid = variable.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
+            if (conditionid != null)
+            {
+                // check if condition for this variable is fulfilled
+                if (!rules.isConditionTrue(conditionid, idata.getVariables()))
+                {
+                    continue;
+                }
+            }
+            // are there any OS-Constraints?
+            if (OsConstraint.oneMatchesCurrentSystem(variable))
+            {
+                if (vname == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    // vname is given
+                    if (vvalue != null)
+                    {
+                        // try to substitute variables in value field
+                        vvalue = vs.substitute(vvalue, null);
+                        // to cut out circular references
+                        idata.setVariable(vname, "");
+                        vvalue = vs.substitute(vvalue, null);
+                    }
+                    // try to set variable
+                    idata.setVariable(vname, vvalue);
+
+                    //                        
+                }
+            }
+        }
+    }
 
 } // public class UserInputPanel
 /*---------------------------------------------------------------------------*/
