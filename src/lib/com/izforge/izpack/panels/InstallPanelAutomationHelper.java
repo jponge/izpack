@@ -24,9 +24,10 @@ package com.izforge.izpack.panels;
 import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.IUnpacker;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.PanelAutomationHelper;
-import com.izforge.izpack.installer.Unpacker;
+import com.izforge.izpack.installer.UnpackerFactory;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
@@ -60,10 +61,15 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      */
     public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
+        /*
         Unpacker unpacker = new Unpacker(idata, this);
         unpacker.start();
+        */
+        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.info.getUnpackerClassName(), idata, this);        
+        Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
+        unpackerthread.start();
         boolean done = false;
-        while (!done && unpacker.isAlive())
+        while (!done && unpackerthread.isAlive())
         {
             try
             {
