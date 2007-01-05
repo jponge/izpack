@@ -1198,9 +1198,13 @@ public class InstallerFrame extends JFrame
      * @param listener The installation listener.
      */
     public void install(AbstractUIProgressHandler listener)
-    {
+    {       
+        IUnpacker unpacker = UnpackerFactory.getUnpacker(this.installdata.info.getUnpackerClassName(), installdata, listener);
+        unpacker.run();
+        /*
         Unpacker unpacker = new Unpacker(installdata, listener);
         unpacker.start();
+        */
     }
 
     /**

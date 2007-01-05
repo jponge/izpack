@@ -43,7 +43,7 @@ import java.util.zip.ZipOutputStream;
  * @author Julien Ponge
  * @author Johannes Lehtinen
  */
-public class Unpacker extends Thread
+public class Unpacker extends Thread implements IUnpacker
 {
 
     /** The installdata. */
@@ -248,7 +248,9 @@ public class Unpacker extends Thread
 
     }
 
-    /** The run method. */
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.installer.IUnpacker#run()
+     */
     public void run()
     {
         addToInstances();
@@ -568,10 +570,8 @@ public class Unpacker extends Thread
         }
     }
 
-    /**
-     * Return the state of the operation.
-     * 
-     * @return true if the operation was successful, false otherwise.
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.installer.IUnpacker#getResult()
      */
     public boolean getResult()
     {

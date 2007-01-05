@@ -346,13 +346,14 @@ public class CompilerConfig extends Thread
             XMLElement unpacker = root.getFirstChildNamed("unpacker");
             
             if (unpacker != null){
-                unpackerclassname = requireAttribute(unpacker, "class");
+                unpackerclassname = requireAttribute(unpacker, "class");                
             }        
         }
         compiler.initPackager(packagerclassname);  
         if (root != null){
             compiler.getPackager().addConfigurationInformation(root);
         }
+        compiler.addProperty("UNPACKER_CLASS", unpackerclassname);
         notifyCompilerListener("loadPackager", CompilerListener.END, data);        
     }
 
@@ -1293,6 +1294,9 @@ public class CompilerConfig extends Thread
         XMLElement slfPath = root.getFirstChildNamed("summarylogfilepath");
         if (slfPath != null) info.setSummaryLogFilePath(requireContent(slfPath));
 
+        // look for an unpacker class
+        String unpackerclass = compiler.getProperty("UNPACKER_CLASS");
+        info.setUnpackerClassName(unpackerclass);
         compiler.setInfo(info);
         notifyCompilerListener("addInfo", CompilerListener.END, data);
     }

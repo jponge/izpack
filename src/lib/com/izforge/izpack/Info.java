@@ -66,6 +66,8 @@ public class Info implements Serializable
      */
     private String packDecoderClassName = null;
     
+    private String unpackerClassName = null;
+    
     /** The constructor, deliberatly void. */
     public Info()
     {
@@ -348,5 +350,17 @@ public class Info implements Serializable
     public void setPackDecoderClassName(String packDecoderClassName)
     {
         this.packDecoderClassName = packDecoderClassName;
+    }
+
+    
+    public String getUnpackerClassName()
+    {
+        return unpackerClassName;
+    }
+
+    
+    public void setUnpackerClassName(String unpackerClassName)
+    {
+        this.unpackerClassName = unpackerClassName;
     }
 }
