@@ -31,6 +31,8 @@
 - Non-interactive command-line uninstaller (Vladimir Ralev, JBoss/Redhat, via Julien Ponge)
 - PathSelectionPanel: the installation path could not be fully displayed in RedHat, Fedora and
   Ubuntu (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
+- Installations could fail if the installation path contained non-english characters
+  (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

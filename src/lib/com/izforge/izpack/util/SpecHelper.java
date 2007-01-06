@@ -300,7 +300,7 @@ public class SpecHelper
         try
         {
             fos = new FileOutputStream(tempFile);
-            substitutor.substitute(input, fos, null, null);
+            substitutor.substitute(input, fos, null, "UTF-8");
         }
         finally
         {
