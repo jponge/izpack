@@ -1014,14 +1014,18 @@ public class CompilerConfig extends Thread
         if (zentry==null) break;
         if (zentry.isDirectory()) continue;
         
-        File temp = File.createTempFile("izpack", null);
-        temp.deleteOnExit();
+        try {
+            File temp = File.createTempFile("izpack", null);
+            temp.deleteOnExit();
+            
+            FileOutputStream out = new FileOutputStream(temp);
+            PackagerHelper.copyStream(zin, out);
+            out.close();
         
-        FileOutputStream out = new FileOutputStream(temp);
-        PackagerHelper.copyStream(zin, out);
-        out.close();
-        
-        pack.addFile(temp, targetdir + "/" + zentry.getName(), osList, override, additionals);
+            pack.addFile(temp, targetdir + "/" + zentry.getName(), osList, override, additionals);
+        } catch (IOException e) {
+            throw new IOException("Couldn't create temporary file for "+zentry.getName()+" in archive "+archive+" ("+e.getMessage()+")");
+        }
         
       }
       fin.close();
