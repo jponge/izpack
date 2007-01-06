@@ -74,18 +74,12 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener
         {
             parent.mkdirs();
         }
-        PrintWriter logfile = null;
-        try
-        {
-            logfile = new PrintWriter(new FileOutputStream(path), true);
-        }
-        catch (IOException e)
-        {
-            Debug.error(e);
-        }
+      
         String summary = SummaryProcessor.getSummary(getInstalldata());
-        logfile.print(summary);
-        logfile.close();
+        java.io.OutputStream out = new FileOutputStream(path);
+        
+        out.write(summary.getBytes("utf-8"));
+        out.close();
     }
 
 }

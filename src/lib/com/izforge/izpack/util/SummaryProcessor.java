@@ -54,7 +54,8 @@ public class SummaryProcessor
         // Initialize HTML header and footer.
         StringBuffer sb = new StringBuffer(256);
         sb.append("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\">\n").append(
-                "<html>\n<head>\n<STYLE TYPE=\"text/css\" media=screen,print>\n").append(
+                "<html>\n" + "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">" +
+                "<head>\n<STYLE TYPE=\"text/css\" media=screen,print>\n").append(
                 "h1{\n  font-size: 100%;\n  margin: 1em 0 0 0;\n  padding: 0;\n}\n").append(
                 "div.body {\n  font-size: 100%;\n  margin: 0mm 2mm 0  8mm;\n  padding: 0;\n}\n")
                 .append("</STYLE>\n</head>\n<body>\n");

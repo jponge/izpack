@@ -33,6 +33,8 @@
   Ubuntu (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 - Installations could fail if the installation path contained non-english characters
   (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
+- Non-English installation path could be displayed garbled in InstallSummary.html
+  (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 
