@@ -26,6 +26,7 @@ package com.izforge.izpack.panels;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -41,6 +42,8 @@ import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonModel;
+import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -52,6 +55,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -631,6 +635,10 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         public CheckBoxEditorRenderer(boolean useAsEditor)
         {
             display = new JCheckBox();
+            display.setIcon(new LFIndependentIcon());
+            display.setDisabledIcon(new LFIndependentIcon());
+            display.setSelectedIcon(new LFIndependentIcon());
+            display.setDisabledSelectedIcon(new LFIndependentIcon());
             display.setHorizontalAlignment(CENTER);
             if (useAsEditor) display.addActionListener(this);
 
@@ -674,6 +682,82 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             stopCellEditing();
         }
+    }
+    public static class LFIndependentIcon implements Icon
+    {
+       ButtonModel buttonModel = null;
+       protected int getControlSize() { return 13; }
+       public void paintIcon(Component c, Graphics g, int x, int y)
+       {
+          ButtonModel model = ((JCheckBox)c).getModel();
+          buttonModel = model;
+          int controlSize = getControlSize();
+          if (model.isPressed() && model.isArmed())
+          {
+             g.setColor( MetalLookAndFeel.getControlShadow() );
+             if(model.isEnabled()) g.setColor(Color.green); else g.setColor(Color.gray);
+             g.fillRect( x, y, controlSize-1, controlSize-1);
+             drawPressedBorder(g, x, y, controlSize, controlSize, model);
+          }
+          else
+          {
+             drawBorder(g, x, y, controlSize, controlSize, model);
+          }
+          g.setColor( Color.green );
+          if (model.isSelected())
+          {
+             drawCheck(c,g,x,y);
+          }
+       }
+       private void drawBorder(Graphics g, int x, int y, int w, int h, ButtonModel model)
+       {
+          g.translate(x, y);
+
+          // outer frame rectangle
+          g.setColor(MetalLookAndFeel.getControlDarkShadow());
+          if(!model.isEnabled()) g.setColor(new Color(0.4f, 0.4f, 0.4f));
+          g.drawRect(0, 0, w-2, h-2);
+
+          // middle frame
+          g.setColor(MetalLookAndFeel.getControlHighlight());
+          if(!model.isEnabled()) g.setColor(new Color(0.6f, 0.6f, 0.6f));
+          g.drawRect(1, 1, w-2, h-2);
+
+          // background
+          if(model.isEnabled()) g.setColor(Color.white); else g.setColor(new Color(0.8f, 0.8f, 0.8f));
+          g.fillRect(2, 2, w-3, h-3);
+
+          //some extra lines for FX
+          g.setColor(MetalLookAndFeel.getControl());
+          g.drawLine(0, h-1, 1, h-2);
+          g.drawLine(w-1, 0, w-2, 1);
+          g.translate(-x, -y);
+       }
+       private void drawPressedBorder(Graphics g, int x, int y, int w, int h, ButtonModel model)
+       {
+          g.translate(x, y);
+          drawBorder(g, 0, 0, w, h, model);
+          g.setColor(MetalLookAndFeel.getControlShadow());
+          g.drawLine(1, 1, 1, h-2);
+          g.drawLine(1, 1, w-2, 1);
+          g.drawLine(2, 2, 2, h-3);
+          g.drawLine(2, 2, w-3, 2);
+          g.translate(-x, -y);
+       }
+       protected void drawCheck(Component c, Graphics g, int x, int y)
+       {
+          int controlSize = getControlSize();
+          if(buttonModel!=null)
+             if(buttonModel.isEnabled())
+                g.setColor(new Color(0.0f,0.6f,0.0f));
+             else g.setColor(new Color(0.1f,0.1f,0.1f));
+
+          g.fillRect( x+3, y+5, 2, controlSize-8 );
+          g.drawLine( x+(controlSize-4), y+3, x+5, y+(controlSize-6) );
+          g.drawLine( x+(controlSize-4), y+4, x+5, y+(controlSize-5) );
+       }
+       public int getIconWidth() {return getControlSize();}
+       public int getIconHeight() {return getControlSize();}
     }
 
 }
