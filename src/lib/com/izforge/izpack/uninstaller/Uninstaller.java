@@ -19,14 +19,12 @@
 
 package com.izforge.izpack.uninstaller;
 
+import javax.swing.*;
 import java.lang.reflect.Method;
-
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 /**
  * The uninstaller class.
- * 
+ *
  * @author Julien Ponge
  */
 public class Uninstaller
@@ -34,15 +32,22 @@ public class Uninstaller
 
     /**
      * The main method (program entry point).
-     * 
+     *
      * @param args The arguments passed on the command line.
      */
     public static void main(String[] args)
     {
+        boolean cmduninstall = false;
+        for (int q = 0; q < args.length; q++) if (args[q].equals("-c")) cmduninstall = true;
+        if (cmduninstall) System.out.println("Command line uninstaller.\n");
         try
         {
             Class clazz = Uninstaller.class;
-            Method target = clazz.getMethod("uninstall", new Class[] { String[].class});
+            Method target;
+            if (cmduninstall)
+                target = clazz.getMethod("cmduninstall", new Class[]{String[].class});
+            else
+                target = clazz.getMethod("uninstall", new Class[]{String[].class});
             new SelfModifier(target).invoke(args);
         }
         catch (Exception ioeOrTypo)
@@ -55,9 +60,28 @@ public class Uninstaller
         }
     }
 
+    public static void cmduninstall(String[] args)
+    {
+        try
+        {
+            UninstallerConsole uco = new UninstallerConsole();
+            boolean force = false;
+            for (int q = 0; q < args.length; q++) if (args[q].equals("-f")) force = true;
+            System.out.println("Force deletion: " + force);
+            uco.runUninstall(force);
+        }
+        catch (Exception err)
+        {
+            System.err.println("- Error -");
+            err.printStackTrace();
+            System.exit(0);
+        }
+    }
+
     public static void uninstall(String[] args)
     {
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable()
+        {
             public void run()
             {
                 try
