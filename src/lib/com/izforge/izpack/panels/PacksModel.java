@@ -155,6 +155,7 @@ class PacksModel extends AbstractTableModel
             Pack pack = (Pack) packs.get(i);
             if (pack.required) propRequirement(pack.name);
         }
+        refreshPacksToInstall();
     }
 
     private void propRequirement(String name)
