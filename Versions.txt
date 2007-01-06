@@ -29,6 +29,8 @@
 - Added support for packaging selection (Dennis Reil)
 - Added support for variables in UserInputPanel (Dennis Reil)
 - Non-interactive command-line uninstaller (Vladimir Ralev, JBoss/Redhat, via Julien Ponge)
+- PathSelectionPanel: the installation path could not be fully displayed in RedHat, Fedora and
+  Ubuntu (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 
