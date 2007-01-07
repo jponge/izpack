@@ -114,7 +114,6 @@ public class InstallationGroupPanel extends IzPanel
             return;
         }
 
-
         // Build the table model from the unique groups
         groupTableModel = getModel(installGroups);
         groupsTable.setModel(groupTableModel);
@@ -146,6 +145,7 @@ public class InstallationGroupPanel extends IzPanel
      */
     public void panelDeactivate()
     {
+
         Debug.trace("InstallationGroupPanel.panelDeactivate, selectedGroup="+selectedGroup);
         if( selectedGroup >= 0 )
         {
@@ -254,6 +254,11 @@ public class InstallationGroupPanel extends IzPanel
         while( iter.hasNext() )
         {
             Pack p = (Pack) iter.next();
+
+            //reverse dependencies must be reset in case the user is going
+            //back and forth between the group selection panel and the packs selection panel
+            p.revDependencies = null;
+
             if( data.packNames.contains(p.name) == false )
             {
                 iter.remove();
