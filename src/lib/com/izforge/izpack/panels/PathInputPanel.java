@@ -189,8 +189,11 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 ok = res == AbstractUIHandler.ANSWER_YES;
             }
             else
-                this.emitNotification(getI18nStringForClass("createdir", "TargetPanel") + "\n"
-                        + chosenPath);
+            {
+			    ok = this.emitNotificationFeedback(getI18nStringForClass("createdir", "TargetPanel") + "\n"
+			            + chosenPath);
+			
+			}
         }
         return ok;
     }

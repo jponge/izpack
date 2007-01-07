@@ -390,6 +390,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @see AbstractUIHandler#askQuestion(String, String, int, int)
      */
     public int askQuestion(String title, String question, int choices, int default_choice)
+
+        if (user_choice == JOptionPane.CLOSED_OPTION) return AbstractUIHandler.ANSWER_NO;
     {
         int jo_choices = 0;
 
@@ -405,6 +407,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
         if (user_choice == JOptionPane.YES_OPTION) return AbstractUIHandler.ANSWER_YES;
 
+    public boolean emitNotificationFeedback(String message)
+    {
+       return (JOptionPane.showConfirmDialog(this, message, "Message", JOptionPane.WARNING_MESSAGE,
+             JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
+    }
         if (user_choice == JOptionPane.NO_OPTION) return AbstractUIHandler.ANSWER_NO;
 
         return default_choice;

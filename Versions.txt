@@ -40,6 +40,8 @@
 - Finnish localization updates (Ari Voutilainen via Julien Ponge)
 - Going back and forth between profile selection and packs selection made packs selection unavailable
   (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)  
+- PathInputPanel: the close button had incorrect behavior for all path input question/notification messages
+  (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 
