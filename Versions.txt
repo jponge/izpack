@@ -37,6 +37,7 @@
   (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 - Selected packs not being refreshed in the collection when the PackPanel is initialized
   (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
+- Finnish localization updates (Ari Voutilainen via Julien Ponge)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 
