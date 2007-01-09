@@ -336,8 +336,9 @@ public class CompilerConfig extends Thread
         XMLElement root = data.getFirstChildNamed("packaging");
         String packagerclassname = "com.izforge.izpack.compiler.Packager";
         String unpackerclassname = "com.izforge.izpack.installer.Unpacker";
+        XMLElement packager = null
         if (root != null){
-            XMLElement packager = root.getFirstChildNamed("packager");
+            packager = root.getFirstChildNamed("packager");
             
             if (packager != null){
                 packagerclassname = requireAttribute(packager, "class");
@@ -350,8 +351,8 @@ public class CompilerConfig extends Thread
             }        
         }
         compiler.initPackager(packagerclassname);  
-        if (root != null){
-            XMLElement options = root.getFirstChildNamed("options");
+        if (packager != null){
+            XMLElement options = packager.getFirstChildNamed("options");
             if (options != null){
                 compiler.getPackager().addConfigurationInformation(options);
             }
