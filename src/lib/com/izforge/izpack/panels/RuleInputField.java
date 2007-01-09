@@ -244,7 +244,8 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         // ----------------------------------------------------
         try
         {
-            if (validator != null){
+            if (validator != null)
+            {
                 validationService = (Validator) Class.forName(validator).newInstance();
             }
         }
@@ -259,7 +260,8 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         // ----------------------------------------------------
         try
         {
-            if (processor != null){
+            if (processor != null)
+            {
                 encryptionService = (Processor) Class.forName(processor).newInstance();
             }
         }
