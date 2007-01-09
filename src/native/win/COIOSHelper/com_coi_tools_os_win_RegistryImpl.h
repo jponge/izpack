@@ -133,6 +133,22 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyN
 JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueNames
   (JNIEnv *, jobject, jint, jstring);
 
+/*
+ * Class:     com_coi_tools_os_win_RegistryImpl
+ * Method:    getKeyACL
+ * Signature: (ILjava/lang/String;)Lcom/coi/tools/os/win/AccessControlList;
+ */
+JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getKeyACL
+  (JNIEnv *, jobject, jint, jstring);
+
+/*
+ * Class:     com_coi_tools_os_win_RegistryImpl
+ * Method:    modifyKeyACL
+ * Signature: (ILjava/lang/String;Ljava/lang/String;Lcom/coi/tools/os/win/AccessControlList;)V
+ */
+JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_modifyKeyACL
+  (JNIEnv *, jobject, jint, jstring, jobject);
+
 #ifdef __cplusplus
 }
 #endif

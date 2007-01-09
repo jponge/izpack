@@ -179,7 +179,7 @@ void deleteRegKey(WinLibEnv *libEnv, int root, const TCHAR *key )
 	LONG	retval;
 	TCHAR	*keycopy = new TCHAR[ _tcslen( key ) + 1];
 	TCHAR	*pos;
-	TCHAR	*subPos;
+	TCHAR	*subPos = keycopy;
 	while(1)
 	{
 		if( ! keycopy )
@@ -189,8 +189,16 @@ void deleteRegKey(WinLibEnv *libEnv, int root, const TCHAR *key )
     	for( pos = keycopy; *pos; ++pos )
     		if( *pos == '\\' )
     			subPos = pos;
+		if( subPos == keycopy )
+		{	// Key to remove is directly under a root key, there the calling conventions are
+			// changed.
+			if( (retval = RegDeleteKey((HKEY) root, keycopy)) != ERROR_SUCCESS )
+    			ERROR_BREAK_CODE_A2( _T("functionFailed.RegDeleteKey"), Root2Char(root) , key, libEnv,retval );
+			break;
+		}
     	// Now subPos is on the last existent backslash, splitt keycopy at this point.
     	*subPos = 0;
+
     	subPos++;
 		if( (retval = RegOpenKeyEx( (HKEY) root, keycopy, 0, DELETE,  &hKey)) != ERROR_SUCCESS )
 			// Not found or no rights for delete.
@@ -223,9 +231,9 @@ void deleteRegValue(WinLibEnv *libEnv, int root, const TCHAR *key, const TCHAR *
 	{
 		if( (retval = RegOpenKeyEx( (HKEY) root, key, 0, KEY_SET_VALUE ,  &hKey)) != ERROR_SUCCESS )
 			// Not found or no rights for delete.
-    		ERROR_BREAK_CODE_A2( _T("functionFailed.RegOpenKeyEx"), Root2Char(root) , key, libEnv,retval );
+   			ERROR_BREAK_CODE_A2( _T("functionFailed.RegOpenKeyEx"), Root2Char(root) , key, libEnv,retval );
 		if( (retval = RegDeleteValue(hKey, value)) != ERROR_SUCCESS )
-    		ERROR_BREAK_CODE_A3( _T("functionFailed.RegDeleteValue"), Root2Char(root) , key, value, libEnv,retval );
+   			ERROR_BREAK_CODE_A3( _T("functionFailed.RegDeleteValue"), Root2Char(root) , key, value, libEnv,retval );
 		break;
 	}
 	if( hKey )
@@ -278,8 +286,13 @@ LPBYTE getRegValue( WinLibEnv *libEnv, int root, const TCHAR *key , const TCHAR 
 	LONG	retval;
 	while(1)
 	{
-		if( (retval =  RegOpenKeyEx( (HKEY) root, key, 0, KEY_READ,  &hKey) ) != ERROR_SUCCESS )
-    		ERROR_BREAK_CODE_A2( _T("functionFailed.RegOpenKeyEx"), Root2Char(root) , key, libEnv,retval );
+		if( key != NULL )
+		{
+			if( (retval =  RegOpenKeyEx( (HKEY) root, key, 0, KEY_READ,  &hKey) ) != ERROR_SUCCESS )
+    			ERROR_BREAK_CODE_A2( _T("functionFailed.RegOpenKeyEx"), Root2Char(root) , key, libEnv,retval );
+		}
+		else
+			hKey = (HKEY) root;
 		if( ( retval = RegQueryValueEx( hKey, value, 0, type, 0, length )) != ERROR_SUCCESS &&
 			retval != ERROR_MORE_DATA)
     		ERROR_BREAK_CODE_A3( _T("functionFailed.RegQueryValueEx"), Root2Char(root) , key, value, libEnv,retval );
@@ -289,7 +302,7 @@ LPBYTE getRegValue( WinLibEnv *libEnv, int root, const TCHAR *key , const TCHAR 
     		ERROR_BREAK_CODE_A3( _T("functionFailed.RegQueryValueEx"), Root2Char(root) , key, value, libEnv,retval );
 		break;
 	}
-	if( hKey )
+	if( hKey && key)
 		RegCloseKey( hKey );
 	return( contents );
 }
@@ -453,5 +466,4 @@ int getValueNames( WinLibEnv *libEnv, int root, const TCHAR *key , TCHAR ***name
 		RegCloseKey( hKey );
 	return( values );
 }
-
 

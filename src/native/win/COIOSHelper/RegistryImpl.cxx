@@ -4,7 +4,7 @@
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
  * 
- * Copyright 2005 Klaus Bartz
+ * Copyright 2005-2006 Klaus Bartz
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,13 +52,13 @@ JNIEXPORT jboolean JNICALL Java_com_coi_tools_os_win_RegistryImpl_exist
 {
 	WinLibEnv libEnv( env, obj );
 	jboolean  retval = false;
-	if( libEnv.verifyNullObjects(jKey ))
-	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-		retval = regKeyExist(&libEnv,  jRoot, key );
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	retval = regKeyExist(&libEnv,  jRoot, key );
 
+	if( key != NULL )
 		env->RELEASE_STRING_CHARS( jKey, key);
-	}
 	libEnv.verifyAndThrowAtError();
 	return( retval  );
 	
@@ -74,12 +74,12 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_createKeyN
 	(JNIEnv *env, jobject obj, jint jRoot, jstring jKey)
 {
 	WinLibEnv libEnv( env, obj );
-	if( libEnv.verifyNullObjects(jKey ))
-	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-		createRegKey(&libEnv,  jRoot, key );
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	createRegKey(&libEnv,  jRoot, key );
+	if( key != NULL )
 		env->RELEASE_STRING_CHARS( jKey, key);
-	}
 	libEnv.verifyAndThrowAtError();
 }
 
@@ -95,9 +95,11 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_setValueN
 {
 	WinLibEnv libEnv( env, obj );
 	WinLibEnv *plibEnv = &libEnv;
-	if( libEnv.verifyNullObjects(jKey, jValue, jContents ))
+	const TCHAR *key = NULL;
+	if( libEnv.verifyNullObjects( jValue, jContents ))
 	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		if( jKey != NULL )
+			key = env->GET_STRING_CHARS( jKey , 0);
 		const TCHAR *value = env->GET_STRING_CHARS( jValue , 0);
 		const TCHAR *buf = NULL;
 		jint type	= 0;
@@ -206,7 +208,8 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_setValueN
 			delete contents;
 
 		}
-		env->RELEASE_STRING_CHARS( jKey, key);
+		if( key != NULL )
+			env->RELEASE_STRING_CHARS( jKey, key);
 		env->RELEASE_STRING_CHARS( jValue, value);
 	}
 	libEnv.verifyAndThrowAtError();
@@ -224,12 +227,15 @@ JNIEXPORT jint JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueType
 {
 	WinLibEnv libEnv( env, obj );
 	jint  retval = 0;
-	if( libEnv.verifyNullObjects(jKey, jValue ))
+	const TCHAR *key = NULL;
+	if( libEnv.verifyNullObjects( jValue ))
 	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		if( jKey != NULL )
+			key = env->GET_STRING_CHARS( jKey , 0);
 		const TCHAR *value = env->GET_STRING_CHARS( jValue , 0);
 		retval = getRegValueType(&libEnv,  jRoot, key, value );
-		env->RELEASE_STRING_CHARS( jKey, key);
+		if( key != NULL )
+			env->RELEASE_STRING_CHARS( jKey, key);
 		env->RELEASE_STRING_CHARS( jValue, value);
 	}
 	libEnv.verifyAndThrowAtError();
@@ -249,10 +255,12 @@ JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValue
 	WinLibEnv libEnv( env, obj );
 	WinLibEnv *plibEnv = &libEnv;
 	jobject retval = NULL;
-	if( libEnv.verifyNullObjects(jKey, jValue ))
+	if( libEnv.verifyNullObjects( jValue ))
 	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		const TCHAR *key = NULL;
 		const TCHAR *value = env->GET_STRING_CHARS( jValue , 0);
+		if(  jKey != NULL )
+			key = env->GET_STRING_CHARS( jKey , 0);
 		DWORD type;
 		DWORD length;
 
@@ -317,7 +325,8 @@ JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValue
 		}
 		if( winData )
 			delete [] winData;
-		env->RELEASE_STRING_CHARS( jKey, key);
+		if( key != NULL )
+			env->RELEASE_STRING_CHARS( jKey, key);
 		env->RELEASE_STRING_CHARS( jValue, value);
 	}
 	libEnv.verifyAndThrowAtError();
@@ -334,12 +343,18 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_deleteValueN
 	(JNIEnv *env, jobject obj, jint jRoot, jstring jKey, jstring jValue)
 {
 	WinLibEnv libEnv( env, obj );
-	if( libEnv.verifyNullObjects(jKey, jValue ))
+	if( libEnv.verifyNullObjects(jValue ))
 	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
+		const TCHAR *key = NULL;
 		const TCHAR *value = env->GET_STRING_CHARS( jValue , 0);
-		deleteRegValue(&libEnv,  jRoot, key, value );
-		env->RELEASE_STRING_CHARS( jKey, key);
+		if( jKey != NULL) 
+			key = env->GET_STRING_CHARS( jKey , 0);
+		if( key == NULL || _tcslen(key) == 0 )
+			deleteRegValue(&libEnv,  jRoot, NULL, value );
+		else
+			deleteRegValue(&libEnv,  jRoot, key, value );
+		if( key != NULL)	// Release only if get performed.
+			env->RELEASE_STRING_CHARS( jKey, key);
 		env->RELEASE_STRING_CHARS( jValue, value);
 	}
 	libEnv.verifyAndThrowAtError();
@@ -356,13 +371,12 @@ JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_deleteKeyN
 	(JNIEnv *env, jobject obj, jint jRoot, jstring jKey)
 {
 	WinLibEnv libEnv( env, obj );
-	if( libEnv.verifyNullObjects(jKey ))
-	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-
-		deleteRegKey(&libEnv,  jRoot, key );
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	deleteRegKey(&libEnv,  jRoot, key );
+	if( key != NULL )
 		env->RELEASE_STRING_CHARS( jKey, key);
-	}
 	libEnv.verifyAndThrowAtError();
 }
 
@@ -378,13 +392,12 @@ JNIEXPORT jboolean JNICALL Java_com_coi_tools_os_win_RegistryImpl_isKeyEmpty
 {
 	WinLibEnv libEnv( env, obj );
 	jboolean retval = false;
-	if( libEnv.verifyNullObjects(jKey ))
-	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-
-		retval = isKeyEmpty(&libEnv,  jRoot, key );
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	retval = isKeyEmpty(&libEnv,  jRoot, key );
+	if( key != NULL )
 		env->RELEASE_STRING_CHARS( jKey, key);
-	}
 	libEnv.verifyAndThrowAtError();
 	return( retval );
 }
@@ -400,14 +413,14 @@ JNIEXPORT jint JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyCount
 {
 	WinLibEnv libEnv( env, obj );
 	DWORD	subkeys = 0;
-	if( libEnv.verifyNullObjects(jKey ))
-	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-		DWORD	values = 1;
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	DWORD	values = 1;
 
-		determineCounts(&libEnv,  jRoot, key, &subkeys, &values  );
+	determineCounts(&libEnv,  jRoot, key, &subkeys, &values  );
+	if( key != NULL )
 		env->RELEASE_STRING_CHARS( jKey, key);
-	}
 	libEnv.verifyAndThrowAtError();
 	return( subkeys );
 }
@@ -423,14 +436,14 @@ JNIEXPORT jint JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueCount
 {
 	WinLibEnv libEnv( env, obj );
 	DWORD	values = 0;
-	if( libEnv.verifyNullObjects(jKey ))
-	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-		DWORD	subkeys = 1;
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	DWORD	subkeys = 1;
 
-		determineCounts(&libEnv,  jRoot, key, &subkeys, &values  );
+	determineCounts(&libEnv,  jRoot, key, &subkeys, &values  );
+	if( key != NULL )
 		env->RELEASE_STRING_CHARS( jKey, key);
-	}
 	libEnv.verifyAndThrowAtError();
 	return( values );
 }
@@ -447,17 +460,17 @@ JNIEXPORT jstring JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyName
 {
 	jstring	retval = NULL;
 	WinLibEnv libEnv( env, obj );
-	if( libEnv.verifyNullObjects(jKey ))
-	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-		TCHAR *name = getSubkeyName(&libEnv,  jRoot, key, jKeyId  );
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	TCHAR *name = getSubkeyName(&libEnv,  jRoot, key, jKeyId  );
+	if( key != NULL )
 		env->RELEASE_STRING_CHARS( jKey, key);
-		libEnv.verifyAndThrowAtError();
-		if( libEnv.good() )	
-			retval = env->NEW_STRING( name );
-		if( name )
-			delete [] name;
-	}
+	libEnv.verifyAndThrowAtError();
+	if( libEnv.good() )	
+		retval = env->NEW_STRING( name );
+	if( name )
+		delete [] name;
 	libEnv.verifyAndThrowAtError();
 	return( retval );
 }
@@ -474,17 +487,17 @@ JNIEXPORT jstring JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueName
 {
 	jstring	retval = NULL;
 	WinLibEnv libEnv( env, obj );
-	if( libEnv.verifyNullObjects(jKey ))
-	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-		TCHAR *name = getValueName(&libEnv,  jRoot, key, jKeyId  );
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	TCHAR *name = getValueName(&libEnv,  jRoot, key, jKeyId  );
+	if( key != NULL )
 		env->RELEASE_STRING_CHARS( jKey, key);
-		libEnv.verifyAndThrowAtError();
-		if( libEnv.good() )	
-			retval = env->NEW_STRING( name );
-		if( name )
-			delete [] name;
-	}
+	libEnv.verifyAndThrowAtError();
+	if( libEnv.good() )	
+		retval = env->NEW_STRING( name );
+	if( name )
+		delete [] name;
 	libEnv.verifyAndThrowAtError();
 	return( retval );
 }
@@ -502,32 +515,32 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getSubkeyN
 {
 	WinLibEnv libEnv( env, obj );
 	jobjectArray  newArr = NULL;
-	if( libEnv.verifyNullObjects(jKey ))
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	jclass clazz;
+	TCHAR **names;
+	LONG length = 0;
+	jstring utf_str;
+	int i;
+	clazz = env->FindClass( "java/lang/String");
+	if( ( length = getSubkeyNames( &libEnv, jRoot, key, &names ) ) > 0 )
 	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-		jclass clazz;
-		TCHAR **names;
-		LONG length = 0;
-		jstring utf_str;
-		int i;
-		clazz = env->FindClass( "java/lang/String");
-		if( ( length = getSubkeyNames( &libEnv, jRoot, key, &names ) ) > 0 )
+		newArr = env->NewObjectArray( length, clazz, NULL);
+		for( i = 0; i < length; ++i )
 		{
-			newArr = env->NewObjectArray( length, clazz, NULL);
-			for( i = 0; i < length; ++i )
-			{
-				utf_str = env->NEW_STRING( names[i] );
-				env->SetObjectArrayElement( newArr, i, utf_str);
-				env->DeleteLocalRef( utf_str );
-				delete [] names[i];
-				//LocalFree( groups[i] );
-				names[i] = NULL;
-			}
-			delete [] names;
-			//LocalFree( groups );
+			utf_str = env->NEW_STRING( names[i] );
+			env->SetObjectArrayElement( newArr, i, utf_str);
+			env->DeleteLocalRef( utf_str );
+			delete [] names[i];
+			//LocalFree( groups[i] );
+			names[i] = NULL;
 		}
-		env->RELEASE_STRING_CHARS( jKey, key);
+		delete [] names;
+		//LocalFree( groups );
 	}
+	if( key != NULL )
+		env->RELEASE_STRING_CHARS( jKey, key);
 	libEnv.verifyAndThrowAtError();
 	if( libEnv.good() )	
 		return( newArr );
@@ -546,38 +559,73 @@ JNIEXPORT jobjectArray JNICALL Java_com_coi_tools_os_win_RegistryImpl_getValueNa
 {
 	WinLibEnv libEnv( env, obj );
 	jobjectArray  newArr = NULL;
-	if( libEnv.verifyNullObjects(jKey ))
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	jclass clazz;
+	TCHAR **names;
+	LONG length = 0;
+	jstring utf_str;
+	int i;
+	clazz = env->FindClass( "java/lang/String");
+	if( ( length = getValueNames( &libEnv, jRoot, key, &names ) ) > 0 )
 	{
-		const TCHAR *key = env->GET_STRING_CHARS( jKey , 0);
-		jclass clazz;
-		TCHAR **names;
-		LONG length = 0;
-		jstring utf_str;
-		int i;
-		clazz = env->FindClass( "java/lang/String");
-		if( ( length = getValueNames( &libEnv, jRoot, key, &names ) ) > 0 )
+		newArr = env->NewObjectArray( length, clazz, NULL);
+		for( i = 0; i < length; ++i )
 		{
-			newArr = env->NewObjectArray( length, clazz, NULL);
-			for( i = 0; i < length; ++i )
-			{
-				utf_str = env->NEW_STRING( names[i] );
-				env->SetObjectArrayElement( newArr, i, utf_str);
-				env->DeleteLocalRef( utf_str );
-				delete [] names[i];
-				//LocalFree( groups[i] );
-				names[i] = NULL;
-			}
-			delete [] names;
-			//LocalFree( groups );
+			utf_str = env->NEW_STRING( names[i] );
+			env->SetObjectArrayElement( newArr, i, utf_str);
+			env->DeleteLocalRef( utf_str );
+			delete [] names[i];
+			//LocalFree( groups[i] );
+			names[i] = NULL;
 		}
-		env->RELEASE_STRING_CHARS( jKey, key);
+		delete [] names;
+		//LocalFree( groups );
 	}
+	if( key != NULL )
+		env->RELEASE_STRING_CHARS( jKey, key);
 	libEnv.verifyAndThrowAtError();
 	if( libEnv.good() )	
 		return( newArr );
 	return( NULL );
 }
 
+/*
+ * Class:     com_coi_tools_os_win_RegistryImpl
+ * Method:    getKeyACL
+ * Signature: (ILjava/lang/String;)Lcom/coi/tools/os/win/AccessControlList;
+ * Returns the ACL associated with the given key. On error a NativeLibException will be thrown.
+ */
+JNIEXPORT jobject JNICALL Java_com_coi_tools_os_win_RegistryImpl_getKeyACL
+	(JNIEnv *env, jobject obj, jint jRoot, jstring jKey)
+{
+	WinLibEnv libEnv( env, obj );
+	const TCHAR *key = NULL;
+	if( jKey != NULL) 
+		key = env->GET_STRING_CHARS( jKey , 0);
+	createRegKey(&libEnv,  jRoot, key );
+	if( key != NULL )
+		env->RELEASE_STRING_CHARS( jKey, key);
+	libEnv.verifyAndThrowAtError();
+	return(NULL);
+}
 
+/*
+ * Class:     com_coi_tools_os_win_RegistryImpl
+ * Method:    modifyKeyACL
+ * Signature: (ILjava/lang/String;Ljava/lang/String;Lcom/coi/tools/os/win/AccessControlList;)V
+ * Modifies the ACL which is associated to the given key. On error a NativeLibException will be thrown.
+ */
+JNIEXPORT void JNICALL Java_com_coi_tools_os_win_RegistryImpl_modifyKeyACL
+	(JNIEnv *env, jobject obj, jint jRoot, jstring jKey, jobject jContents )
 
-
+{
+	WinLibEnv libEnv( env, obj );
+	WinLibEnv *plibEnv = &libEnv;
+	while( libEnv.good())
+	{
+		ERROR_BREAK(_T("registry.ACLNotSupported"), plibEnv);
+	}
+	libEnv.verifyAndThrowAtError();
+}
