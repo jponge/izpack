@@ -39,6 +39,7 @@ import javax.swing.event.CaretListener;
 import org.apache.regexp.RE;
 
 import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /*---------------------------------------------------------------------------*/
@@ -243,11 +244,14 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         // ----------------------------------------------------
         try
         {
-            validationService = (Validator) Class.forName(validator).newInstance();
+            if (validator != null){
+                validationService = (Validator) Class.forName(validator).newInstance();
+            }
         }
         catch (Throwable exception)
         {
-            validationService = null;
+            validationService = null;            
+            Debug.trace(exception);
         }
 
         // ----------------------------------------------------
@@ -255,11 +259,14 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         // ----------------------------------------------------
         try
         {
-            encryptionService = (Processor) Class.forName(processor).newInstance();
+            if (processor != null){
+                encryptionService = (Processor) Class.forName(processor).newInstance();
+            }
         }
         catch (Throwable exception)
         {
             encryptionService = null;
+            Debug.trace(exception);
         }
 
         // ----------------------------------------------------
