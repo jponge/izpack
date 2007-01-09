@@ -336,7 +336,7 @@ public class CompilerConfig extends Thread
         XMLElement root = data.getFirstChildNamed("packaging");
         String packagerclassname = "com.izforge.izpack.compiler.Packager";
         String unpackerclassname = "com.izforge.izpack.installer.Unpacker";
-        XMLElement packager = null
+        XMLElement packager = null;
         if (root != null){
             packager = root.getFirstChildNamed("packager");
             
