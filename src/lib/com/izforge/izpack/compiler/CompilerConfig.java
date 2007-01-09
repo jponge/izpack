@@ -351,7 +351,10 @@ public class CompilerConfig extends Thread
         }
         compiler.initPackager(packagerclassname);  
         if (root != null){
-            compiler.getPackager().addConfigurationInformation(root);
+            XMLElement options = root.getFirstChildNamed("options");
+            if (options != null){
+                compiler.getPackager().addConfigurationInformation(options);
+            }
         }
         compiler.addProperty("UNPACKER_CLASS", unpackerclassname);
         notifyCompilerListener("loadPackager", CompilerListener.END, data);        
