@@ -274,6 +274,7 @@
                debug="${debug}"
                debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/*.java" />
+            <include name="com/izforge/izpack/io/*.java"/>
             <include name="com/izforge/izpack/compiler/*.java" />
             <include name="com/izforge/izpack/compressor/*.java" />
             <include name="com/izforge/izpack/ant/*.java" />
@@ -297,6 +298,7 @@
             </manifest>
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/*.class" />
+                <include name="com/izforge/izpack/io/*.class"/>
                 <include name="com/izforge/izpack/compiler/*.class" />
                 <include name="com/izforge/izpack/compressor/*.class" />
                 <include name="com/izforge/izpack/util/OsConstraint.class" />
@@ -366,10 +368,13 @@
             <include name="com/izforge/izpack/panels/PathSelectionPanel.java" />
             <include name="com/izforge/izpack/*.java" />
             <include name="com/izforge/izpack/gui/*.java" />
+            <include name="com/izforge/izpack/io/*.java" />          
             <include name="com/izforge/izpack/installer/*.java" />
+            <include name="com/izforge/izpack/panels/NextMedia*.java"/>
             <include name="com/izforge/izpack/util/*.java" />
             <include name="com/izforge/izpack/util/os/*.java" />
             <include name="com/izforge/izpack/rules/*.java" />
+            <include name="com/izforge/izpack/uninstaller/SelfModifier*.java"/>
             <include name="net/n3/nanoxml/*.java" />
         </javac>
     </target>
@@ -386,10 +391,13 @@
                 <include name="com/izforge/izpack/panels/PathSelectionPanel.class" />
                 <include name="com/izforge/izpack/*.class" />
                 <include name="com/izforge/izpack/gui/*.class" />
+                <include name="com/izforge/izpack/io/*.class"/>
                 <include name="com/izforge/izpack/installer/*.class" />
                 <include name="com/izforge/izpack/util/*.class" />
                 <include name="com/izforge/izpack/util/**/*.class" />
+                <include name="com/izforge/izpack/panels/NextMedia*.class"/>
                 <include name="com/izforge/izpack/rules/*.class" />
+                <include name="com/izforge/izpack/uninstaller/SelfModifier*.class"/>
                 <include name="net/n3/nanoxml/*.class" />
             </fileset>
             <zipfileset src="${basedir}/lib/jakarta-regexp-1.3.jar">
