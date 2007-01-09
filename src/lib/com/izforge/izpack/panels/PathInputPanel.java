@@ -312,9 +312,6 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 catch (ResourceNotFoundException rnfe)
                 {}
                 // if not specific os, try getting generic 'unix' resource file
-                if (in == null) in = parentFrame.getResource("TargetPanel.dir.unix");
-
-                // if all those failed, try to look up a generic dir file
                 if (in == null)
                 {
                     try
@@ -339,22 +336,22 @@ public class PathInputPanel extends IzPanel implements ActionListener
                 {}
             }
 
-            // now read the file, once we've identified which one to read
             if (in != null)
-			{
-				InputStreamReader isr = new InputStreamReader(in);
-            	br = new BufferedReader(isr);
-            	String line;
-            	while ((line = br.readLine()) != null)
-            	{
-                	line = line.trim();
-                	// use the first non-blank line
-                	if (!"".equals(line)) break;
-            	}
-            	defaultInstallDir = line;
-            	VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-            	defaultInstallDir = vs.substitute(defaultInstallDir, null);
-			}
+            {
+                // now read the file, once we've identified which one to read
+                InputStreamReader isr = new InputStreamReader(in);
+                br = new BufferedReader(isr);
+                String line;
+                while ((line = br.readLine()) != null)
+                {
+                    line = line.trim();
+                    // use the first non-blank line
+                    if (!"".equals(line)) break;
+                }
+                defaultInstallDir = line;
+                VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                defaultInstallDir = vs.substitute(defaultInstallDir, null);
+            }
         }
         catch (Exception e)
         {
