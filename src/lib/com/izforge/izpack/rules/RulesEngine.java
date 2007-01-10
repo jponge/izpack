@@ -193,6 +193,9 @@ public class RulesEngine {
      *         false - there is a condition and the condition was not met
      */
     public boolean canInstallPack(String packid, Properties variables) {
+        if (packid == null){
+            return true;
+        }
         Debug.trace("can install pack with id " + packid + "?");
         if (!this.packconditions.containsKey(packid)) {
             Debug.trace("no condition, can install pack");

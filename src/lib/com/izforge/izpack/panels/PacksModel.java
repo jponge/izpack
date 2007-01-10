@@ -26,11 +26,15 @@ package com.izforge.izpack.panels;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.table.AbstractTableModel;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.util.Debug;
 
 /**
  * User: Gaganis Giorgos Date: Sep 17, 2004 Time: 8:33:21 AM
@@ -60,9 +64,22 @@ class PacksModel extends AbstractTableModel
     // Map to hold the object name relationship
     Map namesPos;
 
+    // reference to the RulesEngine for validating conditions
+    private RulesEngine rules;
+
+    // reference to the current variables, needed for condition validation
+    private Properties variables;
+
+    public PacksModel(PacksPanelInterface panel, InstallData idata, RulesEngine rules)
+    {
+        this(idata.allPacks, idata.selectedPacks, panel);
+        this.rules = rules;
+        this.variables = idata.getVariables();
+        this.updateConditions(true);
+    }
+
     public PacksModel(List packs, List packsToInstall, PacksPanelInterface panel)
     {
-
         this.packs = packs;
         this.packsToInstall = packsToInstall;
         this.panel = panel;
@@ -70,6 +87,45 @@ class PacksModel extends AbstractTableModel
         checkValues = new int[packs.size()];
         reverseDeps();
         initvalues();
+    }
+
+    public void updateConditions()
+    {
+        this.updateConditions(false);
+    }
+
+    private void updateConditions(boolean initial)
+    {
+        // look for packages,
+        for (int i = 0; i < packs.size(); i++)
+        {
+            Pack pack = (Pack) packs.get(i);
+            int pos = getPos(pack.name);
+            Debug.trace("Conditions fulfilled for: " + pack.name + "?");
+            if (!this.rules.canInstallPack(pack.id, this.variables))
+            {
+                Debug.trace("no");
+                if (this.rules.canInstallPackOptional(pack.id, this.variables))
+                {
+                    Debug.trace("optional");
+                    Debug.trace(pack.id + " can be installed optionally.");
+                    if (initial)
+                    {
+                        checkValues[pos] = 0;
+                    }
+                    else
+                    {
+                        // just do nothing                       
+                    }
+                }
+                else
+                {
+                    Debug.trace(pack.id + " can not be installed.");
+                    checkValues[pos] = -2;
+                }
+            }
+        }
+        refreshPacksToInstall();
     }
 
     /**
@@ -131,15 +187,15 @@ class PacksModel extends AbstractTableModel
             }
             // for mutual exclusion, uncheck uncompatible packs too
             // (if available in the current installGroup)
-            
-            if(checkValues[i] > 0 && pack.excludeGroup != null)
+
+            if (checkValues[i] > 0 && pack.excludeGroup != null)
             {
                 for (int q = 0; q < packs.size(); q++)
                 {
-                    if(q != i)
+                    if (q != i)
                     {
                         Pack otherpack = (Pack) packs.get(q);
-                        if(pack.excludeGroup.equals(otherpack.excludeGroup))
+                        if (pack.excludeGroup.equals(otherpack.excludeGroup))
                         {
                             if (checkValues[q] == 1) checkValues[q] = 0;
                         }
@@ -223,15 +279,15 @@ class PacksModel extends AbstractTableModel
         {
             return false;
         }
-        else return columnIndex == 0;
+        else
+            return columnIndex == 0;
     }
 
     /*
      * @see TableModel#getValueAt(int, int)
      */
     public Object getValueAt(int rowIndex, int columnIndex)
-    {
-
+    {        
         Pack pack = (Pack) packs.get(rowIndex);
         switch (columnIndex)
         {
@@ -265,25 +321,37 @@ class PacksModel extends AbstractTableModel
     {
         if (columnIndex == 0)
         {
+            System.out.println("Change value: " + aValue);
             if (aValue instanceof Integer)
             {
                 Pack pack = (Pack) packs.get(rowIndex);
+                
                 if (((Integer) aValue).intValue() == 1)
                 {
-                    checkValues[rowIndex] = 1;
+                    String packid = pack.id;
+                    if (packid != null){
+                        System.out.println("packid="+packid);
+                        if (this.rules.canInstallPack(packid, this.variables) || this.rules.canInstallPackOptional(packid, this.variables)){
+                            System.out.println("can install");
+                            checkValues[rowIndex] = 1;
+                        }                              
+                    }
+                    else {
+                        checkValues[rowIndex] = 1;
+                    }                    
                     updateExcludes(rowIndex);
                     updateDeps();
-
+                    this.updateConditions();
                     int bytes = panel.getBytes();
                     bytes += pack.nbytes;
                     panel.setBytes(bytes);
-                }
+                }                
                 else
                 {
                     checkValues[rowIndex] = 0;
                     updateExcludes(rowIndex);
                     updateDeps();
-
+                    this.updateConditions();
                     int bytes = panel.getBytes();
                     bytes -= pack.nbytes;
                     panel.setBytes(bytes);
@@ -301,8 +369,17 @@ class PacksModel extends AbstractTableModel
         packsToInstall.clear();
         for (int i = 0; i < packs.size(); i++)
         {
-            Object pack = packs.get(i);
-            if (Math.abs(checkValues[i]) == 1) packsToInstall.add(pack);
+            Pack pack = (Pack) packs.get(i);
+            if (Math.abs(checkValues[i]) == 1) {
+                String packid = pack.id;
+                
+                if ((packid != null) && (this.rules != null) && (this.rules.canInstallPack(packid, this.variables) || this.rules.canInstallPackOptional(packid, this.variables))){
+                   packsToInstall.add(pack);
+                }
+                else {
+                    packsToInstall.add(pack);
+                }
+            }
 
         }
 
@@ -334,49 +411,58 @@ class PacksModel extends AbstractTableModel
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
-            if (pack.required == true) propRequirement(pack.name);
+            if (pack.required == true){
+                String packid = pack.id;
+                if (packid != null){
+                    if (!(!this.rules.canInstallPack(packid, this.variables) && this.rules.canInstallPackOptional(packid, this.variables))){
+                        propRequirement(pack.name);
+                    }                    
+                }                
+            }
         }
 
     }
+
     /*
      * Sees which packs (if any) should be unchecked and updates checkValues
      */
     private void updateExcludes(int rowindex)
     {
-        int value = checkValues [rowindex];
+        int value = checkValues[rowindex];
         Pack pack = (Pack) packs.get(rowindex);
-        if( value > 0 && pack.excludeGroup != null)
+        if (value > 0 && pack.excludeGroup != null)
         {
-            for( int q = 0; q < packs.size(); q++)
+            for (int q = 0; q < packs.size(); q++)
             {
-                if( rowindex != q )
+                if (rowindex != q)
                 {
-                    Pack otherpack = (Pack)packs.get(q);
+                    Pack otherpack = (Pack) packs.get(q);
                     String name1 = otherpack.excludeGroup;
                     String name2 = pack.excludeGroup;
-                    if( name2.equals(name1) )
+                    if (name2.equals(name1))
                     {
-                        if( checkValues [q] == 1) checkValues [q] = 0;
+                        if (checkValues[q] == 1) checkValues[q] = 0;
                     }
                 }
             }
         }
         this.UpdateBytes();
     }
-    
+
     private void UpdateBytes()
     {
         int bytes = 0;
-        for(int q=0; q<packs.size(); q++)
+        for (int q = 0; q < packs.size(); q++)
         {
-            if(Math.abs(checkValues[q]) == 1)
+            if (Math.abs(checkValues[q]) == 1)
             {
-                Pack pack = (Pack)packs.get(q);
+                Pack pack = (Pack) packs.get(q);
                 bytes += pack.nbytes;
             }
         }
         panel.setBytes(bytes);
     }
+
     /**
      * We use a modified dfs graph search algorithm as described in: Thomas H. Cormen, Charles
      * Leiserson, Ronald Rivest and Clifford Stein. Introduction to algorithms 2nd Edition

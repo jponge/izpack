@@ -45,6 +45,7 @@
 - PathInputPanel: logged a stacktrace on Linux systems when no defaultInstallDir was specified and
   no TargetPanel.dir.x resource was present (Stefan Wachter via Julien Ponge)
 - Added MultiVolumePackager, MultiVolumeUnpacker, MultiVolumeInstaller to support splitting the installer (Dennis Reil)
+- Added conditions for packs to PacksPanel (Dennis Reil)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

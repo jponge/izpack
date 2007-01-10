@@ -7,6 +7,7 @@
  * Copyright 2002 Marcus Wolschon
  * Copyright 2002 Jan Blok
  * Copyright 2004 Klaus Bartz
+ * Copyright 2007 Dennis Reil
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,9 +75,10 @@ import com.izforge.izpack.util.VariableSubstitutor;
  * panels together. This class handles the common logic of pack selection. The derived class should
  * be create the layout and other specific actions. There are some helper methods to simplify layout
  * creation in the derived class.
- *
+ * 
  * @author Julien Ponge
  * @author Klaus Bartz
+ * @author Dennis Reil
  */
 public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterface,
         ListSelectionListener
@@ -146,9 +148,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * The constructor.
-     *
+     * 
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata The installation data.
      */
     public PacksPanelBase(InstallerFrame parent, InstallData idata)
     {
@@ -226,11 +228,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             String msg = null;
             freeBytes = IoHelper.getFreeSpace(IoHelper.existingParent(
-                    new
-                            File(idata.getInstallPath())).getAbsolutePath());
+                    new File(idata.getInstallPath())).getAbsolutePath());
             if (freeBytes < 0)
-                msg =
-                        parent.langpack.getString("PacksPanel.notAscertainable");
+                msg = parent.langpack.getString("PacksPanel.notAscertainable");
             else
                 msg = Pack.toByteUnitsString(freeBytes);
             freeSpaceLabel.setText(msg);
@@ -239,7 +239,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * Indicates wether the panel has been validated or not.
-     *
+     * 
      * @return true if the needed space is less than the free space, else false
      */
     public boolean isValidated()
@@ -256,7 +256,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * Asks to make the XML panel data.
-     *
+     * 
      * @param panelRoot The XML tree to write the data in.
      */
     public void makeXMLData(XMLElement panelRoot)
@@ -270,9 +270,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
      */
     public void valueChanged(ListSelectionEvent e)
-    {    
-    	VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-    	
+    {
+        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+
         int i = packsTable.getSelectedRow();
         if (i < 0) return;
         // Operations for the description
@@ -298,9 +298,10 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             Pack pack = (Pack) idata.availablePacks.get(i);
             List dep = pack.dependencies;
             String list = "";
-            if(dep != null  )
+            if (dep != null)
             {
-                list += ( langpack == null ) ? "Dependencies: " : langpack.getString("PacksPanel.dependencies");
+                list += (langpack == null) ? "Dependencies: " : langpack
+                        .getString("PacksPanel.dependencies");
             }
             for (int j = 0; dep != null && j < dep.size(); j++)
             {
@@ -308,41 +309,42 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 list += getI18NPackName((Pack) names.get(name));
                 if (j != dep.size() - 1) list += ", ";
             }
-            
-            //add the list of the packs to be excluded
-            String excludeslist = (langpack == null) ?"Excludes: " : langpack.getString("PacksPanel.excludes");
+
+            // add the list of the packs to be excluded
+            String excludeslist = (langpack == null) ? "Excludes: " : langpack
+                    .getString("PacksPanel.excludes");
             int numexcludes = 0;
-            if(pack.excludeGroup != null)
+            if (pack.excludeGroup != null)
             {
-                for(int q=0; q<idata.availablePacks.size(); q++)
+                for (int q = 0; q < idata.availablePacks.size(); q++)
                 {
                     Pack otherpack = (Pack) idata.availablePacks.get(q);
                     String exgroup = otherpack.excludeGroup;
-                    if(exgroup != null)
+                    if (exgroup != null)
                     {
-                        if( q != i && pack.excludeGroup.equals(exgroup))
+                        if (q != i && pack.excludeGroup.equals(exgroup))
                         {
-                            
+
                             excludeslist += getI18NPackName(otherpack) + ", ";
-                            numexcludes ++;
+                            numexcludes++;
                         }
                     }
                 }
             }
-            //concatenate
-            if(dep != null) excludeslist = "    " + excludeslist;
-            if(numexcludes > 0) list += excludeslist;
-            if(list.endsWith(", ")) list = list.substring(0, list.length()-2);
-            
-            //and display the result
+            // concatenate
+            if (dep != null) excludeslist = "    " + excludeslist;
+            if (numexcludes > 0) list += excludeslist;
+            if (list.endsWith(", ")) list = list.substring(0, list.length() - 2);
+
+            // and display the result
             dependencyArea.setText(list);
         }
     }
 
     /**
-     * This method tries to resolve the localized name of the given pack.
-     * If this is not possible, the name given in the installation description
-     * file in ELEMENT <pack> will be used.
+     * This method tries to resolve the localized name of the given pack. If this is not possible,
+     * the name given in the installation description file in ELEMENT <pack> will be used.
+     * 
      * @param pack for which the name should be resolved
      * @return localized name of the pack
      */
@@ -359,22 +361,23 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             packName = pack.name;
         }
-        return( packName );
+        return (packName);
     }
+
     /**
      * Layout helper method:<br>
      * Creates an label with a message given by msgId and an icon given by the iconId. If layout and
      * constraints are not null, the label will be added to layout with the given constraints. The
      * label will be added to this object.
-     *
-     * @param msgId       identifier for the IzPack langpack
-     * @param iconId      identifier for the IzPack icons
-     * @param layout      layout to be used
+     * 
+     * @param msgId identifier for the IzPack langpack
+     * @param iconId identifier for the IzPack icons
+     * @param layout layout to be used
      * @param constraints constraints to be used
      * @return the created label
      */
     protected JLabel createLabel(String msgId, String iconId, GridBagLayout layout,
-                                 GridBagConstraints constraints)
+            GridBagConstraints constraints)
     {
         JLabel label = LabelFactory.create(parent.langpack.getString(msgId), parent.icons
                 .getImageIcon(iconId), TRAILING);
@@ -388,14 +391,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * and a label on the right side with initial no text. The right label will be returned. If
      * layout and constraints are not null, the label will be added to layout with the given
      * constraints. The panel will be added to this object.
-     *
-     * @param msgId       identifier for the IzPack langpack
-     * @param layout      layout to be used
+     * 
+     * @param msgId identifier for the IzPack langpack
+     * @param layout layout to be used
      * @param constraints constraints to be used
      * @return the created (right) label
      */
     protected JLabel createPanelWithLabel(String msgId, GridBagLayout layout,
-                                          GridBagConstraints constraints)
+            GridBagConstraints constraints)
     {
         JPanel panel = new JPanel();
         JLabel label = new JLabel();
@@ -416,18 +419,18 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * else the text area will be added directly to this object. If layout and constraints are not
      * null, the text area or scroller will be added to layout with the given constraints. The text
      * area will be returned.
-     *
-     * @param msgId       identifier for the IzPack langpack
-     * @param scroller    the scroller to be used
-     * @param layout      layout to be used
+     * 
+     * @param msgId identifier for the IzPack langpack
+     * @param scroller the scroller to be used
+     * @param layout layout to be used
      * @param constraints constraints to be used
      * @return the created text area
      */
     protected JTextArea createTextArea(String msgId, JScrollPane scroller, GridBagLayout layout,
-                                       GridBagConstraints constraints)
+            GridBagConstraints constraints)
     {
         JTextArea area = new JTextArea();
-        //area.setMargin(new Insets(2, 2, 2, 2));
+        // area.setMargin(new Insets(2, 2, 2, 2));
         area.setAlignmentX(LEFT_ALIGNMENT);
         area.setCaretPosition(0);
         area.setEditable(false);
@@ -460,15 +463,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * Creates the table for the packs. All parameters are required. The table will be returned.
-     *
-     * @param width       of the table
-     * @param scroller    the scroller to be used
-     * @param layout      layout to be used
+     * 
+     * @param width of the table
+     * @param scroller the scroller to be used
+     * @param layout layout to be used
      * @param constraints constraints to be used
      * @return the created table
      */
     protected JTable createPacksTable(int width, JScrollPane scroller, GridBagLayout layout,
-                                      GridBagConstraints constraints)
+            GridBagConstraints constraints)
     {
 
         JTable table = new JTable();
@@ -491,7 +494,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     /**
      * Computes pack related data like the names or the dependencies state.
-     *
+     * 
      * @param packs
      */
     private void computePacks(List packs)
@@ -514,44 +517,17 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     {
         try
         {
-            packsTable.setModel(new PacksModel(idata.availablePacks, idata.selectedPacks, this));
+            
+            packsTable.setModel(new PacksModel(this, idata, this.parent.getRules()));
             CheckBoxEditorRenderer packSelectedRenderer = new CheckBoxEditorRenderer(false);
             packsTable.getColumnModel().getColumn(0).setCellRenderer(packSelectedRenderer);
             CheckBoxEditorRenderer packSelectedEditor = new CheckBoxEditorRenderer(true);
             packsTable.getColumnModel().getColumn(0).setCellEditor(packSelectedEditor);
             packsTable.getColumnModel().getColumn(0).setMaxWidth(40);
-            DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer()
-            {
-
-                /**
-                 * 
-                 */
-                private static final long serialVersionUID = 3256438101604710708L;
-
-                public void setBorder(Border b)
-                {
-                    // TODO: border support?
-                }
-            };
-            packsTable.getColumnModel().getColumn(1).setCellRenderer(renderer1);
-            DefaultTableCellRenderer renderer2 = new DefaultTableCellRenderer()
-            {
-
-                /**
-                 * 
-                 */
-                private static final long serialVersionUID = 4121128130480976185L;
-
-                public void setBorder(Border b)
-                {
-                    // TODO: border support?
-                }
-
-                // public void setFont(Font f)
-                // {
-                // super.setFont(new Font("Monospaced",Font.PLAIN,11));
-                // }
-            };
+            
+            //packsTable.getColumnModel().getColumn(1).setCellRenderer(renderer1);
+            packsTable.getColumnModel().getColumn(1).setCellRenderer(new PacksPanelTableCellRenderer());
+            PacksPanelTableCellRenderer renderer2 = new PacksPanelTableCellRenderer();
             renderer2.setHorizontalAlignment(RIGHT);
             packsTable.getColumnModel().getColumn(2).setCellRenderer(renderer2);
             packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
@@ -624,8 +600,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         private JCheckBox display;
 
         /**
-         * Creates a check box renderer. If useAsEditor is set,
-         * an action listener will be added, else not.
+         * Creates a check box renderer. If useAsEditor is set, an action listener will be added,
+         * else not.
+         * 
          * @param useAsEditor
          */
         public CheckBoxEditorRenderer(boolean useAsEditor)
@@ -637,7 +614,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         }
 
         public Component getTableCellRendererComponent(JTable table, Object value,
-                                                       boolean isSelected, boolean hasFocus, int row, int column)
+                boolean isSelected, boolean hasFocus, int row, int column)
         {
             if (isSelected)
             {
@@ -650,6 +627,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 display.setBackground(table.getBackground());
             }
             int state = ((Integer) value).intValue();
+            if (state == -2)
+            {
+                // condition not fulfilled
+                display.setForeground(Color.GRAY);                
+            }
             display.setSelected((value != null && Math.abs(state) == 1));
             display.setEnabled(state >= 0);
             return display;
@@ -657,10 +639,10 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
         /**
          * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable,
-         *      Object, boolean, int, int)
+         * Object, boolean, int, int)
          */
         public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column)
+                boolean isSelected, int row, int column)
         {
             return getTableCellRendererComponent(table, value, isSelected, false, row, column);
         }
@@ -674,6 +656,43 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             stopCellEditing();
         }
+    }
+
+    static class PacksPanelTableCellRenderer extends DefaultTableCellRenderer
+    {
+
+        
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column)
+        {
+            Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus,row, column);
+            
+            int state = ((Integer) table.getModel().getValueAt(row, 0)).intValue();
+            if (state == -2)
+            {
+                // condition not fulfilled
+                renderer.setForeground(Color.GRAY);
+                if (isSelected){
+                    renderer.setBackground(table.getSelectionBackground());
+                }
+                else {
+                    renderer.setBackground(table.getBackground());
+                }
+            }
+            else {
+                if (isSelected){
+                    renderer.setForeground(table.getSelectionForeground());
+                    renderer.setBackground(table.getSelectionBackground());
+                }
+                else {
+                    renderer.setForeground(table.getForeground());
+                    renderer.setBackground(table.getBackground());
+                }
+            }
+            
+            return renderer;
+        }
+
     }
 
 }
