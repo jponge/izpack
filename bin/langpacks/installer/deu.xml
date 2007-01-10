@@ -207,5 +207,12 @@
          langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
     -->     
 
+    <str id="nextmedia.title" txt="Nächstes Installationsmedium"/>
+  	<str id="nextmedia.msg" txt="Wählen Sie den Ort des nächsten Installationsmediums aus." />
+	  <str id="nextmedia.browsebtn" txt="Durchsuchen" />
+  	<str id="nextmedia.okbtn" txt="Übernehmen" />
+	  <str id="nextmedia.cancelbtn" txt="Installation abbrechen" />	
+    <str id="nextmedia.choosertitle" txt="Installationsmedium auswählen" />
+    <str id="nextmedia.filedesc" txt="Installationspakete (.pak*)" />
 </langpack>
 
