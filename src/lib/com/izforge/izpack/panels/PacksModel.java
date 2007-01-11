@@ -320,8 +320,7 @@ class PacksModel extends AbstractTableModel
     public void setValueAt(Object aValue, int rowIndex, int columnIndex)
     {
         if (columnIndex == 0)
-        {
-            System.out.println("Change value: " + aValue);
+        {            
             if (aValue instanceof Integer)
             {
                 Pack pack = (Pack) packs.get(rowIndex);
@@ -329,15 +328,23 @@ class PacksModel extends AbstractTableModel
                 if (((Integer) aValue).intValue() == 1)
                 {
                     String packid = pack.id;
-                    if (packid != null){
-                        System.out.println("packid="+packid);
+                    if (packid != null){                        
                         if (this.rules.canInstallPack(packid, this.variables) || this.rules.canInstallPackOptional(packid, this.variables)){
-                            System.out.println("can install");
-                            checkValues[rowIndex] = 1;
+                            if (pack.required){
+                                checkValues[rowIndex] = -1;
+                            }
+                            else {
+                                checkValues[rowIndex] = 1;
+                            }
                         }                              
                     }
                     else {
-                        checkValues[rowIndex] = 1;
+                        if (pack.required){
+                            checkValues[rowIndex] = -1;
+                        }
+                        else {
+                            checkValues[rowIndex] = 1;
+                        }
                     }                    
                     updateExcludes(rowIndex);
                     updateDeps();
@@ -417,7 +424,10 @@ class PacksModel extends AbstractTableModel
                     if (!(!this.rules.canInstallPack(packid, this.variables) && this.rules.canInstallPackOptional(packid, this.variables))){
                         propRequirement(pack.name);
                     }                    
-                }                
+                }  
+                else {
+                    propRequirement(pack.name);
+                }
             }
         }
 
