@@ -72,7 +72,7 @@ class PacksModel extends AbstractTableModel
 
     public PacksModel(PacksPanelInterface panel, InstallData idata, RulesEngine rules)
     {
-        this(idata.allPacks, idata.selectedPacks, panel);
+        this(idata.availablePacks, idata.selectedPacks, panel);
         this.rules = rules;
         this.variables = idata.getVariables();
         this.updateConditions(true);
