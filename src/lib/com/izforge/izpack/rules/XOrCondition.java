@@ -1,9 +1,7 @@
 package com.izforge.izpack.rules;
 
-import java.util.List;
-import java.util.Properties;
-
 import net.n3.nanoxml.XMLElement;
+
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -36,6 +34,7 @@ public class XOrCondition extends OrCondition
      * 
      * @see de.reddot.installer.util.OrCondition#isTrue()
      */
+    /*
     public boolean isTrue(Properties variables)
     {
         boolean op1true = leftoperand.isTrue(variables);
@@ -48,7 +47,7 @@ public class XOrCondition extends OrCondition
         }
         return op1true || op2true;
     }
-
+    */
     /*
      * (non-Javadoc)
      * 
@@ -72,6 +71,20 @@ public class XOrCondition extends OrCondition
         }
     }
 
+    public boolean isTrue()
+    {
+        boolean op1true = leftoperand.isTrue();
+        boolean op2true = rightoperand.isTrue();
+
+        if (op1true && op2true)
+        {
+            // in case where both are true
+            return false;
+        }
+        return op1true || op2true;
+    }
+
+    /*
     public boolean isTrue(Properties variables, List selectedpacks)
     {
         boolean op1true = leftoperand.isTrue(variables, selectedpacks);
@@ -84,4 +97,5 @@ public class XOrCondition extends OrCondition
         }
         return op1true || op2true;
     }
+    */
 }

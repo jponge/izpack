@@ -100,7 +100,8 @@ public class RulesEngine {
                     if (cond != null) {
                         // this.conditionslist.add(cond);
                         String condid = cond.getId();
-                        if ((condid != null) && !("UNKNOWN".equals(condid))) {
+                        cond.setInstalldata(this.installdata);
+                        if ((condid != null) && !("UNKNOWN".equals(condid))) {                            
                             conditionsmap.put(condid, cond);
                         }
                     }
@@ -148,7 +149,7 @@ public class RulesEngine {
             return true;
         } else {
             Debug.trace("Checking condition");
-            return cond.isTrue(variables, this.installdata.selectedPacks);
+            return cond.isTrue();
         }
     }
 
@@ -158,7 +159,7 @@ public class RulesEngine {
             return true;
         } else {
             Debug.trace("Checking condition");
-            return cond.isTrue(variables, this.installdata.selectedPacks);
+            return cond.isTrue();
         }
     }
 
@@ -179,7 +180,7 @@ public class RulesEngine {
         Debug.trace("there is a condition");
         Condition condition = (Condition) conditionsmap.get(this.panelconditions.get(panelid));
         if (condition != null) {
-            return condition.isTrue(variables, this.installdata.selectedPacks);
+            return condition.isTrue();
         }
         return false;
     }
@@ -204,7 +205,7 @@ public class RulesEngine {
         Debug.trace("there is a condition");
         Condition condition = (Condition) conditionsmap.get(this.packconditions.get(packid));
         if (condition != null) {
-            return condition.isTrue(variables, this.installdata.selectedPacks);
+            return condition.isTrue();
         }
         return false;
     }

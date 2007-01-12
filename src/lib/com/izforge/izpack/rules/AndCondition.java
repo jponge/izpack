@@ -40,10 +40,12 @@ public class AndCondition extends Condition
      * 
      * @see de.reddot.installer.util.Condition#isTrue()
      */
+    /*
     public boolean isTrue(Properties variables)
     {
         return leftoperand.isTrue(variables) && rightoperand.isTrue(variables);
     }
+    */
 
     /*
      * (non-Javadoc)
@@ -68,9 +70,15 @@ public class AndCondition extends Condition
         }
     }
 
+    /*
     public boolean isTrue(Properties variables, List selectedpacks)
     {
         return leftoperand.isTrue(variables, selectedpacks)
                 && rightoperand.isTrue(variables, selectedpacks);
+    }
+    */
+    public boolean isTrue()
+    {        
+        return leftoperand.isTrue() && rightoperand.isTrue();
     }
 }

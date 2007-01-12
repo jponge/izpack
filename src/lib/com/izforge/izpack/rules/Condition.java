@@ -1,9 +1,8 @@
 package com.izforge.izpack.rules;
 
-import java.util.List;
-import java.util.Properties;
-
 import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.installer.AutomatedInstallData;
 
 /**
  * Abstract base class for all conditions
@@ -13,19 +12,23 @@ import net.n3.nanoxml.XMLElement;
 public abstract class Condition {
 
     protected String id;
+    protected AutomatedInstallData installdata;
 
     public Condition() {
         this.id = "UNKNOWN";
+        this.installdata = null;
     }
 
+    
     /**
      * checks if this condition is met.
      *
      * @return true if condition is fulfilled
      *         false if condition is not fulfilled
      */
+    /*
     public abstract boolean isTrue(Properties variables);
-
+     */
     /**
      * checks if this condition is met.
      *
@@ -34,10 +37,12 @@ public abstract class Condition {
      * @return true if condition is fulfilled
      *         false if condition is not fulfilled
      */
+    /*
     public boolean isTrue(Properties variables, List selectedpacks) {
         // default implementation is to ignore the selected packs
         return this.isTrue(variables);
     }
+    */
 
     /**
      * @return the id
@@ -55,4 +60,18 @@ public abstract class Condition {
     }
 
     public abstract void readFromXML(XMLElement xmlcondition);
+
+    public abstract boolean isTrue();
+    
+    public AutomatedInstallData getInstalldata()
+    {
+        return installdata;
+    }
+
+
+    
+    public void setInstalldata(AutomatedInstallData installdata)
+    {
+        this.installdata = installdata;
+    }
 }

@@ -29,7 +29,7 @@ public class JavaCondition extends Condition {
 
     }
 
-    public boolean isTrue(Properties variables) {
+    private boolean isTrue(Properties variables) {
         if (!this.complete) {
             return false;
         } else {
@@ -113,6 +113,11 @@ public class JavaCondition extends Condition {
             return;
         }
         this.complete = true;
+    }
+
+    public boolean isTrue()
+    {
+       return this.isTrue(this.installdata.getVariables());
     }
 
 }

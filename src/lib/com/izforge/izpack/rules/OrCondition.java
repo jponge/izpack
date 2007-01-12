@@ -44,11 +44,10 @@ public class OrCondition extends Condition
      * 
      * @see de.reddot.installer.util.Condition#isTrue()
      */
-    public boolean isTrue(Properties variables)
-    {
-        return this.leftoperand.isTrue(variables) || this.rightoperand.isTrue(variables);
-    }
-
+    /*
+     * public boolean isTrue(Properties variables) { return this.leftoperand.isTrue(variables) ||
+     * this.rightoperand.isTrue(variables); }
+     */
     /*
      * (non-Javadoc)
      * 
@@ -72,9 +71,13 @@ public class OrCondition extends Condition
         }
     }
 
-    public boolean isTrue(Properties variables, List selectedpacks)
+    /*
+     * public boolean isTrue(Properties variables, List selectedpacks) { return
+     * this.leftoperand.isTrue(variables, selectedpacks) || this.rightoperand.isTrue(variables,
+     * selectedpacks); }
+     */
+    public boolean isTrue()
     {
-        return this.leftoperand.isTrue(variables, selectedpacks)
-                || this.rightoperand.isTrue(variables, selectedpacks);
+        return this.leftoperand.isTrue() || this.rightoperand.isTrue();
     }
 }

@@ -1,8 +1,5 @@
 package com.izforge.izpack.rules;
 
-import java.util.List;
-import java.util.Properties;
-
 import net.n3.nanoxml.XMLElement;
 
 /**
@@ -20,27 +17,30 @@ public class RefCondition extends Condition
         this.referencedcondition = null;
     }
 
-    public boolean isTrue(Properties variables)
-    {
-        if (referencedcondition == null)
-        {
-            return false;
-        }
-        else
-        {
-            return referencedcondition.isTrue(variables);
-        }
-    }
-
+    /*
+     * public boolean isTrue(Properties variables) { if (referencedcondition == null) { return
+     * false; } else { return referencedcondition.isTrue(variables); } }
+     */
     public void readFromXML(XMLElement xmlcondition)
     {
         String refid = xmlcondition.getAttribute("refid");
         this.referencedcondition = RulesEngine.getCondition(refid);
     }
 
-    public boolean isTrue(Properties variables, List selectedpacks)
+    public boolean isTrue()
     {
-        return referencedcondition.isTrue(variables, selectedpacks);
+        if (this.referencedcondition == null)
+        {
+            return false;
+        }
+        else
+        {
+            return this.referencedcondition.isTrue();
+        }
     }
 
+    /*
+     * public boolean isTrue(Properties variables, List selectedpacks) { return
+     * referencedcondition.isTrue(variables, selectedpacks); }
+     */
 }
