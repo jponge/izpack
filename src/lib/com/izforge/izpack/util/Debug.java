@@ -1,5 +1,5 @@
 /*
- * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  *
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/

@@ -1,8 +1,10 @@
 /*
- * IzPack - Copyright 2006 JBoss Inc, All Rights Reserved.
+ * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
+ *
+ * Copyright 2007 JBoss Inc
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

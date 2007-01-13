@@ -23,26 +23,24 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>4.0 alpha </appversion>
+        <appversion>3.10.0-SNAPSHOT</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
             <author email="" name="Klaus Bartz (developer)"/>
             <author email="" name="Fabrice Mirabile (developer)"/>
-            <author email="" name="Marc Eppelmann (developer)" />
             <author email="" name="Dennis Reil (developer)" />
-
-            <author email="" name="Oliver Kiddle (contributor)"/>
-            <author email="" name="Cesar Martinez Izquierdo (contributor)"/>
-            <author email="" name="Ryan Shillington (contributor)" />
-            <author email="" name="Eric Rose (contributor)" />
-            <author email="" name="Amit Bhayani @JBoss/RedHat (contributors)" />
-            <author email="" name="Scott Starks @JBoss/RedHat (contributors)" />
-            <author email="" name="Alex Pinkin @JBoss/RedHat (contributors)" />
-            <author email="" name="Thomas Edwin Santosa (contributor)" />
+            
+            <author email="" name="Francois Guillet (contributor)"/>
+            <author email="" name="JBoss/RedHat: Vladimir Ralev (contributors)" />            
+            <author email="" name="Nils Meier (contributor)" />
+            <author email="" name="Markus Schlegel (contributor)" />
+            <author email="" name="Hal Vaughan (contributor)" />
+            <author email="" name="Ari Voutilainen (contributor)" />
+            <author email="" name="Stefan Wachter (contributor)" />
 
             <author email=""
-                    name="... the many other developers and contributors to the previous releases (see Thanks.txt)"/>
+                    name="... the (many) other developers and contributors to the previous releases!"/>
         </authors>
         <url>http://www.izforge.com/izpack/</url>
         <javaversion>1.4</javaversion>
@@ -146,7 +144,8 @@
     <!-- The listeners section for CustomActions -->
     <listeners>
         <listener installer="SummaryLoggerInstallerListener"/>
-        <listener installer="RegistryInstallerListener" uninstaller="RegistryUninstallerListener">
+        <listener installer="RegistryInstallerListener"   
+                  uninstaller="RegistryUninstallerListener">
             <os family="windows"/>
         </listener>
     </listeners>

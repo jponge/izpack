@@ -197,8 +197,8 @@
     <property name="cwd" value="${basedir}" />
 
     <property file="src/ant.properties" />
-    <property name="ver" value="3.9" />
-    <property name="rel" value="0" />
+    <property name="ver" value="3.10" />
+    <property name="rel" value="0-SNAPSHOT" />
     <property name="build.number" value="${ver}.${rel}" />
 
     <property name="src.dir" value="${basedir}/src/lib" />

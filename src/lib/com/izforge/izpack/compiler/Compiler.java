@@ -1,6 +1,6 @@
 /*
  * $Id$
- * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
@@ -64,7 +64,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
 public class Compiler extends Thread
 {
     /** The IzPack version. */
-    public final static String IZPACK_VERSION = "3.9.0";
+    public final static String IZPACK_VERSION = "3.10.0";
 
     /** The IzPack home directory. */
     public static String IZPACK_HOME = ".";
@@ -635,39 +635,6 @@ public class Compiler extends Thread
         u.colour = PackInfo.BLACK;
         return 0;
     }
-
-//never used here, see CompilerConfig.addRecursively(..)
-//should be deleted...
-//    /**
-//     * Recursive method to add files in a pack.
-//     * 
-//     * @param file The file to add.
-//     * @param targetdir The relative path to the parent.
-//     * @param osList The target OS constraints.
-//     * @param override Overriding behaviour.
-//     * @param pack Pack to be packed into
-//     * @param additionals Map which contains additional data
-//     * @exception FileNotFoundException if the file does not exist
-//     */
-//    protected void addRecursively(File baseDir, File file, String targetdir, List osList, int override,
-//            PackInfo pack, Map additionals) throws IOException
-//    {
-//        String targetfile = targetdir + "/" + file.getName();
-//        if (!file.isDirectory())
-//            pack.addFile(baseDir, file, targetfile, osList, override, additionals);
-//        else
-//        {
-//            File[] files = file.listFiles();
-//            if (files.length == 0) // The directory is empty so must be added
-//                pack.addFile(baseDir, file, targetfile, osList, override, additionals);
-//            else
-//            {
-//                // new targetdir = targetfile;
-//                for (int i = 0; i < files.length; i++)
-//                    addRecursively(baseDir, files[i], targetfile, osList, override, pack, additionals);
-//            }
-//        }
-//    }
 
     /**
      * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
