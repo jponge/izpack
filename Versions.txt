@@ -47,6 +47,7 @@
 - Added MultiVolumePackager, MultiVolumeUnpacker, MultiVolumeInstaller to support splitting the installer (Dennis Reil)
 - Added conditions for packs to PacksPanel (Dennis Reil)
 - Loose packs fixes (Markus Schlegel via Julien Ponge)
+- UserInputPanel: possible scrambled text fix (Markus Schlegel via Julien Ponge)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

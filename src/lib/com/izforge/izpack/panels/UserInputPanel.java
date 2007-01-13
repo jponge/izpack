@@ -624,6 +624,8 @@ public class UserInputPanel extends IzPanel
         // }
 
         buildUI();
+        //need a validation, else ui is scrambled
+        validate();
         if (packsDefined)
         {
             parentFrame.lockPrevButton();
