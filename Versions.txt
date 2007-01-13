@@ -48,6 +48,10 @@
 - Added conditions for packs to PacksPanel (Dennis Reil)
 - Loose packs fixes (Markus Schlegel via Julien Ponge)
 - UserInputPanel: possible scrambled text fix (Markus Schlegel via Julien Ponge)
+- UserInputPanel (Markus Schlegel via Julien Ponge):
+  - support for the new "installGroup"-attribute for the "programGroup" element of the shortcutSpec.xml
+  - late creation of shortcuts, for example in case ShortcutPanel is displayed before InstallPanel
+  - fixed a bug where each Shortcut-Subgroup influenced the remaining Shortcut creation
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 
