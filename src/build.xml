@@ -696,6 +696,7 @@
     <!-- Macro to compile a listener's classes and create its jar file -->
     <macrodef name="build-listener">
         <attribute name="name" description="The listener jar will get this name" />
+        <attribute name="classpath-ext" description="An extension of the classpath required to build the listener" default=""/>
         <attribute name="srcdir"
                    default="${src.dir}"
                    description="Source directory. Defaults to izpack src dir" />
@@ -710,7 +711,7 @@
             <!-- sourcepath is cleared so there's no mistaking what goes into the Listener -->
             <javac srcdir="@{srcdir}"
                    destdir="${bin.dir}/customActions/@{name}"
-                   classpath="${installer.jar};${compiler.jar};${izevent.jar}"
+                   classpath="${installer.jar};${compiler.jar};${izevent.jar};@{classpath-ext}"
                    sourcepath=""
                    optimize="on"
                    deprecation="on"
@@ -747,12 +748,13 @@
     <!-- Convenience macro to call build-listener for installer listeners -->
     <macrodef name="build-installer-listener">
         <attribute name="name" />
+        <attribute name="classpath-ext" description="An extension of the classpath required to build the listener" default=""/>
         <attribute name="srcdir" default="${src.dir}" />
         <element name="installer-fileset"
                  implicit="yes"
                  description="include and exclude elements indicating listener sources" />
         <sequential>
-            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Uninstaller*">
+            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Uninstaller*" classpath-ext="@{classpath-ext}">
                 <installer-fileset />
             </build-listener>
         </sequential>
@@ -779,7 +781,12 @@
          This also acts as a check to help limit dependancies.
     -->
     <target name="build.listeners" depends="build.compiler,build.installer,build.listener-base">
-        <build-installer-listener name="AntActionInstallerListener">
+    	<!-- This dependency is mandatory -->
+    	<build-installer-listener name="LateShortcutInstallListener" classpath-ext="${bin.dir}/panels/ShortcutPanel.jar">
+            <include name="com/izforge/izpack/event/LateShortcutInstallListener.java" />
+        </build-installer-listener>
+
+    	<build-installer-listener name="AntActionInstallerListener">
             <include name="com/izforge/izpack/event/AntActionInstallerListener.java" />
             <include name="com/izforge/izpack/event/AntAction.java" />
         </build-installer-listener>

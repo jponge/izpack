@@ -54,6 +54,8 @@ import java.util.Vector;
  * a program group for shortcuts, accept the creation of desktop shortcuts and actually creates the
  * shortcuts.
  * 
+ * Use LateShortcutInstallListener to create the Shortcuts after the Files have been installed.
+ * 
  * @version $Revision$
  */
 public class ShortcutPanel extends IzPanel implements ActionListener, ListSelectionListener // ,//
@@ -146,6 +148,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     // ------------------------------------------------------
     /** SPEC_ATTRIBUTE_DEFAULT_GROUP = "defaultName" */
     private static final String SPEC_ATTRIBUTE_DEFAULT_GROUP = "defaultName";
+    
+    /** Support the InstallGroups like in Packs.
+     * SPEC_ATTRIBUTE_INSTALLGROUP = "installGroup" */
+    private static final String SPEC_ATTRIBUTE_INSTALLGROUP = "installGroup";
 
     /** SPEC_ATTRIBUTE_LOCATION = "location" */
     private static final String SPEC_ATTRIBUTE_LOCATION = "location";
@@ -218,8 +224,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     // automatic script section keys
     // ------------------------------------------------------
 
-    /**   */
-
     /** AUTO_KEY_PROGRAM_GROUP = SPEC_KEY_PROGRAM_GROUP = "programGroup" */
     public static final String AUTO_KEY_PROGRAM_GROUP = SPEC_KEY_PROGRAM_GROUP;
 
@@ -269,6 +273,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /** internal flag: create */
     static boolean create;
+    
+    /** 
+     * May be switched by an installerlistener to false.
+     * Installerlistener may then perform the creation of the shortcuts after the files have been installed...
+     * Default is true.
+     */
+    public static boolean createImmediately = true;
 
     /** internal flag isRootUser */
     private static boolean isRootUser;
@@ -565,10 +576,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         create = createShortcuts.isSelected();
 
-        createShortcuts();
-
-        // add files and directories to the uninstaller
-        addToUninstaller();
+        if (createImmediately){
+            createAndRegisterShortcuts();
+        }
 
         return (true);
     }
@@ -829,7 +839,29 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // be placed and where this program group should be
         // located
         // ----------------------------------------------------
-        XMLElement group = spec.getFirstChildNamed(SPEC_KEY_PROGRAM_GROUP);
+        
+        XMLElement group = null;
+        Vector groupSpecs = spec.getChildrenNamed(SPEC_KEY_PROGRAM_GROUP);
+        String selectedInstallGroup = idata.getVariable("INSTALL_GROUP");
+        if (selectedInstallGroup!=null){
+            //The user selected an InstallGroup before.
+            //We may have some restrictions on the Installationgroup
+            //search all defined ProgramGroups for the given InstallGroup
+            for (int i = 0; i < groupSpecs.size(); i++)
+            {
+                XMLElement g = (XMLElement)groupSpecs.get(i);
+                String instGrp = g.getAttribute(SPEC_ATTRIBUTE_INSTALLGROUP);
+                if (instGrp!=null && selectedInstallGroup.equalsIgnoreCase(instGrp)){
+                    group = g;
+                    break;
+                }
+            }
+        }
+        if (group==null){
+            //default (old) behavior
+            group = spec.getFirstChildNamed(SPEC_KEY_PROGRAM_GROUP);
+        }
+        
         String location = null;
         hasDesktopShortcuts = false;
 
@@ -1080,6 +1112,16 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*--------------------------------------------------------------------------*/
 
     /**
+     * Enables Shortcutcreation from outside, e.g. from an InstallerListener.
+     * The Installerlistener can switch the flag "createImmediately" to false on initialisation, and call this method when afterpacks is performed.
+     * This makes only sense, if the ShorcutPanel is displayed before the files are copied onto the disk.
+     */
+    public void createAndRegisterShortcuts(){
+      createShortcuts();
+      addToUninstaller();
+    }
+    
+    /**
      * Creates all shortcuts based on the information in shortcuts.
      */
 
@@ -1089,6 +1131,9 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         if (!create) { Debug.log( this.getClass().getName() + "::createShortcuts():create=" + create ); return; }
 
         ShortcutData data;
+        
+        //fix: don't influence other shortcuts when altering group name...
+        String gn = groupName;
 
         for (int i = 0; i < shortcuts.size(); i++)
         {
@@ -1096,7 +1141,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             try
             {
-                groupName = groupName + data.subgroup;
+                gn = groupName + data.subgroup;
                 shortcut.setUserType(itsUserType);
                 shortcut.setLinkName(data.name);
                 shortcut.setLinkType(data.type);
@@ -1124,7 +1169,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                 if (data.addToGroup)
                 {
-                    shortcut.setProgramGroup(groupName);
+                    shortcut.setProgramGroup(gn);
                 }
                 else
                 {
