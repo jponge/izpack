@@ -46,10 +46,10 @@ public class XPackFile extends PackFile
      * @param override
      * @throws FileNotFoundException
      */
-    public XPackFile(File src, String target, List osList, int override)
+    public XPackFile(File baseDir, File src, String target, List osList, int override)
             throws FileNotFoundException
     {
-        super(src, target, osList, override);
+        super(baseDir, src, target, osList, override);
         this.archivefileposition = 0;
     }
 
@@ -61,16 +61,16 @@ public class XPackFile extends PackFile
      * @param additionals
      * @throws FileNotFoundException
      */
-    public XPackFile(File src, String target, List osList, int override, Map additionals)
+    public XPackFile(File baseDir, File src, String target, List osList, int override, Map additionals)
             throws FileNotFoundException
     {
-        super(src, target, osList, override, additionals);
+        super(baseDir, src, target, osList, override, additionals);
         this.archivefileposition = 0;
     }
 
     public XPackFile(PackFile packf) throws FileNotFoundException
     {
-        super(new File(packf.sourcePath), packf.getTargetPath(), packf.osConstraints(), packf
+        super(new File(packf.sourcePath), packf.relativePath, packf.getTargetPath(), packf.osConstraints(), packf
                 .override(), packf.getAdditionals());
         this.archivefileposition = 0;
         this.packfile = packf;

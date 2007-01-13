@@ -555,6 +555,8 @@ public class CompilerConfig extends Thread
         Vector packElements = root.getChildrenNamed("pack");
         if (packElements.isEmpty()) parseError(root, "<packs> requires a <pack>");
 
+        File baseDir = new File(basedir);
+        
         Iterator packIter = packElements.iterator();
         while (packIter.hasNext())
         {
@@ -686,9 +688,9 @@ public class CompilerConfig extends Thread
                 try
                 {
                     if (unpack)
-                        addArchiveContent(file, targetdir, osList, override, pack, additionals);
+                        addArchiveContent(baseDir, file, targetdir, osList, override, pack, additionals);
                     else
-                        addRecursively(file, targetdir, osList, override, pack, additionals);
+                        addRecursively(baseDir, file, targetdir, osList, override, pack, additionals);
                 }
                 catch (Exception x)
                 {
@@ -712,7 +714,7 @@ public class CompilerConfig extends Thread
 
                 try
                 {
-                     pack.addFile(file, target, osList, override, additionals);
+                    pack.addFile(baseDir, file, target, osList, override, additionals);
                 }
                 catch (FileNotFoundException x)
                 {
@@ -822,7 +824,7 @@ public class CompilerConfig extends Thread
                     {
                         String target = new File(targetdir, files[i]).getPath();
                         pack
-                                .addFile(new File(dir, files[i]), target, osList, override,
+                                .addFile(baseDir, new File(dir, files[i]), target, osList, override,
                                         additionals);
                     }
                     catch (FileNotFoundException x)
@@ -835,7 +837,7 @@ public class CompilerConfig extends Thread
                     try
                     {
                         String target = new File(targetdir, dirs[i]).getPath();
-                        pack.addFile(new File(dir, dirs[i]), target, osList, override, additionals);
+                        pack.addFile(baseDir, new File(dir, dirs[i]), target, osList, override, additionals);
                     }
                     catch (FileNotFoundException x)
                     {
@@ -1009,7 +1011,7 @@ public class CompilerConfig extends Thread
      * @param pack Pack to be packed into
      * @param additionals Map which contains additional data
      */
-    protected void addArchiveContent(File archive, String targetdir, List osList, int override, PackInfo pack, Map additionals) throws IOException {
+    protected void addArchiveContent(File baseDir, File archive, String targetdir, List osList, int override, PackInfo pack, Map additionals) throws IOException {
       
       FileInputStream fin = new FileInputStream(archive);
       ZipInputStream zin = new ZipInputStream(fin);
@@ -1026,7 +1028,7 @@ public class CompilerConfig extends Thread
             PackagerHelper.copyStream(zin, out);
             out.close();
         
-            pack.addFile(temp, targetdir + "/" + zentry.getName(), osList, override, additionals);
+            pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override, additionals);
         } catch (IOException e) {
             throw new IOException("Couldn't create temporary file for "+zentry.getName()+" in archive "+archive+" ("+e.getMessage()+")");
         }
@@ -1046,22 +1048,22 @@ public class CompilerConfig extends Thread
      * @param additionals Map which contains additional data
      * @exception FileNotFoundException if the file does not exist
      */
-    protected void addRecursively(File file, String targetdir, List osList, int override,
+    protected void addRecursively(File baseDir, File file, String targetdir, List osList, int override,
             PackInfo pack, Map additionals) throws IOException
     {
         String targetfile = targetdir + "/" + file.getName();
         if (!file.isDirectory())
-            pack.addFile(file, targetfile, osList, override, additionals);
+            pack.addFile(baseDir, file, targetfile, osList, override, additionals);
         else
         {
             File[] files = file.listFiles();
             if (files.length == 0) // The directory is empty so must be added
-                pack.addFile(file, targetfile, osList, override, additionals);
+                pack.addFile(baseDir, file, targetfile, osList, override, additionals);
             else
             {
                 // new targetdir = targetfile;
                 for (int i = 0; i < files.length; i++)
-                    addRecursively(files[i], targetfile, osList, override, pack, additionals);
+                    addRecursively(baseDir, files[i], targetfile, osList, override, pack, additionals);
             }
         }
     }

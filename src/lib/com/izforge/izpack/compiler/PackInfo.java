@@ -204,12 +204,12 @@ public class PackInfo
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      * then, if the file is deleted in between.
      */
-    public void addFile(File file, String targetfile, List osList, int override, Map additionals)
+    public void addFile(File baseDir, File file, String targetfile, List osList, int override, Map additionals)
             throws FileNotFoundException
     {
         if (!file.exists()) throw new FileNotFoundException(file.toString());
 
-        PackFile packFile = new PackFile(file, targetfile, osList, override, additionals);
+        PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, additionals);
         files.put(packFile, file);
     }
 

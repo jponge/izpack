@@ -72,7 +72,11 @@ public class PackFile implements Serializable
 
     public static final int OVERRIDE_UPDATE = 4;
 
-    public String sourcePath = null;
+    /** Only available when compiling. Makes no sense when installing, use relativePath instead. */
+    public transient String sourcePath = null;//should not be used anymore - may deprecate it.
+    /** The Path of the file relative to the given (compiletime's) basedirectory.
+     *  Can be resolved while installing with either current working directory or directory of "installer.jar". */
+    protected String relativePath = null;
 
     /** The full path name of the target file */
     private String targetPath = null;
@@ -102,14 +106,32 @@ public class PackFile implements Serializable
     /**
      * Constructs and initializes from a source file.
      * 
+     * @param baseDir the baseDirectory of the Fileselection/compilation or null
      * @param src file which this PackFile describes
      * @param target the path to install the file to
      * @param osList OS constraints
      * @param override what to do when the file already exists
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File src, String target, List osList, int override)
+    public PackFile(File baseDir, File src, String target, List osList, int override)
             throws FileNotFoundException
+    {
+        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, null);
+    }
+    
+    /**
+     * Constructs and initializes from a source file.
+     *
+     * @param src  file which this PackFile describes
+     * @param relativeSourcePath the path relative to the compiletime's basedirectory, use computeRelativePathFrom(File, File) to compute this.
+     * @param target the path to install the file to
+     * @param osList OS constraints
+     * @param override what to do when the file already exists
+     * @param additionals additional attributes
+     * @throws FileNotFoundException if the specified file does not exist.
+     */
+    public PackFile(File src, String relativeSourcePath, String target, List osList, int override, Map additionals)
+    throws FileNotFoundException
     {
         if (!src.exists()) // allows cleaner client co
             throw new FileNotFoundException("No such file: " + src);
@@ -118,6 +140,8 @@ public class PackFile implements Serializable
         if (target.endsWith("/")) target = target.substring(0, target.length() - 1);
 
         this.sourcePath = src.getPath();
+        this.relativePath = relativeSourcePath; 
+
         this.targetPath = target;
         this.osConstraints = osList;
         this.override = override;
@@ -125,11 +149,13 @@ public class PackFile implements Serializable
         this.length = src.length();
         this.mtime = src.lastModified();
         this.isDirectory = src.isDirectory();
+        this.additionals = additionals;
     }
 
     /**
      * Constructs and initializes from a source file.
      * 
+     * @param baseDir The Base directory that is used to search for the files. This is used to build the relative path's
      * @param src file which this PackFile describes
      * @param target the path to install the file to
      * @param osList OS constraints
@@ -137,11 +163,34 @@ public class PackFile implements Serializable
      * @param additionals additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File src, String target, List osList, int override, Map additionals)
+    public PackFile(File baseDir, File src, String target, List osList, int override, Map additionals)
             throws FileNotFoundException
     {
-        this(src, target, osList, override);
-        this.additionals = additionals;
+        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, additionals);
+    }
+
+    /**
+     * Builds the relative path of file to the baseDir.
+     * @param baseDir The Base Directory to build the relative path from
+     * @param file the file inside basDir
+     * @return null if file is not a inside baseDir
+     */
+    public static String computeRelativePathFrom(File baseDir, File file) {
+        if (baseDir==null || file == null) return null;
+        try{ //extract relative path...
+            if (file.getCanonicalPath().startsWith(baseDir.getCanonicalPath()))
+            {
+              return file.getCanonicalPath().substring(baseDir.getCanonicalPath().length()); 
+            }
+        }
+        catch(Exception x)//don't throw an exception here. return null instead!
+        {
+            //if we cannot build the relative path because of an error, the developer should be informed about.
+            x.printStackTrace();
+        }
+        
+        //we can not build a relative path for whatever reason
+        return null;
     }
 
     public void setPreviousPackFileRef(int previousPackNumber, long offsetInPreviousPack)
@@ -188,6 +237,13 @@ public class PackFile implements Serializable
     public final String getTargetPath()
     {
         return targetPath;
+    }
+    
+    /** The Path of the file relative to the given (compiletime's) basedirectory.
+     *  Can be resolved while installing with either current working directory or directory of "installer.jar" */
+    public String getRelativeSourcePath() 
+    {
+        return relativePath;    
     }
 
     /**

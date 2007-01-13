@@ -429,9 +429,6 @@ public class Unpacker implements IUnpacker
                         }
 
                         // We copy the file
-                        out = new FileOutputStream(pathFile);
-                        byte[] buffer = new byte[5120];
-                        long bytesCopied = 0;
                         InputStream pis = objIn;
                         if (pf.isBackReference())
                         {
@@ -446,9 +443,56 @@ public class Unpacker implements IUnpacker
                             // bytes)
                         }
                         else if (((Pack) packs.get(i)).loose)
-                        {
+                        {                            
+                            /* Old way of doing the job by using the (absolute) sourcepath.
+                             * Since this is very likely to fail and does not confirm to the documentation,
+                             * prefer using relative path's
                             pis = new FileInputStream(pf.sourcePath);
+                             */
+                            
+                            //take the relative path and search for the file
+                            //1. look at the location where the "info"-file is loaded from (jar)
+                            //2. look into the current working directory
+                            //maybe look into other other locations after that (configurable ?)
+
+                            //find directory of jar file
+                            URL url = getClass().getResource("/info");
+                            String urlPath = url.getPath();
+                            int pos = urlPath.indexOf('!');
+                            if (pos>=0 && urlPath.startsWith("file:/")){
+                                //remove jar-specific part
+                                urlPath = urlPath.substring("file:/".length(), pos);
+                            }
+                            File installerDir = new File(urlPath);
+                            if (!installerDir.isDirectory())
+                            {
+                                installerDir = installerDir.getParentFile();
+                            }
+
+                            File resolvedFile = new File(installerDir, pf.getRelativeSourcePath());
+                            if (!resolvedFile.exists()){
+                                //try alternative destination - the current working directory
+                                //user.dir is likely (depends on launcher type) the current directory of the executable or jar-file...
+                                final File userDir = new File(System.getProperty("user.dir"));
+                                resolvedFile = new File(userDir, pf.getRelativeSourcePath());
+                            }
+                            if (resolvedFile.exists()){
+                                pis = new FileInputStream(resolvedFile);
+                                //may have a different length & last modified than we had at compiletime, therefore we have to build a new PackFile for the copy process...
+                                pf = new PackFile(resolvedFile.getParentFile(), resolvedFile,  pf.getTargetPath(), pf.osConstraints(), pf.override(), pf.getAdditionals());
+                            }else{
+                                //file not found
+                                //issue a warning (logging api pending)
+                                //since this file was loosely bundled, we continue with the installation.
+                                System.out.println("Could not find loosely bundled file: "+pf.getRelativeSourcePath());
+                                out.close();
+                                continue;
+                            }
                         }
+
+                        out = new FileOutputStream(pathFile);
+                        byte[] buffer = new byte[5120];
+                        long bytesCopied = 0;
                         while (bytesCopied < pf.length())
                         {
                             if (performInterrupted())
