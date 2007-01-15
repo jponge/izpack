@@ -51,6 +51,7 @@
   - support for the new "installGroup"-attribute for the "programGroup" element of the shortcutSpec.xml
   - late creation of shortcuts, for example in case ShortcutPanel is displayed before InstallPanel
   - fixed a bug where each Shortcut-Subgroup influenced the remaining Shortcut creation
+- Added icon resource extension, to dynamically change installer icon (Dennis Reil) 
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

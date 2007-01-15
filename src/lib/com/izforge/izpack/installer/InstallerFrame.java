@@ -108,11 +108,12 @@ import com.izforge.izpack.util.VariableSubstitutor;
  * 
  * @author Julien Ponge created October 27, 2002
  * @author Fabrice Mirabile added fix for alert window on cross button, July 06 2005
- * @author Dennis Reil, added RulesEngine November 10 2006
+ * @author Dennis Reil, added RulesEngine November 10 2006, several changes in January 2007
  */
 public class InstallerFrame extends JFrame
 {
 
+   
     private static final long serialVersionUID = 3257852069162727473L;
 
     /**
@@ -122,6 +123,12 @@ public class InstallerFrame extends JFrame
             .getProperty("java.specification.version"));
 
     private static final String ICON_RESOURCE = "Installer.image";
+    
+    /**
+     * Name of the variable where to find an extension to the resource name of the icon resource
+     */
+    private static final String ICON_RESOURCE_EXT_VARIABLE_NAME = "installerimage.ext";
+
 
     private static final String HEADING_ICON_RESOURCE = "Heading.image";
 
@@ -554,6 +561,7 @@ public class InstallerFrame extends JFrame
     {
         ResourceManager rm = ResourceManager.getInstance();
         ImageIcon icon = null;
+        String iconext = this.getIconResourceNameExtension();
         if (tryBaseIcon)
         {
             try
@@ -562,11 +570,11 @@ public class InstallerFrame extends JFrame
             }
             catch (Exception e) // This is not that clean ...
             {
-                icon = rm.getImageIconResource(resPrefix + "." + PanelNo);
+                icon = rm.getImageIconResource(resPrefix + "." + PanelNo + iconext);
             }
         }
         else
-            icon = rm.getImageIconResource(resPrefix + "." + PanelNo);
+            icon = rm.getImageIconResource(resPrefix + "." + PanelNo + iconext);
         return (icon);
     }
 
@@ -575,6 +583,7 @@ public class InstallerFrame extends JFrame
     {
         ResourceManager rm = ResourceManager.getInstance();
         ImageIcon icon = null;
+        String iconext = this.getIconResourceNameExtension();
         if (tryBaseIcon)
         {
             try
@@ -583,13 +592,43 @@ public class InstallerFrame extends JFrame
             }
             catch (Exception e) // This is not that clean ...
             {
-                icon = rm.getImageIconResource(resPrefix + "." + panelid);
+                icon = rm.getImageIconResource(resPrefix + "." + panelid + iconext);
             }
         }
         else
-            icon = rm.getImageIconResource(resPrefix + "." + panelid);
+            icon = rm.getImageIconResource(resPrefix + "." + panelid + iconext);
         return (icon);
     }
+    
+    /**
+     * Returns the current set extension to icon resource names. Can be used to change
+     * the static installer image based on user input
+     * @return a resource extension 
+     *         or an empty string if the variable was not set.
+     */
+    private String getIconResourceNameExtension()
+    {
+        try 
+        {
+            String iconext = this.installdata.getVariable(ICON_RESOURCE_EXT_VARIABLE_NAME);
+            if (iconext == null){
+              iconext = "";
+            }
+            else {
+              
+              if ((iconext.length() > 0) && (iconext.charAt(0) != '.')){
+                iconext = "." + iconext;
+              }
+            }
+            iconext = iconext.trim();
+            return iconext;
+        }
+        catch (Exception e)
+        {
+            // in case of error, return an empty string
+            return "";
+        }
+   }
 
     private void loadAndShowImage(int panelNo)
     {
