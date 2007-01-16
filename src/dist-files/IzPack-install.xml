@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.10.0-SNAPSHOT</appversion>
+        <appversion>3.10.0-RC1</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
@@ -97,7 +97,6 @@
 
     <!-- The resources needed by the various panels -->
     <resources>
-        <res src="conditions.xml" id="conditions.xml" />
         <res src="install-readme.html" id="HTMLInfoPanel.info"/>
         <res src="Licence.txt" id="LicencePanel.licence"/>
         <res src="splash-3.10.png" id="installer.langsel.img"/>
