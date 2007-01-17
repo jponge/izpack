@@ -414,7 +414,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
 	public boolean emitNotificationFeedback(String message)
     {
-       return (JOptionPane.showConfirmDialog(this, message, "Message", JOptionPane.WARNING_MESSAGE,
+       return (JOptionPane.showConfirmDialog(this, message, idata.langpack.getString("installer.Message"), JOptionPane.WARNING_MESSAGE,
              JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
     }
 
