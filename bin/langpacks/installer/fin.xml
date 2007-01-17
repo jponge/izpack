@@ -205,4 +205,12 @@
          langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
     -->
 
+    <str id="nextmedia.title" txt="Seuraava asennusmedia" />
+  	<str id="nextmedia.msg" txt="Valitse seuraava asennusmedia." />
+	  <str id="nextmedia.browsebtn" txt="Selaa" />
+  	<str id="nextmedia.okbtn" txt="Hyväksy" />
+	  <str id="nextmedia.cancelbtn" txt="Peruuta" />
+    <str id="nextmedia.choosertitle" txt="Valitse asennusmedia" />
+    <str id="nextmedia.filedesc" rdid="asennuspaketit (.pak*)" />
 </langpack>
+
