@@ -647,6 +647,7 @@ public class CompilerConfig extends Thread
                 if ("abort".equalsIgnoreCase(val))
                     executable.onFailure = ExecutableFile.ABORT;
                 else if ("warn".equalsIgnoreCase(val)) executable.onFailure = ExecutableFile.WARN;
+                else if ("ignore".equalsIgnoreCase(val)) executable.onFailure = ExecutableFile.IGNORE;
 
                 // whether to keep the executable after executing it
                 val = e.getAttribute("keep");

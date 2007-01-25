@@ -360,6 +360,10 @@ public class FileExecutor
                         handler.emitWarning("file execution error", message);
                         exitStatus = 0;
                     }
+                    else if (efile.onFailure == ExecutableFile.IGNORE){
+                        // do nothing  
+                        exitStatus = 0;
+                    }
                     else
                     {
                         if (handler

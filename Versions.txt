@@ -1,4 +1,7 @@
 [ The list of the different public versions of IzPack ]
+  > ???
+
+- Added ignore as possible value for failure argument in executables (Dennis Reil)
 
   > Next release
 
