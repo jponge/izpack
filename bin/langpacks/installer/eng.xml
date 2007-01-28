@@ -42,6 +42,7 @@
     <str id="installer.help" txt="Help"/>
     <str id="installer.step" txt="Step"/>
     <str id="installer.of" txt="of"/>
+    <str id="installer.Message" txt="Message"/> 
     
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="This will remove the installed application(s)!"/>

@@ -1,9 +1,10 @@
 [ The list of the different public versions of IzPack ]
-  > ???
+
+  > Next release
 
 - Added ignore as possible value for failure argument in executables (Dennis Reil)
 
-  > Next release
+  > 3.10.0 (build 2007.01.29)
 
 - Added docu: executeForPack, executeclass,logfiledir  for ProcessPanel (Fabrice Mirabile)
 - Added docu: createForUnselectedPack for UserInputPanel (Fabrice Mirabile)
@@ -54,7 +55,8 @@
   - support for the new "installGroup"-attribute for the "programGroup" element of the shortcutSpec.xml
   - late creation of shortcuts, for example in case ShortcutPanel is displayed before InstallPanel
   - fixed a bug where each Shortcut-Subgroup influenced the remaining Shortcut creation
-- Added icon resource extension, to dynamically change installer icon (Dennis Reil) 
+- Added icon resource extension, to dynamically change installer icon (Dennis Reil)
+- New splash-screen (Romain Guy)
 
   > 3.9.0 (build 2006.09.25)
 - Fix NullPointerException in CompilerConfig, if you specify a 

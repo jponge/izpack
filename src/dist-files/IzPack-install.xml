@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.10.0-RC1</appversion>
+        <appversion>3.10.0</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
@@ -38,6 +38,7 @@
             <author email="" name="Hal Vaughan (contributor)" />
             <author email="" name="Ari Voutilainen (contributor)" />
             <author email="" name="Stefan Wachter (contributor)" />
+            <author email="" name="Romain Guy (contributor)" />
 
             <author email=""
                     name="... the (many) other developers and contributors to the previous releases!"/>
