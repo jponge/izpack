@@ -1,5 +1,10 @@
 [ The list of the different public versions of IzPack ]
 
+
+	> 3.10.1 (build 2007.xx.xx)
+	
+-	Fixed NPE for pack.id == null (Fabrice Mirabile)
+
   > 3.10.0 (build 2007.01.29)
 
 - Added docu: executeForPack, executeclass,logfiledir  for ProcessPanel (Fabrice Mirabile)
