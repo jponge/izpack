@@ -271,7 +271,7 @@ public class InstallationGroupPanel extends IzPanel
         while( iter.hasNext() )
         {
             Pack p = (Pack) iter.next();
-            if( data.packNames.contains(p.name) == false )
+            if( data.packNames.contains(p.name) == false || !p.preselected)
             {
                 iter.remove();
                 Debug.trace("Removed selectedPack: "+p.name);
