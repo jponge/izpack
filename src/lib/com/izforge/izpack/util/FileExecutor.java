@@ -21,14 +21,10 @@
 
 package com.izforge.izpack.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -47,52 +43,6 @@ import com.izforge.izpack.ExecutableFile;
 public class FileExecutor
 {
 
-    /**
-     * This is a grabber for stdout and stderr. It will be launched once at command execution end
-     * terminates if the apropriate stream runs out of data.
-     * 
-     * @author Olexij Tkatchenko <ot@parcs.de>
-     */
-    private static class MonitorInputStream implements Runnable
-    {
-
-        private BufferedReader reader;
-
-        private BufferedWriter writer;
-
-        private boolean shouldStop = false;
-
-        public MonitorInputStream(Reader in, Writer out)
-        {
-            reader = new BufferedReader(in);
-            writer = new BufferedWriter(out);
-        }
-
-        public void doStop()
-        {
-            shouldStop = true;
-        }
-
-        public void run()
-        {
-            try
-            {
-                String line;
-                while ((line = reader.readLine()) != null)
-                {
-                    writer.write(line);
-                    writer.newLine();
-                    writer.flush();
-                    if (shouldStop) return;
-                }
-            }
-            catch (IOException ioe)
-            {
-                ioe.printStackTrace(System.out);
-            }
-        }
-    }
-
     private boolean stopThread(Thread t, MonitorInputStream m)
     {
         m.doStop();
@@ -102,7 +52,9 @@ public class FileExecutor
             t.join(softTimeout);
         }
         catch (InterruptedException e)
-        {}
+        {
+            // ignore
+        }
 
         if (!t.isAlive()) return true;
 
@@ -113,7 +65,9 @@ public class FileExecutor
             t.join(hardTimeout);
         }
         catch (InterruptedException e)
-        {}
+        {
+            // ignore
+        }
         return !t.isAlive();
     }
 
@@ -284,7 +238,7 @@ public class FileExecutor
         String permissions = "a+x";
 
         // loop through all executables
-        Iterator efileIterator = files.iterator();
+        Iterator efileIterator = this.files.iterator();
         while (exitStatus == 0 && efileIterator.hasNext())
         {
             ExecutableFile efile = (ExecutableFile) efileIterator.next();
