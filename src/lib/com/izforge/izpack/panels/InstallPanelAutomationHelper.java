@@ -135,4 +135,11 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
         System.out.println(") ]");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setSubStepNo(int no_of_substeps)
+    {
+        // not used here
+    }
 }

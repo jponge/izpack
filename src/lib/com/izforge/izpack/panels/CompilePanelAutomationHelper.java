@@ -23,6 +23,7 @@
 package com.izforge.izpack.panels;
 
 import java.io.IOException;
+import java.io.PrintStream;
 
 import net.n3.nanoxml.XMLElement;
 
@@ -51,6 +52,10 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
     private int last_line_len = 0;
 
+    // when using the eclipse compiler, we're capturing System.out and System.err...
+    private PrintStream stdout;
+    private PrintStream stderr;
+    
     /**
      * Save data for running automated.
      * 
@@ -100,6 +105,9 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
             this.worker.setCompiler(compiler);
             this.worker.setCompilerArguments(args);
 
+            this.stdout = System.out;
+            this.stderr = System.err;
+            
             this.worker.run();
             
             return this.worker.getResult().isSuccess();
@@ -118,7 +126,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      */
     public void startAction(String name, int noOfJobs)
     {
-        System.out.println("[ Starting compilation ]");
+        this.stdout.println("[ Starting compilation ]");
         this.job_name = "";
     }
 
@@ -130,14 +138,14 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      */
     public void handleCompileError(CompileResult error)
     {
-        System.out.println();
-        System.out.println("[ Compilation failed ]");
-        System.err.println("Command line: " + error.getCmdline());
-        System.err.println();
-        System.err.println("stdout of compiler:");
-        System.err.println(error.getStdout());
-        System.err.println("stderr of compiler:");
-        System.err.println(error.getStderr());
+        this.stdout.println();
+        this.stdout.println("[ Compilation failed ]");
+        this.stderr.println("Command line: " + error.getCmdline());
+        this.stderr.println();
+        this.stderr.println("stdout of compiler:");
+        this.stderr.println(error.getStdout());
+        this.stderr.println("stderr of compiler:");
+        this.stderr.println(error.getStderr());
         // abort instantly and make installation fail
         error.setAction(CompileResult.ACTION_ABORT);
     }
@@ -152,13 +160,13 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         if ((this.job_name != null) && (this.last_line_len > 0))
         {
             String line = this.job_name + ": done.";
-            System.out.print("\r" + line);
+            this.stdout.print("\r" + line);
             for (int i = line.length(); i < this.last_line_len; i++)
-                System.out.print(' ');
-            System.out.println();
+                this.stdout.print(' ');
+            this.stdout.println();
         }
 
-        if (this.worker.getResult().isSuccess()) System.out.println("[ Compilation successful ]");
+        if (this.worker.getResult().isSuccess()) this.stdout.println("[ Compilation successful ]");
     }
 
     /**
@@ -177,9 +185,9 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
         int line_len = line.length();
 
-        System.out.print("\r" + line);
+        this.stdout.print("\r" + line);
         for (int i = line_len; i < this.last_line_len; i++)
-            System.out.print(' ');
+            this.stdout.print(' ');
 
         this.last_line_len = line_len;
     }
@@ -197,14 +205,22 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         if ((this.job_name != null) && (this.last_line_len > 0))
         {
             String line = this.job_name + ": done.";
-            System.out.print("\r" + line);
+            this.stdout.print("\r" + line);
             for (int i = line.length(); i < this.last_line_len; i++)
-                System.out.print(' ');
-            System.out.println();
+                this.stdout.print(' ');
+            this.stdout.println();
         }
 
         this.job_max = max;
         this.job_name = jobName;
         this.last_line_len = 0;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void setSubStepNo(int no_of_substeps)
+    {
+        this.job_max = no_of_substeps;
     }
 }

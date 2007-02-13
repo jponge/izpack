@@ -55,6 +55,15 @@ public interface AbstractUIProgressHandler extends AbstractUIHandler
     public void nextStep(String step_name, int step_no, int no_of_substeps);
 
     /**
+     * Set the number of substeps.
+     * 
+     * This may be used if the number of substeps changes during an action.
+     * 
+     * @param no_of_substeps The number of substeps.
+     */
+    public void setSubStepNo (int no_of_substeps);
+    
+    /**
      * Notify of progress.
      * 
      * @param substep_no The substep which will be performed next.

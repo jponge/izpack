@@ -182,8 +182,14 @@ public class UninstallerConsole
 
        public void nextStep(String step_name, int step_no, int no_of_substeps)
        {
+           // not used
        }
 
+       public void setSubStepNo(int no_of_substeps)
+       {
+           // not used
+       }
+       
        /**
         * Output a notification.
         *

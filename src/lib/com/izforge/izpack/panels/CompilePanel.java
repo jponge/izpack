@@ -467,6 +467,14 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
                 + Integer.toString(this.noOfJobs));
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setSubStepNo(int max)
+    {
+        packProgressBar.setMaximum(max);        
+    }
+    
     /** Called when the panel becomes active. */
     public void panelActivate()
     {

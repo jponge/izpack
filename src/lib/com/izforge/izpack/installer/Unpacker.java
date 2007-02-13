@@ -750,7 +750,7 @@ public class Unpacker implements IUnpacker
             if (!f.isDirectory())
             // skip directories - they cannot be removed safely yet
             {
-                this.handler.emitNotification("deleting " + f.getPath());
+//                this.handler.emitNotification("deleting " + f.getPath());
                 f.delete();
             }
 

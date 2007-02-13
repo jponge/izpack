@@ -21,6 +21,11 @@
 
 package com.izforge.izpack.installer;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * This class describes the result of the compilation.
  * 
@@ -63,7 +68,7 @@ public class CompileResult
     private String message = null;
 
     /** the command line */
-    private String[] cmdline = null;
+    private List cmdline = null;
 
     /** the stdout of the command */
     private String stdout = null;
@@ -79,6 +84,20 @@ public class CompileResult
     }
 
     /**
+     * Creates a result because of exception.
+     * 
+     * @param anException The exception.
+     */
+    public CompileResult (Exception anException)
+    {
+        StringWriter writer = new StringWriter();
+        anException.printStackTrace(new PrintWriter (writer));
+        this.message = writer.toString();
+        this.action = ACTION_ABORT;
+        this.status = FAILED;
+    }
+    
+    /**
      * creates a new CompileResult with status FAILED
      * 
      * @param message description of the exception
@@ -86,7 +105,7 @@ public class CompileResult
      * @param stdout standard output of failed command
      * @param stderr standard error of failed command
      */
-    public CompileResult(String message, String[] cmdline, String stdout, String stderr)
+    public CompileResult(String message, List cmdline, String stdout, String stderr)
     {
         this.message = message;
         this.status = FAILED;
@@ -169,22 +188,12 @@ public class CompileResult
     public String getCmdline()
     {
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < this.cmdline.length; ++i)
+        for (Iterator cmdIt = this.cmdline.iterator(); cmdIt.hasNext();)
         {
             if (sb.length() > 0) sb.append(' ');
-            sb.append(this.cmdline[i]);
+            sb.append((String)cmdIt.next());
         }
         return sb.toString();
-    }
-
-    /**
-     * get command line of failed command as an array of strings
-     * 
-     * @return command line of failed command
-     */
-    public String[] getCmdlineArray()
-    {
-        return this.cmdline;
     }
 
     public String getStdout()

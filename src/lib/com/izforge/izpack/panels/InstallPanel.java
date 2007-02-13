@@ -215,6 +215,19 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public void setSubStepNo(final int no_of_substeps)
+    {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run()
+            {
+                packProgressBar.setMaximum(no_of_substeps);
+            }
+        });
+    }
+    
     /** Called when the panel becomes active. */
     public void panelActivate()
     {
