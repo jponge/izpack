@@ -352,6 +352,10 @@ public class StdXMLParser implements IXMLParser
         }
 
         XMLUtil.skipWhitespace(this.reader, '&', null, null);
+        
+        // read the root element name
+        XMLUtil.scanIdentifier(this.reader, '&', this.entityResolver);
+        
         String systemID = null;
         StringBuffer publicID = new StringBuffer();
         XMLUtil.skipWhitespace(this.reader, '&', null, null);
