@@ -120,6 +120,7 @@ public class GUIInstaller extends InstallerBase
 
         // Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable() {
+
             public void run()
             {
                 try
@@ -141,6 +142,7 @@ public class GUIInstaller extends InstallerBase
 
         // We launch the installer GUI
         SwingUtilities.invokeLater(new Runnable() {
+
             public void run()
             {
                 try
@@ -221,10 +223,10 @@ public class GUIInstaller extends InstallerBase
         if (npacks != 1)
         {
             LanguageDialog picker = new LanguageDialog(frame, availableLangPacks.toArray());
-            picker.setSelection(Locale.getDefault().getISO3Country().toLowerCase());
+            picker.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
             picker.setModal(true);
             picker.toFront();
-            //frame.setVisible(true);
+            // frame.setVisible(true);
             frame.setVisible(false);
             picker.setVisible(true);
 
@@ -242,6 +244,7 @@ public class GUIInstaller extends InstallerBase
         installdata.setVariable(ScriptParser.ISO3_LANG, installdata.localeISO3);
         InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
         this.installdata.langpack = new LocaleDatabase(in);
+
     }
 
     /**
@@ -288,11 +291,13 @@ public class GUIInstaller extends InstallerBase
         // Resolve whether button icons should be used or not.
         boolean useButtonIcons = true;
         if (installdata.guiPrefs.modifier.containsKey("useButtonIcons")
-                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier.get("useButtonIcons"))) useButtonIcons = false;
+                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+                        .get("useButtonIcons"))) useButtonIcons = false;
         ButtonFactory.useButtonIcons(useButtonIcons);
         boolean useLabelIcons = true;
         if (installdata.guiPrefs.modifier.containsKey("useLabelIcons")
-                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier.get("useLabelIcons"))) useLabelIcons = false;
+                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+                        .get("useLabelIcons"))) useLabelIcons = false;
         LabelFactory.setUseLabelIcons(useLabelIcons);
         if (laf == null)
         {
@@ -419,7 +424,7 @@ public class GUIInstaller extends InstallerBase
             title = installdata.langpack.getString("installer.title")
                     + installdata.info.getAppName();
         else
-        {   // Attention! The alternate message has to contain the hole message including
+        { // Attention! The alternate message has to contain the hole message including
             // $APP_NAME and may be $APP_VER.
             VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
             title = vs.substitute(message, null);
@@ -565,8 +570,7 @@ public class GUIInstaller extends InstallerBase
 
             Dimension frameSize = getSize();
             Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
-            setLocation(center.x - frameSize.width / 2,
-                    center.y - frameSize.height / 2 - 10);
+            setLocation(center.x - frameSize.width / 2, center.y - frameSize.height / 2 - 10);
             setResizable(true);
         }
 
