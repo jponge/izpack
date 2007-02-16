@@ -6,6 +6,7 @@
 - Fixed selection of default language in LanguageSelectionDialog (Dennis Reil)
 - Fixed RegularExpressionValidator (Dennis Reil)
 - Added corrupt volume detection (Dennis Reil)
+- Added file and dir fields in UserInputPanel (Dennis Reil)
 
   > 3.10.0 (build 2007.01.29)
 

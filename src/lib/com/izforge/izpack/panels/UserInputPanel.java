@@ -45,6 +45,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
 
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;
@@ -54,6 +55,7 @@ import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.Panel;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
 import com.izforge.izpack.gui.TwoColumnLayout;
@@ -62,6 +64,8 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
@@ -167,6 +171,7 @@ public class UserInputPanel extends IzPanel
     private static final String FIELD_NODE_ID = "field";
 
     private static final String INSTANCE_IDENTIFIER = "order";
+    protected static final String PANEL_IDENTIFIER = "id";
 
     private static final String TYPE = "type";
 
@@ -265,6 +270,10 @@ public class UserInputPanel extends IzPanel
     private static final String PWD_SIZE = "size";
 
     private static final String SEARCH_FIELD = "search";
+    
+    private static final String FILE_FIELD = "file";
+    
+    private static final String DIR_FIELD = "dir";
 
     // internal value for the button used to trigger autodetection
     private static final String SEARCH_BUTTON_FIELD = "autodetect";
@@ -306,6 +315,8 @@ public class UserInputPanel extends IzPanel
     private static final String OS = "os";
 
     private static final String FAMILY = "family";
+
+    private static final String FIELD_BUTTON = "button";
 
     // ------------------------------------------------------------------------
     // Variable Declarations
@@ -491,9 +502,216 @@ public class UserInputPanel extends IzPanel
                 else if (attribute.equals(SEARCH_FIELD))
                 {
                     addSearch(field);
+                }                
+                else if (attribute.equals(FILE_FIELD))
+                {
+                    addFileField(field);
+                }
+                else if (attribute.equals(DIR_FIELD))
+                {
+                    addDirectoryField(field);
                 }
             }
         }
+    }
+
+    private void addDirectoryField(XMLElement field)
+    {
+        Vector forPacks = field.getChildrenNamed(SELECTEDPACKS);
+        Vector forOs = field.getChildrenNamed(OS);
+        
+        JLabel label;
+        String set;
+        int size;
+
+        String filter = null;
+        String filterdesc = null;
+        
+        String variable = field.getAttribute(VARIABLE);
+        if ((variable == null) || (variable.length() == 0)) { return; }                      
+                
+        XMLElement element = field.getFirstChildNamed(SPEC);
+        if (element == null){            
+            Debug.trace("Error: no spec element defined in file field");
+            return;
+        }
+        else {
+            label = new JLabel(getText(element));
+            // ----------------------------------------------------
+            // extract the specification details
+            // ----------------------------------------------------
+            set = element.getAttribute(SET);
+            if (set == null)
+            {
+                set = idata.getVariable(variable);
+                if (set == null)
+                {
+                    set = "";
+                }
+            }
+            else
+            {
+                if (set != null && !"".equals(set))
+                {
+                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    set = vs.substitute(set, null);
+                }
+            }
+    
+            try
+            {
+                size = Integer.parseInt(element.getAttribute(TEXT_SIZE));
+            }
+            catch (Throwable exception)
+            {
+                size = 1;
+            }
+            
+            filter = element.getAttribute("fileext");
+            if (filter == null){
+                filter = "";
+            }
+            filterdesc = element.getAttribute("fileextdesc");
+            if (filterdesc == null){
+                filterdesc = "";
+            }
+            // internationalize it
+            filterdesc = idata.langpack.getString(filterdesc);             
+        }             
+       
+        final JTextField filetxt = new JTextField(set,size);
+        filetxt.setCaretPosition(0);
+        
+        TwoColumnConstraints constraints = new TwoColumnConstraints();
+        constraints.position = TwoColumnConstraints.WEST;
+
+        uiElements.add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+
+        TwoColumnConstraints constraints2 = new TwoColumnConstraints();
+        constraints2.position = TwoColumnConstraints.EAST;
+                
+        // TODO: use separate key for button text
+        JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"),idata.buttonsHColor);
+        button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e)
+            {               
+               System.out.println("Show dirchooser"); 
+               JFileChooser filechooser = new JFileChooser();
+               filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                              
+               if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION){
+                   filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
+               }
+            }
+        });
+        JPanel panel = new JPanel();
+        panel.add(filetxt);
+        panel.add(button);        
+        uiElements.add(new Object[] { null, DIR_FIELD, variable, constraints2, panel, forPacks,
+                forOs});
+        
+    }
+
+    private void addFileField(XMLElement field)
+    {
+        Vector forPacks = field.getChildrenNamed(SELECTEDPACKS);
+        Vector forOs = field.getChildrenNamed(OS);
+        
+        JLabel label;
+        String set;
+        int size;
+
+        String filter = null;
+        String filterdesc = null;
+        
+        String variable = field.getAttribute(VARIABLE);
+        if ((variable == null) || (variable.length() == 0)) { return; }                      
+                
+        XMLElement element = field.getFirstChildNamed(SPEC);
+        if (element == null){            
+            Debug.trace("Error: no spec element defined in file field");
+            return;
+        }
+        else {
+            label = new JLabel(getText(element));
+            // ----------------------------------------------------
+            // extract the specification details
+            // ----------------------------------------------------
+            set = element.getAttribute(SET);
+            if (set == null)
+            {
+                set = idata.getVariable(variable);
+                if (set == null)
+                {
+                    set = "";
+                }
+            }
+            else
+            {
+                if (set != null && !"".equals(set))
+                {
+                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    set = vs.substitute(set, null);
+                }
+            }
+    
+            try
+            {
+                size = Integer.parseInt(element.getAttribute(TEXT_SIZE));
+            }
+            catch (Throwable exception)
+            {
+                size = 1;
+            }
+            
+            filter = element.getAttribute("fileext");
+            if (filter == null){
+                filter = "";
+            }
+            filterdesc = element.getAttribute("fileextdesc");
+            if (filterdesc == null){
+                filterdesc = "";
+            }
+            // internationalize it
+            filterdesc = idata.langpack.getString(filterdesc);             
+        }             
+       
+        final JTextField filetxt = new JTextField(set,size);
+        filetxt.setCaretPosition(0);
+        
+        TwoColumnConstraints constraints = new TwoColumnConstraints();
+        constraints.position = TwoColumnConstraints.WEST;
+
+        uiElements.add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+
+        TwoColumnConstraints constraints2 = new TwoColumnConstraints();
+        constraints2.position = TwoColumnConstraints.EAST;
+        
+        
+        final UserInputFileFilter uiff = new UserInputFileFilter();
+        uiff.setFileExt(filter);
+        uiff.setFileExtDesc(filterdesc);
+        
+        // TODO: use separate key for button text
+        JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"),idata.buttonsHColor);
+        button.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e)
+            {               
+               System.out.println("Show filechooser"); 
+               JFileChooser filechooser = new JFileChooser();
+               filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+               filechooser.setFileFilter(uiff);
+                              
+               if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION){
+                   filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
+               }
+            }
+        });
+        JPanel panel = new JPanel();
+        panel.add(filetxt);
+        panel.add(button);        
+        uiElements.add(new Object[] { null, FILE_FIELD, variable, constraints2, panel, forPacks,
+                forOs});
     }
 
     protected void updateUIElements()
@@ -559,6 +777,9 @@ public class UserInputPanel extends IzPanel
                     value = rulef.getText();
                 }
             }
+            else if (FIELD_BUTTON.equals(element[POS_TYPE])){
+                // nothing to do
+            }
             // overwrite entry;
             uiElements.set(i, element);
             updated = true;
@@ -582,7 +803,11 @@ public class UserInputPanel extends IzPanel
     /*--------------------------------------------------------------------------*/
     public boolean isValidated()
     {
-        return (readInput());
+        boolean result =readInput();
+        
+        System.out.println(idata.getVariable("templatefile"));
+        
+        return result;
     }
 
     /*--------------------------------------------------------------------------*/
@@ -781,10 +1006,76 @@ public class UserInputPanel extends IzPanel
                     success = readSearch(field);
                     if (!success) { return (false); }
                 }
+                else if (fieldType.equals(FILE_FIELD))
+                {
+                    success = readFileField(field);
+                    if (!success) { return (false); }
+                }
+                else if (fieldType.equals(DIR_FIELD))
+                {
+                    success = readDirectoryField(field);
+                    if (!success) { return (false); }
+                }
             }
         }
 
         return (true);
+    }
+
+    private boolean readDirectoryField(Object[] field)
+    {        
+        try {
+            JPanel panel = (JPanel) field[POS_FIELD];
+            JTextField textf = (JTextField) panel.getComponent(0);
+            String file = textf.getText();
+            if  (file != null){                
+                File ffile = new File(file);
+                if (ffile.isDirectory()){
+                    idata.setVariable((String) field[POS_VARIABLE],file);
+                    return true;
+                }
+                else {
+                    return false;
+                }                
+            }
+            else {
+                return false;
+            }               
+        }
+        catch (Exception e){
+            if (Debug.stackTracing()){
+                Debug.trace(e);
+            }
+            return false;
+        }
+    }
+
+    private boolean readFileField(Object[] field)
+    {
+        try {
+            JPanel panel = (JPanel) field[POS_FIELD];
+            JTextField textf = (JTextField) panel.getComponent(0);
+            String file = textf.getText();
+            if  (file != null){                
+                File ffile = new File(file);
+                if (ffile.isFile()){
+                    idata.setVariable((String) field[POS_VARIABLE],file);
+                    return true;
+                }
+                else {
+                    return false;
+                }                
+            }
+            else {
+                return false;
+            }               
+        }
+        catch (Exception e){
+            if (Debug.stackTracing()){
+                Debug.trace(e);
+            }
+            return false;
+        }
     }
 
     /*--------------------------------------------------------------------------*/
@@ -800,8 +1091,14 @@ public class UserInputPanel extends IzPanel
         XMLElement data;
         Vector specElements;
         String attribute;
+        String panelattribute;
         String instance = Integer.toString(instanceNumber);
-
+        
+        String panelid=null;
+        Panel p = this.getMetadata();
+        if (p != null){
+         panelid = p.getPanelid();
+        }
         try
         {
             input = parentFrame.getResource(SPEC_FILE_NAME);
@@ -834,8 +1131,11 @@ public class UserInputPanel extends IzPanel
             {
                 data = (XMLElement) specElements.elementAt(i);
                 attribute = data.getAttribute(INSTANCE_IDENTIFIER);
-
-                if (instance.equals(attribute))
+                panelattribute = data.getAttribute(PANEL_IDENTIFIER);
+                
+                if (((attribute != null) && instance.equals(attribute))
+                     ||
+                     ((panelattribute != null) && (panelid!=null) && (panelid.equals(panelattribute))))
                 {
                     // use the current element as spec
                     spec = data;
@@ -2997,4 +3297,30 @@ public class UserInputPanel extends IzPanel
 
 } // public class UserInputPanel
 /*---------------------------------------------------------------------------*/
+class UserInputFileFilter extends FileFilter{
+    String fileext = "";
+    String description = "";
+    
+    public void setFileExt(String fileext){                    
+        this.fileext = fileext;                    
+    }
+    
+    public void setFileExtDesc(String desc){
+        this.description = desc;
+    }
+   
+    public boolean accept(File pathname)
+    {
+        if (pathname.isDirectory()){
+            return true;
+        }
+        else {
+            return pathname.getAbsolutePath().endsWith(this.fileext);
+        }                    
+    }
 
+    public String getDescription()
+    {
+        return this.description;
+    }                  
+}
