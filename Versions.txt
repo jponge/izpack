@@ -4,6 +4,7 @@
 - Added ignore as possible value for failure argument in executables (Dennis Reil)
 - Added Conditional expressions (Dennis Reil)
 - Fixed selection of default language in LanguageSelectionDialog (Dennis Reil)
+- Fixed RegularExpressionValidator (Dennis Reil)
 
   > 3.10.0 (build 2007.01.29)
 

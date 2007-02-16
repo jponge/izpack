@@ -20,8 +20,7 @@
 package com.izforge.izpack.util;
 
 import java.util.Map;
-
-import org.apache.regexp.RE;
+import java.util.regex.Pattern;
 
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.RuleInputField;
@@ -59,8 +58,8 @@ public class RegularExpressionValidator implements Validator
             patternString = STR_PATTERN_DEFAULT;
         }
 
-        RE pattern = new RE(patternString);
-        return pattern.match(((RuleInputField) client).getText());
+        Pattern pattern = Pattern.compile(patternString);
+        return pattern.matcher(((RuleInputField) client).getText()).matches();
     }
 
 }
