@@ -31,21 +31,30 @@ import com.izforge.izpack.util.Debug;
 import net.n3.nanoxml.XMLElement;
 
 /**
- * @author Dennis Reil, <Dennis.Reil@reddot.de>
- *         created: 09.11.2006, 13:48:39
+ * The rules engine class is the central point for checking conditions
+ * 
+ * @author Dennis Reil, <Dennis.Reil@reddot.de> created: 09.11.2006, 13:48:39
  */
-public class RulesEngine {
+public class RulesEngine
+{
+
     protected Map panelconditions;
+
     protected Map packconditions;
+
     protected Map optionalpackconditions;
+
     protected XMLElement conditionsspec;
+
     protected static Map conditionsmap = new Hashtable();
+
     protected InstallData installdata;
 
     /**
-     *
+     * 
      */
-    public RulesEngine(XMLElement conditionsspecxml, InstallData installdata) {
+    public RulesEngine(XMLElement conditionsspecxml, InstallData installdata)
+    {
         this.conditionsspec = conditionsspecxml;
         conditionsmap = new Hashtable();
         this.panelconditions = new Hashtable();
@@ -57,41 +66,55 @@ public class RulesEngine {
 
     /**
      * Checks if an attribute for an xmlelement is set.
-     *
-     * @param val       value of attribute to check
+     * 
+     * @param val value of attribute to check
      * @param attribute the attribute which is checked
-     * @param element   the element
-     * @return true value was set
-     *         false no value was set
+     * @param element the element
+     * @return true value was set false no value was set
      */
-    protected boolean checkAttribute(String val, String attribute, String element) {
-        if ((val != null) && (val.length() > 0)) {
+    protected boolean checkAttribute(String val, String attribute, String element)
+    {
+        if ((val != null) && (val.length() > 0))
+        {
             return true;
-        } else {
+        }
+        else
+        {
             Debug.trace("Element " + element + " has to specify an attribute " + attribute);
             return false;
         }
     }
 
-    public static Condition analyzeCondition(XMLElement condition) {
+    public static Condition analyzeCondition(XMLElement condition)
+    {
         String condid = condition.getAttribute("id");
         String condtype = condition.getAttribute("type");
         Condition result = null;
-        if (condtype != null) {
+        if (condtype != null)
+        {
 
             String conditiontype = condtype.toLowerCase();
             // TODO: externalize package name
-            String conditionclassname = "com.izforge.izpack.rules." + conditiontype.substring(0, 1).toUpperCase() + conditiontype.substring(1, conditiontype.length());
+            String conditionclassname = "com.izforge.izpack.rules."
+                    + conditiontype.substring(0, 1).toUpperCase()
+                    + conditiontype.substring(1, conditiontype.length());
             conditionclassname += "Condition";
             ClassLoader loader = ClassLoader.getSystemClassLoader();
-            try {
+            try
+            {
                 Class conditionclass = loader.loadClass(conditionclassname);
                 result = (Condition) conditionclass.newInstance();
-            } catch (ClassNotFoundException e) {
+            }
+            catch (ClassNotFoundException e)
+            {
                 Debug.trace(conditionclassname + " not found.");
-            } catch (InstantiationException e) {
+            }
+            catch (InstantiationException e)
+            {
                 Debug.trace(conditionclassname + " couldn't be instantiated.");
-            } catch (IllegalAccessException e) {
+            }
+            catch (IllegalAccessException e)
+            {
                 Debug.trace("Illegal access to " + conditionclassname);
             }
             result.readFromXML(condition);
@@ -100,35 +123,42 @@ public class RulesEngine {
         return result;
     }
 
-
     /**
      * Read the spec for the conditions
      */
-    protected void readConditions() {
-        if (this.conditionsspec == null){
+    protected void readConditions()
+    {
+        if (this.conditionsspec == null)
+        {
             Debug.trace("No specification for conditions found.");
             return;
         }
-        try {
-            if (this.conditionsspec.hasChildren()) {
+        try
+        {
+            if (this.conditionsspec.hasChildren())
+            {
                 // read in the condition specs
                 Vector childs = this.conditionsspec.getChildrenNamed("condition");
 
-                for (int i = 0; i < childs.size(); i++) {
+                for (int i = 0; i < childs.size(); i++)
+                {
                     XMLElement condition = (XMLElement) childs.get(i);
                     Condition cond = analyzeCondition(condition);
-                    if (cond != null) {
+                    if (cond != null)
+                    {
                         // this.conditionslist.add(cond);
                         String condid = cond.getId();
                         cond.setInstalldata(this.installdata);
-                        if ((condid != null) && !("UNKNOWN".equals(condid))) {                            
+                        if ((condid != null) && !("UNKNOWN".equals(condid)))
+                        {
                             conditionsmap.put(condid, cond);
                         }
                     }
                 }
 
                 Vector panelconditionels = this.conditionsspec.getChildrenNamed("panelcondition");
-                for (int i = 0; i < panelconditionels.size(); i++) {
+                for (int i = 0; i < panelconditionels.size(); i++)
+                {
                     XMLElement panelel = (XMLElement) panelconditionels.get(i);
                     String panelid = panelel.getAttribute("panelid");
                     String conditionid = panelel.getAttribute("conditionid");
@@ -136,48 +166,119 @@ public class RulesEngine {
                 }
 
                 Vector packconditionels = this.conditionsspec.getChildrenNamed("packcondition");
-                for (int i = 0; i < packconditionels.size(); i++) {
+                for (int i = 0; i < packconditionels.size(); i++)
+                {
                     XMLElement panelel = (XMLElement) packconditionels.get(i);
                     String panelid = panelel.getAttribute("packid");
                     String conditionid = panelel.getAttribute("conditionid");
                     this.packconditions.put(panelid, conditionid);
                     // optional install allowed, if condition is not met?
                     String optional = panelel.getAttribute("optional");
-                    if (optional != null) {
+                    if (optional != null)
+                    {
                         boolean optionalinstall = Boolean.valueOf(optional).booleanValue();
-                        if (optionalinstall) {
+                        if (optionalinstall)
+                        {
                             // optional installation is allowed
                             this.optionalpackconditions.put(panelid, conditionid);
                         }
                     }
                 }
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             e.printStackTrace();
         }
     }
 
-
-    public static Condition getCondition(String id) {
-        return (Condition) conditionsmap.get(id);
+    public static Condition getCondition(String id)
+    {
+        Condition result = (Condition) conditionsmap.get(id);
+        if (result == null)
+        {
+            result = getConditionByExpr(new StringBuffer(id));
+        }
+        return result;
     }
 
-    public boolean isConditionTrue(String id, Properties variables) {
-        Condition cond = (Condition) conditionsmap.get(id);
-        if (cond == null) {
+    protected static Condition getConditionByExpr(StringBuffer conditionexpr)
+    {
+        Condition result = null;
+        int index = 0;
+        while (index < conditionexpr.length())
+        {
+            char currentchar = conditionexpr.charAt(index);
+            switch (currentchar)
+            {
+            case '+':
+                // and-condition
+                Condition op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                conditionexpr.delete(0, index + 1);
+                result = new AndCondition(op1, getConditionByExpr(conditionexpr));
+                break;
+            case '|':
+                // or-condition
+                op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                conditionexpr.delete(0, index + 1);
+                result = new OrCondition(op1, getConditionByExpr(conditionexpr));
+                break;
+            case '\\':
+                // xor-condition
+                op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                conditionexpr.delete(0, index + 1);
+                result = new XOrCondition(op1, getConditionByExpr(conditionexpr));
+                break;
+            case '!':
+                // not-condition
+                if (index > 0)
+                {
+                    Debug.trace("error: ! operator only allowed at position 0");
+                }
+                else
+                {
+                    // delete not symbol
+                    conditionexpr.deleteCharAt(index);
+                    result = new NotCondition(getConditionByExpr(conditionexpr));
+                }
+                break;
+            default:
+                // do nothing
+            }
+            index++;
+        }
+        if (conditionexpr.length() > 0)
+        {
+            result = (Condition) conditionsmap.get(conditionexpr.toString());
+            conditionexpr.delete(0, conditionexpr.length());
+        }
+        return result;
+    }
+
+    public boolean isConditionTrue(String id, Properties variables)
+    {
+        Condition cond = (Condition) getCondition(id);
+        if (cond == null)
+        {
             Debug.trace("Condition (" + id + ") not found.");
             return true;
-        } else {
+        }
+        else
+        {
             Debug.trace("Checking condition");
             return cond.isTrue();
         }
     }
 
-    public boolean isConditionTrue(Condition cond, Properties variables) {
-        if (cond == null) {
+    public boolean isConditionTrue(Condition cond, Properties variables)
+    {
+        if (cond == null)
+        {
             Debug.trace("Condition not found.");
             return true;
-        } else {
+        }
+        else
+        {
             Debug.trace("Checking condition");
             return cond.isTrue();
         }
@@ -185,64 +286,66 @@ public class RulesEngine {
 
     /**
      * Can a panel be shown?
-     *
-     * @param panelid   - id of the panel, which should be shown
+     * 
+     * @param panelid - id of the panel, which should be shown
      * @param variables - the variables
-     * @return true - there is no condition or condition is met
-     *         false - there is a condition and the condition was not met
+     * @return true - there is no condition or condition is met false - there is a condition and the
+     * condition was not met
      */
-    public boolean canShowPanel(String panelid, Properties variables) {
+    public boolean canShowPanel(String panelid, Properties variables)
+    {
         Debug.trace("can show panel with id " + panelid + " ?");
-        if (!this.panelconditions.containsKey(panelid)) {
+        if (!this.panelconditions.containsKey(panelid))
+        {
             Debug.trace("no condition, show panel");
             return true;
         }
         Debug.trace("there is a condition");
-        Condition condition = (Condition) conditionsmap.get(this.panelconditions.get(panelid));
-        if (condition != null) {
-            return condition.isTrue();
-        }
+        Condition condition = (Condition) getCondition((String) this.panelconditions.get(panelid));
+        if (condition != null) { return condition.isTrue(); }
         return false;
     }
 
     /**
      * Is the installation of a pack possible?
-     *
+     * 
      * @param packid
      * @param variables
-     * @return true - there is no condition or condition is met
-     *         false - there is a condition and the condition was not met
+     * @return true - there is no condition or condition is met false - there is a condition and the
+     * condition was not met
      */
-    public boolean canInstallPack(String packid, Properties variables) {
-        if (packid == null){
-            return true;
-        }
+    public boolean canInstallPack(String packid, Properties variables)
+    {
+        if (packid == null) { return true; }
         Debug.trace("can install pack with id " + packid + "?");
-        if (!this.packconditions.containsKey(packid)) {
+        if (!this.packconditions.containsKey(packid))
+        {
             Debug.trace("no condition, can install pack");
             return true;
         }
         Debug.trace("there is a condition");
-        Condition condition = (Condition) conditionsmap.get(this.packconditions.get(packid));
-        if (condition != null) {
-            return condition.isTrue();
-        }
+        Condition condition = (Condition) getCondition((String) this.packconditions.get(packid));
+        if (condition != null) { return condition.isTrue(); }
         return false;
     }
 
     /**
      * Is an optional installation of a pack possible if the condition is not met?
-     *
+     * 
      * @param packid
      * @param variables
      * @return
      */
-    public boolean canInstallPackOptional(String packid, Properties variables) {
+    public boolean canInstallPackOptional(String packid, Properties variables)
+    {
         Debug.trace("can install pack optional with id " + packid + "?");
-        if (!this.optionalpackconditions.containsKey(packid)) {
+        if (!this.optionalpackconditions.containsKey(packid))
+        {
             Debug.trace("not in optionalpackconditions.");
             return false;
-        } else {
+        }
+        else
+        {
             Debug.trace("optional install possible");
             return true;
         }
