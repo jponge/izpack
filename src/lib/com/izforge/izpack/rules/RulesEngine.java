@@ -92,13 +92,18 @@ public class RulesEngine
         Condition result = null;
         if (condtype != null)
         {
-
-            String conditiontype = condtype.toLowerCase();
-            // TODO: externalize package name
-            String conditionclassname = "com.izforge.izpack.rules."
+            String conditionclassname = "";
+            if (condtype.indexOf('.')> -1){
+                conditionclassname = condtype;
+            }
+            else {
+                String conditiontype = condtype.toLowerCase();
+                //  TODO: externalize package name
+                conditionclassname = "com.izforge.izpack.rules."
                     + conditiontype.substring(0, 1).toUpperCase()
                     + conditiontype.substring(1, conditiontype.length());
-            conditionclassname += "Condition";
+                conditionclassname += "Condition";
+            }
             ClassLoader loader = ClassLoader.getSystemClassLoader();
             try
             {
