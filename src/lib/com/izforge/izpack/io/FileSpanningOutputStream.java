@@ -58,6 +58,7 @@ public class FileSpanningOutputStream extends OutputStream
 
     // the addition free space of volume 0
     protected long firstvolumefreespacesize = DEFAULT_ADDITIONAL_FIRST_VOLUME_FREE_SPACE_SIZE;
+    public static final String VOLUMES_INFO = "/volumes.info";
 
     public static final int MAGIC_NUMER_LENGTH = 10;
 
