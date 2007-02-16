@@ -50,6 +50,8 @@ public class FileSpanningInputStream extends InputStream
 
     protected GZIPInputStream zippedinputstream;
 
+    protected byte[] magicnumber;
+
     public FileSpanningInputStream(File volume, int volumestotal) throws IOException
     {
         fileinputstream = new FileInputStream(volume);
@@ -58,12 +60,71 @@ public class FileSpanningInputStream extends InputStream
         volumename = volume.getAbsolutePath();
         this.volumestotal = volumestotal;
         filepointer = 0;
-        Debug.trace("Opening stream to " + volume);
+
+        // read magic number
+        this.magicnumber = new byte[FileSpanningOutputStream.MAGIC_NUMER_LENGTH];
+        zippedinputstream.read(this.magicnumber);
+        // this.read(this.magicnumber);
+        Debug.trace("Opening stream to " + volume + " magicnr is " + magicnumber);
+        // reset filepointer
+        filepointer = 0;
     }
 
     public FileSpanningInputStream(String volumename, int volumestotal) throws IOException
     {
         this(new File(volumename), volumestotal);
+    }
+
+    /**
+     * checks if the MagicNumber of this stream is valid. The stream has to be opened right before.
+     * 
+     * @return
+     * @throws IOException
+     */
+    private boolean isMagicNumberValid() throws IOException
+    {
+        Debug.trace("trying to read magic number");
+        boolean valid = false;
+        byte[] magicnumberofvolume = new byte[FileSpanningOutputStream.MAGIC_NUMER_LENGTH];
+        long oldfilepointer = this.filepointer;
+        // this.read(magicnumberofvolume);
+        this.zippedinputstream.read(magicnumberofvolume);
+        this.filepointer = oldfilepointer;
+        Debug.trace("MagicNr is " + magicnumberofvolume);
+        if ((magicnumberofvolume != null) && (this.magicnumber != null))
+        {
+            if (magicnumberofvolume.length != this.magicnumber.length)
+            {
+                // magicnumbers aren't valid
+                valid = false;
+            }
+            else
+            {
+                boolean errorfound = false;
+                // check if magicnumbers are identical
+                for (int i = 0; i < magicnumberofvolume.length; i++)
+                {
+                    byte op1 = magicnumberofvolume[i];
+                    byte op2 = this.magicnumber[i];
+                    if (op1 != op2)
+                    {
+                        errorfound = true;
+                        break;
+                    }
+                }
+                if (errorfound)
+                {
+                    // there was an error
+                    valid = false;
+                }
+                else
+                {
+                    // magic number is valid
+                    valid = true;
+                }
+            }
+        }
+        return valid;
     }
 
     /**
@@ -79,7 +140,7 @@ public class FileSpanningInputStream extends InputStream
         // have we reached the last volume?
         if (currentvolumeindex >= volumestotal)
         {
-            Debug.error("last volume reached.");
+            Debug.trace("last volume reached.");
             return false;
         }
         // the next volume name
@@ -97,6 +158,17 @@ public class FileSpanningInputStream extends InputStream
         // try to open new stream to next volume
         fileinputstream = new FileInputStream(nextvolumefile);
         zippedinputstream = new GZIPInputStream(fileinputstream);
+        // check magic number
+        if (!this.isMagicNumberValid())
+        {
+            currentvolumeindex--;
+            nextvolumenotfound = true;
+            Debug
+                    .trace("volume found, but magic number incorrect. Maybe not a volume of the same version.");
+            throw new CorruptVolumeException(nextvolumename
+                    + "was found, but has magic number error. Maybe not the right version?",
+                    nextvolumename);
+        }
         // everything fine
         nextvolumenotfound = false;
         return true;

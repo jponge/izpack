@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
+import java.util.Random;
 import java.util.zip.GZIPOutputStream;
 
 import com.izforge.izpack.util.Debug;
@@ -34,9 +36,9 @@ import com.izforge.izpack.util.Debug;
 public class FileSpanningOutputStream extends OutputStream
 {
 
-    public static final long KB = 1024;
+    public static final long KB = 1000;
 
-    public static final long MB = 1024 * KB;
+    public static final long MB = 1000 * KB;
 
     // the default size of a volume
     public static final long DEFAULT_VOLUME_SIZE = 650 * MB;
@@ -47,7 +49,7 @@ public class FileSpanningOutputStream extends OutputStream
     public static final long DEFAULT_ADDITIONAL_FIRST_VOLUME_FREE_SPACE_SIZE = 0;
 
     // the default volume name
-    protected static final String DEFAULT_VOLUME_NAME = "installer";
+    protected static final String DEFAULT_VOLUME_NAME = "rdpack";
 
     protected static final long FILE_NOT_AVAILABLE = -1;
 
@@ -56,8 +58,8 @@ public class FileSpanningOutputStream extends OutputStream
 
     // the addition free space of volume 0
     protected long firstvolumefreespacesize = DEFAULT_ADDITIONAL_FIRST_VOLUME_FREE_SPACE_SIZE;
-    
-    public static final String VOLUMES_INFO = "/volumes.info";  
+
+    public static final int MAGIC_NUMER_LENGTH = 10;
 
     // the current file this stream writes to
     protected File currentfile;
@@ -72,6 +74,9 @@ public class FileSpanningOutputStream extends OutputStream
     private FileOutputStream fileoutputstream;
 
     private GZIPOutputStream zippedoutputstream;
+
+    // 
+    private byte[] magicnumber;
 
     // the current position in the open file
     protected long filepointer;
@@ -113,7 +118,29 @@ public class FileSpanningOutputStream extends OutputStream
     protected FileSpanningOutputStream(File volume, long maxvolumesize, int currentvolume)
             throws IOException
     {
+        this.generateMagicNumber();
         this.createVolumeOutputStream(volume, maxvolumesize, currentvolume);
+    }
+
+    private void generateMagicNumber()
+    {
+        // only create a magic number, if not already done
+        if (magicnumber == null)
+        {
+            // create empty magic number
+            magicnumber = new byte[MAGIC_NUMER_LENGTH];
+            Date currenttime = new Date();
+            long currenttimeseconds = currenttime.getTime();
+            // create random number generator
+            Random random = new Random(currenttimeseconds);
+            random.nextBytes(magicnumber);
+            Debug.trace("created new magic number for FileOutputstream: "
+                    + new String(magicnumber));
+            for (int i = 0; i < magicnumber.length; i++)
+            {
+                Debug.trace(i + " - " + magicnumber[i]);
+            }
+        }
     }
 
     /**
@@ -145,6 +172,11 @@ public class FileSpanningOutputStream extends OutputStream
         {
             volumename = volabsolutePath;
         }
+        long oldfilepointer = filepointer;
+        // write magic number into output stream
+        this.write(magicnumber);
+        // reset filepointer
+        filepointer = oldfilepointer;
     }
 
     /**
