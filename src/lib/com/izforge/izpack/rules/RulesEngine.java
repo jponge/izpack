@@ -48,7 +48,7 @@ public class RulesEngine
 
     protected static Map conditionsmap = new Hashtable();
 
-    protected InstallData installdata;
+    protected static InstallData installdata;
 
     /**
      * 
@@ -60,7 +60,7 @@ public class RulesEngine
         this.panelconditions = new Hashtable();
         this.packconditions = new Hashtable();
         this.optionalpackconditions = new Hashtable();
-        this.installdata = installdata;
+        RulesEngine.installdata = installdata;
         this.readConditions();
     }
 
@@ -109,6 +109,9 @@ public class RulesEngine
             {
                 Class conditionclass = loader.loadClass(conditionclassname);
                 result = (Condition) conditionclass.newInstance();
+                result.readFromXML(condition);
+                result.setId(condid);
+                result.setInstalldata(RulesEngine.installdata);
             }
             catch (ClassNotFoundException e)
             {
@@ -121,9 +124,7 @@ public class RulesEngine
             catch (IllegalAccessException e)
             {
                 Debug.trace("Illegal access to " + conditionclassname);
-            }
-            result.readFromXML(condition);
-            result.setId(condid);
+            }            
         }
         return result;
     }
@@ -153,7 +154,7 @@ public class RulesEngine
                     {
                         // this.conditionslist.add(cond);
                         String condid = cond.getId();
-                        cond.setInstalldata(this.installdata);
+                        cond.setInstalldata(RulesEngine.installdata);
                         if ((condid != null) && !("UNKNOWN".equals(condid)))
                         {
                             conditionsmap.put(condid, cond);
@@ -221,18 +222,21 @@ public class RulesEngine
                 Condition op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
                 conditionexpr.delete(0, index + 1);
                 result = new AndCondition(op1, getConditionByExpr(conditionexpr));
+                result.setInstalldata(RulesEngine.installdata);
                 break;
             case '|':
                 // or-condition
                 op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
                 conditionexpr.delete(0, index + 1);
                 result = new OrCondition(op1, getConditionByExpr(conditionexpr));
+                result.setInstalldata(RulesEngine.installdata);
                 break;
             case '\\':
                 // xor-condition
                 op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
                 conditionexpr.delete(0, index + 1);
                 result = new XOrCondition(op1, getConditionByExpr(conditionexpr));
+                result.setInstalldata(RulesEngine.installdata);
                 break;
             case '!':
                 // not-condition
@@ -245,6 +249,7 @@ public class RulesEngine
                     // delete not symbol
                     conditionexpr.deleteCharAt(index);
                     result = new NotCondition(getConditionByExpr(conditionexpr));
+                    result.setInstalldata(RulesEngine.installdata);
                 }
                 break;
             default:
@@ -255,6 +260,7 @@ public class RulesEngine
         if (conditionexpr.length() > 0)
         {
             result = (Condition) conditionsmap.get(conditionexpr.toString());
+            result.setInstalldata(RulesEngine.installdata);
             conditionexpr.delete(0, conditionexpr.length());
         }
         return result;
@@ -271,7 +277,13 @@ public class RulesEngine
         else
         {
             Debug.trace("Checking condition");
-            return cond.isTrue();
+            try {
+                return cond.isTrue();
+            }
+            catch (NullPointerException npe){
+                Debug.error("Nullpointerexception checking condition: " + id);
+                return false;
+            }
         }
     }
 
