@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import java.net.URL;
+
 
 /**
  * Provides general global file utility methods
@@ -158,6 +160,40 @@ public class FileUtil
     }
 
     return result;
+  }
+  
+  /**
+   * Gets file date and time.
+   *
+   * @param   url     The URL of the file for which date and time will be returned.
+   * @return  Returns long value which is the date and time of the file. If any error
+   *          occures returns -1 (=no file date and time available).
+   * @author  Ari Voutilainen, ari(dot)voutilainen(at) iki(dot)fi
+   */
+  public static long getFileDateTime(URL url)
+  {
+      if (url==null)
+          return -1;
+
+      String fileName = url.getFile();
+      if (fileName.charAt(0) == '/' || fileName.charAt(0) == '\\')
+          fileName = fileName.substring(1, fileName.length());
+
+      try
+      {
+          File file = new File(fileName);
+          // File name must be a file or a directory.
+          if (!file.isDirectory() && !file.isFile())
+          {
+              return -1;
+          }
+
+          return file.lastModified();
+      }
+      catch (java.lang.Exception e)
+      {   // Trap all Exception based exceptions and return -1.
+          return -1;
+      }
   }
 
   /** 

@@ -56,6 +56,7 @@ import com.izforge.izpack.compressor.PackCompressorFactory;
 import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileUtil;
 
 /**
  * The packager class. The packager is used by the compiler to put files into an installer, and
@@ -558,7 +559,13 @@ public class MultiVolumePackager implements IPackager
         {
             String name = (String) i.next();
             InputStream in = ((URL) installerResourceURLMap.get(name)).openStream();
-            primaryJarStream.putNextEntry(new ZipEntry(name));
+
+            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(name);
+            long dateTime = FileUtil.getFileDateTime((URL) installerResourceURLMap.get(name));
+            if (dateTime != -1)
+                newEntry.setTime(dateTime);
+            primaryJarStream.putNextEntry(newEntry);
+
             copyStream(in, primaryJarStream);
             primaryJarStream.closeEntry();
             in.close();
@@ -819,7 +826,15 @@ public class MultiVolumePackager implements IPackager
             if (currentSet.contains(currentName)) continue;
             try
             {
-                out.putNextEntry(new ZipEntry(currentName));
+                // Create new entry for zip file.
+                ZipEntry newEntry = new ZipEntry(currentName);
+                // Get input file date and time.
+                long fileTime = zentry.getTime();
+                // Make sure there is date and time set.
+                if (fileTime != -1)
+                    newEntry.setTime(fileTime); // If found set it into output file.
+                out.putNextEntry(newEntry);
+
                 copyStream(zin, out);
                 out.closeEntry();
                 zin.closeEntry();
@@ -874,7 +889,15 @@ public class MultiVolumePackager implements IPackager
             if (currentSet.contains(currentName)) continue;
             try
             {
-                out.putNextEntry(new ZipEntry(currentName));
+                // Create new entry for zip file.
+                ZipEntry newEntry = new ZipEntry(currentName);
+                // Get input file date and time.
+                long fileTime = zentry.getTime();
+                // Make sure there is date and time set.
+                if (fileTime != -1)
+                    newEntry.setTime(fileTime); // If found set it into output file.
+                out.putNextEntry(newEntry);
+
                 copyStream(zin, out);
                 out.closeEntry();
                 zin.closeEntry();

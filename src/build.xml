@@ -160,6 +160,12 @@
   10.10.2006: (Fabrice Mirabile)   
 	  Fixed target src.tar.gz and clean.src.tar.gz
               
+  11.02.2007: (Ari Voutilainen)
+     Added 'preservelastmodified="true"' to all 'copy todir' commands to keep original file date
+     and time. This will effect in directory _dist. This won't effect to compiled files and
+     other files which are manipulated during the process.
+
+
   Mini-HowTo:
 
   To compile and package the compiler.jar jar file, type:
@@ -307,6 +313,7 @@
                 <include name="com/izforge/izpack/util/*Processor.class" />
                 <include name="com/izforge/izpack/util/VariableSubstitutor.class" />
                 <include name="com/izforge/izpack/util/JarOutputStream.class" />
+                <include name="com/izforge/izpack/util/FileUtil.class" />
                 <include name="com/izforge/izpack/ant/*.class" />
                 <include name="com/izforge/izpack/ant/langpacks/*.properties" />
                 <include name="com/izforge/izpack/event/CompilerListener.class" />
@@ -877,7 +884,7 @@
                 <exclude name="**/CVS" />
             </packageset>
         </javadoc>
-        <copy todir="${doc.dir}/izpack/javadoc">
+        <copy todir="${doc.dir}/izpack/javadoc" preservelastmodified="true">
             <fileset dir="${build.dir}/javadoc">
                 <include name="**/*" />
             </fileset>
@@ -886,7 +893,7 @@
 
     <target name="build.docu" description="Builds the customer documentation">
         <mkdir dir="${doc.dir}/izpack/xhtml" />
-        <copy todir="${doc.dir}/izpack/xhtml">
+        <copy todir="${doc.dir}/izpack/xhtml" preservelastmodified="true">
             <fileset dir="${basedir}/src/doc-ng/XHTML">
                 <include name="**/*" />
             </fileset>
@@ -920,17 +927,19 @@
         <mkdir dir="${basedir}/bin/native/izpack" />
         <!-- If unicode support of ShellLink.dll will be not used, change between  both copy blocks -->
         <!--
-		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release/ShellLink.dll" verbose="true" overwrite="yes"/>
-		<copy todir="${basedir}/bin/native/3rdparty" file="${basedir}/src/native/win/COIOSHelper/Release/COIOSHelper.dll" verbose="true" overwrite="yes"/>
+		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release/ShellLink.dll" verbose="true" overwrite="yes" preservelastmodified="true"/>
+		<copy todir="${basedir}/bin/native/3rdparty" file="${basedir}/src/native/win/COIOSHelper/Release/COIOSHelper.dll" verbose="true" overwrite="yes" preservelastmodified="true"/>
 		-->
         <copy todir="${basedir}/bin/native/izpack"
               file="${basedir}/src/native/ShellLink/Release_Unicode/ShellLink.dll"
               verbose="true"
-              overwrite="yes" />
+              overwrite="yes"
+              preservelastmodified="true" />
         <copy todir="${basedir}/bin/native/3rdparty"
               file="${basedir}/src/native/win/COIOSHelper/Release_Unicode/COIOSHelper.dll"
               verbose="true"
-              overwrite="yes" />
+              overwrite="yes"
+              preservelastmodified="true" />
     </target>
 
     
@@ -939,7 +948,7 @@
          - - - - - - - - - - - - - - - - - -->
     <target name="copy.dist.files">
         <echo message="Copies the general files to the dist directory" />
-        <copy todir="${dist.dir}" includeEmptyDirs="yes">
+        <copy todir="${dist.dir}" includeEmptyDirs="yes" preservelastmodified="true">
             <fileset dir="${basedir}">
                 <include name="bin/**" />
                 <include name="lib/*.jar" />
@@ -951,13 +960,13 @@
             </fileset>
         </copy>
         <echo message="Copies the langpacks to the dist directory" />
-        <copy todir="${dist.dir}/bin" includeEmptyDirs="yes">
+        <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" preservelastmodified="true">
             <fileset dir="${basedir}">
                 <include name="langpacks/**" />
             </fileset>
         </copy>
         <echo message="Copies the license images and specs to the dist directory" />
-        <copy todir="${dist.dir}" includeEmptyDirs="yes">
+        <copy todir="${dist.dir}" includeEmptyDirs="yes" preservelastmodified="true">
             <fileset dir="${dist-files.dir}">
                 <include name="useNativeLAF" />
                 <include name="*.jpg" />
@@ -972,7 +981,7 @@
             </fileset>
         </copy>
         <echo message="Copies the bin files to the dist directory" />
-        <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes">
+        <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes" preservelastmodified="true">
             <fileset dir="${dist-files.dir}">
                 <include name="compile*" />            	
                 <include name="lcp.bat" />

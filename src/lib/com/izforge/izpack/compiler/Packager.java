@@ -56,6 +56,7 @@ import com.izforge.izpack.PackFile;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.compressor.PackCompressor;
 import com.izforge.izpack.compressor.PackCompressorFactory;
+import com.izforge.izpack.util.FileUtil;
 //import com.izforge.izpack.util.JarOutputStream;
 
 /**
@@ -425,7 +426,13 @@ public class Packager implements IPackager
         {
             String name = (String) i.next();
             InputStream in = ((URL) installerResourceURLMap.get(name)).openStream();
-            primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(name));
+            
+            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(name);
+            long dateTime = FileUtil.getFileDateTime((URL) installerResourceURLMap.get(name));
+            if (dateTime != -1)
+                newEntry.setTime(dateTime);
+            primaryJarStream.putNextEntry(newEntry);
+
             PackagerHelper.copyStream(in, primaryJarStream);
             primaryJarStream.closeEntry();
             in.close();
@@ -669,7 +676,15 @@ public class Packager implements IPackager
                 continue;
             try
             {
-                out.putNextEntry(new org.apache.tools.zip.ZipEntry(currentName));
+                // Create new entry for zip file.
+                org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(currentName);
+                // Get input file date and time.
+                long fileTime = zentry.getTime();
+                // Make sure there is date and time set.
+                if (fileTime != -1)
+                    newEntry.setTime(fileTime); // If found set it into output file.
+                out.putNextEntry(newEntry);
+
                 PackagerHelper.copyStream(zin, out);
                 out.closeEntry();
                 zin.closeEntry();
