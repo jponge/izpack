@@ -1,12 +1,21 @@
 [ The list of the different public versions of IzPack ]
 
-  > Next release
+  > Next major release
+
 - Added ignore as possible value for failure argument in executables (Dennis Reil)
 - Added Conditional expressions (Dennis Reil)
 - Fixed selection of default language in LanguageSelectionDialog (Dennis Reil)
 - Fixed RegularExpressionValidator (Dennis Reil)
 - Added corrupt volume detection (Dennis Reil)
 - Added file and dir fields in UserInputPanel (Dennis Reil)
+
+	> 3.10.1 (build 2007.xx.xx)
+	
+- Fixed NPE for pack.id == null (Fabrice Mirabile)
+- Packages that are not marked as preselected must also be removed from the selectedPacks
+  (Martina Angela Albrecht, via Fabrice Mirabile)
+- FreeDesktop XDG standard support for Gnome and KDE shortcuts support
+  (Vladimir Ralev via Julien Ponge)
 
   > 3.10.0 (build 2007.01.29)
 

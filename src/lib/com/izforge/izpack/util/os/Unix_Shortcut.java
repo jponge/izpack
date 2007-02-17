@@ -65,6 +65,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -109,6 +110,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     /** QM = "\"" : <b>Q</b>uotation<b>M</b>ark */
     private final static String QM = "\"";
     
+    private int ShortcutType;
     private static ShellScript rootScript = null;
     private static ShellScript uninstallScript = null;
     private static ArrayList users = UnixUsers.getUsersWithValidShellsExistingHomesAndDesktops();
@@ -168,7 +170,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         hlp.append("Comment[").append(userLanguage).append("]=" + $Comment + N);
         hlp.append("Encoding=" + $Encoding + N);
 
-        hlp.append("TryExec=" + $TryExec + N);
+        // this causes too many problems
+        //hlp.append("TryExec=" + $E_QUOT + $Exec + $E_QUOT + S + $Arguments + N);
 
         hlp.append("Exec=" + $E_QUOT + $Exec + $E_QUOT + S + $Arguments + N);
         hlp.append("GenericName=" + $GenericName + N);
@@ -187,6 +190,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         hlp.append("TerminalOptions=" + $Options_For_Terminal + N);
         hlp.append("Type=" + $Type + N);
+        
         hlp.append("URL=" + $URL + N);
         hlp.append("X-KDE-SubstituteUID=" + $X_KDE_SubstituteUID + N);
         hlp.append("X-KDE-Username=" + $X_KDE_Username + N);
@@ -311,7 +315,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         // 
         result = getKdeShareApplnkFolder(current_user).toString();
-
+        
         return result;
     }
 
@@ -325,6 +329,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     private File getKdeShareApplnkFolder(int userType)
     {
+       /*
+        //newer XDG system
+        File xdgPath = new File("usr" + File.separator + "share" + File.separator
+               + "applications");
+        if(xdgPath.exists()) return xdgPath;*/
+       
         File kdeBase = getKdeBase(userType);
 
         File result = new File(kdeBase + File.separator + "share" + File.separator
@@ -421,11 +431,12 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         boolean rootUser4All = this.getUserType() == Shortcut.ALL_USERS;
         boolean create4All = this.getCreateForAll().booleanValue();
-
+        
         // Create The Desktop Shortcuts
         if ("".equals(this.itsGroupName) && (this.getLinkType() == Shortcut.DESKTOP))
         {
-            
+            //System.out.println("this.itsGroupName: "+this.itsGroupName);
+            //System.out.println("this.getLinkType(): "+this.getLinkType());
             target = myHome + FS + "Desktop" + FS + this.itsName
                     + DESKTOP_EXT;
             this.itsFileName = target;
@@ -546,15 +557,23 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         // This is - or should be only a Link in the [K?]-Menu
         else
         {
-            File kdeHomeShareApplnk = getKdeShareApplnkFolder(this.getUserType());
-            target = kdeHomeShareApplnk.toString() + FS + this.itsGroupName + FS + this.itsName
-                    + DESKTOP_EXT;
-            this.itsFileName = target;
-            writeShortCut(target, shortCutDef);
-
-            if (rootUser4All)
+            // the following is for backwards compatibility to older versions of KDE!
+            // on newer versions of KDE the icons will appear duplicated unless you set
+            // the category=""
+            Object categoryobject = props.getProperty($Categories);
+            if(categoryobject != null && ((String)categoryobject).length()>0)
             {
-                if (create4All)
+               File kdeHomeShareApplnk = getKdeShareApplnkFolder(this.getUserType());
+               target = kdeHomeShareApplnk.toString() + FS + this.itsGroupName + FS + this.itsName
+                    + DESKTOP_EXT;
+               this.itsFileName = target;
+               File kdemenufile = writeShortCut(target, shortCutDef);
+          
+               uninstaller.addFile(kdemenufile.toString());
+            }
+            
+            if (rootUser4All && create4All)
+            {
                 {
                     // write the icon pixmaps into /usr/share/pixmaps
 
@@ -581,10 +600,50 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     uninstaller.addFile(writtenFile.toString());
 
                 }
-                else
-                {
-                    // do nothing
-                }
+            }
+            else // create local XDG shortcuts
+            {
+               //System.out.println("Creating gnome shortcut");
+               String localApps = myHome + "/.local/share/applications/";
+               String localPixmaps = myHome + "/.local/share/pixmaps/";
+               //System.out.println("Creating "+localApps);
+               try
+               {
+                  java.io.File f = new java.io.File(localApps);
+                  f.mkdirs();
+                  
+                  f = new java.io.File(localPixmaps);
+                  f.mkdirs();
+               }
+               catch (Exception ignore)
+               {
+                  //System.out.println("Failed creating "+localApps + " or " + localPixmaps);
+                  Debug.log("Failed creating "+localApps + " or " + localPixmaps);
+               }
+               
+               // write the icon pixmaps into ~/share/pixmaps
+
+               File theIcon = new File(this.getIconLocation());
+               File commonIcon = new File(localPixmaps + theIcon.getName());
+
+               try
+               {
+                   copyTo(theIcon, commonIcon);
+                   uninstaller.addFile(commonIcon.toString());
+               }
+               catch (Exception cnc)
+               {
+                   Debug.log("Could Not Copy: " + theIcon + " to " + commonIcon + "( "
+                           + cnc.getMessage() + " )");
+               }
+
+               // write *.desktop.file into ~/share/applications
+
+               String commonTarget = localApps + this.itsName + DESKTOP_EXT;
+               this.itsFileName = target;
+               File writtenFile = writeShortCut(commonTarget, shortCutDef);
+
+               uninstaller.addFile(writtenFile.toString());
             }
 
         }
@@ -767,8 +826,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      * 
      * @see com.izforge.izpack.util.os.Shortcut#setLinkType(int)
      */
-    public void setLinkType(int aType) throws IllegalArgumentException
+    public void setLinkType(int aType) throws IllegalArgumentException, UnsupportedEncodingException
     {
+       ShortcutType = aType;
     }
 
     /**
@@ -1026,5 +1086,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     {
         props.put($TryExec, aTryExec);
     }
-
+    public int getLinkType()
+    {
+        return ShortcutType;
+        //return Shortcut.DESKTOP;
+    }
 }

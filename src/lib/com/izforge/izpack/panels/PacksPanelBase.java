@@ -357,7 +357,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             packName = langpack.getString(key);
         }
-        if ("".equals(packName) || key.equals(packName))
+        if ("".equals(packName) || key.equals(packName) || pack.id == null)
         {
             packName = pack.name;
         }
