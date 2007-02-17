@@ -87,7 +87,8 @@ public class UninstallData
      */
     public synchronized void addFile(String path)
     {
-        filesList.add(path);
+        if(path != null)
+           filesList.add(path);
     }
 
     /**

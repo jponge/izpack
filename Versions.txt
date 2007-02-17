@@ -3,9 +3,11 @@
 
 	> 3.10.1 (build 2007.xx.xx)
 	
--	Fixed NPE for pack.id == null (Fabrice Mirabile)
-- Packages that are not marked as preselected must
-	also be removed from the selectedPacks (Martina Angela Albrecht, via Fabrice Mirabile)
+- Fixed NPE for pack.id == null (Fabrice Mirabile)
+- Packages that are not marked as preselected must also be removed from the selectedPacks
+  (Martina Angela Albrecht, via Fabrice Mirabile)
+- FreeDesktop XDG standard support for Gnome and KDE shortcuts support
+  (Vladimir Ralev via Julien Ponge)
 
   > 3.10.0 (build 2007.01.29)
 

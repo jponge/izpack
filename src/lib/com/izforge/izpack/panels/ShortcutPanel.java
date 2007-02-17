@@ -1108,7 +1108,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
          */
         return true; // If there is no Condition defined, just create the shortcut.
     }
-
+    
     /*--------------------------------------------------------------------------*/
 
     /**
@@ -1121,6 +1121,28 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
       addToUninstaller();
     }
     
+    private String createGnomeMenu(Vector shortcuts, String menuName)
+    {
+       String menuConfigText = "<Menu>\n" +
+            "<Name>Applications</Name>\n" +
+            "<Menu>\n" +
+            "<Name>" + menuName + "</Name>\n" +
+            "<Include>\n";
+       
+       ShortcutData data;
+
+       for (int i = 0; i < shortcuts.size(); i++)
+       {
+           data = (ShortcutData) shortcuts.elementAt(i);
+           menuConfigText += "<Filename>" + data.name + ".desktop</Filename>\n";
+       }
+       menuConfigText += "</Include>\n</Menu>\n</Menu>";
+       return menuConfigText;
+           
+    }
+    
+    /*--------------------------------------------------------------------------*/
+
     /**
      * Creates all shortcuts based on the information in shortcuts.
      */
@@ -1134,7 +1156,32 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         
         //fix: don't influence other shortcuts when altering group name...
         String gn = groupName;
+        
+        if(OsVersion.IS_UNIX)
+        {
+           String menuFile = createGnomeMenu(shortcuts, groupName);
 
+           String menuFolder = System.getProperty("user.home") + File.separator
+              + ".config/menus/applications-merged/";
+           File menuConfigFolder = new File(menuFolder);
+           String menuFilePath = menuFolder + groupName + ".menu";
+           menuConfigFolder.mkdirs();
+           FileWriter menuFileWriter;
+           boolean failed = false;
+           try{
+              
+              menuFileWriter = new FileWriter(menuFilePath);
+              menuFileWriter.write(menuFile);
+              menuFileWriter.close();
+           }
+           catch(Exception ignore)
+           {
+              failed = true;
+              Debug.log("Failed to create menu for gnome.");
+           }
+           if(!failed) UninstallData.getInstance().addFile(menuFilePath);
+
+        }
         for (int i = 0; i < shortcuts.size(); i++)
         {
             data = (ShortcutData) shortcuts.elementAt(i);
