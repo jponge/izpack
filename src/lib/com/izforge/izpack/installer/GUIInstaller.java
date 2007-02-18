@@ -308,7 +308,7 @@ public class GUIInstaller extends InstallerBase
                 // locales the installer throws and exception and doesn't load
                 // at all. See http://jira.jboss.com/jira/browse/JBINSTALL-232.
                 // This is a workaround until this bug gets fixed.
-                Locale.setDefault(Locale.ENGLISH);
+                if("unix".equals(syskey)) Locale.setDefault(Locale.ENGLISH);
                 String syslaf = UIManager.getSystemLookAndFeelClassName();
                 UIManager.setLookAndFeel(syslaf);
                 if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
