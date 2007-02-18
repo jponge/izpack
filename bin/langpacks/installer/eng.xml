@@ -131,7 +131,7 @@
 		<str id="ShortcutPanel.regular.default" txt="Default"/>
     <str id="ShortcutPanel.regular.desktop" txt="Create additional shortcuts on the desktop"/>
     <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Start-Menu"/>
-    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="XDG-Menu"/>
 	                                                          <!-- "StartMenu" is a placeholder will be replaced at runtime -->
     <str id="ShortcutPanel.regular.create" txt="Create shortcuts in the StartMenu"/>
     <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
