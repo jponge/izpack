@@ -98,7 +98,6 @@ public class RulesEngine
             }
             else {
                 String conditiontype = condtype.toLowerCase();
-                //  TODO: externalize package name
                 conditionclassname = "com.izforge.izpack.rules."
                     + conditiontype.substring(0, 1).toUpperCase()
                     + conditiontype.substring(1, conditiontype.length());
@@ -260,8 +259,10 @@ public class RulesEngine
         if (conditionexpr.length() > 0)
         {
             result = (Condition) conditionsmap.get(conditionexpr.toString());
-            result.setInstalldata(RulesEngine.installdata);
-            conditionexpr.delete(0, conditionexpr.length());
+            if (result != null){
+                result.setInstalldata(RulesEngine.installdata);
+                conditionexpr.delete(0, conditionexpr.length());
+            }
         }
         return result;
     }
@@ -299,6 +300,16 @@ public class RulesEngine
             Debug.trace("Checking condition");
             return cond.isTrue();
         }
+    }
+    
+    public boolean isConditionTrue(String id)
+    {
+        return this.isConditionTrue(RulesEngine.getCondition(id));
+    }
+
+    public boolean isConditionTrue(Condition cond)
+    {
+        return cond.isTrue();
     }
 
     /**
