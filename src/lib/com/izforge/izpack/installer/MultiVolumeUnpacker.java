@@ -17,6 +17,7 @@
  */
 package com.izforge.izpack.installer;
 
+import java.awt.Component;
 import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.File;
@@ -39,6 +40,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
+import javax.swing.JOptionPane;
+
 import org.apache.regexp.RE;
 import org.apache.regexp.RECompiler;
 import org.apache.regexp.RESyntaxException;
@@ -57,6 +60,7 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.installer.ScriptParser;
 import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.io.CorruptVolumeException;
 import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.io.VolumeNotFoundException;
@@ -68,6 +72,7 @@ import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
+
 
 /**
  * Unpacker class.
@@ -278,19 +283,25 @@ public class MultiVolumeUnpacker implements IUnpacker
 
     }
 
-    protected File enterNextMediaMessage(String volumename)
+    protected File enterNextMediaMessage(String volumename, boolean lastcorrupt)
     {
-        Debug.trace("Enter next media: " + volumename);
-        StackTraceElement[] el = (new Exception()).getStackTrace();
-        for (int i = 0; i < el.length; i++)
+        if (lastcorrupt)
         {
-            StackTraceElement element = el[i];
-            Debug.trace(element.toString());
+            Component parent = null;
+            if ((this.handler != null) && (this.handler instanceof IzPanel))
+            {
+                parent = ((IzPanel) this.handler).getInstallerFrame();
+            }
+            JOptionPane.showMessageDialog(parent, idata.langpack
+                    .getString("nextmedia.corruptmedia"), idata.langpack
+                    .getString("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
         }
-
+        Debug.trace("Enter next media: " + volumename);
+        
         File nextvolume = new File(volumename);
         NextMediaDialog nmd = null;
-        while (!nextvolume.exists())
+
+        while (!nextvolume.exists() || lastcorrupt)
         {
             if ((this.handler != null) && (this.handler instanceof IzPanel))
             {
@@ -312,10 +323,20 @@ public class MultiVolumeUnpacker implements IUnpacker
                 Debug.trace("Input from NextMediaDialog was null");
                 nextvolume = new File(volumename);
             }
+            // selection equal to last selected which was corrupt?
+            if (!(volumename.equals(nextvolume.getAbsolutePath()) && lastcorrupt))
+            {
+                lastcorrupt = false;
+            }
         }
         return nextvolume;
     }
 
+    protected File enterNextMediaMessage(String volumename)
+    {
+        return enterNextMediaMessage(volumename, false);
+    }
+    
     /** The run method. */
     public void run()
     {
@@ -548,6 +569,12 @@ public class MultiVolumeUnpacker implements IUnpacker
                                 File nextmedia = enterNextMediaMessage(vnfe.getVolumename());
                                 fin.setVolumename(nextmedia.getAbsolutePath());
                             }
+                            catch (CorruptVolumeException cve)
+                            {
+                                Debug.trace("corrupt media found. magic number is not correct");
+                                File nextmedia = enterNextMediaMessage(cve.getVolumename(), true);
+                                fin.setVolumename(nextmedia.getAbsolutePath());
+                            }  
                         }
 
                         if (fin.getFilepointer() > fileposition)
@@ -585,6 +612,12 @@ public class MultiVolumeUnpacker implements IUnpacker
                                 File nextmedia = enterNextMediaMessage(vnfe.getVolumename());
                                 fin.setVolumename(nextmedia.getAbsolutePath());
                             }
+                            catch (CorruptVolumeException cve)
+                            {
+                                Debug.trace("corrupt media found. magic number is not correct");
+                                File nextmedia = enterNextMediaMessage(cve.getVolumename(), true);
+                                fin.setVolumename(nextmedia.getAbsolutePath());
+                            }
                         }
                         // Cleanings
                         out.close();
@@ -620,6 +653,12 @@ public class MultiVolumeUnpacker implements IUnpacker
                         catch (VolumeNotFoundException vnfe)
                         {
                             File nextmedia = enterNextMediaMessage(vnfe.getVolumename());
+                            fin.setVolumename(nextmedia.getAbsolutePath());
+                        }
+                        catch (CorruptVolumeException cve)
+                        {
+                            Debug.trace("corrupt media found. magic number is not correct");
+                            File nextmedia = enterNextMediaMessage(cve.getVolumename(), true);
                             fin.setVolumename(nextmedia.getAbsolutePath());
                         }
                         catch (EOFException eofe)
