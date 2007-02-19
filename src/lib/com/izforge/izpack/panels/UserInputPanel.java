@@ -802,12 +802,8 @@ public class UserInputPanel extends IzPanel
      */
     /*--------------------------------------------------------------------------*/
     public boolean isValidated()
-    {
-        boolean result =readInput();
-        
-        System.out.println(idata.getVariable("templatefile"));
-        
-        return result;
+    {                               
+        return readInput();
     }
 
     /*--------------------------------------------------------------------------*/
