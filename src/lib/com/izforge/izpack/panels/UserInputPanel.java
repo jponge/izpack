@@ -3255,6 +3255,17 @@ public class UserInputPanel extends IzPanel
             XMLElement variable = (XMLElement) variables.elementAt(i);
             String vname = variable.getAttribute(ATTRIBUTE_VARIABLE_NAME);
             String vvalue = variable.getAttribute(ATTRIBUTE_VARIABLE_VALUE);
+            
+            if (vvalue == null)
+            {
+                // try to read value element
+                if (variable.hasChildren())
+                {
+                    XMLElement value = variable.getFirstChildNamed("value");
+                    vvalue = value.getContent();
+                }
+            }
+            
             String conditionid = variable.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
             if (conditionid != null)
             {
