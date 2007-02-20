@@ -8,6 +8,8 @@
   (Martina Angela Albrecht, via Fabrice Mirabile)
 - FreeDesktop XDG standard support for Gnome and KDE shortcuts support
   (Vladimir Ralev via Julien Ponge)
+- Workaround for a Sun bug in Java 6 which crashes the installer in some non-english locales,
+  see http://jira.jboss.com/jira/browse/JBINSTALL-232 (Vladimir Ralev)
 
   > 3.10.0 (build 2007.01.29)
 
