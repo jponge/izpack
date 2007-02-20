@@ -210,13 +210,19 @@ public class FileExecutor
             stopThread(t2, errMonitor);
             output[0] = "";
             output[1] = e.getMessage() + "\n";
-            process.destroy();
         }
         catch (IOException e)
         {
             if (Debug.tracing()) e.printStackTrace(System.err);
             output[0] = "";
             output[1] = e.getMessage() + "\n";
+        }
+        finally 
+        {
+        	// cleans up always resources like file handles etc.
+        	// else many calls (like chmods for every file) can produce
+        	// too much open handles.
+            if (process != null) process.destroy();
         }
         return exitStatus;
     }
