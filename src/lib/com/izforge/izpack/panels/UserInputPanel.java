@@ -45,6 +45,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.filechooser.FileFilter;
 
 import net.n3.nanoxml.NonValidator;
@@ -3001,7 +3005,43 @@ public class UserInputPanel extends IzPanel
             this.autodetectButton.addActionListener(this);
             this.browseButton.addActionListener(this);
 
+            /*
+             * add DocumentListener to manage nextButton if user enters input
+             */
+            ((JTextField)this.pathComboBox.getEditor().getEditorComponent()).getDocument().addDocumentListener(new DocumentListener()
+            {
+                public void changedUpdate(DocumentEvent e)
+                {
+                    checkNextButtonState();
+                }
+                public void insertUpdate(DocumentEvent e)
+                {
+                    checkNextButtonState();
+                }
+                public void removeUpdate(DocumentEvent e)
+                {
+                    checkNextButtonState();
+                }
+                private void checkNextButtonState()
+                {
+                    Document doc = ((JTextField)pathComboBox.getEditor().getEditorComponent()).getDocument();
+                    try {
+                        if (pathMatches(doc.getText(0, doc.getLength())))
+                            getInstallerFrame().unlockNextButton(false);
+                        else    
+                            getInstallerFrame().lockNextButton();
+                    } catch (BadLocationException e) {/*ignore, it not happens*/}
+                }
+            });
+
             autodetect();
+        }
+        
+        /**
+         * convenient method
+         */
+        private InstallerFrame getInstallerFrame() {
+            return parent;
         }
 
         /**
@@ -3061,7 +3101,10 @@ public class UserInputPanel extends IzPanel
              * Check if the user has entered data into the ComboBox and add it to the Itemlist
              */
             String selected = (String) this.pathComboBox.getSelectedItem();
-            if (selected == null) { return false; }
+            if (selected == null) {
+                parent.lockNextButton();
+                return false;
+            }
             boolean found = false;
             for (int x = 0; x < this.pathComboBox.getItemCount(); x++)
             {
@@ -3130,14 +3173,19 @@ public class UserInputPanel extends IzPanel
                 if (this.pathMatches(path))
                 {
                     this.pathComboBox.setSelectedIndex(i);
+                    parent.unlockNextButton();
                     return true;
                 }
 
             }
 
             // if the user entered something else, it's not listed as an item
-            return this.pathMatches((String) this.pathComboBox.getSelectedItem());
-
+            if (this.pathMatches((String) this.pathComboBox.getSelectedItem())) {
+                parent.unlockNextButton();
+                return true;
+            }
+            parent.lockNextButton();
+            return false;
         }
 
         /*--------------------------------------------------------------------------*/

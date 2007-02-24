@@ -1363,8 +1363,18 @@ public class InstallerFrame extends JFrame
      */
     public void unlockNextButton()
     {
+        unlockNextButton(true);
+    }
+
+    /**
+     * Unlocks the 'next' button.
+     * @param requestFocus if <code>true</code> focus goes to <code>nextButton</code> 
+     */
+    public void unlockNextButton(boolean requestFocus)
+    {
         nextButton.setEnabled(true);
-        nextButton.requestFocus();
+        if (requestFocus)
+            nextButton.requestFocus();
     }
 
     /**

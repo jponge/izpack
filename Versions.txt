@@ -10,6 +10,8 @@
 - Added file and dir fields in UserInputPanel (Dennis Reil)
 - Modifications to keep original file dates and times in _dist directory and in the installer jar
   (Ari Voutilainen via Julien Ponge)
+- UserInputPanel: force users to select an existing directory or file
+  (Michael Hagedorn via Julien Ponge)
 
 	> 3.10.1 (build 2007.xx.xx)
 	
