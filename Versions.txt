@@ -10,6 +10,8 @@
   (Vladimir Ralev via Julien Ponge)
 - Workaround for a Sun bug in Java 6 which crashes the installer in some non-english locales,
   see http://jira.jboss.com/jira/browse/JBINSTALL-232 (Vladimir Ralev)
+- Replaced the default checkbox icons in Gnome/KDE since they do not grey-out when disabled
+  as notes in the helper label. This change is only effective for UNIX. (Vladimir Ralev)
 
   > 3.10.0 (build 2007.01.29)
 
