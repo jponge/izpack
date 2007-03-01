@@ -12,6 +12,8 @@
   see http://jira.jboss.com/jira/browse/JBINSTALL-232 (Vladimir Ralev)
 - Replaced the default checkbox icons in Gnome/KDE since they do not grey-out when disabled
   as notes in the helper label. This change is only effective for UNIX. (Vladimir Ralev)
+- Added localization support for column names in InstallationGroupPanel
+  (Markus Schlegel via Vladimir Ralev)
 
   > 3.10.0 (build 2007.01.29)
 
