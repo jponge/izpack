@@ -406,7 +406,10 @@ public class InstallationGroupPanel extends IzPanel
 
     protected TableModel getModel(HashMap groupData)
     {
-        String[] columns = { "Selected", "InstallType", "Size"};
+        String c1 = parent.langpack.getString("InstallationGroupPanel.colNameSelected");
+        String c2 = parent.langpack.getString("InstallationGroupPanel.colNameInstallType");
+        String c3 = parent.langpack.getString("InstallationGroupPanel.colNameSize");
+        String[] columns = {c1, c2, c3};
          DefaultTableModel model = new DefaultTableModel (columns, 0)
          {
             public boolean isCellEditable (int row, int column)
