@@ -4,6 +4,28 @@
 
 <langpack>
 
+    <!-- Heading messages START -->
+    <str id="CheckedHelloPanel.headline" txt="Vitajte"/>
+    <str id="CompilePanel.headline" txt="Kompilácia zdrojových súborov"/>
+    <str id="ConditionalUserInputPanel.headline" txt="Pou¾ivateµské data"/>
+    <str id="ExtendedInstallPanel.headline" txt="In¹talácia a konfigurácia"/>
+    <str id="FinishPanel.headline" txt="In¹talácia ukonèená"/>
+    <str id="HelloPanel.headline" txt="Vitajte"/>
+    <str id="HTMLInfoPanel.headline" txt="Informácie"/>
+    <str id="HTMLLicencePanel.headline" txt="Potvrdenie licencie"/>
+    <str id="ImgPacksPanel.headline" txt="Vyberte in¹talaèné balíky"/>
+    <str id="InfoPanel.headline" txt="Informácie"/>
+    <str id="InstallPanel.headline" txt="In¹talácia"/>
+    <str id="JDKPathPanel.headline" txt="JDK Cesta"/>
+    <str id="LicencePanel.headline" txt="Potvrdenie licencie"/>
+    <str id="PacksPanel.headline" txt="Vyberte in¹talaèné balíky"/>
+    <str id="ProcessPanel.headline" txt="Vykonanie externých programov"/>
+    <str id="ShortcutPanel.headline" txt="Zástupcovia"/>
+    <str id="SimpleFinishPanel.headline" txt="In¹talácia ukonèená"/>
+    <str id="SummaryPanel.headline" txt="Sumár konfiguraèných dát"/>
+    <str id="TargetPanel.headline" txt="Cieµová cesta"/>
+    <str id="UserInputPanel.headline" txt="Pou¾ivateµské data"/>
+
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - In¹talácia "/>
     <str id="installer.next" txt="Ïal¹í"/>
@@ -17,6 +39,11 @@
     <str id="installer.no" txt="Nie"/>
     <str id="installer.cancel" txt="Zru¹i»"/> 
     <str id="installer.error" txt="Chyba"/>
+    <str id="installer.help" txt="Pomoc"/>
+    <str id="installer.step" txt="Krok"/>
+    <str id="installer.of" txt=" - "/>
+    <str id="installer.Message" txt="Správa"/> 
+    
     
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Táto operácia odstráni nain¹talovanú aplikáciu !"/>
@@ -28,6 +55,13 @@
     <str id="HelloPanel.welcome2" txt=" !"/>
     <str id="HelloPanel.authors" txt="Autor(i) tohto softvéru je(sú) : "/>
     <str id="HelloPanel.url" txt="Domovská stránka projektu je : "/>
+
+    <str id="PrinterSelectPanel.select_printer" txt="Vyberte tlaèiareò pre in¹taláciu." />
+    
+    <str id="CheckedHelloPanel.productAlreadyExist0" txt="Aplikácia sa u¾ nachádza nain¹talovaná na tomto poèítaèi v prieèinku "/>
+    <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Ste si istý ¾e chcete in¹talova» inú in¹tanciu danej aplikácie?"/>
+    <str id="CheckedHelloPanel.infoOverUninstallKey" txt="Názov odin¹talaèného kµúèa: " />
+    
     
     <str id="LicencePanel.info" txt="Pozorne si preèítajte nasledovné licenèné podmienky:"/>
     <str id="LicencePanel.agree" txt="Akceptujem licenèné podmienky."/>
@@ -51,7 +85,8 @@
          txt="Súbor nie je prieèinok! Vyberte prieèinok!"/>
     <str id="TargetPanel.notwritable" 
          txt="Do vybraného prieèinku sa nedá zapisova» ! Vyberte iný prieèinok!"/>
-
+    
+    <str id="JDKPathPanel.extendedIntro" txt="In¹talovaná aplikácia potrebuje JDK(Java devepoler kit) od verzie ${JDKPathPanel.minVersion} po ${JDKPathPanel.maxVersion}. JRE (Java runtime environment) nie je postaèujúce."/>
     <str id="JDKPathPanel.intro" txt="In¹talovaná aplikácia potrebuje JDK(Java devepoler kit). JRE (Java runtime environment) nie je postaèujúce."/>
     <str id="JDKPathPanel.info" txt="Vyberte prieèinok s nain¹talovanym JDK (Java devepoler kit) :"/>
     <str id="JDKPathPanel.badVersion1" txt="Vybraná verzia JDK má nesprávnu verziu (k dispozícii: "/>
@@ -64,8 +99,10 @@
     <str id="PacksPanel.freespace" txt="Voµné miesto: "/>
     <str id="PacksPanel.description" txt="Poznámka"/>
     <str id="PacksPanel.dependencyList" txt="Vybraný balík potrebuje ma» nain¹talované aj tieto balíky "/>
+    <str id="PacksPanel.dependencies" txt="Závislosti: "/>
+    <str id="PacksPanel.excludes" txt="Vylúèené: "/>
     <str id="ImgPacksPanel.dependencyList" txt="Závisle balíky"/>
-	<str id="PacksPanel.notEnoughSpace" txt="Na disku nie je dostatoèné mno¾stvo voµného miesta."/>
+    <str id="PacksPanel.notEnoughSpace" txt="Na disku nie je dostatoèné mno¾stvo voµného miesta."/>
     <str id="PacksPanel.notAscertainable" txt="nie je mo¾né zisti»"/>
     
     <str id="InstallPanel.info" txt="Kliknutím na tlaèítko 'In¹talova» !' zaènete in¹taláciu"/>
@@ -138,7 +175,7 @@
 
     <str id="CompilePanel.heading" txt="Preklad" />
     <str id="CompilePanel.tip" txt="Priebeh prekladanej úlohy:" />
-    <str id="CompilePanel.browse" txt="Prehµada»..." />
+    <str id="CompilePanel.browse" txt="Prehµadáva»..." />
     <str id="CompilePanel.browse.approve" txt="Pou¾i» ako prekladaè" />
     <str id="CompilePanel.start" txt="©tart" />
     <str id="CompilePanel.progress.initial" txt="[Stlaète ©tart tlaèitko]" />
@@ -171,5 +208,12 @@
     
     
     <!-- Add your own panels specific strings here if you need -->
+    <str id="nextmedia.title" txt="Ïaµ¹ie in¹talaèné média"/>
+    <str id="nextmedia.msg" txt="Vyberte ïaµ¹ie in¹talaèné média." />
+    <str id="nextmedia.browsebtn" txt="Prehµadáva»" />
+    <str id="nextmedia.okbtn" txt="Vybra»" />
+    <str id="nextmedia.cancelbtn" txt="Zru¹i»" />	
+    <str id="nextmedia.choosertitle" txt="Vybra» in¹talaèné média" />
+    <str id="nextmedia.filedesc" rdid="in¹talova» balíky (.pak*)" />
 
 </langpack>
