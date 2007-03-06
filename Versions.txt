@@ -14,6 +14,7 @@
   as notes in the helper label. This change is only effective for UNIX. (Vladimir Ralev)
 - Added localization support for column names in InstallationGroupPanel
   (Markus Schlegel via Vladimir Ralev)
+- Finnish langpack update (Ari Voutilainen via Julien Ponge)
 
   > 3.10.0 (build 2007.01.29)
 

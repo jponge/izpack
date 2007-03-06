@@ -131,7 +131,7 @@
     <str id="ShortcutPanel.regular.default" txt="Oletus"/>
     <str id="ShortcutPanel.regular.desktop" txt="Luo pikalinkit myös työpöydälle"/>
     <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Aloitusvalikko"/>
-    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Valikko"/>
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="XDG-Valikko"/>
                                                              <!-- "StartMenu" is a placeholder will be replaced at runtime -->
     <str id="ShortcutPanel.regular.create" txt="Luo pikalinkit aloitusvalikkoon"/>
     <str id="ShortcutPanel.regular.userIntro" txt="Luo pikalinkki:"/>
@@ -215,5 +215,10 @@
 	  <str id="nextmedia.cancelbtn" txt="Peruuta" />
     <str id="nextmedia.choosertitle" txt="Valitse asennusmedia" />
     <str id="nextmedia.filedesc" rdid="asennuspaketit (.pak*)" />
+
+    <str id="InstallationGroupPanel.colNameSelected" txt="Valittu" />
+    <str id="InstallationGroupPanel.colNameInstallType" txt="Asennustyyppi" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Koko" />
+
 </langpack>
 
