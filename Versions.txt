@@ -12,6 +12,7 @@
   (Ari Voutilainen via Julien Ponge)
 - UserInputPanel: force users to select an existing directory or file
   (Michael Hagedorn via Julien Ponge)
+- Default path for JDKPathPanel will be got from Windows registry if possible (Klaus Bartz)  
 
 	> 3.10.1 (build 2007.xx.xx)
 	
