@@ -42,6 +42,7 @@
     <str id="installer.help" txt="Hilfe"/>
     <str id="installer.step" txt="Schritt"/>
     <str id="installer.of" txt="von"/>
+    <str id="installer.Message" txt="Meldung"/> 
 
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Jetzt werden die installierten Anwendungen entfernt!"/>
@@ -89,6 +90,7 @@
     <str id="JDKPathPanel.badVersion1" txt="Der gewählte JDK hat die falsche Version (vorhanden: "/>
     <str id="JDKPathPanel.badVersion2" txt=" benötigt: "/>
     <str id="JDKPathPanel.badVersion3" txt=") Soll der JDK trotzdem benutzt werden?"/>
+    <str id="JDKPathPanel.nonValidPathInReg" txt="Die Windows-Registry enthält für diesen SDK einen fehlerhaften Pfad-Eintrag. Soll der JDK trotzdem benutzt werden?"/>
 
     <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus:"/>
     <str id="PacksPanel.tip" txt="Hinweis: die grau markierten Pakete können nicht optional ausgewählt werden."/>
