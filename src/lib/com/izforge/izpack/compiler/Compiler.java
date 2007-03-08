@@ -730,6 +730,11 @@ public class Compiler extends Thread
         URL url = findIzPackResource(jarPath, "CustomAction jar file");
         List filePaths = getContainedFilePaths(url);
         String fullClassName = getFullClassName(url, className);
+        if (fullClassName == null)
+        {
+            throw new CompilerException("CustomListener class '" + className + "' not found in '"
+                    + url + "'. The class and listener name must match");
+        }
         CustomData ca = new CustomData(fullClassName, filePaths, constraints, type);
         packager.addCustomJar(ca, url);
     }
