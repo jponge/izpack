@@ -1,5 +1,5 @@
 /*
- * $Id:$
+ * $Id$
  * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  * 
  * http://www.izforge.com/izpack/
@@ -283,7 +283,7 @@ public class JDKPathPanel extends PathInputPanel
         }
         if (max != null)
             if (!compareVersions(vs, max, false, 4, 4, "__NO_NOT_IDENTIFIER_")) retval = BAD_VERSION;
-        if( retval == OK && badRegEntries.size() > 0 )
+        if (retval == OK && badRegEntries != null && badRegEntries.size() > 0)
         {   // Test for bad registry entry.
             if( badRegEntries.contains(getDetectedVersion()))
                 retval = BAD_REG_PATH;
