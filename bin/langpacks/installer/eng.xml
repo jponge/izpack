@@ -216,4 +216,41 @@
 	  <str id="nextmedia.cancelbtn" txt="Cancel" />	
     <str id="nextmedia.choosertitle" txt="Choose install media" />
     <str id="nextmedia.filedesc" rdid="install packs (.pak*)" />
+    <!-- Strings for the loggin/reporting system (Messenger) -->
+
+    <!-- This string defines the time stamp format in the installation report.
+         The format details are documented in java.text.SimpleDateFormat -->
+    <str id="log.timeStamp"               txt="MM-dd-yyyy [HH:mm:ss]  zzzz"/>
+
+    <!-- Strings for various purposes in the logging/reporting system  -->
+    <str id="log.reportHeading"           txt="                           IzPack INSTALLATION REPORT"/>
+    <str id="log.installFailed"           txt="WARNING!!! The installation did not succeed!"/>
+    <str id="log.partialInstall"          txt="WARNING!!! The installation might not have completely succeeded!"/>
+    <str id="log.messageCount"            txt="This report contains {0} general message(s), {1} warning(s) and {2} error(s)"/>
+    <str id="log.application"             txt="Installation report for : {0} Version {1}"/>
+    <str id="log.timePrefix"              txt="Install time            : {0}"/>
+    <str id="log.pathPrefix"              txt="Install directory       : {0}"/>
+    <str id="log.messageHeading"          txt="                         --- Installation Messages ---"/>
+    <str id="log.warningHeading"          txt="                               --- Warnings ---"/>
+    <str id="log.errorHeading"            txt="                                --- Errors ---"/>
+    <str id="log.exceptionPrefix"         txt="                 >> Exception: {0}"/>
+    <str id="log.messagePrefix"           txt="Message  [{0}] - "/>
+    <str id="log.warningPrefix"           txt="Warning [{0}] - "/>
+    <str id="log.errorPrefix"             txt="Error [{0}] - "/>
+    <str id="log.reportWriteErrorTitle"   txt="Error writing report"/>
+    <str id="log.reportWriteError"        txt="Unable to write the installation report to ''{0}''"/>
+    <str id="log.informUserTitle"         txt="Installation Problems"/>
+    <str id="log.saveLogTitle"            txt="Save Log File"/>
+    <str id="log.LogFileName"             txt="installLog.txt"/>
+    <str id="log.informUserFail"          txt="<html>The installation did not succeed!<br>Would you like to write a log file?</html>"/>
+    <str id="log.informUserPartial"       txt="<html>The installation might not have completely succeeded!<br>Would you like to write a log file?</html>"/>
+
+    <!-- Strings for individual messages in the logging/reporting system.
+         Numbers for each category (message/warning/error) start at 0  -->
+    <str id="log.message_"                txt=""/>
+
+    <str id="log.warning_"                txt=""/>
+
+    <str id="log.error_0"                 txt="unable to write ''{0}''"/>
+
 </langpack>
