@@ -20,8 +20,11 @@
 package com.izforge.izpack;
 
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.TreeMap;
 import java.util.Vector;
+
+import com.izforge.izpack.util.StringTool;
 
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;
@@ -52,6 +55,13 @@ public class LocaleDatabase extends TreeMap
         add(in);
     }
 
+    /**
+     * Adds the contents of the given stream to the data base. The stream have to contain key value
+     * pairs as declared by the DTD langpack.dtd.
+     * 
+     * @param in an InputStream to read the translation from.
+     * @throws Exception
+     */
     public void add(InputStream in) throws Exception
     {
         // Initialises the parser
@@ -98,8 +108,38 @@ public class LocaleDatabase extends TreeMap
         // At a change of the return value at val == null the method
         // com.izforge.izpack.installer.IzPanel.getI18nStringForClass
         // should be also addapted.
-        if (val == null) val = key;
+        if (val == null)
+            val = key;
         return val;
     }
-}
 
+    /**
+     * Convenience method to retrieve an element and simultainiously insert variables into the
+     * string. A placeholder have to be build with the substring {n} where n is the parameter
+     * argument beginning with 0. The first argument is therefore {0}. If a parameter starts with a
+     * dollar sign the value will be used as key into the LocalDatabase. The key can be written as
+     * $MYKEY or ${MYKEY}. For all placeholder an argument should be exist and vis a versa.
+     * 
+     * @param key The key of the element to retrieve.
+     * @param variables the variables to insert
+     * @return The element value with the variables inserted or the key if not found.
+     */
+    public String getString(String key, String[] variables)
+    {
+        for (int i = 0; i < variables.length; ++i)
+        {
+            if (variables[i].startsWith("$"))
+            { // Argument is also a key into the LocaleDatabase.
+                String curArg = variables[i];
+                if (curArg.startsWith("${"))
+                    curArg = curArg.substring(2, curArg.length() - 1);
+                else
+                    curArg = curArg.substring(1);
+                variables[i] = getString(curArg);
+            }
+        }
+
+        return MessageFormat.format(getString(key), variables);
+    }
+
+}
