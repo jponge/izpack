@@ -215,5 +215,10 @@
 	  <str id="nextmedia.cancelbtn" txt="Peruuta" />
     <str id="nextmedia.choosertitle" txt="Valitse asennusmedia" />
     <str id="nextmedia.filedesc" rdid="asennuspaketit (.pak*)" />
+
+    <str id="InstallationGroupPanel.colNameSelected" txt="Valittu" />
+    <str id="InstallationGroupPanel.colNameInstallType" txt="Asennustyyppi" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Koko" />
+
 </langpack>
 

@@ -216,6 +216,7 @@
 	  <str id="nextmedia.cancelbtn" txt="Installation abbrechen" />	
     <str id="nextmedia.choosertitle" txt="Installationsmedium auswählen" />
     <str id="nextmedia.filedesc" txt="Installationspakete (.pak*)" />
+
     <!-- Strings for the loggin/reporting system (Messenger) -->
 
     <!-- This string defines the time stamp format in the installation report.
@@ -252,5 +253,10 @@
 
     <str id="log.error_0"                 txt="konnte die Datei ''{0}'' nicht schreiben"/>
 
+    
+    <str id="InstallationGroupPanel.colNameSelected" txt="Selektiert" />
+    <str id="InstallationGroupPanel.colNameInstallType" txt="Installationstyp" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Grösse" />
+    
 </langpack>
 

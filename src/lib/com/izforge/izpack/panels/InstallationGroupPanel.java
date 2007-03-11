@@ -224,7 +224,7 @@ public class InstallationGroupPanel extends IzPanel
         descriptionField.setOpaque(false);
         descriptionField.setText("<b>Install group description text</b>");
         descriptionField.setContentType("text/html");
-        descriptionField.setBorder(new TitledBorder("Description"));
+        descriptionField.setBorder(new TitledBorder(idata.langpack.getString("PacksPanel.description")));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -406,7 +406,10 @@ public class InstallationGroupPanel extends IzPanel
 
     protected TableModel getModel(HashMap groupData)
     {
-        String[] columns = { "Selected", "InstallType", "Size"};
+        String c1 = parent.langpack.getString("InstallationGroupPanel.colNameSelected");
+        String c2 = parent.langpack.getString("InstallationGroupPanel.colNameInstallType");
+        String c3 = parent.langpack.getString("InstallationGroupPanel.colNameSize");
+        String[] columns = {c1, c2, c3};
          DefaultTableModel model = new DefaultTableModel (columns, 0)
          {
             public boolean isCellEditable (int row, int column)
