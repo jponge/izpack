@@ -243,8 +243,8 @@
     <str id="log.informUserTitle"         txt="Installation Problems"/>
     <str id="log.saveLogTitle"            txt="Save Log File"/>
     <str id="log.LogFileName"             txt="installLog.txt"/>
-    <str id="log.informUserFail"          txt="<html>The installation did not succeed!<br>Would you like to write a log file?</html>"/>
-    <str id="log.informUserPartial"       txt="<html>The installation might not have completely succeeded!<br>Would you like to write a log file?</html>"/>
+    <str id="log.informUserFail"          txt="&lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt;"/>
+    <str id="log.informUserPartial"       txt="&lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt;"/>
 
     <!-- Strings for individual messages in the logging/reporting system.
          Numbers for each category (message/warning/error) start at 0  -->

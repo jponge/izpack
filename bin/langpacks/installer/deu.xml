@@ -90,7 +90,7 @@
     <str id="JDKPathPanel.badVersion1" txt="Der gewählte JDK hat die falsche Version (vorhanden: "/>
     <str id="JDKPathPanel.badVersion2" txt=" benötigt: "/>
     <str id="JDKPathPanel.badVersion3" txt=") Soll der JDK trotzdem benutzt werden?"/>
-    <str id="JDKPathPanel.nonValidPathInReg" txt="Die Windows-Registry enthält für diesen SDK einen fehlerhaften Pfad-Eintrag. Soll der JDK trotzdem benutzt werden?"/>
+    <str id="JDKPathPanel.nonValidPathInReg" txt="Die Windows-Registry enthält für diesen JDK einen fehlerhaften Pfad-Eintrag. Soll der JDK trotzdem benutzt werden?"/>
 
     <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus:"/>
     <str id="PacksPanel.tip" txt="Hinweis: die grau markierten Pakete können nicht optional ausgewählt werden."/>
@@ -243,8 +243,8 @@
     <str id="log.informUserTitle"         txt="Installationsprobleme"/>
     <str id="log.saveLogTitle"            txt="Protokoll speichern"/>
     <str id="log.LogFileName"             txt="installLog.txt"/>
-    <str id="log.informUserFail"          txt="<html>Die Installation ist fehlgeschalgen!<br>Möchten Sie ein Protokoll abspeichern?</html>"/>
-    <str id="log.informUserPartial"       txt="<html>Die Installation konnte nicht vollständig ausgeführt werden!<br>Möchten Sie ein Protokoll abspeichern?</html>"/>
+    <str id="log.informUserFail"          txt="&lt;html&gt;Die Installation ist fehlgeschalgen!&lt;br&gt;Möchten Sie ein Protokoll abspeichern?&lt;/html&gt;"/>
+    <str id="log.informUserPartial"       txt="&lt;html&gt;Die Installation konnte nicht vollständig ausgeführt werden!&lt;br&gt;Möchten Sie ein Protokoll abspeichern?&lt;/html&gt;"/>
 
     <!-- Strings for individual messages in the logging/reporting system.
          Numbers for each category (message/warning/error) start at 0  -->
