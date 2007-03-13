@@ -13,8 +13,9 @@
 - UserInputPanel: force users to select an existing directory or file
   (Michael Hagedorn via Julien Ponge)
 - Default path for JDKPathPanel will be got from Windows registry if possible (Klaus Bartz)  
+- New Farsi langpack (Parastou Kohvaei)
 
-	> 3.10.1 (build 2007.xx.xx)
+  > 3.10.1 (build 2007.xx.xx)
 	
 - Fixed NPE for pack.id == null (Fabrice Mirabile)
 - Packages that are not marked as preselected must also be removed from the selectedPacks

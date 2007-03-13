@@ -106,4 +106,5 @@ IzPack for your projects ;-)
 - Eric Rose: for the patch related to the logfile of AntActions.
 - Ryan Shillington: for the patches
 - Amit Bhayani & JBoss: for the patches
+- Parastou Kohvaei: for the Farsi translation.
 
