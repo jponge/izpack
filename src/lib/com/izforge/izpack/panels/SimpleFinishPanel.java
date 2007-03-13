@@ -26,6 +26,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
@@ -98,7 +99,7 @@ public class SimpleFinishPanel extends IzPanel
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("information"),  LEADING));
         getLayoutHelper().completeLayout(); // Call, or call not?
-
+        Log.getInstance().informUser();
     }
 
     /**

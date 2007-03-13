@@ -98,8 +98,10 @@ import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.DebugConstants;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 
@@ -729,6 +731,12 @@ public class InstallerFrame extends JFrame
             panelsContainer.setVisible(false);
             IzPanel panel = (IzPanel) installdata.panels.get(installdata.curPanelNumber);
             IzPanel l_panel = (IzPanel) installdata.panels.get(last);
+            Log.getInstance().addDebugMessage(
+                    "InstallerFrame.switchPanel: try switching panel from {0} to {1} ({2} to {3})",
+                    new String[] { l_panel.getClass().getName(), panel.getClass().getName(),
+                            Integer.toString(last), Integer.toString(installdata.curPanelNumber)},
+                    DebugConstants.PANEL_TRACE, null);
+
             // instead of writing data here which leads to duplicated entries in
             // auto-installation script (bug # 4551), let's make data only immediately before
             // writing out that script.
@@ -764,6 +772,7 @@ public class InstallerFrame extends JFrame
                 public void run()
                 {
                    JButton cdb = null;
+                   String buttonName = "next";
                    if (nextButton.isEnabled()) {
                      cdb = nextButton;
                      quitButton.setDefaultCapable(false);
@@ -771,11 +780,16 @@ public class InstallerFrame extends JFrame
                      nextButton.setDefaultCapable(true);
                    } else if (quitButton.isEnabled()) {
                      cdb = quitButton;
+                     buttonName = "quit";
                      quitButton.setDefaultCapable(true);
                      prevButton.setDefaultCapable(false);
                      nextButton.setDefaultCapable(false);
                    }
                    getRootPane().setDefaultButton(cdb);
+                   Log.getInstance().addDebugMessage("InstallerFrame.switchPanel: setting {0} as default button", 
+                           new String[] { buttonName }, 
+                           DebugConstants.PANEL_TRACE,
+                             null);
                  }
             });
 
@@ -835,6 +849,8 @@ public class InstallerFrame extends JFrame
             }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
+            Log.getInstance().addDebugMessage("InstallerFrame.switchPanel: switched", null,
+                    DebugConstants.PANEL_TRACE, null);
         }
         catch (Exception err)
         {

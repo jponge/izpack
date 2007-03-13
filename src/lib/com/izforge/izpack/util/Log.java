@@ -220,6 +220,8 @@ public class Log implements LogError, LogWarning, LogMessage
             // ----------------------------------------------------
             // get the list of debug channels requested
             // ----------------------------------------------------
+            recordedChannels = new Hashtable();
+            channels = new Vector();
             temp = System.getProperty(CHANNEL_LIST);
             if ((temp != null) && (temp.toUpperCase().equals("ON")))
             {
@@ -232,8 +234,6 @@ public class Log implements LogError, LogWarning, LogMessage
             temp = System.getProperty(CHANNEL_SPEC);
             if (temp != null)
             {
-                channels = new Vector();
-                recordedChannels = new Hashtable();
                 String[] channelList = temp.split(",");
 
                 for (int i = 0; i < channelList.length; i++)
