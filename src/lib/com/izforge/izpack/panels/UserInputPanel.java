@@ -370,6 +370,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
     private Vector entries = new Vector();
 
     private LocaleDatabase langpack = null;
+    
+    // Used for dynamic controls to skip content validation unless the user
+    // really clicks "Next"
+    private boolean validating = true;
 
     /*--------------------------------------------------------------------------*/
     // This method can be used to search for layout problems. If this class is
@@ -1396,7 +1400,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
         if ((variable == null) || (ruleField == null)) { return (true); }
 
-        boolean success = ruleField.validateContents();
+        boolean success = validating ? ruleField.validateContents() : true;
         if (!success)
         {
             String message = "";
@@ -2029,7 +2033,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         if ((variable == null) || (passwordGroupsRead.contains(group))) { return (true); }
         passwordGroups.add(group);
 
-        boolean success = group.validateContents();
+        boolean success = validating ? group.validateContents() : true;
 
         if (!success)
         {
@@ -3392,8 +3396,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
     
     // Repaint all controls and validate them agains the current variables
     public void actionPerformed(ActionEvent e) {
+       validating = false;
        readInput();
        panelActivate();
+       validating = true;
    }
 
 } // public class UserInputPanel
