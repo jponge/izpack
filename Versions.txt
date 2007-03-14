@@ -14,6 +14,7 @@
   (Michael Hagedorn via Julien Ponge)
 - Default path for JDKPathPanel will be got from Windows registry if possible (Klaus Bartz)  
 - New Farsi langpack (Parastou Kohvaei)
+- Dynamic control validation on radio and checkbox selection events (Vladimir Ralev)
 
   > 3.10.1 (build 2007.xx.xx)
 	

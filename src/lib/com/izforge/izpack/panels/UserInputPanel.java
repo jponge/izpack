@@ -117,7 +117,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
  * To Do: ------ * make sure all header documentation is complete and correct
  * --------------------------------------------------------------------------
  */
-public class UserInputPanel extends IzPanel
+public class UserInputPanel extends IzPanel implements ActionListener
 {
 
     // ------------------------------------------------------------------------
@@ -190,6 +190,10 @@ public class UserInputPanel extends IzPanel
     private static final String SPEC = "spec";
 
     private static final String SET = "set";
+    
+    private static final String REVALIDATE = "revalidate";
+    
+    private static final String TOPBUFFER = "topBuffer";
 
     private static final String TRUE = "true";
 
@@ -395,13 +399,10 @@ public class UserInputPanel extends IzPanel
 
     protected void init()
     {
+        
+        TwoColumnLayout layout;
         super.removeAll();
         uiElements.clear();
-
-        // ----------------------------------------------------
-        // ----------------------------------------------------
-        TwoColumnLayout layout = new TwoColumnLayout(10, 5, 30, 25, TwoColumnLayout.LEFT);
-        setLayout(layout);
 
         // ----------------------------------------------------
         // get a locale database
@@ -430,6 +431,24 @@ public class UserInputPanel extends IzPanel
             exception.printStackTrace();
         }
 
+        // ----------------------------------------------------
+        // Set the topBuffer from the attribute. topBuffer=0 is useful
+        // if you don't want your panel to be moved up and down during
+        // dynamic validation (showing and hiding components within the
+        // same panel)
+        // ----------------------------------------------------
+        int topbuff = 25;
+        try
+        {
+           topbuff = Integer.parseInt(spec.getAttribute(TOPBUFFER));
+        }
+        catch(Exception ex){}
+        finally
+        {
+            layout = new TwoColumnLayout(10, 5, 30, topbuff, TwoColumnLayout.LEFT);
+        }
+        setLayout(layout);
+        
         if (!haveSpec)
         {
             // return if we could not read the spec. further
@@ -849,7 +868,9 @@ public class UserInputPanel extends IzPanel
         // }
 
         buildUI();
-        // need a validation, else ui is scrambled
+        //need a validation, else ui is scrambled
+
+        this.setSize(this.getMaximumSize().width, this.getMaximumSize().height);
         validate();
         if (packsDefined)
         {
@@ -1787,11 +1808,19 @@ public class UserInputPanel extends IzPanel
             {
                 JRadioButton choice = new JRadioButton();
                 choice.setText(getText((XMLElement) choices.elementAt(i)));
+                String causesValidataion = ((XMLElement) choices.elementAt(i)).getAttribute(REVALIDATE);
+                if(causesValidataion != null && causesValidataion.equals("yes"))
+                    choice.addActionListener(this);
                 value = (((XMLElement) choices.elementAt(i)).getAttribute(RADIO_VALUE));
 
                 group.add(choice);
 
                 String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
+                // in order to properly initialize dependent controls
+                // we must set this variable now
+                if(idata.getVariable(variable) == null)
+                   if(set != null)
+                      idata.setVariable(variable, value);
                 if (set != null)
                 {
                     if (set != null && !"".equals(set))
@@ -2030,6 +2059,7 @@ public class UserInputPanel extends IzPanel
         String trueValue = null;
         String falseValue = null;
         String variable = spec.getAttribute(VARIABLE);
+        String causesValidataion = null;
         XMLElement detail = spec.getFirstChildNamed(SPEC);
 
         if (variable == null) { return; }
@@ -2040,10 +2070,20 @@ public class UserInputPanel extends IzPanel
             set = detail.getAttribute(SET);
             trueValue = detail.getAttribute(TRUE);
             falseValue = detail.getAttribute(FALSE);
+            causesValidataion = detail.getAttribute(REVALIDATE);
+            String value = idata.getVariable(variable);
+            if(value != null)
+            {
+                set = value;
+            }
         }
 
         JCheckBox checkbox = new JCheckBox(label);
-
+        
+        if(causesValidataion != null && causesValidataion.equals("yes"))
+           checkbox.addActionListener(this);
+        idata.setVariable(variable, set);
+        
         if (set != null)
         {
             if (set != null && !"".equals(set))
@@ -3349,6 +3389,12 @@ public class UserInputPanel extends IzPanel
             }
         }
     }
+    
+    // Repaint all controls and validate them agains the current variables
+    public void actionPerformed(ActionEvent e) {
+       readInput();
+       panelActivate();
+   }
 
 } // public class UserInputPanel
 /*---------------------------------------------------------------------------*/
