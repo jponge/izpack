@@ -14,7 +14,7 @@
   as notes in the helper label. This change is only effective for UNIX. (Vladimir Ralev)
 - Added localization support for column names in InstallationGroupPanel
   (Markus Schlegel via Vladimir Ralev)
-- Finnish langpack update (Ari Voutilainen via Julien Ponge)
+- Finnish langpack updates (Ari Voutilainen via Julien Ponge)
 - Fix: Variables assigned by UserInputPanel are not available when the next page
   nagivations rules are evaluated. http://jira.jboss.com/jira/browse/JBINSTALL-248
   (Vladimir Ralev)

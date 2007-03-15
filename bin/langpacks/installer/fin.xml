@@ -90,6 +90,7 @@
     <str id="JDKPathPanel.badVersion1" txt="Valitun JDK:n versio on väärä (valittavana on: "/>
     <str id="JDKPathPanel.badVersion2" txt=" vaadittu versio: "/>
     <str id="JDKPathPanel.badVersion3" txt=") käytetäänkö tätä JDK:ta silti?"/>
+    <str id="JDKPathPanel.nonValidPathInReg" txt="Windowsin rekisterissÃ¤ on epÃ¤kelpo polku tÃ¤lle JDK:lle. KÃ¤ytetÃ¤Ã¤nkÃ¶ tÃ¤tÃ¤ JDK:ta silti?"/>
 
     <str id="PacksPanel.info" txt="Valitse paketit, jotka haluat asentaa:"/>
     <str id="PacksPanel.tip" txt="Huomaa: harmaa valintaruutu tarkoittaa, että paketti on pakollinen."/>
@@ -216,9 +217,45 @@
     <str id="nextmedia.choosertitle" txt="Valitse asennusmedia" />
     <str id="nextmedia.filedesc" rdid="asennuspaketit (.pak*)" />
 
+    <!-- Strings for the loggin/reporting system (Messenger) -->
+
+    <!-- This string defines the time stamp format in the installation report.
+         The format details are documented in java.text.SimpleDateFormat -->
+    <str id="log.timeStamp"               txt="d.M.yyyy [HH.mm.ss] Z"/>
+
+    <!-- Strings for various purposes in the logging/reporting system  -->
+    <str id="log.reportHeading"           txt="                           IzPack ASENNUSRAPORTTI"/>
+    <str id="log.installFailed"           txt="VAROITUS!!! Asennus ei onnistunut!"/>
+    <str id="log.partialInstall"          txt="VAROITUS!!! Asennus ei ole onnistunut kokonaan!"/>
+    <str id="log.messageCount"            txt="TÃ¤mÃ¤ raportti sisÃ¤ltÃ¤Ã¤ {0} yleistÃ¤ viestiÃ¤, {1} varoitusta ja {2} virhettÃ¤"/>
+    <str id="log.application"             txt="Asennusraportti : {0} versio {1}"/>
+    <str id="log.timePrefix"              txt="Asennusaika     : {0}"/>
+    <str id="log.pathPrefix"              txt="Asennushakemisto: {0}"/>
+    <str id="log.messageHeading"          txt="                 --- Asennusviestit ---"/>
+    <str id="log.warningHeading"          txt="                   --- Varoitukset ---"/>
+    <str id="log.errorHeading"            txt="                     --- Virheet ---"/>
+    <str id="log.exceptionPrefix"         txt="                 >> Poikkeus: {0}"/>
+    <str id="log.messagePrefix"           txt="Viesti  [{0}] - "/>
+    <str id="log.warningPrefix"           txt="Varoitus [{0}] - "/>
+    <str id="log.errorPrefix"             txt="Virhe [{0}] - "/>
+    <str id="log.reportWriteErrorTitle"   txt="Virhe raportin kirjoituksessa"/>
+    <str id="log.reportWriteError"        txt="Asennusraporttia ei vio kirjoittaa: ''{0}''"/>
+    <str id="log.informUserTitle"         txt="Asennusongelmat"/>
+    <str id="log.saveLogTitle"            txt="Tallenna lokitiedosto"/>
+    <str id="log.LogFileName"             txt="installLog.txt"/>
+    <str id="log.informUserFail"          txt="&lt;html&gt;Asennus ei onnistunut!&lt;br&gt;Haluatko kirjoittaa lokitiedoston?&lt;/html&gt;"/>
+    <str id="log.informUserPartial"       txt="&lt;html&gt;Asennus ei ole onnistunut kokonaan!&lt;br&gt;Haluatko kirjoittaa lokitiedoston?&lt;/html&gt;"/>
+
+    <!-- Strings for individual messages in the logging/reporting system.
+         Numbers for each category (message/warning/error) start at 0  -->
+    <str id="log.message_"                txt=""/>
+
+    <str id="log.warning_"                txt=""/>
+
+    <str id="log.error_0"                 txt="ei voi kirjoittaa: ''{0}''"/>
+
     <str id="InstallationGroupPanel.colNameSelected" txt="Valittu" />
     <str id="InstallationGroupPanel.colNameInstallType" txt="Asennustyyppi" />
     <str id="InstallationGroupPanel.colNameSize" txt="Koko" />
 
 </langpack>
-
