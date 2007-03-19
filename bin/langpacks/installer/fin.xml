@@ -90,7 +90,7 @@
     <str id="JDKPathPanel.badVersion1" txt="Valitun JDK:n versio on väärä (valittavana on: "/>
     <str id="JDKPathPanel.badVersion2" txt=" vaadittu versio: "/>
     <str id="JDKPathPanel.badVersion3" txt=") käytetäänkö tätä JDK:ta silti?"/>
-    <str id="JDKPathPanel.nonValidPathInReg" txt="Windowsin rekisterissÃ¤ on epÃ¤kelpo polku tÃ¤lle JDK:lle. KÃ¤ytetÃ¤Ã¤nkÃ¶ tÃ¤tÃ¤ JDK:ta silti?"/>
+    <str id="JDKPathPanel.nonValidPathInReg" txt="Windowsin rekisterissä on epäkelpo polku tälle JDK:lle. Käytetäänkö tätä JDK:ta silti?"/>
 
     <str id="PacksPanel.info" txt="Valitse paketit, jotka haluat asentaa:"/>
     <str id="PacksPanel.tip" txt="Huomaa: harmaa valintaruutu tarkoittaa, että paketti on pakollinen."/>
@@ -227,19 +227,19 @@
     <str id="log.reportHeading"           txt="                           IzPack ASENNUSRAPORTTI"/>
     <str id="log.installFailed"           txt="VAROITUS!!! Asennus ei onnistunut!"/>
     <str id="log.partialInstall"          txt="VAROITUS!!! Asennus ei ole onnistunut kokonaan!"/>
-    <str id="log.messageCount"            txt="TÃ¤mÃ¤ raportti sisÃ¤ltÃ¤Ã¤ {0} yleistÃ¤ viestiÃ¤, {1} varoitusta ja {2} virhettÃ¤"/>
+    <str id="log.messageCount"            txt="Tämä raportti sisältää {0} yleistä viestiä, {1} varoitusta ja {2} virhettä"/>
     <str id="log.application"             txt="Asennusraportti : {0} versio {1}"/>
     <str id="log.timePrefix"              txt="Asennusaika     : {0}"/>
     <str id="log.pathPrefix"              txt="Asennushakemisto: {0}"/>
     <str id="log.messageHeading"          txt="                 --- Asennusviestit ---"/>
     <str id="log.warningHeading"          txt="                   --- Varoitukset ---"/>
     <str id="log.errorHeading"            txt="                     --- Virheet ---"/>
-    <str id="log.exceptionPrefix"         txt="                 >> Poikkeus: {0}"/>
+    <str id="log.exceptionPrefix"         txt="                 &gt;&gt; Poikkeus: {0}"/>
     <str id="log.messagePrefix"           txt="Viesti  [{0}] - "/>
     <str id="log.warningPrefix"           txt="Varoitus [{0}] - "/>
     <str id="log.errorPrefix"             txt="Virhe [{0}] - "/>
     <str id="log.reportWriteErrorTitle"   txt="Virhe raportin kirjoituksessa"/>
-    <str id="log.reportWriteError"        txt="Asennusraporttia ei vio kirjoittaa: ''{0}''"/>
+    <str id="log.reportWriteError"        txt="Asennusraporttia ei voi kirjoittaa: ''{0}''"/>
     <str id="log.informUserTitle"         txt="Asennusongelmat"/>
     <str id="log.saveLogTitle"            txt="Tallenna lokitiedosto"/>
     <str id="log.LogFileName"             txt="installLog.txt"/>
