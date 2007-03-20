@@ -18,6 +18,7 @@
 - Fix: Variables assigned by UserInputPanel are not available when the next page
   nagivations rules are evaluated. http://jira.jboss.com/jira/browse/JBINSTALL-248
   (Vladimir Ralev)
+- Fixed an XML error in the French langpack. (Julien Ponge, reported by Ari Voutilainen).
 
   > 3.10.0 (build 2007.01.29)
 
