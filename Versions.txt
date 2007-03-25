@@ -19,6 +19,7 @@
   nagivations rules are evaluated. http://jira.jboss.com/jira/browse/JBINSTALL-248
   (Vladimir Ralev)
 - Fixed an XML error in the French langpack. (Julien Ponge, reported by Ari Voutilainen).
+- Compile listeners are included in izevent.jar (Julien Ponge).
 
   > 3.10.0 (build 2007.01.29)
 
