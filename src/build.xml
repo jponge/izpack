@@ -690,7 +690,9 @@
                classpath="${installer.jar};${compiler.jar}">
             <include name="com/izforge/izpack/event/ActionBase.java" />
             <include name="com/izforge/izpack/event/Simple*nstallerListener.java" />
+            <include name="com/izforge/izpack/event/SimpleCompilerListener.java" />
             <include name="com/izforge/izpack/event/InstallerListener.java" />
+            <include name="com/izforge/izpack/event/CompilerListener.java" /> 
             <include name="com/izforge/izpack/event/UninstallerListener.java" />
             <include name="com/izforge/izpack/util/IoHelper.java" />
         </javac>

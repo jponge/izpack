@@ -1448,6 +1448,15 @@ public class InstallerFrame extends JFrame
     {
         if ((installdata.curPanelNumber < installdata.panels.size() - 1))
         {
+            // We must trasfer all fields into the variables before
+            // panelconditions try to resolve the rules based on unassigned vars.
+            boolean isValid = 
+              ((IzPanel) installdata.panels.get(last)).isValidated();
+          
+            // if this is not here, validation will
+            // occur mutilple times while skipping panels through the recursion
+            if(!isValid) return; 
+            
             installdata.curPanelNumber++;
             if (!canShow(installdata.curPanelNumber))
             {
@@ -1456,7 +1465,7 @@ public class InstallerFrame extends JFrame
             }
             else
             {
-                if (((IzPanel) installdata.panels.get(last)).isValidated())
+                if (isValid)
                 {
                     switchPanel(last);
                 }
