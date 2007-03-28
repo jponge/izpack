@@ -346,23 +346,15 @@ class PacksModel extends AbstractTableModel
                             checkValues[rowIndex] = 1;
                         }
                     }                    
-                    updateExcludes(rowIndex);
-                    updateDeps();
-                    this.updateConditions();
-                    int bytes = panel.getBytes();
-                    bytes += pack.nbytes;
-                    panel.setBytes(bytes);
                 }                
                 else
                 {
                     checkValues[rowIndex] = 0;
-                    updateExcludes(rowIndex);
-                    updateDeps();
-                    this.updateConditions();
-                    int bytes = panel.getBytes();
-                    bytes -= pack.nbytes;
-                    panel.setBytes(bytes);
                 }
+                updateExcludes(rowIndex);
+                updateDeps();
+                updateConditions();
+                updateBytes();
                 fireTableDataChanged();
                 refreshPacksToInstall();
                 panel.showSpaceRequired();
@@ -456,10 +448,9 @@ class PacksModel extends AbstractTableModel
                 }
             }
         }
-        this.UpdateBytes();
     }
 
-    private void UpdateBytes()
+    private void updateBytes()
     {
         int bytes = 0;
         for (int q = 0; q < packs.size(); q++)

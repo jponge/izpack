@@ -20,6 +20,8 @@
   (Vladimir Ralev)
 - Fixed an XML error in the French langpack. (Julien Ponge, reported by Ari Voutilainen).
 - Compile listeners are included in izevent.jar (Julien Ponge).
+- PacksModel: the number of required bytes could be wrong when selecting and deselecting
+  packs. (Stefan Wachter via Julien Ponge)
 
   > 3.10.0 (build 2007.01.29)
 
