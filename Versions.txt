@@ -22,6 +22,7 @@
 - Compile listeners are included in izevent.jar (Julien Ponge).
 - PacksModel: the number of required bytes could be wrong when selecting and deselecting
   packs. (Stefan Wachter via Julien Ponge)
+- Turkish langpack updated (Melih Cetin vie Julien Ponge)
 
   > 3.10.0 (build 2007.01.29)
 
