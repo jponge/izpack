@@ -1,10 +1,10 @@
 <!--
     $Id$
-    
+
     IzPack installer XML file
-    
+
     By Julien PONGE
-    
+
     In order to build an installer for IzPack, let's create a directory
     named '_dist' in the IzPack root directory. Then copy the files from
     'src/dist-files' into '_dist'. Copy your IzPack image, that is all
@@ -12,7 +12,7 @@
     you'll get bin/, lib/, ... and text files like Versions.txt and so
     on. Now you can invoke the IzPack compiler and it will generate the
     installer.
-    
+
     Alternatively, you can use the IzPack Ant makefile and run 'ant dist'. It's
     much simpler :-)
 -->
@@ -23,22 +23,23 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.10.0</appversion>
+        <appversion>3.10.1</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
             <author email="" name="Klaus Bartz (developer)"/>
             <author email="" name="Fabrice Mirabile (developer)"/>
             <author email="" name="Dennis Reil (developer)" />
-            
+            <author email="" name="JBoss/RedHat: Vladimir Ralev (developers)" />
+
             <author email="" name="Francois Guillet (contributor)"/>
-            <author email="" name="JBoss/RedHat: Vladimir Ralev (contributors)" />            
             <author email="" name="Nils Meier (contributor)" />
             <author email="" name="Markus Schlegel (contributor)" />
             <author email="" name="Hal Vaughan (contributor)" />
             <author email="" name="Ari Voutilainen (contributor)" />
             <author email="" name="Stefan Wachter (contributor)" />
             <author email="" name="Romain Guy (contributor)" />
+            <author email="" name="Melih Cetin (contributor)" />
 
             <author email=""
                     name="... the (many) other developers and contributors to the previous releases!"/>
@@ -58,7 +59,7 @@
     	<modifier key="headingPanelCounter" value="progressbar"/>
 		<modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
 		<modifier key="allYGap" value="3"/>
-		<modifier key="paragraphYGap" value="10"/>	
+		<modifier key="paragraphYGap" value="10"/>
 		<modifier key="filler1YGap" value="5"/>
 		<modifier key="filler3XGap" value="10"/>
     </guiprefs>
@@ -107,8 +108,8 @@
         <res src="doc-html.png" id="ImgPacksPanel.img.1"/>
         <res src="javadocs.png" id="ImgPacksPanel.img.2"/>
         <res src="doc-nanoxml.png" id="ImgPacksPanel.img.3"/>
-        <!--    
-            <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />        
+        <!--
+            <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />
         -->
         <res src="sample.png" id="ImgPacksPanel.img.4"/>
         <res src="src.png" id="ImgPacksPanel.img.5"/>
@@ -134,9 +135,9 @@
         <panel classname="SummaryPanel" id="summarypanel"/>
         <panel classname="InstallPanel" id="installpanel"/>
         <panel classname="ShortcutPanel" id="shortcutpanel"/>
-        <!-- We use temporary the FinishPanel in the 3.9 Release 
+        <!-- We use temporary the FinishPanel in the 3.9 Release
              to get Access to the [Generate an automatic installation script]-Button
-             to get feedback so quick as possible from all of users, 
+             to get feedback so quick as possible from all of users,
              who wants to get back this feature ;-) -->
         <panel classname="FinishPanel" id="finishpanel"/>
     </panels>
@@ -144,7 +145,7 @@
     <!-- The listeners section for CustomActions -->
     <listeners>
         <listener installer="SummaryLoggerInstallerListener"/>
-        <listener installer="RegistryInstallerListener"   
+        <listener installer="RegistryInstallerListener"
                   uninstaller="RegistryUninstallerListener">
             <os family="windows"/>
         </listener>
@@ -183,7 +184,7 @@
         </pack>
         <!--
             Disabled while doc-ng not provides a pdf ...
-            
+
             <pack name="PDF Documentation" required="no">
             <description>The IzPack documentation (PDF version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">

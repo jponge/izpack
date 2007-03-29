@@ -1,8 +1,8 @@
 [ The list of the different public versions of IzPack ]
 
 
-	> 3.10.1 (build 2007.xx.xx)
-	
+  > 3.10.1 (build 2007.03.29)
+
 - Fixed NPE for pack.id == null (Fabrice Mirabile)
 - Packages that are not marked as preselected must also be removed from the selectedPacks
   (Martina Angela Albrecht, via Fabrice Mirabile)
@@ -22,7 +22,7 @@
 - Compile listeners are included in izevent.jar (Julien Ponge).
 - PacksModel: the number of required bytes could be wrong when selecting and deselecting
   packs. (Stefan Wachter via Julien Ponge)
-- Turkish langpack updated (Melih Cetin vie Julien Ponge)
+- Turkish langpack updated (Melih Cetin via Julien Ponge)
 
   > 3.10.0 (build 2007.01.29)
 
@@ -62,7 +62,7 @@
   (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 - Finnish localization updates (Ari Voutilainen via Julien Ponge)
 - Going back and forth between profile selection and packs selection made packs selection unavailable
-  (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)  
+  (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 - PathInputPanel: the close button had incorrect behavior for all path input question/notification messages
   (Vladimir Ralev, JBoss/RedHat, via Julien Ponge)
 - PathInputPanel: logged a stacktrace on Linux systems when no defaultInstallDir was specified and
@@ -79,12 +79,12 @@
 - New splash-screen (Romain Guy)
 
   > 3.9.0 (build 2006.09.25)
-- Fix NullPointerException in CompilerConfig, if you specify a 
+- Fix NullPointerException in CompilerConfig, if you specify a
 	compiler listener and the compiler listener class can't be found (Dennis Reil)
 - Fix Accents In French Langpack (Fabrice Mirabile)
 - Update French Langpack (Julien Ponge)
 - New Indonesian Langpack (Hans Aikema, thanks to Thomas Edwin Santosa)
-- Updated Dutch Langpack (Hans Aikema) 
+- Updated Dutch Langpack (Hans Aikema)
 - Fix for ComboBox in SearchField of UserInputPanel returning
   java.lang.reflect.InvocationTargetException
   if no options added.(Fabrice Mirabile, thanks to Oliver Kiddle)
@@ -93,7 +93,7 @@
 - Added TroubleShooting for ShellLink.dll missing in help (DocBook and XHTML)
   (Fabrice Mirabile).
 - Swing threading fixes (Julien Ponge).
-- Some fixes adviced by IntelliJ IDEA 5.1 code inspector (Julien Ponge).  
+- Some fixes adviced by IntelliJ IDEA 5.1 code inspector (Julien Ponge).
 - Spanish langpack update (Cesar Martinez Izquierdo).
 - New Polish langpack (Fabrice Mirabile, thanks to Radek)
 - Fixed the createPWD.sh (Fabrice Mirabile, thanks to Radek)
@@ -103,7 +103,7 @@
 - Fixed indent of ShortcutPanels Headline (Marc Eppelmann)
 - Made available all IzPack Variable in the ShortCut Specs (Marc Eppelmann)
 - Configurable heading panel added to InstallerFrame (Klaus Bartz).
-- Panels counter (text or progressbar) useable in the heading or 
+- Panels counter (text or progressbar) useable in the heading or
   navigation panel (Klaus Bartz).
 - Fixed logfile for AntActions (Eric Rose).
 - PacksPanels: fixed disk space requirements (Ryan Shillington, via Julien
@@ -116,9 +116,9 @@
 - Added a variable for install log, InstallerFrame.logfilePath (Klaus Bartz).
 - Added the docu for install log (Fabrice Mirabile).
 - TwoColumnLayout fix (Amit Bhayani @JBoss/RedHat).
-- New compiler (packager) comandline argument -h for IZPACK_HOME; try to 
+- New compiler (packager) comandline argument -h for IZPACK_HOME; try to
   automatic resolving of IZPACK_HOME if not specified (Klaus Bartz).
-- New layout manager (IzPanelLayout) for simplify layouting of IzPanels. 
+- New layout manager (IzPanelLayout) for simplify layouting of IzPanels.
   Configurable anchor, gaps, stretch rules etc. (Klaus Bartz).
 - Documentation figures refreshment (Julien Ponge).
 - Throw an IllegalArgumentException in the compiler if the declared panel
@@ -136,7 +136,7 @@
 - Write Desktop shortcuts to all known local and ypbinded users "desktop" folders.
   (Marc Eppelmann)
 - Write common shortcuts and their icons to the new freedesktop.org common
-  "/usr/share/applications"   and "/usr/share/pixmaps" folders to display 
+  "/usr/share/applications"   and "/usr/share/pixmaps" folders to display
   these in the commons [start].menu (Marc Eppelmann)
 - New InstallationGroupPanel for grouping packs together (Amit Bhayani, Scott Starks,
   Alex Pinkin @JBoss/RedHat, via Julien Ponge).
@@ -159,11 +159,11 @@
 - Subgrouping of shortcuts (Weiji Guo).
 - Added Korean language support (Fabrice Mirabile, thanks to Dongsu Jang).
 - Added new panel SelectedPrinterPanel which allows the user to chose any local
-  printer installed and set it to the $SELECTED_PRINTER variable. (Hal Vaughan 
+  printer installed and set it to the $SELECTED_PRINTER variable. (Hal Vaughan
   and Fabrice Mirabile).
 
   > 3.8.0 (build 2005.10.27)
-- Added 2 processor classes having the ability to fill a combobox 
+- Added 2 processor classes having the ability to fill a combobox
   with all available unix user and groups (Thorsten Kamann)
 - All default values for the InputPanel (the values of the set attribute)
   can conatins variables at now.  All
@@ -171,7 +171,7 @@
 - The resources of the target panel can contains variables at now. All
   variables will be replaces by the VariableSubstitutor (Thorsten Kamann)
 - Fixed chinese Flag.
-- Patch for InstallerFrame to support user confirmation after pressing 
+- Patch for InstallerFrame to support user confirmation after pressing
   windows "X" closing button.
 - Update the IzPackTask to support an embedded xml installation document that
   replaces @{x} property references with the corresponding ant property.
@@ -203,18 +203,18 @@
   and Scott Stark).
 - New Turkish langpack (Levent Bayindir).
 - Mac OS X: better Swing integration.
-- Configurable notation of language names in the language selection dialog 
+- Configurable notation of language names in the language selection dialog
   (Christian Murphy | Klaus Bartz).
 - Fail message in SimpleFinishPanel (Klaus Bartz).
 - Interrupt handling changed (Klaus Bartz).
-- Fixed shortcuts for RedHat and Mandrake (Fabrice Mirabile, thanks to Vitor 
+- Fixed shortcuts for RedHat and Mandrake (Fabrice Mirabile, thanks to Vitor
   Rodrigues for the code).
 - New ConditionalUserInputPanel (Andreas Breiter, patches #407, #408).
 - ExecuteForPack, allow processing depending on the selected pack (Fabrice
   Mirabile, thanks to Johannes Gutleber for the code).
 - Ant file cleanup: requires ant 1.6. Incremental builds of jar files.
 - Macrodefs instead of antcalls (Chad McHenry).
-- createForUnselectedPack, show a userinputapanel if a pack is not selected 
+- createForUnselectedPack, show a userinputapanel if a pack is not selected
   (Fabrice Mirabile, thanks to Stefano Gamma)
 - Registry support on Windows (Klaus Bartz).
 - New CheckedHelloPanel which checks already installed products (Klaus Bartz).
@@ -249,7 +249,7 @@
 - The Danish langpack was empty by mistake in 3.7.0.
 - Silent installations fix (Oscar Sierra).
 - Free disk space bugfix on Solaris (Oscar Sierra).
-- Installation runable with VM versions < 1.4 again (Klaus Bartz) 
+- Installation runable with VM versions < 1.4 again (Klaus Bartz)
   (implementation for bug #2268 changed).
 - Italian langpack fixes (Fabrice Mirabille).
 - UserInputPanel: bug fixes by Per Abich (bugs #3233 and #3283).
@@ -302,7 +302,7 @@
   (bug #2713).
 - Installers: avoid showing an empty JFrame behind the languages selection
   dialog (observed on X11).
-- UserInputPanel: the autodetect button is hidden if not needed 
+- UserInputPanel: the autodetect button is hidden if not needed
   (Michael Hagedorn).
 - A tutorial is now available.
 - New Czech langpack (Jan Pavlovic).
