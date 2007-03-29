@@ -1,7 +1,7 @@
 <project name="IzPack" default="all" basedir="..">
     <!--
   $Id$
-  
+
   build.xml first written by Pierre Dittgen (pierre.dittgen@criltelecom.com)
   This file is intended to be used with ant (http://jakarta.apache.org/ant),
   a java/xml makefile utility.
@@ -79,87 +79,87 @@
     30.04.2003: (by Jonathan Halliday)
         Change to panel compilation target, for panel automation
         (silent install) support.
-        
+
     05.07.2003: (by Julien Ponge)
         Added a target to fix the files encoding and cr/lf (fix.crlf).
-    
+
     10.09.2003: (by Julien Ponge)
         Reformatting, 4 spaces tabs, got rid of residual hard tabs.
-    
+
     19.09.2003: (by Julien Ponge)
         Added a run.installer target to test an installer.
-    
+
     06.12.2003: (by Julien Ponge)
         Removed the frontend-related sections.
 
     16.12.2003: (by Julien Ponge)
         Added the SudoPanel building call.
-    
+
     18.02.2004: (by Julien Ponge)
         New installer naming scheme (IzPack-install-{version}.jar).
-    
+
     29.05.2004: (by Julien Ponge)
         New SimpleFinishPanel.
 
     30.07.2004: (by Klaus Bartz)
         Simple CustomAction stuff added.
-    
+
     09.09.2004: (by Klaus Bartz)
         Clean up of CustomActions added.
         New uninstaller-ext.jar with native helper stuff for native libs
            in uninstaller.
-    
+
     14.10.2004: (by Klaus Bartz)
         New izevent.jar with the base classes of the custom action stuff
           to support creation of custom action jars without IzPack source tree
-    
+
     25.10.2004: (by Klaus Bartz)
         "Standard" CustomActions AntActionInstallerListener and
         AntActionUninstallerListener added
-    
+
     03.05.2005: (by Klaus Bartz)
         Target generated.installer-reg added:
         Creates an installer for IzPack with registry support
-    
+
     09.05.2005: (by Marc Eppelman)
         Target dist+run added:
         convenient :) makes a complete dist an installer and run them
-    
+
     11.05.2005: (by Fabrice Mirabile)
         Target cleandistreg added:
         Clean, Regenerate installer and installer with reg support. Avoid use of bad jars during installation.
-    
+
     18.07.2005: (by Julien Ponge)
     	Enforce source / target compatibility, now 1.4 / 1.4.
-    
+
     02.09.2005: (by Klaus Bartz)
     	Unicode support of ShellLink.
-    
+
     09.09.2005: (Marc.Eppelmann)
 		Added start.sh to the shipped files in bin-folder.
-		
+
 	10.01.2006: (by Fabrice Mirabile)
 		Added the splashscreen to the cleandistreg target
-		
+
 	06.04.2006: (Marc Eppelmann)
 	    Inserted the fix.crlf target in the depends-list of target "all" to prevent encoding problems.
-	    
+
 	26.06.2006: (Marc Eppelmann)
 	    Extracted / Reordered some dist related targets to prevent double copy actions.
         Also fixed the fix.crlf basedir
-        
+
 	27.08.2006: (Marc Eppelmann)
-      Embedd ShortcutPanel*.java     
-        
-  14.09.2006: (Marc Eppelmann)   
+      Embedd ShortcutPanel*.java
+
+  14.09.2006: (Marc Eppelmann)
       Added target src.tar.gz and clean.src.tar.gz
-      
-  19.10.2006: (Fabrice Mirabile & Hal Vaughan)   
+
+  19.10.2006: (Fabrice Mirabile & Hal Vaughan)
       Added DataCheckPanel
 
-  10.10.2006: (Fabrice Mirabile)   
+  10.10.2006: (Fabrice Mirabile)
 	  Fixed target src.tar.gz and clean.src.tar.gz
-              
+
   11.02.2007: (Ari Voutilainen)
      Added 'preservelastmodified="true"' to all 'copy todir' commands to keep original file date
      and time. This will effect in directory _dist. This won't effect to compiled files and
@@ -204,7 +204,7 @@
 
     <property file="src/ant.properties" />
     <property name="ver" value="3.10" />
-    <property name="rel" value="0" />
+    <property name="rel" value="1" />
     <property name="build.number" value="${ver}.${rel}" />
 
     <property name="src.dir" value="${basedir}/src/lib" />
@@ -375,7 +375,7 @@
             <include name="com/izforge/izpack/panels/PathSelectionPanel.java" />
             <include name="com/izforge/izpack/*.java" />
             <include name="com/izforge/izpack/gui/*.java" />
-            <include name="com/izforge/izpack/io/*.java" />          
+            <include name="com/izforge/izpack/io/*.java" />
             <include name="com/izforge/izpack/installer/*.java" />
             <include name="com/izforge/izpack/panels/NextMedia*.java"/>
             <include name="com/izforge/izpack/util/*.java" />
@@ -430,11 +430,11 @@
                debuglevel="${debuglevel}">
             <include name="com/izforge/izpack/LocaleDatabase.java" />
             <include name="com/izforge/izpack/gui/*.java" />
-            
+
             <include name="com/izforge/izpack/util/*.java"/>
             <include name="com/izforge/izpack/util/os/*.java"/>
             <include name="com/izforge/izpack/util/os/unix/*.java"/>
-            
+
             <include name="com/izforge/izpack/uninstaller/*.java" />
             <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
             <include name="net/n3/nanoxml/*.java" />
@@ -453,7 +453,7 @@
                 <include name="com/izforge/izpack/LocaleDatabase.class" />
                 <include name="com/izforge/izpack/gui/*.class" />
                 <include name="com/izforge/izpack/uninstaller/*.class" />
-                <include name="com/izforge/izpack/ExecutableFile.class" />                
+                <include name="com/izforge/izpack/ExecutableFile.class" />
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class" />
                 <include name="net/n3/nanoxml/*.class" />
             </fileset>
@@ -480,7 +480,7 @@
             <include name="com/izforge/izpack/util/os/*.java"/>
             <include name="com/izforge/izpack/util/os/unix/*.java"/>
             <include name="com/izforge/izpack/util/xml/*.java"/>
-          
+
             <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java" />
             <include name="net/n3/nanoxml/*.java" />
         </javac>
@@ -495,7 +495,7 @@
         </jar>
     </target>
 
-    <!-- 
+    <!--
          ======================================================================
            Create Panel Modules
          ======================================================================
@@ -531,8 +531,8 @@
     </macrodef>
 
     <!-- Compile all panels and put them at the right location -->
-    <!-- 
-         If you add a another, and the build fails because it can't find a class, 
+    <!--
+         If you add a another, and the build fails because it can't find a class,
          be sure to explicitly include the .java file in the nested fileset.
          This also acts as a check to help limit dependancies.
     -->
@@ -670,7 +670,7 @@
         </build-panel>
     </target>
 
-    <!-- 
+    <!--
          ======================================================================
            Create Listener Modules
          ======================================================================
@@ -692,7 +692,7 @@
             <include name="com/izforge/izpack/event/Simple*nstallerListener.java" />
             <include name="com/izforge/izpack/event/SimpleCompilerListener.java" />
             <include name="com/izforge/izpack/event/InstallerListener.java" />
-            <include name="com/izforge/izpack/event/CompilerListener.java" /> 
+            <include name="com/izforge/izpack/event/CompilerListener.java" />
             <include name="com/izforge/izpack/event/UninstallerListener.java" />
             <include name="com/izforge/izpack/util/IoHelper.java" />
         </javac>
@@ -791,8 +791,8 @@
     </macrodef>
 
     <!-- Compile all custom actions (listener) and put them at the right location -->
-    <!-- 
-         If you add a another, and the build fails because it can't find a class, 
+    <!--
+         If you add a another, and the build fails because it can't find a class,
          be sure to explicitly include the .java file in the nested fileset.
          This also acts as a check to help limit dependancies.
     -->
@@ -914,10 +914,10 @@
             description="Creates the javadoc-api and customer documentation">
 
     </target>
-	
-	
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: taskdef                      
+
+
+    <!-- - - - - - - - - - - - - - - - - -
+          target: taskdef
          - - - - - - - - - - - - - - - - - -->
     <target name="taskdef.dist">
         <!-- Allows us to use the IzPack Ant task -->
@@ -925,10 +925,10 @@
                  classpath="${basedir}/lib/compiler.jar"
                  classname="com.izforge.izpack.ant.IzPackTask" />
     </target>
-	
-	
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: copy.natives                      
+
+
+    <!-- - - - - - - - - - - - - - - - - -
+          target: copy.natives
          - - - - - - - - - - - - - - - - - -->
     <target name="copy.dist.natives">
         <echo message="Copies the recent changed native files to the ${basedir}/bin directory" />
@@ -951,9 +951,9 @@
               preservelastmodified="true" />
     </target>
 
-    
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: copy.distfiles                      
+
+    <!-- - - - - - - - - - - - - - - - - -
+          target: copy.distfiles
          - - - - - - - - - - - - - - - - - -->
     <target name="copy.dist.files">
         <echo message="Copies the general files to the dist directory" />
@@ -992,16 +992,16 @@
         <echo message="Copies the bin files to the dist directory" />
         <copy todir="${dist.dir}/bin" includeEmptyDirs="yes" overwrite="yes" preservelastmodified="true">
             <fileset dir="${dist-files.dir}">
-                <include name="compile*" />            	
+                <include name="compile*" />
                 <include name="lcp.bat" />
             	<include name="start.sh"/>
             </fileset>
         </copy>
     </target>
 
-    
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: replace.dist.buildnumber                      
+
+    <!-- - - - - - - - - - - - - - - - - -
+          target: replace.dist.buildnumber
          - - - - - - - - - - - - - - - - - -->
     <target name="replace.dist.buildnumber">
         <replace file="${dist.dir}/shortcutSpec.xml"
@@ -1034,20 +1034,20 @@
                 compressionlevel="9" />
     	<echo>
 sucessfully created:
-${dist.dir}/${installer.name}${ver}.${rel}.jar    		
+${dist.dir}/${installer.name}${ver}.${rel}.jar
     	</echo>
     </target>
-	
-	
-    <!-- - - - - - - - - - - - - - - - - - 
-          target: prepare.install.dist                      
+
+
+    <!-- - - - - - - - - - - - - - - - - -
+          target: prepare.install.dist
          - - - - - - - - - - - - - - - - - -->
     <target name="prepare.install.dist" depends="taskdef.dist, copy.dist.natives, copy.dist.files, replace.dist.buildnumber, fix.crlf">
-            
+
     </target>
-	
+
     <!-- =================================
-	   Creates a normal installer for IzPack 
+	   Creates a normal installer for IzPack
 	  ================================= -->
     <target name="generate.installer" depends="prepare.install.dist">
         <antcall target="exec.izpack.compiler">
@@ -1080,7 +1080,7 @@ Fixing linefeeds for several files in:
         </fixcrlf>
     	<fixcrlf srcdir="${dist.bin.dir}" eol="unix" eof="remove">
     	  <include name="**/*.sh"/>
-    	  <include name="compile"/>	    	
+    	  <include name="compile"/>
     	</fixcrlf>
     </target>
 
@@ -1103,16 +1103,16 @@ Fixing linefeeds for several files in:
     <target name="cleandistreg"
             depends="clean, splashscreen, dist, generate.installer"
             description="creates a full dist with Win32 uninstall registry support" />
-  
-    <!-- ================================= 
-          target: clean.src.tar.gz              
+
+    <!-- =================================
+          target: clean.src.tar.gz
          ================================= -->
     <target name="clean.src.tar.gz" depends="clean, src.tar.gz" description="--> creates a src.tar.gz after clean up">
     </target>
 
-  
-    <!-- ================================= 
-          target: src.tar.gz              
+
+    <!-- =================================
+          target: src.tar.gz
          ================================= -->
     <target name="src.tar.gz"  description="--> creates a src.tar.gz ">
       <mkdir dir="${basedir}/_src${dist.subdir}"/>
@@ -1161,8 +1161,8 @@ Fixing linefeeds for several files in:
     </target>
 
 
-    <!-- ================================= 
-          target: ShellLink.Javah              
+    <!-- =================================
+          target: ShellLink.Javah
          ================================= -->
     <target name="ShellLink.Javah"
             depends="compile.installer"
@@ -1174,16 +1174,16 @@ Fixing linefeeds for several files in:
     </target>
 
 
-    <!-- ================================= 
-         target: time - takes a timestamp           
+    <!-- =================================
+         target: time - takes a timestamp
         ================================= -->
     <target name="time">
         <tstamp />
     </target>
 
 
-    <!-- ================================= 
-          target: dump.properties - dumps the curent properties into the $os_$timestamp.properties file             
+    <!-- =================================
+          target: dump.properties - dumps the curent properties into the $os_$timestamp.properties file
          ================================= -->
     <target name="dump.properties" depends="time" description="dump.environment (for debug)">
         <echoproperties destfile="${basedir}/ant_properties_at_${os.name}-${os.arch}-${os.version}_at_${DSTAMP}-${TSTAMP}.txt" />
