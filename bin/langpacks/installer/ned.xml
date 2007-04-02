@@ -48,6 +48,7 @@
     <str id="installer.help" txt="Help" />
     <str id="installer.step" txt="Stap" />
     <str id="installer.of" txt="van" />
+    <str id="installer.Message" txt="Bericht"/> 
 
 
     <!-- Uninstaller specific strings -->
@@ -114,6 +115,7 @@
     <str id="JDKPathPanel.badVersion3"
         txt=") wilt u toch deze JDK gebruiken?" />
 
+
     <str id="PacksPanel.info"
         txt="Selecteer de pakketten die u wilt installeren :" />
     <str id="PacksPanel.tip"
@@ -123,6 +125,9 @@
     <str id="PacksPanel.description" txt="Omschrijving" />
     <str id="PacksPanel.dependencyList"
         txt="Het geselecteerde pakket vereist installatie van de volgende pakketten" />
+    <str id="PacksPanel.dependencies" txt="Afhankelijkheden: "/>
+    <str id="PacksPanel.excludes" txt="Uitsluitingen: "/>
+    <str id="ImgPacksPanel.dependencyList" txt="Afhankelijkheden en/of uitsluitingen"/>
     <str id="PacksPanel.notEnoughSpace"
         txt="Schijfruimte nodig voor installatie overtreft beschikbare schijfruimte." />
     <str id="PacksPanel.notAscertainable" txt="niet vast te stellen" />
@@ -266,6 +271,23 @@
     <str id="functionFailed.RegOpenKeyEx"
         txt="Kan registersleutel {0}\\{1} niet openen." />
 
-    <!-- Add your own panels specific strings here if you need -->
+    <str id="nextmedia.title" txt="Volgend installatie media"/>
+  	<str id="nextmedia.msg" txt="Kies het volgend installatie media." />
+	  <str id="nextmedia.browsebtn" txt="Bladeren" />
+  	<str id="nextmedia.okbtn" txt="Toepassen" />
+	  <str id="nextmedia.cancelbtn" txt="Annuleren" />	
+    <str id="nextmedia.choosertitle" txt="Kies installatie media" />
+    <str id="nextmedia.filedesc" rdid="Installatie pakketten (.pak*)" />
+
+    <!-- Strings for the loggin/reporting system (Messenger) -->
+
+
+    <str id="InstallationGroupPanel.colNameSelected" txt="Geselecteerd" />
+    <str id="InstallationGroupPanel.colNameInstallType" txt="Installatie Type" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Grootte" />
+
+    <!-- Add your own panels specific strings here if you need or use a custom
+         langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
+    -->     
 
 </langpack>
