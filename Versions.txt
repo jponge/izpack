@@ -1,5 +1,8 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.10.2
+
+- Vista/Java6 fixes (Stefan Wachter via Julien Ponge)
 
   > 3.10.1 (build 2007.03.29)
 

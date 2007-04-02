@@ -115,6 +115,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     protected JTable packsTable;
 
     /**
+     * The packs model.
+     */
+    protected PacksModel packsModel;
+    
+    /**
      * The tablescroll.
      */
     protected JScrollPane tableScroller;
@@ -279,6 +284,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
         int i = packsTable.getSelectedRow();
         if (i < 0) return;
+        
+        // toggle the value stored in the packsModel
+        Integer checked = (Integer)packsModel.getValueAt(i, 0);
+        if (checked.intValue() == 0) {
+          packsModel.setValueAt(new Integer(1), i, 0);
+        } else if (checked.intValue() == 1) {
+          packsModel.setValueAt(new Integer(0), i, 0);
+        }
+        
         // Operations for the description
         if (descriptionArea != null)
         {
@@ -521,12 +535,15 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     {
         try
         {
-            
-            packsTable.setModel(new PacksModel(this, idata, this.parent.getRules()));
-            CheckBoxEditorRenderer packSelectedRenderer = new CheckBoxEditorRenderer(false);
+            // TODO the PacksModel could be patched such that isCellEditable
+            // allows returns false. In that case the PacksModel must not be
+            // adapted here.
+            packsModel = new PacksModel(this, idata, this.parent.getRules()) {
+              public boolean isCellEditable(int rowIndex, int columnIndex) { return false; }
+            };
+            packsTable.setModel(packsModel);
+            CheckBoxRenderer packSelectedRenderer = new CheckBoxRenderer();
             packsTable.getColumnModel().getColumn(0).setCellRenderer(packSelectedRenderer);
-            CheckBoxEditorRenderer packSelectedEditor = new CheckBoxEditorRenderer(true);
-            packsTable.getColumnModel().getColumn(0).setCellEditor(packSelectedEditor);
             packsTable.getColumnModel().getColumn(0).setMaxWidth(40);
             
             //packsTable.getColumnModel().getColumn(1).setCellRenderer(renderer1);
@@ -592,26 +609,12 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         return (retval.toString());
     }
 
-    static class CheckBoxEditorRenderer extends AbstractCellEditor implements TableCellRenderer,
-            TableCellEditor, ActionListener
+    static class CheckBoxRenderer implements TableCellRenderer
     {
-
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 4049072731222061879L;
-
-        private JCheckBox display;
-
-        /**
-         * Creates a check box renderer. If useAsEditor is set, an action listener will be added,
-         * else not.
-         * 
-         * @param useAsEditor
-         */
-        public CheckBoxEditorRenderer(boolean useAsEditor)
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column)
         {
-            display = new JCheckBox();
+            JCheckBox display = new JCheckBox();
             if(com.izforge.izpack.util.OsVersion.IS_UNIX)
             {
                 display.setIcon(new LFIndependentIcon());
@@ -620,13 +623,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 display.setDisabledSelectedIcon(new LFIndependentIcon());
             }
             display.setHorizontalAlignment(CENTER);
-            if (useAsEditor) display.addActionListener(this);
-
-        }
-
-        public Component getTableCellRendererComponent(JTable table, Object value,
-                boolean isSelected, boolean hasFocus, int row, int column)
-        {
+            
             if (isSelected)
             {
                 display.setForeground(table.getSelectionForeground());
@@ -646,26 +643,6 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             display.setSelected((value != null && Math.abs(state) == 1));
             display.setEnabled(state >= 0);
             return display;
-        }
-
-        /**
-         * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable,
-         * Object, boolean, int, int)
-         */
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                boolean isSelected, int row, int column)
-        {
-            return getTableCellRendererComponent(table, value, isSelected, false, row, column);
-        }
-
-        public Object getCellEditorValue()
-        {
-            return new Integer(display.isSelected() ? 1 : 0);
-        }
-
-        public void actionPerformed(ActionEvent e)
-        {
-            stopCellEditing();
         }
     }
     
