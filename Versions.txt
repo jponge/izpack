@@ -16,6 +16,10 @@
 - New Farsi langpack (Parastou Kohvaei)
 - Dynamic control validation on radio and checkbox selection events (Vladimir Ralev)
 
+  > 3.10.2
+
+- Vista/Java6 fixes (Stefan Wachter via Julien Ponge)
+
   > 3.10.1 (build 2007.03.29)
 
 - Fixed NPE for pack.id == null (Fabrice Mirabile)

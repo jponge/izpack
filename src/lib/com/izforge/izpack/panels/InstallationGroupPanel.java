@@ -59,6 +59,7 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.OsConstraint;
 
 import java.util.ArrayList;
 import java.net.URLDecoder;
@@ -100,8 +101,12 @@ public class InstallationGroupPanel extends IzPanel
      */
     public void panelActivate()
     {
-        // Set/restore availablePacks from allPacks
-        idata.availablePacks = new ArrayList(idata.allPacks);
+        // Set/restore availablePacks from allPacks; consider OS constraints
+        idata.availablePacks = new ArrayList();
+        for (Iterator i = idata.allPacks.iterator(); i.hasNext(); ) {
+          Pack p = (Pack)i.next();
+          if (OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) idata.availablePacks.add(p);
+        }
 
         Debug.trace("InstallationGroupPanel.panelActivate, selectedGroup="+selectedGroup);
         // If there are no groups, skip this panel
@@ -118,8 +123,37 @@ public class InstallationGroupPanel extends IzPanel
         groupTableModel = getModel(installGroups);
         groupsTable.setModel(groupTableModel);
         TableColumnModel tcm = groupsTable.getColumnModel();
-        tcm.getColumn(0).setCellRenderer(new RadioButtonRenderer());
-        tcm.getColumn(0).setCellEditor(new RadioButtonEditor());
+
+        // renders the radio buttons and adjusts their state
+        TableCellRenderer radioButtonRenderer = new TableCellRenderer() {
+          public Component getTableCellRendererComponent(JTable table, Object value,
+                  boolean isSelected, boolean hasFocus,
+                  int row, int column) {
+            if (value==null) return null;
+            
+            int selectedRow = table.getSelectedRow();
+            
+            if (selectedRow != -1) {
+              JRadioButton selectedButton = (JRadioButton)table.getValueAt(selectedRow, 0);
+              if (!selectedButton.isSelected()) {
+                selectedButton.doClick();
+              }
+            }
+
+            JRadioButton button = (JRadioButton) value;
+            button.setForeground(isSelected ?
+              table.getSelectionForeground() : table.getForeground());
+            button.setBackground(isSelected ?
+              table.getSelectionBackground() : table.getBackground());
+            
+            // long millis = System.currentTimeMillis() % 100000;
+            // System.out.printf("%1$5d: row: %2$d; isSelected: %3$5b; buttonSelected: %4$5b; selectedRow: %5$d%n", millis, row, isSelected, button.isSelected(), selectedRow);
+            
+            return button;
+          }
+        };
+        tcm.getColumn(0).setCellRenderer(radioButtonRenderer);
+        
         //groupsTable.setColumnSelectionAllowed(false);
         //groupsTable.setRowSelectionAllowed(true);
         groupsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -187,6 +221,7 @@ public class InstallationGroupPanel extends IzPanel
                 {
                     GroupData data = rows[selectedGroup];
                     descriptionField.setText(data.description);
+                    ((JRadioButton)groupTableModel.getValueAt(selectedGroup, 0)).setSelected(true);
                 }
                 Debug.trace("selectedGroup set to: "+selectedGroup);
             }
@@ -248,8 +283,6 @@ public class InstallationGroupPanel extends IzPanel
         Debug.trace("InstallationGroupPanel.removeUnusedPacks, GroupData="+data.name);
 
         // Now remove the packs not in groupPackNames
-        idata.selectedPacks.clear();
-        idata.selectedPacks.addAll(idata.availablePacks);
         Iterator iter = idata.availablePacks.iterator();
         while( iter.hasNext() )
         {
@@ -266,15 +299,13 @@ public class InstallationGroupPanel extends IzPanel
             }
         }
 
-        List selectedPacks = idata.selectedPacks;
-        iter = selectedPacks.iterator();
-        while( iter.hasNext() )
-        {
-            Pack p = (Pack) iter.next();
-            if( data.packNames.contains(p.name) == false || !p.preselected)
-            {
-                iter.remove();
-                Debug.trace("Removed selectedPack: "+p.name);
+        idata.selectedPacks.clear();
+        if (!"no".equals(idata.getVariable("InstallationGroupPanel.selectPacks"))) {
+            idata.selectedPacks.addAll(idata.availablePacks);
+        } else {
+            for (Iterator i = idata.availablePacks.iterator(); i.hasNext(); ) {
+              Pack p = (Pack)i.next();
+              if (p.preselected) idata.selectedPacks.add(p);
             }
         }
     }
@@ -414,7 +445,7 @@ public class InstallationGroupPanel extends IzPanel
          {
             public boolean isCellEditable (int row, int column)
             {
-               return column == 0;
+               return false;
             }
         };
         rows = new GroupData[groupData.size()];
@@ -534,67 +565,6 @@ public class InstallationGroupPanel extends IzPanel
             tmp.append(packNames);
             tmp.append("}");
             return tmp.toString();
-        }
-    }
-
-    class RadioButtonRenderer implements TableCellRenderer
-    {
-        public Component getTableCellRendererComponent (JTable table, Object value,
-                                                        boolean isSelected, boolean hasFocus,
-                                                        int row, int column)
-        {
-            if (value==null) {
-                return null;
-            }
-
-            JRadioButton button = (JRadioButton) value;
-
-            button.setForeground(isSelected ?
-                                 table.getSelectionForeground() : table.getForeground());
-            button.setBackground(isSelected ?
-                                 table.getSelectionBackground() : table.getBackground());
-
-            return button;
-        }
-    }
-
-    class RadioButtonEditor
-        extends AbstractCellEditor
-        implements ItemListener,
-                   TableCellEditor
-    {
-        private JRadioButton button;
-
-        public Component getTableCellEditorComponent (JTable table, Object value,
-                                                      boolean isSelected, int row, int column)
-        {
-            Debug.trace("getTableCellEditorComponent, row="+row);
-            if (value==null) {
-                return null;
-            }
-
-            button = (JRadioButton) value;
-            button.addItemListener(this);
-
-            button.setForeground(isSelected ?
-                                 table.getSelectionForeground() : table.getForeground());
-            button.setBackground(isSelected ?
-                                 table.getSelectionBackground() : table.getBackground());
-
-            return button;
-        }
-
-        public Object getCellEditorValue ()
-        {
-            button.removeItemListener (this);
-            return button;
-        }
-
-        public void itemStateChanged (ItemEvent e)
-        {
-            Debug.trace("itemStateChanged, e="+e);
-            super.fireEditingStopped ();
-            groupsTable.repaint();
         }
     }
 
