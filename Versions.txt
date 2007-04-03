@@ -3,6 +3,7 @@
   > 3.10.2
 
 - Vista/Java6 fixes (Stefan Wachter via Julien Ponge)
+- Dutch Langpack fixes (Hans Aikema)
 
   > 3.10.1 (build 2007.03.29)
 
