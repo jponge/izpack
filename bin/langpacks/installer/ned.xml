@@ -98,7 +98,7 @@
     <str id="TargetPanel.empty_target"
         txt="U heeft geen installatiemap ingevuld. Wilt u toch doorgaan?" />
     <str id="TargetPanel.createdir"
-        txt="de installatiemap zal worden aangemaakt :" />
+        txt="De installatiemap zal worden aangemaakt :" />
     <str id="TargetPanel.nodir"
         txt="Uw keuze is geen map! Kies s.v.p. een map!" />
     <str id="TargetPanel.notwritable"
