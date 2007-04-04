@@ -36,7 +36,7 @@ public class LateShortcutInstallListener extends SimpleInstallerListener {
 
   public LateShortcutInstallListener()
   {
-      ShortcutPanel.getInstance().createImmediately = false;
+      ShortcutPanel.createImmediately = false;
   }
   
   public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
