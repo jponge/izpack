@@ -948,22 +948,26 @@ public class CompileWorker implements Runnable
             }
             catch (ClassNotFoundException cnfe)
             {
-                output = new String[] { "error getting eclipse compiler", cnfe.getMessage() };
+                output[0] = "error getting eclipse compiler";
+                output[1] = cnfe.getMessage();
                 return -1;
             }
             catch (NoSuchMethodException nsme)
             {
-                output = new String[] { "error getting eclipse compiler method", nsme.getMessage() };
+                output[0] = "error getting eclipse compiler method";
+                output[1] = nsme.getMessage();
                 return -1;                    
             }
             catch (IllegalAccessException iae)
             {
-                output = new String[] { "error calling eclipse compiler", iae.getMessage() };
+                output[0] = "error calling eclipse compiler";
+                output[1] = iae.getMessage();
                 return -1;                                        
             }
             catch (InvocationTargetException ite)
             {
-                output = new String[] { "error calling eclipse compiler", ite.getMessage() };
+                output[0] = "error calling eclipse compiler";
+                output[1] = ite.getMessage();
                 return -1;                                        
             }
 
