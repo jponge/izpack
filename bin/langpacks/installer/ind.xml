@@ -47,6 +47,7 @@
     <str id="installer.help" txt="Pertolongan" />
     <str id="installer.of" txt="dari" />
     <str id="installer.step" txt="Langkah" />
+    <str id="installer.Message" txt="Pesan" />
 
 
     <!-- Uninstaller specific strings -->
@@ -109,6 +110,7 @@
     <str id="JDKPathPanel.badVersion2" txt=" yang diperlukan: " />
     <str id="JDKPathPanel.badVersion3"
         txt=") apakah JDK ini tetap akan digunakan?" />
+    <str id="JDKPathPanel.nonValidPathInReg" txt="The Windows registry contains a non-valid path for this JDK. Should this JDK be used anyway?"/>
     <str id="JDKPathPanel.extendedIntro"
         txt="Aplikasi yang telah dipasang membutuhkan sebuah JDK dengan versi antara ${JDKPathPanel.minVersion} dan ${JDKPathPanel.maxVersion}. Sebuah Java Runtime Environment (JRE) tidak cukup." />
     <str id="PacksPanel.info"
@@ -120,6 +122,8 @@
     <str id="PacksPanel.description" txt="Deskripsi" />
     <str id="PacksPanel.dependencyList"
         txt="Paket yang terpilih membutuhkan paket-paket berikut dipasang " />
+    <str id="PacksPanel.dependencies" txt="Ketergantungan: " />
+    <str id="PacksPanel.excludes" txt="Pengecualian: " />
     <str id="ImgPacksPanel.dependencyList" txt="Ketergantungan" />
     <str id="PacksPanel.notEnoughSpace"
         txt="Ruang cakram yang diperlukan untuk pemasangan melebihi ruang cakram yang tersedia." />
@@ -269,6 +273,46 @@
     <str id="functionFailed.RegOpenKeyEx"
         txt="Tidak dapat membuka kunci registri {0}\\{1}" />
 
-    <!-- Add your own panels specific strings here if you need -->
+    <str id="nextmedia.browsebtn" txt="Jelajah" />
+    <str id="nextmedia.cancelbtn" txt="Batal" />
+    <str id="nextmedia.choosertitle" txt="Pilih media pemasangan" />
+    <str id="nextmedia.filedesc" txt="pak pemasangan (.pak*)" />
+    <str id="nextmedia.msg" txt="Pilih media pemasangan berikutnya." />
+    <str id="nextmedia.okbtn" txt="Terapkan" />
+    <str id="nextmedia.title" txt="Media pemasangan berikutnya" />
+
+    <str id="log.reportHeading"           txt="                            LAPORAN PEMASANGAN IzPack" />
+    <str id="log.installFailed"           txt="PERINGATAN!!! Pemasangan tidak berhasil!" />
+    <str id="log.partialInstall"          txt="PERINGATAN!!! Pemasangan bisa jadi telah tidak selesai dengan sukses!" />
+    <str id="log.messageCount"            txt="Laporan ini mengandung {0} pesan umum, {1} peringatan and {2} kesalahan(s)" />
+    <str id="log.application"             txt="Laporan pemasangan untuk : {0} Versi {1}" />
+    <str id="log.timePrefix"              txt="Waktu pemasangan         : {0}" />
+    <str id="log.pathPrefix"              txt="Direktori pemasangan     : {0}" />
+    <str id="log.messageHeading"          txt="                         --- Pesan-Pesan Pemasangan ---" />
+    <str id="log.warningHeading"          txt="                         --- Peringatan-Peringatan ---" />
+    <str id="log.errorHeading"            txt="                           --- Kesalahan-Kesalahan---" />
+    <str id="log.exceptionPrefix"         txt="                  >> Eksepsi: {0}" />
+    <str id="log.messagePrefix"           txt="Pesan  [{0}] - " />
+    <str id="log.warningPrefix"           txt="Warning [{0}] - " />
+    <str id="log.errorPrefix"             txt="Kesalahan [{0}] - " />
+    <str id="log.reportWriteErrorTitle"   txt="Kesalahan dalam penulisan laporan" />
+    <str id="log.reportWriteError"        txt="Tidak dapat menulis laporan pemasangan ke ''{0}''" />
+    <str id="log.informUserTitle"         txt="Masalah-Masalah Pemasangan" />
+    <str id="log.saveLogTitle"            txt="Simpan Berkas Catatan" />
+    <str id="log.LogFileName"             txt="catatanPemasangan.txt" />
+    <str id="log.informUserFail"          txt="&lt;html&gt;Pemasangan tidak berhasil!&lt;br&gt;Apakah Anda ingin menulis suatu berkas catatan?&lt;/html&gt;" />
+    <str id="log.informUserPartial"       txt="&lt;html&gt;Pemasangan bisa jadi telah tidak selesai dengan sukses!&lt;br&gt;Apakah Anda ingin menulis suatu berkas catatan?&lt;/html&gt;" />
+    <str id="log.error_0" txt="tidak dapat menulis ''{0}''" />
+    <str id="log.message_" txt="" />
+    <str id="log.timeStamp" txt="dd-MM-yyyy [HH:mm:ss]  zzzz" />
+    <str id="log.warning_" txt="" />
+
+    <str id="InstallationGroupPanel.colNameInstallType" txt="JenisPemasangan" />
+    <str id="InstallationGroupPanel.colNameSelected" txt="Terpilih" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Ukuran" />
+    
+    <!-- Add your own panels specific strings here if you need or use a custom
+         langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
+    -->     
 
 </langpack>
