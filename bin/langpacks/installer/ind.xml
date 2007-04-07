@@ -47,6 +47,7 @@
     <str id="installer.help" txt="Pertolongan" />
     <str id="installer.of" txt="dari" />
     <str id="installer.step" txt="Langkah" />
+    <str id="installer.Message" txt="Pesan" />
 
 
     <!-- Uninstaller specific strings -->
@@ -120,6 +121,8 @@
     <str id="PacksPanel.description" txt="Deskripsi" />
     <str id="PacksPanel.dependencyList"
         txt="Paket yang terpilih membutuhkan paket-paket berikut dipasang " />
+    <str id="PacksPanel.dependencies" txt="Ketergantungan: " />
+    <str id="PacksPanel.excludes" txt="Pengecualian: " />
     <str id="ImgPacksPanel.dependencyList" txt="Ketergantungan" />
     <str id="PacksPanel.notEnoughSpace"
         txt="Ruang cakram yang diperlukan untuk pemasangan melebihi ruang cakram yang tersedia." />
@@ -269,6 +272,20 @@
     <str id="functionFailed.RegOpenKeyEx"
         txt="Tidak dapat membuka kunci registri {0}\\{1}" />
 
-    <!-- Add your own panels specific strings here if you need -->
+    <str id="nextmedia.browsebtn" txt="Jelajah" />
+    <str id="nextmedia.cancelbtn" txt="Batal" />
+    <str id="nextmedia.choosertitle" txt="Pilih media pemasangan" />
+    <str id="nextmedia.filedesc" txt="pak pemasangan (.pak*)" />
+    <str id="nextmedia.msg" txt="Pilih media pemasangan berikutnya." />
+    <str id="nextmedia.okbtn" txt="Terapkan" />
+    <str id="nextmedia.title" txt="Media pemasangan berikutnya" />
+
+    <str id="InstallationGroupPanel.colNameInstallType" txt="JenisPemasangan" />
+    <str id="InstallationGroupPanel.colNameSelected" txt="Terpilih" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Ukuran" />
+    
+    <!-- Add your own panels specific strings here if you need or use a custom
+         langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
+    -->     
 
 </langpack>
