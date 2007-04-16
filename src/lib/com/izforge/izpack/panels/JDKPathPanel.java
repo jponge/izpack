@@ -30,7 +30,6 @@ import java.util.StringTokenizer;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.NativeLibException;
-import com.coi.tools.os.win.RegDataContainer;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.AbstractUIHandler;
@@ -99,25 +98,25 @@ public class JDKPathPanel extends PathInputPanel
      */
     public boolean isValidated()
     {
-        if(idata.getVariable("PANEL_LAYOUT_TEST") != null)
-            return(true);
+        boolean retval = false;
         if (super.isValidated())
         {
             switch( verifyVersionEx())
             {
             case OK:
                 idata.setVariable(getVariableName(), pathSelectionPanel.getPath());
-                return (true);
+                retval = true;
+                break;
             case BAD_REG_PATH:
                 if (askQuestion(parent.langpack.getString("installer.warning"), parent.langpack.getString("JDKPathPanel.nonValidPathInReg"),
                         AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
                 {
                     idata.setVariable(getVariableName(), pathSelectionPanel.getPath());
-                    return (true);
+                    retval = true;
                 }
-                return(false);
+                break;
             case BAD_REAL_PATH:
-                return(false);
+                break;
             case BAD_VERSION:
                 String min = getMinVersion();
                 String max = getMaxVersion();
@@ -136,13 +135,14 @@ public class JDKPathPanel extends PathInputPanel
                         AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES)
                 {
                     idata.setVariable(getVariableName(), pathSelectionPanel.getPath());
-                    return (true);
+                    retval = true;
                 }
+                break;
                 default: throw new RuntimeException("Internal error: unknown result of version verification.");
                 
             }
         }
-        return (false);
+        return (retval);
     }
 
     /** Called when the panel becomes active. */
