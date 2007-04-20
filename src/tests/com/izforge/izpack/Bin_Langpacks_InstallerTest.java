@@ -164,6 +164,17 @@ public void testEng() throws Exception{
         this.checkLangpack("eng.xml");
     }
 /**
+ * Checks the Farsi language pack for missing / superfluous translations
+ * @throws Exception Forwarded Exception for the LocaleDatabase contructor, FileInputStream constructor or TreeMap containsKey method
+ * 
+ * @see com.izforge.izpack.LocaleDatabase#LocaleDatabase(java.io.InputStream)
+ * @see java.io.FileInputStream#FileInputStream(java.lang.String)
+ * @see java.util.TreeMap#containsKey(java.lang.Object)
+ */
+    public void testFa() throws Exception{
+        this.checkLangpack("fa.xml");
+    }
+/**
  * Checks the Finnish language pack for missing / superfluous translations
  * @throws Exception Forwarded Exception for the LocaleDatabase contructor, FileInputStream constructor or TreeMap containsKey method
  * 
