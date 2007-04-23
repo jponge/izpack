@@ -2,7 +2,7 @@
  * $Id$
  * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  * 
- * http://www.izforge.com/izpack/
+ * http://izpack.org/
  * http://developer.berlios.de/projects/izpack/
  * 
  * Copyright 2001 Johannes Lehtinen
@@ -1795,7 +1795,7 @@ public class CompilerConfig extends Thread
         System.out.println("< compiler specifications version: " + VERSION + " >");
         System.out.println("");
         System.out.println("- Copyright (C) 2001-2007 Julien Ponge");
-        System.out.println("- Visit http://www.izforge.com/izpack/ for the latest releases");
+        System.out.println("- Visit http://izpack.org/ for the latest releases");
         System.out.println("- Released under the terms of the Apache Software License version 2.0.");
         System.out.println("");
 

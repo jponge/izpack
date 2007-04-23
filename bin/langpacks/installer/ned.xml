@@ -35,7 +35,7 @@
     <str id="installer.prev" txt="Terug" />
     <str id="installer.quit" txt="Afsluiten" />
     <str id="installer.madewith"
-        txt="(Installatie gemaakt met IzPack - http://www.izforge.com/)" />
+        txt="(Installatie gemaakt met IzPack - http://izpack.org/)" />
     <str id="installer.quit.title"
         txt="Weet u zeker dat u wilt afsluiten?" />
     <str id="installer.quit.message"

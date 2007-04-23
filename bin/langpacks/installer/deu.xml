@@ -31,7 +31,7 @@
     <str id="installer.next" txt="Weiter"/>
     <str id="installer.prev" txt="Zurück"/>
     <str id="installer.quit" txt="Beenden"/>
-    <str id="installer.madewith" txt="(Erstellt mit IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="(Erstellt mit IzPack - http://izpack.org/)"/>
     <str id="installer.quit.title" txt="Wollen Sie wirklich beenden?"/>
     <str id="installer.quit.message" txt="Die Installation wird jetzt abgebrochen!"/>
     <str id="installer.warning" txt="Warnung!"/>

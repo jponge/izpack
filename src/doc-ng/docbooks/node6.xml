@@ -304,7 +304,7 @@ the users PATH environment variable. Consult the Unix manuals for more details.<
 </para>
 
 <para>If you want to create a shortcut as type <emphasis role="i">Link</emphasis>, then you have to set the <literal>url</literal> attribute. The value can be a locally installed html or another document, with a known MIME type, like
-plain text, or a WWW Url i.e. 'http://www.izforge.com/izpack'.<?db2html element="br"?>
+plain text, or a WWW Url i.e. 'http://izpack.org/'.<?db2html element="br"?>
 </para>
 
 <para>A local document can be referenced by i.e. "$INSTALL_PATH/doc/index.html".<?db2html element="br"?>

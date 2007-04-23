@@ -34,7 +34,7 @@
     <str id="installer.prev" txt="Sebelum" />
     <str id="installer.quit" txt="Keluar" />
     <str id="installer.madewith"
-        txt="(Dibuat dengan IzPack- http://www.izforge.com/)" />
+        txt="(Dibuat dengan IzPack- http://izpack.org/)" />
     <str id="installer.quit.title"
         txt="Apakah Anda yakin ingin keluar?" />
     <str id="installer.quit.message"

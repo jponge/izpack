@@ -20,7 +20,7 @@
 
     <str id="installer.quit" txt="Wyj¶cie"/>
 
-    <str id="installer.madewith" txt="(Utworzono z IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="(Utworzono z IzPack - http://izpack.org/)"/>
 
     <str id="installer.quit.title" txt="Czy na pewno chcesz wyj¶æ?"/>
 
