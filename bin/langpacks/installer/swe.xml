@@ -153,13 +153,13 @@
 
     <str id="ProcessPanel.heading" txt="Processar" />
 
-    <!-- Strings for the summary of panels --- START -->
+    <!-- Strings for the summary of panels - START -->
     <str id="SummaryPanel.info" txt="Färdig att installera. Viktiga inställningar anges nedan. Tryck &quot;Nästa&quot; för att starta installationen, "/>
     <str id="TargetPanel.summaryCaption" txt="Sökväg för installationen"/>
     <str id="JDKPathPanel.summaryCaption" txt="Sökväg till JDK"/>
     <str id="PacksPanel.summaryCaption" txt="Valda paket för installering"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Valda paket för installering"/>
-    <!-- Strings for the summary of panels --- END -->
+    <!-- Strings for the summary of panels - END -->
 
     <!-- Add your own panels specific strings here if you need -->
 
