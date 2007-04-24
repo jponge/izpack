@@ -53,7 +53,7 @@ see this as a fun activity in my free time where i can learn a lot of great thin
 
 <itemizedlist spacing="compact"><listitem><para>translations</para></listitem><listitem><para>new features and various fixes</para></listitem><listitem><para>bug fixes</para></listitem><listitem><para>writing manuals</para></listitem><listitem><para>... anything else you like :-)</para></listitem></itemizedlist>
 
-<para>The official I<small xmlns="http://www.w3.org/1999/xhtml">Z</small>P<small xmlns="http://www.w3.org/1999/xhtml">ACK</small> homepage is located at <literal><anchor id="tex2html9"/>http://www.izforge.com/izpack/</literal>. The IzPack developer
+<para>The official I<small xmlns="http://www.w3.org/1999/xhtml">Z</small>P<small xmlns="http://www.w3.org/1999/xhtml">ACK</small> homepage is located at <literal><anchor id="tex2html9"/>http://izpack.org/</literal>. The IzPack developer
 services (mailing-lists, CVS, patches manager, bugs tracker, ...) are generously hosted by BerliOS. The IzPack BerliOS section is located at <literal><anchor id="tex2html10"/>http://developer.berlios.de/projects/izpack/</literal>. Feel free to use these services. In particular, there are two mailing-lists:</para>
 
 <itemizedlist spacing="compact"><listitem><para><literal>izpack-devel</literal>: used for the IzPack development</para></listitem><listitem><para><literal>izpack-users</literal>: general users lounge, great to get some help with IzPack.</para></listitem></itemizedlist>

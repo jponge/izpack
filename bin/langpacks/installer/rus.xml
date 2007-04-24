@@ -10,7 +10,7 @@
     <str id="installer.next"         txt="Далее"/>
     <str id="installer.prev"         txt="Назад"/>
     <str id="installer.quit"         txt="Выход"/>
-    <str id="installer.madewith"     txt="(Программа установки сделана при помощи IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith"     txt="(Программа установки сделана при помощи IzPack - http://izpack.org/)"/>
     <str id="installer.quit.title"   txt="Закончить работу?"/>
     <str id="installer.quit.message" txt="Установка будет отменена!"/>
     <str id="installer.warning"      txt="Предупреждение!"/>

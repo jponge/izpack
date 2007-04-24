@@ -1,7 +1,7 @@
 /*
  * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  * 
- * http://www.izforge.com/izpack/
+ * http://izpack.org/
  * http://developer.berlios.de/projects/izpack/
  * 
  * Copyright 2002 Marcus Wolschon
@@ -375,7 +375,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             packName = langpack.getString(key);
         }
-        if ("".equals(packName) || key.equals(packName) || pack.id == null)
+        if ("".equals(packName) || key == null || key.equals(packName) )
         {
             packName = pack.name;
         }

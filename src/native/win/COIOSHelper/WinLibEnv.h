@@ -4,7 +4,7 @@
 /*
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
- * http://www.izforge.com/izpack/
+ * http://izpack.org/
  * http://developer.berlios.de/projects/izpack/
  * 
  * Copyright 2005 Klaus Bartz

@@ -9,7 +9,7 @@
     <str id="installer.next" txt="Prossimo"/>
     <str id="installer.prev" txt="Precedente"/>
     <str id="installer.quit" txt="Uscire"/>
-    <str id="installer.madewith" txt="(Creato con IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="(Creato con IzPack - http://izpack.org/)"/>
     <str id="installer.quit.title" txt="Sei sicuro di volere uscire ?"/>
     <str id="installer.quit.message" txt="Questo annulla  l'installazione !"/>
     <str id="installer.warning" txt="Avvertimento !"/>

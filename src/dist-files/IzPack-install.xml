@@ -44,7 +44,7 @@
             <author email=""
                     name="... the (many) other developers and contributors to the previous releases!"/>
         </authors>
-        <url>http://www.izforge.com/izpack/</url>
+        <url>http://izpack.org/</url>
         <javaversion>1.4</javaversion>
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
     </info>

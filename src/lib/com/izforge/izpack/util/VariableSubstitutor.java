@@ -1,7 +1,7 @@
 /*
  * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  * 
- * http://www.izforge.com/izpack/
+ * http://izpack.org/
  * http://developer.berlios.de/projects/izpack/
  * 
  * Copyright 2001 Johannes Lehtinen
@@ -77,6 +77,9 @@ public class VariableSubstitutor implements Serializable
     /** A constant for file type. Plain file with '@' start char. */
     protected final static int TYPE_AT = 4;
     
+    /** A constant for file type. Java file, where \ have to be escaped. */
+    protected final static int TYPE_JAVA = 5;
+    
     /** PLAIN = "plain" */
     public final static String PLAIN = "plain";
 
@@ -89,6 +92,7 @@ public class VariableSubstitutor implements Serializable
         typeNameToConstantMap = new HashMap();
         typeNameToConstantMap.put("plain", new Integer(TYPE_PLAIN));
         typeNameToConstantMap.put("javaprop", new Integer(TYPE_JAVA_PROPERTIES));
+        typeNameToConstantMap.put("java", new Integer(TYPE_JAVA));
         typeNameToConstantMap.put("xml", new Integer(TYPE_XML));
         typeNameToConstantMap.put("shell", new Integer(TYPE_SHELL));
         typeNameToConstantMap.put("at", new Integer(TYPE_AT));
@@ -399,32 +403,42 @@ public class VariableSubstitutor implements Serializable
         case TYPE_AT:
             return str;
         case TYPE_JAVA_PROPERTIES:
+        case TYPE_JAVA:
             buffer = new StringBuffer(str);
             len = str.length();
             for (i = 0; i < len; i++)
             {
                 // Check for control characters
                 char c = buffer.charAt(i);
-                if (c == '\t' || c == '\n' || c == '\r')
-                {
-                    char tag;
-                    if (c == '\t')
-                        tag = 't';
-                    else if (c == '\n')
-                        tag = 'n';
-                    else
-                        tag = 'r';
-                    buffer.replace(i, i + 1, "\\" + tag);
-                    len++;
-                    i++;
+                if (type == TYPE_JAVA_PROPERTIES){
+                    if(c == '\t' || c == '\n' || c == '\r')
+                    {
+                        char tag;
+                        if (c == '\t')
+                            tag = 't';
+                        else if (c == '\n')
+                            tag = 'n';
+                        else
+                            tag = 'r';
+                        buffer.replace(i, i + 1, "\\" + tag);
+                        len++;
+                        i++;
+                    }
+    
+                    // Check for special characters
+                    if (c == '\\' || c == '"' || c == '\'' || c == ' ')
+                    {
+                        buffer.insert(i, '\\');
+                        len++;
+                        i++;
+                    }
                 }
-
-                // Check for special characters
-                if (c == '\\' || c == '"' || c == '\'' || c == ' ')
-                {
-                    buffer.insert(i, '\\');
-                    len++;
-                    i++;
+                else{
+                    if (c == '\\'){
+                        buffer.replace(i, i + 1, "\\\\");
+                        len++;
+                        i++;
+                    }
                 }
             }
             return buffer.toString();

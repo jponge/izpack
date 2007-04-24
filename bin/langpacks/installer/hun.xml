@@ -9,7 +9,7 @@
     <str id="installer.next" txt="Következõ"/>
     <str id="installer.prev" txt="Elözõ"/>
     <str id="installer.quit" txt="Kilépés"/>
-    <str id="installer.madewith" txt="(Created with IzPack - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="(Created with IzPack - http://izpack.org/)"/>
     <str id="installer.quit.title" txt="A telepítés megszakítása"/>
     <str id="installer.quit.message" txt="Biztos benne, hogy ki akar lépni ?"/>
     <str id="installer.warning" txt="Figylem !"/>

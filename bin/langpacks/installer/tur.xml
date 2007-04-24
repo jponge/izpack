@@ -38,7 +38,7 @@
     <str id="installer.next"            txt="Sonraki"/>
     <str id="installer.prev"            txt="Önceki"/>
     <str id="installer.quit"            txt="Çıkış"/>
-    <str id="installer.madewith"        txt="(IzPack ile hazırlanmıştır - http://www.izforge.com/)"/>
+    <str id="installer.madewith"        txt="(IzPack ile hazırlanmıştır - http://izpack.org/)"/>
     <str id="installer.quit.title"      txt="Çıkmak istediğinizden emin misiniz?"/>
     <str id="installer.quit.message"    txt="Bu kurulumu iptal edecektir!"/>
     <str id="installer.warning"         txt="Uyarı!"/>

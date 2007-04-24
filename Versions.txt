@@ -19,6 +19,11 @@
   > 3.10.2
 
 - Vista/Java6 fixes (Stefan Wachter via Julien Ponge)
+- Dutch Langpack fixes (Hans Aikema)
+- Fix NPE for pack.id == null in dependencies/excludes (Hans Aikema)
+- Indonesian Langpack fixes (Thomas Santosa via Hans Aikema)
+- UserInputPanel and InstallerFrame: enable the next button for search dialogs (Michael Hagedorn via Julien Ponge)
+- VariableSubstitutor: new Java source files support (Max Fedorov via Julien Ponge)
 
   > 3.10.1 (build 2007.03.29)
 

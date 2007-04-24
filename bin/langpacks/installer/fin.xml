@@ -31,7 +31,7 @@
     <str id="installer.next" txt="Seuraava"/>
     <str id="installer.prev" txt="Edellinen"/>
     <str id="installer.quit" txt="Lopeta"/>
-    <str id="installer.madewith" txt="(Tehty IzPackilla - http://www.izforge.com/)"/>
+    <str id="installer.madewith" txt="(Tehty IzPackilla - http://izpack.org/)"/>
     <str id="installer.quit.title" txt="Haluatko varmasti lopettaa?"/>
     <str id="installer.quit.message" txt="Tämä keskeyttää asennuksen!"/>
     <str id="installer.warning" txt="Varoitus!"/>
