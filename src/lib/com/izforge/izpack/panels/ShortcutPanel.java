@@ -756,11 +756,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         try
         {
-            input = parent.getResource(TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
+            input = ResourceManager.getInstance().getInputStream(
+                    TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
         }
         catch (ResourceNotFoundException rnfE)
         {
-            input = parent.getResource(SPEC_FILE_NAME);
+            input = ResourceManager.getInstance().getInputStream(SPEC_FILE_NAME);
         }
 
         if (input == null)
