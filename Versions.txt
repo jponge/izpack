@@ -13,8 +13,9 @@
 - UserInputPanel: force users to select an existing directory or file
   (Michael Hagedorn via Julien Ponge)
 - Default path for JDKPathPanel will be got from Windows registry if possible (Klaus Bartz)  
-- New Farsi langpack (Parastou Kohvaei)
+- New Farsi langpack (Parastou Kohvaei via Klaus Bartz)
 - Dynamic control validation on radio and checkbox selection events (Vladimir Ralev)
+- Locale support of Shortcut specification file (Klaus Bartz)
 
   > 3.10.2
 
