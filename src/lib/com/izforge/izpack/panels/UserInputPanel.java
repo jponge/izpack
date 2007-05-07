@@ -35,6 +35,7 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -48,9 +49,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.filechooser.FileFilter;
 
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;
@@ -62,6 +63,7 @@ import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
 import com.izforge.izpack.gui.TwoColumnLayout;
 import com.izforge.izpack.installer.InstallData;
@@ -70,7 +72,6 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
@@ -165,6 +166,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     private static final int POS_GROUP = 10;
 
+    protected static final String ICON_KEY = "icon";
+    
     /** The name of the XML file that specifies the panel layout */
     private static final String SPEC_FILE_NAME = "userInputSpec.xml";
 
@@ -1195,34 +1198,61 @@ public class UserInputPanel extends IzPanel implements ActionListener
         boolean bold = getBoolean(spec, BOLD, false);
         float multiplier = getFloat(spec, SIZE, 2.0f);
         int justify = getAlignment(spec);
+        
+        String icon = getIconName(spec);
 
         if (title != null)
         {
-            JLabel label = new JLabel(title);
-            Font font = label.getFont();
-            float size = font.getSize();
-            int style = 0;
+          JLabel label = null;
+          ImageIcon imgicon = null;
+          try {
+            imgicon = parent.icons.getImageIcon(icon);
+            label = LabelFactory.create(title, imgicon , JLabel.TRAILING , true);
+          }
+          catch (Exception e){
+            Debug.trace("Icon " + icon + " not found in icon list. " + e.getMessage());
+            label = LabelFactory.create(title);
+          }       
+          Font font = label.getFont();
+          float size = font.getSize();
+          int style = 0;      
+          
+          if (bold) {
+            style += Font.BOLD;
+          }
+          if (italic) {
+            style += Font.ITALIC;
+          }
 
-            if (bold)
-            {
-                style += Font.BOLD;
-            }
-            if (italic)
-            {
-                style += Font.ITALIC;
-            }
+          font = font.deriveFont(style, (size * multiplier));
+          label.setFont(font);
+          label.setAlignmentX(0);
 
-            font = font.deriveFont(style, (size * multiplier));
-            label.setFont(font);
-            label.setAlignmentX(0);
+          TwoColumnConstraints constraints = new TwoColumnConstraints();
+          constraints.align = justify;
+          constraints.position = TwoColumnConstraints.NORTH;
 
-            TwoColumnConstraints constraints = new TwoColumnConstraints();
-            constraints.align = justify;
-            constraints.position = TwoColumnConstraints.NORTH;
-
-            add(label, constraints);
+          add(label, constraints);          
         }
     }
+
+    protected String getIconName(XMLElement element) {
+      if (element == null) {
+        return (null);
+      }
+
+      String key = element.getAttribute(ICON_KEY);
+      String text = null;
+      if ((key != null) && (langpack != null)) {
+        try {
+          text = langpack.getString(key);
+        } catch (Throwable exception) {
+          text = null;
+        }
+      }
+
+      return (text);
+    }        
 
     /*--------------------------------------------------------------------------*/
     /**
