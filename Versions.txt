@@ -25,6 +25,7 @@
 - Indonesian Langpack fixes (Thomas Santosa via Hans Aikema)
 - UserInputPanel and InstallerFrame: enable the next button for search dialogs (Michael Hagedorn via Julien Ponge)
 - VariableSubstitutor: new Java source files support (Max Fedorov via Julien Ponge)
+- AutomatedUninstaller.writeUninstallData() out of sync with InstallerFrame fixed (Marius Nicolae via Marc Eppelmann)
 
   > 3.10.1 (build 2007.03.29)
 
