@@ -23,11 +23,13 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.10.1</appversion>
+        <appversion>3.10.2</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
             <author email="" name="Klaus Bartz (developer)"/>
+            <author email="" name="Hans Aikema (developer)" />
+            <author email="" name="Marc Eppelmann (developer)" />
             <author email="" name="Fabrice Mirabile (developer)"/>
             <author email="" name="Dennis Reil (developer)" />
             <author email="" name="JBoss/RedHat: Vladimir Ralev (developers)" />
@@ -40,6 +42,11 @@
             <author email="" name="Stefan Wachter (contributor)" />
             <author email="" name="Romain Guy (contributor)" />
             <author email="" name="Melih Cetin (contributor)" />
+            <author email="" name="Thomas Santosa (contributor)" />
+            <author email="" name="Michael Hagedorn (contributor)" />
+            <author email="" name="Max Fedorov (contributor)" />
+            <author email="" name="Scott Plante (contributor)" />
+            <author email="" name="Marius Nicolae (contributor)" />
 
             <author email=""
                     name="... the (many) other developers and contributors to the previous releases!"/>
