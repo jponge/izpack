@@ -293,4 +293,9 @@ public class PackInfo
     {
         return pack.name;
     }
+
+    public void setPackImgId(String packImgId)
+    {
+        pack.packImgId = packImgId;
+    }
 }

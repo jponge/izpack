@@ -29,7 +29,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
@@ -39,6 +39,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 
+import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.ResourceManager;
@@ -63,7 +64,7 @@ public class ImgPacksPanel extends PacksPanelBase
     private static final long serialVersionUID = 3977858492633659444L;
 
     /** The images to display. */
-    private ArrayList images;
+    private HashMap images;
 
     /** The img label. */
     private JLabel imgLabel;
@@ -109,7 +110,19 @@ public class ImgPacksPanel extends PacksPanelBase
         packsTable = createPacksTable(250, tableScroller, layout, gbConstraints);
 
         // Create the image label with a scroller.
-        imgLabel = new JLabel((ImageIcon) images.get(0));
+        // Use the image of the first pack having an image as initial image
+        Iterator pack_it = idata.availablePacks.iterator();
+        Pack firstImgPack = null;
+        boolean imgFound = false;
+        while ( !imgFound && pack_it.hasNext()) {
+        	firstImgPack = (Pack) pack_it.next();
+        	imgFound = firstImgPack.packImgId != null;
+        }
+        if (imgFound) {
+        	imgLabel = new JLabel((ImageIcon) images.get(firstImgPack.packImgId));
+        } else {
+        	imgLabel = new JLabel();
+        }
         JScrollPane imgScroller = new JScrollPane(imgLabel);
         imgScroller.setPreferredSize(getPreferredSizeFromImages());
         parent.buildConstraints(gbConstraints, 1, 1, 1, 1, 0.5, 1.0);
@@ -159,18 +172,24 @@ public class ImgPacksPanel extends PacksPanelBase
     private void preLoadImages()
     {
         int size = idata.availablePacks.size();
-        images = new ArrayList(size);
-        for (int i = 0; i < size; i++)
-            try
-            {
-                URL url = ResourceManager.getInstance().getURL("ImgPacksPanel.img." + i);
-                ImageIcon img = new ImageIcon(url);
-                images.add(img);
+        images = new HashMap(size);
+        Iterator pack_it = idata.availablePacks.iterator();
+        while (pack_it.hasNext())
+        {
+            Pack pack = (Pack) pack_it.next();
+            if (pack.packImgId != null) {
+                try
+                {
+                    URL url = ResourceManager.getInstance().getURL(pack.packImgId);
+                    ImageIcon img = new ImageIcon(url);
+                    images.put(pack.packImgId, img);
+                }
+                catch (Exception err)
+                {
+                    err.printStackTrace();
+                }
             }
-            catch (Exception err)
-            {
-                err.printStackTrace();
-            }
+        }
     }
 
     /**
@@ -183,7 +202,7 @@ public class ImgPacksPanel extends PacksPanelBase
         int maxHeight = 60;
         ImageIcon icon;
 
-        for (Iterator it = images.iterator(); it.hasNext();)
+        for (Iterator it = images.values().iterator(); it.hasNext();)
         {
             icon = (ImageIcon) it.next();
             maxWidth = Math.max(maxWidth, icon.getIconWidth());
@@ -203,10 +222,18 @@ public class ImgPacksPanel extends PacksPanelBase
      */
     public void valueChanged(ListSelectionEvent e)
     {
+        // this MUST be called before calling the super's valueChanged() since
+        // that method refreshes the tablemodel and thus deselects the 
+        // just selected row
+        int i = packsTable.getSelectedRow(); 
         super.valueChanged(e);
-        int i = packsTable.getSelectedRow();
-        if (i >= 0) imgLabel.setIcon((ImageIcon) images.get(i));
-
+        if (i < 0) {
+            return;
+        }
+        if (i >= 0) {
+            Pack pack = (Pack) idata.availablePacks.get(i);
+            imgLabel.setIcon((ImageIcon) images.get(pack.packImgId));
+        }
     }
 
 }

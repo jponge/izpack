@@ -96,10 +96,11 @@ $Id$
         <!ATTLIST listener jar CDATA #IMPLIED>
 
 <!-- The packs section (indicates the packs to create) -->
-<!ELEMENT packs (pack+)>
+<!ELEMENT packs ((pack|refpack)+)>
     <!ELEMENT pack (description, os*, file*, singlefile*, fileset*, updatecheck?, parsable*, executable*, depends*)>
         <!ATTLIST pack name CDATA #REQUIRED>
         <!ATTLIST pack id CDATA #IMPLIED>
+        <!ATTLIST pack packImgId IDREF #IMPLIED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
         <!ATTLIST pack preselected (yes|no) "yes">
         <!ATTLIST pack os (unix|windows|mac) #IMPLIED>
@@ -157,6 +158,8 @@ $Id$
       <!ELEMENT updatecheck (include*, exclude*)>
       <!ELEMENT depends EMPTY>
           <!ATTLIST depends packname CDATA #REQUIRED>
+    <!ELEMENT refpack EMPTY>
+        <!ATTLIST refpack file CDATA #REQUIRED>
           
 <!-- Allows the inclusion in the installer or uninstaller of a native library -->
 <!ELEMENT native (os*)>

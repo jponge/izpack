@@ -8,6 +8,7 @@
  * Copyright 2001 Johannes Lehtinen
  * Copyright 2002 Paul Wilkinson
  * Copyright 2004 Gaganis Giorgos
+ * Copyright 2007 Syed Khadeer / Hans Aikema
  *
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,6 +76,7 @@ import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLException;
 
 /**
  * A parser for the installer xml configuration. This parses a document
@@ -548,12 +550,36 @@ public class CompilerConfig extends Thread
     protected void addPacks(XMLElement data) throws CompilerException
     {
         notifyCompilerListener("addPacks", CompilerListener.BEGIN, data);
+
+        // the actual adding is delegated to addPacksSingle to enable recursive
+        // parsing of refpack package definitions
+        addPacksSingle(data);
+        
+        compiler.checkDependencies();
+        compiler.checkExcludes();
+
+        notifyCompilerListener("addPacks", CompilerListener.END, data);
+    }
+
+    /**
+     * Add packs and their contents to the installer without checking 
+     * the dependencies and includes.
+     * 
+     * Helper method to recursively add more packs from refpack XML packs definitions
+     * 
+     * @param data The XML data
+     * @throws CompilerException
+     */
+    private void addPacksSingle(XMLElement data) throws CompilerException
+    {
+        notifyCompilerListener("addPacksSingle", CompilerListener.BEGIN, data);
         // Initialisation
         XMLElement root = requireChildNamed(data, "packs");
 
         // at least one pack is required
         Vector packElements = root.getChildrenNamed("pack");
-        if (packElements.isEmpty()) parseError(root, "<packs> requires a <pack>");
+        Vector refPackElements = root.getChildrenNamed("refpack");
+        if (packElements.isEmpty() && refPackElements.isEmpty()) parseError(root, "<packs> requires a <pack> or <refpack>");
 
         File baseDir = new File(basedir);
         
@@ -565,6 +591,7 @@ public class CompilerConfig extends Thread
             // Trivial initialisations
             String name = requireAttribute(el, "name");
             String id = el.getAttribute("id");
+            String packImgId = el.getAttribute("packImgId");
             
             boolean loose = "true".equalsIgnoreCase(el.getAttribute("loose", "false"));
             String description = requireChildNamed(el, "description").getContent();
@@ -601,6 +628,11 @@ public class CompilerConfig extends Thread
                     String igroup = st.nextToken();
                     pack.addInstallGroup(igroup);
                 }
+            }
+            
+            // Set the packImgId if specified
+            if (packImgId != null) {
+                pack.setPackImgId(packImgId);
             }
 
             // We get the parsables list
@@ -889,10 +921,73 @@ public class CompilerConfig extends Thread
             compiler.addPack(pack);
         }
         
-        compiler.checkDependencies();
-        compiler.checkExcludes();
+        Iterator refPackIter = refPackElements.iterator();
+        while (refPackIter.hasNext())
+        {
+        	XMLElement el = (XMLElement) refPackIter.next();
 
-        notifyCompilerListener("addPacks", CompilerListener.END, data);
+            // get the name of reference xml file
+        	String refFileName = requireAttribute(el, "file");
+        	
+        	// Load the reference XML file
+        	
+        	// Initialises the parser
+            IXMLReader refXMLReader = null;
+            
+            File refXMLFile = new File(refFileName);
+            if (!refXMLFile.isAbsolute()) refXMLFile = new File(basedir, refFileName);
+            if (!refXMLFile.canRead()) {
+                throw new CompilerException("Invalid file: " + refXMLFile);
+            }
+            
+            try
+            {
+            	refXMLReader = new StdXMLReader(new FileInputStream(refXMLFile.getAbsolutePath()));
+            }
+            catch (CompilerException c)
+            {
+            	throw new CompilerException("Compiler exception while reading refXMLFile");
+            }
+            catch (IOException io)
+            {
+            	throw new CompilerException("IOException exception while reading refXMLFile");
+            }
+            
+            StdXMLParser refXMLParser = new StdXMLParser();
+            refXMLParser.setBuilder(new StdXMLBuilder());
+            refXMLParser.setReader(refXMLReader);
+            refXMLParser.setValidator(new NonValidator());
+
+            // We get it
+            XMLElement refXMLData = null;
+            try
+            {
+                refXMLData = (XMLElement) refXMLParser.parse();
+            }
+            catch (XMLException x)
+            {
+                throw new CompilerException("Error parsing installation file", x);
+            }
+            
+            // Now checked the loaded XML file for basic syntax
+            // We check it
+            if (!"installation".equalsIgnoreCase(refXMLData.getName())) {
+                parseError(refXMLData, "this is not an IzPack XML installation file");
+            }
+            if (!VERSION.equalsIgnoreCase(requireAttribute(refXMLData, "version"))) {
+                parseError(refXMLData, "the file version is different from the compiler version");
+            }
+            
+            // Read the properties and perform replacement on the rest of the tree
+            substituteProperties(refXMLData);
+            
+            // call addResources to add the referenced XML resources to this installation
+            addResources(refXMLData);
+            
+            // Recursively call myself to add all packs and refpacks from the reference XML
+            addPacksSingle(refXMLData);
+        }
+        notifyCompilerListener("addPacksSingle", CompilerListener.END, data);
     }
 
     /**
@@ -1465,7 +1560,7 @@ public class CompilerConfig extends Thread
         }
         else
         {
-            throw new CompilerException("Neither install file or text specified");
+            throw new CompilerException("Neither install file nor text specified");
         }
 
         StdXMLParser parser = new StdXMLParser();
@@ -1487,7 +1582,7 @@ public class CompilerConfig extends Thread
         // We check it
         if (!"installation".equalsIgnoreCase(data.getName()))
             parseError(data, "this is not an IzPack XML installation file");
-        if (!requireAttribute(data, "version").equalsIgnoreCase(VERSION))
+        if (!VERSION.equalsIgnoreCase(requireAttribute(data, "version")))
             parseError(data, "the file version is different from the compiler version");
 
         // We finally return the tree
@@ -1976,7 +2071,7 @@ public class CompilerConfig extends Thread
     private static String resolveIzPackHome(String home)
     {
         File test = new File(home, IZ_TEST_SUBDIR + File.separator + IZ_TEST_FILE);
-        if( test != null && test.exists())
+        if(test.exists())
             return( home);
         // Try to resolve the path using compiler.jar which also should be under
         // IZPACK_HOME.

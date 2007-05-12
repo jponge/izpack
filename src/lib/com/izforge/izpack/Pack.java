@@ -90,6 +90,9 @@ public class Pack implements Serializable
     /** The color of the node. This is used for the dependency graph algorithms */
     public int color;
 
+    /** The id to use if we want to obtain this pack's image resource */
+    public String packImgId;
+
     /** white colour */
     public final static int WHITE = 0;
 
@@ -124,6 +127,7 @@ public class Pack implements Serializable
         this.preselected = preselected;
         this.loose = loose;
         this.excludeGroup = excludegroup;
+        this.packImgId = null;
         nbytes = 0;
         color = PackInfo.WHITE;
     }

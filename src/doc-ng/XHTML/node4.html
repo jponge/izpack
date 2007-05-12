@@ -656,8 +656,8 @@ The Resources Element <tt>&lt;resources&gt;</tt></h2>
 <p>Several panels, such as the license panel and the shortcut panel, require additional data to perform their task. This data is supplied in the form of resources. This section describes how to
 specify them. Take a look at each panel description to see if it might need any resources. Currently, no checks are made to ensure resources needed by any panel have been included. The <tt>
 &lt;resources&gt;</tt> element is not required, and no <tt>&lt;res&gt;</tt> elements are required within.<br />
+The <tt>&lt;resources&gt;</tt> element is the only element besides the <tt>&lt;packs&gt;</tt> element that is taken into consideration in referenced pack-files (see <a href="#packs-element"><tt>&lt;packs&gt;</tt> element</a> for more info)<br />
 </p>
-
 <p>You have to set one <tt>&lt;res&gt;</tt> markup for each resource. Here are the attributes to specify :</p>
 
 <ul>
@@ -705,7 +705,7 @@ in order to find the ones you need. The <tt>&lt;panel&gt;</tt> markup takes a si
 <h2><a name="SECTION00438000000000000000"></a> <a name="packs-element"></a><br />
 The Packs Element <tt>&lt;packs&gt;</tt></h2>
 
-<p>This is a crucial section as it is used to specify the files that need to be installed. The <tt>&lt;packs&gt;</tt> section consists of several <tt>&lt;pack&gt;</tt> tags.</p>
+<p>This is a crucial section as it is used to specify the files that need to be installed. The <tt>&lt;packs&gt;</tt> section consists of several <tt>&lt;pack&gt;</tt> and <tt>&lt;refpack&gt;</tt> tags.</p>
 
 <p>The <tt>&lt;pack&gt;</tt> takes the following attributes :</p>
 
@@ -724,8 +724,9 @@ feature needed to put his application on a CD so that the users could run it dir
 this feature will make IzPack take the files on disk instead of from the installer. <i>Please make sure that your relative files paths are correct !</i></li>
 
 <li><tt>id</tt>: this attribute is used to give a unique id to the pack to be used for internationalization.</li>
+<li><tt>packImgId</tt>: this attribute is used to reference a unique resource that represents the pack's image for the ImgPacksPanel. The resource should be defined in the <tt>&lt;resources&gt;</tt> element of the installation XML using the same value for the <tt>id</tt> attribute of the <tt>&lt;res&gt;</tt> element.</li>
 </ul>
-
+<p>The <tt>&lt;refpack&gt;</tt> takes only one attribute <tt>file</tt>, which contains the relative path (from the installation compiler) to an externally defined packs-definition. This external packs definition is a regular IzPack installation XML. However the only elements that are used from that XML file are the <tt>&lt;packs&gt;</tt> and the <tt>&lt;resources&gt;</tt> elements. This enables a model in which a single developer is responsible for maintaining the packs and resources related to the development-package assigned to him. The main install XML references these xml-files to avoid synchronization efforts between the central installation XML and the developer-maintained installer XMLs.
 <h3><a name="SECTION00438100000000000000">Internationalization of the PacksPanel</a></h3>
 
 <p>In order to provide internationalization for the PacksPanel, so that your users can be presented with a different name and description for each language you support, you have to create a file named
@@ -1090,10 +1091,9 @@ And in file.html:
 
 <h2><a name="SECTION00445000000000000000">ImgPacksPanel</a></h2>
 
-<p>This is the same as above, but for each panel a different picture is shown to the user. The pictures are specified with the resources <tt>ImgPacksPanel.img.x</tt> where x stands for the pack
-number, the numbers start from 0. Of course it's up to you to specify as many images as needed and with correct numbers. For instance if you have 2 packs <tt>core</tt> and <tt>documentation</tt> (in
-this order), then the resource for <tt>core</tt> will be <tt>ImgPacksPanel.img.0</tt> and the resource for <tt>doc</tt> will be <tt>ImgPacksPanel.img.1</tt>. The supported image formats depend on
-what you JVM supports, but starting from J2SE 1.3, <i>GIF</i>, <i>JPEG</i> and <i>PNG</i> are supported.<br />
+<p>This is the same as above, but for each pack a different picture is shown to the user. The pictures are specified using the packImgId attribute for each pack in the installer XML. The initial image will be the image of the first pack that has a packImgId. The image is updated each time the user (de)selects a pack that has a packImgId. Of course it's up to you to specify an image for each pack in your installation with a unique packImgId. For instance if you have 2 packs <tt>core</tt>  and <tt>documentation</tt> (in
+this order), and you assign both packs a packImgId that is identical to the pack's name then the resource for <tt>core</tt> will be <tt>core</tt> and the resource for <tt>documentation</tt> will be <tt>documentation</tt>. The initially shown image will be the resource  <tt>core</tt>. The supported image formats depend on
+what your client's JVM supports, but starting from J2SE 1.3, <i>GIF</i>, <i>JPEG</i> and <i>PNG</i> are supported.<br />
 </p>
 
 <h2><a name="SECTION00446000000000000000">TargetPanel</a></h2>
