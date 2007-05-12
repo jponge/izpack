@@ -16,6 +16,7 @@
 - New Farsi langpack (Parastou Kohvaei via Klaus Bartz)
 - Dynamic control validation on radio and checkbox selection events (Vladimir Ralev)
 - Locale support of Shortcut specification file (Klaus Bartz using a hint of Loic)
+- Enabled distributed pack-definitions (Hans Aikema based on patch by Syed Khadeer)
 
   > 3.10.2
 

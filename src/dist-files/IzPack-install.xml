@@ -155,7 +155,7 @@
     <packs>
 
         <!-- The core files -->
-        <pack name="Core" required="yes">
+        <pack name="Core" required="yes" packImgId="ImgPacksPanel.img.0">
             <description>The IzPack core files.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="*.txt"/>
@@ -168,13 +168,13 @@
         </pack>
 
         <!-- The documentation -->
-        <pack name="XHTML Documentation" required="no">
+        <pack name="XHTML Documentation" required="no" packImgId="ImgPacksPanel.img.1">
             <description>The IzPack documentation (XHTML version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="doc/izpack/xhtml/**/*"/>
             </fileset>
         </pack>
-        <pack name="Java Documentation" required="no">
+        <pack name="Java Documentation" required="no" packImgId="ImgPacksPanel.img.2">
             <description>
                 The IzPack Java documentation (Javadocs for IzPack developers).
             </description>
@@ -192,7 +192,7 @@
             </fileset>
             </pack>
         -->
-        <pack name="NanoXML Documentation" required="no">
+        <pack name="NanoXML Documentation" required="no" packImgId="ImgPacksPanel.img.3">
             <description>NanoXML documentation (for IzPack developers).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="doc/nanoxml/**/*"/>
@@ -201,7 +201,7 @@
 
 
         <!-- A trivial sample to get started -->
-        <pack name="Sample" required="no">
+        <pack name="Sample" required="no" packImgId="ImgPacksPanel.img.4">
             <description>A sample installation.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="sample/**/*"/>
@@ -209,7 +209,7 @@
         </pack>
 
         <!-- The source code of this version -->
-        <pack name="Sources" required="no">
+        <pack name="Sources" required="no" packImgId="ImgPacksPanel.img.5">
             <description>The full IzPack source code.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="src/**/*"/>
