@@ -450,20 +450,26 @@ name="MyOSHelper.dll"stage="both" &gt;
         [IzPackRoot]/src/lib/[MyPackagePath]/MyCompilerListener.java</tt>.
       </li>
       <li>
-        Add a "compile.simple" antcall in to <tt>[IzPackRoot]/src/build.xml</tt>. 
+        Add a "<tt>build-compiler-listener</tt>" macro call in to the 
+        <tt>build.listeners</tt> target in <tt>[IzPackRoot]/src/build.xml</tt>.
+        Note that the name attribute value in the build-instealler-listener 
+        must match <tt>CompilerListener</tt> implementation class name (not 
+        including the package). You should include the actual Listener
+        implementation, as well as any other classes required by the listener.
 <pre>
-&lt;antcall target="compile.listener.simple"&gt;
-  &lt;param name="listener" value="MyCompilerListener"/&gt;
-  &lt;param name="listener-dir" value="MyCompilerListener"/&gt;
-  &lt;param name="listener-include" value="[MyPackagePath]"/&gt;
-&lt;/antcall&gt;
+        &lt;build-compiler-listener name="MyCompilerListener"&gt;
+            &lt;include name="[MyPackagePath]/MyCompilerListener.java"/&gt;
+            &lt;include name="[MyPackagePath]/SomeOtherHelperClass.java"/&gt;
+        &lt;/build-compiler-listener&gt;
 </pre>
       </li>
       <li>
         Run <tt>[IzPackRoot]/src/build.xml</tt>.
+        An <tt>ant</tt> alone will execute the required targets.
       </li>
       <li>
-        Add a "listeners" ELEMENT with a "listener" ELEMENT with a "compiler" attribute in to [MyProjectPath]/install.xml 
+        Add a "listeners" ELEMENT with a "listener" ELEMENT with a "compiler"
+        attribute in to [MyProjectPath]/install.xml 
 <pre>
   &lt;listeners&gt;
     &lt;listener compiler="MyCompilerListener" /&gt;
@@ -471,7 +477,7 @@ name="MyOSHelper.dll"stage="both" &gt;
 </pre>
       </li>
       <li>
-        Compile with 
+        Compile with the following command, or an ant task you have set up.
 <pre>
 java -jar [IzPackRoot]/lib/compiler.jar -HOME [IzPackRoot]
   [MyProjectPath]/install.xml -b [MyProductPath] -o

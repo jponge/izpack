@@ -86,6 +86,11 @@
     <str id="InstallPanel.overwrite.title" txt="Le fichier existe déjà."/>
     <str id="InstallPanel.overwrite.question" txt="Le fichier suivant existe déjà. Faut-il l'écraser ?"/>
     
+    <!-- InstallationGroupPanel strings -->
+    <str id="InstallationGroupPanel.colNameSelected" txt="Groupe Ã  installer" />
+    <str id="InstallationGroupPanel.colNameInstallType" txt="Description" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Taille" />
+	
     <!-- FinishPanel strings -->
     <str id="FinishPanel.success" txt="L'installation est réussie !"/>
     <str id="FinishPanel.done" txt="Terminer"/>
