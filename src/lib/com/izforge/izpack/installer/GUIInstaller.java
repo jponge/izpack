@@ -390,10 +390,10 @@ public class GUIInstaller extends InstallerBase
         if ("looks".equals(laf))
         {
             Map variants = new TreeMap();
-            variants.put("extwin", "com.jgoodies.plaf.windows.ExtWindowsLookAndFeel");
-            variants.put("plastic", "com.jgoodies.plaf.plastic.PlasticLookAndFeel");
-            variants.put("plastic3D", "com.jgoodies.plaf.plastic.Plastic3DLookAndFeel");
-            variants.put("plasticXP", "com.jgoodies.plaf.plastic.PlasticXPLookAndFeel");
+            variants.put("windows", "com.jgoodies.looks.windows.WindowsLookAndFeel");
+            variants.put("plastic", "com.jgoodies.looks.plastic.PlasticLookAndFeel");
+            variants.put("plastic3D", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+            variants.put("plasticXP", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
             String variant = (String) variants.get("plasticXP");
 
             Map params = (Map) installdata.guiPrefs.lookAndFeelParams.get(laf);
