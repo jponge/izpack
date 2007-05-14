@@ -430,6 +430,7 @@ public class CompilerConfig extends Thread
             lafMap.put("kunststoff", "kunststoff.jar");
             lafMap.put("metouia", "metouia.jar");
             lafMap.put("looks", "looks.jar");
+            lafMap.put("substance", "substance.jar");
 
             // is this really what we want? a double loop? needed, since above,
             // it's

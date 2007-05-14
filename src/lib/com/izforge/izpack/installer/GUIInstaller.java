@@ -408,6 +408,33 @@ public class GUIInstaller extends InstallerBase
 
             UIManager.setLookAndFeel(variant);
         }
+
+        // Substance (http://substance.dev.java.net/)
+        if ("substance".equals(laf))
+        {
+            Map variants = new TreeMap();
+            variants.put("default", "org.jvnet.substance.SubstanceLookAndFeel"); // Ugly!!!
+            variants.put("business", "org.jvnet.substance.skin.SubstanceBusinessLookAndFeel");
+            variants.put("business-blue", "org.jvnet.substance.skin.SubstanceBusinessBlueSteelLookAndFeel");
+            variants.put("business-black", "org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel");
+            variants.put("creme", "org.jvnet.substance.skin.SubstanceCremeLookAndFeel");
+            variants.put("sahara", "org.jvnet.substance.skin.SubstanceSaharaLookAndFeel");
+            variants.put("moderate", "org.jvnet.substance.skin.SubstanceModerateLookAndFeel");
+            variants.put("officesilver", "org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel");
+            String variant = (String) variants.get("default");
+
+            Map params = (Map) installdata.guiPrefs.lookAndFeelParams.get(laf);
+            if (params.containsKey("variant"))
+            {
+                String param = (String) params.get("variant");
+                if (variants.containsKey(param))
+                {
+                    variant = (String) variants.get(param);
+                }
+            }
+
+            UIManager.setLookAndFeel(variant);
+        }
     }
 
     /**

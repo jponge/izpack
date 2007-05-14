@@ -465,6 +465,8 @@ value</tt>.</li>
 <li>Metouia: <tt>metouia</tt></li>
 
 <li>JGoodies Looks: <tt>looks</tt></li>
+
+<li>Substance: <tt>substance</tt></li>
 </ul>
 
 <p>If you don't specify a look and feel for a particular operating system, then the default native one will be used: Windows on Windows, Aqua on Mac OS X and Metal on the Unix-like variants.<br />
@@ -503,6 +505,12 @@ value</tt>.</li>
     &lt;/laf&gt;
 &lt;/guiprefs&gt;
 </pre>
+
+<p>The <i>Substance</i> look and feel <i>toned-down</i> themes can be specified using the <tt>variant</tt> parameter, with the value being one of:
+<tt>business, business-blue, business-black, creme, sahara, moderate, officesilver</tt>. We have reduced the choice to the toned-down themes
+since they are the only ones to actually look decent (the other families colors are way too saturated).
+Please consult <a href="https://substance.dev.java.net/docs/skins/toneddown.html">https://substance.dev.java.net/docs/skins/toneddown.html</a> for a
+gallery of the different toned-down themes.</p>
 
 <p>Starting from IzPack 3.7, some characteristics can be customized with the <tt>&lt;modifier&gt;</tt> tag. There is a
 separate description in the <a href="node5.html">Advanced Features</a> chapter paragraph 

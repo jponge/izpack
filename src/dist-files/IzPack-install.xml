@@ -58,7 +58,7 @@
 
     <!-- Flexible and in the screen proportions -->
     <guiprefs height="600" resizable="yes" width="800">
-        <laf name="looks">
+        <laf name="looks" >
             <os family="unix"/>
         </laf>
         <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
