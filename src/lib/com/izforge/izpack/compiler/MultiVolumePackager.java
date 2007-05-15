@@ -66,59 +66,15 @@ import com.izforge.izpack.util.FileUtil;
  * 
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class MultiVolumePackager implements IPackager
+public class MultiVolumePackager extends PackagerBase
 {
 
     public static final String INSTALLER_PAK_NAME = "installer";
 
-    /** Path to the skeleton installer. */
-    public static final String SKELETON_SUBPATH = "lib/installer.jar";
-
-    /** Base file name of all jar files. This has no ".jar" suffix. */
-    private File baseFile = null;
-
     /** Executable zipped output stream. First to open, last to close. */
     private ZipOutputStream primaryJarStream;
 
-    /** Basic installer info. */
-    private Info info = null;
 
-    /** Gui preferences of instatller. */
-    private GUIPrefs guiPrefs = null;
-
-    /** The variables used in the project */
-    private Properties variables = new Properties();
-
-    /** The ordered panels informations. */
-    private List panelList = new ArrayList();
-
-    /** The ordered packs informations (as PackInfo objects). */
-    private List packsList = new ArrayList();
-
-    /** The ordered langpack ISO3 names. */
-    private List langpackNameList = new ArrayList();
-
-    /** The ordered custom actions informations. */
-    private List customDataList = new ArrayList();
-
-    /** The langpack URLs keyed by ISO3 name. */
-    private Map installerResourceURLMap = new HashMap();
-
-    /** Jar file URLs who's contents will be copied into the installer. */
-    private Set includedJarURLs = new HashSet();
-
-    /** Each pack is created in a separte jar if webDirURL is non-null. */
-    private boolean packJarsSeparate = false;
-
-    /** The listeners. */
-    private PackagerListener listener;
-
-    /** The compression format to be used for pack compression */
-    private PackCompressor compressor;
-
-    /** Files which are always written into the container file */
-    private HashMap alreadyWrittenFiles = new HashMap();
-    
     private XMLElement configdata = null;
 
     /**
@@ -152,7 +108,7 @@ public class MultiVolumePackager implements IPackager
      */
     public MultiVolumePackager(String compr_format, int compr_level) throws CompilerException
     {
-        setCompressorOptions(compr_format, compr_level);
+        initPackCompressor(compr_format, compr_level);
     }
 
     /**
@@ -235,226 +191,6 @@ public class MultiVolumePackager implements IPackager
             this.variables.setProperty(sizeprop, volumesize);
             this.variables.setProperty(freespaceprop, freespace);
         }         
-    }
-
-    /**
-     * Get the PackagerListener.
-     * 
-     * @return the current PackagerListener
-     */
-    public PackagerListener getPackagerListener()
-    {
-        return listener;
-    }
-
-    /**
-     * Adds a listener.
-     * 
-     * @param listener The listener.
-     */
-    public void setPackagerListener(PackagerListener listener)
-    {
-        this.listener = listener;
-    }
-
-    /**
-     * Dispatches a message to the listeners.
-     * 
-     * @param job The job description.
-     */
-    private void sendMsg(String job)
-    {
-        sendMsg(job, PackagerListener.MSG_INFO);
-    }
-
-    /**
-     * Dispatches a message to the listeners at specified priority.
-     * 
-     * @param job The job description.
-     * @param priority The message priority.
-     */
-    private void sendMsg(String job, int priority)
-    {
-        Debug.trace(job);
-        if (listener != null) listener.packagerMsg(job, priority);
-    }
-
-    /** Dispatches a start event to the listeners. */
-    private void sendStart()
-    {
-        if (listener != null) listener.packagerStart();
-    }
-
-    /** Dispatches a stop event to the listeners. */
-    private void sendStop()
-    {
-        if (listener != null) listener.packagerStop();
-    }
-
-    /***********************************************************************************************
-     * Public methods to add data to the Installer being packed
-     **********************************************************************************************/
-
-    /**
-     * Sets the informations related to this installation.
-     * 
-     * @param info The info section.
-     * @exception Exception Description of the Exception
-     */
-    public void setInfo(Info info) throws Exception
-    {
-        sendMsg("Setting the installer information", PackagerListener.MSG_VERBOSE);
-        this.info = info;
-        if (!getCompressor().useStandardCompression()
-                && getCompressor().getDecoderMapperName() != null)
-        {
-            this.info.setPackDecoderClassName(getCompressor().getDecoderMapperName());
-        }
-    }
-
-    /**
-     * Sets the GUI preferences.
-     * 
-     * @param prefs The new gUIPrefs value
-     */
-    public void setGUIPrefs(GUIPrefs prefs)
-    {
-        sendMsg("Setting the GUI preferences", PackagerListener.MSG_VERBOSE);
-        guiPrefs = prefs;
-    }
-
-    /**
-     * Allows access to add, remove and update the variables for the project, which are maintained
-     * in the packager.
-     * 
-     * @return map of variable names to values
-     */
-    public Properties getVariables()
-    {
-        return variables;
-    }
-
-    /**
-     * Add a panel, where order is important. Only one copy of the class files neeed are inserted in
-     * the installer.
-     */
-    public void addPanelJar(Panel panel, URL jarURL)
-    {
-        panelList.add(panel); // serialized to keep order/variables correct
-        addJarContent(jarURL); // each included once, no matter how many times
-        // added
-    }
-
-    /**
-     * Add a custom data like custom actions, where order is important. Only one copy of the class
-     * files neeed are inserted in the installer.
-     * 
-     * @param ca custom action object
-     * @param url the URL to include once
-     */
-    public void addCustomJar(CustomData ca, URL url)
-    {
-        customDataList.add(ca); // serialized to keep order/variables correct
-        addJarContent(url); // each included once, no matter how many times
-        // added
-    }
-
-    /**
-     * Adds a pack, order is mostly irrelevant.
-     * 
-     * @param pack contains all the files and items that go with a pack
-     */
-    public void addPack(PackInfo pack)
-    {
-        packsList.add(pack);
-    }
-
-    /**
-     * Gets the packages list
-     */
-    public List getPacksList()
-    {
-        return packsList;
-    }
-
-    /**
-     * Adds a language pack.
-     * 
-     * @param iso3 The ISO3 code.
-     * @param xmlURL The location of the xml local info
-     * @param flagURL The location of the flag image resource
-     */
-    public void addLangPack(String iso3, URL xmlURL, URL flagURL)
-    {
-        sendMsg("Adding langpack: " + iso3, PackagerListener.MSG_VERBOSE);
-        // put data & flag as entries in installer, and keep array of iso3's
-        // names
-        langpackNameList.add(iso3);
-        addResource("flag." + iso3, flagURL);
-        installerResourceURLMap.put("langpacks/" + iso3 + ".xml", xmlURL);
-    }
-
-    /**
-     * Adds a resource.
-     * 
-     * @param resId The resource Id.
-     * @param url The location of the data
-     */
-    public void addResource(String resId, URL url)
-    {
-        sendMsg("Adding resource: " + resId, PackagerListener.MSG_VERBOSE);
-        installerResourceURLMap.put("res/" + resId, url);
-    }
-
-    /**
-     * Adds a native library.
-     * 
-     * @param name The native library name.
-     * @param url The url to get the data from.
-     * @exception Exception Description of the Exception
-     */
-    public void addNativeLibrary(String name, URL url) throws Exception
-    {
-        sendMsg("Adding native library: " + name, PackagerListener.MSG_VERBOSE);
-        installerResourceURLMap.put("native/" + name, url);
-    }
-
-    /**
-     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information.
-     * 
-     * @param jarURL The url of the jar to add to the installer. We use a URL so the jar may be
-     * nested within another.
-     */
-    public void addJarContent(URL jarURL)
-    {
-        addJarContent(jarURL, null);
-    }
-
-    /**
-     * Adds a jar file content to the installer. Package structure is maintained. Need mechanism to
-     * copy over signed entry information.
-     * 
-     * @param jarURL The url of the jar to add to the installer. We use a URL so the jar may be
-     * nested within another.
-     */
-    public void addJarContent(URL jarURL, List files)
-    {
-        Object[] cont = { jarURL, files};
-        sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
-        includedJarURLs.add(cont);
-    }
-
-    /**
-     * Marks a native library to be added to the uninstaller.
-     * 
-     * @param data the describing custom action data object
-     */
-    public void addNativeUninstallerLibrary(CustomData data)
-    {
-        customDataList.add(data); // serialized to keep order/variables
-        // correct
-
     }
 
     /***********************************************************************************************
@@ -933,29 +669,12 @@ public class MultiVolumePackager implements IPackager
         return bytesCopied;
     }
 
-    /**
-     * Returns the current pack compressor
-     * 
-     * @return Returns the current pack compressor.
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.IPackager#addConfigurationInformation(net.n3.nanoxml.XMLElement)
      */
-    public PackCompressor getCompressor()
-    {
-        return compressor;
-    }
-
-    public void setCompressorOptions(String compr_format, int compr_level) throws CompilerException
-    {
-        compressor = PackCompressorFactory.get(compr_format);
-        compressor.setCompressionLevel(compr_level);
-    }
-
     public void addConfigurationInformation(XMLElement data)
     {
        this.configdata = data;        
     }
 
-    public void initPackCompressor(String compr_format, int compr_level) throws CompilerException
-    {       
-        this.setCompressorOptions(compr_format, compr_level);        
-    }
 }
