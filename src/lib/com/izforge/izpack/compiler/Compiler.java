@@ -26,7 +26,6 @@
 package com.izforge.izpack.compiler;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -418,14 +417,15 @@ public class Compiler extends Thread
     }
     /**
      * Add a lang pack to the installation.
-     * @param iso3
-     * @param iso3xmlURL
-     * @param iso3FlagURL
+     * 
+     * @param locale
+     * @param localeURL
+     * @param flagURL
      */
-    public void addLangPack(String iso3, URL iso3xmlURL, URL iso3FlagURL)
-    {
-        packager.addLangPack(iso3, iso3xmlURL, iso3FlagURL);
-    }
+    public void addLangPack(String locale, URL localeURL, URL flagURL)
+   {
+       packager.addLangPack(locale, localeURL, flagURL);
+   }
     /**
      * Add a native library to the installation.
      * @param name
@@ -788,12 +788,12 @@ public class Compiler extends Thread
             if (className != null)
             {
                 pos = name.indexOf(className);
-            }
-            if (name.length() == pos + className.length() + 6) // "Main" class
-            // found
-            {
-                jis.close();
-                return (name.substring(0, lastPos));
+                if (name.length() == pos + className.length() + 6) // "Main" class
+                // found
+                {
+                    jis.close();
+                    return (name.substring(0, lastPos));
+                }
             }
         }
         jis.close();
