@@ -39,6 +39,7 @@ import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
 
 import com.izforge.izpack.panels.PathSelectionPanel;
+import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.MultiLineLabel;
 
 /**
@@ -704,6 +705,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         prefLayoutDim = null;
         preferredLayoutSize(parent);
         Dimension realSizeDim = parent.getSize();
+        Log.getInstance().addDebugMessage("IzPanelLayout.layoutContainer parent size: {0}",
+                new String[] { parent.getSize().toString()}, "LayoutTrace", null);
         Insets insets = parent.getInsets();
 
         int rowHeight = 0;
@@ -771,6 +774,8 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                     currentComp.setBounds(adaptedXPos + generellOffset[0], adaptedYPos
                             + generellOffset[1], useWidth, useHeight);
                     currentComp.getBounds(curRect);
+                    if(curRect.height > 100)
+                        curRect.height = useHeight;
                     if (!(currentComp instanceof FillerComponent))
                     {
                         if (curRect.x < minWidth) minWidth = curRect.x;
@@ -826,7 +831,21 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                         int curPixel = (int) ((colConstraints[i].getXStretch() / rowStretch) * pixel);
 
                         Rectangle curBounds = colConstraints[i].component.getBounds();
+                        // The width of some components differ from time to time. E.g. a JScrollPane
+                        // with a JEditorPane as viewport has sometimes the minimum column width and
+                        // some times the width of the scroll bar. Therefore we use the minimum
+                        // column width.
+                        int curWidth = this.minimumColumnWidth(i);
+                        if (curBounds.width < curWidth) curBounds.width = curWidth;
                         int newWidth = curPixel + curBounds.width;
+                        Log
+                                .getInstance()
+                                .addDebugMessage(
+                                        "IzPanelLayout.layoutContainer resize bounds for {2}|{3} old width {0} new width {1}",
+                                        new String[] { Integer.toString(curBounds.width),
+                                                Integer.toString(newWidth), 
+                                                Integer.toString(row), Integer.toString(i)},
+                                        "LayoutTrace", null);
                         colConstraints[i].component.setBounds(curBounds.x + offset, curBounds.y,
                                 newWidth, curBounds.height);
                         colConstraints[i].component.getBounds(curRect);
@@ -838,6 +857,24 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                         colConstraints[i].setBounds(curRect);
 
                         if (curMax - minHeight > overallHeight) overallHeight = curMax - minHeight;
+
+                        Log
+                                .getInstance()
+                                .addDebugMessage(
+                                        "IzPanelLayout.layoutContainer resize bounds for {2}|{3} ({0}): {1}",
+                                        new String[] {
+                                                colConstraints[i].component.getClass().getName(),
+                                                curRect.toString(), Integer.toString(row),
+                                                Integer.toString(i)}, "LayoutTrace", null);
+
+                        Log
+                                .getInstance()
+                                .addDebugMessage(
+                                        "IzPanelLayout.layoutContainer resize bounds for {2}|{3}: maxWidth = {0} maxHeight = {1}",
+                                        new String[] {
+                                                Integer.toString(maxWidth),
+                                                Integer.toString(overallHeight), Integer.toString(row),
+                                                Integer.toString(i)}, "LayoutTrace", null);
 
                         offset += curPixel;
                         if (needsReEvaluation(colConstraints[i].component))
@@ -869,7 +906,11 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             {
                 IzPanelConstraints currentConst = getConstraints(col, row);
                 if (currentConst != null)
+                {
+                    Log.getInstance().addDebugMessage("IzPanelLayout.fastLayoutContainer bounds: {0}",
+                            new String[] { currentConst.getBounds().toString()}, "LayoutTrace", null);
                     currentConst.component.setBounds(currentConst.getBounds());
+                }
 
             }
 
@@ -882,7 +923,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         Insets opi = oldParentInsets;
         oldParentSize = parent.getSize();
         oldParentInsets = parent.getInsets();
-        if (opi == null || opi == null) return (true);
+        if (opi == null) return (true);
         if (ops.equals(parent.getSize()) && opi.equals(parent.getInsets())) return (false);
         return (true);
 
@@ -1191,6 +1232,9 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
      */
     public static class FillerComponent extends Component
     {
+
+        /**  */
+        private static final long serialVersionUID = 7270064864038287900L;
 
         private Dimension size;
 
