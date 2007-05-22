@@ -826,6 +826,12 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                         int curPixel = (int) ((colConstraints[i].getXStretch() / rowStretch) * pixel);
 
                         Rectangle curBounds = colConstraints[i].component.getBounds();
+                        // The width of some components differ from time to time. E.g. a JScrollPane
+                        // with a JEditorPane as viewport has sometimes the minimum column width and
+                        // some times the width of the scroll bar. Therefore we use the minimum
+                        // column width.
+                        int curWidth = this.minimumColumnWidth(i);
+                        if (curBounds.width < curWidth) curBounds.width = curWidth;
                         int newWidth = curPixel + curBounds.width;
                         colConstraints[i].component.setBounds(curBounds.x + offset, curBounds.y,
                                 newWidth, curBounds.height);
