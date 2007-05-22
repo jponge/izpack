@@ -20,6 +20,10 @@
 - Update of the Liquid and JGoodies look and feel libraries (Julien Ponge).
 - Support for the toned-down Substance look and feel themes (Julien Ponge).
 
+  > 3.10.3 (build xxxx.xx.xx)
+
+- LayoutManager bug at handling EditorPanes fixed (width to small) (Klaus Bartz)
+
   > 3.10.2 (build 2007.05.11)
 
 - Vista/Java6 fixes (Stefan Wachter via Julien Ponge)
