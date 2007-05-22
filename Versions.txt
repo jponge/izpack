@@ -1,5 +1,9 @@
 [ The list of the different public versions of IzPack ]
 
+  > 3.10.3 (build xxxx.xx.xx)
+
+- LayoutManager bug at handling EditorPanes fixed (width to small) (Klaus Bartz)
+
   > 3.10.2 (build 2007.05.11)
 
 - Vista/Java6 fixes (Stefan Wachter via Julien Ponge)
