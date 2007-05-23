@@ -22,6 +22,7 @@ package com.izforge.izpack.installer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.zip.ZipOutputStream;
@@ -65,6 +66,9 @@ public class AutomatedInstallData
 
     /** The language code. */
     public String localeISO3;
+
+    /** The used locale. */
+    public Locale locale;
 
     /** The language pack. */
     public LocaleDatabase langpack;

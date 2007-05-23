@@ -21,17 +21,25 @@
  */
 package com.izforge.izpack.util;
 
-
 /**
- * This interface contains common used templates and channel names for debug messages 
- * using class 
+ * This interface contains common used templates and channel names for debug messages using class
  * {@link com.izforge.izpack.util.Log <code>LogMessage</code>}
  * 
  * @author Klaus Bartz
- *
+ * 
  */
 public interface DebugConstants
 {
+
     /** Channel name for debug message about panel tracing. */
     public final static String PANEL_TRACE = "PanelTrace";
+
+    /** Channel name for debug message about layout tracing. */
+    public final static String LAYOUT_TRACE = "LayoutTrace";
+
+    /** Channel name for debug message which will be triggered by the old logging system (not yet implemented). */
+    public final static String OLD_DEBUG_TRACE = "DebugTrace";
+
+    /** Channel name for debug message which will be triggered by the old logging system (not yet implemented). */
+    public final static String OLD_DEBUG_STACKTRACE = "DebugStackTrace";
 }
