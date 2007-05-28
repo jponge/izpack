@@ -3,6 +3,7 @@
   > 3.10.3 (build xxxx.xx.xx)
 
 - LayoutManager bug at handling EditorPanes fixed (width to small) (Klaus Bartz)
+- Fixed NPE when ypcat not installed on linux. (Dick Hollenbeck via Marc Eppelmann)
 
   > 3.10.2 (build 2007.05.11)
 
