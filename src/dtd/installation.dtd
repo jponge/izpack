@@ -108,6 +108,7 @@ $Id$
         <!ATTLIST pack group CDATA #IMPLIED>
         <!ATTLIST pack installGroups CDATA #IMPLIED>
         <!ATTLIST pack excludeGroup CDATA #IMPLIED>
+        <!ATTLIST pack parent CDATA #IMPLIED>
         <!ELEMENT description (#PCDATA)>
         <!ELEMENT file (os*, additionaldata*)>
             <!ATTLIST file src CDATA #REQUIRED>

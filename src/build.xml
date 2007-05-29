@@ -668,6 +668,15 @@
          <include name="com/izforge/izpack/panels/InstallationGroupPanel.java"/>
          <include name="com/izforge/izpack/panels/InstallationGroupPanelAutomationHelper.java"/>
         </build-panel>
+        <build-panel name="TreePacksPanel">
+         <include name="com/izforge/izpack/panels/TreePacksPanel.java"/>
+         <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java" />
+         <include name="com/izforge/izpack/panels/ImgPacksPanelBase.java" />
+         <include name="com/izforge/izpack/panels/PacksModel.java" />
+         <include name="com/izforge/izpack/panels/PacksPanelAutomationHelper.java" />
+         <include name="com/izforge/izpack/panels/PacksPanelBase.java" />
+         <include name="com/izforge/izpack/panels/PacksPanelInterface.java" />
+        </build-panel>
     </target>
 
     <!--
