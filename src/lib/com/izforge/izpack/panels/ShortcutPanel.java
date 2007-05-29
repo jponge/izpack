@@ -478,7 +478,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         if (eventSource.equals(currentUser))
         {
-            groupList.setListData(shortcut.getProgramGroups(Shortcut.CURRENT_USER));
+            if(groupList != null) groupList.setListData(shortcut.getProgramGroups(Shortcut.CURRENT_USER));
             programGroup.setText(suggestedProgramGroup);
             shortcut.setUserType(itsUserType = Shortcut.CURRENT_USER);
 
@@ -492,7 +492,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         else if (eventSource.equals(allUsers))
         {
-            groupList.setListData(shortcut.getProgramGroups(Shortcut.ALL_USERS));
+            if(groupList != null) groupList.setListData(shortcut.getProgramGroups(Shortcut.ALL_USERS));
             programGroup.setText(suggestedProgramGroup);
             shortcut.setUserType(itsUserType = Shortcut.ALL_USERS);
 
@@ -658,7 +658,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 {
                     itsUserType = Shortcut.CURRENT_USER;
                 }                
-
+                
                 buildUI(getProgramsFolder(isRootUser ? Shortcut.ALL_USERS : Shortcut.CURRENT_USER));
 
                 // addSelectionList();
@@ -1122,7 +1122,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
       addToUninstaller();
     }
     
-    private String createGnomeMenu(Vector shortcuts, String menuName)
+    private String createXDGMenu(ArrayList shortcuts, String menuName)
     {
        String menuConfigText = "<Menu>\n" +
             "<Name>Applications</Name>\n" +
@@ -1130,16 +1130,50 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             "<Name>" + menuName + "</Name>\n" +
             "<Include>\n";
        
-       ShortcutData data;
-
        for (int i = 0; i < shortcuts.size(); i++)
        {
-           data = (ShortcutData) shortcuts.elementAt(i);
-           menuConfigText += "<Filename>" + data.name + ".desktop</Filename>\n";
+           String shortcutFile = (String) shortcuts.get(i);
+           menuConfigText += "<Filename>" + shortcutFile + "</Filename>\n";
        }
        menuConfigText += "</Include>\n</Menu>\n</Menu>";
        return menuConfigText;
            
+    }
+    
+    private void writeXDGMenuFile(ArrayList desktopFileNames, String groupName)
+    {
+       if(OsVersion.IS_UNIX)
+       {
+          String menuFile = createXDGMenu(desktopFileNames, groupName);
+          String menuFolder;
+          if(itsUserType == Shortcut.ALL_USERS)
+          {
+             menuFolder = "/etc/xdg/menus/applications-merged/";              
+          }
+          else
+          {
+             menuFolder = System.getProperty("user.home") + File.separator
+                  + ".config/menus/applications-merged/";
+          }
+          File menuConfigFolder = new File(menuFolder);
+          String menuFilePath = menuFolder + groupName + ".menu";
+          menuConfigFolder.mkdirs();
+          FileWriter menuFileWriter;
+          boolean failed = false;
+          try{
+             
+             menuFileWriter = new FileWriter(menuFilePath);
+             menuFileWriter.write(menuFile);
+             menuFileWriter.close();
+          }
+          catch(Exception ignore)
+          {
+             failed = true;
+             Debug.log("Failed to create menu for gnome.");
+          }
+          if(!failed) UninstallData.getInstance().addFile(menuFilePath);
+
+       }       
     }
     
     /*--------------------------------------------------------------------------*/
@@ -1158,31 +1192,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         //fix: don't influence other shortcuts when altering group name...
         String gn = groupName;
         
-        if(OsVersion.IS_UNIX)
-        {
-           String menuFile = createGnomeMenu(shortcuts, groupName);
-
-           String menuFolder = System.getProperty("user.home") + File.separator
-              + ".config/menus/applications-merged/";
-           File menuConfigFolder = new File(menuFolder);
-           String menuFilePath = menuFolder + groupName + ".menu";
-           menuConfigFolder.mkdirs();
-           FileWriter menuFileWriter;
-           boolean failed = false;
-           try{
-              
-              menuFileWriter = new FileWriter(menuFilePath);
-              menuFileWriter.write(menuFile);
-              menuFileWriter.close();
-           }
-           catch(Exception ignore)
-           {
-              failed = true;
-              Debug.log("Failed to create menu for gnome.");
-           }
-           if(!failed) UninstallData.getInstance().addFile(menuFilePath);
-
-        }
+        ArrayList startMenuShortcuts = new ArrayList();
         for (int i = 0; i < shortcuts.size(); i++)
         {
             data = (ShortcutData) shortcuts.elementAt(i);
@@ -1236,9 +1246,20 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                             || ((data.type == Shortcut.DESKTOP) && allowDesktopShortcut
                                     .isSelected()))
                     {
+
                         // save the shortcut
                         shortcut.save();
-
+                        
+                        if(data.type == Shortcut.APPLICATIONS || data.addToGroup == true)
+                        {
+                           if(shortcut instanceof com.izforge.izpack.util.os.Unix_Shortcut)
+                           {
+                              com.izforge.izpack.util.os.Unix_Shortcut unixcut =
+                                 (com.izforge.izpack.util.os.Unix_Shortcut) shortcut;
+                              Object f = unixcut.getWrittenFileName();
+                              if(f != null) startMenuShortcuts.add(f);
+                           }
+                        }
                         // add the file and directory name to the file list
                         String fileName = shortcut.getFileName();
                         files.add(0, fileName);
@@ -1282,7 +1303,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 continue;
             }
         }
-        
+        if(OsVersion.IS_UNIX) writeXDGMenuFile(startMenuShortcuts, groupName);
         shortcut.execPostAction();
 
         try
@@ -1456,17 +1477,32 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         listLabel = LabelFactory.create(parent.langpack.getString("ShortcutPanel.regular.list"),
                 JLabel.LEADING);
+        if(OsVersion.IS_WINDOWS)
+        {
+           constraints.gridx = col;
+           constraints.gridy = line + 3;
 
-        constraints.gridx = col;
-        constraints.gridy = line + 3;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
+           constraints.gridwidth = 1;
+           constraints.gridheight = 1;
 
-        constraints.insets = new Insets(10, 10, 0, 0);
+           constraints.insets = new Insets(10, 10, 0, 0);
 
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.NORTHWEST;
+           constraints.fill = GridBagConstraints.HORIZONTAL;
+           constraints.anchor = GridBagConstraints.NORTHWEST;
+        }
+        else
+        {
+           constraints.gridx = col;
+           constraints.gridy = line + 4;
 
+           constraints.gridwidth = 1;
+           constraints.gridheight = 1;
+
+           constraints.insets = new Insets(10, 10, 0, 0);
+
+           constraints.fill = GridBagConstraints.HORIZONTAL;
+           constraints.anchor = GridBagConstraints.SOUTHWEST;
+        }
         layout.addLayoutComponent(listLabel, constraints);
         add(listLabel);
 
@@ -1480,7 +1516,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         // Quickfix prevent NullPointer on non default compliant Linux - KDEs
         // i.e Mandrake 2005 LE stores from now also in "applnk" instead in prior "applnk-mdk":
-        if (entries != null)
+        if (entries != null && !OsVersion.IS_UNIX)
         {
             for (int idx = 0; idx < entries.length; idx++)
             {
@@ -1490,14 +1526,16 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 }
             }
         }
-
-        if (groupList == null)
+        if(OsVersion.IS_WINDOWS)
         {
-            groupList = new JList();
-        }
+           if (groupList == null)
+           {
+              groupList = new JList();
+           }
 
-        groupList = addList(dirEntries, ListSelectionModel.SINGLE_SELECTION, groupList, col,
+           groupList = addList(dirEntries, ListSelectionModel.SINGLE_SELECTION, groupList, col,
                 line + 4, 1, 1, GridBagConstraints.BOTH);
+        }
 
         // ----------------------------------------------------
         // radio buttons to select current user or all users.
@@ -1525,11 +1563,22 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             TitledBorder border = new TitledBorder(new EmptyBorder(2, 2, 2, 2), parent.langpack
                     .getString("ShortcutPanel.regular.userIntro"));
             usersPanel.setBorder(border);
-
-            constraints.gridx = col + 1;
-            constraints.gridy = line + 4;
-            constraints.gridwidth = 1;
-            constraints.gridheight = 1;
+            if(OsVersion.IS_WINDOWS)
+            {
+               constraints.gridx = col + 1;
+               constraints.gridy = line + 4;
+               constraints.gridwidth = 1;
+               constraints.gridheight = 1;
+            }
+            else
+            {
+               constraints.insets = new Insets(10, 10, 20, 0);
+               constraints.gridx = col;
+               constraints.gridy = line + 4;
+               constraints.gridwidth = 2;
+               constraints.gridheight = 1;
+               constraints.anchor = constraints.EAST;
+            }
 
             // constraints.weighty = 1.0;
             // constraints.weightx = 1.0;

@@ -1,7 +1,7 @@
 /*
  * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  *
- * http://izpack.org/
+ * http://www.izforge.com/izpack/
  * http://developer.berlios.de/projects/izpack/
  *
  * Copyright 2003 Marc Eppelmann
@@ -320,27 +320,26 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     }
 
     /**
-     * Gets the kde/share/applink - Folder for the given user and for the currently known and
-     * supported distribution.
+     * Gets the XDG path to place the menu shortcuts
      * 
      * @param userType to get for.
      * 
-     * @return the users or the systems kde share/applink(-redhat/-mdk)
+     * @return handle to the directory
      */
     private File getKdeShareApplnkFolder(int userType)
     {
-       /*
-        //newer XDG system
-        File xdgPath = new File("usr" + File.separator + "share" + File.separator
-               + "applications");
-        if(xdgPath.exists()) return xdgPath;*/
-       
-        File kdeBase = getKdeBase(userType);
 
-        File result = new File(kdeBase + File.separator + "share" + File.separator
-                + getKdeApplinkFolderName());
+        if(userType == Shortcut.ALL_USERS)
+        {
+           return new File(File.separator + "usr" + File.separator + "share" + File.separator
+                 + "applications");
+        }
+        else
+        {
+           return new File(System.getProperty("user.home") + File.separator + ".local"
+                 + File.separator + "share" + File.separator + "applications");
+        }
 
-        return result;
     }
 
     /**
@@ -435,15 +434,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         // Create The Desktop Shortcuts
         if ("".equals(this.itsGroupName) && (this.getLinkType() == Shortcut.DESKTOP))
         {
-            //System.out.println("this.itsGroupName: "+this.itsGroupName);
-            //System.out.println("this.getLinkType(): "+this.getLinkType());
-            target = myHome + FS + "Desktop" + FS + this.itsName
-                    + DESKTOP_EXT;
+
             this.itsFileName = target;
 
             // write my own ShortCut
-            File writtenDesktopFile = writeShortCut(target, shortCutDef);
-
+            File writtenDesktopFile = writeSafeShortcut(myHome + FS + "Desktop" + FS, this.itsName, shortCutDef);
+            uninstaller.addFile(writtenDesktopFile.toString());
+            
             // If I'm root and this Desktop.ShortCut should be for all other users
             if (rootUser4All && create4All)
             {
@@ -568,7 +565,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     + DESKTOP_EXT;
                this.itsFileName = target;
                File kdemenufile = writeShortCut(target, shortCutDef);
-          
+
                uninstaller.addFile(kdemenufile.toString());
             }
             
@@ -591,12 +588,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                                 + cnc.getMessage() + " )");
                     }
 
-                    // write *.desktop.file into /usr/share/applications
+                    // write *.desktop
 
-                    String commonTarget = "/usr/share/applications/" + this.itsName + DESKTOP_EXT;
                     this.itsFileName = target;
-                    File writtenFile = writeShortCut(commonTarget, shortCutDef);
-
+                    File writtenFile = writeSafeShortcut("/usr/share/applications/", this.itsName, shortCutDef);
+                    setWrittenFileName(writtenFile.getName());
                     uninstaller.addFile(writtenFile.toString());
 
                 }
@@ -637,12 +633,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                            + cnc.getMessage() + " )");
                }
 
-               // write *.desktop.file into ~/share/applications
+               // write *.desktop in the local folder
 
-               String commonTarget = localApps + this.itsName + DESKTOP_EXT;
                this.itsFileName = target;
-               File writtenFile = writeShortCut(commonTarget, shortCutDef);
-
+               File writtenFile = writeSafeShortcut(localApps, this.itsName, shortCutDef);
+               setWrittenFileName(writtenFile.getName());
                uninstaller.addFile(writtenFile.toString());
             }
 
@@ -711,6 +706,66 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         writer.close();
     }
 
+    private String writtenFileName;
+    
+    public String getWrittenFileName()
+    {
+       return writtenFileName;
+    }
+    
+    protected void setWrittenFileName(String s)
+    {
+       writtenFileName = s;
+    }
+    
+    private File writeSafeShortcut(String targetPath, String shortcutName, String shortcutDef)
+    {
+        if( !(targetPath.endsWith("/") || targetPath.endsWith("\\")) )
+        {
+            targetPath += File.separatorChar;
+        }
+        
+        File shortcutFile;
+        
+        do
+        {
+           shortcutFile = new File(targetPath + shortcutName + "-" + System.currentTimeMillis() + DESKTOP_EXT);
+        }
+        while (shortcutFile.exists());
+
+
+        FileWriter fileWriter = null;
+
+        try
+        {
+            fileWriter = new FileWriter(shortcutFile);
+        }
+        catch (IOException e1)
+        {
+            System.out.println(e1.getMessage());
+        }
+
+        try
+        {
+            fileWriter.write(shortcutDef);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            fileWriter.close();
+        }
+        catch (IOException e2)
+        {
+            e2.printStackTrace();
+        }
+        return shortcutFile;        
+        
+    }
+    
     /**
      * Writes the given Shortcutdefinition to the given Target. Returns the written File.
      * 
