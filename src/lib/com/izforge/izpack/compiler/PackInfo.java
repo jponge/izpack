@@ -289,6 +289,16 @@ public class PackInfo
         return pack.dependencies;
     }
     
+	public String getParent()
+    {
+       return pack.parent;
+    }
+    
+    public void setParent(String p)
+    {
+       pack.parent = p;
+    }
+    
     public String toString()
     {
         return pack.name;

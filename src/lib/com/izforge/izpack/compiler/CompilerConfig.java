@@ -600,6 +600,7 @@ public class CompilerConfig extends Thread
             String group = el.getAttribute("group");
             String installGroups = el.getAttribute("installGroups");
             String excludeGroup = el.getAttribute("excludeGroup");
+            String parent = el.getAttribute("parent");
             
             if(required && excludeGroup != null)
             {
@@ -609,6 +610,7 @@ public class CompilerConfig extends Thread
             
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup);
             pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO:
+            pack.setParent(parent);
             
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
