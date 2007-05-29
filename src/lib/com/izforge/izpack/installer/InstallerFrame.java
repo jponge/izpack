@@ -1614,6 +1614,17 @@ public class InstallerFrame extends JFrame
         headingLabels[0] = new JLabel("");
         // First line ist the "main heading" which should be bold.
         headingLabels[0].setFont(headingLabels[0].getFont().deriveFont(Font.BOLD));
+        
+        // Updated by Daniel Azarov, Exadel Inc.
+        // start
+        Color foreground = null;
+        if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor")){
+            foreground = Color.decode((String) installdata.guiPrefs.modifier
+                    .get("headingForegroundColor"));
+            headingLabels[0].setForeground(foreground);
+        }
+        // end
+        
         if (installdata.guiPrefs.modifier.containsKey("headingFontSize"))
         {
             float fontSize = Float.parseFloat((String) installdata.guiPrefs.modifier
@@ -1660,6 +1671,16 @@ public class InstallerFrame extends JFrame
                 JLabel headingCountPanels = new JLabel(" ");
                 headingCounterComponent = headingCountPanels;
                 headingCounterComponent.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
+                
+                // Updated by Daniel Azarov, Exadel Inc.
+                // start
+                Color foreground = null;
+                if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor")){
+                    foreground = Color.decode((String) installdata.guiPrefs.modifier
+                            .get("headingForegroundColor"));
+                    headingCountPanels.setForeground(foreground);
+                }
+                // end
             }
             if ("inHeading".equals(counterPos))
             {
@@ -1696,7 +1717,18 @@ public class InstallerFrame extends JFrame
         }
         JPanel imgPanel = new JPanel();
         imgPanel.setLayout(new BoxLayout(imgPanel, BoxLayout.Y_AXIS));
-        imgPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        
+        // Updated by Daniel Azarov, Exadel Inc.
+        // start
+        int borderSize = 8;
+        if (installdata.guiPrefs.modifier.containsKey("headingImageBorderSize"))
+        {
+            borderSize = Integer.parseInt((String) installdata.guiPrefs.modifier
+                    .get("headingImageBorderSize"));
+        }
+        imgPanel.setBorder(BorderFactory.createEmptyBorder(borderSize, borderSize, borderSize, borderSize));
+        // end
+        
         if (back != null) imgPanel.setBackground(back);
         JLabel iconLab = new JLabel(icon);
         imgPanel.add(iconLab, BorderLayout.EAST);
