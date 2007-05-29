@@ -14,11 +14,17 @@
   (Michael Hagedorn via Julien Ponge)
 - Default path for JDKPathPanel will be got from Windows registry if possible (Klaus Bartz)  
 - New Farsi langpack (Parastou Kohvaei via Klaus Bartz)
-- Dynamic control validation on radio and checkbox selection events (Vladimir Ralev)
+- Dynamic control re-rendering (show/hide) on radio and checkbox selection events (Vladimir Ralev)
 - Locale support of Shortcut specification file (Klaus Bartz using a hint of Loic)
 - Enabled distributed pack-definitions (Hans Aikema based on patch by Syed Khadeer)
 - Update of the Liquid and JGoodies look and feel libraries (Julien Ponge).
 - Support for the toned-down Substance look and feel themes (Julien Ponge).
+- Added main frame GUI properties 'headingForegroundColor' and 'headingImageBorderSize'
+  (Daniel Azarov, Exadel Inc via Vladimir Ralev)
+- Unix shortcuts fixes (Vladimir Ralev)
+- TreePacksPanel, a hierarchical packs selection panel (Vladimir Ralev)
+- HTMLInfoPanel to launch links in external browser on any Windows and Linux (Vladimir Ralev)
+
 
   > 3.10.3 (build xxxx.xx.xx)
 
