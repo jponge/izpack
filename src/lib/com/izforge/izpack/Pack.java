@@ -86,6 +86,9 @@ public class Pack implements Serializable
 
     /** Whether this pack is suggested (preselected for installation). */
     public boolean preselected;
+    
+    /** Parent pack name to display it in the TreePacksPanel (optional)*/
+    public String parent;
 
     /** The color of the node. This is used for the dependency graph algorithms */
     public int color;
