@@ -303,7 +303,11 @@ class PacksModel extends AbstractTableModel
             }
             else
             {
-                return langpack.getString(pack.id);
+                String tmp = langpack.getString(pack.id);
+                if (pack.id.equals(tmp))
+                    return pack.name;
+                else
+                    return tmp;
             }
 
         case 2:
