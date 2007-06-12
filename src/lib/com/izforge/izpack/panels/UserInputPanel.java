@@ -2575,6 +2575,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 // Background color and font to match the label's.
                 label.setBackground(javax.swing.UIManager.getColor("label.backgroud"));
                 label.setMargin(new java.awt.Insets(3, 0, 3, 0));
+                // workaround to cut out layout problems
+                label.getPreferredSize();
+                // end of workaround.
 
                 uiElements.add(new Object[] { null, DESCRIPTION, null, constraints, label,
                         forPacks, forOs});
