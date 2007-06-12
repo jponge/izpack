@@ -25,6 +25,7 @@
 - TreePacksPanel, a hierarchical packs selection panel (Vladimir Ralev)
 - HTMLInfoPanel to launch links in external browser on any Windows and Linux (Vladimir Ralev)
 - PacksModel fix (Markus Schlegel via Julien Ponge).
+- Workaround for layout problems in UserInputPanel when clicking previous button (Dennis Reil)
 
   > 3.10.3 (build xxxx.xx.xx)
 
