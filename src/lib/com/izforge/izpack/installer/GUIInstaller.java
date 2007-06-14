@@ -386,6 +386,13 @@ public class GUIInstaller extends InstallerBase
             return;
         }
 
+				// Nimbus (http://nimbus.dev.java.net/)
+				if ("nimbus".equals(laf))
+				{
+						UIManager.setLookAndFeel("org.jdesktop.swingx.plaf.nimbus.NimbusLookAndFeel");
+						return;
+				}
+
         // JGoodies Looks (http://looks.dev.java.net/)
         if ("looks".equals(laf))
         {
@@ -407,6 +414,7 @@ public class GUIInstaller extends InstallerBase
             }
 
             UIManager.setLookAndFeel(variant);
+						return;
         }
 
         // Substance (http://substance.dev.java.net/)
@@ -434,6 +442,7 @@ public class GUIInstaller extends InstallerBase
             }
 
             UIManager.setLookAndFeel(variant);
+						return;
         }
     }
 
