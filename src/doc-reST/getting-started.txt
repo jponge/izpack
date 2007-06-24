@@ -141,7 +141,7 @@ Install.sh: ::
             at java.lang.Class.newInstance(Class.java:261)
             at com.izforge.izpack.installer.Installer.main(Installer.java:47)
 
-   Then, it's most probably the fact that in some distribution the console and environment variables are "erased" when switching between users. So, you can type 'su -' in order to obtain all commands. With 'su -' $DISPLAY variables is erased and all X11 connections is refused. So, a best and fast practice in this way is:
+Then, it's most probably the fact that in some distribution the console and environment variables are "erased" when switching between users. So, you can type 'su -' in order to obtain all commands. With 'su -' $DISPLAY variables is erased and all X11 connections is refused. So, a best and fast practice in this way is:
 
    1. Log in your system by user
    2. In shell type: '$ echo $DISPLAY'
