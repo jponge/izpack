@@ -634,7 +634,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
     */
    public void setDependencies(String id)
    {
-      if (descriptionArea != null)
+      if (dependencyArea != null)
       {
          Pack pack = (Pack) idToPack.get(id);
          List dep = pack.dependencies;
