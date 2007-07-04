@@ -136,6 +136,8 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    
    private HashMap idToCheckBoxNode = new HashMap();
    private boolean created = false;
+   
+   private CheckTreeController checkTreeController;
 
    /**
     * The constructor.
@@ -447,7 +449,8 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       tree.setEditable(false);
       tree.setShowsRootHandles(true);
       tree.setRootVisible(false);
-      tree.addMouseListener(new CheckTreeController(this));
+      checkTreeController = new CheckTreeController(this);
+      tree.addMouseListener(checkTreeController);
       tree.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
       tree.setBackground(Color.white);
       tree.setToggleClickCount(0);
@@ -778,8 +781,9 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          fromModel();
          
          // Init the pack sizes (individual and cumulative)
-         CheckBoxNode cbn = (CheckBoxNode) packsTree.getModel().getRoot();
-         CheckTreeController.initTotalSize(cbn, false);
+         CheckBoxNode root = (CheckBoxNode) packsTree.getModel().getRoot();
+         checkTreeController.updateAllParents(root);
+         CheckTreeController.initTotalSize(root, false);
          
          // Ugly repaint because of a bug in tree.treeDidChange
          packsTree.revalidate();
@@ -1193,6 +1197,10 @@ class CheckTreeController extends MouseAdapter{
       }
       CheckBoxNode root = (CheckBoxNode)current.getRoot();
       treePacksPanel.fromModel();
+      
+      updateAllParents(root);
+      
+      /*
       updateParents(current);
       List deps = current.getPack().revDependencies;
       if(deps != null) for(int q=0; q<deps.size(); q++)
@@ -1202,6 +1210,8 @@ class CheckTreeController extends MouseAdapter{
          CheckBoxNode cbn = (CheckBoxNode) treePacksPanel.getCbnById(id);
          updateParents(cbn);
       }
+      */
+      
       initTotalSize(root, true);
       
       // must override the bytes being computed at packsModel
@@ -1209,7 +1219,29 @@ class CheckTreeController extends MouseAdapter{
       treePacksPanel.showSpaceRequired();
       tree.treeDidChange();
    } 
+   /**
+    * Updates partial/deselected/selected state of all parent nodes.
+    * This is needed and is a patch to allow unrelated nodes (in terms of the tree)
+    * to fire updates for each other.
+    * 
+    * @param root
+    */
+   public void updateAllParents(CheckBoxNode root)
+   {
+      Enumeration rootEnum = root.depthFirstEnumeration();
+      while(rootEnum.hasMoreElements())
+      {
+         CheckBoxNode child = (CheckBoxNode) rootEnum.nextElement();
+         if(child.getParent()!=null && !child.getParent().equals(root))
+             updateParents(child);
+      }
+   }
    
+   /**
+    * Updates the parents of this particular node
+    * 
+    * @param node
+    */
    private void updateParents(CheckBoxNode node)
    {
       CheckBoxNode parent = (CheckBoxNode) node.getParent();
@@ -1221,8 +1253,12 @@ class CheckTreeController extends MouseAdapter{
          while(ne.hasMoreElements())
          {
             CheckBoxNode child = (CheckBoxNode) ne.nextElement();
-            if(child.isSelected()) allDeselected = false;
-            else allSelected = false;
+            if(child.isSelected())
+               allDeselected = false;
+            else
+               allSelected = false;
+            if(child.isPartial()) allSelected = allDeselected = false;
+            if(!allSelected && !allDeselected) break;
          }
          if(parent.getChildCount()>0)
          {
