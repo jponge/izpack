@@ -159,6 +159,17 @@ public class Librarian implements CleanupClient
         return (me);
     }
 
+    public synchronized void loadLibrary(String name, NativeLibraryClient client) throws Exception
+    {
+       try
+       {
+          loadArchSpecificLibrary(name, client);
+       }
+       catch(Exception ex)
+       {
+          loadArchSpecificLibrary(name+"_x64", client);
+       }
+    }
     /*--------------------------------------------------------------------------*/
     /**
      * Loads the requested library. If the library is already loaded, this method returns
@@ -200,7 +211,7 @@ public class Librarian implements CleanupClient
      * @exception Exception if all attempts to load the library fail.
      */
     /*--------------------------------------------------------------------------*/
-    public synchronized void loadLibrary(String name, NativeLibraryClient client) throws Exception
+    public synchronized void loadArchSpecificLibrary(String name, NativeLibraryClient client) throws Exception
     {
         String libraryName = strip(name);
         String tempFileName = "";
