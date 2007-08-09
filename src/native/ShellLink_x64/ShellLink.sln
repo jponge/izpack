@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShellLink", "ShellLink.vcproj", "{BF46B82B-A948-4C56-91C8-A5F20FB2D869}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug Unicode|Win32 = Debug Unicode|Win32
+		Debug|Win32 = Debug|Win32
+		Release Unicode|Win32 = Release Unicode|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF46B82B-A948-4C56-91C8-A5F20FB2D869}.Debug Unicode|Win32.ActiveCfg = Debug Unicode|Win32
+		{BF46B82B-A948-4C56-91C8-A5F20FB2D869}.Debug Unicode|Win32.Build.0 = Debug Unicode|Win32
+		{BF46B82B-A948-4C56-91C8-A5F20FB2D869}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BF46B82B-A948-4C56-91C8-A5F20FB2D869}.Debug|Win32.Build.0 = Debug|Win32
+		{BF46B82B-A948-4C56-91C8-A5F20FB2D869}.Release Unicode|Win32.ActiveCfg = Release Unicode|Win32
+		{BF46B82B-A948-4C56-91C8-A5F20FB2D869}.Release Unicode|Win32.Build.0 = Release Unicode|Win32
+		{BF46B82B-A948-4C56-91C8-A5F20FB2D869}.Release|Win32.ActiveCfg = Release|Win32
+		{BF46B82B-A948-4C56-91C8-A5F20FB2D869}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
