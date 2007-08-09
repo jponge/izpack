@@ -27,6 +27,7 @@
 - PacksModel fix (Markus Schlegel via Julien Ponge).
 - Workaround for layout problems in UserInputPanel when clicking previous button (Dennis Reil)
 - Nimbus look and feel support (Julien Ponge)
+- Try to load a 64-bit dll if the 32-bit load fails and 64-bit ShellLink (Vladimir Ralev)
 
   > 3.10.3 (build xxxx.xx.xx)
 
