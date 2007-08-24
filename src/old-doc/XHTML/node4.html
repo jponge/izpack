@@ -1384,10 +1384,22 @@ panel will be shown.
     </pre>
 
     In above example when InstallationGroupPanel is displayed, it contains three radios named Group1, Group2 and Group3.
-    Depending on what user selects respective Packs will be displayed in PacksPanel. InstallationGroupPanel will look
-    for description corresponding to key InstallationGroupPanel.description.Group1,
-    InstallationGroupPanel.description.Group2 etc in installation langpacks and displays this description for each of
-    the Group_i.
+    Depending on what user selects, the respective Packs will be displayed in PacksPanel. InstallationGroupPanel will look
+    for a description corresponding to the key "InstallationGroupPanel.description.Group1",
+    "InstallationGroupPanel.description.Group2" etc in installation langpacks and variables and displays this description for each of
+    the Group_i.</p>
+	<p>You may also define a sortKey in the variables section of the installer.xml to define an alternative sorting. The default sorting is based on the Group Name.
+	<br>Here is an example for alternative sorting of groups:
+	<pre>
+    (...)
+    &lt;variables&gt;
+       (...)
+        &lt;variable name=&quot;InstallationGroupPanel.sortKey.Group2&quot; value=&quot;A&quot;/&gt;
+        &lt;variable name=&quot;InstallationGroupPanel.sortKey.Group1&quot; value=&quot;B&quot;/&gt;
+        &lt;variable name=&quot;InstallationGroupPanel.sortKey.Group3&quot; value=&quot;C&quot;/&gt;
+    &lt;/variables&gt;
+    (...)
+	</pre>
 
 </p>
 

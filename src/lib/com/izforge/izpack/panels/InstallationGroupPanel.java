@@ -361,7 +361,8 @@ public class InstallationGroupPanel extends IzPanel
                 if (data == null)
                 {
                     String description = getGroupDescription(group);
-                    data = new GroupData(group, description);
+                    String sortKey = getGroupSortKey(group);
+                    data = new GroupData(group, description, sortKey);
                     installGroups.put(group, data);
                 }
             }
@@ -434,6 +435,31 @@ public class InstallationGroupPanel extends IzPanel
 
         return description;
     }
+    
+    /**
+     * Look for a key = InstallationGroupPanel.sortKey.[group] entry:
+     * by using idata.getVariable(key)
+     * if this variable is not defined, defaults to group
+     * @param group - the installation group name
+     * @return the group sortkey
+     */
+    protected String getGroupSortKey(String group)
+    {
+        String key = "InstallationGroupPanel.sortKey." + group;
+        String sortKey = idata.getVariable(key);
+        if (sortKey == null)
+            sortKey = group;
+        try
+        {
+            sortKey = URLDecoder.decode(sortKey, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            emitWarning("Failed to convert sortKey", e.getMessage());
+        }
+
+        return sortKey;
+    }
 
     protected TableModel getModel(HashMap groupData)
     {
@@ -460,12 +486,12 @@ public class InstallationGroupPanel extends IzPanel
                GroupData g1 = (GroupData) o1;
                GroupData g2 = (GroupData) o2;
 
-               if (g1.name == null || g2.name==null)
+               if (g1.sortKey == null || g2.sortKey==null)
                {
                    return 0;
                }
 
-               return g1.name.compareTo(g2.name);
+               return g1.sortKey.compareTo(g2.sortKey);
            }
         });
 
@@ -521,13 +547,15 @@ public class InstallationGroupPanel extends IzPanel
 
         String name;
         String description;
+        String sortKey;
         long size;
         HashSet packNames = new HashSet();
 
-        GroupData(String name, String description)
+        GroupData(String name, String description, String sortKey)
         {
             this.name = name;
             this.description = description;
+            this.sortKey = sortKey;
         }
 
         String getSizeString()
@@ -557,6 +585,8 @@ public class InstallationGroupPanel extends IzPanel
             tmp.append(name);
             tmp.append("){description=");
             tmp.append(description);
+            tmp.append(", sortKey=");
+            tmp.append(sortKey);
             tmp.append(", size=");
             tmp.append(size);
             tmp.append(", sizeString=");
