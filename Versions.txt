@@ -32,9 +32,7 @@
   (Gilles Wiart via Julien Ponge)
 - Hungarian langpack update (Kerekes Balazs via Julien Ponge)
 - InstallGroupPanel: sortable InstallGroups (Markus Schlegel via Julien Ponge)
-
-  > 3.10.3 (build xxxx.xx.xx)
-
+- chmod only applies and executes when file type is set to bin (Andreas Guenther via Julien Ponge)
 - LayoutManager bug at handling EditorPanes fixed (width to small) (Klaus Bartz)
 - Fixed NPE when ypcat not installed on linux. (Dick Hollenbeck via Marc Eppelmann)
 
