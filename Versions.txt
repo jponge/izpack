@@ -35,7 +35,14 @@
 - chmod only applies and executes when file type is set to bin (Andreas Guenther via Julien Ponge)
 - LayoutManager bug at handling EditorPanes fixed (width to small) (Klaus Bartz)
 - Fixed NPE when ypcat not installed on linux. (Dick Hollenbeck via Marc Eppelmann)
-
+- Updated web installer (Vladimir Ralev)
+- Unix shortcuts allow programGroup icon. Fixed appearing multiple times bug in Fedora 7.
+  (Vladimir Ralev)
+- TreePacksPanel with more user-friendly click logic. Added automated installer helper.
+  (Vladimir Ralev)
+- Updated installation listener interface (Vladimir Ralev)
+- Re-entrant ShortcutPanel (WALLEM Pascal, AWL-T&P via Vladimir Ralev)
+  
   > 3.10.2 (build 2007.05.11)
 
 - Vista/Java6 fixes (Stefan Wachter via Julien Ponge)
