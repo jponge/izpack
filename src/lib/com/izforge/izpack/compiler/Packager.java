@@ -22,6 +22,7 @@ package com.izforge.izpack.compiler;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
@@ -38,6 +39,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
 import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLWriter;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
@@ -227,6 +229,9 @@ public class Packager extends PackagerBase
         
         int packNumber = 0;
         Iterator packIter = packsList.iterator();
+        
+        XMLElement root = new XMLElement("packs");
+        
         while (packIter.hasNext())
         {
             PackInfo packInfo = (PackInfo) packIter.next();
@@ -238,7 +243,7 @@ public class Packager extends PackagerBase
             if (packJarsSeparate)
             {
                 // See installer.Unpacker#getPackAsStream for the counterpart
-                String name = baseFile.getName() + ".pack" + packNumber + ".jar";
+                String name = baseFile.getName() + ".pack-" + pack.id + ".jar";
                 packStream = getJarOutputStream(name);
             }
             OutputStream comprStream = packStream;
@@ -247,7 +252,7 @@ public class Packager extends PackagerBase
 
             // Retrieve the correct output stream
             org.apache.tools.zip.ZipEntry entry = 
-                new org.apache.tools.zip.ZipEntry("packs/pack" + packNumber);
+                new org.apache.tools.zip.ZipEntry("packs/pack-" + pack.id);
             if( ! compressor.useStandardCompression())
             {
                 entry.setMethod(ZipEntry.STORED);
@@ -282,10 +287,10 @@ public class Packager extends PackagerBase
 
                 // use a back reference if file was in previous pack, and in
                 // same jar
-                long[] lInfo = (long[]) storedFiles.get(file);
-                if (lInfo != null && !packJarsSeparate)
+                Object[] info = (Object[]) storedFiles.get(file);
+                if (info != null && !packJarsSeparate)
                 {
-                    pf.setPreviousPackFileRef((int) lInfo[0], lInfo[1]);
+                    pf.setPreviousPackFileRef((String) info[0], (Long)info[1]);
                     addFile = false;
                 }
 
@@ -303,7 +308,7 @@ public class Packager extends PackagerBase
                         throw new IOException("File size mismatch when reading " + file);
 
                     inStream.close();
-                    storedFiles.put(file, new long[] { packNumber, pos});
+                    storedFiles.put(file, new Object[] { pack.id, new Long(pos)});
                 }
 
                 // even if not written, it counts towards pack size
@@ -340,9 +345,21 @@ public class Packager extends PackagerBase
             // close pack specific jar if required
             if (packJarsSeparate) packStream.closeAlways();
 
+            XMLElement child = new XMLElement("pack");
+            child.setAttribute("nbytes", new Long(pack.nbytes).toString());
+            child.setAttribute("name", pack.name);
+            if(pack.id != null) child.setAttribute("id", pack.id);
+            root.addChild(child);
+            
             packNumber++;
         }
-
+        
+        // Wrtie packsinfo for web installers
+        FileWriter writer = new FileWriter(baseFile.getParent()
+              + File.separator + "packsinfo.xml");
+        XMLWriter xmlwriter = new XMLWriter(writer);
+        xmlwriter.write(root);
+        
         // Now that we know sizes, write pack metadata to primary jar.
         primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry("packs.info"));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);

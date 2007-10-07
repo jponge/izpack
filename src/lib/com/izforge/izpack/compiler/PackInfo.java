@@ -79,7 +79,7 @@ public class PackInfo
      * @param loose files of pack should be stored separatly or not
      * @param excludegroup name of the exclude group 
      */
-    protected PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup)
+    public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup)
     {
         boolean ispreselected = (excludegroup == null) ? true : false;
         pack = new Pack(name, id, description, null, null, required, ispreselected, loose, excludegroup);

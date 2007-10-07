@@ -110,6 +110,8 @@ public class Unpacker implements IUnpacker
     /** The result of the operation. */
     private boolean result = true;
     
+    private static final String tempPath = "$INSTALL_PATH/Uninstaller/IzpackWebTemp";
+    
     /**
      * The constructor.
      * 
@@ -304,11 +306,12 @@ public class Unpacker implements IUnpacker
             {
                 // We get the pack stream
                 int n = idata.allPacks.indexOf(packs.get(i));
+                Pack p = (Pack) packs.get(i);
 
                 // Custom action listener stuff --- beforePack ----
                 informListeners(customActions, InstallerListener.BEFORE_PACK, packs.get(i),
                         new Integer(npacks), handler);
-                ObjectInputStream objIn = new ObjectInputStream(getPackAsStream(n));
+                ObjectInputStream objIn = new ObjectInputStream(getPackAsStream(p.id));
 
                 // We unpack the files
                 int nfiles = objIn.readInt();
@@ -432,7 +435,7 @@ public class Unpacker implements IUnpacker
                         InputStream pis = objIn;
                         if (pf.isBackReference())
                         {
-                            InputStream is = getPackAsStream(pf.previousPackNumber);
+                            InputStream is = getPackAsStream(pf.previousPackId);
                             pis = new ObjectInputStream(is);
                             // must wrap for blockdata use by objectstream
                             // (otherwise strange result)
@@ -628,10 +631,18 @@ public class Unpacker implements IUnpacker
         catch (Exception err)
         {
             // TODO: finer grained error handling with useful error messages
-            handler.stopAction();
-            handler.emitError("An error occured", err.toString());
-            err.printStackTrace();
+            handler.stopAction(); 
+            if("Installation cancelled".equals(err.getMessage()))
+            {
+                handler.emitNotification("Installation cancelled");
+            }
+            else
+            {
+                handler.emitError("An error occured", err.getMessage());
+                err.printStackTrace();
+            }
             this.result = false;
+            System.exit(4);
         }
         finally
         {
@@ -984,15 +995,17 @@ public class Unpacker implements IUnpacker
      * @return The stream or null if it could not be found.
      * @exception Exception Description of the Exception
      */
-    private InputStream getPackAsStream(int n) throws Exception
+    private InputStream getPackAsStream(String packid) throws Exception
     {
         InputStream in = null;
 
         String webDirURL = idata.info.getWebDirURL();
 
+        packid = "-" + packid;
+        
         if (webDirURL == null) // local
         {
-            in = Unpacker.class.getResourceAsStream("/packs/pack" + n);
+            in = Unpacker.class.getResourceAsStream("/packs/pack" + packid);
         }
         else
         // web based
@@ -1003,15 +1016,31 @@ public class Unpacker implements IUnpacker
 
             // See compiler.Packager#getJarOutputStream for the counterpart
             String baseName = idata.info.getInstallerBase();
-            String packURL = webDirURL + "/" + baseName + ".pack" + n + ".jar";
-            URL url = new URL("jar:" + packURL + "!/packs/pack" + n);
+            String packURL = webDirURL + "/" + baseName + ".pack" + packid + ".jar";
+            String tf = IoHelper.translatePath(Unpacker.tempPath, vs);
+            String tempfile;
+            try
+            {
+               tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tf);
+               udata.addFile(tempfile);
+            }
+            catch(Exception e)
+            {
+               if("Cancelled".equals(e.getMessage()))
+                  throw new InstallerException("Installation cancelled", e);
+               else
+                  throw new InstallerException("Installation failed", e);
+            }
+            URL url = new URL("jar:" + tempfile + "!/packs/pack" + packid);
+
+            //URL url = new URL("jar:" + packURL + "!/packs/pack" + packid);
             // JarURLConnection jarConnection = (JarURLConnection)
             // url.openConnection();
             // TODO: what happens when using an automated installer?
             in = new WebAccessor(null).openInputStream(url);
             // TODO: Fails miserably when pack jars are not found, so this is
             // temporary
-            if (in == null) throw new FileNotFoundException(url.toString());
+            if (in == null) throw new InstallerException(url.toString() + " not available", new FileNotFoundException(url.toString()));
         }
         if( in != null && idata.info.getPackDecoderClassName() != null )
         {

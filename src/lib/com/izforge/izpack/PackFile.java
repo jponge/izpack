@@ -99,7 +99,7 @@ public class PackFile implements Serializable
     /** Additional attributes or any else for customisation */
     private Map additionals = null;
 
-    public int previousPackNumber = -1;
+    public String previousPackId = null;
 
     public long offsetInPreviousPack = -1;
 
@@ -193,10 +193,10 @@ public class PackFile implements Serializable
         return null;
     }
 
-    public void setPreviousPackFileRef(int previousPackNumber, long offsetInPreviousPack)
+    public void setPreviousPackFileRef(String previousPackId, Long offsetInPreviousPack)
     {
-        this.previousPackNumber = previousPackNumber;
-        this.offsetInPreviousPack = offsetInPreviousPack;
+        this.previousPackId = previousPackId;
+        this.offsetInPreviousPack = offsetInPreviousPack.longValue();
     }
 
     /** The target operating system constraints of this file */
@@ -230,7 +230,7 @@ public class PackFile implements Serializable
 
     public final boolean isBackReference()
     {
-        return (previousPackNumber >= 0);
+        return (previousPackId != null);
     }
 
     /** The full path name of the target file, using '/' as fileseparator. */

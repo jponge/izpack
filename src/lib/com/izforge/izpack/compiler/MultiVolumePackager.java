@@ -392,11 +392,11 @@ public class MultiVolumePackager extends PackagerBase
                 Debug.trace("Next file: " + file.getAbsolutePath());
                 // use a back reference if file was in previous pack, and in
                 // same jar
-                long[] info = (long[]) storedFiles.get(file);
+                Object[] info = (Object[]) storedFiles.get(file);
                 if (info != null && !packJarsSeparate)
                 {
                     Debug.trace("File already included in other pack");
-                    pf.setPreviousPackFileRef((int) info[0], info[1]);
+                    pf.setPreviousPackFileRef((String) info[0], (Long)info[1]);
                     addFile = false;
                 }
 
