@@ -58,6 +58,7 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.installer.WebAccessor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
@@ -133,6 +134,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
 
    private HashMap idToPack;
    private HashMap treeData;
+   private HashMap packToRowNumber;
    
    private HashMap idToCheckBoxNode = new HashMap();
    private boolean created = false;
@@ -152,8 +154,25 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       try
       {
          this.langpack = parent.langpack;
-         InputStream inputStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
-         this.langpack.add(inputStream);
+         InputStream langPackStream;
+         String webdir = idata.info.getWebDirURL();
+         if(webdir != null)
+         {
+            try
+            {
+               java.net.URL url = new java.net.URL(webdir + "/langpacks/" + LANG_FILE_NAME + idata.localeISO3);
+               langPackStream = new WebAccessor(null).openInputStream(url);
+            }
+            catch(Exception e)
+            {
+               langPackStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
+            }
+         }
+         else
+            langPackStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
+         
+         this.langpack.add(langPackStream);
+         langPackStream.close();
       }
       catch (Throwable exception)
       {
@@ -496,6 +515,14 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       CheckBoxNode root = (CheckBoxNode)model.getRoot();
       updateModel(root);
    }
+
+   private int getRowIndex(Pack pack)
+   {
+      Object o = packToRowNumber.get(pack);
+      if(o == null) return -1;
+      Integer ret = (Integer) o;
+      return ret.intValue();
+   }
    
    /**
     * Helper function for fromModel() - runs the recursion
@@ -504,7 +531,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
     */
    private void updateModel(CheckBoxNode rnode)
    {
-      int rowIndex = idata.availablePacks.indexOf(rnode.getPack());
+      int rowIndex = getRowIndex(rnode.getPack());
       if(rowIndex > 0)
       {
          Integer state = (Integer) packsModel.getValueAt(rowIndex, 0);
@@ -539,7 +566,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          Object nodePack = idToPack.get(nodeText);
          if(!cbnode.isPartial())
          {
-            int childRowIndex = idata.availablePacks.indexOf(nodePack);
+            int childRowIndex = getRowIndex((Pack)nodePack);
             if(childRowIndex > 0)
             {
                Integer state = (Integer) packsModel.getValueAt(childRowIndex, 0);
@@ -565,7 +592,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       if(cbnode.isEnabled() && cbnode.isSelected()) value = 1;
       if(!cbnode.isEnabled() && cbnode.isSelected()) value = -1;
       if(!cbnode.isEnabled() && !cbnode.isSelected()) value = -2;
-      int rowIndex = idata.availablePacks.indexOf(nodePack);
+      int rowIndex = getRowIndex((Pack)nodePack);
       if(rowIndex > 0)
       {
          Integer newValue = new Integer(value);
@@ -658,7 +685,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          String excludeslist = (langpack == null) ? "Excludes: " : langpack
                .getString("PacksPanel.excludes");
          int numexcludes = 0;
-         int i = idata.availablePacks.indexOf(pack);
+         int i = getRowIndex(pack);
          if (pack.excludeGroup != null)
          {
             for (int q = 0; q < idata.availablePacks.size(); q++)
@@ -769,6 +796,15 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          packsModel = new PacksModel(this, idata, this.parent.getRules()) {
             public boolean isCellEditable(int rowIndex, int columnIndex) { return false; }
          };
+         
+         //initialize helper map to increa performance
+         packToRowNumber = new HashMap();
+         java.util.Iterator rowpack = idata.availablePacks.iterator();
+         while (rowpack.hasNext())
+         {
+            Pack p = (Pack) rowpack.next();
+            packToRowNumber.put(p, new Integer(idata.availablePacks.indexOf(p)));
+         }
          
          // Init tree structures
          createTreeData();
@@ -1174,6 +1210,33 @@ class CheckTreeController extends MouseAdapter{
       this.treePacksPanel = p;
    } 
 
+   private void selectNode(CheckBoxNode current)
+   {
+      current.setPartial(false);
+      treePacksPanel.setModelValue(current);
+      Enumeration e = current.depthFirstEnumeration();
+      while(e.hasMoreElements())
+      {
+         CheckBoxNode child = (CheckBoxNode) e.nextElement();
+         child.setSelected(current.isSelected() || child.getPack().required);
+         if(!child.isSelected()) child.setPartial(false);
+         treePacksPanel.setModelValue(child);
+      }
+      treePacksPanel.fromModel();
+   }
+   
+   private boolean hasExcludes(CheckBoxNode node)
+   {
+      Enumeration e = node.depthFirstEnumeration();
+      while(e.hasMoreElements())
+      {
+         CheckBoxNode cbn = (CheckBoxNode) e.nextElement();
+         if(cbn.getPack().excludeGroup != null)
+            return true;
+      }
+      return false;
+   }
+   
    public void mouseReleased(MouseEvent me){ 
       TreePath path = tree.getPathForLocation(me.getX(), me.getY()); 
       if(path==null) 
@@ -1184,33 +1247,27 @@ class CheckTreeController extends MouseAdapter{
       if(me.getX()>tree.getPathBounds(path).x + checkWidth) 
          return; 
 
-      current.setSelected(!current.isSelected());
-      current.setPartial(false);
-      treePacksPanel.setModelValue(current);
-      Enumeration e = current.depthFirstEnumeration();
-      while(e.hasMoreElements())
-      {
-         CheckBoxNode child = (CheckBoxNode) e.nextElement();
-         child.setSelected(current.isSelected());
-         if(!current.isSelected()) child.setPartial(false);
-         treePacksPanel.setModelValue(child);
-      }
+      // If this pack is required, leave it alone
+      if(current.getPack().required) return;
+      
+      boolean currIsSelected = current.isSelected() & !current.isPartial();
+      boolean currIsPartial = current.isPartial();
+      boolean currHasExcludes = hasExcludes(current);
       CheckBoxNode root = (CheckBoxNode)current.getRoot();
-      treePacksPanel.fromModel();
       
-      updateAllParents(root);
-      
-      /*
-      updateParents(current);
-      List deps = current.getPack().revDependencies;
-      if(deps != null) for(int q=0; q<deps.size(); q++)
+      if(currIsPartial && currHasExcludes)
       {
-         String id = (String)deps.get(q);
-         if (id == null) continue;
-         CheckBoxNode cbn = (CheckBoxNode) treePacksPanel.getCbnById(id);
-         updateParents(cbn);
+         current.setSelected(false);
+         selectNode(current); // deselect actually
+         updateAllParents(root);
       }
-      */
+      else
+      {
+         if(!currIsSelected) selectAllChildNodes(current);
+         current.setSelected(!currIsSelected);
+         selectNode(current);
+         updateAllParents(root);
+      }
       
       initTotalSize(root, true);
       
@@ -1219,6 +1276,49 @@ class CheckTreeController extends MouseAdapter{
       treePacksPanel.showSpaceRequired();
       tree.treeDidChange();
    } 
+   
+   public void selectAllChildNodes(CheckBoxNode cbn)
+   {
+      Enumeration e = cbn.children();
+      while(e.hasMoreElements())
+      {
+         CheckBoxNode subCbn = (CheckBoxNode)e.nextElement();
+         selectAllDependencies(subCbn);
+         if(subCbn.getChildCount()>0)
+            selectAllChildNodes(subCbn);
+         
+         subCbn.setSelected(true);
+         // we need this, because the setModel ignored disabled values
+         subCbn.setEnabled(true);
+         treePacksPanel.setModelValue(subCbn);
+         subCbn.setEnabled(!subCbn.getPack().required);
+      }
+   }
+   
+   public void selectAllDependencies(CheckBoxNode cbn)
+   {
+      Pack pack = cbn.getPack();
+      List deps = pack.getDependencies();
+      if(deps == null) return;
+      Iterator e = deps.iterator();
+      while(e.hasNext())
+      {
+         String depId = (String)e.next();
+         CheckBoxNode depCbn = treePacksPanel.getCbnById(depId);
+         selectAllDependencies(depCbn);
+         if(depCbn.getChildCount()>0)
+         {
+            if(!depCbn.isSelected() || depCbn.isPartial())
+               selectAllChildNodes(depCbn);
+         }
+         depCbn.setSelected(true);
+         // we need this, because the setModel ignored disabled values
+         depCbn.setEnabled(true);
+         treePacksPanel.setModelValue(depCbn);
+         depCbn.setEnabled(!depCbn.getPack().required);
+      }
+   }
+   
    /**
     * Updates partial/deselected/selected state of all parent nodes.
     * This is needed and is a patch to allow unrelated nodes (in terms of the tree)

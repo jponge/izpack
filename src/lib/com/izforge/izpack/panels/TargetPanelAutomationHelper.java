@@ -25,6 +25,7 @@ import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * Functions to support automated usage of the TargetPanel
@@ -68,7 +69,13 @@ public class TargetPanelAutomationHelper implements PanelAutomation
     {
         // We set the installation path
         XMLElement ipath = panelRoot.getFirstChildNamed("installpath");
-        idata.setInstallPath(ipath.getContent());
+        
+        // Allow for variable substitution of the installpath value
+        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        String path = ipath.getContent();
+        path = vs.substitute(path, null);
+        
+        idata.setInstallPath(path);
         return true;
     }
 }
