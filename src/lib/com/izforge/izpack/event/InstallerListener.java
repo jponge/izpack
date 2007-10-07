@@ -152,4 +152,12 @@ public interface InstallerListener
      * @throws Exception
      */
     void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler) throws Exception;
+
+    /**
+     * Called when the installer creates the listener instance, immediately
+     * after the install data is parsed.
+     * 
+     * @param data
+     */
+    void afterInstallerInitialization(AutomatedInstallData data) throws Exception;
 }

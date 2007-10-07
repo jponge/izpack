@@ -198,6 +198,11 @@ public class SimpleInstallerListener implements InstallerListener
     {
         // Do nothing
     }
+    
+    public void afterInstallerInitialization(AutomatedInstallData data)
+    {
+       this.installdata = data;
+    }
 
     /**
      * Returns current specification helper.
