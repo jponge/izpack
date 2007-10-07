@@ -557,6 +557,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             // the following is for backwards compatibility to older versions of KDE!
             // on newer versions of KDE the icons will appear duplicated unless you set
             // the category=""
+           
+           //removed because of compatibility issues
+           /*
             Object categoryobject = props.getProperty($Categories);
             if(categoryobject != null && ((String)categoryobject).length()>0)
             {
@@ -568,7 +571,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
                uninstaller.addFile(kdemenufile.toString());
             }
-            
+            */
+           
             if (rootUser4All && create4All)
             {
                 {

@@ -1,7 +1,7 @@
 /*
  * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
  *
- * http://izpack.org/ http://developer.berlios.de/projects/izpack/
+ * http://www.izforge.com/izpack/ http://developer.berlios.de/projects/izpack/
  *
  * Copyright 2002 Elmar Grom
  *
@@ -271,6 +271,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     private static ShortcutPanel self = null;
 
+    private static boolean firstTime = true;
+
     /** internal flag: create */
     static boolean create;
     
@@ -343,6 +345,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /** The name chosen by the user for the program group, */
     private String groupName;
+    
+    /** The icon for the group in XDG/unix menu */
+    private String programGroupIconFile;
+    
+    /** Comment for XDG/unix group */
+    private String programGroupComment;
 
     /**
      * The location for placign the program group. This is the same as the location (type) of a
@@ -508,7 +516,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         else if (eventSource.equals(defaultButton))
         {
-            groupList.getSelectionModel().clearSelection();
+            if(groupList != null && groupList.getSelectionModel() != null)
+               groupList.getSelectionModel().clearSelection();
             programGroup.setText(suggestedProgramGroup);
 
             return;
@@ -659,6 +668,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     itsUserType = Shortcut.CURRENT_USER;
                 }                
                 
+                if (firstTime)
                 buildUI(getProgramsFolder(isRootUser ? Shortcut.ALL_USERS : Shortcut.CURRENT_USER));
 
                 // addSelectionList();
@@ -670,11 +680,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             else
             {
                 // TODO MEP: Test
+                if (firstTime)
                 buildAlternateUI();
 
                 // parent.unlockNextButton();
                 // parent.lockPrevButton();
             }
+            firstTime = false;
         }
         else
         {
@@ -756,12 +768,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         try
         {
-            input = ResourceManager.getInstance().getInputStream(
-                    TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
+            input = parent.getResource(TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
         }
         catch (ResourceNotFoundException rnfE)
         {
-            input = ResourceManager.getInstance().getInputStream(SPEC_FILE_NAME);
+            input = parent.getResource(SPEC_FILE_NAME);
         }
 
         if (input == null)
@@ -869,6 +880,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         if (group != null)
         {
             suggestedProgramGroup = group.getAttribute(SPEC_ATTRIBUTE_DEFAULT_GROUP, "");
+            programGroupIconFile = group.getAttribute("iconFile", "");
+            programGroupComment = group.getAttribute("comment", "");
             location = group.getAttribute(SPEC_ATTRIBUTE_LOCATION, SPEC_VALUE_APPLICATIONS);
         }
         else
@@ -1127,6 +1140,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
        String menuConfigText = "<Menu>\n" +
             "<Name>Applications</Name>\n" +
             "<Menu>\n" +
+            // Ubuntu can't handle spaces, replace with "-"
+            "<Directory>" + menuName.replaceAll(" ", "-") + "-izpack.directory</Directory>\n"+
             "<Name>" + menuName + "</Name>\n" +
             "<Include>\n";
        
@@ -1140,42 +1155,74 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
            
     }
     
-    private void writeXDGMenuFile(ArrayList desktopFileNames, String groupName)
+    private String createXDGDirectory(String menuName, String icon, String comment)
     {
+       String menuDirectoryDescriptor = "[Desktop Entry]\n" +
+       "Name=$Name\n" +
+       "Comment=$Comment\n" +
+       "Icon=$Icon\n" +
+       "Type=Directory\n"+
+       "Encoding=UTF-8";
+       menuDirectoryDescriptor = 
+          StringTool.replace(menuDirectoryDescriptor, "$Name", menuName);
+       menuDirectoryDescriptor = 
+          StringTool.replace(menuDirectoryDescriptor, "$Comment", comment);
+       menuDirectoryDescriptor = 
+          StringTool.replace(menuDirectoryDescriptor, "$Icon", icon);
+       return menuDirectoryDescriptor;
+    }
+    
+    private void writeXDGMenuFile(ArrayList desktopFileNames, String groupName, String icon, String comment)
+    {
+       if("".equals(suggestedProgramGroup) || suggestedProgramGroup == null) return; // No group name means the shortcuts
+       // will be placed by category
        if(OsVersion.IS_UNIX)
        {
           String menuFile = createXDGMenu(desktopFileNames, groupName);
+          String dirFile = createXDGDirectory(groupName, icon, comment);
           String menuFolder;
+          String directoryFolder;
           if(itsUserType == Shortcut.ALL_USERS)
           {
-             menuFolder = "/etc/xdg/menus/applications-merged/";              
+             menuFolder = "/etc/xdg/menus/applications-merged/"; 
+             directoryFolder = "/usr/share/desktop-directories/";
           }
           else
           {
              menuFolder = System.getProperty("user.home") + File.separator
                   + ".config/menus/applications-merged/";
+             directoryFolder = System.getProperty("user.home") + File.separator
+                  + ".local/share/desktop-directories/";
           }
-          File menuConfigFolder = new File(menuFolder);
+          File menuFolderFile = new File(menuFolder);
+          File directoryFolderFile = new File(directoryFolder);
           String menuFilePath = menuFolder + groupName + ".menu";
-          menuConfigFolder.mkdirs();
-          FileWriter menuFileWriter;
-          boolean failed = false;
-          try{
-             
-             menuFileWriter = new FileWriter(menuFilePath);
-             menuFileWriter.write(menuFile);
-             menuFileWriter.close();
-          }
-          catch(Exception ignore)
-          {
-             failed = true;
-             Debug.log("Failed to create menu for gnome.");
-          }
-          if(!failed) UninstallData.getInstance().addFile(menuFilePath);
-
+          // Ubuntu can't handle spaces in the directory file name
+          String dirFilePath = directoryFolder + groupName.replaceAll(" ", "-") + "-izpack.directory";
+          menuFolderFile.mkdirs();
+          directoryFolderFile.mkdirs();
+          writeString(menuFile, menuFilePath);
+          writeString(dirFile, dirFilePath);
        }       
+       
+
     }
     
+    private void writeString(String str, String file)
+    {
+       boolean failed = false;
+       try{
+          FileWriter writer = new FileWriter(file);
+          writer.write(str);
+          writer.close();
+       }
+       catch(Exception ignore)
+       {
+          failed = true;
+          Debug.log("Failed to create menu for gnome.");
+       }
+       if(!failed) UninstallData.getInstance().addFile(file);
+    }
     /*--------------------------------------------------------------------------*/
 
     /**
@@ -1303,7 +1350,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 continue;
             }
         }
-        if(OsVersion.IS_UNIX) writeXDGMenuFile(startMenuShortcuts, groupName);
+        if(OsVersion.IS_UNIX) writeXDGMenuFile(startMenuShortcuts,
+              groupName, programGroupIconFile, programGroupComment);
         shortcut.execPostAction();
 
         try
@@ -1620,6 +1668,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         constraints.fill = GridBagConstraints.HORIZONTAL;
         layout.addLayoutComponent(defaultButton, constraints);
         add(defaultButton);
+        
+        if(suggestedProgramGroup == null || "".equals(suggestedProgramGroup))
+        {
+           programGroup.setVisible(false);
+           defaultButton.setVisible(false);
+           listLabel.setVisible(false);
+        }
     }
 
     /**
