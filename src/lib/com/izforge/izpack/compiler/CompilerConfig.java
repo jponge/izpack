@@ -601,6 +601,7 @@ public class CompilerConfig extends Thread
             String group = el.getAttribute("group");
             String installGroups = el.getAttribute("installGroups");
             String excludeGroup = el.getAttribute("excludeGroup");
+            boolean uninstall = "yes".equalsIgnoreCase(el.getAttribute("uninstall", "yes"));
             String parent = el.getAttribute("parent");
             
             if(required && excludeGroup != null)
@@ -609,7 +610,7 @@ public class CompilerConfig extends Thread
                     new Exception("Pack, which has excludeGroup can not be required."));
             }
             
-            PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup);
+            PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup, uninstall);
             pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO:
             pack.setParent(parent);
             

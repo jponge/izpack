@@ -890,7 +890,7 @@ public class InstallerFrame extends JFrame
         {
             // We get the data
             UninstallData udata = UninstallData.getInstance();
-            List files = udata.getFilesList();
+            List files = udata.getUninstalableFilesList();
             ZipOutputStream outJar = installdata.uninstallOutJar;
 
             if (outJar == null) return;
@@ -1217,7 +1217,7 @@ public class InstallerFrame extends JFrame
 
         // Wipes them all in 2 stages
         UninstallData u = UninstallData.getInstance();
-        it = u.getFilesList().iterator();
+        it = u.getInstalledFilesList().iterator();
         if (!it.hasNext()) return;
         while (it.hasNext())
         {

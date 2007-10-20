@@ -78,11 +78,12 @@ public class PackInfo
      * @param required pack is required or not
      * @param loose files of pack should be stored separatly or not
      * @param excludegroup name of the exclude group 
+     * @param uninstall pack must be uninstalled 
      */
-    public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup)
+    public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup, boolean uninstall)
     {
         boolean ispreselected = (excludegroup == null) ? true : false;
-        pack = new Pack(name, id, description, null, null, required, ispreselected, loose, excludegroup);
+        pack = new Pack(name, id, description, null, null, required, ispreselected, loose, excludegroup, uninstall);
         colour = PackInfo.WHITE;
     }
 

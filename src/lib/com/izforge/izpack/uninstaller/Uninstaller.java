@@ -78,7 +78,7 @@ public class Uninstaller
         }
     }
 
-    public static void uninstall(String[] args)
+    public static void uninstall(final String[] args)
     {
         SwingUtilities.invokeLater(new Runnable()
         {
@@ -86,8 +86,16 @@ public class Uninstaller
             {
                 try
                 {
+                    boolean displayForceOption = true;
+                    boolean forceOptionState = false;
+                    
+                    for (int q = 0; q < args.length; q++) {
+                        if (args[q].equals("-f")) forceOptionState = true;
+                        else if (args[q].equals("-x")) displayForceOption = false;
+                    }
+                    
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    new UninstallerFrame();
+                    new UninstallerFrame(displayForceOption, forceOptionState);
                 }
                 catch (Exception err)
                 {

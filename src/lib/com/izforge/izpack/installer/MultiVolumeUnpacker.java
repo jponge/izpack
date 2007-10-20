@@ -475,7 +475,7 @@ public class MultiVolumeUnpacker implements IUnpacker
                         informListeners(customActions, InstallerListener.BEFORE_FILE, pathFile, pf,
                                 null);
                         // We add the path to the log,
-                        udata.addFile(path);
+                        udata.addFile(path, pack.uninstall);
 
                         handler.progress(j, path);
 
@@ -862,7 +862,7 @@ public class MultiVolumeUnpacker implements IUnpacker
         // use a treeset for fast access
         TreeSet installed_files = new TreeSet();
 
-        for (Iterator if_it = this.udata.getFilesList().iterator(); if_it.hasNext();)
+        for (Iterator if_it = this.udata.getInstalledFilesList().iterator(); if_it.hasNext();)
         {
             String fname = (String) if_it.next();
 
@@ -1111,7 +1111,7 @@ public class MultiVolumeUnpacker implements IUnpacker
         ZipOutputStream outJar = new ZipOutputStream(bos);
         idata.uninstallOutJar = outJar;
         outJar.setLevel(9);
-        udata.addFile(jar);
+        udata.addFile(jar, true);
 
         // We copy the uninstallers
         HashSet doubles = new HashSet();

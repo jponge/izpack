@@ -40,7 +40,13 @@ public class Pack implements Serializable
 
     /** Flag for store files of this pack outside the installation jar file */
     public boolean loose;
-
+   
+    /** If true, all files of the pack will be deleted during uninstallation, if 
+     * false they are only removed if uninstaller force delete option is
+     * activated.
+     */
+    public boolean uninstall;
+        
     /** The pack name. */
     public String name;
 
@@ -116,10 +122,11 @@ public class Pack implements Serializable
      * @param required Indicates wether the pack is required or not.
      * @param preselected This pack will be selected automatically.
      * @param loose Flag for store files of this pack outside the installation jar file
-     * @param excludegroup associated exclude group 
+     * @param excludegroup associated exclude group
+     * @param uninstall If true, pack must be uninstalled.
      */
     public Pack(String name, String id, String description, List osConstraints, List dependencies,
-            boolean required, boolean preselected, boolean loose, String excludegroup)
+            boolean required, boolean preselected, boolean loose, String excludegroup, boolean uninstall)
     {
         this.name = name;
         this.id = id;
@@ -130,6 +137,7 @@ public class Pack implements Serializable
         this.preselected = preselected;
         this.loose = loose;
         this.excludeGroup = excludegroup;
+        this.uninstall = uninstall;
         this.packImgId = null;
         nbytes = 0;
         color = PackInfo.WHITE;

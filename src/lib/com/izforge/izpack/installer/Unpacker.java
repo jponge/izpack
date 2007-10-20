@@ -311,7 +311,7 @@ public class Unpacker implements IUnpacker
                 // Custom action listener stuff --- beforePack ----
                 informListeners(customActions, InstallerListener.BEFORE_PACK, packs.get(i),
                         new Integer(npacks), handler);
-                ObjectInputStream objIn = new ObjectInputStream(getPackAsStream(p.id));
+                ObjectInputStream objIn = new ObjectInputStream(getPackAsStream(p.id, p.uninstall));
 
                 // We unpack the files
                 int nfiles = objIn.readInt();
@@ -371,7 +371,7 @@ public class Unpacker implements IUnpacker
                         informListeners(customActions, InstallerListener.BEFORE_FILE, pathFile, pf,
                                 null);
                         // We add the path to the log,
-                        udata.addFile(path);
+                        udata.addFile(path, pack.uninstall);
 
                         handler.progress(j, path);
 
@@ -435,7 +435,7 @@ public class Unpacker implements IUnpacker
                         InputStream pis = objIn;
                         if (pf.isBackReference())
                         {
-                            InputStream is = getPackAsStream(pf.previousPackId);
+                            InputStream is = getPackAsStream(pf.previousPackId, pack.uninstall);
                             pis = new ObjectInputStream(is);
                             // must wrap for blockdata use by objectstream
                             // (otherwise strange result)
@@ -691,7 +691,7 @@ public class Unpacker implements IUnpacker
         // use a treeset for fast access
         TreeSet installed_files = new TreeSet();
 
-        for (Iterator if_it = this.udata.getFilesList().iterator(); if_it.hasNext();)
+        for (Iterator if_it = this.udata.getInstalledFilesList().iterator(); if_it.hasNext();)
         {
             String fname = (String) if_it.next();
 
@@ -940,7 +940,7 @@ public class Unpacker implements IUnpacker
         ZipOutputStream outJar = new ZipOutputStream(bos);
         idata.uninstallOutJar = outJar;
         outJar.setLevel(9);
-        udata.addFile(jar);
+        udata.addFile(jar, true);
 
         // We copy the uninstallers
         HashSet doubles = new HashSet();
@@ -992,10 +992,11 @@ public class Unpacker implements IUnpacker
      * Returns a stream to a pack, location depending on if it's web based.
      * 
      * @param n The pack number.
+     * @param uninstall true if pack must be uninstalled
      * @return The stream or null if it could not be found.
      * @exception Exception Description of the Exception
      */
-    private InputStream getPackAsStream(String packid) throws Exception
+    private InputStream getPackAsStream(String packid, boolean uninstall) throws Exception
     {
         InputStream in = null;
 
@@ -1022,7 +1023,7 @@ public class Unpacker implements IUnpacker
             try
             {
                tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tf);
-               udata.addFile(tempfile);
+               udata.addFile(tempfile, uninstall);
             }
             catch(Exception e)
             {

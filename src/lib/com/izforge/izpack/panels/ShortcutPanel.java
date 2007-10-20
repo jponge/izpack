@@ -1221,7 +1221,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
           failed = true;
           Debug.log("Failed to create menu for gnome.");
        }
-       if(!failed) UninstallData.getInstance().addFile(file);
+       if(!failed) UninstallData.getInstance().addFile(file, true);
     }
     /*--------------------------------------------------------------------------*/
 
@@ -2031,7 +2031,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         for (int i = 0; i < files.size(); i++)
         {
-            uninstallData.addFile((String) files.elementAt(i));
+            uninstallData.addFile((String) files.elementAt(i), true);
         }
     }
 

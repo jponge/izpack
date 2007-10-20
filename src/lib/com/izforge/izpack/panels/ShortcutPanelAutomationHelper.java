@@ -354,7 +354,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
         for (int i = 0; i < files.size(); i++)
         {
-            uninstallData.addFile((String) files.elementAt(i));
+            uninstallData.addFile((String) files.elementAt(i), true);
             System.out.print(".");
             System.out.flush();
         }

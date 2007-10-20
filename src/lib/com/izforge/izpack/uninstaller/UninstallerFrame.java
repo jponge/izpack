@@ -96,9 +96,12 @@ public class UninstallerFrame extends JFrame
     /**
      * The constructor.
      * 
+     * @param displayForceOption If true, display to the user the option permitting to force
+     * all files deletion.
+     * @param forceOptionState If true, force deletion is activated.
      * @exception Exception Description of the Exception
      */
-    public UninstallerFrame() throws Exception
+    public UninstallerFrame(boolean displayForceOption, boolean forceOptionState) throws Exception
     {
         super("IzPack - Uninstaller");
 
@@ -115,7 +118,7 @@ public class UninstallerFrame extends JFrame
         setIconImage(icons.getImageIcon("JFrameIcon").getImage());
 
         // We build the GUI & show it
-        buildGUI();
+        buildGUI(displayForceOption, forceOptionState);
         addWindowListener(new WindowHandler());
         pack();
         centerFrame(this);
@@ -123,8 +126,14 @@ public class UninstallerFrame extends JFrame
         setVisible(true);
     }
 
-    /** Builds the GUI. */
-    private void buildGUI()
+    /**
+     * Builds the GUI.
+     * 
+     * @param displayForceOption If true, display to the user the option permitting to force
+     * all files deletion.
+     * @param forceOptionState If true, force deletion is activated.
+     */
+    private void buildGUI(boolean displayForceOption, boolean forceOptionState)
     {
         // We initialize our layout
         JPanel contentPane = (JPanel) getContentPane();
@@ -157,10 +166,10 @@ public class UninstallerFrame extends JFrame
         contentPane.add(warningLabel);
 
         targetDestroyCheckbox = new JCheckBox(langpack.getString("uninstaller.destroytarget")
-                + installPath, false);
+                + installPath, forceOptionState);
         buildConstraints(gbConstraints, 0, 1, 2, 1, 1.0, 0.0);
         layout.addLayoutComponent(targetDestroyCheckbox, gbConstraints);
-        contentPane.add(targetDestroyCheckbox);
+        if (displayForceOption) contentPane.add(targetDestroyCheckbox);
         gbConstraints.fill = GridBagConstraints.HORIZONTAL;
 
         progressBar = new JProgressBar();

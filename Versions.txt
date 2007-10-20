@@ -45,6 +45,10 @@
 - FileExecutor: allow Java classpath specification in targetfile attribute using
   either : or ; delimiter, and support classpath loading of all jar files within a given folder,
   e.g. targetfile="$INSTALL_PATH/lib/allMyJars (Andreas Guenther via Julien Ponge)
+- Support of a new 'uninstall' (yes/no) attribute on pack elements to allow certains pack to be
+  kept on uninstallation (Gildas Le Louarn via Julien Ponge)
+- Uninstaller: in GUI mode, users don't see the 'force uninstallation' checkbox unless the
+  '-x' command-line flag is used (Gildas Le Louarn via Julien Ponge)
   
   > 3.10.2 (build 2007.05.11)
 

@@ -39,8 +39,11 @@ public class UninstallData
     /** The uninstall data object. */
     private static UninstallData instance = null;
 
-    /** The files list. */
-    private List filesList;
+    /** The installed files list. */
+    private List installedFilesList;
+    
+    /** The uninstallable files list. */
+    private List uninstallableFilesList;
 
     /** The executables list. */
     private List executablesList;
@@ -60,7 +63,8 @@ public class UninstallData
     /** The constructor. */
     private UninstallData()
     {
-        filesList = new ArrayList();
+        installedFilesList = new ArrayList();
+        uninstallableFilesList = new ArrayList();
         executablesList = new ArrayList();
         additionalData = new HashMap();
         rootScript = new String();
@@ -84,22 +88,34 @@ public class UninstallData
      * Adds a file to the data.
      * 
      * @param path The file to add.
+     * @param uninstall If true, file must be uninstalled.
      */
-    public synchronized void addFile(String path)
+    public synchronized void addFile(String path, boolean uninstall)
     {
         if(path != null)
-           filesList.add(path);
+            installedFilesList.add(path);
+            if (uninstall) uninstallableFilesList.add(path);
     }
 
     /**
-     * Returns the files list.
+     * Returns the installed files list.
      * 
-     * @return The files list.
+     * @return The installed files list.
      */
-    public List getFilesList()
+    public List getInstalledFilesList()
     {
-        return filesList;
+        return installedFilesList;
     }
+    
+    /**
+     * Returns the uninstallable files list.
+     * 
+     * @return The uninstallable files list.
+     */
+    public List getUninstalableFilesList()
+    {
+        return uninstallableFilesList;
+    }    
 
     /**
      * Adds an executable to the data.

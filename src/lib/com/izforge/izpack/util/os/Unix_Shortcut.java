@@ -439,7 +439,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
             // write my own ShortCut
             File writtenDesktopFile = writeSafeShortcut(myHome + FS + "Desktop" + FS, this.itsName, shortCutDef);
-            uninstaller.addFile(writtenDesktopFile.toString());
+            uninstaller.addFile(writtenDesktopFile.toString(), true);
             
             // If I'm root and this Desktop.ShortCut should be for all other users
             if (rootUser4All && create4All)
@@ -569,7 +569,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                this.itsFileName = target;
                File kdemenufile = writeShortCut(target, shortCutDef);
 
-               uninstaller.addFile(kdemenufile.toString());
+               uninstaller.addFile(kdemenufile.toString(), true);
             }
             */
            
@@ -584,7 +584,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     try
                     {
                         copyTo(theIcon, commonIcon);
-                        uninstaller.addFile(commonIcon.toString());
+                        uninstaller.addFile(commonIcon.toString(), true);
                     }
                     catch (Exception cnc)
                     {
@@ -597,7 +597,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     this.itsFileName = target;
                     File writtenFile = writeSafeShortcut("/usr/share/applications/", this.itsName, shortCutDef);
                     setWrittenFileName(writtenFile.getName());
-                    uninstaller.addFile(writtenFile.toString());
+                    uninstaller.addFile(writtenFile.toString(), true);
 
                 }
             }
@@ -629,7 +629,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                try
                {
                    copyTo(theIcon, commonIcon);
-                   uninstaller.addFile(commonIcon.toString());
+                   uninstaller.addFile(commonIcon.toString(), true);
                }
                catch (Exception cnc)
                {
@@ -642,7 +642,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                this.itsFileName = target;
                File writtenFile = writeSafeShortcut(localApps, this.itsName, shortCutDef);
                setWrittenFileName(writtenFile.getName());
-               uninstaller.addFile(writtenFile.toString());
+               uninstaller.addFile(writtenFile.toString(), true);
             }
 
         }
