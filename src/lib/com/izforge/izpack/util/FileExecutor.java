@@ -22,6 +22,7 @@
 package com.izforge.izpack.util;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
@@ -42,7 +43,8 @@ import com.izforge.izpack.ExecutableFile;
  */
 public class FileExecutor
 {
-
+    private static final String JAR_FILE_SUFFIX = ".jar";
+    
     private boolean stopThread(Thread t, MonitorInputStream m)
     {
         m.doStop();
@@ -288,7 +290,15 @@ public class FileExecutor
                 {
                     paramList.add(System.getProperty("java.home") + "/bin/java");
                     paramList.add("-cp");
-                    paramList.add(file.toString());
+                    try
+                    {
+                        paramList.add(buildClassPath(file.toString()));
+                    }
+                    catch (Exception e)
+                    {
+                        exitStatus = -1;
+                        Debug.error(e);
+                    }
                     paramList.add(efile.mainClass);
                 }
 
@@ -343,6 +353,61 @@ public class FileExecutor
 
         }
         return exitStatus;
+    }
+    
+    /**
+     * Transform classpath as specified in targetFile attribute into 
+     * OS specific classpath. This method also resolves directories
+     * containing jar files. ';' and ':' are valid delimiters allowed
+     * in targetFile attribute.
+     * 
+     * @param targetFile
+     * @return valid Java classpath
+     * @throws Exception
+     */
+    private String buildClassPath(String targetFile) throws Exception
+    {
+        StringBuffer classPath = new StringBuffer();
+        List jars = new ArrayList();
+        String rawClassPath = targetFile.replace(':', File.pathSeparatorChar).replace(';', File.pathSeparatorChar);
+        String[] rawJars = rawClassPath.split("" + File.pathSeparatorChar);
+        for (int i = 0; i < rawJars.length; i++)
+        {
+            File file = new File(rawJars[i]);
+            jars.add(rawJars[i]);
+            
+            if (file.isDirectory())
+            {
+                String[] subDirJars = FileUtil.getFileNames(rawJars[i], 
+                        new FilenameFilter() 
+                        {
+                            public boolean accept(File dir, String name)
+                            {
+                                return name.toLowerCase().endsWith(JAR_FILE_SUFFIX);
+                            }
+                            
+                        });
+                if (subDirJars != null)
+                {
+                    for (int j = 0; j < subDirJars.length; j++)
+                    {
+                        jars.add(rawJars[i] + File.separator + subDirJars[j]);
+                    }
+                }
+            }
+        }
+        
+        Iterator iter = jars.iterator();
+        if (iter.hasNext())
+        {
+            classPath.append(iter.next());
+        }
+        while (iter.hasNext())
+        {
+            classPath.append(File.pathSeparatorChar).append(iter.next());
+        }
+        
+        return classPath.toString();
     }
 
     /** The files to execute. */

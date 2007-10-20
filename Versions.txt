@@ -42,6 +42,9 @@
   (Vladimir Ralev)
 - Updated installation listener interface (Vladimir Ralev)
 - Re-entrant ShortcutPanel (WALLEM Pascal, AWL-T&P via Vladimir Ralev)
+- FileExecutor: allow Java classpath specification in targetfile attribute using
+  either : or ; delimiter, and support classpath loading of all jar files within a given folder,
+  e.g. targetfile="$INSTALL_PATH/lib/allMyJars (Andreas Guenther via Julien Ponge)
   
   > 3.10.2 (build 2007.05.11)
 

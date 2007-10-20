@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import java.util.ArrayList;
@@ -194,6 +195,29 @@ public class FileUtil
       {   // Trap all Exception based exceptions and return -1.
           return -1;
       }
+  }
+  
+  public static String[] getFileNames(String dirPath) throws Exception
+  {
+      return getFileNames(dirPath, null);
+  }
+  
+  public static String[] getFileNames(String dirPath, FilenameFilter fileNameFilter) throws Exception
+  {
+      String fileNames[] = null;
+      File dir = new File(dirPath);
+      if (dir.isDirectory())
+      {
+          if (fileNameFilter != null)
+          {
+              fileNames = dir.list(fileNameFilter);
+          }
+          else
+          {
+              fileNames = dir.list();
+          }
+      }
+      return fileNames;
   }
 
   /** 
