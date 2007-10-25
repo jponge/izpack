@@ -311,7 +311,7 @@ class PacksModel extends AbstractTableModel
             }
 
         case 2:
-            return Pack.toByteUnitsString((int) pack.nbytes);
+            return Pack.toByteUnitsString(pack.nbytes);
 
         default:
             return null;

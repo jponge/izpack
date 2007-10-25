@@ -30,8 +30,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -39,7 +37,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -53,12 +50,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import net.n3.nanoxml.XMLElement;
@@ -133,7 +128,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /**
      * The bytes of the current pack.
      */
-    protected int bytes = 0;
+    protected long bytes = 0;
 
     /**
      * The free bytes of the current selected disk.
@@ -203,7 +198,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      */
     public int getBytes()
     {
-        return (bytes);
+        return (int) (bytes);
     }
 
     /*
