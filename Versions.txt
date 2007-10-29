@@ -50,6 +50,7 @@
 - Uninstaller: in GUI mode, users don't see the 'force uninstallation' checkbox unless the
   '-x' command-line flag is used (Gildas Le Louarn via Julien Ponge)
 - Fixed wrong display size of really big packs (Dennis Reil) 
+- Tango icons (Julien Ponge)
   
   > 3.10.2 (build 2007.05.11)
 

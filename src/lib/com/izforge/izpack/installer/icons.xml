@@ -35,7 +35,5 @@
     <sysicon res="/img/messagebox_warning.png" id="OptionPane.warningIcon" />
     <sysicon res="/img/question.png" id="OptionPane.questionIcon" />
     <sysicon res="/img/uparrow.png" id="FileChooser.upFolderIcon" />
-    <sysicon res="/img/view_detailed.png" id="FileChooser.detailsViewIcon" />
-    <sysicon res="/img/view_icon.png" id="FileChooser.listViewIcon" />
         
 </icons>
