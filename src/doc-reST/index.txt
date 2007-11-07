@@ -1,0 +1,32 @@
+////////////////////////
+IzPack documentation
+////////////////////////
+
+.. WARNING:: This is a work in progress and should not be used as a reference...
+
+Chapters
+========
+
+- introduction_
+- getting-started_
+- installation-files_
+- advanced-features_
+- desktop-shortcuts_
+- creating-panels_
+- user-input_
+- custom-actions_
+- apache-license_
+- cc-license_
+- cookbooks_
+
+.. _introduction: introduction.html
+.. _getting-started: getting-started.html
+.. _installation-files: installation-files.html
+.. _advanced-features: advanced-features.html
+.. _desktop-shortcuts: desktop-shortcuts.html
+.. _creating-panels: creating-panels.html
+.. _user-input: user-input.html
+.. _custom-actions: custom-actions.html
+.. _apache-license: apache-license.html
+.. _cc-license: cc-license.html
+.. _cookbooks: cookbooks.html
