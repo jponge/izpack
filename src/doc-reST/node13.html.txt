@@ -1,5 +1,5 @@
 CookBooks
-=
+=========
 
 
 1. How To create an ODBC connection with IzPack (by Fabrice Mirabile)
@@ -7,7 +7,7 @@ CookBooks
 
 
 a. Problem
-~~~~~~~~~~
+''''''''''
 
 ODBC can be used as a layer between app servers and databases. It is quite
 convienent to setup an ODBC connection at installation time when the
@@ -16,7 +16,7 @@ achieve that? And for which OS ?
 
 
 b. Solution
-~~~~~~~~~~~
+'''''''''''
 
 After looking at many solutions, I found one that is very convenient in the
 sense that it applies to both Windows and UNIX environment.
@@ -35,15 +35,14 @@ though, there's a trick!
 
 
 A fileDSN (the name given to this type of connection) for a connection to an
-Oracle database will look like this :
+Oracle database will look like this : ::
 
-`` [ODBC]
-DRIVER=Oracle in OraHome92
-UID=%{UID}
-PWD=%{PWD}
-DBQ=%{DBName}
-SERVER=%{DBName}
-``
+    [ODBC]
+    DRIVER=Oracle in OraHome92
+    UID=%{UID}
+    PWD=%{PWD}
+    DBQ=%{DBName}
+    SERVER=%{DBName}
 
 Therefore you can realize straightforwardly that by changing the UID and PWD
 you will make your connection point to any schemas you want.
@@ -51,9 +50,9 @@ you will make your connection point to any schemas you want.
 In my company's software, we use ODBC to make the connection between the
 application and the database. Therefore, we use a batch to launch the server
 with a bunch of parameters. One of them is the ODBC DSN. This one, using
-fileDSN, should be defined as follows:
+fileDSN, should be defined as follows: ::
 
-SET DSN=filedsn=$INSTALL_PATH\whateveryoulike.dsn
+    SET DSN=filedsn=$INSTALL_PATH\whateveryoulike.dsn
 
 A very nice trick is to put in this batch the UID and the PWD so that it's
 not needed in the file directly and therefore you make the installer create
@@ -69,7 +68,7 @@ permit to connect to an Oracle DataBase.
 
 
 c. Discussion
-~~~~~~~~~~~~~
+'''''''''''''
 
 **Install.xml:**
 
@@ -79,6 +78,7 @@ c. Discussion
 **UserInputSpec.xml:**
 
 ::
+
     <userInput>
         <panel order="0">
                 <field type="staticText" align="left" txt="Server Only:
@@ -129,6 +129,7 @@ c. Discussion
 **BatchLoader.bat:**
 
 ::
+
     SET DSN=filedsn=$INSTALL_PATH\whateveryoulike.dsn;UID=$UID;PWD=$PWD
     start $INSTALL_PATH\yourpath\yourapp
 
@@ -136,6 +137,7 @@ c. Discussion
 **whateveryoulike.dsn:**
 
 ::
+
     [ODBC]
     DRIVER=Oracle in OraHome92
     DBQ=%{DBName}
@@ -157,6 +159,7 @@ copying whateveryoulike.dsn, you can copy whateveryoulikeforMS.dsn which
 looks like this:
 
 ::
+
     [ODBC]
     DRIVER=SQL Server
     WSID=%{DBName}
@@ -172,20 +175,18 @@ could setup more than one connection at once on different DB as long as UID
 and PWD are the same. If not you'll need a little trick...
 
 I hope this helps and if anyone has a question, don't hesitate to contact me
-via `http://developer.berlios.de/sendmessage.php?touser=12462`_ or post into
+via `http://developer.berlios.de/sendmessage.php?touser=12462` or post into
 the user/devel list.
 
 **Done by Fabrice Mirabile on 20th of april 2005**
 
 
-2. Work around for pack and process dependence And Execution of Java
-    Classes that runs SQL/PLSQL
------------------------------------------------------------------------------
--------------------
+2. Work around for pack and process dependence And Execution of Java Classes that runs SQL/PLSQL
+------------------------------------------------------------------------------------------------
 
 
 a. Problem
-~~~~~~~~~~
+''''''''''
 
 I've encountered in many cases the need to have a relation between job being
 executed with the processpanel and a pack. Since IzPack doesn't provide yet
@@ -196,7 +197,7 @@ statements.
 
 
 b. Solution
-~~~~~~~~~~~
+'''''''''''
 
 Here is what you will need:
 
@@ -233,11 +234,12 @@ specific pack would be run and there is the dependence we're looking for!
 
 
 c .Discussion
-~~~~~~~~~~~~~
+'''''''''''''
 
 **Install.xml:**
 
 ::
+
     <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
     <installation version="1.0">
     ....
@@ -328,6 +330,7 @@ c .Discussion
 **UserInputSpec.xml:**
 
 ::
+
     <userInput>
       <panel order="0">
         <field type="title" align="Left" txt="Database Connection
@@ -386,6 +389,7 @@ c .Discussion
 **ProcessPanel.Spec.xml:**
 
 ::
+
     <processing>
       <job name="Executing the Needed Queries">
         <os family="windows" />
@@ -396,7 +400,9 @@ c .Discussion
 
 **Launchsql.bat:**
 
-::echo "Execution of SQL Queries \n"
+::
+
+    echo "Execution of SQL Queries \n"
     java -classpath $INSTALL_PATH\updates\msutil.jar;$INSTALL_PATH\update
     s\msbase.jar;$INSTALL_PATH\updates\mssqlserver.jar;$INSTALL_PATH\updates\
     ojdbc14.jar;$INSTALL_PATH\updates\
@@ -413,7 +419,9 @@ c .Discussion
 **JDBCGeneral.java: (of course you need the compiled .class !!! but I'm
 showing the source code)**
 
-::/**
+::
+
+    /**
      * Parses a .sql file and runs them depending on DB settings
      * through jdbc.
      *
@@ -495,15 +503,15 @@ showing the source code)**
                         Name: "+ dm.getDriverName());
                         System.out.println("\tDriver
                         Version: "+ dm.getDriverVersion ());
-System.out.println("\nDatabase Information ");
-System.out.println("\tDatabase Name: "+
+                        System.out.println("\nDatabase Information ");
+                        System.out.println("\tDatabase Name: "+
                         dm.getDatabaseProductName());
-System.out.println("\tDatabase Version: "+
+                        System.out.println("\tDatabase Version: "+
                         dm.getDatabaseProductVersion());
-System.out.println("Avalilable Catalogs ");
+                        System.out.println("Avalilable Catalogs ");
                         rs = dm.getCatalogs();
                         while(rs.next()){
-System.out.println("\tcatalog: "+
+                        System.out.println("\tcatalog: "+
                              rs.getString(1));
                         }
                         rs.close();
@@ -534,15 +542,15 @@ System.out.println("\tcatalog: "+
                         Name: "+ dm.getDriverName());
                         System.out.println("\tDriver
                         Version: "+ dm.getDriverVersion ());
-System.out.println("\nDatabase Information ");
-System.out.println("\tDatabase Name: "+
+                        System.out.println("\nDatabase Information ");
+                        System.out.println("\tDatabase Name: "+
                         dm.getDatabaseProductName());
-System.out.println("\tDatabase Version: "+
+                        System.out.println("\tDatabase Version: "+
                         dm.getDatabaseProductVersion());
-System.out.println("Avalilable Catalogs ");
+                        System.out.println("Avalilable Catalogs ");
                         rs = dm.getCatalogs();
                         while(rs.next()){
-System.out.println("\tcatalog: "+
+                        System.out.println("\tcatalog: "+
                              rs.getString(1));
                         }
                         rs.close();
@@ -617,7 +625,7 @@ System.out.println("\tcatalog: "+
                      + " = " +  thelist[j] + "\n");
                      String[] StatementsSQL =
                      SQLFileInput(newfolderpath + thelist[j]);
-RunSQLOracle(StatementsSQL,classforname,url,serverName,
+                     RunSQLOracle(StatementsSQL,classforname,url,serverName,
                      portNumber, databaseName, userName, password);
              }
              return thelist;
@@ -636,7 +644,7 @@ RunSQLOracle(StatementsSQL,classforname,url,serverName,
                   " +  thelist[j] + "\n");
                   String[] StatementsSQL =
                   SQLFileInput(newfolderpath + thelist[j]);
-RunSQLMS(StatementsSQL,classforname,url,serverName,
+                  RunSQLMS(StatementsSQL,classforname,url,serverName,
                   portNumber, databaseName, userName, password);
             }
              return thelist;
@@ -699,11 +707,11 @@ RunSQLMS(StatementsSQL,classforname,url,serverName,
                 {
                      if (StatementsSQL[i] != null)
                      {
-System.out.print(StatementsSQL[i] + "...");
+                         System.out.print(StatementsSQL[i] + "...");
                          int rowsAffected =
                          stAddUser.executeUpdate(StatementsSQL[i]);
                          if (rowsAffected == 1)
-System.out.println("OK");
+                         System.out.println("OK");
                       }
                 }
                 closeConnection();
@@ -728,11 +736,11 @@ System.out.println("OK");
                 {
                     if (StatementsSQL[i] != null)
                      {
-System.out.print(StatementsSQL[i] + "...");
+                        System.out.print(StatementsSQL[i] + "...");
                         int rowsAffected =
                         stAddUser.executeUpdate(StatementsSQL[i]);
                         if (rowsAffected == 1)
-System.out.println("OK");
+                            System.out.println("OK");
                      }
                 }
                 closeConnection();
@@ -774,10 +782,7 @@ process.xml launch the class which takes as arguments the following entries:
 
 Once again, i hope you'll find this useful and if anyone has a question,
 don't hesitate to contact me via
-`http://developer.berlios.de/sendmessage.php?touser=12462`_ or post into the
+`http://developer.berlios.de/sendmessage.php?touser=12462` or post into the
 user/devel list.
 
 **Done by Fabrice Mirabile on 20th of april 2005**
-
-.. _http://developer.berlios.de/sendmessage.php?touser=12462:
-    http://developer.berlios.de/sendmessage.php?touser=12462

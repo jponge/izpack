@@ -2,60 +2,58 @@ Introduction
 ============
 
 
-Welcome to IZPACK !
-==
+Welcome to IzPack !
+-------------------
 
-.. image:: img1.png
-    :alt: \fbox{\includegraphics[scale=0.5]{img/lang-sel-splash}}
-IZPACK is a tool that will help you to solve your software installation
+IzPack is a tool that will help you to solve your software installation
 problems. It is a JavaTM based software installer builder that will run on
 any operating system coming with a *Java Virtual Machine (JVM)* that is
 compliant with the Sun JVM 1.4 or higher. Its design is very modular and you
 will be able to choose how **you** want your installer to look and you will
 also be able to customize it using a very simple *Application Programming
-Interface (API)*. Although IZPACK is essentially a JavaTM only application
+Interface (API)*. Although IzPack is essentially a JavaTM only application
 (it can run on virtually any operating system), it can interact in a clean
 way with the underlying operating system. Native code can interact with it on
 a specific platform without disturbing the operation on incompatible
 operating systems. For instance, you can develop Unix-specific code that will
 be silent if run on Windows. To put it in a nutshell, whereas most of the
-other JavaTM installers force you to go their way, IZPACK will let you go
+other JavaTM installers force you to go their way, IzPack will let you go
 **your way**. Some respectable companies have been using it in order to
 produce customized installers for their *very* specific needs.
 
 
 *"So, if it's so good, how much is it ?"* : well, you can get it for free.
-**BUT** IZPACK is not a *freeware*. It's not *free* as in *"free beer"* but
+**BUT** IzPack is not a *freeware*. It's not *free* as in *"free beer"* but
 *"free as in free speech"*. So it's neither *freeware* nor *public domain*.
 It is software covered by the Apache Software License 2.0. You have access to
-the IZPACK source code and you can modify it to make it suit your needs, but
+the IzPack source code and you can modify it to make it suit your needs, but
 if you publish such a modified version, you are forced to publish the
 modifications you've made.That's a fair exchange of expertise and work. To
 learn more about the Apache Software License 2.0, visit
-```http://www.apache.org/licenses/LICENSE-2.0.html`_``.
+http://www.apache.org/licenses/LICENSE-2.0.html
 
 
 
 The Features
-============
+------------
 
-IZPACK uses XML files to describe installations. When you make an installer,
+IzPack uses XML files to describe installations. When you make an installer,
 you have a choice of panels. You can see panels as a kind of plugin that
 composes the installer. For instance, a panel can choose the installation
 path, the packs to install, prompt the user for a license agreement and so
 on. This approach is very modular. You can also create your own panels if you
 have specific needs. In some cases you even have a choice from multiple panel
 versions for the same task. You can also choose the order in which panels
-appear during the installation process. IZPACK can be used in a number of
+appear during the installation process. IzPack can be used in a number of
 different ways:
 
 -   by writing the XML installation file "by hand" and compiling it with
     the command line compiler
 -   by invoking the compiler from the great APACHE JAKARTA ANT tool (see
-    ``` http://jakarta.apache.org/`_``) as IZPACK can be used as a task for
+    http://jakarta.apache.org/) as IzPack can be used as a task for
     ANT
 
-Here is a brief (and certainly incomplete !) list of the main IZPACK features
+Here is a brief (and certainly incomplete !) list of the main IzPack features
 :
 
 -   XML based installation files
@@ -76,9 +74,9 @@ Here is a brief (and certainly incomplete !) list of the main IZPACK features
 
 
 The Development
-===============
+---------------
 
-i started writing IZPACK in April 2001 and many people have helped me
+I started writing IzPack in April 2001 and many people have helped me
 improving it since. i prefer not to mention them here as i would for sure
 forget some of them, so please check the file named ``Thanks.txt`` which i
 try to get as up-to-date as possible in order to mention everyone who helped
@@ -93,10 +91,10 @@ any form :
 -   writing manuals
 -   ... anything else you like :-)
 
-The official IZPACK homepage is located at ```http://izpack.org/`_``. The
+The official IzPack homepage is located at http://izpack.org/. The
 IzPack developer services (mailing-lists, CVS, patches manager, bugs tracker,
 ...) are generously hosted by BerliOS. The IzPack BerliOS section is located
-at ```http://developer.berlios.de/projects/izpack/`_``. Feel free to use
+at http://developer.berlios.de/projects/izpack/. Feel free to use
 these services. In particular, there are two mailing-lists:
 
 -   ``izpack-devel``: used for the IzPack development
@@ -104,41 +102,29 @@ these services. In particular, there are two mailing-lists:
     IzPack.
 
 
-3rd party code used in IZPACK
-===
+3rd party code used in IzPack
+-----------------------------
 
-IZPACK uses several 3rd party libraries and i would like to mention them in
+IzPack uses several 3rd party libraries and i would like to mention them in
 respect for their respective authors work :
 
--   *NanoXML* by Marc DE SCHEEMAECKER : the XML parser used inside IZPACK
-    and released under a *zlib/png*-style license - see
-```http://nanoxml.sourceforge.net/`_`` -
+-   *NanoXML* by Marc DE SCHEEMAECKER : the XML parser used inside IzPack
+    and released under a *zlib/png*-style license - see http://nanoxml.sourceforge.net/
 -   *Kunststoff Look and Feel* by Incors Gmbh : a SwingTM Look and Feel
     that can be used for installers. It **really** looks good and is released
     under the GNU LESSER GENERAL PUBLIC LICENSE (LGPL) - see
-    ```http://www.incors.org/`_`` -
--   *Crystal-SVG Icons* : the icons used in IZPACK come from the great
-    work of Everaldo (```http://www.everaldo.com/`_``) that makes KDE 3.2
+    http://www.incors.org/
+-   *Crystal-SVG Icons* : the icons used in IzPack come from the great
+    work of Everaldo (http://www.everaldo.com/) that makes KDE 3.2
     look so sweet
 -   *Some Apache Jakarta classes and libraries* : released under the
     *Apache License*
 -   *Metouia Look and Feel* by Taoufik Romdhane : released under the
-    *LGPL license* - see ```http://mlf.sf.net/`_``
+    *LGPL license* - see http://mlf.sf.net/
 -   *Liquid Look and Feel* by Miroslav Lazarevic : released under the
-    *LGPL license* - see ```liquidlnf.sf.net/`_``
+    *LGPL license* - see liquidlnf.sf.net/
 -   *JGoodies Looks* by Karsten Lentzsch : released under a *BSD-style
-    license* - see ```http://looks.dev.java.net/`_``.
+    license* - see http://looks.dev.java.net/
 
-So, now let's dive into understanding how IZPACK works. You'll be surprised
+So, now let's dive into understanding how IzPack works. You'll be surprised
 to see how powerful and simple it can be :-)
-
-.. _http://www.apache.org/licenses/LICENSE-2.0.html: http://www.apache.org/licenses/LICENSE-2.0.html
-.. _ http://jakarta.apache.org/: http://jakarta.apache.org/
-.. _http://izpack.org/: http://izpack.org/
-.. _http://developer.berlios.de/projects/izpack/:  http://developer.berlios.de/projects/izpack/
-.. _http://nanoxml.sourceforge.net/: http://nanoxml.sourceforge.net/
-.. _http://www.incors.org/: http://www.incors.org/
-.. _http://www.everaldo.com/: http://www.everaldo.com/
-.. _http://mlf.sf.net/: http://mlf.sf.net/
-.. _liquidlnf.sf.net/: liquidlnf.sf.net/
-.. _http://looks.dev.java.net/: http://looks.dev.java.net/

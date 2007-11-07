@@ -3,38 +3,39 @@ Writing Installation XML Files
 
 
 What You Need
-=============
+-------------
 
 
 Your editor
------------
+'''''''''''
 
 In order to write your XML installation files, you just need a plain text
 editor. Of course it's always easier to work with color coded text, so you
 might rather want to work with a text editor having such a feature. Here is a
 list of free editors that work well :
 
--   Jext : ```http://www.jext.org/`_``
--   JEdit : ```http://www.jedit.org/`_``
+-   Jext : http://www.jext.org/
+-   JEdit : http://www.jedit.org/
 -   classics like Vim and (X)Emacs.
 
 If you are a developer and tend to write your own patches, extension or
 features to IzPack sources, or, if you wish to debug your compilation,
-installation and uninstallation, we recommend two IDE:
+installation and uninstallation, we recommend these IDE:
 
--   Jext : ```http://www.jetbrains.com/idea/`_``
--   JEdit : ```http://www.eclipse.org/`_``
+-   IntelliJ IDEA : http://www.jetbrains.com/idea/
+-   Eclipse : http://www.eclipse.org/
+-   Netbeans : http://www.netbeans.org/
 
 For the first one, JetBrains has granted us an Open Source License. All
 project members can ask the Licence Key to one of the project manager.
 
-The second one is a well know open source (Just like us :-)) IDE. We provide
+The other ones are well know open source projects (Just like us :-)). We provide
 a tutorial on how to develop/debug IzPack using Eclipse in the chapter
-`Getting Started -> How to develop and debug IpPack using Eclipse`_
+''Getting Started > How to develop and debug IpPack using Eclipse''
 
 
 Writing XML
------------
+'''''''''''
 
 Though you might not know much about XML, you have certainly heard about it.
 If you know XML you can skip this subsection as we will briefly present how
@@ -51,6 +52,7 @@ attributes like : ``<markup attr1="123" attr2="hello !"/>``. Here is a sample
 of a valid XML structure :
 
 ::
+
     <chapter title="Chapter 1">
       <section name="Introduction">
         <paragraph>
@@ -85,10 +87,8 @@ installation specification. For a better introduction there are plenty of
 books and articles/tutorials dealing with XML on the Internet, in book
 stores, in magazines and so on.
 
-
-
 Variable Substitution
-=====================
+---------------------
 
 During the installation process IzPack can substitute variables in various
 places with real values. Obvious targets for variable substitution are
@@ -139,12 +139,12 @@ The following variables are built-in :
 -   ``$FILE_SEPARATOR`` : the file separator on the installation system
 -   ``$DesktopShortcutCheckboxEnabled`` : When set to true, it
     automatically checks the "Create Desktop Shortcuts" button. To see how to
-    use it, go to `The Variables Element ``<variables>```_ Be careful this
+    use it, go to `The Variables Element ``<variables>`` Be careful this
     variable is case sensitve !
 -   ``$InstallerFrame.logfilePath`` : The path to the install log. This
     file contains the paths of all installed files. If set to "default" then
     the "$INSTALL_PATH/Uninstaller/install.log" path will be used. To see how
-    to use it, go to `The Variables Element ``<variables>```_. If this
+    to use it, go to `The Variables Element ``<variables>``. If this
     variable is not set, no install.log will be created.
 
 
@@ -182,8 +182,8 @@ are available:
     alternative variable marker is used: ``%variable`` or ``%{variable}``.
 
 
-The iZPACK Elements
-=========
+The IzPack Elements
+-------------------
 
 *When writing your installer XML files, it's a good idea to have a look at
 the iZPACK installation DTD*.
@@ -192,20 +192,16 @@ the iZPACK installation DTD*.
 
 
 The Root Element ``<installation>``
-------------
+''''''''''''''''''''''''''''''''''''
 
 The root element of an installation is ``<installation>``. It takes one
 required attribute : ``version``. The attribute defines the version of the
 XML file layout and is used by the compiler to identify if it is compatible
-with the XML file. This should be set to .. image:: img4.png
-    :alt: $1.0$
-for the moment.
-
-
+with the XML file. This should be set to **1.0** for the moment.
 
 
 The Information Element ``<info>``
-----
+'''''''''''''''''''''''''''''''''''
 
 This element is used to specify some general information for the installer.
 It contains the following elements :
@@ -233,17 +229,17 @@ It contains the following elements :
     install your program. Values can be ``1.2``, ``1.2.2``, ``1.4``, etc. The
     test is a lexical comparison against the ``java.version`` System property
     on the install machine.
--   ``<webdir>`` : Causes a ``web installer'' to be created, and
+-   ``<webdir>`` : Causes a ''web installer'' to be created, and
     specifies the URL packages are retrieved from at install time. The
-    content of the tag must be a properly formed URL. See section `3.7`_ for
-    more details.
+    content of the tag must be a properly formed URL.
 -   ``<summarylogfilepath>`` : specifies the path for the logfile of the
-    `SummaryLoggerInstallerListener`_.
+    `SummaryLoggerInstallerListener`.
 
 Here is an example of a typical ``<info>`` section :
 
 
 ::
+
     <info>
       <appname>Super extractor</appname>
       <appversion>2.1 beta 6</appversion>
@@ -258,7 +254,7 @@ Here is an example of a typical ``<info>`` section :
 
 
 The Variables Element ``<variables>``
----------
+''''''''''''''''''''''''''''''''''''''
 
 This element allows you to define variables for the variables substitution
 system. Some variables are built-in, such as ``$INSTALL_PATH`` (which is the
@@ -275,6 +271,7 @@ Here's a sample ``<variables>`` section :
 
 
 ::
+
     <variables>
       <variable name="app-version" value="1.4"/>
       <variable name="released-on" value="08/03/2002"/>
@@ -286,6 +283,7 @@ InstallerFrame.logfilePath variables:
 
 
 ::
+
     <variables>
       <variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH
       /My-install.log"/>
@@ -301,7 +299,7 @@ InstallerFrame.logfilePath variables:
 
 
 The GUI Preferences Element ``<guiprefs>``
---------
+'''''''''''''''''''''''''''''''''''''''''''
 
 This element allows you to set the behavior of your installer GUI. This
 information will not have any effect on the command-line installers that will
@@ -315,6 +313,7 @@ be available in future versions of iZPACK . The arguments to specify are :
 Here's a sample :
 
 ::
+
     <guiprefs resizable="no" width="800" height="600"/>
 
 
@@ -362,6 +361,7 @@ parameters. The values can be one of:
 Here is a small sample:
 
 ::
+
     <guiprefs height="600" resizable="yes" width="800">
         <laf name="metouia">
             <os family="unix" />
@@ -378,17 +378,17 @@ The *Substance* look and feel *toned-down* themes can be specified using the
 blue, business-black, creme, sahara, moderate, officesilver``. We have
 reduced the choice to the toned-down themes since they are the only ones to
 actually look decent (the other families colors are way too saturated).
-Please consult `https://substance.dev.java.net/docs/skins/toneddown.html`_
+Please consult https://substance.dev.java.net/docs/skins/toneddown.html
 for a gallery of the different toned-down themes.
 
 Starting from IzPack 3.7, some characteristics can be customized with the
 ``<modifier>`` tag. There is a separate description in the `Advanced
-Features`_ chapter paragraph `Modifying the GUI`_.
+Features` chapter paragraph `Modifying the GUI`.
 
 
 
 The Localization Element ``<locale>``
-------
+''''''''''''''''''''''''''''''''''''''
 
 This element is used to specify the language packs (langpacks) that you want
 to use for your installer. You must set one ``<langpack>`` markup per
@@ -400,6 +400,7 @@ Here's a sample :
 
 
 ::
+
     <locale>
       <langpack iso3="eng"/>
       <langpack iso3="fra"/>
@@ -409,35 +410,38 @@ Here's a sample :
 
 The supported ISO3 codes are :
 
-*ISO3 code* *Language*
-cat Catalunyan
-chn Chinese
-cze Czech
-dan Danish
-deu German
-eng English
-fin Finnish
-fra French
-hun Hungarian
-ita Italian
-jpn Japanese
-mys Malaysian
-ned Nederlands
-nor Norwegian
-pol Polnish
-por Portuguese (Brazilian)
-rom Romanian
-rus Russian
-scg Serbian
-spa Spanish
-svk Slovakian
-swe Swedish
-ukr Ukrainian
+========= ============================
+ISO3 code Language
+========= ============================
+cat       Catalunyan
+chn       Chinese
+cze       Czech
+dan       Danish
+deu       German
+eng       English
+fin       Finnish
+fra       French
+hun       Hungarian
+ita       Italian
+jpn       Japanese
+mys       Malaysian
+ned       Nederlands
+nor       Norwegian
+pol       Polnish
+por       Portuguese (Brazilian)
+rom       Romanian
+rus       Russian
+scg       Serbian
+spa       Spanish
+svk       Slovakian
+swe       Swedish
+ukr       Ukrainian
+========= ============================
 
 
 
 The Resources Element ``<resources>``
----------
+''''''''''''''''''''''''''''''''''''''
 
 Several panels, such as the license panel and the shortcut panel, require
 additional data to perform their task. This data is supplied in the form of
@@ -471,6 +475,7 @@ attributes to specify :
 Here's a sample :
 
 ::
+
     <resources>
       <res id="InfoPanel.info" src="doc/readme.txt" parse="yes"/>
       <res id="LicencePanel.licence" src="legal/License.txt"/>
@@ -478,7 +483,7 @@ Here's a sample :
 
 
 The Panels Element ``<panels>``
-------
+'''''''''''''''''''''''''''''''''
 
 Here you tell the compiler which panels you want to use. They will appear in
 the installer in the order in which they are listed in your XML installation
@@ -490,6 +495,7 @@ classname of the panel.
 Here's a sample :
 
 ::
+
     <panels>
       <panel classname="HelloPanel"/>
       <panel classname="LicencePanel"/>
@@ -500,7 +506,7 @@ Here's a sample :
 
 
 The Packs Element ``<packs>``
------
+'''''''''''''''''''''''''''''''
 
 This is a crucial section as it is used to specify the files that need to be
 installed. The ``<packs>`` section consists of several ``<pack>`` and
@@ -542,8 +548,9 @@ resources related to the development-package assigned to him. The main
 install XML references these xml-files to avoid synchronization efforts
 between the central installation XML and the developer-maintained installer
 XMLs.
+
 Internationalization of the PacksPanel
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''''''
 
 In order to provide internationalization for the PacksPanel, so that your
 users can be presented with a different name and description for each
@@ -555,20 +562,20 @@ name of the file. The format of these files is identical with the
 distribution langpack files located at ``
 $IZPACK_HOME/bin/langpacks/installer``. For the name of the panel you just
 use the pack ``id`` as the txt ``id``. For the description you use the pack
-``id`` suffixed with `` '.description'``.
+``id`` suffixed with ``.description``.
 
 The following sections describe the tags available for a ``<pack>`` section.
 
 
 ``<description>`` - pack description
-~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''''
 
 The contents of the ``<description>`` tag describe the pack contents. This
 description is displayed if the user highlights the pack during installation.
 
 
 ``<depends>`` - pack dependencies
-~~~~~~~~~~~~~~~~~~~~
+''''''''''''''''''''''''''''''''''
 
 This can be used to make this pack selectable only to be installed only if
 some other is selected to be installed. The pack can depend on more than one
@@ -582,7 +589,7 @@ This tag takes the following attribute:
 
 
 ``<os>`` - OS restrictions
-~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''
 
 It is possible to restrict a panel to a certain list of operating systems.
 This tag takes the following attributes:
@@ -596,7 +603,7 @@ This tag takes the following attributes:
 
 
 ``<updatecheck>``
-~~~~~~~~~~~
+''''''''''''''''''
 
 This feature can update an already installed package, therefore removing
 superfluous files after installation. Here's how this feature author (Tino
@@ -606,6 +613,7 @@ Schwarze) described it on the IzPack development mailing-list:
 ant fileset syntax, e.g.:
 
 ::
+
     <updatecheck>
       <include name="lib/**" />
       <exclude name="config/local/** />
@@ -620,7 +628,7 @@ for details.
 
 
 ``<file>`` - add files or directories
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''''''
 
 The ``<file>`` tag specifies a file (a directory is a file too) to include
 into the pack. It takes the following attributes:
@@ -646,7 +654,7 @@ into the pack. It takes the following attributes:
 
 
 ``<additionaldata>``
-::::::::::::::
+'''''''''''''''''''''
 
 This tag can also be specified in order to pass additional data related to a
 file tag for customizing.
@@ -657,7 +665,7 @@ file tag for customizing.
 
 
 ``<singlefile>`` - add a single file
-~~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''''
 
 Specifies a single file to include. The difference to ``<file>`` is that this
 tag allows the file to be renamed, therefore it has a ``target`` attribute
@@ -669,14 +677,14 @@ instead of `` targetdir``.
 -   ``os``: can optionally specify a target operating system (``unix,
     windows, mac``) - this means that the file will only be installed on its
     target operating system
--   ``override``: see ``<file>`` (`2.3.8`_) for description
+-   ``override``: see ``<file>`` for description
 
-A ``<additionaldata>`` (`2.3.8`_) tag can also be specified for customizing.
+A ``<additionaldata>`` tag can also be specified for customizing.
 
 
 
 ``<fileset>``: add a fileset
-~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''
 
 The ``<fileset>`` tag allows files to be specified using the powerful Jakarta
 Ant set syntax. It takes the following parameters:
@@ -718,6 +726,7 @@ in Ant. IzPack defaults to the Ant list of default excludes. There is
 currently no equivalent to the <defaultexcludes> task. Default excludes are:
 
 ::
+
          **/*\~{}
          **/\#*\#
          **/.\#*
@@ -734,19 +743,19 @@ currently no equivalent to the <defaultexcludes> task. Default excludes are:
          **/.DS\_Store
 
 
-A ``<additionaldata>`` (`2.3.8`_) tag can also be specified for customizing.
+A ``<additionaldata>`` tag can also be specified for customizing.
 
 
 ``<parsable>`` - parse a file after installation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Files specified by ``<parsable>`` are parsed after installation and may have
 variables substituted.
 
 -   ``targetfile`` : the file to parse, could be something like
-``$INSTALL_PATH/bin/launch-script.sh``
-A slash will be changed to the system dependant path separator (e.g. to a
-backslash on Windows) only if no backslash masks the slash.
+    ``$INSTALL_PATH/bin/launch-script.sh``
+    A slash will be changed to the system dependant path separator (e.g. to a
+    backslash on Windows) only if no backslash masks the slash.
 -   ``type`` : specifies the type (same as for the resources) - the
     default is ``plain``
 -   ``encoding`` : specifies the file encoding
@@ -754,16 +763,16 @@ backslash on Windows) only if no backslash masks the slash.
 
 
 ``<executable>`` - mark file executable or execute it
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 The ``<executable>`` tag is a very useful thing if you need to execute
 something during the installation process. It can also be used to set the
 executable flag on Unix-like systems. Here are the attributes :
 
 -   ``targetfile`` : the file to run, could be something like
-``$INSTALL_PATH/bin/launch-script.sh``
-Slashes are handled special (see attribute ``targetfile`` of tag
-``<parsable>```2.3.8`_).
+    ``$INSTALL_PATH/bin/launch-script.sh``
+    Slashes are handled special (see attribute ``targetfile`` of tag
+    ``<parsable>``).
 -   ``class`` : If the executable is a jar file, this is the class to run
     for a JavaTM program
 -   ``type`` : ``bin`` or ``jar`` (the default is ``bin``)
@@ -785,12 +794,12 @@ executable:
 
 -   ``<arg>``: passes the argument specified in the ``value`` attribute.
     Slashes are handled special (see attribute ``targetfile`` of tag
-    ``<parsable>```2.3.8`_).
+    ``<parsable>``.
 
 
 
 ``<os>`` - make a file OS-dependent
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 The ``<os>`` tag can be used inside the ``<file>``, ``<fileset>``,
 ``<singlefile>``, ``<parsable>``, ``<executable>`` tags to restrict it's
@@ -806,6 +815,7 @@ effect to a specific operating system family, architecture or version:
 Here's an example installation file :
 
 ::
+
     <packs>
         <!-- The core files -->
         <pack name="Core" required="yes">
@@ -838,14 +848,14 @@ Here's an example installation file :
 
 
 The Native Element ``<native>``
-------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Use this if you want to use a feature that requires a native library. The
 native libraries are placed under ``bin/native/..``. There are 2 kinds of
 native libraries : the iZPACK libraries and the third-party ones. The IzPack
 libraries are located at ``bin/native/izpack``, you can place your own
 libraries at `` bin/native/3rdparty``. It is possible to place a native
-library also into the uninstaller. It is useable from CustomActions (`7`_).
+library also into the uninstaller. It is useable from CustomActions.
 If one or more are referenced for it, the needed support classes are
 automatically placed into the uninstaller. To place it only on operating
 systems for which they are build, it is possible to define an OS restriction.
@@ -858,20 +868,21 @@ the following attributes :
 
 
 ``<os>`` - make a library OS-dependent
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 The ``<os>`` tag can be used to restrict the inclusion into the uninstaller
 to a specific operating system family, architecture or version. The inclusion
-into the installer will be always done. For more information see `2.3.8`_.
+into the installer will be always done.
 
 Here's a sample :
 
 ::
+
     <native type="izpack" name="ShellLink.dll"/>
 
 
 The Jar Merging Element ``<jar>``
----
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 If you adapt iZPACK for your own needs, you might need to merge the content
 of another jar file into the jar installer. For instance, this could be a
@@ -888,10 +899,11 @@ attributes are:
 A sample :
 
 ::
+
     <jar src="../nicelibrary.jar"/>
 
 The Available Panels
-====================
+---------------------
 
 In this section i will introduce the various panels available in IzPack. The
 usage for most is pretty simple and described right here. The more elaborate
@@ -907,7 +919,7 @@ the founded class file.
 
 
 HelloPanel
-----------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This panel welcomes the user by displaying the project name, the version, the
 URL as well as the authors.
@@ -915,7 +927,7 @@ URL as well as the authors.
 
 
 CheckedHelloPanel
------------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This panel welcomes the user also by displaying the project name, the
 version, the URL as well as the authors.
@@ -924,12 +936,12 @@ version, the URL as well as the authors.
 Additonal on windows the registry will be scanned for an entry which
 determines that the product is already installed. If so, a dialog will be
 shown which ask whether to install a second version of the product or not. If
-you use this panel do not forget to add the `registry feature`_ into your
+you use this panel do not forget to add the `registry feature` into your
 installation.
 
 
 InfoPanel and HTMLInfoPanel
----------------------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This is a kind of 'README' panel. It presents text of any length. The text is
 specified by the ``(HTML)InfoPanel.info`` resource. Starting from IzPack
@@ -938,19 +950,23 @@ To add an image to the HTMLInfoPanel you simply need to add a ressource to
 your install.xml with an ID decided by you, then you can call this image by
 refering it by this same ID.
 
+In install.xml:
 
 ::
-    e.g.:
-    In install.xml:
+
     <resources>
       <res src="logo.jpg" id="GHGHGH"/>
       .....
 
-    And in file.html:
+and in file.html:
+
+::
+
     <img src="GHGHGH" />
 
+
 LicencePanel and HTMLLicencePanel
----------------------------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Note:* There is a mistake in the name - it should be LicensePanel. In France
 the word is Licence ... and one of my diploma is a 'Licence' so ...:* -)
@@ -966,14 +982,14 @@ agreement text you have to use the `` (HTML)LicencePanel.licence`` resource.
 
 
 PacksPanel
-----------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Allows the user to select the packs he wants to install.
 
 
 
 ImgPacksPanel
--------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This is the same as above, but for each pack a different picture is shown to
 the user. The pictures are specified using the packImgId attribute for each
@@ -992,7 +1008,7 @@ are supported.
 
 
 TargetPanel
------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This panel allows the user to select the installation path. It can be
 customized with the following resources (they are text files containing the
@@ -1012,14 +1028,14 @@ path) :
 
 
 InstallPanel
-------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 You should always have this one as it launches the installation process !
 
 
 
 XInfoPanel
-----------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 A panel showing text parsed by the variable substitutor. The text can be
 specified through the ``XInfoPanel.info`` resource. This panel can be useful
@@ -1029,7 +1045,7 @@ when you have to show information after the installation process is completed
 
 
 FinishPanel
------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 A ending panel, able to write automated installer information. For details
 see the chapter on 'Advanced Features'.
@@ -1037,7 +1053,7 @@ see the chapter on 'Advanced Features'.
 
 
 SimpleFinishPanel
------------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Same as ``FinishPanel``, but without the automated installer features. It is
 aimed at making the life easier for end-users who will never encounter the
@@ -1046,30 +1062,29 @@ automated installer extra feature.
 
 
 ShortcutPanel
--------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This panel is used to create desktop shortcuts. For details on using the
 ShortcutPanel see the chapter 'Desktop Shortcuts'.
 
 
 UserInputPanel
---------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This panel allows you to prompt the user for data. What the user is prompted
 for is specified using an XML file which is included as a resource to the
-installer. See chapter `6`_ on page `.. image:: crossref.png
-    :alt: [*]
-`_ for a detailed explanation.
+installer.
 
 
 CompilePanel
-------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This panel allows you to compile just installed Java sourcecode. The details
 for the compilation are specified using the resource
 ``CompilePanel.Spec.xml``. The XML file has the following format:
 
 ::
+
     <compilation>
       <global>
         <compiler>
@@ -1106,12 +1121,12 @@ The user can change the compiler to use and choose from some default
 compilation options before compilation is started.
 
 .. image:: ./compilePanel.png
-    :alt: Image compilePanel
+    :alt: CompilePanel
 
 
 
 ProcessPanel
-------------
+''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This panel allows you to execute arbitrary files after installation. The
 details for the compilation are specified using the resource
@@ -1120,6 +1135,7 @@ details for the compilation are specified using the resource
 The XML file has the following format:
 
 ::
+
     <processing>
       <job name="do xyz">
         <os family="windows" />
@@ -1136,12 +1152,12 @@ The XML file has the following format:
     </processing>
 
 
-Each job may have an ``<os>`` attribute - see `2.3.8`_ for details.
+Each job may have an ``<os>`` attribute.
 
 
 
 ``<executeclass>`` - Execute Java Classes
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is also possible to execute Java classes from this panel. Here's what this
 feature author (Alex Bradley) says:
@@ -1151,6 +1167,7 @@ feature author (Alex Bradley) says:
 extended the DTD of the `` ProcessPanel.Spec.xml`` to include a new element:
 
 ::
+
     <executeclass name="classname">
     <args..../>
     </executeclass>
@@ -1161,6 +1178,7 @@ This will run a user-specified class in the context of the installer JVM with
 a single method :
 
 ::
+
     run( AbstractUIProcessHandler handler, String[] args]);
 
 
@@ -1171,17 +1189,18 @@ been built.
 
 To use the executeclass facility, you will need to create a jar file with
 your class and then add it to the installer with the `The Jar Merging
-Element`_.
+Element`.
 
 
 ``<executeForPack>`` - Only execute the job for certain packs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This can be be used to run the job only if the pack is enabled. For example,
 the batch file will if either the ``Sources`` or ``Executables`` packs are
 selected at install time.
 
 ::
+
     <processing>
      <job name="List files">
       <executeForPack name="Sources"/>
@@ -1192,7 +1211,7 @@ selected at install time.
     </processing>
 
 ``<logfiledir>`` - Output of the processPanel saved to a log
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 New with version 3.7 is the possibility to tee output that is written to the
 ProcessPanel's textarea into an optional logfile. Using this feature is
@@ -1207,12 +1226,14 @@ The name of the logfile is not (yet) configurable but should fit in most
 cases. It will be named
 
 ::
+
     Install_V<$APP_VER>_<YYYY>-<MM>-<DD>_<hh>-<mm>-<ss>_<RandomId>.log
 
 
 Here's an example:
 
 ::
+
     <processing>
       <logfiledir>$INSTALL_PATH</logfiledir>
       <job name="do xyz">
@@ -1235,7 +1256,7 @@ jobs and not a file for each job that is run.
 
 
 JDKPathPanel
-------------
+'''''''''''''
 
 This panel allows the user to select a JDK path. The variable JAVA_HOME does
 not point to a JDK, else to a JRE also the environment variable points to a
@@ -1247,6 +1268,7 @@ JDK, the directory will be used as default (JAVA_HOME/..). If there is the
 variable
 
 ::
+
     JDKPathPanel.skipIfValid
 
 
@@ -1254,6 +1276,7 @@ defined with the value "yes", the panel will be skiped if the path is valid.
 Additional it is possible to make a version control. If one or both variables
 
 ::
+
     JDKPathPanel.minVersion
     JDKPathPanel.maxVersion
 
@@ -1264,6 +1287,7 @@ that the detection can fail at some VMs. The values in the install.xml should
 be like
 
 ::
+
     <variables>
       <variable name="JDKPathPanel.minVersion" value="1.4.1" />
       <variable name="JDKPathPanel.maxVersion" value="1.4.99" />
@@ -1274,6 +1298,7 @@ be like
 If all is valid, the panels isValidated method sets the variable
 
 ::
+
     JDKPath
 
 
@@ -1283,7 +1308,7 @@ selection.
 
 
 SelectPrinterPanel
-------------------
+''''''''''''''''''''''''''
 
 This panel will look at the local printers installed and propose a list box
 with all of them. Once chosen, the variable $SELECTED_PRINTER is set to the
@@ -1291,7 +1316,7 @@ user choice.
 
 
 DataCheckPanel
---------------
+''''''''''''''''''''''''''
 
 DataCheckPanel is not for inclusion in an actuall install, but is a debugging
 resource for developers writing custom panels or code to be included in
@@ -1311,7 +1336,7 @@ whenever the panel is made active.
 
 
 SummaryPanel
-------------
+'''''''''''''
 
 This panel gives a summary of all shown panels. The best place for it is just
 infront of the InstallPanel. Normaly it contains a warning that this is the
@@ -1323,18 +1348,19 @@ text. ``getSummaryBody`` has to be implemented in all panels which should be
 presented in the summary. If the secound method is not implemented, no
 summary of this panel will be shown.
 
-Additional it is possible to `log the contents`_ of the summary panel into a
+Additional it is possible to `log the contents` of the summary panel into a
 HTML file.
 
 
 InstallationGroupPanel
-----------------------
+''''''''''''''''''''''''''
 
 This Panel groups the pack together. A panel which displays the available
 *installGroups* found on the packs to allow the user to select a subset of
 the packs based on the pack *installGroups* attribute. This panel will be
 skipped if there are no pack elements with an *installGroups* attribute. For
 example ::
+
         <installation version="1.0">
            (...)
             <panels>
@@ -1362,20 +1388,23 @@ example ::
                 </pack>
             </packs>
         </installation>
-         In above example when InstallationGroupPanel is displayed,
-         it contains three radios named Group1, Group2 and Group3. Depending
-         on what user selects, the respective Packs will be displayed in
-         PacksPanel. InstallationGroupPanel will look for a description
-         corresponding to the key
-         "InstallationGroupPanel.description.Group1",
-         "InstallationGroupPanel.description.Group2" etc in installation
-         langpacks and variables and displays this description for each of
-         the Group_i.
+        
+In above example when InstallationGroupPanel is displayed,
+it contains three radios named Group1, Group2 and Group3. Depending
+on what user selects, the respective Packs will be displayed in
+PacksPanel. InstallationGroupPanel will look for a description
+corresponding to the key
+"InstallationGroupPanel.description.Group1",
+"InstallationGroupPanel.description.Group2" etc in installation
+langpacks and variables and displays this description for each of
+the Group_i.
 
 You may also define a sortKey in the variables section of the installer.xml
 to define an alternative sorting. The default sorting is based on the Group
 Name.
+
 Here is an example for alternative sorting of groups: ::
+
         (...)
         <variables>
            (...)
@@ -1387,9 +1416,3 @@ Here is an example for alternative sorting of groups: ::
             name="InstallationGroupPanel.sortKey.Group3" value="C"/>
         </variables>
         (...)
-
-.. _http://www.jext.org/: http://www.jext.org/
-.. _http://www.jedit.org/: http://www.jedit.org/
-.. _http://www.jetbrains.com/idea/: http://www.jetbrains.com/idea/
-.. _http://www.eclipse.org/: http://www.eclipse.org/
-.. _https://substance.dev.java.net/docs/skins/toneddown.html: https://substance.dev.java.net/docs/skins/toneddown.html

@@ -1,5 +1,5 @@
 Creating Your Own Panels
-=====
+========================
 
 In IzPack all of the actual work of installing an application is done in
 panels. The IzPack framework is primarily there to support the operation of
@@ -20,7 +20,7 @@ subject later on in this chapter.
 
 
 How to get started
------
+--------------------
 
 To get started with writing your own panels, it is best to place all the
 IzPack code into a separate working directory, from where you can compile it.
@@ -34,8 +34,6 @@ code for building UI and such, only detracts from the essentials of what a
 panel needs to do. This means that you shouldn't start with ``
 UserInputPanel`` or ``ShortcutPanel``. ``HelloPanel`` is probably a much
 better choice at this stage. The source code for panels is located at:
-
-
 ``/src/lib/com/izforge/izpack/panels``.
 
 
@@ -50,14 +48,11 @@ works. The implementation is really quite straight forward.
 
 
 Next Steps
------
+--------------------
 
 Once you have a successful compilation, you must place the compiled result of
 your panel code at a special place, so that the installer compiler can fetch
-it when building an installer that uses your panel. Go to:
-
-
-``/bin/panels``
+it when building an installer that uses your panel. Go to: ``/bin/panels``
 
 
 You will see that there is a subdirectory for each panel. Make a subdirectory
@@ -76,7 +71,7 @@ larger audience, please think about a contribution to IzPack.
 
 
 Access to the Variable Substitution System
------
+------------------------------------------------------------
 
 One thing many developers ask about is how to get access to the variable
 substitution system. This is not surprising, because customizing an
@@ -95,7 +90,7 @@ particular interest in this context are the methods `` getVariable()``,
 
 
 Controlling Flow
------
+--------------------
 
 Some of the interesting methods in ``com.izforge.izpack.InstallerFrame`` that
 you might want to explore are ``lockPrevButton()`` and ``lockNextButton()``.
@@ -111,7 +106,7 @@ should block the use of the next button until that task is completed.
 
 
 Reading XML
------
+--------------------
 
 If you need configuration files for your panel you would want to use XML for
 that purpose. To read XML files you should use NanoXML, as it is guaranteed
@@ -127,26 +122,26 @@ explore NanoXML.
 
 
 Supporting Classes
------
+--------------------
 
 If your panel requires any supporting classes that are part of the panels
-package, then you must place the *.class files into the same directory with
+package, then you must place the .class files into the same directory with
 your panel .class file.
 
 
 It is also possible to have supporting classes that are not part of the
 panels package. In fact, these classes don't even have to be in the
-``com.izpack...`` tree. You simply have to ensure that the *.class files are
+``com.izpack...`` tree. You simply have to ensure that the .class files are
 located in the proper directory structure inside ``/lib/installer.jar``. If
 this is done, they will be available at install time. For your first
-experiments you can simply compile your classes and add them to the *.jar
+experiments you can simply compile your classes and add them to the .jar
 file using the jar tool or a zip utility. However, ultimately it is much
 easier to use Ant and the IzPack build script to accomplish this task.
 
 
 
 Panels that are not visible
------
+----------------------------------------
 
 If you have a task that needs to be performed at a particular step in the
 installation process, but that does not need any user interaction, you can
@@ -167,7 +162,7 @@ flow.
 
 
 A word about building IzPack
------
+----------------------------------------
 
 If you don't already use Jakarta Ant to support your development work, i
 highly recommend you have a look at it. It is a great help in organizing
@@ -178,30 +173,17 @@ starting a single command. In addition, IzPack provides its own Ant task,
 which supports the integration of building a complete installer into your
 regular build scripts. You can find more details about this in the chapter
 about advanced features. To get a look at Ant you can visit the following
-link: ``` http://ant.apache.org/index.html`_``.
+link:  http://ant.apache.org/index.html.
 
 
-You can find the Ant build script for IzPack itself at:
-
-
-``/src/build.xml``
-
-
+You can find the Ant build script for IzPack itself at: ``/src/build.xml``
 
 The ``IzPanel`` Class
-=====
+----------------------
 
 
-UML Diagram
------
+.. image:: izpanel-uml-diag.png
 
-.. image:: img6.png
-    :alt: \fbox{\includegraphics[scale=0.5]{img/ch5-izpanel}}
-
-
-
-Description
------
 
 The two data members are : the install data (refer to the ``InstallData``
 Javadoc reference) and a reference to the parent installer frame.
@@ -262,12 +244,13 @@ handling and creation of some common used components.
 
 
 The ``Internationalization`` of custom panels
-=====
+------------------------------------------------------------
 
 A common way to define language dependant messages for custom panels is to
 add entries into the common langpacks which are stored in the directory
 
 ::
+
     [IzPackRoot]/bin/langpacks/installer
 
 
@@ -275,6 +258,7 @@ New with version 3.8 is the possibility to define a resource for custom
 langpacks. Define e.g.
 
 ::
+
     <resources>
         ...
         <res id="CustomLangpack.xml_deu"
@@ -288,4 +272,3 @@ and name can be other than in the example. This file should be using the same
 DTD as the common langpack. For each language a separate file with the ISO3
 extension in the id should be used.
 
-.. _http://ant.apache.org/index.html: http://ant.apache.org/index.html

@@ -78,7 +78,7 @@ user can not be allowed to go back to the packs panel.
 
 
 The Basic XML Structure
-=====
+----------------------------------------
 
 The top level XML section is called ``<userInput>``. For most panels it does
 not make sense to present them more than once, however you might want to
@@ -111,7 +111,7 @@ default is ``left``.
 
 
 Concepts and XML Elements Common to All Fields
-=====
+------------------------------------------------------------
 
 Before i dive into the details of defining the various UI elements i would
 like to present XML elements and general concepts that apply throughout. This
@@ -155,9 +155,9 @@ specification:
 
 
 ::
+
     <field type="text" variable="myFirstVariable">
-      <description align="left" txt="A description" id="description
-      1"/>
+      <description align="left" txt="A description" id="description1"/>
       .
       .
       .
@@ -216,7 +216,7 @@ after the packs panel for this feature to work.
 
 
 Internationalization
-=====
+--------------------
 
 To provide internationalization you can create a file named
 ``userInputLang.xml_xyz`` where ``xyz`` is the ISO3 code of the language in
@@ -234,6 +234,7 @@ have to create two files named userInputLang.xml_eng and
 userInputLang.xml_fra:
 
 ::
+
     <userInput>
     <panel order="0">
       <field type="staticText" align="left" txt="My comment is here."
@@ -253,6 +254,7 @@ userInputLang.xml_fra:
 userInputLang.xml_eng file contains:
 
 ::
+
     <langpack>
       <str id="input.comment" txt="English:My comment is here."/>
       <str id="input.proxy" txt="English:Proxy Host:"/>
@@ -263,6 +265,7 @@ userInputLang.xml_eng file contains:
 userInputLang.xml_fra file contains:
 
 ::
+
     <langpack>
       <str id="input.comment" txt="French:My comment is here."/>
       <str id="input.proxy" txt="French:Proxy Host:"/>
@@ -273,6 +276,7 @@ userInputLang.xml_fra file contains:
 you will also have to add the following to the install.xml file
 
 ::
+
     <resources>
       ...
       <res id="userInputSpec.xml" src="userInputSpec.xml"/>
@@ -282,7 +286,7 @@ you will also have to add the following to the install.xml file
     </resources>
 
 Panel Title
-=====
+--------------------
 
 You can place an optional title at the top of the panel. Though it is not
 possible to select a font for the title that is different form the one used
@@ -314,7 +318,7 @@ the body font on the panel. The default value is 2.
 
 
 Static Text
-=====
+--------------------
 
 Static text is simply text that is placed on the panel without direct
 connection to any of the input elements. It is laid out to use the entire
@@ -332,12 +336,13 @@ text in any way.
 The following example inserts some static text in the panel.
 
 ::
+
     <field type="staticText" align="left"
            txt="This is just some simple static text."
            id="staticText.text"/>
 
 Visual Separation
-=====
+--------------------
 
 Sometimes it is desirable to separate different entities visually. This can
 be accomplished by inserting a space or a divider. A space simply inserts a
@@ -349,12 +354,9 @@ bottom of the separation.
 ``<field type="divider" />``
 ``<field type="space" />``
 
-..... maybe i should draw the line myself and add no additional space at all
-...
-
 
 Text Input
-=====
+--------------------
 
 A text input field allows the user to enter and edit a single line of text,
 without length restriction. The input field can have a label, which will show
@@ -394,6 +396,7 @@ is first presented.
 
 
 ::
+
     <field type="text" variable="textInput">
       <description align="left" txt="A description for a text input
       field"
@@ -403,7 +406,7 @@ is first presented.
     </field>
 
 Radio Buttons
-=====
+--------------------
 
 The radio buttons are useful when the user needs to select a specific option
 out of a pre-defined list of choices. This field offers an arbitrary number
@@ -460,25 +463,20 @@ The second button will be selected when the UI is first presented.
 
 
 ::
+
     <field type="radio" variable="radioSelection">
       <description align="left" txt="This is a description for radio
-      buttons"
-                   id="description.radio"/>
+      buttons" id="description.radio"/>
       <spec>
-      <choice txt="the first choice" id="radio.label.1" value="1
-      selected" />
-      <choice txt="the second choice" id="radio.label.2" value="2
-      selected"
-              set="true" />
-      <choice txt="the third choice" id="radio.label.3" value="3
-      selected" />
-      <choice txt="the fourth choice" id="radio.label.4" value="4
-      selected" />
+      <choice txt="the first choice" id="radio.label.1" value="1 selected" />
+      <choice txt="the second choice" id="radio.label.2" value="2 selected" set="true" />
+      <choice txt="the third choice" id="radio.label.3" value="3 selected" />
+      <choice txt="the fourth choice" id="radio.label.4" value="4 selected" />
       </spec>
     </field>
 
 Combo Box
-=====
+--------------------
 
 The combo box provides essentially the same functionality as do the radio
 buttons, just in a different presentation stile. The advantage of the combo
@@ -487,7 +485,7 @@ box is that it is easier to deal with a long list of choices.
 
 
 Check Box
-=====
+--------------------
 
 If there are a number of choices and any combination of them could be
 selected, not just a single one, then radio buttons are not the way to go.
@@ -548,6 +546,7 @@ accomplished by omitting the ``set`` attribute.
 
 
 ::
+
     <field type="check" variable="chekSelection.1">
       <description align="left" txt="This is a description for a check
       box"
@@ -557,7 +556,7 @@ accomplished by omitting the ``set`` attribute.
     </field>
 
 Rule Input
-=====
+--------------------
 
 The rule input field is the most powerful and complex one of all the input
 fields offered by this panel. In its most simple incarnation it looks and
@@ -570,7 +569,7 @@ many aspects of its look as well as overt and covert operation.
 
 
 Layout and Input Rules
------
+----------------------------------------
 
 The basic nature of this input field is that of a text input field and as
 mentioned before, in its most simple incarnation that is what it looks like
@@ -621,7 +620,6 @@ the physical width of the field.
 
 
 .. image:: img7.png
-    :alt: \fbox{\includegraphics[scale=1.0]{img/userInput-phone}}
 
 
 **E-Mail address**
@@ -634,7 +632,6 @@ more restrictive by only accepting a string up to forty characters long.
 
 
 .. image:: img8.png
-    :alt: \fbox{\includegraphics[scale=1.0]{img/userInput-email}}
 
 
 **IP address**
@@ -646,7 +643,6 @@ N:3:3 . N:3:3"``
 
 
 .. image:: img9.png
-    :alt: \fbox{\includegraphics[scale=1.0]{img/userInput-IP}}
 
 
 **Serial Number or Key Code**
@@ -662,7 +658,6 @@ hexadecimal, the second six numerical and the third three numerical digits.
 
 
 .. image:: img10.png
-    :alt: \fbox{\includegraphics[scale=1.0]{img/userInput-serial}}
 
 
 **Limitations**
@@ -680,21 +675,20 @@ The following table lists and describes all the keys that can be used in the
 specification string.
 
 
-*Key* *Meaning* *Description*
-N  numeric  The field will accept only numerals.
-H  hexadecimal  The field will accept only hexadecimal numerals, that is all
-numbers from 0-F.
-A  alphabetic  The field will accept only alphabetic characters. Numerals and
-punctuation marks will not be accepted.
-AN  alpha-numeric  The field will accept alphabetic characters and numerals
-but no punctuation marks.
-O  open  The filed will accept any input, without restriction.
-U  unlimited  This key is only legal for specifying the editing length of a
-fields. If used, the field imposes no length restriction on the text entered.
+==== =============== ================================================================================================================================================
+Key   Meaning         Description
+==== =============== ================================================================================================================================================
+N     numeric         The field will accept only numerals.
+H     hexadecimal     The field will accept only hexadecimal numerals, that is all numbers from 0-F.
+A     alphabetic      The field will accept only alphabetic characters. Numerals and punctuation marks will not be accepted.
+AN    alpha-numeric   The field will accept alphabetic characters and numerals but no punctuation marks.
+O     open            The filed will accept any input, without restriction.
+U     unlimited       This key is only legal for specifying the editing length of a fields. If used, the field imposes no length restriction on the text entered.
+==== =============== ================================================================================================================================================
 
 
 Setting Field Content
------
+----------------------
 
 Like all other input fields the rule input field can also be pre-filled with
 data and as usual, this is accomplished thought the ``set`` attribute. As you
@@ -715,7 +709,7 @@ pre-fill values are not allowed, otherwise the result is undefined.
 
 
 The Output Format
------
+----------------------
 
 The user input from all subfields is combined into one single value and used
 to replace the variable associated with the field. You can make a number of
@@ -724,20 +718,17 @@ is done with the ``resultFormat`` and ``separator`` attributes. The
 ``resultFormat`` attribute can take the following values:
 
 
-*Value* *Meaning*
-``plainString`` The content of all subfields is simply concatenated into one
-long string.
-``displayFormat`` The content of all subfields and all labels -as displayed-
-is concatenated into one long string.
-``specialSeparator`` The content of all subfields is concatenated into one
-string, using the string specified withe the ``separator`` attribute to
-separate the content of the subfields.
-``processed`` The content is processed by Java code that you supply before
-replacing the variable. How to do this is described below.
-
+===================== ======================================================================================================================================================
+Value                 Meaning
+===================== ======================================================================================================================================================
+``plainString``       The content of all subfields is simply concatenated into one long string.
+``displayFormat``     The content of all subfields and all labels (as displayed) is concatenated into one long string.
+``specialSeparator``  The content of all subfields is concatenated into one string, using the string specified with the ``separator`` attribute to separate the content of the subfields.
+``processed``         The content is processed by Java code that you supply before replacing the variable. How to do this is described below.
+===================== ======================================================================================================================================================
 
 Validating the Field Content
------
+--------------------------------------------
 
 You can provide runtime validation for user input into a rule field via the
 ``validator`` element (which is a child of the ``field`` element. There are
@@ -751,6 +742,7 @@ will be unable to continue to the next panel.
 You can specify a processor for a combobox:
 
 ::
+
     <choice processor="fully.qualified.class.name"
             set="selectedValue"/>
 
@@ -759,7 +751,7 @@ so that you can fill a combobox with data on a simple way.
 
 
 NotEmptyValidator
-~~~~~
+''''''''''''''''''
 
 The ``NotEmptyValidator`` simply checks that the user entered a non-null
 value into each subfield, and returns ``false`` otherwise.
@@ -767,13 +759,13 @@ value into each subfield, and returns ``false`` otherwise.
 
 
 RegularExpressionValidator
-~~~~~
+'''''''''''''''''''''''''''
 
 The ``RegularExpressionValidator`` checks that the user entered a value which
 matches a specified regular expression, as accepted by the Jakarta Regexp
-library (```http://jakarta.apache.org/regexp/`_``). The syntax of this
+library (http://jakarta.apache.org/regexp/). The syntax of this
 implementation is described in the javadoc of the ``RE`` class
-(```http://jakarta.apache.org/regexp/apidocs/org/apache/regexp/RE.html`_``).
+(http://jakarta.apache.org/regexp/apidocs/org/apache/regexp/RE.html).
 
 You can specify the regular expression to be tested by passing a parameter
 with a name of ``pattern`` to the validator (via the ``param`` element), with
@@ -782,6 +774,7 @@ would validate an e-mail address:
 
 
 ::
+
     <field type="rule" variable="EMAILaddress">
       <spec
           txt="Your Email address:" layout="O:12:U @ O:8:40 .
@@ -800,13 +793,13 @@ would validate an e-mail address:
     </field>
 
 
-You can test your own regular expressions using the handy applet at ```
-http://jakarta.apache.org/regexp/applet.html`_`` .
+You can test your own regular expressions using the handy applet at
+http://jakarta.apache.org/regexp/applet.html.
 
 
 
 Creation Your Own Custom Validator
-~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can create your own custom Validator implementation simply by creating a
 new class which implements the ``com.izforge.izpack.panels.Validator``
@@ -827,6 +820,7 @@ a processor class to pre process a value to be set at initial value of a
 RuleInputField. Syntax:
 
 ::
+
     <spec set="0:defaultVal:classname" .../>
 
 
@@ -836,15 +830,16 @@ The class name is an optional value. The class must implement the
 
 
 Processing the Field Content
------
+--------------------------------------------
 
 This feature needs to be documented.
 
 
 Summary Example
------
+----------------------
 
 ::
+
     <field type="rule" variable="test1">
       <description align="left" txt="A description for a rule input
       field."
@@ -858,7 +853,7 @@ Summary Example
     </field>
 
 Search
-=====
+----------------------
 
 The search input field allows the user to choose the location of files or
 directories. It also supports auto-detection of the location using a list of
@@ -866,17 +861,15 @@ suggestions. The field is basically a combobox with an extra button to
 trigger auto-detection (again).
 
 .. image:: img11.png
-    :alt: \fbox{\includegraphics[scale=0.8]{img/userInput-search}}
 
 
 
 Specification
------
+----------------------
 
-The ``<description>`` tag is the same as with other fields (see `6.2`_ on
-page `.. image:: crossref.png
-    :alt: [*]
-`_). The ``<spec>`` tag supports the following attributes:
+The ``<description>`` tag is the same as with other fields
+
+The ``<spec>`` tag supports the following attributes:
 
 -   ``filename`` - the name of the file or directory to search for
 -   ``type`` - what to search for
@@ -886,21 +879,19 @@ page `.. image:: crossref.png
 
 -   ``result`` - what to return as the search result
 
-    -   ``file`` - result of search is whole pathname of file or
-    directory found
-    -   ``directory`` - only return directory where the file was found
-    (this is the same as ``file`` when searching for directories)
-    -   ``parentdir`` - return the full path of the parent directory
-    where the file was found
+    -   ``file`` - result of search is whole pathname of file or directory found
+    -   ``directory`` - only return directory where the file was found (this is the same as ``file`` when searching for directories)
+    -   ``parentdir`` - return the full path of the parent directory where the file was found
 
 -   ``checkfilename`` - the name of a file or directory to check for
     existence (this can be used to validate the user's selection)
 
 
 Example
------
+-------
 
 ::
+
     <field type="search" variable="java_sdk_home">
       <description align="left"
                    txt="This is a description for a search
@@ -915,7 +906,3 @@ Example
       </spec>
     </field>
 
-.. _http://jakarta.apache.org/regexp/: http://jakarta.apache.org/regexp/
-.. _http://jakarta.apache.org/regexp/apidocs/org/apache/regexp/RE.html:
-    http://jakarta.apache.org/regexp/apidocs/org/apache/regexp/RE.html
-.. _http://jakarta.apache.org/regexp/applet.html: http://jakarta.apache.org/regexp/applet.html

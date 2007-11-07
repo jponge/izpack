@@ -5,7 +5,7 @@ Custom Actions
 
 
 Overview
-=====
+----------------------
 
 The implementation of custom actions presume knowledge of java. Custom
 actions are not a good starting point for learning java. Learners can use
@@ -51,7 +51,7 @@ installation action as custom action, but not as panel.
 
 
 How It Works
-=====
+----------------------
 
 Custom actions are implemented as listeners. Each listener implements
 callback methods that will be called at well-defined points. The method
@@ -79,31 +79,24 @@ action (see example).
 
 
 Custom Action Types
------
+----------------------
 
 Custom actions are intended to be used at packaging time, at installation
 time and at uninstallation time. The interfaces are:
 
-*Custom action type* *Interface name*
-Packaging  com.izforge.izpack.event.CompilerListener
-Installation  com.izforge.izpack.event.InstallerListener
-Uninstallation  com.izforge.izpack.event.UninstallerListener
+=================== =============================================
+Custom action type  Interface name
+=================== =============================================
+Packaging           com.izforge.izpack.event.CompilerListener
+Installation        com.izforge.izpack.event.InstallerListener
+Uninstallation      com.izforge.izpack.event.UninstallerListener
+=================== =============================================
 
 
 Custom Actions At Packaging
-~~~~~
-
-
-UML Diagram
-:::::
+''''''''''''''''''''''''''''
 
 .. image:: img12.png
-    :alt: \fbox{\includegraphics[scale=1.0]{img/CompilerListener}}
-
-
-
-Description
-:::::
 
 -   *(constructor)*: only the default constructor will be used. It is
     called from Compiler just after creating the packager. Therefore
@@ -123,19 +116,10 @@ Description
 
 
 Custom Actions At Installing Time
-~~~~~
+''''''''''''''''''''''''''''''''''
 
-
-UML Diagram
-:::::
 
 .. image:: img13.png
-    :alt: \fbox{\includegraphics[scale=1.0]{img/InstallerListener}}
-
-
-
-Description
-:::::
 
 -   *(constructor)*: only the default constructor will be used. It is
     called from ``Unpacker.run`` before unpacking.
@@ -160,19 +144,9 @@ Description
 
 
 Custom Actions At Uninstalling Time
-~~~~~
-
-
-UML Diagram
-:::::
+'''''''''''''''''''''''''''''''''''''
 
 .. image:: img14.png
-    :alt: \fbox{\includegraphics[scale=1.0]{img/UninstallerListener}}
-
-
-
-Description
-:::::
 
 -   *(constructor)* : only the default constructor will be used. It is
     called from ``Destroyer.run`` as first call.
@@ -189,7 +163,7 @@ Description
 
 
 Package Path
------
+----------------------
 
 Custom actions must always implement one of the given listener interfaces. As
 mentioned above, it is also possible to derive from one of the "Simple"
@@ -201,6 +175,7 @@ name. This jar file should be placed in ``[IzPackRoot]/bin/customActions``,
 may be
 
 ::
+
     [IzPackRoot]/bin/customActions/MyCompilerListener.jar
     [IzPackRoot]/bin/customActions/MyInstallerListener.jar
     [IzPackRoot]/bin/customActions/MyUninstallerListener.jar
@@ -209,13 +184,8 @@ may be
 In the default Ant definition file (build.xml) there are some targets for
 this stuff.
 
-
-Correlated Stuff
------
-
-
 Native Libraries for Uninstallation
-~~~~~
+--------------------------------------------
 
 If a custom action uses JNI at installation time, often the associated
 uninstall custom action needs JNI too. For this situation it is possible to
@@ -223,6 +193,7 @@ declare a native library for unstallation. The only work to do is to add a
 ``stage`` attribute to the ``native`` tag in the install xml file like
 
 ::
+
     <!-- The native section. We specify here our os dependant
     libs..--> <native type="3rdparty"
     name="MyOSHelper.dll"stage="both" >
@@ -237,7 +208,7 @@ position.
 
 
 What You Have To Do
-=====
+----------------------
 
 Follow the steps that are needed to create and use custom actions with the
 "normal" source environment (not standalone compiler) using Ant. Of course,
@@ -256,7 +227,10 @@ Custom Actions at Packaging (CompilerListener)
     the name attribute value in the build-instealler-listener must match
     ``CompilerListener`` implementation class name (not including the
     package). You should include the actual Listener implementation, as well
-    as any other classes required by the listener. ::
+    as any other classes required by the listener.
+    
+    ::
+    
                 <build-compiler-listener
                 name="MyCompilerListener">
                     <include
@@ -268,13 +242,18 @@ Custom Actions at Packaging (CompilerListener)
 -   Run ``[IzPackRoot]/src/build.xml``. An ``ant`` alone will execute the
     required targets.
 -   Add a "listeners" ELEMENT with a "listener" ELEMENT with a "compiler"
-    attribute in to [MyProjectPath]/install.xml ::
+    attribute in to [MyProjectPath]/install.xml
+    
+    ::
+    
           <listeners>
             <listener compiler="MyCompilerListener" />
           <listeners>
 
 -   Compile with the following command, or an ant task you have set up.
+    
     ::
+    
         java -jar [IzPackRoot]/lib/compiler.jar -HOME [IzPackRoot]
           [MyProjectPath]/install.xml -b [MyProductPath] -o
           [MyBuildPath]/install.jar
@@ -283,48 +262,57 @@ Custom Actions at Packaging (CompilerListener)
 
 
 Custom Actions at Installation Time (InstallerListener)
------
+------------------------------------------------------------------
 
-Perform the same steps as described in `7.3.1`_, replace all occurrences of
+Perform the same steps as above, replace all occurrences of
 "CompilerListener" with "InstallerListener" and "compiler" with "installer".
 
 
 Custom Actions at Uninstallation Time (UninstallerListener)
------
+------------------------------------------------------------------
 
-Perform the same steps as described in `7.3.1`_, replace all occurrences of
+Perform the same steps as above, replace all occurrences of
 "CompilerListener" with "UninstallerListener"and "compiler" with
 "uninstaller".
 
 
 Example
-=====
+----------------------
 
 Let us say, we want to set access rights for files and directories on Unix.
 The Java sources are placed in the directory
 ``[IzPackRoot]/sample/src/com/myCompany/tools/install/listener``. There are
 the files ChmodCompilerListener.java and ChmodInstallerListener.java.
 
--   Copy the files too
-    [IzPackRoot]/src/lib/com/myCompany/tools/install/listener
--   In [IzPackRoot]/src/build.xml there are the lines ::
+-   Copy the files to  ``[IzPackRoot]/src/lib/com/myCompany/tools/install/listener``
+-   In ``[IzPackRoot]/src/build.xml`` there are the lines
+
+    ::
+    
             <!-- CUSTOM ACTION test START
             CUSTOM ACTION test END -->
-         Uncomment them (activate the lines between them).
+            
+    Uncomment them (activate the lines between them).
 -   Build IzPack new.
--   Compile a test installation with ::
+-   Compile a test installation with
+    
+    ::
+    
         java -jar [IzPackRoot]/lib/compiler.jar -HOME [IzPackRoot]
           [IzPackRoot]/sample/listener/install.xml
           -b [IzPackRoot]/sample/listener -o
           [IzPackRoot]/sample/listener/install.jar
 
--   Install it ::
+-   Install it
+
+    ::
+    
         java -jar install.jar
 
 
 
 Ant Actions (InstallerListener and UninstallerListener)
-=====
+------------------------------------------------------------------
 
 In this section the common ant task custom actions are described in detail.
 It is only for developers who are not acquainted with ``IzPack`` or it's
@@ -337,6 +325,7 @@ be needed, as example:
 
 
 ::
+
     <listeners>
         <listener installer="AntActionInstallerListener"
             uninstaller="AntActionUninstallerListener" />
@@ -358,6 +347,7 @@ e.g.
 
 
 ::
+
     <resorces>
         ...
         <res id="AntActionsSpec.xml"
@@ -375,6 +365,7 @@ predestinated for such cases, e.g.
 
 
 ::
+
     <jar src="jar/ant/ant.jar" stage="both" />
 
 
@@ -392,7 +383,7 @@ that the paths of the contained files are unique and the information in
 
 
 The Basic XML Struture
------
+----------------------
 
 An ant action will be defined in the resource with the id
 "AntActionsSpec.xml". Sometimes it will help to lock into
@@ -456,9 +447,9 @@ to the elements themselfs.
 
 
 ``<property>``: define a property
-~~~~~~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''
 
-Property to be used with all ``target``s and ``uninstall_target``s which are
+Property to be used with all ``target`` and ``uninstall_target`` which are
 defined for this antcall.
 
 -   ``name``: required. The name (id) of the property.
@@ -467,7 +458,7 @@ defined for this antcall.
 
 
 ``<propertyfile>``: define properties in a file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+''''''''''''''''''''''''''''''''''''''''''''''''
 
 Properties to be used with all targets and uninstall_targets which are
 defined for this antcall given by the path of a properties file.
@@ -485,7 +476,7 @@ defined for this antcall given by the path of a properties file.
 
 
 ``<target>``: target to call at installation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+''''''''''''''''''''''''''''''''''''''''''''''''
 
 Targets to perform with this antcall at installation time. The targets should
 be defined in the given buildfile or else an ant exception will be raised.
@@ -497,7 +488,7 @@ e.g. cleaning the ``IzPack`` project with ``ant clean``
 
 
 ``<uninstall_target>``: target to call on uninstallation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Targets to perform with this antcall at uninstallation time. The targets
 should be defined in the given buildfile otherwise an ant exception will be
@@ -508,7 +499,7 @@ installation time.
 
 
 Registry access (InstallerListener and UninstallerListener)
-===========================================================
+------------------------------------------------------------
 
 The event package of ``IzPack`` contains an installer and an uninstaller
 listener for Windows registry access. The listeners uses the separated pack
@@ -521,7 +512,7 @@ WARRANTIES OR CONDITIONS OF ANY KIND
 The listeners themselves are only able to write into the Windows registry at
 installation and delet the writing at uninstall time. But it is also possible
 to use the registry handler as a registry reader in custom panels or costum
-actions. The `CheckedHelloPanel`_ reads the registry and can be used as
+actions. The `CheckedHelloPanel` reads the registry and can be used as
 example for it.
 
 To add registry support to an installation some changes in the installation
@@ -529,6 +520,7 @@ definition file (often called``install.xml``) are to be made. First the
 declaration of the listener themselves:
 
 ::
+
     <listeners>
         <listener installer="RegistryInstallerListener"
             uninstaller="RegistryUninstallerListener" >
@@ -551,6 +543,7 @@ As second change in ``install.xml`` we have to declare the native part JNI
 needs the dll
 
 ::
+
     <native type="3rdparty" name="COIOSHelper.dll" stage="both">
         <os family="windows"/>
     </native>
@@ -567,6 +560,7 @@ registry at the installation. If you open the software manager of Windows,
 there will be an entry with the variables $APP_NAME $APP_VER, e.g.:
 
 ::
+
     IzPack 4.6.8 (build 2007.02.15)
 
 
@@ -579,6 +573,7 @@ specification file. The file should be then refered to in ``install.xml`` as
 resource:
 
 ::
+
     <resources>
         ...
         <res src="mySubPath/MyRegistrySpec.xml"
@@ -632,33 +627,33 @@ there?Reading is in opposite to writing no problem.
 
 
 ``<key>``: define a key
-~~~~~~~~~~~~~~
+''''''''''''''''''''''''
 
 Key to be set at installation time into the Windows registry.
 
 -   ``keypath`` : required. The path of the key in Windows syntax without
     the root.
-If the key should be placed directly under a registry root (`not recommended;
-often not possible)`_) write the key name without any backslash.
+    If the key should be placed directly under a registry root (`not recommended;
+    often not possible)`) write the key name without any backslash.
 -   ``root`` : required. The root of the key as symbol. Valid is one of
     HKCR HKCU HKLM HKU HKPD HKCC HKDDS.
 
 
 ``<value>``: define a value
-~~~~~~~~~~~~~~~~
+''''''''''''''''''''''''''''
 
 Value to be set at installation time into the Windows registry.
 
 -   ``name`` : required. The name of the value to be set or modified
     without a path.
-The default value will be written as the empty string "".
+    The default value will be written as the empty string "".
 -   ``keypath`` : required. The key path under which the value should be
     placed in Windows syntax without the root and value name. If the key of
     the value should be placed directly under a registry root (if not exist,
-    `not recommended; often not possible)`_) write the key name without any
+    `not recommended; often not possible)`) write the key name without any
     backslash.
-If the value should be placed directly under a registry root (also not
-recommended and often not possible) write as keypath the empty string "".
+    If the value should be placed directly under a registry root (also not
+    recommended and often not possible) write as keypath the empty string "".
 -   ``root`` : required. The root of the key as symbol. Valid is one of
     HKCR HKCU HKLM HKU HKPD HKCC HKDDS.
 -   ``override`` : optional. Override an existent value or not. Valid is
@@ -668,25 +663,26 @@ recommended and often not possible) write as keypath the empty string "".
 
     -   ``string`` : contents for value to be set if it is a string.
     -   ``dword`` : contents for value to be set if it is an integer
-    (Windows DWORD). Only digits are valid. "48" is valid, "0x30" will be
-    raise an NumberFormatException from ``java.lang.Long.parseLong``.
+        (Windows DWORD). Only digits are valid. "48" is valid, "0x30" will be
+        raise an NumberFormatException from ``java.lang.Long.parseLong``.
     -   ``<bin>`` : element to handle one "line" of binary data.
 
         -   ``data`` : contents for value of type BINARY written as
-        comma separated list of hex. Only hex-digits are valid. "48, f4" is
-        valid, "0x48, 0xf4" will be raise an NumberFormatException from
-        ``java.lang.Integer.parseInt``.
+            comma separated list of hex. Only hex-digits are valid. "48, f4" is
+            valid, "0x48, 0xf4" will be raise an NumberFormatException from
+            ``java.lang.Integer.parseInt``.
 
     -   ``<multi>``: element to handle one contents string for
-    MULTI_STRINGs.
+        MULTI_STRINGs.
 
         -   ``data`` : the contents for the element <multi>.
 
-May be the descriptions for type BINARY and MULTI_STRING are not fully
+Maybe the descriptions for type BINARY and MULTI_STRING are not fully
 descriptive. Therefore as example the test entries in the registry
 specification file of IzPack:
 
 ::
+
     <registry>
       ...
       <pack name="Core">
@@ -718,9 +714,9 @@ Extended Uninstall Key
 ----------------------
 
 There is a special pack named ``UninstallStuff``. If a pack will be declared
-like
+like ::
 
-::<pack name="UninstallStuff">
+  <name="UninstallStuff">
 
 the incorporated elements will be used for creating the uninstall key and
 values instead of the build-in behavior. This pack name should be not used at
@@ -734,6 +730,7 @@ If the pack was declared, **all** keypaths under it should be written as
 following:
 
 ::
+
     ...
     <value name="DisplayName"
       keypath="SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$UNI
@@ -765,7 +762,7 @@ will be performed depending to the following rules:
 
         -   no new values or subkeys are added after installation.
         -   no changes are made at the contents of values after
-        installation.
+            installation.
 
         With other words: if under the key something was changed
         between installation and uninstallation, the key will be persist.
@@ -773,12 +770,12 @@ will be performed depending to the following rules:
 -   Values:
 
     -   A newly created value will be deleted, if the contents at
-    uninstall time is the same as after installation.
+        uninstall time is the same as after installation.
     -   The contents of a previos existent value will be changed to the
-    previos contents (the contents before installation) if the contents at
-    uninstall time is the same as after installation.
+        previous contents (the contents before installation) if the contents at
+        uninstall time is the same as after installation.
 
-    With other words: if the contents of a value was changed between
+    In other words: if the contents of a value was changed between
     installation and uninstallation this contents will be persist. There is
     no handling of parts of the contents (important for type MULTI_STRING).
 
@@ -793,6 +790,7 @@ Examples
 There are the files
 
 ::
+
     [IzPackRoot]/src/dist-files/IzPack-install-reg.xml
     [IzPackRoot]/src/dist-files/RegistrySpec.xml
 
@@ -808,13 +806,14 @@ and defines some additional keys and values.
 
 
 Summary Logger (InstallerListener)
-=
+------------------------------------------------------------
 
 The listener ``SummaryLoggerInstallerListener`` can be used to log the
-`summary of panels`_ into a file. To use it, add following element to the
+`summary of panels` into a file. To use it, add following element to the
 listener section of your installation config file.
 
 ::
+
     <listeners>
         <listener installer="SummaryLoggerInstallerListener"
             uninstaller="SummaryLoggerInstallerListener" >
@@ -825,12 +824,15 @@ listener section of your installation config file.
 
 The default path is
 
-::$INSTALL_PATH/Uninstaller/InstallSummary.htm
+::
+
+  $INSTALL_PATH/Uninstaller/InstallSummary.htm
 
 It can be changed with the subelement ``summarylogfilepath`` of the element
 ``info`` of the installation description file. As example:
 
 ::
+
     <info>
         ...
         <summarylogfilepath>

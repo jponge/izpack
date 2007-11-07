@@ -4,11 +4,11 @@ Desktop Shortcuts
 (by Elmar GROM and Marc EPPELMANN)
 
 Defining Shortcuts
-==================
+------------------
 
 
 Introduction
-------------
+'''''''''''''
 
 On todays GUI oriented operating systems, users are used to launching
 applications, view web sites, look at documentation and perform a variety of
@@ -38,13 +38,12 @@ you start to implement your own shortcuts.
 At the time of writing this Chapter the current IzPack Version 3.7.0-M3 is
 only capable to creating shortcuts on
 
-1.  Microsoft Windows
-and
+1.  Microsoft Windows, and
 2.  Unix and Unix-based operating systems (like Linux), which use the
-    `X11`_ GUI-System and ` FreeDesktop.org`_ based shortcut handling (such
-    as `KDE`_ and `Gnome`_).
+    `X11` GUI-System and ` FreeDesktop.org` based shortcut handling (such
+    as `KDE` and `Gnome`).
 
-Other operating or GUI systems, such as MacOS ``<`` MacOS-X are not
+Other operating or GUI systems, such as MacOS X are not
 supported. However, there is a special UI-variant that automatically pops up
 on unsupported systems. It informs the user about the intended targets of
 your shortcuts and allows the user to save this information to a text file.
@@ -66,7 +65,7 @@ working on Mac support.
 
 
 What to Add to the Installer
-----------------------------
+'''''''''''''''''''''''''''''
 
 There are some things that you have to add to your installer to enable
 shortcut creation. Obviously you need to add the panel responsible for
@@ -105,8 +104,8 @@ is required by the shortcut panel. The format of all spec files is XML and
 they must be added to the installer as a resource. The source name of this
 specification does not matter, however its resource name (also called id or
 alias) when added to the installer must be ``(prefix)+shortcutSpec.xml``.
-At this release, there are only two prefixes supported: "Win_" for the
-Windows family and "Unix_" for all Unixes. If the prefix is ommited the
+At this release, there are only two prefixes supported: "Win" for the
+Windows family and "Unix" for all Unixes. If the prefix is ommited the
 shortcut panel searches for a named resource: `` shortcutSpec.xml``. This is
 the default resource name. As the default resource name will be used on
 Windows platforms, the ``"Win_shortcutSpec.xml"`` can be ommited.
@@ -119,8 +118,8 @@ path to these.
 
 
 ::
-    <res
-    src="C:\MyDocuments\Installer\default_shortcut_specification.xml"
+
+    <res src="C:\MyDocuments\Installer\default_shortcut_specification.xml"
          id="shortcutSpec.xml"/>
     <res src="C:\MyDocuments\Installer\unix_shortcut_specification.xml"
          id="Unix_shortcutSpec.xml"/>
@@ -417,7 +416,7 @@ also not supported on Unix.*
 
 
 Unix specific shortcut attributes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------------
 
 This extension was programmed by MARC EPPELMANN. This is still in development
 and may be changed in one of the next releases of IzPack.
@@ -515,7 +514,7 @@ DesktopShortcutCheckboxEnabled Builtin Variable
 
 ``$DesktopShortcutCheckboxEnabled`` : When set to true, it automatically
 checks the "Create Desktop Shortcuts" button. To see how to use it, go to
-`The Variables Element ``<variables>```_
+`The Variables Element ``<variables>``
 
 Be careful this variable is case sensitve !
 
@@ -536,6 +535,7 @@ Summary
 **Specification File Layout - Windows**
 
 ::
+
     <shortcuts>
       <skipIfNotSupported/>
       <programGroup defaultName="MyOrganization\MyApplication"
@@ -546,7 +546,7 @@ Summary
         commandLine=""
         workingDirectory="$INSTALL_PATH\Path\to\MyApplication"
         description="This starts MyApplication"
-iconFile="$INSTALL_PATH\Path\to\MyApplication\Icons\start.ico"
+        iconFile="$INSTALL_PATH\Path\to\MyApplication\Icons\start.ico"
         iconIndex="0"
         initialState="noShow||normal||maximized||minimized"
         programGroup="yes||no"
@@ -565,9 +565,9 @@ iconFile="$INSTALL_PATH\Path\to\MyApplication\Icons\start.ico"
 
 
 Shortcut Tips
-=============
+-------------
 
-i wrote this section to provide additional information about issues
+I wrote this section to provide additional information about issues
 surrounding the creation of shortcuts. Reading this section is not necessary
 to successfully create shortcuts, but it might help you creating an
 installation that works more smoothly. In addition, it might give you some
@@ -576,9 +576,8 @@ of the issues described in this section are focused on differences in
 operating system specifics.
 
 
-
 The Desktop
------------
+'''''''''''
 
 You should recognize that the desktop is precious real estate for many
 people. They like to keep it uncluttered and keep only the things there that
@@ -606,7 +605,7 @@ application is placed directly on the desktop. Many installers first ask for
 permission to do so, as does the ShortcutPanel in IzPack.
 
 
-i would like to recommend that you always create a shortcut in the menu
+I would like to recommend that you always create a shortcut in the menu
 system, even if your application has only one access point and you are
 placing this on the desktop. Note that shortcuts can also be placed directly
 in the menu, they don't need to be in a program group. There are two reasons
@@ -622,7 +621,7 @@ for doing so.
 
 
 Icons
------
+''''''
 
 Icons are supplied in image files, usually in some kind of bitmap format.
 Unfortunately there is no format that is universally recognized by all
@@ -638,7 +637,7 @@ files is not much of a problem once the icons themselves are created.
 
 
 Windows prefers to use its native icon file format. Files of this type
-usually use the extension *.ico. These so called ICO files can hold multiple
+usually use the extension .ico. These so called ICO files can hold multiple
 icons in one file, which can be useful if the same icon is to be provided in
 a number of sizes and color-depths.
 
@@ -648,7 +647,7 @@ available, the desktop displays the 32x32 pixel resolution of the same ICO if
 this is in.
 
 In other words, a ICO file has embedded one or more dimensions of the same
-Icon. We recommend to play with `microangelo`_.
+Icon. We recommend to play with `microangelo`.
 
 Dlls and Exe files on the other side, can store, amongst other things, a
 collection of different Icons. You can select your desired Icon by its index.
@@ -659,15 +658,16 @@ specify this index.
 As a sample look into
 
 ::
+
     %SystemRoot%\system32\shell32.dll
 
 
-These contains a lot of Windows own icons. You can use the `PE Explorer`_ or
+These contains a lot of Windows own icons. You can use the `PE Explorer` or
 another Resource Editor to extract or modify Icons in dlls or exe files. But
 be warned. You can also destroy a working application with these kind of
 tools.
 
-At least Windows also supports the use of bitmap files in the *.bmp format as
+At least Windows also supports the use of bitmap files in the .bmp format as
 icons. Note that this format does not support multiple icons.
 
 
@@ -680,12 +680,12 @@ one of these two formats should keep you out of trouble.
 **Apple**
 
 
-Apple Macintosh systems use the Macintosh PICT format, extension *.pct. If
+Apple Macintosh systems use the Macintosh PICT format, extension .pct. If
 you are working with an apple system you know a whole lot more about this
 format than i do. If you don't but would like to be able to install your
 application on a Mac, simply start with any bitmap format that you feel
 comfortable to work with. Then find an application that is capable of
-converting this format into a *.pct file. i like to use Paint Shop Pro (PC
+converting this format into a .pct file. i like to use Paint Shop Pro (PC
 based), because it provides conversion capabilities among several dozen
 different file formats.
 
@@ -708,7 +708,7 @@ transparency informations (It has an alpha channel).
 
 
 Targets
--------
+''''''''
 
 So, you thought you could escape the ugly mess of operating system
 dependencies at least with the way how your Java application is started?
@@ -738,7 +738,7 @@ sophisticated command lines is practically impossible.
 Another method is less commonly used but just as possible. Implement a native
 executable that launches the VM with your Java application. The VM comes as
 DLL and is used by java.exe in just the same way. As a sample look at the
-exlipse.exe provided by the `Eclipse-IDE`_
+exlipse.exe provided by the `Eclipse-IDE`
 
 
 Clearly, even though the first option is a bit ugly and has some
@@ -773,32 +773,33 @@ necessarily the most pretty way of doing things.
 
 
 This approach is currently used by IzPack. Package your application in a
-*.jar file if you don't already do so and make it executable by including the
+.jar file if you don't already do so and make it executable by including the
 necessary metaINF/MANIFEST.MF information file. i am not going into all the
 details on how exactly to do this, the Java documentation will have to do.
 You might have noticed that even though the instructions to install IzPack
 say to type :
 
 ::
+
     java -jar IzPack-install.jar
 
 
 You can just as well double click on IzPack-install.jar and it will start up.
 This procedure will work on all GUI based Java supported operating systems
 -though you might have to replace double clicking with dropping the file on
-the VM. In just the same way, you can make the *.jar file itself the target
+the VM. In just the same way, you can make the .jar file itself the target
 of a shortcut. Note: This works only, if jars are registered as files, which
-have to launch by the installed JRE (with: javaw.exe -jar *)
+have to launch by the installed JRE (with: javaw.exe -jar)
 
 
-The one restriction with this approach is that a *.jar file can only have one
+The one restriction with this approach is that a .jar file can only have one
 main file. So, if you have multiple targets, they need to be packaged each
-into a different *.jar file. They can be in one *.jar file but then you have
+into a different .jar file. They can be in one .jar file but then you have
 to start them explicitly, which gets you back to the problems that i
 mentioned before. This brings me to the ugly part. If you have just one
 target, then you are all set. If you have multiple targets, you need to
-create a *.jar file for each of them. In addition, you have a much harder
-time setting the classpath, because each of the *.jar files that contain
+create a .jar file for each of them. In addition, you have a much harder
+time setting the classpath, because each of the .jar files that contain
 supporting code must be listed. In fact, at present there is no way of
 setting this during the installation, because IzPack does not yet (version
 3.0) support the setting and modification of environment variables.
@@ -839,7 +840,7 @@ using a property file that contains the configuration data.
 
 
 Trouble Shooting
-================
+-----------------
 
 by Elmar
 
@@ -854,7 +855,7 @@ some idea where the problem might be located.
 
 
 Problems You Can Solve
-----------------------
+'''''''''''''''''''''''
 
 If you see an exception that essentially says that a library can not be
 loaded (ShellLink.dll) you have an easy problem to deal with. Your installer
@@ -875,7 +876,7 @@ attribute) or the target file name has a path or package name pre-pended. You
 have only to use ``shortcutSpec.xml`` or ``Unix_shortcutSpec.xml`` and
 nothing else, just as described in 'What to Add to the Installer'. You can
 always verify if this part is ok by inspecting the content of the installer
-*.jar file. The file shortcutSpec.xml should be located in the directory
+.jar file. The file shortcutSpec.xml should be located in the directory
 ``res``. This inspection can be performed with any zip tool. If the file is
 not there, first correct this before proceeding.
 
@@ -911,7 +912,7 @@ shortcut spec was not adjusted to stay in sync.
 
 
 Problems That Have No Solution (yet)
-------------------------------------
+'''''''''''''''''''''''''''''''''''''''
 
 Unfortunately one problem has been very persistent and only recently one user
 found the reason. The problem occurs when installing on some target systems
@@ -928,9 +929,10 @@ find a workaround the problem.
 
 
 A sample shortcut specification file for Unix
----------------------------------------------
+----------------------------------------------
 
 ::
+
     <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
     <shortcuts>
@@ -1023,12 +1025,3 @@ A sample shortcut specification file for Unix
        </shortcut>
 
     </shortcuts>
-
-.. _X11: http://www.x11.org/
-.. _ FreeDesktop.org: http://www.freedesktop.org/
-.. _KDE: http://www.kde.org/
-.. _Gnome: http://www.gnome.org/
-.. _variables: node4.html#SECTION00433000000000000000
-.. _microangelo: http://www.microangelo.us
-.. _PE Explorer: http://www.heaventools.com
-.. _Eclipse-IDE: http://www.eclipse.org
