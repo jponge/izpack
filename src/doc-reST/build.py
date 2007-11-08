@@ -35,6 +35,7 @@
 import os
 import shutil
 
+from glob import glob
 from optparse import OptionParser
 from docutils.core import publish_cmdline as publish
 
@@ -45,8 +46,8 @@ def create_dirs():
 
 def scan_files():
 	print('Scanning files...')
-	rest_files = [ f[0:(len(f) - 4)] for f in os.listdir('.') if f.endswith('.txt') and f != 'pdf-version.txt' ]
-	pictures   = [ f for f in os.listdir('.') if f.endswith('.png') or f.endswith('.jpg') ]
+	rest_files = [ f[0:(len(f) - 4)] for f in glob('*.txt') if f != 'pdf-version.txt' ]
+	pictures   = glob('*.jpg') + glob('*.png')
 	return rest_files, pictures
 
 def copy_files(pictures):
