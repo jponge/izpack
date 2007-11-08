@@ -165,6 +165,9 @@
      and time. This will effect in directory _dist. This won't effect to compiled files and
      other files which are manipulated during the process.
 
+  08.11.2007: (Julien Ponge)
+     Call the new docutils-based documentation build system.
+
 
   Mini-HowTo:
 
@@ -203,8 +206,8 @@
     <property name="cwd" value="${basedir}" />
 
     <property file="src/ant.properties" />
-    <property name="ver" value="3.10" />
-    <property name="rel" value="2" />
+    <property name="ver" value="3.11" />
+    <property name="rel" value="0-beta1" />
     <property name="build.number" value="${ver}.${rel}" />
 
     <property name="src.dir" value="${basedir}/src/lib" />
@@ -910,10 +913,19 @@
     </target>
 
     <target name="build.docu" description="Builds the customer documentation">
-        <mkdir dir="${doc.dir}/izpack/xhtml" />
-        <copy todir="${doc.dir}/izpack/xhtml" preservelastmodified="true">
-            <fileset dir="${basedir}/src/doc-ng/XHTML">
+        <exec executable="python" dir="${basedir}/src/doc-reST">
+            <arg value="build.py"/>
+        </exec>
+        <mkdir dir="${doc.dir}/izpack/html" />
+        <copy todir="${doc.dir}/izpack/html" preservelastmodified="true">
+            <fileset dir="${basedir}/src/doc-reST/html">
                 <include name="**/*" />
+            </fileset>
+        </copy>
+        <mkdir dir="${doc.dir}/izpack/pdf" />
+        <copy todir="${doc.dir}/izpack/pdf" preservelastmodified="true">
+            <fileset dir="${basedir}/src/doc-reST/pdf">
+                <include name="manual.pdf" />
             </fileset>
         </copy>
     </target>
@@ -1090,6 +1102,12 @@ Fixing linefeeds for several files in:
     	<fixcrlf srcdir="${dist.bin.dir}" eol="unix" eof="remove">
     	  <include name="**/*.sh"/>
     	  <include name="compile"/>
+    	</fixcrlf>
+    	<fixcrlf srcdir="${dist.dir}" eol="dos" eof="add">
+            <include name="**/*.bat"/>
+        </fixcrlf>
+    	<fixcrlf srcdir="${dist.bin.dir}" eol="dos" eof="add">
+    	  <include name="**/*.bat"/>
     	</fixcrlf>
     </target>
 

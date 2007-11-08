@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.10.2</appversion>
+        <appversion>3.11.0-beta1</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
 
@@ -113,13 +113,11 @@
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
         <res src="core.png" id="ImgPacksPanel.img.0"/>
         <res src="doc-html.png" id="ImgPacksPanel.img.1"/>
-        <res src="javadocs.png" id="ImgPacksPanel.img.2"/>
-        <res src="doc-nanoxml.png" id="ImgPacksPanel.img.3"/>
-        <!--
-            <res src="doc-pdf.png" id="ImgPacksPanel.img.2" />
-        -->
-        <res src="sample.png" id="ImgPacksPanel.img.4"/>
-        <res src="src.png" id="ImgPacksPanel.img.5"/>
+        <res src="doc-pdf.png" id="ImgPacksPanel.img.2"/>
+        <res src="javadocs.png" id="ImgPacksPanel.img.3"/>
+        <res src="doc-nanoxml.png" id="ImgPacksPanel.img.4"/>
+        <res src="sample.png" id="ImgPacksPanel.img.5"/>
+        <res src="src.png" id="ImgPacksPanel.img.6"/>
         <res src="border1.png" id="Installer.image.0"/>
         <res src="border2.png" id="Installer.image.1"/>
         <res src="border3.png" id="Installer.image.2"/>
@@ -142,10 +140,6 @@
         <panel classname="SummaryPanel" id="summarypanel"/>
         <panel classname="InstallPanel" id="installpanel"/>
         <panel classname="ShortcutPanel" id="shortcutpanel"/>
-        <!-- We use temporary the FinishPanel in the 3.9 Release
-             to get Access to the [Generate an automatic installation script]-Button
-             to get feedback so quick as possible from all of users,
-             who wants to get back this feature ;-) -->
         <panel classname="FinishPanel" id="finishpanel"/>
     </panels>
 
@@ -175,13 +169,19 @@
         </pack>
 
         <!-- The documentation -->
-        <pack name="XHTML Documentation" required="no" packImgId="ImgPacksPanel.img.1">
-            <description>The IzPack documentation (XHTML version).</description>
+        <pack name="HTML Documentation" required="no" packImgId="ImgPacksPanel.img.1">
+            <description>The IzPack documentation (HTML version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="doc/izpack/xhtml/**/*"/>
+                <include name="doc/izpack/html/**/*"/>
             </fileset>
         </pack>
-        <pack name="Java Documentation" required="no" packImgId="ImgPacksPanel.img.2">
+        <pack name="PDF Documentation" required="no" packImgId="ImgPacksPanel.img.2">
+            <description>The IzPack documentation (PDF version).</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+            <include name="doc/izpack/pdf/**/*" />
+            </fileset>
+        </pack>
+        <pack name="Javadocs Documentation" required="no" packImgId="ImgPacksPanel.img.3">
             <description>
                 The IzPack Java documentation (Javadocs for IzPack developers).
             </description>
@@ -189,17 +189,7 @@
                 <include name="doc/izpack/javadoc/**/*"/>
             </fileset>
         </pack>
-        <!--
-            Disabled while doc-ng not provides a pdf ...
-
-            <pack name="PDF Documentation" required="no">
-            <description>The IzPack documentation (PDF version).</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-            <include name="doc/izpack/pdf/**/*" />
-            </fileset>
-            </pack>
-        -->
-        <pack name="NanoXML Documentation" required="no" packImgId="ImgPacksPanel.img.3">
+        <pack name="NanoXML Documentation" required="no" packImgId="ImgPacksPanel.img.4">
             <description>NanoXML documentation (for IzPack developers).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="doc/nanoxml/**/*"/>
@@ -208,7 +198,7 @@
 
 
         <!-- A trivial sample to get started -->
-        <pack name="Sample" required="no" packImgId="ImgPacksPanel.img.4">
+        <pack name="Sample" required="no" packImgId="ImgPacksPanel.img.5">
             <description>A sample installation.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="sample/**/*"/>
@@ -216,7 +206,7 @@
         </pack>
 
         <!-- The source code of this version -->
-        <pack name="Sources" required="no" packImgId="ImgPacksPanel.img.5">
+        <pack name="Sources" required="no" packImgId="ImgPacksPanel.img.6">
             <description>The full IzPack source code.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="src/**/*"/>
