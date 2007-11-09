@@ -52,6 +52,7 @@
 - Fixed wrong display size of really big packs (Dennis Reil) 
 - Tango icons (Julien Ponge)
 - Refreshed installer border images (Julien Ponge)
+- Fixed conditions in PacksPanel/PacksModel (Dennis Reil)
   
   > 3.10.2 (build 2007.05.11)
 
