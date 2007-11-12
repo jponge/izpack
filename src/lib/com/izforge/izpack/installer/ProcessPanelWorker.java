@@ -44,6 +44,8 @@ import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.rules.Condition;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 import com.izforge.izpack.util.Debug;
@@ -144,7 +146,17 @@ public class ProcessPanelWorker implements Runnable
         for (Iterator job_it = spec.getChildrenNamed("job").iterator(); job_it.hasNext();)
         {
             XMLElement job_el = (XMLElement) job_it.next();
-
+            String conditionid = job_el.getAttribute("conditionid");
+            if (conditionid != null){
+              Debug.trace("Condition for job.");
+              Condition cond = RulesEngine.getCondition(conditionid);
+              if ((cond != null) && !cond.isTrue()){
+                Debug.trace("condition is not fulfilled.");
+                // skip, if there is a condition and this condition isn't true
+                continue;
+              }
+            }
+            Debug.trace("Condition is fulfilled or not existent.");
             // ExecuteForPack Patch
             // Check if processing required for pack
             Vector forPacks = job_el.getChildrenNamed("executeForPack");

@@ -53,6 +53,7 @@
 - Tango icons (Julien Ponge)
 - Refreshed installer border images (Julien Ponge)
 - Fixed conditions in PacksPanel/PacksModel (Dennis Reil)
+- Added conditions for jobs in ProcessPanel (Dennis Reil) 
   
   > 3.10.2 (build 2007.05.11)
 
