@@ -70,7 +70,7 @@ public class PackInfo
 
     /** Update check specifications in this Pack. */
     private List updateChecks = new ArrayList();
-
+        
     /** Constructor with required info. 
      * @param name name of the pack
      * @param id id of the pack e.g. to resolve I18N
@@ -309,4 +309,23 @@ public class PackInfo
     {
         pack.packImgId = packImgId;
     }
+
+    
+    /**
+     * @return the condition
+     */
+    public String getCondition()
+    {
+        return this.pack.getCondition();
+    }
+
+    
+    /**
+     * @param condition the condition to set
+     */
+    public void setCondition(String condition)
+    {
+        this.pack.setCondition(condition);
+    }
+    
 }

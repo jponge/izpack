@@ -1255,12 +1255,9 @@ public class InstallerFrame extends JFrame
     public void install(AbstractUIProgressHandler listener)
     {       
         IUnpacker unpacker = UnpackerFactory.getUnpacker(this.installdata.info.getUnpackerClassName(), installdata, listener);
+        unpacker.setRules(this.rules);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
-        unpackerthread.start();
-        /*
-        Unpacker unpacker = new Unpacker(installdata, listener);
-        unpacker.start();
-        */
+        unpackerthread.start();        
     }
 
     /**

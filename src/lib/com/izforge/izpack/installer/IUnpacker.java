@@ -20,6 +20,8 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.rules.RulesEngine;
+
 public interface IUnpacker extends Runnable
 {
     /**
@@ -28,4 +30,11 @@ public interface IUnpacker extends Runnable
      * @return true if the operation was successful, false otherwise.
      */
     public abstract boolean getResult();
+    
+    /**
+     * Called by the InstallerFrame to set a reference to the RulesEngine, which will
+     * be used to check conditions.
+     * @param rules - an instantiated RulesEngine
+     */
+    public void setRules(RulesEngine rules); 
 }

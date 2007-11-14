@@ -55,6 +55,7 @@ import com.izforge.izpack.PackFile;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.event.InstallerListener;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.FileExecutor;
@@ -111,6 +112,8 @@ public class Unpacker implements IUnpacker
     private boolean result = true;
     
     private static final String tempPath = "$INSTALL_PATH/Uninstaller/IzpackWebTemp";
+    
+    private RulesEngine rules;
     
     /**
      * The constructor.
@@ -300,14 +303,28 @@ public class Unpacker implements IUnpacker
                     npacks), handler);
             packs = idata.selectedPacks;
             npacks = packs.size();
-
+            
+            
             // We unpack the selected packs
             for (int i = 0; i < npacks; i++)
             {
                 // We get the pack stream
                 int n = idata.allPacks.indexOf(packs.get(i));
                 Pack p = (Pack) packs.get(i);
-
+                
+                // evaluate condition
+                if (p.hasCondition()) {
+                    if (rules != null) {
+                        if (!rules.isConditionTrue(p.getCondition())) {
+                            // skip pack, condition is not fullfilled.
+                            continue;
+                        }
+                    }
+                    else {
+                        // TODO: skip pack, because condition can not be checked 
+                    }
+                }
+                
                 // Custom action listener stuff --- beforePack ----
                 informListeners(customActions, InstallerListener.BEFORE_PACK, packs.get(i),
                         new Integer(npacks), handler);
@@ -1269,5 +1286,10 @@ public class Unpacker implements IUnpacker
     private static void setInterruptDesired(boolean interruptDesired)
     {
         Unpacker.interruptDesired = interruptDesired;
+    }
+
+    public void setRules(RulesEngine rules)
+    {        
+        this.rules = rules;        
     }
 }

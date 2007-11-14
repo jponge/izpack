@@ -55,6 +55,7 @@
 - Fixed conditions in PacksPanel/PacksModel (Dennis Reil)
 - Added conditions for jobs in ProcessPanel (Dennis Reil) 
 - Fixed wrong required size of packs (Dennis Reil)
+- Added condition-attribute to pack element in installer.xml (Dennis Reil)
   
   > 3.10.2 (build 2007.05.11)
 

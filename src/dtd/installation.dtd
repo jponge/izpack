@@ -100,6 +100,7 @@ $Id$
     <!ELEMENT pack (description, os*, file*, singlefile*, fileset*, updatecheck?, parsable*, executable*, depends*)>
         <!ATTLIST pack name CDATA #REQUIRED>
         <!ATTLIST pack id CDATA #IMPLIED>
+        <!ATTLIST pack condition CDATA #IMPLIED>
         <!ATTLIST pack packImgId IDREF #IMPLIED>
         <!ATTLIST pack required (yes|no) #REQUIRED>
         <!ATTLIST pack preselected (yes|no) "yes">

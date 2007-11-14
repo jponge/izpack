@@ -54,17 +54,12 @@ import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.XPackFile;
 import com.izforge.izpack.event.InstallerListener;
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.ResourceManager;
-import com.izforge.izpack.installer.ScriptParser;
-import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.io.CorruptVolumeException;
 import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.io.VolumeNotFoundException;
 import com.izforge.izpack.panels.NextMediaDialog;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
@@ -120,6 +115,8 @@ public class MultiVolumeUnpacker implements IUnpacker
 
     /** The result of the operation. */
     private boolean result = true;
+
+    private RulesEngine rules;
 
     /**
      * The constructor.
@@ -422,6 +419,18 @@ public class MultiVolumeUnpacker implements IUnpacker
 
                 // We get the internationalized name of the pack
                 final Pack pack = ((Pack) packs.get(i));
+                // evaluate condition
+                if (pack.hasCondition()) {
+                    if (rules != null) {
+                        if (!rules.isConditionTrue(pack.getCondition())) {
+                            // skip pack, condition is not fullfilled.
+                            continue;
+                        }
+                    }
+                    else {
+                        // TODO: skip pack, because condition can not be checked 
+                    }
+                }
                 String stepname = pack.name;// the message to be passed to the
                 // installpanel
                 if (langpack != null && !(pack.id == null || "".equals(pack.id)))
@@ -1362,5 +1371,10 @@ public class MultiVolumeUnpacker implements IUnpacker
     private static void setInterruptDesired(boolean interruptDesired)
     {
         MultiVolumeUnpacker.interruptDesired = interruptDesired;
+    }
+
+    public void setRules(RulesEngine rules)
+    {
+        this.rules = rules;        
     }
 }

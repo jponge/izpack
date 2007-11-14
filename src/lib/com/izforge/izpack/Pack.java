@@ -77,6 +77,9 @@ public class Pack implements Serializable
 
     /** The target operation system of this pack */
     public List osConstraints = null;
+    
+    /** Condition for this pack **/
+    private String condition;
 
     /** The list of packs this pack depends on */
     public List dependencies = null;
@@ -139,6 +142,7 @@ public class Pack implements Serializable
         this.excludeGroup = excludegroup;
         this.uninstall = uninstall;
         this.packImgId = null;
+        this.condition = null;
         nbytes = 0;
         color = PackInfo.WHITE;
     }
@@ -231,5 +235,27 @@ public class Pack implements Serializable
             double value = bytes / GIGABYTES;
             return formatter.format(value) + " GB";
         }
+    }
+
+    
+    /**
+     * @return the condition
+     */
+    public String getCondition()
+    {
+        return this.condition;
+    }
+
+    
+    /**
+     * @param condition the condition to set
+     */
+    public void setCondition(String condition)
+    {
+        this.condition = condition;
+    }
+    
+    public boolean hasCondition() {
+        return this.condition != null;
     }
 }

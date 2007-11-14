@@ -604,6 +604,11 @@ public class CompilerConfig extends Thread
             boolean uninstall = "yes".equalsIgnoreCase(el.getAttribute("uninstall", "yes"));
             String parent = el.getAttribute("parent");
             
+            String conditionid = el.getAttribute("condition");
+            if ((conditionid != null) && (id == null)) {
+                parseError(el,"Pack, which has no id can not have conditions.");
+                new Exception("Pack, which has no id can not have conditions.");
+            }
             if(required && excludeGroup != null)
             {
                 parseError(el, "Pack, which has excludeGroup can not be required.", 
@@ -613,6 +618,7 @@ public class CompilerConfig extends Thread
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup, uninstall);
             pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO:
             pack.setParent(parent);
+            pack.setCondition(conditionid);
             
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
