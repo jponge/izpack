@@ -6,27 +6,20 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.EventListener;
-import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
-import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonModel;
 import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -36,13 +29,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.UIManager;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
@@ -53,7 +41,6 @@ import net.n3.nanoxml.XMLElement;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.gui.TwoColumnLayout;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -110,7 +97,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    /**
     * The bytes of the current pack.
     */
-   protected int bytes = 0;
+   protected long bytes = 0;
 
    /**
     * The free bytes of the current selected disk.
@@ -224,7 +211,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
     * 
     * @see com.izforge.izpack.panels.PacksPanelInterface#getBytes()
     */
-   public int getBytes()
+   public long getBytes()
    {
       return (bytes);
    }
@@ -234,7 +221,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
     * 
     * @see com.izforge.izpack.panels.PacksPanelInterface#setBytes(int)
     */
-   public void setBytes(int bytes)
+   public void setBytes(long bytes)
    {
       this.bytes = bytes;
    }
