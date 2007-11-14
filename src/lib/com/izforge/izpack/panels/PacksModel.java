@@ -489,7 +489,7 @@ class PacksModel extends AbstractTableModel
 
     private void updateBytes()
     {
-        int bytes = 0;
+        long bytes = 0;
         for (int q = 0; q < packs.size(); q++)
         {
             if (Math.abs(checkValues[q]) == 1)

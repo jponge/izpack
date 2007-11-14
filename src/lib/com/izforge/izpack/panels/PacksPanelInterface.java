@@ -41,9 +41,9 @@ public interface PacksPanelInterface
 
     public LocaleDatabase getLangpack();
 
-    public int getBytes();
+    public long getBytes();
 
-    public void setBytes(int bytes);
+    public void setBytes(long bytes);
 
     public void showSpaceRequired();
 

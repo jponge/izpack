@@ -196,9 +196,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see com.izforge.izpack.panels.PacksPanelInterface#getBytes()
      */
-    public int getBytes()
+    public long getBytes()
     {
-        return (int) (bytes);
+        return bytes;
     }
 
     /*
@@ -206,7 +206,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see com.izforge.izpack.panels.PacksPanelInterface#setBytes(int)
      */
-    public void setBytes(int bytes)
+    public void setBytes(long bytes)
     {
         this.bytes = bytes;
     }
