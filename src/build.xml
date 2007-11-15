@@ -889,6 +889,8 @@
         </delete>
     	    <delete file="bin/native/3rdparty/COIOSHelper.dll" />
         <delete dir="${basedir}/bin/native/izpack" />
+        <delete dir="${basedir}/src/doc-reST/html" />
+        <delete dir="${basedir}/src/doc-reST/pdf" />
         <delete includeEmptyDirs="true" dir="${basedir}/doc/izpack" />
         <delete dir="${basedir}/_src${dist.subdir}"/>
     </target>
@@ -1167,22 +1169,16 @@ Fixing linefeeds for several files in:
             description="shows the used environment and project settings">
 
         <property name="console_line" value="**************************************************" />
-        <!-- Task splash/ ?? -->
         <echo message="${console_line}" />
         <echo message="* ${ant.version}" />
-        <!-- N2H: Test if this is the right ANT-Version (implementation of an own JAVA-Class which compares BuildNumbers) -->
         <echo message="*   Java JRE version ${ant.java.version} ${java.vm.vendor}" />
-        <!-- 1.3 -->
         <exec executable="${java.home}/bin/java">
             <arg line="-version" />
         </exec>
         <echo message="${console_line}" />
         <echo message="*  processing file ....... '${ant.file}'" />
-        <!-- D:\ToDo\_2002-11\AntTest\build.xml -->
         <echo message="*  in base-directory ..... '${basedir}'" />
-        <!-- D:\ToDo\_2002-11\AntTest -->
         <echo message="*  building project ...... '${ant.project.name}'" />
-        <!-- CIS -->
         <echo message="*  working in directory .. '${cwd}'" />
         <echo message="${console_line}" />
     </target>
