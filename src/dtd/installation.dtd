@@ -10,7 +10,7 @@ $Id$
 -->
 
 <!-- The root element -->
-<!ELEMENT installation (preinstall?, info, properties?, variables?, 
+<!ELEMENT installation (preinstall?, info, packaging?, properties?, variables?, 
                         guiprefs?, locale, resources?, panels,
                         listeners?, packs, jar*, native*, postinstall?)>
     <!ATTLIST installation version CDATA #REQUIRED>
@@ -31,6 +31,15 @@ $Id$
         <!ATTLIST uninstaller name CDATA "uninstaller.jar">
     <!ELEMENT webdir (#PCDATA)>
     <!ELEMENT summarylogfilepath (#PCDATA)>
+
+<!ELEMENT packaging (packager, unpacker)>
+<!ELEMENT packager (options)>
+<!ATTLIST packager class CDATA #REQUIRED>
+<!ELEMET options EMPTY>
+<!ATTLIST options volumesize CDATA #IMPLIED>
+<!ATTLIST options firstvolumefreespace CDATA #IMPLIED>
+<!ELEMENT unpacker EMPTY>
+<!ATTLIST unpacker class CDATA #REQUIRED>
 
 <!-- The properties markup (property declarations) -->
 <!ELEMENT properties (property*)>
@@ -117,11 +126,13 @@ $Id$
             <!ATTLIST file targetdir CDATA #REQUIRED>
             <!ATTLIST file os (unix|windows|mac) #IMPLIED>
             <!ATTLIST file override (true|false|asktrue|askfalse|update) "update">
+            <!ATTLIST file condition CDATA #IMPLIED>
         <!ELEMENT singlefile (os*, additionaldata*)>
             <!ATTLIST singlefile src CDATA #REQUIRED>
             <!ATTLIST singlefile target CDATA #REQUIRED>
             <!ATTLIST singlefile os (unix|windows|mac) #IMPLIED>
             <!ATTLIST singlefile override (true|false|asktrue|askfalse|update) "update">
+            <!ATTLIST files condition CDATA #IMPLIED>
     <!ELEMENT fileset (include*, exclude*, os*, additionaldata*)>
           <!ATTLIST fileset dir CDATA #REQUIRED>
           <!ATTLIST fileset targetdir CDATA #REQUIRED>  
@@ -131,6 +142,7 @@ $Id$
           <!ATTLIST fileset override (true|false|asktrue|askfalse|update) "update">
           <!ATTLIST fileset includes CDATA #IMPLIED>
           <!ATTLIST fileset excludes CDATA #IMPLIED>
+          <!ATTLIST fileset condition CDATA #IMPLIED>
       <!ELEMENT include EMPTY>
             <!ATTLIST include name CDATA #REQUIRED>
       <!ELEMENT exclude EMPTY>
@@ -143,6 +155,7 @@ $Id$
           <!ATTLIST parsable type CDATA "plain">
           <!ATTLIST parsable encoding CDATA #IMPLIED>
           <!ATTLIST parsable os (unix|windows|mac) #IMPLIED>
+          <!ATTLIST parsable condition CDATA #IMPLIED>
       <!ELEMENT executable (args?, os*)>
           <!ATTLIST executable targetfile CDATA #IMPLIED>
           <!ATTLIST executable class CDATA #IMPLIED>
@@ -150,6 +163,7 @@ $Id$
           <!ATTLIST executable stage (postinstall|never|uninstall) "never">
           <!ATTLIST executable failure (abort|warn|ask) "ask">
           <!ATTLIST executable keep (true|false) "false">
+          <!ATTLIST executable condition CDATA #IMPLIED>
           <!ELEMENT args (arg+)>
               <!ELEMENT arg EMPTY>
                   <!ATTLIST arg value CDATA #REQUIRED>

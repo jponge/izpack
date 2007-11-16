@@ -102,6 +102,9 @@ public class PackFile implements Serializable
     public String previousPackId = null;
 
     public long offsetInPreviousPack = -1;
+    
+    /** condition for this packfile */
+    private String condition = null;
 
     /**
      * Constructs and initializes from a source file.
@@ -256,4 +259,25 @@ public class PackFile implements Serializable
         return additionals;
     }
 
+    
+    /**
+     * @return the condition
+     */
+    public String getCondition()
+    {
+        return this.condition;
+    }
+
+    
+    /**
+     * @param condition the condition to set
+     */
+    public void setCondition(String condition)
+    {
+        this.condition = condition;
+    }
+
+    public boolean hasCondition() {
+        return this.condition != null;
+    }
 }

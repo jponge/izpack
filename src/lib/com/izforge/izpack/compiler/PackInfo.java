@@ -184,6 +184,7 @@ public class PackInfo
      * @param targetfile path file will be installed to.
      * @param osList the target operation system(s) of this pack.
      * @param override what to do if the file already exists when installing
+     * @param condition 
      * 
      * @throws FileNotFoundException if the file specified does not exist. The file is not read
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
@@ -205,12 +206,13 @@ public class PackInfo
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      * then, if the file is deleted in between.
      */
-    public void addFile(File baseDir, File file, String targetfile, List osList, int override, Map additionals)
+    public void addFile(File baseDir, File file, String targetfile, List osList, int override, Map additionals, String condition)
             throws FileNotFoundException
     {
         if (!file.exists()) throw new FileNotFoundException(file.toString());
 
         PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, additionals);
+        packFile.setCondition(condition);
         files.put(packFile, file);
     }
 

@@ -46,6 +46,9 @@ public class ParsableFile implements Serializable
 
     /** The list of OS constraints limiting file installation. */
     public List osConstraints = null;
+    
+    /** condition for this Parsable */
+    private String condition = null;
 
     /**
      * Constructs and initializes a new instance.
@@ -61,6 +64,28 @@ public class ParsableFile implements Serializable
         this.type = type;
         this.encoding = encoding;
         this.osConstraints = osConstraints;
+    }
+
+    
+    /**
+     * @return the condition
+     */
+    public String getCondition()
+    {
+        return this.condition;
+    }
+
+    
+    /**
+     * @param condition the condition to set
+     */
+    public void setCondition(String condition)
+    {
+        this.condition = condition;
+    }
+    
+    public boolean hasCondition() {
+        return this.condition != null;
     }
 
 }

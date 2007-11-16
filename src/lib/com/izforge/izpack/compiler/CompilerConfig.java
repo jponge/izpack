@@ -605,10 +605,7 @@ public class CompilerConfig extends Thread
             String parent = el.getAttribute("parent");
             
             String conditionid = el.getAttribute("condition");
-            if ((conditionid != null) && (id == null)) {
-                parseError(el,"Pack, which has no id can not have conditions.");
-                new Exception("Pack, which has no id can not have conditions.");
-            }
+            
             if(required && excludeGroup != null)
             {
                 parseError(el, "Pack, which has excludeGroup can not be required.", 
@@ -655,8 +652,10 @@ public class CompilerConfig extends Thread
                 String type = p.getAttribute("type", "plain");
                 String encoding = p.getAttribute("encoding", null);
                 List osList = OsConstraint.getOsList(p); // TODO: unverified
-
-                pack.addParsable(new ParsableFile(target, type, encoding, osList));
+                String condition = p.getAttribute("condition");
+                ParsableFile parsable = new ParsableFile(target, type, encoding, osList);
+                parsable.setCondition(condition);
+                pack.addParsable(parsable);
             }
 
             // We get the executables list
@@ -666,7 +665,8 @@ public class CompilerConfig extends Thread
                 XMLElement e = (XMLElement) iter.next();
                 ExecutableFile executable = new ExecutableFile();
                 String val; // temp value
-
+                String condition = e.getAttribute("condition");
+                executable.setCondition(condition);
                 executable.path = requireAttribute(e, "targetfile");
 
                 // when to execute this executable
@@ -725,16 +725,17 @@ public class CompilerConfig extends Thread
                 int override = getOverrideValue(f);
                 Map additionals = getAdditionals(f);
                 boolean unpack = src.endsWith(".zip") && "true".equalsIgnoreCase(f.getAttribute("unpack"));
-
+                String condition = f.getAttribute("condition");
+                
                 File file = new File(src);
                 if (!file.isAbsolute()) file = new File(basedir, src);
 
                 try
                 {
                     if (unpack)
-                        addArchiveContent(baseDir, file, targetdir, osList, override, pack, additionals);
+                        addArchiveContent(baseDir, file, targetdir, osList, override, pack, additionals,condition);
                     else
-                        addRecursively(baseDir, file, targetdir, osList, override, pack, additionals);
+                        addRecursively(baseDir, file, targetdir, osList, override, pack, additionals,condition);
                 }
                 catch (Exception x)
                 {
@@ -752,13 +753,13 @@ public class CompilerConfig extends Thread
                 List osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
                 Map additionals = getAdditionals(f);
-
+                String condition = f.getAttribute("condition");
                 File file = new File(src);
                 if (!file.isAbsolute()) file = new File(basedir, src);
 
                 try
                 {
-                    pack.addFile(baseDir, file, target, osList, override, additionals);
+                    pack.addFile(baseDir, file, target, osList, override, additionals,condition);
                 }
                 catch (FileNotFoundException x)
                 {
@@ -784,6 +785,7 @@ public class CompilerConfig extends Thread
                 List osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
                 Map additionals = getAdditionals(f);
+                String condition = f.getAttribute("condition");
 
                 // get includes and excludes
                 Vector xcludesList = null;
@@ -867,9 +869,7 @@ public class CompilerConfig extends Thread
                     try
                     {
                         String target = new File(targetdir, files[i]).getPath();
-                        pack
-                                .addFile(baseDir, new File(dir, files[i]), target, osList, override,
-                                        additionals);
+                        pack.addFile(baseDir, new File(dir, files[i]), target, osList, override,additionals,condition);
                     }
                     catch (FileNotFoundException x)
                     {
@@ -881,7 +881,7 @@ public class CompilerConfig extends Thread
                     try
                     {
                         String target = new File(targetdir, dirs[i]).getPath();
-                        pack.addFile(baseDir, new File(dir, dirs[i]), target, osList, override, additionals);
+                        pack.addFile(baseDir, new File(dir, dirs[i]), target, osList, override, additionals,condition);
                     }
                     catch (FileNotFoundException x)
                     {
@@ -1117,8 +1117,9 @@ public class CompilerConfig extends Thread
      * @param override Overriding behaviour.
      * @param pack Pack to be packed into
      * @param additionals Map which contains additional data
+     * @param condition 
      */
-    protected void addArchiveContent(File baseDir, File archive, String targetdir, List osList, int override, PackInfo pack, Map additionals) throws IOException {
+    protected void addArchiveContent(File baseDir, File archive, String targetdir, List osList, int override, PackInfo pack, Map additionals, String condition) throws IOException {
       
       FileInputStream fin = new FileInputStream(archive);
       ZipInputStream zin = new ZipInputStream(fin);
@@ -1135,7 +1136,7 @@ public class CompilerConfig extends Thread
             PackagerHelper.copyStream(zin, out);
             out.close();
         
-            pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override, additionals);
+            pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override, additionals,condition);
         } catch (IOException e) {
             throw new IOException("Couldn't create temporary file for "+zentry.getName()+" in archive "+archive+" ("+e.getMessage()+")");
         }
@@ -1153,24 +1154,25 @@ public class CompilerConfig extends Thread
      * @param override Overriding behaviour.
      * @param pack Pack to be packed into
      * @param additionals Map which contains additional data
+     * @param condition 
      * @exception FileNotFoundException if the file does not exist
      */
     protected void addRecursively(File baseDir, File file, String targetdir, List osList, int override,
-            PackInfo pack, Map additionals) throws IOException
+            PackInfo pack, Map additionals, String condition) throws IOException
     {
         String targetfile = targetdir + "/" + file.getName();
         if (!file.isDirectory())
-            pack.addFile(baseDir, file, targetfile, osList, override, additionals);
+            pack.addFile(baseDir, file, targetfile, osList, override, additionals,condition);
         else
         {
             File[] files = file.listFiles();
             if (files.length == 0) // The directory is empty so must be added
-                pack.addFile(baseDir, file, targetfile, osList, override, additionals);
+                pack.addFile(baseDir, file, targetfile, osList, override, additionals,condition);
             else
             {
                 // new targetdir = targetfile;
                 for (int i = 0; i < files.length; i++)
-                    addRecursively(baseDir, files[i], targetfile, osList, override, pack, additionals);
+                    addRecursively(baseDir, files[i], targetfile, osList, override, pack, additionals,condition);
             }
         }
     }
