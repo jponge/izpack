@@ -252,6 +252,41 @@ Here is an example of a typical ``<info>`` section :
       <javaversion>1.2</javaversion>
     </info>
 
+The Packaging Element ``<packaging>``
+''''''''''''''''''''''''''''''''''''''
+
+This element allows to specify packaging options. If not specified, the default will be to create an all in one
+installer. This element will usually be used to create an installer which spans over multiple volumes, 
+e.g. the output will be two CDs. The packaging-element contains the following elements:
+
+-   ``<packager>`` : specifies options used by the packager. The packager tag has the ``class`` attribute,
+    which specifys the class to use for packaging. Currently two implementations
+    are available (com.izforge.izpack.compiler.Packager, com.izforge.izpack.compiler.MultiVolumePackager).
+    The packager-element can contain the ``<options>`` element which can have different attributes for the different
+    implementations of packagers. For the MultiVolumePackager, it can have the following attributes:
+    
+    -	``volumesize``: the size of the volumes
+    -	``firstvolumefreespace``: free space on the first volume used for the installer jar and additional resources like
+    	readme-files etc.
+    
+    
+-   ``<unpacker>`` : specifies which unpacker class should be used. Currently there are two unpacker implementations
+	(com.izforge.izpack.compiler.UnPacker, com.izforge.izpack.compiler.MultiVolumeUnPacker).
+  
+Here's an example how to specify an installer which will create multiple volumes. In this example the volumes shall be
+CDs with 650 megabytes. There will be an additional free space of 150 megabytes on the first volume. This will result in
+the creation of an installer.jar and multiple installer.pak* files. The installer.jar plus installer.pak plus the additional
+resources have to be copied on the first volume, each installer.pak.<number> on several volumes. 
+  
+::
+
+ 	  <packaging>
+	    <packager class="com.izforge.izpack.compiler.MultiVolumePackager">
+			<!-- 650 MB volumes, 150 MB space on the first volume -->
+	        <options volumesize="681574400" firstvolumefreespace="157286400"/>
+	    </packager>
+	    <unpacker class="com.izforge.izpack.installer.MultiVolumeUnpacker" />
+	  </packaging>
 
 The Variables Element ``<variables>``
 ''''''''''''''''''''''''''''''''''''''
