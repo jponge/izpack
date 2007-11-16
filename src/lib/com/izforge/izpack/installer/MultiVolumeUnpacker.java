@@ -420,16 +420,11 @@ public class MultiVolumeUnpacker implements IUnpacker
                 // We get the internationalized name of the pack
                 final Pack pack = ((Pack) packs.get(i));
                 // evaluate condition
-                if (pack.hasCondition()) {
-                    if (rules != null) {
-                        if (!rules.isConditionTrue(pack.getCondition())) {
-                            // skip pack, condition is not fullfilled.
-                            continue;
-                        }
-                    }
-                    else {
-                        // TODO: skip pack, because condition can not be checked 
-                    }
+                if (pack.hasCondition() && (rules != null)) {                    
+                    if (!rules.isConditionTrue(pack.getCondition())) {
+                        // skip pack, condition is not fullfilled.
+                        continue;
+                    }                    
                 }
                 String stepname = pack.name;// the message to be passed to the
                 // installpanel
@@ -447,7 +442,12 @@ public class MultiVolumeUnpacker implements IUnpacker
                 {
                     // We read the header
                     XPackFile pf = (XPackFile) objIn.readObject();
-
+                    if (pf.hasCondition() && (rules != null)) {
+                        if (!rules.isConditionTrue(pf.getCondition())) {
+                            // skip file, condition is false
+                            continue;
+                        }
+                    }
                     if (OsConstraint.oneMatchesCurrentSystem(pf.osConstraints()))
                     {
                         // We translate & build the path
@@ -676,6 +676,12 @@ public class MultiVolumeUnpacker implements IUnpacker
                             fin.setVolumename(nextmedia.getAbsolutePath());
                         }
                     }
+                    if (pf.hasCondition() && (rules != null)) {
+                        if (!rules.isConditionTrue(pf.getCondition())) {
+                            // skip parsable, condition is false
+                            continue;
+                        }
+                    }
                     pf.path = IoHelper.translatePath(pf.path, vs);
                     Debug.trace("Found parsable: " + pf.path);
                     parsables.add(pf);
@@ -687,7 +693,12 @@ public class MultiVolumeUnpacker implements IUnpacker
                 for (int k = 0; k < numExecutables; k++)
                 {
                     ExecutableFile ef = (ExecutableFile) objIn.readObject();
-
+                    if (ef.hasCondition() && (rules != null)) {
+                        if (!rules.isConditionTrue(ef.getCondition())) {
+                            // skip, condition is false
+                            continue;
+                        }
+                    }
                     ef.path = IoHelper.translatePath(ef.path, vs);
                     if (null != ef.argList && !ef.argList.isEmpty())
                     {

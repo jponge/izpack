@@ -351,7 +351,13 @@ public class Unpacker implements IUnpacker
                 {
                     // We read the header
                     PackFile pf = (PackFile) objIn.readObject();
-
+                    // TODO: reaction if condition can not be checked
+                    if (pf.hasCondition() && (rules != null)) {
+                        if (!rules.isConditionTrue(pf.getCondition())) {
+                            // skip, condition is not fulfilled
+                            continue;
+                        }
+                    }
                     if (OsConstraint.oneMatchesCurrentSystem(pf.osConstraints()))
                     {
                         // We translate & build the path
@@ -552,6 +558,12 @@ public class Unpacker implements IUnpacker
                 for (int k = 0; k < numParsables; k++)
                 {
                     ParsableFile pf = (ParsableFile) objIn.readObject();
+                    if (pf.hasCondition() && (rules != null)) {
+                        if (!rules.isConditionTrue(pf.getCondition())) {
+                            // skip, condition is not fulfilled
+                            continue;
+                        }
+                    }
                     pf.path = IoHelper.translatePath(pf.path, vs);
                     parsables.add(pf);
                 }
@@ -561,6 +573,12 @@ public class Unpacker implements IUnpacker
                 for (int k = 0; k < numExecutables; k++)
                 {
                     ExecutableFile ef = (ExecutableFile) objIn.readObject();
+                    if (ef.hasCondition() && (rules != null)) {
+                        if (!rules.isConditionTrue(ef.getCondition())) {
+                            // skip, condition is false
+                            continue;
+                        }
+                    }
                     ef.path = IoHelper.translatePath(ef.path, vs);
                     if (null != ef.argList && !ef.argList.isEmpty())
                     {
