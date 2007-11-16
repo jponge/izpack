@@ -40,6 +40,9 @@ public class Panel implements Serializable
 
     /** the unique id of this panel */
     protected String panelid;
+    
+    /** condition for this panel */
+    private String condition = null;
 
     public String getClassName() {
       return this.className;
@@ -67,5 +70,27 @@ public class Panel implements Serializable
 
     public void setPanelid(String panelid) {      
       this.panelid = panelid;
+    }
+
+    
+    /**
+     * @return the condition
+     */
+    public String getCondition()
+    {
+        return this.condition;
+    }
+
+    
+    /**
+     * @param condition the condition to set
+     */
+    public void setCondition(String condition)
+    {
+        this.condition = condition;
+    }
+    
+    public boolean hasCondition() {
+        return this.condition != null;
     }
 }

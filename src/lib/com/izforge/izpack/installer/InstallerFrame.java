@@ -1414,19 +1414,26 @@ public class InstallerFrame extends JFrame
     public boolean canShow(int panelnumber)
     {
         IzPanel panel = (IzPanel) installdata.panels.get(panelnumber);
-        String panelid = panel.getMetadata().getPanelid();
-        Debug.trace("Current Panel: " + panelid);
-
-        if (!this.getRules().canShowPanel(panelid, this.installdata.variables))
-        {
-            // skip panel, if conditions for panel aren't met
-            Debug.log("Skip panel with panelid=" + panelid);
-            // panel should be skipped, so we have to decrement panelnumber for skipping
-            return false;
+        Panel panelmetadata = panel.getMetadata(); 
+        String panelid = panelmetadata.getPanelid();
+        Debug.trace("Current Panel: " + panelid);                
+        
+        if (panelmetadata.hasCondition()) {
+            Debug.log("Checking panelcondition");
+            return rules.isConditionTrue(panelmetadata.getCondition());
         }
-        else
-        {
-            return true;
+        else {        
+            if (!rules.canShowPanel(panelid, this.installdata.variables))
+            {
+                // skip panel, if conditions for panel aren't met
+                Debug.log("Skip panel with panelid=" + panelid);
+                // panel should be skipped, so we have to decrement panelnumber for skipping
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 

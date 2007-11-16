@@ -1205,6 +1205,9 @@ public class CompilerConfig extends Thread
             // add an id
             String panelid = xmlPanel.getAttribute("id");
             panel.setPanelid(panelid);                   
+            String condition = xmlPanel.getAttribute("condition");
+            panel.setCondition(condition);
+            
             // Panel files come in jars packaged w/ IzPack
             String jarPath = "bin/panels/" + className + ".jar";
             URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel);
