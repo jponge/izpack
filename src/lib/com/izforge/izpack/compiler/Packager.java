@@ -237,6 +237,9 @@ public class Packager extends PackagerBase
             PackInfo packInfo = (PackInfo) packIter.next();
             Pack pack = packInfo.getPack();
             pack.nbytes = 0;
+            if ((pack.id == null) || (pack.id.length() == 0)) {
+                pack.id=pack.name;
+            }
 
             // create a pack specific jar if required
             com.izforge.izpack.util.JarOutputStream packStream = primaryJarStream;
@@ -251,8 +254,7 @@ public class Packager extends PackagerBase
             sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
 
             // Retrieve the correct output stream
-            org.apache.tools.zip.ZipEntry entry = 
-                new org.apache.tools.zip.ZipEntry("packs/pack-" + pack.id);
+            org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry("packs/pack-" + pack.id);
             if( ! compressor.useStandardCompression())
             {
                 entry.setMethod(ZipEntry.STORED);

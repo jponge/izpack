@@ -52,6 +52,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.apache.tools.ant.DirectoryScanner;
@@ -939,21 +940,52 @@ public class CompilerConfig extends Thread
 
             // get the name of reference xml file
         	String refFileName = requireAttribute(el, "file");
+        	String selfcontained = el.getAttribute("selfcontained");
+        	boolean isselfcontained = Boolean.valueOf(selfcontained).booleanValue();
         	
-        	// Load the reference XML file
         	
-        	// Initialises the parser
-            IXMLReader refXMLReader = null;
-            
-            File refXMLFile = new File(refFileName);
+        	File refXMLFile = new File(refFileName);
             if (!refXMLFile.isAbsolute()) refXMLFile = new File(basedir, refFileName);
             if (!refXMLFile.canRead()) {
                 throw new CompilerException("Invalid file: " + refXMLFile);
             }
             
+            InputStream specin = null;
+            
+        	if (isselfcontained){
+        	    if (!refXMLFile.getAbsolutePath().endsWith(".zip")) {
+        	        throw new CompilerException("Invalid file: " + refXMLFile + ". Selfcontained files can only be of type zip.");
+        	    }
+        	    ZipFile zip;
+                try
+                {
+                    zip = new ZipFile(refXMLFile,ZipFile.OPEN_READ);
+                    ZipEntry specentry = zip.getEntry("META-INF/izpack.xml");
+                    specin = zip.getInputStream(specentry);
+                }
+                catch (IOException e)
+                {
+                    throw new CompilerException("Error reading META-INF/izpack.xml in " + refXMLFile);
+                }        	    
+        	}
+        	else {
+        	    try
+                {
+                    specin = new FileInputStream(refXMLFile.getAbsolutePath());
+                }
+                catch (FileNotFoundException e)
+                {
+                    throw new CompilerException("FileNotFoundException exception while reading refXMLFile");
+                }
+        	}
+        	
+        	// Initialises the parser
+            IXMLReader refXMLReader = null;
+            
+            // Load the reference XML file                        
             try
             {
-            	refXMLReader = new StdXMLReader(new FileInputStream(refXMLFile.getAbsolutePath()));
+            	refXMLReader = new StdXMLReader(specin);
             }
             catch (CompilerException c)
             {
@@ -974,6 +1006,7 @@ public class CompilerConfig extends Thread
             try
             {
                 refXMLData = (XMLElement) refXMLParser.parse();
+                
             }
             catch (XMLException x)
             {
@@ -995,6 +1028,15 @@ public class CompilerConfig extends Thread
             // call addResources to add the referenced XML resources to this installation
             addResources(refXMLData);
             
+            try
+            {
+                specin.close();
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             // Recursively call myself to add all packs and refpacks from the reference XML
             addPacksSingle(refXMLData);
         }

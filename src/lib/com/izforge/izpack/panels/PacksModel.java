@@ -110,8 +110,15 @@ class PacksModel extends AbstractTableModel
                     }
                 }
                 this.removeAlreadyInstalledPacks(idata.selectedPacks);
+                Debug.trace("Found " + packsinstalled.size() + " installed packs");
+                
                 Properties variables = (Properties) oin.readObject();
-                Debug.trace("Found " + packsinstalled.size() + " installed packs");                
+                
+                Iterator iter = variables.keySet().iterator();
+                while (iter.hasNext()) {
+                    Object key = iter.next();
+                    idata.setVariable((String) key, (String) variables.get(key));
+                }                                
                 fin.close();                
             }
             catch (FileNotFoundException e)
