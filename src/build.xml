@@ -680,6 +680,9 @@
          <include name="com/izforge/izpack/panels/PacksPanelBase.java" />
          <include name="com/izforge/izpack/panels/PacksPanelInterface.java" />
         </build-panel>
+    	<build-panel name="InstallationTypePanel">
+    		<include name="com/izforge/izpack/panels/InstallationTypePanel.java"/>
+    	</build-panel>    	
     </target>
 
     <!--
@@ -914,7 +917,7 @@
         </copy>
     </target>
 
-    <target name="build.docu" description="Builds the customer documentation">
+    <target name="build.docu" description="Builds the customer documentation">    	
         <exec executable="python" dir="${basedir}/src/doc-reST">
             <arg value="build.py"/>
         </exec>
@@ -929,7 +932,7 @@
             <fileset dir="${basedir}/src/doc-reST/pdf">
                 <include name="manual.pdf" />
             </fileset>
-        </copy>
+        </copy>    	
     </target>
 
     <target name="create.docu"

@@ -451,6 +451,9 @@ public class Unpacker extends UnpackerBase
                 return;
             }
 
+            // write installation information
+            writeInstallationInformation();
+            
             // The end :-)
             handler.stopAction();
         }

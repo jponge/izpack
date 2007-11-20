@@ -56,7 +56,7 @@ import com.izforge.izpack.util.OsConstraint;
 /**
  * Unpacker class for a multi volume installation.
  * 
- * @author Dennis Reil
+ * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class MultiVolumeUnpacker extends UnpackerBase
 {             
@@ -568,6 +568,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
             { // Interrupt was initiated; perform it.
                 return;
             }
+            
+            // write installation information
+            writeInstallationInformation();
+            
             this.writeConfigInformation();
             // The end :-)
             handler.stopAction();

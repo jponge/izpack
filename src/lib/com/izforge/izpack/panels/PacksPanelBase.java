@@ -81,8 +81,8 @@ import com.izforge.izpack.util.VariableSubstitutor;
  */
 public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterface,
         ListSelectionListener
-{
-
+{    
+    
     // Common used Swing fields
     /**
      * The free space label.
@@ -529,7 +529,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     public void panelActivate()
     {
         try
-        {
+        {            
             // TODO the PacksModel could be patched such that isCellEditable
             // allows returns false. In that case the PacksModel must not be
             // adapted here.
@@ -601,6 +601,25 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             else
                 retval.append(pack.name);
         }
+        if (packsModel.isModifyinstallation()) {
+            Map installedpacks = packsModel.getInstalledpacks();
+            iter = installedpacks.keySet().iterator();
+            retval.append("<br><b>");           
+            retval.append(langpack.getString("PacksPanel.installedpacks.summarycaption"));
+            retval.append("</b>");
+            retval.append("<br>");
+            while (iter.hasNext()) {
+                Pack pack = (Pack) installedpacks.get(iter.next());
+                if (langpack != null && pack.id != null && !"".equals(pack.id))
+                {
+                    retval.append(langpack.getString(pack.id));
+                }
+                else {
+                    retval.append(pack.name);
+                }
+                retval.append("<br>");
+            }
+        }
         return (retval.toString());
     }
 
@@ -636,6 +655,12 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 display.setForeground(Color.GRAY);                
             }
             display.setSelected((value != null && Math.abs(state) == 1));
+            
+            if (state == -3) {
+                display.setForeground(Color.RED);
+                display.setSelected(true);
+            }
+            
             display.setEnabled(state >= 0);
             return display;
         }

@@ -22,9 +22,12 @@ package com.izforge.izpack.installer;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -47,6 +50,7 @@ import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 
@@ -803,7 +807,57 @@ public abstract class UnpackerBase implements IUnpacker
             }
 
         }
-
+    }
+    
+    /**
+     * Writes information about the installed packs and the variables at
+     * installation time.
+     * @throws IOException 
+     * @throws ClassNotFoundException 
+     */
+    public void writeInstallationInformation() throws IOException, ClassNotFoundException {
+        Debug.trace("writing installation information");
+        String installdir = idata.getInstallPath();
+        
+        List installedpacks = new ArrayList(idata.selectedPacks);
+        
+        File installationinfo = new File(installdir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
+        if (!installationinfo.exists()) {
+            Debug.trace("creating info file" + installationinfo.getAbsolutePath());
+            installationinfo.createNewFile();
+        }
+        else {
+            Debug.trace("installation information found");
+            // read in old information and update
+            FileInputStream fin = new FileInputStream(installationinfo);
+            ObjectInputStream oin = new ObjectInputStream(fin);
+            
+            List packs = (List) oin.readObject();
+            for (Iterator iterator = packs.iterator(); iterator.hasNext();)
+            {
+                Pack pack = (Pack) iterator.next();
+                installedpacks.add(pack);
+            }
+            oin.close();
+            fin.close();
+            
+        }
+        
+        FileOutputStream fout = new FileOutputStream(installationinfo);
+        ObjectOutputStream oout = new ObjectOutputStream(fout);
+        oout.writeObject(installedpacks);
+        /*
+        int selectedpackscount = idata.selectedPacks.size();
+        for (int i = 0; i < selectedpackscount; i++)
+        {
+            Pack pack = (Pack) idata.selectedPacks.get(i);
+            oout.writeObject(pack);
+        }
+        */
+        oout.writeObject(idata.variables);
+        Debug.trace("done.");
+        oout.close();
+        fout.close();
     }
 }
 

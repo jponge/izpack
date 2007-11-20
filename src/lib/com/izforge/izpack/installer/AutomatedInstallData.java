@@ -42,7 +42,9 @@ public class AutomatedInstallData
 {
 
     // --- Static members -------------------------------------------------
-
+    public static final String MODIFY_INSTALLATION = "modify.izpack.install";
+    public static final String INSTALLATION_INFORMATION = ".installationinformation";
+    
     /**
      * Names of the custom actions types with which they are stored in the installer jar file. These
      * names are also used to identify the type of custom action in the customData map. Slashes as

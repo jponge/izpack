@@ -33,27 +33,17 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import net.n3.nanoxml.XMLElement;
 
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.GUIPrefs;
-import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
-import com.izforge.izpack.Panel;
 import com.izforge.izpack.XPackFile;
-import com.izforge.izpack.compressor.PackCompressor;
-import com.izforge.izpack.compressor.PackCompressorFactory;
-import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileUtil;
@@ -178,7 +168,8 @@ public class MultiVolumePackager extends PackagerBase
     {
         String classname = this.getClass().getName();
         String sizeprop = classname + ".volumesize";
-        String freespaceprop = classname + ".firstvolumefreespace";        
+        String freespaceprop = classname + ".firstvolumefreespace"; 
+        
         if (this.configdata == null){
             // no configdata given, set default values
             this.variables.setProperty(sizeprop, Long.toString(FileSpanningOutputStream.DEFAULT_VOLUME_SIZE));
@@ -371,10 +362,6 @@ public class MultiVolumePackager extends PackagerBase
             Debug.trace("Writing Pack " + packNumber + ": " + pack.name);
             ZipEntry entry = new ZipEntry("packs/pack" + packNumber);
             // write the metadata as uncompressed object stream to primaryJarStream
-            // ByteCountingOutputStream dos = new
-            // ByteCountingOutputStream(comprStream);
-            // ByteCountingOutputStream dos = new
-            // ByteCountingOutputStream(primaryJarStream);
             // first write a packs entry
 
             primaryJarStream.putNextEntry(entry);

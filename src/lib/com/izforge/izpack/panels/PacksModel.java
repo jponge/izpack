@@ -24,7 +24,14 @@
 
 package com.izforge.izpack.panels;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -33,6 +40,7 @@ import javax.swing.table.AbstractTableModel;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
@@ -53,6 +61,10 @@ class PacksModel extends AbstractTableModel
     private List packs;
 
     private List packsToInstall;
+    
+    private Map installedpacks;
+    private boolean modifyinstallation;
+    
 
     private PacksPanelInterface panel;
 
@@ -74,17 +86,55 @@ class PacksModel extends AbstractTableModel
     private Properties variables;
 
     public PacksModel(PacksPanelInterface panel, InstallData idata, RulesEngine rules)
-    {        
-        this(idata.availablePacks, idata.selectedPacks, panel, rules, idata.getVariables());               
-    }
-
-    public PacksModel(List packs, List packsToInstall, PacksPanelInterface panel, RulesEngine rules, Properties variables)
-    {
+    {                
+        modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION)).booleanValue();
+        this.installedpacks = new HashMap();
+        
+        if (modifyinstallation) {
+            // installation shall be modified
+            // load installation information
+            
+            try
+            {
+                FileInputStream fin = new FileInputStream(new File(idata.getInstallPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION));
+                ObjectInputStream oin = new ObjectInputStream(fin);
+                List packsinstalled = (List) oin.readObject();
+                for (int i = 0; i < packsinstalled.size(); i++)
+                {
+                    Pack installedpack = (Pack) packsinstalled.get(i);
+                    if ((installedpack.id != null) && (installedpack.id.length() > 0)) {
+                        this.installedpacks.put(installedpack.id, installedpack);
+                    }
+                    else {
+                        this.installedpacks.put(installedpack.name, installedpack);
+                    }
+                }
+                this.removeAlreadyInstalledPacks(idata.selectedPacks);
+                Properties variables = (Properties) oin.readObject();
+                Debug.trace("Found " + packsinstalled.size() + " installed packs");                
+                fin.close();                
+            }
+            catch (FileNotFoundException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            catch (ClassNotFoundException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }                
         this.rules = rules;
-        this.packs = packs;
-        this.packsToInstall = packsToInstall;
+        this.packs = idata.availablePacks;
+        this.packsToInstall = idata.selectedPacks;
         this.panel = panel;
-        this.variables = variables;
+        this.variables = idata.getVariables();
         this.variables.setProperty(INITAL_PACKSELECTION,Boolean.toString(true));
         langpack = panel.getLangpack();
         checkValues = new int[packs.size()];
@@ -93,6 +143,31 @@ class PacksModel extends AbstractTableModel
         this.updateConditions(true);
         refreshPacksToInstall();
         this.variables.setProperty(INITAL_PACKSELECTION,Boolean.toString(false));
+    }    
+    
+    private void removeAlreadyInstalledPacks(List selectedpacks) {
+        List removepacks = new ArrayList();
+        
+        for (Iterator iterator = selectedpacks.iterator(); iterator.hasNext();)
+        {
+            Pack selectedpack = (Pack) iterator.next();
+            String key = "";
+            if ((selectedpack.id != null) && (selectedpack.id.length() > 0)){
+                key = selectedpack.id;
+            }
+            else {
+                key = selectedpack.name;
+            }
+            if (installedpacks.containsKey(key)) {
+                // pack is already installed, remove it
+                removepacks.add(selectedpack);
+            }
+        }
+        for (Iterator iterator = removepacks.iterator(); iterator.hasNext();)
+        {
+            Pack removepack = (Pack) iterator.next();
+            selectedpacks.remove(removepack);            
+        }
     }
 
     public void updateConditions()
@@ -190,7 +265,8 @@ class PacksModel extends AbstractTableModel
         {
             Pack pack = (Pack) packs.get(i);
             if (packsToInstall.contains(pack)) checkValues[i] = 1;
-        }
+        }               
+        
         // Check out and disable the ones that are excluded by non fullfiled
         // deps
         for (int i = 0; i < packs.size(); i++)
@@ -230,8 +306,10 @@ class PacksModel extends AbstractTableModel
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
+            
             if (pack.required) propRequirement(pack.name);
         }
+                        
         refreshPacksToInstall();
     }
 
@@ -413,13 +491,36 @@ class PacksModel extends AbstractTableModel
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
-            if (Math.abs(checkValues[i]) == 1) {                               
+            String key = "";
+            if ((pack.id != null) && (pack.id.length() > 0)) {
+                key = pack.id;
+            }
+            else {
+                key = pack.name;
+            }
+            if ((Math.abs(checkValues[i]) == 1) && (!installedpacks.containsKey(key))) {                               
                 packsToInstall.add(pack);               
             }
 
         }
-
+        
+        for (int i=0; i < packs.size(); i++) {
+            Pack pack = (Pack) packs.get(i);
+            
+            String key = "";
+            if ((pack.id != null) && (pack.id.length() > 0)) {
+                key = pack.id;
+            }
+            else {
+                key = pack.name;
+            }
+            if (installedpacks.containsKey(key)) {
+                checkValues[i] = -3;
+            }
+        }
     }
+    
+    
 
     /**
      * This function updates the checkboxes after a change by disabling packs that cannot be
@@ -554,4 +655,21 @@ class PacksModel extends AbstractTableModel
         u.color = Pack.BLACK;
         return 0;
     }
+
+    
+    /**
+     * @return the installedpacks
+     */
+    public Map getInstalledpacks()
+    {
+        return this.installedpacks;
+    }        
+    
+    /**
+     * @return the modifyinstallation
+     */
+    public boolean isModifyinstallation()
+    {
+        return this.modifyinstallation;
+    }     
 }
