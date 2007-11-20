@@ -25,6 +25,7 @@
     <str id="SummaryPanel.headline" txt="Zusammenfassung Konfigurationsdaten"/>
     <str id="TargetPanel.headline" txt="Installationspfad"/>
     <str id="UserInputPanel.headline" txt="Benutzerdaten"/>
+    <str id="InstallationTypePanel.headline" txt="Installationsart" />
     
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Installation von "/>
@@ -68,6 +69,10 @@
     <str id="LicencePanel.no" txt="Nein"/>
     <str id="InfoPanel.info" txt="Bitte lesen Sie die folgenden Informationen:"/>
     
+    <str id="InstallationTypePanel.info" txt="Bitte wählen Sie die Installationsart:" />
+    <str id="InstallationTypePanel.normal" txt="Neue Installation" />
+    <str id="InstallationTypePanel.modify" txt="Installation anpassen" />
+    
     <str id="PathInputPanel.required" txt="Das gewählte Verzeichnis muss existieren."/>
     <str id="PathInputPanel.notValid" txt="Das gewählte Verzeichnis enthält nicht das benötigte Produkt."/>
 
@@ -105,6 +110,8 @@
     <str id="PacksPanel.notEnoughSpace" 
     	txt="Der erforderliche Festplattenplatz für die Installation ist größer als der zur Verfügung stehende Speicherplatz."/>
     <str id="PacksPanel.notAscertainable" txt="nicht bestimmbar"/>
+    <str id="PacksPanel.installedpacks.summarycaption" txt="Bereits installierte Pakete"/>
+    
     
     <str id="InstallPanel.info" txt="Starten Sie hier die Installation:"/>
     <str id="InstallPanel.install" txt="Installieren!"/>
