@@ -57,6 +57,7 @@
 - Fixed wrong required size of packs (Dennis Reil)
 - Added condition-attribute to pack element in installer.xml (Dennis Reil)
 - Spanish langpack update (Sergio Banos Calvo via Julien Ponge)
+- Various fixes (Loic via Julien Ponge)
   
   > 3.10.2 (build 2007.05.11)
 

@@ -252,7 +252,7 @@ public class FileExecutor
             ExecutableFile efile = (ExecutableFile) efileIterator.next();
             boolean deleteAfterwards = !efile.keepFile;
             File file = new File(efile.path);
-            Debug.trace("handeling executable file " + efile);
+            Debug.trace("handling executable file " + efile);
 
             // skip file if not for current OS (it might not have been installed
             // at all)

@@ -1451,3 +1451,20 @@ Here is an example for alternative sorting of groups: ::
             name="InstallationGroupPanel.sortKey.Group3" value="C"/>
         </variables>
         (...)
+
+By default, your group name (and description) are displayed as-is in the
+installer. If you want them to be localized, add localized names to your
+``packsLang.xml`` resources. The string ID has to be 
+InstallationGroupPanel.group.```group_name``.
+
+Here is an example to localize groups into French (these lines have to be put
+in your ``packsLang.xml_fra`` resource) :
+::
+
+<str id="InstallationGroupPanel.group.Core" txt="Noyau de l'application" />
+<str id="InstallationGroupPanel.description.Core" txt="Fichiers principaux, indispensables au fonctionnement de l'application" />
+<str id="InstallationGroupPanel.group.Samples" txt="Fichiers d'exemple" />
+<str id="InstallationGroupPanel.description.Samples" txt="Fichiers d'exemples" />
+
+If you want to add html markup to those strings, add ``.html`` at the end
+of the string id (after the group name).

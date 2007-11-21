@@ -113,6 +113,7 @@ Hint: If the shortcut panel does not find one of these named resources, it
 will never appears. So, do not use different resource names and do not add a
 path to these.
 
+ShortcutSpecs can be localized, see "Localizing shortcuts" below.
 
 **Example**
 
@@ -133,6 +134,11 @@ Why use different shortcut spec files?
 2.  The Icon file formats are different. ICOs on Windows-, PNGs on Unix-
     platforms.
 3.  The Target locations can be different.
+4.  If your installer is localized, your users sure will expect their
+    shortcuts names and descriptions to be as well. Moreover, some paths
+    can be different when OS are localized (``My Documents`` becomes
+    ``Mes Documents`` on Windows in french for example). See "Localizing
+    shortcuts" below.
 
 This is the simple reason.
 
@@ -507,6 +513,46 @@ can save yourself some troubleshooting and some Aspirin by not using this
 feature if it's not required. On the other hand if you need it i would advise
 to be very careful about changing pack names.
 
+
+Localizing shortcuts
+---------------------
+
+The izPack installer allows localization of your installer. Obviously, you will
+want your shortcuts labels to be localized, too. Thus, you can provide
+shortcutSpec files for each language you support.
+
+This works just like localizing other specs for other panels : add an
+underscore and the iso3 language code to the end of the resource name, and set
+the source name to the appropriate localized spec file.
+As for the platforms, if a specific spec file is not declared for the current
+language, the installer will revert to the default ``shortcutSpec.xml`` resource.
+This way, you can for example have a resource ``shortcutSpec.xml_fra`` for
+french installs and have the default resource ``shortcutSpec.xml`` (maybe
+containing strings in english) be used for other languages.
+
+The platform prefix and language suffix are combined like in this example :
+ ``Unix_shortcutSpec.xml_fra``.
+When the installer can't find such a platform-and-language-specific resource,
+it will fallback to a suitable default using the following search order :
+ ``shortcutSpec.xml_<iso3>`` (default platform, language-specific)
+ ``<platform>_shortcutSpec.xml`` (default language, platform-specific)
+ ``shortcutSpec.xml`` (default platform and language)
+
+Reminder: If the shortcut panel does not find one of these named resources,
+it will never appear. So, do not use different resource names and do not add
+a path to these.
+
+**Example**
+
+::
+	<res src="C:\MyDocuments\Installer\default_shortcut_specification.xml"
+     id="shortcutSpec.xml"/>
+	<res src="C:\MyDocuments\Installer\default_shortcut_specification_fr.xml"
+     id="shortcutSpec.xml_fra"/>
+	<res src="C:\MyDocuments\Installer\unix_shortcut_specification_en.xml"
+     id="Unix_shortcutSpec.xml"/>
+	<res src="C:\MyDocuments\Installer\unix_shortcut_specification_fr.xml"
+     id="Unix_shortcutSpec.xml_fra"/>
 
 
 DesktopShortcutCheckboxEnabled Builtin Variable

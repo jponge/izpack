@@ -23,30 +23,29 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.List;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -57,13 +56,9 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
-
-import java.util.ArrayList;
-import java.net.URLDecoder;
-import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -461,6 +456,46 @@ public class InstallationGroupPanel extends IzPanel
         return sortKey;
     }
 
+
+    /**
+     * Look for a key = InstallationGroupPanel.group.[group] entry:
+     * first using idata.langpackgetString(key+".html")
+     * next using idata.langpack.getString(key)
+     * next using idata.getVariable(key)
+     * lastly, defaulting to group
+     * @param group - the installation group name
+     * @return the localized group name
+     */
+    protected String getLocalizedGroupName(String group)
+    {
+        String gname = null;
+        String key = "InstallationGroupPanel.group." + group;
+        if( idata.langpack != null )
+        {
+            String htmlKey = key+".html";
+            String html = idata.langpack.getString(htmlKey);
+            // This will equal the key if there is no entry
+            if( htmlKey.equalsIgnoreCase(html) )
+                gname = idata.langpack.getString(key);
+            else
+                gname = html;
+        }
+        if (gname == null  || key.equalsIgnoreCase(gname))
+            gname = idata.getVariable(key);
+        if (gname == null)
+            gname = group;
+        try
+        {
+            gname = URLDecoder.decode(gname, "UTF-8");
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            emitWarning("Failed to convert localized group name", e.getMessage());
+        }
+
+        return gname;
+    }
+
     protected TableModel getModel(HashMap groupData)
     {
         String c1 = parent.langpack.getString("InstallationGroupPanel.colNameSelected");
@@ -504,7 +539,7 @@ public class InstallationGroupPanel extends IzPanel
             GroupData gd = (GroupData) iter.next();
             rows[count] = gd;
             Debug.trace("Creating button#"+count+", group="+gd.name);
-            JRadioButton btn = new JRadioButton(gd.name);
+            JRadioButton btn = new JRadioButton(getLocalizedGroupName(gd.name));
             if( selectedGroup == count )
             {
                 btn.setSelected(true);

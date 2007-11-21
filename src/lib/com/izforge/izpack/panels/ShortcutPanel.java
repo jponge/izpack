@@ -920,15 +920,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 continue;
             }
 
-            // TODO: write log info INFO.info( "Checking Condition for " +
-            // shortcutSpec.getAttribute( SPEC_ATTRIBUTE_NAME ) );
+            Debug.log( "Checking Condition for " + shortcutSpec.getAttribute( SPEC_ATTRIBUTE_NAME ) );
             if (!checkConditions(shortcutSpec))
             {
                 continue;
             }
 
-            // TODO write log info INFO.info( "Checked Condition for " +
-            // shortcutSpec.getAttribute( SPEC_ATTRIBUTE_NAME ) );
+            Debug.log( "Checked Condition for " + shortcutSpec.getAttribute( SPEC_ATTRIBUTE_NAME ) );
             data = new ShortcutData();
 
             data.name = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_NAME);

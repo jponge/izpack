@@ -243,7 +243,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants
                 }
                 catch (IOException e)
                 {
-                    // TODO handle or ignore
+                    Debug.log("Unable to get release file contents in 'getOsDetails'.");
                 }
             }
         }
