@@ -531,12 +531,13 @@ french installs and have the default resource ``shortcutSpec.xml`` (maybe
 containing strings in english) be used for other languages.
 
 The platform prefix and language suffix are combined like in this example :
- ``Unix_shortcutSpec.xml_fra``.
+``Unix_shortcutSpec.xml_fra``.
+
 When the installer can't find such a platform-and-language-specific resource,
 it will fallback to a suitable default using the following search order :
- ``shortcutSpec.xml_<iso3>`` (default platform, language-specific)
- ``<platform>_shortcutSpec.xml`` (default language, platform-specific)
- ``shortcutSpec.xml`` (default platform and language)
+``shortcutSpec.xml_<iso3>`` (default platform, language-specific)
+``<platform>_shortcutSpec.xml`` (default language, platform-specific)
+``shortcutSpec.xml`` (default platform and language)
 
 Reminder: If the shortcut panel does not find one of these named resources,
 it will never appear. So, do not use different resource names and do not add
@@ -545,6 +546,7 @@ a path to these.
 **Example**
 
 ::
+
 	<res src="C:\MyDocuments\Installer\default_shortcut_specification.xml"
      id="shortcutSpec.xml"/>
 	<res src="C:\MyDocuments\Installer\default_shortcut_specification_fr.xml"
