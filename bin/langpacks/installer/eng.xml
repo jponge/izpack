@@ -75,6 +75,7 @@
     <str id="InfoPanel.info" txt="Please read the following information: "/>
     
     <str id="PathInputPanel.required" txt="The chosen directory should exist."/>
+    <str id="PathInputPanel.required.forModificationInstallation" txt="The chosen directory should exist."/>    
     <str id="PathInputPanel.notValid" txt="The chosen directory does not contain the required product."/>
 
     <str id="TargetPanel.info" txt="Select the installation path: "/>

@@ -74,6 +74,7 @@
     <str id="InstallationTypePanel.modify" txt="Installation anpassen" />
     
     <str id="PathInputPanel.required" txt="Das gewählte Verzeichnis muss existieren."/>
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Das gewählte Verzeichnis muss existieren."/>
     <str id="PathInputPanel.notValid" txt="Das gewählte Verzeichnis enthält nicht das benötigte Produkt."/>
 
     <str id="TargetPanel.info" txt="Wählen Sie den Installationspfad:"/>
