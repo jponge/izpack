@@ -26,10 +26,15 @@ produce customized installers for their *very* specific needs.
 **BUT** IzPack is not a *freeware*. It's not *free* as in *"free beer"* but
 *"free as in free speech"*. So it's neither *freeware* nor *public domain*.
 It is software covered by the Apache Software License 2.0. You have access to
-the IzPack source code and you can modify it to make it suit your needs, but
-if you publish such a modified version, you are forced to publish the
-modifications you've made.That's a fair exchange of expertise and work. To
-learn more about the Apache Software License 2.0, visit
+the IzPack source code and you can modify it to make it suit your needs.
+
+**You are not required to publish your modifications** per the terms of the Apache Software License.
+However if you have made general-purpose changes, please consider **contributing them back** as it
+will benefit to the larger IzPack community. Another benefit of contributing back your changes is
+that you won't have to maintain your own patches and apply them back whenever we publish a new
+version of the software...
+
+To learn more about the Apache Software License 2.0, visit
 http://www.apache.org/licenses/LICENSE-2.0.html
 
 
@@ -49,9 +54,9 @@ different ways:
 
 -   by writing the XML installation file "by hand" and compiling it with
     the command line compiler
--   by invoking the compiler from the great APACHE JAKARTA ANT tool (see
-    http://jakarta.apache.org/) as IzPack can be used as a task for
-    ANT
+-   by invoking the compiler from the great Apache Ant tool (see
+    http://ant.apache.org/) as IzPack can be used as a task for
+    Ant
 
 Here is a brief (and certainly incomplete !) list of the main IzPack features
 :
@@ -92,7 +97,7 @@ any form :
 -   ... anything else you like :-)
 
 The official IzPack homepage is located at http://izpack.org/. The
-IzPack developer services (mailing-lists, CVS, patches manager, bugs tracker,
+IzPack developer services (mailing-lists, SVN, patches manager, bugs tracker,
 ...) are generously hosted by BerliOS. The IzPack BerliOS section is located
 at http://developer.berlios.de/projects/izpack/. Feel free to use
 these services. In particular, there are two mailing-lists:
@@ -108,23 +113,21 @@ these services. In particular, there are two mailing-lists:
 IzPack uses several 3rd party libraries and i would like to mention them in
 respect for their respective authors work :
 
--   *NanoXML* by Marc DE SCHEEMAECKER : the XML parser used inside IzPack
+-   *NanoXML* by Marc De Scheemaecker: the XML parser used inside IzPack
     and released under a *zlib/png*-style license - see http://nanoxml.sourceforge.net/
--   *Kunststoff Look and Feel* by Incors Gmbh : a SwingTM Look and Feel
-    that can be used for installers. It **really** looks good and is released
-    under the GNU LESSER GENERAL PUBLIC LICENSE (LGPL) - see
+-   *Kunststoff Look and Feel* by Incors Gmbh: a SwingTM Look and Feel
+    that can be used for installers. Released under the LGPL license - see
     http://www.incors.org/
--   *Crystal-SVG Icons* : the icons used in IzPack come from the great
-    work of Everaldo (http://www.everaldo.com/) that makes KDE 3.2
-    look so sweet
--   *Some Apache Jakarta classes and libraries* : released under the
+-   *Tango Icons*: icons from the Tango project at http://tango.freedesktop.org/
+-   *Some Apache Jakarta classes and libraries*: released under the
     *Apache License*
--   *Metouia Look and Feel* by Taoufik Romdhane : released under the
+-   *Metouia Look and Feel* by Taoufik Romdhane: released under the
     *LGPL license* - see http://mlf.sf.net/
--   *Liquid Look and Feel* by Miroslav Lazarevic : released under the
+-   *Liquid Look and Feel* by Miroslav Lazarevic: released under the
     *LGPL license* - see liquidlnf.sf.net/
--   *JGoodies Looks* by Karsten Lentzsch : released under a *BSD-style
+-   *JGoodies Looks* by Karsten Lentzsch: released under a *BSD-style
     license* - see http://looks.dev.java.net/
+-   *Nimbus look and feel* by Sun Microsystems under a LGPL license - see https://nimbus.dev.java.net/
 
 So, now let's dive into understanding how IzPack works. You'll be surprised
 to see how powerful and simple it can be :-)
