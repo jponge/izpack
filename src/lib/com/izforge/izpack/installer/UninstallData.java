@@ -21,13 +21,10 @@ package com.izforge.izpack.installer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.util.os.unix.UnixUser;
 
 /**
  * Holds uninstallation data. Implemented as a singleton.

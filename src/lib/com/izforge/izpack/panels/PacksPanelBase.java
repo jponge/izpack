@@ -534,7 +534,12 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             // allows returns false. In that case the PacksModel must not be
             // adapted here.
             packsModel = new PacksModel(this, idata, this.parent.getRules()) {
-              public boolean isCellEditable(int rowIndex, int columnIndex) { return false; }
+              /**
+               * Required (serializable)
+               */
+              private static final long serialVersionUID = 5061108355293832820L;
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) { return false; }
             };
             packsTable.setModel(packsModel);
             CheckBoxRenderer packSelectedRenderer = new CheckBoxRenderer();
@@ -751,6 +756,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     {
 
         
+        /**
+         * Required (serializable)
+         */
+        private static final long serialVersionUID = -9089892183236584242L;
+
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column)
         {

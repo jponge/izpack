@@ -25,7 +25,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.util.Debug;
 
 /*---------------------------------------------------------------------------*/
 /**

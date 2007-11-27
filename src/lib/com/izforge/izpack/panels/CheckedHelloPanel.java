@@ -38,6 +38,10 @@ import com.izforge.izpack.util.os.RegistryHandler;
 public class CheckedHelloPanel extends HelloPanel implements MSWinConstants
 {
 
+    /**
+     * Required (serializable)
+     */
+    private static final long serialVersionUID = 1737042770727953387L;
     /** Flag to break installation or not. */
     protected boolean abortInstallation;
 

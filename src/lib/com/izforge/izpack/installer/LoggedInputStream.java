@@ -1,9 +1,8 @@
 package com.izforge.izpack.installer;
 
 import java.io.IOException;
-import java.awt.event.*;
 import java.io.InputStream;
-import javax.swing.*;
+
 import com.izforge.izpack.Pack;
 
 /**
@@ -21,7 +20,7 @@ public class LoggedInputStream extends InputStream
    private long bytesRead = 0;
    private InputStream is;
    private DownloadPanel downloader;
-   private WebAccessor webAccessor;
+   // private WebAccessor webAccessor;  // Unused
    private boolean cancelled = false;
    private long lastTime = -1;
    private long lastBytes = -1;
@@ -35,7 +34,7 @@ public class LoggedInputStream extends InputStream
    {
       if(is == null) throw new RuntimeException("Unable to connect");
       this.is = is;
-      this.webAccessor = webAccessor;
+      // this.webAccessor = webAccessor;
       
       String sizeStr;
       if(webAccessor.getContentLength()>0)

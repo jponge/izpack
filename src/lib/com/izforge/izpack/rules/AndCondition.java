@@ -21,10 +21,8 @@
 
 package com.izforge.izpack.rules;
 
-import java.util.List;
-import java.util.Properties;
-
 import net.n3.nanoxml.XMLElement;
+
 import com.izforge.izpack.util.Debug;
 
 /**

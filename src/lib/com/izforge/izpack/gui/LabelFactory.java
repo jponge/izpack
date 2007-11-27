@@ -199,6 +199,11 @@ public class LabelFactory implements SwingConstants
     {
 
         /**
+         * Required (serializable)
+         */
+        private static final long serialVersionUID = 2918265795390777147L;
+
+        /**
          * Creates a <code>JLabel</code> instance with the specified image.
          * The label is centered vertically and horizontally
          * in its display area.

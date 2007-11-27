@@ -1,10 +1,15 @@
 package com.izforge.izpack.installer;
 
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import java.awt.event.*;
-import java.awt.*;
-import java.awt.image.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
 
 /**
  * Displays progress and stats while downloading repository files.
@@ -14,6 +19,8 @@ import java.awt.image.*;
  */
 public class DownloadPanel extends JDialog implements ActionListener
 {
+   private static final long serialVersionUID = -4458769435196053866L;
+
    JLabel statusLabel = new JLabel("", JLabel.RIGHT);
 
    JLabel fileLabel = new JLabel("File", JLabel.LEFT);

@@ -22,21 +22,19 @@
 package com.izforge.izpack.installer;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
-import java.io.ByteArrayOutputStream;
-
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;

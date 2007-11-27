@@ -23,12 +23,12 @@ package com.izforge.izpack.installer;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.io.InputStream;
 import java.net.Authenticator;
 import java.net.ConnectException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.PasswordAuthentication;
 import java.net.URL;
@@ -42,8 +42,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.JProgressBar;
-import java.net.*;
 
 /**
  * Dialogs for password authentication and firewall specification, when needed, during web

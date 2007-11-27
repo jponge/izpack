@@ -24,8 +24,6 @@ import java.text.MessageFormat;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import com.izforge.izpack.util.StringTool;
-
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;

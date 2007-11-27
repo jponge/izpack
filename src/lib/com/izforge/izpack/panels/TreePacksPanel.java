@@ -52,7 +52,12 @@ import com.izforge.izpack.util.VariableSubstitutor;
 
 public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
 {
-   // Common used Swing fields
+   /**
+     * Required (serializable)
+     */
+    private static final long serialVersionUID = 5684716698930628262L;
+
+// Common used Swing fields
    /**
     * The free space label.
     */
@@ -124,7 +129,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    private HashMap packToRowNumber;
    
    private HashMap idToCheckBoxNode = new HashMap();
-   private boolean created = false;
+   //private boolean created = false;   // UNUSED
    
    private CheckTreeController checkTreeController;
 
@@ -781,6 +786,11 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          // allows returns false. In that case the PacksModel must not be
          // adapted here.
          packsModel = new PacksModel(this, idata, this.parent.getRules()) {
+            /**
+             * Required (serializable)
+             */
+            private static final long serialVersionUID = 697462278279845304L;
+
             public boolean isCellEditable(int rowIndex, int columnIndex) { return false; }
          };
          
@@ -1013,7 +1023,11 @@ class CheckBoxNodeRenderer implements TreeCellRenderer {
  */
 class CheckBoxNode extends DefaultMutableTreeNode{
 
-   String id;
+   /**
+    * Required (serializable)
+    */
+   private static final long serialVersionUID = 8743154051564336973L;
+String id;
    boolean selected;
    boolean partial;
    boolean enabled;

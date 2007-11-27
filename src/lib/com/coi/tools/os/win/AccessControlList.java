@@ -34,6 +34,10 @@ import java.util.ArrayList;
 public class AccessControlList extends java.util.ArrayList
 {
 
+    /**
+     * Required (serializable)
+     */
+    private static final long serialVersionUID = -5350586385078554562L;
     private ArrayList permissions = new ArrayList();
 
     /**

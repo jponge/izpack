@@ -17,13 +17,10 @@
  */
 package com.izforge.izpack.installer;
 
+import junit.framework.TestCase;
 import net.n3.nanoxml.XMLElement;
 
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
-
-import junit.framework.TestCase;
 
 
 /**

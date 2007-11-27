@@ -1146,7 +1146,7 @@ public class CompileWorker implements Runnable
      */
     private static class EclipseStdErrHandler extends PrintStream
     {   
-        private CompileHandler listener;
+        // private CompileHandler listener;   // Unused
         private int errorCount = 0;
         private StdErrParser parser;
         
@@ -1160,7 +1160,7 @@ public class CompileWorker implements Runnable
         {
             // initialize with dummy stream (PrintStream needs it)
             super(anOutputStream);
-            this.listener = aHandler;
+            // this.listener = aHandler; // TODO : reactivate this when we want to do something with it
             this.parser = new StdErrParser();
         }
         
