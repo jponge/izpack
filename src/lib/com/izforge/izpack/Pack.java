@@ -64,7 +64,7 @@ public class Pack implements Serializable
      * is a string and serves are key identifying each group of mutually
      * exclusive packs.
      */
-    public String excludeGroup = new String();
+    public String excludeGroup = "";
 
     /** The group the pack is associated with. The pack group identifies
      * packs with common functionality to allow for grouping of packs in a

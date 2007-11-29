@@ -442,7 +442,6 @@ public class GUIInstaller extends InstallerBase
             }
 
             UIManager.setLookAndFeel(variant);
-						return;
         }
     }
 

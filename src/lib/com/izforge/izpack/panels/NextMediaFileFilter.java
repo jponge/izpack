@@ -44,12 +44,7 @@ public class NextMediaFileFilter extends FileFilter {
       return true;
     }
     String filepath = f.getAbsolutePath();
-    if (filepath.endsWith(this.volumename)) {
-      return true;
-    }
-    else {
-      return false;
-    }
+      return filepath.endsWith(this.volumename);
   }
 
   /* (non-Javadoc)

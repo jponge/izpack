@@ -333,7 +333,7 @@ public class Packager extends PackagerBase
             if (packJarsSeparate) packStream.closeAlways();
 
             XMLElement child = new XMLElement("pack");
-            child.setAttribute("nbytes", new Long(pack.nbytes).toString());
+            child.setAttribute("nbytes", Long.toString(pack.nbytes));
             child.setAttribute("name", pack.name);
             if(pack.id != null) child.setAttribute("id", pack.id);
             root.addChild(child);

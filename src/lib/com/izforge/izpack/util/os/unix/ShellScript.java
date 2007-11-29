@@ -92,7 +92,7 @@ public class ShellScript
      */
     public ShellScript(String aShell)
     {
-        content.append("#!/usr/bin/env " + aShell);
+        content.append("#!/usr/bin/env ").append(aShell);
         content.append(header);
     }
 

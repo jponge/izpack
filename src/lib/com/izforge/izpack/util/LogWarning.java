@@ -32,6 +32,6 @@ public interface LogWarning
   static final int WARNING_BASE = 1000;
 
   /** The highest legal error message number is less than this value.  */
-  static final int MAX_WARNING  = WARNING_BASE + 0;
+  static final int MAX_WARNING  = WARNING_BASE;
 }
 

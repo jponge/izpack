@@ -1530,7 +1530,6 @@ public class InstallerFrame extends JFrame
             if (!canShow(installdata.curPanelNumber))
             {
                 this.navigateNext(last);
-                return;
             }
             else
             {
@@ -1564,7 +1563,6 @@ public class InstallerFrame extends JFrame
             if (!canShow(installdata.curPanelNumber))
             {
                 this.navigatePrevious(last);
-                return;
             }
             else
             {

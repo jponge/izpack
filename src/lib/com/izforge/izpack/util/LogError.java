@@ -37,7 +37,7 @@ public interface LogError
    *  <li>name of the file that could not be written
    *  </ol>
    *   */
-  public static final int COULD_NOT_WRITE_FILE = ERROR_BASE + 0;
+  public static final int COULD_NOT_WRITE_FILE = ERROR_BASE;
 
   /** The highest legal error message number is less than this value.  */
   static final int MAX_ERROR  = ERROR_BASE + 1;

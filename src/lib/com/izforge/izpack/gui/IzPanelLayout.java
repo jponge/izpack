@@ -416,7 +416,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                                 .getView()).getLineWrap()) size.width = 1000;
                     }
                 }
-                ((JComponent) constraints.component).setPreferredSize(size);
+                constraints.component.setPreferredSize(size);
 
             }
             height += stretchPart;

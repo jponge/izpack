@@ -112,16 +112,7 @@ public class FileSpanningInputStream extends InputStream
                         break;
                     }
                 }
-                if (errorfound)
-                {
-                    // there was an error
-                    valid = false;
-                }
-                else
-                {
-                    // magic number is valid
-                    valid = true;
-                }
+                valid = !errorfound;
             }
         }
         return valid;

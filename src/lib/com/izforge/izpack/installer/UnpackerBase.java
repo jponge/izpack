@@ -509,7 +509,7 @@ public abstract class UnpackerBase implements IUnpacker
             // element of custom action array.
             i = retval.length - 1; // Should be so, but safe is safe ...
             retval[i] = new ArrayList();
-            Iterator iter = ((List) retval[AutomatedInstallData.INSTALLER_LISTENER_INDEX])
+            Iterator iter = retval[AutomatedInstallData.INSTALLER_LISTENER_INDEX]
                     .iterator();
             while (iter.hasNext())
             {

@@ -521,7 +521,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             programGroup.setText(suggestedProgramGroup);
             shortcut.setUserType(itsUserType = Shortcut.CURRENT_USER);
 
-            return;
         }
 
         // ----------------------------------------------------
@@ -535,7 +534,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             programGroup.setText(suggestedProgramGroup);
             shortcut.setUserType(itsUserType = Shortcut.ALL_USERS);
 
-            return;
         }
 
         // ----------------------------------------------------
@@ -551,7 +549,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                groupList.getSelectionModel().clearSelection();
             programGroup.setText(suggestedProgramGroup);
 
-            return;
         }
 
         // ----------------------------------------------------
@@ -565,7 +562,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             // add the file to the uninstaller
             addToUninstaller();
 
-            return;
         }
         else if (eventSource.equals(createShortcuts))
         {
@@ -989,7 +985,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             data.TryExec = shortcutSpec.getAttribute(
                     SPEC_TRYEXEC, "");
 
-            data.createForAll = new Boolean(shortcutSpec.getAttribute(CREATE_FOR_ALL, "false"));
+            data.createForAll = Boolean.valueOf(shortcutSpec.getAttribute(CREATE_FOR_ALL, "false"));
 
             // ** EndOf LINUX **//
             // temp =
@@ -1326,7 +1322,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                         // save the shortcut
                         shortcut.save();
                         
-                        if(data.type == Shortcut.APPLICATIONS || data.addToGroup == true)
+                        if(data.type == Shortcut.APPLICATIONS || data.addToGroup)
                         {
                            if(shortcut instanceof com.izforge.izpack.util.os.Unix_Shortcut)
                            {
@@ -1376,7 +1372,6 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             }
             catch (Throwable exception)
             {
-                continue;
             }
         }
         if(OsVersion.IS_UNIX) writeXDGMenuFile(startMenuShortcuts,
@@ -1448,7 +1443,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = (String) ((XMLElement) packs.elementAt(k)).getAttribute(
+                required = ((XMLElement) packs.elementAt(k)).getAttribute(
                         SPEC_ATTRIBUTE_NAME, "");
 
                 if (selected.equals(required)) { return (true); }

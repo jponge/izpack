@@ -459,7 +459,7 @@ public class UninstallerFrame extends JFrame
             else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
                 jo_choices = JOptionPane.YES_NO_CANCEL_OPTION;
 
-            int user_choice = JOptionPane.showConfirmDialog(null, (Object) question, title,
+            int user_choice = JOptionPane.showConfirmDialog(null, question, title,
                     jo_choices, JOptionPane.QUESTION_MESSAGE);
 
             if (user_choice == JOptionPane.CANCEL_OPTION) return AbstractUIHandler.ANSWER_CANCEL;

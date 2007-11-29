@@ -82,7 +82,7 @@ public class PackInfo
      */
     public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup, boolean uninstall)
     {
-        boolean ispreselected = (excludegroup == null) ? true : false;
+        boolean ispreselected = (excludegroup == null);
         pack = new Pack(name, id, description, null, null, required, ispreselected, loose, excludegroup, uninstall);
         colour = PackInfo.WHITE;
     }

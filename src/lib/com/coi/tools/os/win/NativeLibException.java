@@ -286,7 +286,6 @@ public class NativeLibException extends Exception
             }
             catch (MissingResourceException missingresourceexception)
             { // do not throw, else look in next bundle.
-                ;
             }
         }
         return (s);

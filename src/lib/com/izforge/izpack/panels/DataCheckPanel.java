@@ -102,8 +102,7 @@ public class DataCheckPanel extends IzPanel
 	public void panelActivate()
 	{
         printDebugInfo();
-		return;
-	}	
+    }
 	
     /**
      * Get and return the list of pack names.

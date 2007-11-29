@@ -22,11 +22,7 @@
 
 package com.izforge.izpack.util;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Vector;
-import java.util.Hashtable;
-import java.util.Enumeration;
+import java.util.*;
 import java.text.MessageFormat;
 import java.io.File;
 import java.io.FileWriter;
@@ -236,10 +232,7 @@ public class Log implements LogError, LogWarning, LogMessage
             {
                 String[] channelList = temp.split(",");
 
-                for (int i = 0; i < channelList.length; i++)
-                {
-                    channels.add(channelList[i]);
-                }
+                channels.addAll(Arrays.asList(channelList));
             }
         }
     }
@@ -726,7 +719,7 @@ public class Log implements LogError, LogWarning, LogMessage
         {
             message
                     .append(installData.langpack.getString(MESSAGE_PREFIX
-                            + Integer.toString(record.message - LogMessage.MESSAGE_BASE),
+                            + Integer.toString(record.message),
                             record.variables));
         }
         else
@@ -858,7 +851,7 @@ public class Log implements LogError, LogWarning, LogMessage
         }
         else
         {
-            message.append("Debug - " + record.channel + ": ");
+            message.append("Debug - ").append(record.channel).append(": ");
         }
 
         message.append(MessageFormat.format(record.template, record.variables));

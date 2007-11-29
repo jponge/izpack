@@ -146,7 +146,7 @@ public class CompilerConfig extends Thread
      */
     public CompilerConfig(String filename, String basedir, String kind, String output) throws CompilerException
     {
-        this(filename, basedir, kind, output, (PackagerListener) null);
+        this(filename, basedir, kind, output, null);
     }
     /**
      * The constructor.
@@ -175,7 +175,7 @@ public class CompilerConfig extends Thread
     public CompilerConfig(String filename, String base, String kind, String output, String compr_format, 
             PackagerListener listener) throws CompilerException
     {
-        this(filename,base,kind,output, compr_format,listener, (String) null);
+        this(filename,base,kind,output, compr_format,listener, null);
     }
 
     /**
@@ -190,7 +190,7 @@ public class CompilerConfig extends Thread
     public CompilerConfig(String basedir, String kind, String output, PackagerListener listener,
             String installText) throws CompilerException
     {
-        this((String) null, basedir, kind, output, "default", listener, installText);
+        this(null, basedir, kind, output, "default", listener, installText);
     }
     /**
      * 
@@ -2166,7 +2166,7 @@ public class CompilerConfig extends Thread
                 // Calls the compiler
                 CmdlinePackagerListener listener = new CmdlinePackagerListener();
                 CompilerConfig compiler = new CompilerConfig(filename, base, kind, output, 
-                        compr_format, compr_level, listener, (String) null);
+                        compr_format, compr_level, listener, null);
                 compiler.executeCompiler();
 
                 // Waits

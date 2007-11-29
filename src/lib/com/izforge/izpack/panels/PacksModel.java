@@ -555,7 +555,7 @@ class PacksModel extends AbstractTableModel
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
-            if (pack.required == true){
+            if (pack.required){
                 String packid = pack.id;
                 if (packid != null){
                     if (!(!this.rules.canInstallPack(packid, this.variables) && this.rules.canInstallPackOptional(packid, this.variables))){

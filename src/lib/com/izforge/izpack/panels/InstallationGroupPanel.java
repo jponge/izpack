@@ -202,7 +202,7 @@ public class InstallationGroupPanel extends IzPanel
     public void valueChanged(ListSelectionEvent e)
     {
         Debug.trace("valueChanged: " + e);
-        if (e.getValueIsAdjusting() == false)
+        if (!e.getValueIsAdjusting())
         {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
             if( lsm.isSelectionEmpty()  )
@@ -287,7 +287,7 @@ public class InstallationGroupPanel extends IzPanel
             //back and forth between the group selection panel and the packs selection panel
             p.revDependencies = null;
 
-            if( data.packNames.contains(p.name) == false )
+            if(!data.packNames.contains(p.name))
             {
                 iter.remove();
                 Debug.trace("Removed AvailablePack: "+p.name);
@@ -317,7 +317,7 @@ public class InstallationGroupPanel extends IzPanel
         while( iter.hasNext() )
         {
             String dependent = (String) iter.next();
-            if( data.packNames.contains(dependent) == false )
+            if(!data.packNames.contains(dependent))
             {
                 Debug.trace("Need dependent: "+dependent);
                 Pack dependentPack = (Pack) packsByName.get(dependent);
@@ -377,10 +377,10 @@ public class InstallationGroupPanel extends IzPanel
             {
                 Pack p = (Pack) iter.next();
                 Set groups = p.installGroups;
-                if( groups.size() == 0 || groups.contains(data.name) == true )
+                if( groups.size() == 0 || groups.contains(data.name))
                 {
                     // The pack may have already been added while traversing dependencies
-                    if( data.packNames.contains(p.name) == false )
+                    if(!data.packNames.contains(p.name))
                         addDependents(p, packsByName, data);
                 }
             }
@@ -545,7 +545,7 @@ public class InstallationGroupPanel extends IzPanel
                 btn.setSelected(true);
                 Debug.trace("Selected button#"+count);
             }
-            else if ( selectedGroup < 0 && madeSelection == false )
+            else if ( selectedGroup < 0 && !madeSelection)
             {
                 if( defaultGroup != null )
                 {

@@ -760,7 +760,7 @@ public class TwoColumnLayout implements LayoutManager2
     private int topBuffer(int usedHeight, Container parent)
     {
         int amount = ((int) parent.getSize().getHeight()) - usedHeight;
-        amount = (int) (amount * topBuffer) / 100;
+        amount = amount * topBuffer / 100;
 
         return (amount);
     }

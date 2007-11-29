@@ -200,7 +200,6 @@ public class LayoutHelper implements LayoutConstants
         if (isGridBag())
         {
             completeGridBagLayout();
-            return;
         }
         // TODO: impl for IzPanelLayout
     }

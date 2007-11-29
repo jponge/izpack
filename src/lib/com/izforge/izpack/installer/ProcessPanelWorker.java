@@ -649,7 +649,7 @@ public class ProcessPanelWorker implements Runnable
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = (String) ((XMLElement) packs.elementAt(k)).getAttribute("name", "");
+                required = ((XMLElement) packs.elementAt(k)).getAttribute("name", "");
                 // System.out.println ("Attribute name is " + required);
                 if (selected.equals(required))
                 {

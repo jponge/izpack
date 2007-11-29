@@ -123,7 +123,7 @@ public class FileExecutor
 
             return execOut[0];
 
-        else if (forceToGetStdOut == true)
+        else if (forceToGetStdOut)
             return execOut[0];
         else
             return execOut[1];

@@ -64,7 +64,7 @@ public class UninstallData
         uninstallableFilesList = new ArrayList();
         executablesList = new ArrayList();
         additionalData = new HashMap();
-        rootScript = new String();
+        rootScript = "";
     }
     
     /** Constant RootFiles = "rootfiles" */
@@ -202,7 +202,7 @@ public class UninstallData
      */
     public void addRootUninstallScript( String aRootUninstallScript )
     {    
-        rootScript = new String( aRootUninstallScript==null?"":aRootUninstallScript );
+        rootScript = aRootUninstallScript == null ? "" : aRootUninstallScript;
     }
     
     /**

@@ -219,7 +219,7 @@ public class Destroyer extends Thread
      */
     private String getRootScript() throws Exception
     {
-        String result = new String();
+        String result = "";
         ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
                 + UninstallData.ROOTSCRIPT));
         
@@ -238,7 +238,7 @@ public class Destroyer extends Thread
     {
         if(!"".equals(aRootScript))
         {
-            Debug.log("Will Execute: " + aRootScript.toString());
+            Debug.log("Will Execute: " + aRootScript);
 
             try
             {

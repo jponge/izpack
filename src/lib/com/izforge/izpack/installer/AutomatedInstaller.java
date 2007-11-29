@@ -411,7 +411,6 @@ public class AutomatedInstaller extends InstallerBase
                                 + panelClassName );
                         e.printStackTrace();
                         this.result = false;
-                        continue;
                     }
     
                 }

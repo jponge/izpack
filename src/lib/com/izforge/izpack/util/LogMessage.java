@@ -32,6 +32,6 @@ public interface LogMessage
   static final int MESSAGE_BASE = 0;
 
   /** The highest legal error message number is less than this value.  */
-  static final int MAX_MESSAGE  = MESSAGE_BASE + 0;
+  static final int MAX_MESSAGE  = 0;
 }
 

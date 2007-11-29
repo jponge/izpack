@@ -293,7 +293,7 @@ public class JDKPathPanel extends PathInputPanel
     }
     private boolean verifyVersion()
     {
-        return( verifyVersionEx() > 0 ? false : true );
+        return(verifyVersionEx() <= 0 );
     }
 
     private boolean compareVersions(String in, String template, boolean isMin,

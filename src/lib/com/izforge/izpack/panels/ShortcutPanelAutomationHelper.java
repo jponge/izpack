@@ -208,7 +208,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
             data.TryExec = dataElement.getAttribute(ShortcutPanel.SPEC_TRYEXEC, "");
 
-            data.createForAll = new Boolean(dataElement.getAttribute(ShortcutPanel.CREATE_FOR_ALL,
+            data.createForAll = Boolean.valueOf(dataElement.getAttribute(ShortcutPanel.CREATE_FOR_ALL,
                     "false"));
             data.userType = Integer.valueOf(
                     dataElement.getAttribute(ShortcutPanel.USER_TYPE, Integer
@@ -316,7 +316,6 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
             }
             catch (Throwable exception)
             {
-                continue;
             }
         }
 

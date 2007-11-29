@@ -1431,7 +1431,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
         if ((variable == null) || (ruleField == null)) { return (true); }
 
-        boolean success = validating ? ruleField.validateContents() : true;
+        boolean success = !validating || ruleField.validateContents();
         if (!success)
         {
             String message = "";
@@ -2064,7 +2064,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         if ((variable == null) || (passwordGroupsRead.contains(group))) { return (true); }
         passwordGroups.add(group);
 
-        boolean success = validating ? group.validateContents() : true;
+        boolean success = !validating || group.validateContents();
 
         if (!success)
         {
@@ -2858,7 +2858,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = (String) ((XMLElement) packs.elementAt(k)).getAttribute(NAME, "");
+                required = ((XMLElement) packs.elementAt(k)).getAttribute(NAME, "");
                 if (selected.equals(required)) { return (true); }
             }
         }
@@ -2907,7 +2907,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = (String) ((XMLElement) packs.elementAt(k)).getAttribute(NAME, "");
+                required = ((XMLElement) packs.elementAt(k)).getAttribute(NAME, "");
                 if (selected.equals(required)) { return (false); }
             }
         }
@@ -3186,7 +3186,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             boolean found = false;
             for (int x = 0; x < this.pathComboBox.getItemCount(); x++)
             {
-                if (((String) this.pathComboBox.getItemAt(x)).equals(selected))
+                if (this.pathComboBox.getItemAt(x).equals(selected))
                 {
                     found = true;
                 }
@@ -3406,7 +3406,6 @@ public class UserInputPanel extends IzPanel implements ActionListener
             {
                 if (vname == null)
                 {
-                    continue;
                 }
                 else
                 {

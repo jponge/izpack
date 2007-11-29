@@ -280,7 +280,7 @@ public class RulesEngine
 
     public boolean isConditionTrue(String id, Properties variables)
     {
-        Condition cond = (Condition) getCondition(id);
+        Condition cond = getCondition(id);
         if (cond == null)
         {
             Debug.trace("Condition (" + id + ") not found.");
@@ -346,7 +346,7 @@ public class RulesEngine
             return true;
         }
         Debug.trace("there is a condition");
-        Condition condition = (Condition) getCondition((String) this.panelconditions.get(panelid));
+        Condition condition = getCondition((String) this.panelconditions.get(panelid));
         if (condition != null) { return condition.isTrue(); }
         return false;
     }
@@ -369,7 +369,7 @@ public class RulesEngine
             return true;
         }
         Debug.trace("there is a condition");
-        Condition condition = (Condition) getCondition((String) this.packconditions.get(packid));
+        Condition condition = getCondition((String) this.packconditions.get(packid));
         if (condition != null) { return condition.isTrue(); }
         return false;
     }
