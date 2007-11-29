@@ -92,7 +92,7 @@ public class Compiler extends Thread
     private String compr_format;
     private int compr_level;
     private PackagerListener packagerlistener;
-
+      
     /**
      * Set the IzPack home directory
      * @param izHome - the izpack home directory
@@ -150,7 +150,7 @@ public class Compiler extends Thread
         // initialize backed by system properties
         properties = new Properties(System.getProperties());
         propertySubstitutor = new VariableSubstitutor(properties);
-
+       
         // add izpack built in property
         setProperty("izpack.version", IZPACK_VERSION);
         setProperty("basedir", basedir);
@@ -863,6 +863,24 @@ public class Compiler extends Thread
             System.out.println();
             System.out.println("[ End ]");
         }
+    }
+
+    
+    /**
+     * @return the conditions
+     */
+    public Map getConditions()
+    {
+        return this.packager.getRules();
+    }
+
+    
+    /**
+     * @param conditions the conditions to set
+     */
+    public void setConditions(Map conditions)
+    {
+        this.packager.setRules(conditions);        
     }
 
 }

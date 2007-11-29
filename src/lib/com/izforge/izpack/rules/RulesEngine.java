@@ -50,18 +50,27 @@ public class RulesEngine
 
     protected static InstallData installdata;
 
+    private RulesEngine() {
+        conditionsmap = new Hashtable();
+        this.panelconditions = new Hashtable();
+        this.packconditions = new Hashtable();
+        this.optionalpackconditions = new Hashtable();
+    }
+    
     /**
      * 
      */
     public RulesEngine(XMLElement conditionsspecxml, InstallData installdata)
     {
-        this.conditionsspec = conditionsspecxml;
-        conditionsmap = new Hashtable();
-        this.panelconditions = new Hashtable();
-        this.packconditions = new Hashtable();
-        this.optionalpackconditions = new Hashtable();
+        this();
+        this.conditionsspec = conditionsspecxml;        
         RulesEngine.installdata = installdata;
         this.readConditions();
+    }
+    
+    public RulesEngine(Map rules, InstallData installdata) {
+        this();
+        RulesEngine.installdata = installdata;
     }
 
     /**
@@ -103,7 +112,8 @@ public class RulesEngine
                     + conditiontype.substring(1, conditiontype.length());
                 conditionclassname += "Condition";
             }
-            ClassLoader loader = ClassLoader.getSystemClassLoader();
+            //ClassLoader loader = ClassLoader.getSystemClassLoader();
+            ClassLoader loader = RulesEngine.class.getClassLoader();
             try
             {
                 Class conditionclass = loader.loadClass(conditionclassname);
@@ -115,14 +125,17 @@ public class RulesEngine
             catch (ClassNotFoundException e)
             {
                 Debug.trace(conditionclassname + " not found.");
+                e.printStackTrace();                
             }
             catch (InstantiationException e)
             {
                 Debug.trace(conditionclassname + " couldn't be instantiated.");
+                e.printStackTrace();
             }
             catch (IllegalAccessException e)
             {
                 Debug.trace("Illegal access to " + conditionclassname);
+                e.printStackTrace();
             }            
         }
         return result;

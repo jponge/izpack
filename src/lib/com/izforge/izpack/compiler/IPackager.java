@@ -21,6 +21,7 @@ package com.izforge.izpack.compiler;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import net.n3.nanoxml.XMLElement;
@@ -182,4 +183,14 @@ public interface IPackager
      * @param data - the xml-element packaging from the install.xml
      */
     public abstract void addConfigurationInformation(XMLElement data);
+    
+    /**
+     * @return the rules
+     */
+    public abstract Map getRules();    
+    
+    /**
+     * @param rules the rules to set
+     */
+    public abstract void setRules(Map rules);
 }

@@ -67,6 +67,8 @@ import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
 import com.izforge.izpack.event.CompilerListener;
+import com.izforge.izpack.rules.Condition;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
@@ -319,6 +321,7 @@ public class CompilerConfig extends Thread
 
         // We add all the information
         addVariables(data);
+        addConditions(data);
         addInfo(data);
         addGUIPrefs(data);
         addLangpacks(data);
@@ -1509,6 +1512,41 @@ public class CompilerConfig extends Thread
         }
         notifyCompilerListener("addVariables", CompilerListener.END, data);
     }
+    
+    /**
+     * Parse conditions and add them to the compiler.
+     * @param data
+     * @throws CompilerException
+     */
+    protected void addConditions(XMLElement data) throws CompilerException
+    {
+        notifyCompilerListener("addConditions", CompilerListener.BEGIN, data);
+        // We get the condition list
+        XMLElement root = data.getFirstChildNamed("conditions");
+        Map conditions = compiler.getConditions();
+        if (root != null) {               
+            Iterator iter = root.getChildrenNamed("condition").iterator();
+            while (iter.hasNext())
+            {
+                XMLElement conditionel = (XMLElement) iter.next();
+                Condition condition = RulesEngine.analyzeCondition(conditionel);
+                if (condition != null) {
+                    String conditionid = condition.getId();
+                    if (conditions.containsKey(conditionid))
+                    {
+                        parseWarn(conditionel, "Condition with id '" + conditionid + "' will be overwritten");
+                    }
+                    conditions.put(conditionid, condition);
+                    
+                }
+                else {
+                    parseWarn(conditionel, "Condition couldn't be instantiated.");
+                }
+            }
+        }        
+        notifyCompilerListener("addConditions", CompilerListener.END, data);
+    }
+    
 
     /**
      * Properties declaration is a fragment of the xml file. For example:

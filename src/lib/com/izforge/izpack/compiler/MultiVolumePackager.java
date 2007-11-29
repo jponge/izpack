@@ -131,19 +131,7 @@ public class MultiVolumePackager extends PackagerBase
 
         sendStart();
 
-        // write the primary jar. MUST be first so manifest is not overwritten
-        // by
-        // an included jar
-        System.out.println("Writing skeleton installer.");
-        writeSkeletonInstaller();
-        writeInstallerObject("info", info);
-        writeInstallerObject("vars", variables);
-        writeInstallerObject("GUIPrefs", guiPrefs);
-        writeInstallerObject("panelsOrder", panelList);
-        writeInstallerObject("customData", customDataList);
-        writeInstallerObject("langpacks.info", langpackNameList);
-        writeInstallerResources();
-        writeIncludedJars();
+        writeInstaller();
 
         // Pack File Data may be written to separate jars
         String packfile = baseFile.getParent() + File.separator + INSTALLER_PAK_NAME;
@@ -192,7 +180,7 @@ public class MultiVolumePackager extends PackagerBase
      * Write skeleton installer to primary jar. It is just an included jar, except that we copy the
      * META-INF as well.
      */
-    private void writeSkeletonInstaller() throws IOException
+    protected void writeSkeletonInstaller() throws IOException
     {
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
         
@@ -267,7 +255,7 @@ public class MultiVolumePackager extends PackagerBase
     /**
      * Write an arbitrary object to primary jar.
      */
-    private void writeInstallerObject(String entryName, Object object) throws IOException
+    protected void writeInstallerObject(String entryName, Object object) throws IOException
     {
         primaryJarStream.putNextEntry(new ZipEntry(entryName));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
@@ -277,7 +265,7 @@ public class MultiVolumePackager extends PackagerBase
     }
 
     /** Write the data referenced by URL to primary jar. */
-    private void writeInstallerResources() throws IOException
+    protected void writeInstallerResources() throws IOException
     {
         sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
 
@@ -300,7 +288,7 @@ public class MultiVolumePackager extends PackagerBase
     }
 
     /** Copy included jars to primary jar. */
-    private void writeIncludedJars() throws IOException
+    protected void writeIncludedJars() throws IOException
     {
         sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
 
@@ -497,21 +485,7 @@ public class MultiVolumePackager extends PackagerBase
 
         return jar;
     }
-
-    /**
-     * Copies contents of one jar to another.
-     * 
-     * <p>
-     * TODO: it would be useful to be able to keep signature information from signed jar files, can
-     * we combine manifests and still have their content signed?
-     * 
-     * @see #copyStream(InputStream, OutputStream)
-     */
-    private void copyZip(ZipInputStream zin, ZipOutputStream out) throws IOException
-    {
-        copyZip(zin, out, null);
-    }
-
+    
     /**
      * Copies specified contents of one jar to another.
      * 
@@ -662,6 +636,15 @@ public class MultiVolumePackager extends PackagerBase
     public void addConfigurationInformation(XMLElement data)
     {
        this.configdata = data;        
+    }
+
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.compiler.PackagerBase#writePacks()
+     */
+    protected void writePacks() throws Exception
+    {
+        // TODO Auto-generated method stub
+        
     }
 
 }

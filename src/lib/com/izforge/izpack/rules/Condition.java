@@ -21,6 +21,8 @@
 
 package com.izforge.izpack.rules;
 
+import java.io.Serializable;
+
 import com.izforge.izpack.installer.AutomatedInstallData;
 import net.n3.nanoxml.XMLElement;
 
@@ -29,7 +31,7 @@ import net.n3.nanoxml.XMLElement;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public abstract class Condition
+public abstract class Condition implements Serializable
 {
 
     protected String id;

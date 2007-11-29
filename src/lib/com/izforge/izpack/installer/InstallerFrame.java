@@ -48,6 +48,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -268,13 +269,30 @@ public class InstallerFrame extends JFrame
      */
     protected void loadConditions()
     {
+        // try to load already parsed conditions
+        try {
+            InputStream in = InstallerFrame.class.getResourceAsStream("/rules");
+            ObjectInputStream objIn = new ObjectInputStream(in);
+            Map rules = (Map) objIn.readObject();
+            if ((rules != null) && (rules.size() != 0)) {
+                this.rules = new RulesEngine(rules,installdata);
+            }
+            objIn.close();
+        }
+        catch (Exception e) {
+            
+        }
+        if (rules != null) {
+            // rules already read
+            return;
+        }
         try
         {
             InputStream input = null;
             input = this.getResource(CONDITIONS_SPECRESOURCENAME);
             if (input == null)
             {
-                this.rules = new RulesEngine(null, installdata);
+                this.rules = new RulesEngine((XMLElement) null, installdata);
                 return;
             }
 
@@ -291,7 +309,7 @@ public class InstallerFrame extends JFrame
         {
             Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
             // there seem to be no conditions
-            this.rules = new RulesEngine(null, installdata);
+            this.rules = new RulesEngine((XMLElement) null, installdata);
         }
     }
 

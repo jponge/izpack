@@ -23,6 +23,7 @@
 package com.izforge.izpack.compiler;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,6 +82,9 @@ public abstract class PackagerBase implements IPackager
 
     /** The langpack URLs keyed by locale name (e.g. de_CH). */
     protected Map installerResourceURLMap = new HashMap();
+    
+    /** the conditions */
+    protected Map rules = new HashMap();
 
     /** Jar file URLs who's contents will be copied into the installer. */
     protected Set includedJarURLs = new HashSet();
@@ -290,4 +294,48 @@ public abstract class PackagerBase implements IPackager
         this.listener = listener;
     }
 
+    
+    /**
+     * @return the rules
+     */
+    public Map getRules()
+    {
+        return this.rules;
+    }
+
+    
+    /**
+     * @param rules the rules to set
+     */
+    public void setRules(Map rules)
+    {
+        this.rules = rules;
+    }
+
+    
+    protected void writeInstaller() throws Exception{
+        // write the primary jar. MUST be first so manifest is not overwritten
+        // by
+        // an included jar
+        writeSkeletonInstaller();
+
+        writeInstallerObject("info", info);
+        writeInstallerObject("vars", variables);
+        writeInstallerObject("GUIPrefs", guiPrefs);
+        writeInstallerObject("panelsOrder", panelList);
+        writeInstallerObject("customData", customDataList);
+        writeInstallerObject("langpacks.info", langpackNameList);
+        writeInstallerObject("rules", rules);
+        writeInstallerResources();
+        writeIncludedJars();
+
+        // Pack File Data may be written to separate jars
+        writePacks();
+    }
+    
+    protected abstract void writeInstallerObject(String entryName, Object object) throws IOException;
+    protected abstract void writeSkeletonInstaller() throws IOException;    
+    protected abstract void writeInstallerResources() throws IOException;
+    protected abstract void writeIncludedJars() throws IOException;
+    protected abstract void writePacks() throws Exception;
 }

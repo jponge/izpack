@@ -114,22 +114,7 @@ public class Packager extends PackagerBase
 
         sendStart();
         
-        // write the primary jar. MUST be first so manifest is not overwritten
-        // by
-        // an included jar
-        writeSkeletonInstaller();
-
-        writeInstallerObject("info", info);
-        writeInstallerObject("vars", variables);
-        writeInstallerObject("GUIPrefs", guiPrefs);
-        writeInstallerObject("panelsOrder", panelList);
-        writeInstallerObject("customData", customDataList);
-        writeInstallerObject("langpacks.info", langpackNameList);
-        writeInstallerResources();
-        writeIncludedJars();
-
-        // Pack File Data may be written to separate jars
-        writePacks();
+        writeInstaller();
 
         // Finish up. closeAlways is a hack for pack compressions other than
         // default. Some of it (e.g. BZip2) closes the slave of it also.
@@ -149,7 +134,7 @@ public class Packager extends PackagerBase
      * Write skeleton installer to primary jar. It is just an included jar, except that we copy the
      * META-INF as well.
      */
-    private void writeSkeletonInstaller() throws IOException
+    protected void writeSkeletonInstaller() throws IOException
     {
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
 
@@ -166,7 +151,7 @@ public class Packager extends PackagerBase
     /**
      * Write an arbitrary object to primary jar.
      */
-    private void writeInstallerObject(String entryName, Object object) throws IOException
+    protected void writeInstallerObject(String entryName, Object object) throws IOException
     {
         primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry(entryName));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
@@ -176,7 +161,7 @@ public class Packager extends PackagerBase
     }
 
     /** Write the data referenced by URL to primary jar. */
-    private void writeInstallerResources() throws IOException
+    protected void writeInstallerResources() throws IOException
     {
         sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
 
@@ -199,7 +184,7 @@ public class Packager extends PackagerBase
     }
 
     /** Copy included jars to primary jar. */
-    private void writeIncludedJars() throws IOException
+    protected void writeIncludedJars() throws IOException
     {
         sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
 
@@ -216,7 +201,7 @@ public class Packager extends PackagerBase
     /**
      * Write Packs to primary jar or each to a separate jar.
      */
-    private void writePacks() throws Exception
+    protected void writePacks() throws Exception
     {
         final int num = packsList.size();
         sendMsg("Writing " + num + " Pack" + (num > 1 ? "s" : "") + " into installer");

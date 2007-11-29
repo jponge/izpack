@@ -58,6 +58,8 @@
 - Added condition-attribute to pack element in installer.xml (Dennis Reil)
 - Spanish langpack update (Sergio Banos Calvo via Julien Ponge)
 - Various fixes (Loic via Julien Ponge)
+- Added conditions-definition to installer xml (Dennis Reil)
+
   
   > 3.10.2 (build 2007.05.11)
 
