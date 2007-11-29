@@ -26,28 +26,28 @@
         <appversion>3.11.0-beta1</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
-
-            <author email="" name="Klaus Bartz (developer)"/>
+            
             <author email="" name="Hans Aikema (developer)" />
-            <author email="" name="Marc Eppelmann (developer)" />
-            <author email="" name="Fabrice Mirabile (developer)"/>
+            <author email="" name="Klaus Bartz (developer)"/>     
+            <author email="" name="Marc Eppelmann (developer)" />       
             <author email="" name="Dennis Reil (developer)" />
             <author email="" name="JBoss/RedHat: Vladimir Ralev (developers)" />
 
-            <author email="" name="Francois Guillet (contributor)"/>
-            <author email="" name="Nils Meier (contributor)" />
-            <author email="" name="Markus Schlegel (contributor)" />
-            <author email="" name="Hal Vaughan (contributor)" />
-            <author email="" name="Ari Voutilainen (contributor)" />
-            <author email="" name="Stefan Wachter (contributor)" />
-            <author email="" name="Romain Guy (contributor)" />
-            <author email="" name="Melih Cetin (contributor)" />
-            <author email="" name="Thomas Santosa (contributor)" />
+            <author email="" name="Daniel Azarov (Exadel Inc, contributors)" />
+            <author email="" name="Sergio Banos Calvo (contributor)" />
+            <author email="" name="Loic Bardon (contributor)" />
+            <author email="" name="Kerekes Balazs (contributor)" />
+            <author email="" name="Andreas Guenther (contributor)" />
             <author email="" name="Michael Hagedorn (contributor)" />
-            <author email="" name="Max Fedorov (contributor)" />
-            <author email="" name="Scott Plante (contributor)" />
-            <author email="" name="Marius Nicolae (contributor)" />
-
+            <author email="" name="Dick Hollenbeck (contributor)" />
+            <author email="" name="Syed Khadeer (contributor)" />
+            <author email="" name="Parastou Kohvaei (contributor)" />
+            <author email="" name="Gildas Le Louarn (contributor)" />
+            <author email="" name="Markus Schlegel (contributor)" />
+            <author email="" name="Ari Voutilainen (contributor)" />
+            <author email="" name="Pascal Wallem (contributor)" />
+            <author email="" name="Gilles Wiart (contributor)" />
+            
             <author email=""
                     name="... the (many) other developers and contributors to the previous releases!"/>
         </authors>
