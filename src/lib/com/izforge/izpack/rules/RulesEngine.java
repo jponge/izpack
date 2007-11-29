@@ -71,6 +71,7 @@ public class RulesEngine
     public RulesEngine(Map rules, InstallData installdata) {
         this();
         RulesEngine.installdata = installdata;
+        conditionsmap = rules;
     }
 
     /**
@@ -314,7 +315,13 @@ public class RulesEngine
     
     public boolean isConditionTrue(String id)
     {
-        return this.isConditionTrue(RulesEngine.getCondition(id));
+        Condition cond = RulesEngine.getCondition(id);
+        if (cond != null) {
+            return this.isConditionTrue(cond);
+        }
+        else {
+            return false;
+        }
     }
 
     public boolean isConditionTrue(Condition cond)

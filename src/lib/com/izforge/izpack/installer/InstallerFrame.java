@@ -271,7 +271,7 @@ public class InstallerFrame extends JFrame
         switchPanel(0);
     }
     
-    private void refreshDynamicVariables() {
+    private void refreshDynamicVariables() {        
         if (dynamicvariables != null) {
             Iterator iter = dynamicvariables.keySet().iterator();
             while (iter.hasNext()) {
@@ -279,7 +279,7 @@ public class InstallerFrame extends JFrame
                 DynamicVariable dynvar = (DynamicVariable) dynamicvariables.get(dynvarname);
                 boolean refresh = false;
                 if (dynvar.getConditionid() != null) {
-                    if (rules.isConditionTrue(dynvar.getConditionid())) {
+                    if ((rules != null) &&  rules.isConditionTrue(dynvar.getConditionid())) {
                         // condition for this rule is true
                         refresh = true;
                     }                    
