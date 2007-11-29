@@ -882,5 +882,16 @@ public class Compiler extends Thread
     {
         this.packager.setRules(conditions);        
     }
+    
+    public Map getDynamicVariables()
+    {
+        return this.packager.getDynamicVariables();
+    }
+    
+    
+    public void setDynamicVariables(Map dynamicvariables)
+    {
+        this.packager.setDynamicVariables(dynamicvariables);
+    }
 
 }

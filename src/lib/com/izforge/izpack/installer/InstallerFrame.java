@@ -93,6 +93,7 @@ import com.izforge.izpack.CustomData;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.compiler.DynamicVariable;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
@@ -230,6 +231,9 @@ public class InstallerFrame extends JFrame
      * Resource name for custom icons
      */
     private static final String CUSTOM_ICONS_RESOURCEFILE = "customicons.xml";
+    
+    private Map dynamicvariables;
+    private VariableSubstitutor substitutor;
 
     /**
      * The constructor (normal mode).
@@ -241,6 +245,7 @@ public class InstallerFrame extends JFrame
     public InstallerFrame(String title, InstallData installdata) throws Exception
     {
         super(title);
+        substitutor = new VariableSubstitutor(installdata.variables);
         guiListener = new ArrayList();
         visiblePanelMapping = new ArrayList();
         this.installdata = installdata;
@@ -253,6 +258,8 @@ public class InstallerFrame extends JFrame
         // initialize rules by loading the conditions
         loadConditions();
 
+        // load dynamic variables
+        loadDynamicVariables();
         // Builds the GUI
         loadIcons();
         loadCustomIcons();
@@ -262,6 +269,42 @@ public class InstallerFrame extends JFrame
         // We show the frame
         showFrame();
         switchPanel(0);
+    }
+    
+    private void refreshDynamicVariables() {
+        if (dynamicvariables != null) {
+            Iterator iter = dynamicvariables.keySet().iterator();
+            while (iter.hasNext()) {
+                DynamicVariable dynvar = (DynamicVariable) iter.next();
+                boolean refresh = false;
+                if (dynvar.getConditionid() != null) {
+                    if (rules.isConditionTrue(dynvar.getConditionid())) {
+                        // condition for this rule is true
+                        refresh = true;
+                    }                    
+                }
+                else {
+                    refresh = true;
+                }
+                if (refresh) {
+                    String newvalue = substitutor.substitute(dynvar.getValue(), null);
+                    installdata.variables.setProperty(dynvar.getName(), newvalue);
+                }
+            }
+        }
+    }
+
+    private void loadDynamicVariables()
+    {
+        try {
+            InputStream in = InstallerFrame.class.getResourceAsStream("/dynvariables");
+            ObjectInputStream objIn = new ObjectInputStream(in); 
+            dynamicvariables = (Map) objIn.readObject();
+            objIn.close();
+        }
+        catch (Exception e) {
+            Debug.trace("Can not find optional dynamic variables");           
+        }        
     }
 
     /**
@@ -280,7 +323,7 @@ public class InstallerFrame extends JFrame
             objIn.close();
         }
         catch (Exception e) {
-            
+            Debug.trace("Can not find optional rules");            
         }
         if (rules != null) {
             // rules already read
@@ -740,6 +783,8 @@ public class InstallerFrame extends JFrame
      */
     protected void switchPanel(int last)
     {
+        // refresh dynamic variables every time, a panel switch is done
+        refreshDynamicVariables();
         try
         {
             if (installdata.curPanelNumber < last)

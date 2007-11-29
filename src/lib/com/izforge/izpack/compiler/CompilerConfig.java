@@ -321,6 +321,7 @@ public class CompilerConfig extends Thread
 
         // We add all the information
         addVariables(data);
+        addDynamicVariables(data);
         addConditions(data);
         addInfo(data);
         addGUIPrefs(data);
@@ -1511,6 +1512,33 @@ public class CompilerConfig extends Thread
             variables.setProperty(name, value);
         }
         notifyCompilerListener("addVariables", CompilerListener.END, data);
+    }
+    
+    protected void addDynamicVariables(XMLElement data) throws CompilerException
+    {
+        notifyCompilerListener("addDynamicVariables", CompilerListener.BEGIN, data);
+        // We get the dynamic variable list
+        XMLElement root = data.getFirstChildNamed("dynamicvariables");
+        if (root == null) return;
+
+        Map dynamicvariables = compiler.getDynamicVariables();
+
+        Iterator iter = root.getChildrenNamed("variable").iterator();
+        while (iter.hasNext())
+        {
+            XMLElement var = (XMLElement) iter.next();
+            String name = requireAttribute(var, "name");
+            String value = requireAttribute(var, "value");
+            String conditionid = var.getAttribute("condition");
+            if (dynamicvariables.containsKey(name))
+                parseWarn(var, "DynamicVariable '" + name + "' being overwritten");
+            DynamicVariable dynvar = new DynamicVariable();
+            dynvar.setName(name);
+            dynvar.setValue(value);
+            dynvar.setConditionid(conditionid);
+            dynamicvariables.put(name, dynvar);
+        }
+        notifyCompilerListener("addDynamicVariables", CompilerListener.END, data);
     }
     
     /**

@@ -10,7 +10,7 @@ $Id$
 -->
 
 <!-- The root element -->
-<!ELEMENT installation (preinstall?, info, packaging?, properties?, variables?,conditions?, 
+<!ELEMENT installation (preinstall?, info, packaging?, properties?, variables?,dynamicvariables?,conditions?, 
                         guiprefs?, locale, resources?, panels,
                         listeners?, packs, jar*, native*, postinstall?)>
     <!ATTLIST installation version CDATA #REQUIRED>
@@ -55,6 +55,7 @@ $Id$
     <!ELEMENT variable EMPTY>
         <!ATTLIST variable name CDATA #REQUIRED>
         <!ATTLIST variable value CDATA #REQUIRED>
+        <!ATTLIST variable condition CDATA #IMPLIED>
 
 <!-- The conditions markup (condition declarations) -->
 <!ELEMENT conditions (condition*)>
@@ -62,7 +63,8 @@ $Id$
 <!ELEMENT condition EMPTY>
 <!ATTLIST condition type CDATA #REQUIRED>
 <!ATTLIST condition id CDATA #REQUIRED>
-        
+
+<!ELEMENT dynamicvariables (variables*)>        
 <!-- The guiprefs markup (customizes the installer in GUI mode) -->
 <!ELEMENT guiprefs (laf*, modifier*)>
     <!ATTLIST guiprefs resizable (yes|no) #REQUIRED>

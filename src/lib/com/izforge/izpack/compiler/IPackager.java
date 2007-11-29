@@ -193,4 +193,16 @@ public interface IPackager
      * @param rules the rules to set
      */
     public abstract void setRules(Map rules);
+    
+    /**
+     * Returns a map of dynamically refreshed variables
+     * @return
+     */
+    public abstract Map getDynamicVariables();
+    
+    /**
+     * 
+     * @param dynamicvariables
+     */
+    public abstract void setDynamicVariables(Map dynamicvariables);
 }

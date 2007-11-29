@@ -85,6 +85,9 @@ public abstract class PackagerBase implements IPackager
     
     /** the conditions */
     protected Map rules = new HashMap();
+    
+    /** dynamic variables */
+    protected Map dynamicvariables = new HashMap();
 
     /** Jar file URLs who's contents will be copied into the installer. */
     protected Set includedJarURLs = new HashSet();
@@ -326,6 +329,7 @@ public abstract class PackagerBase implements IPackager
         writeInstallerObject("customData", customDataList);
         writeInstallerObject("langpacks.info", langpackNameList);
         writeInstallerObject("rules", rules);
+        writeInstallerObject("dynvariables",dynamicvariables);
         writeInstallerResources();
         writeIncludedJars();
 
@@ -338,4 +342,22 @@ public abstract class PackagerBase implements IPackager
     protected abstract void writeInstallerResources() throws IOException;
     protected abstract void writeIncludedJars() throws IOException;
     protected abstract void writePacks() throws Exception;
+
+    
+    /**
+     * @return the dynamicvariables
+     */
+    public Map getDynamicVariables()
+    {
+        return this.dynamicvariables;
+    }
+
+    
+    /**
+     * @param dynamicvariables the dynamicvariables to set
+     */
+    public void setDynamicVariables(Map dynamicvariables)
+    {
+        this.dynamicvariables = dynamicvariables;
+    }
 }
