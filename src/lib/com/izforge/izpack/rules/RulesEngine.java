@@ -124,18 +124,15 @@ public class RulesEngine
             }
             catch (ClassNotFoundException e)
             {
-                Debug.trace(conditionclassname + " not found.");
-                e.printStackTrace();                
+                Debug.trace(conditionclassname + " not found.");                               
             }
             catch (InstantiationException e)
             {
-                Debug.trace(conditionclassname + " couldn't be instantiated.");
-                e.printStackTrace();
+                Debug.trace(conditionclassname + " couldn't be instantiated.");                
             }
             catch (IllegalAccessException e)
             {
-                Debug.trace("Illegal access to " + conditionclassname);
-                e.printStackTrace();
+                Debug.trace("Illegal access to " + conditionclassname);                
             }            
         }
         return result;
