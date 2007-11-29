@@ -329,6 +329,7 @@ public abstract class PackagerBase implements IPackager
         writeInstallerObject("customData", customDataList);
         writeInstallerObject("langpacks.info", langpackNameList);
         writeInstallerObject("rules", rules);
+        System.out.println("Dynamicvariables: " + dynamicvariables.size());
         writeInstallerObject("dynvariables",dynamicvariables);
         writeInstallerResources();
         writeIncludedJars();

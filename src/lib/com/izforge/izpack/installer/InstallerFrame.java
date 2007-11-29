@@ -275,7 +275,8 @@ public class InstallerFrame extends JFrame
         if (dynamicvariables != null) {
             Iterator iter = dynamicvariables.keySet().iterator();
             while (iter.hasNext()) {
-                DynamicVariable dynvar = (DynamicVariable) iter.next();
+                String dynvarname = (String) iter.next();
+                DynamicVariable dynvar = (DynamicVariable) dynamicvariables.get(dynvarname);
                 boolean refresh = false;
                 if (dynvar.getConditionid() != null) {
                     if (rules.isConditionTrue(dynvar.getConditionid())) {
@@ -303,7 +304,8 @@ public class InstallerFrame extends JFrame
             objIn.close();
         }
         catch (Exception e) {
-            Debug.trace("Can not find optional dynamic variables");           
+            Debug.trace("Can not find optional dynamic variables");   
+            System.out.println(e);
         }        
     }
 
