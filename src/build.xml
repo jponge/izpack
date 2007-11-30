@@ -941,6 +941,10 @@
                 <include name="manual.pdf" />
             </fileset>
         </copy>
+
+	<delete file="${basedir}/src/texput.log" />
+	<delete dir="${basedir}/src/doc-reST/html" />
+	<delete dir="${basedir}/src/doc-reST/pdf" />
     </target>
 
     <target name="create.docu"
