@@ -925,7 +925,6 @@
     </target>
 
     <target name="build.docu" description="Builds the customer documentation">
-        <!--     	
         <exec executable="python" dir="${basedir}/src/doc-reST">
             <arg value="build.py"/>
         </exec>
@@ -942,7 +941,6 @@
                 <include name="manual.pdf" />
             </fileset>
         </copy>
-        -->    	
     </target>
 
     <target name="create.docu"
