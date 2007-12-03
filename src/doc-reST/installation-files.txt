@@ -374,7 +374,7 @@ Here's a sample ``<dynamicvariables>`` section :
 
 
 The Conditions Element ``<conditions>``
-''''''''''''''''''''''''''''''''''''''
+''''''''''''''''''''''''''''''''''''''''
 
 This element allows you to define conditions which can be used to dynamically change the installer, 
 e.g. the panels shown, the variables set, files parsed, files
@@ -405,8 +405,10 @@ condition can take the following attributes:
 The condition element can have several child elements depending on the type of this conditions. E.g. the VariableCondition
 has a name and value child element to specify, which variable should have a certain value to fullfil this condition.
 
-:: 	This is an example which defines four conditions, two VariableConditions, a JavaCondition and a AndCondition which will
-    refer to two of the first conditions.
+This is an example which defines four conditions, two VariableConditions, a JavaCondition and a AndCondition which will
+refer to two of the first conditions.
+
+::
     
    <conditions>
       <condition type="variable" id="standardinstallation">
