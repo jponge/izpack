@@ -398,7 +398,8 @@ When you define a set of conditions, you just have to write as many ``<condition
 condition can take the following attributes:
 
 - 	``type``: the type of the condition. For built-in types, this is the lowercase portion of the condition class
-              name without condition appended (variable,packselection,java, ...)
+              name without condition appended (variable,packselection,java, ...). Custom condition types should be
+              referenced by the full qualified class name, e.g. de.dr.rules.MyCoolCondition.
 - 	``id``: the id of the condition. This will be used to refer to this conditions in other elements
 
 The condition element can have several child elements depending on the type of this conditions. E.g. the VariableCondition
@@ -438,6 +439,8 @@ expression language. The language has the following operators:
 -	``!``: an operator for the NotCondition
 
 Neverthless if you define really complex conditions it's much easier to define them using the xml structure. 
+
+More types of conditions can be defined by inheriting com.izforge.izpack.Condition class.
 
 
 The GUI Preferences Element ``<guiprefs>``
