@@ -69,7 +69,9 @@ Here is a brief (and certainly incomplete !) list of the main IzPack features
     is included !)
 -   powerful variable substitution system that you can use to customize
     scripts and more generally any text-based file
--   different kinds of installers (standard, web-based, ...)
+-   powerful condition system that can be used to conditionally show panels, user input fields and
+    execute files conditionally
+-   different kinds of installers (standard, web-based, multi-volume, ...)
 -   launching of external executables during the installation process and
     Unix executable flag support (useful for the scripts for instance)
 -   layout of the installation files in packs (some can be optional)
