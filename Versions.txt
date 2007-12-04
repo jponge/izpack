@@ -60,6 +60,8 @@
 - Various fixes (Loic via Julien Ponge)
 - Added conditions-definition to installer xml (Dennis Reil)
 - Added dynamic variables (Dennis Reil)
+- IzPack installer: check that users are actually launching the latest version by checking from
+  the http://izpack.org/ website (Julien Ponge)
 
   
   > 3.10.2 (build 2007.05.11)
