@@ -63,7 +63,7 @@ public class Panel implements Serializable
     public String getPanelid() {
       if (this.panelid == null)
       {
-        this.panelid = "UNKNOWN";
+        this.panelid = "UNKNOWN (" + className + ")";
       }
       return this.panelid;
     }

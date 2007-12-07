@@ -14,6 +14,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.util.Debug;
 
 
 /**
@@ -28,7 +29,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
     public InstallationTypePanel(InstallerFrame parent, InstallData idata)
     {
         super(parent, idata, new IzPanelLayout());
-        
+        buildGUI();        
     }
     
     private void buildGUI() {
@@ -66,17 +67,32 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
      */
     public void panelActivate()
     {
-        buildGUI();
+        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION)).booleanValue();
+        if (modifyinstallation) {
+            modifyinstall.setSelected(true);
+        }
+        else {
+            normalinstall.setSelected(true);
+        }
     }
    
     public void actionPerformed(ActionEvent e)
-    {
-        if (normalinstall.isSelected()) {
+    {        
+        Debug.trace("installation type changed");
+        if (e.getSource() == normalinstall) {
+            Debug.trace("normal installation");
             idata.setVariable(InstallData.MODIFY_INSTALLATION, "false");
         }
         else {
-            idata.setVariable(InstallData.MODIFY_INSTALLATION, "true");
-        } 
+            Debug.trace("modification installation");
+            idata.setVariable(InstallData.MODIFY_INSTALLATION, "true");            
+        }
+        /*
+        if (normalinstall.isSelected()) {
+            
+        }
+        else {
+        } */
         
     }
 }
