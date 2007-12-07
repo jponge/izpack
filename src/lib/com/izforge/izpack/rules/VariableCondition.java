@@ -96,14 +96,19 @@ public class VariableCondition extends Condition
 
     public boolean isTrue()
     {
-        String val = this.installdata.getVariable(variablename);
-        if (val == null)
-        {
-            return false;
+        if (this.installdata != null) {
+            String val = this.installdata.getVariable(variablename);
+            if (val == null)
+            {
+                return false;
+            }
+            else
+            {
+                return val.equals(value);
+            }
         }
-        else
-        {
-            return val.equals(value);
+        else {
+            return false;
         }
     }
 }

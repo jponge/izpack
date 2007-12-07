@@ -21,6 +21,7 @@
 package com.izforge.izpack.rules;
 
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
@@ -72,6 +73,12 @@ public class RulesEngine
         this();
         RulesEngine.installdata = installdata;
         conditionsmap = rules;
+        Iterator keyiter = conditionsmap.keySet().iterator();
+        while (keyiter.hasNext()) {
+            String key = (String) keyiter.next();
+            Condition condition = (Condition) conditionsmap.get(key);
+            condition.setInstalldata(installdata);
+        }
     }
 
     /**
