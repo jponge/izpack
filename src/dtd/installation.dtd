@@ -35,7 +35,7 @@ $Id$
 <!ELEMENT packaging (packager, unpacker)>
 <!ELEMENT packager (options)>
 <!ATTLIST packager class CDATA #REQUIRED>
-<!ELEMET options EMPTY>
+<!ELEMENT options EMPTY>
 <!ATTLIST options volumesize CDATA #IMPLIED>
 <!ATTLIST options firstvolumefreespace CDATA #IMPLIED>
 <!ELEMENT unpacker EMPTY>
