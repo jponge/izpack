@@ -341,11 +341,14 @@ public class Packager extends PackagerBase
             packNumber++;
         }
         
-        // Wrtie packsinfo for web installers
-        FileWriter writer = new FileWriter(baseFile.getParent()
+        // Write packsinfo for web installers
+		if (packJarsSeparate)
+        {
+			FileWriter writer = new FileWriter(baseFile.getParent()
               + File.separator + "packsinfo.xml");
-        XMLWriter xmlwriter = new XMLWriter(writer);
-        xmlwriter.write(root);
+        	XMLWriter xmlwriter = new XMLWriter(writer);
+        	xmlwriter.write(root);
+		}
         
         // Now that we know sizes, write pack metadata to primary jar.
         primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry("packs.info"));

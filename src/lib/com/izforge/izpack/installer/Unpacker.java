@@ -146,6 +146,7 @@ public class Unpacker extends UnpackerBase
                     if (pf.hasCondition() && (rules != null)) {
                         if (!rules.isConditionTrue(pf.getCondition())) {
                             // skip, condition is not fulfilled
+							objIn.skip(pf.length());
                             continue;
                         }
                     }
