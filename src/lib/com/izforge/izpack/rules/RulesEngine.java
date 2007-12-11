@@ -20,6 +20,7 @@
  */
 package com.izforge.izpack.rules;
 
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class RulesEngine
         this.panelconditions = new Hashtable();
         this.packconditions = new Hashtable();
         this.optionalpackconditions = new Hashtable();
-    }
+    }      
     
     /**
      * 
@@ -79,6 +80,16 @@ public class RulesEngine
             Condition condition = (Condition) conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }
+    }
+    
+    /**
+     * Returns the current known condition ids.
+     * @return
+     */
+    public String[] getKnownConditionIds() {
+        String[] conditionids = (String[]) this.conditionsmap.keySet().toArray(new String[this.conditionsmap.size()]);
+        Arrays.sort(conditionids);
+        return conditionids;
     }
 
     /**

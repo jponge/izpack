@@ -76,6 +76,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -234,6 +235,10 @@ public class InstallerFrame extends JFrame
     
     private Map dynamicvariables;
     private VariableSubstitutor substitutor;
+    
+    
+    private JTextPane debugtxt;
+    private Debugger debugger;
 
     /**
      * The constructor (normal mode).
@@ -584,6 +589,24 @@ public class InstallerFrame extends JFrame
         quitButton.addActionListener(navHandler);
         contentPane.add(navPanel, BorderLayout.SOUTH);
 
+        // create a debug panel if TRACE is enabled
+        if (Debug.isTRACE()) {            
+            debugger = new Debugger(installdata,icons,rules);
+            JPanel debugpanel = debugger.getDebugPanel();
+            if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")) {
+                if (Boolean.valueOf((String) installdata.guiPrefs.modifier.get("showDebugWindow")).booleanValue()) {
+                    JFrame debugframe = new JFrame("Debug information");                    
+                    debugframe.setContentPane(debugpanel);
+                    debugframe.setSize(new Dimension(400,400));
+                    debugframe.setVisible(true);
+                }
+                else {
+                    debugpanel.setPreferredSize(new Dimension(200,400));                        
+                    contentPane.add(debugpanel,BorderLayout.EAST);
+                }                            
+            }
+        }
+        
         try
         {
             ImageIcon icon = loadIcon(ICON_RESOURCE, 0, true);
@@ -786,7 +809,7 @@ public class InstallerFrame extends JFrame
     protected void switchPanel(int last)
     {
         // refresh dynamic variables every time, a panel switch is done
-        refreshDynamicVariables();
+        refreshDynamicVariables();          
         try
         {
             if (installdata.curPanelNumber < last)
@@ -796,6 +819,9 @@ public class InstallerFrame extends JFrame
             panelsContainer.setVisible(false);
             IzPanel panel = (IzPanel) installdata.panels.get(installdata.curPanelNumber);
             IzPanel l_panel = (IzPanel) installdata.panels.get(last);
+            if (Debug.isTRACE()) {
+                debugger.switchPanel(panel.getMetadata(),l_panel.getMetadata());
+            }
             Log.getInstance().addDebugMessage(
                     "InstallerFrame.switchPanel: try switching panel from {0} to {1} ({2} to {3})",
                     new String[] { l_panel.getClass().getName(), panel.getClass().getName(),

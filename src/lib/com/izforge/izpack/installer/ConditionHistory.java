@@ -1,0 +1,125 @@
+/*
+ * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
+ *
+ * http://izpack.org/
+ * http://developer.berlios.de/projects/izpack/
+ *
+ * Copyright 2007 Dennis Reil
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.izforge.izpack.installer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.izforge.izpack.rules.Condition;
+
+/**
+ * 
+ * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @version $Id: $
+ */
+public class ConditionHistory
+{
+    private Condition condition;
+    private List values;
+    
+    private boolean newcondition;
+    private boolean changedcondition;    
+
+    
+    public ConditionHistory(Condition condition) {
+        this.condition = condition;
+        values = new ArrayList();
+        newcondition = true;
+        changedcondition = true;        
+    }
+    
+    public void addValue(boolean value,String comment) {
+        if ((values.size() == 0) || value != getLastValue()) {
+            Object[] valuecomment = new Object[2];
+            valuecomment[0] = Boolean.valueOf(value);
+            valuecomment[1] = comment;
+            this.values.add(valuecomment);
+            if (values.size() == 1) {
+                newcondition = true;
+                changedcondition = true;
+            }
+            else {
+                changedcondition = true;
+            }
+        }
+    }       
+    
+    public boolean getLastValue() {
+        if (values.size() > 0) {
+            return ((Boolean)((Object[]) values.get(values.size() - 1))[0]).booleanValue();
+        }
+        else {
+            return false;
+        }
+    }
+    
+    public int getValueCount() {
+        return values.size();
+    }
+    
+    public void clearState() {
+        newcondition = false;
+        changedcondition = false;
+    }
+    
+    /**
+     * @return the newcondition
+     */
+    public boolean isNewcondition()
+    {
+        return this.newcondition;
+    }
+
+    
+    /**
+     * @return the changedcondition
+     */
+    public boolean isChangedcondition()
+    {
+        return this.changedcondition;
+    }
+    
+    public String toString() {
+        return Boolean.toString(getLastValue());
+    }
+    
+    public String getConditionHistoryDetails() {
+        StringBuffer details = new StringBuffer();
+        details.append("<html><body>");
+        details.append("<h3>Details of <b>");
+        details.append(this.condition.getId());
+        details.append("</b></h3>");
+        for (int i = values.size()-1; i >= 0; i--)
+        {
+            Object[] condcomment = (Object[]) values.get(i);
+            details.append(i+1);
+            details.append(". ");
+            details.append(((Boolean)condcomment[0]).toString());
+            details.append(" (");
+            details.append(condcomment[1]);
+            details.append(")<br>");            
+        }
+        details.append("</body></html>");
+        return details.toString();
+    }
+}
+

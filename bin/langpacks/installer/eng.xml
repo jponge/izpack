@@ -264,4 +264,5 @@
     <str id="InstallationGroupPanel.colNameInstallType" txt="InstallType" />
     <str id="InstallationGroupPanel.colNameSize" txt="Size" />
 
+	<str id="debug.changevariable" txt="modify value"/>
 </langpack>
