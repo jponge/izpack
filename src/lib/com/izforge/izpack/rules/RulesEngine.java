@@ -20,22 +20,16 @@
  */
 package com.izforge.izpack.rules;
 
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Vector;
-
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.util.Debug;
-
 import net.n3.nanoxml.XMLElement;
+
+import java.util.*;
 
 /**
  * The rules engine class is the central point for checking conditions
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de> created: 09.11.2006, 13:48:39
  */
 public class RulesEngine
@@ -53,52 +47,31 @@ public class RulesEngine
 
     protected static InstallData installdata;
 
-    private RulesEngine() {
+    private RulesEngine()
+    {
         conditionsmap = new Hashtable();
         this.panelconditions = new Hashtable();
         this.packconditions = new Hashtable();
-        this.optionalpackconditions = new Hashtable();        
-    }      
-    
+        this.optionalpackconditions = new Hashtable();
+    }
+
     /**
      * initializes builtin conditions
      */
-    private void init() {
-        JavaCondition installonwindows = new JavaCondition();
-        installonwindows.setInstalldata(installdata);
-        installonwindows.id = "izpack.windowsinstall";
-        installonwindows.classname = "com.izforge.izpack.util.OsVersion";
-        installonwindows.fieldname = "IS_WINDOWS";
-        installonwindows.returnvalue = "true";
-        installonwindows.returnvaluetype = "boolean";
-        installonwindows.complete = true;
-        conditionsmap.put(installonwindows.id, installonwindows);
-        
-        JavaCondition installonlinux = new JavaCondition();
-        installonlinux.setInstalldata(installdata);
-        installonlinux.id = "izpack.linuxinstall";
-        installonlinux.classname = "com.izforge.izpack.util.OsVersion";
-        installonlinux.fieldname = "IS_LINUX";
-        installonlinux.returnvalue = "true";
-        installonlinux.returnvaluetype = "boolean";
-        installonlinux.complete = true;
-        conditionsmap.put(installonlinux.id, installonlinux);
-        
-        JavaCondition installonsolaris = new JavaCondition();
-        installonsolaris.setInstalldata(installdata);
-        installonsolaris.id = "izpack.solarisinstall";
-        installonsolaris.classname = "com.izforge.izpack.util.OsVersion";
-        installonsolaris.fieldname = "IS_SUNOS";
-        installonsolaris.returnvalue = "true";
-        installonsolaris.returnvaluetype = "boolean";
-        installonsolaris.complete = true;
-        conditionsmap.put(installonsolaris.id, installonsolaris);
-        
-        if ((installdata != null) && (installdata.allPacks != null)) {
+    private void init()
+    {
+        createBuiltinOsCondition("IS_WINDOWS", "izpack.windowsinstall");
+        createBuiltinOsCondition("IS_LINUX", "izpack.linuxinstall");
+        createBuiltinOsCondition("IS_SUNOS", "izpack.solarisinstall");
+        createBuiltinOsCondition("IS_MAC", "izpack.macinstall");
+
+        if ((installdata != null) && (installdata.allPacks != null))
+        {
             for (Iterator iterator = installdata.allPacks.iterator(); iterator.hasNext();)
             {
                 Pack pack = (Pack) iterator.next();
-                if (pack.id != null) {
+                if (pack.id != null)
+                {
                     // automatically add packselection condition
                     PackselectionCondition packselcond = new PackselectionCondition();
                     packselcond.setInstalldata(installdata);
@@ -109,37 +82,54 @@ public class RulesEngine
             }
         }
     }
-    
+
+    private void createBuiltinOsCondition(String osVersionField, String conditionId)
+    {
+        JavaCondition condition = new JavaCondition();
+        condition.setInstalldata(installdata);
+        condition.id = conditionId;
+        condition.classname = "com.izforge.izpack.util.OsVersion";
+        condition.fieldname = osVersionField;
+        condition.returnvalue = "true";
+        condition.returnvaluetype = "boolean";
+        condition.complete = true;
+        conditionsmap.put(condition.id, condition);
+    }
+
     /**
-     * 
+     *
      */
     public RulesEngine(XMLElement conditionsspecxml, InstallData installdata)
     {
         this();
-        this.conditionsspec = conditionsspecxml;        
+        this.conditionsspec = conditionsspecxml;
         RulesEngine.installdata = installdata;
         this.readConditions();
         init();
     }
-    
-    public RulesEngine(Map rules, InstallData installdata) {
+
+    public RulesEngine(Map rules, InstallData installdata)
+    {
         this();
         RulesEngine.installdata = installdata;
         conditionsmap = rules;
         Iterator keyiter = conditionsmap.keySet().iterator();
-        while (keyiter.hasNext()) {
+        while (keyiter.hasNext())
+        {
             String key = (String) keyiter.next();
             Condition condition = (Condition) conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }
         init();
     }
-    
+
     /**
      * Returns the current known condition ids.
+     *
      * @return
      */
-    public String[] getKnownConditionIds() {
+    public String[] getKnownConditionIds()
+    {
         String[] conditionids = (String[]) this.conditionsmap.keySet().toArray(new String[this.conditionsmap.size()]);
         Arrays.sort(conditionids);
         return conditionids;
@@ -147,10 +137,10 @@ public class RulesEngine
 
     /**
      * Checks if an attribute for an xmlelement is set.
-     * 
-     * @param val value of attribute to check
+     *
+     * @param val       value of attribute to check
      * @param attribute the attribute which is checked
-     * @param element the element
+     * @param element   the element
      * @return true value was set false no value was set
      */
     protected boolean checkAttribute(String val, String attribute, String element)
@@ -174,14 +164,16 @@ public class RulesEngine
         if (condtype != null)
         {
             String conditionclassname = "";
-            if (condtype.indexOf('.')> -1){
+            if (condtype.indexOf('.') > -1)
+            {
                 conditionclassname = condtype;
             }
-            else {
+            else
+            {
                 String conditiontype = condtype.toLowerCase();
                 conditionclassname = "com.izforge.izpack.rules."
-                    + conditiontype.substring(0, 1).toUpperCase()
-                    + conditiontype.substring(1, conditiontype.length());
+                        + conditiontype.substring(0, 1).toUpperCase()
+                        + conditiontype.substring(1, conditiontype.length());
                 conditionclassname += "Condition";
             }
             //ClassLoader loader = ClassLoader.getSystemClassLoader();
@@ -196,16 +188,16 @@ public class RulesEngine
             }
             catch (ClassNotFoundException e)
             {
-                Debug.trace(conditionclassname + " not found.");                               
+                Debug.trace(conditionclassname + " not found.");
             }
             catch (InstantiationException e)
             {
-                Debug.trace(conditionclassname + " couldn't be instantiated.");                
+                Debug.trace(conditionclassname + " couldn't be instantiated.");
             }
             catch (IllegalAccessException e)
             {
-                Debug.trace("Illegal access to " + conditionclassname);                
-            }            
+                Debug.trace("Illegal access to " + conditionclassname);
+            }
         }
         return result;
     }
@@ -298,50 +290,51 @@ public class RulesEngine
             char currentchar = conditionexpr.charAt(index);
             switch (currentchar)
             {
-            case '+':
-                // and-condition
-                Condition op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
-                conditionexpr.delete(0, index + 1);
-                result = new AndCondition(op1, getConditionByExpr(conditionexpr));
-                result.setInstalldata(RulesEngine.installdata);
-                break;
-            case '|':
-                // or-condition
-                op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
-                conditionexpr.delete(0, index + 1);
-                result = new OrCondition(op1, getConditionByExpr(conditionexpr));
-                result.setInstalldata(RulesEngine.installdata);
-                break;
-            case '\\':
-                // xor-condition
-                op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
-                conditionexpr.delete(0, index + 1);
-                result = new XOrCondition(op1, getConditionByExpr(conditionexpr));
-                result.setInstalldata(RulesEngine.installdata);
-                break;
-            case '!':
-                // not-condition
-                if (index > 0)
-                {
-                    Debug.trace("error: ! operator only allowed at position 0");
-                }
-                else
-                {
-                    // delete not symbol
-                    conditionexpr.deleteCharAt(index);
-                    result = new NotCondition(getConditionByExpr(conditionexpr));
+                case '+':
+                    // and-condition
+                    Condition op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                    conditionexpr.delete(0, index + 1);
+                    result = new AndCondition(op1, getConditionByExpr(conditionexpr));
                     result.setInstalldata(RulesEngine.installdata);
-                }
-                break;
-            default:
-                // do nothing
+                    break;
+                case '|':
+                    // or-condition
+                    op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                    conditionexpr.delete(0, index + 1);
+                    result = new OrCondition(op1, getConditionByExpr(conditionexpr));
+                    result.setInstalldata(RulesEngine.installdata);
+                    break;
+                case '\\':
+                    // xor-condition
+                    op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                    conditionexpr.delete(0, index + 1);
+                    result = new XOrCondition(op1, getConditionByExpr(conditionexpr));
+                    result.setInstalldata(RulesEngine.installdata);
+                    break;
+                case '!':
+                    // not-condition
+                    if (index > 0)
+                    {
+                        Debug.trace("error: ! operator only allowed at position 0");
+                    }
+                    else
+                    {
+                        // delete not symbol
+                        conditionexpr.deleteCharAt(index);
+                        result = new NotCondition(getConditionByExpr(conditionexpr));
+                        result.setInstalldata(RulesEngine.installdata);
+                    }
+                    break;
+                default:
+                    // do nothing
             }
             index++;
         }
         if (conditionexpr.length() > 0)
         {
             result = (Condition) conditionsmap.get(conditionexpr.toString());
-            if (result != null){
+            if (result != null)
+            {
                 result.setInstalldata(RulesEngine.installdata);
                 conditionexpr.delete(0, conditionexpr.length());
             }
@@ -360,10 +353,12 @@ public class RulesEngine
         else
         {
             Debug.trace("Checking condition");
-            try {
+            try
+            {
                 return cond.isTrue();
             }
-            catch (NullPointerException npe){
+            catch (NullPointerException npe)
+            {
                 Debug.error("Nullpointerexception checking condition: " + id);
                 return false;
             }
@@ -383,14 +378,16 @@ public class RulesEngine
             return cond.isTrue();
         }
     }
-    
+
     public boolean isConditionTrue(String id)
     {
         Condition cond = RulesEngine.getCondition(id);
-        if (cond != null) {
+        if (cond != null)
+        {
             return this.isConditionTrue(cond);
         }
-        else {
+        else
+        {
             return false;
         }
     }
@@ -402,11 +399,11 @@ public class RulesEngine
 
     /**
      * Can a panel be shown?
-     * 
-     * @param panelid - id of the panel, which should be shown
+     *
+     * @param panelid   - id of the panel, which should be shown
      * @param variables - the variables
      * @return true - there is no condition or condition is met false - there is a condition and the
-     * condition was not met
+     *         condition was not met
      */
     public boolean canShowPanel(String panelid, Properties variables)
     {
@@ -418,21 +415,27 @@ public class RulesEngine
         }
         Debug.trace("there is a condition");
         Condition condition = getCondition((String) this.panelconditions.get(panelid));
-        if (condition != null) { return condition.isTrue(); }
+        if (condition != null)
+        {
+            return condition.isTrue();
+        }
         return false;
     }
 
     /**
      * Is the installation of a pack possible?
-     * 
+     *
      * @param packid
      * @param variables
      * @return true - there is no condition or condition is met false - there is a condition and the
-     * condition was not met
+     *         condition was not met
      */
     public boolean canInstallPack(String packid, Properties variables)
     {
-        if (packid == null) { return true; }
+        if (packid == null)
+        {
+            return true;
+        }
         Debug.trace("can install pack with id " + packid + "?");
         if (!this.packconditions.containsKey(packid))
         {
@@ -441,13 +444,16 @@ public class RulesEngine
         }
         Debug.trace("there is a condition");
         Condition condition = getCondition((String) this.packconditions.get(packid));
-        if (condition != null) { return condition.isTrue(); }
+        if (condition != null)
+        {
+            return condition.isTrue();
+        }
         return false;
     }
 
     /**
      * Is an optional installation of a pack possible if the condition is not met?
-     * 
+     *
      * @param packid
      * @param variables
      * @return

@@ -41,11 +41,7 @@ import net.n3.nanoxml.XMLElement;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.ResourceManager;
-import com.izforge.izpack.installer.WebAccessor;
+import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
@@ -261,7 +257,12 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       }
    }
 
-   /**
+    public Debugger getDebugger()
+    {
+        return null;
+    }
+
+    /**
     * Indicates wether the panel has been validated or not.
     * 
     * @return true if the needed space is less than the free space, else false
