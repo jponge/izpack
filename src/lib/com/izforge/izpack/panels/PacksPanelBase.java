@@ -61,6 +61,7 @@ import net.n3.nanoxml.XMLElement;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.Debugger;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
@@ -149,6 +150,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * The name of the XML file that specifies the panel langpack
      */
     private static final String LANG_FILE_NAME = "packsLang.xml";
+    
+    private Debugger debugger;
 
     /**
      * The constructor.
@@ -165,6 +168,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             this.langpack = parent.langpack;
             InputStream inputStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
             this.langpack.add(inputStream);
+            this.debugger = parent.getDebugger();
         }
         catch (Throwable exception)
         {
@@ -530,6 +534,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     {
         try
         {            
+            
             // TODO the PacksModel could be patched such that isCellEditable
             // allows returns false. In that case the PacksModel must not be
             // adapted here.
@@ -793,5 +798,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         }
 
     }
-
+    
+    public Debugger getDebugger() {
+        return this.debugger;
+    }
 }

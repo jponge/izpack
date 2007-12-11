@@ -467,10 +467,16 @@ class PacksModel extends AbstractTableModel
                 updateDeps();
 
                 if (packadded) {
+                    if (panel.getDebugger() != null) {
+                        panel.getDebugger().packSelectionChanged("after adding pack " + pack.id);
+                    }
                     // temporarily add pack to packstoinstall
                     this.packsToInstall.add(pack);
                 }
                 else {
+                    if (panel.getDebugger() != null) {
+                        panel.getDebugger().packSelectionChanged("after removing pack " + pack.id);
+                    }
                     // temporarily remove pack from packstoinstall
                     this.packsToInstall.remove(pack);
                 }
@@ -486,7 +492,7 @@ class PacksModel extends AbstractTableModel
                 updateBytes();
                 fireTableDataChanged();
                 refreshPacksToInstall();
-                panel.showSpaceRequired();
+                panel.showSpaceRequired();                
             }
         }
     }

@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.installer.Debugger;
 
 /**
  * This interface is used to be able to access the common information in the PackPanel and the
@@ -48,4 +49,6 @@ public interface PacksPanelInterface
     public void showSpaceRequired();
 
     public void showFreeSpace();
+    
+    public Debugger getDebugger();
 }

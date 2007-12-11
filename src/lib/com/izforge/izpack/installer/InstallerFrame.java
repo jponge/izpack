@@ -276,6 +276,10 @@ public class InstallerFrame extends JFrame
         switchPanel(0);
     }
     
+    public Debugger getDebugger() {
+        return this.debugger;
+    }
+    
     private void refreshDynamicVariables() {        
         if (dynamicvariables != null) {
             Iterator iter = dynamicvariables.keySet().iterator();

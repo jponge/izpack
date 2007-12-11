@@ -374,5 +374,9 @@ public class Debugger
         this.debugVariables(nextpanelmetadata, lastpanelmetadata);  
         this.debugConditions(nextpanelmetadata, lastpanelmetadata);
     }
+    
+    public void packSelectionChanged(String comment) {
+        this.updateChangedConditions(comment);
+    }
 }
 

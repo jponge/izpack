@@ -63,6 +63,7 @@
 - IzPack installer: check that users are actually launching the latest version by checking from
   the http://izpack.org/ website (Julien Ponge)
 - Added debugging for variables and conditions (Dennis Reil)
+- Added built-in conditions (Dennis Reil)
 
   
   > 3.10.2 (build 2007.05.11)

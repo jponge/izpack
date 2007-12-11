@@ -47,7 +47,7 @@ public class JavaCondition extends Condition {
 
     public JavaCondition() {
 
-    }
+    }    
 
     private boolean isTrue(Properties variables) {
         if (!this.complete) {

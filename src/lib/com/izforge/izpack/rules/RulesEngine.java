@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
 
+import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.util.Debug;
 
@@ -56,8 +57,58 @@ public class RulesEngine
         conditionsmap = new Hashtable();
         this.panelconditions = new Hashtable();
         this.packconditions = new Hashtable();
-        this.optionalpackconditions = new Hashtable();
+        this.optionalpackconditions = new Hashtable();        
     }      
+    
+    /**
+     * initializes builtin conditions
+     */
+    private void init() {
+        JavaCondition installonwindows = new JavaCondition();
+        installonwindows.setInstalldata(installdata);
+        installonwindows.id = "izpack.windowsinstall";
+        installonwindows.classname = "com.izforge.izpack.util.OsVersion";
+        installonwindows.fieldname = "IS_WINDOWS";
+        installonwindows.returnvalue = "true";
+        installonwindows.returnvaluetype = "boolean";
+        installonwindows.complete = true;
+        conditionsmap.put(installonwindows.id, installonwindows);
+        
+        JavaCondition installonlinux = new JavaCondition();
+        installonlinux.setInstalldata(installdata);
+        installonlinux.id = "izpack.linuxinstall";
+        installonlinux.classname = "com.izforge.izpack.util.OsVersion";
+        installonlinux.fieldname = "IS_LINUX";
+        installonlinux.returnvalue = "true";
+        installonlinux.returnvaluetype = "boolean";
+        installonlinux.complete = true;
+        conditionsmap.put(installonlinux.id, installonlinux);
+        
+        JavaCondition installonsolaris = new JavaCondition();
+        installonsolaris.setInstalldata(installdata);
+        installonsolaris.id = "izpack.solarisinstall";
+        installonsolaris.classname = "com.izforge.izpack.util.OsVersion";
+        installonsolaris.fieldname = "IS_SUNOS";
+        installonsolaris.returnvalue = "true";
+        installonsolaris.returnvaluetype = "boolean";
+        installonsolaris.complete = true;
+        conditionsmap.put(installonsolaris.id, installonsolaris);
+        
+        if ((installdata != null) && (installdata.allPacks != null)) {
+            for (Iterator iterator = installdata.allPacks.iterator(); iterator.hasNext();)
+            {
+                Pack pack = (Pack) iterator.next();
+                if (pack.id != null) {
+                    // automatically add packselection condition
+                    PackselectionCondition packselcond = new PackselectionCondition();
+                    packselcond.setInstalldata(installdata);
+                    packselcond.id = "izpack.selected." + pack.id;
+                    packselcond.packid = pack.id;
+                    conditionsmap.put(packselcond.id, packselcond);
+                }
+            }
+        }
+    }
     
     /**
      * 
@@ -68,6 +119,7 @@ public class RulesEngine
         this.conditionsspec = conditionsspecxml;        
         RulesEngine.installdata = installdata;
         this.readConditions();
+        init();
     }
     
     public RulesEngine(Map rules, InstallData installdata) {
@@ -80,6 +132,7 @@ public class RulesEngine
             Condition condition = (Condition) conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }
+        init();
     }
     
     /**
