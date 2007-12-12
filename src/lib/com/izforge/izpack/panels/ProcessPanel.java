@@ -100,7 +100,10 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
         heading.setHorizontalAlignment(SwingConstants.CENTER);
         heading.setText(parent.langpack.getString("ProcessPanel.heading"));
         heading.setVerticalAlignment(SwingConstants.TOP);
-        setLayout(new BorderLayout());
+        BorderLayout layout = new BorderLayout();
+        layout.setHgap(2);
+        layout.setVgap(2);
+        setLayout(layout);
         add(heading, BorderLayout.NORTH);
 
         // put everything but the heading into it's own panel
@@ -190,15 +193,14 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     public void startProcess(String jobName)
     {
         processLabel.setText(jobName);
-
-        this.currentJob++;
-        overallProgressBar.setValue(this.currentJob);
-        overallProgressBar.setString(Integer.toString(this.currentJob) + " / "
-                + Integer.toString(this.noOfJobs));
     }
 
     public void finishProcess()
     {
+        this.currentJob++;
+        overallProgressBar.setValue(this.currentJob);
+        overallProgressBar.setString(Integer.toString(this.currentJob) + " / "
+                + Integer.toString(this.noOfJobs));
     }
 
     /** Called when the panel becomes active. */
