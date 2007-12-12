@@ -128,6 +128,9 @@ public class VariableCondition extends Condition
         details.append(this.value);
         details.append("</b> on variable <b>");
         details.append(this.variablename);
+        details.append(" (current value: ");
+        details.append(this.installdata.getVariable(variablename));
+        details.append(")");
         details.append("</b><br/>");
         return details.toString();
     }
