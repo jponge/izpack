@@ -83,10 +83,7 @@ public class Debugger
         this.conditionhistory = new HashMap();
         this.init();
     }
-    
-    private void getCurrentConditionState(boolean updateconditionhistory, String comment) {       
-                     
-    }
+        
     
     private void init() {
         String[] variablekeys = (String[]) lasttimevariables.keySet().toArray(new String[lasttimevariables.size()]);

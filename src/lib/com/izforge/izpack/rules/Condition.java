@@ -74,4 +74,8 @@ public abstract class Condition implements Serializable
     {
         this.installdata = installdata;
     }
+    
+    public String getDependenciesDetails() {
+        return "No dependencies for this condition.";
+    }
 }

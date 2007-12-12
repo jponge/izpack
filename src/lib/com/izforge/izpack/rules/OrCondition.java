@@ -30,10 +30,11 @@ import com.izforge.izpack.util.Debug;
  */
 public class OrCondition extends Condition
 {
-
-    public static final String RDE_VCS_REVISION = "$Revision: 1.1 $";
-
-    public static final String RDE_VCS_NAME = "$Name:  $";
+   
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8341350377205144199L;
 
     protected Condition leftoperand;
 
@@ -97,5 +98,20 @@ public class OrCondition extends Condition
     public boolean isTrue()
     {
         return this.leftoperand.isTrue() || this.rightoperand.isTrue();
+    }
+
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
+     */
+    public String getDependenciesDetails()
+    {
+        StringBuffer details = new StringBuffer();
+        details.append(this.id);
+        details.append(" depends on:<ul><li>");        
+        details.append(leftoperand.getDependenciesDetails());
+        details.append("</li> OR <li>");
+        details.append(rightoperand.getDependenciesDetails());
+        details.append("</li></ul>");
+        return details.toString();
     }
 }

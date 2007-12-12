@@ -30,6 +30,10 @@ import net.n3.nanoxml.XMLElement;
 public class RefCondition extends Condition
 {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2880915036530702269L;
     Condition referencedcondition;
 
     public RefCondition()
@@ -59,8 +63,16 @@ public class RefCondition extends Condition
         }
     }
 
-    /*
-     * public boolean isTrue(Properties variables, List selectedpacks) { return
-     * referencedcondition.isTrue(variables, selectedpacks); }
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
      */
+    public String getDependenciesDetails()
+    {
+        StringBuffer details = new StringBuffer();
+        details.append(this.id);
+        details.append(" depends on:<ul><li>");        
+        details.append(referencedcondition.getDependenciesDetails());
+        details.append("</li></ul>");
+        return details.toString();
+    }    
 }

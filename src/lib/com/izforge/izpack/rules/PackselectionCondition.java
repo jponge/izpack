@@ -36,6 +36,10 @@ import net.n3.nanoxml.XMLElement;
 public class PackselectionCondition extends Condition
 {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 9193011814966195963L;
     protected String packid;
 
     /**
@@ -95,6 +99,19 @@ public class PackselectionCondition extends Condition
     public boolean isTrue()
     {
         return this.isTrue(this.installdata.getVariables(), this.installdata.selectedPacks);
+    }
+
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
+     */
+    public String getDependenciesDetails()
+    {
+        StringBuffer details = new StringBuffer();
+        details.append(this.id);
+        details.append("depends on the selection of pack <b>");
+        details.append(this.packid);        
+        details.append("</b><br/>");
+        return details.toString();
     }
 
 }

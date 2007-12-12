@@ -33,6 +33,10 @@ import com.izforge.izpack.util.Debug;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class JavaCondition extends Condition {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7649870719815066537L;
     protected String classname;
     protected String methodname;
     protected String fieldname;
@@ -138,6 +142,32 @@ public class JavaCondition extends Condition {
     public boolean isTrue()
     {
        return this.isTrue(this.installdata.getVariables());
+    }
+
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
+     */
+    public String getDependenciesDetails()
+    {
+        StringBuffer details = new StringBuffer();
+        details.append(this.id);
+        details.append(" depends on the ");
+        if (this.fieldname != null) {
+            details.append("value of field <b>");
+            details.append(this.fieldname);
+            details.append("</b>");
+        }
+        else {
+            details.append("return value of method <b>");
+            details.append(this.methodname);
+            details.append("</b>");
+        }
+        details.append(" on an instance of class <b>");
+        details.append(this.classname);
+        details.append("</b> which should be <b>");
+        details.append(this.returnvalue);        
+        details.append("</b><br/>");        
+        return details.toString();
     }
 
 }

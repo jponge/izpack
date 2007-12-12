@@ -32,6 +32,11 @@ import com.izforge.izpack.util.Debug;
 public class VariableCondition extends Condition
 {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2881336115632480575L;
+
     protected String variablename;
 
     protected String value;
@@ -110,5 +115,20 @@ public class VariableCondition extends Condition
         else {
             return false;
         }
+    }
+
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
+     */
+    public String getDependenciesDetails()
+    {
+        StringBuffer details = new StringBuffer();
+        details.append(this.id);
+        details.append(" depends on a value of <b>");        
+        details.append(this.value);
+        details.append("</b> on variable <b>");
+        details.append(this.variablename);
+        details.append("</b><br/>");
+        return details.toString();
     }
 }

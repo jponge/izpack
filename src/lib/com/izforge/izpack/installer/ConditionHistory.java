@@ -118,6 +118,8 @@ public class ConditionHistory
             details.append(condcomment[1]);
             details.append(")<br>");            
         }
+        details.append("<h4>Dependencies</h4>");
+        details.append(this.condition.getDependenciesDetails());
         details.append("</body></html>");
         return details.toString();
     }

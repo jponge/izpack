@@ -34,10 +34,14 @@ public class XOrCondition extends OrCondition
     /**
      * 
      */
+    private static final long serialVersionUID = 3148555083095194992L;
+
+    /**
+     * 
+     */
     public XOrCondition()
     {
-        super();
-        // TODO Auto-generated constructor stub
+        super();       
     }
 
     /**
@@ -49,25 +53,6 @@ public class XOrCondition extends OrCondition
         super(operand1, operand2);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.util.OrCondition#isTrue()
-     */
-    /*
-    public boolean isTrue(Properties variables)
-    {
-        boolean op1true = leftoperand.isTrue(variables);
-        boolean op2true = rightoperand.isTrue(variables);
-
-        if (op1true && op2true)
-        {
-            // in case where both are true
-            return false;
-        }
-        return op1true || op2true;
-    }
-    */
     /*
      * (non-Javadoc)
      * 
@@ -104,18 +89,18 @@ public class XOrCondition extends OrCondition
         return op1true || op2true;
     }
 
-    /*
-    public boolean isTrue(Properties variables, List selectedpacks)
+    /* (non-Javadoc)
+     * @see com.izforge.izpack.rules.OrCondition#getDependenciesDetails()
+     */
+    public String getDependenciesDetails()
     {
-        boolean op1true = leftoperand.isTrue(variables, selectedpacks);
-        boolean op2true = rightoperand.isTrue(variables, selectedpacks);
-
-        if (op1true && op2true)
-        {
-            // in case where both are true
-            return false;
-        }
-        return op1true || op2true;
-    }
-    */
+        StringBuffer details = new StringBuffer();
+        details.append(this.id);
+        details.append(" depends on:<ul><li>");        
+        details.append(leftoperand.getDependenciesDetails());
+        details.append("</li> XOR <li>");
+        details.append(rightoperand.getDependenciesDetails());
+        details.append("</li></ul>");
+        return details.toString();
+    }   
 }
