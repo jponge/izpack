@@ -64,12 +64,14 @@ import javax.swing.plaf.metal.MetalTheme;
 
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPackMetalTheme;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.FileExecutor;
 
 /**
  * The IzPack graphical installer class.
@@ -117,6 +119,7 @@ public class GUIInstaller extends InstallerBase
 
         // Checks the Java version
         checkJavaVersion();
+        checkJDKAvailable();
 
         // Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable() {
@@ -193,6 +196,35 @@ public class GUIInstaller extends InstallerBase
             System.out.println(msg.toString());
             JOptionPane.showMessageDialog(null, msg.toString(), "Error", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
+        }
+    }
+
+    /**
+     * Checks if a JDK is available.
+     */
+    private void checkJDKAvailable()
+    {
+        if (!this.installdata.info.isJdkRequired())
+        {
+            return;
+        }
+
+        FileExecutor exec = new FileExecutor();
+        String[] output = new String[2];
+        String[] params = { "javac", "-help" };
+        if (exec.executeCommand(params, output) != 0)
+        {
+            String[] message = {
+                "It looks like your system does not have a Java Development Kit (JDK) available.",
+                "The software that you plan to install requires a JDK for both its installation and execution.",
+                "\n",
+                "Do you still want to proceed with the installation process?"
+            };
+            int status = JOptionPane.showConfirmDialog(null, message, "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (status == JOptionPane.NO_OPTION)
+            {
+                System.exit(1);
+            }
         }
     }
 

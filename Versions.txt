@@ -68,6 +68,9 @@
   (Julien Ponge)
 - JDKPathPanel: Mac OS X fix (Julien Ponge)
 - PathInputPanel: add some space between the text and the input field (Julien Ponge)
+- Installer files: support of a 'requiresjdk' element to specify wether a JDK is required for the
+  software to install (instead of just a JRE). This is a light test performed like 'javaversion'
+  before the installer frame appears. (Julien Ponge)
 
   
   > 3.10.2 (build 2007.05.11)

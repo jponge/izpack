@@ -241,6 +241,9 @@ It contains the following elements :
     install your program. Values can be ``1.2``, ``1.2.2``, ``1.4``, etc. The
     test is a lexical comparison against the ``java.version`` System property
     on the install machine.
+-   ``<requiresjdk>``: (yes or no) specifies wether a JDK is required for the software
+    to be installed and executed. If not, then the user will be informed and given the
+    option to still proceed with the installation process or not.
 -   ``<webdir>`` : Causes a ''web installer'' to be created, and
     specifies the URL packages are retrieved from at install time. The
     content of the tag must be a properly formed URL.

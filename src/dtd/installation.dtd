@@ -10,9 +10,9 @@ $Id$
 -->
 
 <!-- The root element -->
-<!ELEMENT installation (preinstall?, info, packaging?, properties?, variables?,dynamicvariables?,conditions?, 
+<!ELEMENT installation (info, packaging?, properties?, variables?,dynamicvariables?,conditions?,
                         guiprefs?, locale, resources?, panels,
-                        listeners?, packs, jar*, native*, postinstall?)>
+                        listeners?, packs, jar*, native*)>
     <!ATTLIST installation version CDATA #REQUIRED>
 
 <!-- The info section (general information on an installation) -->
@@ -26,6 +26,7 @@ $Id$
         <!ATTLIST author email CDATA #REQUIRED>
     <!ELEMENT url (#PCDATA)>
     <!ELEMENT javaversion (#PCDATA)>
+    <!ELEMENT requiresjdk (#PCDATA)>
     <!ELEMENT uninstaller EMPTY>
         <!ATTLIST uninstaller write (yes|no) "yes">
         <!ATTLIST uninstaller name CDATA "uninstaller.jar">

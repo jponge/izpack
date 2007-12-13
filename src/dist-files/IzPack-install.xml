@@ -53,6 +53,7 @@
         </authors>
         <url>http://izpack.org/</url>
         <javaversion>1.4</javaversion>
+        <requiresjdk>no</requiresjdk>
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
     </info>
 

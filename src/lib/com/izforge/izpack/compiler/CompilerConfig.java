@@ -1425,6 +1425,10 @@ public class CompilerConfig extends Thread
         XMLElement javaVersion = root.getFirstChildNamed("javaversion");
         if (javaVersion != null) info.setJavaVersion(requireContent(javaVersion));
 
+        // Is a JDK required?
+        XMLElement jdkRequired = root.getFirstChildNamed("requiresjdk");
+        if (jdkRequired != null) info.setJdkRequired("yes".equals(jdkRequired.getContent()));
+
         // validate and insert (and require if -web kind) web dir
         XMLElement webDirURL = root.getFirstChildNamed("webdir");
         if (webDirURL != null) info.setWebDirURL(requireURLContent(webDirURL).toString());
