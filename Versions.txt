@@ -66,6 +66,8 @@
 - Added built-in conditions (Dennis Reil)
 - ProcessPanel: make the progress bar advance after the current process has run, not before
   (Julien Ponge)
+- JDKPathPanel: Mac OS X fix (Julien Ponge)
+- PathInputPanel: add some space between the text and the input field (Julien Ponge)
 
   
   > 3.10.2 (build 2007.05.11)

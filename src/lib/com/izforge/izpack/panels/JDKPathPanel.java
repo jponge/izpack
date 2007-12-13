@@ -55,6 +55,8 @@ public class JDKPathPanel extends PathInputPanel
     
     private static final String JDK_VALUE_NAME = "JavaHome";
 
+    private static final String OSX_JDK_HOME = "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/";
+
     private static final int OK = 0;
     private static final int BAD_VERSION = 1;
     private static final int BAD_REAL_PATH = 2;
@@ -157,8 +159,17 @@ public class JDKPathPanel extends PathInputPanel
         if (idata.getVariable(getVariableName()) != null)
             chosenPath = idata.getVariable(getVariableName());
         else
-            // Try the JAVA_HOME as child dir of the jdk path
-            chosenPath = (new File(idata.getVariable("JAVA_HOME"))).getParent();
+        {
+            if (OsVersion.IS_OSX)
+            {
+                chosenPath = OSX_JDK_HOME;
+            }
+            else
+            {
+                // Try the JAVA_HOME as child dir of the jdk path
+                chosenPath = (new File(idata.getVariable("JAVA_HOME"))).getParent();
+            }
+        }
         // Set the path for method pathIsValid ...
         pathSelectionPanel.setPath(chosenPath);
 

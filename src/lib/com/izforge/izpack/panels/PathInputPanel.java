@@ -96,6 +96,9 @@ public class PathInputPanel extends IzPanel implements ActionListener
         // Intro
         // row 0 column 0
         add(createMultiLineLabel(introText));
+
+        add(IzPanelLayout.createParagraphGap());
+
         // Label for input
         // row 1 column 0.
         add(createLabel("info", "TargetPanel", "open",
