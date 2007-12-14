@@ -74,9 +74,9 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     private ProcessPanelWorker worker;
 
     /** Number of jobs to process. Used for progress indication. */
-    private int noOfJobs;
+    private int noOfJobs = 0;
 
-    private int currentJob;
+    private int currentJob = 0;
 
     /** Where the output is displayed */
     private JTextArea outputPane;
@@ -145,17 +145,17 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     public void startProcessing(int no_of_jobs)
     {
         this.noOfJobs = no_of_jobs;
-        overallProgressBar.setMaximum(noOfJobs);
+        overallProgressBar.setMaximum(no_of_jobs);
+        overallProgressBar.setIndeterminate(true);
         parent.lockPrevButton();
     }
 
     /** The compiler stops. */
     public void finishProcessing()
     {
-        overallProgressBar.setValue(this.noOfJobs);
+        overallProgressBar.setIndeterminate(false);
         String no_of_jobs = Integer.toString(this.noOfJobs);
         overallProgressBar.setString(no_of_jobs + " / " + no_of_jobs);
-        overallProgressBar.setEnabled(false);
 
         processLabel.setText(" ");
         processLabel.setEnabled(false);
@@ -193,14 +193,16 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     public void startProcess(String jobName)
     {
         processLabel.setText(jobName);
-    }
-
-    public void finishProcess()
-    {
+        
         this.currentJob++;
         overallProgressBar.setValue(this.currentJob);
         overallProgressBar.setString(Integer.toString(this.currentJob) + " / "
                 + Integer.toString(this.noOfJobs));
+    }
+
+    public void finishProcess()
+    {
+
     }
 
     /** Called when the panel becomes active. */
