@@ -15,6 +15,7 @@ Chapters
 - creating-panels_
 - user-input_
 - custom-actions_
+- izpack-utils_
 - apache-license_
 - cc-license_
 - cookbooks_
@@ -27,6 +28,7 @@ Chapters
 .. _creating-panels: creating-panels.html
 .. _user-input: user-input.html
 .. _custom-actions: custom-actions.html
+.. _izpack-utils: izpack-utils.html
 .. _apache-license: apache-license.html
 .. _cc-license: cc-license.html
 .. _cookbooks: cookbooks.html

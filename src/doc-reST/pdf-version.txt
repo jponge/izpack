@@ -14,6 +14,7 @@ IzPack documentation
 .. include:: creating-panels.txt
 .. include:: user-input.txt
 .. include:: custom-actions.txt
+.. include:: izpack-utils.txt
 .. include:: apache-license.txt
 .. include:: cc-license.txt
 .. include:: cookbooks.txt
