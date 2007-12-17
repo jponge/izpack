@@ -63,6 +63,36 @@ public class StdXMLBuilder implements IXMLBuilder
     }
 
     /**
+     * Return the element that is currently being processed
+     *
+     * @return  the element that is currently being processed
+     */
+    protected XMLElement getCurrentElement() {
+        return (XMLElement) stack.peek();
+    }
+
+    /**
+     * Return the stack used for processing the elements.
+     *
+     * @return  the stack used for processing the elements.
+     */
+    protected Stack getStack() {
+        return stack;
+    }
+
+    /**
+     * Set the root element to a new element. This causes the internal stack
+     * to be flushed and the supplied element to be pushed onto it
+     *
+     * @param element the new root element.
+     */
+    protected void setRootElement(XMLElement element) {
+        stack.clear();
+        stack.push(element);
+        this.root = element;
+    }
+
+    /**
      * Cleans up the object when it's destroyed.
      */
     protected void finalize() throws Throwable

@@ -49,10 +49,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLBuilderFactory;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.Pack;
@@ -830,7 +830,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
          * System.out.println( "==================================================================" ); }
          */
         StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(new StdXMLBuilder());
+        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
         parser.setValidator(new NonValidator());
         parser.setReader(StdXMLReader.stringReader(substitutedSpec));
 

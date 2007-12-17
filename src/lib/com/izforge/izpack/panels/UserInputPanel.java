@@ -54,10 +54,10 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
 import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLBuilderFactory;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
@@ -1145,7 +1145,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         // initialize the parser
         StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(new StdXMLBuilder());
+        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
         parser.setValidator(new NonValidator());
         parser.setReader(new StdXMLReader(input));
 

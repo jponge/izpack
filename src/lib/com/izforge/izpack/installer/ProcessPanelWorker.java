@@ -38,10 +38,10 @@ import java.util.List;
 import java.util.Vector;
 
 import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLBuilderFactory;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.rules.Condition;
@@ -117,7 +117,7 @@ public class ProcessPanelWorker implements Runnable
         }
 
         StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(new StdXMLBuilder());
+        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
         parser.setValidator(new NonValidator());
 
         XMLElement spec;

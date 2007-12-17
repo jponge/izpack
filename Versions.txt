@@ -71,7 +71,8 @@
 - Installer files: support of a 'requiresjdk' element to specify wether a JDK is required for the
   software to install (instead of just a JRE). This is a light test performed like 'javaversion'
   before the installer frame appears. (Julien Ponge)
-
+- Support of XInclude-like constructs (Matthew Fudge, Volantis Systems Ltd.
+  via Julien Ponge)
   
   > 3.10.2 (build 2007.05.11)
 

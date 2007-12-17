@@ -40,10 +40,10 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
 import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLBuilderFactory;
 
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.ExecutableFile;
@@ -454,7 +454,7 @@ public class AutomatedInstaller extends InstallerBase
 
         // Initialises the parser
         StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(new StdXMLBuilder());
+        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
         parser.setReader(new StdXMLReader(in));
         parser.setValidator(new NonValidator());
 

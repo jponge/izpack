@@ -138,7 +138,7 @@ public class StdXMLReader implements IXMLReader
         }
         catch (MalformedURLException e)
         {
-            systemID = "file:" + systemID;
+            systemID = "file://" + systemID;
 
             try
             {

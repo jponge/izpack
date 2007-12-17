@@ -84,11 +84,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
 import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
 import net.n3.nanoxml.XMLWriter;
+import net.n3.nanoxml.XMLBuilderFactory;
 
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.ExecutableFile;
@@ -351,7 +351,7 @@ public class InstallerFrame extends JFrame
             }
 
             StdXMLParser parser = new StdXMLParser();
-            parser.setBuilder(new StdXMLBuilder());
+            parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
             parser.setValidator(new NonValidator());
             parser.setReader(new StdXMLReader(input));
 
@@ -443,7 +443,7 @@ public class InstallerFrame extends JFrame
 
         // Initialises the parser
         StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(new StdXMLBuilder());
+        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
         parser.setReader(new StdXMLReader(inXML));
         parser.setValidator(new NonValidator());
 
@@ -495,7 +495,7 @@ public class InstallerFrame extends JFrame
 
       // Initialises the parser
       StdXMLParser parser = new StdXMLParser();
-      parser.setBuilder(new StdXMLBuilder());
+      parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
       parser.setReader(new StdXMLReader(inXML));
       parser.setValidator(new NonValidator());
 

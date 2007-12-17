@@ -65,7 +65,7 @@ public class XMLParserFactory
     {
         String className = System.getProperty(XMLParserFactory.CLASS_KEY,
                 XMLParserFactory.DEFAULT_CLASS);
-        return XMLParserFactory.createXMLParser(className, new StdXMLBuilder());
+        return XMLParserFactory.createXMLParser(className, XMLBuilderFactory.createXMLBuilder());
     }
 
     /**

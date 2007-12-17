@@ -75,11 +75,11 @@ import com.izforge.izpack.util.VariableSubstitutor;
 
 import net.n3.nanoxml.IXMLReader;
 import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLBuilder;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
 import net.n3.nanoxml.XMLElement;
 import net.n3.nanoxml.XMLException;
+import net.n3.nanoxml.XMLBuilderFactory;
 
 /**
  * A parser for the installer xml configuration. This parses a document
@@ -1001,7 +1001,7 @@ public class CompilerConfig extends Thread
             }
             
             StdXMLParser refXMLParser = new StdXMLParser();
-            refXMLParser.setBuilder(new StdXMLBuilder());
+            refXMLParser.setBuilder(XMLBuilderFactory.createXMLBuilder());
             refXMLParser.setReader(refXMLReader);
             refXMLParser.setValidator(new NonValidator());
 
@@ -1692,7 +1692,7 @@ public class CompilerConfig extends Thread
         }
 
         StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(new StdXMLBuilder());
+        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
         parser.setReader(reader);
         parser.setValidator(new NonValidator());
 

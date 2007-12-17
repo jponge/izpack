@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<aaaa>
+    <xinclude href="content-fragment.xml"/>
+    <xinclude href="content-fragment.xml"/>
+</aaaa>
