@@ -73,6 +73,7 @@
   before the installer frame appears. (Julien Ponge)
 - Support of XInclude-like constructs (Matthew Fudge, Volantis Systems Ltd.
   via Julien Ponge)
+- Spanish langpack update (Sergio Banos Calvo via Julien Ponge)
   
   > 3.10.2 (build 2007.05.11)
 
