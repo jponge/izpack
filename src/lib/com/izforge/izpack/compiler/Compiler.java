@@ -63,7 +63,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
 public class Compiler extends Thread
 {
     /** The IzPack version. */
-    public final static String IZPACK_VERSION = "3.10.2";
+    public final static String IZPACK_VERSION = "3.11.0";
 
     /** The IzPack home directory. */
     public static String IZPACK_HOME = ".";

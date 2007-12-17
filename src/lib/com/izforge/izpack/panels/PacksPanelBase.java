@@ -582,8 +582,10 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             e.printStackTrace();
         }
+
         showSpaceRequired();
         showFreeSpace();
+        packsTable.setRowSelectionInterval(0, 0);
     }
 
     /*

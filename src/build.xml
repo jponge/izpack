@@ -207,7 +207,7 @@
 
     <property file="src/ant.properties" />
     <property name="ver" value="3.11" />
-    <property name="rel" value="0-beta1" />
+    <property name="rel" value="0-beta2" />
     <property name="build.number" value="${ver}.${rel}" />
 
     <property name="src.dir" value="${basedir}/src/lib" />

@@ -602,19 +602,14 @@ public class GUIInstaller extends InstallerBase
             String firstMessage = "Please select your language";
             if (getLangType().equals(LANGUAGE_DISPLAY_TYPES[0]))
             // iso3
-                firstMessage = "Please select your language (ISO3 code)";
+                firstMessage = "Please select your language below";
 
-            JLabel label1 = new JLabel(firstMessage, SwingConstants.CENTER);
+            JLabel label1 = new JLabel(firstMessage, SwingConstants.LEADING);
             gbConstraints.gridy = 1;
-            gbConstraints.insets = new Insets(5, 5, 0, 5);
+            gbConstraints.insets = new Insets(15, 5, 2, 5);
             layout.addLayoutComponent(label1, gbConstraints);
             contentPane.add(label1);
-            JLabel label2 = new JLabel("for install instructions:", SwingConstants.CENTER);
-            gbConstraints.gridy = 2;
-            gbConstraints.insets = new Insets(0, 5, 5, 5);
-            layout.addLayoutComponent(label2, gbConstraints);
-            contentPane.add(label2);
-            gbConstraints.insets = new Insets(5, 5, 5, 5);
+            gbConstraints.insets = new Insets(2, 5, 2, 5);
 
             items = reviseItems(items);
 
@@ -625,6 +620,7 @@ public class GUIInstaller extends InstallerBase
             layout.addLayoutComponent(comboBox, gbConstraints);
             contentPane.add(comboBox);
 
+            gbConstraints.insets = new Insets(15, 5, 5, 5);
             JButton okButton = new JButton("OK");
             okButton.addActionListener(this);
             gbConstraints.fill = GridBagConstraints.NONE;

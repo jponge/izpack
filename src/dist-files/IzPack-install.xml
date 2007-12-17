@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.11.0-beta1</appversion>
+        <appversion>3.11.0-beta2</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
             
@@ -37,7 +37,7 @@
             <author email="" name="Sergio Banos Calvo (contributor)" />
             <author email="" name="Loic Bardon (contributor)" />
             <author email="" name="Kerekes Balazs (contributor)" />
-	    <author email="" name="Matthew Fudge (Volantis Systems Ltd., contributors)" />
+            <author email="" name="Matthew Fudge (Volantis Systems Ltd., contributors)" />
             <author email="" name="Andreas Guenther (contributor)" />
             <author email="" name="Michael Hagedorn (contributor)" />
             <author email="" name="Dick Hollenbeck (contributor)" />
@@ -59,7 +59,7 @@
     </info>
 
     <!-- Flexible and in the screen proportions -->
-    <guiprefs height="600" resizable="yes" width="800">
+    <guiprefs height="650" resizable="yes" width="866">
         <laf name="looks" >
             <os family="unix"/>
         </laf>
@@ -67,7 +67,7 @@
     	<modifier key="layoutAnchor" value="CENTER"/>
     	<modifier key="headingPanelCounter" value="progressbar"/>
 		<modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
-		<modifier key="allYGap" value="3"/>
+		<modifier key="allYGap" value="4"/>
 		<modifier key="paragraphYGap" value="10"/>
 		<modifier key="filler1YGap" value="5"/>
 		<modifier key="filler3XGap" value="10"/>
@@ -113,13 +113,6 @@
         <res src="splash-3.10.png" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
-        <res src="core.png" id="ImgPacksPanel.img.0"/>
-        <res src="doc-html.png" id="ImgPacksPanel.img.1"/>
-        <res src="doc-pdf.png" id="ImgPacksPanel.img.2"/>
-        <res src="javadocs.png" id="ImgPacksPanel.img.3"/>
-        <res src="doc-nanoxml.png" id="ImgPacksPanel.img.4"/>
-        <res src="sample.png" id="ImgPacksPanel.img.5"/>
-        <res src="src.png" id="ImgPacksPanel.img.6"/>
         <res src="info-border.png" id="Installer.image.0"/>
         <res src="info-border.png" id="Installer.image.1"/>
         <res src="info-border.png" id="Installer.image.2"/>
@@ -138,7 +131,7 @@
         <panel classname="HTMLInfoPanel" id="infopanel"/>
         <panel classname="LicencePanel" id="licensepanel"/>
         <panel classname="TargetPanel" id="targetpanel"/>
-        <panel classname="ImgPacksPanel" id="packspanel"/>
+        <panel classname="PacksPanel" id="packspanel"/>
         <panel classname="SummaryPanel" id="summarypanel"/>
         <panel classname="InstallPanel" id="installpanel"/>
         <panel classname="ShortcutPanel" id="shortcutpanel"/>
@@ -158,7 +151,7 @@
     <packs>
 
         <!-- The core files -->
-        <pack name="Core" required="yes" packImgId="ImgPacksPanel.img.0">
+        <pack name="Core" required="yes">
             <description>The IzPack core files.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="*.txt"/>
@@ -171,36 +164,41 @@
         </pack>
 
         <!-- The documentation -->
-        <pack name="HTML Documentation" required="no" packImgId="ImgPacksPanel.img.1">
+        <pack name="HTML Documentation" required="no">
             <description>The IzPack documentation (HTML version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="doc/izpack/html/**/*"/>
             </fileset>
         </pack>
-        <pack name="PDF Documentation" required="no" packImgId="ImgPacksPanel.img.2">
+        <pack name="PDF Documentation" required="no">
             <description>The IzPack documentation (PDF version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
             <include name="doc/izpack/pdf/**/*" />
             </fileset>
         </pack>
-        <pack name="Javadocs Documentation" required="no" packImgId="ImgPacksPanel.img.3">
-            <description>
-                The IzPack Java documentation (Javadocs for IzPack developers).
-            </description>
+        <pack name="Javadocs Documentation" required="no">
+            <description>The IzPack Java documentation (Javadocs for IzPack developers).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="doc/izpack/javadoc/**/*"/>
             </fileset>
         </pack>
-        <pack name="NanoXML Documentation" required="no" packImgId="ImgPacksPanel.img.4">
+        <pack name="NanoXML Documentation" required="no">
             <description>NanoXML documentation (for IzPack developers).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="doc/nanoxml/**/*"/>
             </fileset>
         </pack>
 
+        <!-- Utilities pack -->
+        <pack name="Utilities" required="no">
+            <description>IzPack utilities (izpack2exe, izpack2app, ...)</description>
+            <fileset dir="" targetdir="$INSTALL_PATH">
+                <include name="utils/**/*" />
+            </fileset>
+        </pack>
 
         <!-- A trivial sample to get started -->
-        <pack name="Sample" required="no" packImgId="ImgPacksPanel.img.5">
+        <pack name="Sample" required="no">
             <description>A sample installation.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="sample/**/*"/>
@@ -208,7 +206,7 @@
         </pack>
 
         <!-- The source code of this version -->
-        <pack name="Sources" required="no" packImgId="ImgPacksPanel.img.6">
+        <pack name="Sources" required="no">
             <description>The full IzPack source code.</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="src/**/*"/>
