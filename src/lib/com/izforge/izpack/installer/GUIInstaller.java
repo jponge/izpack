@@ -588,17 +588,18 @@ public class GUIInstaller extends InstallerBase
             GridBagConstraints gbConstraints = new GridBagConstraints();
             gbConstraints.anchor = GridBagConstraints.CENTER;
             gbConstraints.insets = new Insets(5, 5, 5, 5);
-            gbConstraints.fill = GridBagConstraints.NONE;
+            gbConstraints.fill = GridBagConstraints.HORIZONTAL;
             gbConstraints.gridx = 0;
             gbConstraints.weightx = 1.0;
             gbConstraints.weighty = 1.0;
+			gbConstraints.ipadx = 0;
+			gbConstraints.ipady = 6;
 
             ImageIcon img = getImage();
             JLabel imgLabel = new JLabel(img);
             gbConstraints.gridy = 0;
             contentPane.add(imgLabel);
 
-            gbConstraints.fill = GridBagConstraints.HORIZONTAL;
             String firstMessage = "Please select your language";
             if (getLangType().equals(LANGUAGE_DISPLAY_TYPES[0]))
             // iso3
@@ -606,22 +607,21 @@ public class GUIInstaller extends InstallerBase
 
             JLabel label1 = new JLabel(firstMessage, SwingConstants.LEADING);
             gbConstraints.gridy = 1;
-            gbConstraints.insets = new Insets(15, 5, 2, 5);
+            gbConstraints.insets = new Insets(15, 5, 5, 5);
             layout.addLayoutComponent(label1, gbConstraints);
             contentPane.add(label1);
-            gbConstraints.insets = new Insets(2, 5, 2, 5);
 
+            gbConstraints.insets = new Insets(5, 5, 5, 5);
             items = reviseItems(items);
 
             comboBox = new JComboBox(items);
             if (useFlags()) comboBox.setRenderer(new FlagRenderer());
-            gbConstraints.fill = GridBagConstraints.HORIZONTAL;
             gbConstraints.gridy = 3;
             layout.addLayoutComponent(comboBox, gbConstraints);
             contentPane.add(comboBox);
 
-            gbConstraints.insets = new Insets(15, 5, 5, 5);
-            JButton okButton = new JButton("OK");
+            gbConstraints.insets = new Insets(15, 5, 15, 5);
+            JButton okButton = new JButton("Ok");
             okButton.addActionListener(this);
             gbConstraints.fill = GridBagConstraints.NONE;
             gbConstraints.gridy = 4;
@@ -633,9 +633,10 @@ public class GUIInstaller extends InstallerBase
             // Packs and centers
             // Fix for bug "Installer won't show anything on OSX"
             if (System.getProperty("mrj.version") == null)
+			{
                 pack();
-            else
-                setSize(getPreferredSize());
+			}
+            setSize(getPreferredSize());
 
             Dimension frameSize = getSize();
             Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();

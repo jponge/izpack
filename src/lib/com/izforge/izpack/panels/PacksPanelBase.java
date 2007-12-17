@@ -641,7 +641,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 boolean isSelected, boolean hasFocus, int row, int column)
         {
             JCheckBox display = new JCheckBox();
-            if(com.izforge.izpack.util.OsVersion.IS_UNIX)
+            if(com.izforge.izpack.util.OsVersion.IS_UNIX && !com.izforge.izpack.util.OsVersion.IS_OSX)
             {
                 display.setIcon(new LFIndependentIcon());
                 display.setDisabledIcon(new LFIndependentIcon());
