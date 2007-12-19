@@ -25,7 +25,8 @@
     <str id="SummaryPanel.headline" txt="Sumár konfiguraèných dát"/>
     <str id="TargetPanel.headline" txt="Cieµová cesta"/>
     <str id="UserInputPanel.headline" txt="Pou¾ivateµské data"/>
-
+    <str id="InstallationTypePanel.headline" txt="Typ in¹talácie" />
+    
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - In¹talácia "/>
     <str id="installer.next" txt="Ïal¹í"/>
@@ -44,7 +45,6 @@
     <str id="installer.of" txt=" - "/>
     <str id="installer.Message" txt="Správa"/> 
     
-    
     <!-- Uninstaller specific strings -->
     <str id="uninstaller.warning" txt="Táto operácia odstráni nain¹talovanú aplikáciu !"/>
     <str id="uninstaller.destroytarget" txt=" Odstráni» "/>
@@ -62,16 +62,20 @@
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Ste si istý ¾e chcete in¹talova» inú in¹tanciu danej aplikácie?"/>
     <str id="CheckedHelloPanel.infoOverUninstallKey" txt="Názov odin¹talaèného kµúèa: " />
     
-    
     <str id="LicencePanel.info" txt="Pozorne si preèítajte nasledovné licenèné podmienky:"/>
     <str id="LicencePanel.agree" txt="Akceptujem licenèné podmienky."/>
     <str id="LicencePanel.notagree" txt="Neakceptujem licenèné podmienky."/>
     <str id="LicencePanel.yes" txt="Áno"/>
     <str id="LicencePanel.no" txt="Nie"/>
     
+    <str id="InstallationTypePanel.info" txt="Vyberte prosím typ in¹talácie:" />
+    <str id="InstallationTypePanel.normal" txt="Nová in¹talácia" />
+    <str id="InstallationTypePanel.modify" txt="Zmena in¹talácia" />
+    
     <str id="InfoPanel.info" txt="Preèítajte si nasledujuce informácie :"/>
     
     <str id="PathInputPanel.required" txt="Vybraný prieèinok by mal existova»."/>
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Vybraný prieèinok musí existova»."/>    
     <str id="PathInputPanel.notValid" txt="Vybraný prieèinok neobsahuje po¾adovaný produkt."/>
 
     <str id="TargetPanel.info" txt="Vyberte in¹talaèný prieèinok :"/>
@@ -80,7 +84,7 @@
          txt="Adresár existuje ! Ste si istý ,¾e chcete nain¹talova» softvér do tohto prieèinku ? Súèasná verzia súborov bude prepísaná?"/>
     <str id="TargetPanel.empty_target"
          txt="Nevybrali ste cieµový prieèinok! Je to správne?"/>
-		<str id="TargetPanel.createdir" txt="Cieµový prieèinok bude vytvorený :" />
+	<str id="TargetPanel.createdir" txt="Cieµový prieèinok bude vytvorený :" />
     <str id="TargetPanel.nodir" 
          txt="Súbor nie je prieèinok! Vyberte prieèinok!"/>
     <str id="TargetPanel.notwritable" 
@@ -92,17 +96,20 @@
     <str id="JDKPathPanel.badVersion1" txt="Vybraná verzia JDK má nesprávnu verziu (k dispozícii: "/>
     <str id="JDKPathPanel.badVersion2" txt=" vy¾adovaná: "/>
     <str id="JDKPathPanel.badVersion3" txt="), má by» táto verzia pou¾itá aj napriek tomu?"/>
+    <str id="JDKPathPanel.nonValidPathInReg" txt="Register vo Windows  obsahuje nesprávnu cestu k JDK (Java devepoler kit). Ma by» naozaj pou¾itá?"/>
 	 
     <str id="PacksPanel.info" txt="Vyberte balíky ktoré budú in¹talované :"/>
     <str id="PacksPanel.tip" txt="Poznámka: za¹edené balíky su vy¾adované."/>
     <str id="PacksPanel.space" txt="Vy¾adované miesto na disku: "/>
     <str id="PacksPanel.freespace" txt="Voµné miesto: "/>
     <str id="PacksPanel.description" txt="Poznámka"/>
-    <str id="PacksPanel.dependencyList" txt="Vybraný balík potrebuje ma» nain¹talované aj tieto balíky "/>
+    <str id="PacksPanel.dependencyList" 
+    txt="Vybraný balík potrebuje ma» nain¹talované aj tieto balíky "/>
     <str id="PacksPanel.dependencies" txt="Závislosti: "/>
     <str id="PacksPanel.excludes" txt="Vylúèené: "/>
     <str id="ImgPacksPanel.dependencyList" txt="Závisle balíky"/>
-    <str id="PacksPanel.notEnoughSpace" txt="Na disku nie je dostatoèné mno¾stvo voµného miesta."/>
+    <str id="PacksPanel.notEnoughSpace" 
+    	txt="Na disku nie je dostatoèné mno¾stvo voµného miesta."/>
     <str id="PacksPanel.notAscertainable" txt="nie je mo¾né zisti»"/>
     
     <str id="InstallPanel.info" txt="Kliknutím na tlaèítko 'In¹talova» !' zaènete in¹taláciu"/>
@@ -113,7 +120,6 @@
     <str id="InstallPanel.progress" txt="Celkový stav in¹talácie :"/>
     <str id="InstallPanel.overwrite.title" txt="Súbor u¾ existuje"/>
     <str id="InstallPanel.overwrite.question" txt="Súbor u¾ existuje. Má by» súbor prepísaný?"/>
-    
     
     <str id="FinishPanel.success" txt="In¹talácia úspe¹ne ukonèená."/>
     <str id="FinishPanel.fail" txt="In¹talácia zlyhala!"/>
@@ -145,7 +151,6 @@
     <str id="ShortcutPanel.alternate.saveButton" txt="Ulo¾i» textový súbor"/>
     
     <str id="ShortcutPanel.textFile.header" txt="Informácie o zástupcoch\n====================\n\nTento zoznam je zoznam zástupcov ku ktorému by ste mali ma» prístup.\n  Vytvori» zástupcov musite sami.\n"/>
-    
     <str id="ShortcutPanel.textFile.name"         txt="Zástupca          : "/>
     <str id="ShortcutPanel.textFile.location"     txt="Umiestnenie       : "/>
     <str id="ShortcutPanel.textFile.description"  txt="Poznámka          : "/>
@@ -216,4 +221,44 @@
     <str id="nextmedia.choosertitle" txt="Vybra» in¹talaèné média" />
     <str id="nextmedia.filedesc" rdid="in¹talova» balíky (.pak*)" />
 
+  <!-- This string defines the time stamp format in the installation report.
+         The format details are documented in java.text.SimpleDateFormat -->
+    <str id="log.timeStamp"               txt="dd.MM.yyyy [hh:mm:ss]"/>
+
+    <!-- Strings for various purposes in the logging/reporting system  -->
+    <str id="log.reportHeading"           txt="                           IzPack In¹talácia zápis"/>
+    <str id="log.installFailed"           txt="VAROVANIE!!! In¹talácia skonèila neúspe¹ne!"/>
+    <str id="log.partialInstall"          txt="VAROVANIE!!! In¹talácia èiastoène skonèila neuspe¹ne!"/>
+    <str id="log.messageCount"            txt="Tento výpis obsahuje {0} správu/správy, {1} varovanie/varovaní a {2} chybu/chýb"/>
+    <str id="log.application"             txt="In¹talácia zápis pre : {0} Verzia {1}"/>
+    <str id="log.timePrefix"              txt="Èas in¹talácia          : {0}"/>
+    <str id="log.pathPrefix"              txt="In¹talaèný prieèinok    : {0}"/>
+    <str id="log.messageHeading"          txt="                         --- In¹talaèné správy ---"/>
+    <str id="log.warningHeading"          txt="                               --- Varovania ---"/>
+    <str id="log.errorHeading"            txt="                                --- Chyby ---"/>
+    <str id="log.exceptionPrefix"         txt="                 >> Vynimka: {0}"/>
+    <str id="log.messagePrefix"           txt="Správa  [{0}] - "/>
+    <str id="log.warningPrefix"           txt="Varovanie [{0}] - "/>
+    <str id="log.errorPrefix"             txt="Chyba [{0}] - "/>
+    <str id="log.reportWriteErrorTitle"   txt="Chyba pri zápise zápisu"/>
+    <str id="log.reportWriteError"        txt="Nedá sa zapísa» in¹talaèný zápis ''{0}''"/>
+    <str id="log.informUserTitle"         txt="Problémy pri in¹talácii"/>
+    <str id="log.saveLogTitle"            txt="Ulo¾i» log."/>
+    <str id="log.LogFileName"             txt="installLog.txt"/>
+    <str id="log.informUserFail"          txt="&lt;html&gt;In¹talácia skonèila neúspe¹ne!&lt;br&gt;Chcete zapísa» log súbor?&lt;/html&gt;"/>
+    <str id="log.informUserPartial"       txt="&lt;html&gt;In¹talácia èiastoène skonèila neuspe¹ne!&lt;br&gt;Chcete zapísa» log súbor?&lt;/html&gt;"/>
+
+    <!-- Strings for individual messages in the logging/reporting system.
+         Numbers for each category (message/warning/error) start at 0  -->
+    <str id="log.message_"                txt=""/>
+
+    <str id="log.warning_"                txt=""/>
+
+    <str id="log.error_0"                 txt="nedá sa zapisova» do ''{0}''"/>
+    
+    <str id="InstallationGroupPanel.colNameSelected" txt="Vybraný" />
+    <str id="InstallationGroupPanel.colNameInstallType" txt="Typ" />
+    <str id="InstallationGroupPanel.colNameSize" txt="Veµkos»" />
+
+	<str id="debug.changevariable" txt="zmente hodnotu"/>    
 </langpack>
