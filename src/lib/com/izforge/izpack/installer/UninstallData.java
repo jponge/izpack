@@ -89,9 +89,10 @@ public class UninstallData
      */
     public synchronized void addFile(String path, boolean uninstall)
     {
-        if(path != null)
+        if(path != null) {
             installedFilesList.add(path);
             if (uninstall) uninstallableFilesList.add(path);
+		}
     }
 
     /**
