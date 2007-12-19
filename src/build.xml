@@ -998,6 +998,7 @@
         <copy todir="${dist.dir}" includeEmptyDirs="yes" preservelastmodified="true">
             <fileset dir="${basedir}">
                 <include name="bin/**" />
+                <include name="utils/**" />
                 <include name="lib/*.jar" />
                 <include name="doc/**" />
                 <include name="legal/**" />
