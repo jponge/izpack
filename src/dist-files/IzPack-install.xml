@@ -109,7 +109,7 @@
     <!-- The resources needed by the various panels -->
     <resources>
         <res src="install-readme.html" id="HTMLInfoPanel.info"/>
-        <res src="Licence.txt" id="LicencePanel.licence"/>
+        <res src="license.html" id="HTMLLicencePanel.licence"/>
         <res src="splash-3.10.png" id="installer.langsel.img"/>
         <res src="shortcutSpec.xml" id="shortcutSpec.xml"/>
         <res src="Unix_shortcutSpec.xml" id="Unix_shortcutSpec.xml"/>
@@ -129,7 +129,7 @@
     <panels>
         <panel classname="CheckedHelloPanel" id="hellopanel"/>
         <panel classname="HTMLInfoPanel" id="infopanel"/>
-        <panel classname="LicencePanel" id="licensepanel"/>
+        <panel classname="HTMLLicencePanel" id="licensepanel"/>
         <panel classname="TargetPanel" id="targetpanel"/>
         <panel classname="PacksPanel" id="packspanel"/>
         <panel classname="SummaryPanel" id="summarypanel"/>
