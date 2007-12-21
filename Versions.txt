@@ -86,6 +86,7 @@
 - French langpack updates (Loic, via Julien Ponge)
 - Documentation update (Scott Plante via Julien Ponge)
 - AutomatedUninstaller.writeUninstallData() out of sync with InstallerFrame fixed (Marius Nicolae via Marc Eppelmann)
+- Finnish langpack updates (Ari Voutilainen via Julien Ponge)
 
   > 3.10.1 (build 2007.03.29)
 

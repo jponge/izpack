@@ -25,6 +25,7 @@
     <str id="SummaryPanel.headline" txt="Yhteenveto asetustiedoista"/>
     <str id="TargetPanel.headline" txt="Kohdepolku"/>
     <str id="UserInputPanel.headline" txt="Käyttäjän data"/>
+    <str id="InstallationTypePanel.headline" txt="Asennuksen tyyppi" />
 
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Asennetaan: "/>
@@ -67,9 +68,14 @@
     <str id="LicencePanel.yes" txt="Kyllä"/>
     <str id="LicencePanel.no" txt="En"/>
 
+    <str id="InstallationTypePanel.info" txt="Valitse asennuksen tyyppi:" />
+    <str id="InstallationTypePanel.normal" txt="Uusi asennus" />
+    <str id="InstallationTypePanel.modify" txt="Asennuksen muutos" />
+
     <str id="InfoPanel.info" txt="Ole hyvä ja lue seuraavat tiedotteet: "/>
 
     <str id="PathInputPanel.required" txt="Valitun hakemiston on oltava olemassa."/>
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Valitun hakemiston on oltava olemassa."/>    
     <str id="PathInputPanel.notValid" txt="Valittu hakemisto ei sisällä vaadittua tuotetta."/>
 
     <str id="TargetPanel.info" txt="Valitse asennushakemisto:"/>
@@ -210,10 +216,10 @@
     -->
 
     <str id="nextmedia.title" txt="Seuraava asennusmedia" />
-  	<str id="nextmedia.msg" txt="Valitse seuraava asennusmedia." />
-	  <str id="nextmedia.browsebtn" txt="Selaa" />
-  	<str id="nextmedia.okbtn" txt="Hyväksy" />
-	  <str id="nextmedia.cancelbtn" txt="Peruuta" />
+  	 <str id="nextmedia.msg" txt="Valitse seuraava asennusmedia." />
+	 <str id="nextmedia.browsebtn" txt="Selaa" />
+  	 <str id="nextmedia.okbtn" txt="Hyväksy" />
+	 <str id="nextmedia.cancelbtn" txt="Peruuta" />
     <str id="nextmedia.choosertitle" txt="Valitse asennusmedia" />
     <str id="nextmedia.filedesc" rdid="asennuspaketit (.pak*)" />
 
@@ -258,4 +264,5 @@
     <str id="InstallationGroupPanel.colNameInstallType" txt="Asennustyyppi" />
     <str id="InstallationGroupPanel.colNameSize" txt="Koko" />
 
+	<str id="debug.changevariable" txt="muuta arvo"/>
 </langpack>
