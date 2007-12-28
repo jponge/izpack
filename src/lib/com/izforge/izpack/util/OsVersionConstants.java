@@ -25,61 +25,126 @@ package com.izforge.izpack.util;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public interface OsVersionConstants
-{
-  //~ Static fields/initializers *********************************************************
+public interface OsVersionConstants {
+    //~ Static fields/initializers *********************************************************
 
-  /** OSNAME = "os.name" */
-  public final static String OSNAME = "os.name";
+    /**
+     * OSNAME = "os.name"
+     */
+    public final static String OSNAME = "os.name";
 
-  /** FREEBSD = "FreeBSD" */
-  public final static String FREEBSD = "FreeBSD";
+    /**
+     * OSARCH = "os.arch"
+     */
+    public final static String OSARCH = "os.arch";
 
-  /** LINUX = "Linux" */
-  public final static String LINUX = "Linux";
+    /**
+     * X86 = "x86"
+     */
+    public static final String X86 = "x86";
 
-  /** HP_UX = "HP-UX" */
-  public final static String HP_UX = "HP-UX";
+    /**
+     * I386 = "i386"
+     */
+    public static final String I386 = "i386";
 
-  /** AIX = "AIX" */
-  public final static String AIX = "AIX";
+    /**
+     * PPC = "ppc"
+     */
+    public static final String PPC = "ppc";
 
-  /** SUNOS = "SunOS" */
-  public final static String SUNOS = "SunOS";
+    /**
+     * SPARC = "sparc"
+     */
+    public static final String SPARC = "sparc";
 
-  /** OS_2 = "OS/2" */
-  public final static String OS_2 = "OS/2";
+    /**
+     * FREEBSD = "FreeBSD"
+     */
+    public final static String FREEBSD = "FreeBSD";
 
-  /** MAC = "Mac" */
-  public final static String MAC = "Mac";
-  
-  /** Mac OS X */
-  public final static String MACOSX = "mac os x";
+    /**
+     * LINUX = "Linux"
+     */
+    public final static String LINUX = "Linux";
 
-  /** WINDOWS = "Windows" */
-  public final static String WINDOWS = "Windows";
+    /**
+     * HP_UX = "HP-UX"
+     */
+    public final static String HP_UX = "HP-UX";
 
-  /** REDHAT  = "RedHat" */
-  public final static String REDHAT  = "RedHat";
+    /**
+     * AIX = "AIX"
+     */
+    public final static String AIX = "AIX";
 
-  /** RED_HAT = "Red Hat" */
-  public final static String RED_HAT = "Red Hat";
+    /**
+     * SUNOS = "SunOS"
+     */
+    public final static String SUNOS = "SunOS";
 
-  /** FEDORA = "Fedora" */
-  public final static String FEDORA = "Fedora";
+    /**
+     * SOLARIS = "Solaris"
+     */
+    public static final String SOLARIS = "Solaris";
 
-  /** MANDRAKE = "Mandrake" */
-  public final static String MANDRAKE = "Mandrake";
+    /**
+     * OS_2 = "OS/2"
+     */
+    public final static String OS_2 = "OS/2";
 
-  /** MANDRIVA = "Mandriva" */
-  public final static String MANDRIVA = "Mandriva";
+    /**
+     * MAC = "Mac"
+     */
+    public final static String MAC = "Mac";
 
-  /** SUSE = "SuSE" */
-  public final static String SUSE = "SuSE";
+    /**
+     * Mac OS X
+     */
+    public final static String MACOSX = "mac os x";
 
-  /** DEBIAN = "Debian" */
-  public final static String DEBIAN = "Debian";
+    /**
+     * WINDOWS = "Windows"
+     */
+    public final static String WINDOWS = "Windows";
 
-  /** PROC_VERSION = "/proc/version" */
-  public final static String PROC_VERSION = "/proc/version";
+    /**
+     * REDHAT  = "RedHat"
+     */
+    public final static String REDHAT = "RedHat";
+
+    /**
+     * RED_HAT = "Red Hat"
+     */
+    public final static String RED_HAT = "Red Hat";
+
+    /**
+     * FEDORA = "Fedora"
+     */
+    public final static String FEDORA = "Fedora";
+
+    /**
+     * MANDRAKE = "Mandrake"
+     */
+    public final static String MANDRAKE = "Mandrake";
+
+    /**
+     * MANDRIVA = "Mandriva"
+     */
+    public final static String MANDRIVA = "Mandriva";
+
+    /**
+     * SUSE = "SuSE"
+     */
+    public final static String SUSE = "SuSE";
+
+    /**
+     * DEBIAN = "Debian"
+     */
+    public final static String DEBIAN = "Debian";
+
+    /**
+     * PROC_VERSION = "/proc/version"
+     */
+    public final static String PROC_VERSION = "/proc/version";
 }

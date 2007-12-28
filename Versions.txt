@@ -74,6 +74,8 @@
 - Support of XInclude-like constructs (Matthew Fudge, Volantis Systems Ltd.
   via Julien Ponge)
 - Spanish langpack update (Sergio Banos Calvo via Julien Ponge)
+- OsVersion class: detect X86, PPC and SPARC architectures (Julien Ponge)
+- RulesEngines: new built-in rules: izpack.solarisinstall.x86 and izpack.solarisinstall.sparc (Julien Ponge)
   
   > 3.10.2 (build 2007.05.11)
 
