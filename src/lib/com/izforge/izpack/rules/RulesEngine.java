@@ -64,8 +64,9 @@ public class RulesEngine
         createBuiltinOsCondition("IS_LINUX", "izpack.linuxinstall");
         createBuiltinOsCondition("IS_SUNOS", "izpack.solarisinstall");
         createBuiltinOsCondition("IS_MAC", "izpack.macinstall");
+        createBuiltinOsCondition("IS_SUNOS", "izpack.solarisinstall");
         createBuiltinOsCondition("IS_SUNOS_X86", "izpack.solarisinstall.x86");
-        createBuiltinOsCondition("IS_SUNOS_sparc", "izpack.solarisinstall.sparc");
+        createBuiltinOsCondition("IS_SUNOS_SPARC", "izpack.solarisinstall.sparc");
 
         if ((installdata != null) && (installdata.allPacks != null))
         {
