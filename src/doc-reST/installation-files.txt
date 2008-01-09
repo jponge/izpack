@@ -567,6 +567,7 @@ cat       Catalunyan
 chn       Chinese
 cze       Czech
 dan       Danish
+glg       Galician
 deu       German
 eng       English
 fin       Finnish
