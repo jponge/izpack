@@ -31,9 +31,9 @@ import java.util.Vector;
  */
 public class XIncludeXMLBuilder extends StdXMLBuilder {
     /**
-     * Namespace to for XInclude  (NOTE that this is not used
+     * Namespace for XInclude  (NOTE that this is not used
      * at the moment). The specification can be found
-     * here'>http://www.w3.org/TR/xinclude/">here.
+     * <a href="http://www.w3.org/TR/xinclude/">here</a>.
      */
     public static final String INCLUDE_NS = "http://www.w3.org/2001/XInclude";
     /**
@@ -82,7 +82,7 @@ public class XIncludeXMLBuilder extends StdXMLBuilder {
     public static final String FRAGMENT_NS = "http://izpack.org/izpack/fragment";
 
     /**
-     * The name of the fragment element is a root node element that can be
+     * The fragment element is a root node element that can be
      * used to wrap xml fragments for inclusion. It is removed during the
      * include operation. This should be called "fragment" and be in the
      * {@link #FRAGMENT_NS} but namespaces are not supported.

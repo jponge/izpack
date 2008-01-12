@@ -26,14 +26,44 @@
 
 package com.izforge.izpack.compiler;
 
+import com.izforge.izpack.CustomData;
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.Info;
+import com.izforge.izpack.PackFile;
+import com.izforge.izpack.Panel;
+import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
+import com.izforge.izpack.event.CompilerListener;
+import com.izforge.izpack.rules.Condition;
+import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
+import net.n3.nanoxml.IXMLParser;
+import net.n3.nanoxml.IXMLReader;
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLBuilderFactory;
+import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLException;
+import net.n3.nanoxml.XMLParserFactory;
+import net.n3.nanoxml.XMLWriter;
+import org.apache.tools.ant.DirectoryScanner;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -54,32 +84,6 @@ import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
-
-import org.apache.tools.ant.DirectoryScanner;
-
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.GUIPrefs;
-import com.izforge.izpack.Info;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.Panel;
-import com.izforge.izpack.ParsableFile;
-import com.izforge.izpack.UpdateCheck;
-import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
-import com.izforge.izpack.event.CompilerListener;
-import com.izforge.izpack.rules.Condition;
-import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.VariableSubstitutor;
-
-import net.n3.nanoxml.IXMLReader;
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLElement;
-import net.n3.nanoxml.XMLException;
-import net.n3.nanoxml.XMLBuilderFactory;
 
 /**
  * A parser for the installer xml configuration. This parses a document
@@ -1294,46 +1298,96 @@ public class CompilerConfig extends Thread
             XMLElement res = (XMLElement) iter.next();
             String id = requireAttribute(res, "id");
             String src = requireAttribute(res, "src");
-            boolean parse = validateYesNoAttribute(res, "parse", NO);
+            boolean substitute = validateYesNoAttribute(res, "substitute", NO);
+            boolean parsexml = validateYesNoAttribute(res, "parsexml", NO);
 
             // basedir is not prepended if src is already an absolute path
-            URL url = findProjectResource(src, "Resource", res);
+            URL originalUrl = findProjectResource(src, "Resource", res);
+            URL url = originalUrl;
 
-            // substitute variable values in the resource if parsed
-            if (parse)
+            InputStream is = null;
+            OutputStream os = null;
+            try
             {
-                if (compiler.getVariables().isEmpty())
+                if (parsexml ||
+                    (substitute && !compiler.getVariables().isEmpty()))
                 {
-                    parseWarn(res, "No variables defined. " + url.getPath() + " not parsed.");
+                    // make the substitutions into a temp file
+                    File parsedFile = File.createTempFile("izpp", null);
+                    parsedFile.deleteOnExit();
+                    FileOutputStream outFile = new FileOutputStream(parsedFile);
+                    os = new BufferedOutputStream(outFile);
+                    // and specify the substituted file to be added to the
+                    // packager
+                    url = parsedFile.toURL();
                 }
-                else
-                {
-                    String type = res.getAttribute("type");
-                    String encoding = res.getAttribute("encoding");
-                    File parsedFile = null;
 
-                    try
-                    {
-                        // make the substitutions into a temp file
-                        InputStream bin = new BufferedInputStream(url.openStream());
+                if (parsexml)
+                {               
+                    IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
+                    // this constructor will open the specified url (this is
+                    // why the InputStream is not handled in a similar manner
+                    // to the OutputStream)
+                    IXMLReader reader = new StdXMLReader(null, url.toExternalForm());
+                    parser.setReader(reader);
+                    XMLElement xml = (XMLElement) parser.parse();
 
-                        parsedFile = File.createTempFile("izpp", null);
-                        parsedFile.deleteOnExit();
-                        FileOutputStream outFile = new FileOutputStream(parsedFile);
-                        BufferedOutputStream bout = new BufferedOutputStream(outFile);
-
-                        VariableSubstitutor vs = new VariableSubstitutor(compiler.getVariables());
-                        vs.substitute(bin, bout, type, encoding);
-                        bin.close();
-                        bout.close();
-
-                        // and specify the substituted file to be added to the
-                        // packager
-                        url = parsedFile.toURL();
+                    if (substitute && !compiler.getVariables().isEmpty()) {
+                        // if we are also performing substitutions on the file
+                        // then create an in-memory copy to pass to the
+                        // substitutor
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        XMLWriter xmlWriter = new XMLWriter(baos);
+                        xmlWriter.write(xml);
+                        is = new ByteArrayInputStream(baos.toByteArray());
+                    } else {
+                        // otherwise write direct to the temp file
+                        XMLWriter xmlWriter = new XMLWriter(os);
+                        xmlWriter.write(xml);
                     }
-                    catch (IOException x)
+                }
+
+                // substitute variable values in the resource if parsed
+                if (substitute)
+                {
+                    if (compiler.getVariables().isEmpty())
                     {
-                        parseError(res, x.getMessage(), x);
+                        // reset url to original.
+                        url = originalUrl;
+                        parseWarn(res, "No variables defined. " + url.getPath() + " not parsed.");
+                    }
+                    else
+                    {
+                        String type = res.getAttribute("type");
+                        String encoding = res.getAttribute("encoding");
+
+                        // if the xml parser did not open the url
+                        // ('parsexml' was not enabled)
+                        if (null == is) {
+                            is = new BufferedInputStream(url.openStream());
+                        }
+                        VariableSubstitutor vs = new VariableSubstitutor(compiler.getVariables());
+                        vs.substitute(is, os, type, encoding);
+                    }
+                }
+
+            } catch (Exception e)
+            {
+                parseError(res, e.getMessage(), e);
+            } finally {
+                if (null != os) {
+                    try {
+                        os.close();
+                    } catch (IOException e) {
+                        // ignore as there is nothing we can realistically do
+                        // so lets at least try to close the input stream
+                    }
+                }
+                if (null != is) {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        // ignore as there is nothing we can realistically do
                     }
                 }
             }

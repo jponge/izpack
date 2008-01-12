@@ -81,6 +81,7 @@
 - FileExecutor: fix a blank dialog prompting the user to continue if there's a failure (Jeff Gordon via Julien Ponge)
 - Italian translation update (Roberto Boriotti, Sylvain Gaudard via Julien Ponge)
 - PacksPanelAutomationHelper fix (Jeff Gordon via Julien Ponge)
+- 'parsexml' attribute for resources (Matthew Fudge via Julien Ponge)
 
 
   > 3.10.2 (build 2007.05.11)
