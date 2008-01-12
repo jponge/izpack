@@ -98,7 +98,10 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                         int index = Integer.parseInt(index_str);
                         if ((index >= 0) && (index < idata.availablePacks.size()))
                         {
+                          if (el.getAttribute("selected").equalsIgnoreCase("true") ||
+                              el.getAttribute("selected").equalsIgnoreCase("on")) {
                             idata.selectedPacks.add(idata.availablePacks.get(index));
+                          }
                         }
                         else
                         {

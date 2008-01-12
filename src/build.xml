@@ -362,6 +362,8 @@
                 <include name="lib/metouia.jar" />
                 <include name="lib/looks.jar" />
                 <include name="lib/ant.jar" />
+                <include name="lib/nimbus.jar" />
+                <include name="lib/substance.jar" />
                 <exclude name="**/CVS" />
             </fileset>
         </jar>
