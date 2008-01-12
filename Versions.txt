@@ -77,6 +77,11 @@
 - OsVersion class: detect X86, PPC and SPARC architectures (Julien Ponge)
 - RulesEngines: new built-in rules: izpack.solarisinstall.x86 and izpack.solarisinstall.sparc (Julien Ponge)
 - New Galician translation (Xabier Cancela via Julien Ponge)
+- build.xml: include the new L&F jars (Jeff Gordon via Julien Ponge)
+- FileExecutor: fix a blank dialog prompting the user to continue if there's a failure (Jeff Gordon via Julien Ponge)
+- Italian translation update (Roberto Boriotti, Sylvain Gaudard via Julien Ponge)
+- PacksPanelAutomationHelper fix (Jeff Gordon via Julien Ponge)
+
 
   > 3.10.2 (build 2007.05.11)
 
