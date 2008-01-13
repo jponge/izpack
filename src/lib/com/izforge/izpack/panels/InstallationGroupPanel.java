@@ -59,6 +59,8 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 
 
 /**
@@ -148,6 +150,10 @@ public class InstallationGroupPanel extends IzPanel
           }
         };
         tcm.getColumn(0).setCellRenderer(radioButtonRenderer);
+
+        DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.RIGHT);
+        tcm.getColumn(1).setCellRenderer(renderer);
         
         //groupsTable.setColumnSelectionAllowed(false);
         //groupsTable.setRowSelectionAllowed(true);
@@ -499,9 +505,9 @@ public class InstallationGroupPanel extends IzPanel
     protected TableModel getModel(HashMap groupData)
     {
         String c1 = parent.langpack.getString("InstallationGroupPanel.colNameSelected");
-        String c2 = parent.langpack.getString("InstallationGroupPanel.colNameInstallType");
+        //String c2 = parent.langpack.getString("InstallationGroupPanel.colNameInstallType");
         String c3 = parent.langpack.getString("InstallationGroupPanel.colNameSize");
-        String[] columns = {c1, c2, c3};
+        String[] columns = {c1, c3};
          DefaultTableModel model = new DefaultTableModel (columns, 0)
          {
             public boolean isCellEditable (int row, int column)
@@ -567,7 +573,8 @@ public class InstallationGroupPanel extends IzPanel
             }
             buttonGroup.add(btn);
             String sizeText = gd.getSizeString();
-            Object[] data = { btn, gd.description, sizeText};
+            //Object[] data = { btn, gd.description, sizeText};
+            Object[] data = { btn, sizeText};
             model.addRow(data);
             count ++;
         }
