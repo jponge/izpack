@@ -1,6 +1,6 @@
 [ Description ]
 
-    IzPack is Copyright (c) 2001-2007 Julien PONGE.
+    IzPack is Copyright (c) 2001-2008 Julien Ponge.
     http://izpack.org/
     julien.ponge@gmail.com
 

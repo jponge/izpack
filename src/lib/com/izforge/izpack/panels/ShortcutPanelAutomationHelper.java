@@ -1,6 +1,6 @@
 /*
  * $Id: copyright-notice-template 1421 2006-03-12 16:32:32Z jponge $
- * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
  *
  * http://izpack.org/
  * http://developer.berlios.de/projects/izpack/

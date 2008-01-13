@@ -1,6 +1,6 @@
 /*
  * $Id: Compiler.java 1918 2007-11-29 14:02:17Z dreil $
- * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
  *
  * http://izpack.org/
  * http://developer.berlios.de/projects/izpack/

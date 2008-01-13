@@ -1,6 +1,6 @@
 /*
  * $Id: Packager.java 1671 2007-01-02 10:28:58Z dreil $
- * IzPack - Copyright 2001-2007 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
  *
  * http://izpack.org/
  * http://developer.berlios.de/projects/izpack/
