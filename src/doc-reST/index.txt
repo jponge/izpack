@@ -10,6 +10,7 @@ Chapters
 - introduction_
 - getting-started_
 - installation-files_
+- panels_
 - advanced-features_
 - desktop-shortcuts_
 - creating-panels_
@@ -23,6 +24,7 @@ Chapters
 .. _introduction: introduction.html
 .. _getting-started: getting-started.html
 .. _installation-files: installation-files.html
+.. _panels: panels.html
 .. _advanced-features: advanced-features.html
 .. _desktop-shortcuts: desktop-shortcuts.html
 .. _creating-panels: creating-panels.html
