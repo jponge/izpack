@@ -101,7 +101,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      */
     public void stopAction()
     {
-        System.out.println("[ Unpacking finished. ]");
+        System.out.println("[ Unpacking finished ]");
         boolean done = true;
     }
 
