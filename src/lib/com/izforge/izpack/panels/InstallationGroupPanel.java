@@ -609,15 +609,15 @@ public class InstallationGroupPanel extends IzPanel
             }
             else if (size < ONEM)
             {
-                s = size / ONEK + " KBytes";
+                s = size / ONEK + " KB";
             }
             else if (size < ONEG)
             {
-                s = size / ONEM + " MBytes";
+                s = size / ONEM + " MB";
             }
             else
             {
-                s = size / ONEG + " GBytes";
+                s = size / ONEG + " GB";
             }
             return s;
         }
