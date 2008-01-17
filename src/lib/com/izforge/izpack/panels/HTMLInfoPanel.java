@@ -123,7 +123,10 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
                    textArea.setPage(e.getURL());
                 else
                 {
-                   if(com.izforge.izpack.util.OsVersion.IS_UNIX)
+                   if(com.izforge.izpack.util.OsVersion.IS_OSX)
+                   {
+                       Runtime.getRuntime().exec("open " + urls);
+                   } else if(com.izforge.izpack.util.OsVersion.IS_UNIX)
                    {
                       String[] launchers = {"htmlview QqzURL", "xdg-open QqzURL", "gnome-open QqzURL", "kfmclient openURL QqzURL", "call-browser QqzURL", "firefox QqzURL", "opera QqzURL", "konqueror QqzURL", "epiphany QqzURL", "mozilla QqzURL", "netscape QqzURL"};
                       //String launchers = "/bin/sh -c \"htmlview QqzURL || xdg-open QqzURL || gnome-open QqzURL || kfmclient openURL QqzURL || call-browser QqzURL || firefox QqzURL || opera QqzURL || konqueror QqzURL || epiphany QqzURL || mozilla QqzURL || netscape QqzURL\"";
@@ -143,7 +146,9 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
                       }
                    }
                    else // windows
-                      Runtime.getRuntime().exec("cmd /C start "+urls);
+                   {
+                      Runtime.getRuntime().exec("cmd /C start " + urls);
+                   }
                 }
             }
         }

@@ -83,6 +83,7 @@
 - PacksPanelAutomationHelper fix (Jeff Gordon via Julien Ponge)
 - 'parsexml' attribute for resources (Matthew Fudge via Julien Ponge)
 - InstallationGroupPanel UI improvements (Jeff Gordon via Julien Ponge)
+- HTMLInfoPanel: open external links in a web browser on Mac OS X as well (Alexander Maslov via Julien Ponge)
 
 
   > 3.10.2 (build 2007.05.11)
