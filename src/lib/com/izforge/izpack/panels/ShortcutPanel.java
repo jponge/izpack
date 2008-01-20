@@ -58,11 +58,7 @@ import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.ResourceNotFoundException;
-import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.MultiLineLabel;
@@ -795,11 +791,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         try
         {
-            input = parent.getResource(TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
+            input = ResourceManager.getInstance().getInputStream(TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
         }
         catch (ResourceNotFoundException rnfE)
         {
-            input = parent.getResource(SPEC_FILE_NAME);
+            input = ResourceManager.getInstance().getInputStream(SPEC_FILE_NAME);
         }
 
         if (input == null)
