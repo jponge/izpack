@@ -80,7 +80,9 @@ agreement text you have to use the `` (HTML)LicencePanel.licence`` resource.
 PacksPanel
 ----------
 
-Allows the user to select the packs he wants to install.
+Allows the user to select the packs he wants to install. This
+panel also allows grouping of packs. Look at ``InstallationGroupPanel``
+description to get more details.
 
 
 
@@ -100,6 +102,51 @@ then the resource for ``core`` will be ``core`` and the resource for
 be the resource ``core``. The supported image formats depend on what your
 client's JVM supports, but starting from J2SE 1.3, *GIF*, *JPEG* and *PNG*
 are supported.
+
+
+
+TreePacksPanel
+--------------
+
+This panel is very similar to ``PacksPanel``, but instead of simple list
+of available packs, the tree-like list is constructed. By using the ``parent``
+attribute of ``pack`` element, one can specify the hierarchy of the tree.
+This panel supports grouping just like ``PacksPanel`` does.
+
+example ::
+
+        <installation version="1.0">
+           (...)
+            <panels>
+                (...)
+                <panel classname="TreePacksPanel"/>
+                (...)
+            </panels>
+
+            <packs>
+                <pack name="Base"
+                    required="yes">
+                    (...)
+                </pack>
+                <pack name="Themes"
+                    required="no">
+                    (...)
+                </pack>
+                <pack name="Black"
+                    parent="Themes"
+                    required="no">
+                    (...)
+                </pack>
+                <pack name="Red"
+                    parent="Themes"
+                    required="no">
+                    (...)
+                </pack>
+            </packs>
+        </installation>
+
+The result tree contains Base element with no children,
+and Themes with two children named Black and Red.
 
 
 
