@@ -3421,7 +3421,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     // try to set variable
                     idata.setVariable(vname, vvalue);
 
-                    //                        
+                    // for save this variable to be used later by Automation Helper
+                    entries.add(new TextValuePair(vname, vvalue));                       
                 }
             }
         }
