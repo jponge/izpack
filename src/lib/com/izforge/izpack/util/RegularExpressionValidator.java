@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.izforge.izpack.panels.ProcessingClient;
-import com.izforge.izpack.panels.RuleInputField;
 import com.izforge.izpack.panels.Validator;
 
 /**
@@ -46,12 +45,10 @@ public class RegularExpressionValidator implements Validator
 
         String patternString;
 
-        RuleInputField field = (RuleInputField) client;
-        if (field.hasParams())
+        if (client.hasParams())
         {
-            Map paramMap = field.getValidatorParams();
+            Map paramMap = client.getValidatorParams();
             patternString = (String) paramMap.get(PATTERN_PARAM);
-
         }
         else
         {
@@ -59,7 +56,7 @@ public class RegularExpressionValidator implements Validator
         }
 
         Pattern pattern = Pattern.compile(patternString);
-        return pattern.matcher(((RuleInputField) client).getText()).matches();
+        return pattern.matcher(client.getText()).matches();
     }
 
 }

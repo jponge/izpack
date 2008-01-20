@@ -21,6 +21,8 @@
 
 package com.izforge.izpack.panels;
 
+import java.util.Map;
+
 /*---------------------------------------------------------------------------*/
 /**
  * Implement this interface in any class that wants to use processing or validation services.
@@ -56,5 +58,32 @@ public interface ProcessingClient
      */
     /*--------------------------------------------------------------------------*/
     public String getFieldContents(int index);
+
+    /*---------------------------------------------------------------------------*/
+    /**
+     * Returns the field contents.
+     * 
+     * @return the field contents
+     */
+    /*--------------------------------------------------------------------------*/
+    public String getText();
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * @return true if this instance has any parameters to pass to the Validator instance.
+     */
+    /*--------------------------------------------------------------------------*/
+    public boolean hasParams();
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Returns the validator parameters, if any. The caller should check for the existence of
+     * validator parameters via the <code>hasParams()</code> method prior to invoking this method.
+     * 
+     * @return a java.util.Map containing the validator parameters.
+     */
+    /*--------------------------------------------------------------------------*/
+    public Map getValidatorParams();
+
 }
 /*---------------------------------------------------------------------------*/

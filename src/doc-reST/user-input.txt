@@ -214,6 +214,26 @@ mentioned earlier, you need to make sure that the user input panel shows up
 after the packs panel for this feature to work.
 
 
+There is a possibility to use variables in those elements where the text is 
+supplied via ``txt`` attribute. This includes static fields and input fields 
+(spec, description). The text can contain unlimited number of variables that 
+will be substituted. Variable substitution also works with language packs, 
+just use variables in your language pack, and they will be still subsituted 
+properly.
+
+
+**Example**
+
+In the following example, the variables: name1, name2, name3 will be substituted.
+
+::
+
+    <field type="text" variable="value1">
+      <description align="left" txt="Configuration for $name1 and $name2" id=""/>
+      <spec txt="The value for $name3:" id="" size="20" set="default value" />
+    </field>
+
+
 
 Internationalization
 --------------------
@@ -327,7 +347,8 @@ necessary. To specify static text create a ``<field>`` tag and use the
 ``type`` attribute with a value of ``staticText``. In addition to the ``
 txt`` and ``id`` attributes, the text can be justified ``left``, ``center``
 or ``right`` with the ``align`` attribute. It is not possible to format this
-text in any way.
+text in any way. You can also use variables in the text (as it was mentioned
+above), they will be substituted with variable's value.
 
 
 **Example**
@@ -338,7 +359,7 @@ The following example inserts some static text in the panel.
 ::
 
     <field type="staticText" align="left"
-           txt="This is just some simple static text."
+           txt="This is just some simple static text with variable substitution in here: $myvariable."
            id="staticText.text"/>
 
 Visual Separation
@@ -730,8 +751,8 @@ Value                 Meaning
 Validating the Field Content
 --------------------------------------------
 
-You can provide runtime validation for user input into a rule field via the
-``validator`` element (which is a child of the ``field`` element. There are
+You can provide runtime validation for user input into a text field and rule field 
+via the ``validator`` element (which is a child of the ``field`` element. There are
 two types of built-in validators already provided: a ``NotEmptyValidator``
 and a ``RegularExpressionValidator``. You can also easily create your own
 validator. In all cases, if the chosen validator returns ``false``, a
@@ -773,6 +794,8 @@ the regular expression as the ``value`` attribute. For example, the following
 would validate an e-mail address:
 
 
+The example of using Regexp validator in rule input field:
+
 ::
 
     <field type="rule" variable="EMAILaddress">
@@ -793,8 +816,29 @@ would validate an e-mail address:
     </field>
 
 
+The example of using Regexp validator in text input field:
+
+::
+
+    <field type="text" variable="EMAILaddress">
+      <spec
+          txt="Your Email address:" set="you@domain.com" size="20" id=""
+      />
+      <validator
+      class="com.izforge.izpack.util.RegularExpressionValidator"
+          txt="Invalid email address!">
+        <param
+            name="pattern"
+            value="[a-zA-Z0-9._-]{3,}@[a-zA-Z0-9._-]+([.][a-zA-Z0
+            -9_-]+)*[.][a-zA-Z0-9._-]{2,4}"
+        />
+      </validator>
+    </field>
+
+
 You can test your own regular expressions using the handy applet at
 http://jakarta.apache.org/regexp/applet.html.
+
 
 
 

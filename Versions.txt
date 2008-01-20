@@ -85,6 +85,8 @@
 - InstallationGroupPanel UI improvements (Jeff Gordon via Julien Ponge)
 - HTMLInfoPanel: open external links in a web browser on Mac OS X as well (Alexander Maslov via Julien Ponge)
 - UserInputPanel: some variables were not saved for silent installers (Piotr Skowronek via Julien Ponge)
+- Text fields now can support validators (Piotr Skowronek via Julien Ponge)
+- UserInputPanel: substitution support for text fields (Piotr Skowronek via Julien Ponge)
 
   > 3.10.2 (build 2007.05.11)
 

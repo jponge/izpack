@@ -644,6 +644,7 @@
             <include name="com/izforge/izpack/panels/Processor.java" />
             <include name="com/izforge/izpack/panels/RuleInputField.java" />
             <include name="com/izforge/izpack/panels/RuleTextField.java" />
+            <include name="com/izforge/izpack/panels/TextInputField.java" />
             <include name="com/izforge/izpack/panels/UserInputPanel.java" />
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java" />
             <include name="com/izforge/izpack/panels/Validator.java" />
@@ -655,6 +656,7 @@
             <include name="com/izforge/izpack/panels/Processor.java" />
             <include name="com/izforge/izpack/panels/RuleInputField.java" />
             <include name="com/izforge/izpack/panels/RuleTextField.java" />
+            <include name="com/izforge/izpack/panels/TextInputField.java" />
             <include name="com/izforge/izpack/panels/UserInputPanel.java" />
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java" />
             <include name="com/izforge/izpack/panels/Validator.java" />

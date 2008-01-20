@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.panels;
 
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JPasswordField;
@@ -177,11 +178,29 @@ public class PasswordGroup implements ProcessingClient
 
             if (fields.size() > 0)
             {
-                contents = new String(((JPasswordField) fields.elementAt(0)).getPassword());
+                contents = getText();
             }
 
             return (contents);
         }
+    }
+
+    // javadoc inherited
+    public String getText()
+    {
+        return new String(((JPasswordField) fields.elementAt(0)).getPassword());
+    }
+
+    // javadoc inherited
+    public Map getValidatorParams()
+    {
+        return null;
+    }
+
+    // javadoc inherited
+    public boolean hasParams()
+    {
+        return false;
     }
 }
 /*---------------------------------------------------------------------------*/

@@ -780,9 +780,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
             else if (TEXT_FIELD.equals(element[POS_TYPE]))
             {
                 // update TextField
-                JTextField textf = (JTextField) element[POS_FIELD];
+                TextInputField textf = (TextInputField) element[POS_FIELD];
 
-                // System.out.println("Textfield: " + value);
                 if (value == null)
                 {
                     value = textf.getText();
@@ -1419,11 +1418,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
     {
         RuleInputField ruleField = null;
         String variable = null;
+	String message = null;
 
         try
         {
             ruleField = (RuleInputField) field[POS_FIELD];
             variable = (String) field[POS_VARIABLE];
+            message = (String) field[POS_MESSAGE]; 
         }
         catch (Throwable exception)
         {
@@ -1431,24 +1432,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
         if ((variable == null) || (ruleField == null)) { return (true); }
 
+
         boolean success = !validating || ruleField.validateContents();
         if (!success)
         {
-            String message = "";
-            try
-            {
-                message = langpack.getString((String) field[POS_MESSAGE]);
-                if ("".equals(message))
-                {
-                    message = (String) field[POS_MESSAGE];
-                }
-            }
-            catch (Throwable t)
-            {
-                message = (String) field[POS_MESSAGE];
-            }
-            JOptionPane.showMessageDialog(parentFrame, message, parentFrame.langpack
-                    .getString("UserInputPanel.error.caption"), JOptionPane.WARNING_MESSAGE);
+            showWarningMessageDialog(parentFrame, message);
             return (false);
         }
 
@@ -1472,6 +1460,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
         JLabel label;
         String set;
         int size;
+        HashMap validateParamMap = null;
+        Vector validateParams = null;
+        String validator = null;
+        String message = null;
+        boolean hasParams = false;
+        TextInputField inputField;
+
 
         String variable = spec.getAttribute(VARIABLE);
         if ((variable == null) || (variable.length() == 0)) { return; }
@@ -1519,6 +1514,37 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
 
         // ----------------------------------------------------
+        // get the validator if was defined
+        // ----------------------------------------------------
+        element = spec.getFirstChildNamed(VALIDATOR);
+        if (element != null)
+        {
+            validator = element.getAttribute(CLASS);
+            message = getText(element);
+            // ----------------------------------------------------------
+            // check and see if we have any parameters for this validator.
+            // If so, then add them to validateParamMap.
+            // ----------------------------------------------------------
+            validateParams = element.getChildrenNamed(RULE_PARAM);
+            if (validateParams != null && validateParams.size() > 0)
+            {
+                hasParams = true;
+
+                if (validateParamMap == null) validateParamMap = new HashMap();
+
+                for (Iterator it = validateParams.iterator(); it.hasNext();)
+                {
+                    element = (XMLElement) it.next();
+                    String paramName = element.getAttribute(RULE_PARAM_NAME);
+                    String paramValue = element.getAttribute(RULE_PARAM_VALUE);
+                    validateParamMap.put(paramName, paramValue);
+                }
+
+            }
+
+        }
+
+        // ----------------------------------------------------
         // get the description and add it to the list UI
         // elements if it exists.
         // ----------------------------------------------------
@@ -1528,8 +1554,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
         // ----------------------------------------------------
         // construct the UI element and add it to the list
         // ----------------------------------------------------
-        JTextField field = new JTextField(set, size);
-        field.setCaretPosition(0);
+        if (hasParams)
+        {
+            inputField = new TextInputField(set, size, validator, validateParamMap);
+        } else 
+        {
+            inputField = new TextInputField(set, size, validator);
+        }
+
 
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
@@ -1540,8 +1572,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        uiElements.add(new Object[] { null, TEXT_FIELD, variable, constraints2, field, forPacks,
-                forOs});
+        uiElements.add(new Object[] { null, TEXT_FIELD, variable, constraints2, inputField, forPacks,
+                forOs, null, null, message});
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1557,14 +1589,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private boolean readTextField(Object[] field)
     {
-        JTextField textField = null;
+        TextInputField textField = null;
         String variable = null;
         String value = null;
+	String message = null;
 
         try
         {
-            textField = (JTextField) field[POS_FIELD];
+            textField = (TextInputField) field[POS_FIELD];
             variable = (String) field[POS_VARIABLE];
+            message = (String) field[POS_MESSAGE]; 
             value = textField.getText();
         }
         catch (Throwable exception)
@@ -1572,6 +1606,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
             return (true);
         }
         if ((variable == null) || (value == null)) { return (true); }
+
+        // validate the input
+        boolean success = textField.validateContents();
+        if (!success)
+        {
+            showWarningMessageDialog(parentFrame, message);
+            return (false);
+        }
 
         idata.setVariable(variable, value);
         entries.add(new TextValuePair(variable, value));
@@ -2065,11 +2107,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
         passwordGroups.add(group);
 
         boolean success = !validating || group.validateContents();
-
         if (!success)
         {
-            JOptionPane.showMessageDialog(parentFrame, message, parentFrame.langpack
-                    .getString("UserInputPanel.error.caption"), JOptionPane.WARNING_MESSAGE);
+            showWarningMessageDialog(parentFrame, message);
             return (false);
         }
 
@@ -2543,6 +2583,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             if (description != null)
             {
                 String alignment = spec.getAttribute(ALIGNMENT);
+                // FIX needed: where do we use this variable at all? i dont think so... 
                 int justify = MultiLineLabel.LEFT;
 
                 if (alignment != null)
@@ -2725,8 +2766,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             text = element.getAttribute(TEXT);
         }
+        
+        // try to parse the text, and substitute any variable it finds
+        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
 
-        return (text);
+        return (vs.substitute(text, null));
     }
 
     /*--------------------------------------------------------------------------*/
@@ -3268,7 +3312,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         /*--------------------------------------------------------------------------*/
         /**
-         * This is called if one of the buttons has bee pressed.
+         * This is called if one of the buttons has been pressed.
          * 
          * It checks, which button caused the action and acts accordingly.
          */
@@ -3280,10 +3324,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
             if (event.getSource() == this.autodetectButton)
             {
                 if (!autodetect())
-                    JOptionPane.showMessageDialog(parent, parent.langpack
-                            .getString("UserInputPanel.search.autodetect.failed.message"),
-                            parent.langpack
-                                    .getString("UserInputPanel.search.autodetect.failed.caption"),
+                    showMessageDialog(parent, "UserInputPanel.search.autodetect.failed.message", 
+                            "UserInputPanel.search.autodetect.failed.caption", 
                             JOptionPane.WARNING_MESSAGE);
             }
             else if (event.getSource() == this.browseButton)
@@ -3304,11 +3346,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     // use any given directory directly
                     if (this.resultType != TYPE_FILE && !this.pathMatches(f.getAbsolutePath()))
                     {
-                        JOptionPane.showMessageDialog(parent, parent.langpack
-                                .getString("UserInputPanel.search.wrongselection.message"),
-                                parent.langpack
-                                        .getString("UserInputPanel.search.wrongselection.caption"),
+                        showMessageDialog(parent, "UserInputPanel.search.wrongselection.message", 
+                                "UserInputPanel.search.wrongselection.caption", 
                                 JOptionPane.WARNING_MESSAGE);
+
                     }
                 }
 
@@ -3436,7 +3477,41 @@ public class UserInputPanel extends IzPanel implements ActionListener
        validating = true;
    }
 
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Show localized message dialog basing on given parameters.
+     * 
+     * @param parentFrame The parent frame.
+     * @param message The message to print out in dialog box.
+     * @param caption The caption of dialog box.
+     * @param messageType The message type (JOptionPane.*_MESSAGE)
+     */
+    /*--------------------------------------------------------------------------*/
+    private void showMessageDialog(InstallerFrame parentFrame, String message, String caption, int messageType) {
+        String localizedMessage = langpack.getString(message);
+        if ("".equals(localizedMessage))
+        {
+            localizedMessage = message;
+        }
+        JOptionPane.showMessageDialog(parentFrame, localizedMessage, caption, messageType);
+    }
+
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Show localized warning message dialog basing on given parameters.
+     * 
+     * @param parentFrame parent frame.
+     * @param message the message to print out in dialog box.
+     */
+    /*--------------------------------------------------------------------------*/
+    private void showWarningMessageDialog(InstallerFrame parentFrame, String message) {
+        showMessageDialog(parentFrame, message, 
+                parentFrame.langpack.getString("UserInputPanel.error.caption"), 
+                JOptionPane.WARNING_MESSAGE);    
+    }
+
 } // public class UserInputPanel
+
 /*---------------------------------------------------------------------------*/
 class UserInputFileFilter extends FileFilter{
     String fileext = "";
