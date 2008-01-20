@@ -1,6 +1,7 @@
 Introduction
 ============
 
+.. include:: include-top.inc
 
 Welcome to IzPack !
 -------------------
@@ -133,3 +134,5 @@ respect for their respective authors work :
 
 So, now let's dive into understanding how IzPack works. You'll be surprised
 to see how powerful and simple it can be :-)
+
+.. include:: include-bottom.inc

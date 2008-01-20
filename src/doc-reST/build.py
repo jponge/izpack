@@ -59,6 +59,8 @@ def copy_files(resources):
 
 def generate_html(rest_files):
 	print('Generating html...')
+	shutil.copyfile('include-top', 'include-top.inc')
+	shutil.copyfile('include-bottom', 'include-bottom.inc')
 	for rest_file in rest_files:
 		print('    ' + rest_file)
 		args = [
@@ -72,6 +74,8 @@ def generate_html(rest_files):
 
 def generate_latex():
 	print('Generating LaTeX for PDF output...')
+	shutil.copyfile('include-empty', 'include-top.inc')
+	shutil.copyfile('include-empty', 'include-bottom.inc')
 	publish(writer_name='newlatex2e', argv=['pdf-version.txt', 'pdf/manual.tex'])
 
 def compile_latex():

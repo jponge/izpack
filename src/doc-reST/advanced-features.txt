@@ -1,6 +1,8 @@
 Advanced features
 ==================
 
+.. include:: include-top.inc
+
 Apache Ant integration
 -----------------------
 
@@ -372,3 +374,5 @@ then the related entries of the langpacks will look like this: ::
 
   <str id="core.package" txt="Core Package"/>
   <str id="core.package.description" txt="The core package provides
+
+.. include:: include-bottom.inc

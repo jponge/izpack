@@ -1,6 +1,8 @@
 Creating Your Own Panels
 ========================
 
+.. include:: include-top.inc
+
 In IzPack all of the actual work of installing an application is done in
 panels. The IzPack framework is primarily there to support the operation of
 the panels and to manage the navigation through the installation process.
@@ -272,3 +274,4 @@ and name can be other than in the example. This file should be using the same
 DTD as the common langpack. For each language a separate file with the ISO3
 extension in the id should be used.
 
+.. include:: include-bottom.inc

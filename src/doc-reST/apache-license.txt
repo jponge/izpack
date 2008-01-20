@@ -1,5 +1,10 @@
 Apache License, Version 2.0
---------------------------------
+============================
+
+.. include:: include-top.inc
+
+Overview
+--------
 
 IzPack is license under the terms of the **Apache License version 2.0**.
 
@@ -7,6 +12,8 @@ Please note that IzPack may use some third-party libraries that are not released
 
 Finally, note that IzPack is not affiliated to the Apache Software Foundation.
 
+License
+-------
 
 ::
 
@@ -212,3 +219,5 @@ Finally, note that IzPack is not affiliated to the Apache Software Foundation.
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
+
+.. include:: include-bottom.inc

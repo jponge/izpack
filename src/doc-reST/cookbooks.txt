@@ -1,6 +1,7 @@
 CookBooks
 =========
 
+.. include:: include-top.inc
 
 1. How To create an ODBC connection with IzPack (by Fabrice Mirabile)
 ---------------------------------------------------------------------
@@ -786,3 +787,5 @@ don't hesitate to contact me via
 user/devel list.
 
 **Done by Fabrice Mirabile on 20th of april 2005**
+
+.. include:: include-bottom.inc

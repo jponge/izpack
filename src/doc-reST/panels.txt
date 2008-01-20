@@ -1,6 +1,8 @@
 The Available Panels
 =====================
 
+.. include:: include-top.inc
+
 In this section I will introduce the various panels available in IzPack. The
 usage for most is pretty simple and described right here. The more elaborate
 ones are explained in more detail in the *Advanced Features* chapter or in
@@ -576,3 +578,5 @@ in your ``packsLang.xml_fra`` resource) :
 
 If you want to add html markup to those strings, add ``.html`` at the end
 of the string id (after the group name).
+
+.. include:: include-bottom.inc

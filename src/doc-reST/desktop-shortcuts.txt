@@ -3,6 +3,8 @@ Desktop Shortcuts
 
 (by Elmar GROM and Marc EPPELMANN)
 
+.. include:: include-top.inc
+
 Defining Shortcuts
 ------------------
 
@@ -1073,3 +1075,5 @@ A sample shortcut specification file for Unix
        </shortcut>
 
     </shortcuts>
+
+.. include:: include-bottom.inc

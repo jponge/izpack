@@ -3,6 +3,7 @@ User Input
 
 (by Elmar GROM)
 
+.. include:: include-top.inc
 
 Most of the panels that come with IzPack take user input in some form. In
 some panels this is through a simple user acknowledgment in others the user
@@ -950,3 +951,4 @@ Example
       </spec>
     </field>
 
+.. include:: include-bottom.inc

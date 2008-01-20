@@ -1,10 +1,12 @@
 Getting started
 ================
 
+.. include:: include-top.inc
+
 Overview
 ---------
 
-To begin with, you should know what IzPack is organized if you want to use it. let's go into the directory where you have installed IzPack on your machine. There are 3 text files and a set of directories. The most important for the moment are bin/ doc/ sample/. If you are reading this, you already know that doc contains this documentation :-) 
+To begin with, you should know how IzPack is organized if you want to use it. Let's go into the directory where you have installed IzPack on your machine. There are 3 text files and a set of directories. The most important for the moment are bin/ doc/ sample/. If you are reading this, you already know that doc contains this documentation :-) 
 
 So let's go into bin/. The icons/ directory contains some directories for your system, in case you would like an icon to launch a component of IzPack . But the most important things you can see in bin are the compile scripts (in both unix* and windows formats). Compile is used to compile a ready-to-go xml installation file from a command-line context or from an external tool.
 
@@ -358,3 +360,5 @@ followed by ::
    ant all
 
 then all jar files in [izpackroot]/lib, [izpackroot]/bin/panels and [izpackroot]/bin/customactions should be recompiled with the selected source version.
+
+.. include:: include-bottom.inc

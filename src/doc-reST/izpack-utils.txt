@@ -1,6 +1,8 @@
 IzPack utilities
 ================
 
+.. include:: include-top.inc
+
 The IzPack project includes a set of utilities that you may find useful.
 
 These projects live outside the regular IzPack installer Subversion repository. You can access it from  http://svn.berlios.de/svnroot/repos/izpack/izpack-utils/ instead of  http://svn.berlios.de/svnroot/repos/izpack/izpack-src/ for IzPack itself.
@@ -95,5 +97,4 @@ The usage is straightforward::
 
 wraps *installer.jar* as *Installer.app*
 
-
-
+.. include:: include-bottom.inc

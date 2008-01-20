@@ -1,6 +1,7 @@
 Writing Installation XML Files
 ==============================
 
+.. include:: include-top.inc
 
 What You Need
 -------------
@@ -1148,3 +1149,5 @@ I could use the xfragment element to enable it
           <iiii>there</iiii>
       </hhhh>
   </xfragment>
+
+.. include:: include-bottom.inc
