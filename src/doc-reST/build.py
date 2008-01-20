@@ -63,7 +63,7 @@ def generate_html(rest_files):
 		print('    ' + rest_file)
 		args = [
 		    '--link-stylesheet',
-		    '--stylesheet-path=izpack.css',
+		    '--stylesheet-path=html/izpack.css',
 		    '--cloak-email-addresses',
 		    '%s.txt' % rest_file,
 		    'html/%s.html' % rest_file
