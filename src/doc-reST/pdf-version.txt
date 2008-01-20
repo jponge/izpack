@@ -1,8 +1,8 @@
-////////////////////////
+/////////////////////
 IzPack documentation
-////////////////////////
+/////////////////////
 
-.. WARNING:: This is a work in progress and should not be used as a reference...
+.. include:: preambule.txt
 
 .. contents::
 

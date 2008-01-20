@@ -47,12 +47,12 @@ def create_dirs():
 def scan_files():
 	print('Scanning files...')
 	rest_files = [ f[0:(len(f) - 4)] for f in glob('*.txt') if f != 'pdf-version.txt' ]
-	pictures   = glob('*.jpg') + glob('*.png')
-	return rest_files, pictures
+	resources   = glob('*.jpg') + glob('*.png') + glob('*.css')
+	return rest_files, resources
 
-def copy_files(pictures):
-	print('Copying pictures...')
-	for pic in pictures:
+def copy_files(resources):
+	print('Copying resources...')
+	for pic in resources:
 		print('    ' + pic)
 		shutil.copyfile(pic, 'html/' + pic)
 		shutil.copyfile(pic, 'pdf/' + pic)
@@ -61,7 +61,14 @@ def generate_html(rest_files):
 	print('Generating html...')
 	for rest_file in rest_files:
 		print('    ' + rest_file)
-		publish(writer_name='html', argv=['%s.txt' % rest_file, 'html/%s.html' % rest_file])
+		args = [
+		    '--link-stylesheet',
+		    '--stylesheet-path=izpack.css',
+		    '--cloak-email-addresses',
+		    '%s.txt' % rest_file,
+		    'html/%s.html' % rest_file
+		]
+		publish(writer_name='html', argv=args)
 
 def generate_latex():
 	print('Generating LaTeX for PDF output...')
@@ -81,11 +88,12 @@ if __name__ == '__main__':
                   	default=True, help="don't call pdflatex")
 	options, args = parser.parse_args()
 	
-	rest_files, pictures = scan_files()
+	rest_files, resources = scan_files()
 	create_dirs()
-	copy_files(pictures)
+	copy_files(resources)
 	generate_html(rest_files)
-	generate_latex()
-	if options.pdflatex: compile_latex()
+	if options.pdflatex:
+	    generate_latex()
+	    compile_latex()
 	
 	print('Done')

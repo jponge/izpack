@@ -1,36 +1,36 @@
-////////////////////////
+/////////////////////
 IzPack documentation
-////////////////////////
+/////////////////////
 
-.. WARNING:: This is a work in progress and should not be used as a reference...
+.. include:: preambule.txt
 
 Chapters
 ========
 
-- introduction_
-- getting-started_
-- installation-files_
-- panels_
-- advanced-features_
-- desktop-shortcuts_
-- creating-panels_
-- user-input_
-- custom-actions_
-- izpack-utils_
-- apache-license_
-- cc-license_
-- cookbooks_
+- `Introduction`_
+- `Getting started`_
+- `Writing installation files`_
+- `Available panels`_
+- `Advanced features`_
+- `Desktop shortcuts`_
+- `Creating panels`_
+- `User input`_
+- `Custom actions`_
+- `IzPack utilities`_
+- `IzPack license`_
+- `Documentation license`_
+- `Cookbooks`_
 
-.. _introduction: introduction.html
-.. _getting-started: getting-started.html
-.. _installation-files: installation-files.html
-.. _panels: panels.html
-.. _advanced-features: advanced-features.html
-.. _desktop-shortcuts: desktop-shortcuts.html
-.. _creating-panels: creating-panels.html
-.. _user-input: user-input.html
-.. _custom-actions: custom-actions.html
-.. _izpack-utils: izpack-utils.html
-.. _apache-license: apache-license.html
-.. _cc-license: cc-license.html
-.. _cookbooks: cookbooks.html
+.. _Introduction: introduction.html
+.. _Getting started: getting-started.html
+.. _Writing installation files: installation-files.html
+.. _Available panels: panels.html
+.. _Advanced features: advanced-features.html
+.. _Desktop shortcuts: desktop-shortcuts.html
+.. _Creating panels: creating-panels.html
+.. _User input: user-input.html
+.. _Custom actions: custom-actions.html
+.. _IzPack utilities: izpack-utils.html
+.. _IzPack license: apache-license.html
+.. _Documentation license: cc-license.html
+.. _Cookbooks: cookbooks.html
