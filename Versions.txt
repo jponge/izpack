@@ -87,6 +87,21 @@
 - UserInputPanel: some variables were not saved for silent installers (Piotr Skowronek via Julien Ponge)
 - Text fields now can support validators (Piotr Skowronek via Julien Ponge)
 - UserInputPanel: substitution support for text fields (Piotr Skowronek via Julien Ponge)
+- TextInputField: Vertical layout issue fixed. (Jeff Gordon)
+- RegularExpressionValidator: Added ability to use with password fields. (Jeff Gordon)
+- PasswordEqualityValidator: Implementation of sample validator for use in any installer. 
+  Shows how to get at validator parameters as well. (Jeff Gordon)
+- PasswordKeystoreValidator: Validates keystore and/or key access using password field. (Jeff Gordon)
+- CompilerConfig: Changed uninstaller name to allow file name without jar extension. (Jeff Gordon)
+- UserPathPanel: Implemented copy of PathPanel as an alternative to dir type in UserInputPanel. (Jeff Gordon)
+- ValidatorContainer: Added supporting class for using multiple validators. (Jeff Gordon)
+- PasswordGroup: Added usage of ValidatorContainer to support multiple validators. (Jeff Gordon)
+- UserInputPanel: Changes to support multiple validators in password field and better error messages. (Jeff Gordon)
+- build.xml: Added ValidatorContainer and section for UserPathPanel. (Jeff Gordon)
+- eng.xml: Grammatical corrections, added UserPathPanel headline, messages, and captions,
+  added UserInputPanel.dir.* messages and captions, added UserInputPanel.file.* messages and captions.
+  (Need to add/test with alternative lang packs)  (Jeff Gordon)
+
 
   > 3.10.2 (build 2007.05.11)
 
