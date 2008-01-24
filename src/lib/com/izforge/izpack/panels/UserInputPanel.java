@@ -76,6 +76,8 @@ import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
+import java.util.ArrayList;
+import java.util.List;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -1060,13 +1062,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 File ffile = new File(file);
                 if (ffile.isDirectory()){
                     idata.setVariable((String) field[POS_VARIABLE],file);
+                    entries.add(new TextValuePair((String) field[POS_VARIABLE],file));
                     return true;
                 }
                 else {
+                    showMessage("dir.notdirectory");
                     return false;
                 }                
             }
             else {
+                showMessage("dir.nodirectory");
                 return false;
             }               
         }
@@ -1076,6 +1081,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
             }
             return false;
         }
+    }
+
+    private void showMessage(String messageType)
+    {
+        JOptionPane.showMessageDialog(parent, parent.langpack.getString("UserInputPanel." + messageType + ".message"),
+                parent.langpack.getString("UserInputPanel." + messageType + ".caption"),
+                JOptionPane.WARNING_MESSAGE);
     }
 
     private boolean readFileField(Object[] field)
@@ -1088,13 +1100,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 File ffile = new File(file);
                 if (ffile.isFile()){
                     idata.setVariable((String) field[POS_VARIABLE],file);
+                    entries.add(new TextValuePair((String) field[POS_VARIABLE],file));
                     return true;
                 }
                 else {
+                    showMessage("file.notfile");
                     return false;
                 }                
             }
             else {
+                showMessage("file.nofile");
                 return false;
             }               
         }
@@ -1973,8 +1988,24 @@ public class UserInputPanel extends IzPanel implements ActionListener
      *        &lt;processor class=&quot;com.izforge.sample.PWDEncryptor&quot;/&gt;
      *      &lt;/field&gt;
      *      
+     * </pre>
+     * Additionally, parameters and multiple validators can be used to provide
+     * separate validation and error messages for each case.
+     * <pre>
      *     
-     *    
+     *    &lt;field type=&quot;password&quot; align=&quot;left&quot; variable=&quot;keystore.password&quot;&gt;
+     *      &lt;spec&gt;
+     *        &lt;pwd txt=&quot;Keystore Password:&quot; size=&quot;25&quot; set=&quot;&quot;/&gt;
+     *        &lt;pwd txt=&quot;Retype Password:&quot; size=&quot;25&quot; set=&quot;&quot;/&gt;
+     *      &lt;/spec&gt;
+     *      &lt;validator class=&quot;com.izforge.izpack.util.PasswordEqualityValidator&quot; txt=&quot;Both keystore passwords must match.&quot; id=&quot;key for the error text&quot;/&gt;
+     *      &lt;validator class=&quot;com.izforge.izpack.util.PasswordKeystoreValidator&quot; txt=&quot;Could not validate keystore with password and alias provided.&quot; id=&quot;key for the error text&quot;&gt;
+     *        &lt;param name=&quot;keystoreFile&quot; value=&quot;${existing.ssl.keystore}&quot;/&gt;
+     *        &lt;param name=&quot;keystoreType&quot; value=&quot;JKS&quot;/&gt;
+     *        &lt;param name=&quot;keystoreAlias&quot; value=&quot;${keystore.key.alias}&quot;/&gt;
+     *      &lt;/validator&gt;
+     *    &lt;/field&gt;
+     *      
      * </pre>
      * 
      * @param spec a <code>XMLElement</code> containing the specification for the set of password
@@ -1986,12 +2017,15 @@ public class UserInputPanel extends IzPanel implements ActionListener
         Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
         Vector forOs = spec.getChildrenNamed(OS);
         String variable = spec.getAttribute(VARIABLE);
-        String validator = null;
         String message = null;
         String processor = null;
         XMLElement element = null;
         PasswordGroup group = null;
         int size = 0;
+        // For multiple validator support
+        Vector validatorsElem = null;
+        List validatorsList = new ArrayList();
+        int vsize = 0;
 
         // ----------------------------------------------------
         // get the description and add it to the list of UI
@@ -2003,11 +2037,36 @@ public class UserInputPanel extends IzPanel implements ActionListener
         // ----------------------------------------------------
         // get the validator and processor if they are defined
         // ----------------------------------------------------
-        element = spec.getFirstChildNamed(VALIDATOR);
-        if (element != null)
+
+        validatorsElem = spec.getChildrenNamed(VALIDATOR);
+        if (validatorsElem != null && validatorsElem.size() > 0)
         {
-            validator = element.getAttribute(CLASS);
-            message = getText(element);
+            vsize = validatorsElem.size();
+            for (int i = 0; i < vsize; i++)
+            {
+                element = (XMLElement) validatorsElem.get(i);
+                String validator = element.getAttribute(CLASS);
+                message = getText(element);
+                HashMap validateParamMap = new HashMap();
+                // ----------------------------------------------------------
+                // check and see if we have any parameters for this validator.
+                // If so, then add them to validateParamMap.
+                // ----------------------------------------------------------
+                Vector validateParams = element.getChildrenNamed(RULE_PARAM);
+                if (validateParams != null && validateParams.size() > 0)
+                {
+                    Iterator iter = validateParams.iterator();
+                    while (iter.hasNext())
+                    {
+                        element = (XMLElement) iter.next();
+                        String paramName = element.getAttribute(RULE_PARAM_NAME);
+                        String paramValue = element.getAttribute(RULE_PARAM_VALUE);
+                        // System.out.println("Adding parameter: "+paramName+"="+paramValue);
+                        validateParamMap.put(paramName, paramValue);
+                    }
+                }
+                validatorsList.add(new ValidatorContainer(validator, message, validateParamMap));
+            }
         }
 
         element = spec.getFirstChildNamed(PROCESSOR);
@@ -2016,7 +2075,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             processor = element.getAttribute(CLASS);
         }
 
-        group = new PasswordGroup(validator, processor);
+        group = new PasswordGroup(idata, validatorsList, processor);
 
         // ----------------------------------------------------
         // extract the specification details
@@ -2067,8 +2126,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 TwoColumnConstraints constraints2 = new TwoColumnConstraints();
                 constraints2.position = TwoColumnConstraints.EAST;
 
-                uiElements.add(new Object[] { null, PWD_FIELD, variable, constraints2, field,
-                        forPacks, forOs, null, null, message, group});
+                // Removed message to support pulling from multiple validators
+                uiElements.add(new Object[]{null, PWD_FIELD, variable, constraints2, field,
+                    forPacks, forOs, null, null, null, group
+                });
+                // Original
+//        uiElements.add(new Object[]{null, PWD_FIELD, variable, constraints2, field,
+//          forPacks, forOs, null, null, message, group
+//        });
                 group.addField(field);
             }
         }
@@ -2097,7 +2162,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             group = (PasswordGroup) field[POS_GROUP];
             variable = (String) field[POS_VARIABLE];
-            message = (String) field[POS_MESSAGE];
+        // Removed to support grabbing the message from multiple validators
+        // message = (String) field[POS_MESSAGE];
         }
         catch (Throwable exception)
         {
@@ -2106,16 +2172,40 @@ public class UserInputPanel extends IzPanel implements ActionListener
         if ((variable == null) || (passwordGroupsRead.contains(group))) { return (true); }
         passwordGroups.add(group);
 
-        boolean success = !validating || group.validateContents();
+
+        //boolean success = !validating || group.validateContents();
+        boolean success = !validating;
+
+        // Use each validator to validate contents
         if (!success)
         {
-            showWarningMessageDialog(parentFrame, message);
-            return (false);
+            int size = group.validatorSize();
+            // System.out.println("Found "+(size)+" validators");
+            for (int i = 0; i < size; i++)
+            {
+                success = group.validateContents(i);
+                if (!success)
+                {
+                    JOptionPane.showMessageDialog(parentFrame, group.getValidatorMessage(i),
+                            parentFrame.langpack.getString("UserInputPanel.error.caption"),
+                            JOptionPane.WARNING_MESSAGE);
+                    break;
+                }
+            }
         }
 
-        idata.setVariable(variable, group.getPassword());
-        entries.add(new TextValuePair(variable, group.getPassword()));
-        return (true);
+//    // Changed to show messages for each validator
+//    if (!success) {
+//      JOptionPane.showMessageDialog(parentFrame, message, parentFrame.langpack.getString("UserInputPanel.error.caption"), JOptionPane.WARNING_MESSAGE);
+//      return (false);
+//    }
+
+        if (success)
+        {
+            idata.setVariable(variable, group.getPassword());
+            entries.add(new TextValuePair(variable, group.getPassword()));
+        }
+        return success;
     }
 
     /*--------------------------------------------------------------------------*/
