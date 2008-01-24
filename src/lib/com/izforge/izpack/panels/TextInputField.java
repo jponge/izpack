@@ -115,7 +115,8 @@ public class TextInputField extends JComponent implements ProcessingClient
         }
         
         com.izforge.izpack.gui.FlowLayout layout = new com.izforge.izpack.gui.FlowLayout();
-        layout.setAlignment(com.izforge.izpack.gui.FlowLayout.LEFT);
+        layout.setAlignment(com.izforge.izpack.gui.FlowLayout.LEADING);
+        layout.setVgap(0);
         setLayout(layout);
         
         // ----------------------------------------------------
