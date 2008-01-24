@@ -91,9 +91,9 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
      */
     protected void createLayout()
     {
-        // We woulduse the IzPanelLayout also in this "sub"panel.
-        // In an IzPanel there are support of this layout manager at
-        // more than one places. In this panel not, therefore we have
+        // We would use the IzPanelLayout also in this "sub" panel.
+        // In an IzPanel there is support for this layout manager in
+        // more than one place, but not in this panel so we have
         // to make all things needed.
         // First create a layout helper.
         LayoutHelper layoutHelper = new LayoutHelper(this);
