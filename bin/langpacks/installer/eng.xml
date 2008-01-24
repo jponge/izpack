@@ -11,10 +11,10 @@
     <str id="ExtendedInstallPanel.headline" txt="Installation and Configuration"/>
     <str id="FinishPanel.headline" txt="Installation Finished"/>
     <str id="HelloPanel.headline" txt="Welcome"/>
-    <str id="HTMLInfoPanel.headline" txt="Informations"/>
+    <str id="HTMLInfoPanel.headline" txt="Information"/>
     <str id="HTMLLicencePanel.headline" txt="Licensing Agreements"/>
     <str id="ImgPacksPanel.headline" txt="Select Installation Packages"/>
-    <str id="InfoPanel.headline" txt="Informations"/>
+    <str id="InfoPanel.headline" txt="Information"/>
     <str id="InstallPanel.headline" txt="Installation"/>
     <str id="JDKPathPanel.headline" txt="JDK Path"/>
     <str id="LicencePanel.headline" txt="Licensing Agreements"/>
@@ -25,6 +25,7 @@
     <str id="SummaryPanel.headline" txt="Summary Configuration Data"/>
     <str id="TargetPanel.headline" txt="Target Path"/>
     <str id="UserInputPanel.headline" txt="User Data"/>
+    <str id="UserPathPanel.headline" txt="Select Path"/>
     <str id="InstallationTypePanel.headline" txt="Installation Type" />
     
     <!-- General installer strings -->
@@ -46,7 +47,7 @@
     <str id="installer.Message" txt="Message"/> 
     
     <!-- Uninstaller specific strings -->
-    <str id="uninstaller.warning" txt="This will remove the installed application(s)!"/>
+    <str id="uninstaller.warning" txt="This will remove the installed application!"/>
     <str id="uninstaller.destroytarget" txt=" Force the deletion of "/>
     <str id="uninstaller.uninstall" txt="Uninstall"/>
     
@@ -99,7 +100,7 @@
     <str id="JDKPathPanel.nonValidPathInReg" txt="The Windows registry contains a non-valid path for this JDK. Should this JDK be used anyway?"/>
 
     <str id="PacksPanel.info" txt="Select the packs you want to install:"/>
-    <str id="PacksPanel.tip" txt="Note: greyed out packs are required."/>
+    <str id="PacksPanel.tip" txt="Note: Grayed packs are required."/>
     <str id="PacksPanel.space" txt="Total space Required: "/>
     <str id="PacksPanel.freespace" txt="Available space: "/>
     <str id="PacksPanel.description" txt="Description"/>
@@ -115,7 +116,7 @@
     <str id="InstallPanel.info" txt="Click 'Install!' to begin the installation process"/>
     <str id="InstallPanel.install" txt="Install!"/>
     <str id="InstallPanel.tip" txt="Pack installation progress:"/>
-    <str id="InstallPanel.begin" txt="[Nothing]"/>
+    <str id="InstallPanel.begin" txt=" "/>
     <str id="InstallPanel.finished" txt="[Finished]"/>
     <str id="InstallPanel.progress" txt="Overall installation progress:"/>
     <str id="InstallPanel.overwrite.title" txt="File already exists"/>
@@ -165,18 +166,37 @@
     <str id="ShortcutPanel.location.startMenu"    txt="Start Menu"/>
     <str id="ShortcutPanel.location.startup"      txt="Startup Group"/>
     
-    <str id="UserInputPanel.error.caption"        txt="Input Problem"/>
+    <str id="UserInputPanel.error.caption"        txt="Error"/>
     <str id="UserInputPanel.search.autodetect"    txt="Autodetect"/>
 
+    <str id="UserInputPanel.dir.nodirectory.message"   txt="You must select a valid directory."/>
+    <str id="UserInputPanel.dir.nodirectory.caption"   txt="No Directory Selected"/>
+    <str id="UserInputPanel.dir.notdirectory.message"   txt="The directory you have chosen either does not exist or is not valid."/>
+    <str id="UserInputPanel.dir.notdirectory.caption"   txt="Invalid Directory"/>
+    <str id="UserInputPanel.file.nofile.message"   txt="You must select a valid file."/>
+    <str id="UserInputPanel.file.nofile.caption"   txt="No File Selected"/>
+    <str id="UserInputPanel.file.notfile.message"   txt="The file you have chosen either does not exist or is not valid."/>
+    <str id="UserInputPanel.file.notfile.caption"   txt="Invalid File"/>
+
+    
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
-    <str id="UserInputPanel.search.autodetect.failed.message"    txt="Autodetection failed."/>
-    <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Autodetection failed."/>
+    <str id="UserInputPanel.search.autodetect.failed.message"    txt="Auto-detection failed."/>
+    <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Auto-Detection Failed"/>
     <str id="UserInputPanel.search.autodetect.tooltip"           txt="Check for the file or directory in the paths given above."/>
     <str id="UserInputPanel.search.location"           txt="Enter location of {0}."/>
     <str id="UserInputPanel.search.location.checkedfile" txt="The existence of {0} is checked."/>
     <str id="UserInputPanel.search.browse"           txt="Browse..."/>
-    <str id="UserInputPanel.search.wrongselection.message"   txt="The file or directory you choose either does not exist or is not appropiate."/>
-    <str id="UserInputPanel.search.wrongselection.caption"   txt="Invalid selection."/>
+    <str id="UserInputPanel.search.wrongselection.message"   txt="The file or directory you have chosen either does not exist or is not appropriate."/>
+    <str id="UserInputPanel.search.wrongselection.caption"   txt="Invalid Selection"/>
+
+    <str id="UserPathPanel.required" txt="The chosen directory should exist."/>
+    <str id="UserPathPanel.info" txt="Select the path: "/>
+    <str id="UserPathPanel.browse" txt="Browse"/>
+    <str id="UserPathPanel.exists_warn" txt="The directory already exists! Are you sure you want to install here and possibly overwrite existing files?"/>
+    <str id="UserPathPanel.empty_target" txt="You have not specified a target location! Is this correct?"/>
+    <str id="UserPathPanel.createdir" txt="The target directory will be created: " />
+    <str id="UserPathPanel.nodir"  txt="This file is not a directory! Please choose a directory!"/>
+    <str id="UserPathPanel.notwritable" txt="This directory can not be written! Please choose another directory!"/>
 
     <str id="CompilePanel.heading" txt="Compilation" />
     <str id="CompilePanel.tip" txt="Job compilation progress:" />
@@ -201,18 +221,19 @@
     <str id="ProcessPanel.heading" txt="Processing" />
 
     <!-- Strings for the summary of panels - START -->
-    <str id="SummaryPanel.info" txt="Ready to install. Important data are listed below. Press &quot;Next&quot; to start installation, "/>
-    <str id="TargetPanel.summaryCaption" txt="Installation path"/>
-    <str id="JDKPathPanel.summaryCaption" txt="JDK path"/>
-    <str id="PacksPanel.summaryCaption" txt="Chosen installation packs"/>
-    <str id="ImgPacksPanel.summaryCaption" txt="Chosen installation packs"/>
+    <str id="SummaryPanel.info" txt="Installation will proceed with the following settings. Press Next to continue."/>
+    <str id="TargetPanel.summaryCaption" txt="Installation Path"/>
+    <str id="JDKPathPanel.summaryCaption" txt="JDK Path"/>
+    <str id="PacksPanel.summaryCaption" txt="Chosen Installation Packs"/>
+    <str id="ImgPacksPanel.summaryCaption" txt="Chosen Installation Packs"/>
+    <str id="UserPathPanel.summaryCaption" txt="Selected Path"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->
     <str id="functionFailed.RegOpenKeyEx" txt="Cannot open registry key {0}\\{1}."/>
     
     <!-- Add your own panels specific strings here if you need or use a custom
-         langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
+         langpack with the same syntax referred as resource CustomLangpack.xml_[ISO3]"
     -->     
 
     <str id="nextmedia.title" txt="Next install media"/>
@@ -223,7 +244,7 @@
     <str id="nextmedia.choosertitle" txt="Choose install media" />
     <str id="nextmedia.filedesc" rdid="install packs (.pak*)" />
 
-    <!-- Strings for the loggin/reporting system (Messenger) -->
+    <!-- Strings for the logging/reporting system (Messenger) -->
 
     <!-- This string defines the time stamp format in the installation report.
          The format details are documented in java.text.SimpleDateFormat -->
