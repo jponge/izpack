@@ -361,6 +361,8 @@
                 <include name="lib/liquidlnf.jar" />
                 <include name="lib/metouia.jar" />
                 <include name="lib/looks.jar" />
+                <include name="lib/nimbus.jar" />
+                <include name="lib/substance.jar" />
                 <include name="lib/ant.jar" />
                 <include name="lib/nimbus.jar" />
                 <include name="lib/substance.jar" />
@@ -648,6 +650,13 @@
             <include name="com/izforge/izpack/panels/UserInputPanel.java" />
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java" />
             <include name="com/izforge/izpack/panels/Validator.java" />
+            <include name="com/izforge/izpack/panels/ValidatorContainer.java" />
+        </build-panel>
+        <build-panel name="UserPathPanel">
+            <include name="com/izforge/izpack/panels/UserPathInputPanel.java" />
+            <include name="com/izforge/izpack/panels/UserPathSelectionPanel.java" />
+            <include name="com/izforge/izpack/panels/UserPathPanel.java" />
+            <include name="com/izforge/izpack/panels/UserPathPanelAutomationHelper.java" />
         </build-panel>
         <build-panel name="ConditionalUserInputPanel">
             <include name="com/izforge/izpack/panels/ConditionalUserInputPanel.java" />
@@ -660,6 +669,7 @@
             <include name="com/izforge/izpack/panels/UserInputPanel.java" />
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java" />
             <include name="com/izforge/izpack/panels/Validator.java" />
+            <include name="com/izforge/izpack/panels/ValidatorContainer.java" />
         </build-panel>
         <build-panel name="CompilePanel">
             <include name="com/izforge/izpack/panels/CompilePanel.java" />
