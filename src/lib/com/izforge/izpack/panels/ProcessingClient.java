@@ -58,7 +58,10 @@ public interface ProcessingClient
      */
     /*--------------------------------------------------------------------------*/
     public String getFieldContents(int index);
-
+    
+// These newly added fields are similar to the functionality provided 
+// by the multiple validator support using the validator container.
+    
     /*---------------------------------------------------------------------------*/
     /**
      * Returns the field contents.
