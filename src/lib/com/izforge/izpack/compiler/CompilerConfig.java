@@ -1511,8 +1511,7 @@ public class CompilerConfig extends Thread
             if (uninstallInfo != null)
             {
                 String uninstallerName = uninstallInfo.getAttribute("name");
-                if (uninstallerName != null && uninstallerName.endsWith(".jar")
-                        && uninstallerName.length() > ".jar".length())
+                if (uninstallerName != null && uninstallerName.length() > ".jar".length())
                     info.setUninstallerName(uninstallerName);
             }
         }
