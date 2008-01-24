@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.panels.PasswordGroup;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -54,9 +55,25 @@ public class RegularExpressionValidator implements Validator
         {
             patternString = STR_PATTERN_DEFAULT;
         }
-
         Pattern pattern = Pattern.compile(patternString);
-        return pattern.matcher(client.getText()).matches();
+        return pattern.matcher(getString(client)).matches();
+    }
+    
+    private String getString(ProcessingClient client) {
+      String returnValue = "";
+      if (client instanceof PasswordGroup) {
+        int numFields = client.getNumFields();
+        if (numFields > 0) {
+          returnValue = client.getFieldContents(0);
+        } else {
+          // Should never get here, but might as well try and grab some text
+          returnValue = client.getText();
+        }
+      } else {
+        // Original way to retrieve text for validation
+        returnValue = client.getText();
+      }
+      return returnValue;
     }
 
 }
