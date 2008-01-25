@@ -1,0 +1,162 @@
+Sample Install Definition
+================================
+
+.. include:: include-top.inc
+
+This shows an example of how to use many of the features and advanced features 
+discussed in many of the other sections of this documentation.  Look in the 
+sample directory for a more basic example and all the necessary files and 
+instructions to build your first IzPack installer.
+
+Normally, a build process will call IzPack from Ant using something like the following:
+
+::
+
+	  <!-- Allows us to use the IzPack Ant task, standalone-compiler.jar added to Ant lib -->
+	  <taskdef name="izpack" classpath="${install.lib}/standalone-compiler.jar" 
+	      classname="com.izforge.izpack.ant.IzPackTask"/>
+
+::
+
+    <!-- Run installer build -->
+    <echo message="Running IzPack to build the installer..."/>  
+    <izpack input="install-definition.xml"
+            output="${output.dir}/${product.short.name}-${product.version}-install.jar"
+            installerType="standard"
+            inheritAll="true"
+            basedir="${temp.dir}"
+            compression="deflate"
+            compressionlevel="9"/>
+    <!-- Clean working directory -->
+    <echo message="Cleaning up working directory..."/>  
+    <delete dir="${temp.dir}" quiet="true" includeemptydirs="true"/>
+    <echo message="Done."/>  
+
+
+**install-definition.xml**
+
+::
+
+		<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+		
+		<installation version="1.0">
+		  <!-- Ant properties in this file can be referenced with @{}, 
+		       otherwise use variables below in installer files with ${} -->
+		  <info>
+		    <appname>@{product.name}</appname>
+		    <appversion>@{product.version}</appversion>
+		    <uninstaller name="remove.task" write="yes"/>
+		  </info>
+		  
+		  <guiprefs width="600" height="480" resizable="no">
+		    <laf name="kunststoff">
+		      <os family="unix" />
+		    </laf>
+		    <modifier key="useHeadingPanel" value="yes"/>
+		    <modifier key="useHeadingForSummary" value="yes"/>
+		    <modifier key="headingLineCount" value="2"/>
+		    <modifier key="headingFontSize" value="1.5"/>
+		    <modifier key="headingBackgroundColor" value="0x00ffffff"/>
+		    <modifier key="headingPanelCounter" value="text"/>
+		    <modifier key="headingPanelCounterPos" value="inHeading"/>
+		  </guiprefs>
+		  
+		  <locale>
+		    <langpack iso3="eng"/>
+		  </locale>
+		  
+		  <!-- Need to define ant properties we want to use during install as variables -->
+		  <variables>
+		    <variable name="app.name" value="@{app.name}"/>
+		    <variable name="UserPathPanelVariable" value="@{default.dest.dir.sql}"/>
+		    <variable name="UserPathPanelDependsName" value="Install Database Server"/>
+		    <variable name="jboss.version" value="@{jboss.version}"/>
+		    <variable name="install.jboss.service" value="true"/>
+		  </variables>
+		  
+		  <resources>
+		    <res id="box-out-32.png" src="@{install.res}/box-out-32.png"/>
+		    <res id="customicons.xml" src="@{install.res}/custom.icons.xml"/>
+		    <res id="CustomLangpack.xml_eng" src="@{install.res}/custom.eng.xml"/>
+		    <res id="HTMLInfoPanel.info" src="@{install.res}/license-notice.html"/>
+		    <res id="Heading.image" src="@{install.res}/heading-image.png"/>
+		    <res id="Installer.image" src="@{install.res}/side-image.png" />
+		    <res id="ProcessPanel.Spec.xml" src="@{build.dir}/processing-tasks.xml"/>
+		    <res id="userInputSpec.xml" src="@{build.dir}/userInputSpec.xml" />
+		    <res id="uninstaller.warning" src="@{install.res}/uninstall-warn.txt"/>
+		    <!-- default-dir.txt is written by the calling build.xml -->
+		    <res id="TargetPanel.dir" src="@{install.res}/default-dir.txt"/>
+		  </resources>
+		  
+		  <panels>
+		    <panel classname="HelloPanel"/>
+		    <panel classname="HTMLInfoPanel"/>
+		    <panel classname="TargetPanel"/> 
+		    <panel classname="InstallationGroupPanel"/>
+		    <panel classname="PacksPanel"/>
+		    <panel classname="UserInputPanel" id="UserInputPanel.0"/>
+		    <panel classname="UserInputPanel" id="UserInputPanel.1"/>
+		    <panel classname="UserInputPanel" id="UserInputPanel.2"/>
+		    <panel classname="UserPathPanel"/>
+		    <panel classname="SummaryPanel"/>
+		    <panel classname="InstallPanel"/>
+		    <panel classname="ProcessPanel"/>
+		    <panel classname="SimpleFinishPanel"/>
+		  </panels>
+		  
+		  <listeners>
+		      <listener installer="SummaryLoggerInstallerListener">
+		          <os family="windows"/>
+		      </listener>
+		  </listeners>  
+		  
+		  <packs>
+		    <pack name="Main Application" required="yes" installGroups="New Application" >
+		      <description>The first application deployed in a new JBoss application server.</description>
+		      <file src="@{jboss.version}" targetdir="$INSTALL_PATH"/>
+		    </pack>
+		    <pack name="Install Database Server" required="no" preselected="yes" os="windows" installGroups="New Application">
+		      <description>New server installation of the selected database as required by the application.</description>
+		      <file src="postgresql" targetdir="$INSTALL_PATH"/>
+		      <file src="sql" targetdir="$INSTALL_PATH"/>
+		      <executable
+		        targetfile="$INSTALL_PATH/postgresql/postgres_install_windows.bat"
+		        stage="postinstall"
+		        keep="true"
+		      >
+		        <args>
+		          <arg value="${UserPathPanelVariable}"/>
+		          <arg value="$HOST_NAME"/>
+		          <arg value="${db.service.name}"/>
+		          <arg value="${db.service.password}"/>
+		          <arg value="${db.su.password}"/>
+		        </args>  
+		      </executable>
+		    </pack>
+		    <pack name="JBoss Source Code" required="no" preselected="no" installGroups="New Application">
+		      <description>The JBoss application server source is available as required by the LGPL.</description>
+		      <file src="src" targetdir="$INSTALL_PATH/@{jboss.version}" />
+		    </pack>
+		    <pack name="Update Application" required="yes" installGroups="Update Existing Application">
+		      <description>The required application files to update an existing installation.</description>
+		      <file src="update" targetdir="$INSTALL_PATH"/>
+		    </pack>
+		    <pack name="Post-Install Tasks" required="yes">
+		      <description>Configuration and cleanup required for the installation.</description>
+		      <file src="ant" targetdir="$INSTALL_PATH"/>
+		      <file src="post-install-tasks.bat" targetdir="$INSTALL_PATH"/>
+		      <file src="build.xml" targetdir="$INSTALL_PATH"/>
+		      <file src="Uninstall_PostgreSQL_and_Application.bat" targetdir="$INSTALL_PATH"/>
+		      <file src="Uninstall_Application_Only.bat" targetdir="$INSTALL_PATH"/>
+		      <parsable targetfile="$INSTALL_PATH/post-install-tasks.bat"/>
+		      <parsable targetfile="$INSTALL_PATH/build.xml"/>
+		      <parsable targetfile="$INSTALL_PATH/@{jboss.version}/bin/system.properties"/>
+		      <parsable targetfile="$INSTALL_PATH/Uninstall_PostgreSQL_and_Application.bat"/>
+		      <parsable targetfile="$INSTALL_PATH/Uninstall_Application_Only.bat"/>
+		    </pack>
+		  </packs>
+		  
+		  <!-- The native libraries to add. This is required for creating shortcuts on Windows -->
+		  <native type="izpack" name="ShellLink.dll"/>
+		  
+		</installation>
