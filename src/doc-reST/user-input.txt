@@ -19,6 +19,10 @@ To use this panel, list it in the install file with the class name
 it to the install resources. The name of this resource must be
 ``userInputSpec.xml``.
 
+Here's an example userInputSpec.xml_ showing 3 panels.  There are some advanced
+features in this example, but the general flow should be looked at first.
+
+.. _userInputSpec.xml: sample-userInputSpec.html
 
 The user input panel is a blank panel that can be populated with UI elements
 through a XML specification file. The specification supports text labels,
@@ -31,8 +35,19 @@ The following types of user input elements are supported:
 -   Combo Box
 -   Radio Buttons
 -   Check Box
+-   Password
+-   File
+-   Directory
 -   Rule Input Field
 -   Search Field
+
+Additionally visual elements can be added using the following types:
+
+-   Static Text
+-   Title
+-   Space
+-   Divider
+
 
 The way in which this panel conveys the user input to your application is
 through the variable substitution system. User input is not directly inserted
@@ -67,7 +82,7 @@ important to place the associated input panel in the process before the
 variables are used.
 
 
-At this point i would also like to mention that it is possible to hide select
+At this point I would also like to mention that it is possible to hide select
 elements on the panel or the panel altogether if certain packs are not
 selected. For this to work you must place this panel after the packs panel.
 One side effect of using this feature is that it is not possible to step back
@@ -80,6 +95,7 @@ user can not be allowed to go back to the packs panel.
 
 The Basic XML Structure
 ----------------------------------------
+
 
 The top level XML section is called ``<userInput>``. For most panels it does
 not make sense to present them more than once, however you might want to
@@ -114,7 +130,7 @@ default is ``left``.
 Concepts and XML Elements Common to All Fields
 ------------------------------------------------------------
 
-Before i dive into the details of defining the various UI elements i would
+Before we dive into the details of defining the various UI elements I would
 like to present XML elements and general concepts that apply throughout. This
 saves me a lot of work in writing and you a lot of repetitive reading and
 maybe a tree or two.
@@ -172,7 +188,7 @@ only supporting a single language. However, if you would like to separate
 your text definitions from the panel specification or if you need to support
 multiple languages you might want to use the ``id`` attribute instead to only
 specify an identifier. You can then add multiple XML files with the same name
-as this spec file (userInputSpec.xml) appended with an unserscore '_' and the
+as this spec file (userInputSpec.xml) appended with an underscore '_' and the
 the appropriate three letter ISO3 language code. The content of those files
 must conform to the specification for IzPack language packages. For more
 details on this topic see the chapter on language packages under advanced
@@ -210,7 +226,7 @@ the packs panel.
 Also, any number of ``<createForUnselectedPack name=''a pack name'' />`` tags
 can be added to the ``<panel>`` and ``<field>`` sections. This tag has only
 one attribute and no data. It works exactly like createForPack except that
-once added userinputpanel will appear for only NOT Selected packs. As
+once added user input panel will appear for only NOT Selected packs. As
 mentioned earlier, you need to make sure that the user input panel shows up
 after the packs panel for this feature to work.
 
@@ -219,7 +235,7 @@ There is a possibility to use variables in those elements where the text is
 supplied via ``txt`` attribute. This includes static fields and input fields 
 (spec, description). The text can contain unlimited number of variables that 
 will be substituted. Variable substitution also works with language packs, 
-just use variables in your language pack, and they will be still subsituted 
+just use variables in your language pack, and they will be still substituted 
 properly.
 
 
@@ -250,7 +266,7 @@ Example:
 
 
 If you have the following userInputSpec.xml and you want to internationalize
-``input.comment``, ``input.proxy``, ``input.port`` for english and french you
+``input.comment``, ``input.proxy``, ``input.port`` for English and French you
 have to create two files named userInputLang.xml_eng and
 userInputLang.xml_fra:
 
@@ -373,8 +389,10 @@ line of text or a an input field. A divider inserts the same amount of space
 but also draws a division line which can be either aligned at the top or
 bottom of the separation.
 
-``<field type="divider" />``
-``<field type="space" />``
+::
+
+		<field type="divider" />
+		<field type="space" />
 
 
 Text Input
@@ -420,11 +438,9 @@ is first presented.
 ::
 
     <field type="text" variable="textInput">
-      <description align="left" txt="A description for a text input
-      field"
-                   id="description.text"/>
-      <spec txt="Enter some text:" id="text.label" size="15" set="some
-      text"/>
+      <description align="left" txt="A description for a text input field"
+          id="description.text"/>
+      <spec txt="Enter some text:" id="text.label" size="15" set="some text"/>
     </field>
 
 Radio Buttons
@@ -487,13 +503,13 @@ The second button will be selected when the UI is first presented.
 ::
 
     <field type="radio" variable="radioSelection">
-      <description align="left" txt="This is a description for radio
-      buttons" id="description.radio"/>
+      <description align="left" txt="This is a description for radio buttons" 
+      		id="description.radio"/>
       <spec>
-      <choice txt="the first choice" id="radio.label.1" value="1 selected" />
-      <choice txt="the second choice" id="radio.label.2" value="2 selected" set="true" />
-      <choice txt="the third choice" id="radio.label.3" value="3 selected" />
-      <choice txt="the fourth choice" id="radio.label.4" value="4 selected" />
+	      <choice txt="the first choice" id="radio.label.1" value="1 selected" />
+	      <choice txt="the second choice" id="radio.label.2" value="2 selected" set="true" />
+	      <choice txt="the third choice" id="radio.label.3" value="3 selected" />
+	      <choice txt="the fourth choice" id="radio.label.4" value="4 selected" />
       </spec>
     </field>
 
@@ -569,13 +585,107 @@ accomplished by omitting the ``set`` attribute.
 
 ::
 
-    <field type="check" variable="chekSelection.1">
-      <description align="left" txt="This is a description for a check
-      box"
-                   id="description.check.1"/>
+    <field type="check" variable="checkSelection.1">
+      <description align="left" txt="This is a description for a check box" 
+      		id="description.check.1"/>
       <spec txt="check box 1" id="check.label.1" true="on" false="off"
-            set="false"/>
+          set="false"/>
     </field>
+
+
+Password Field
+--------------------
+
+The password field allows masked user input to accept password values.  Normally,
+a spec is created with 2 'pwd' elements to allow equality validation (below) and
+ensure the user typed the password correctly. The password field also allows 
+**multiple validators** (see below).  This is a very powerful feature for chaining
+validation operations based on user input. See the PasswordKeystoreValidator for
+an example.
+
+::
+
+        <field type="password" align="left" variable="the.password">
+          <spec>
+            <pwd txt="The Password:" size="25" set=""/>
+            <pwd txt="Retype Password:" size="25" set=""/>
+          </spec>
+        </field>
+
+
+File Field
+--------------------
+
+This field allows the user to select a file from the file system.  Text can be added before
+the selection or a static text element can be added to display above the selection box
+(a little more visually appealing). 
+
+::
+
+        <field type="file" align="left" variable="the.file">
+          <spec txt="" size="25" set=""/>
+        </field>
+
+::
+
+       <field type="staticText" align="left" txt="Existing SSL keystore to import:"/>
+        <field type="file" align="left" variable="existing.ssl.keystore">
+          <spec txt="" size="25" set=""/>
+        </field>
+
+.. image:: file-field.png
+
+Pressing 'Next' without a file selected show the following message:
+
+.. image:: file-field-error.png
+
+
+Messages for the file field can be customized by creating a custom lang pack and
+overriding the following values (attribute values wrapped for readability):
+
+::
+
+    <str id="UserInputPanel.file.nofile.message"   txt="You must select a valid file."/>
+    <str id="UserInputPanel.file.nofile.caption"   txt="No File Selected"/>
+    <str id="UserInputPanel.file.notfile.message"   txt="The file you have chosen either 
+    		does not exist or is not valid."/>
+    <str id="UserInputPanel.file.notfile.caption"   txt="Invalid File"/>
+
+
+Note: Mixing file fields with other fields that have text in front of 
+them can lead to formatting (layout) issues. Placing these types of elements on
+different panels can provide a much better user experience.
+
+
+Directory Field
+--------------------
+
+The directory field is essentially the same as the file field except the 
+field will ensure a directory is selected.
+
+
+::
+
+        <field type="dir" align="left" variable="existing.jboss.home">
+          <spec txt="" size="25" set="$INSTALL_PATH$FILE_SEPARATOR${jboss.version}"/>
+        </field>
+
+
+Messages for the directory field can be customized by creating a custom lang pack and
+overriding the following values (attribute values wrapped for readability):
+
+::
+
+    <str id="UserInputPanel.dir.nodirectory.message"   txt="You must select a valid directory."/>
+    <str id="UserInputPanel.dir.nodirectory.caption"   txt="No Directory Selected"/>
+    <str id="UserInputPanel.dir.notdirectory.message"   txt="The directory you have chosen 
+    		either does not exist or is not valid."/>
+    <str id="UserInputPanel.dir.notdirectory.caption"   txt="Invalid Directory"/>
+
+Note: Mixing directory fields with other fields that have text in front of 
+them can lead to formatting (layout) issues. Placing these types of elements on
+different panels can provide a much better user experience.
+
 
 Rule Input
 --------------------
@@ -749,7 +859,8 @@ Value                 Meaning
 ``processed``         The content is processed by Java code that you supply before replacing the variable. How to do this is described below.
 ===================== ======================================================================================================================================================
 
-Validating the Field Content
+
+Validating Field Content
 --------------------------------------------
 
 You can provide runtime validation for user input into a text field and rule field 
@@ -836,10 +947,86 @@ The example of using Regexp validator in text input field:
       </validator>
     </field>
 
+An example of using regexp validator in a password field 
+(attribute text wrapped for readability):
+
+::
+
+        <field type="password" align="left" variable="db.password">
+          <spec>
+            <pwd txt="DB Password:" size="25" set=""/>
+            <pwd txt="Retype Password:" size="25" set=""/>
+          </spec>
+          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" 
+          		txt="Both DB passwords must match." id="key for the error text"/>
+          <validator class="com.izforge.izpack.util.RegularExpressionValidator" 
+          		txt="Service password must begin with a character and be 8-20 
+          				 mixed-case characters, numbers, and special characters [#@!$_]." 
+          				 id="key for the error text">
+            <param name="pattern" value="^(?=[a-zA-Z])(?=.*[0-9])(?=.*[#@!$_])
+            		(?=.*[A-Z])(?=.*[a-z])(?!.*[^a-zA-Z0-9#@!$_])(?!.*\s).{8,20}$"/>
+          </validator>
+        </field>
+
 
 You can test your own regular expressions using the handy applet at
 http://jakarta.apache.org/regexp/applet.html.
 
+
+PasswordEqualityValidator
+''''''''''''''''''''''''''''''
+
+This validator uses a password field specification to compare the values in 
+each field for equality. Normally, this would be to ensure a password was 
+typed correctly before any other validation takes place.
+
+::
+
+		        <field type="password" align="left" variable="the.password">
+		          <spec>
+		            <pwd txt="The Password:" size="25" set=""/>
+		            <pwd txt="Retype Password:" size="25" set=""/>
+		          </spec>
+		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" 
+		          	txt="Both passwords must match." id="lang pack key for the error text"/>
+		        </field>
+
+
+PasswordKeystoreValidator
+''''''''''''''''''''''''''''''
+
+This validator uses the password field and parameters you send in from previous
+user input or predefined properties to open a keystore and optionally try to
+get a specified key.
+
+You must specify the parameter 'keystoreFile', and optionally 'keystoreType' 
+(defaults to JKS), 'keystoreAlias' (to check for existence of a key),
+and 'aliasPassword' (for trying to retrieve the key).
+
+An additional parameter 'skipValidation' can be set to 'true' in a checkbox and
+allow the validator framework to run, but not actually do the validation.
+
+Optionally checking the key password of multiple keys within a keystore
+requires the keystore password (if different from the key password) be set
+in the 'keystorePassword' parameter.
+
+::
+
+		        <field type="password" align="left" variable="keystore.password">
+		          <spec>
+		            <pwd txt="Keystore Password:" size="25" set=""/>
+		            <pwd txt="Retype Password:" size="25" set=""/>
+		          </spec>
+		          <validator class="com.izforge.izpack.util.PasswordEqualityValidator" 
+		          		txt="Both keystore passwords must match." id="key for the error text"/>
+		          <validator class="com.izforge.izpack.util.PasswordKeystoreValidator" 
+		          		txt="Could not validate keystore with password and alias provided." id="key for the error text">
+		            <param name="keystoreFile" value="${ssl.keystore}"/>
+		            <param name="keystoreType" value="${ssl.keystore.type}"/>
+		            <param name="keystoreAlias" value="${keystore.key.alias}"/>
+		            <param name="skipValidation" value="${skip.keystore.validation}"/>
+		          </validator>
+		        </field>
 
 
 
