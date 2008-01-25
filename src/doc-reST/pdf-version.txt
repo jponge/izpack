@@ -1,5 +1,5 @@
 /////////////////////
-IzPack documentation
+IzPack Documentation
 /////////////////////
 
 .. include:: preamble.txt
