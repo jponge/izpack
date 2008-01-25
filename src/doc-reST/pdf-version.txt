@@ -2,7 +2,7 @@
 IzPack documentation
 /////////////////////
 
-.. include:: preambule.txt
+.. include:: preamble.txt
 
 .. contents::
 
@@ -19,3 +19,5 @@ IzPack documentation
 .. include:: apache-license.txt
 .. include:: cc-license.txt
 .. include:: cookbooks.txt
+.. include:: sample-install-definition.txt
+.. include:: sample-userInputSpec.txt
