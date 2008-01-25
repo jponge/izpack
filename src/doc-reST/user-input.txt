@@ -1031,7 +1031,7 @@ in the 'keystorePassword' parameter.
 
 
 Creation Your Own Custom Validator
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'''''''''''''''''''''''''''''''''''''
 
 You can create your own custom Validator implementation simply by creating a
 new class which implements the ``com.izforge.izpack.panels.Validator``
