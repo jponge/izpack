@@ -579,4 +579,40 @@ in your ``packsLang.xml_fra`` resource) :
 If you want to add html markup to those strings, add ``.html`` at the end
 of the string id (after the group name).
 
+
+UserPathPanel
+--------------
+
+This panel allows the user to select a path similar to the installation path. 
+Like the installation path, this panel will allow the directory to be created
+if it does not already exist.  It can also be pre-loaded with a path and 
+set to only display if a certain pack is selected using the following variables:
+
+::
+
+    <variable name="UserPathPanelVariable" value="@{default.dest.dir.sql}"/>
+    <variable name="UserPathPanelDependsName" value="Install Database Server"/>
+
+Final path selection can be accessed using the variable "UserPathPanelVariable".
+
+Messages for the UserPathPanel can be customized by creating a custom lang pack and
+overriding the following values (attribute values wrapped for readability):
+
+::
+
+    <str id="UserPathPanel.required" txt="The chosen directory should exist."/>
+    <str id="UserPathPanel.info" txt="Select the path: "/>
+    <str id="UserPathPanel.browse" txt="Browse"/>
+    <str id="UserPathPanel.exists_warn" txt="The directory already exists! 
+    		Are you sure you want to install here and possibly overwrite existing files?"/>
+    <str id="UserPathPanel.empty_target" txt="You have not specified a target 
+    		location! Is this correct?"/>
+    <str id="UserPathPanel.createdir" txt="The target directory will be created: " />
+    <str id="UserPathPanel.nodir"  txt="This file is not a directory! Please 
+    		choose a directory!"/>
+    <str id="UserPathPanel.notwritable" txt="This directory can not be written! 
+    		Please choose another directory!"/>
+
+
+
 .. include:: include-bottom.inc
