@@ -287,6 +287,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         if (e.getValueIsAdjusting())
         {
             Integer checked = (Integer) packsModel.getValueAt(i, 0);
+            checked = (checked.intValue() == 0) ? Integer.valueOf(1) : Integer.valueOf(0);
             packsModel.setValueAt(checked, i, 0);
         }
         
