@@ -595,7 +595,6 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    /**
     * Updates a value for pack in PacksModel with data from a checkbox node
     * 
-    * @param id pack id
     * @param cbnode This is the checkbox node which contains model values
     */
    public void setModelValue(CheckBoxNode cbnode)

@@ -205,7 +205,6 @@ public class Log implements LogError, LogWarning, LogMessage
         // get the debug setting
         // ----------------------------------------------------
         String temp = System.getProperty(DEBUG_SWITCH);
-        System.out.println("temp: " + temp);
         if ((temp != null) && (temp.toUpperCase().equals("ON")))
         {
             debugActive = true;

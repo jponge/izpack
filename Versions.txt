@@ -101,6 +101,8 @@
 - eng.xml: Grammatical corrections, added UserPathPanel headline, messages, and captions,
   added UserInputPanel.dir.* messages and captions, added UserInputPanel.file.* messages and captions.
   (Need to add/test with alternative lang packs)  (Jeff Gordon)
+- PacksPanelBase: the packs would be selected / deselected on any list event (e.g., by navigating using the keys).
+  This funky behavior has been fixed (Julien Ponge).
 
 
   > 3.10.2 (build 2007.05.11)

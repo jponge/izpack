@@ -280,16 +280,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     public void valueChanged(ListSelectionEvent e)
     {
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-
         int i = packsTable.getSelectedRow();
         if (i < 0) return;
         
         // toggle the value stored in the packsModel
-        Integer checked = (Integer)packsModel.getValueAt(i, 0);
-        if (checked.intValue() == 0) {
-          packsModel.setValueAt(new Integer(1), i, 0);
-        } else if (checked.intValue() == 1) {
-          packsModel.setValueAt(new Integer(0), i, 0);
+        if (e.getValueIsAdjusting())
+        {
+            Integer checked = (Integer) packsModel.getValueAt(i, 0);
+            packsModel.setValueAt(checked, i, 0);
         }
         
         // Operations for the description
