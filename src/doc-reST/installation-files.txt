@@ -193,6 +193,12 @@ are available:
 -   ``shell`` - use this type if the substitution happens in a shell
     script. Because shell scripts use ``$variable`` themselves, an
     alternative variable marker is used: ``%variable`` or ``%{variable}``.
+-   ``at`` - use this type if the substitution must occure on files
+    where paramters are marked with leading AT characters. 
+    The example: ``@variable``.
+-   ``ant`` - use this type if the substitution must occure on files
+    where parameters are surrounded with AT characters (similar to ANT 
+    filters, hence the type name). The example: ``@variable@``.
 
 
 The IzPack Elements

@@ -79,7 +79,10 @@ public class VariableSubstitutor implements Serializable
     
     /** A constant for file type. Java file, where \ have to be escaped. */
     protected final static int TYPE_JAVA = 5;
-    
+
+    /** A constant for file type. Plain file with ANT-like variable markers, ie @param@ */
+    protected final static int TYPE_ANT = 6;
+
     /** PLAIN = "plain" */
     public final static String PLAIN = "plain";
 
@@ -96,6 +99,7 @@ public class VariableSubstitutor implements Serializable
         typeNameToConstantMap.put("xml", new Integer(TYPE_XML));
         typeNameToConstantMap.put("shell", new Integer(TYPE_SHELL));
         typeNameToConstantMap.put("at", new Integer(TYPE_AT));
+        typeNameToConstantMap.put("ant", new Integer(TYPE_ANT));
     }
 
     /**
@@ -274,16 +278,25 @@ public class VariableSubstitutor implements Serializable
         // Check the file type
         int t = getTypeConstant(type);
 
-        // determine character which starts a variable
+        // determine character which starts (and ends) a variable
         char variable_start = '$';
+        char variable_end = '\0';
         if (t == TYPE_SHELL)
             variable_start = '%';
-        else if (t == TYPE_AT) variable_start = '@';
+        else if (t == TYPE_AT) 
+            variable_start = '@';
+        else if (t == TYPE_ANT) 
+        {
+            variable_start = '@';
+            variable_end = '@';
+        }
+       
 
         int subs = 0;
 
         // Copy data and substitute variables
         int c = reader.read();
+        
         // Ignore BOM of UTF-8
         if( c == 0xEF )
         {
@@ -328,7 +341,7 @@ public class VariableSubstitutor implements Serializable
             StringBuffer nameBuffer = new StringBuffer();
             while (c != -1 && (braces && c != '}') || (c >= 'a' && c <= 'z')
                     || (c >= 'A' && c <= 'Z') || (braces && (c == '[') || (c == ']'))
-                    || (((c >= '0' && c <= '9') || c == '_') && nameBuffer.length() > 0))
+                    || (((c >= '0' && c <= '9') || c == '_' || c == '.') && nameBuffer.length() > 0))
             {
                 nameBuffer.append((char) c);
                 c = reader.read();
@@ -338,7 +351,9 @@ public class VariableSubstitutor implements Serializable
             // Check if a legal and defined variable found
             String varvalue = null;
 
-            if ((!braces || c == '}') && name.length() > 0)
+            if (( (!braces || c == '}') && 
+                  (!braces || variable_end == '\0' || variable_end == c )
+                ) && name.length() > 0)
             {
                 // check for environment variables
                 if (braces && name.startsWith("ENV[")
@@ -356,7 +371,7 @@ public class VariableSubstitutor implements Serializable
             if (varvalue != null)
             {
                 writer.write(escapeSpecialChars(varvalue, t));
-                if (braces) c = reader.read();
+                if (braces || variable_end != '\0') c = reader.read();
             }
             // ...or ignore it
             else
@@ -401,6 +416,7 @@ public class VariableSubstitutor implements Serializable
         case TYPE_PLAIN:
         case TYPE_SHELL:
         case TYPE_AT:
+        case TYPE_ANT:
             return str;
         case TYPE_JAVA_PROPERTIES:
         case TYPE_JAVA:
