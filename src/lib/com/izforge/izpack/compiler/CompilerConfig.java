@@ -1319,7 +1319,7 @@ public class CompilerConfig extends Thread
                     os = new BufferedOutputStream(outFile);
                     // and specify the substituted file to be added to the
                     // packager
-                    url = parsedFile.toURL();
+                    url = parsedFile.toURI().toURL();
                 }
 
                 if (parsexml)
@@ -1826,7 +1826,7 @@ public class CompilerConfig extends Thread
 
         try
         {
-            url = resource.toURL();
+            url = resource.toURI().toURL();
         }
         catch (MalformedURLException how)
         {
@@ -1862,7 +1862,7 @@ public class CompilerConfig extends Thread
 
             try
             {
-                url = resource.toURL();
+                url = resource.toURI().toURL();
             }
             catch (MalformedURLException how)
             {
@@ -2457,7 +2457,7 @@ public class CompilerConfig extends Thread
                     if (in != null) in.close();
                     if (outFile != null) outFile.close();
                 }
-                url = tf.toURL();
+                url = tf.toURI().toURL();
 
             }
             // Use the class loader of the interface as parent, else
