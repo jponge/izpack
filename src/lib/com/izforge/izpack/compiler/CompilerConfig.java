@@ -1298,7 +1298,9 @@ public class CompilerConfig extends Thread
             XMLElement res = (XMLElement) iter.next();
             String id = requireAttribute(res, "id");
             String src = requireAttribute(res, "src");
-            boolean substitute = validateYesNoAttribute(res, "substitute", NO);
+            // the parse attribute causes substitution to occur
+            boolean substitute = validateYesNoAttribute(res, "parse", NO);
+            // the parsexml attribute causes the xml document to be parsed 
             boolean parsexml = validateYesNoAttribute(res, "parsexml", NO);
 
             // basedir is not prepended if src is already an absolute path
