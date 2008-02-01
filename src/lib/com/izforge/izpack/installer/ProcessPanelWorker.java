@@ -412,9 +412,14 @@ public class ProcessPanelWorker implements Runnable
 
                     if (exitStatus != 0)
                     {
-                        if (this.handler.askQuestion("process execution failed",
+                        // New bahavior: make it fail
+                        this.handler.emitError("process execution failed", "");
+                        /*if (this.handler.askQuestion("process execution failed",
                                 "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
-                                AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO) { return false; }
+                                AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
+                        {
+                            return false;
+                        }*/
                     }
                 }
                 catch (InterruptedException ie)

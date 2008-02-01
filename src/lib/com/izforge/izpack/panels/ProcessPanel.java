@@ -161,7 +161,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
         processLabel.setEnabled(false);
 
         validated = true;
-        idata.installSuccess = true;
+        idata.installSuccess = worker.getResult();
         if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) parent.unlockNextButton();
     }
 

@@ -104,6 +104,7 @@
 - PacksPanelBase: the packs would be selected / deselected on any list event (e.g., by navigating using the keys).
   This funky behavior has been fixed (Julien Ponge).
 - Changed File.toURL() to File.toURI().toURL() to get rid of deprecation messages in Java 6. (Jeff Gordon)
+- ProcessPanel: the installation success is set to false in case an error has occurred (Julien Ponge)
 
   > 3.10.2 (build 2007.05.11)
 
