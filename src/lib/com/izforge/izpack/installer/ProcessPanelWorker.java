@@ -413,7 +413,8 @@ public class ProcessPanelWorker implements Runnable
                     if (exitStatus != 0)
                     {
                         // New bahavior: make it fail
-                        this.handler.emitError("process execution failed", "");
+                        this.handler.emitError("Process execution failure", "The process has returned an error.");
+                        return false;
                         /*if (this.handler.askQuestion("process execution failed",
                                 "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
                                 AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
