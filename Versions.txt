@@ -105,6 +105,7 @@
   This funky behavior has been fixed (Julien Ponge).
 - Changed File.toURL() to File.toURI().toURL() to get rid of deprecation messages in Java 6. (Jeff Gordon)
 - ProcessPanel: the installation success is set to false in case an error has occurred (Julien Ponge)
+- VariableSubstitutor: parameters can also contain dashes (without need to use braces) (Piotr Skowronek)
 
   > 3.10.2 (build 2007.05.11)
 
