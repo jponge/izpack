@@ -31,7 +31,7 @@
     <str id="installer.next" txt="Avanti"/>
     <str id="installer.prev" txt="Indietro"/>
     <str id="installer.quit" txt="Esci"/>
-    <str id="installer.madewith" txt="(Creato con IzPack - http://izpack.org/)"/
+    <str id="installer.madewith" txt="(Creato con IzPack - http://izpack.org/)" />
     <str id="installer.quit.title" txt="Siuri di voler uscire ?"/>
     <str id="installer.quit.message" txt="Verrà interrotta l'installazione !"/>
     <str id="installer.warning" txt="Avvertimento !"/>
