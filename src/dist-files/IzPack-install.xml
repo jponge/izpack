@@ -109,7 +109,7 @@
         <langpack iso3="scg"/>
         <langpack iso3="cze"/>
         <langpack iso3="kor"/>
-        <langpack iso3="gal"/>
+        <langpack iso3="glg"/>
     </locale>
 
     <!-- The resources needed by the various panels -->
