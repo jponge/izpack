@@ -56,6 +56,7 @@ def copy_files(resources):
 		print('    ' + pic)
 		shutil.copyfile(pic, 'html/' + pic)
 		shutil.copyfile(pic, 'pdf/' + pic)
+		shutil.copyfile('picins.sty', 'pdf/picins.sty')
 
 def generate_html(rest_files):
 	print('Generating html...')
@@ -84,7 +85,7 @@ def compile_latex():
 	for i in xrange(1,4):
 		print('    pdflatex pass #%i' % i)
 		os.system('pdflatex --interaction=batchmode manual.tex')
-		os.chdir('..')
+	os.chdir('..')
 
 if __name__ == '__main__':
 	parser = OptionParser()
