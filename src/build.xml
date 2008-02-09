@@ -1175,7 +1175,7 @@ Fixing linefeeds for several files in:
          ================================= -->
     <target name="src.tar.gz"  description="--> creates a src.tar.gz ">
       <mkdir dir="${basedir}/_src${dist.subdir}"/>
-      <property name="src.tar.gz" value="${basedir}/_src${dist.subdir}/${product}.src.${ver}.${rel}.tar.gz"/>
+      <property name="src.tar.gz" value="${basedir}/_src${dist.subdir}/${product}-src-${ver}.${rel}.tar.gz"/>
       <tar compression="gzip" destfile="${src.tar.gz}" basedir="${basedir}" excludes="_src${dist.subdir}/**, _dist/**, _build/**, bin/panels/**, bin/customActions/**, doc/izpack/**, eclipse-bin/**, lib/standalone-compiler.jar, lib/izevent.jar, lib/uninstaller*, lib/installer.jar, lib/compiler.jar"/>
     </target>
 
