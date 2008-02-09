@@ -2,7 +2,7 @@
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
  * 
- * http://izpack.org/ http://developer.berlios.de/projects/izpack/
+ * http://izpack.org/ http://izpack.codehaus.org/
  * 
  * Copyright 2005 Klaus Bartz
  * 

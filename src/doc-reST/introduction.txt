@@ -99,15 +99,9 @@ any form :
 -   writing manuals
 -   ... anything else you like :-)
 
-The official IzPack homepage is located at http://izpack.org/. The
-IzPack developer services (mailing-lists, SVN, patches manager, bugs tracker,
-...) are generously hosted by BerliOS. The IzPack BerliOS section is located
-at http://developer.berlios.de/projects/izpack/. Feel free to use
-these services. In particular, there are two mailing-lists:
-
--   ``izpack-devel``: used for the IzPack development
--   ``izpack-users``: general users lounge, great to get some help with
-    IzPack.
+The official IzPack homepage is located at http://izpack.org/.
+The IzPack developer services are generously hosted by Codehaus at http://izpack.codehaus.org/.
+The project is grateful to the BerliOS community for havinh hosted the services in the past.
 
 
 3rd party code used in IzPack

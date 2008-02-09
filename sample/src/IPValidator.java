@@ -2,7 +2,7 @@
  * IzPack - Copyright 2001-2005 Julien Ponge, All Rights Reserved.
  * 
  * http://izpack.org/
- * http://developer.berlios.de/projects/izpack/
+ * http://izpack.codehaus.org/
  * 
  * Copyright 2003 Elmar Grom
  * 

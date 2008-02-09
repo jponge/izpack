@@ -1,7 +1,7 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
  * 
- * http://www.izforge.com/izpack/ http://developer.berlios.de/projects/izpack/
+ * http://www.izforge.com/izpack/ http://izpack.codehaus.org/
  * 
  * Copyright 2007 Dennis Reil
  * 
