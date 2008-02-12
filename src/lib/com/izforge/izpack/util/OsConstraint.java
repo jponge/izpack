@@ -40,14 +40,14 @@ import java.util.List;
 public class OsConstraint
         implements java.io.Serializable
 {
-    //~ Static variables/initializers ·····················································································
+    //~ Static variables/initializers 
 
     /**
      *
      */
     private static final long serialVersionUID = 3762248660406450488L;
 
-    //~ Instance variables ································································································
+    //~ Instance variables 
 
     /**
      * OS architecture from java system properties
@@ -74,7 +74,7 @@ public class OsConstraint
      */
     private String version;
 
-    //~ Constructors ······································································································
+    //~ Constructors 
 
     /**
      * Constructs a new instance. Please remember, MacOSX belongs to Unix family.
@@ -125,7 +125,7 @@ public class OsConstraint
         this(family, name, version, arch, null);
     }    // end OsConstraint()
 
-    //~ Methods ···········································································································
+    //~ Methods 
 
     /**
      * Matches OS specification in this class against current system properties.

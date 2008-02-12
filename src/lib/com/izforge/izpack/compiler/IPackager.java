@@ -196,7 +196,7 @@ public interface IPackager
     
     /**
      * Returns a map of dynamically refreshed variables
-     * @return
+     * @return the map
      */
     public abstract Map getDynamicVariables();
     

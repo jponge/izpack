@@ -169,7 +169,6 @@ public class FileUtil
    * @param   url     The URL of the file for which date and time will be returned.
    * @return  Returns long value which is the date and time of the file. If any error
    *          occures returns -1 (=no file date and time available).
-   * @author  Ari Voutilainen, ari(dot)voutilainen(at) iki(dot)fi
    */
   public static long getFileDateTime(URL url)
   {

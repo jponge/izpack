@@ -391,7 +391,6 @@ public class Packager extends PackagerBase
      * TODO: it would be useful to be able to keep signature information from signed jar files, can
      * we combine manifests and still have their content signed?
      * 
-     * @see #copyStream(InputStream, OutputStream)
      */
     private void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out) throws IOException
     {
@@ -405,7 +404,6 @@ public class Packager extends PackagerBase
      * TODO: it would be useful to be able to keep signature information from signed jar files, can
      * we combine manifests and still have their content signed?
      * 
-     * @see #copyStream(InputStream, OutputStream)
      */
     private void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out,
             List files) 

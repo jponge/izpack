@@ -89,7 +89,7 @@ public class WebRepositoryAccessor
    /**
     * Get the list of the packs from the remore install.xml
     * 
-    * @return
+    * @return the packs list
     */
    public ArrayList getOnlinePacks()
    {
@@ -104,7 +104,7 @@ public class WebRepositoryAccessor
     * Returns the contents of a file at url as a string (must be a text file)
     * 
     * @param url
-    * @return
+    * @return the content
     */
    private String stringFromURL(String url)
    {
@@ -164,7 +164,7 @@ public class WebRepositoryAccessor
    /**
     * Parse install.xml and return the list of packs
     * 
-    * @return
+    * @return the list of packs
     */
    private ArrayList parsePacks()
    {
@@ -218,7 +218,7 @@ public class WebRepositoryAccessor
     * to see the download progress there).
     * 
     * @param url
-    * @return
+    * @return the url
     */
    public static String getCachedUrl(String url, String tempFolder) throws Exception
    {

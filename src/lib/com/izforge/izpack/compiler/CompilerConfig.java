@@ -1162,7 +1162,7 @@ public class CompilerConfig extends Thread
     /**
      * Add files in an archive to a pack
      * @param archive the archive file to unpack
-     * @parm targetdir the target directory where the content of the archive will be installed
+     * @param targetdir the target directory where the content of the archive will be installed
      * @param osList The target OS constraints.
      * @param override Overriding behaviour.
      * @param pack Pack to be packed into

@@ -483,7 +483,6 @@ public class Unpacker extends UnpackerBase
     /**
      * Returns a stream to a pack, location depending on if it's web based.
      * 
-     * @param n The pack number.
      * @param uninstall true if pack must be uninstalled
      * @return The stream or null if it could not be found.
      * @exception Exception Description of the Exception
