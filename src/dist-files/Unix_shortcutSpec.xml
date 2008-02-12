@@ -39,7 +39,7 @@
 
 <shortcuts>
 
-  <programGroup defaultName="IzForge/IzPack@build.number@" location="applications"/>
+  <programGroup defaultName="IzPack@build.number@" location="applications"/>
 
 
     <!-- Disabled since there is no Frontend
@@ -65,7 +65,7 @@
    </shortcut -->
 
    <shortcut
-     name="IzPack@ver@ XHtml Documentation"
+     name="IzPack@ver@ Html Documentation"
      programGroup="yes"
      desktop="yes"
      applications="no"
@@ -73,17 +73,17 @@
      startup="no"
      target="$INSTALL_PATH/bin/start.sh"
      workingDirectory=""
-     commandLine="$INSTALL_PATH/doc/izpack/xhtml/izpack-doc.html"
+     commandLine="$INSTALL_PATH/doc/izpack/html/index.html"
      initialState="noShow"
      iconFile="help"
      iconIndex="0" 
-     url="$INSTALL_PATH/doc/izpack/xhtml/index.html"                                
+     url="$INSTALL_PATH/doc/izpack/html/index.html"                                
      type="Application"
      encoding="UTF-8" 
    createForAll="true"  
      description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) user documentation">
      
-     <createForPack name="XHTML Documentation"/>
+     <createForPack name="HTML Documentation"/>
    </shortcut>
   
      <shortcut
@@ -105,7 +105,7 @@
    createForAll="true"  
      description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) Java documentation">
      
-     <createForPack name="Java Documentation"/>
+     <createForPack name="Javadocs Documentation"/>
    </shortcut>
   
    <shortcut
@@ -138,7 +138,7 @@
      startup="no"
      target="acroread"
      workingDirectory=""
-     commandLine="$INSTALL_PATH/doc/izpack/pdf/izpack-doc.pdf"
+     commandLine="$INSTALL_PATH/doc/izpack/pdf/manual.pdf"
      initialState="noShow"
      iconFile="acroread"
      iconIndex="0"                                   

@@ -4,7 +4,7 @@
 
   <skipIfNotSupported />
 
-  <programGroup defaultName="IzForge\IzPack@build.number@" location="applications"/>
+  <programGroup defaultName="IzPack@build.number@" location="applications"/>
 
 <!--  
   <shortcut
@@ -27,23 +27,23 @@
 -->
 
    <shortcut
-     name="IzPack@ver@ XHtml Documentation"
+     name="IzPack@ver@ Html Documentation"
      programGroup="yes"
-     desktop="yes"
+     desktop="no"
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH\doc\izpack\xhtml\izpack-doc.html"
+     target="$INSTALL_PATH\doc\izpack\html\index.html"
      commandLine=""
      description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) user documentation">
           
-     <createForPack name="XHTML Documentation" />
+     <createForPack name="HTML Documentation" />
    </shortcut>
   
    <shortcut
      name="IzPack@ver@ Java Documentation"
      programGroup="yes"
-     desktop="yes"
+     desktop="no"
      applications="no"
      startMenu="no"
      startup="no"
@@ -57,7 +57,7 @@
    <shortcut
      name="NanoXML Documentation"
      programGroup="yes"
-     desktop="yes"
+     desktop="no"
      applications="no"
      startMenu="no"
      startup="no"
@@ -77,7 +77,7 @@
      applications="no"
      startMenu="no"
      startup="no"
-     target="$INSTALL_PATH\doc\izpack\pdf\izpack-doc.pdf"
+     target="$INSTALL_PATH\doc\izpack\pdf\manual.pdf"
      commandLine=""
 	   iconFile="%SystemRoot%\system32\SHELL32.dll"
      iconIndex="23" 
