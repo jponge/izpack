@@ -38,7 +38,7 @@ public abstract class UnpackerFactory
      * @param unpackerclassname
      * @param installdata
      * @param listener
-     * @return
+     * @return the unpacker
      */
     public static IUnpacker getUnpacker(String unpackerclassname, AutomatedInstallData installdata, AbstractUIProgressHandler listener){
         IUnpacker unpackerobj = null;

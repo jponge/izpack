@@ -30,8 +30,8 @@ public class PackagerFactory
 {
     /**
      * Returns a new instantiation of the specified packager
-     * @param classname
-     * @return
+     * @param classname the class name
+     * @return a new packager instance
      * @throws InstantiationException
      * @throws IllegalAccessException
      * @throws ClassNotFoundException

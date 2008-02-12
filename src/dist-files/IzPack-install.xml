@@ -41,7 +41,7 @@
             <author email="" name="Loic Bardon (contributor)" />
             <author email="" name="Roberto Boriotti (contributor)" />
             <author email="" name="Kerekes Balazs (contributor)" />
-	        <author email="" name="Xabier Cancela (contributor)" />
+            <author email="" name="Xabier Cancela (contributor)" />
             <author email="" name="Andreas Guenther (contributor)" />
             <author email="" name="Michael Hagedorn (contributor)" />
             <author email="" name="Dick Hollenbeck (contributor)" />
@@ -53,9 +53,6 @@
             <author email="" name="Ari Voutilainen (contributor)" />
             <author email="" name="Pascal Wallem (contributor)" />
             <author email="" name="Gilles Wiart (contributor)" />
-            
-            <author email=""
-                    name="... the (many) other developers and contributors to the previous releases!"/>
         </authors>
         <url>http://izpack.org/</url>
         <javaversion>1.4</javaversion>
@@ -64,10 +61,11 @@
     </info>
 
     <!-- Flexible and in the screen proportions -->
-    <guiprefs height="650" resizable="yes" width="866">
-        <laf name="looks" >
-            <os family="unix"/>
-        </laf>
+    <guiprefs height="700" resizable="yes" width="870">
+	<laf name="looks">
+            <os family="unix" />
+	    <param name="variant" value="plastic3D" />
+	</laf>
         <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
     	<modifier key="layoutAnchor" value="CENTER"/>
     	<modifier key="headingPanelCounter" value="progressbar"/>

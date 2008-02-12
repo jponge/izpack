@@ -1,6 +1,6 @@
 [ The list of the different public versions of IzPack ]
 
-  > 3.11.0 (TBD)
+  > 3.11.0 (build 2008.02.12)
 
 - Added ignore as possible value for failure argument in executables (Dennis Reil)
 - Added Conditional expressions (Dennis Reil)

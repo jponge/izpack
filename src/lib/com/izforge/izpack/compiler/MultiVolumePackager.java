@@ -405,7 +405,7 @@ public class MultiVolumePackager extends PackagerBase
                     if (bytesWritten != pf.length()) { throw new IOException(
                             "File size mismatch when reading " + file); }
                     inStream.close();
-                    // keine backreferences möglich
+                    // keine backreferences mglich
                     // storedFiles.put(file, new long[] { packNumber, pos});
                 }
 

@@ -78,7 +78,7 @@ public class FileSpanningInputStream extends InputStream
     /**
      * checks if the MagicNumber of this stream is valid. The stream has to be opened right before.
      * 
-     * @return
+     * @return wether the magic number is valid or not
      * @throws IOException
      */
     private boolean isMagicNumberValid() throws IOException

@@ -89,7 +89,7 @@ public class TextInputField extends JComponent implements ProcessingClient
      * Constructs a text input field.
      *
      * @param set A default value for field.
-     * @param suze The size of the field.
+     * @param size The size of the field.
      * @param validator A string that specifies a class to perform validation services. The string
      * must completely identify the class, so that it can be instantiated. The class must implement
      * the <code>RuleValidator</code> interface. If an attempt to instantiate this class fails, no

@@ -61,13 +61,9 @@ public class PasswordGroup implements ProcessingClient
     /**
      * Creates a password group to manage one or more password fields.
      * 
-     * @param validator A string that specifies a class that provides a password validation service.
-     * The class must implement the <code>Validator</code> interface. If an attempt to instantiate
-     * this class fails, no validation will be performed.
-     * @param processor A string that specifies a class that provides a password processing service,
-     * such as password encryption. The class must implement the <code>Processor</code> interface.
-     * If an attempt to instantiate this class fails, no processing will be performed. Insted the
-     * contents of the first field will be returned.
+     * @param idata the installation data
+     * @param validatorContainers the validator containers
+     * @param processor the processor
      */
     /*--------------------------------------------------------------------------*/
     public PasswordGroup(InstallData idata, List validatorContainers, String processor)

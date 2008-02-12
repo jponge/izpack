@@ -264,7 +264,7 @@ public class InstallerBase
     /** 
      * just plain wrong in case the programfiles are not stored where the developer expects them.
      * E.g. in custom installations of large companies or if used internationalized version of windows with a language pack.
-     * @return
+     * @return the program files path
      */
     private String buildWindowsDefaultPathFromProps()
     {

@@ -96,8 +96,6 @@ public class DataCheckPanel extends IzPanel
 	 * When the panel is made active, call the printDebugInfo method.
      * 
 	 * @see com.izforge.izpack.installer.IzPanel#panelActivate()
-     * @param none
-     * @return void
 	 */
 	public void panelActivate()
 	{
@@ -132,8 +130,6 @@ public class DataCheckPanel extends IzPanel
      * Print list of variables names and value, as well as the list
      * of packages and their status (selected or not).
      * 
-     * @param none
-     * @return void
      */
     private void printDebugInfo()
     {

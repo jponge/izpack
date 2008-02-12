@@ -846,8 +846,6 @@ public class CompileWorker implements Runnable
          * 
          * @param executor The executor, only used when using external compiler.
          * @param output The output from the compiler ([0] = stdout, [1] = stderr)
-         * @param full_cmdline The command line, first argument is the compiler.
-         * 
          * @return The result of the compilation.
          */
         private int runCompiler(FileExecutor executor, String[] output, List cmdline)
