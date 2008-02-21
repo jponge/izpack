@@ -137,7 +137,7 @@ public class LocaleDatabase extends TreeMap
             }
         }
 
-        return MessageFormat.format(getString(key), variables);
+        return MessageFormat.format(getString(key), new Object[]{variables});
     }
 
 }

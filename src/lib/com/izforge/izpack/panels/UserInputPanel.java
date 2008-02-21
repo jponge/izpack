@@ -2490,15 +2490,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
         if ((filename != null) && (filename.length() > 0))
         {
             tooltiptext.append(MessageFormat.format(parentFrame.langpack
-                    .getString("UserInputPanel.search.location"), new String[] { filename}));
+                    .getString("UserInputPanel.search.location"), new Object[]{new String[]{filename}}));
         }
 
         boolean showAutodetect = (check_filename != null) && (check_filename.length() > 0);
         if (showAutodetect)
         {
             tooltiptext.append(MessageFormat.format(parentFrame.langpack
-                    .getString("UserInputPanel.search.location.checkedfile"),
-                    new String[] { check_filename}));
+                    .getString("UserInputPanel.search.location.checkedfile"), new Object[]{new String[]{check_filename}}));
         }
 
         if (tooltiptext.length() > 0) combobox.setToolTipText(tooltiptext.toString());
