@@ -1330,7 +1330,7 @@ public class CompilerConfig extends Thread
                     // this constructor will open the specified url (this is
                     // why the InputStream is not handled in a similar manner
                     // to the OutputStream)
-                    IXMLReader reader = new StdXMLReader(null, url.toExternalForm());
+                    IXMLReader reader = new StdXMLReader(null, originalUrl.toExternalForm());
                     parser.setReader(reader);
                     XMLElement xml = (XMLElement) parser.parse();
 
