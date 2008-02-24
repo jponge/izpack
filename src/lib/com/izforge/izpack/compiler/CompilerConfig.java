@@ -1734,6 +1734,7 @@ public class CompilerConfig extends Thread
             File file = new File(filename).getAbsoluteFile();
             if (!file.canRead()) throw new CompilerException("Invalid file: " + file);
             reader = new StdXMLReader(new FileInputStream(filename));
+            reader.setSystemID(file.toURL().toExternalForm());
             // add izpack built in property
             compiler.setProperty("izpack.file", file.toString());
         }

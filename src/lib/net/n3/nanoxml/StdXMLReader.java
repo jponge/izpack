@@ -364,7 +364,6 @@ public class StdXMLReader implements IXMLReader
         {
             // never happens
         }
-
         this.startNewStream(new StringReader(charsRead.toString()));
     }
 
@@ -527,6 +526,10 @@ public class StdXMLReader implements IXMLReader
     public void setSystemID(String systemID) throws MalformedURLException
     {
         this.currentSystemID = new URL(this.currentSystemID, systemID);
+        if (! this.systemIds.isEmpty()) {
+            this.systemIds.pop();
+            this.systemIds.push(this.currentSystemID);
+        }
     }
 
     /**
