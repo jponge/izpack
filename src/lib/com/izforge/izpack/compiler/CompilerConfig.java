@@ -1522,10 +1522,12 @@ public class CompilerConfig extends Thread
         XMLElement slfPath = root.getFirstChildNamed("summarylogfilepath");
         if (slfPath != null) info.setSummaryLogFilePath(requireContent(slfPath));
 
-        XMLElement writeInstallInfo = root.getFirstChildNamed("writeinstallationinformation");
-        
-        String writeInstallInfoString = requireContent(writeInstallInfo);        
-        info.setWriteInstallationInformation(validateYesNo(writeInstallInfoString));
+        XMLElement writeInstallInfo = root.getFirstChildNamed("writeinstallationinformation");        
+        if (writeInstallInfo != null)
+        {
+            String writeInstallInfoString = requireContent(writeInstallInfo);
+            info.setWriteInstallationInformation(validateYesNo(writeInstallInfoString));
+        }
         
         // look for an unpacker class
         String unpackerclass = compiler.getProperty("UNPACKER_CLASS");
