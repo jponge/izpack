@@ -286,11 +286,12 @@ public abstract class UnpackerBase implements IUnpacker
     private boolean fileMatchesOnePattern(String filename, ArrayList<RE> patterns)
     {
         // first check whether any include matches
-        for (Iterator<RE> inc_it = patterns.iterator(); inc_it.hasNext();)
+        for (RE pattern : patterns)
         {
-            RE pattern = inc_it.next();
-
-            if (pattern.match(filename)) { return true; }
+            if (pattern.match(filename))
+            {
+                return true;
+            }
         }
 
         return false;
@@ -306,10 +307,8 @@ public abstract class UnpackerBase implements IUnpacker
     {
         ArrayList<RE> result = new ArrayList<RE>();
 
-        for (Iterator<String> iter = list.iterator(); iter.hasNext();)
+        for (String element : list)
         {
-            String element = iter.next();
-
             if ((element != null) && (element.length() > 0))
             {
                 // substitute variables in the pattern
@@ -349,48 +348,54 @@ public abstract class UnpackerBase implements IUnpacker
                         lookahead = -1;
                     }
                     else
+                    {
                         c = element.charAt(pos++);
+                    }
 
                     switch (c)
                     {
-                    case '/': {
-                        element_re.append(File.separator);
-                        break;
-                    }
-                    // escape backslash and dot
-                    case '\\':
-                    case '.': {
-                        element_re.append("\\");
-                        element_re.append(c);
-                        break;
-                    }
-                    case '*': {
-                        if (pos == element.length())
+                        case '/':
                         {
-                            element_re.append("[^").append(File.separator).append("]*");
+                            element_re.append(File.separator);
                             break;
                         }
-
-                        lookahead = element.charAt(pos++);
-
-                        // check for "**"
-                        if (lookahead == '*')
+                        // escape backslash and dot
+                        case '\\':
+                        case '.':
                         {
-                            element_re.append(".*");
-                            // consume second star
-                            lookahead = -1;
+                            element_re.append("\\");
+                            element_re.append(c);
+                            break;
                         }
-                        else
+                        case '*':
                         {
-                            element_re.append("[^").append(File.separator).append("]*");
-                            // lookahead stays there
+                            if (pos == element.length())
+                            {
+                                element_re.append("[^").append(File.separator).append("]*");
+                                break;
+                            }
+
+                            lookahead = element.charAt(pos++);
+
+                            // check for "**"
+                            if (lookahead == '*')
+                            {
+                                element_re.append(".*");
+                                // consume second star
+                                lookahead = -1;
+                            }
+                            else
+                            {
+                                element_re.append("[^").append(File.separator).append("]*");
+                                // lookahead stays there
+                            }
+                            break;
                         }
-                        break;
-                    }
-                    default: {
-                        element_re.append(c);
-                        break;
-                    }
+                        default:
+                        {
+                            element_re.append(c);
+                            break;
+                        }
                     } // switch
 
                 }
@@ -639,10 +644,13 @@ public abstract class UnpackerBase implements IUnpacker
         // We copy the uninstallers
         HashSet<String> doubles = new HashSet<String>();
 
-        for (int i = 0; i < in.length; ++i)
+        for (InputStream anIn : in)
         {
-            if (in[i] == null) continue;
-            ZipInputStream inRes = new ZipInputStream(in[i]);
+            if (anIn == null)
+            {
+                continue;
+            }
+            ZipInputStream inRes = new ZipInputStream(anIn);
             ZipEntry zentry = inRes.getNextEntry();
             while (zentry != null)
             {
@@ -712,15 +720,17 @@ public abstract class UnpackerBase implements IUnpacker
         this.absolute_installpath = new File(idata.getInstallPath()).getAbsoluteFile();
 
         // at first, collect all patterns
-        for (Iterator<UpdateCheck> iter = updatechecks.iterator(); iter.hasNext();)
+        for (UpdateCheck uc : updatechecks)
         {
-            UpdateCheck uc = iter.next();
-
             if (uc.includesList != null)
+            {
                 include_patterns.addAll(preparePatterns(uc.includesList, recompiler));
+            }
 
             if (uc.excludesList != null)
+            {
                 exclude_patterns.addAll(preparePatterns(uc.excludesList, recompiler));
+            }
         }
 
         // do nothing if no update checks were specified
@@ -732,10 +742,8 @@ public abstract class UnpackerBase implements IUnpacker
         // use a treeset for fast access
         TreeSet<String> installed_files = new TreeSet<String>();
 
-        for (Iterator<String> if_it = this.udata.getInstalledFilesList().iterator(); if_it.hasNext();)
+        for (String fname : this.udata.getInstalledFilesList())
         {
-            String fname = if_it.next();
-
             File f = new File(fname);
 
             if (!f.isAbsolute())
@@ -767,14 +775,15 @@ public abstract class UnpackerBase implements IUnpacker
 
                 if (files == null) { throw new IOException(f.getPath() + "is not a directory!"); }
 
-                for (int i = 0; i < files.length; i++)
+                for (File newf : files)
                 {
-                    File newf = files[i];
-
                     String newfname = newf.getPath();
 
                     // skip files we just installed
-                    if (installed_files.contains(newfname)) continue;
+                    if (installed_files.contains(newfname))
+                    {
+                        continue;
+                    }
 
                     if (fileMatchesOnePattern(newfname, include_patterns)
                             && (!fileMatchesOnePattern(newfname, exclude_patterns)))
@@ -795,10 +804,8 @@ public abstract class UnpackerBase implements IUnpacker
             this.handler.emitError("error while performing update checks", e.toString());
         }
 
-        for (Iterator<File> f_it = files_to_delete.iterator(); f_it.hasNext();)
+        for (File f : files_to_delete)
         {
-            File f = f_it.next();
-
             if (!f.isDirectory())
             // skip directories - they cannot be removed safely yet
             {
@@ -837,9 +844,9 @@ public abstract class UnpackerBase implements IUnpacker
             ObjectInputStream oin = new ObjectInputStream(fin);
             
             List packs = (List) oin.readObject();
-            for (Iterator iterator = packs.iterator(); iterator.hasNext();)
+            for (Object pack1 : packs)
             {
-                Pack pack = (Pack) iterator.next();
+                Pack pack = (Pack) pack1;
                 installedpacks.add(pack);
             }
             oin.close();

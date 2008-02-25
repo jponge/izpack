@@ -537,9 +537,8 @@ public class Compiler extends Thread
         // Because we use package names in the configuration file we assosiate
         // the names with the objects
         Map<String, PackInfo> names = new HashMap<String, PackInfo>();
-        for (int i = 0; i < packs.size(); i++)
+        for (PackInfo pack : packs)
         {
-            PackInfo pack = packs.get(i);
             names.put(pack.getPack().name, pack);
         }
         int result = dfs(packs, names);
@@ -561,12 +560,14 @@ public class Compiler extends Thread
     private int dfs(List<PackInfo> packs, Map<String, PackInfo> names)
     {
         Map<Edge, Integer> edges = new HashMap<Edge, Integer>();
-        for (int i = 0; i < packs.size(); i++)
+        for (PackInfo pack : packs)
         {
-            PackInfo pack = packs.get(i);
             if (pack.colour == PackInfo.WHITE)
             {
-                if (dfsVisit(pack, names, edges) != 0) return -1;
+                if (dfsVisit(pack, names, edges) != 0)
+                {
+                    return -1;
+                }
             }
 
         }
@@ -581,11 +582,13 @@ public class Compiler extends Thread
     private int checkBackEdges(Map<Edge, Integer> edges)
     {
         Set<Edge> keys = edges.keySet();
-        for (Iterator<Edge> iterator = keys.iterator(); iterator.hasNext();)
+        for (final Edge key : keys)
         {
-            final Object key = iterator.next();
             int color = edges.get(key);
-            if (color == PackInfo.GREY) { return -2; }
+            if (color == PackInfo.GREY)
+            {
+                return -2;
+            }
         }
         return 0;
 
@@ -614,23 +617,28 @@ public class Compiler extends Thread
         List<String> deps = u.getDependencies();
         if (deps != null)
         {
-            for (int i = 0; i < deps.size(); i++)
+            for (String name : deps)
             {
-                String name = deps.get(i);
                 PackInfo v = names.get(name);
                 if (v == null)
                 {
-                    System.out.println("Failed to find dependency: "+name);
+                    System.out.println("Failed to find dependency: " + name);
                     return -1;
                 }
                 Edge edge = new Edge(u, v);
-                if (edges.get(edge) == null) edges.put(edge, v.colour);
+                if (edges.get(edge) == null)
+                {
+                    edges.put(edge, v.colour);
+                }
 
                 if (v.colour == PackInfo.WHITE)
                 {
 
                     final int result = dfsVisit(v, names, edges);
-                    if (result != 0) return result;
+                    if (result != 0)
+                    {
+                        return result;
+                    }
                 }
             }
         }

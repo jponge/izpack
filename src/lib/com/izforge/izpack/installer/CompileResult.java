@@ -188,10 +188,13 @@ public class CompileResult
     public String getCmdline()
     {
         StringBuffer sb = new StringBuffer();
-        for (Iterator<String> cmdIt = this.cmdline.iterator(); cmdIt.hasNext();)
+        for (String aCmdline : this.cmdline)
         {
-            if (sb.length() > 0) sb.append(' ');
-            sb.append(cmdIt.next());
+            if (sb.length() > 0)
+            {
+                sb.append(' ');
+            }
+            sb.append(aCmdline);
         }
         return sb.toString();
     }

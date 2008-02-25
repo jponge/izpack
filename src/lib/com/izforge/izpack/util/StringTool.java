@@ -178,9 +178,9 @@ public class StringTool
     public static String stringArrayToSpaceSeparatedString(String[] args)
     {
         String result = "";
-        for (int idx = 0; idx < args.length; idx++)
+        for (String arg : args)
         {
-            result += args[idx] + " ";
+            result += arg + " ";
         }
         return result;
     }
@@ -222,9 +222,9 @@ public class StringTool
 
         StringBuffer temp = new StringBuffer();
 
-        for (int idx = 0; idx < aStringList.size(); idx++)
+        for (Object anAStringList : aStringList)
         {
-            temp.append(aStringList.get(idx)).append(LineSeparator);
+            temp.append(anAStringList).append(LineSeparator);
         }
 
         return temp.toString();

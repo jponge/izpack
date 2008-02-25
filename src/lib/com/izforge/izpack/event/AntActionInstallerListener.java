@@ -239,9 +239,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         if (actList == null || actList.size() == 0) return;
 
         Debug.trace("******* Executing all " + order + " actions of " + packName + " ...");
-        for (int i = 0; i < actList.size(); i++)
+        for (AntAction act : actList)
         {
-            AntAction act = actList.get(i);
             // Inform progress bar if needed. Works only
             // on AFTER_PACKS
             if (informProgressBar() && handler != null
@@ -259,7 +258,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             {
                 throw new InstallerException(e);
             }
-            if (act.getUninstallTargets().size() > 0) uninstActions.add(act);
+            if (act.getUninstallTargets().size() > 0)
+            {
+                uninstActions.add(act);
+            }
         }
     }
 

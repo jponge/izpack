@@ -187,19 +187,24 @@ public class LibraryRemover
         // This allows later to delete the classes because class files are deleteable
         // also the using process is running, jar files are not deletable in that
         // situation.,
-        for (int i = 0; i < SANDBOX_CONTENT.length; ++i)
+        for (String aSANDBOX_CONTENT : SANDBOX_CONTENT)
         {
-            in = getClass().getResourceAsStream("/" + SANDBOX_CONTENT[i]);
+            in = getClass().getResourceAsStream("/" + aSANDBOX_CONTENT);
 
-            File outFile = new File(sandbox, SANDBOX_CONTENT[i]);
+            File outFile = new File(sandbox, aSANDBOX_CONTENT);
             File parent = outFile.getParentFile();
-            if (parent != null && !parent.exists()) parent.mkdirs();
+            if (parent != null && !parent.exists())
+            {
+                parent.mkdirs();
+            }
 
             out = new BufferedOutputStream(new FileOutputStream(outFile));
 
             int n;
             while ((n = in.read(buf, 0, buf.length)) > 0)
+            {
                 out.write(buf, 0, n);
+            }
 
             out.close();
             extracted++;
@@ -313,8 +318,10 @@ public class LibraryRemover
 
         StringBuffer sb = new StringBuffer("Spawning phase ");
         sb.append(nextPhase).append(": ");
-        for (int i = 0; i < javaCmd.length; i++)
-            sb.append("\n\t").append(javaCmd[i]);
+        for (String aJavaCmd : javaCmd)
+        {
+            sb.append("\n\t").append(aJavaCmd);
+        }
         log(sb.toString());
 
         // Just invoke it and let it go, the exception will be caught above
@@ -332,8 +339,10 @@ public class LibraryRemover
         if (file.isDirectory())
         {
             File[] files = file.listFiles();
-            for (int i = 0; i < files.length; i++)
-                deleteTree(files[i]);
+            for (File file1 : files)
+            {
+                deleteTree(file1);
+            }
         }
         return file.delete();
     }

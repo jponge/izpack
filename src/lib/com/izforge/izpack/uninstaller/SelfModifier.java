@@ -416,8 +416,10 @@ public class SelfModifier
 
         StringBuffer sb = new StringBuffer("Spawning phase ");
         sb.append(nextPhase).append(": ");
-        for (int i = 0; i < entireCmd.length; i++)
-            sb.append("\n\t").append(entireCmd[i]);
+        for (String anEntireCmd : entireCmd)
+        {
+            sb.append("\n\t").append(anEntireCmd);
+        }
         log(sb.toString());
 
         // Just invoke it and let it go, the exception will be caught above
@@ -597,8 +599,10 @@ public class SelfModifier
         if (file.isDirectory())
         {
             File[] files = file.listFiles();
-            for (int i = 0; i < files.length; i++)
-                deleteTree(files[i]);
+            for (File file1 : files)
+            {
+                deleteTree(file1);
+            }
         }
         return file.delete();
     }

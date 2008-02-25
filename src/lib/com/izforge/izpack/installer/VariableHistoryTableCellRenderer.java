@@ -72,11 +72,11 @@ public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer
         return comp;
     }
     
-    public void clearState() {        
-        for (Iterator<String> iterator = variablehistory.keySet().iterator(); iterator.hasNext();)
+    public void clearState() {
+        for (String s : variablehistory.keySet())
         {
-            VariableHistory vh = variablehistory.get(iterator.next());
-            vh.clearState();            
+            VariableHistory vh = variablehistory.get(s);
+            vh.clearState();
         }
     }            
 }

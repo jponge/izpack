@@ -530,8 +530,13 @@ public class GUIInstaller extends InstallerBase
             String val = installdata.guiPrefs.modifier.get("langDisplayType");
             val = val.toLowerCase();
             // Verify that the value is valid, else return the default.
-            for (int i = 0; i < LANGUAGE_DISPLAY_TYPES.length; ++i)
-                if (val.equalsIgnoreCase(LANGUAGE_DISPLAY_TYPES[i])) return (val);
+            for (String aLANGUAGE_DISPLAY_TYPES : LANGUAGE_DISPLAY_TYPES)
+            {
+                if (val.equalsIgnoreCase(aLANGUAGE_DISPLAY_TYPES))
+                {
+                    return (val);
+                }
+            }
             Debug.trace("Value for language display type not valid; value: " + val);
         }
         return (LANGUAGE_DISPLAY_TYPES[0]);

@@ -882,11 +882,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             //The user selected an InstallGroup before.
             //We may have some restrictions on the Installationgroup
             //search all defined ProgramGroups for the given InstallGroup
-            for (int i = 0; i < groupSpecs.size(); i++)
+            for (XMLElement g : groupSpecs)
             {
-                XMLElement g = groupSpecs.get(i);
                 String instGrp = g.getAttribute(SPEC_ATTRIBUTE_INSTALLGROUP);
-                if (instGrp!=null && selectedInstallGroup.equalsIgnoreCase(instGrp)){
+                if (instGrp != null && selectedInstallGroup.equalsIgnoreCase(instGrp))
+                {
                     group = g;
                     break;
                 }
@@ -1165,12 +1165,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             "<Directory>" + menuName.replaceAll(" ", "-") + "-izpack.directory</Directory>\n"+
             "<Name>" + menuName + "</Name>\n" +
             "<Include>\n";
-       
-       for (int i = 0; i < shortcuts.size(); i++)
-       {
-           String shortcutFile = (String) shortcuts.get(i);
-           menuConfigText += "<Filename>" + shortcutFile + "</Filename>\n";
-       }
+
+        for (Object shortcut1 : shortcuts)
+        {
+            String shortcutFile = (String) shortcut1;
+            menuConfigText += "<Filename>" + shortcutFile + "</Filename>\n";
+        }
        menuConfigText += "</Include>\n</Menu>\n</Menu>";
        return menuConfigText;
            
@@ -1586,11 +1586,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // i.e Mandrake 2005 LE stores from now also in "applnk" instead in prior "applnk-mdk":
         if (entries != null && !OsVersion.IS_UNIX)
         {
-            for (int idx = 0; idx < entries.length; idx++)
+            for (File entry : entries)
             {
-                if (entries[idx].isDirectory())
+                if (entry.isDirectory())
                 {
-                    dirEntries.add(entries[idx].getName());
+                    dirEntries.add(entry.getName());
                 }
             }
         }

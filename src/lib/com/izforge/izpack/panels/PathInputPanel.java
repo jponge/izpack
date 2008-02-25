@@ -225,10 +225,13 @@ public class PathInputPanel extends IzPanel implements ActionListener
     protected boolean pathIsValid()
     {
         if (existFiles == null) return true;
-        for (int i = 0; i < existFiles.length; ++i)
+        for (String existFile : existFiles)
         {
-            File path = new File(pathSelectionPanel.getPath(), existFiles[i]).getAbsoluteFile();
-            if (!path.exists()) return false;
+            File path = new File(pathSelectionPanel.getPath(), existFile).getAbsoluteFile();
+            if (!path.exists())
+            {
+                return false;
+            }
         }
         return true;
     }

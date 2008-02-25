@@ -1371,9 +1371,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
                 if (validateParamMap == null) validateParamMap = new HashMap<String, String>();
 
-                for (Iterator<XMLElement> it = validateParams.iterator(); it.hasNext();)
+                for (XMLElement validateParam : validateParams)
                 {
-                    element = it.next();
+                    element = validateParam;
                     paramName = element.getAttribute(RULE_PARAM_NAME);
                     paramValue = element.getAttribute(RULE_PARAM_VALUE);
                     validateParamMap.put(paramName, paramValue);
@@ -1547,9 +1547,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
                 if (validateParamMap == null) validateParamMap = new HashMap<String, String>();
 
-                for (Iterator<XMLElement> it = validateParams.iterator(); it.hasNext();)
+                for (XMLElement validateParam : validateParams)
                 {
-                    element = it.next();
+                    element = validateParam;
                     String paramName = element.getAttribute(RULE_PARAM_NAME);
                     String paramValue = element.getAttribute(RULE_PARAM_VALUE);
                     validateParamMap.put(paramName, paramValue);
@@ -3346,9 +3346,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     if (dir.isDirectory())
                     {
                         File[] subdirs = dir.listFiles();
-                        for (int x = 0; x < subdirs.length; x++)
+                        for (File subdir : subdirs)
                         {
-                            String search = subdirs[x].getAbsolutePath();
+                            String search = subdir.getAbsolutePath();
                             if (this.pathMatches(search))
                             {
                                 items.add(search);
@@ -3371,9 +3371,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
             // generated vector
             this.pathComboBox.removeAllItems();
             VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-            for (int i = 0; i < items.size(); i++)
+            for (String item : items)
             {
-                this.pathComboBox.addItem(vs.substitute(items.get(i), "plain"));
+                this.pathComboBox.addItem(vs.substitute(item, "plain"));
             }
 
             // loop through all items

@@ -171,11 +171,12 @@ public final class OsVersion implements OsVersionConstants, StringConstants {
         File[] etcList = new File("/etc").listFiles();
 
         if (etcList != null)
-            for (int idx = 0; idx < etcList.length; idx++) {
-                File etcEntry = etcList[idx];
-
-                if (etcEntry.isFile()) {
-                    if (etcEntry.getName().endsWith("-release")) {
+            for (File etcEntry : etcList)
+            {
+                if (etcEntry.isFile())
+                {
+                    if (etcEntry.getName().endsWith("-release"))
+                    {
                         //match :-)
                         return result = etcEntry.toString();
                     }

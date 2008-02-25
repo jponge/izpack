@@ -72,11 +72,11 @@ public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer
         return comp;
     }
     
-    public void clearState() {        
-        for (Iterator<String> iterator = conditionhistory.keySet().iterator(); iterator.hasNext();)
+    public void clearState() {
+        for (String s : conditionhistory.keySet())
         {
-            ConditionHistory ch = conditionhistory.get(iterator.next());
-            ch.clearState();            
+            ConditionHistory ch = conditionhistory.get(s);
+            ch.clearState();
         }
     }            
 }

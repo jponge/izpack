@@ -226,9 +226,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 $Type, $X_KDE_SubstituteUID, $X_KDE_Username, $Icon, $URL, $E_QUOT, $P_QUOT,
                 $Categories, $TryExec};
 
-        for (int i = 0; i < propsArray.length; i++)
+        for (String aPropsArray : propsArray)
         {
-            props.put(propsArray[i], "");
+            props.put(aPropsArray, "");
         }
     }
 
@@ -288,11 +288,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         {
             File[] listing = kdeShareApplnk.listFiles();
 
-            for (int i = 0; i < listing.length; i++)
+            for (File aListing : listing)
             {
-                if (listing[i].isDirectory())
+                if (aListing.isDirectory())
                 {
-                    groups.add(listing[i].getName());
+                    groups.add(aListing.getName());
                 }
             }
         }
@@ -463,14 +463,14 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 //StringBuffer script = new StringBuffer();
                 //
 
-                for (int idx = 0; idx < users.size(); idx++)
+                for (Object user1 : users)
                 {
-                    UnixUser user = ((UnixUser) users.get(idx));
-                    
-                    if( user.getHome().equals(myHome) )
+                    UnixUser user = ((UnixUser) user1);
+
+                    if (user.getHome().equals(myHome))
                     {
-                       Debug.log( "need not to copy for itself: " + user.getHome() + "==" + myHome  );
-                       continue;
+                        Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
+                        continue;
                     }
                     try
                     {
@@ -486,7 +486,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                         // This works as well
                         // su $username -c "cp /tmp/desktopfile $HOME/Desktop/link.desktop"
                         // chown $username $HOME/Desktop/link.desktop
-                        
+
                         //Debug.log("Will Copy: " + tempFile.toString() + " to " + dest.toString());
 
                         rootScript.append(su);
@@ -502,21 +502,21 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                         rootScript.append(S);
                         rootScript.append(StringTool.replace(dest.toString(), " ", "\\ "));
                         rootScript.appendln('"');
-                        
+
                         rootScript.append('\n');
-                        
+
                         //Debug.log("Will exec: " + script.toString());
-                        
-                        rootScript.append( chown );
-                        rootScript.append( S );
-                        rootScript.append( user.getName() );
-                        rootScript.append( S );
-                        rootScript.appendln( StringTool.replace(dest.toString(), " ", "\\ ") );
+
+                        rootScript.append(chown);
+                        rootScript.append(S);
+                        rootScript.append(user.getName());
+                        rootScript.append(S);
+                        rootScript.appendln(StringTool.replace(dest.toString(), " ", "\\ "));
                         rootScript.append('\n');
                         rootScript.append('\n');
 
                         //Debug.log("Will exec: " + script.toString());
-                        
+
                         uninstallScript.append(su);
                         uninstallScript.append(S);
                         uninstallScript.append(user.getName());
@@ -533,7 +533,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     }
                     catch (Exception rex)
                     {
-                        System.out.println("Error while su Copy: " + rex.getLocalizedMessage()+"\n\n");
+                        System.out.println("Error while su Copy: " + rex.getLocalizedMessage() + "\n\n");
                         rex.printStackTrace();
 
                         /* ignore */

@@ -215,12 +215,14 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
     if (_existFiles == null) {
       return true;
     }
-    for (int i = 0; i < _existFiles.length; ++i) {
-      File path = new File(_pathSelectionPanel.getPath(), _existFiles[i]).getAbsoluteFile();
-      if (!path.exists()) {
-        return false;
+      for (String _existFile : _existFiles)
+      {
+          File path = new File(_pathSelectionPanel.getPath(), _existFile).getAbsoluteFile();
+          if (!path.exists())
+          {
+              return false;
+          }
       }
-    }
     return true;
   }
 

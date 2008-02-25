@@ -233,8 +233,13 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
      */
     public boolean isValidType(int type0)
     {
-        for (int i = 0; i < VALID_TYPES.length; ++i)
-            if (type0 == VALID_TYPES[i]) return (true);
+        for (int aVALID_TYPES : VALID_TYPES)
+        {
+            if (type0 == aVALID_TYPES)
+            {
+                return (true);
+            }
+        }
         return (false);
 
     }

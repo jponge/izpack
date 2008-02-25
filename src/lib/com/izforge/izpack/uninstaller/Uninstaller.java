@@ -38,7 +38,13 @@ public class Uninstaller
     public static void main(String[] args)
     {
         boolean cmduninstall = false;
-        for (int q = 0; q < args.length; q++) if (args[q].equals("-c")) cmduninstall = true;
+        for (String arg : args)
+        {
+            if (arg.equals("-c"))
+            {
+                cmduninstall = true;
+            }
+        }
         if (cmduninstall) System.out.println("Command line uninstaller.\n");
         try
         {
@@ -66,7 +72,13 @@ public class Uninstaller
         {
             UninstallerConsole uco = new UninstallerConsole();
             boolean force = false;
-            for (int q = 0; q < args.length; q++) if (args[q].equals("-f")) force = true;
+            for (String arg : args)
+            {
+                if (arg.equals("-f"))
+                {
+                    force = true;
+                }
+            }
             System.out.println("Force deletion: " + force);
             uco.runUninstall(force);
         }
@@ -88,10 +100,17 @@ public class Uninstaller
                 {
                     boolean displayForceOption = true;
                     boolean forceOptionState = false;
-                    
-                    for (int q = 0; q < args.length; q++) {
-                        if (args[q].equals("-f")) forceOptionState = true;
-                        else if (args[q].equals("-x")) displayForceOption = false;
+
+                    for (String arg : args)
+                    {
+                        if (arg.equals("-f"))
+                        {
+                            forceOptionState = true;
+                        }
+                        else if (arg.equals("-x"))
+                        {
+                            displayForceOption = false;
+                        }
                     }
                     
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

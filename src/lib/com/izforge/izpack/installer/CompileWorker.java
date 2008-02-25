@@ -556,11 +556,12 @@ public class CompileWorker implements Runnable
 
         File[] entries = path.listFiles();
 
-        for (int i = 0; i < entries.length; i++)
+        for (File f : entries)
         {
-            File f = entries[i];
-
-            if (f == null) continue;
+            if (f == null)
+            {
+                continue;
+            }
 
             if (f.isDirectory())
             {

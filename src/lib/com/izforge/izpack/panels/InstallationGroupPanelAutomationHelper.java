@@ -49,23 +49,22 @@ public class InstallationGroupPanelAutomationHelper
 		GroupData[] rows = (GroupData[]) idata.getAttribute("GroupData");
 		HashMap packsByName = (HashMap) idata.getAttribute("packsByName");
         // Write out the group to pack mappings
-        for(int n = 0; n < rows.length; n ++)
+        for (GroupData gd : rows)
         {
-        	GroupData gd = rows[n];
-        	XMLElement xgroup = new XMLElement("group");
-        	xgroup.setAttribute("name", gd.name);
-        	Iterator<String> names = gd.packNames.iterator();
-        	while( names.hasNext() )
-        	{
-        		String name = names.next();
-        		Pack pack = (Pack) packsByName.get(name);
-        		int index = idata.availablePacks.indexOf(pack);
-        		XMLElement xpack = new XMLElement("pack");
-        		xpack.setAttribute("name", name);
-        		xpack.setAttribute("index", ""+index);
-        		xgroup.addChild(xpack);
-        	}
-        	panelRoot.addChild(xgroup);
+            XMLElement xgroup = new XMLElement("group");
+            xgroup.setAttribute("name", gd.name);
+            Iterator<String> names = gd.packNames.iterator();
+            while (names.hasNext())
+            {
+                String name = names.next();
+                Pack pack = (Pack) packsByName.get(name);
+                int index = idata.availablePacks.indexOf(pack);
+                XMLElement xpack = new XMLElement("pack");
+                xpack.setAttribute("name", name);
+                xpack.setAttribute("index", "" + index);
+                xgroup.addChild(xpack);
+            }
+            panelRoot.addChild(xgroup);
         }
 	}
 
@@ -81,35 +80,33 @@ public class InstallationGroupPanelAutomationHelper
 		if( installGroup != null )
 		{
 			Vector<XMLElement> groups = panelRoot.getChildrenNamed("group");
-			for(int i = 0; i < groups.size(); i ++)
-			{
-				XMLElement group = groups.get(i);
-				String name = group.getAttribute("name");
-				Debug.trace("InstallationGroupPanelAutomationHelper: Checking INSTALL_GROUP against: "+name);
-				if( name.equalsIgnoreCase(installGroup) )
-				{
-					Debug.trace("Found INSTALL_GROUP match for: "+installGroup);
-					idata.selectedPacks.clear();
-					Vector<XMLElement> packs = group.getChildrenNamed("pack");
-					Debug.trace(name+" pack count: "+packs.size());
-					Debug.trace("Available pack count: "+idata.availablePacks.size());
-					for(int j = 0; j < packs.size(); j ++)
-					{
-						XMLElement xpack = packs.get(j);
-						String pname = xpack.getAttribute("name");
-						String indexStr = xpack.getAttribute("index");
-						int index = Integer.parseInt(indexStr);
-						if( index >= 0 )
-						{
-							Pack pack = (Pack) idata.availablePacks.get(index);
-							idata.selectedPacks.add(pack);
-							Debug.trace("Added pack: "+pack.name);
-						}
-					}
-					Debug.trace("Set selectedPacks to: "+idata.selectedPacks);
-					break;
-				}
-			}
+            for (XMLElement group : groups)
+            {
+                String name = group.getAttribute("name");
+                Debug.trace("InstallationGroupPanelAutomationHelper: Checking INSTALL_GROUP against: " + name);
+                if (name.equalsIgnoreCase(installGroup))
+                {
+                    Debug.trace("Found INSTALL_GROUP match for: " + installGroup);
+                    idata.selectedPacks.clear();
+                    Vector<XMLElement> packs = group.getChildrenNamed("pack");
+                    Debug.trace(name + " pack count: " + packs.size());
+                    Debug.trace("Available pack count: " + idata.availablePacks.size());
+                    for (XMLElement xpack : packs)
+                    {
+                        String pname = xpack.getAttribute("name");
+                        String indexStr = xpack.getAttribute("index");
+                        int index = Integer.parseInt(indexStr);
+                        if (index >= 0)
+                        {
+                            Pack pack = (Pack) idata.availablePacks.get(index);
+                            idata.selectedPacks.add(pack);
+                            Debug.trace("Added pack: " + pack.name);
+                        }
+                    }
+                    Debug.trace("Set selectedPacks to: " + idata.selectedPacks);
+                    break;
+                }
+            }
 		}
         return true;
 	}

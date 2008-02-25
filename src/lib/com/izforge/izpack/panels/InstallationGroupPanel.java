@@ -100,9 +100,12 @@ public class InstallationGroupPanel extends IzPanel
     {
         // Set/restore availablePacks from allPacks; consider OS constraints
         idata.availablePacks = new ArrayList();
-        for (Iterator<Pack> i = idata.allPacks.iterator(); i.hasNext(); ) {
-          Pack p = i.next();
-          if (OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) idata.availablePacks.add(p);
+        for (Pack p : idata.allPacks)
+        {
+            if (OsConstraint.oneMatchesCurrentSystem(p.osConstraints))
+            {
+                idata.availablePacks.add(p);
+            }
         }
 
         Debug.trace("InstallationGroupPanel.panelActivate, selectedGroup="+selectedGroup);
@@ -304,9 +307,13 @@ public class InstallationGroupPanel extends IzPanel
         if (!"no".equals(idata.getVariable("InstallationGroupPanel.selectPacks"))) {
             idata.selectedPacks.addAll(idata.availablePacks);
         } else {
-            for (Iterator i = idata.availablePacks.iterator(); i.hasNext(); ) {
-              Pack p = (Pack)i.next();
-              if (p.preselected) idata.selectedPacks.add(p);
+            for (Object availablePack : idata.availablePacks)
+            {
+                Pack p = (Pack) availablePack;
+                if (p.preselected)
+                {
+                    idata.selectedPacks.add(p);
+                }
             }
         }
     }

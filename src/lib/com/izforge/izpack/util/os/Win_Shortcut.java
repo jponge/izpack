@@ -172,18 +172,19 @@ public class Win_Shortcut extends Shortcut
 
         if (file != null)
         {
-            for (int i = 0; i < file.length; i++)
+            for (File aFile : file)
             {
-                File aFile = file[i];
                 String aFilename = aFile.getName();
                 if (aFile.isDirectory())
                 {
-                    
-                    Debug.log( CLASS + myClass + ".getProgramGroups()-" + logentry++ + " '" + aFilename + "'" );
-                    groups.add( aFilename );
+
+                    Debug.log(CLASS + myClass + ".getProgramGroups()-" + logentry++ + " '" + aFilename + "'");
+                    groups.add(aFilename);
                 }
                 else
-                    Debug.log( CLASS + myClass + ".getProgramGroups()-" + logentry++ + " Skip (NoDirectory): '" + aFilename + "'" );  
+                {
+                    Debug.log(CLASS + myClass + ".getProgramGroups()-" + logentry++ + " Skip (NoDirectory): '" + aFilename + "'");
+                }
             }
         }
 

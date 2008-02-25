@@ -117,9 +117,8 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
         // Perform the actions with the order "beforedeletion".
         if (befDel.size() > 0)
         {
-            for (int i = 0; i < befDel.size(); i++)
+            for (AntAction act : befDel)
             {
-                AntAction act = befDel.get(i);
                 act.performUninstallAction();
             }
         }
@@ -136,9 +135,8 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
     {
         if (antActions != null && antActions.size() > 0)
         { // There are actions of the order "afterdeletion".
-            for (int i = 0; i < antActions.size(); i++)
+            for (AntAction act : antActions)
             {
-                AntAction act = antActions.get(i);
                 act.performUninstallAction();
             }
 

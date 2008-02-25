@@ -94,10 +94,10 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
         cbPrinters = new JComboBox();
     	PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
     	iData.setVariable("SELECTED_PRINTER", pServices[0].getName());
-    	for (int i = 0; i < pServices.length; i++)
-    	{
-    		cbPrinters.addItem(pServices[i].getName());
-    	}
+        for (PrintService pService : pServices)
+        {
+            cbPrinters.addItem(pService.getName());
+        }
         cbPrinters.addActionListener(this);
 
         // We create and put the labels

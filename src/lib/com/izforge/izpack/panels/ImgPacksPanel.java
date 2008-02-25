@@ -202,9 +202,9 @@ public class ImgPacksPanel extends PacksPanelBase
         int maxHeight = 60;
         ImageIcon icon;
 
-        for (Iterator<ImageIcon> it = images.values().iterator(); it.hasNext();)
+        for (ImageIcon imageIcon : images.values())
         {
-            icon = it.next();
+            icon = imageIcon;
             maxWidth = Math.max(maxWidth, icon.getIconWidth());
             maxHeight = Math.max(maxHeight, icon.getIconHeight());
         }

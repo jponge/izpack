@@ -150,20 +150,20 @@ public class AntAction extends ActionBase
             if (choosenTargets.size() > 0)
             {
                 Ant antcall = null;
-                for (int i = 0; i < choosenTargets.size(); i++)
+                for (String choosenTarget : choosenTargets)
                 {
                     antcall = (Ant) antProj.createTask("ant");
                     antcall.setAntfile(getBuildFile());
-                    antcall.setTarget(choosenTargets.get(i));
+                    antcall.setTarget(choosenTarget);
                     antcalls.add(antcall);
                 }
             }
             Target target = new Target();
             target.setName("calltarget");
 
-            for (int i = 0; i < antcalls.size(); i++)
+            for (Ant antcall : antcalls)
             {
-                target.addTask(antcalls.get(i));
+                target.addTask(antcall);
             }
             antProj.addTarget(target);
             System.setOut(new PrintStream(new DemuxOutputStream(antProj, false)));
@@ -444,9 +444,9 @@ public class AntAction extends ActionBase
         FileInputStream fis = null;
         try
         {
-            for (int i = 0; i < propertyFiles.size(); i++)
+            for (String propertyFile : propertyFiles)
             {
-                pf = new File(propertyFiles.get(i));
+                pf = new File(propertyFile);
                 if (pf.exists())
                 {
                     fis = new FileInputStream(pf);

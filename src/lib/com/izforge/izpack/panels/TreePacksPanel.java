@@ -510,12 +510,15 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    {
       names = new HashMap<String, Pack>();
       dependenciesExist = false;
-      for (int i = 0; i < packs.size(); i++)
-      {
-         Pack pack = (Pack) packs.get(i);
-         names.put(pack.name, pack);
-         if (pack.dependencies != null || pack.excludeGroup != null) dependenciesExist = true;
-      }
+       for (Object pack1 : packs)
+       {
+           Pack pack = (Pack) pack1;
+           names.put(pack.name, pack);
+           if (pack.dependencies != null || pack.excludeGroup != null)
+           {
+               dependenciesExist = true;
+           }
+       }
    }
 
    /**
@@ -771,11 +774,11 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          if(kidsObject != null)
          {
             ArrayList kids = (ArrayList) kidsObject;
-            for(int q=0; q<kids.size(); q++)
-            {
-               String kidId = (String) kids.get(q);
-               links.add(populateTreePacks(kidId));
-            }
+             for (Object kid : kids)
+             {
+                 String kidId = (String) kid;
+                 links.add(populateTreePacks(kidId));
+             }
             
             CheckBoxNode cbn = new CheckBoxNode(parent, translated, links.toArray(), true);
             idToCheckBoxNode.put(cbn.getId(), cbn);

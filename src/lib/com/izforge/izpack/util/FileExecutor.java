@@ -143,9 +143,9 @@ public class FileExecutor
         retval.append("executeCommand\n");
         if (params != null)
         {
-            for (int i = 0; i < params.length; i++)
+            for (String param : params)
             {
-                retval.append("\tparams: ").append(params[i]);
+                retval.append("\tparams: ").append(param);
                 retval.append("\n");
             }
         }
@@ -371,27 +371,27 @@ public class FileExecutor
         List<String> jars = new ArrayList<String>();
         String rawClassPath = targetFile.replace(':', File.pathSeparatorChar).replace(';', File.pathSeparatorChar);
         String[] rawJars = rawClassPath.split("" + File.pathSeparatorChar);
-        for (int i = 0; i < rawJars.length; i++)
+        for (String rawJar : rawJars)
         {
-            File file = new File(rawJars[i]);
-            jars.add(rawJars[i]);
-            
+            File file = new File(rawJar);
+            jars.add(rawJar);
+
             if (file.isDirectory())
             {
-                String[] subDirJars = FileUtil.getFileNames(rawJars[i], 
-                        new FilenameFilter() 
+                String[] subDirJars = FileUtil.getFileNames(rawJar,
+                        new FilenameFilter()
                         {
                             public boolean accept(File dir, String name)
                             {
                                 return name.toLowerCase().endsWith(JAR_FILE_SUFFIX);
                             }
-                            
+
                         });
                 if (subDirJars != null)
                 {
-                    for (int j = 0; j < subDirJars.length; j++)
+                    for (String subDirJar : subDirJars)
                     {
-                        jars.add(rawJars[i] + File.separator + subDirJars[j]);
+                        jars.add(rawJar + File.separator + subDirJar);
                     }
                 }
             }

@@ -517,11 +517,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     {
         names = new HashMap<String, Pack>();
         dependenciesExist = false;
-        for (int i = 0; i < packs.size(); i++)
+        for (Object pack1 : packs)
         {
-            Pack pack = (Pack) packs.get(i);
+            Pack pack = (Pack) pack1;
             names.put(pack.name, pack);
-            if (pack.dependencies != null || pack.excludeGroup != null) dependenciesExist = true;
+            if (pack.dependencies != null || pack.excludeGroup != null)
+            {
+                dependenciesExist = true;
+            }
         }
     }
 

@@ -130,9 +130,9 @@ public class Destroyer extends Thread
             err.printStackTrace();
            
             StackTraceElement str[] = err.getStackTrace();
-            for(int idx = 0; idx < str.length;idx++)
+            for (StackTraceElement aStr : str)
             {
-                 
+
             }
             
             StringWriter trace = new StringWriter();

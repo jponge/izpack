@@ -70,9 +70,8 @@ public class RulesEngine
 
         if ((installdata != null) && (installdata.allPacks != null))
         {
-            for (Iterator<Pack> iterator = installdata.allPacks.iterator(); iterator.hasNext();)
+            for (Pack pack : installdata.allPacks)
             {
-                Pack pack = iterator.next();
                 if (pack.id != null)
                 {
                     // automatically add packselection condition
@@ -222,9 +221,8 @@ public class RulesEngine
                 // read in the condition specs
                 Vector<XMLElement> childs = this.conditionsspec.getChildrenNamed("condition");
 
-                for (int i = 0; i < childs.size(); i++)
+                for (XMLElement condition : childs)
                 {
-                    XMLElement condition = childs.get(i);
                     Condition cond = analyzeCondition(condition);
                     if (cond != null)
                     {
@@ -239,18 +237,16 @@ public class RulesEngine
                 }
 
                 Vector<XMLElement> panelconditionels = this.conditionsspec.getChildrenNamed("panelcondition");
-                for (int i = 0; i < panelconditionels.size(); i++)
+                for (XMLElement panelel : panelconditionels)
                 {
-                    XMLElement panelel = panelconditionels.get(i);
                     String panelid = panelel.getAttribute("panelid");
                     String conditionid = panelel.getAttribute("conditionid");
                     this.panelconditions.put(panelid, conditionid);
                 }
 
                 Vector<XMLElement> packconditionels = this.conditionsspec.getChildrenNamed("packcondition");
-                for (int i = 0; i < packconditionels.size(); i++)
+                for (XMLElement panelel : packconditionels)
                 {
-                    XMLElement panelel = packconditionels.get(i);
                     String panelid = panelel.getAttribute("packid");
                     String conditionid = panelel.getAttribute("conditionid");
                     this.packconditions.put(panelid, conditionid);

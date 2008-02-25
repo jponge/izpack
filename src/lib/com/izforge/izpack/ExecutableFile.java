@@ -151,9 +151,9 @@ public class ExecutableFile implements Serializable
         retval.append("\n");
         if (argList != null)
         {
-            for (int i = 0; i < argList.size(); i++)
+            for (String anArgList : argList)
             {
-                retval.append("\targ: ").append(argList.get(i));
+                retval.append("\targ: ").append(anArgList);
                 retval.append("\n");
             }
         }
@@ -162,9 +162,9 @@ public class ExecutableFile implements Serializable
         retval.append("\n");
         if (osList != null)
         {
-            for (int i = 0; i < osList.size(); i++)
+            for (OsConstraint anOsList : osList)
             {
-                retval.append("\tos: ").append(osList.get(i));
+                retval.append("\tos: ").append(anOsList);
                 retval.append("\n");
             }
         }

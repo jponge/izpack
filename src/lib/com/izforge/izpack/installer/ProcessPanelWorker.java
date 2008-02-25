@@ -142,18 +142,19 @@ public class ProcessPanelWorker implements Runnable
             logfiledir = lfd.getContent();
         }
 
-        for (Iterator<XMLElement> job_it = spec.getChildrenNamed("job").iterator(); job_it.hasNext();)
+        for (XMLElement job_el : spec.getChildrenNamed("job"))
         {
-            XMLElement job_el = job_it.next();
             String conditionid = job_el.getAttribute("conditionid");
-            if (conditionid != null){
-              Debug.trace("Condition for job.");
-              Condition cond = RulesEngine.getCondition(conditionid);
-              if ((cond != null) && !cond.isTrue()){
-                Debug.trace("condition is not fulfilled.");
-                // skip, if there is a condition and this condition isn't true
-                continue;
-              }
+            if (conditionid != null)
+            {
+                Debug.trace("Condition for job.");
+                Condition cond = RulesEngine.getCondition(conditionid);
+                if ((cond != null) && !cond.isTrue())
+                {
+                    Debug.trace("condition is not fulfilled.");
+                    // skip, if there is a condition and this condition isn't true
+                    continue;
+                }
             }
             Debug.trace("Condition is fulfilled or not existent.");
             // ExecuteForPack Patch
@@ -173,11 +174,8 @@ public class ProcessPanelWorker implements Runnable
 
                 String job_name = job_el.getAttribute("name", "");
 
-                for (Iterator<XMLElement> ef_it = job_el.getChildrenNamed("executefile").iterator(); ef_it
-                        .hasNext();)
+                for (XMLElement ef : job_el.getChildrenNamed("executefile"))
                 {
-                    XMLElement ef = ef_it.next();
-
                     String ef_name = ef.getAttribute("name");
 
                     if ((ef_name == null) || (ef_name.length() == 0))
@@ -188,10 +186,8 @@ public class ProcessPanelWorker implements Runnable
 
                     List<String> args = new ArrayList<String>();
 
-                    for (Iterator<XMLElement> arg_it = ef.getChildrenNamed("arg").iterator(); arg_it.hasNext();)
+                    for (XMLElement arg_el : ef.getChildrenNamed("arg"))
                     {
-                        XMLElement arg_el = arg_it.next();
-
                         String arg_val = arg_el.getContent();
 
                         args.add(arg_val);
@@ -200,10 +196,8 @@ public class ProcessPanelWorker implements Runnable
                     ef_list.add(new ExecutableFile(ef_name, args));
                 }
 
-                for (Iterator<XMLElement> ef_it = job_el.getChildrenNamed("executeclass").iterator(); ef_it
-                        .hasNext();)
+                for (XMLElement ef : job_el.getChildrenNamed("executeclass"))
                 {
-                    XMLElement ef = ef_it.next();
                     String ef_name = ef.getAttribute("name");
                     if ((ef_name == null) || (ef_name.length() == 0))
                     {
@@ -212,9 +206,8 @@ public class ProcessPanelWorker implements Runnable
                     }
 
                     List<String> args = new ArrayList<String>();
-                    for (Iterator<XMLElement> arg_it = ef.getChildrenNamed("arg").iterator(); arg_it.hasNext();)
+                    for (XMLElement arg_el : ef.getChildrenNamed("arg"))
                     {
-                        XMLElement arg_el = arg_it.next();
                         String arg_val = arg_el.getContent();
                         args.add(arg_val);
                     }
@@ -288,17 +281,18 @@ public class ProcessPanelWorker implements Runnable
 
         this.handler.startProcessing(this.jobs.size());
 
-        for (Iterator<ProcessingJob> job_it = this.jobs.iterator(); job_it.hasNext();)
+        for (ProcessingJob pj : this.jobs)
         {
-            ProcessingJob pj = job_it.next();
-
             this.handler.startProcess(pj.name);
 
             this.result = pj.run(this.handler, this.vs);
 
             this.handler.finishProcess();
 
-            if (!this.result) break;
+            if (!this.result)
+            {
+                break;
+            }
         }
 
         this.handler.finishProcessing();
@@ -348,11 +342,12 @@ public class ProcessPanelWorker implements Runnable
 
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
         {
-            for (Iterator<Processable> pr_it = this.processables.iterator(); pr_it.hasNext();)
+            for (Processable pr : this.processables)
             {
-                Processable pr = pr_it.next();
-
-                if (!pr.run(handler, vs)) return false;
+                if (!pr.run(handler, vs))
+                {
+                    return false;
+                }
             }
 
             return true;
@@ -384,9 +379,9 @@ public class ProcessPanelWorker implements Runnable
             params[0] = vs.substitute(this.filename, "plain");
 
             int i = 1;
-            for (Iterator<String> arg_it = this.arguments.iterator(); arg_it.hasNext();)
+            for (String argument : this.arguments)
             {
-                params[i++] = vs.substitute(arg_it.next(), "plain");
+                params[i++] = vs.substitute(argument, "plain");
             }
 
             try
@@ -551,8 +546,10 @@ public class ProcessPanelWorker implements Runnable
             String params[] = new String[myArguments.size()];
 
             int i = 0;
-            for (Iterator<String> arg_it = myArguments.iterator(); arg_it.hasNext();)
-                params[i++] = varSubstitutor.substitute(arg_it.next(), "plain");
+            for (String myArgument : myArguments)
+            {
+                params[i++] = varSubstitutor.substitute(myArgument, "plain");
+            }
 
             try
             {

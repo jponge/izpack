@@ -87,26 +87,24 @@ public class Debugger
     
     private void init() {
         String[] variablekeys = (String[]) lasttimevariables.keySet().toArray(new String[lasttimevariables.size()]);
-        for (int i = 0; i < variablekeys.length; i++)
+        for (String variablename : variablekeys)
         {
-            String variablename = variablekeys[i];
             VariableHistory vh = new VariableHistory(variablename);
             vh.addValue(lasttimevariables.getProperty(variablename), "initial value");
             variableshistory.put(variablename, vh);
         }
         String[] conditionids = this.rules.getKnownConditionIds();
-        for (int i = 0; i < conditionids.length; i++)
+        for (String conditionid : conditionids)
         {
-            String conditionid = conditionids[i];
             Condition currentcondition = RulesEngine.getCondition(conditionid);
             boolean result = this.rules.isConditionTrue(currentcondition);
-                        
+
             ConditionHistory ch = null;
             ch = new ConditionHistory(currentcondition);
-            
+
             ch.addValue(result, "initial value");
             conditionhistory.put(conditionid, ch);
-            
+
         }  
     }
     
@@ -122,20 +120,21 @@ public class Debugger
     
     private void updateChangedConditions(String comment) {       
         String[] conditionids = this.rules.getKnownConditionIds();
-        for (int i = 0; i < conditionids.length; i++)
+        for (String conditionid : conditionids)
         {
-            String conditionid = conditionids[i];
             Condition currentcondition = RulesEngine.getCondition(conditionid);
             ConditionHistory ch = null;
-            if (!conditionhistory.containsKey(conditionid)) {
+            if (!conditionhistory.containsKey(conditionid))
+            {
                 // new condition
                 ch = new ConditionHistory(currentcondition);
-                conditionhistory.put(conditionid, ch);                
+                conditionhistory.put(conditionid, ch);
             }
-            else {
+            else
+            {
                 ch = conditionhistory.get(conditionid);
             }
-            ch.addValue(this.rules.isConditionTrue(currentcondition), comment);               
+            ch.addValue(this.rules.isConditionTrue(currentcondition), comment);
         }
         conditionhistorymodel.fireTableDataChanged();
     }

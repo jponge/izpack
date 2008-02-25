@@ -99,12 +99,14 @@ public class PackCompressorFactory
         throws CompilerException
     {
         String [] syms = pc.getCompressionFormatSymbols();
-        for(int i = 0; i < syms.length; ++i)
+        for (String sym1 : syms)
         {
-            String sym = syms[i].toLowerCase();
-            if( typeMap.containsKey(sym))
-                throw new CompilerException("PackCompressor for symbol " 
+            String sym = sym1.toLowerCase();
+            if (typeMap.containsKey(sym))
+            {
+                throw new CompilerException("PackCompressor for symbol "
                         + sym + " allready registered");
+            }
             typeMap.put(sym, pc);
             // TODO: add verify of PackCompressor.
         }

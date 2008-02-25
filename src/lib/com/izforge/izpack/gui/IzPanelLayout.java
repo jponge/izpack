@@ -311,10 +311,13 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
     private int rows()
     {
         int maxRows = 0;
-        for (int i = 0; i < components.size(); ++i)
+        for (Object component : components)
         {
-            int curRows = ((ArrayList) components.get(i)).size();
-            if (curRows > maxRows) maxRows = curRows;
+            int curRows = ((ArrayList) component).size();
+            if (curRows > maxRows)
+            {
+                maxRows = curRows;
+            }
 
         }
         return (maxRows);

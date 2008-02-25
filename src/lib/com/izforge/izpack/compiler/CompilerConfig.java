@@ -874,24 +874,24 @@ public class CompilerConfig extends Thread
 
                 // Directory scanner has done recursion, add files and
                 // directories
-                for (int i = 0; i < files.length; ++i)
+                for (String file : files)
                 {
                     try
                     {
-                        String target = new File(targetdir, files[i]).getPath();
-                        pack.addFile(baseDir, new File(dir, files[i]), target, osList, override,additionals,condition);
+                        String target = new File(targetdir, file).getPath();
+                        pack.addFile(baseDir, new File(dir, file), target, osList, override, additionals, condition);
                     }
                     catch (FileNotFoundException x)
                     {
                         parseError(f, x.getMessage(), x);
                     }
                 }
-                for (int i = 0; i < dirs.length; ++i)
+                for (String dir1 : dirs)
                 {
                     try
                     {
-                        String target = new File(targetdir, dirs[i]).getPath();
-                        pack.addFile(baseDir, new File(dir, dirs[i]), target, osList, override, additionals,condition);
+                        String target = new File(targetdir, dir1).getPath();
+                        pack.addFile(baseDir, new File(dir, dir1), target, osList, override, additionals, condition);
                     }
                     catch (FileNotFoundException x)
                     {
@@ -1062,9 +1062,8 @@ public class CompilerConfig extends Thread
         // Because we use package names in the configuration file we assosiate
         // the names with the objects
         Map<String, PackInfo> names = new HashMap<String, PackInfo>();
-        for (int i = 0; i < packs.size(); i++)
+        for (PackInfo pack : packs)
         {
-            PackInfo pack = packs.get(i);
             names.put(pack.getPack().name, pack);
         }
         int result = dfs(packs, names);
@@ -1085,12 +1084,14 @@ public class CompilerConfig extends Thread
     private int dfs(List<PackInfo> packs, Map<String, PackInfo> names)
     {
         Map<Edge, Integer> edges = new HashMap<Edge, Integer>();
-        for (int i = 0; i < packs.size(); i++)
+        for (PackInfo pack : packs)
         {
-            PackInfo pack = packs.get(i);
             if (pack.colour == PackInfo.WHITE)
             {
-                if (dfsVisit(pack, names, edges) != 0) return -1;
+                if (dfsVisit(pack, names, edges) != 0)
+                {
+                    return -1;
+                }
             }
 
         }
@@ -1103,11 +1104,13 @@ public class CompilerConfig extends Thread
     private int checkBackEdges(Map<Edge, Integer> edges)
     {
         Set<Edge> keys = edges.keySet();
-        for (Iterator<Edge> iterator = keys.iterator(); iterator.hasNext();)
+        for (final Edge key : keys)
         {
-            final Object key = iterator.next();
             int color = edges.get(key);
-            if (color == PackInfo.GREY) { return -2; }
+            if (color == PackInfo.GREY)
+            {
+                return -2;
+            }
         }
         return 0;
 
@@ -1136,23 +1139,28 @@ public class CompilerConfig extends Thread
         List<String> deps = u.getDependencies();
         if (deps != null)
         {
-            for (int i = 0; i < deps.size(); i++)
+            for (String name : deps)
             {
-                String name = deps.get(i);
                 PackInfo v = names.get(name);
                 if (v == null)
                 {
-                    System.out.println("Failed to find dependency: "+name);
+                    System.out.println("Failed to find dependency: " + name);
                     return -1;
                 }
                 Edge edge = new Edge(u, v);
-                if (edges.get(edge) == null) edges.put(edge, v.colour);
+                if (edges.get(edge) == null)
+                {
+                    edges.put(edge, v.colour);
+                }
 
                 if (v.colour == PackInfo.WHITE)
                 {
 
                     final int result = dfsVisit(v, names, edges);
-                    if (result != 0) return result;
+                    if (result != 0)
+                    {
+                        return result;
+                    }
                 }
             }
         }
@@ -1222,8 +1230,10 @@ public class CompilerConfig extends Thread
             else
             {
                 // new targetdir = targetfile;
-                for (int i = 0; i < files.length; i++)
-                    addRecursively(baseDir, files[i], targetfile, osList, override, pack, additionals,condition);
+                for (File file1 : files)
+                {
+                    addRecursively(baseDir, file1, targetfile, osList, override, pack, additionals, condition);
+                }
             }
         }
     }

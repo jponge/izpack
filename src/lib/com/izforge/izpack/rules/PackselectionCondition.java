@@ -82,9 +82,9 @@ public class PackselectionCondition extends Condition
     {
         if (selectedpacks != null)
         {
-            for (Iterator iter = selectedpacks.iterator(); iter.hasNext();)
+            for (Object selectedpack : selectedpacks)
             {
-                Pack p = (Pack) iter.next();
+                Pack p = (Pack) selectedpack;
                 if (packid.equals(p.id))
                 {
                     // pack is selected

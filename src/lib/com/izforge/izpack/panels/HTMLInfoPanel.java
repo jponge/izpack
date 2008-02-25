@@ -130,20 +130,20 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
                    {
                       String[] launchers = {"htmlview QqzURL", "xdg-open QqzURL", "gnome-open QqzURL", "kfmclient openURL QqzURL", "call-browser QqzURL", "firefox QqzURL", "opera QqzURL", "konqueror QqzURL", "epiphany QqzURL", "mozilla QqzURL", "netscape QqzURL"};
                       //String launchers = "/bin/sh -c \"htmlview QqzURL || xdg-open QqzURL || gnome-open QqzURL || kfmclient openURL QqzURL || call-browser QqzURL || firefox QqzURL || opera QqzURL || konqueror QqzURL || epiphany QqzURL || mozilla QqzURL || netscape QqzURL\"";
-                      for(int q=0; q<launchers.length; q++)
-                      {
-                         
-                         try
-                         {
-                            Runtime.getRuntime().exec(launchers[q].replaceAll("QqzURL", urls));
-                            System.out.println("OK");
-                            break;
-                         }
-                         catch(Exception ignore)
-                         {
-                            System.out.println(launchers[q]+" NOT OK");
-                         }
-                      }
+                       for (String launcher : launchers)
+                       {
+
+                           try
+                           {
+                               Runtime.getRuntime().exec(launcher.replaceAll("QqzURL", urls));
+                               System.out.println("OK");
+                               break;
+                           }
+                           catch (Exception ignore)
+                           {
+                               System.out.println(launcher + " NOT OK");
+                           }
+                       }
                    }
                    else // windows
                    {
