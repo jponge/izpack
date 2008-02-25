@@ -278,9 +278,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      * 
      * @see com.izforge.izpack.util.os.Shortcut#getProgramGroups(int)
      */
-    public Vector getProgramGroups(int userType)
+    public Vector<String> getProgramGroups(int userType)
     {
-        Vector groups = new Vector();
+        Vector<String> groups = new Vector<String>();
 
         File kdeShareApplnk = getKdeShareApplnkFolder(userType);
 

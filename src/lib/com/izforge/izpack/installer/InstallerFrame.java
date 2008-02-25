@@ -182,12 +182,12 @@ public class InstallerFrame extends JFrame
     /**
      * Mapping from "raw" panel number to visible panel number.
      */
-    protected ArrayList visiblePanelMapping;
+    protected ArrayList<Integer> visiblePanelMapping;
 
     /**
      * Registered GUICreationListener.
      */
-    protected ArrayList guiListener;
+    protected ArrayList<GUIListener> guiListener;
 
     /**
      * Heading major text.
@@ -233,7 +233,7 @@ public class InstallerFrame extends JFrame
      */
     private static final String CUSTOM_ICONS_RESOURCEFILE = "customicons.xml";
     
-    private Map dynamicvariables;
+    private Map<String, DynamicVariable> dynamicvariables;
     private VariableSubstitutor substitutor;
     
     
@@ -251,8 +251,8 @@ public class InstallerFrame extends JFrame
     {
         super(title);
         substitutor = new VariableSubstitutor(installdata.variables);
-        guiListener = new ArrayList();
-        visiblePanelMapping = new ArrayList();
+        guiListener = new ArrayList<GUIListener>();
+        visiblePanelMapping = new ArrayList<Integer>();
         this.installdata = installdata;
         this.langpack = installdata.langpack;
 
@@ -282,10 +282,10 @@ public class InstallerFrame extends JFrame
     
     private void refreshDynamicVariables() {        
         if (dynamicvariables != null) {
-            Iterator iter = dynamicvariables.keySet().iterator();
+            Iterator<String> iter = dynamicvariables.keySet().iterator();
             while (iter.hasNext()) {
-                String dynvarname = (String) iter.next();
-                DynamicVariable dynvar = (DynamicVariable) dynamicvariables.get(dynvarname);
+                String dynvarname = iter.next();
+                DynamicVariable dynvar = dynamicvariables.get(dynvarname);
                 boolean refresh = false;
                 if (dynvar.getConditionid() != null) {
                     if ((rules != null) &&  rules.isConditionTrue(dynvar.getConditionid())) {
@@ -309,7 +309,7 @@ public class InstallerFrame extends JFrame
         try {
             InputStream in = InstallerFrame.class.getResourceAsStream("/dynvariables");
             ObjectInputStream objIn = new ObjectInputStream(in); 
-            dynamicvariables = (Map) objIn.readObject();
+            dynamicvariables = (Map<String, DynamicVariable>) objIn.readObject();
             objIn.close();
         }
         catch (Exception e) {
@@ -451,11 +451,11 @@ public class InstallerFrame extends JFrame
         XMLElement data = (XMLElement) parser.parse();
 
         // We load the icons
-        Vector children = data.getChildrenNamed("icon");
+        Vector<XMLElement> children = data.getChildrenNamed("icon");
         int size = children.size();
         for (int i = 0; i < size; i++)
         {
-            icon = (XMLElement) children.get(i);
+            icon = children.get(i);
             url = InstallerFrame.class.getResource(icon.getAttribute("res"));
             img = new ImageIcon(url);
             icons.put(icon.getAttribute("id"), img);
@@ -466,7 +466,7 @@ public class InstallerFrame extends JFrame
         size = children.size();
         for (int i = 0; i < size; i++)
         {
-            icon = (XMLElement) children.get(i);
+            icon = children.get(i);
             url = InstallerFrame.class.getResource(icon.getAttribute("res"));
             img = new ImageIcon(url);
             UIManager.put(icon.getAttribute("id"), img);
@@ -503,10 +503,10 @@ public class InstallerFrame extends JFrame
       XMLElement data = (XMLElement) parser.parse();
 
       // We load the icons
-      Vector children = data.getChildrenNamed("icon");
+      Vector<XMLElement> children = data.getChildrenNamed("icon");
       int size = children.size();
       for (int i = 0; i < size; i++) {
-        icon = (XMLElement) children.get(i);
+        icon = children.get(i);
         url = InstallerFrame.class.getResource(icon.getAttribute("res"));
         img = new ImageIcon(url);
         Debug.trace("Icon with id found: " + icon.getAttribute("id"));
@@ -517,7 +517,7 @@ public class InstallerFrame extends JFrame
       children = data.getChildrenNamed("sysicon");
       size = children.size();
       for (int i = 0; i < size; i++) {
-        icon = (XMLElement) children.get(i);
+        icon = children.get(i);
         url = InstallerFrame.class.getResource(icon.getAttribute("res"));
         img = new ImageIcon(url);
         UIManager.put(icon.getAttribute("id"), img);
@@ -557,7 +557,7 @@ public class InstallerFrame extends JFrame
 
         // We put the first panel
         installdata.curPanelNumber = 0;
-        IzPanel panel_0 = (IzPanel) installdata.panels.get(0);
+        IzPanel panel_0 = installdata.panels.get(0);
         panelsContainer.add(panel_0);
 
         // We add the navigation buttons & labels
@@ -598,7 +598,7 @@ public class InstallerFrame extends JFrame
             debugger = new Debugger(installdata,icons,rules);
             JPanel debugpanel = debugger.getDebugPanel();
             if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")) {
-                if (Boolean.valueOf((String) installdata.guiPrefs.modifier.get("showDebugWindow")).booleanValue()) {
+                if (Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow")).booleanValue()) {
                     JFrame debugframe = new JFrame("Debug information");                    
                     debugframe.setContentPane(debugpanel);
                     debugframe.setSize(new Dimension(400,400));
@@ -643,9 +643,9 @@ public class InstallerFrame extends JFrame
 
     private void callGUIListener(int what, Object param)
     {
-        Iterator iter = guiListener.iterator();
+        Iterator<GUIListener> iter = guiListener.iterator();
         while (iter.hasNext())
-            ((GUIListener) iter.next()).guiActionPerformed(what, param);
+            (iter.next()).guiActionPerformed(what, param);
     }
 
     private ImageIcon loadIcon(String resPrefix, int PanelNo, boolean tryBaseIcon)
@@ -821,8 +821,8 @@ public class InstallerFrame extends JFrame
                 isBack = true;
             }
             panelsContainer.setVisible(false);
-            IzPanel panel = (IzPanel) installdata.panels.get(installdata.curPanelNumber);
-            IzPanel l_panel = (IzPanel) installdata.panels.get(last);
+            IzPanel panel = installdata.panels.get(installdata.curPanelNumber);
+            IzPanel l_panel = installdata.panels.get(last);
             if (Debug.isTRACE()) {
                 debugger.switchPanel(panel.getMetadata(),l_panel.getMetadata());
             }
@@ -837,7 +837,7 @@ public class InstallerFrame extends JFrame
             // writing out that script.
             // l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
             // No previos button in the first visible panel
-            if (((Integer) visiblePanelMapping.get(installdata.curPanelNumber)).intValue() == 0)
+            if ((visiblePanelMapping.get(installdata.curPanelNumber)).intValue() == 0)
             {
                 prevButton.setVisible(false);
                 lockPrevButton();
@@ -845,7 +845,7 @@ public class InstallerFrame extends JFrame
                 // panel
             }
             // Only the exit button in the last panel.
-            else if (((Integer) visiblePanelMapping.get(installdata.panels.size())).intValue() == installdata.curPanelNumber)
+            else if ((visiblePanelMapping.get(installdata.panels.size())).intValue() == installdata.curPanelNumber)
             {
                 prevButton.setVisible(false);
                 nextButton.setVisible(false);
@@ -934,12 +934,12 @@ public class InstallerFrame extends JFrame
             Panel metadata = panel.getMetadata();
             if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
             {
-                loadAndShowImage(((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
+                loadAndShowImage((visiblePanelMapping.get(installdata.curPanelNumber))
                         .intValue(), metadata.getPanelid());
             }
             else
             {
-                loadAndShowImage(((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
+                loadAndShowImage((visiblePanelMapping.get(installdata.curPanelNumber))
                         .intValue());
             }
             isBack = false;
@@ -1050,14 +1050,14 @@ public class InstallerFrame extends JFrame
             // Do not "kill" the installation if there is a problem
             // with custom uninstall data. Therefore log it to Debug,
             // but do not throw.
-            Map additionalData = udata.getAdditionalData();
+            Map<String, Object> additionalData = udata.getAdditionalData();
             if (additionalData != null && !additionalData.isEmpty())
             {
-                Iterator keys = additionalData.keySet().iterator();
-                HashSet exist = new HashSet();
+                Iterator<String> keys = additionalData.keySet().iterator();
+                HashSet<String> exist = new HashSet<String>();
                 while (keys != null && keys.hasNext())
                 {
-                    String key = (String) keys.next();
+                    String key = keys.next();
                     Object contents = additionalData.get(key);
                     if ("__uninstallLibs__".equals(key))
                     {
@@ -1086,7 +1086,7 @@ public class InstallerFrame extends JFrame
                         // First we create a new ArrayList which contains only
                         // the full paths for the uninstall listener self; thats
                         // the first entry of each sub ArrayList.
-                        ArrayList subContents = new ArrayList();
+                        ArrayList<String> subContents = new ArrayList<String>();
 
                         // Secound put the class into uninstaller.jar
                         Iterator listenerIter = ((List) contents).iterator();
@@ -1101,10 +1101,10 @@ public class InstallerFrame extends JFrame
                             // remind it for later.
                             if (customData.listenerName != null)
                                 subContents.add(customData.listenerName);
-                            Iterator liClaIter = customData.contents.iterator();
+                            Iterator<String> liClaIter = customData.contents.iterator();
                             while (liClaIter.hasNext())
                             {
-                                String contentPath = (String) liClaIter.next();
+                                String contentPath = liClaIter.next();
                                 if (exist.contains(contentPath)) continue;
                                 exist.add(contentPath);
                                 try
@@ -1304,7 +1304,7 @@ public class InstallerFrame extends JFrame
      */
     protected void wipeAborted()
     {
-        Iterator it;
+        Iterator<String> it;
 
         // We set interrupt to all running Unpacker and wait 40 sec for maximum.
         // If interrupt is discarded (return value false), return immediately:
@@ -1316,7 +1316,7 @@ public class InstallerFrame extends JFrame
         if (!it.hasNext()) return;
         while (it.hasNext())
         {
-            String p = (String) it.next();
+            String p = it.next();
             File f = new File(p);
             f.delete();
         }
@@ -1369,7 +1369,7 @@ public class InstallerFrame extends JFrame
         // writer.write(root);
         for (int i = 0; i < installdata.panels.size(); i++)
         {
-            IzPanel panel = (IzPanel) installdata.panels.get(i);
+            IzPanel panel = installdata.panels.get(i);
             panel.makeXMLData(installdata.xmlData.getChildAtIndex(i));
         }
         writer.write(installdata.xmlData);
@@ -1394,7 +1394,7 @@ public class InstallerFrame extends JFrame
      */
     public void setQuitButtonIcon(String iconName)
     {
-        String useButtonIcons = (String) installdata.guiPrefs.modifier.get("useButtonIcons");
+        String useButtonIcons = installdata.guiPrefs.modifier.get("useButtonIcons");
 
         if (useButtonIcons == null || "yes".equalsIgnoreCase(useButtonIcons))
         {
@@ -1508,7 +1508,7 @@ public class InstallerFrame extends JFrame
 
     public boolean canShow(int panelnumber)
     {
-        IzPanel panel = (IzPanel) installdata.panels.get(panelnumber);
+        IzPanel panel = installdata.panels.get(panelnumber);
         Panel panelmetadata = panel.getMetadata(); 
         String panelid = panelmetadata.getPanelid();
         Debug.trace("Current Panel: " + panelid);                
@@ -1550,7 +1550,7 @@ public class InstallerFrame extends JFrame
             // We must trasfer all fields into the variables before
             // panelconditions try to resolve the rules based on unassigned vars.
             boolean isValid = 
-              ((IzPanel) installdata.panels.get(last)).isValidated();
+              (installdata.panels.get(last)).isValidated();
           
             // if this is not here, validation will
             // occur mutilple times while skipping panels through the recursion
@@ -1688,7 +1688,7 @@ public class InstallerFrame extends JFrame
      * 
      * @return the gui creation listener list
      */
-    public List getGuiListener()
+    public List<GUIListener> getGuiListener()
     {
         return guiListener;
     }
@@ -1716,7 +1716,7 @@ public class InstallerFrame extends JFrame
         // start
         Color foreground = null;
         if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor")){
-            foreground = Color.decode((String) installdata.guiPrefs.modifier
+            foreground = Color.decode(installdata.guiPrefs.modifier
                     .get("headingForegroundColor"));
             headingLabels[0].setForeground(foreground);
         }
@@ -1724,7 +1724,7 @@ public class InstallerFrame extends JFrame
         
         if (installdata.guiPrefs.modifier.containsKey("headingFontSize"))
         {
-            float fontSize = Float.parseFloat((String) installdata.guiPrefs.modifier
+            float fontSize = Float.parseFloat(installdata.guiPrefs.modifier
                     .get("headingFontSize"));
             if (fontSize > 0.0 && fontSize <= 5.0)
             {
@@ -1747,13 +1747,13 @@ public class InstallerFrame extends JFrame
         int i;
         String counterPos = "inHeading";
         if (installdata.guiPrefs.modifier.containsKey("headingPanelCounterPos"))
-            counterPos = (String) installdata.guiPrefs.modifier.get("headingPanelCounterPos");
+            counterPos = installdata.guiPrefs.modifier.get("headingPanelCounterPos");
         // Do not create counter if it should be in the heading, but no heading should be used.
         if (leftHeadingPanel == null && "inHeading".equalsIgnoreCase(counterPos)) return;
         if (installdata.guiPrefs.modifier.containsKey("headingPanelCounter"))
         {
             headingCounterComponent = null;
-            if ("progressbar".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+            if ("progressbar".equalsIgnoreCase(installdata.guiPrefs.modifier
                     .get("headingPanelCounter")))
             {
                 JProgressBar headingProgressBar = new JProgressBar();
@@ -1762,7 +1762,7 @@ public class InstallerFrame extends JFrame
                 headingProgressBar.setValue(0);
                 headingCounterComponent = headingProgressBar;
             }
-            else if ("text".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+            else if ("text".equalsIgnoreCase(installdata.guiPrefs.modifier
                     .get("headingPanelCounter")))
             {
                 JLabel headingCountPanels = new JLabel(" ");
@@ -1773,7 +1773,7 @@ public class InstallerFrame extends JFrame
                 // start
                 Color foreground = null;
                 if (installdata.guiPrefs.modifier.containsKey("headingForegroundColor")){
-                    foreground = Color.decode((String) installdata.guiPrefs.modifier
+                    foreground = Color.decode(installdata.guiPrefs.modifier
                             .get("headingForegroundColor"));
                     headingCountPanels.setForeground(foreground);
                 }
@@ -1820,7 +1820,7 @@ public class InstallerFrame extends JFrame
         int borderSize = 8;
         if (installdata.guiPrefs.modifier.containsKey("headingImageBorderSize"))
         {
-            borderSize = Integer.parseInt((String) installdata.guiPrefs.modifier
+            borderSize = Integer.parseInt(installdata.guiPrefs.modifier
                     .get("headingImageBorderSize"));
         }
         imgPanel.setBorder(BorderFactory.createEmptyBorder(borderSize, borderSize, borderSize, borderSize));
@@ -1841,13 +1841,13 @@ public class InstallerFrame extends JFrame
         // The number of lines can be determined in the config xml file.
         // The first is the header, additonals are descriptions for the header.
         if (installdata.guiPrefs.modifier.containsKey("headingLineCount"))
-            headingLines = Integer.parseInt((String) installdata.guiPrefs.modifier
+            headingLines = Integer.parseInt(installdata.guiPrefs.modifier
                     .get("headingLineCount"));
         Color back = null;
         int i = 0;
         // It is possible to determine the used background color of the heading panel.
         if (installdata.guiPrefs.modifier.containsKey("headingBackgroundColor"))
-            back = Color.decode((String) installdata.guiPrefs.modifier
+            back = Color.decode(installdata.guiPrefs.modifier
                     .get("headingBackgroundColor"));
         // Try to create counter if no heading should be used.
         if (!isHeading(null))
@@ -1902,7 +1902,7 @@ public class InstallerFrame extends JFrame
     public boolean isHeading(IzPanel caller)
     {
         if (!installdata.guiPrefs.modifier.containsKey("useHeadingPanel")
-                || !((String) installdata.guiPrefs.modifier.get("useHeadingPanel"))
+                || !(installdata.guiPrefs.modifier.get("useHeadingPanel"))
                         .equalsIgnoreCase("yes")) return (false);
         if (caller == null) return (true);
         return (caller.getI18nStringForClass("headline", null) != null);
@@ -1914,7 +1914,7 @@ public class InstallerFrame extends JFrame
         int i;
         int headingLines = 1;
         if (installdata.guiPrefs.modifier.containsKey("headingLineCount"))
-            headingLines = Integer.parseInt((String) installdata.guiPrefs.modifier
+            headingLines = Integer.parseInt(installdata.guiPrefs.modifier
                     .get("headingLineCount"));
 
         if (headingLabels == null) return;
@@ -1941,7 +1941,7 @@ public class InstallerFrame extends JFrame
         // Do not forgett the first headline.
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
-        int curPanelNo = ((Integer) visiblePanelMapping.get(installdata.curPanelNumber)).intValue();
+        int curPanelNo = (visiblePanelMapping.get(installdata.curPanelNumber)).intValue();
         if (headingLabels[headingLines] != null)
         {
             loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
@@ -1955,9 +1955,9 @@ public class InstallerFrame extends JFrame
     {
         if (headingCounterComponent != null)
         {
-            int curPanelNo = ((Integer) visiblePanelMapping.get(installdata.curPanelNumber))
+            int curPanelNo = (visiblePanelMapping.get(installdata.curPanelNumber))
                     .intValue();
-            int visPanelsCount = ((Integer) visiblePanelMapping.get(((Integer) visiblePanelMapping
+            int visPanelsCount = (visiblePanelMapping.get((visiblePanelMapping
                     .get(installdata.panels.size())).intValue())).intValue();
 
             StringBuffer buf = new StringBuffer();

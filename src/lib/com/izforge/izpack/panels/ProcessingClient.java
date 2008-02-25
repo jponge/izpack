@@ -86,7 +86,7 @@ public interface ProcessingClient
      * @return a java.util.Map containing the validator parameters.
      */
     /*--------------------------------------------------------------------------*/
-    public Map getValidatorParams();
+    public Map<String, String> getValidatorParams();
 
 }
 /*---------------------------------------------------------------------------*/

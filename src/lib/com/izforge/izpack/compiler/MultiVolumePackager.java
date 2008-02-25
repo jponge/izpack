@@ -194,7 +194,7 @@ public class MultiVolumePackager extends PackagerBase
         ZipInputStream inJarStream = new ZipInputStream(is);
         
         // copy anything except the manifest.mf
-        List excludes = new ArrayList();
+        List<String> excludes = new ArrayList<String>();
         excludes.add("META-INF.MANIFEST.MF");
         copyZipWithoutExcludes(inJarStream, primaryJarStream,excludes);
 
@@ -269,14 +269,14 @@ public class MultiVolumePackager extends PackagerBase
     {
         sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
 
-        Iterator i = installerResourceURLMap.keySet().iterator();
+        Iterator<String> i = installerResourceURLMap.keySet().iterator();
         while (i.hasNext())
         {
-            String name = (String) i.next();
-            InputStream in = ((URL) installerResourceURLMap.get(name)).openStream();
+            String name = i.next();
+            InputStream in = (installerResourceURLMap.get(name)).openStream();
 
             org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(name);
-            long dateTime = FileUtil.getFileDateTime((URL) installerResourceURLMap.get(name));
+            long dateTime = FileUtil.getFileDateTime(installerResourceURLMap.get(name));
             if (dateTime != -1)
                 newEntry.setTime(dateTime);
             primaryJarStream.putNextEntry(newEntry);
@@ -292,13 +292,13 @@ public class MultiVolumePackager extends PackagerBase
     {
         sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
 
-        Iterator i = includedJarURLs.iterator();
+        Iterator<Object[]> i = includedJarURLs.iterator();
         while (i.hasNext())
         {
-            Object[] current = (Object[]) i.next();
+            Object[] current = i.next();
             InputStream is = ((URL) current[0]).openStream();
             ZipInputStream inJarStream = new ZipInputStream(is);
-            copyZip(inJarStream, primaryJarStream, (List) current[1]);
+            copyZip(inJarStream, primaryJarStream, (List<String>) current[1]);
         }
     }
 
@@ -339,10 +339,10 @@ public class MultiVolumePackager extends PackagerBase
         fout.setFirstvolumefreespacesize(extraspacel);
 
         int packNumber = 0;
-        Iterator packIter = packsList.iterator();
+        Iterator<PackInfo> packIter = packsList.iterator();
         while (packIter.hasNext())
         {
-            PackInfo packInfo = (PackInfo) packIter.next();
+            PackInfo packInfo = packIter.next();
             Pack pack = packInfo.getPack();
             pack.nbytes = 0;
 
@@ -457,10 +457,10 @@ public class MultiVolumePackager extends PackagerBase
         out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(packsList.size());
 
-        Iterator i = packsList.iterator();
+        Iterator<PackInfo> i = packsList.iterator();
         while (i.hasNext())
         {
-            PackInfo pack = (PackInfo) i.next();
+            PackInfo pack = i.next();
             out.writeObject(pack.getPack());
         }
         out.flush();
@@ -495,11 +495,11 @@ public class MultiVolumePackager extends PackagerBase
      * 
      * @see #copyStream(InputStream, OutputStream)
      */
-    private void copyZip(ZipInputStream zin, ZipOutputStream out, List files) throws IOException
+    private void copyZip(ZipInputStream zin, ZipOutputStream out, List<String> files) throws IOException
     {
         java.util.zip.ZipEntry zentry;
-        if (!alreadyWrittenFiles.containsKey(out)) alreadyWrittenFiles.put(out, new HashSet());
-        HashSet currentSet = (HashSet) alreadyWrittenFiles.get(out);
+        if (!alreadyWrittenFiles.containsKey(out)) alreadyWrittenFiles.put(out, new HashSet<String>());
+        HashSet<String> currentSet = alreadyWrittenFiles.get(out);
         while ((zentry = zin.getNextEntry()) != null)
         {
             String currentName = zentry.getName();
@@ -507,11 +507,11 @@ public class MultiVolumePackager extends PackagerBase
             testName = testName.replace('\\', '.');
             if (files != null)
             {
-                Iterator i = files.iterator();
+                Iterator<String> i = files.iterator();
                 boolean founded = false;
                 while (i.hasNext())
                 { // Make "includes" self to support regex.
-                    String doInclude = (String) i.next();
+                    String doInclude = i.next();
                     if (testName.matches(doInclude))
                     {
                         founded = true;
@@ -555,11 +555,11 @@ public class MultiVolumePackager extends PackagerBase
      * 
      * @see #copyStream(InputStream, OutputStream)
      */
-    private void copyZipWithoutExcludes(ZipInputStream zin, ZipOutputStream out, List excludes) throws IOException
+    private void copyZipWithoutExcludes(ZipInputStream zin, ZipOutputStream out, List<String> excludes) throws IOException
     {
         java.util.zip.ZipEntry zentry;
-        if (!alreadyWrittenFiles.containsKey(out)) alreadyWrittenFiles.put(out, new HashSet());
-        HashSet currentSet = (HashSet) alreadyWrittenFiles.get(out);
+        if (!alreadyWrittenFiles.containsKey(out)) alreadyWrittenFiles.put(out, new HashSet<String>());
+        HashSet<String> currentSet = alreadyWrittenFiles.get(out);
         while ((zentry = zin.getNextEntry()) != null)
         {
             String currentName = zentry.getName();
@@ -567,12 +567,12 @@ public class MultiVolumePackager extends PackagerBase
             testName = testName.replace('\\', '.');
             if (excludes != null)
             {
-                Iterator i = excludes.iterator();
+                Iterator<String> i = excludes.iterator();
                 boolean skip = false;
                 while (i.hasNext())
                 { 
                     // Make "excludes" self to support regex.
-                    String doExclude = (String) i.next();                    
+                    String doExclude = i.next();
                     if (testName.matches(doExclude))
                     {                        
                         skip = true;

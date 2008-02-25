@@ -21,6 +21,8 @@
 
 package com.izforge.izpack;
 
+import com.izforge.izpack.util.OsConstraint;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,10 +76,10 @@ public class ExecutableFile implements Serializable
     public int onFailure;
 
     /** List of arguments */
-    public List argList = null;
+    public List<String> argList = null;
 
     /** List of operating systems to run on */
-    public List osList = null;
+    public List<OsConstraint> osList = null;
 
     /**
      * Indicates the file should be kept after executing. Default is false for backward
@@ -96,8 +98,8 @@ public class ExecutableFile implements Serializable
         mainClass = null;
         type = BIN;
         onFailure = ASK;
-        osList = new ArrayList();
-        argList = new ArrayList();
+        osList = new ArrayList<OsConstraint>();
+        argList = new ArrayList<String>();
         keepFile = false;
     }
 
@@ -109,7 +111,7 @@ public class ExecutableFile implements Serializable
      * @param onFailure what to do if execution fails
      * @param osList list of operating systems to run on
      */
-    public ExecutableFile(String path, int executionStage, int onFailure, java.util.List osList,
+    public ExecutableFile(String path, int executionStage, int onFailure, List<OsConstraint> osList,
             boolean keepFile)
     {
         this.path = path;
@@ -120,7 +122,7 @@ public class ExecutableFile implements Serializable
     }
 
     public ExecutableFile(String path, int type, String mainClass, int executionStage,
-            int onFailure, java.util.List argList, java.util.List osList, boolean keepFile)
+            int onFailure, List<String> argList, List<OsConstraint> osList, boolean keepFile)
     {
         this.path = path;
         this.mainClass = mainClass;

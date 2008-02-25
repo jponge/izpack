@@ -21,6 +21,8 @@
 
 package com.izforge.izpack;
 
+import com.izforge.izpack.util.OsConstraint;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class CustomData implements Serializable
      * contained files are listed with it complete sub path. If it is a uninstaller native library,
      * this value is the path in the installer jar.
      */
-    public List contents;
+    public List<String> contents;
 
     /**
      * Full qualified name of the managed listener. If type is not a listener, this value is
@@ -63,7 +65,7 @@ public class CustomData implements Serializable
     public String listenerName;
 
     /** The target operation system of this custom action */
-    public List osConstraints = null;
+    public List<OsConstraint> osConstraints = null;
 
     /**
      * Type of this custom action data; possible are INSTALLER_LISTENER, UNINSTALLER_LISTENER,
@@ -83,7 +85,7 @@ public class CustomData implements Serializable
      * @param osConstraints target operation system of this custom action
      * @param type type of this custom data
      */
-    public CustomData(String listenerName, List contents, List osConstraints, int type)
+    public CustomData(String listenerName, List<String> contents, List<OsConstraint> osConstraints, int type)
     {
         this.listenerName = listenerName;
         this.contents = contents;

@@ -178,14 +178,14 @@ public class SpecHelper
      */
     public XMLElement getPackForName(String packDestName)
     {
-        Vector packs = getSpec().getChildrenNamed(PACK_KEY);
-        Iterator iter = null;
+        Vector<XMLElement> packs = getSpec().getChildrenNamed(PACK_KEY);
+        Iterator<XMLElement> iter = null;
         if (packs == null) return (null);
         iter = packs.iterator();
         while (iter.hasNext())
         {
 
-            XMLElement pack = (XMLElement) iter.next();
+            XMLElement pack = iter.next();
             String packName = pack.getAttribute(PACK_NAME);
             if (packName.equals(packDestName)) return (pack);
         }
@@ -243,7 +243,7 @@ public class SpecHelper
      * name
      * @return a Vector of XMLElements of all leafs founded under root
      */
-    public Vector getAllSubChildren(XMLElement root, String[] childdef)
+    public Vector<XMLElement> getAllSubChildren(XMLElement root, String[] childdef)
     {
         return (getSubChildren(root, childdef, 0));
     }
@@ -258,21 +258,21 @@ public class SpecHelper
      * @param depth depth to start in childdef
      * @return a Vector of XMLElements of all leafs founded under root
      */
-    private Vector getSubChildren(XMLElement root, String[] childdef, int depth)
+    private Vector<XMLElement> getSubChildren(XMLElement root, String[] childdef, int depth)
     {
-        Vector retval = null;
-        Vector retval2 = null;
-        Vector children = root != null ? root.getChildrenNamed(childdef[depth]) : null;
+        Vector<XMLElement> retval = null;
+        Vector<XMLElement> retval2 = null;
+        Vector<XMLElement> children = root != null ? root.getChildrenNamed(childdef[depth]) : null;
         if (children == null) return (null);
         if (depth < childdef.length - 1)
         {
-            Iterator iter = children.iterator();
+            Iterator<XMLElement> iter = children.iterator();
             while (iter.hasNext())
             {
-                retval2 = getSubChildren((XMLElement) iter.next(), childdef, depth + 1);
+                retval2 = getSubChildren(iter.next(), childdef, depth + 1);
                 if (retval2 != null)
                 {
-                    if (retval == null) retval = new Vector();
+                    if (retval == null) retval = new Vector<XMLElement>();
                     retval.addAll(retval2);
                 }
             }

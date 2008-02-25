@@ -157,28 +157,28 @@ public class Log implements LogError, LogWarning, LogMessage
     private AutomatedInstallData installData = null;
 
     /** The collection of installation messages */
-    private ArrayList messages = new ArrayList();
+    private ArrayList<Record> messages = new ArrayList<Record>();
 
     /** The collection of warning messages */
-    private ArrayList warnings = new ArrayList();
+    private ArrayList<Record> warnings = new ArrayList<Record>();
 
     /** The collection of error messages */
-    private ArrayList errors = new ArrayList();
+    private ArrayList<Record> errors = new ArrayList<Record>();
 
     /** The collection of debug messages */
-    private ArrayList debug = new ArrayList();
+    private ArrayList<Record> debug = new ArrayList<Record>();
 
     /**
      * The list of channels requested for debug output. A <code>Vector</code> must be used for
      * this purpose, since this is the only class that explicitly specifies that the
      * <code>equals()</code> method is used for determining if a particular object is contained.
      */
-    private Vector channels = null;
+    private Vector<String> channels = null;
 
     /**
      * This map keeps track of all channels that are recorded. It is used for information purposes.
      */
-    private Hashtable recordedChannels = null;
+    private Hashtable<String, String> recordedChannels = null;
 
     /** This flag signals if debug messages should be recorded */
     private boolean debugActive = false;
@@ -215,8 +215,8 @@ public class Log implements LogError, LogWarning, LogMessage
             // ----------------------------------------------------
             // get the list of debug channels requested
             // ----------------------------------------------------
-            recordedChannels = new Hashtable();
-            channels = new Vector();
+            recordedChannels = new Hashtable<String, String>();
+            channels = new Vector<String>();
             temp = System.getProperty(CHANNEL_LIST);
             if ((temp != null) && (temp.toUpperCase().equals("ON")))
             {
@@ -705,7 +705,7 @@ public class Log implements LogError, LogWarning, LogMessage
     /*--------------------------------------------------------------------------*/
     private String buildMessage(int index)
     {
-        Record record = (Record) messages.get(index);
+        Record record = messages.get(index);
         StringBuffer message = new StringBuffer();
 
         // ----------------------------------------------------
@@ -739,7 +739,7 @@ public class Log implements LogError, LogWarning, LogMessage
     /*--------------------------------------------------------------------------*/
     private String buildWarning(int index)
     {
-        Record record = (Record) warnings.get(index);
+        Record record = warnings.get(index);
         StringBuffer message = new StringBuffer();
 
         // ----------------------------------------------------
@@ -783,7 +783,7 @@ public class Log implements LogError, LogWarning, LogMessage
     /*--------------------------------------------------------------------------*/
     private String buildError(int index)
     {
-        Record record = (Record) errors.get(index);
+        Record record = errors.get(index);
         StringBuffer message = new StringBuffer();
 
         // ----------------------------------------------------
@@ -825,7 +825,7 @@ public class Log implements LogError, LogWarning, LogMessage
     /*--------------------------------------------------------------------------*/
     private String buildDebug(int index)
     {
-        Record record = (Record) debug.get(index);
+        Record record = debug.get(index);
 
         return (buildDebug(record));
     }
@@ -882,7 +882,7 @@ public class Log implements LogError, LogWarning, LogMessage
             System.out.println("The following debug channels did record messages:");
             System.out.println();
 
-            Enumeration list = recordedChannels.keys();
+            Enumeration<String> list = recordedChannels.keys();
 
             while (list.hasMoreElements())
             {

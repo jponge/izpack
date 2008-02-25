@@ -55,22 +55,22 @@ public class StdXMLReader implements IXMLReader
     /**
      * The stack of push-back readers.
      */
-    private Stack pbreaders;
+    private Stack<PushbackReader> pbreaders;
 
     /**
      * The stack of line-number readers.
      */
-    private Stack linereaders;
+    private Stack<LineNumberReader> linereaders;
 
     /**
      * The stack of system ids.
      */
-    private Stack systemIds;
+    private Stack<URL> systemIds;
 
     /**
      * The stack of public ids.
      */
-    private Stack publicIds;
+    private Stack<String> publicIds;
 
     /**
      * The current push-back reader.
@@ -153,10 +153,10 @@ public class StdXMLReader implements IXMLReader
         Reader reader = this.openStream(publicID, systemIDasURL.toString());
         this.currentLineReader = new LineNumberReader(reader);
         this.currentPbReader = new PushbackReader(this.currentLineReader, 2);
-        this.pbreaders = new Stack();
-        this.linereaders = new Stack();
-        this.publicIds = new Stack();
-        this.systemIds = new Stack();
+        this.pbreaders = new Stack<PushbackReader>();
+        this.linereaders = new Stack<LineNumberReader>();
+        this.publicIds = new Stack<String>();
+        this.systemIds = new Stack<URL>();
         this.currentPublicID = publicID;
         this.currentSystemID = systemIDasURL;
     }
@@ -170,10 +170,10 @@ public class StdXMLReader implements IXMLReader
     {
         this.currentLineReader = new LineNumberReader(reader);
         this.currentPbReader = new PushbackReader(this.currentLineReader, 2);
-        this.pbreaders = new Stack();
-        this.linereaders = new Stack();
-        this.publicIds = new Stack();
-        this.systemIds = new Stack();
+        this.pbreaders = new Stack<PushbackReader>();
+        this.linereaders = new Stack<LineNumberReader>();
+        this.publicIds = new Stack<String>();
+        this.systemIds = new Stack<URL>();
         this.currentPublicID = "";
 
         try
@@ -350,10 +350,10 @@ public class StdXMLReader implements IXMLReader
         Reader reader = this.stream2reader(stream, charsRead);
         this.currentLineReader = new LineNumberReader(reader);
         this.currentPbReader = new PushbackReader(this.currentLineReader, 2);
-        this.pbreaders = new Stack();
-        this.linereaders = new Stack();
-        this.publicIds = new Stack();
-        this.systemIds = new Stack();
+        this.pbreaders = new Stack<PushbackReader>();
+        this.linereaders = new Stack<LineNumberReader>();
+        this.publicIds = new Stack<String>();
+        this.systemIds = new Stack<URL>();
         this.currentPublicID = "";
 
         try
@@ -383,10 +383,10 @@ public class StdXMLReader implements IXMLReader
             if (this.pbreaders.empty()) { throw new IOException("Unexpected EOF"); }
 
             this.currentPbReader.close();
-            this.currentPbReader = (PushbackReader) this.pbreaders.pop();
-            this.currentLineReader = (LineNumberReader) this.linereaders.pop();
-            this.currentSystemID = (URL) this.systemIds.pop();
-            this.currentPublicID = (String) this.publicIds.pop();
+            this.currentPbReader = this.pbreaders.pop();
+            this.currentLineReader = this.linereaders.pop();
+            this.currentSystemID = this.systemIds.pop();
+            this.currentPublicID = this.publicIds.pop();
             ch = this.currentPbReader.read();
         }
 
@@ -441,10 +441,10 @@ public class StdXMLReader implements IXMLReader
             if (this.pbreaders.empty()) { return true; }
 
             this.currentPbReader.close();
-            this.currentPbReader = (PushbackReader) this.pbreaders.pop();
-            this.currentLineReader = (LineNumberReader) this.linereaders.pop();
-            this.currentSystemID = (URL) this.systemIds.pop();
-            this.currentPublicID = (String) this.publicIds.pop();
+            this.currentPbReader = this.pbreaders.pop();
+            this.currentLineReader = this.linereaders.pop();
+            this.currentSystemID = this.systemIds.pop();
+            this.currentPublicID = this.publicIds.pop();
             ch = this.currentPbReader.read();
         }
 

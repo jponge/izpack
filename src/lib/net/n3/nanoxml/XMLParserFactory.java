@@ -105,8 +105,8 @@ public class XMLParserFactory
     public static IXMLParser createXMLParser(String className, IXMLBuilder builder)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException
     {
-        Class cls = Class.forName(className);
-        IXMLParser parser = (IXMLParser) cls.newInstance();
+        Class<IXMLParser> cls = (Class<IXMLParser>) Class.forName(className);
+        IXMLParser parser = cls.newInstance();
         parser.setBuilder(builder);
         parser.setValidator(new NonValidator());
         return parser;

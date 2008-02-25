@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.izforge.izpack.compiler.PackInfo;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  * Represents a Pack.
@@ -58,7 +59,7 @@ public class Pack implements Serializable
      * different pack collections to be selected, for example: minimal,
      * default, all.
      */
-    public Set installGroups = new HashSet();
+    public Set<String> installGroups = new HashSet<String>();
     
     /** All packs in the same excludeGroup are mutually exclusive. The excludeGroup
      * is a string and serves are key identifying each group of mutually
@@ -76,16 +77,16 @@ public class Pack implements Serializable
     public String description;
 
     /** The target operation system of this pack */
-    public List osConstraints = null;
+    public List<OsConstraint> osConstraints = null;
     
     /** Condition for this pack **/
     private String condition;
 
     /** The list of packs this pack depends on */
-    public List dependencies = null;
+    public List<String> dependencies = null;
 
     /** Reverse dependencies(childs) */
-    public List revDependencies = null;
+    public List<String> revDependencies = null;
     
     /** True if the pack is required. */
     public boolean required;
@@ -128,7 +129,7 @@ public class Pack implements Serializable
      * @param excludegroup associated exclude group
      * @param uninstall If true, pack must be uninstalled.
      */
-    public Pack(String name, String id, String description, List osConstraints, List dependencies,
+    public Pack(String name, String id, String description, List<OsConstraint> osConstraints, List<String> dependencies,
             boolean required, boolean preselected, boolean loose, String excludegroup, boolean uninstall)
     {
         this.name = name;
@@ -159,7 +160,7 @@ public class Pack implements Serializable
 
     /** getter method for dependencies
      * @return the dependencies list*/
-    public List getDependencies()
+    public List<String> getDependencies()
     {
         return dependencies;
     }
@@ -173,7 +174,7 @@ public class Pack implements Serializable
      */
     public void addRevDep(String name0)
     {
-        if (revDependencies == null) revDependencies = new ArrayList();
+        if (revDependencies == null) revDependencies = new ArrayList<String>();
         revDependencies.add(name0);
     }
 
@@ -189,10 +190,10 @@ public class Pack implements Serializable
         String name0;
         for (int i = 0; i < dependencies.size() - 1; i++)
         {
-            name0 = (String) dependencies.get(i);
+            name0 = dependencies.get(i);
             text += name0 + ",";
         }
-        name0 = (String) dependencies.get(dependencies.size() - 1);
+        name0 = dependencies.get(dependencies.size() - 1);
         text += name0;
         return text;
 

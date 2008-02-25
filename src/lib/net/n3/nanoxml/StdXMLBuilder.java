@@ -46,7 +46,7 @@ public class StdXMLBuilder implements IXMLBuilder
     /**
      * This stack contains the current element and its parents.
      */
-    private Stack stack;
+    private Stack<XMLElement> stack;
 
     /**
      * The root element of the parsed XML tree.
@@ -68,7 +68,7 @@ public class StdXMLBuilder implements IXMLBuilder
      * @return  the element that is currently being processed
      */
     protected XMLElement getCurrentElement() {
-        return (XMLElement) stack.peek();
+        return stack.peek();
     }
 
     /**
@@ -76,7 +76,7 @@ public class StdXMLBuilder implements IXMLBuilder
      *
      * @return  the stack used for processing the elements.
      */
-    protected Stack getStack() {
+    protected Stack<XMLElement> getStack() {
         return stack;
     }
 
@@ -111,7 +111,7 @@ public class StdXMLBuilder implements IXMLBuilder
      */
     public void startBuilding(String systemID, int lineNr)
     {
-        this.stack = new Stack();
+        this.stack = new Stack<XMLElement>();
         this.root = null;
     }
 
@@ -149,7 +149,7 @@ public class StdXMLBuilder implements IXMLBuilder
         }
         else
         {
-            XMLElement top = (XMLElement) this.stack.peek();
+            XMLElement top = this.stack.peek();
             top.addChild(elt);
         }
 
@@ -182,7 +182,7 @@ public class StdXMLBuilder implements IXMLBuilder
      */
     public void endElement(String name, String nsPrefix, String nsSystemID)
     {
-        XMLElement elt = (XMLElement) this.stack.pop();
+        XMLElement elt = this.stack.pop();
 
         if (elt.getChildrenCount() == 1)
         {
@@ -210,7 +210,7 @@ public class StdXMLBuilder implements IXMLBuilder
     public void addAttribute(String key, String nsPrefix, String nsSystemID, String value,
             String type) throws Exception
     {
-        XMLElement top = (XMLElement) this.stack.peek();
+        XMLElement top = this.stack.peek();
 
         if (top.hasAttribute(key)) { throw new XMLParseException(top.getSystemID(),
                 top.getLineNr(), "Duplicate attribute: " + key); }
@@ -261,7 +261,7 @@ public class StdXMLBuilder implements IXMLBuilder
 
         if (!this.stack.empty())
         {
-            XMLElement top = (XMLElement) this.stack.peek();
+            XMLElement top = this.stack.peek();
             top.addChild(elt);
         }
     }

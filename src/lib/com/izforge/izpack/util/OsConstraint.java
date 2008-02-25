@@ -185,16 +185,16 @@ public class OsConstraint
      * @param element parent XMLElement
      * @return List of OsConstraint (or empty List if no constraints found)
      */
-    public static List getOsList(XMLElement element)
+    public static List<OsConstraint> getOsList(XMLElement element)
     {
         // get os info on this executable
-        ArrayList osList = new ArrayList();
-        Iterator osIterator = element.getChildrenNamed("os").iterator();
+        ArrayList<OsConstraint> osList = new ArrayList<OsConstraint>();
+        Iterator<XMLElement> osIterator = element.getChildrenNamed("os").iterator();
 
 
         while (osIterator.hasNext())
         {
-            XMLElement os = (XMLElement) osIterator.next();
+            XMLElement os = osIterator.next();
 
 
             osList.add(new OsConstraint(os.getAttribute("family",
@@ -234,14 +234,14 @@ public class OsConstraint
      * @return true if one of the OsConstraints matched the current system or constraint_list is
      *         null (no constraints), false if none of the OsConstraints matched
      */
-    public static boolean oneMatchesCurrentSystem(List constraint_list)
+    public static boolean oneMatchesCurrentSystem(List<OsConstraint> constraint_list)
     {
         if (constraint_list == null)
         {
             return true;
         }    // end if
 
-        Iterator constraint_it = constraint_list.iterator();
+        Iterator<OsConstraint> constraint_it = constraint_list.iterator();
 
         // no constraints at all - matches!
         if (!constraint_it.hasNext())
@@ -251,7 +251,7 @@ public class OsConstraint
 
         while (constraint_it.hasNext())
         {
-            OsConstraint osc = (OsConstraint) constraint_it.next();
+            OsConstraint osc = constraint_it.next();
 
 
             Debug.trace("checking if os constraints " + osc + " match current OS");

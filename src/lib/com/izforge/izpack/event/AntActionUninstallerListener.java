@@ -44,7 +44,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
 {
 
     /** Ant actions to be performed after deletion */
-    private List antActions = null;
+    private List<AntAction> antActions = null;
 
     /**
      * Default constructor
@@ -76,8 +76,8 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
         List allActions = (List) objIn.readObject();
         objIn.close();
         in.close();
-        ArrayList befDel = new ArrayList();
-        antActions = new ArrayList();
+        ArrayList<AntAction> befDel = new ArrayList<AntAction>();
+        antActions = new ArrayList<AntAction>();
         Iterator iter = allActions.iterator();
         // There are two possible orders; before and after deletion.
         // Now we assign the actions to two different lists, the
@@ -98,14 +98,14 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
                 // install dir.
                 File tmpFile = IoHelper.copyToTempFile(action.getBuildFile(), ".xml");
                 action.setBuildFile(tmpFile.getCanonicalPath());
-                List props = action.getPropertyFiles();
+                List<String> props = action.getPropertyFiles();
                 if (props != null)
                 {
-                    Iterator iter2 = props.iterator();
-                    ArrayList newProps = new ArrayList();
+                    Iterator<String> iter2 = props.iterator();
+                    ArrayList<String> newProps = new ArrayList<String>();
                     while (iter2.hasNext())
                     {
-                        String propName = (String) iter2.next();
+                        String propName = iter2.next();
                         File propFile = IoHelper.copyToTempFile(propName, ".properties");
                         newProps.add(propFile.getCanonicalPath());
                     }
@@ -119,7 +119,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
         {
             for (int i = 0; i < befDel.size(); i++)
             {
-                AntAction act = (AntAction) befDel.get(i);
+                AntAction act = befDel.get(i);
                 act.performUninstallAction();
             }
         }
@@ -138,7 +138,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
         { // There are actions of the order "afterdeletion".
             for (int i = 0; i < antActions.size(); i++)
             {
-                AntAction act = (AntAction) antActions.get(i);
+                AntAction act = antActions.get(i);
                 act.performUninstallAction();
             }
 

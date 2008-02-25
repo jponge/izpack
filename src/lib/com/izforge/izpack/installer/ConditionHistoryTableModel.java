@@ -36,9 +36,9 @@ public class ConditionHistoryTableModel extends AbstractTableModel
     private static final long serialVersionUID = 5966543100431588652L;
     
     public static final String[] columnheader = {"Id","Value"};
-    private Map conditionvalues;
+    private Map<String, ConditionHistory> conditionvalues;
             
-    public ConditionHistoryTableModel(Map values) {        
+    public ConditionHistoryTableModel(Map<String, ConditionHistory> values) {
         this.conditionvalues = values;        
     }
     
@@ -72,7 +72,7 @@ public class ConditionHistoryTableModel extends AbstractTableModel
             
             case 1:           
                 String conditionid = (String) getValueAt(rowIndex, 0);
-                ConditionHistory ch = (ConditionHistory) conditionvalues.get(conditionid);
+                ConditionHistory ch = conditionvalues.get(conditionid);
                 return ch;        
         }
         return null;

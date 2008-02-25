@@ -50,7 +50,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         // We add each pack to the panelRoot element
         for (int i = 0; i < idata.allPacks.size(); i++)
         {
-            Pack pack = (Pack) idata.allPacks.get(i);
+            Pack pack = idata.allPacks.get(i);
             XMLElement el = new XMLElement("pack");
             el.setAttribute("index", Integer.toString(i));
             el.setAttribute("name", pack.name);
@@ -72,7 +72,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
     public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
         // We get the packs markups
-        Vector pm = panelRoot.getChildrenNamed("pack");
+        Vector<XMLElement> pm = panelRoot.getChildrenNamed("pack");
 
         boolean result = true;
         
@@ -81,7 +81,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         idata.selectedPacks.clear();
         for (int i = 0; i < size; i++)
         {
-            XMLElement el = (XMLElement) pm.get(i);
+            XMLElement el = pm.get(i);
             Boolean selected = Boolean.TRUE; // No longer needed.
 
             if (selected.booleanValue())

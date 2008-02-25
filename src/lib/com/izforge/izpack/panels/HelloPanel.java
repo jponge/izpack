@@ -94,7 +94,7 @@ public class HelloPanel extends IzPanel
         // to create a paragraph gap which is configurable.
         add(IzPanelLayout.createParagraphGap());
 
-        ArrayList authors = idata.info.getAuthors();
+        ArrayList<Info.Author> authors = idata.info.getAuthors();
         int size = authors.size();
         if (size > 0)
         {
@@ -115,7 +115,7 @@ public class HelloPanel extends IzPanel
             JLabel label;
             for (int i = 0; i < size; i++)
             {
-                Info.Author a = (Info.Author) authors.get(i);
+                Info.Author a = authors.get(i);
                 String email = (a.getEmail() != null && a.getEmail().length() > 0) ? (" <"
                         + a.getEmail() + ">") : "";
                 label = LabelFactory.create(" - " + a.getName() + email, parent.icons

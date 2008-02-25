@@ -123,7 +123,7 @@ public class Shortcut
      * @see #APPLICATIONS
      * @see #START_MENU
      */
-    public Vector getProgramGroups(int userType)
+    public Vector<String> getProgramGroups(int userType)
     {
         return (null);
     }

@@ -98,27 +98,27 @@ public class Librarian implements CleanupClient
      * A list that is used to track all libraries that have been loaded. This list is used to ensure
      * that each library is loaded only once.
      */
-    private Vector trackList = new Vector();
+    private Vector<String> trackList = new Vector<String>();
 
     /**
      * A list of references to clients that use libraries that were extracted from a *.jar file.
      * This is needed because the clients need to be called for freeing their libraries.
      */
-    private Vector clients = new Vector();
+    private Vector<NativeLibraryClient> clients = new Vector<NativeLibraryClient>();
 
     /**
      * A list of library names as they appear in the temporary directory. This is needed to free
      * each library through the client. The index of each name corresponds to the index of the
      * respective client in the <code>clients</code> list.
      */
-    private Vector libraryNames = new Vector();
+    private Vector<String> libraryNames = new Vector<String>();
 
     /**
      * A list of fully qualified library names. This is needed to delete the temporary library files
      * after use. The index of each name corresponds to the index of the respective client in the
      * <code>clients</code> list.
      */
-    private Vector temporaryFileNames = new Vector();
+    private Vector<String> temporaryFileNames = new Vector<String>();
 
     /** The extension to use for native libraries. */
     private String extension = "";
@@ -699,8 +699,8 @@ public class Librarian implements CleanupClient
             // --------------------------------------------------
             // free the library
             // --------------------------------------------------
-            NativeLibraryClient client = (NativeLibraryClient) clients.elementAt(i);
-            String libraryName = (String) libraryNames.elementAt(i);
+            NativeLibraryClient client = clients.elementAt(i);
+            String libraryName = libraryNames.elementAt(i);
 
             FreeThread free = new FreeThread(libraryName, client);
             free.start();
@@ -716,7 +716,7 @@ public class Librarian implements CleanupClient
             // --------------------------------------------------
             // delete the library
             // --------------------------------------------------
-            String tempFileName = (String) temporaryFileNames.elementAt(i);
+            String tempFileName = temporaryFileNames.elementAt(i);
             try
             {
                 File file = new File(tempFileName);

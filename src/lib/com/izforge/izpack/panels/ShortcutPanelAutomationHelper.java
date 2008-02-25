@@ -81,16 +81,16 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
          * A list of ShortcutData> objects. Each object is the complete specification for one
          * shortcut that must be created.
          */
-        Vector shortcuts = new Vector();
+        Vector<ShortcutData> shortcuts = new Vector<ShortcutData>();
 
-        Vector execFiles = new Vector();
+        Vector<ExecutableFile> execFiles = new Vector<ExecutableFile>();
 
         /**
          * Holds a list of all the shortcut files that have been created. Note: this variable
          * contains valid data only after createShortcuts() has been called. This list is created so
          * that the files can be added to the uninstaller.
          */
-        Vector files = new Vector();
+        Vector<String> files = new Vector<String>();
 
         Debug.log(this.getClass().getName() + " Entered runAutomated()");
 
@@ -127,9 +127,9 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
             return true;
         }
 
-        shortcuts = new Vector();
+        shortcuts = new Vector<ShortcutData>();
 
-        Vector shortcutElements;
+        Vector<XMLElement> shortcutElements;
         ShortcutData data;
         XMLElement dataElement;
 
@@ -154,7 +154,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         {
             Debug.log(this.getClass().getName() + "runAutomated:shortcutElements " + i);
             data = new ShortcutData();
-            dataElement = (XMLElement) shortcutElements.elementAt(i);
+            dataElement = shortcutElements.elementAt(i);
 
             data.name = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
             data.addToGroup = Boolean.valueOf(
@@ -222,7 +222,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         // ShortcutData data;
         for (int i = 0; i < shortcuts.size(); i++)
         {
-            data = (ShortcutData) shortcuts.elementAt(i);
+            data = shortcuts.elementAt(i);
 
             try
             {
@@ -283,11 +283,11 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
                     File file = new File(fileName);
                     File base = new File(shortcut.getBasePath());
-                    Vector intermediates = new Vector();
+                    Vector<File> intermediates = new Vector<File>();
 
                     // String directoryName = shortcut.getDirectoryCreated ();
                     execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
-                            ExecutableFile.IGNORE, new ArrayList(), false));
+                            ExecutableFile.IGNORE, new ArrayList<OsConstraint>(), false));
 
                     files.add(fileName);
 
@@ -303,7 +303,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
                     if (file != null)
                     {
-                        Enumeration filesEnum = intermediates.elements();
+                        Enumeration<File> filesEnum = intermediates.elements();
 
                         while (filesEnum.hasMoreElements())
                         {
@@ -353,7 +353,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
         for (int i = 0; i < files.size(); i++)
         {
-            uninstallData.addFile((String) files.elementAt(i), true);
+            uninstallData.addFile(files.elementAt(i), true);
             System.out.print(".");
             System.out.flush();
         }

@@ -30,6 +30,7 @@ import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.compressor.PackCompressor;
 
 /**
@@ -110,7 +111,7 @@ public interface IPackager
     /**
      * Gets the packages list
      */
-    public abstract List getPacksList();
+    public abstract List<PackInfo> getPacksList();
 
     /**
      * Adds a language pack.
@@ -156,7 +157,7 @@ public interface IPackager
      * nested within another.
      * @param files to be copied
      */
-    public abstract void addJarContent(URL jarURL, List files);
+    public abstract void addJarContent(URL jarURL, List<String> files);
 
     /**
      * Marks a native library to be added to the uninstaller.
@@ -187,22 +188,22 @@ public interface IPackager
     /**
      * @return the rules
      */
-    public abstract Map getRules();    
+    public abstract Map<String, Condition> getRules();
     
     /**
      * @param rules the rules to set
      */
-    public abstract void setRules(Map rules);
+    public abstract void setRules(Map<String, Condition> rules);
     
     /**
      * Returns a map of dynamically refreshed variables
      * @return the map
      */
-    public abstract Map getDynamicVariables();
+    public abstract Map<String, DynamicVariable> getDynamicVariables();
     
     /**
      * 
      * @param dynamicvariables
      */
-    public abstract void setDynamicVariables(Map dynamicvariables);
+    public abstract void setDynamicVariables(Map<String, DynamicVariable> dynamicvariables);
 }

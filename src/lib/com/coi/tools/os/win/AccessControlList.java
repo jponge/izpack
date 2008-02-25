@@ -38,7 +38,7 @@ public class AccessControlList extends java.util.ArrayList
      * Required (serializable)
      */
     private static final long serialVersionUID = -5350586385078554562L;
-    private ArrayList permissions = new ArrayList();
+    private ArrayList<AccessControlEntry> permissions = new ArrayList<AccessControlEntry>();
 
     /**
      * Default constructor.
@@ -69,7 +69,7 @@ public class AccessControlList extends java.util.ArrayList
      */
     public AccessControlEntry getACE(int num)
     {
-        return ((AccessControlEntry) (((AccessControlEntry) permissions.get(num)).clone()));
+        return ((AccessControlEntry) ((permissions.get(num)).clone()));
     }
 
     /**

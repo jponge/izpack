@@ -108,7 +108,7 @@ public class XIncludeXMLBuilder extends StdXMLBuilder {
     private void processXInclude(final XMLElement element) {
         if (INCLUDE_ELEMENT.equals(element.getName())) {
 
-            Vector fallbackChildren = element.getChildrenNamed(FALLBACK_ELEMENT);
+            Vector<XMLElement> fallbackChildren = element.getChildrenNamed(FALLBACK_ELEMENT);
             if (element.getChildrenCount() != fallbackChildren.size() ||
                 fallbackChildren.size() > 1) {
                 throw new RuntimeException(new XMLParseException(
@@ -168,11 +168,11 @@ public class XIncludeXMLBuilder extends StdXMLBuilder {
      * @return a reader for the fallback
      */
     private IXMLReader handleFallback(XMLElement include) {
-        Vector fallbackChildren = include.getChildrenNamed(FALLBACK_ELEMENT);
+        Vector<XMLElement> fallbackChildren = include.getChildrenNamed(FALLBACK_ELEMENT);
         if (fallbackChildren.size() == 1) {
             // process fallback
 
-            XMLElement fallback = (XMLElement) fallbackChildren.get(0);
+            XMLElement fallback = fallbackChildren.get(0);
             // fallback element can only contain a CDATA so it will not have
             // its content in un-named children
             String content = fallback.getContent();
@@ -206,7 +206,7 @@ public class XIncludeXMLBuilder extends StdXMLBuilder {
     private void includeXML(final XMLElement element, IXMLReader reader) {
 
         try {
-            Stack stack = getStack();
+            Stack<XMLElement> stack = getStack();
             // set up a new parser to parse the include file.
             StdXMLParser parser = new StdXMLParser();
             parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
@@ -220,7 +220,7 @@ public class XIncludeXMLBuilder extends StdXMLBuilder {
             if (stack.isEmpty()) {
                 setRootElement(childroot);
             } else {
-                XMLElement parent = (XMLElement) stack.peek();
+                XMLElement parent = stack.peek();
                 // remove the include element from its parent
                 parent.removeChild(element);
 
@@ -262,7 +262,7 @@ public class XIncludeXMLBuilder extends StdXMLBuilder {
                 "xpointer cannot be used with parse='text'"));
         }
 
-        Stack stack = getStack();
+        Stack<XMLElement> stack = getStack();
         if (stack.isEmpty()) {
             throw new RuntimeException(new XMLParseException(
                 element.getSystemID(),
@@ -271,7 +271,7 @@ public class XIncludeXMLBuilder extends StdXMLBuilder {
         }
 
         // remove the include element from the parent
-        XMLElement parent = (XMLElement)stack.peek();
+        XMLElement parent = stack.peek();
         parent.removeChild(element);
         StringBuffer buffer = new StringBuffer();
         try {

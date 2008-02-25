@@ -186,7 +186,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
         // gridBagConstraints.weighty = 0.1;
 
-        Iterator it = this.worker.getAvailableCompilers().iterator();
+        Iterator<String> it = this.worker.getAvailableCompilers().iterator();
 
         while (it.hasNext())
             compilerComboBox.addItem(it.next());
@@ -480,7 +480,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     {
         // get compilers again (because they might contain variables from former
         // panels)
-        Iterator it = this.worker.getAvailableCompilers().iterator();
+        Iterator<String> it = this.worker.getAvailableCompilers().iterator();
 
         compilerComboBox.removeAllItems();
 

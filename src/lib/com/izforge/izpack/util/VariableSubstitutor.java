@@ -87,12 +87,12 @@ public class VariableSubstitutor implements Serializable
     public final static String PLAIN = "plain";
 
     /** A mapping of file type names to corresponding integer constants. */
-    protected final static Map typeNameToConstantMap;
+    protected final static Map<String, Integer> typeNameToConstantMap;
 
     // Initialize the file type map
     static
     {
-        typeNameToConstantMap = new HashMap();
+        typeNameToConstantMap = new HashMap<String, Integer>();
         typeNameToConstantMap.put("plain", new Integer(TYPE_PLAIN));
         typeNameToConstantMap.put("javaprop", new Integer(TYPE_JAVA_PROPERTIES));
         typeNameToConstantMap.put("java", new Integer(TYPE_JAVA));
@@ -392,7 +392,7 @@ public class VariableSubstitutor implements Serializable
     protected int getTypeConstant(String type)
     {
         if (type == null) return TYPE_PLAIN;
-        Integer integer = (Integer) typeNameToConstantMap.get(type);
+        Integer integer = typeNameToConstantMap.get(type);
         if (integer == null)
             throw new IllegalArgumentException("Unknown file type " + type);
         else

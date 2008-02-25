@@ -108,7 +108,7 @@ public class DataCheckPanel extends IzPanel
      * @param packList
      * @return String
      */
-	private String getPackNames(List packList)
+	private String getPackNames(List<Pack> packList)
 	{
 		int i;
 		String pStatus;
@@ -116,7 +116,7 @@ public class DataCheckPanel extends IzPanel
 		Pack iPack;
 		for (i = 0; i < packList.size(); i++)
 		{
-			iPack = (Pack) packList.get(i);
+			iPack = packList.get(i);
 			if (iData.selectedPacks.indexOf(iPack) != -1)
 				pStatus = "Selected";
 			else
@@ -140,9 +140,9 @@ public class DataCheckPanel extends IzPanel
         System.out.println("InstallData Variables:");
         Properties varList = iData.getVariables();
         String[] alphaName = new String[varList.size()];
-        Enumeration varNames = varList.propertyNames();
+        Enumeration<String> varNames = (Enumeration<String>) varList.propertyNames();
         while (varNames.hasMoreElements())
-            alphaName[i++] = (String) varNames.nextElement();
+            alphaName[i++] = varNames.nextElement();
         java.util.Arrays.sort(alphaName);
         for (i = 0; i < alphaName.length; i++)
             sInfo = sInfo + "\tName: " + alphaName[i] + ", Value: " + varList.getProperty(alphaName[i]) + "\n";

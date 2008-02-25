@@ -165,14 +165,14 @@ public class Packager extends PackagerBase
     {
         sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
 
-        Iterator i = installerResourceURLMap.keySet().iterator();
+        Iterator<String> i = installerResourceURLMap.keySet().iterator();
         while (i.hasNext())
         {
-            String name = (String) i.next();
-            InputStream in = ((URL) installerResourceURLMap.get(name)).openStream();
+            String name = i.next();
+            InputStream in = (installerResourceURLMap.get(name)).openStream();
             
             org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(name);
-            long dateTime = FileUtil.getFileDateTime((URL) installerResourceURLMap.get(name));
+            long dateTime = FileUtil.getFileDateTime(installerResourceURLMap.get(name));
             if (dateTime != -1)
                 newEntry.setTime(dateTime);
             primaryJarStream.putNextEntry(newEntry);
@@ -188,13 +188,13 @@ public class Packager extends PackagerBase
     {
         sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
 
-        Iterator i = includedJarURLs.iterator();
+        Iterator<Object[]> i = includedJarURLs.iterator();
         while (i.hasNext())
         {
-            Object [] current = (Object []) i.next();
+            Object [] current = i.next();
             InputStream is = ((URL) current[0]).openStream();
             ZipInputStream inJarStream = new ZipInputStream(is);
-            copyZip(inJarStream, primaryJarStream, (List) current[1]);
+            copyZip(inJarStream, primaryJarStream, (List<String>) current[1]);
         }
     }
 
@@ -207,19 +207,19 @@ public class Packager extends PackagerBase
         sendMsg("Writing " + num + " Pack" + (num > 1 ? "s" : "") + " into installer");
 
         // Map to remember pack number and bytes offsets of back references
-        Map storedFiles = new HashMap();
+        Map<File, Object[]> storedFiles = new HashMap<File, Object[]>();
 
         // First write the serialized files and file metadata data for each pack
         // while counting bytes.
         
         int packNumber = 0;
-        Iterator packIter = packsList.iterator();
+        Iterator<PackInfo> packIter = packsList.iterator();
         
         XMLElement root = new XMLElement("packs");
         
         while (packIter.hasNext())
         {
-            PackInfo packInfo = (PackInfo) packIter.next();
+            PackInfo packInfo = packIter.next();
             Pack pack = packInfo.getPack();
             pack.nbytes = 0;
             if ((pack.id == null) || (pack.id.length() == 0)) {
@@ -274,7 +274,7 @@ public class Packager extends PackagerBase
 
                 // use a back reference if file was in previous pack, and in
                 // same jar
-                Object[] info = (Object[]) storedFiles.get(file);
+                Object[] info = storedFiles.get(file);
                 if (info != null && !packJarsSeparate)
                 {
                     pf.setPreviousPackFileRef((String) info[0], (Long)info[1]);
@@ -355,10 +355,10 @@ public class Packager extends PackagerBase
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(packsList.size());
 
-        Iterator i = packsList.iterator();
+        Iterator<PackInfo> i = packsList.iterator();
         while (i.hasNext())
         {
-            PackInfo pack = (PackInfo) i.next();
+            PackInfo pack = i.next();
             out.writeObject(pack.getPack());
         }
         out.flush();
@@ -406,13 +406,13 @@ public class Packager extends PackagerBase
      * 
      */
     private void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out,
-            List files) 
+            List<String> files)
     throws IOException
     {
         java.util.zip.ZipEntry zentry;
         if( ! alreadyWrittenFiles.containsKey( out ))
-            alreadyWrittenFiles.put(out, new HashSet());
-        HashSet currentSet = (HashSet) alreadyWrittenFiles.get(out);
+            alreadyWrittenFiles.put(out, new HashSet<String>());
+        HashSet<String> currentSet = alreadyWrittenFiles.get(out);
         while ((zentry = zin.getNextEntry()) != null)
         {
             String currentName = zentry.getName();
@@ -420,11 +420,11 @@ public class Packager extends PackagerBase
             testName = testName.replace('\\', '.');
             if( files != null )
             {
-                Iterator i = files.iterator();
+                Iterator<String> i = files.iterator();
                 boolean founded = false;
                 while( i.hasNext())
                 {   // Make "includes" self to support regex.
-                    String doInclude = (String) i.next();
+                    String doInclude = i.next();
                     if( testName.matches( doInclude  ) )
                     {
                         founded = true;

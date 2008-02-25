@@ -416,7 +416,7 @@ public class LayoutHelper implements LayoutConstants
         String todo;
         if (idata instanceof InstallData
                 && ((InstallData) idata).guiPrefs.modifier.containsKey("layoutAnchor"))
-            todo = (String) ((InstallData) idata).guiPrefs.modifier.get("layoutAnchor");
+            todo = ((InstallData) idata).guiPrefs.modifier.get("layoutAnchor");
         else
             todo = idata.getVariable("IzPanel.LayoutType");
         if (todo == null) // No command, no work.
@@ -465,7 +465,7 @@ public class LayoutHelper implements LayoutConstants
         {
             try
             {
-                commonDefault = Integer.parseInt((String) id.guiPrefs.modifier.get(ALL_X_GAP));
+                commonDefault = Integer.parseInt(id.guiPrefs.modifier.get(ALL_X_GAP));
             }
             catch (NumberFormatException nfe)
             {
@@ -483,7 +483,7 @@ public class LayoutHelper implements LayoutConstants
             }
             else
             {
-                var = (String) id.guiPrefs.modifier.get(X_GAP_NAME_LOOK_UP[i]);
+                var = id.guiPrefs.modifier.get(X_GAP_NAME_LOOK_UP[i]);
                 if (var != null)
                 {
                     try
@@ -528,7 +528,7 @@ public class LayoutHelper implements LayoutConstants
         {
             try
             {
-                commonDefault = Integer.parseInt((String) id.guiPrefs.modifier.get(ALL_Y_GAP));
+                commonDefault = Integer.parseInt(id.guiPrefs.modifier.get(ALL_Y_GAP));
             }
             catch (NumberFormatException nfe)
             {
@@ -546,7 +546,7 @@ public class LayoutHelper implements LayoutConstants
             }
             else
             {
-                var = (String) id.guiPrefs.modifier.get(Y_GAP_NAME_LOOK_UP[i]);
+                var = id.guiPrefs.modifier.get(Y_GAP_NAME_LOOK_UP[i]);
                 if (var != null)
                 {
                     try
@@ -678,7 +678,7 @@ public class LayoutHelper implements LayoutConstants
         String var = null;
         if (((InstallData) idata).guiPrefs.modifier.containsKey(key))
         {
-            var = (String) ((InstallData) idata).guiPrefs.modifier.get(key);
+            var = ((InstallData) idata).guiPrefs.modifier.get(key);
             if (var != null)
             {
                 try

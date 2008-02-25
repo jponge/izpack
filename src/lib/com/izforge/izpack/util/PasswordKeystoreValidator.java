@@ -66,18 +66,18 @@ public class PasswordKeystoreValidator implements Validator {
     String skipValidation = null;
     String alias = null;
     String aliasPassword = null;
-    Map params = getParams(client);
+    Map<String, String> params = getParams(client);
     try {
       if (params!=null) {
         // Don't try and open the keystore if skipValidation is true
-        skipValidation = (String)params.get("skipValidation");
+        skipValidation = params.get("skipValidation");
         System.out.println("skipValidation = "+skipValidation);
         if (skipValidation!=null && skipValidation.equalsIgnoreCase("true")) {
           System.out.println("Not validating keystore");
           return true;
         }
         // See if keystore password is passed in or is passed through the validator
-        keystorePassword = (String)params.get("keystorePassword");
+        keystorePassword = params.get("keystorePassword");
         if (keystorePassword==null) {
           keystorePassword = getPassword(client);
           System.out.println("keystorePassword parameter null, using validator password for keystore");
@@ -86,7 +86,7 @@ public class PasswordKeystoreValidator implements Validator {
           System.out.println("keystorePassword parameter empty, using validator password for keystore");
         }
         // See if alias (key) password is passed in or is passed through the validator
-        aliasPassword = (String)params.get("aliasPassword");
+        aliasPassword = params.get("aliasPassword");
         if (aliasPassword==null) {
           aliasPassword = getPassword(client);
           System.out.println("aliasPassword parameter null, using validator password for key");
@@ -95,7 +95,7 @@ public class PasswordKeystoreValidator implements Validator {
           System.out.println("aliasPassword parameter empty, using validator password for key");
         }
         // Get keystore type from parameters or use default
-        keystoreType = (String)params.get("keystoreType");
+        keystoreType = params.get("keystoreType");
         if (keystoreFile==null) {
           keystoreType = "JKS";
           System.out.println("keystoreType parameter null, using default of JKS");
@@ -104,7 +104,7 @@ public class PasswordKeystoreValidator implements Validator {
           System.out.println("keystoreType parameter empty, using default of JKS");
         }
         // Get keystore location from params
-        keystoreFile = (String)params.get("keystoreFile");
+        keystoreFile = params.get("keystoreFile");
         if (keystoreFile!=null) {
           System.out.println("Attempting to open keystore: "+keystoreFile);
           KeyStore ks = getKeyStore(keystoreFile, keystoreType, keystorePassword.toCharArray());
@@ -112,7 +112,7 @@ public class PasswordKeystoreValidator implements Validator {
             returnValue = true;
             System.out.println("keystore password validated");
             // check alias if provided
-            alias = (String)params.get("keystoreAlias");
+            alias = params.get("keystoreAlias");
             if (alias!=null) {
               returnValue = ks.containsAlias(alias);
               if (returnValue) {
@@ -141,21 +141,21 @@ public class PasswordKeystoreValidator implements Validator {
     return (returnValue);
   }
   
-  private Map getParams(ProcessingClient client) {
-    Map returnValue = null;
+  private Map<String, String> getParams(ProcessingClient client) {
+    Map<String, String> returnValue = null;
     PasswordGroup group = null;
     InstallData idata = getIdata(client);
     VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
     try {
       group = (PasswordGroup)client;
       if (group.hasParams()) {
-        Map params = group.getValidatorParams();
-        returnValue = new HashMap();
-        Iterator keys = params.keySet().iterator();
+        Map<String, String> params = group.getValidatorParams();
+        returnValue = new HashMap<String, String>();
+        Iterator<String> keys = params.keySet().iterator();
         while (keys.hasNext()) {
-          String key = (String)keys.next();
+          String key = keys.next();
           // Feed parameter values through vs
-          String value = vs.substitute((String)params.get(key), null);
+          String value = vs.substitute(params.get(key), null);
           // System.out.println("Adding local parameter: "+key+"="+value);
           returnValue.put(key, value);
         }

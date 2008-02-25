@@ -34,6 +34,7 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  * Temporary holding place for Pack information as the Packager is built. The packager is used by
@@ -91,7 +92,7 @@ public class PackInfo
      * Attributes of the Pack
      **********************************************************************************************/
 
-    public void setDependencies(List dependencies)
+    public void setDependencies(List<String> dependencies)
     {
         pack.dependencies = dependencies;
     }
@@ -105,12 +106,12 @@ public class PackInfo
         pack.excludeGroup = group;
     }
     
-    public void setOsConstraints(List osConstraints)
+    public void setOsConstraints(List<OsConstraint> osConstraints)
     {
         pack.osConstraints = osConstraints;
     }
 
-    public List getOsConstraints(List osConstraints)
+    public List<OsConstraint> getOsConstraints(List osConstraints)
     {
         return pack.osConstraints;
     }
@@ -163,7 +164,7 @@ public class PackInfo
      * Get the install group names.
      * @return Set<String> for the install groups
      */
-    public Set getInstallGroups()
+    public Set<String> getInstallGroups()
     {
         return pack.installGroups;
     }
@@ -206,7 +207,7 @@ public class PackInfo
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      * then, if the file is deleted in between.
      */
-    public void addFile(File baseDir, File file, String targetfile, List osList, int override, Map additionals, String condition)
+    public void addFile(File baseDir, File file, String targetfile, List<OsConstraint> osList, int override, Map additionals, String condition)
             throws FileNotFoundException
     {
         if (!file.exists()) throw new FileNotFoundException(file.toString());
@@ -282,12 +283,12 @@ public class PackInfo
     {
         if (pack.dependencies == null)
         {
-            pack.dependencies = new ArrayList();
+            pack.dependencies = new ArrayList<String>();
         }
         pack.dependencies.add(dependency);
     }
     
-    public List getDependencies()
+    public List<String> getDependencies()
     {
         return pack.dependencies;
     }

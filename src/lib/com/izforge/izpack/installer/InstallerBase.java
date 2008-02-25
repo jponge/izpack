@@ -108,7 +108,7 @@ public class InstallerBase
         objIn = new ObjectInputStream(in);
         size = objIn.readInt();
         ArrayList availablePacks = new ArrayList();
-        ArrayList allPacks = new ArrayList();
+        ArrayList<Pack> allPacks = new ArrayList<Pack>();
         for (i = 0; i < size; i++)
         {
             Pack pk = (Pack) objIn.readObject();

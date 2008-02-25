@@ -35,11 +35,11 @@ import java.util.*;
 public class RulesEngine
 {
 
-    protected Map panelconditions;
+    protected Map<String, String> panelconditions;
 
-    protected Map packconditions;
+    protected Map<String, String> packconditions;
 
-    protected Map optionalpackconditions;
+    protected Map<String, String> optionalpackconditions;
 
     protected XMLElement conditionsspec;
 
@@ -50,9 +50,9 @@ public class RulesEngine
     private RulesEngine()
     {
         conditionsmap = new Hashtable();
-        this.panelconditions = new Hashtable();
-        this.packconditions = new Hashtable();
-        this.optionalpackconditions = new Hashtable();
+        this.panelconditions = new Hashtable<String, String>();
+        this.packconditions = new Hashtable<String, String>();
+        this.optionalpackconditions = new Hashtable<String, String>();
     }
 
     /**
@@ -70,9 +70,9 @@ public class RulesEngine
 
         if ((installdata != null) && (installdata.allPacks != null))
         {
-            for (Iterator iterator = installdata.allPacks.iterator(); iterator.hasNext();)
+            for (Iterator<Pack> iterator = installdata.allPacks.iterator(); iterator.hasNext();)
             {
-                Pack pack = (Pack) iterator.next();
+                Pack pack = iterator.next();
                 if (pack.id != null)
                 {
                     // automatically add packselection condition
@@ -183,8 +183,8 @@ public class RulesEngine
             ClassLoader loader = RulesEngine.class.getClassLoader();
             try
             {
-                Class conditionclass = loader.loadClass(conditionclassname);
-                result = (Condition) conditionclass.newInstance();
+                Class<Condition> conditionclass = (Class<Condition>) loader.loadClass(conditionclassname);
+                result = conditionclass.newInstance();
                 result.readFromXML(condition);
                 result.setId(condid);
                 result.setInstalldata(RulesEngine.installdata);
@@ -220,11 +220,11 @@ public class RulesEngine
             if (this.conditionsspec.hasChildren())
             {
                 // read in the condition specs
-                Vector childs = this.conditionsspec.getChildrenNamed("condition");
+                Vector<XMLElement> childs = this.conditionsspec.getChildrenNamed("condition");
 
                 for (int i = 0; i < childs.size(); i++)
                 {
-                    XMLElement condition = (XMLElement) childs.get(i);
+                    XMLElement condition = childs.get(i);
                     Condition cond = analyzeCondition(condition);
                     if (cond != null)
                     {
@@ -238,19 +238,19 @@ public class RulesEngine
                     }
                 }
 
-                Vector panelconditionels = this.conditionsspec.getChildrenNamed("panelcondition");
+                Vector<XMLElement> panelconditionels = this.conditionsspec.getChildrenNamed("panelcondition");
                 for (int i = 0; i < panelconditionels.size(); i++)
                 {
-                    XMLElement panelel = (XMLElement) panelconditionels.get(i);
+                    XMLElement panelel = panelconditionels.get(i);
                     String panelid = panelel.getAttribute("panelid");
                     String conditionid = panelel.getAttribute("conditionid");
                     this.panelconditions.put(panelid, conditionid);
                 }
 
-                Vector packconditionels = this.conditionsspec.getChildrenNamed("packcondition");
+                Vector<XMLElement> packconditionels = this.conditionsspec.getChildrenNamed("packcondition");
                 for (int i = 0; i < packconditionels.size(); i++)
                 {
-                    XMLElement panelel = (XMLElement) packconditionels.get(i);
+                    XMLElement panelel = packconditionels.get(i);
                     String panelid = panelel.getAttribute("packid");
                     String conditionid = panelel.getAttribute("conditionid");
                     this.packconditions.put(panelid, conditionid);
@@ -417,7 +417,7 @@ public class RulesEngine
             return true;
         }
         Debug.trace("there is a condition");
-        Condition condition = getCondition((String) this.panelconditions.get(panelid));
+        Condition condition = getCondition(this.panelconditions.get(panelid));
         if (condition != null)
         {
             return condition.isTrue();
@@ -446,7 +446,7 @@ public class RulesEngine
             return true;
         }
         Debug.trace("there is a condition");
-        Condition condition = getCondition((String) this.packconditions.get(packid));
+        Condition condition = getCondition(this.packconditions.get(packid));
         if (condition != null)
         {
             return condition.isTrue();

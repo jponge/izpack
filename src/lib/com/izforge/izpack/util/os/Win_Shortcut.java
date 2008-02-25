@@ -130,7 +130,7 @@ public class Win_Shortcut extends Shortcut
      * @see #APPLICATIONS
      * @see #START_MENU
      */
-    public Vector getProgramGroups(int userType)
+    public Vector<String> getProgramGroups(int userType)
     {
         int logentry = 0;
         Debug.log( CLASS + myClass + ".getProgramGroups()-" + logentry++ + " '" + Integer.toString(userType) + "'" );
@@ -159,7 +159,7 @@ public class Win_Shortcut extends Shortcut
         // in case there is a problem obtaining a path return
         // an empty vector (there are no preexisting program
         // groups)
-        if (linkPath == null) { return (new Vector()); }
+        if (linkPath == null) { return (new Vector<String>()); }
 
         File path = new File(linkPath);
         File[] file = path.listFiles();
@@ -168,7 +168,7 @@ public class Win_Shortcut extends Shortcut
         // build a vector that contains only the names of
         // the directories.
         // ----------------------------------------------------
-        Vector groups = new Vector();
+        Vector<String> groups = new Vector<String>();
 
         if (file != null)
         {

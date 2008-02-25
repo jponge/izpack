@@ -43,11 +43,11 @@ public class GUIPrefs implements Serializable
     public int height;
 
     /** Specifies the OS Look and Feels mappings. */
-    public Map lookAndFeelMapping = new TreeMap();
+    public Map<String, String> lookAndFeelMapping = new TreeMap<String, String>();
 
     /** Specifies the OS Look and Feels optionnal parameters. */
-    public Map lookAndFeelParams = new TreeMap();
+    public Map<String, Map<String, String>> lookAndFeelParams = new TreeMap<String, Map<String, String>>();
 
     /** Specifies the modifier. */
-    public Map modifier = new TreeMap();
+    public Map<String, String> modifier = new TreeMap<String, String>();
 }

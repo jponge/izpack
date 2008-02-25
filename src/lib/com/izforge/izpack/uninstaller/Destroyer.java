@@ -83,12 +83,12 @@ public class Destroyer extends Thread
             // We get the list of uninstaller listeners
             List[] listeners = getListenerLists();
             // We get the list of the files to delete
-            ArrayList executables = getExecutablesList();
+            ArrayList<ExecutableFile> executables = getExecutablesList();
 
             FileExecutor executor = new FileExecutor(executables);
             executor.executeFiles(ExecutableFile.UNINSTALL, this.handler);
 
-            ArrayList files = getFilesList();
+            ArrayList<File> files = getFilesList();
             int size = files.size();
 
             // Custem action listener stuff --- beforeDeletion ----
@@ -99,7 +99,7 @@ public class Destroyer extends Thread
             // We destroy the files
             for (int i = 0; i < size; i++)
             {
-                File file = (File) files.get(i);
+                File file = files.get(i);
                 // Custem action listener stuff --- beforeDelete ----
                 informListeners(listeners[1], UninstallerListener.BEFORE_DELETE, file, handler);
 
@@ -169,10 +169,10 @@ public class Destroyer extends Thread
      * @return The files list.
      * @exception Exception Description of the Exception
      */
-    private ArrayList getFilesList() throws Exception
+    private ArrayList<File> getFilesList() throws Exception
     {
         // Initialisations
-        TreeSet files = new TreeSet(Collections.reverseOrder());
+        TreeSet<File> files = new TreeSet<File>(Collections.reverseOrder());
         InputStream in = Destroyer.class.getResourceAsStream("/install.log");
         InputStreamReader inReader = new InputStreamReader(in);
         BufferedReader reader = new BufferedReader(inReader);
@@ -189,7 +189,7 @@ public class Destroyer extends Thread
         }
 
         // We return it
-        return new ArrayList(files);
+        return new ArrayList<File>(files);
     }
 
     /**
@@ -197,9 +197,9 @@ public class Destroyer extends Thread
      * @return The ArrayList of the Executables
      * @throws Exception
      */
-    private ArrayList getExecutablesList() throws Exception
+    private ArrayList<ExecutableFile> getExecutablesList() throws Exception
     {
-        ArrayList executables = new ArrayList();
+        ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
         ObjectInputStream in = new ObjectInputStream(Destroyer.class
                 .getResourceAsStream("/executables"));
         int num = in.readInt();
@@ -297,8 +297,8 @@ public class Destroyer extends Thread
             Iterator iter = listeners.iterator();
             while (iter != null && iter.hasNext())
             {
-                Class clazz = Class.forName(((String) iter.next()));
-                UninstallerListener ul = (UninstallerListener) clazz.newInstance();
+                Class<UninstallerListener> clazz = (Class<UninstallerListener>) Class.forName(((String) iter.next()));
+                UninstallerListener ul = clazz.newInstance();
                 if (ul.isFileListener()) uninstaller[1].add(ul);
                 uninstaller[0].add(ul);
             }

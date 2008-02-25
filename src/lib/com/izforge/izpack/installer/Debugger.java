@@ -65,8 +65,8 @@ public class Debugger
     
     private JTextPane debugtxt;
     private IconsDatabase icons;
-    private Map variableshistory;
-    private Map conditionhistory;
+    private Map<String, VariableHistory> variableshistory;
+    private Map<String, ConditionHistory> conditionhistory;
     
     private JTable variablestable;
     private VariableHistoryTableModel variablesmodel;
@@ -79,8 +79,8 @@ public class Debugger
         this.rules = rules;        
         lasttimevariables = (Properties) idata.variables.clone();
         this.icons = icons;
-        this.variableshistory = new HashMap();   
-        this.conditionhistory = new HashMap();
+        this.variableshistory = new HashMap<String, VariableHistory>();
+        this.conditionhistory = new HashMap<String, ConditionHistory>();
         this.init();
     }
         
@@ -133,7 +133,7 @@ public class Debugger
                 conditionhistory.put(conditionid, ch);                
             }
             else {
-                ch = (ConditionHistory) conditionhistory.get(conditionid);
+                ch = conditionhistory.get(conditionid);
             }
             ch.addValue(this.rules.isConditionTrue(currentcondition), comment);               
         }
@@ -162,7 +162,7 @@ public class Debugger
             }
             else {
                 if (!currentvalue.equals(oldvalue)) {
-                    VariableHistory vh = (VariableHistory) variableshistory.get(key);
+                    VariableHistory vh = variableshistory.get(key);
                     vh.addValue(currentvalue, "changed value after panel " + lastpanelmetadata.getPanelid());                                       
                     changes = true;
                     changedvariables.put(key, currentvalue);
@@ -178,7 +178,7 @@ public class Debugger
     private void modifyVariableManually(String varnametxt, String varvaluetxt)
     {
         lasttimevariables = (Properties) idata.variables.clone();
-        VariableHistory vh = (VariableHistory) variableshistory.get(varnametxt);
+        VariableHistory vh = variableshistory.get(varnametxt);
         if (vh != null) {
             vh.addValue(varvaluetxt, "modified manually");
         }
@@ -237,7 +237,7 @@ public class Debugger
                     varname.setText(selectedvariable);
                 }
                 else {
-                    VariableHistory vh = (VariableHistory) variableshistory.get(selectedvariable);
+                    VariableHistory vh = variableshistory.get(selectedvariable);
                     
                     JFrame variabledetails = new JFrame("Details");
                     
@@ -303,7 +303,7 @@ public class Debugger
                 
                 if (e.getClickCount() == 2) {                                        
                     
-                    ConditionHistory ch = (ConditionHistory) conditionhistory.get(selectedcondition);
+                    ConditionHistory ch = conditionhistory.get(selectedcondition);
                     
                     JFrame variabledetails = new JFrame("Details");
                     

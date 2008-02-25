@@ -68,15 +68,15 @@ public class AntAction extends ActionBase
 
     private Properties properties = null;
 
-    private List targets = null;
+    private List<String> targets = null;
 
-    private List uninstallTargets = null;
+    private List<String> uninstallTargets = null;
 
     private String logFile = null;
 
     private String buildFile = null;
 
-    private List propertyFiles = null;
+    private List<String> propertyFiles = null;
 
     /**
      * Default constructor
@@ -85,9 +85,9 @@ public class AntAction extends ActionBase
     {
         super();
         properties = new Properties();
-        targets = new ArrayList();
-        uninstallTargets = new ArrayList();
-        propertyFiles = new ArrayList();
+        targets = new ArrayList<String>();
+        uninstallTargets = new ArrayList<String>();
+        propertyFiles = new ArrayList<String>();
     }
 
     /**
@@ -145,8 +145,8 @@ public class AntAction extends ActionBase
             // TODO: propertyfiles, logFile
             antProj.fireBuildStarted();
             antProj.init();
-            List antcalls = new ArrayList();
-            List choosenTargets = (uninstall) ? uninstallTargets : targets;
+            List<Ant> antcalls = new ArrayList<Ant>();
+            List<String> choosenTargets = (uninstall) ? uninstallTargets : targets;
             if (choosenTargets.size() > 0)
             {
                 Ant antcall = null;
@@ -154,7 +154,7 @@ public class AntAction extends ActionBase
                 {
                     antcall = (Ant) antProj.createTask("ant");
                     antcall.setAntfile(getBuildFile());
-                    antcall.setTarget((String) choosenTargets.get(i));
+                    antcall.setTarget(choosenTargets.get(i));
                     antcalls.add(antcall);
                 }
             }
@@ -163,7 +163,7 @@ public class AntAction extends ActionBase
 
             for (int i = 0; i < antcalls.size(); i++)
             {
-                target.addTask((Ant) antcalls.get(i));
+                target.addTask(antcalls.get(i));
             }
             antProj.addTarget(target);
             System.setOut(new PrintStream(new DemuxOutputStream(antProj, false)));
@@ -223,7 +223,7 @@ public class AntAction extends ActionBase
      * 
      * @return the property file paths
      */
-    public List getPropertyFiles()
+    public List<String> getPropertyFiles()
     {
         return propertyFiles;
     }
@@ -243,7 +243,7 @@ public class AntAction extends ActionBase
      * 
      * @param propertyFiles list of property file paths to be set
      */
-    public void setPropertyFiles(List propertyFiles)
+    public void setPropertyFiles(List<String> propertyFiles)
     {
         this.propertyFiles = propertyFiles;
     }
@@ -315,7 +315,7 @@ public class AntAction extends ActionBase
      * 
      * @return the targets
      */
-    public List getTargets()
+    public List<String> getTargets()
     {
         return targets;
     }
@@ -325,7 +325,7 @@ public class AntAction extends ActionBase
      * 
      * @param targets list of targets
      */
-    public void setTargets(ArrayList targets)
+    public void setTargets(ArrayList<String> targets)
     {
         this.targets = targets;
     }
@@ -345,7 +345,7 @@ public class AntAction extends ActionBase
      * 
      * @return the uninstaller targets
      */
-    public List getUninstallTargets()
+    public List<String> getUninstallTargets()
     {
         return uninstallTargets;
     }
@@ -355,7 +355,7 @@ public class AntAction extends ActionBase
      * 
      * @param targets list of targets
      */
-    public void setUninstallTargets(ArrayList targets)
+    public void setUninstallTargets(ArrayList<String> targets)
     {
         this.uninstallTargets = targets;
     }
@@ -446,7 +446,7 @@ public class AntAction extends ActionBase
         {
             for (int i = 0; i < propertyFiles.size(); i++)
             {
-                pf = new File((String) propertyFiles.get(i));
+                pf = new File(propertyFiles.get(i));
                 if (pf.exists())
                 {
                     fis = new FileInputStream(pf);

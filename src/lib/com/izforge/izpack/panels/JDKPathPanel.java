@@ -70,7 +70,7 @@ public class JDKPathPanel extends PathInputPanel
 
     private String variableName;
     
-    private Set badRegEntries = null; 
+    private Set<String> badRegEntries = null;
     
 
     
@@ -203,7 +203,7 @@ public class JDKPathPanel extends PathInputPanel
         String retval = "";
         int oldVal = 0;
         RegistryHandler rh = null;
-        badRegEntries = new HashSet();
+        badRegEntries = new HashSet<String>();
         try
         {
             // Get the default registry handler.

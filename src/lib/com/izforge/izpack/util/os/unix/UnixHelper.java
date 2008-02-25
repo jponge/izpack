@@ -52,9 +52,9 @@ public class UnixHelper
      * 
      * @return the /etc/passwd as String ArrayList
      */
-    public static ArrayList getEtcPasswdArray()
+    public static ArrayList<String> getEtcPasswdArray()
     {
-        ArrayList result = new ArrayList();
+        ArrayList<String> result = new ArrayList<String>();
 
         String line = "";
         BufferedReader reader = null;
@@ -95,9 +95,9 @@ public class UnixHelper
      * 
      * @return the /etc/passwd as String ArrayList
      */
-    public static ArrayList getYpPasswdArray()
+    public static ArrayList<String> getYpPasswdArray()
     {
-        ArrayList result = new ArrayList();
+        ArrayList<String> result = new ArrayList<String>();
 
         String line = "";
         BufferedReader reader = null;

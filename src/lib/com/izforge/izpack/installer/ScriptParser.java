@@ -84,7 +84,7 @@ public class ScriptParser
     
 
     /** The files to parse. */
-    private Collection files;
+    private Collection<ParsableFile> files;
 
     /** The variables substituror. */
     private VariableSubstitutor vs;
@@ -96,7 +96,7 @@ public class ScriptParser
      * @param files the parsable files to process
      * @param vs the variable substitutor to use
      */
-    public ScriptParser(Collection files, VariableSubstitutor vs)
+    public ScriptParser(Collection<ParsableFile> files, VariableSubstitutor vs)
     {
         this.files = files;
         this.vs = vs;
@@ -110,14 +110,14 @@ public class ScriptParser
     public void parseFiles() throws Exception
     {
         // Parses the files
-        Iterator iter = files.iterator();
+        Iterator<ParsableFile> iter = files.iterator();
         while (iter.hasNext())
         {
             // If interrupt is desired, return immediately.
             if (Unpacker.isInterruptDesired()) return;
             // Create a temporary file for the parsed data
             // (Use the same directory so that renaming works later)
-            ParsableFile pfile = (ParsableFile) iter.next();
+            ParsableFile pfile = iter.next();
 
             // check whether the OS matches
             if (!OsConstraint.oneMatchesCurrentSystem(pfile.osConstraints))

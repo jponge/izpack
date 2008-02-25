@@ -92,7 +92,7 @@ public class MultiLineLabel extends JComponent
 
     private static final char NEW_LINE = '\n';
 
-    protected Vector line = new Vector();// text lines to display
+    protected Vector<String> line = new Vector<String>();// text lines to display
 
     protected String labelText; // text lines to display
 
@@ -434,7 +434,7 @@ public class MultiLineLabel extends JComponent
 
         for (int i = 0; i < numLines; i++)
         {
-            this.lineWidth[i] = fm.stringWidth((String) this.line.elementAt(i));
+            this.lineWidth[i] = fm.stringWidth(this.line.elementAt(i));
             if (this.lineWidth[i] > this.maxWidth)
             {
                 this.maxWidth = this.lineWidth[i];
@@ -476,7 +476,7 @@ public class MultiLineLabel extends JComponent
             default:
                 x = (d.width - lineWidth[i]) / 2;
             }
-            graphics.drawString((String) line.elementAt(i), x, y);
+            graphics.drawString(line.elementAt(i), x, y);
         }
     }
 

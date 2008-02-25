@@ -355,13 +355,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
     private boolean haveSpec = false;
 
     /** Holds the references to all of the UI elements */
-    private Vector uiElements = new Vector();
+    private Vector<Object[]> uiElements = new Vector<Object[]>();
 
     /** Holds the references to all radio button groups */
-    private Vector buttonGroups = new Vector();
+    private Vector<ButtonGroup> buttonGroups = new Vector<ButtonGroup>();
 
     /** Holds the references to all password field groups */
-    private Vector passwordGroups = new Vector();
+    private Vector<PasswordGroup> passwordGroups = new Vector<PasswordGroup>();
 
     /**
      * used for temporary storage of references to password groups that have already been read in a
@@ -370,10 +370,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
     private Vector passwordGroupsRead = new Vector();
 
     /** Used to track search fields. Contains SearchField references. */
-    private Vector searchFields = new Vector();
+    private Vector<SearchField> searchFields = new Vector<SearchField>();
 
     /** Holds all user inputs for use in automated installation */
-    private Vector entries = new Vector();
+    private Vector<TextValuePair> entries = new Vector<TextValuePair>();
 
     private LocaleDatabase langpack = null;
     
@@ -475,11 +475,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
         // for its type, then an appropriate memeber function
         // is called that will create the correct UI elements.
         // ----------------------------------------------------
-        Vector fields = spec.getChildrenNamed(FIELD_NODE_ID);
+        Vector<XMLElement> fields = spec.getChildrenNamed(FIELD_NODE_ID);
 
         for (int i = 0; i < fields.size(); i++)
         {
-            XMLElement field = (XMLElement) fields.elementAt(i);
+            XMLElement field = fields.elementAt(i);
             String attribute = field.getAttribute(TYPE);
             String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
             if (conditionid != null)
@@ -550,8 +550,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     private void addDirectoryField(XMLElement field)
     {
-        Vector forPacks = field.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = field.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = field.getChildrenNamed(OS);
         
         JLabel label;
         String set;
@@ -647,8 +647,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     private void addFileField(XMLElement field)
     {
-        Vector forPacks = field.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = field.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = field.getChildrenNamed(OS);
         
         JLabel label;
         String set;
@@ -754,7 +754,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         for (int i = 0; i < uiElements.size(); i++)
         {
-            Object[] element = (Object[]) uiElements.get(i);
+            Object[] element = uiElements.get(i);
             if (element[POS_VARIABLE] == null)
             {
                 continue;
@@ -856,9 +856,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
         // update UI with current values of associated variables
         updateUIElements();
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forUnselectedPacks = spec.getChildrenNamed(UNSELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forUnselectedPacks = spec.getChildrenNamed(UNSELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
 
         if (!itemRequiredFor(forPacks) || !itemRequiredForUnselected(forUnselectedPacks)
                 || !itemRequiredForOs(forOs))
@@ -897,11 +897,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     public void makeXMLData(XMLElement panelRoot)
     {
-        Map entryMap = new HashMap();
+        Map<String, String> entryMap = new HashMap<String, String>();
 
         for (int i = 0; i < entries.size(); i++)
         {
-            TextValuePair pair = (TextValuePair) entries.elementAt(i);
+            TextValuePair pair = entries.elementAt(i);
             entryMap.put(pair.toString(), pair.getValue());
         }
 
@@ -919,10 +919,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         for (int i = 0; i < uiElements.size(); i++)
         {
-            uiElement = (Object[]) uiElements.elementAt(i);
+            uiElement = uiElements.elementAt(i);
 
-            if (itemRequiredFor((Vector) uiElement[POS_PACKS])
-                    && itemRequiredForOs((Vector) uiElement[POS_OS]))
+            if (itemRequiredFor((Vector<XMLElement>) uiElement[POS_PACKS])
+                    && itemRequiredForOs((Vector<XMLElement>) uiElement[POS_OS]))
             {
                 try
                 {
@@ -984,7 +984,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         // ----------------------------------------------------
         for (int i = 0; i < uiElements.size(); i++)
         {
-            field = (Object[]) uiElements.elementAt(i);
+            field = uiElements.elementAt(i);
 
             if ((field != null) && (((Boolean) field[POS_DISPLAYED]).booleanValue()))
             {
@@ -1132,7 +1132,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     {
         InputStream input = null;
         XMLElement data;
-        Vector specElements;
+        Vector<XMLElement> specElements;
         String attribute;
         String panelattribute;
         String instance = Integer.toString(instanceNumber);
@@ -1172,7 +1172,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             specElements = data.getChildrenNamed(NODE_ID);
             for (int i = 0; i < specElements.size(); i++)
             {
-                data = (XMLElement) specElements.elementAt(i);
+                data = specElements.elementAt(i);
                 attribute = data.getAttribute(INSTANCE_IDENTIFIER);
                 panelattribute = data.getAttribute(PANEL_IDENTIFIER);
                 
@@ -1277,8 +1277,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addRuleField(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         XMLElement element = spec.getFirstChildNamed(SPEC);
         String variable = spec.getAttribute(VARIABLE);
         RuleInputField field = null;
@@ -1292,8 +1292,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
         boolean hasParams = false;
         String paramName = null;
         String paramValue = null;
-        HashMap validateParamMap = null;
-        Vector validateParams = null;
+        HashMap<String, String> validateParamMap = null;
+        Vector<XMLElement> validateParams = null;
         String processor = null;
         int resultFormat = RuleInputField.DISPLAY_FORMAT;
 
@@ -1369,11 +1369,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
             {
                 hasParams = true;
 
-                if (validateParamMap == null) validateParamMap = new HashMap();
+                if (validateParamMap == null) validateParamMap = new HashMap<String, String>();
 
-                for (Iterator it = validateParams.iterator(); it.hasNext();)
+                for (Iterator<XMLElement> it = validateParams.iterator(); it.hasNext();)
                 {
-                    element = (XMLElement) it.next();
+                    element = it.next();
                     paramName = element.getAttribute(RULE_PARAM_NAME);
                     paramValue = element.getAttribute(RULE_PARAM_VALUE);
                     validateParamMap.put(paramName, paramValue);
@@ -1469,14 +1469,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addTextField(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         XMLElement element = spec.getFirstChildNamed(SPEC);
         JLabel label;
         String set;
         int size;
-        HashMap validateParamMap = null;
-        Vector validateParams = null;
+        HashMap<String, String> validateParamMap = null;
+        Vector<XMLElement> validateParams = null;
         String validator = null;
         String message = null;
         boolean hasParams = false;
@@ -1545,11 +1545,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
             {
                 hasParams = true;
 
-                if (validateParamMap == null) validateParamMap = new HashMap();
+                if (validateParamMap == null) validateParamMap = new HashMap<String, String>();
 
-                for (Iterator it = validateParams.iterator(); it.hasNext();)
+                for (Iterator<XMLElement> it = validateParams.iterator(); it.hasNext();)
                 {
-                    element = (XMLElement) it.next();
+                    element = it.next();
                     String paramName = element.getAttribute(RULE_PARAM_NAME);
                     String paramValue = element.getAttribute(RULE_PARAM_VALUE);
                     validateParamMap.put(paramName, paramValue);
@@ -1663,8 +1663,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addComboBox(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         XMLElement element = spec.getFirstChildNamed(SPEC);
         String variable = spec.getAttribute(VARIABLE);
         TextValuePair listItem = null;
@@ -1679,7 +1679,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             label = new JLabel(getText(element));
 
-            Vector choices = element.getChildrenNamed(COMBO_CHOICE);
+            Vector<XMLElement> choices = element.getChildrenNamed(COMBO_CHOICE);
 
             if (choices == null) { return; }
             // get current value of associated variable
@@ -1691,7 +1691,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             }
             for (int i = 0; i < choices.size(); i++)
             {
-                String processorClass = ((XMLElement) choices.elementAt(i))
+                String processorClass = (choices.elementAt(i))
                         .getAttribute("processor");
 
                 if (processorClass != null && !"".equals(processorClass))
@@ -1706,7 +1706,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     {
                         t.printStackTrace();
                     }
-                    String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
+                    String set = (choices.elementAt(i)).getAttribute(SET);
                     if (set == null)
                     {
                         set = "";
@@ -1733,8 +1733,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 }
                 else
                 {
-                    String value = ((XMLElement) choices.elementAt(i)).getAttribute(COMBO_VALUE);
-                    listItem = new TextValuePair(getText((XMLElement) choices.elementAt(i)), value);
+                    String value = (choices.elementAt(i)).getAttribute(COMBO_VALUE);
+                    listItem = new TextValuePair(getText(choices.elementAt(i)), value);
                     field.addItem(listItem);
                     if (userinput)
                     {         
@@ -1750,7 +1750,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     else
                     {
                         // there is no user input
-                        String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
+                        String set = (choices.elementAt(i)).getAttribute(SET);
                         if (set != null)
                         {
                             if (set != null && !"".equals(set))
@@ -1862,8 +1862,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addRadioButton(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         String variable = spec.getAttribute(VARIABLE);
         String value = null;
 
@@ -1889,7 +1889,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         if (element != null)
         {
-            Vector choices = element.getChildrenNamed(RADIO_CHOICE);
+            Vector<XMLElement> choices = element.getChildrenNamed(RADIO_CHOICE);
 
             if (choices == null) { return; }
 
@@ -1899,15 +1899,15 @@ public class UserInputPanel extends IzPanel implements ActionListener
             for (int i = 0; i < choices.size(); i++)
             {
                 JRadioButton choice = new JRadioButton();
-                choice.setText(getText((XMLElement) choices.elementAt(i)));
-                String causesValidataion = ((XMLElement) choices.elementAt(i)).getAttribute(REVALIDATE);
+                choice.setText(getText(choices.elementAt(i)));
+                String causesValidataion = (choices.elementAt(i)).getAttribute(REVALIDATE);
                 if(causesValidataion != null && causesValidataion.equals("yes"))
                     choice.addActionListener(this);
-                value = (((XMLElement) choices.elementAt(i)).getAttribute(RADIO_VALUE));
+                value = ((choices.elementAt(i)).getAttribute(RADIO_VALUE));
 
                 group.add(choice);
 
-                String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
+                String set = (choices.elementAt(i)).getAttribute(SET);
                 // in order to properly initialize dependent controls
                 // we must set this variable now
                 if(idata.getVariable(variable) == null)
@@ -2014,8 +2014,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addPasswordField(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         String variable = spec.getAttribute(VARIABLE);
         String message = null;
         String processor = null;
@@ -2023,8 +2023,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
         PasswordGroup group = null;
         int size = 0;
         // For multiple validator support
-        Vector validatorsElem = null;
-        List validatorsList = new ArrayList();
+        Vector<XMLElement> validatorsElem = null;
+        List<ValidatorContainer> validatorsList = new ArrayList<ValidatorContainer>();
         int vsize = 0;
 
         // ----------------------------------------------------
@@ -2044,21 +2044,21 @@ public class UserInputPanel extends IzPanel implements ActionListener
             vsize = validatorsElem.size();
             for (int i = 0; i < vsize; i++)
             {
-                element = (XMLElement) validatorsElem.get(i);
+                element = validatorsElem.get(i);
                 String validator = element.getAttribute(CLASS);
                 message = getText(element);
-                HashMap validateParamMap = new HashMap();
+                HashMap<String, String> validateParamMap = new HashMap<String, String>();
                 // ----------------------------------------------------------
                 // check and see if we have any parameters for this validator.
                 // If so, then add them to validateParamMap.
                 // ----------------------------------------------------------
-                Vector validateParams = element.getChildrenNamed(RULE_PARAM);
+                Vector<XMLElement> validateParams = element.getChildrenNamed(RULE_PARAM);
                 if (validateParams != null && validateParams.size() > 0)
                 {
-                    Iterator iter = validateParams.iterator();
+                    Iterator<XMLElement> iter = validateParams.iterator();
                     while (iter.hasNext())
                     {
-                        element = (XMLElement) iter.next();
+                        element = iter.next();
                         String paramName = element.getAttribute(RULE_PARAM_NAME);
                         String paramValue = element.getAttribute(RULE_PARAM_VALUE);
                         // System.out.println("Adding parameter: "+paramName+"="+paramValue);
@@ -2084,7 +2084,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         if (element != null)
         {
-            Vector inputs = element.getChildrenNamed(PWD_INPUT);
+            Vector<XMLElement> inputs = element.getChildrenNamed(PWD_INPUT);
 
             if (inputs == null) { return; }
 
@@ -2094,7 +2094,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             XMLElement fieldSpec;
             for (int i = 0; i < inputs.size(); i++)
             {
-                fieldSpec = (XMLElement) inputs.elementAt(i);
+                fieldSpec = inputs.elementAt(i);
                 String set = fieldSpec.getAttribute(SET);
                 if (set != null && !"".equals(set))
                 {
@@ -2217,8 +2217,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addCheckBox(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         String label = "";
         String set = null;
         String trueValue = null;
@@ -2362,8 +2362,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addSearch(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         XMLElement element = spec.getFirstChildNamed(SPEC);
         String variable = spec.getAttribute(VARIABLE);
         String filename = null;
@@ -2431,13 +2431,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
             check_filename = element.getAttribute(SEARCH_CHECKFILENAME);
 
-            Vector choices = element.getChildrenNamed(SEARCH_CHOICE);
+            Vector<XMLElement> choices = element.getChildrenNamed(SEARCH_CHOICE);
 
             if (choices == null) { return; }
 
             for (int i = 0; i < choices.size(); i++)
             {
-                XMLElement choice_el = (XMLElement) choices.elementAt(i);
+                XMLElement choice_el = choices.elementAt(i);
 
                 if (!OsConstraint.oneMatchesCurrentSystem(choice_el)) continue;
 
@@ -2445,7 +2445,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
                 combobox.addItem(value);
 
-                String set = ((XMLElement) choices.elementAt(i)).getAttribute(SET);
+                String set = (choices.elementAt(i)).getAttribute(SET);
                 if (set != null)
                 {
                     if (set != null && !"".equals(set))
@@ -2556,7 +2556,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             comboBox = (JComboBox) field[POS_FIELD];
             for (int i = 0; i < this.searchFields.size(); ++i)
             {
-                SearchField sf = (SearchField) this.searchFields.elementAt(i);
+                SearchField sf = this.searchFields.elementAt(i);
                 if (sf.belongsTo(comboBox))
                 {
                     value = sf.getResult();
@@ -2584,8 +2584,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addText(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
 
         addDescription(spec, forPacks, forOs);
     }
@@ -2600,8 +2600,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addSpace(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         JPanel panel = new JPanel();
 
         TwoColumnConstraints constraints = new TwoColumnConstraints();
@@ -2621,8 +2621,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void addDivider(XMLElement spec)
     {
-        Vector forPacks = spec.getChildrenNamed(SELECTEDPACKS);
-        Vector forOs = spec.getChildrenNamed(OS);
+        Vector<XMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
+        Vector<XMLElement> forOs = spec.getChildrenNamed(OS);
         JPanel panel = new JPanel();
         String alignment = spec.getAttribute(ALIGNMENT);
 
@@ -2657,7 +2657,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * @param spec a <code>XMLElement</code> containing the specification for the description.
      */
     /*--------------------------------------------------------------------------*/
-    private void addDescription(XMLElement spec, Vector forPacks, Vector forOs)
+    private void addDescription(XMLElement spec, Vector<XMLElement> forPacks, Vector<XMLElement> forOs)
     {
         String description;
         TwoColumnConstraints constraints = new TwoColumnConstraints();
@@ -2914,13 +2914,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * @return <code>true</code> if the item is required for the os, otherwise returns
      * <code>false</code>.
      */
-    public boolean itemRequiredForOs(Vector os)
+    public boolean itemRequiredForOs(Vector<XMLElement> os)
     {
         if (os.size() == 0) { return true; }
 
         for (int i = 0; i < os.size(); i++)
         {
-            String family = ((XMLElement) os.elementAt(i)).getAttribute(FAMILY);
+            String family = (os.elementAt(i)).getAttribute(FAMILY);
             boolean match = false;
 
             if ("windows".equals(family))
@@ -2963,7 +2963,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
-    private boolean itemRequiredFor(Vector packs)
+    private boolean itemRequiredFor(Vector<XMLElement> packs)
     {
 
         String selected;
@@ -2991,7 +2991,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = ((XMLElement) packs.elementAt(k)).getAttribute(NAME, "");
+                required = (packs.elementAt(k)).getAttribute(NAME, "");
                 if (selected.equals(required)) { return (true); }
             }
         }
@@ -3022,7 +3022,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
-    private boolean itemRequiredForUnselected(Vector packs)
+    private boolean itemRequiredForUnselected(Vector<XMLElement> packs)
     {
 
         String selected;
@@ -3040,7 +3040,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = ((XMLElement) packs.elementAt(k)).getAttribute(NAME, "");
+                required = (packs.elementAt(k)).getAttribute(NAME, "");
                 if (selected.equals(required)) { return (false); }
             }
         }
@@ -3054,7 +3054,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * 
      * @return Returns the uiElements.
      */
-    protected Vector getUiElements()
+    protected Vector<Object[]> getUiElements()
     {
         return uiElements;
     }
@@ -3306,7 +3306,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /** perform autodetection */
         public boolean autodetect()
         {
-            Vector items = new Vector();
+            Vector<String> items = new Vector<String>();
 
             /*
              * Check if the user has entered data into the ComboBox and add it to the Itemlist
@@ -3365,7 +3365,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 }
             }
             // Make the enties in the vector unique
-            items = new Vector(new HashSet(items));
+            items = new Vector<String>(new HashSet<String>(items));
 
             // Now clear the combobox and add the items out of the newly
             // generated vector
@@ -3373,7 +3373,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
             for (int i = 0; i < items.size(); i++)
             {
-                this.pathComboBox.addItem(vs.substitute((String) items.get(i), "plain"));
+                this.pathComboBox.addItem(vs.substitute(items.get(i), "plain"));
             }
 
             // loop through all items
@@ -3502,13 +3502,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /**
          * Look if there are new variables defined
          */
-        Vector variables = spec.getChildrenNamed(VARIABLE_NODE);
+        Vector<XMLElement> variables = spec.getChildrenNamed(VARIABLE_NODE);
         RulesEngine rules = parent.getRules();
 
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
         for (int i = 0; i < variables.size(); i++)
         {
-            XMLElement variable = (XMLElement) variables.elementAt(i);
+            XMLElement variable = variables.elementAt(i);
             String vname = variable.getAttribute(ATTRIBUTE_VARIABLE_NAME);
             String vvalue = variable.getAttribute(ATTRIBUTE_VARIABLE_VALUE);
             

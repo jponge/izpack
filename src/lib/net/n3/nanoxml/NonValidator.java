@@ -63,20 +63,20 @@ public class NonValidator implements IXMLValidator
     /**
      * Contains the default values for attributes for the different element types.
      */
-    protected Hashtable attributeDefaultValues;
+    protected Hashtable<String, Properties> attributeDefaultValues;
 
     /**
      * The stack of elements to be processed.
      */
-    protected Stack currentElements;
+    protected Stack<Properties> currentElements;
 
     /**
      * Creates the &quot;validator&quot;.
      */
     public NonValidator()
     {
-        this.attributeDefaultValues = new Hashtable();
-        this.currentElements = new Stack();
+        this.attributeDefaultValues = new Hashtable<String, Properties>();
+        this.currentElements = new Stack<Properties>();
         this.parameterEntityResolver = new XMLEntityResolver();
         this.peLevel = 0;
     }
@@ -482,7 +482,7 @@ public class NonValidator implements IXMLValidator
     public void elementStarted(String name, String nsPrefix, String nsSystemId, String systemId,
             int lineNr)
     {
-        Properties attribs = (Properties) this.attributeDefaultValues.get(name);
+        Properties attribs = this.attributeDefaultValues.get(name);
 
         if (attribs == null)
         {
@@ -526,7 +526,7 @@ public class NonValidator implements IXMLValidator
     public void elementAttributesProcessed(String name, String nsPrefix, String nsSystemId,
             Properties extraAttributes, String systemId, int lineNr)
     {
-        Properties props = (Properties) this.currentElements.pop();
+        Properties props = this.currentElements.pop();
         Enumeration enumeration = props.keys();
 
         while (enumeration.hasMoreElements())
@@ -549,7 +549,7 @@ public class NonValidator implements IXMLValidator
     public void attributeAdded(String key, String nsPrefix, String nsSystemId, String value,
             String systemId, int lineNr)
     {
-        Properties props = (Properties) this.currentElements.peek();
+        Properties props = this.currentElements.peek();
 
         if (props.containsKey(key))
         {

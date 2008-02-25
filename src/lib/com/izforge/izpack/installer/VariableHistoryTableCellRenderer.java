@@ -39,9 +39,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer
 {           
     private static final long serialVersionUID = 6779914244548965230L;
-    private Map variablehistory;
+    private Map<String, VariableHistory> variablehistory;
     
-    public VariableHistoryTableCellRenderer(Map variablehistory) {
+    public VariableHistoryTableCellRenderer(Map<String, VariableHistory> variablehistory) {
         this.variablehistory = variablehistory;
     }
     
@@ -73,9 +73,9 @@ public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer
     }
     
     public void clearState() {        
-        for (Iterator iterator = variablehistory.keySet().iterator(); iterator.hasNext();)
+        for (Iterator<String> iterator = variablehistory.keySet().iterator(); iterator.hasNext();)
         {
-            VariableHistory vh = (VariableHistory) variablehistory.get(iterator.next());
+            VariableHistory vh = variablehistory.get(iterator.next());
             vh.clearState();            
         }
     }            

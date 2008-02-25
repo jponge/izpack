@@ -50,7 +50,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     public static final String UNINSTALL_ROOT = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\";
 
-    public static final Map ROOT_KEY_MAP = new HashMap();
+    public static final Map<String, Integer> ROOT_KEY_MAP = new HashMap<String, Integer>();
 
     protected String uninstallName = null;
 

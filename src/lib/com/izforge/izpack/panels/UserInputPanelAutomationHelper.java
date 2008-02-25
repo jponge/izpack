@@ -58,7 +58,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
     // ------------------------------------------------------
     // String-String key-value pairs
     // ------------------------------------------------------
-    private Map entries;
+    private Map<String, String> entries;
 
     /**
      * Default constructor, used during automated installation.
@@ -72,7 +72,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
      * 
      * @param entries String-String key-value pairs representing the state of the Panel
      */
-    public UserInputPanelAutomationHelper(Map entries)
+    public UserInputPanelAutomationHelper(Map<String, String> entries)
     {
         this.entries = entries;
     }
@@ -97,11 +97,11 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         // add all entries
         // ----------------------------------------------------
-        Iterator keys = this.entries.keySet().iterator();
+        Iterator<String> keys = this.entries.keySet().iterator();
         while (keys.hasNext())
         {
-            String key = (String) keys.next();
-            String value = (String) this.entries.get(key);
+            String key = keys.next();
+            String value = this.entries.get(key);
 
             dataElement = new XMLElement(AUTO_KEY_ENTRY);
             dataElement.setAttribute(AUTO_ATTRIBUTE_KEY, key);
@@ -133,7 +133,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
 
         if (userInput == null) { return false; }
 
-        Vector userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
+        Vector<XMLElement> userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
 
         if (userEntries == null) { return false; }
 
@@ -143,7 +143,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         for (int i = 0; i < userEntries.size(); i++)
         {
-            dataElement = (XMLElement) userEntries.elementAt(i);
+            dataElement = userEntries.elementAt(i);
             variable = dataElement.getAttribute(AUTO_ATTRIBUTE_KEY);
             value = dataElement.getAttribute(AUTO_ATTRIBUTE_VALUE);
 

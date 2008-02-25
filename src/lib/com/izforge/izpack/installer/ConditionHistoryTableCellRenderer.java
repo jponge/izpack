@@ -39,9 +39,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer
 {           
     private static final long serialVersionUID = 6779914244548965230L;
-    private Map conditionhistory;
+    private Map<String, ConditionHistory> conditionhistory;
     
-    public ConditionHistoryTableCellRenderer(Map conditionhistory) {
+    public ConditionHistoryTableCellRenderer(Map<String, ConditionHistory> conditionhistory) {
         this.conditionhistory = conditionhistory;
     }
     
@@ -73,9 +73,9 @@ public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer
     }
     
     public void clearState() {        
-        for (Iterator iterator = conditionhistory.keySet().iterator(); iterator.hasNext();)
+        for (Iterator<String> iterator = conditionhistory.keySet().iterator(); iterator.hasNext();)
         {
-            ConditionHistory ch = (ConditionHistory) conditionhistory.get(iterator.next());
+            ConditionHistory ch = conditionhistory.get(iterator.next());
             ch.clearState();            
         }
     }            

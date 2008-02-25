@@ -66,7 +66,7 @@ public class AutomatedInstaller extends InstallerBase
     // there are panels which can be instantiated multiple times
     // we therefore need to select the right XML section for each
     // instance
-    private TreeMap panelInstanceCount;
+    private TreeMap<String, Integer> panelInstanceCount;
 
     /** The automated installation data. */
     private AutomatedInstallData idata = new AutomatedInstallData();
@@ -104,7 +104,7 @@ public class AutomatedInstaller extends InstallerBase
         // Load custom langpack if exist.
         addCustomLangpack(this.idata);
 
-        this.panelInstanceCount = new TreeMap();
+        this.panelInstanceCount = new TreeMap<String, Integer>();
     }
 
    
@@ -171,14 +171,14 @@ public class AutomatedInstaller extends InstallerBase
             // Do not "kill" the installation if there is a problem
             // with custom uninstall data. Therefore log it to Debug,
             // but do not throw.
-            Map additionalData = udata.getAdditionalData();
+            Map<String, Object> additionalData = udata.getAdditionalData();
             if (additionalData != null && !additionalData.isEmpty())
             {
-                Iterator keys = additionalData.keySet().iterator();
-                HashSet exist = new HashSet();
+                Iterator<String> keys = additionalData.keySet().iterator();
+                HashSet<String> exist = new HashSet<String>();
                 while (keys != null && keys.hasNext())
                 {
-                    String key = (String) keys.next();
+                    String key = keys.next();
                     Object contents = additionalData.get(key);
                     if ("__uninstallLibs__".equals(key))
                     {
@@ -207,7 +207,7 @@ public class AutomatedInstaller extends InstallerBase
                         // First we create a new ArrayList which contains only
                         // the full paths for the uninstall listener self; thats
                         // the first entry of each sub ArrayList.
-                        ArrayList subContents = new ArrayList();
+                        ArrayList<String> subContents = new ArrayList<String>();
 
                         // Secound put the class into uninstaller.jar
                         Iterator listenerIter = ((List) contents).iterator();
@@ -222,10 +222,10 @@ public class AutomatedInstaller extends InstallerBase
                             // remind it for later.
                             if (customData.listenerName != null)
                                 subContents.add(customData.listenerName);
-                            Iterator liClaIter = customData.contents.iterator();
+                            Iterator<String> liClaIter = customData.contents.iterator();
                             while (liClaIter.hasNext())
                             {
-                                String contentPath = (String) liClaIter.next();
+                                String contentPath = liClaIter.next();
                                 if (exist.contains(contentPath)) continue;
                                 exist.add(contentPath);
                                 try
@@ -338,14 +338,14 @@ public class AutomatedInstaller extends InstallerBase
     
                 String panelClassName = p.className;
                 String automationHelperClassName = praefix + panelClassName + "AutomationHelper";
-                Class automationHelperClass = null;
+                Class<PanelAutomation> automationHelperClass = null;
                 
                 Debug.log( "AutomationHelper:" + automationHelperClassName );
                 // determine if the panel supports automated install
                 try
                 {
                     
-                    automationHelperClass = Class.forName(automationHelperClassName);
+                    automationHelperClass = (Class<PanelAutomation>) Class.forName(automationHelperClassName);
                     
                 }
                 catch (ClassNotFoundException e)
@@ -362,7 +362,7 @@ public class AutomatedInstaller extends InstallerBase
                     try
                     {
                         Debug.log( "Instantiate :" + automationHelperClassName );
-                        automationHelperInstance = (PanelAutomation) automationHelperClass
+                        automationHelperInstance = automationHelperClass
                                 .newInstance();
                     }
                     catch (Exception e)
@@ -374,16 +374,16 @@ public class AutomatedInstaller extends InstallerBase
                 }
     
                 // We get the panels root xml markup
-                Vector panelRoots = this.idata.xmlData.getChildrenNamed(panelClassName);
+                Vector<XMLElement> panelRoots = this.idata.xmlData.getChildrenNamed(panelClassName);
                 int panelRootNo = 0;
     
                 if (this.panelInstanceCount.containsKey(panelClassName))
                 {
                     // get number of panel instance to process
-                    panelRootNo = ((Integer) this.panelInstanceCount.get(panelClassName)).intValue();
+                    panelRootNo = (this.panelInstanceCount.get(panelClassName)).intValue();
                 }
     
-                XMLElement panelRoot = (XMLElement) panelRoots.elementAt(panelRootNo);
+                XMLElement panelRoot = panelRoots.elementAt(panelRootNo);
     
                 this.panelInstanceCount.put(panelClassName, new Integer(panelRootNo + 1));
     

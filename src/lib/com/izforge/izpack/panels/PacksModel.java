@@ -74,10 +74,10 @@ class PacksModel extends AbstractTableModel
     private int[] checkValues;
 
     // Map to hold the object name relationship
-    Map namesObj;
+    Map<String, Pack> namesObj;
 
     // Map to hold the object name relationship
-    Map namesPos;
+    Map<String, Integer> namesPos;
 
     // reference to the RulesEngine for validating conditions
     private RulesEngine rules;
@@ -153,7 +153,7 @@ class PacksModel extends AbstractTableModel
     }    
     
     private void removeAlreadyInstalledPacks(List selectedpacks) {
-        List removepacks = new ArrayList();
+        List<Pack> removepacks = new ArrayList<Pack>();
         
         for (Iterator iterator = selectedpacks.iterator(); iterator.hasNext();)
         {
@@ -170,9 +170,9 @@ class PacksModel extends AbstractTableModel
                 removepacks.add(selectedpack);
             }
         }
-        for (Iterator iterator = removepacks.iterator(); iterator.hasNext();)
+        for (Iterator<Pack> iterator = removepacks.iterator(); iterator.hasNext();)
         {
-            Pack removepack = (Pack) iterator.next();
+            Pack removepack = iterator.next();
             selectedpacks.remove(removepack);            
         }
     }
@@ -237,7 +237,7 @@ class PacksModel extends AbstractTableModel
     private void reverseDeps()
     {
         // name to pack map
-        namesObj = new HashMap();
+        namesObj = new HashMap<String, Pack>();
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
@@ -247,11 +247,11 @@ class PacksModel extends AbstractTableModel
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
-            List deps = pack.dependencies;
+            List<String> deps = pack.dependencies;
             for (int j = 0; deps != null && j < deps.size(); j++)
             {
-                String name = (String) deps.get(j);
-                Pack parent = (Pack) namesObj.get(name);
+                String name = deps.get(j);
+                Pack parent = namesObj.get(name);
                 parent.addRevDep(pack.name);
             }
         }
@@ -261,7 +261,7 @@ class PacksModel extends AbstractTableModel
     private void initvalues()
     {
         // name to pack position map
-        namesPos = new HashMap();
+        namesPos = new HashMap<String, Integer>();
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
@@ -281,10 +281,10 @@ class PacksModel extends AbstractTableModel
             Pack pack = (Pack) packs.get(i);
             if (checkValues[i] == 0)
             {
-                List deps = pack.revDependencies;
+                List<String> deps = pack.revDependencies;
                 for (int j = 0; deps != null && j < deps.size(); j++)
                 {
-                    String name = (String) deps.get(j);
+                    String name = deps.get(j);
                     int pos = getPos(name);
                     checkValues[pos] = -2;
                 }
@@ -325,10 +325,10 @@ class PacksModel extends AbstractTableModel
 
         final int pos = getPos(name);
         checkValues[pos] = -1;
-        List deps = ((Pack) packs.get(pos)).dependencies;
+        List<String> deps = ((Pack) packs.get(pos)).dependencies;
         for (int i = 0; deps != null && i < deps.size(); i++)
         {
-            String s = (String) deps.get(i);
+            String s = deps.get(i);
             propRequirement(s);
         }
 
@@ -342,7 +342,7 @@ class PacksModel extends AbstractTableModel
      */
     private int getPos(String name)
     {
-        return ((Integer) namesPos.get(name)).intValue();
+        return (namesPos.get(name)).intValue();
     }
 
     /*
@@ -646,13 +646,13 @@ class PacksModel extends AbstractTableModel
         {
             wipe = true;
         }
-        List deps = u.revDependencies;
+        List<String> deps = u.revDependencies;
         if (deps != null)
         {
             for (int i = 0; i < deps.size(); i++)
             {
-                String name = (String) deps.get(i);
-                Pack v = (Pack) namesObj.get(name);
+                String name = deps.get(i);
+                Pack v = namesObj.get(name);
                 if (wipe)
                 {
                     status[getPos(v.name)] = 1;

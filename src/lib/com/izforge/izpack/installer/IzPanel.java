@@ -858,7 +858,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         String caption;
         if (parent.isHeading(this)
                 && idata.guiPrefs.modifier.containsKey("useHeadingForSummary")
-                && ((String) idata.guiPrefs.modifier.get("useHeadingForSummary"))
+                && (idata.guiPrefs.modifier.get("useHeadingForSummary"))
                         .equalsIgnoreCase("yes"))
         {
             caption = getI18nStringForClass("headline", this.getClass().getName());

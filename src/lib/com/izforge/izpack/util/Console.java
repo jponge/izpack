@@ -36,6 +36,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
@@ -371,7 +372,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
 
     private PipedInputStream in;
 
-    private java.util.Vector history;
+    private Vector<String> history;
 
     private int historyIndex = -1;
 
@@ -386,7 +387,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
     public ConsoleTextArea()
     {
         super();
-        history = new java.util.Vector();
+        history = new java.util.Vector<String>();
         console1 = new ConsoleWriter(this);
         ConsoleWriter console2 = new ConsoleWriter(this);
         out = new PrintStream(console1);
@@ -497,7 +498,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
                 }
                 if (historyIndex >= 0)
                 {
-                    String str = (String) history.elementAt(historyIndex);
+                    String str = history.elementAt(historyIndex);
                     int len = getDocument().getLength();
                     replaceRange(str, outputMark, len);
                     int caretPos = outputMark + str.length();
@@ -527,7 +528,7 @@ class ConsoleTextArea extends JTextArea implements KeyListener, DocumentListener
                 int len = getDocument().getLength();
                 if (historyIndex < history.size())
                 {
-                    String str = (String) history.elementAt(historyIndex);
+                    String str = history.elementAt(historyIndex);
                     replaceRange(str, outputMark, len);
                     caretPos = outputMark + str.length();
                 }

@@ -20,6 +20,8 @@
  */
 package com.izforge.izpack;
 
+import com.izforge.izpack.util.OsConstraint;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class Panel implements Serializable
     public String className;
 
     /** The target operation system of this panel */
-    public List osConstraints = null;
+    public List<OsConstraint> osConstraints = null;
 
     /** the unique id of this panel */
     protected String panelid;
@@ -52,11 +54,11 @@ public class Panel implements Serializable
       this.className = className;
     }
 
-    public List getOsConstraints() {
+    public List<OsConstraint> getOsConstraints() {
       return this.osConstraints;
     }
 
-    public void setOsConstraints(List osConstraints) {
+    public void setOsConstraints(List<OsConstraint> osConstraints) {
       this.osConstraints = osConstraints;
     }
 

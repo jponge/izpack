@@ -78,7 +78,7 @@ public class InstallationGroupPanel extends IzPanel
     private static final long serialVersionUID = 1L;
 
     /** HashMap<String, Pack> of the InstallData.availablePacks */
-    private HashMap packsByName;
+    private HashMap<String, Pack> packsByName;
     private TableModel groupTableModel;
     private JTextPane descriptionField;
     private JScrollPane groupScrollPane;
@@ -100,8 +100,8 @@ public class InstallationGroupPanel extends IzPanel
     {
         // Set/restore availablePacks from allPacks; consider OS constraints
         idata.availablePacks = new ArrayList();
-        for (Iterator i = idata.allPacks.iterator(); i.hasNext(); ) {
-          Pack p = (Pack)i.next();
+        for (Iterator<Pack> i = idata.allPacks.iterator(); i.hasNext(); ) {
+          Pack p = i.next();
           if (OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) idata.availablePacks.add(p);
         }
 
@@ -310,7 +310,7 @@ public class InstallationGroupPanel extends IzPanel
             }
         }
     }
-    protected void addDependents(Pack p, HashMap packsByName, GroupData data)
+    protected void addDependents(Pack p, HashMap<String, Pack> packsByName, GroupData data)
     {
         data.packNames.add(p.name);
         data.size += p.nbytes;
@@ -318,15 +318,15 @@ public class InstallationGroupPanel extends IzPanel
         if( p.dependencies == null || p.dependencies.size() == 0 )
             return;
 
-        Iterator iter = p.dependencies.iterator();
+        Iterator<String> iter = p.dependencies.iterator();
         Debug.trace(p.name+" dependencies: "+p.dependencies);
         while( iter.hasNext() )
         {
-            String dependent = (String) iter.next();
+            String dependent = iter.next();
             if(!data.packNames.contains(dependent))
             {
                 Debug.trace("Need dependent: "+dependent);
-                Pack dependentPack = (Pack) packsByName.get(dependent);
+                Pack dependentPack = packsByName.get(dependent);
                 addDependents(dependentPack, packsByName, data);
             }
         }
@@ -346,18 +346,18 @@ public class InstallationGroupPanel extends IzPanel
         /* First create a packsByName<String, Pack> of all packs and identify
         the unique install group names.
         */
-        packsByName = new HashMap();
+        packsByName = new HashMap<String, Pack>();
         HashMap installGroups = new HashMap();
         for (int n = 0; n < idata.availablePacks.size(); n++)
         {
             Pack p = (Pack) idata.availablePacks.get(n);
             packsByName.put(p.name, p);
-            Set groups = p.installGroups;
-            Iterator iter = groups.iterator();
+            Set<String> groups = p.installGroups;
+            Iterator<String> iter = groups.iterator();
             Debug.trace("Pack: "+p.name+", installGroups: "+groups);
             while (iter.hasNext())
             {
-                String group = (String) iter.next();
+                String group = iter.next();
                 GroupData data = (GroupData) installGroups.get(group);
                 if (data == null)
                 {
@@ -382,7 +382,7 @@ public class InstallationGroupPanel extends IzPanel
             while( iter.hasNext() )
             {
                 Pack p = (Pack) iter.next();
-                Set groups = p.installGroups;
+                Set<String> groups = p.installGroups;
                 if( groups.size() == 0 || groups.contains(data.name))
                 {
                     // The pack may have already been added while traversing dependencies
@@ -591,7 +591,7 @@ public class InstallationGroupPanel extends IzPanel
         String description;
         String sortKey;
         long size;
-        HashSet packNames = new HashSet();
+        HashSet<String> packNames = new HashSet<String>();
 
         GroupData(String name, String description, String sortKey)
         {

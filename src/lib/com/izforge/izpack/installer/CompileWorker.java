@@ -67,7 +67,7 @@ public class CompileWorker implements Runnable
 {
 
     /** Compilation jobs */
-    private ArrayList jobs;
+    private ArrayList<CompilationJob> jobs;
 
     /** Name of resource for specifying compilation parameters. */
     private static final String SPEC_RESOURCE_NAME = "CompilePanel.Spec.xml";
@@ -86,13 +86,13 @@ public class CompileWorker implements Runnable
 
     private XMLElement compilerSpec;
 
-    private ArrayList compilerList;
+    private ArrayList<String> compilerList;
 
     private String compilerToUse;
 
     private XMLElement compilerArgumentsSpec;
 
-    private ArrayList compilerArgumentsList;
+    private ArrayList<String> compilerArgumentsList;
 
     private String compilerArgumentsToUse;
 
@@ -119,7 +119,7 @@ public class CompileWorker implements Runnable
      * 
      * @return ArrayList of String
      */
-    public ArrayList getAvailableCompilers()
+    public ArrayList<String> getAvailableCompilers()
     {
         readChoices(this.compilerSpec, this.compilerList);
         return this.compilerList;
@@ -152,7 +152,7 @@ public class CompileWorker implements Runnable
      * 
      * @return ArrayList of String
      */
-    public ArrayList getAvailableArguments()
+    public ArrayList<String> getAvailableArguments()
     {
         readChoices(this.compilerArgumentsSpec, this.compilerArgumentsList);
         return this.compilerArgumentsList;
@@ -207,7 +207,7 @@ public class CompileWorker implements Runnable
         {
             if (!collectJobs())
             {
-                List args = new ArrayList();
+                List<String> args = new ArrayList<String>();
                 args.add ("nothing to do");
 
                 this.result = new CompileResult(this.idata.langpack
@@ -258,8 +258,8 @@ public class CompileWorker implements Runnable
 
         if (!this.spec.hasChildren()) return false;
 
-        this.compilerArgumentsList = new ArrayList();
-        this.compilerList = new ArrayList();
+        this.compilerArgumentsList = new ArrayList<String>();
+        this.compilerList = new ArrayList<String>();
 
         // read <global> information
         XMLElement global = this.spec.getFirstChildNamed("global");
@@ -305,25 +305,25 @@ public class CompileWorker implements Runnable
     }
 
     // helper function
-    private void readChoices(XMLElement element, ArrayList choiceList)
+    private void readChoices(XMLElement element, ArrayList<String> choiceList)
     {
-        Vector choices = element.getChildrenNamed("choice");
+        Vector<XMLElement> choices = element.getChildrenNamed("choice");
 
         if (choices == null) return;
 
         choiceList.clear();
 
-        Iterator choice_it = choices.iterator();
+        Iterator<XMLElement> choice_it = choices.iterator();
 
         while (choice_it.hasNext())
         {
-            XMLElement choice = (XMLElement) choice_it.next();
+            XMLElement choice = choice_it.next();
 
             String value = choice.getAttribute("value");
 
             if (value != null)
             {
-                List osconstraints = OsConstraint.getOsList(choice);
+                List<OsConstraint> osconstraints = OsConstraint.getOsList(choice);
 
                 if (OsConstraint.oneMatchesCurrentSystem(osconstraints))
                 {
@@ -365,7 +365,7 @@ public class CompileWorker implements Runnable
         // list of classpath entries
         ArrayList classpath = new ArrayList();
 
-        this.jobs = new ArrayList();
+        this.jobs = new ArrayList<CompilationJob>();
 
         // we throw away the toplevel compilation job
         // (all jobs are collected in this.jobs)
@@ -377,7 +377,7 @@ public class CompileWorker implements Runnable
     /** perform the actual compilation */
     private CompileResult compileJobs()
     {
-        ArrayList args = new ArrayList();
+        ArrayList<String> args = new ArrayList<String>();
         StringTokenizer tokenizer = new StringTokenizer(this.compilerArgumentsToUse);
 
         while (tokenizer.hasMoreTokens())
@@ -385,14 +385,14 @@ public class CompileWorker implements Runnable
             args.add(tokenizer.nextToken());
         }
 
-        Iterator job_it = this.jobs.iterator();
+        Iterator<CompilationJob> job_it = this.jobs.iterator();
 
         this.handler.startAction("Compilation", this.jobs.size());
 
         // check whether compiler is valid (but only if there are jobs)
         if (job_it.hasNext())
         {
-            CompilationJob first_job = (CompilationJob) this.jobs.get(0);
+            CompilationJob first_job = this.jobs.get(0);
 
             CompileResult check_result = first_job.checkCompiler(this.compilerToUse, args);
             if (!check_result.isContinue()) { return check_result; }
@@ -403,7 +403,7 @@ public class CompileWorker implements Runnable
 
         while (job_it.hasNext())
         {
-            CompilationJob job = (CompilationJob) job_it.next();
+            CompilationJob job = job_it.next();
 
             this.handler.nextStep(job.getName(), job.getSize(), job_no++);
 
@@ -421,7 +421,7 @@ public class CompileWorker implements Runnable
     {
         Enumeration toplevel_tags = node.enumerateChildren();
         ArrayList ourclasspath = (ArrayList) classpath.clone();
-        ArrayList files = new ArrayList();
+        ArrayList<File> files = new ArrayList<File>();
 
         while (toplevel_tags.hasMoreElements())
         {
@@ -546,11 +546,11 @@ public class CompileWorker implements Runnable
      * 
      * @return list of files found (might be empty)
      */
-    private ArrayList scanDirectory(File path)
+    private ArrayList<File> scanDirectory(File path)
     {
         Debug.trace("scanning directory " + path.getAbsolutePath());
 
-        ArrayList scan_result = new ArrayList();
+        ArrayList<File> scan_result = new ArrayList<File>();
 
         if (!path.isDirectory()) return scan_result;
 
@@ -584,7 +584,7 @@ public class CompileWorker implements Runnable
 
         private String name;
 
-        private ArrayList files;
+        private ArrayList<File> files;
 
         private ArrayList classpath;
 
@@ -605,7 +605,7 @@ public class CompileWorker implements Runnable
          * @param classpath The class path to use.
          */
         public CompilationJob(CompileHandler listener, AutomatedInstallData idata, String name,
-                ArrayList files, ArrayList classpath)
+                ArrayList<File> files, ArrayList classpath)
         {
             this.listener = listener;
             this.idata = idata;
@@ -644,19 +644,19 @@ public class CompileWorker implements Runnable
          * @param arguments The compiler arguments to use.
          * @return The result.
          */
-        public CompileResult perform(String compiler, ArrayList arguments)
+        public CompileResult perform(String compiler, ArrayList<String> arguments)
         {
             Debug.trace("starting job " + this.name);
             // we have some maximum command line length - need to count
             int cmdline_len = 0;
 
             // used to collect the arguments for executing the compiler
-            LinkedList args = new LinkedList(arguments);
+            LinkedList<String> args = new LinkedList<String>(arguments);
 
             {
-                Iterator arg_it = args.iterator();
+                Iterator<String> arg_it = args.iterator();
                 while (arg_it.hasNext())
-                    cmdline_len += ((String) arg_it.next()).length() + 1;
+                    cmdline_len += (arg_it.next()).length() + 1;
             }
 
             boolean isEclipseCompiler = compiler.equalsIgnoreCase(ECLIPSE_COMPILER_NAME);
@@ -703,11 +703,11 @@ public class CompileWorker implements Runnable
             int last_fileno = 0;
 
             // now iterate over all files of this job
-            Iterator file_it = this.files.iterator();
+            Iterator<File> file_it = this.files.iterator();
 
             while (file_it.hasNext())
             {
-                File f = (File) file_it.next();
+                File f = file_it.next();
 
                 String fpath = f.getAbsolutePath();
 
@@ -749,10 +749,10 @@ public class CompileWorker implements Runnable
                         // verify that all files have been compiled successfully
                         // I found that sometimes, no error code is returned
                         // although compilation failed.
-                        Iterator arg_it = args.listIterator(common_args_no);
+                        Iterator<String> arg_it = args.listIterator(common_args_no);
                         while (arg_it.hasNext())
                         {
-                            File java_file = new File((String) arg_it.next());
+                            File java_file = new File(arg_it.next());
 
                             String basename = java_file.getName();
                             int dotpos = basename.lastIndexOf('.');
@@ -808,10 +808,10 @@ public class CompileWorker implements Runnable
                     // verify that all files have been compiled successfully
                     // I found that sometimes, no error code is returned
                     // although compilation failed.
-                    Iterator arg_it = args.listIterator(common_args_no);
+                    Iterator<String> arg_it = args.listIterator(common_args_no);
                     while (arg_it.hasNext())
                     {
-                        File java_file = new File((String) arg_it.next());
+                        File java_file = new File(arg_it.next());
 
                         String basename = java_file.getName();
                         int dotpos = basename.lastIndexOf('.');
@@ -848,7 +848,7 @@ public class CompileWorker implements Runnable
          * @param output The output from the compiler ([0] = stdout, [1] = stderr)
          * @return The result of the compilation.
          */
-        private int runCompiler(FileExecutor executor, String[] output, List cmdline)
+        private int runCompiler(FileExecutor executor, String[] output, List<String> cmdline)
         {
             if (cmdline.get(0).equals (ECLIPSE_COMPILER_NAME))
                 return runEclipseCompiler(output, cmdline);
@@ -856,11 +856,11 @@ public class CompileWorker implements Runnable
             return executor.executeCommand((String[])cmdline.toArray(new String[cmdline.size()]), output);
         }
 
-        private int runEclipseCompiler (String[] output, List cmdline)
+        private int runEclipseCompiler (String[] output, List<String> cmdline)
         {
             try
             {
-                List final_cmdline = new LinkedList (cmdline);
+                List<String> final_cmdline = new LinkedList<String>(cmdline);
 
                 // remove compiler name from argument list
                 final_cmdline.remove(0);
@@ -988,7 +988,7 @@ public class CompileWorker implements Runnable
          * @param arguments additional arguments to pass to the compiler
          * @return false on error
          */
-        public CompileResult checkCompiler(String compiler, ArrayList arguments)
+        public CompileResult checkCompiler(String compiler, ArrayList<String> arguments)
         {
             // don't do further checks for eclipse compiler - it would exit
             if (compiler.equalsIgnoreCase(ECLIPSE_COMPILER_NAME))
@@ -1001,7 +1001,7 @@ public class CompileWorker implements Runnable
             Debug.trace("checking whether \"" + compiler + " -help\" works");
 
             {
-                List args = new ArrayList();
+                List<String> args = new ArrayList<String>();
                 args.add (compiler);
                 args.add ("-help");
 
@@ -1020,7 +1020,7 @@ public class CompileWorker implements Runnable
             Debug.trace("checking whether \"" + compiler + " -help +arguments\" works");
 
             // used to collect the arguments for executing the compiler
-            LinkedList args = new LinkedList(arguments);
+            LinkedList<String> args = new LinkedList<String>(arguments);
 
             // add -help argument to prevent the compiler from doing anything
             args.add(0, "-help");

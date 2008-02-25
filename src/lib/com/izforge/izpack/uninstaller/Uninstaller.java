@@ -42,7 +42,7 @@ public class Uninstaller
         if (cmduninstall) System.out.println("Command line uninstaller.\n");
         try
         {
-            Class clazz = Uninstaller.class;
+            Class<Uninstaller> clazz = Uninstaller.class;
             Method target;
             if (cmduninstall)
                 target = clazz.getMethod("cmduninstall", new Class[]{String[].class});

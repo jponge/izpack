@@ -68,7 +68,7 @@ public class CompileResult
     private String message = null;
 
     /** the command line */
-    private List cmdline = null;
+    private List<String> cmdline = null;
 
     /** the stdout of the command */
     private String stdout = null;
@@ -105,7 +105,7 @@ public class CompileResult
      * @param stdout standard output of failed command
      * @param stderr standard error of failed command
      */
-    public CompileResult(String message, List cmdline, String stdout, String stderr)
+    public CompileResult(String message, List<String> cmdline, String stdout, String stderr)
     {
         this.message = message;
         this.status = FAILED;
@@ -188,10 +188,10 @@ public class CompileResult
     public String getCmdline()
     {
         StringBuffer sb = new StringBuffer();
-        for (Iterator cmdIt = this.cmdline.iterator(); cmdIt.hasNext();)
+        for (Iterator<String> cmdIt = this.cmdline.iterator(); cmdIt.hasNext();)
         {
             if (sb.length() > 0) sb.append(' ');
-            sb.append((String)cmdIt.next());
+            sb.append(cmdIt.next());
         }
         return sb.toString();
     }

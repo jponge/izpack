@@ -47,7 +47,7 @@ import com.izforge.izpack.util.SpecHelper;
 public class SimpleInstallerListener implements InstallerListener
 {
 
-    private static ArrayList progressBarCaller = new ArrayList();
+    private static ArrayList<SimpleInstallerListener> progressBarCaller = new ArrayList<SimpleInstallerListener>();
 
     /** The name of the XML file that specifies the panel langpack */
     protected static final String LANG_FILE_NAME = "CustomActionsLang.xml";

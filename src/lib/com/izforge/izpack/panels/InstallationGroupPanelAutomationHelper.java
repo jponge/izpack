@@ -54,10 +54,10 @@ public class InstallationGroupPanelAutomationHelper
         	GroupData gd = rows[n];
         	XMLElement xgroup = new XMLElement("group");
         	xgroup.setAttribute("name", gd.name);
-        	Iterator names = gd.packNames.iterator();
+        	Iterator<String> names = gd.packNames.iterator();
         	while( names.hasNext() )
         	{
-        		String name = (String) names.next();
+        		String name = names.next();
         		Pack pack = (Pack) packsByName.get(name);
         		int index = idata.availablePacks.indexOf(pack);
         		XMLElement xpack = new XMLElement("pack");
@@ -80,22 +80,22 @@ public class InstallationGroupPanelAutomationHelper
 		Debug.trace("InstallationGroupPanelAutomationHelper: runAutomated, INSTALL_GROUP: "+installGroup);
 		if( installGroup != null )
 		{
-			Vector groups = panelRoot.getChildrenNamed("group");
+			Vector<XMLElement> groups = panelRoot.getChildrenNamed("group");
 			for(int i = 0; i < groups.size(); i ++)
 			{
-				XMLElement group = (XMLElement) groups.get(i);
+				XMLElement group = groups.get(i);
 				String name = group.getAttribute("name");
 				Debug.trace("InstallationGroupPanelAutomationHelper: Checking INSTALL_GROUP against: "+name);
 				if( name.equalsIgnoreCase(installGroup) )
 				{
 					Debug.trace("Found INSTALL_GROUP match for: "+installGroup);
 					idata.selectedPacks.clear();
-					Vector packs = group.getChildrenNamed("pack");
+					Vector<XMLElement> packs = group.getChildrenNamed("pack");
 					Debug.trace(name+" pack count: "+packs.size());
 					Debug.trace("Available pack count: "+idata.availablePacks.size());
 					for(int j = 0; j < packs.size(); j ++)
 					{
-						XMLElement xpack = (XMLElement) packs.get(j);
+						XMLElement xpack = packs.get(j);
 						String pname = xpack.getAttribute("name");
 						String indexStr = xpack.getAttribute("index");
 						int index = Integer.parseInt(indexStr);

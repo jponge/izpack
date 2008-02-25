@@ -147,9 +147,9 @@ public class ActionBase implements Serializable
 
     public static final String ASKFALSE = "askfalse";
 
-    private static final HashSet installOrders = new HashSet();
+    private static final HashSet<String> installOrders = new HashSet<String>();
 
-    private static final HashSet uninstallOrders = new HashSet();
+    private static final HashSet<String> uninstallOrders = new HashSet<String>();
 
     protected String uninstallOrder = ActionBase.BEFOREDELETION;
 

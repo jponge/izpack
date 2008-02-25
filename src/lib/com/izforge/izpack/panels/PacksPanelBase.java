@@ -124,7 +124,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     /**
      * Map that connects names with pack objects
      */
-    private Map names;
+    private Map<String, Pack> names;
 
     /**
      * The bytes of the current pack.
@@ -312,7 +312,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         if (dependencyArea != null)
         {
             Pack pack = (Pack) idata.availablePacks.get(i);
-            List dep = pack.dependencies;
+            List<String> dep = pack.dependencies;
             String list = "";
             if (dep != null)
             {
@@ -321,8 +321,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             }
             for (int j = 0; dep != null && j < dep.size(); j++)
             {
-                String name = (String) dep.get(j);
-                list += getI18NPackName((Pack) names.get(name));
+                String name = dep.get(j);
+                list += getI18NPackName(names.get(name));
                 if (j != dep.size() - 1) list += ", ";
             }
 
@@ -515,7 +515,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      */
     private void computePacks(List packs)
     {
-        names = new HashMap();
+        names = new HashMap<String, Pack>();
         dependenciesExist = false;
         for (int i = 0; i < packs.size(); i++)
         {

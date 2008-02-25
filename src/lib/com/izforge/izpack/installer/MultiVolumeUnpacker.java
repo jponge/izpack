@@ -128,9 +128,9 @@ public class MultiVolumeUnpacker extends UnpackerBase
             //
             // Initialisations
             FileOutputStream out = null;
-            ArrayList parsables = new ArrayList();
-            ArrayList executables = new ArrayList();
-            ArrayList updatechecks = new ArrayList();
+            ArrayList<ParsableFile> parsables = new ArrayList<ParsableFile>();
+            ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
+            ArrayList<UpdateCheck> updatechecks = new ArrayList<UpdateCheck>();
             List packs = idata.selectedPacks;
             int npacks = packs.size();
             Debug.trace("Unpacker starting");
@@ -490,7 +490,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         String arg = null;
                         for (int j = 0; j < ef.argList.size(); j++)
                         {
-                            arg = (String) ef.argList.get(j);
+                            arg = ef.argList.get(j);
                             arg = IoHelper.translatePath(arg, vs);
                             ef.argList.set(j, arg);
                         }

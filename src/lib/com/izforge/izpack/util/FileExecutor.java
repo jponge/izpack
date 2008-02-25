@@ -79,7 +79,7 @@ public class FileExecutor
      * 
      * @param files the executable files to process
      */
-    public FileExecutor(Collection files)
+    public FileExecutor(Collection<ExecutableFile> files)
     {
         this.files = files;
     }
@@ -246,10 +246,10 @@ public class FileExecutor
         String permissions = "a+x";
 
         // loop through all executables
-        Iterator efileIterator = this.files.iterator();
+        Iterator<ExecutableFile> efileIterator = this.files.iterator();
         while (exitStatus == 0 && efileIterator.hasNext())
         {
-            ExecutableFile efile = (ExecutableFile) efileIterator.next();
+            ExecutableFile efile = efileIterator.next();
             boolean deleteAfterwards = !efile.keepFile;
             File file = new File(efile.path);
             Debug.trace("handling executable file " + efile);
@@ -276,7 +276,7 @@ public class FileExecutor
             if ((exitStatus == 0)
                     && ((currentStage == ExecutableFile.POSTINSTALL && efile.executionStage == ExecutableFile.POSTINSTALL) || (currentStage == ExecutableFile.UNINSTALL && efile.executionStage == ExecutableFile.UNINSTALL)))
             {
-                List paramList = new ArrayList();
+                List<String> paramList = new ArrayList<String>();
                 if (ExecutableFile.BIN == efile.type)
                     paramList.add(file.toString());
 
@@ -307,7 +307,7 @@ public class FileExecutor
 
                 String[] params = new String[paramList.size()];
                 for (int i = 0; i < paramList.size(); i++)
-                    params[i] = (String) paramList.get(i);
+                    params[i] = paramList.get(i);
 
                 exitStatus = executeCommand(params, output);
 
@@ -368,7 +368,7 @@ public class FileExecutor
     private String buildClassPath(String targetFile) throws Exception
     {
         StringBuffer classPath = new StringBuffer();
-        List jars = new ArrayList();
+        List<String> jars = new ArrayList<String>();
         String rawClassPath = targetFile.replace(':', File.pathSeparatorChar).replace(';', File.pathSeparatorChar);
         String[] rawJars = rawClassPath.split("" + File.pathSeparatorChar);
         for (int i = 0; i < rawJars.length; i++)
@@ -397,7 +397,7 @@ public class FileExecutor
             }
         }
         
-        Iterator iter = jars.iterator();
+        Iterator<String> iter = jars.iterator();
         if (iter.hasNext())
         {
             classPath.append(iter.next());
@@ -411,5 +411,5 @@ public class FileExecutor
     }
 
     /** The files to execute. */
-    private Collection files;
+    private Collection<ExecutableFile> files;
 }

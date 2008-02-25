@@ -318,7 +318,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     // ~ Instance fields ********************************************************************
 
     /** a VectorList of Files wich should be make executable */
-    private Vector execFiles = new Vector();
+    private Vector<ExecutableFile> execFiles = new Vector<ExecutableFile>();
 
     // ------------------------------------------------------------------------
     // Variable Declarations
@@ -410,7 +410,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * valid data only after createShortcuts() has been called. This list is created so that the
      * files can be added to the uninstaller.
      */
-    private Vector files = new Vector();
+    private Vector<String> files = new Vector<String>();
 
     /**
      * If true it indicates that there are shortcuts to create. The value is set by
@@ -439,7 +439,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     public final static String USER_TYPE = "usertype";
 
     /** shortCuts */
-    private Vector shortCuts;
+    private Vector<String> shortCuts;
 
     /** internal line counter */
     int line;
@@ -876,7 +876,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         
         XMLElement group = null;
-        Vector groupSpecs = spec.getChildrenNamed(SPEC_KEY_PROGRAM_GROUP);
+        Vector<XMLElement> groupSpecs = spec.getChildrenNamed(SPEC_KEY_PROGRAM_GROUP);
         String selectedInstallGroup = idata.getVariable("INSTALL_GROUP");
         if (selectedInstallGroup!=null){
             //The user selected an InstallGroup before.
@@ -884,7 +884,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             //search all defined ProgramGroups for the given InstallGroup
             for (int i = 0; i < groupSpecs.size(); i++)
             {
-                XMLElement g = (XMLElement)groupSpecs.get(i);
+                XMLElement g = groupSpecs.get(i);
                 String instGrp = g.getAttribute(SPEC_ATTRIBUTE_INSTALLGROUP);
                 if (instGrp!=null && selectedInstallGroup.equalsIgnoreCase(instGrp)){
                     group = g;
@@ -927,16 +927,16 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // created, containing all details about each shortcut
         // ----------------------------------------------------
         // String temp;
-        Vector shortcutSpecs = spec.getChildrenNamed(SPEC_KEY_SHORTCUT);
+        Vector<XMLElement> shortcutSpecs = spec.getChildrenNamed(SPEC_KEY_SHORTCUT);
         XMLElement shortcutSpec;
         ShortcutData data;
 
-        shortCuts = new Vector();
+        shortCuts = new Vector<String>();
 
         for (int i = 0; i < shortcutSpecs.size(); i++)
         {
             // System.out.println( "Processing shortcut: " + i );
-            shortcutSpec = (XMLElement) shortcutSpecs.elementAt(i);
+            shortcutSpec = shortcutSpecs.elementAt(i);
 
             if (!OsConstraint.oneMatchesCurrentSystem(shortcutSpec))
             {
@@ -1048,7 +1048,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             // the shortcut is not actually required for any of the selected packs // the shortcut
             // is not actually required for any of the selected packs
-            Vector forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);
+            Vector<XMLElement> forPacks = shortcutSpec.getChildrenNamed(SPEC_KEY_PACKS);
 
             if (!shortcutRequiredFor(forPacks))
             {
@@ -1334,11 +1334,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                         File file = new File(fileName);
                         File base = new File(shortcut.getBasePath());
-                        Vector intermediates = new Vector();
+                        Vector<File> intermediates = new Vector<File>();
 
                         // String directoryName = shortcut.getDirectoryCreated ();
                         execFiles.add(new ExecutableFile(fileName, ExecutableFile.UNINSTALL,
-                                ExecutableFile.IGNORE, new ArrayList(), false));
+                                ExecutableFile.IGNORE, new ArrayList<OsConstraint>(), false));
 
                         files.add(fileName);
 
@@ -1354,7 +1354,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                         if (file != null)
                         {
-                            Enumeration filesEnum = intermediates.elements();
+                            Enumeration<File> filesEnum = intermediates.elements();
 
                             while (filesEnum.hasMoreElements())
                             {
@@ -1426,7 +1426,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
-    private boolean shortcutRequiredFor(Vector packs)
+    private boolean shortcutRequiredFor(Vector<XMLElement> packs)
     {
         String selected;
         String required;
@@ -1439,7 +1439,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = ((XMLElement) packs.elementAt(k)).getAttribute(
+                required = (packs.elementAt(k)).getAttribute(
                         SPEC_ATTRIBUTE_NAME, "");
 
                 if (selected.equals(required)) { return (true); }
@@ -1578,7 +1578,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // list box to list all of already existing folders as program groups
         // at the intended destination
         // ----------------------------------------------------
-        Vector dirEntries = new Vector();
+        Vector<String> dirEntries = new Vector<String>();
 
         File[] entries = groups.listFiles();
 
@@ -1711,7 +1711,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * 
      * @return the filled JList
      */
-    private JList addList(Vector Entries, int ListModel, JList aJList, int aGridx, int aGridy,
+    private JList addList(Vector<String> Entries, int ListModel, JList aJList, int aGridx, int aGridy,
             int aGridwidth, int aGridheight, int aFill)
     {
         if (aJList == null)
@@ -1796,7 +1796,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // list box to list all of the intended shortcut targets
         // ----------------------------------------------------
-        Vector targets = new Vector();
+        Vector<String> targets = new Vector<String>();
 
         for (int i = 0; i < shortcuts.size(); i++)
         {
@@ -2051,7 +2051,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         for (int i = 0; i < files.size(); i++)
         {
-            uninstallData.addFile((String) files.elementAt(i), true);
+            uninstallData.addFile(files.elementAt(i), true);
         }
     }
 

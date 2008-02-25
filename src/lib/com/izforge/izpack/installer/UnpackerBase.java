@@ -82,7 +82,7 @@ public abstract class UnpackerBase implements IUnpacker
     protected boolean result = true;    
 
     /** The instances of the unpacker objects. */
-    protected static HashMap instances = new HashMap();
+    protected static HashMap<Object, String> instances = new HashMap<Object, String>();
     
     /** Interrupt flag if global interrupt is desired. */
     protected static boolean interruptDesired = false;
@@ -283,12 +283,12 @@ public abstract class UnpackerBase implements IUnpacker
      * 
      * @return true if the file matched one pattern, false if it did not
      */
-    private boolean fileMatchesOnePattern(String filename, ArrayList patterns)
+    private boolean fileMatchesOnePattern(String filename, ArrayList<RE> patterns)
     {
         // first check whether any include matches
-        for (Iterator inc_it = patterns.iterator(); inc_it.hasNext();)
+        for (Iterator<RE> inc_it = patterns.iterator(); inc_it.hasNext();)
         {
-            RE pattern = (RE) inc_it.next();
+            RE pattern = inc_it.next();
 
             if (pattern.match(filename)) { return true; }
         }
@@ -302,13 +302,13 @@ public abstract class UnpackerBase implements IUnpacker
      * 
      * @return List of org.apache.regexp.RE
      */
-    private List preparePatterns(ArrayList list, RECompiler recompiler)
+    private List<RE> preparePatterns(ArrayList<String> list, RECompiler recompiler)
     {
-        ArrayList result = new ArrayList();
+        ArrayList<RE> result = new ArrayList<RE>();
 
-        for (Iterator iter = list.iterator(); iter.hasNext();)
+        for (Iterator<String> iter = list.iterator(); iter.hasNext();)
         {
-            String element = (String) iter.next();
+            String element = iter.next();
 
             if ((element != null) && (element.length() > 0))
             {
@@ -498,7 +498,7 @@ public abstract class UnpackerBase implements IUnpacker
         int i;
         for (i = 0; i < listenerNames.length; ++i)
         {
-            retval[i] = (List) idata.customData.get(listenerNames[i]);
+            retval[i] = idata.customData.get(listenerNames[i]);
             if (retval[i] == null)
             // Make a dummy list, then iterator is ever callable.
                 retval[i] = new ArrayList();
@@ -637,7 +637,7 @@ public abstract class UnpackerBase implements IUnpacker
         udata.addFile(jar, true);
 
         // We copy the uninstallers
-        HashSet doubles = new HashSet();
+        HashSet<String> doubles = new HashSet<String>();
 
         for (int i = 0; i < in.length; ++i)
         {
@@ -702,19 +702,19 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * @param updatechecks
      */
-    protected void performUpdateChecks(ArrayList updatechecks)
+    protected void performUpdateChecks(ArrayList<UpdateCheck> updatechecks)
     {
-        ArrayList include_patterns = new ArrayList();
-        ArrayList exclude_patterns = new ArrayList();
+        ArrayList<RE> include_patterns = new ArrayList<RE>();
+        ArrayList<RE> exclude_patterns = new ArrayList<RE>();
 
         RECompiler recompiler = new RECompiler();
 
         this.absolute_installpath = new File(idata.getInstallPath()).getAbsoluteFile();
 
         // at first, collect all patterns
-        for (Iterator iter = updatechecks.iterator(); iter.hasNext();)
+        for (Iterator<UpdateCheck> iter = updatechecks.iterator(); iter.hasNext();)
         {
-            UpdateCheck uc = (UpdateCheck) iter.next();
+            UpdateCheck uc = iter.next();
 
             if (uc.includesList != null)
                 include_patterns.addAll(preparePatterns(uc.includesList, recompiler));
@@ -730,11 +730,11 @@ public abstract class UnpackerBase implements IUnpacker
         // out files to check for deletion
 
         // use a treeset for fast access
-        TreeSet installed_files = new TreeSet();
+        TreeSet<String> installed_files = new TreeSet<String>();
 
-        for (Iterator if_it = this.udata.getInstalledFilesList().iterator(); if_it.hasNext();)
+        for (Iterator<String> if_it = this.udata.getInstalledFilesList().iterator(); if_it.hasNext();)
         {
-            String fname = (String) if_it.next();
+            String fname = if_it.next();
 
             File f = new File(fname);
 
@@ -750,10 +750,10 @@ public abstract class UnpackerBase implements IUnpacker
         // directories to scan
         // (note: we'll recurse infinitely if there are circular links or
         // similar nasty things)
-        Stack scanstack = new Stack();
+        Stack<File> scanstack = new Stack<File>();
 
         // contains File objects determined for deletion
-        ArrayList files_to_delete = new ArrayList();
+        ArrayList<File> files_to_delete = new ArrayList<File>();
 
         try
         {
@@ -761,7 +761,7 @@ public abstract class UnpackerBase implements IUnpacker
 
             while (!scanstack.empty())
             {
-                File f = (File) scanstack.pop();
+                File f = scanstack.pop();
 
                 File[] files = f.listFiles();
 
@@ -795,9 +795,9 @@ public abstract class UnpackerBase implements IUnpacker
             this.handler.emitError("error while performing update checks", e.toString());
         }
 
-        for (Iterator f_it = files_to_delete.iterator(); f_it.hasNext();)
+        for (Iterator<File> f_it = files_to_delete.iterator(); f_it.hasNext();)
         {
-            File f = (File) f_it.next();
+            File f = f_it.next();
 
             if (!f.isDirectory())
             // skip directories - they cannot be removed safely yet

@@ -46,7 +46,7 @@ public class PasswordEqualityValidator implements Validator {
    */
   public boolean validate(ProcessingClient client) {
     boolean returnValue = false;
-    Map params = getParams(client);
+    Map<String, String> params = getParams(client);
     try {
       returnValue = fieldsMatch(client);
       if (returnValue) {
@@ -61,9 +61,9 @@ public class PasswordEqualityValidator implements Validator {
     return (returnValue);
   }
   
-  private Map getParams(ProcessingClient client) {
+  private Map<String, String> getParams(ProcessingClient client) {
     PasswordGroup group = null;
-    Map params = null;
+    Map<String, String> params = null;
     try {
       group = (PasswordGroup)client;
       if (group.hasParams()) {

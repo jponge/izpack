@@ -114,7 +114,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    /**
     * Map that connects names with pack objects
     */
-   private Map names;
+   private Map<String, Pack> names;
 
    /**
     * The bytes of the current pack.
@@ -141,11 +141,11 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
     */
    private static final String LANG_FILE_NAME = "packsLang.xml";
 
-   private HashMap idToPack;
+   private HashMap<String, Pack> idToPack;
    private HashMap treeData;
-   private HashMap packToRowNumber;
+   private HashMap<Pack, Integer> packToRowNumber;
    
-   private HashMap idToCheckBoxNode = new HashMap();
+   private HashMap<String, CheckBoxNode> idToCheckBoxNode = new HashMap<String, CheckBoxNode>();
    //private boolean created = false;   // UNUSED
    
    private CheckTreeController checkTreeController;
@@ -337,7 +337,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
 
    public String getI18NPackName(String packId)
    {
-      Pack pack = (Pack) idToPack.get(packId);
+      Pack pack = idToPack.get(packId);
       if(pack == null) return packId;
       // Internationalization code
       String packName = pack.name;
@@ -508,7 +508,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
     */
    private void computePacks(List packs)
    {
-      names = new HashMap();
+      names = new HashMap<String, Pack>();
       dependenciesExist = false;
       for (int i = 0; i < packs.size(); i++)
       {
@@ -622,7 +622,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    private void createTreeData()
    {
       treeData = new HashMap();
-      idToPack = new HashMap();
+      idToPack = new HashMap<String, Pack>();
 
       java.util.Iterator iter = idata.availablePacks.iterator();
       while (iter.hasNext())
@@ -654,7 +654,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
       if (descriptionArea != null)
       {
-         Pack pack = (Pack) idToPack.get(id);
+         Pack pack = idToPack.get(id);
          String desc = "";
          String key = pack.id + ".description";
          if (langpack != null && pack.id != null && !"".equals(pack.id))
@@ -679,8 +679,8 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    {
       if (dependencyArea != null)
       {
-         Pack pack = (Pack) idToPack.get(id);
-         List dep = pack.dependencies;
+         Pack pack = idToPack.get(id);
+         List<String> dep = pack.dependencies;
          String list = "";
          if (dep != null)
          {
@@ -689,8 +689,8 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          }
          for (int j = 0; dep != null && j < dep.size(); j++)
          {
-            String name = (String) dep.get(j);
-            list += getI18NPackName((Pack) names.get(name));
+            String name = dep.get(j);
+            list += getI18NPackName(names.get(name));
             if (j != dep.size() - 1) list += ", ";
          }
 
@@ -734,7 +734,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
     */
    public CheckBoxNode getCbnById(String id)
    {
-      return (CheckBoxNode) this.idToCheckBoxNode.get(id);
+      return this.idToCheckBoxNode.get(id);
    }
    
    /**
@@ -765,7 +765,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       {
          ArrayList links = new ArrayList();
          Object kidsObject = treeData.get(parent);
-         Pack p = (Pack) idToPack.get(parent);
+         Pack p = idToPack.get(parent);
          String translated = getI18NPackName(parent);
          
          if(kidsObject != null)
@@ -816,7 +816,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          };
          
          //initialize helper map to increa performance
-         packToRowNumber = new HashMap();
+         packToRowNumber = new HashMap<Pack, Integer>();
          java.util.Iterator rowpack = idata.availablePacks.iterator();
          while (rowpack.hasNext())
          {
@@ -1320,12 +1320,12 @@ class CheckTreeController extends MouseAdapter{
    public void selectAllDependencies(CheckBoxNode cbn)
    {
       Pack pack = cbn.getPack();
-      List deps = pack.getDependencies();
+      List<String> deps = pack.getDependencies();
       if(deps == null) return;
-      Iterator e = deps.iterator();
+      Iterator<String> e = deps.iterator();
       while(e.hasNext())
       {
-         String depId = (String)e.next();
+         String depId = e.next();
          CheckBoxNode depCbn = treePacksPanel.getCbnById(depId);
          selectAllDependencies(depCbn);
          if(depCbn.getChildCount()>0)

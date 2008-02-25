@@ -44,9 +44,11 @@ import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.compressor.PackCompressor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  * The IzPack compiler class. This is now a java bean style class that can be
@@ -400,7 +402,7 @@ public class Compiler extends Thread
      * nested within another.
      * @param files to be copied
      */
-    public void addJarContent(URL content, List files)
+    public void addJarContent(URL content, List<String> files)
     {
         packager.addJarContent(content, files);
     }
@@ -496,16 +498,16 @@ public class Compiler extends Thread
      * @param packs list of packs which should be checked
      * @throws CompilerException
      */
-    public void checkExcludes(List packs) throws CompilerException
+    public void checkExcludes(List<PackInfo> packs) throws CompilerException
     {
         for(int q=0; q<packs.size(); q++)
         {
-            PackInfo packinfo1 = (PackInfo) packs.get(q);
+            PackInfo packinfo1 = packs.get(q);
             Pack pack1 = packinfo1.getPack();
             for(int w = 0; w < q; w++)
             {
 
-                PackInfo packinfo2 = (PackInfo) packs.get(w);
+                PackInfo packinfo2 = packs.get(w);
                 Pack pack2 = packinfo2.getPack();
                 if(pack1.excludeGroup != null && pack2.excludeGroup != null)
                 {
@@ -530,14 +532,14 @@ public class Compiler extends Thread
      * @param packs - List<Pack> representing the packs in the installation
      * @throws CompilerException
      */
-    public void checkDependencies(List packs) throws CompilerException
+    public void checkDependencies(List<PackInfo> packs) throws CompilerException
     {
         // Because we use package names in the configuration file we assosiate
         // the names with the objects
-        Map names = new HashMap();
+        Map<String, PackInfo> names = new HashMap<String, PackInfo>();
         for (int i = 0; i < packs.size(); i++)
         {
-            PackInfo pack = (PackInfo) packs.get(i);
+            PackInfo pack = packs.get(i);
             names.put(pack.getPack().name, pack);
         }
         int result = dfs(packs, names);
@@ -556,12 +558,12 @@ public class Compiler extends Thread
      * @param names The name map
      * @return -2 if back edges exist, else 0
      */
-    private int dfs(List packs, Map names)
+    private int dfs(List<PackInfo> packs, Map<String, PackInfo> names)
     {
-        Map edges = new HashMap();
+        Map<Edge, Integer> edges = new HashMap<Edge, Integer>();
         for (int i = 0; i < packs.size(); i++)
         {
-            PackInfo pack = (PackInfo) packs.get(i);
+            PackInfo pack = packs.get(i);
             if (pack.colour == PackInfo.WHITE)
             {
                 if (dfsVisit(pack, names, edges) != 0) return -1;
@@ -576,13 +578,13 @@ public class Compiler extends Thread
      * @param edges map to be checked
      * @return -2 if back edges exist, else 0
      */
-    private int checkBackEdges(Map edges)
+    private int checkBackEdges(Map<Edge, Integer> edges)
     {
-        Set keys = edges.keySet();
-        for (Iterator iterator = keys.iterator(); iterator.hasNext();)
+        Set<Edge> keys = edges.keySet();
+        for (Iterator<Edge> iterator = keys.iterator(); iterator.hasNext();)
         {
             final Object key = iterator.next();
-            int color = ((Integer) edges.get(key)).intValue();
+            int color = (edges.get(key)).intValue();
             if (color == PackInfo.GREY) { return -2; }
         }
         return 0;
@@ -606,16 +608,16 @@ public class Compiler extends Thread
         }
     }
 
-    private int dfsVisit(PackInfo u, Map names, Map edges)
+    private int dfsVisit(PackInfo u, Map<String, PackInfo> names, Map<Edge, Integer> edges)
     {
         u.colour = PackInfo.GREY;
-        List deps = u.getDependencies();
+        List<String> deps = u.getDependencies();
         if (deps != null)
         {
             for (int i = 0; i < deps.size(); i++)
             {
-                String name = (String) deps.get(i);
-                PackInfo v = (PackInfo) names.get(name);
+                String name = deps.get(i);
+                PackInfo v = names.get(name);
                 if (v == null)
                 {
                     System.out.println("Failed to find dependency: "+name);
@@ -724,11 +726,11 @@ public class Compiler extends Thread
      * @param constraints The list of constraints.
      * @throws Exception Thrown in case an error occurs.
      */
-    public void addCustomListener(int type, String className, String jarPath, List constraints) throws Exception
+    public void addCustomListener(int type, String className, String jarPath, List<OsConstraint> constraints) throws Exception
     {
         jarPath = replaceProperties(jarPath);
         URL url = findIzPackResource(jarPath, "CustomAction jar file");
-        List filePaths = getContainedFilePaths(url);
+        List<String> filePaths = getContainedFilePaths(url);
         String fullClassName = getFullClassName(url, className);
         if (fullClassName == null)
         {
@@ -747,11 +749,11 @@ public class Compiler extends Thread
      * @return full qualified paths of the contained files
      * @throws Exception
      */
-    private List getContainedFilePaths(URL url) throws Exception
+    private List<String> getContainedFilePaths(URL url) throws Exception
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry = null;
-        ArrayList fullNames = new ArrayList();
+        ArrayList<String> fullNames = new ArrayList<String>();
         while ((zentry = jis.getNextEntry()) != null)
         {
             String name = zentry.getName();
@@ -869,7 +871,7 @@ public class Compiler extends Thread
     /**
      * @return the conditions
      */
-    public Map getConditions()
+    public Map<String, Condition> getConditions()
     {
         return this.packager.getRules();
     }
@@ -878,18 +880,18 @@ public class Compiler extends Thread
     /**
      * @param conditions the conditions to set
      */
-    public void setConditions(Map conditions)
+    public void setConditions(Map<String, Condition> conditions)
     {
         this.packager.setRules(conditions);        
     }
     
-    public Map getDynamicVariables()
+    public Map<String, DynamicVariable> getDynamicVariables()
     {
         return this.packager.getDynamicVariables();
     }
     
     
-    public void setDynamicVariables(Map dynamicvariables)
+    public void setDynamicVariables(Map<String, DynamicVariable> dynamicvariables)
     {
         this.packager.setDynamicVariables(dynamicvariables);
     }

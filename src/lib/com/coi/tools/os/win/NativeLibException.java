@@ -41,7 +41,7 @@ public class NativeLibException extends Exception
     private static final long serialVersionUID = 3257002172494721080L;
 
     /** Map of founded resource bundles which contains the localized error messages. */
-    private final static HashMap messageResourceBundles = new HashMap();
+    private final static HashMap<String, ResourceBundle> messageResourceBundles = new HashMap<String, ResourceBundle>();
 
     /** Internal error as number. */
     private int libErr;
@@ -56,7 +56,7 @@ public class NativeLibException extends Exception
     private String osErrString;
 
     /** Additional arguments. */
-    private ArrayList args = new ArrayList();
+    private ArrayList<String> args = new ArrayList<String>();
 
     static
     {
@@ -248,7 +248,7 @@ public class NativeLibException extends Exception
      * 
      * @return the internal argument list
      */
-    public ArrayList getArguments()
+    public ArrayList<String> getArguments()
     {
         return (args);
     }
@@ -263,7 +263,7 @@ public class NativeLibException extends Exception
         for (int i = 0; i < args.size(); ++i)
         {
             String key = "{" + Integer.toString(i) + "}";
-            msg = replaceString(msg, key, (String) args.get(i));
+            msg = replaceString(msg, key, args.get(i));
         }
         return (msg);
     }
@@ -277,12 +277,12 @@ public class NativeLibException extends Exception
 
     private String getMsg(String s)
     {
-        Iterator it = messageResourceBundles.values().iterator();
+        Iterator<ResourceBundle> it = messageResourceBundles.values().iterator();
         while (it.hasNext())
         {
             try
             {
-                return (((ResourceBundle) it.next()).getString(s));
+                return ((it.next()).getString(s));
             }
             catch (MissingResourceException missingresourceexception)
             { // do not throw, else look in next bundle.

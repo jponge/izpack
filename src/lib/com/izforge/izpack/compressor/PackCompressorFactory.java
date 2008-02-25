@@ -47,7 +47,7 @@ public class PackCompressorFactory
      *  The keys are the symbolic names which are used for a particular
      *  compression format.
      */
-    private static HashMap typeMap = new HashMap();
+    private static HashMap<String, PackCompressor> typeMap = new HashMap<String, PackCompressor>();
     private static CompilerException ShitHappens = null;
     
     static
@@ -144,7 +144,7 @@ public class PackCompressorFactory
             throw new CompilerException( 
                 "No PackCompressor registered for the given symbol " 
                 + type + ".");
-        return((PackCompressor) typeMap.get(type));
+        return(typeMap.get(type));
         
     }
     /**

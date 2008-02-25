@@ -24,6 +24,7 @@ package com.izforge.izpack.compiler;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FilterOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.compressor.PackCompressor;
 import com.izforge.izpack.compressor.PackCompressorFactory;
 
@@ -69,28 +71,28 @@ public abstract class PackagerBase implements IPackager
     protected Properties variables = new Properties();
 
     /** The ordered panels informations. */
-    protected List panelList = new ArrayList();
+    protected List<Panel> panelList = new ArrayList<Panel>();
 
     /** The ordered packs informations (as PackInfo objects). */
-    protected List packsList = new ArrayList();
+    protected List<PackInfo> packsList = new ArrayList<PackInfo>();
 
     /** The ordered langpack locale names. */
-    protected List langpackNameList = new ArrayList();
+    protected List<String> langpackNameList = new ArrayList<String>();
 
     /** The ordered custom actions informations. */
-    protected List customDataList = new ArrayList();
+    protected List<CustomData> customDataList = new ArrayList<CustomData>();
 
     /** The langpack URLs keyed by locale name (e.g. de_CH). */
-    protected Map installerResourceURLMap = new HashMap();
+    protected Map<String, URL> installerResourceURLMap = new HashMap<String, URL>();
     
     /** the conditions */
-    protected Map rules = new HashMap();
+    protected Map<String, Condition> rules = new HashMap<String, Condition>();
     
     /** dynamic variables */
-    protected Map dynamicvariables = new HashMap();
+    protected Map<String, DynamicVariable> dynamicvariables = new HashMap<String, DynamicVariable>();
 
     /** Jar file URLs who's contents will be copied into the installer. */
-    protected Set includedJarURLs = new HashSet();
+    protected Set<Object[]> includedJarURLs = new HashSet<Object[]>();
 
     /** Each pack is created in a separte jar if webDirURL is non-null. */
     protected boolean packJarsSeparate = false;
@@ -102,7 +104,7 @@ public abstract class PackagerBase implements IPackager
     protected PackCompressor compressor;
     
     /** Files which are always written into the container file */
-    protected HashMap alreadyWrittenFiles = new HashMap();
+    protected HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles = new HashMap<FilterOutputStream, HashSet<String>>();
 
     /**
      * Dispatches a message to the listeners.
@@ -158,7 +160,7 @@ public abstract class PackagerBase implements IPackager
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addJarContent(java.net.URL, java.util.List)
      */
-    public void addJarContent(URL jarURL, List files)
+    public void addJarContent(URL jarURL, List<String> files)
     {
         Object [] cont = { jarURL, files };
         sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
@@ -244,7 +246,7 @@ public abstract class PackagerBase implements IPackager
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#getPacksList()
      */
-    public List getPacksList()
+    public List<PackInfo> getPacksList()
     {
         return packsList;
     }
@@ -301,7 +303,7 @@ public abstract class PackagerBase implements IPackager
     /**
      * @return the rules
      */
-    public Map getRules()
+    public Map<String, Condition> getRules()
     {
         return this.rules;
     }
@@ -310,7 +312,7 @@ public abstract class PackagerBase implements IPackager
     /**
      * @param rules the rules to set
      */
-    public void setRules(Map rules)
+    public void setRules(Map<String, Condition> rules)
     {
         this.rules = rules;
     }
@@ -347,7 +349,7 @@ public abstract class PackagerBase implements IPackager
     /**
      * @return the dynamicvariables
      */
-    public Map getDynamicVariables()
+    public Map<String, DynamicVariable> getDynamicVariables()
     {
         return this.dynamicvariables;
     }
@@ -356,7 +358,7 @@ public abstract class PackagerBase implements IPackager
     /**
      * @param dynamicvariables the dynamicvariables to set
      */
-    public void setDynamicVariables(Map dynamicvariables)
+    public void setDynamicVariables(Map<String, DynamicVariable> dynamicvariables)
     {
         this.dynamicvariables = dynamicvariables;
     }

@@ -42,9 +42,11 @@ import java.text.StringCharacterIterator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.jar.JarFile;
+import java.util.jar.JarEntry;
 import java.util.zip.ZipEntry;
 
 import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.installer.MultiVolumeInstaller;
 
 /**
  * Allows an application to modify the jar file from which it came, including outright deletion. The
@@ -376,7 +378,7 @@ public class SelfModifier
         sandbox = sandbox.getCanonicalFile();
         logFile = logFile.getCanonicalFile();
 
-        jarFile = findJarFile(method.getDeclaringClass()).getCanonicalFile();
+        jarFile = findJarFile((Class<MultiVolumeInstaller>) method.getDeclaringClass()).getCanonicalFile();
         if (jarFile == null) throw new IllegalStateException("SelfModifier must be in a jar file");
         log("JarFile: " + jarFile);
 
@@ -432,7 +434,7 @@ public class SelfModifier
      * @return null if file was not loaded from a jar file
      * @throws SecurityException if access to is denied by SecurityManager
      */
-    public static File findJarFile(Class clazz)
+    public static File findJarFile(Class<MultiVolumeInstaller> clazz)
     {
         String resource = clazz.getName().replace('.', '/') + ".class";
 
@@ -473,10 +475,10 @@ public class SelfModifier
 
         try
         {
-            Enumeration entries = jar.entries();
+            Enumeration<JarEntry> entries = jar.entries();
             while (entries.hasMoreElements())
             {
-                ZipEntry entry = (ZipEntry) entries.nextElement();
+                ZipEntry entry = entries.nextElement();
                 if (entry.isDirectory()) continue;
 
                 String pathname = entry.getName();

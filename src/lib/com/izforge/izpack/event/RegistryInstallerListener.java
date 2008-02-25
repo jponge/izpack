@@ -241,14 +241,14 @@ public class RegistryInstallerListener extends NativeInstallerListener
             rh.setValue(keypath, name, value);
             return;
         }
-        Vector values = regEntry.getChildrenNamed(REG_MULTI);
+        Vector<XMLElement> values = regEntry.getChildrenNamed(REG_MULTI);
         if (values != null && !values.isEmpty())
         { // Value type is REG_MULTI_SZ; placeholder possible.
-            Iterator multiIter = values.iterator();
+            Iterator<XMLElement> multiIter = values.iterator();
             String[] multiString = new String[values.size()];
             for (int i = 0; multiIter.hasNext(); ++i)
             {
-                XMLElement element = (XMLElement) multiIter.next();
+                XMLElement element = multiIter.next();
                 multiString[i] = specHelper.getRequiredAttribute(element, REG_DATA);
                 multiString[i] = substitutor.substitute(multiString[i], null);
             }
@@ -259,12 +259,12 @@ public class RegistryInstallerListener extends NativeInstallerListener
         if (values != null && !values.isEmpty())
         { // Value type is REG_BINARY; placeholder possible or not ??? why not
             // ...
-            Iterator multiIter = values.iterator();
+            Iterator<XMLElement> multiIter = values.iterator();
 
             StringBuffer buf = new StringBuffer();
             for (int i = 0; multiIter.hasNext(); ++i)
             {
-                XMLElement element = (XMLElement) multiIter.next();
+                XMLElement element = multiIter.next();
                 String tmp = specHelper.getRequiredAttribute(element, REG_DATA);
                 buf.append(tmp);
                 if (!tmp.endsWith(",") && multiIter.hasNext()) buf.append(",");
@@ -329,7 +329,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
             throws Exception
     {
         String root1 = substitutor.substitute(root, null);
-        Integer tmp = (Integer) RegistryHandler.ROOT_KEY_MAP.get(root1);
+        Integer tmp = RegistryHandler.ROOT_KEY_MAP.get(root1);
         if (tmp != null) return (tmp.intValue());
         getSpecHelper().parseError(regEntry, "Unknown value (" + root1 + ")for registry root.");
         return 0;

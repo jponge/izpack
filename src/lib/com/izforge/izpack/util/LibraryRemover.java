@@ -122,7 +122,7 @@ public class LibraryRemover
      * @param temporaryFileNames
      * @throws IOException
      */
-    public static void invoke(List temporaryFileNames) throws IOException
+    public static void invoke(List<String> temporaryFileNames) throws IOException
     {
         LibraryRemover self = new LibraryRemover(1);
         self.invoke1(temporaryFileNames);
@@ -160,7 +160,7 @@ public class LibraryRemover
      * @param temporaryFileNames list of paths of the files which should be removed
      * @throws IOException
      */
-    private void invoke1(List temporaryFileNames) throws IOException
+    private void invoke1(List<String> temporaryFileNames) throws IOException
     {
         // Initialize sandbox and log file to be unique, but similarly named
         while (true)
@@ -208,10 +208,10 @@ public class LibraryRemover
         // We write a file which contains the paths to remove.
         out = new BufferedOutputStream(new FileOutputStream(specFile));
         BufferedWriter specWriter = new BufferedWriter(new OutputStreamWriter(out));
-        Iterator iter = temporaryFileNames.iterator();
+        Iterator<String> iter = temporaryFileNames.iterator();
         while (iter.hasNext())
         {
-            specWriter.write((String) iter.next());
+            specWriter.write(iter.next());
             if (iter.hasNext()) specWriter.newLine();
         }
         specWriter.flush();
@@ -230,10 +230,10 @@ public class LibraryRemover
      * @return The files list.
      * @exception Exception Description of the Exception
      */
-    private ArrayList getFilesList() throws Exception
+    private ArrayList<File> getFilesList() throws Exception
     {
         // Initialisations
-        TreeSet files = new TreeSet(Collections.reverseOrder());
+        TreeSet<File> files = new TreeSet<File>(Collections.reverseOrder());
         InputStream in = new FileInputStream(specFile);
         InputStreamReader inReader = new InputStreamReader(in);
         BufferedReader reader = new BufferedReader(inReader);
@@ -247,7 +247,7 @@ public class LibraryRemover
         }
         in.close();
         // We return it
-        return new ArrayList(files);
+        return new ArrayList<File>(files);
     }
 
     /**
@@ -266,14 +266,14 @@ public class LibraryRemover
             catch (Exception x)
             {}
 
-            ArrayList files = getFilesList();
+            ArrayList<File> files = getFilesList();
             int size = files.size();
             // We destroy the files
 
             log("deleteing temporary dlls/shls");
             for (int i = 0; i < size; i++)
             {
-                File file = (File) files.get(i);
+                File file = files.get(i);
                 file.delete();
                 if (file.exists())
                     log("    deleting of " + file.getCanonicalPath() + " failed!!!");

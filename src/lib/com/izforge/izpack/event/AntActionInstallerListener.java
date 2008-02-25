@@ -60,9 +60,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     /** Name of the specification file */
     public static final String SPEC_FILE_NAME = "AntActionsSpec.xml";
 
-    private HashMap actions = null;
+    private HashMap<String, HashMap<Object, ArrayList<AntAction>>> actions = null;
 
-    private ArrayList uninstActions = null;
+    private ArrayList<AntAction> uninstActions = null;
 
     /**
      * Default constructor
@@ -70,8 +70,8 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     public AntActionInstallerListener()
     {
         super(true);
-        actions = new HashMap();
-        uninstActions = new ArrayList();
+        actions = new HashMap<String, HashMap<Object, ArrayList<AntAction>>>();
+        uninstActions = new ArrayList<AntAction>();
     }
 
     /**
@@ -79,7 +79,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * 
      * @return the actions map
      */
-    public HashMap getActions()
+    public HashMap<String, HashMap<Object, ArrayList<AntAction>>> getActions()
     {
         return (actions);
     }
@@ -111,27 +111,27 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             if (pack == null) continue;
 
             // Prepare the action cache
-            HashMap packActions = new HashMap();
-            packActions.put(ActionBase.BEFOREPACK, new ArrayList());
-            packActions.put(ActionBase.AFTERPACK, new ArrayList());
-            packActions.put(ActionBase.BEFOREPACKS, new ArrayList());
-            packActions.put(ActionBase.AFTERPACKS, new ArrayList());
+            HashMap<Object, ArrayList<AntAction>> packActions = new HashMap<Object, ArrayList<AntAction>>();
+            packActions.put(ActionBase.BEFOREPACK, new ArrayList<AntAction>());
+            packActions.put(ActionBase.AFTERPACK, new ArrayList<AntAction>());
+            packActions.put(ActionBase.BEFOREPACKS, new ArrayList<AntAction>());
+            packActions.put(ActionBase.AFTERPACKS, new ArrayList<AntAction>());
 
             // Get all entries for antcalls.
-            Vector antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
+            Vector<XMLElement> antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
             if (antCallEntries != null && antCallEntries.size() >= 1)
             {
-                Iterator entriesIter = antCallEntries.iterator();
+                Iterator<XMLElement> entriesIter = antCallEntries.iterator();
                 while (entriesIter != null && entriesIter.hasNext())
                 {
-                    AntAction act = readAntCall((XMLElement) entriesIter.next());
+                    AntAction act = readAntCall(entriesIter.next());
                     if (act != null)
                     {
-                        ((ArrayList) packActions.get(act.getOrder())).add(act);
+                        (packActions.get(act.getOrder())).add(act);
                     }
                 }
                 // Set for progress bar interaction.
-                if (((ArrayList) packActions.get(ActionBase.AFTERPACKS)).size() > 0)
+                if ((packActions.get(ActionBase.AFTERPACKS)).size() > 0)
                     this.setProgressBarCaller();
             }
 
@@ -201,7 +201,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         while (iter.hasNext())
         {
             String currentPack = ((Pack) iter.next()).name;
-            ArrayList actList = getActions(currentPack, order);
+            ArrayList<AntAction> actList = getActions(currentPack, order);
             if (actList != null) retval += actList.size();
         }
         return (retval);
@@ -215,14 +215,14 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * @return a list which contains all defined actions for the given pack and order
      */
     // -------------------------------------------------------
-    protected ArrayList getActions(String packName, String order)
+    protected ArrayList<AntAction> getActions(String packName, String order)
     {
         if (actions == null) return null;
 
-        HashMap packActions = (HashMap) actions.get(packName);
+        HashMap<Object, ArrayList<AntAction>> packActions = actions.get(packName);
         if (packActions == null || packActions.size() == 0) return null;
 
-        return (ArrayList) packActions.get(order);
+        return packActions.get(order);
     }
 
     /**
@@ -235,13 +235,13 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     private void performAllActions(String packName, String order, AbstractUIProgressHandler handler)
             throws InstallerException
     {
-        ArrayList actList = getActions(packName, order);
+        ArrayList<AntAction> actList = getActions(packName, order);
         if (actList == null || actList.size() == 0) return;
 
         Debug.trace("******* Executing all " + order + " actions of " + packName + " ...");
         for (int i = 0; i < actList.size(); i++)
         {
-            AntAction act = (AntAction) actList.get(i);
+            AntAction act = actList.get(i);
             // Inform progress bar if needed. Works only
             // on AFTER_PACKS
             if (informProgressBar() && handler != null
@@ -298,10 +298,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         if (msgId != null && msgId.length() > 0) act.setMessageID(msgId);
 
         // read propertyfiles
-        Iterator iter = el.getChildrenNamed(ActionBase.PROPERTYFILE).iterator();
+        Iterator<XMLElement> iter = el.getChildrenNamed(ActionBase.PROPERTYFILE).iterator();
         while (iter.hasNext())
         {
-            XMLElement propEl = (XMLElement) iter.next();
+            XMLElement propEl = iter.next();
             act.addPropertyFile(spec.getRequiredAttribute(propEl, ActionBase.PATH));
         }
 
@@ -309,7 +309,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         iter = el.getChildrenNamed(ActionBase.PROPERTY).iterator();
         while (iter.hasNext())
         {
-            XMLElement propEl = (XMLElement) iter.next();
+            XMLElement propEl = iter.next();
             act.setProperty(spec.getRequiredAttribute(propEl, ActionBase.NAME), spec
                     .getRequiredAttribute(propEl, ActionBase.VALUE));
         }
@@ -318,7 +318,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         iter = el.getChildrenNamed(ActionBase.TARGET).iterator();
         while (iter.hasNext())
         {
-            XMLElement targEl = (XMLElement) iter.next();
+            XMLElement targEl = iter.next();
             act.addTarget(spec.getRequiredAttribute(targEl, ActionBase.NAME));
         }
 
@@ -326,7 +326,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         iter = el.getChildrenNamed(ActionBase.UNINSTALL_TARGET).iterator();
         while (iter.hasNext())
         {
-            XMLElement utargEl = (XMLElement) iter.next();
+            XMLElement utargEl = iter.next();
             act.addUninstallTarget(spec.getRequiredAttribute(utargEl, ActionBase.NAME));
         }
 

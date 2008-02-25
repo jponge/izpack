@@ -41,7 +41,7 @@ public class Info implements Serializable
     private String installationSubPath = null;
 
     /** The application authors */
-    private ArrayList authors = new ArrayList();
+    private ArrayList<Author> authors = new ArrayList<Author>();
 
     /** The application URL */
     private String appURL = null;
@@ -133,7 +133,7 @@ public class Info implements Serializable
      *
      * @return The authors list.
      */
-    public ArrayList getAuthors()
+    public ArrayList<Author> getAuthors()
     {
         return authors;
     }

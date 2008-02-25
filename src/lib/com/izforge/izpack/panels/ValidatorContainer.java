@@ -10,9 +10,9 @@ public class ValidatorContainer {
   private Validator validator = null;
   private String message;
   private boolean hasParams = false;
-  private Map validatorParams = null;
+  private Map<String, String> validatorParams = null;
 
-  public ValidatorContainer(String validator, String message, Map validatorParams) {
+  public ValidatorContainer(String validator, String message, Map<String, String> validatorParams) {
     try {
       this.validator = (Validator) Class.forName(validator).newInstance();
       this.message = message;
@@ -44,7 +44,7 @@ public class ValidatorContainer {
    * 
    * @return a java.util.Map containing the validator parameters.
    */
-  public Map getValidatorParams() {
+  public Map<String, String> getValidatorParams() {
     return validatorParams;
   }
 

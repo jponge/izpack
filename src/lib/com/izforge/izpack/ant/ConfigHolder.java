@@ -62,7 +62,7 @@ public class ConfigHolder
      * @exception BuildException if the string contains an opening @{ without a
      * closing }
      */
-    static void parseCompileProperties(String value, Vector fragments, Vector propertyRefs)
+    static void parseCompileProperties(String value, Vector<String> fragments, Vector<String> propertyRefs)
             throws BuildException
     {
         int prev = 0;
@@ -144,21 +144,21 @@ public class ConfigHolder
     public void addText(String rawText)
     {
         // Locate the @{x} references
-        Vector fragments = new Vector();
-        Vector propertyRefs = new Vector();
+        Vector<String> fragments = new Vector<String>();
+        Vector<String> propertyRefs = new Vector<String>();
         parseCompileProperties(rawText, fragments, propertyRefs);
 
         // Replace the references with the project property value
         StringBuffer sb = new StringBuffer();
-        Enumeration i = fragments.elements();
-        Enumeration j = propertyRefs.elements();
+        Enumeration<String> i = fragments.elements();
+        Enumeration<String> j = propertyRefs.elements();
 
         while (i.hasMoreElements())
         {
-            String fragment = (String) i.nextElement();
+            String fragment = i.nextElement();
             if (fragment == null)
             {
-                String propertyName = (String) j.nextElement();
+                String propertyName = j.nextElement();
                 Object replacement = null;
 
                 // try to get it from the project

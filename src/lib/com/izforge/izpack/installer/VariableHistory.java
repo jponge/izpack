@@ -32,14 +32,14 @@ import java.util.List;
 public class VariableHistory
 {
     private String name;
-    private List values;
+    private List<String[]> values;
     private boolean newvariable;
     private boolean changed;
     
     
     public VariableHistory(String variable) {
         name = variable;
-        values = new ArrayList();            
+        values = new ArrayList<String[]>();
     }
 
     
@@ -75,7 +75,7 @@ public class VariableHistory
     }
     
     public String[] getValueComment(int index) {
-        return (String[]) values.get(index);
+        return values.get(index);
     }
     
     public int getValuesCount() {
@@ -84,7 +84,7 @@ public class VariableHistory
     
     public String getLastValue() {
         if (values.size() > 0) {
-            String[] valuecomment = (String[]) values.get(values.size() - 1);
+            String[] valuecomment = values.get(values.size() - 1);
             return valuecomment[0];
         }
         else {
@@ -133,7 +133,7 @@ public class VariableHistory
         details.append("</b></h3>");
         for (int i = values.size()-1; i >= 0; i--)
         {
-            String[] valuecomment = (String[]) values.get(i);
+            String[] valuecomment = values.get(i);
             details.append(i+1);
             details.append(". ");
             details.append(valuecomment[0]);

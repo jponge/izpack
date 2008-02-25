@@ -64,7 +64,6 @@ import javax.swing.plaf.metal.MetalTheme;
 
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPackMetalTheme;
 import com.izforge.izpack.gui.LabelFactory;
@@ -316,19 +315,19 @@ public class GUIInstaller extends InstallerBase
         String laf = null;
         if (installdata.guiPrefs.lookAndFeelMapping.containsKey(syskey))
         {
-            laf = (String) installdata.guiPrefs.lookAndFeelMapping.get(syskey);
+            laf = installdata.guiPrefs.lookAndFeelMapping.get(syskey);
         }
 
         // Let's use the system LAF
         // Resolve whether button icons should be used or not.
         boolean useButtonIcons = true;
         if (installdata.guiPrefs.modifier.containsKey("useButtonIcons")
-                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier
                         .get("useButtonIcons"))) useButtonIcons = false;
         ButtonFactory.useButtonIcons(useButtonIcons);
         boolean useLabelIcons = true;
         if (installdata.guiPrefs.modifier.containsKey("useLabelIcons")
-                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier
+                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier
                         .get("useLabelIcons"))) useLabelIcons = false;
         LabelFactory.setUseLabelIcons(useLabelIcons);
         if (laf == null)
@@ -366,15 +365,15 @@ public class GUIInstaller extends InstallerBase
             // make it always true.
             ButtonFactory.useButtonIcons(useButtonIcons);
             installdata.buttonsHColor = new Color(255, 255, 255);
-            Class lafClass = Class.forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
+            Class<LookAndFeel> lafClass = (Class<LookAndFeel>) Class.forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
             Class mtheme = Class.forName("javax.swing.plaf.metal.MetalTheme");
             Class[] params = { mtheme};
-            Class theme = Class.forName("com.izforge.izpack.gui.IzPackKMetalTheme");
+            Class<MetalTheme> theme = (Class<MetalTheme>) Class.forName("com.izforge.izpack.gui.IzPackKMetalTheme");
             Method setCurrentThemeMethod = lafClass.getMethod("setCurrentTheme", params);
 
             // We invoke and place Kunststoff as our L&F
-            LookAndFeel kunststoff = (LookAndFeel) lafClass.newInstance();
-            MetalTheme ktheme = (MetalTheme) theme.newInstance();
+            LookAndFeel kunststoff = lafClass.newInstance();
+            MetalTheme ktheme = theme.newInstance();
             Object[] kparams = { ktheme};
             UIManager.setLookAndFeel(kunststoff);
             setCurrentThemeMethod.invoke(kunststoff, kparams);
@@ -389,10 +388,10 @@ public class GUIInstaller extends InstallerBase
             UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
             lnf = "liquid";
 
-            Map params = (Map) installdata.guiPrefs.lookAndFeelParams.get(laf);
+            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
             if (params.containsKey("decorate.frames"))
             {
-                String value = (String) params.get("decorate.frames");
+                String value = params.get("decorate.frames");
                 if ("yes".equals(value))
                 {
                     JFrame.setDefaultLookAndFeelDecorated(true);
@@ -400,7 +399,7 @@ public class GUIInstaller extends InstallerBase
             }
             if (params.containsKey("decorate.dialogs"))
             {
-                String value = (String) params.get("decorate.dialogs");
+                String value = params.get("decorate.dialogs");
                 if ("yes".equals(value))
                 {
                     JDialog.setDefaultLookAndFeelDecorated(true);
@@ -428,20 +427,20 @@ public class GUIInstaller extends InstallerBase
         // JGoodies Looks (http://looks.dev.java.net/)
         if ("looks".equals(laf))
         {
-            Map variants = new TreeMap();
+            Map<String, String> variants = new TreeMap<String, String>();
             variants.put("windows", "com.jgoodies.looks.windows.WindowsLookAndFeel");
             variants.put("plastic", "com.jgoodies.looks.plastic.PlasticLookAndFeel");
             variants.put("plastic3D", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
             variants.put("plasticXP", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
-            String variant = (String) variants.get("plasticXP");
+            String variant = variants.get("plasticXP");
 
-            Map params = (Map) installdata.guiPrefs.lookAndFeelParams.get(laf);
+            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
             if (params.containsKey("variant"))
             {
-                String param = (String) params.get("variant");
+                String param = params.get("variant");
                 if (variants.containsKey(param))
                 {
-                    variant = (String) variants.get(param);
+                    variant = variants.get(param);
                 }
             }
 
@@ -452,7 +451,7 @@ public class GUIInstaller extends InstallerBase
         // Substance (http://substance.dev.java.net/)
         if ("substance".equals(laf))
         {
-            Map variants = new TreeMap();
+            Map<String, String> variants = new TreeMap<String, String>();
             variants.put("default", "org.jvnet.substance.SubstanceLookAndFeel"); // Ugly!!!
             variants.put("business", "org.jvnet.substance.skin.SubstanceBusinessLookAndFeel");
             variants.put("business-blue", "org.jvnet.substance.skin.SubstanceBusinessBlueSteelLookAndFeel");
@@ -461,15 +460,15 @@ public class GUIInstaller extends InstallerBase
             variants.put("sahara", "org.jvnet.substance.skin.SubstanceSaharaLookAndFeel");
             variants.put("moderate", "org.jvnet.substance.skin.SubstanceModerateLookAndFeel");
             variants.put("officesilver", "org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel");
-            String variant = (String) variants.get("default");
+            String variant = variants.get("default");
 
-            Map params = (Map) installdata.guiPrefs.lookAndFeelParams.get(laf);
+            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
             if (params.containsKey("variant"))
             {
-                String param = (String) params.get("variant");
+                String param = params.get("variant");
                 if (variants.containsKey(param))
                 {
-                    variant = (String) variants.get(param);
+                    variant = variants.get(param);
                 }
             }
 
@@ -513,7 +512,7 @@ public class GUIInstaller extends InstallerBase
     protected boolean useFlags()
     {
         if (installdata.guiPrefs.modifier.containsKey("useFlags")
-                && "no".equalsIgnoreCase((String) installdata.guiPrefs.modifier.get("useFlags")))
+                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier.get("useFlags")))
             return (false);
         return (true);
     }
@@ -528,7 +527,7 @@ public class GUIInstaller extends InstallerBase
     {
         if (installdata.guiPrefs.modifier.containsKey("langDisplayType"))
         {
-            String val = (String) installdata.guiPrefs.modifier.get("langDisplayType");
+            String val = installdata.guiPrefs.modifier.get("langDisplayType");
             val = val.toLowerCase();
             // Verify that the value is valid, else return the default.
             for (int i = 0; i < LANGUAGE_DISPLAY_TYPES.length; ++i)
@@ -556,7 +555,7 @@ public class GUIInstaller extends InstallerBase
         private JComboBox comboBox;
 
         /** The ISO3 to ISO2 HashMap */
-        private HashMap iso3Toiso2 = null;
+        private HashMap<String, String> iso3Toiso2 = null;
 
         /** iso3Toiso2 expanded ? */
         private boolean isoMapExpanded = false;
@@ -679,7 +678,7 @@ public class GUIInstaller extends InstallerBase
             int i;
             if (iso3Toiso2 == null)
             { // Loasd predefined langs into HashMap.
-                iso3Toiso2 = new HashMap(32);
+                iso3Toiso2 = new HashMap<String, String>(32);
                 isoTable = new HashMap();
                 for (i = 0; i < LANG_CODES.length; ++i)
                     iso3Toiso2.put(LANG_CODES[i][0], LANG_CODES[i][1]);
@@ -828,10 +827,10 @@ public class GUIInstaller extends InstallerBase
         private static final long serialVersionUID = 3832899961942782769L;
 
         /** Icons cache. */
-        private TreeMap icons = new TreeMap();
+        private TreeMap<String, ImageIcon> icons = new TreeMap<String, ImageIcon>();
 
         /** Grayed icons cache. */
-        private TreeMap grayIcons = new TreeMap();
+        private TreeMap<String, ImageIcon> grayIcons = new TreeMap<String, ImageIcon>();
 
         public FlagRenderer()
         {
@@ -876,9 +875,9 @@ public class GUIInstaller extends InstallerBase
                 grayIcons.put(iso3, icon);
             }
             if (isSelected || index == -1)
-                setIcon((ImageIcon) icons.get(iso3));
+                setIcon(icons.get(iso3));
             else
-                setIcon((ImageIcon) grayIcons.get(iso3));
+                setIcon(grayIcons.get(iso3));
 
             // We return
             return this;

@@ -62,7 +62,7 @@ public class MultiVolumeInstaller
         {
             try
             {
-                Class clazz = MultiVolumeInstaller.class;
+                Class<MultiVolumeInstaller> clazz = MultiVolumeInstaller.class;
                 Method target = clazz.getMethod("install", new Class[] { String[].class});
                 String[] newargs = new String[args.length + 2];
 

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.izforge.izpack.PackFile;
+import com.izforge.izpack.util.OsConstraint;
 
 /**
  * Extends the packfile by the information at which file position an entry is stored
@@ -42,7 +43,7 @@ public class XPackFile extends PackFile
      * @param override
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List osList, int override)
+    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override)
             throws FileNotFoundException
     {
         super(baseDir, src, target, osList, override);
@@ -57,7 +58,7 @@ public class XPackFile extends PackFile
      * @param additionals
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List osList, int override, Map additionals)
+    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Map additionals)
             throws FileNotFoundException
     {
         super(baseDir, src, target, osList, override, additionals);

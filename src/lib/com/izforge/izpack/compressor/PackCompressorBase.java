@@ -63,7 +63,7 @@ public abstract class PackCompressorBase implements PackCompressor
     protected Class [] paramsClasses = null;
 
     private Compiler compiler;
-    private Constructor constructor;
+    private Constructor<Object> constructor;
     private int level = -1;
    /**
      * 
@@ -162,10 +162,10 @@ public abstract class PackCompressorBase implements PackCompressor
     {
         if( getEncoderClassName() == null)
             return;
-        Class encoder = null;
+        Class<Object> encoder = null;
         if( getContainerPaths() == null  )
         {   // May be class files are in the compiler.jar.
-            encoder = Class.forName(className);
+            encoder = (Class<Object>) Class.forName(className);
         }
         if( encoder == null)
         {
@@ -228,7 +228,7 @@ public abstract class PackCompressorBase implements PackCompressor
                 // compile will fail at using it via an Ant task.
                 URLClassLoader ucl = new URLClassLoader(uRLs, PackCompressor.class
                         .getClassLoader());
-                encoder = ucl.loadClass(className);
+                encoder = (Class<Object>) ucl.loadClass(className);
             }
         }
 

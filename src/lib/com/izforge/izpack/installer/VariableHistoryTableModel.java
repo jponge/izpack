@@ -36,9 +36,9 @@ public class VariableHistoryTableModel extends AbstractTableModel
     private static final long serialVersionUID = 5966543100431588652L;
     
     public static final String[] columnheader = {"Name","Value"};
-    private Map variablevalues;
+    private Map<String, VariableHistory> variablevalues;
             
-    public VariableHistoryTableModel(Map values) {        
+    public VariableHistoryTableModel(Map<String, VariableHistory> values) {
         this.variablevalues = values;        
     }
     
@@ -72,7 +72,7 @@ public class VariableHistoryTableModel extends AbstractTableModel
             
             case 1:           
                 String variablename = (String) getValueAt(rowIndex, 0);
-                VariableHistory vh = (VariableHistory) variablevalues.get(variablename);
+                VariableHistory vh = variablevalues.get(variablename);
                 return vh;        
         }
         return null;

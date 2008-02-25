@@ -154,16 +154,16 @@ public class SudoPanel extends IzPanel implements ActionListener
             Properties vars = new Properties();
             vars.put("password", pass);
 
-            List oses = new ArrayList();
+            List<OsConstraint> oses = new ArrayList<OsConstraint>();
             oses.add(new OsConstraint("unix", null, null, null));
 
-            ArrayList plist = new ArrayList();
+            ArrayList<ParsableFile> plist = new ArrayList<ParsableFile>();
             ParsableFile pf = new ParsableFile(file.getAbsolutePath(), null, null, oses);
             plist.add(pf);
             ScriptParser sp = new ScriptParser(plist, new VariableSubstitutor(vars));
             sp.parseFiles();
 
-            ArrayList elist = new ArrayList();
+            ArrayList<ExecutableFile> elist = new ArrayList<ExecutableFile>();
             ExecutableFile ef = new ExecutableFile(file.getAbsolutePath(),
                     ExecutableFile.POSTINSTALL, ExecutableFile.ABORT, oses, false);
             elist.add(ef);

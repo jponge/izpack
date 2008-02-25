@@ -290,9 +290,9 @@ public class XMLElement implements Serializable
      * 
      * @return the non-null vector of child elements.
      */
-    public Vector getChildrenNamed(String name)
+    public Vector<XMLElement> getChildrenNamed(String name)
     {
-        Vector result = new Vector(this.children.size());
+        Vector<XMLElement> result = new Vector<XMLElement>(this.children.size());
         Enumeration enumeration = this.children.elements();
 
         while (enumeration.hasMoreElements())

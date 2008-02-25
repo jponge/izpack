@@ -31,6 +31,7 @@ import net.n3.nanoxml.XMLElement;
 
 import com.izforge.izpack.Info;
 import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.Pack;
 
 /**
  * Encloses information about the install process. This implementation is not thread safe.
@@ -82,7 +83,7 @@ public class AutomatedInstallData
     public Info info;
 
     /** The complete list of packs. */
-    public List allPacks;
+    public List<Pack> allPacks;
 
     /** The available packs. */
     public List availablePacks;
@@ -91,7 +92,7 @@ public class AutomatedInstallData
     public List selectedPacks;
 
     /** The panels list. */
-    public List panels;
+    public List<IzPanel> panels;
 
     /** The panels order. */
     public List panelsOrder;
@@ -109,7 +110,7 @@ public class AutomatedInstallData
     public XMLElement xmlData;
 
     /** Custom data. */
-    public Map customData;
+    public Map<String, List> customData;
 
     /**
      * Maps the variable names to their values
@@ -117,7 +118,7 @@ public class AutomatedInstallData
     protected Properties variables;
 
     /** The attributes used by the panels */
-    protected Map attributes;
+    protected Map<String, Object> attributes;
     
     /** This class should be a singleton. Therefore
      * the one possible object will be stored in this 
@@ -141,12 +142,12 @@ public class AutomatedInstallData
     {
         availablePacks = new ArrayList();
         selectedPacks = new ArrayList();
-        panels = new ArrayList();
+        panels = new ArrayList<IzPanel>();
         panelsOrder = new ArrayList();
         xmlData = new XMLElement("AutomatedInstallation");
         variables = new Properties();
-        attributes = new HashMap();
-        customData = new HashMap();
+        attributes = new HashMap<String, Object>();
+        customData = new HashMap<String, List>();
         if( self != null )
             throw new RuntimeException("Panic!! second call of the InstallData Ctor!!");
         self = this;

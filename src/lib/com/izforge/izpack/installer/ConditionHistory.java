@@ -34,7 +34,7 @@ import com.izforge.izpack.rules.Condition;
 public class ConditionHistory
 {
     private Condition condition;
-    private List values;
+    private List<Object[]> values;
     
     private boolean newcondition;
     private boolean changedcondition;    
@@ -42,7 +42,7 @@ public class ConditionHistory
     
     public ConditionHistory(Condition condition) {
         this.condition = condition;
-        values = new ArrayList();
+        values = new ArrayList<Object[]>();
         newcondition = true;
         changedcondition = true;        
     }
@@ -65,7 +65,7 @@ public class ConditionHistory
     
     public boolean getLastValue() {
         if (values.size() > 0) {
-            return ((Boolean)((Object[]) values.get(values.size() - 1))[0]).booleanValue();
+            return ((Boolean)(values.get(values.size() - 1))[0]).booleanValue();
         }
         else {
             return false;
@@ -110,7 +110,7 @@ public class ConditionHistory
         details.append("</b></h3>");
         for (int i = values.size()-1; i >= 0; i--)
         {
-            Object[] condcomment = (Object[]) values.get(i);
+            Object[] condcomment = values.get(i);
             details.append(i+1);
             details.append(". ");
             details.append(((Boolean)condcomment[0]).toString());

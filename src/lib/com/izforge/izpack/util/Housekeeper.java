@@ -46,7 +46,7 @@ public class Housekeeper
     // ------------------------------------------------------------------------
     private static Housekeeper me = null;
 
-    private Vector cleanupClients = new Vector();
+    private Vector<CleanupClient> cleanupClients = new Vector<CleanupClient>();
 
     /*--------------------------------------------------------------------------*/
     /**
@@ -109,7 +109,7 @@ public class Housekeeper
         {
             try
             {
-                ((CleanupClient) cleanupClients.elementAt(i)).cleanUp();
+                (cleanupClients.elementAt(i)).cleanUp();
             }
             catch (Throwable exception)
             {

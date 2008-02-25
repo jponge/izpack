@@ -57,7 +57,7 @@ public class WebRepositoryAccessor
    private String packsInfo;
 
    /** list of PackInfo entries */
-   private ArrayList packs;
+   private ArrayList<PackInfo> packs;
 
    /** Constant for checking attributes. */
    private static boolean YES = true;
@@ -91,7 +91,7 @@ public class WebRepositoryAccessor
     * 
     * @return the packs list
     */
-   public ArrayList getOnlinePacks()
+   public ArrayList<PackInfo> getOnlinePacks()
    {
       readConfig();
       packs = parsePacks();
@@ -166,7 +166,7 @@ public class WebRepositoryAccessor
     * 
     * @return the list of packs
     */
-   private ArrayList parsePacks()
+   private ArrayList<PackInfo> parsePacks()
    {
       try
       {
@@ -200,7 +200,7 @@ public class WebRepositoryAccessor
          for (int q = 0; q < root.getChildrenCount(); q++)
          {
             XMLElement ch = root.getChildAtIndex(q);
-            PackInfo pi = (PackInfo) packs.get(q);
+            PackInfo pi = packs.get(q);
             Pack p = pi.getPack();
             p.nbytes = Long.parseLong(ch.getAttribute("nbytes"));
          }
@@ -259,22 +259,22 @@ public class WebRepositoryAccessor
    }
 
    
-   protected ArrayList loadPacksList(XMLElement data) throws CompilerException
+   protected ArrayList<PackInfo> loadPacksList(XMLElement data) throws CompilerException
    {
-      ArrayList result = new ArrayList();
+      ArrayList<PackInfo> result = new ArrayList<PackInfo>();
 
       // Initialisation
       XMLElement root = requireChildNamed(data, "packs");
 
       // at least one pack is required
-      Vector packElements = root.getChildrenNamed("pack");
+      Vector<XMLElement> packElements = root.getChildrenNamed("pack");
       if (packElements.isEmpty())
          parseError(root, "<packs> requires a <pack>");
 
-      Iterator packIter = packElements.iterator();
+      Iterator<XMLElement> packIter = packElements.iterator();
       while (packIter.hasNext())
       {
-         XMLElement el = (XMLElement) packIter.next();
+         XMLElement el = packIter.next();
 
          // Trivial initialisations
          String name = requireAttribute(el, "name");
@@ -321,14 +321,14 @@ public class WebRepositoryAccessor
          }
 
          // We get the parsables list
-         Iterator iter = el.getChildrenNamed("parsable").iterator();
+         Iterator<XMLElement> iter = el.getChildrenNamed("parsable").iterator();
          while (iter.hasNext())
          {
-            XMLElement p = (XMLElement) iter.next();
+            XMLElement p = iter.next();
             String target = requireAttribute(p, "targetfile");
             String type = p.getAttribute("type", "plain");
             String encoding = p.getAttribute("encoding", null);
-            List osList = OsConstraint.getOsList(p); // TODO: unverified
+            List<OsConstraint> osList = OsConstraint.getOsList(p); // TODO: unverified
 
             pack.addParsable(new ParsableFile(target, type, encoding, osList));
          }
@@ -337,7 +337,7 @@ public class WebRepositoryAccessor
          iter = el.getChildrenNamed("executable").iterator();
          while (iter.hasNext())
          {
-            XMLElement e = (XMLElement) iter.next();
+            XMLElement e = iter.next();
             ExecutableFile executable = new ExecutableFile();
             String val; // temp value
 
@@ -374,10 +374,10 @@ public class WebRepositoryAccessor
             XMLElement args = e.getFirstChildNamed("args");
             if (null != args)
             {
-               Iterator argIterator = args.getChildrenNamed("arg").iterator();
+               Iterator<XMLElement> argIterator = args.getChildrenNamed("arg").iterator();
                while (argIterator.hasNext())
                {
-                  XMLElement arg = (XMLElement) argIterator.next();
+                  XMLElement arg = argIterator.next();
                   executable.argList.add(requireAttribute(arg, "value"));
                }
             }
@@ -392,26 +392,26 @@ public class WebRepositoryAccessor
          iter = el.getChildrenNamed("updatecheck").iterator();
          while (iter.hasNext())
          {
-            XMLElement f = (XMLElement) iter.next();
+            XMLElement f = iter.next();
 
             String casesensitive = f.getAttribute("casesensitive");
 
             // get includes and excludes
-            ArrayList includesList = new ArrayList();
-            ArrayList excludesList = new ArrayList();
+            ArrayList<String> includesList = new ArrayList<String>();
+            ArrayList<String> excludesList = new ArrayList<String>();
 
             // get includes and excludes
-            Iterator include_it = f.getChildrenNamed("include").iterator();
+            Iterator<XMLElement> include_it = f.getChildrenNamed("include").iterator();
             while (include_it.hasNext())
             {
-               XMLElement inc_el = (XMLElement) include_it.next();
+               XMLElement inc_el = include_it.next();
                includesList.add(requireAttribute(inc_el, "name"));
             }
 
-            Iterator exclude_it = f.getChildrenNamed("exclude").iterator();
+            Iterator<XMLElement> exclude_it = f.getChildrenNamed("exclude").iterator();
             while (exclude_it.hasNext())
             {
-               XMLElement excl_el = (XMLElement) exclude_it.next();
+               XMLElement excl_el = exclude_it.next();
                excludesList.add(requireAttribute(excl_el, "name"));
             }
 
@@ -421,7 +421,7 @@ public class WebRepositoryAccessor
          iter = el.getChildrenNamed("depends").iterator();
          while (iter.hasNext())
          {
-            XMLElement dep = (XMLElement) iter.next();
+            XMLElement dep = iter.next();
             String depName = requireAttribute(dep, "packname");
             pack.addDependency(depName);
 

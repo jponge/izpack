@@ -47,7 +47,7 @@ public class TextInputField extends JComponent implements ProcessingClient
     /**
      * Validator parameters.
      */
-    private Map validatorParams;
+    private Map<String, String> validatorParams;
 
     /**
      * Holds an instance of the <code>Validator</code> if one was specified and available
@@ -77,7 +77,7 @@ public class TextInputField extends JComponent implements ProcessingClient
      * @param validatorParams validator parameters.
      */
     /*--------------------------------------------------------------------------*/
-    public TextInputField(String set, int size, String validator, Map validatorParams) {
+    public TextInputField(String set, int size, String validator, Map<String, String> validatorParams) {
         this(set, size, validator);
         this.validatorParams = validatorParams;
         this.hasParams = true;
@@ -135,7 +135,7 @@ public class TextInputField extends JComponent implements ProcessingClient
      * 
      * @return a java.util.Map containing the validator parameters.
      */
-    public Map getValidatorParams()
+    public Map<String, String> getValidatorParams()
     {
         return validatorParams;
     }

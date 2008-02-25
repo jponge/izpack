@@ -129,7 +129,7 @@ public class CompilerConfig extends Thread
     /**
      * List of CompilerListeners which should be called at packaging
      */
-    protected List compilerListeners = new ArrayList();
+    protected List<CompilerListener> compilerListeners = new ArrayList<CompilerListener>();
 
     /**
      * Set the IzPack home directory
@@ -397,26 +397,26 @@ public class CompilerConfig extends Thread
             prefs.height = requireIntAttribute(gp, "height");
 
             // Look and feel mappings
-            Iterator it = gp.getChildrenNamed("laf").iterator();
+            Iterator<XMLElement> it = gp.getChildrenNamed("laf").iterator();
             while (it.hasNext())
             {
-                XMLElement laf = (XMLElement) it.next();
+                XMLElement laf = it.next();
                 String lafName = requireAttribute(laf, "name");
                 requireChildNamed(laf, "os");
 
-                Iterator oit = laf.getChildrenNamed("os").iterator();
+                Iterator<XMLElement> oit = laf.getChildrenNamed("os").iterator();
                 while (oit.hasNext())
                 {
-                    XMLElement os = (XMLElement) oit.next();
+                    XMLElement os = oit.next();
                     String osName = requireAttribute(os, "family");
                     prefs.lookAndFeelMapping.put(osName, lafName);
                 }
 
-                Iterator pit = laf.getChildrenNamed("param").iterator();
-                Map params = new TreeMap();
+                Iterator<XMLElement> pit = laf.getChildrenNamed("param").iterator();
+                Map<String, String> params = new TreeMap<String, String>();
                 while (pit.hasNext())
                 {
-                    XMLElement param = (XMLElement) pit.next();
+                    XMLElement param = pit.next();
                     String name = requireAttribute(param, "name");
                     String value = requireAttribute(param, "value");
                     params.put(name, value);
@@ -427,7 +427,7 @@ public class CompilerConfig extends Thread
             it = gp.getChildrenNamed("modifier").iterator();
             while (it.hasNext())
             {
-                XMLElement curentModifier = (XMLElement) it.next();
+                XMLElement curentModifier = it.next();
                 String key = requireAttribute(curentModifier, "key");
                 String value = requireAttribute(curentModifier, "value");
                 prefs.modifier.put(key, value);
@@ -435,7 +435,7 @@ public class CompilerConfig extends Thread
             }
             // make sure jar contents of each are available in installer
             // map is easier to read/modify than if tree
-            HashMap lafMap = new HashMap();
+            HashMap<String, String> lafMap = new HashMap<String, String>();
             lafMap.put("liquid", "liquidlnf.jar");
             lafMap.put("kunststoff", "kunststoff.jar");
             lafMap.put("metouia", "metouia.jar");
@@ -448,11 +448,11 @@ public class CompilerConfig extends Thread
             // the /last/ lnf for an os which is used, so can't add during
             // initial
             // loop
-            Iterator kit = prefs.lookAndFeelMapping.keySet().iterator();
+            Iterator<String> kit = prefs.lookAndFeelMapping.keySet().iterator();
             while (kit.hasNext())
             {
-                String lafName = (String) prefs.lookAndFeelMapping.get(kit.next());
-                String lafJarName = (String) lafMap.get(lafName);
+                String lafName = prefs.lookAndFeelMapping.get(kit.next());
+                String lafJarName = lafMap.get(lafName);
                 if (lafJarName == null) parseError(gp, "Unrecognized Look and Feel: " + lafName);
 
                 URL lafJarURL = findIzPackResource("lib/" + lafJarName, "Look and Feel Jar file",
@@ -472,10 +472,10 @@ public class CompilerConfig extends Thread
     protected void addJars(XMLElement data) throws Exception
     {
         notifyCompilerListener("addJars", CompilerListener.BEGIN, data);
-        Iterator iter = data.getChildrenNamed("jar").iterator();
+        Iterator<XMLElement> iter = data.getChildrenNamed("jar").iterator();
         while (iter.hasNext())
         {
-            XMLElement el = (XMLElement) iter.next();
+            XMLElement el = iter.next();
             String src = requireAttribute(el, "src");
             URL url = findProjectResource(src, "Jar file", el);
             compiler.addJarContent(url);
@@ -508,10 +508,10 @@ public class CompilerConfig extends Thread
     {
         boolean needAddOns = false;
         notifyCompilerListener("addNativeLibraries", CompilerListener.BEGIN, data);
-        Iterator iter = data.getChildrenNamed("native").iterator();
+        Iterator<XMLElement> iter = data.getChildrenNamed("native").iterator();
         while (iter.hasNext())
         {
-            XMLElement el = (XMLElement) iter.next();
+            XMLElement el = iter.next();
             String type = requireAttribute(el, "type");
             String name = requireAttribute(el, "name");
             String path = "bin/native/" + type + "/" + name;
@@ -526,11 +526,11 @@ public class CompilerConfig extends Thread
             // observed
             // for the uninstaller.
             String stage = el.getAttribute("stage");
-            List constraints = OsConstraint.getOsList(el);
+            List<OsConstraint> constraints = OsConstraint.getOsList(el);
             if (stage != null
                     && ("both".equalsIgnoreCase(stage) || "uninstall".equalsIgnoreCase(stage)))
             {
-                ArrayList al = new ArrayList();
+                ArrayList<String> al = new ArrayList<String>();
                 al.add(name);
                 CustomData cad = new CustomData(null, al, constraints, CustomData.UNINSTALLER_LIB);
                 compiler.addNativeUninstallerLibrary(cad);
@@ -589,16 +589,16 @@ public class CompilerConfig extends Thread
         XMLElement root = requireChildNamed(data, "packs");
 
         // at least one pack is required
-        Vector packElements = root.getChildrenNamed("pack");
-        Vector refPackElements = root.getChildrenNamed("refpack");
+        Vector<XMLElement> packElements = root.getChildrenNamed("pack");
+        Vector<XMLElement> refPackElements = root.getChildrenNamed("refpack");
         if (packElements.isEmpty() && refPackElements.isEmpty()) parseError(root, "<packs> requires a <pack> or <refpack>");
 
         File baseDir = new File(basedir);
         
-        Iterator packIter = packElements.iterator();
+        Iterator<XMLElement> packIter = packElements.iterator();
         while (packIter.hasNext())
         {
-            XMLElement el = (XMLElement) packIter.next();
+            XMLElement el = packIter.next();
 
             // Trivial initialisations
             String name = requireAttribute(el, "name");
@@ -654,14 +654,14 @@ public class CompilerConfig extends Thread
             }
 
             // We get the parsables list
-            Iterator iter = el.getChildrenNamed("parsable").iterator();
+            Iterator<XMLElement> iter = el.getChildrenNamed("parsable").iterator();
             while (iter.hasNext())
             {
-                XMLElement p = (XMLElement) iter.next();
+                XMLElement p = iter.next();
                 String target = requireAttribute(p, "targetfile");
                 String type = p.getAttribute("type", "plain");
                 String encoding = p.getAttribute("encoding", null);
-                List osList = OsConstraint.getOsList(p); // TODO: unverified
+                List<OsConstraint> osList = OsConstraint.getOsList(p); // TODO: unverified
                 String condition = p.getAttribute("condition");
                 ParsableFile parsable = new ParsableFile(target, type, encoding, osList);
                 parsable.setCondition(condition);
@@ -672,7 +672,7 @@ public class CompilerConfig extends Thread
             iter = el.getChildrenNamed("executable").iterator();
             while (iter.hasNext())
             {
-                XMLElement e = (XMLElement) iter.next();
+                XMLElement e = iter.next();
                 ExecutableFile executable = new ExecutableFile();
                 String val; // temp value
                 String condition = e.getAttribute("condition");
@@ -710,10 +710,10 @@ public class CompilerConfig extends Thread
                 XMLElement args = e.getFirstChildNamed("args");
                 if (null != args)
                 {
-                    Iterator argIterator = args.getChildrenNamed("arg").iterator();
+                    Iterator<XMLElement> argIterator = args.getChildrenNamed("arg").iterator();
                     while (argIterator.hasNext())
                     {
-                        XMLElement arg = (XMLElement) argIterator.next();
+                        XMLElement arg = argIterator.next();
                         executable.argList.add(requireAttribute(arg, "value"));
                     }
                 }
@@ -728,10 +728,10 @@ public class CompilerConfig extends Thread
             iter = el.getChildrenNamed("file").iterator();
             while (iter.hasNext())
             {
-                XMLElement f = (XMLElement) iter.next();
+                XMLElement f = iter.next();
                 String src = requireAttribute(f, "src");
                 String targetdir = requireAttribute(f, "targetdir");
-                List osList = OsConstraint.getOsList(f); // TODO: unverified
+                List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
                 Map additionals = getAdditionals(f);
                 boolean unpack = src.endsWith(".zip") && "true".equalsIgnoreCase(f.getAttribute("unpack"));
@@ -757,10 +757,10 @@ public class CompilerConfig extends Thread
             iter = el.getChildrenNamed("singlefile").iterator();
             while (iter.hasNext())
             {
-                XMLElement f = (XMLElement) iter.next();
+                XMLElement f = iter.next();
                 String src = requireAttribute(f, "src");
                 String target = requireAttribute(f, "target");
-                List osList = OsConstraint.getOsList(f); // TODO: unverified
+                List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
                 Map additionals = getAdditionals(f);
                 String condition = f.getAttribute("condition");
@@ -781,7 +781,7 @@ public class CompilerConfig extends Thread
             iter = el.getChildrenNamed("fileset").iterator();
             while (iter.hasNext())
             {
-                XMLElement f = (XMLElement) iter.next();
+                XMLElement f = iter.next();
                 String dir_attr = requireAttribute(f, "dir");
 
                 File dir = new File(dir_attr);
@@ -792,13 +792,13 @@ public class CompilerConfig extends Thread
                 boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
                 boolean defexcludes = validateYesNoAttribute(f, "defaultexcludes", YES);
                 String targetdir = requireAttribute(f, "targetdir");
-                List osList = OsConstraint.getOsList(f); // TODO: unverified
+                List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
                 Map additionals = getAdditionals(f);
                 String condition = f.getAttribute("condition");
 
                 // get includes and excludes
-                Vector xcludesList = null;
+                Vector<XMLElement> xcludesList = null;
                 String[] includes = null;
                 xcludesList = f.getChildrenNamed("include");
                 if (!xcludesList.isEmpty())
@@ -806,7 +806,7 @@ public class CompilerConfig extends Thread
                     includes = new String[xcludesList.size()];
                     for (int j = 0; j < xcludesList.size(); j++)
                     {
-                        XMLElement xclude = (XMLElement) xcludesList.get(j);
+                        XMLElement xclude = xcludesList.get(j);
                         includes[j] = requireAttribute(xclude, "name");
                     }
                 }
@@ -817,7 +817,7 @@ public class CompilerConfig extends Thread
                     excludes = new String[xcludesList.size()];
                     for (int j = 0; j < xcludesList.size(); j++)
                     {
-                        XMLElement xclude = (XMLElement) xcludesList.get(j);
+                        XMLElement xclude = xcludesList.get(j);
                         excludes[j] = requireAttribute(xclude, "name");
                     }
                 }
@@ -904,26 +904,26 @@ public class CompilerConfig extends Thread
             iter = el.getChildrenNamed("updatecheck").iterator();
             while (iter.hasNext())
             {
-                XMLElement f = (XMLElement) iter.next();
+                XMLElement f = iter.next();
 
                 String casesensitive = f.getAttribute("casesensitive");
 
                 // get includes and excludes
-                ArrayList includesList = new ArrayList();
-                ArrayList excludesList = new ArrayList();
+                ArrayList<String> includesList = new ArrayList<String>();
+                ArrayList<String> excludesList = new ArrayList<String>();
 
                 // get includes and excludes
-                Iterator include_it = f.getChildrenNamed("include").iterator();
+                Iterator<XMLElement> include_it = f.getChildrenNamed("include").iterator();
                 while (include_it.hasNext())
                 {
-                    XMLElement inc_el = (XMLElement) include_it.next();
+                    XMLElement inc_el = include_it.next();
                     includesList.add(requireAttribute(inc_el, "name"));
                 }
 
-                Iterator exclude_it = f.getChildrenNamed("exclude").iterator();
+                Iterator<XMLElement> exclude_it = f.getChildrenNamed("exclude").iterator();
                 while (exclude_it.hasNext())
                 {
-                    XMLElement excl_el = (XMLElement) exclude_it.next();
+                    XMLElement excl_el = exclude_it.next();
                     excludesList.add(requireAttribute(excl_el, "name"));
                 }
 
@@ -933,7 +933,7 @@ public class CompilerConfig extends Thread
             iter = el.getChildrenNamed("depends").iterator();
             while (iter.hasNext())
             {
-                XMLElement dep = (XMLElement) iter.next();
+                XMLElement dep = iter.next();
                 String depName = requireAttribute(dep, "packname");
                 pack.addDependency(depName);
 
@@ -942,10 +942,10 @@ public class CompilerConfig extends Thread
             compiler.addPack(pack);
         }
         
-        Iterator refPackIter = refPackElements.iterator();
+        Iterator<XMLElement> refPackIter = refPackElements.iterator();
         while (refPackIter.hasNext())
         {
-        	XMLElement el = (XMLElement) refPackIter.next();
+        	XMLElement el = refPackIter.next();
 
             // get the name of reference xml file
         	String refFileName = requireAttribute(el, "file");
@@ -1057,14 +1057,14 @@ public class CompilerConfig extends Thread
      * checks that no pack point to a non existent pack and also that there are no circular
      * dependencies in the packs.
      */
-    public void checkDependencies(List packs) throws CompilerException
+    public void checkDependencies(List<PackInfo> packs) throws CompilerException
     {
         // Because we use package names in the configuration file we assosiate
         // the names with the objects
-        Map names = new HashMap();
+        Map<String, PackInfo> names = new HashMap<String, PackInfo>();
         for (int i = 0; i < packs.size(); i++)
         {
-            PackInfo pack = (PackInfo) packs.get(i);
+            PackInfo pack = packs.get(i);
             names.put(pack.getPack().name, pack);
         }
         int result = dfs(packs, names);
@@ -1082,12 +1082,12 @@ public class CompilerConfig extends Thread
      * @param packs The graph
      * @param names The name map
      */
-    private int dfs(List packs, Map names)
+    private int dfs(List<PackInfo> packs, Map<String, PackInfo> names)
     {
-        Map edges = new HashMap();
+        Map<Edge, Integer> edges = new HashMap<Edge, Integer>();
         for (int i = 0; i < packs.size(); i++)
         {
-            PackInfo pack = (PackInfo) packs.get(i);
+            PackInfo pack = packs.get(i);
             if (pack.colour == PackInfo.WHITE)
             {
                 if (dfsVisit(pack, names, edges) != 0) return -1;
@@ -1100,13 +1100,13 @@ public class CompilerConfig extends Thread
     /**
      * This function checks for the existence of back edges.
      */
-    private int checkBackEdges(Map edges)
+    private int checkBackEdges(Map<Edge, Integer> edges)
     {
-        Set keys = edges.keySet();
-        for (Iterator iterator = keys.iterator(); iterator.hasNext();)
+        Set<Edge> keys = edges.keySet();
+        for (Iterator<Edge> iterator = keys.iterator(); iterator.hasNext();)
         {
             final Object key = iterator.next();
-            int color = ((Integer) edges.get(key)).intValue();
+            int color = (edges.get(key)).intValue();
             if (color == PackInfo.GREY) { return -2; }
         }
         return 0;
@@ -1130,16 +1130,16 @@ public class CompilerConfig extends Thread
         }
     }
 
-    private int dfsVisit(PackInfo u, Map names, Map edges)
+    private int dfsVisit(PackInfo u, Map<String, PackInfo> names, Map<Edge, Integer> edges)
     {
         u.colour = PackInfo.GREY;
-        List deps = u.getDependencies();
+        List<String> deps = u.getDependencies();
         if (deps != null)
         {
             for (int i = 0; i < deps.size(); i++)
             {
-                String name = (String) deps.get(i);
-                PackInfo v = (PackInfo) names.get(name);
+                String name = deps.get(i);
+                PackInfo v = names.get(name);
                 if (v == null)
                 {
                     System.out.println("Failed to find dependency: "+name);
@@ -1170,7 +1170,7 @@ public class CompilerConfig extends Thread
      * @param additionals Map which contains additional data
      * @param condition 
      */
-    protected void addArchiveContent(File baseDir, File archive, String targetdir, List osList, int override, PackInfo pack, Map additionals, String condition) throws IOException {
+    protected void addArchiveContent(File baseDir, File archive, String targetdir, List<OsConstraint> osList, int override, PackInfo pack, Map additionals, String condition) throws IOException {
       
       FileInputStream fin = new FileInputStream(archive);
       ZipInputStream zin = new ZipInputStream(fin);
@@ -1208,7 +1208,7 @@ public class CompilerConfig extends Thread
      * @param condition 
      * @exception FileNotFoundException if the file does not exist
      */
-    protected void addRecursively(File baseDir, File file, String targetdir, List osList, int override,
+    protected void addRecursively(File baseDir, File file, String targetdir, List<OsConstraint> osList, int override,
             PackInfo pack, Map additionals, String condition) throws IOException
     {
         String targetfile = targetdir + "/" + file.getName();
@@ -1240,14 +1240,14 @@ public class CompilerConfig extends Thread
         XMLElement root = requireChildNamed(data, "panels");
 
         // at least one panel is required
-        Vector panels = root.getChildrenNamed("panel");
+        Vector<XMLElement> panels = root.getChildrenNamed("panel");
         if (panels.isEmpty()) parseError(root, "<panels> requires a <panel>");
 
         // We process each panel markup
-        Iterator iter = panels.iterator();
+        Iterator<XMLElement> iter = panels.iterator();
         while (iter.hasNext())
         {
-            XMLElement xmlPanel = (XMLElement) iter.next();
+            XMLElement xmlPanel = iter.next();
 
             // create the serialized Panel data
             Panel panel = new Panel();
@@ -1293,10 +1293,10 @@ public class CompilerConfig extends Thread
         if (root == null) return;
 
         // We process each res markup
-        Iterator iter = root.getChildrenNamed("res").iterator();
+        Iterator<XMLElement> iter = root.getChildrenNamed("res").iterator();
         while (iter.hasNext())
         {
-            XMLElement res = (XMLElement) iter.next();
+            XMLElement res = iter.next();
             String id = requireAttribute(res, "id");
             String src = requireAttribute(res, "src");
             // the parse attribute causes substitution to occur
@@ -1412,14 +1412,14 @@ public class CompilerConfig extends Thread
         XMLElement root = requireChildNamed(data, "locale");
 
         // at least one langpack is required
-        Vector locals = root.getChildrenNamed("langpack");
+        Vector<XMLElement> locals = root.getChildrenNamed("langpack");
         if (locals.isEmpty()) parseError(root, "<locale> requires a <langpack>");
 
         // We process each langpack markup
-        Iterator iter = locals.iterator();
+        Iterator<XMLElement> iter = locals.iterator();
         while (iter.hasNext())
         {
-            XMLElement el = (XMLElement) iter.next();
+            XMLElement el = iter.next();
             String iso3 = requireAttribute(el, "iso3");
             String path;
 
@@ -1468,10 +1468,10 @@ public class CompilerConfig extends Thread
         XMLElement authors = root.getFirstChildNamed("authors");
         if (authors != null)
         {
-            Iterator iter = authors.getChildrenNamed("author").iterator();
+            Iterator<XMLElement> iter = authors.getChildrenNamed("author").iterator();
             while (iter.hasNext())
             {
-                XMLElement author = (XMLElement) iter.next();
+                XMLElement author = iter.next();
                 String name = requireAttribute(author, "name");
                 String email = requireAttribute(author, "email");
                 info.addAuthor(new Info.Author(name, email));
@@ -1566,10 +1566,10 @@ public class CompilerConfig extends Thread
 
         Properties variables = compiler.getVariables();
 
-        Iterator iter = root.getChildrenNamed("variable").iterator();
+        Iterator<XMLElement> iter = root.getChildrenNamed("variable").iterator();
         while (iter.hasNext())
         {
-            XMLElement var = (XMLElement) iter.next();
+            XMLElement var = iter.next();
             String name = requireAttribute(var, "name");
             String value = requireAttribute(var, "value");
             if (variables.contains(name))
@@ -1586,12 +1586,12 @@ public class CompilerConfig extends Thread
         XMLElement root = data.getFirstChildNamed("dynamicvariables");
         if (root == null) return;
 
-        Map dynamicvariables = compiler.getDynamicVariables();
+        Map<String, DynamicVariable> dynamicvariables = compiler.getDynamicVariables();
 
-        Iterator iter = root.getChildrenNamed("variable").iterator();
+        Iterator<XMLElement> iter = root.getChildrenNamed("variable").iterator();
         while (iter.hasNext())
         {
-            XMLElement var = (XMLElement) iter.next();
+            XMLElement var = iter.next();
             String name = requireAttribute(var, "name");
             String value = requireAttribute(var, "value");
             String conditionid = var.getAttribute("condition");
@@ -1616,12 +1616,12 @@ public class CompilerConfig extends Thread
         notifyCompilerListener("addConditions", CompilerListener.BEGIN, data);
         // We get the condition list
         XMLElement root = data.getFirstChildNamed("conditions");
-        Map conditions = compiler.getConditions();
+        Map<String, Condition> conditions = compiler.getConditions();
         if (root != null) {               
-            Iterator iter = root.getChildrenNamed("condition").iterator();
+            Iterator<XMLElement> iter = root.getChildrenNamed("condition").iterator();
             while (iter.hasNext())
             {
-                XMLElement conditionel = (XMLElement) iter.next();
+                XMLElement conditionel = iter.next();
                 Condition condition = RulesEngine.analyzeCondition(conditionel);
                 if (condition != null) {
                     String conditionid = condition.getId();
@@ -1676,10 +1676,10 @@ public class CompilerConfig extends Thread
         if (root != null)
         {
             // add individual properties
-            Iterator iter = root.getChildrenNamed("property").iterator();
+            Iterator<XMLElement> iter = root.getChildrenNamed("property").iterator();
             while (iter.hasNext())
             {
-                XMLElement prop = (XMLElement) iter.next();
+                XMLElement prop = iter.next();
                 Property property = new Property(prop, this);
                 property.execute();
             }
@@ -2328,10 +2328,10 @@ public class CompilerConfig extends Thread
         // We get the listeners
         XMLElement root = data.getFirstChildNamed("listeners");
         if (root == null) return;
-        Iterator iter = root.getChildrenNamed("listener").iterator();
+        Iterator<XMLElement> iter = root.getChildrenNamed("listener").iterator();
         while (iter.hasNext())
         {
-            XMLElement xmlAction = (XMLElement) iter.next();
+            XMLElement xmlAction = iter.next();
             Object[] listener = getCompilerListenerInstance(xmlAction);
             if (listener != null)
                 addCompilerListener((CompilerListener) listener[0]);
@@ -2348,7 +2348,7 @@ public class CompilerConfig extends Thread
                     jarPath = compiler.replaceProperties(jarPath);
                     if( jarPath == null )
                         jarPath = "bin/customActions/" + className + ".jar";
-                    List constraints = OsConstraint.getOsList(xmlAction);
+                    List<OsConstraint> constraints = OsConstraint.getOsList(xmlAction);
                     compiler.addCustomListener(types[i], className, jarPath, constraints);
                 }
             }
@@ -2364,11 +2364,11 @@ public class CompilerConfig extends Thread
      * @return full qualified paths of the contained files
      * @throws Exception
      */
-    private List getContainedFilePaths(URL url) throws Exception
+    private List<String> getContainedFilePaths(URL url) throws Exception
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry = null;
-        ArrayList fullNames = new ArrayList();
+        ArrayList<String> fullNames = new ArrayList<String>();
         while ((zentry = jis.getNextEntry()) != null)
         {
             String name = zentry.getName();
@@ -2498,7 +2498,7 @@ public class CompilerConfig extends Thread
         if (!CompilerListener.class.isInstance(instance))
             parseError(var, "'" + className + "' must be implemented "
                     + CompilerListener.class.toString());
-        List constraints = OsConstraint.getOsList(var);
+        List<OsConstraint> constraints = OsConstraint.getOsList(var);
         return (new Object[] { instance, className, constraints});
     }
 
@@ -2524,11 +2524,11 @@ public class CompilerConfig extends Thread
     private void notifyCompilerListener(String callerName, int state, XMLElement data)
             throws CompilerException
     {
-        Iterator i = compilerListeners.iterator();
+        Iterator<CompilerListener> i = compilerListeners.iterator();
         IPackager packager = compiler.getPackager();
         while (i != null && i.hasNext())
         {
-            CompilerListener listener = (CompilerListener) i.next();
+            CompilerListener listener = i.next();
             listener.notify(callerName, state, data, packager);
         }
 
@@ -2542,13 +2542,13 @@ public class CompilerConfig extends Thread
      */
     private Map getAdditionals(XMLElement f) throws CompilerException
     {
-        Iterator i = compilerListeners.iterator();
+        Iterator<CompilerListener> i = compilerListeners.iterator();
         Map retval = null;
         try
         {
             while (i != null && i.hasNext())
             {
-                retval = ((CompilerListener) i.next()).reviseAdditionalDataMap(retval, f);
+                retval = (i.next()).reviseAdditionalDataMap(retval, f);
             }
         }
         catch (CompilerException ce)

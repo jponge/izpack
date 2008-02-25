@@ -21,6 +21,8 @@
 
 package com.izforge.izpack;
 
+import com.izforge.izpack.util.OsConstraint;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class ParsableFile implements Serializable
     public String encoding = null;
 
     /** The list of OS constraints limiting file installation. */
-    public List osConstraints = null;
+    public List<OsConstraint> osConstraints = null;
     
     /** condition for this Parsable */
     private String condition = null;
@@ -58,7 +60,7 @@ public class ParsableFile implements Serializable
      * @param encoding the file encoding (or null for default)
      * @param osConstraints the OS constraint (or null for any OS)
      */
-    public ParsableFile(String path, String type, String encoding, List osConstraints)
+    public ParsableFile(String path, String type, String encoding, List<OsConstraint> osConstraints)
     {
         this.path = path;
         this.type = type;

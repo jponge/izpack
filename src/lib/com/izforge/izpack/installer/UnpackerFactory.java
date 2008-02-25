@@ -44,11 +44,11 @@ public abstract class UnpackerFactory
         IUnpacker unpackerobj = null;
         try
         {
-            Class unpackerclass = Class.forName(unpackerclassname);
+            Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
             Class[] parametertypes = {AutomatedInstallData.class, AbstractUIProgressHandler.class};
-            Constructor unpackerconstructor = unpackerclass.getConstructor(parametertypes);
+            Constructor<IUnpacker> unpackerconstructor = unpackerclass.getConstructor(parametertypes);
             Object[] parameter = {installdata,listener};
-            unpackerobj = (IUnpacker) unpackerconstructor.newInstance(parameter);            
+            unpackerobj = unpackerconstructor.newInstance(parameter);
         }        
         catch (NoSuchMethodException e)
         {

@@ -72,12 +72,12 @@ public class SummaryProcessor
      */
     public static String getSummary(AutomatedInstallData idata)
     {
-        Iterator iter = idata.panels.iterator();
+        Iterator<IzPanel> iter = idata.panels.iterator();
         StringBuffer sb = new StringBuffer(2048);
         sb.append(HTML_HEADER);
         while (iter.hasNext())
         {
-            IzPanel panel = (IzPanel) iter.next();
+            IzPanel panel = iter.next();
             String caption = panel.getSummaryCaption();
             String msg = panel.getSummaryBody();
             // If no caption or/and message, ignore it.

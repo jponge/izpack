@@ -29,6 +29,7 @@ import java.awt.event.KeyListener;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import java.io.Serializable;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -118,7 +119,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /** Used internally to identify the default setting for the return format. */
     private static int DEFAULT = DISPLAY_FORMAT;
 
-    private Vector items = new Vector();
+    private Vector<Serializable> items = new Vector<Serializable>();
 
     /**
      * This <code>Vector</code> holds a reference to each input field, in the order in which they
@@ -128,7 +129,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
     private boolean hasParams = false;
 
-    private Map validatorParams;
+    private Map<String, String> validatorParams;
 
     private RuleTextField activeField;
 
@@ -190,7 +191,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      */
     /*--------------------------------------------------------------------------*/
     public RuleInputField(String format, String preset, String separator, String validator,
-            Map validatorParams, String processor, int resultFormat, Toolkit toolkit,
+            Map<String, String> validatorParams, String processor, int resultFormat, Toolkit toolkit,
             InstallData idata)
     {
         this(format, preset, separator, validator, processor, resultFormat, toolkit, idata);
@@ -319,7 +320,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
     /*--------------------------------------------------------------------------*/
     // javadoc inherited
-    public Map getValidatorParams()
+    public Map<String, String> getValidatorParams()
     {
         return validatorParams;
     }

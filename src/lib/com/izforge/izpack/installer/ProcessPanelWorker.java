@@ -46,7 +46,6 @@ import net.n3.nanoxml.XMLBuilderFactory;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
@@ -74,7 +73,7 @@ public class ProcessPanelWorker implements Runnable
 
     protected AbstractUIProcessHandler handler;
 
-    private ArrayList jobs = new ArrayList();
+    private ArrayList<ProcessingJob> jobs = new ArrayList<ProcessingJob>();
 
     private boolean result = true;
     
@@ -143,9 +142,9 @@ public class ProcessPanelWorker implements Runnable
             logfiledir = lfd.getContent();
         }
 
-        for (Iterator job_it = spec.getChildrenNamed("job").iterator(); job_it.hasNext();)
+        for (Iterator<XMLElement> job_it = spec.getChildrenNamed("job").iterator(); job_it.hasNext();)
         {
-            XMLElement job_el = (XMLElement) job_it.next();
+            XMLElement job_el = job_it.next();
             String conditionid = job_el.getAttribute("conditionid");
             if (conditionid != null){
               Debug.trace("Condition for job.");
@@ -159,25 +158,25 @@ public class ProcessPanelWorker implements Runnable
             Debug.trace("Condition is fulfilled or not existent.");
             // ExecuteForPack Patch
             // Check if processing required for pack
-            Vector forPacks = job_el.getChildrenNamed("executeForPack");
+            Vector<XMLElement> forPacks = job_el.getChildrenNamed("executeForPack");
             if (!jobRequiredFor(forPacks))
             {
                 continue;
             }
 
             // first check OS constraints - skip jobs not suited for this OS
-            List constraints = OsConstraint.getOsList(job_el);
+            List<OsConstraint> constraints = OsConstraint.getOsList(job_el);
 
             if (OsConstraint.oneMatchesCurrentSystem(constraints))
             {
-                List ef_list = new ArrayList();
+                List<Processable> ef_list = new ArrayList<Processable>();
 
                 String job_name = job_el.getAttribute("name", "");
 
-                for (Iterator ef_it = job_el.getChildrenNamed("executefile").iterator(); ef_it
+                for (Iterator<XMLElement> ef_it = job_el.getChildrenNamed("executefile").iterator(); ef_it
                         .hasNext();)
                 {
-                    XMLElement ef = (XMLElement) ef_it.next();
+                    XMLElement ef = ef_it.next();
 
                     String ef_name = ef.getAttribute("name");
 
@@ -187,11 +186,11 @@ public class ProcessPanelWorker implements Runnable
                         return false;
                     }
 
-                    List args = new ArrayList();
+                    List<String> args = new ArrayList<String>();
 
-                    for (Iterator arg_it = ef.getChildrenNamed("arg").iterator(); arg_it.hasNext();)
+                    for (Iterator<XMLElement> arg_it = ef.getChildrenNamed("arg").iterator(); arg_it.hasNext();)
                     {
-                        XMLElement arg_el = (XMLElement) arg_it.next();
+                        XMLElement arg_el = arg_it.next();
 
                         String arg_val = arg_el.getContent();
 
@@ -201,10 +200,10 @@ public class ProcessPanelWorker implements Runnable
                     ef_list.add(new ExecutableFile(ef_name, args));
                 }
 
-                for (Iterator ef_it = job_el.getChildrenNamed("executeclass").iterator(); ef_it
+                for (Iterator<XMLElement> ef_it = job_el.getChildrenNamed("executeclass").iterator(); ef_it
                         .hasNext();)
                 {
-                    XMLElement ef = (XMLElement) ef_it.next();
+                    XMLElement ef = ef_it.next();
                     String ef_name = ef.getAttribute("name");
                     if ((ef_name == null) || (ef_name.length() == 0))
                     {
@@ -212,10 +211,10 @@ public class ProcessPanelWorker implements Runnable
                         return false;
                     }
 
-                    List args = new ArrayList();
-                    for (Iterator arg_it = ef.getChildrenNamed("arg").iterator(); arg_it.hasNext();)
+                    List<String> args = new ArrayList<String>();
+                    for (Iterator<XMLElement> arg_it = ef.getChildrenNamed("arg").iterator(); arg_it.hasNext();)
                     {
-                        XMLElement arg_el = (XMLElement) arg_it.next();
+                        XMLElement arg_el = arg_it.next();
                         String arg_val = arg_el.getContent();
                         args.add(arg_val);
                     }
@@ -289,9 +288,9 @@ public class ProcessPanelWorker implements Runnable
 
         this.handler.startProcessing(this.jobs.size());
 
-        for (Iterator job_it = this.jobs.iterator(); job_it.hasNext();)
+        for (Iterator<ProcessingJob> job_it = this.jobs.iterator(); job_it.hasNext();)
         {
-            ProcessingJob pj = (ProcessingJob) job_it.next();
+            ProcessingJob pj = job_it.next();
 
             this.handler.startProcess(pj.name);
 
@@ -339,9 +338,9 @@ public class ProcessPanelWorker implements Runnable
 
         public String name;
 
-        private List processables;
+        private List<Processable> processables;
 
-        public ProcessingJob(String name, List processables)
+        public ProcessingJob(String name, List<Processable> processables)
         {
             this.name = name;
             this.processables = processables;
@@ -349,9 +348,9 @@ public class ProcessPanelWorker implements Runnable
 
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
         {
-            for (Iterator pr_it = this.processables.iterator(); pr_it.hasNext();)
+            for (Iterator<Processable> pr_it = this.processables.iterator(); pr_it.hasNext();)
             {
-                Processable pr = (Processable) pr_it.next();
+                Processable pr = pr_it.next();
 
                 if (!pr.run(handler, vs)) return false;
             }
@@ -366,11 +365,11 @@ public class ProcessPanelWorker implements Runnable
 
         private String filename;
 
-        private List arguments;
+        private List<String> arguments;
 
         protected AbstractUIProcessHandler handler;
 
-        public ExecutableFile(String fn, List args)
+        public ExecutableFile(String fn, List<String> args)
         {
             this.filename = fn;
             this.arguments = args;
@@ -385,9 +384,9 @@ public class ProcessPanelWorker implements Runnable
             params[0] = vs.substitute(this.filename, "plain");
 
             int i = 1;
-            for (Iterator arg_it = this.arguments.iterator(); arg_it.hasNext();)
+            for (Iterator<String> arg_it = this.arguments.iterator(); arg_it.hasNext();)
             {
-                params[i++] = vs.substitute((String) arg_it.next(), "plain");
+                params[i++] = vs.substitute(arg_it.next(), "plain");
             }
 
             try
@@ -534,11 +533,11 @@ public class ProcessPanelWorker implements Runnable
 
         final private String myClassName;
 
-        final private List myArguments;
+        final private List<String> myArguments;
 
         protected AbstractUIProcessHandler myHandler;
 
-        public ExecutableClass(String className, List args)
+        public ExecutableClass(String className, List<String> args)
         {
             myClassName = className;
             myArguments = args;
@@ -552,8 +551,8 @@ public class ProcessPanelWorker implements Runnable
             String params[] = new String[myArguments.size()];
 
             int i = 0;
-            for (Iterator arg_it = myArguments.iterator(); arg_it.hasNext();)
-                params[i++] = varSubstitutor.substitute((String) arg_it.next(), "plain");
+            for (Iterator<String> arg_it = myArguments.iterator(); arg_it.hasNext();)
+                params[i++] = varSubstitutor.substitute(arg_it.next(), "plain");
 
             try
             {
@@ -637,7 +636,7 @@ public class ProcessPanelWorker implements Runnable
      * /*--------------------------------------------------------------------------
      */
 
-    private boolean jobRequiredFor(Vector packs)
+    private boolean jobRequiredFor(Vector<XMLElement> packs)
     {
         String selected;
         String required;
@@ -655,7 +654,7 @@ public class ProcessPanelWorker implements Runnable
 
             for (int k = 0; k < packs.size(); k++)
             {
-                required = ((XMLElement) packs.elementAt(k)).getAttribute("name", "");
+                required = (packs.elementAt(k)).getAttribute("name", "");
                 // System.out.println ("Attribute name is " + required);
                 if (selected.equals(required))
                 {

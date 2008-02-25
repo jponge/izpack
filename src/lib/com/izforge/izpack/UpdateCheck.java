@@ -37,12 +37,12 @@ public class UpdateCheck implements Serializable
     /**
      * ant-fileset-like list of include patterns, based on INSTALL_PATH if relative
      */
-    public ArrayList includesList = null;
+    public ArrayList<String> includesList = null;
 
     /**
      * ant-fileset-like list of exclude patterns, based on INSTALL_PATH if relative
      */
-    public ArrayList excludesList = null;
+    public ArrayList<String> excludesList = null;
 
     /** Whether pattern matching is performed case-sensitive */
     boolean caseSensitive = true;
@@ -58,7 +58,7 @@ public class UpdateCheck implements Serializable
      * @param includes The patterns to include in the check.
      * @param excludes The patterns to exclude from the check.
      */
-    public UpdateCheck(ArrayList includes, ArrayList excludes)
+    public UpdateCheck(ArrayList<String> includes, ArrayList<String> excludes)
     {
         this.includesList = includes;
         this.excludesList = excludes;
@@ -71,7 +71,7 @@ public class UpdateCheck implements Serializable
      * @param excludes The patterns to exclude from the check.
      * @param casesensitive If "yes", matches are performed case sensitive.
      */
-    public UpdateCheck(ArrayList includes, ArrayList excludes, String casesensitive)
+    public UpdateCheck(ArrayList<String> includes, ArrayList<String> excludes, String casesensitive)
     {
         this.includesList = includes;
         this.excludesList = excludes;

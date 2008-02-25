@@ -64,7 +64,7 @@ public class ImgPacksPanel extends PacksPanelBase
     private static final long serialVersionUID = 3977858492633659444L;
 
     /** The images to display. */
-    private HashMap images;
+    private HashMap<String, ImageIcon> images;
 
     /** The img label. */
     private JLabel imgLabel;
@@ -119,7 +119,7 @@ public class ImgPacksPanel extends PacksPanelBase
         	imgFound = firstImgPack.packImgId != null;
         }
         if (imgFound) {
-        	imgLabel = new JLabel((ImageIcon) images.get(firstImgPack.packImgId));
+        	imgLabel = new JLabel(images.get(firstImgPack.packImgId));
         } else {
         	imgLabel = new JLabel();
         }
@@ -172,7 +172,7 @@ public class ImgPacksPanel extends PacksPanelBase
     private void preLoadImages()
     {
         int size = idata.availablePacks.size();
-        images = new HashMap(size);
+        images = new HashMap<String, ImageIcon>(size);
         Iterator pack_it = idata.availablePacks.iterator();
         while (pack_it.hasNext())
         {
@@ -202,9 +202,9 @@ public class ImgPacksPanel extends PacksPanelBase
         int maxHeight = 60;
         ImageIcon icon;
 
-        for (Iterator it = images.values().iterator(); it.hasNext();)
+        for (Iterator<ImageIcon> it = images.values().iterator(); it.hasNext();)
         {
-            icon = (ImageIcon) it.next();
+            icon = it.next();
             maxWidth = Math.max(maxWidth, icon.getIconWidth());
             maxHeight = Math.max(maxHeight, icon.getIconHeight());
         }
@@ -232,7 +232,7 @@ public class ImgPacksPanel extends PacksPanelBase
         }
         if (i >= 0) {
             Pack pack = (Pack) idata.availablePacks.get(i);
-            imgLabel.setIcon((ImageIcon) images.get(pack.packImgId));
+            imgLabel.setIcon(images.get(pack.packImgId));
         }
     }
 

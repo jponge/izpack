@@ -45,9 +45,9 @@ public class PasswordGroup implements ProcessingClient
     // ------------------------------------------------------------------------
     // Variable Declarations
     // ------------------------------------------------------------------------
-    private Vector fields = new Vector();
+    private Vector<JPasswordField> fields = new Vector<JPasswordField>();
 
-    private List validatorContainers = null;
+    private List<ValidatorContainer> validatorContainers = null;
 //  private Validator validator = null;
 //  private boolean hasParams = false;
 //  private Map validatorParams = null;
@@ -66,7 +66,7 @@ public class PasswordGroup implements ProcessingClient
      * @param processor the processor
      */
     /*--------------------------------------------------------------------------*/
-    public PasswordGroup(InstallData idata, List validatorContainers, String processor)
+    public PasswordGroup(InstallData idata, List<ValidatorContainer> validatorContainers, String processor)
     {
         // ----------------------------------------------------
         // attempt to create an instance of the Validator
@@ -134,7 +134,7 @@ public class PasswordGroup implements ProcessingClient
             throw (new IndexOutOfBoundsException());
         }
 
-        String contents = new String(((JPasswordField) fields.elementAt(index)).getPassword());
+        String contents = new String((fields.elementAt(index)).getPassword());
         return (contents);
     }
 
@@ -220,7 +220,7 @@ public class PasswordGroup implements ProcessingClient
         ValidatorContainer container = null;
         try
         {
-            container = (ValidatorContainer) validatorContainers.get(i);
+            container = validatorContainers.get(i);
         } catch (Exception e)
         {
             container = null;
@@ -251,14 +251,14 @@ public class PasswordGroup implements ProcessingClient
         return returnValue;
     }
 
-    public Map getValidatorParams()
+    public Map<String, String> getValidatorParams()
     {
         return getValidatorParams(currentValidator);
     }
 
-    public Map getValidatorParams(int i)
+    public Map<String, String> getValidatorParams(int i)
     {
-        Map returnValue = null;
+        Map<String, String> returnValue = null;
         try
         {
             ValidatorContainer container = getValidatorContainer(i);
@@ -301,7 +301,7 @@ public class PasswordGroup implements ProcessingClient
 
             if (fields.size() > 0)
             {
-                contents = new String(((JPasswordField) fields.elementAt(0)).getPassword());
+                contents = new String((fields.elementAt(0)).getPassword());
             }
 
             return (contents);

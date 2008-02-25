@@ -37,7 +37,7 @@ public class UninstallData
     private static UninstallData instance = null;
 
     /** The installed files list. */
-    private List installedFilesList;
+    private List<String> installedFilesList;
     
     /** The uninstallable files list. */
     private List uninstallableFilesList;
@@ -52,7 +52,7 @@ public class UninstallData
     private String uninstallerPath;
 
     /** Additional uninstall data like uninstaller listener list. */
-    private Map additionalData;
+    private Map<String, Object> additionalData;
     
     /** Filesmap which should removed by the root user for another user */
     private String rootScript;
@@ -60,10 +60,10 @@ public class UninstallData
     /** The constructor. */
     private UninstallData()
     {
-        installedFilesList = new ArrayList();
+        installedFilesList = new ArrayList<String>();
         uninstallableFilesList = new ArrayList();
         executablesList = new ArrayList();
-        additionalData = new HashMap();
+        additionalData = new HashMap<String, Object>();
         rootScript = "";
     }
     
@@ -100,7 +100,7 @@ public class UninstallData
      * 
      * @return The installed files list.
      */
-    public List getInstalledFilesList()
+    public List<String> getInstalledFilesList()
     {
         return installedFilesList;
     }
@@ -180,7 +180,7 @@ public class UninstallData
      * 
      * @return additional uninstall data
      */
-    public Map getAdditionalData()
+    public Map<String, Object> getAdditionalData()
     {
         return additionalData;
     }

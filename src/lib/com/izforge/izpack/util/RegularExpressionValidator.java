@@ -48,8 +48,8 @@ public class RegularExpressionValidator implements Validator
 
         if (client.hasParams())
         {
-            Map paramMap = client.getValidatorParams();
-            patternString = (String) paramMap.get(PATTERN_PARAM);
+            Map<String, String> paramMap = client.getValidatorParams();
+            patternString = paramMap.get(PATTERN_PARAM);
         }
         else
         {
