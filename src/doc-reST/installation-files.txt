@@ -256,6 +256,8 @@ It contains the following elements :
     content of the tag must be a properly formed URL.
 -   ``<summarylogfilepath>`` : specifies the path for the logfile of the
     `SummaryLoggerInstallerListener`.
+-   ``<writeinstallationinformation>`` : (yes or no) specifies if the file .installinformation should 
+    be written which includes the information about installed packs. The default if not specified is yes.
 
 Here is an example of a typical ``<info>`` section :
 

@@ -13,10 +13,10 @@ $Id$
 <!ELEMENT installation (info, packaging?, properties?, variables?,dynamicvariables?,conditions?,
                         guiprefs?, locale, resources?, panels,
                         listeners?, packs, jar*, native*)>
-    <!ATTLIST installation version CDATA #REQUIRED>
+<!ATTLIST installation version CDATA #REQUIRED>
 
 <!-- The info section (general information on an installation) -->
-<!ELEMENT info (appname, appversion, appsubpath?, authors?, url?, javaversion?, uninstaller?, webdir?, summarylogfilepath?)>
+<!ELEMENT info (appname, appversion, appsubpath?, authors?, url?, javaversion?, uninstaller?, webdir?, summarylogfilepath?,writeinstallationinformation?)>
     <!ELEMENT appname (#PCDATA)>
     <!ELEMENT appversion (#PCDATA)>
     <!ELEMENT appsubpath (#PCDATA)>
@@ -32,6 +32,7 @@ $Id$
         <!ATTLIST uninstaller name CDATA "uninstaller.jar">
     <!ELEMENT webdir (#PCDATA)>
     <!ELEMENT summarylogfilepath (#PCDATA)>
+	<!ELEMENT writeinstallationinformation (#PCDATA)>
 
 <!ELEMENT packaging (packager, unpacker)>
 <!ELEMENT packager (options)>
