@@ -258,7 +258,7 @@ public class RulesEngine
                     String optional = panelel.getAttribute("optional");
                     if (optional != null)
                     {
-                        boolean optionalinstall = Boolean.valueOf(optional).booleanValue();
+                        boolean optionalinstall = Boolean.valueOf(optional);
                         if (optionalinstall)
                         {
                             // optional installation is allowed

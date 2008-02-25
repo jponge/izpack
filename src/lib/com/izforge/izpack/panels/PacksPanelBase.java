@@ -287,7 +287,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         if (e.getValueIsAdjusting())
         {
             Integer checked = (Integer) packsModel.getValueAt(i, 0);
-            checked = (checked.intValue() == 0) ? Integer.valueOf(1) : Integer.valueOf(0);
+            checked = (checked == 0) ? 1 : 0;
             packsModel.setValueAt(checked, i, 0);
         }
         
@@ -659,7 +659,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 display.setForeground(table.getForeground());
                 display.setBackground(table.getBackground());
             }
-            int state = ((Integer) value).intValue();
+            int state = (Integer) value;
             if (state == -2)
             {
                 // condition not fulfilled
@@ -772,7 +772,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         {
             Component renderer = super.getTableCellRendererComponent(table, value, isSelected, hasFocus,row, column);
             
-            int state = ((Integer) table.getModel().getValueAt(row, 0)).intValue();
+            int state = (Integer) table.getModel().getValueAt(row, 0);
             if (state == -2)
             {
                 // condition not fulfilled

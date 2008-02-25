@@ -50,7 +50,7 @@ public class ConditionHistory
     public void addValue(boolean value,String comment) {
         if ((values.size() == 0) || value != getLastValue()) {
             Object[] valuecomment = new Object[2];
-            valuecomment[0] = Boolean.valueOf(value);
+            valuecomment[0] = value;
             valuecomment[1] = comment;
             this.values.add(valuecomment);
             if (values.size() == 1) {
@@ -65,7 +65,7 @@ public class ConditionHistory
     
     public boolean getLastValue() {
         if (values.size() > 0) {
-            return ((Boolean)(values.get(values.size() - 1))[0]).booleanValue();
+            return (Boolean) (values.get(values.size() - 1))[0];
         }
         else {
             return false;

@@ -143,7 +143,7 @@ public class PathInputPanel extends IzPanel implements ActionListener
         String chosenPath = pathSelectionPanel.getPath();
         boolean ok = true;
         
-        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION)).booleanValue();
+        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
         if (modifyinstallation) {
             // installation directory has to exist in a modification installation
             mustExist = true;

@@ -177,7 +177,7 @@ public class PackFile implements Serializable
     public void setPreviousPackFileRef(String previousPackId, Long offsetInPreviousPack)
     {
         this.previousPackId = previousPackId;
-        this.offsetInPreviousPack = offsetInPreviousPack.longValue();
+        this.offsetInPreviousPack = offsetInPreviousPack;
     }
 
     /** The target operating system constraints of this file */

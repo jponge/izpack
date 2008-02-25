@@ -535,7 +535,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       Object o = packToRowNumber.get(pack);
       if(o == null) return -1;
       Integer ret = (Integer) o;
-      return ret.intValue();
+      return ret;
    }
    
    /**
@@ -549,7 +549,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       if(rowIndex > 0)
       {
          Integer state = (Integer) packsModel.getValueAt(rowIndex, 0);
-         if( (state.intValue() == -2) && rnode.getChildCount() > 0)
+         if( (state == -2) && rnode.getChildCount() > 0)
          {
             boolean dirty = false;
             Enumeration toBeDeselected = rnode.depthFirstEnumeration();
@@ -584,7 +584,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
             if(childRowIndex > 0)
             {
                Integer state = (Integer) packsModel.getValueAt(childRowIndex, 0);
-               cbnode.setEnabled(state.intValue() >= 0);
+               cbnode.setEnabled(state >= 0);
                cbnode.setSelected(Math.abs(state.intValue()) == 1);
             }
          }
@@ -608,7 +608,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
       int rowIndex = getRowIndex((Pack)nodePack);
       if(rowIndex > 0)
       {
-         Integer newValue = new Integer(value);
+         Integer newValue = value;
          Integer modelValue = (Integer) packsModel.getValueAt(rowIndex, 0);
          if(!newValue.equals(modelValue))
             packsModel.setValueAt(newValue, rowIndex, 0);
@@ -821,7 +821,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          while (rowpack.hasNext())
          {
             Pack p = (Pack) rowpack.next();
-            packToRowNumber.put(p, new Integer(idata.availablePacks.indexOf(p)));
+            packToRowNumber.put(p, idata.availablePacks.indexOf(p));
          }
          
          // Init tree structures

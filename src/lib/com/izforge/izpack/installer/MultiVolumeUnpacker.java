@@ -139,8 +139,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
             // Custom action listener stuff --- load listeners ----
             List[] customActions = getCustomActions();
             // Custom action listener stuff --- beforePacks ----
-            informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, new Integer(
-                    npacks), handler);
+            informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
             // vs = new VariableSubstitutor(idata.getVariables());
             packs = idata.selectedPacks;
             npacks = packs.size();
@@ -196,7 +195,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
 
                 // Custom action listener stuff --- beforePack ----
                 informListeners(customActions, InstallerListener.BEFORE_PACK, packs.get(i),
-                        new Integer(npacks), handler);
+                        npacks, handler);
                 // find next Entry
                 ObjectInputStream objIn = new ObjectInputStream(in);
                 // We unpack the files
@@ -524,7 +523,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
 
                 // Custom action listener stuff --- afterPack ----
                 informListeners(customActions, InstallerListener.AFTER_PACK, packs.get(i),
-                        new Integer(i), handler);
+                        i, handler);
             }
             Debug.trace("Trying to parse files");
             // We use the scripts parser

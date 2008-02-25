@@ -93,13 +93,13 @@ public class VariableSubstitutor implements Serializable
     static
     {
         typeNameToConstantMap = new HashMap<String, Integer>();
-        typeNameToConstantMap.put("plain", new Integer(TYPE_PLAIN));
-        typeNameToConstantMap.put("javaprop", new Integer(TYPE_JAVA_PROPERTIES));
-        typeNameToConstantMap.put("java", new Integer(TYPE_JAVA));
-        typeNameToConstantMap.put("xml", new Integer(TYPE_XML));
-        typeNameToConstantMap.put("shell", new Integer(TYPE_SHELL));
-        typeNameToConstantMap.put("at", new Integer(TYPE_AT));
-        typeNameToConstantMap.put("ant", new Integer(TYPE_ANT));
+        typeNameToConstantMap.put("plain", TYPE_PLAIN);
+        typeNameToConstantMap.put("javaprop", TYPE_JAVA_PROPERTIES);
+        typeNameToConstantMap.put("java", TYPE_JAVA);
+        typeNameToConstantMap.put("xml", TYPE_XML);
+        typeNameToConstantMap.put("shell", TYPE_SHELL);
+        typeNameToConstantMap.put("at", TYPE_AT);
+        typeNameToConstantMap.put("ant", TYPE_ANT);
     }
 
     /**
@@ -396,7 +396,7 @@ public class VariableSubstitutor implements Serializable
         if (integer == null)
             throw new IllegalArgumentException("Unknown file type " + type);
         else
-            return integer.intValue();
+            return integer;
     }
 
     /**

@@ -584,7 +584,7 @@ public class Compiler extends Thread
         for (Iterator<Edge> iterator = keys.iterator(); iterator.hasNext();)
         {
             final Object key = iterator.next();
-            int color = (edges.get(key)).intValue();
+            int color = edges.get(key);
             if (color == PackInfo.GREY) { return -2; }
         }
         return 0;
@@ -624,7 +624,7 @@ public class Compiler extends Thread
                     return -1;
                 }
                 Edge edge = new Edge(u, v);
-                if (edges.get(edge) == null) edges.put(edge, new Integer(v.colour));
+                if (edges.get(edge) == null) edges.put(edge, v.colour);
 
                 if (v.colour == PackInfo.WHITE)
                 {

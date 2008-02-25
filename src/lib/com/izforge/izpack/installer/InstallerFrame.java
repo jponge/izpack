@@ -411,10 +411,10 @@ public class InstallerFrame extends JFrame
             panel = (IzPanel) object;
             installdata.panels.add(panel);
             if (panel.isHidden())
-                visiblePanelMapping.add(count, new Integer(-1));
+                visiblePanelMapping.add(count, -1);
             else
             {
-                visiblePanelMapping.add(count, new Integer(curVisPanelNumber));
+                visiblePanelMapping.add(count, curVisPanelNumber);
                 curVisPanelNumber++;
                 lastVis = count;
             }
@@ -423,7 +423,7 @@ public class InstallerFrame extends JFrame
             XMLElement panelRoot = new XMLElement(className);
             installdata.xmlData.addChild(panelRoot);
         }
-        visiblePanelMapping.add(count, new Integer(lastVis));
+        visiblePanelMapping.add(count, lastVis);
     }
 
     /**
@@ -598,7 +598,7 @@ public class InstallerFrame extends JFrame
             debugger = new Debugger(installdata,icons,rules);
             JPanel debugpanel = debugger.getDebugPanel();
             if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")) {
-                if (Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow")).booleanValue()) {
+                if (Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow"))) {
                     JFrame debugframe = new JFrame("Debug information");                    
                     debugframe.setContentPane(debugpanel);
                     debugframe.setSize(new Dimension(400,400));
@@ -837,7 +837,7 @@ public class InstallerFrame extends JFrame
             // writing out that script.
             // l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
             // No previos button in the first visible panel
-            if ((visiblePanelMapping.get(installdata.curPanelNumber)).intValue() == 0)
+            if (visiblePanelMapping.get(installdata.curPanelNumber) == 0)
             {
                 prevButton.setVisible(false);
                 lockPrevButton();
@@ -845,7 +845,7 @@ public class InstallerFrame extends JFrame
                 // panel
             }
             // Only the exit button in the last panel.
-            else if ((visiblePanelMapping.get(installdata.panels.size())).intValue() == installdata.curPanelNumber)
+            else if (visiblePanelMapping.get(installdata.panels.size()) == installdata.curPanelNumber)
             {
                 prevButton.setVisible(false);
                 nextButton.setVisible(false);
@@ -934,13 +934,11 @@ public class InstallerFrame extends JFrame
             Panel metadata = panel.getMetadata();
             if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid())))
             {
-                loadAndShowImage((visiblePanelMapping.get(installdata.curPanelNumber))
-                        .intValue(), metadata.getPanelid());
+                loadAndShowImage(visiblePanelMapping.get(installdata.curPanelNumber), metadata.getPanelid());
             }
             else
             {
-                loadAndShowImage((visiblePanelMapping.get(installdata.curPanelNumber))
-                        .intValue());
+                loadAndShowImage(visiblePanelMapping.get(installdata.curPanelNumber));
             }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
@@ -1941,7 +1939,7 @@ public class InstallerFrame extends JFrame
         // Do not forgett the first headline.
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
-        int curPanelNo = (visiblePanelMapping.get(installdata.curPanelNumber)).intValue();
+        int curPanelNo = visiblePanelMapping.get(installdata.curPanelNumber);
         if (headingLabels[headingLines] != null)
         {
             loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
@@ -1955,10 +1953,9 @@ public class InstallerFrame extends JFrame
     {
         if (headingCounterComponent != null)
         {
-            int curPanelNo = (visiblePanelMapping.get(installdata.curPanelNumber))
-                    .intValue();
-            int visPanelsCount = (visiblePanelMapping.get((visiblePanelMapping
-                    .get(installdata.panels.size())).intValue())).intValue();
+            int curPanelNo = visiblePanelMapping.get(installdata.curPanelNumber);
+            int visPanelsCount = visiblePanelMapping.get((visiblePanelMapping
+                    .get(installdata.panels.size())).intValue());
 
             StringBuffer buf = new StringBuffer();
             buf.append(langpack.getString("installer.step")).append(" ").append(curPanelNo + 1)

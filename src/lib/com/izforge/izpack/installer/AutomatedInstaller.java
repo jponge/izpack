@@ -380,12 +380,12 @@ public class AutomatedInstaller extends InstallerBase
                 if (this.panelInstanceCount.containsKey(panelClassName))
                 {
                     // get number of panel instance to process
-                    panelRootNo = (this.panelInstanceCount.get(panelClassName)).intValue();
+                    panelRootNo = this.panelInstanceCount.get(panelClassName);
                 }
     
                 XMLElement panelRoot = panelRoots.elementAt(panelRootNo);
     
-                this.panelInstanceCount.put(panelClassName, new Integer(panelRootNo + 1));
+                this.panelInstanceCount.put(panelClassName, panelRootNo + 1);
     
                 // execute the installation logic for the current panel, if it has
                 // any:

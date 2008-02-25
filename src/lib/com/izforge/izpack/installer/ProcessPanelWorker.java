@@ -471,7 +471,7 @@ public class ProcessPanelWorker implements Runnable
 
             private BufferedReader reader;
 
-            private Boolean stop = Boolean.valueOf(false);
+            private Boolean stop = false;
 
             public OutputMonitor(AbstractUIProcessHandler handler, InputStream is, boolean stderr)
             {
@@ -495,7 +495,7 @@ public class ProcessPanelWorker implements Runnable
 
                         synchronized (this.stop)
                         {
-                            if (stop.booleanValue()) return;
+                            if (stop) return;
                         }
                     }
                 }
@@ -515,7 +515,7 @@ public class ProcessPanelWorker implements Runnable
             {
                 synchronized (this.stop)
                 {
-                    this.stop = Boolean.valueOf(true);
+                    this.stop = true;
                 }
             }
 

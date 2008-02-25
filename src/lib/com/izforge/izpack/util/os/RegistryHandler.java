@@ -59,20 +59,20 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
     private static RegistryHandler defaultHandler = null;
     static
     {
-        ROOT_KEY_MAP.put("HKCR", new Integer(HKEY_CLASSES_ROOT));
-        ROOT_KEY_MAP.put("HKEY_CLASSES_ROOT", new Integer(HKEY_CLASSES_ROOT));
-        ROOT_KEY_MAP.put("HKCU", new Integer(HKEY_CURRENT_USER));
-        ROOT_KEY_MAP.put("HKEY_CURRENT_USER", new Integer(HKEY_CURRENT_USER));
-        ROOT_KEY_MAP.put("HKLM", new Integer(HKEY_LOCAL_MACHINE));
-        ROOT_KEY_MAP.put("HKEY_LOCAL_MACHINE", new Integer(HKEY_LOCAL_MACHINE));
-        ROOT_KEY_MAP.put("HKU", new Integer(HKEY_USERS));
-        ROOT_KEY_MAP.put("HKEY_USERS", new Integer(HKEY_USERS));
-        ROOT_KEY_MAP.put("HKPD", new Integer(HKEY_PERFORMANCE_DATA));
-        ROOT_KEY_MAP.put("HKEY_PERFORMANCE_DATA", new Integer(HKEY_PERFORMANCE_DATA));
-        ROOT_KEY_MAP.put("HKCC", new Integer(HKEY_CURRENT_CONFIG));
-        ROOT_KEY_MAP.put("HKEY_CURRENT_CONFIG", new Integer(HKEY_CURRENT_CONFIG));
-        ROOT_KEY_MAP.put("HKDDS", new Integer(HKEY_DYN_DATA));
-        ROOT_KEY_MAP.put("HKEY_DYN_DATA", new Integer(HKEY_DYN_DATA));
+        ROOT_KEY_MAP.put("HKCR", HKEY_CLASSES_ROOT);
+        ROOT_KEY_MAP.put("HKEY_CLASSES_ROOT", HKEY_CLASSES_ROOT);
+        ROOT_KEY_MAP.put("HKCU", HKEY_CURRENT_USER);
+        ROOT_KEY_MAP.put("HKEY_CURRENT_USER", HKEY_CURRENT_USER);
+        ROOT_KEY_MAP.put("HKLM", HKEY_LOCAL_MACHINE);
+        ROOT_KEY_MAP.put("HKEY_LOCAL_MACHINE", HKEY_LOCAL_MACHINE);
+        ROOT_KEY_MAP.put("HKU", HKEY_USERS);
+        ROOT_KEY_MAP.put("HKEY_USERS", HKEY_USERS);
+        ROOT_KEY_MAP.put("HKPD", HKEY_PERFORMANCE_DATA);
+        ROOT_KEY_MAP.put("HKEY_PERFORMANCE_DATA", HKEY_PERFORMANCE_DATA);
+        ROOT_KEY_MAP.put("HKCC", HKEY_CURRENT_CONFIG);
+        ROOT_KEY_MAP.put("HKEY_CURRENT_CONFIG", HKEY_CURRENT_CONFIG);
+        ROOT_KEY_MAP.put("HKDDS", HKEY_DYN_DATA);
+        ROOT_KEY_MAP.put("HKEY_DYN_DATA", HKEY_DYN_DATA);
 
     }
 

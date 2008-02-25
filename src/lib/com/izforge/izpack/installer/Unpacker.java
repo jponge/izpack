@@ -90,8 +90,7 @@ public class Unpacker extends UnpackerBase
             // Custom action listener stuff --- load listeners ----
             List[] customActions = getCustomActions();
             // Custom action listener stuff --- beforePacks ----
-            informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, new Integer(
-                    npacks), handler);
+            informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
             packs = idata.selectedPacks;
             npacks = packs.size();
             
@@ -118,7 +117,7 @@ public class Unpacker extends UnpackerBase
                 
                 // Custom action listener stuff --- beforePack ----
                 informListeners(customActions, InstallerListener.BEFORE_PACK, packs.get(i),
-                        new Integer(npacks), handler);
+                        npacks, handler);
                 ObjectInputStream objIn = new ObjectInputStream(getPackAsStream(p.id, p.uninstall));
 
                 // We unpack the files
@@ -410,7 +409,7 @@ public class Unpacker extends UnpackerBase
 
                 // Custom action listener stuff --- afterPack ----
                 informListeners(customActions, InstallerListener.AFTER_PACK, packs.get(i),
-                        new Integer(i), handler);
+                        i, handler);
             }
 
             // We use the scripts parser

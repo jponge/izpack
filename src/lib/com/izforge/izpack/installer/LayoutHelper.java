@@ -77,9 +77,9 @@ public class LayoutHelper implements LayoutConstants
 
     protected static double FULL_COLUMN_STRETCH_DEFAULT = -1.0;
 
-    protected static Double INITIAL_STRETCH_DEFAULT = new Double(1.0);
+    protected static Double INITIAL_STRETCH_DEFAULT = 1.0;
 
-    protected static Double DOUBLE_ZERO = new Double(0.0);
+    protected static Double DOUBLE_ZERO = 0.0;
 
     /**
      * Look-up table for gap identifier to gap names for the x direction. The gap names can be used
@@ -638,9 +638,9 @@ public class LayoutHelper implements LayoutConstants
 
     public static double getFullLineStretch()
     {
-        FULL_LINE_STRETCH_DEFAULT = ((Double) getModifierValue(
-                new Double(FULL_LINE_STRETCH_DEFAULT), INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
-                "layoutFullLineStretch")).doubleValue();
+        FULL_LINE_STRETCH_DEFAULT = (Double) getModifierValue(
+                FULL_LINE_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
+                "layoutFullLineStretch");
         return (FULL_LINE_STRETCH_DEFAULT);
     }
 
@@ -655,9 +655,8 @@ public class LayoutHelper implements LayoutConstants
 
     public static double getFullColumnStretch()
     {
-        FULL_COLUMN_STRETCH_DEFAULT = ((Double) getModifierValue(new Double(
-                FULL_COLUMN_STRETCH_DEFAULT), INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
-                "layoutFullColumnStretch")).doubleValue();
+        FULL_COLUMN_STRETCH_DEFAULT = (Double) getModifierValue(FULL_COLUMN_STRETCH_DEFAULT, INITIAL_STRETCH_DEFAULT, DOUBLE_ZERO,
+                "layoutFullColumnStretch");
         return (FULL_COLUMN_STRETCH_DEFAULT);
     }
 
@@ -665,11 +664,11 @@ public class LayoutHelper implements LayoutConstants
             String key)
     {
         if (defaultVal instanceof Integer)
-            if (((Integer) currentVal).intValue() >= ((Integer) readLimit).intValue())
+            if ((Integer) currentVal >= (Integer) readLimit)
                 return (currentVal);
         if (defaultVal instanceof Double)
         {
-            if (((Double) currentVal).doubleValue() >= ((Double) readLimit).doubleValue())
+            if ((Double) currentVal >= (Double) readLimit)
                 return (currentVal);
         }
         Object retval = defaultVal;
@@ -683,8 +682,8 @@ public class LayoutHelper implements LayoutConstants
             {
                 try
                 {
-                    if (defaultVal instanceof Integer) return (new Integer(Integer.parseInt(var)));
-                    if (defaultVal instanceof Double) { return (new Double(Double.parseDouble(var))); }
+                    if (defaultVal instanceof Integer) return (Integer.parseInt(var));
+                    if (defaultVal instanceof Double) { return (Double.parseDouble(var)); }
                     return (var);
                 }
                 catch (NumberFormatException nfe)

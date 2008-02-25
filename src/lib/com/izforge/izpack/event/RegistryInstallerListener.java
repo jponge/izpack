@@ -330,7 +330,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
     {
         String root1 = substitutor.substitute(root, null);
         Integer tmp = RegistryHandler.ROOT_KEY_MAP.get(root1);
-        if (tmp != null) return (tmp.intValue());
+        if (tmp != null) return (tmp);
         getSpecHelper().parseError(regEntry, "Unknown value (" + root1 + ")for registry root.");
         return 0;
     }

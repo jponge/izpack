@@ -87,7 +87,7 @@ class PacksModel extends AbstractTableModel
 
     public PacksModel(PacksPanelInterface panel, InstallData idata, RulesEngine rules)
     {                
-        modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION)).booleanValue();
+        modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
         this.installedpacks = new HashMap();
         
         if (modifyinstallation) {
@@ -265,7 +265,7 @@ class PacksModel extends AbstractTableModel
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
-            namesPos.put(pack.name, new Integer(i));
+            namesPos.put(pack.name, i);
         }
         // Init to the first values
         for (int i = 0; i < packs.size(); i++)
@@ -342,7 +342,7 @@ class PacksModel extends AbstractTableModel
      */
     private int getPos(String name)
     {
-        return (namesPos.get(name)).intValue();
+        return namesPos.get(name);
     }
 
     /*
@@ -399,7 +399,7 @@ class PacksModel extends AbstractTableModel
         {
         case 0:
 
-            return new Integer(checkValues[rowIndex]);
+            return checkValues[rowIndex];
 
         case 1:
 
@@ -435,7 +435,7 @@ class PacksModel extends AbstractTableModel
             {
                 Pack pack = (Pack) packs.get(rowIndex);
                 boolean packadded=false;
-                if (((Integer) aValue).intValue() == 1)
+                if ((Integer) aValue == 1)
                 {
                     packadded=true;
                     String packid = pack.id;

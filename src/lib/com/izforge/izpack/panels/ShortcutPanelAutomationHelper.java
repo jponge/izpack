@@ -158,12 +158,12 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
             data.name = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
             data.addToGroup = Boolean.valueOf(
-                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_GROUP)).booleanValue();
+                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_GROUP));
 
             if (OsVersion.IS_WINDOWS)
             {
                 data.type = Integer.valueOf(
-                        dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TYPE)).intValue();
+                        dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TYPE));
             }
             else
             {
@@ -174,10 +174,9 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
             data.description = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_DESCRIPTION);
             data.iconFile = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_ICON);
             data.iconIndex = Integer.valueOf(
-                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_ICON_INDEX)).intValue();
+                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_ICON_INDEX));
             data.initialState = Integer.valueOf(
-                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_INITIAL_STATE))
-                    .intValue();
+                    dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_INITIAL_STATE));
             data.target = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TARGET);
             data.workingDirectory = dataElement
                     .getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_WORKING_DIR);
@@ -212,7 +211,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
                     "false"));
             data.userType = Integer.valueOf(
                     dataElement.getAttribute(ShortcutPanel.USER_TYPE, Integer
-                            .toString(Shortcut.CURRENT_USER))).intValue();
+                            .toString(Shortcut.CURRENT_USER)));
             // END LINUX
             shortcuts.add(data);
         }

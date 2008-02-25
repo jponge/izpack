@@ -87,7 +87,7 @@ public class JavaCondition extends Condition {
                 if ("boolean".equals(this.returnvaluetype)) {
                     try {
                         boolean returnval = this.usedfield.getBoolean(null);
-                        boolean expectedreturnval = Boolean.valueOf(this.returnvalue).booleanValue();
+                        boolean expectedreturnval = Boolean.valueOf(this.returnvalue);
                         return returnval == expectedreturnval;
                     } catch (IllegalArgumentException e) {
                         Debug.log("IllegalArgumentexeption " + this.fieldname);

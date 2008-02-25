@@ -255,7 +255,7 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
         case REG_BINARY:
             return (getBinData());
         case REG_DWORD:
-            return (new Long(getDwordData()));
+            return (getDwordData());
         case REG_MULTI_SZ:
             return (getMultiStringData());
         default:

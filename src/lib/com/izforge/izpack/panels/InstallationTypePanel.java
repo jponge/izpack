@@ -58,7 +58,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
         
         ButtonGroup group = new ButtonGroup();
         
-        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION)).booleanValue();
+        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
 
         normalinstall = new JRadioButton(parent.langpack.getString("InstallationTypePanel.normal"), !modifyinstallation);
         normalinstall.addActionListener(this);
@@ -84,7 +84,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener
      */
     public void panelActivate()
     {
-        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION)).booleanValue();
+        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
         if (modifyinstallation) {
             modifyinstall.setSelected(true);
         }

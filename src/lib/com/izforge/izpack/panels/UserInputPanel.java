@@ -932,7 +932,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                         add((JComponent) uiElement[POS_FIELD], uiElement[POS_CONSTRAINTS]);
                     }
 
-                    uiElement[POS_DISPLAYED] = Boolean.valueOf(true);
+                    uiElement[POS_DISPLAYED] = true;
                     uiElements.remove(i);
                     uiElements.add(i, uiElement);
                 }
@@ -957,7 +957,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     System.out.println("Internal format error in field: "
                             + uiElement[POS_TYPE].toString()); // !!! logging
                 }
-                uiElement[POS_DISPLAYED] = Boolean.valueOf(false);
+                uiElement[POS_DISPLAYED] = false;
                 uiElements.remove(i);
                 uiElements.add(i, uiElement);
             }
@@ -986,7 +986,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             field = uiElements.elementAt(i);
 
-            if ((field != null) && (((Boolean) field[POS_DISPLAYED]).booleanValue()))
+            if ((field != null) && ((Boolean) field[POS_DISPLAYED]))
             {
                 fieldType = (String) (field[POS_TYPE]);
 

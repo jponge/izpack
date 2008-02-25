@@ -295,7 +295,7 @@ public class Packager extends PackagerBase
                         throw new IOException("File size mismatch when reading " + file);
 
                     inStream.close();
-                    storedFiles.put(file, new Object[] { pack.id, new Long(pos)});
+                    storedFiles.put(file, new Object[] { pack.id, pos});
                 }
 
                 // even if not written, it counts towards pack size

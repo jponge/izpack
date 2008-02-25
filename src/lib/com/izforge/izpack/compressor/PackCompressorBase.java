@@ -301,7 +301,7 @@ public abstract class PackCompressorBase implements PackCompressor
         paramsClasses = new Class[2];
         paramsClasses[0] = Class.forName("java.io.OutputStream");
         paramsClasses[1] = java.lang.Integer.TYPE;
-        Object[] params = { slave, new Integer(level)};
+        Object[] params = { slave, level};
         return( params );
      }
 

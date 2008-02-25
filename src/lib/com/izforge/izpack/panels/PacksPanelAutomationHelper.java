@@ -54,7 +54,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
             XMLElement el = new XMLElement("pack");
             el.setAttribute("index", Integer.toString(i));
             el.setAttribute("name", pack.name);
-            Boolean selected = Boolean.valueOf(idata.selectedPacks.contains(pack));
+            Boolean selected = idata.selectedPacks.contains(pack);
             el.setAttribute("selected", selected.toString());
 
             panelRoot.addChild(el);
@@ -84,7 +84,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
             XMLElement el = pm.get(i);
             Boolean selected = Boolean.TRUE; // No longer needed.
 
-            if (selected.booleanValue())
+            if (selected)
             {
                 String index_str = el.getAttribute("index");
 

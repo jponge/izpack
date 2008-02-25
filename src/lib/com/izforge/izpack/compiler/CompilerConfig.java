@@ -950,7 +950,7 @@ public class CompilerConfig extends Thread
             // get the name of reference xml file
         	String refFileName = requireAttribute(el, "file");
         	String selfcontained = el.getAttribute("selfcontained");
-        	boolean isselfcontained = Boolean.valueOf(selfcontained).booleanValue();
+        	boolean isselfcontained = Boolean.valueOf(selfcontained);
         	
         	
         	File refXMLFile = new File(refFileName);
@@ -1106,7 +1106,7 @@ public class CompilerConfig extends Thread
         for (Iterator<Edge> iterator = keys.iterator(); iterator.hasNext();)
         {
             final Object key = iterator.next();
-            int color = (edges.get(key)).intValue();
+            int color = edges.get(key);
             if (color == PackInfo.GREY) { return -2; }
         }
         return 0;
@@ -1146,7 +1146,7 @@ public class CompilerConfig extends Thread
                     return -1;
                 }
                 Edge edge = new Edge(u, v);
-                if (edges.get(edge) == null) edges.put(edge, new Integer(v.colour));
+                if (edges.get(edge) == null) edges.put(edge, v.colour);
 
                 if (v.colour == PackInfo.WHITE)
                 {
@@ -1991,7 +1991,7 @@ public class CompilerConfig extends Thread
         }
         else {
             Debug.trace("yes/no not found. trying true/false");
-            result = Boolean.valueOf(value).booleanValue();
+            result = Boolean.valueOf(value);
         }   
         return result;
     }

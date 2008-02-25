@@ -429,7 +429,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         String shortCutDef = this.replace();
 
         boolean rootUser4All = this.getUserType() == Shortcut.ALL_USERS;
-        boolean create4All = this.getCreateForAll().booleanValue();
+        boolean create4All = this.getCreateForAll();
         
         // Create The Desktop Shortcuts
         if ("".equals(this.itsGroupName) && (this.getLinkType() == Shortcut.DESKTOP))

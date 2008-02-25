@@ -120,7 +120,7 @@ public class ShortcutData implements Cloneable
         result.Categories = cloneString(Categories);
         result.TryExec = cloneString(TryExec);
         
-        result.createForAll = Boolean.valueOf(createForAll.booleanValue());
+        result.createForAll = createForAll.booleanValue();
         return (result);
     }
 
