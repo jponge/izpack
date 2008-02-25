@@ -70,6 +70,8 @@ public class Info implements Serializable
     private String packDecoderClassName = null;
 
     private String unpackerClassName = null;
+    
+    private boolean writeInstallationInformation = true;
 
     /** The constructor, deliberatly void. */
     public Info()
@@ -375,5 +377,17 @@ public class Info implements Serializable
     public void setUnpackerClassName(String unpackerClassName)
     {
         this.unpackerClassName = unpackerClassName;
+    }
+
+    
+    public boolean isWriteInstallationInformation()
+    {
+        return writeInstallationInformation;
+    }
+
+    
+    public void setWriteInstallationInformation(boolean writeInstallationInformation)
+    {
+        this.writeInstallationInformation = writeInstallationInformation;
     }
 }

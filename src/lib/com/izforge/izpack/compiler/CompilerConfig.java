@@ -39,6 +39,7 @@ import com.izforge.izpack.event.CompilerListener;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 import net.n3.nanoxml.IXMLParser;
@@ -1521,6 +1522,11 @@ public class CompilerConfig extends Thread
         XMLElement slfPath = root.getFirstChildNamed("summarylogfilepath");
         if (slfPath != null) info.setSummaryLogFilePath(requireContent(slfPath));
 
+        XMLElement writeInstallInfo = root.getFirstChildNamed("writeinstallationinformation");
+        
+        String writeInstallInfoString = requireContent(writeInstallInfo);        
+        info.setWriteInstallationInformation(validateYesNo(writeInstallInfoString));
+        
         // look for an unpacker class
         String unpackerclass = compiler.getProperty("UNPACKER_CLASS");
         info.setUnpackerClassName(unpackerclass);
@@ -1972,6 +1978,22 @@ public class CompilerConfig extends Thread
             parseError(element, "<" + element.getName() + "> requires content");
         return content;
     }
+    
+    protected boolean validateYesNo(String value){
+        boolean result = false;
+        if ("yes".equalsIgnoreCase(value)){
+            result = true;
+        }
+        else if ("no".equalsIgnoreCase(value)){
+            result = false;
+        }
+        else {
+            Debug.trace("yes/no not found. trying true/false");
+            result = Boolean.valueOf(value).booleanValue();
+        }   
+        return result;
+    }
+    
 
     /**
      * Call getAttribute on an element, producing a meaningful error message if not present, or

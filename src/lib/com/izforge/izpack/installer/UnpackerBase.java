@@ -814,8 +814,12 @@ public abstract class UnpackerBase implements IUnpacker
      * installation time.
      * @throws IOException 
      * @throws ClassNotFoundException 
-     */
+     */    
     public void writeInstallationInformation() throws IOException, ClassNotFoundException {
+        if (!idata.info.isWriteInstallationInformation()){
+            Debug.trace("skip writing installation information");
+            return;
+        }
         Debug.trace("writing installation information");
         String installdir = idata.getInstallPath();
         
