@@ -142,7 +142,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
    private static final String LANG_FILE_NAME = "packsLang.xml";
 
    private HashMap<String, Pack> idToPack;
-   private HashMap treeData;
+   private HashMap<String, ArrayList<String>> treeData;
    private HashMap<Pack, Integer> packToRowNumber;
    
    private HashMap<String, CheckBoxNode> idToCheckBoxNode = new HashMap<String, CheckBoxNode>();
@@ -624,7 +624,7 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
     */
    private void createTreeData()
    {
-      treeData = new HashMap();
+      treeData = new HashMap<String, ArrayList<String>>();
       idToPack = new HashMap<String, Pack>();
 
       java.util.Iterator iter = idata.availablePacks.iterator();
@@ -634,12 +634,12 @@ public class TreePacksPanel  extends IzPanel implements PacksPanelInterface
          idToPack.put(p.id, p);
          if(p.parent != null)
          {
-            ArrayList kids = null;
+            ArrayList<String> kids = null;
             if(treeData.containsKey(p.parent))
-               kids = (ArrayList)treeData.get(p.parent);
+               kids = treeData.get(p.parent);
             else
             {
-               kids = new ArrayList();
+               kids = new ArrayList<String>();
             }
             kids.add(p.id);
             treeData.put(p.parent, kids);

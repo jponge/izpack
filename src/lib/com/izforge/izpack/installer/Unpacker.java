@@ -535,10 +535,10 @@ public class Unpacker extends UnpackerBase
         }
         if( in != null && idata.info.getPackDecoderClassName() != null )
         {
-            Class decoder = Class.forName(idata.info.getPackDecoderClassName());
+            Class<Object> decoder = (Class<Object>) Class.forName(idata.info.getPackDecoderClassName());
             Class[] paramsClasses = new Class[1];
             paramsClasses[0] = Class.forName("java.io.InputStream");
-            Constructor constructor = decoder.getDeclaredConstructor(paramsClasses);
+            Constructor<Object> constructor = decoder.getDeclaredConstructor(paramsClasses);
             // Our first used decoder input stream (bzip2) reads byte for byte from
             // the source. Therefore we put a buffering stream between it and the
             // source.

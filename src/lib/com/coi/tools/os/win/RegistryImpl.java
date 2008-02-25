@@ -627,9 +627,9 @@ public class RegistryImpl implements MSWinConstants
      * 
      * @return a copy of the colected logging informations
      */
-    public List getLoggingInfo()
+    public List<Object> getLoggingInfo()
     {
-        ArrayList retval = new ArrayList(logging.size());
+        ArrayList<Object> retval = new ArrayList<Object>(logging.size());
         Iterator iter = logging.iterator();
         while (iter.hasNext())
             try

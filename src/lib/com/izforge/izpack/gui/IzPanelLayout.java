@@ -31,7 +31,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -52,7 +51,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
 {
 
     /** holds all the components and layout constraints. */
-    private ArrayList components = new ArrayList();
+    private ArrayList<ArrayList<IzPanelConstraints>> components = new ArrayList<ArrayList<IzPanelConstraints>>();
 
     /** Maximum rows to handle symbolic values like NEXT_ROW in constraints. */
     private int currentYPos = 0;
@@ -579,7 +578,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         {
             try
             {
-                obj = ((ArrayList) components.get(col)).get(row);
+                obj = (components.get(col)).get(row);
             }
             catch (Throwable t)
             {
@@ -590,7 +589,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
             // was added under this component.
             // Put dummy components into the array.
 
-            ArrayList colA = (ArrayList) components.get(col);
+            ArrayList<IzPanelConstraints> colA = components.get(col);
             for (int curRow = colA.size(); row >= curRow; ++curRow)
             {
 
@@ -601,7 +600,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 currentConst.component = new FillerComponent();
                 try
                 {
-                    ((ArrayList) components.get(col)).add(row, currentConst);
+                    (components.get(col)).add(row, currentConst);
                 }
                 catch (Throwable t)
                 {
@@ -1077,12 +1076,12 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
         if (components.size() < cc.getXPos() + perfCol)
         {
             for (i = components.size() - 1; i < cc.getXPos() + perfCol - 1; ++i)
-                components.add(new ArrayList());
+                components.add(new ArrayList<IzPanelConstraints>());
         }
         IzPanelConstraints curConst = cc;
         for (int j = 0; j < perfCol; ++j)
         {
-            ArrayList xComp = (ArrayList) components.get(xPos);
+            ArrayList<IzPanelConstraints> xComp = components.get(xPos);
             if (xComp.size() < yPos)
             {
                 for (i = xComp.size() - 1; i < yPos - 1; ++i)
@@ -1102,7 +1101,7 @@ public class IzPanelLayout implements LayoutManager, LayoutManager2, LayoutConst
                 xPos++;
             }
         }
-        int xcsize = ((ArrayList) components.get(xPos)).size() - 1;
+        int xcsize = (components.get(xPos)).size() - 1;
         if (currentYPos < xcsize) currentYPos = xcsize;
         currentXPos = xPos;
 

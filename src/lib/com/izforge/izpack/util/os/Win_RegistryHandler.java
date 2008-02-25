@@ -301,7 +301,7 @@ public class Win_RegistryHandler extends RegistryHandler
         regWorker.resetLogging();
     }
 
-    public List getLoggingInfo() throws NativeLibException
+    public List<Object> getLoggingInfo() throws NativeLibException
     {
         if (!good()) return (null);
         return (regWorker.getLoggingInfo());

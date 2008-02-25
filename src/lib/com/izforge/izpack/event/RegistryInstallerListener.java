@@ -149,7 +149,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
             // This is the common way to transport informations from an
             // installer CustomAction to the corresponding uninstaller
             // CustomAction.
-            List info = rh.getLoggingInfo();
+            List<Object> info = rh.getLoggingInfo();
             if (info != null)
                 UninstallData.getInstance().addAdditionalData("registryEntries", info);
 

@@ -269,16 +269,17 @@ public class MultiVolumePackager extends PackagerBase
     {
         sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
 
-        Iterator<String> i = installerResourceURLMap.keySet().iterator();
-        while (i.hasNext())
+        for (String s : installerResourceURLMap.keySet())
         {
-            String name = i.next();
+            String name = s;
             InputStream in = (installerResourceURLMap.get(name)).openStream();
 
             org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(name);
             long dateTime = FileUtil.getFileDateTime(installerResourceURLMap.get(name));
             if (dateTime != -1)
+            {
                 newEntry.setTime(dateTime);
+            }
             primaryJarStream.putNextEntry(newEntry);
 
             copyStream(in, primaryJarStream);
@@ -292,10 +293,9 @@ public class MultiVolumePackager extends PackagerBase
     {
         sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
 
-        Iterator<Object[]> i = includedJarURLs.iterator();
-        while (i.hasNext())
+        for (Object[] includedJarURL : includedJarURLs)
         {
-            Object[] current = i.next();
+            Object[] current = includedJarURL;
             InputStream is = ((URL) current[0]).openStream();
             ZipInputStream inJarStream = new ZipInputStream(is);
             copyZip(inJarStream, primaryJarStream, (List<String>) current[1]);
@@ -339,10 +339,9 @@ public class MultiVolumePackager extends PackagerBase
         fout.setFirstvolumefreespacesize(extraspacel);
 
         int packNumber = 0;
-        Iterator<PackInfo> packIter = packsList.iterator();
-        while (packIter.hasNext())
+        for (PackInfo aPacksList : packsList)
         {
-            PackInfo packInfo = packIter.next();
+            PackInfo packInfo = aPacksList;
             Pack pack = packInfo.getPack();
             pack.nbytes = 0;
 
@@ -359,10 +358,10 @@ public class MultiVolumePackager extends PackagerBase
             objOut.writeInt(packInfo.getPackFiles().size());
 
             Iterator iter = packInfo.getPackFiles().iterator();
-            while (iter.hasNext())
+            for (Object o : packInfo.getPackFiles())
             {
                 boolean addFile = !pack.loose;
-                XPackFile pf = new XPackFile((PackFile) iter.next());
+                XPackFile pf = new XPackFile((PackFile) o);
                 File file = packInfo.getFile(pf.getPackfile());
                 Debug.trace("Next file: " + file.getAbsolutePath());
                 // use a back reference if file was in previous pack, and in
@@ -371,7 +370,7 @@ public class MultiVolumePackager extends PackagerBase
                 if (info != null && !packJarsSeparate)
                 {
                     Debug.trace("File already included in other pack");
-                    pf.setPreviousPackFileRef((String) info[0], (Long)info[1]);
+                    pf.setPreviousPackFileRef((String) info[0], (Long) info[1]);
                     addFile = false;
                 }
 
@@ -395,15 +394,18 @@ public class MultiVolumePackager extends PackagerBase
                     {
                         Debug.trace("file: " + file.getName());
                         Debug.trace("(Filepos/BytesWritten/ExpectedNewFilePos/NewFilePointer) ("
-                                        + pos + "/" + bytesWritten + "/" + (pos + bytesWritten)
-                                        + "/" + fout.getFilepointer() + ")");
+                                + pos + "/" + bytesWritten + "/" + (pos + bytesWritten)
+                                + "/" + fout.getFilepointer() + ")");
                         Debug.trace("Volumecount (before/after) ("
                                 + volumecountbeforewrite + "/" + fout.getVolumeCount() + ")");
                         throw new IOException("Error new filepointer is illegal");
                     }
 
-                    if (bytesWritten != pf.length()) { throw new IOException(
-                            "File size mismatch when reading " + file); }
+                    if (bytesWritten != pf.length())
+                    {
+                        throw new IOException(
+                                "File size mismatch when reading " + file);
+                    }
                     inStream.close();
                     // keine backreferences mglich
                     // storedFiles.put(file, new long[] { packNumber, pos});
@@ -418,19 +420,25 @@ public class MultiVolumePackager extends PackagerBase
             objOut.writeInt(packInfo.getParsables().size());
             iter = packInfo.getParsables().iterator();
             while (iter.hasNext())
-                objOut.writeObject(iter.next());
+            {
+                objOut.writeObject(aPacksList);
+            }
 
             // Write out information about executable files
             objOut.writeInt(packInfo.getExecutables().size());
             iter = packInfo.getExecutables().iterator();
             while (iter.hasNext())
-                objOut.writeObject(iter.next());
+            {
+                objOut.writeObject(aPacksList);
+            }
 
             // Write out information about updatecheck files
             objOut.writeInt(packInfo.getUpdateChecks().size());
             iter = packInfo.getUpdateChecks().iterator();
             while (iter.hasNext())
-                objOut.writeObject(iter.next());
+            {
+                objOut.writeObject(aPacksList);
+            }
 
             // Cleanup
             objOut.flush();
@@ -457,10 +465,9 @@ public class MultiVolumePackager extends PackagerBase
         out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(packsList.size());
 
-        Iterator<PackInfo> i = packsList.iterator();
-        while (i.hasNext())
+        for (PackInfo aPacksList : packsList)
         {
-            PackInfo pack = i.next();
+            PackInfo pack = aPacksList;
             out.writeObject(pack.getPack());
         }
         out.flush();

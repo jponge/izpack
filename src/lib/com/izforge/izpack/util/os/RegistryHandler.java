@@ -313,7 +313,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
     {
     }
 
-    public List getLoggingInfo() throws NativeLibException
+    public List<Object> getLoggingInfo() throws NativeLibException
     {
         return (null);
     }
