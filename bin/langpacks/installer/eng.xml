@@ -242,7 +242,7 @@
   	<str id="nextmedia.okbtn" txt="Apply" />
 	  <str id="nextmedia.cancelbtn" txt="Cancel" />	
     <str id="nextmedia.choosertitle" txt="Choose install media" />
-    <str id="nextmedia.filedesc" rdid="install packs (.pak*)" />
+    <str id="nextmedia.filedesc" txt="install packs (.pak*)" />
 
     <!-- Strings for the logging/reporting system (Messenger) -->
 
