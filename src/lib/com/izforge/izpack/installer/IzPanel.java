@@ -328,7 +328,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * further through the installation process until the panel is validated. Default behaviour is
      * to return <code>true</code>.
      * 
-     * @return A boolean stating wether the panel has been validated or not.
+     * @return A boolean stating whether the panel has been validated or not.
      */
     public boolean isValidated()
     {

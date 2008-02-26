@@ -76,7 +76,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
-import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
@@ -134,10 +133,11 @@ public class InstallerFrame extends JFrame
      */
     private static final String ICON_RESOURCE_EXT_VARIABLE_NAME = "installerimage.ext";
 
-
+    /**
+     * Heading icon resource name.
+     */
     private static final String HEADING_ICON_RESOURCE = "Heading.image";
 
-    // private static final int HEADINGLINES = 1;
 
     /**
      * The language pack.
@@ -235,9 +235,6 @@ public class InstallerFrame extends JFrame
     
     private Map<String, DynamicVariable> dynamicvariables;
     private VariableSubstitutor substitutor;
-    
-    
-    private JTextPane debugtxt;
     private Debugger debugger;
 
     /**
@@ -280,6 +277,10 @@ public class InstallerFrame extends JFrame
         return this.debugger;
     }
     
+    /**
+     * Refreshes Dynamic Variables.
+     *
+     */
     private void refreshDynamicVariables() {        
         if (dynamicvariables != null) {
             Iterator<String> iter = dynamicvariables.keySet().iterator();
@@ -304,6 +305,10 @@ public class InstallerFrame extends JFrame
         }
     }
 
+    /**
+     * Loads Dynamic Variables.
+     *
+     */
     private void loadDynamicVariables()
     {
         try {
@@ -313,7 +318,7 @@ public class InstallerFrame extends JFrame
             objIn.close();
         }
         catch (Exception e) {
-            Debug.trace("Can not find optional dynamic variables");   
+            Debug.trace("Cannot find optional dynamic variables");   
             System.out.println(e);
         }        
     }
@@ -401,7 +406,7 @@ public class InstallerFrame extends JFrame
             String praefix = "com.izforge.izpack.panels.";
             if (className.indexOf('.') > -1)
             // Full qualified class name
-                praefix = "";
+            praefix = "";
             objectClass = Class.forName(praefix + className);
             constructor = objectClass.getDeclaredConstructor(paramsClasses);
             installdata.currentPanel = p; // A hack to use meta data in IzPanel constructor
@@ -648,6 +653,16 @@ public class InstallerFrame extends JFrame
             (iter.next()).guiActionPerformed(what, param);
     }
 
+    /**
+     * Loads icon for given panel.
+     * 
+     * @param resPrefix resources prefix.
+     * @param PanelNo panel id.
+     * @param tryBaseIcon should try to fallback to base icon?
+     * @return icon image
+     * @throws ResourceNotFoundException
+     * @throws IOException
+     */
     private ImageIcon loadIcon(String resPrefix, int PanelNo, boolean tryBaseIcon)
             throws ResourceNotFoundException, IOException
     {
@@ -670,6 +685,15 @@ public class InstallerFrame extends JFrame
         return (icon);
     }
 
+    /**
+     * Loads icon for given panel id.
+     * @param resPrefix resource prefix.
+     * @param panelid panel id.
+     * @param tryBaseIcon should try to load base icon?
+     * @return image icon
+     * @throws ResourceNotFoundException
+     * @throws IOException
+     */
     private ImageIcon loadIcon(String resPrefix, String panelid, boolean tryBaseIcon)
             throws ResourceNotFoundException, IOException
     {
@@ -803,6 +827,9 @@ public class InstallerFrame extends JFrame
         setVisible(true);
     }
 
+    /**
+     * Here is persisted the direction of panel traversing.
+     */
     private boolean isBack = false;
 
     /**
@@ -1260,7 +1287,10 @@ public class InstallerFrame extends JFrame
      */
     public void exit()
     {
-        if (installdata.canClose)
+        if (installdata.canClose || 
+            ((!nextButton.isVisible() || !nextButton.isEnabled())  &&
+             (!prevButton.isVisible() || !prevButton.isEnabled()))
+           )
         {
             // this does nothing if the uninstaller was not included
             writeUninstallData();
@@ -1400,7 +1430,7 @@ public class InstallerFrame extends JFrame
         }
     }
 
-    /*
+    /**
      * FocusTraversalPolicy objects to handle keybord blocking; the declaration os Object allows to
      * use a pre version 1.4 VM.
      */
@@ -1492,18 +1522,21 @@ public class InstallerFrame extends JFrame
         {
             if (isBack)
             {
-                installdata.curPanelNumber--;
-                switchPanel(installdata.curPanelNumber + 1);
+                navigatePrevious(installdata.curPanelNumber);
             }
             else
             {
-                installdata.curPanelNumber++;
-                switchPanel(installdata.curPanelNumber - 1);
+                navigateNext(installdata.curPanelNumber, false);
             }
-
         }
     }
 
+    /**
+     * Method checks whether conditions are met to show the given panel.
+     * 
+     * @param panelnumber the panel number to check
+     * @return true or false
+     */
     public boolean canShow(int panelnumber)
     {
         IzPanel panel = installdata.panels.get(panelnumber);
@@ -1541,14 +1574,29 @@ public class InstallerFrame extends JFrame
         this.navigateNext(installdata.curPanelNumber);
     }
 
-    public void navigateNext(int last)
+    /**
+     * This function searches for the next available panel, the search
+     * begins from given panel+1. 
+     * @param startPanel the starting panel number 
+     */
+    public void navigateNext(int startPanel) {
+        this.navigateNext(startPanel, true);        
+    }
+    
+    /**
+     * This function searches for the next available panel, the search
+     * begins from given panel+1.
+     * 
+     * @param startPanel the starting panel number
+     * @param doValidation whether to do panel validation
+     */
+    public void navigateNext(int startPanel, boolean doValidation)
     {
         if ((installdata.curPanelNumber < installdata.panels.size() - 1))
         {
             // We must trasfer all fields into the variables before
             // panelconditions try to resolve the rules based on unassigned vars.
-            boolean isValid = 
-              (installdata.panels.get(last)).isValidated();
+            boolean isValid = doValidation ? ((IzPanel) installdata.panels.get(startPanel)).isValidated() : true;
           
             // if this is not here, validation will
             // occur mutilple times while skipping panels through the recursion
@@ -1557,21 +1605,15 @@ public class InstallerFrame extends JFrame
             installdata.curPanelNumber++;
             if (!canShow(installdata.curPanelNumber))
             {
-                this.navigateNext(last);
+                this.navigateNext(startPanel, false);
             }
             else
             {
-                if (isValid)
-                {
-                    switchPanel(last);
-                }
-                else {
-                    installdata.curPanelNumber--;
-                }
+                switchPanel(startPanel);
             }
         }
     }
-
+    
     /**
      * This function moves to the previous panel
      */
@@ -1583,18 +1625,23 @@ public class InstallerFrame extends JFrame
         this.navigatePrevious(installdata.curPanelNumber);
     }
 
-    public void navigatePrevious(int last)
+    /**
+     * This function switches to available panel that is just before given one.
+     * 
+     * @param endingPanel the panel is searched backwards, beginning from this.
+     */
+    public void navigatePrevious(int endingPanel)
     {
         if ((installdata.curPanelNumber > 0))
         {
             installdata.curPanelNumber--;
             if (!canShow(installdata.curPanelNumber))
             {
-                this.navigatePrevious(last);
+                this.navigatePrevious(endingPanel);
             }
             else
             {
-                switchPanel(last);
+                switchPanel(endingPanel);
             }
         }
     }
@@ -1701,6 +1748,12 @@ public class InstallerFrame extends JFrame
         guiListener.add(listener);
     }
 
+    /**
+     * Creates heading labels.
+     * 
+     * @param headingLines the number of lines of heading labels
+     * @param back background color (currently not used)
+     */
     private void createHeadingLabels(int headingLines, Color back)
     {
         // headingLabels are an array which contains the labels for header (0),
@@ -1740,6 +1793,13 @@ public class InstallerFrame extends JFrame
 
     }
 
+    /**
+     * Creates heading panel counter.
+     * 
+     * @param back background color
+     * @param navPanel navi JPanel 
+     * @param leftHeadingPanel left heading JPanel
+     */
     private void createHeadingCounter(Color back, JPanel navPanel, JPanel leftHeadingPanel)
     {
         int i;
@@ -1798,6 +1858,12 @@ public class InstallerFrame extends JFrame
         }
     }
 
+    /**
+     * Creates heading icon.
+     * 
+     * @param back the color of background around image.
+     * @return a panel with heading image.
+     */
     private JPanel createHeadingIcon(Color back)
     {
         // the icon
@@ -1832,6 +1898,10 @@ public class InstallerFrame extends JFrame
 
     }
 
+    /**
+     * Creates a Heading in given Panel.
+     * @param navPanel a panel  
+     */
     private void createHeading(JPanel navPanel)
     {
         headingPanel = null;
