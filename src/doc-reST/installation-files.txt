@@ -200,6 +200,18 @@ are available:
     where parameters are surrounded with AT characters (similar to ANT 
     filters, hence the type name). The example: ``@variable@``.
 
+Unless using braces to surround variable's name (``${variable}`` or ``%{variable}``}, 
+the variable name can contain following characters:
+letters, digits, dots, dashes (-), underbars (_). 
+Example:
+``$this.is-my_variable``
+
+If you want to have two variables separated by character that is allowed 
+to appear in variable name, for example: ``$major-version.$minor-version``,
+then you must use braces, and the above example should look like:
+``${major-version}.${minor-version}``.
+
+
 
 The IzPack Elements
 -------------------
