@@ -25,6 +25,7 @@
     <str id="SummaryPanel.headline" txt="Yhteenveto asetustiedoista"/>
     <str id="TargetPanel.headline" txt="Kohdepolku"/>
     <str id="UserInputPanel.headline" txt="Käyttäjän data"/>
+    <str id="UserPathPanel.headline" txt="Valitse polku"/>
     <str id="InstallationTypePanel.headline" txt="Asennuksen tyyppi" />
 
     <!-- General installer strings -->
@@ -83,7 +84,7 @@
     <str id="TargetPanel.warn"
          txt="Hakemisto on jo olemassa! Haluatko varmasti asentaa kyseiseen hakemistoon ja mahdollisesti korvata olemassa olevat tiedostot?"/>
     <str id="TargetPanel.empty_target"
-         txt="Et ole määritellyt asennushakemistoa! Haluatko varmasti jatkaa?"/>
+         txt="Et ole antanut asennushakemistoa! Onko tämä oikein?"/>
    <str id="TargetPanel.createdir" txt="Luodaan asennushakemisto: " />
     <str id="TargetPanel.nodir"
          txt="Valittu tiedosto ei ole hakemisto! Ole hyvä ja valitse hakemisto!"/>
@@ -168,6 +169,16 @@
     <str id="UserInputPanel.error.caption"        txt="Syöttöongelma"/>
     <str id="UserInputPanel.search.autodetect"    txt="Automaattinen tunnistus"/>
 
+    <str id="UserInputPanel.dir.nodirectory.message"   txt="Sinun täytyy valita kelvollinen hakemisto."/>
+    <str id="UserInputPanel.dir.nodirectory.caption"   txt="Hakemistoa ei valittu"/>
+    <str id="UserInputPanel.dir.notdirectory.message"   txt="Valitsemasi hakemisto ei ole olemassa tai ei ole käyttökelpoinen."/>
+    <str id="UserInputPanel.dir.notdirectory.caption"   txt="Kelvoton hakemisto"/>
+    <str id="UserInputPanel.file.nofile.message"   txt="Sinun täytyy valita kelvollinen tiedosto."/>
+    <str id="UserInputPanel.file.nofile.caption"   txt="Tiedostoa ei valittu"/>
+    <str id="UserInputPanel.file.notfile.message"   txt="Valitsemasi tiedosto ei ole olemassa tai ei ole käyttökelpoinen."/>
+    <str id="UserInputPanel.file.notfile.caption"   txt="Kelvoton tiedosto"/>
+
+
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
     <str id="UserInputPanel.search.autodetect.failed.message"    txt="Automaattinen tunnistus epäonnistui."/>
     <str id="UserInputPanel.search.autodetect.failed.caption"    txt="Automaattinen tunnistus"/>
@@ -177,6 +188,15 @@
     <str id="UserInputPanel.search.browse"           txt="Selaa..."/>
     <str id="UserInputPanel.search.wrongselection.message"   txt="Valitsemasi tiedosto tai hakemisto ei ole olemassa tai ei ole käyttökelpoinen."/>
     <str id="UserInputPanel.search.wrongselection.caption"   txt="Väärä valinta."/>
+
+    <str id="UserPathPanel.required" txt="Valitun hakemiston on oltava olemassa."/>
+    <str id="UserPathPanel.info" txt="Valitse polku: "/>
+    <str id="UserPathPanel.browse" txt="Selaa"/>
+    <str id="UserPathPanel.exists_warn" txt="Hakemisto on jo olemassa! Haluatko varmasti asentaa kyseiseen hakemistoon ja mahdollisesti korvata olemassa olevat tiedostot?"/>
+    <str id="UserPathPanel.empty_target" txt="Et ole antanut asennushakemistoa! Onko tämä oikein?"/>
+    <str id="UserPathPanel.createdir" txt="Luodaan asennushakemisto: " />
+    <str id="UserPathPanel.nodir"  txt="Valittu tiedosto ei ole hakemisto! Ole hyvä ja valitse hakemisto!"/>
+    <str id="UserPathPanel.notwritable" txt="Hakemistoon ei voi kirjoittaa! Ole hyvä ja valitse toinen hakemisto!"/>
 
     <str id="CompilePanel.heading" txt="Käännös" />
     <str id="CompilePanel.tip" txt="Käännöksen tila:" />
@@ -206,13 +226,14 @@
     <str id="JDKPathPanel.summaryCaption" txt="JDK polku"/>
     <str id="PacksPanel.summaryCaption" txt="Valitut asennuspaketit"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Valitut asennuspaketit"/>
+    <str id="UserPathPanel.summaryCaption" txt="Valittu polku"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->
-    <str id="functionFailed.RegOpenKeyEx" txt="Ei voi avata rekisteriavainta {0}\\{1}."/>
+    <str id="functionFailed.RegOpenKeyEx" txt="Ei voida avata rekisteriavainta {0}\\{1}."/>
 
     <!-- Add your own panels specific strings here if you need or use a custom
-         langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
+         langpack with the same syntax referred as resource CustomLangpack.xml_[ISO3]"
     -->
 
     <str id="nextmedia.title" txt="Seuraava asennusmedia" />
@@ -223,7 +244,7 @@
     <str id="nextmedia.choosertitle" txt="Valitse asennusmedia" />
     <str id="nextmedia.filedesc" rdid="asennuspaketit (.pak*)" />
 
-    <!-- Strings for the loggin/reporting system (Messenger) -->
+    <!-- Strings for the logging/reporting system (Messenger) -->
 
     <!-- This string defines the time stamp format in the installation report.
          The format details are documented in java.text.SimpleDateFormat -->
