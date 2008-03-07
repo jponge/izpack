@@ -1332,42 +1332,17 @@ public class InstallerFrame extends JFrame
      */
     protected void wipeAborted()
     {
-        Iterator<String> it;
-
         // We set interrupt to all running Unpacker and wait 40 sec for maximum.
         // If interrupt is discarded (return value false), return immediately:
         if (!Unpacker.interruptAll(40000)) return;
 
-        // Wipes them all in 2 stages
+        // Wipe the files that had been installed
         UninstallData u = UninstallData.getInstance();
-        it = u.getInstalledFilesList().iterator();
-        if (!it.hasNext()) return;
-        while (it.hasNext())
+        for (String p : u.getInstalledFilesList())
         {
-            String p = it.next();
             File f = new File(p);
             f.delete();
         }
-        String fullCleanup = installdata.getVariable("InstallerFrame.cleanAllAtInterrupt");
-        if (fullCleanup == null || !"no".equalsIgnoreCase(fullCleanup))
-            cleanWipe(new File(installdata.getInstallPath()));
-    }
-
-    /**
-     * Recursive files wiper.
-     * 
-     * @param file The file to wipe.
-     */
-    private void cleanWipe(File file)
-    {
-        if (file.isDirectory())
-        {
-            File[] files = file.listFiles();
-            int size = files.length;
-            for (int i = 0; i < size; i++)
-                cleanWipe(files[i]);
-        }
-        file.delete();
     }
 
     /**
