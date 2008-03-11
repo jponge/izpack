@@ -15,19 +15,21 @@
     <str id="HTMLInfoPanel.headline" txt="Informatie" />
     <str id="HTMLLicencePanel.headline" txt="Licentieovereenkomst" />
     <str id="ImgPacksPanel.headline"
-        txt="Selecteer Installatie pakketten" />
+        txt="Selecteer Installatiepakketten" />
     <str id="InfoPanel.headline" txt="Informatie" />
     <str id="InstallPanel.headline" txt="Installatie" />
     <str id="JDKPathPanel.headline" txt="JDK pad" />
     <str id="LicencePanel.headline" txt="Licentieovereenkomst" />
-    <str id="PacksPanel.headline" txt="Selecteer Installatie Pakketten" />
+    <str id="PacksPanel.headline" txt="Selecteer Installatiepakketten" />
     <str id="ProcessPanel.headline" txt="Uitvoeren externe programma's" />
     <str id="ShortcutPanel.headline" txt="Snelkoppelingen" />
     <str id="SimpleFinishPanel.headline" txt="Installatie Gereed" />
     <str id="SummaryPanel.headline"
-        txt="Overzicht configuratie gegevens" />
-    <str id="TargetPanel.headline" txt="Installatie pad" />
+        txt="Overzicht configuratiegegevens" />
+    <str id="TargetPanel.headline" txt="Installatiepad" />
     <str id="UserInputPanel.headline" txt="Gebruikersgegevens" />
+    <str id="UserPathPanel.headline" txt="Selekteer pad"/>
+    <str id="InstallationTypePanel.headline" txt="Installatietype" />
 
     <!-- General installer strings -->
     <str id="installer.title" txt="IzPack - Installatie van " />
@@ -84,10 +86,15 @@
     <str id="LicencePanel.yes" txt="Ja" />
     <str id="LicencePanel.no" txt="Nee" />
 
+    <str id="InstallationTypePanel.info" txt="Kies het installatietype:" />
+    <str id="InstallationTypePanel.normal" txt="Nieuwe installatie" />
+    <str id="InstallationTypePanel.modify" txt="Wijzig bestaande installatie" />
+    
     <str id="InfoPanel.info" txt="Lees a.u.b. de volgende informatie :" />
 
     <str id="PathInputPanel.required"
         txt="De gekozen map moet reeds bestaan." />
+    <str id="PathInputPanel.required.forModificationInstallation" txt="De gekozen map moet reeds bestaan."/>    
     <str id="PathInputPanel.notValid"
         txt="De gekozen map bevat niet het vereiste product." />
 
@@ -211,6 +218,16 @@
     <str id="UserInputPanel.error.caption" txt="Invoer Probleem" />
     <str id="UserInputPanel.search.autodetect" txt="Automatisch zoeken" />
 
+    <str id="UserInputPanel.dir.nodirectory.message"   txt="U moet een geldige map kiezen."/>
+    <str id="UserInputPanel.dir.nodirectory.caption"   txt="Geen Map Gekozen"/>
+    <str id="UserInputPanel.dir.notdirectory.message"   txt="De map die u heeft gekozen bestaat niet of is ongeldig."/>
+    <str id="UserInputPanel.dir.notdirectory.caption"   txt="Ongeldige Map"/>
+    <str id="UserInputPanel.file.nofile.message"   txt="U moet een geldig bestand kiezen."/>
+    <str id="UserInputPanel.file.nofile.caption"   txt="Geen Bestand Gekozen"/>
+    <str id="UserInputPanel.file.notfile.message"   txt="Het bestand dat u heeft gekozen bestaat niet of is ongeldig."/>
+    <str id="UserInputPanel.file.notfile.caption"   txt="Ongeldig Bestand"/>
+
+    
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
     <str id="UserInputPanel.search.autodetect.failed.message"
         txt="Het automatisch zoeken is mislukt." />
@@ -227,6 +244,15 @@
         txt="Het bestand of de map die u gekozen hebt bestaat niet of is niet bruikbaar." />
     <str id="UserInputPanel.search.wrongselection.caption"
         txt="Ongeldige selectie" />
+
+    <str id="UserPathPanel.required" txt="De gekozen map moet bestaan."/>
+    <str id="UserPathPanel.info" txt="Kies de map: "/>
+    <str id="UserPathPanel.browse" txt="Bladeren"/>
+    <str id="UserPathPanel.exists_warn" txt="De map bestaat al! Weet u zeker dat u hier wilt installeren en met de kans dat u bestaande bestanden overschrijft?"/>
+    <str id="UserPathPanel.empty_target" txt="U heeft geen doel locatie opgegeven! Is dit bewust gedaan?"/>
+    <str id="UserPathPanel.createdir" txt="De doel map zal worden gemaakt: " />
+    <str id="UserPathPanel.nodir"  txt="Dit is geen map! Kies alstublieft een map!"/>
+    <str id="UserPathPanel.notwritable" txt="In deze map kan niet worden geschreven! Kies alstublieft een andere map!"/>
 
     <str id="CompilePanel.heading" txt="Compilatie" />
     <str id="CompilePanel.tip" txt="Voortgang compilatie taak:" />
@@ -266,6 +292,7 @@
         txt="Gekozen installatiepakketten" />
     <str id="ImgPacksPanel.summaryCaption"
         txt="Gekozen installatie pakketten" />
+    <str id="UserPathPanel.summaryCaption" txt="Gekozen pad"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->
@@ -278,7 +305,7 @@
   	<str id="nextmedia.okbtn" txt="Toepassen" />
 	  <str id="nextmedia.cancelbtn" txt="Annuleren" />	
     <str id="nextmedia.choosertitle" txt="Kies installatie media" />
-    <str id="nextmedia.filedesc" rdid="Installatie pakketten (.pak*)" />
+    <str id="nextmedia.filedesc" txt="Installatie pakketten (.pak*)" />
 
     <!-- Strings for the loggin/reporting system (Messenger) -->
 
@@ -321,6 +348,7 @@
     <str id="InstallationGroupPanel.colNameInstallType" txt="Installatie Type" />
     <str id="InstallationGroupPanel.colNameSize" txt="Grootte" />
 
+    <str id="debug.changevariable" txt="wijzig waarde"/>
     <!-- Add your own panels specific strings here if you need or use a custom
          langpack with the same syntax referred as resoure CustomLangpack.xml_[ISO3]"
     -->     
