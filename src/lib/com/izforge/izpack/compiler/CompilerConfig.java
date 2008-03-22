@@ -1737,6 +1737,33 @@ public class CompilerConfig extends Thread
     }
 
     /**
+     * Checks whether a File instance is a regular file, exists and is readable.
+     * Throws appropriate CompilerException to report violations of these
+     * conditions.
+     * 
+     * @exception CompilerException if the file is either not existing, not a regular
+     *            file or not readable.
+     */
+    private void assertIsNormalReadableFile(File fileToCheck, String fileDescription) throws CompilerException
+    {
+        if (fileToCheck != null)
+        {
+            if (!fileToCheck.exists())
+            {
+                throw new CompilerException(fileDescription + " does not exist: " + fileToCheck);
+            }
+            if (!fileToCheck.isFile())
+            {
+                throw new CompilerException(fileDescription + " is not a regular file: " + fileToCheck);
+            }
+            if (!fileToCheck.canRead())
+            {
+                throw new CompilerException(fileDescription + " is not readable by application: " + fileToCheck);
+            }
+        }
+    }
+
+    /**
      * Returns the XMLElement representing the installation XML file.
      * 
      * @return The XML tree.
@@ -1750,7 +1777,7 @@ public class CompilerConfig extends Thread
         if( filename != null )
         {
             File file = new File(filename).getAbsoluteFile();
-            if (!file.canRead()) throw new CompilerException("Invalid file: " + file);
+	        assertIsNormalReadableFile(file, "Configuration file");
             reader = new StdXMLReader(new FileInputStream(filename));
             reader.setSystemID(file.toURL().toExternalForm());
             // add izpack built in property
