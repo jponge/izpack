@@ -10,13 +10,13 @@ IzPack can be easily integrated inside an Ant build process. To do so you first 
 
   <!-- Allows us to use the IzPack Ant task -->
   <taskdef name="IzPack" classpath="${basedir}/lib/compiler.jar"
-           classname="com.izforge.IzPack.ant.IzPackTask"/>
+           classname="com.izforge.izpack.ant.IzPackTask"/>
 
 If you want to use the standalone compiler (and therefore don't need an IzPack installation for building), the task needs to be defined as follows: ::
 
   <!-- Allows us to use the IzPack Ant task -->
   <taskdef name="IzPack" classpath="${basedir}/lib/standalone-compiler.jar"
-           classname="com.izforge.IzPack.ant.IzPackTask"/>
+           classname="com.izforge.izpack.ant.IzPackTask"/>
   Don't forget to add compiler.jar or standalone-compiler.jar to the classpath of the Ant process.
 
 Then you can invoke IzPack with the IzPack task which takes the following parameters:
