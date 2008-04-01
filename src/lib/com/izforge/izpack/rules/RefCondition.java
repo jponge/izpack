@@ -35,10 +35,12 @@ public class RefCondition extends Condition
      */
     private static final long serialVersionUID = -2880915036530702269L;
     Condition referencedcondition;
+    private String referencedConditionId;
 
     public RefCondition()
     {
         this.referencedcondition = null;
+        this.referencedConditionId = null;
     }
 
     /*
@@ -47,19 +49,22 @@ public class RefCondition extends Condition
      */
     public void readFromXML(XMLElement xmlcondition)
     {
-        String refid = xmlcondition.getAttribute("refid");
-        this.referencedcondition = RulesEngine.getCondition(refid);
+        this.referencedConditionId = xmlcondition.getAttribute("refid");
+        this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);        
     }
 
     public boolean isTrue()
     {
-        if (this.referencedcondition == null)
+        if (this.referencedConditionId == null)
         {
             return false;
         }
-        else
+        else 
         {
-            return this.referencedcondition.isTrue();
+            if (this.referencedcondition == null) {
+                this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);
+            }           
+            return (this.referencedcondition != null) ? this.referencedcondition.isTrue() : false;
         }
     }
 
@@ -74,5 +79,5 @@ public class RefCondition extends Condition
         details.append(referencedcondition.getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();
-    }    
+    }          
 }
