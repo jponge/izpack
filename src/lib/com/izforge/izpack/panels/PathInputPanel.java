@@ -169,6 +169,13 @@ public class PathInputPanel extends IzPanel implements ActionListener
         }
         if (!ok) return ok;
 
+        // Expand unix home reference
+        if (chosenPath.startsWith("~"))
+        {
+            String home = System.getProperty("user.home");
+            chosenPath = home + chosenPath.substring(1);
+        }
+
         // Normalize the path
         File path = new File(chosenPath).getAbsoluteFile();
         chosenPath = path.toString();
