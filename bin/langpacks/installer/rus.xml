@@ -163,6 +163,7 @@
     <str id="JDKPathPanel.summaryCaption"  txt="Путь к JDK"/>
     <str id="PacksPanel.summaryCaption"    txt="Выбранные модули для установки"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Выбранные модули для установки"/>
+    <str id="TreePacksPanel.summaryCaption"    txt="Выбранные модули для установки"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->

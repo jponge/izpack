@@ -226,6 +226,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="Lokasi JDK" />
     <str id="PacksPanel.summaryCaption" txt="Paket-paket pemasangan yang dipilih" />
     <str id="ImgPacksPanel.summaryCaption" txt="Paket-paket pemasangan yang dipilih" />
+    <str id="TreePacksPanel.summaryCaption" txt="Paket-paket pemasangan yang dipilih" />
     <str id="UserPathPanel.summaryCaption" txt="Lokasi Terpilih" />
     <!-- Strings for the summary of panels - END -->
 

@@ -159,6 +159,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="Sökväg till JDK"/>
     <str id="PacksPanel.summaryCaption" txt="Valda paket för installering"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Valda paket för installering"/>
+    <str id="TreePacksPanel.summaryCaption" txt="Valda paket för installering"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Add your own panels specific strings here if you need -->

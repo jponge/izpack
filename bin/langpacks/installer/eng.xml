@@ -226,6 +226,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="JDK Path"/>
     <str id="PacksPanel.summaryCaption" txt="Chosen Installation Packs"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Chosen Installation Packs"/>
+    <str id="TreePacksPanel.summaryCaption" txt="Chosen Installation Packs"/>
     <str id="UserPathPanel.summaryCaption" txt="Selected Path"/>
     <!-- Strings for the summary of panels - END -->
 

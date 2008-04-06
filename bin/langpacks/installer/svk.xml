@@ -206,6 +206,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="JDK prieèinok"/>
     <str id="PacksPanel.summaryCaption" txt="Vybrané in¹talaèné balíky"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Vybrané in¹talaèné balíky"/>
+    <str id="TreePacksPanel.summaryCaption" txt="Vybrané in¹talaèné balíky"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->

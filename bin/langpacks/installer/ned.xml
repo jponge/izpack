@@ -292,6 +292,8 @@
         txt="Gekozen installatiepakketten" />
     <str id="ImgPacksPanel.summaryCaption"
         txt="Gekozen installatie pakketten" />
+    <str id="TreePacksPanel.summaryCaption"
+        txt="Gekozen installatiepakketten" />
     <str id="UserPathPanel.summaryCaption" txt="Gekozen pad"/>
     <!-- Strings for the summary of panels - END -->
 

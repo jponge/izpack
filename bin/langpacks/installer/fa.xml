@@ -200,6 +200,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="JDK مسیر"/>
     <str id="PacksPanel.summaryCaption" txt="بسته های نصب انتخاب شده"/>
     <str id="ImgPacksPanel.summaryCaption" txt="بسته های نصب انتخاب شده"/>
+    <str id="TreePacksPanel.summaryCaption" txt="بسته های نصب انتخاب شده"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->

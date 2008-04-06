@@ -167,6 +167,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="JDK 경로"/>
     <str id="PacksPanel.summaryCaption" txt="선택한 설치 꾸러미"/>
     <str id="ImgPacksPanel.summaryCaption" txt="선택한 설치 꾸러미"/>
+    <str id="TreePacksPanel.summaryCaption" txt="선택한 설치 꾸러미"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->

@@ -226,6 +226,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="JDK polku"/>
     <str id="PacksPanel.summaryCaption" txt="Valitut asennuspaketit"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Valitut asennuspaketit"/>
+    <str id="TreePacksPanel.summaryCaption" txt="Valitut asennuspaketit"/>
     <str id="UserPathPanel.summaryCaption" txt="Valittu polku"/>
     <!-- Strings for the summary of panels - END -->
 

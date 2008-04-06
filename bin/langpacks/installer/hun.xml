@@ -140,6 +140,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="JDK elérési út"/>
     <str id="PacksPanel.summaryCaption" txt="Kiválasztott telepítési csomagok"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Kiválasztott telepítési csomagok"/>
+    <str id="TreePacksPanel.summaryCaption" txt="Kiválasztott telepítési csomagok"/>
 
     <str id="CheckedHelloPanel.productAlreadyExist0" txt="Ez a program már telepítve van a következõ mappában "/>
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Biztos benne, hogy még egy példányban telepíteni akarja?"/>

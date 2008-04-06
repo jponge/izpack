@@ -200,6 +200,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="Ruta do JDK"/>
     <str id="PacksPanel.summaryCaption" txt="Paquetes de instalación escollidos"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Paquetes de instalación escollidos"/>
+    <str id="TreePacksPanel.summaryCaption" txt="Paquetes de instalación escollidos"/>
     <!-- Strings for the summary of panels - END -->
     
     <!-- Strings for the Registry -->

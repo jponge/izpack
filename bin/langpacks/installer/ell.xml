@@ -167,6 +167,7 @@
     <str id="JDKPathPanel.summaryCaption" txt="Κατάλογος JDK"/>
     <str id="PacksPanel.summaryCaption" txt="Επιλεγμένα πακέτα εγκατάστασης"/>
     <str id="ImgPacksPanel.summaryCaption" txt="Επιλεγμένα πακέτα εγκατάστασης"/>
+    <str id="TreePacksPanel.summaryCaption" txt="Επιλεγμένα πακέτα εγκατάστασης"/>
     <!-- Strings for the summary of panels - END -->
 
     <!-- Strings for the Registry -->
