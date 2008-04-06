@@ -1139,7 +1139,9 @@ public class ShellLink implements NativeLibraryClient
      */
     private void setAllLinkPaths() throws IllegalArgumentException
     {
-        // sets currentUsersLinkPath and allUsersLinkPath
+        // (re)sets currentUsersLinkPath and allUsersLinkPath
+        currentUserLinkPath = "";
+        allUsersLinkPath = "";
         GetFullLinkPath(CURRENT_USER, linkType);
         GetFullLinkPath(ALL_USERS, linkType);
 
@@ -1153,8 +1155,10 @@ public class ShellLink implements NativeLibraryClient
             userType = CURRENT_USER;
         }
 
-        if ( allUsersLinkPath.length() == 0 && currentUserLinkPath.length() == 0) { throw (new IllegalArgumentException(
-                "linkType " + linkType + " is invalid.")); }
+        if ( allUsersLinkPath.length() == 0  && currentUserLinkPath.length() == 0) 
+        {
+            throw (new IllegalArgumentException("linkType " + linkType + " is invalid."));
+        }
     }
 
 }
