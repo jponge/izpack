@@ -3578,7 +3578,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void showMessageDialog(InstallerFrame parentFrame, String message, String caption, int messageType) {
         String localizedMessage = langpack.getString(message);
-        if ("".equals(localizedMessage))
+        if ((localizedMessage == null) || (localizedMessage.trim().length() == 0))
         {
             localizedMessage = message;
         }
