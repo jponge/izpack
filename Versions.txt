@@ -2,6 +2,7 @@
 
   > 3.11.0 (build 2008.02.12)
 
+- Fixed possible null pointer in message dialogs coming from validated text in UserInputPanel (Jeff Gordon)
 - Added ignore as possible value for failure argument in executables (Dennis Reil)
 - Added Conditional expressions (Dennis Reil)
 - Fixed selection of default language in LanguageSelectionDialog (Dennis Reil)
