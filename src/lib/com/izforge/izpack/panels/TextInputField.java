@@ -105,6 +105,7 @@ public class TextInputField extends JComponent implements ProcessingClient
         {
             if (validator != null)
             {
+                Debug.trace("Making Validator for: "+validator);
                 validationService = (Validator) Class.forName(validator).newInstance();
             }
         }
@@ -182,10 +183,12 @@ public class TextInputField extends JComponent implements ProcessingClient
     {
         if (validationService != null)
         {
+          Debug.trace("Validating contents");
             return (validationService.validate(this));
         }
         else
         {
+          Debug.trace("Not validating contents");
             return (true);
         }
     }
