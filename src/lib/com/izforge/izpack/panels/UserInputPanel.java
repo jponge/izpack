@@ -380,6 +380,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     // Used for dynamic controls to skip content validation unless the user
     // really clicks "Next"
     private boolean validating = true;
+    
+    private String currentDirectoryPath = null;
 
     /*--------------------------------------------------------------------------*/
     // This method can be used to search for layout problems. If this class is
@@ -629,11 +631,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
             public void actionPerformed(ActionEvent e)
             {               
                System.out.println("Show dirchooser"); 
-               JFileChooser filechooser = new JFileChooser();
+               JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
                filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                               
                if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION){
                    filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
+                   currentDirectoryPath = filechooser.getSelectedFile().getAbsolutePath();
+                   Debug.trace("Setting current file chooser directory to: "+currentDirectoryPath);
                }
             }
         });
@@ -731,12 +735,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
             public void actionPerformed(ActionEvent e)
             {               
                System.out.println("Show filechooser"); 
-               JFileChooser filechooser = new JFileChooser();
+               JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
                filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                filechooser.setFileFilter(uiff);
                               
                if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION){
                    filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
+                   currentDirectoryPath = filechooser.getSelectedFile().getParent();
+                   Debug.trace("Setting current file chooser directory to: "+currentDirectoryPath);
                }
             }
         });
@@ -1525,6 +1531,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         // ----------------------------------------------------
         else
         {
+          Debug.trace("No specification element, returning.");
             return;
         }
 
@@ -1535,6 +1542,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         if (element != null)
         {
             validator = element.getAttribute(CLASS);
+            Debug.trace("Validator found for text field: "+validator);
             message = getText(element);
             // ----------------------------------------------------------
             // check and see if we have any parameters for this validator.
@@ -1543,6 +1551,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             validateParams = element.getChildrenNamed(RULE_PARAM);
             if (validateParams != null && validateParams.size() > 0)
             {
+                Debug.trace("Validator has "+validateParams.size()+" parameters.");
                 hasParams = true;
 
                 if (validateParamMap == null) validateParamMap = new HashMap<String, String>();
@@ -1623,13 +1632,18 @@ public class UserInputPanel extends IzPanel implements ActionListener
         if ((variable == null) || (value == null)) { return (true); }
 
         // validate the input
+        Debug.trace("Validating text field");
         boolean success = textField.validateContents();
         if (!success)
         {
+            Debug.trace("Validation did not pass, message: "+message);
+            if (message==null) {
+              message = "Text entered did not pass validation.";
+            }
             showWarningMessageDialog(parentFrame, message);
             return (false);
         }
-
+        Debug.trace("Field validated");
         idata.setVariable(variable, value);
         entries.add(new TextValuePair(variable, value));
         return (true);
