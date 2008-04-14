@@ -71,6 +71,7 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.FileExecutor;
+import java.io.File;
 
 /**
  * The IzPack graphical installer class.
@@ -120,6 +121,9 @@ public class GUIInstaller extends InstallerBase
         checkJavaVersion();
         checkJDKAvailable();
 
+        // Check for already running instance
+        checkLockFile();
+        
         // Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable() {
 
@@ -172,6 +176,58 @@ public class GUIInstaller extends InstallerBase
         objIn.close();
     }
 
+    /**
+     * Sets a lock file. Not using java.nio.channels.FileLock to prevent
+     * the installer from accidentally keeping a lock on a file if the install
+     * fails or is killed. 
+     * 
+     * @exception Exception Description of the Exception
+     */
+    private void checkLockFile() throws Exception {
+        String tempDir = System.getProperty("java.io.tmpdir");
+        String appName = this.installdata.info.getAppName();
+        String fileName = "iz-"+appName+".tmp";
+        Debug.trace("Making temp file: "+fileName);
+        Debug.trace("In temp directory: "+tempDir);
+        File file = new File(tempDir, fileName);
+        if (file.exists()) {
+          // Ask user if they want to proceed.
+          Debug.trace("Lock File Exists, asking user for permission to proceed.");
+          StringBuffer msg = new StringBuffer();
+          msg.append("The "+appName+" installer you are attempting to run seems to have a copy already running. \n\n");
+          msg.append("This could be from a previous failed installation attempt or you may have accidentally launched \n");
+          msg.append("the installer twice. The recommended action is to select 'No' below and wait for the other copy \n");
+          msg.append("of the installer to start. If you are sure there is no other copy of the installer running click \n");
+          msg.append("the 'Yes' button to allow this installer to run. \n\n");
+          msg.append("Are you sure you want to proceed with this installation?");
+          int status = JOptionPane.showConfirmDialog(null, msg.toString(), "Warning", 
+                  JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+          if (status == JOptionPane.YES_OPTION) {
+            // Take control of the file so it gets deleted after this installer instance exits.
+            Debug.trace("Setting temp file to delete on exit");
+            file.deleteOnExit();
+          } else {
+            // Leave the file as it is.
+            Debug.trace("Leaving temp file alone and exiting");
+            System.exit(1);
+          }
+        } else {
+          try {
+            // Create the new lock file
+            if (file.createNewFile()) {
+              Debug.trace("Temp file created");
+              file.deleteOnExit();
+            } else {
+              Debug.trace("Temp file could not be created");
+              Debug.trace("*** Multiple instances of installer will be allowed ***");
+            }
+          } catch (Exception e) {
+            Debug.trace("Temp file could not be created: "+e);
+            Debug.trace("*** Multiple instances of installer will be allowed ***");
+          }
+        }
+    }
+    
     /**
      * Checks the Java version.
      * 
@@ -496,7 +552,7 @@ public class GUIInstaller extends InstallerBase
             title = installdata.langpack.getString("installer.title")
                     + installdata.info.getAppName();
         else
-        { // Attention! The alternate message has to contain the hole message including
+        { // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
             VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
             title = vs.substitute(message, null);
