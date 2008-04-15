@@ -195,14 +195,17 @@ public class GUIInstaller extends InstallerBase
           Debug.trace("Lock File Exists, asking user for permission to proceed.");
           StringBuffer msg = new StringBuffer();
           msg.append("The "+appName+" installer you are attempting to run seems to have a copy already running. \n\n");
-          msg.append("This could be from a previous failed installation attempt or you may have accidentally launched \n");
-          msg.append("the installer twice. The recommended action is to select 'No' below and wait for the other copy \n");
-          msg.append("of the installer to start. If you are sure there is no other copy of the installer running click \n");
-          msg.append("the 'Yes' button to allow this installer to run. \n\n");
-          msg.append("Are you sure you want to proceed with this installation?");
-          int status = JOptionPane.showConfirmDialog(null, msg.toString(), "Warning", 
-                  JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-          if (status == JOptionPane.YES_OPTION) {
+          msg.append("This could be from a previous failed installation attempt or you may have accidentally launched the \n");
+          msg.append("installer twice. The recommended action is to select 'Exit' and wait for the other copy of the \n");
+          msg.append("installer to start. If you are sure there is no other copy of the installer running, click the \n");
+          msg.append("'Continue' button to allow this installer to run. \n\n");
+          msg.append("Are you sure you want to continue with this installation?");
+          Object[] optionValues = {"Continue", "Exit"};
+          int selectedOption = JOptionPane.showOptionDialog(null, msg.toString(), "Warning", 
+                  JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues, 
+                  optionValues[1]);
+          Debug.trace("Selected option: "+selectedOption);
+          if (selectedOption == 0) {
             // Take control of the file so it gets deleted after this installer instance exits.
             Debug.trace("Setting temp file to delete on exit");
             file.deleteOnExit();
