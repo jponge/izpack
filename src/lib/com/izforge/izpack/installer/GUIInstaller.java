@@ -194,14 +194,18 @@ public class GUIInstaller extends InstallerBase
           // Ask user if they want to proceed.
           Debug.trace("Lock File Exists, asking user for permission to proceed.");
           StringBuffer msg = new StringBuffer();
-          msg.append("The "+appName+" installer you are attempting to run seems to have a copy already running. \n\n");
-          msg.append("This could be from a previous failed installation attempt or you may have accidentally launched the \n");
-          msg.append("installer twice. The recommended action is to select 'Exit' and wait for the other copy of the \n");
-          msg.append("installer to start. If you are sure there is no other copy of the installer running, click the \n");
-          msg.append("'Continue' button to allow this installer to run. \n\n");
+          msg.append("<html>");
+          msg.append("The "+appName+" installer you are attempting to run seems to have a copy already running.<br><br>");
+          msg.append("This could be from a previous failed installation attempt or you may have accidentally launched <br>");
+          msg.append("the installer twice. <b>The recommended action is to select 'Exit'</b> and wait for the other copy of <br>");
+          msg.append("the installer to start. If you are sure there is no other copy of the installer running, click <br>");
+          msg.append("the 'Continue' button to allow this installer to run. <br><br>");
           msg.append("Are you sure you want to continue with this installation?");
+          msg.append("</html>");
+          JLabel label = new JLabel(msg.toString());
+          label.setFont(new Font("Sans Serif", Font.PLAIN, 12));
           Object[] optionValues = {"Continue", "Exit"};
-          int selectedOption = JOptionPane.showOptionDialog(null, msg.toString(), "Warning", 
+          int selectedOption = JOptionPane.showOptionDialog(null, label, "Warning", 
                   JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, optionValues, 
                   optionValues[1]);
           Debug.trace("Selected option: "+selectedOption);
