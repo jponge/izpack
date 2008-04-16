@@ -620,6 +620,12 @@
             <include name="com/izforge/izpack/panels/TargetPanel.java" />
             <include name="com/izforge/izpack/panels/TargetPanelAutomationHelper.java" />
         </build-panel>
+        <build-panel name="DefaultTargetPanel">
+            <include name="com/izforge/izpack/panels/PathInputPanel.java" />
+            <include name="com/izforge/izpack/panels/PathSelectionPanel.java" />
+            <include name="com/izforge/izpack/panels/DefaultTargetPanel.java" />
+            <include name="com/izforge/izpack/panels/DefaultTargetPanelAutomationHelper.java" />
+        </build-panel>
         <build-panel name="JDKPathPanel">
             <include name="com/izforge/izpack/panels/JDKPathPanel.java" />
             <include name="com/izforge/izpack/panels/PathInputPanel.java" />

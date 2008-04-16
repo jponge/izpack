@@ -2,6 +2,9 @@
 
   > 3.11.0 (build 2008.02.12)
 
+- Added DefaultTargetPanel to use default path instead of letting user select (Jeff Gordon)
+- Added check for multiple instances of same installer running and warn user (Jeff Gordon)
+- Added tracking of currentDirectoryPath to the directory and file choosers to maintain state (Jeff Gordon)
 - Fixed possible null pointer in message dialogs coming from validated text in UserInputPanel (Jeff Gordon)
 - Added ignore as possible value for failure argument in executables (Dennis Reil)
 - Added Conditional expressions (Dennis Reil)

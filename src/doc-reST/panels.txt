@@ -172,6 +172,17 @@ path) :
     wouldn't work though.
 
 
+
+DefaultTargetPanel
+-------------------
+
+The default installation directory is specified as in the TargetPanel (using
+identical names (TargetPanel... not DefaultTargetPanel...), 
+but will not allow the user to change the installation path. It can be used when
+software must be installed in a specific location.
+
+
+
 InstallPanel
 ------------
 
