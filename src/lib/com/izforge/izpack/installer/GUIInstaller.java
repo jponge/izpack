@@ -649,7 +649,7 @@ public class GUIInstaller extends InstallerBase
             // We build the GUI
             addWindowListener(new WindowHandler());
             JPanel contentPane = (JPanel) getContentPane();
-            setTitle("Language selection");
+            setTitle("Language Selection");
             GridBagLayout layout = new GridBagLayout();
             contentPane.setLayout(layout);
             GridBagConstraints gbConstraints = new GridBagConstraints();
@@ -688,7 +688,7 @@ public class GUIInstaller extends InstallerBase
             contentPane.add(comboBox);
 
             gbConstraints.insets = new Insets(15, 5, 15, 5);
-            JButton okButton = new JButton("Ok");
+            JButton okButton = new JButton("OK");
             okButton.addActionListener(this);
             gbConstraints.fill = GridBagConstraints.NONE;
             gbConstraints.gridy = 4;
