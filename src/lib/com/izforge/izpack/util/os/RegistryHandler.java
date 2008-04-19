@@ -345,6 +345,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
         int oldVal = getRoot();
         setRoot(HKEY_LOCAL_MACHINE);
         boolean retval = keyExist(keyName);
+        setRoot(HKEY_CURRENT_USER);
+        retval = retval || keyExist(keyName);
         setRoot(oldVal);
         return (retval);
     }
@@ -361,11 +363,25 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
         String keyName = UNINSTALL_ROOT + uninstallName;
         String cmd = "\"" + installdata.getVariable("JAVA_HOME") + "\\bin\\javaw.exe\" -jar \""
                 + installdata.getVariable("INSTALL_PATH") + "\\uninstaller\\uninstaller.jar\"";
+        String appVersion = installdata.getVariable("APP_VER");
+        String appUrl = installdata.getVariable("APP_URL");
 
         int oldVal = getRoot();
-        setRoot(HKEY_LOCAL_MACHINE);
-        setValue(keyName, "DisplayName", uninstallName);
+        try
+        {
+            setRoot(HKEY_LOCAL_MACHINE);
+            setValue(keyName, "DisplayName", uninstallName);
+        }
+        catch (NativeLibException exception)
+        { // Users without administrative rights should be able to install the app for themselves
+            Debug.trace("Failed to register uninstaller in HKEY_LOCAL_MACHINE hive, trying HKEY_CURRENT_USER: " + exception.getMessage());
+            setRoot(HKEY_CURRENT_USER);
+            setValue(keyName, "DisplayName", uninstallName);
+        }
         setValue(keyName, "UninstallString", cmd);
+        setValue(keyName, "DisplayVersion", appVersion);
+        if (appUrl != null && appUrl.length() > 0)
+            setValue(keyName, "HelpLink", appUrl);
         // Try to write the uninstaller icon out.
         try
         {
