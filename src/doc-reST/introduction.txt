@@ -9,7 +9,7 @@ Welcome to IzPack !
 IzPack is a tool that will help you to solve your software installation
 problems. It is a JavaTM based software installer builder that will run on
 any operating system coming with a *Java Virtual Machine (JVM)* that is
-compliant with the Sun JVM 1.4 or higher. Its design is very modular and you
+compliant with the Sun JVM 1.5 or higher. Its design is very modular and you
 will be able to choose how **you** want your installer to look and you will
 also be able to customize it using a very simple *Application Programming
 Interface (API)*. Although IzPack is essentially a JavaTM only application
@@ -21,7 +21,6 @@ be silent if run on Windows. To put it in a nutshell, whereas most of the
 other JavaTM installers force you to go their way, IzPack will let you go
 **your way**. Some respectable companies have been using it in order to
 produce customized installers for their *very* specific needs.
-
 
 *"So, if it's so good, how much is it ?"* : well, you can get it for free.
 **BUT** IzPack is not a *freeware*. It's not *free* as in *"free beer"* but

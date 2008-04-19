@@ -349,12 +349,12 @@ e.g.
 
 ::
 
-    <resorces>
+    <resources>
         ...
         <res id="AntActionsSpec.xml"
         src="myInstallSpecs/MyAntActionsSpec.xml" />
         ...
-    </resorces>
+    </resources>
 
 
 The precise spelling of the id is important. The base path of ``src`` is the
@@ -506,6 +506,9 @@ The event package of ``IzPack`` contains an installer and an uninstaller
 listener for Windows registry access. The listeners uses the separated pack
 *com.coi.tools* which is also available as source under the src subtree of
 ``IzPack``. The registry will be called by JNI.
+
+There is no support from the IzPack project of this feature for Windows 95 and Windows 98.
+Please check the patches at http://jira.codehaus.org/browse/IZPACK-58 if you need to support those platforms.
 
 The registry stuff was implemented in all conscience, but certainly WITHOUT
 WARRANTIES OR CONDITIONS OF ANY KIND
