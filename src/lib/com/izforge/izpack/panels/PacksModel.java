@@ -412,18 +412,12 @@ class PacksModel extends AbstractTableModel
 
         case 1:
 
-            if (langpack == null || pack.id == null || pack.id.equals(""))
-            {
-                return pack.name;
-            }
-            else
-            {
-                String tmp = langpack.getString(pack.id);
-                if (pack.id.equals(tmp))
-                    return pack.name;
-                else
-                    return tmp;
-            }
+            Object name = null;
+            if (langpack != null && pack.id != null && !pack.id.equals(""))
+                name = langpack.get(pack.id);
+            if (name == null || "".equals(name))
+                name = pack.name;
+            return name;
 
         case 2:
             return Pack.toByteUnitsString(pack.nbytes);
