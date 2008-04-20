@@ -880,10 +880,23 @@ public class InstallerFrame extends JFrame
             }
             else
             {
-                prevButton.setVisible(true);
-                nextButton.setVisible(true);
-                unlockPrevButton();
-                unlockNextButton();
+                if (hasNavigatePrevious(installdata.curPanelNumber,true) != -1) 
+                {
+                    prevButton.setVisible(true);
+                    unlockPrevButton(); 
+                } else {
+                    lockPrevButton();
+                    prevButton.setVisible(false);
+                }
+                if (hasNavigateNext(installdata.curPanelNumber,true) != -1) 
+                {
+                    nextButton.setVisible(true);
+                    unlockNextButton(); 
+                } else {
+                    lockNextButton();
+                    nextButton.setVisible(false);
+                }
+                
             }
             // With VM version >= 1.5 setting default button one time will not work.
             // Therefore we set it every panel switch and that also later. But in
@@ -1546,22 +1559,12 @@ public class InstallerFrame extends JFrame
         // If the button is inactive this indicates that we cannot move
         // so we don't do the move
         if (!nextButton.isEnabled()) return;
-        this.navigateNext(installdata.curPanelNumber);
+        this.navigateNext(installdata.curPanelNumber, true);
     }
 
     /**
      * This function searches for the next available panel, the search
-     * begins from given panel+1. 
-     * @param startPanel the starting panel number 
-     */
-    public void navigateNext(int startPanel) {
-        this.navigateNext(startPanel, true);        
-    }
-    
-    /**
-     * This function searches for the next available panel, the search
-     * begins from given panel+1.
-     * 
+     * begins from given panel+1
      * @param startPanel the starting panel number
      * @param doValidation whether to do panel validation
      */
@@ -1576,19 +1579,76 @@ public class InstallerFrame extends JFrame
             // if this is not here, validation will
             // occur mutilple times while skipping panels through the recursion
             if(!isValid) return; 
-            
-            installdata.curPanelNumber++;
-            if (!canShow(installdata.curPanelNumber))
+
+            // We try to show the next panel that we can.
+            int nextPanel = hasNavigateNext(startPanel,false);
+            if (-1 != nextPanel) 
             {
-                this.navigateNext(startPanel, false);
-            }
-            else
-            {
+                installdata.curPanelNumber = nextPanel;
                 switchPanel(startPanel);
             }
         }
     }
     
+    /**
+     * Check to see if there is another panel that can be navigated to next.
+     * This checks the successive panels to see if at least one can be shown
+     * based on the conditions associated with the panels.
+     * @param startPanel The panel to check from
+     * @param visibleOnly Only check the visible panels
+     * @return The panel that we can navigate to next or -1 if there is no panel
+     * that we can navigate next to
+     */
+    public int hasNavigateNext(int startPanel,boolean visibleOnly) 
+    {
+        // Assume that we cannot navigate to another panel
+        int res = -1;
+        // Start from the panel given and check each one until we find one
+        //  that we can navigate to or until there are no more panels
+        for (int panel = startPanel + 1; res == -1 && panel < installdata.panels.size(); panel++)
+        {
+            // See if we can show this panel
+            if (! visibleOnly || ((Integer) visiblePanelMapping.get(panel)).intValue() != -1)
+            {
+                if (canShow(panel))
+                {
+                    res = panel;
+                }
+            }
+        }
+        // Return the result
+        return res;
+    }
+
+    /**
+     * Check to see if there is another panel that can be navigated to previous.
+     * This checks the previous panels to see if at least one can be shown
+     * based on the conditions associated with the panels.
+     * @param endingPanel The panel to check from
+     * @return The panel that we can navigate to previous or -1 if there is no panel
+     * that we can navigate previous to
+     */
+    public int hasNavigatePrevious(int endingPanel,boolean visibleOnly) 
+    {
+        // Assume that we cannot navigate to another panel
+        int res = -1;
+        // Start from the panel given and check each one until we find one
+        //  that we can navigate to or until there are no more panels
+        for (int panel = endingPanel - 1; res == -1 && panel >= 0; panel--)
+        {
+            // See if we can show this panel
+            if (! visibleOnly || ((Integer) visiblePanelMapping.get(panel)).intValue() != -1)
+            {
+                if (canShow(panel))
+                {
+                    res = panel;
+                }
+            }
+        }
+        // Return the result
+        return res;
+    }
+
     /**
      * This function moves to the previous panel
      */
@@ -1601,23 +1661,17 @@ public class InstallerFrame extends JFrame
     }
 
     /**
-     * This function switches to available panel that is just before given one.
-     * 
-     * @param endingPanel the panel is searched backwards, beginning from this.
+     * This function switches to the available panel that is just before the given one.
+     * @param endingPanel the panel to search backwards, beginning from this.
      */
     public void navigatePrevious(int endingPanel)
     {
-        if ((installdata.curPanelNumber > 0))
+        // We try to show the previous panel that we can.
+        int prevPanel = hasNavigatePrevious(endingPanel,false);
+        if (-1 != prevPanel) 
         {
-            installdata.curPanelNumber--;
-            if (!canShow(installdata.curPanelNumber))
-            {
-                this.navigatePrevious(endingPanel);
-            }
-            else
-            {
-                switchPanel(endingPanel);
-            }
+            installdata.curPanelNumber = prevPanel;
+            switchPanel(endingPanel);
         }
     }
 
