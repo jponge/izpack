@@ -62,7 +62,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
     {
         Debug.log(this.getClass().getName() + "::entering makeXMLData()");
 
-        // ShortcutPanel.getInstance().makeXMLData( idata, panelRoot );
+        // not used here - during automatic installation, no automatic
+        // installation information is generated
     }
 
     /**
@@ -137,8 +138,11 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         // set the name of the program group
         // ----------------------------------------------------
         dataElement = panelRoot.getFirstChildNamed(ShortcutPanel.AUTO_KEY_PROGRAM_GROUP);
+        String groupName = null;
 
-        String groupName = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
+        if (dataElement != null) {
+            groupName = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
+        }
 
         if (groupName == null)
         {
