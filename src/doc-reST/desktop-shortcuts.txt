@@ -53,7 +53,7 @@ While this is not an elegant solution, at least it aids the user in the
 manual creation of the shortcuts.
 
 .. note:: There is no support from the IzPack project of this feature
-   for Windows 95 and Windows 98.
+   for Windows 95, Windows 98 and Windows ME.
    Please check the patches at http://jira.codehaus.org/browse/IZPACK-58
    if you need to support those platforms.
 

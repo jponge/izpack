@@ -507,7 +507,7 @@ listener for Windows registry access. The listeners uses the separated pack
 *com.coi.tools* which is also available as source under the src subtree of
 ``IzPack``. The registry will be called by JNI.
 
-There is no support from the IzPack project of this feature for Windows 95 and Windows 98.
+There is no support from the IzPack project of this feature for Windows 95, Windows 98 and Windows ME.
 Please check the patches at http://jira.codehaus.org/browse/IZPACK-58 if you need to support those platforms.
 
 The registry stuff was implemented in all conscience, but certainly WITHOUT
