@@ -96,7 +96,9 @@ public class InstallerBase
         if (inf.getAppURL() != null)
             installdata.setVariable(ScriptParser.APP_URL, inf.getAppURL());
         installdata.setVariable(ScriptParser.APP_VER, inf.getAppVersion());
-
+        if (inf.getUninstallerCondition() != null){
+            installdata.setVariable("UNINSTALLER_CONDITION", inf.getUninstallerCondition());
+        }        
         // We read the panels order data
         in = InstallerBase.class.getResourceAsStream("/panelsOrder");
         objIn = new ObjectInputStream(in);
