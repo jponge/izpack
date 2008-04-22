@@ -60,6 +60,8 @@ public class Info implements Serializable
 
     /** The uninstaller name */
     private String uninstallerName = "uninstaller.jar";
+    /** condition for writing the uninstaller */
+    private String uninstallerCondition = null;
 
     /** The path of the summary log file */
     private String summaryLogFilePath = "$INSTALL_PATH/Uninstaller/InstallSummary.htm";
@@ -389,5 +391,17 @@ public class Info implements Serializable
     public void setWriteInstallationInformation(boolean writeInstallationInformation)
     {
         this.writeInstallationInformation = writeInstallationInformation;
+    }
+
+    
+    public String getUninstallerCondition()
+    {
+        return uninstallerCondition;
+    }
+
+    
+    public void setUninstallerCondition(String uninstallerCondition)
+    {
+        this.uninstallerCondition = uninstallerCondition;
     }
 }
