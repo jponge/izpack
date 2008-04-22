@@ -2265,10 +2265,6 @@ public class UserInputPanel extends IzPanel implements ActionListener
         
         if(causesValidataion != null && causesValidataion.equals("yes"))
            checkbox.addActionListener(this);
-        // We shouldn't be changing the variable until it is read and 
-        // it should be the set true or false value (detail) not boolean
-        // idata.setVariable(variable, set);
-        
         if (set != null)
         {
             if (set != null && !"".equals(set))
