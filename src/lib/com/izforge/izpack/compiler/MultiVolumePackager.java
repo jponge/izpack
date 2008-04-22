@@ -361,8 +361,9 @@ public class MultiVolumePackager extends PackagerBase
             for (Object o : packInfo.getPackFiles())
             {
                 boolean addFile = !pack.loose;
-                XPackFile pf = new XPackFile((PackFile) o);
-                File file = packInfo.getFile(pf.getPackfile());
+                PackFile packfile = (PackFile) o;
+                XPackFile pf = new XPackFile(packfile);
+                File file = packInfo.getFile(packfile);
                 Debug.trace("Next file: " + file.getAbsolutePath());
                 // use a back reference if file was in previous pack, and in
                 // same jar
