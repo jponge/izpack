@@ -33,9 +33,6 @@ public class PortProcessorTest extends TestCase
         ServerSocket use = new ServerSocket(0,0,InetAddress.getByName("localhost"));
         int usedPort = use.getLocalPort();
         ProcessingClient pc = new ProcessingClientStub("localhost", usedPort);
-        Assert.assertEquals(2, pc.getNumFields());
-        Assert.assertEquals("localhost", pc.getFieldContents(0));
-        Assert.assertEquals(Integer.toString(usedPort), pc.getFieldContents(1));
         PortProcessor pp = new PortProcessor();
         String result = pp.process(pc);
         Assert.assertFalse((Integer.toString(usedPort)).equals(result));
@@ -46,6 +43,36 @@ public class PortProcessorTest extends TestCase
         }
     }
     
+    public void testProcessGenericOnGenericBoundPortIPv6() throws IOException {
+        // create a ServerSocket for localhost on any free port
+        ServerSocket use = new ServerSocket(0,0,InetAddress.getByName("::"));
+        int usedPort = use.getLocalPort();
+        ProcessingClient pc = new ProcessingClientStub("::", usedPort);
+        PortProcessor pp = new PortProcessor();
+        String result = pp.process(pc);
+        Assert.assertFalse((Integer.toString(usedPort)).equals(result));
+        try {
+            use.close();
+        } catch (Throwable t) {
+            //ignore cleanup errors
+        }
+    }
+
+    public void testProcessGenericOnGenericBoundPortIPv4() throws IOException {
+        // create a ServerSocket for localhost on any free port
+        ServerSocket use = new ServerSocket(0,0,InetAddress.getByName("0.0.0.0"));
+        int usedPort = use.getLocalPort();
+        ProcessingClient pc = new ProcessingClientStub("::", usedPort);
+        PortProcessor pp = new PortProcessor();
+        String result = pp.process(pc);
+        Assert.assertFalse((Integer.toString(usedPort)).equals(result));
+        try {
+            use.close();
+        } catch (Throwable t) {
+            //ignore cleanup errors
+        }
+    }
+
     class ProcessingClientStub implements ProcessingClient {
 
         String[] fields;
