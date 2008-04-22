@@ -1524,10 +1524,17 @@ public class CompilerConfig extends Thread
             if (uninstallInfo != null)
             {
                 String uninstallerName = uninstallInfo.getAttribute("name");
-                if (uninstallerName != null && uninstallerName.length() > ".jar".length())
+                if (uninstallerName != null && uninstallerName.length() > ".jar".length()){
                     info.setUninstallerName(uninstallerName);
-            }
-        }
+                }
+                if (uninstallInfo.hasAttribute("condition")){
+                    // there's a condition for uninstaller
+                    String uninstallerCondition = uninstallInfo.getAttribute("condition");
+                    info.setUninstallerCondition(uninstallerCondition);
+                }
+            }            
+        }        
+        
         // Add the path for the summary log file if specified
         XMLElement slfPath = root.getFirstChildNamed("summarylogfilepath");
         if (slfPath != null) info.setSummaryLogFilePath(requireContent(slfPath));
