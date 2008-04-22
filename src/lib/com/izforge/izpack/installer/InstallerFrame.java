@@ -602,18 +602,16 @@ public class InstallerFrame extends JFrame
         if (Debug.isTRACE()) {            
             debugger = new Debugger(installdata,icons,rules);
             JPanel debugpanel = debugger.getDebugPanel();
-            if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")) {
-                if (Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow"))) {
-                    JFrame debugframe = new JFrame("Debug information");                    
-                    debugframe.setContentPane(debugpanel);
-                    debugframe.setSize(new Dimension(400,400));
-                    debugframe.setVisible(true);
-                }
-                else {
-                    debugpanel.setPreferredSize(new Dimension(200,400));                        
-                    contentPane.add(debugpanel,BorderLayout.EAST);
-                }                            
+            if (installdata.guiPrefs.modifier.containsKey("showDebugWindow") && Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow"))) {
+                JFrame debugframe = new JFrame("Debug information");                    
+                debugframe.setContentPane(debugpanel);
+                debugframe.setSize(new Dimension(400,400));
+                debugframe.setVisible(true);
             }
+            else {
+                debugpanel.setPreferredSize(new Dimension(200,400));                        
+                contentPane.add(debugpanel,BorderLayout.EAST);
+            }                            
         }
         
         try
