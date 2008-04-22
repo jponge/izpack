@@ -1021,6 +1021,13 @@ public class InstallerFrame extends JFrame
         }
         try
         {
+            String condition = installdata.getVariable("UNINSTALLER_CONDITION");
+            if (condition != null){
+                if (!RulesEngine.getCondition(condition).isTrue()){
+                    // condition for creating the uninstaller is not fulfilled.
+                    return;                    
+                }
+            }
             // We get the data
             UninstallData udata = UninstallData.getInstance();
             List files = udata.getUninstalableFilesList();
