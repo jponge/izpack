@@ -30,6 +30,7 @@ $Id$
     <!ELEMENT uninstaller EMPTY>
         <!ATTLIST uninstaller write (yes|no) "yes">
         <!ATTLIST uninstaller name CDATA "uninstaller.jar">
+        <!ATTLIST uninstaller condition CDATA>
     <!ELEMENT webdir (#PCDATA)>
     <!ELEMENT summarylogfilepath (#PCDATA)>
 	<!ELEMENT writeinstallationinformation (#PCDATA)>
