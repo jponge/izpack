@@ -35,7 +35,8 @@ public class PortProcessorTest extends TestCase
         ProcessingClient pc = new ProcessingClientStub("localhost", usedPort);
         PortProcessor pp = new PortProcessor();
         String result = pp.process(pc);
-        Assert.assertFalse((Integer.toString(usedPort)).equals(result));
+        System.out.println(result);
+        Assert.assertFalse(("localhost*"+Integer.toString(usedPort)).equals(result));
         try {
             use.close();
         } catch (Throwable t) {
@@ -50,7 +51,7 @@ public class PortProcessorTest extends TestCase
         ProcessingClient pc = new ProcessingClientStub("::", usedPort);
         PortProcessor pp = new PortProcessor();
         String result = pp.process(pc);
-        Assert.assertFalse((Integer.toString(usedPort)).equals(result));
+        Assert.assertFalse(("::*"+Integer.toString(usedPort)).equals(result));
         try {
             use.close();
         } catch (Throwable t) {
@@ -62,10 +63,25 @@ public class PortProcessorTest extends TestCase
         // create a ServerSocket for localhost on any free port
         ServerSocket use = new ServerSocket(0,0,InetAddress.getByName("0.0.0.0"));
         int usedPort = use.getLocalPort();
-        ProcessingClient pc = new ProcessingClientStub("::", usedPort);
+        ProcessingClient pc = new ProcessingClientStub("0.0.0.0", usedPort);
         PortProcessor pp = new PortProcessor();
         String result = pp.process(pc);
-        Assert.assertFalse((Integer.toString(usedPort)).equals(result));
+        Assert.assertFalse(("0.0.0.0*"+Integer.toString(usedPort)).equals(result));
+        try {
+            use.close();
+        } catch (Throwable t) {
+            //ignore cleanup errors
+        }
+    }
+
+    public void testProcessSpecificOnGenericBoundPortIPv4() throws IOException {
+        // create a ServerSocket for localhost on any free port
+        ServerSocket use = new ServerSocket(0,0,InetAddress.getByName("0.0.0.0"));
+        int usedPort = use.getLocalPort();
+        ProcessingClient pc = new ProcessingClientStub("127.0.0.1", usedPort);
+        PortProcessor pp = new PortProcessor();
+        String result = pp.process(pc);
+        Assert.assertEquals("127.0.0.1*"+Integer.toString(usedPort),result);
         try {
             use.close();
         } catch (Throwable t) {
