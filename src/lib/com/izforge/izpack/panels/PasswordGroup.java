@@ -21,6 +21,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.util.Debug;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -52,7 +53,7 @@ public class PasswordGroup implements ProcessingClient
 //  private boolean hasParams = false;
 //  private Map validatorParams = null;
     private Processor processor = null;
-
+    private String modifiedPassword = null;
     private int currentValidator = 0;
 
     private InstallData idata;
@@ -74,16 +75,10 @@ public class PasswordGroup implements ProcessingClient
         try
         {
             this.idata = idata;
-//      this.validator = (Validator) Class.forName(validator).newInstance();
             this.validatorContainers = validatorContainers;
-//      this.validatorParams = validatorParams;
-//      if (validatorParams != null) {
-//        if (validatorParams.size() > 0) {
-//          hasParams = true;
-//        }
-//      }
         } catch (Throwable exception)
         {
+            Debug.trace("Failed in PasswordGroup constructor: "+exception);
             this.validatorContainers = null;
         }
 
@@ -95,6 +90,7 @@ public class PasswordGroup implements ProcessingClient
             this.processor = (Processor) Class.forName(processor).newInstance();
         } catch (Throwable exception)
         {
+            Debug.trace("Failed in PasswordGroup constructor making processor: "+exception);
             this.processor = null;
         }
     }
@@ -176,7 +172,7 @@ public class PasswordGroup implements ProcessingClient
             }
         } catch (Exception e)
         {
-            System.out.println("validateContents(" + i + ") failed: " + e);
+            Debug.trace("validateContents(" + i + ") failed: " + e);
         // just return true
         }
         return returnValue;
@@ -194,7 +190,7 @@ public class PasswordGroup implements ProcessingClient
             }
         } catch (Exception e)
         {
-            System.out.println("getValidatorMessage(" + i + ") failed: " + e);
+            Debug.trace("getValidatorMessage(" + i + ") failed: " + e);
         // just return true
         }
         return returnValue;
@@ -245,7 +241,7 @@ public class PasswordGroup implements ProcessingClient
             }
         } catch (Exception e)
         {
-            System.out.println("hasParams(" + i + ") failed: " + e);
+            Debug.trace("hasParams(" + i + ") failed: " + e);
         // just return true
         }
         return returnValue;
@@ -268,7 +264,7 @@ public class PasswordGroup implements ProcessingClient
             }
         } catch (Exception e)
         {
-            System.out.println("getValidatorParams(" + i + ") failed: " + e);
+            Debug.trace("getValidatorParams(" + i + ") failed: " + e);
         // just return true
         }
         return returnValue;
@@ -281,9 +277,16 @@ public class PasswordGroup implements ProcessingClient
         return getValidatorMessage(currentValidator);
     }
 
+    public void setModifiedPassword(String value) 
+    {
+        modifiedPassword = value;
+    }
+    
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the password. If a processing service class was supplied it will be used to process
+     * Returns the password in the following order: 
+     * If a validator sets a modified password such as an encrypted string that is returned, 
+     * OR if a processing service class was supplied it will be used to process
      * the password before it is returned, otherwise the content of the first field will be
      * returned.
      * 
@@ -292,20 +295,18 @@ public class PasswordGroup implements ProcessingClient
     /*--------------------------------------------------------------------------*/
     public String getPassword()
     {
-        if (processor != null)
-        {
-            return (processor.process(this));
-        } else
-        {
-            String contents = "";
-
-            if (fields.size() > 0)
-            {
-                contents = new String((fields.elementAt(0)).getPassword());
-            }
-
-            return (contents);
+      String returnValue = "";
+      if (modifiedPassword!=null) {
+        returnValue = modifiedPassword;
+        if (processor!=null) {
+          Debug.trace("Validator changed password, PROCESSOR WILL NOT RUN!");
         }
+      } else if (processor != null) {
+        returnValue = processor.process(this);
+      } else if (fields.size() > 0) {
+        returnValue = new String(((JPasswordField)fields.elementAt(0)).getPassword());
+      }
+      return returnValue;
     }
 
 }

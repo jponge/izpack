@@ -2251,9 +2251,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
             falseValue = detail.getAttribute(FALSE);
             causesValidataion = detail.getAttribute(REVALIDATE);
             String value = idata.getVariable(variable);
-            if(value != null)
+            Debug.trace("check: value: "+value+", set: "+set);
+            if (value != null)
             {
-                set = value;
+              // Default is not checked so we only need to check for true
+              if (value.equals(trueValue)) {
+                set = TRUE;
+              }
             }
         }
 
@@ -2261,7 +2265,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
         
         if(causesValidataion != null && causesValidataion.equals("yes"))
            checkbox.addActionListener(this);
-        idata.setVariable(variable, set);
+        // We shouldn't be changing the variable until it is read and 
+        // it should be the set true or false value (detail) not boolean
+        // idata.setVariable(variable, set);
         
         if (set != null)
         {
@@ -2332,16 +2338,19 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
         catch (Throwable exception)
         {
+            Debug.trace("readCheckBox(): failed: "+exception);
             return (true);
         }
 
         if (box.isSelected())
         {
+            Debug.trace("readCheckBox(): selected, setting "+variable+" to "+trueValue);
             idata.setVariable(variable, trueValue);
             entries.add(new TextValuePair(variable, trueValue));
         }
         else
         {
+            Debug.trace("readCheckBox(): not selected, setting "+variable+" to "+falseValue);
             idata.setVariable(variable, falseValue);
             entries.add(new TextValuePair(variable, falseValue));
         }
