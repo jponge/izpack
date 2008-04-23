@@ -81,6 +81,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     /** Where the output is displayed */
     private JTextArea outputPane;
 
+    private static boolean finishedWork = false;
     /**
      * The constructor.
      * 
@@ -163,6 +164,9 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
         validated = true;
         idata.installSuccess = worker.getResult();
         if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) parent.unlockNextButton();
+        
+        // set to finished only in case of success
+        finishedWork = idata.installSuccess;                   
     }
 
     /**
@@ -218,7 +222,10 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
 
         parent.lockNextButton();
 
-        this.worker.startThread();
+        // only let the process start if the weren't finished before.
+        if (!finishedWork){
+            this.worker.startThread();
+        }
     }
 
     /** Create XML data for automated installation. */
