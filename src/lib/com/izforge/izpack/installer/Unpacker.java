@@ -44,6 +44,7 @@ import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
 
@@ -471,7 +472,7 @@ public class Unpacker extends UnpackerBase
                 err.printStackTrace();
             }
             this.result = false;
-            System.exit(4);
+            Housekeeper.getInstance().shutDown(4);
         }
         finally
         {

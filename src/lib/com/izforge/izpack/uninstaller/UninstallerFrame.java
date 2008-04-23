@@ -55,6 +55,7 @@ import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.Housekeeper;
 
 /**
  * The uninstaller frame class.
@@ -308,7 +309,7 @@ public class UninstallerFrame extends JFrame
          */
         public void windowClosing(WindowEvent e)
         {
-            System.exit(0);
+            Housekeeper.getInstance().shutDown(0);
         }
     }
 
@@ -490,7 +491,7 @@ public class UninstallerFrame extends JFrame
         {
             Object src = e.getSource();
             if (src == quitButton)
-                System.exit(0);
+                Housekeeper.getInstance().shutDown(0);
             else if (src == destroyButton)
             {
                 destroyButton.setEnabled(false);

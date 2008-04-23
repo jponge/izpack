@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.uninstaller;
 
+import com.izforge.izpack.util.Housekeeper;
 import javax.swing.*;
 import java.lang.reflect.Method;
 
@@ -86,7 +87,7 @@ public class Uninstaller
         {
             System.err.println("- Error -");
             err.printStackTrace();
-            System.exit(0);
+            Housekeeper.getInstance().shutDown(0);
         }
     }
 
@@ -120,7 +121,7 @@ public class Uninstaller
                 {
                     System.err.println("- Error -");
                     err.printStackTrace();
-                    System.exit(0);
+                    Housekeeper.getInstance().shutDown(0);
                 }
             }
         });
