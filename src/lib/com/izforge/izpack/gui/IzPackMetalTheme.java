@@ -19,17 +19,17 @@
 
 package com.izforge.izpack.gui;
 
-import java.awt.Font;
-
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.DefaultMetalTheme;
+import java.awt.*;
 
 /**
  * The IzPack metal theme.
  * 
  * @author Julien Ponge
  */
+@Deprecated
 public class IzPackMetalTheme extends DefaultMetalTheme
 {
 

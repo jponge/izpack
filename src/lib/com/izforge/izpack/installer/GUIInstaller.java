@@ -20,58 +20,29 @@
 
 package com.izforge.izpack.installer;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Toolkit;
+import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.VariableSubstitutor;
+
+import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.metal.MetalTheme;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
-
-import javax.swing.GrayFilter;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
-import javax.swing.LookAndFeel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.MetalTheme;
-
-import com.izforge.izpack.GUIPrefs;
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.IzPackMetalTheme;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.FileExecutor;
-import java.io.File;
 
 /**
  * The IzPack graphical installer class.
@@ -407,13 +378,7 @@ public class GUIInstaller extends InstallerBase
                 UIManager.setLookAndFeel(syslaf);
                 if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel)
                 {
-                    MetalLookAndFeel.setCurrentTheme(new IzPackMetalTheme());
-                    ButtonFactory.useHighlightButtons();
-                    // Reset the use button icons state because
-                    // useHighlightButtons
-                    // make it always true.
                     ButtonFactory.useButtonIcons(useButtonIcons);
-                    installdata.buttonsHColor = new Color(182, 182, 204);
                 }
             }
             lnf = "swing";

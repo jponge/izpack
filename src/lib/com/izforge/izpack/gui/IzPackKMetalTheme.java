@@ -26,6 +26,7 @@ import javax.swing.plaf.ColorUIResource;
  * 
  * @author Julien Ponge
  */
+@Deprecated
 public class IzPackKMetalTheme extends IzPackMetalTheme
 {
 
