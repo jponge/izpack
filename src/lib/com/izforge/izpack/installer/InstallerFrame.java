@@ -283,7 +283,7 @@ public class InstallerFrame extends JFrame
      */
     private void refreshDynamicVariables() {        
         if (dynamicvariables != null) {            
-            for (String dynvarname : dynamicvariables.keySet())               
+            for (String dynvarname : dynamicvariables.keySet()){               
                 for(DynamicVariable dynvar : dynamicvariables.get(dynvarname)){                    
                         boolean refresh = false;
                         String conditionid = dynvar.getConditionid();
