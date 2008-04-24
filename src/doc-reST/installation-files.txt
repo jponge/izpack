@@ -475,7 +475,7 @@ The GUI Preferences Element ``<guiprefs>``
 
 This element allows you to set the behavior of your installer GUI. This
 information will not have any effect on the command-line installers that will
-be available in future versions of iZPACK . The arguments to specify are :
+be available in future versions of IzPack. The arguments to specify are :
 
 -   ``resizable`` : takes ``yes`` or ``no`` and indicates whether the
     window size can be changed or not.

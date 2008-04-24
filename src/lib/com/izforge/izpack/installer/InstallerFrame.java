@@ -236,6 +236,10 @@ public class InstallerFrame extends JFrame
     private Map<String, List<DynamicVariable>> dynamicvariables;
     private VariableSubstitutor substitutor;
     private Debugger debugger;
+    
+    // If a heading image is defined should it be displayed on the left
+    private boolean imageLeft = false;
+
 
     /**
      * The constructor (normal mode).
@@ -1819,11 +1823,20 @@ public class InstallerFrame extends JFrame
                         currentSize * fontSize));
             }
         }
+        if (imageLeft) 
+        {
+          headingLabels[0].setAlignmentX(Component.RIGHT_ALIGNMENT);
+        }
         for (int i = 1; i < headingLines; ++i)
         {
             headingLabels[i] = new JLabel();
             // Minor headings should be a little bit more to the right.
-            headingLabels[i].setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
+            if (imageLeft) 
+            {
+              headingLabels[i].setAlignmentX(Component.RIGHT_ALIGNMENT);  
+            } else {
+              headingLabels[i].setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 8));
+            }
         }
 
     }
@@ -1854,13 +1867,22 @@ public class InstallerFrame extends JFrame
                 headingProgressBar.setString("");
                 headingProgressBar.setValue(0);
                 headingCounterComponent = headingProgressBar;
+                if (imageLeft) 
+                {
+                  headingCounterComponent.setAlignmentX(Component.RIGHT_ALIGNMENT);
+                }
             }
             else if ("text".equalsIgnoreCase(installdata.guiPrefs.modifier
                     .get("headingPanelCounter")))
             {
                 JLabel headingCountPanels = new JLabel(" ");
                 headingCounterComponent = headingCountPanels;
-                headingCounterComponent.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
+                if (imageLeft) 
+                {
+                  headingCounterComponent.setAlignmentX(Component.RIGHT_ALIGNMENT);
+                } else {
+                  headingCounterComponent.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 0));
+                }
                 
                 // Updated by Daniel Azarov, Exadel Inc.
                 // start
@@ -1874,7 +1896,7 @@ public class InstallerFrame extends JFrame
             }
             if ("inHeading".equals(counterPos))
             {
-                leftHeadingPanel.add(headingCounterComponent);
+                  leftHeadingPanel.add(headingCounterComponent);
             }
             else if ("inNavigationPanel".equals(counterPos))
             {
@@ -1927,7 +1949,12 @@ public class InstallerFrame extends JFrame
         
         if (back != null) imgPanel.setBackground(back);
         JLabel iconLab = new JLabel(icon);
-        imgPanel.add(iconLab, BorderLayout.EAST);
+        if (imageLeft) 
+        {
+          imgPanel.add(iconLab, BorderLayout.WEST);
+        } else {
+          imgPanel.add(iconLab, BorderLayout.EAST);
+        }
         headingLabels[headingLabels.length - 1] = iconLab;
         return (imgPanel);
 
@@ -1958,7 +1985,13 @@ public class InstallerFrame extends JFrame
             createHeadingCounter(back, navPanel, null);
             return;
         }
-
+        // See if we should switch the header image to the left side
+        if (installdata.guiPrefs.modifier.containsKey("headingImageOnLeft") &&
+            (installdata.guiPrefs.modifier.get("headingImageOnLeft").equalsIgnoreCase("yes") ||
+             installdata.guiPrefs.modifier.get("headingImageOnLeft").equalsIgnoreCase("true") ))
+        {
+          imageLeft = true;
+        }
         // We create the text labels and the needed panels. From inner to outer.
         // Labels
         createHeadingLabels(headingLines, back);
@@ -1966,8 +1999,15 @@ public class InstallerFrame extends JFrame
         JPanel leftHeadingPanel = new JPanel();
         if (back != null) leftHeadingPanel.setBackground(back);
         leftHeadingPanel.setLayout(new BoxLayout(leftHeadingPanel, BoxLayout.Y_AXIS));
-        for (i = 0; i < headingLines; ++i)
+        if (imageLeft) 
+        {
+          leftHeadingPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 8));
+        }
+        for (i = 0; i < headingLines; ++i) 
+        {
             leftHeadingPanel.add(headingLabels[i]);
+        }
+          
         // HeadingPanel counter: this is a label or a progress bar which can be placed
         // in the leftHeadingPanel or in the navigation bar. It is facultative. If
         // exist, it shows the current panel number and the amount of panels.
@@ -1980,9 +2020,16 @@ public class InstallerFrame extends JFrame
         if (back != null) northPanel.setBackground(back);
         northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.X_AXIS));
         northPanel.setBorder(BorderFactory.createEmptyBorder(0, 12, 0, 0));
-        northPanel.add(leftHeadingPanel);
-        northPanel.add(Box.createHorizontalGlue());
-        northPanel.add(imgPanel);
+        if (imageLeft) 
+        {
+          northPanel.add(imgPanel);
+          northPanel.add(Box.createHorizontalGlue());
+          northPanel.add(leftHeadingPanel);
+        } else {
+          northPanel.add(leftHeadingPanel);
+          northPanel.add(Box.createHorizontalGlue());
+          northPanel.add(imgPanel);
+        }
         headingPanel = new JPanel(new BorderLayout());
         headingPanel.add(northPanel);
         headingPanel.add(new JSeparator(), BorderLayout.SOUTH);
