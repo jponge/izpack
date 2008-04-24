@@ -89,7 +89,7 @@ public abstract class PackagerBase implements IPackager
     protected Map<String, Condition> rules = new HashMap<String, Condition>();
     
     /** dynamic variables */
-    protected Map<String, DynamicVariable> dynamicvariables = new HashMap<String, DynamicVariable>();
+    protected Map<String, List<DynamicVariable>> dynamicvariables = new HashMap<String, List<DynamicVariable>>();
 
     /** Jar file URLs who's contents will be copied into the installer. */
     protected Set<Object[]> includedJarURLs = new HashSet<Object[]>();
@@ -349,7 +349,7 @@ public abstract class PackagerBase implements IPackager
     /**
      * @return the dynamicvariables
      */
-    public Map<String, DynamicVariable> getDynamicVariables()
+    public Map<String, List<DynamicVariable>> getDynamicVariables()
     {
         return this.dynamicvariables;
     }
@@ -358,7 +358,7 @@ public abstract class PackagerBase implements IPackager
     /**
      * @param dynamicvariables the dynamicvariables to set
      */
-    public void setDynamicVariables(Map<String, DynamicVariable> dynamicvariables)
+    public void setDynamicVariables(Map<String, List<DynamicVariable>> dynamicvariables)
     {
         this.dynamicvariables = dynamicvariables;
     }

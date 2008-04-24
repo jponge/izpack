@@ -38,7 +38,9 @@ public class DynamicVariable implements Serializable
     private String conditionid;
     
     public DynamicVariable() {
-        
+        name = "";
+        value = "";
+        conditionid = "";
     }
     
     /**
@@ -54,7 +56,9 @@ public class DynamicVariable implements Serializable
      */
     public void setName(String name)
     {
-        this.name = name;
+        if (name != null){
+            this.name = name;    
+        }        
     }
     
     /**
@@ -70,7 +74,9 @@ public class DynamicVariable implements Serializable
      */
     public void setValue(String value)
     {
-        this.value = value;
+        if (value != null){
+            this.value = value;    
+        }        
     }
     
     /**
@@ -86,9 +92,26 @@ public class DynamicVariable implements Serializable
      */
     public void setConditionid(String conditionid)
     {
-        this.conditionid = conditionid;
+        if (conditionid != null){
+            this.conditionid = conditionid;    
+        }        
     }
-    
-    
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if ((obj == null) || !(obj instanceof DynamicVariable)){
+            return false;
+        }
+        DynamicVariable compareObj = (DynamicVariable) obj;
+        return (name.equals(compareObj.getName()) && value.equals(compareObj.getValue()) && conditionid.equals(compareObj.getConditionid()));
+    }
+
+    @Override
+    public int hashCode()
+    {        
+        // TODO: check if this always correct
+        return name.hashCode() ^ value.hashCode() ^ conditionid.hashCode();
+    }       
 }
 

@@ -233,7 +233,7 @@ public class InstallerFrame extends JFrame
      */
     private static final String CUSTOM_ICONS_RESOURCEFILE = "customicons.xml";
     
-    private Map<String, DynamicVariable> dynamicvariables;
+    private Map<String, List<DynamicVariable>> dynamicvariables;
     private VariableSubstitutor substitutor;
     private Debugger debugger;
 
@@ -282,25 +282,26 @@ public class InstallerFrame extends JFrame
      *
      */
     private void refreshDynamicVariables() {        
-        if (dynamicvariables != null) {
-            Iterator<String> iter = dynamicvariables.keySet().iterator();
-            while (iter.hasNext()) {
-                String dynvarname = iter.next();
-                DynamicVariable dynvar = dynamicvariables.get(dynvarname);
-                boolean refresh = false;
-                if (dynvar.getConditionid() != null) {
-                    if ((rules != null) &&  rules.isConditionTrue(dynvar.getConditionid())) {
-                        // condition for this rule is true
-                        refresh = true;
-                    }                    
-                }
-                else {
-                    refresh = true;
-                }
-                if (refresh) {
-                    String newvalue = substitutor.substitute(dynvar.getValue(), null);
-                    installdata.variables.setProperty(dynvar.getName(), newvalue);
-                }
+        if (dynamicvariables != null) {            
+            for (String dynvarname : dynamicvariables.keySet())               
+                for(DynamicVariable dynvar : dynamicvariables.get(dynvarname)){                    
+                        boolean refresh = false;
+                        String conditionid = dynvar.getConditionid();
+                        if ((conditionid != null) && (conditionid.length() > 0)) {
+                            if ((rules != null) &&  rules.isConditionTrue(conditionid)) {
+                                // condition for this rule is true
+                                refresh = true;
+                            }                    
+                        }
+                        else {
+                            // empty condition
+                            refresh = true;
+                        }
+                        if (refresh) {
+                            String newvalue = substitutor.substitute(dynvar.getValue(), null);
+                            installdata.variables.setProperty(dynvar.getName(), newvalue);
+                        } 
+                }                
             }
         }
     }
@@ -314,7 +315,7 @@ public class InstallerFrame extends JFrame
         try {
             InputStream in = InstallerFrame.class.getResourceAsStream("/dynvariables");
             ObjectInputStream objIn = new ObjectInputStream(in); 
-            dynamicvariables = (Map<String, DynamicVariable>) objIn.readObject();
+            dynamicvariables = (Map<String, List<DynamicVariable>>) objIn.readObject();
             objIn.close();
         }
         catch (Exception e) {

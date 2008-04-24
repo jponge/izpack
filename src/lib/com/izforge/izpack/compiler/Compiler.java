@@ -31,7 +31,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -670,8 +669,8 @@ public class Compiler extends Thread
                 parseError(desc + " not found: " + resource);
 
             try
-            {
-                url = resource.toURL();
+            {                
+                url = resource.toURI().toURL();
             }
             catch (MalformedURLException how)
             {
@@ -893,13 +892,13 @@ public class Compiler extends Thread
         this.packager.setRules(conditions);        
     }
     
-    public Map<String, DynamicVariable> getDynamicVariables()
+    public Map<String, List<DynamicVariable>> getDynamicVariables()
     {
         return this.packager.getDynamicVariables();
     }
     
     
-    public void setDynamicVariables(Map<String, DynamicVariable> dynamicvariables)
+    public void setDynamicVariables(Map<String, List<DynamicVariable>> dynamicvariables)
     {
         this.packager.setDynamicVariables(dynamicvariables);
     }

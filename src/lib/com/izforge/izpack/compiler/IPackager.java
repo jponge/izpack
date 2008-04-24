@@ -199,11 +199,11 @@ public interface IPackager
      * Returns a map of dynamically refreshed variables
      * @return the map
      */
-    public abstract Map<String, DynamicVariable> getDynamicVariables();
+    public abstract Map<String, List<DynamicVariable>> getDynamicVariables();
     
     /**
      * 
      * @param dynamicvariables
      */
-    public abstract void setDynamicVariables(Map<String, DynamicVariable> dynamicvariables);
+    public abstract void setDynamicVariables(Map<String, List<DynamicVariable>> dynamicvariables);
 }
