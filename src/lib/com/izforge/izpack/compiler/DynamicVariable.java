@@ -104,7 +104,7 @@ public class DynamicVariable implements Serializable
             return false;
         }
         DynamicVariable compareObj = (DynamicVariable) obj;
-        return (name.equals(compareObj.getName()) && value.equals(compareObj.getValue()) && conditionid.equals(compareObj.getConditionid()));
+        return (name.equals(compareObj.getName()) && conditionid.equals(compareObj.getConditionid()));
     }
 
     @Override
