@@ -111,7 +111,7 @@ public class DynamicVariable implements Serializable
     public int hashCode()
     {        
         // TODO: check if this always correct
-        return name.hashCode() ^ value.hashCode() ^ conditionid.hashCode();
+        return name.hashCode() ^ conditionid.hashCode();
     }       
 }
 
