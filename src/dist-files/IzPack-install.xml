@@ -23,37 +23,10 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>3.11.0</appversion>
+        <appversion>4.0.0-SNAPSHOT</appversion>
         <authors>
             <author email="" name="Julien Ponge (maintainer and original developer)"/>
-            
-            <author email="" name="Hans Aikema (developer)" />
-            <author email="" name="Klaus Bartz (developer)"/>     
-            <author email="" name="Marc Eppelmann (developer)" />
-            <author email="" name="Matthew Fudge (Volantis Systems Ltd., developers)" />
-            <author email="" name="Jeff Gordon (developer)" />
-            <author email="" name="Dennis Reil (developer)" />
-            <author email="" name="JBoss/RedHat: Vladimir Ralev (developers)" />
-            <author email="" name="Piotr Skowronek (developer)" />
-
-            <author email="" name="Daniel Azarov (Exadel Inc, contributors)" />
-            <author email="" name="Sergio Banos Calvo (contributor)" />
-            <author email="" name="Loic Bardon (contributor)" />
-            <author email="" name="Roberto Boriotti (contributor)" />
-            <author email="" name="Kerekes Balazs (contributor)" />
-            <author email="" name="Xabier Cancela (contributor)" />
-            <author email="" name="Andreas Guenther (contributor)" />
-            <author email="" name="Michael Hagedorn (contributor)" />
-            <author email="" name="Dick Hollenbeck (contributor)" />
-            <author email="" name="Syed Khadeer (contributor)" />
-            <author email="" name="Parastou Kohvaei (contributor)" />
-            <author email="" name="Gildas Le Louarn (contributor)" />
-            <author email="" name="Alexander Maslov (contributor)" />
-            <author email="" name="Markus Schlegel (contributor)" />
-            <author email="" name="Ari Voutilainen (contributor)" />
-            <author email="" name="Pascal Wallem (contributor)" />
-            <author email="" name="Gilles Wiart (contributor)" />
-        </authors>
+       </authors>
         <url>http://izpack.org/</url>
         <javaversion>1.4</javaversion>
         <requiresjdk>no</requiresjdk>
@@ -62,11 +35,7 @@
 
     <!-- Flexible and in the screen proportions -->
     <guiprefs height="700" resizable="yes" width="870">
-	<laf name="looks">
-            <os family="unix" />
-	    <param name="variant" value="plastic3D" />
-	</laf>
-        <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
+       <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
     	<modifier key="layoutAnchor" value="CENTER"/>
     	<modifier key="headingPanelCounter" value="progressbar"/>
 		<modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
