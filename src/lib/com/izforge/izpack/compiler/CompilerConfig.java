@@ -1377,7 +1377,7 @@ public class CompilerConfig extends Thread
                         // if the xml parser did not open the url
                         // ('parsexml' was not enabled)
                         if (null == is) {
-                            is = new BufferedInputStream(url.openStream());
+                            is = new BufferedInputStream(originalUrl.openStream());
                         }
                         VariableSubstitutor vs = new VariableSubstitutor(compiler.getVariables());
                         vs.substitute(is, os, type, encoding);
