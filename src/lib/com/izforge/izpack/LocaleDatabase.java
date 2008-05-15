@@ -21,30 +21,127 @@ package com.izforge.izpack;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
+
+import com.izforge.izpack.installer.ResourceManager;
 
 import net.n3.nanoxml.NonValidator;
 import net.n3.nanoxml.StdXMLParser;
 import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLElement;
 import net.n3.nanoxml.XMLBuilderFactory;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * Represents a database of a locale.
  * 
  * @author Julien Ponge
+ * @author J. Chris Folsom <jchrisfolsom@gmail.com>
  */
 public class LocaleDatabase extends TreeMap
 {
+    /*
+     * Static cache of locale databases mapped by their iso name.
+     */
+    private static Map<String, LocaleDatabase> cachedLocales = new HashMap<String, LocaleDatabase>();
+
+    /**
+     * The directory where language packs are kept inside the installer jar
+     * file.
+     */
+    public static final String LOCALE_DATABASE_DIRECTORY = "/langpacks/";
+
+    /**
+     * The suffix for language pack definitions (.xml).
+     */
+    public static final String LOCALE_DATABASE_DEF_SUFFIX = ".xml";
+
+    /**
+     * Load a locale database. If the database has already been loaded it will
+     * not be reloaded.
+     * 
+     * @param isoCode
+     *            The io code of the locale database.
+     * @return The locale database or null if it cannot be found.
+     * @throws Exception
+     */
+    public static synchronized LocaleDatabase getLocaleDatabase(String isoCode)
+            throws Exception
+    {
+        return getLocaleDatabase(isoCode, false);
+    }
+
+    /**
+     * Load a LocaleDatabase.
+     * 
+     * @param isoCode
+     *            The ISO language prefix for the locale.
+     * @param reload
+     *            Whether or not to reload the locale database if it has already
+     *            been loaded.
+     * @return The locale database or null if it cannot be found.
+     * 
+     * FIXME Maybe we should define some custom exception like
+     * LocaleLoadException or something similar so that this class can have a
+     * method signature that does not throw Exception
+     */
+    public static synchronized LocaleDatabase getLocaleDatabase(String isoCode,
+            boolean reload) throws Exception
+    {
+        LocaleDatabase langpack = cachedLocales.get(isoCode);
+
+        if (reload || langpack == null)
+        {
+            StringBuffer localeDefPath = new StringBuffer();
+
+            localeDefPath.append(LOCALE_DATABASE_DIRECTORY);
+            localeDefPath.append(isoCode);
+            localeDefPath.append(LOCALE_DATABASE_DEF_SUFFIX);
+
+            String path = localeDefPath.toString();
+
+            // The resource exists
+            if (LocaleDatabase.class.getResource(path) != null)
+            {
+                langpack = new LocaleDatabase(LocaleDatabase.class
+                        .getResourceAsStream(path));
+
+                cachedLocales.put(isoCode, langpack);
+            }
+        }
+
+        return langpack;
+    }
+
+    /**
+     * Load the current default LocaleDatabase.
+     * 
+     * @throws Exception
+     *             FIXME
+     */
+    public static synchronized LocaleDatabase getLocaleDatabase()
+            throws Exception
+    {
+        ResourceManager resourceManager = ResourceManager.getInstance();
+
+        String defaultLocale = resourceManager.getLocale();
+
+        return getLocaleDatabase(defaultLocale);
+    }
+
+    // End JCF changes
 
     static final long serialVersionUID = 4941525634108401848L;
 
     /**
      * The constructor.
      * 
-     * @param in An InputStream to read the translation from.
-     * @exception Exception Description of the Exception
+     * @param in
+     *            An InputStream to read the translation from.
+     * @exception Exception
+     *                Description of the Exception
      */
     public LocaleDatabase(InputStream in) throws Exception
     {
@@ -54,10 +151,11 @@ public class LocaleDatabase extends TreeMap
     }
 
     /**
-     * Adds the contents of the given stream to the data base. The stream have to contain key value
-     * pairs as declared by the DTD langpack.dtd.
+     * Adds the contents of the given stream to the data base. The stream have
+     * to contain key value pairs as declared by the DTD langpack.dtd.
      * 
-     * @param in an InputStream to read the translation from.
+     * @param in
+     *            an InputStream to read the translation from.
      * @throws Exception
      */
     public void add(InputStream in) throws Exception
@@ -85,8 +183,7 @@ public class LocaleDatabase extends TreeMap
             if (text != null && !"".equals(text))
             {
                 put(e.getAttribute("id"), text.trim());
-            }
-            else
+            } else
             {
                 put(e.getAttribute("id"), e.getAttribute("txt"));
             }
@@ -97,7 +194,8 @@ public class LocaleDatabase extends TreeMap
     /**
      * Convenience method to retrieve an element.
      * 
-     * @param key The key of the element to retrieve.
+     * @param key
+     *            The key of the element to retrieve.
      * @return The element value or the key if not found.
      */
     public String getString(String key)
@@ -112,15 +210,20 @@ public class LocaleDatabase extends TreeMap
     }
 
     /**
-     * Convenience method to retrieve an element and simultainiously insert variables into the
-     * string. A placeholder have to be build with the substring {n} where n is the parameter
-     * argument beginning with 0. The first argument is therefore {0}. If a parameter starts with a
-     * dollar sign the value will be used as key into the LocalDatabase. The key can be written as
-     * $MYKEY or ${MYKEY}. For all placeholder an argument should be exist and vis a versa.
+     * Convenience method to retrieve an element and simultaneously insert
+     * variables into the string. A place holder has to be build with the
+     * substring {n} where n is the parameter argument beginning with 0. The
+     * first argument is therefore {0}. If a parameter starts with a dollar sign
+     * the value will be used as key into the LocalDatabase. The key can be
+     * written as $MYKEY or ${MYKEY}. For all place holders an argument should
+     * be exist and vis a versa.
      * 
-     * @param key The key of the element to retrieve.
-     * @param variables the variables to insert
-     * @return The element value with the variables inserted or the key if not found.
+     * @param key
+     *            The key of the element to retrieve.
+     * @param variables
+     *            the variables to insert
+     * @return The element value with the variables inserted or the key if not
+     *         found.
      */
     public String getString(String key, String[] variables)
     {
@@ -137,7 +240,7 @@ public class LocaleDatabase extends TreeMap
             }
         }
 
-        return MessageFormat.format(getString(key), new Object[]{variables});
+        return MessageFormat.format(getString(key), variables);
     }
 
 }
