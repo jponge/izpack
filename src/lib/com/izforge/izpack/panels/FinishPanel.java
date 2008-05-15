@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -128,7 +129,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new File(idata.getInstallPath()));
         fc.setMultiSelectionEnabled(false);
-        fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
+        fc.addChoosableFileFilter(new AutomatedInstallScriptFilter());
         // fc.setCurrentDirectory(new File("."));
 
         // Shows it

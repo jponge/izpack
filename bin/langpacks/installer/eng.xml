@@ -129,6 +129,7 @@
     <str id="FinishPanel.auto" txt="Generate an automatic installation script"/>
     <str id="FinishPanel.auto.tip" 
          txt="Use this script to repeat this installation on other computers."/>
+    <str id="FinishPanel.auto.dialog.filterdesc" txt="XML Files" />
     
     <str id="ImgPacksPanel.packs" txt="The following packs are available:"/>
     <str id="ImgPacksPanel.snap" txt="Package snapshot:"/>
