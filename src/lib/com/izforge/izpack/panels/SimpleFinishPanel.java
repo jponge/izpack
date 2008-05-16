@@ -79,10 +79,10 @@ public class SimpleFinishPanel extends IzPanel
             
             // We set the information
             add(LabelFactory.create(parent.icons.getImageIcon("check")));
-            add(IzPanelLayout.createParagraphGap());
+            add(IzPanelLayout.createVerticalStrut(5));
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("information"), LEADING), NEXT_LINE);
-            add(IzPanelLayout.createParagraphGap());
+                    parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
+            add(IzPanelLayout.createVerticalStrut(5));
             if (idata.uninstallOutJar != null)
             {
                 // We prepare a message for the uninstaller feature
@@ -90,14 +90,14 @@ public class SimpleFinishPanel extends IzPanel
 
                 add(LabelFactory.create(parent.langpack
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("information"), LEADING), NEXT_LINE);
+                        .getImageIcon("preferences"), LEADING), NEXT_LINE);
                 add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
                         LEADING), NEXT_LINE);
             }
         }
         else
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
-                    parent.icons.getImageIcon("information"),  LEADING));
+                    parent.icons.getImageIcon("stop"),  LEADING));
         getLayoutHelper().completeLayout(); // Call, or call not?
         Log.getInstance().informUser();
     }

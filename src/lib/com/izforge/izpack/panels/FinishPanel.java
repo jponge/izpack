@@ -89,8 +89,8 @@ public class FinishPanel extends IzPanel implements ActionListener
         {
             // We set the information
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
-                    parent.icons.getImageIcon("information"), LEADING), NEXT_LINE);
-            add(IzPanelLayout.createParagraphGap());
+                    parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
+            add(IzPanelLayout.createVerticalStrut(5));
             if (idata.uninstallOutJar != null)
             {
                 // We prepare a message for the uninstaller feature
@@ -98,13 +98,13 @@ public class FinishPanel extends IzPanel implements ActionListener
 
                 add(LabelFactory.create(parent.langpack
                         .getString("FinishPanel.uninst.info"), parent.icons
-                        .getImageIcon("information"), LEADING), NEXT_LINE);
+                        .getImageIcon("preferences"), LEADING), NEXT_LINE);
                 add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
                         LEADING), NEXT_LINE);
             }
 
             // We add the autoButton
-            add(IzPanelLayout.createParagraphGap());
+            add(IzPanelLayout.createVerticalStrut(5));
             autoButton = ButtonFactory.createButton(parent.langpack.getString("FinishPanel.auto"),
                     parent.icons.getImageIcon("edit"), idata.buttonsHColor);
             autoButton.setToolTipText(parent.langpack.getString("FinishPanel.auto.tip"));
@@ -113,7 +113,7 @@ public class FinishPanel extends IzPanel implements ActionListener
         }
         else
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
-                    parent.icons.getImageIcon("information"), LEADING), NEXT_LINE);
+                    parent.icons.getImageIcon("stop"), LEADING), NEXT_LINE);
         getLayoutHelper().completeLayout(); // Call, or call not?
         Log.getInstance().informUser();
     }

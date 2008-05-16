@@ -52,6 +52,9 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     /** The operation label . */
     protected JLabel overallOpLabel;
 
+    /** The icon used. */
+    protected String iconName = "preferences";
+
     /** The pack progress bar. */
     protected JProgressBar packProgressBar;
 
@@ -74,7 +77,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
     {
         super(parent, idata, new IzPanelLayout());
         this.tipLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.tip"),
-                parent.icons.getImageIcon("information"), LEADING);
+                parent.icons.getImageIcon(iconName), LEADING);
         add(this.tipLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         packOpLabel = LabelFactory.create(" ", LEADING);
         add(packOpLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
@@ -85,10 +88,11 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
         packProgressBar.setValue(0);
         add(packProgressBar, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         // make sure there is some space between the progress bars
-        add(IzPanelLayout.createParagraphGap());
+        add(IzPanelLayout.createVerticalStrut(5));
+        //add(IzPanelLayout.createParagraphGap());
 
         overallOpLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.progress"),
-                parent.icons.getImageIcon("information"), LEADING);
+                parent.icons.getImageIcon(iconName), LEADING);
         add(this.overallOpLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
 
         overallProgressBar = new JProgressBar();
