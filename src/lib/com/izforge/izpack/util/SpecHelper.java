@@ -21,6 +21,10 @@
 
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.installer.ResourceManager;
+import net.n3.nanoxml.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -28,20 +32,10 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Vector;
 
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLElement;
-import net.n3.nanoxml.XMLBuilderFactory;
-
-import com.izforge.izpack.installer.InstallerException;
-import com.izforge.izpack.installer.ResourceManager;
-
 /**
  * This class contains some helper methods to simplify handling of xml specification files.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class SpecHelper
 {
@@ -71,8 +65,8 @@ public class SpecHelper
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the XML specification given by the file name. The result is stored in spec.
-     * 
-     * @exception Exception for any problems in reading the specification
+     *
+     * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     public void readSpec(String specFileName) throws Exception
@@ -83,8 +77,8 @@ public class SpecHelper
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the XML specification given by the file name. The result is stored in spec.
-     * 
-     * @exception Exception for any problems in reading the specification
+     *
+     * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     public void readSpec(String specFileName, VariableSubstitutor substitutor) throws Exception
@@ -116,8 +110,8 @@ public class SpecHelper
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the XML specification given by the input stream. The result is stored in spec.
-     * 
-     * @exception Exception for any problems in reading the specification
+     *
+     * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     public void readSpec(InputStream input) throws Exception
@@ -128,8 +122,8 @@ public class SpecHelper
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the XML specification given by the input stream. The result is stored in spec.
-     * 
-     * @exception Exception for any problems in reading the specification
+     *
+     * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     public void readSpec(InputStream input, VariableSubstitutor substitutor) throws Exception
@@ -153,7 +147,7 @@ public class SpecHelper
 
     /**
      * Gets the stream to a resource.
-     * 
+     *
      * @param res The resource id.
      * @return The resource value, null if not found
      */
@@ -172,7 +166,7 @@ public class SpecHelper
 
     /**
      * Returns a XML element which represents the pack for the given name.
-     * 
+     *
      * @param packDestName name of the pack which should be returned
      * @return a XML element which represents the pack for the given name
      */
@@ -180,14 +174,20 @@ public class SpecHelper
     {
         Vector<XMLElement> packs = getSpec().getChildrenNamed(PACK_KEY);
         Iterator<XMLElement> iter = null;
-        if (packs == null) return (null);
+        if (packs == null)
+        {
+            return (null);
+        }
         iter = packs.iterator();
         while (iter.hasNext())
         {
 
             XMLElement pack = iter.next();
             String packName = pack.getAttribute(PACK_NAME);
-            if (packName.equals(packDestName)) return (pack);
+            if (packName.equals(packDestName))
+            {
+                return (pack);
+            }
         }
         return (null);
 
@@ -196,8 +196,8 @@ public class SpecHelper
     /**
      * Create parse error with consistent messages. Includes file name and line # of parent. It is
      * an error for 'parent' to be null.
-     * 
-     * @param parent The element in which the error occured
+     *
+     * @param parent  The element in which the error occured
      * @param message Brief message explaining error
      */
     public void parseError(XMLElement parent, String message) throws InstallerException
@@ -207,7 +207,7 @@ public class SpecHelper
 
     /**
      * Returns true if a specification exist, else false.
-     * 
+     *
      * @return true if a specification exist, else false
      */
     public boolean haveSpec()
@@ -217,7 +217,7 @@ public class SpecHelper
 
     /**
      * Returns the specification.
-     * 
+     *
      * @return the specification
      */
     public XMLElement getSpec()
@@ -227,7 +227,7 @@ public class SpecHelper
 
     /**
      * Sets the specifaction to the given XML element.
-     * 
+     *
      * @param element
      */
     public void setSpec(XMLElement element)
@@ -237,10 +237,10 @@ public class SpecHelper
 
     /**
      * Returns a Vector with all leafs of the tree which is described with childdef.
-     * 
-     * @param root the XMLElement which is the current root for the search
+     *
+     * @param root     the XMLElement which is the current root for the search
      * @param childdef a String array which describes the tree; the last element contains the leaf
-     * name
+     *                 name
      * @return a Vector of XMLElements of all leafs founded under root
      */
     public Vector<XMLElement> getAllSubChildren(XMLElement root, String[] childdef)
@@ -251,11 +251,11 @@ public class SpecHelper
     /**
      * Returns a Vector with all leafs of the tree which is described with childdef beginning at the
      * given depth.
-     * 
-     * @param root the XMLElement which is the current root for the search
+     *
+     * @param root     the XMLElement which is the current root for the search
      * @param childdef a String array which describes the tree; the last element contains the leaf
-     * name
-     * @param depth depth to start in childdef
+     *                 name
+     * @param depth    depth to start in childdef
      * @return a Vector of XMLElements of all leafs founded under root
      */
     private Vector<XMLElement> getSubChildren(XMLElement root, String[] childdef, int depth)
@@ -263,7 +263,10 @@ public class SpecHelper
         Vector<XMLElement> retval = null;
         Vector<XMLElement> retval2 = null;
         Vector<XMLElement> children = root != null ? root.getChildrenNamed(childdef[depth]) : null;
-        if (children == null) return (null);
+        if (children == null)
+        {
+            return (null);
+        }
         if (depth < childdef.length - 1)
         {
             Iterator<XMLElement> iter = children.iterator();
@@ -272,21 +275,26 @@ public class SpecHelper
                 retval2 = getSubChildren(iter.next(), childdef, depth + 1);
                 if (retval2 != null)
                 {
-                    if (retval == null) retval = new Vector<XMLElement>();
+                    if (retval == null)
+                    {
+                        retval = new Vector<XMLElement>();
+                    }
                     retval.addAll(retval2);
                 }
             }
         }
         else
+        {
             return (children);
+        }
         return (retval);
     }
 
     /**
      * Creates an temp file in to the substitutor the substituted contents of input writes; close it
      * and (re)open it as FileInputStream. The file will be deleted on exit.
-     * 
-     * @param input the opened input stream which contents should be substituted
+     *
+     * @param input       the opened input stream which contents should be substituted
      * @param substitutor substitutor which should substitute the contents of input
      * @return a file input stream of the created temporary file
      * @throws Exception
@@ -304,7 +312,10 @@ public class SpecHelper
         }
         finally
         {
-            if (fos != null) fos.close();
+            if (fos != null)
+            {
+                fos.close();
+            }
         }
         return new FileInputStream(tempFile);
     }
@@ -312,17 +323,23 @@ public class SpecHelper
     /**
      * Returns whether the value to the given attribute is "yes" or not. If the attribute does not
      * exist, or the value is not "yes" and not "no", the default value is returned.
-     * 
-     * @param element the XML element which contains the attribute
-     * @param attribute the name of the attribute
+     *
+     * @param element      the XML element which contains the attribute
+     * @param attribute    the name of the attribute
      * @param defaultValue the default value
      * @return whether the value to the given attribute is "yes" or not
      */
     public boolean isAttributeYes(XMLElement element, String attribute, boolean defaultValue)
     {
         String value = element.getAttribute(attribute, (defaultValue ? YES : NO));
-        if (value.equalsIgnoreCase(YES)) return true;
-        if (value.equalsIgnoreCase(NO)) return false;
+        if (value.equalsIgnoreCase(YES))
+        {
+            return true;
+        }
+        if (value.equalsIgnoreCase(NO))
+        {
+            return false;
+        }
 
         return defaultValue;
     }
@@ -330,8 +347,8 @@ public class SpecHelper
     /**
      * Returns the attribute for the given attribute name. If no attribute exist, an
      * InstallerException with a detail message is thrown.
-     * 
-     * @param element XML element which should contain the attribute
+     *
+     * @param element  XML element which should contain the attribute
      * @param attrName key of the attribute
      * @return the attribute as string
      * @throws InstallerException

@@ -25,7 +25,8 @@ package com.izforge.izpack.util;
  *
  * @author marc.eppelmann&#064;reddot.de
  */
-public interface OsVersionConstants {
+public interface OsVersionConstants
+{
     //~ Static fields/initializers *********************************************************
 
     /**

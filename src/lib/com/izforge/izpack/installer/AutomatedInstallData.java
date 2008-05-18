@@ -19,23 +19,17 @@
 
 package com.izforge.izpack.installer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.zip.ZipOutputStream;
-
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.Info;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import net.n3.nanoxml.XMLElement;
+
+import java.util.*;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Encloses information about the install process. This implementation is not thread safe.
- * 
+ *
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
@@ -45,7 +39,7 @@ public class AutomatedInstallData
     // --- Static members -------------------------------------------------
     public static final String MODIFY_INSTALLATION = "modify.izpack.install";
     public static final String INSTALLATION_INFORMATION = ".installationinformation";
-    
+
     /**
      * Names of the custom actions types with which they are stored in the installer jar file. These
      * names are also used to identify the type of custom action in the customData map. Slashes as
@@ -54,7 +48,7 @@ public class AutomatedInstallData
     // Attention !! Do not change the existent names and the order.
     // Add a / as first char at new types. Add new type handling in
     // Unpacker.
-    static final String[] CUSTOM_ACTION_TYPES = new String[] { "/installerListeners",
+    static final String[] CUSTOM_ACTION_TYPES = new String[]{"/installerListeners",
             "/uninstallerListeners", "/uninstallerLibs", "/uninstallerJars"};
 
     public static final int INSTALLER_LISTENER_INDEX = 0;
@@ -67,49 +61,79 @@ public class AutomatedInstallData
 
     // --- Instance members -----------------------------------------------
 
-    /** The language code. */
+    /**
+     * The language code.
+     */
     public String localeISO3;
 
-    /** The used locale. */
+    /**
+     * The used locale.
+     */
     public Locale locale;
 
-    /** The language pack. */
+    /**
+     * The language pack.
+     */
     public LocaleDatabase langpack;
 
-    /** The uninstaller jar stream. */
+    /**
+     * The uninstaller jar stream.
+     */
     public ZipOutputStream uninstallOutJar;
 
-    /** The inforamtions. */
+    /**
+     * The inforamtions.
+     */
     public Info info;
 
-    /** The complete list of packs. */
+    /**
+     * The complete list of packs.
+     */
     public List<Pack> allPacks;
 
-    /** The available packs. */
+    /**
+     * The available packs.
+     */
     public List availablePacks;
 
-    /** The selected packs. */
+    /**
+     * The selected packs.
+     */
     public List selectedPacks;
 
-    /** The panels list. */
+    /**
+     * The panels list.
+     */
     public List<IzPanel> panels;
 
-    /** The panels order. */
+    /**
+     * The panels order.
+     */
     public List panelsOrder;
 
-    /** The current panel. */
+    /**
+     * The current panel.
+     */
     public int curPanelNumber;
 
-    /** Can we close the installer ? */
+    /**
+     * Can we close the installer ?
+     */
     public boolean canClose = false;
 
-    /** Did the installation succeed ? */
+    /**
+     * Did the installation succeed ?
+     */
     public boolean installSuccess = true;
 
-    /** The xmlData for automated installers. */
+    /**
+     * The xmlData for automated installers.
+     */
     public XMLElement xmlData;
 
-    /** Custom data. */
+    /**
+     * Custom data.
+     */
     public Map<String, List> customData;
 
     /**
@@ -117,27 +141,33 @@ public class AutomatedInstallData
      */
     protected Properties variables;
 
-    /** The attributes used by the panels */
+    /**
+     * The attributes used by the panels
+     */
     protected Map<String, Object> attributes;
-    
-    /** This class should be a singleton. Therefore
-     * the one possible object will be stored in this 
+
+    /**
+     * This class should be a singleton. Therefore
+     * the one possible object will be stored in this
      * static member.
      */
     private static AutomatedInstallData self = null;
-    
+
     /**
      * Returns the one possible object of this class.
+     *
      * @return the one possible object of this class
      */
     public static AutomatedInstallData getInstance()
     {
-        return( self);
+        return (self);
     }
 
-    /** Constructs a new instance of this class. 
+    /**
+     * Constructs a new instance of this class.
      * Only one should be possible, at a scound call a RuntimeException
-     * will be raised. */
+     * will be raised.
+     */
     public AutomatedInstallData()
     {
         availablePacks = new ArrayList();
@@ -148,15 +178,17 @@ public class AutomatedInstallData
         variables = new Properties();
         attributes = new HashMap<String, Object>();
         customData = new HashMap<String, List>();
-        if( self != null )
+        if (self != null)
+        {
             throw new RuntimeException("Panic!! second call of the InstallData Ctor!!");
+        }
         self = this;
     }
 
     /**
      * Returns the map of variable values. Modifying this will directly affect the current value of
      * variables.
-     * 
+     *
      * @return the map of variable values
      */
     public Properties getVariables()
@@ -167,7 +199,7 @@ public class AutomatedInstallData
     /**
      * Sets a variable to the specified value. This is short hand for
      * <code>getVariables().setProperty(var, val)</code>.
-     * 
+     *
      * @param var the name of the variable
      * @param val the new value of the variable
      * @see #getVariable
@@ -180,7 +212,7 @@ public class AutomatedInstallData
     /**
      * Returns the current value of the specified variable. This is short hand for
      * <code>getVariables().getProperty(var)</code>.
-     * 
+     *
      * @param var the name of the variable
      * @return the value of the variable or null if not set
      * @see #setVariable
@@ -192,7 +224,7 @@ public class AutomatedInstallData
 
     /**
      * Sets the install path.
-     * 
+     *
      * @param path the new install path
      * @see #getInstallPath
      */
@@ -203,7 +235,7 @@ public class AutomatedInstallData
 
     /**
      * Returns the install path.
-     * 
+     *
      * @return the current install path or null if none set yet
      * @see #setInstallPath
      */
@@ -214,7 +246,7 @@ public class AutomatedInstallData
 
     /**
      * Returns the value of the named attribute.
-     * 
+     *
      * @param attr the name of the attribute
      * @return the value of the attribute or null if not set
      * @see #setAttribute
@@ -230,17 +262,21 @@ public class AutomatedInstallData
      * panels do not need to implement a common data storage but can use InstallData singleton. The
      * name of the attribute should include the package and class name to prevent name space
      * collisions.
-     * 
+     *
      * @param attr the name of the attribute to set
-     * @param val the value of the attribute or null to unset the attribute
+     * @param val  the value of the attribute or null to unset the attribute
      * @see #getAttribute
      */
     public void setAttribute(String attr, Object val)
     {
         if (val == null)
+        {
             attributes.remove(attr);
+        }
         else
+        {
             attributes.put(attr, val);
+        }
 
     }
 }

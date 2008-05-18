@@ -21,30 +21,24 @@
 
 package com.izforge.izpack.compiler;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import com.izforge.izpack.util.VariableSubstitutor;
+import net.n3.nanoxml.XMLElement;
+import org.apache.tools.ant.taskdefs.Execute;
+
+import java.io.*;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 
-import net.n3.nanoxml.XMLElement;
-
-import org.apache.tools.ant.taskdefs.Execute;
-
-import com.izforge.izpack.util.VariableSubstitutor;
-
 /**
  * Sets a property by name, or set of properties (from file or resource) in the project. This is
  * modeled after ant properties
- * <p>
- * 
+ * <p/>
+ * <p/>
  * Properties are immutable: once a property is set it cannot be changed. They are most definately
  * not variable.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * There are five ways to set properties:
  * <ul>
  * <li>By supplying both the <i>name</i> and <i>value</i> attributes.</li>
@@ -54,37 +48,37 @@ import com.izforge.izpack.util.VariableSubstitutor;
  * defined for every environment variable by prefixing the supplied name and a period to the name of
  * the variable.</li>
  * </ul>
- * 
+ * <p/>
  * Combinations of the above are considered an error.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * The value part of the properties being set, might contain references to other properties. These
  * references are resolved when the properties are set.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * This also holds for properties loaded from a property file.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * Properties are case sensitive.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * When specifying the environment attribute, it's value is used as a prefix to use when retrieving
  * environment variables. This functionality is currently only implemented on select platforms.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * Thus if you specify environment=&quot;myenv&quot; you will be able to access OS-specific
  * environment variables via property names &quot;myenv.PATH&quot; or &quot;myenv.TERM&quot;.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * Note also that properties are case sensitive, even if the environment variables on your operating
  * system are not, e.g. it will be ${env.Path} not ${env.PATH} on Windows 2000.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * Note that when specifying either the <code>prefix</code> or <code>environment</code>
  * attributes, if you supply a property name with a final &quot;.&quot; it will not be doubled. ie
  * environment=&quot;myenv.&quot; will still allow access of environment variables through
  * &quot;myenv.PATH&quot; and &quot;myenv.TERM&quot;.
- * <p>
+ * <p/>
  */
 public class Property
 {
@@ -115,18 +109,27 @@ public class Property
         name = xmlProp.getAttribute("name");
         value = xmlProp.getAttribute("value");
         env = xmlProp.getAttribute("environment");
-        if (env != null && !env.endsWith(".")) env += ".";
+        if (env != null && !env.endsWith("."))
+        {
+            env += ".";
+        }
 
         prefix = xmlProp.getAttribute("prefix");
-        if (prefix != null && !prefix.endsWith(".")) prefix += ".";
+        if (prefix != null && !prefix.endsWith("."))
+        {
+            prefix += ".";
+        }
 
         String filename = xmlProp.getAttribute("file");
-        if (filename != null) file = new File(filename);
+        if (filename != null)
+        {
+            file = new File(filename);
+        }
     }
 
     /**
      * get the value of this property
-     * 
+     *
      * @return the current value or the empty string
      */
     public String getValue()
@@ -136,7 +139,7 @@ public class Property
 
     /**
      * get the value of this property
-     * 
+     *
      * @return the current value or the empty string
      */
     public String toString()
@@ -153,30 +156,43 @@ public class Property
         if (name != null)
         {
             if (value == null)
+            {
                 config.parseError(xmlProp, "You must specify a value with the name attribute");
+            }
         }
         else
         {
             if (file == null && env == null)
+            {
                 config.parseError(xmlProp,
                         "You must specify file, or environment when not using the name attribute");
+            }
         }
 
         if (file == null && prefix != null)
+        {
             config.parseError(xmlProp, "Prefix is only valid when loading from a file ");
+        }
 
         if ((name != null) && (value != null))
+        {
             addProperty(name, value);
+        }
 
         else if (file != null)
+        {
             loadFile(file);
+        }
 
-        else if (env != null) loadEnvironment(env);
+        else if (env != null)
+        {
+            loadEnvironment(env);
+        }
     }
 
     /**
      * load properties from a file
-     * 
+     *
      * @param file file to load
      */
     protected void loadFile(File file) throws CompilerException
@@ -195,7 +211,10 @@ public class Property
                 }
                 finally
                 {
-                    if (fis != null) fis.close();
+                    if (fis != null)
+                    {
+                        fis.close();
+                    }
                 }
                 addProperties(props);
             }
@@ -214,7 +233,7 @@ public class Property
 
     /**
      * load the environment values
-     * 
+     *
      * @param prefix prefix to place before them
      */
     protected void loadEnvironment(String prefix) throws CompilerException
@@ -242,8 +261,8 @@ public class Property
 
     /**
      * Add a name value pair to the project property set
-     * 
-     * @param name name of property
+     *
+     * @param name  name of property
      * @param value value to set
      */
     protected void addProperty(String name, String value) throws CompilerException
@@ -276,7 +295,7 @@ public class Property
 
     /**
      * resolve properties inside a properties object
-     * 
+     *
      * @param props properties to resolve
      */
     private void resolveAllProperties(Properties props) throws CompilerException

@@ -24,14 +24,19 @@ package com.izforge.izpack.util;
 
 /**
  * Interface for handle warnings logging with IzPack Log class.
+ *
  * @author Elmar Grom
  */
 public interface LogWarning
 {
-  /** First index for warning messages */
-  static final int WARNING_BASE = 1000;
+    /**
+     * First index for warning messages
+     */
+    static final int WARNING_BASE = 1000;
 
-  /** The highest legal error message number is less than this value.  */
-  static final int MAX_WARNING  = WARNING_BASE;
+    /**
+     * The highest legal error message number is less than this value.
+     */
+    static final int MAX_WARNING = WARNING_BASE;
 }
 

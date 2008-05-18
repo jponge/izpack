@@ -21,25 +21,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.gui.LabelFactory;
@@ -51,9 +32,19 @@ import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+
 /**
  * The packs selection panel class.
- * 
+ *
  * @author Jan Blok
  * @since November 27, 2003
  */
@@ -61,7 +52,7 @@ public class SudoPanel extends IzPanel implements ActionListener
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3689628116465561651L;
 
@@ -71,9 +62,9 @@ public class SudoPanel extends IzPanel implements ActionListener
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public SudoPanel(InstallerFrame parent, InstallData idata)
     {
@@ -83,15 +74,15 @@ public class SudoPanel extends IzPanel implements ActionListener
 
         add(LabelFactory
                 .create(
-                        /* parent.langpack.getString("SudoPanel.info") */"For installing administrator privileges are necessary",
-                        JLabel.TRAILING));
+                /* parent.langpack.getString("SudoPanel.info") */"For installing administrator privileges are necessary",
+                JLabel.TRAILING));
 
         add(Box.createRigidArea(new Dimension(0, 5)));
 
         add(LabelFactory
                 .create(
-                        /* parent.langpack.getString("SudoPanel.tip") */"Please note that passwords are case-sensitive",
-                        parent.icons.getImageIcon("tip"), JLabel.TRAILING));
+                /* parent.langpack.getString("SudoPanel.tip") */"Please note that passwords are case-sensitive",
+                parent.icons.getImageIcon("tip"), JLabel.TRAILING));
 
         add(Box.createRigidArea(new Dimension(0, 5)));
 
@@ -116,7 +107,9 @@ public class SudoPanel extends IzPanel implements ActionListener
         add(spacePanel);
     }
 
-    /** Called when the panel becomes active. */
+    /**
+     * Called when the panel becomes active.
+     */
     public void panelActivate()
     {
         passwordField.requestFocus();
@@ -124,7 +117,7 @@ public class SudoPanel extends IzPanel implements ActionListener
 
     /**
      * Actions-handling method.
-     * 
+     *
      * @param e The event.
      */
     public void actionPerformed(ActionEvent e)
@@ -189,7 +182,10 @@ public class SudoPanel extends IzPanel implements ActionListener
         }
         try
         {
-            if (file != null && file.exists()) file.delete();// you don't
+            if (file != null && file.exists())
+            {
+                file.delete();// you don't
+            }
             // want the file
             // with password
             // tobe arround,
@@ -204,7 +200,7 @@ public class SudoPanel extends IzPanel implements ActionListener
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return Always true.
      */
     public boolean isValidated()

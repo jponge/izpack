@@ -17,52 +17,34 @@
  */
 package com.izforge.izpack.installer;
 
-import java.awt.Component;
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
-
-import javax.swing.JOptionPane;
-
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.ParsableFile;
-import com.izforge.izpack.UpdateCheck;
-import com.izforge.izpack.XPackFile;
+import com.izforge.izpack.*;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.io.CorruptVolumeException;
 import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.io.VolumeNotFoundException;
 import com.izforge.izpack.panels.NextMediaDialog;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
 
 
 /**
  * Unpacker class for a multi volume installation.
- * 
+ *
  * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class MultiVolumeUnpacker extends UnpackerBase
-{             
+{
     public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler)
     {
-        super(idata, handler);       
+        super(idata, handler);
     }
 
     protected File enterNextMediaMessage(String volumename, boolean lastcorrupt)
@@ -79,7 +61,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
                     .getString("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
         }
         Debug.trace("Enter next media: " + volumename);
-        
+
         File nextvolume = new File(volumename);
         NextMediaDialog nmd = null;
 
@@ -118,8 +100,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
     {
         return enterNextMediaMessage(volumename, false);
     }
-    
-    /** The run method. */
+
+    /**
+     * The run method.
+     */
     public void run()
     {
         addToInstances();
@@ -204,11 +188,13 @@ public class MultiVolumeUnpacker extends UnpackerBase
                 // We get the internationalized name of the pack
                 final Pack pack = ((Pack) packs.get(i));
                 // evaluate condition
-                if (pack.hasCondition() && (rules != null)) {                    
-                    if (!rules.isConditionTrue(pack.getCondition())) {
+                if (pack.hasCondition() && (rules != null))
+                {
+                    if (!rules.isConditionTrue(pack.getCondition()))
+                    {
                         // skip pack, condition is not fullfilled.
                         continue;
-                    }                    
+                    }
                 }
                 String stepname = pack.name;// the message to be passed to the
                 // installpanel
@@ -226,8 +212,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
                 {
                     // We read the header
                     XPackFile pf = (XPackFile) objIn.readObject();
-                    if (pf.hasCondition() && (rules != null)) {
-                        if (!rules.isConditionTrue(pf.getCondition())) {
+                    if (pf.hasCondition() && (rules != null))
+                    {
+                        if (!rules.isConditionTrue(pf.getCondition()))
+                        {
                             // skip file, condition is false
                             continue;
                         }
@@ -238,7 +226,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         String path = IoHelper.translatePath(pf.getTargetPath(), vs);
                         File pathFile = new File(path);
                         File dest = pathFile;
-                        if (!pf.isDirectory()) dest = pathFile.getParentFile();
+                        if (!pf.isDirectory())
+                        {
+                            dest = pathFile.getParentFile();
+                        }
 
                         if (!dest.exists())
                         {
@@ -247,7 +238,9 @@ public class MultiVolumeUnpacker extends UnpackerBase
                             // creating a directory, create it recursively.
                             List fileListeners = customActions[customActions.length - 1];
                             if (fileListeners != null && fileListeners.size() > 0)
+                            {
                                 mkDirsWithEnhancement(dest, pf, customActions);
+                            }
                             else
                             // Create it in on step.
                             {
@@ -262,7 +255,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
                             }
                         }
 
-                        if (pf.isDirectory()) continue;
+                        if (pf.isDirectory())
+                        {
+                            continue;
+                        }
 
                         // Custom action listener stuff --- beforeFile ----
                         informListeners(customActions, InstallerListener.BEFORE_FILE, pathFile, pf,
@@ -303,9 +299,13 @@ public class MultiVolumeUnpacker extends UnpackerBase
                                     int def_choice = -1;
 
                                     if (pf.override() == PackFile.OVERRIDE_ASK_FALSE)
+                                    {
                                         def_choice = AbstractUIHandler.ANSWER_NO;
+                                    }
                                     if (pf.override() == PackFile.OVERRIDE_ASK_TRUE)
+                                    {
                                         def_choice = AbstractUIHandler.ANSWER_YES;
+                                    }
 
                                     int answer = handler.askQuestion(idata.langpack
                                             .getString("InstallPanel.overwrite.title")
@@ -367,7 +367,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
                                 Debug.trace("corrupt media found. magic number is not correct");
                                 File nextmedia = enterNextMediaMessage(cve.getVolumename(), true);
                                 fin.setVolumename(nextmedia.getAbsolutePath());
-                            }  
+                            }
                         }
 
                         if (fin.getFilepointer() > fileposition)
@@ -382,7 +382,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
                                 if (performInterrupted())
                                 { // Interrupt was initiated; perform it.
                                     out.close();
-                                    if (pis != objIn) pis.close();
+                                    if (pis != objIn)
+                                    {
+                                        pis.close();
+                                    }
                                     return;
                                 }
                                 int maxBytes = (int) Math.min(pf.length() - bytesCopied,
@@ -417,7 +420,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         // if (pis != objIn) pis.close();
 
                         // Set file modification time if specified
-                        if (pf.lastModified() >= 0) pathFile.setLastModified(pf.lastModified());
+                        if (pf.lastModified() >= 0)
+                        {
+                            pathFile.setLastModified(pf.lastModified());
+                        }
                         // Custom action listener stuff --- afterFile ----
                         informListeners(customActions, InstallerListener.AFTER_FILE, pathFile, pf,
                                 null);
@@ -460,8 +466,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
                             fin.setVolumename(nextmedia.getAbsolutePath());
                         }
                     }
-                    if (pf.hasCondition() && (rules != null)) {
-                        if (!rules.isConditionTrue(pf.getCondition())) {
+                    if (pf.hasCondition() && (rules != null))
+                    {
+                        if (!rules.isConditionTrue(pf.getCondition()))
+                        {
                             // skip parsable, condition is false
                             continue;
                         }
@@ -477,8 +485,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
                 for (int k = 0; k < numExecutables; k++)
                 {
                     ExecutableFile ef = (ExecutableFile) objIn.readObject();
-                    if (ef.hasCondition() && (rules != null)) {
-                        if (!rules.isConditionTrue(ef.getCondition())) {
+                    if (ef.hasCondition() && (rules != null))
+                    {
+                        if (!rules.isConditionTrue(ef.getCondition()))
+                        {
                             // skip, condition is false
                             continue;
                         }
@@ -567,10 +577,10 @@ public class MultiVolumeUnpacker extends UnpackerBase
             { // Interrupt was initiated; perform it.
                 return;
             }
-            
+
             // write installation information
             writeInstallationInformation();
-            
+
             this.writeConfigInformation();
             // The end :-)
             handler.stopAction();
@@ -625,5 +635,5 @@ public class MultiVolumeUnpacker extends UnpackerBase
             Debug.trace("Error while writing config information in MultiVolumeUnpacker: "
                     + e.getMessage());
         }
-    }      
+    }
 }

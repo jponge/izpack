@@ -19,17 +19,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.URL;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JEditorPane;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
@@ -37,30 +26,41 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+
 /**
  * The IzPack HTML license panel.
- * 
+ *
  * @author Julien Ponge
  */
 public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, ActionListener
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3256728385458746416L;
 
-    /** The text area. */
+    /**
+     * The text area.
+     */
     private JEditorPane textArea;
 
-    /** The radio buttons. */
+    /**
+     * The radio buttons.
+     */
     private JRadioButton yesRadio;
     private JRadioButton noRadio;
 
     /**
      * The constructor.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata  The installation data.
      * @param parent Description of the Parameter
      */
     public HTMLLicencePanel(InstallerFrame parent, InstallData idata)
@@ -72,7 +72,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         // We put our components
 
         add(LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
-                parent.icons.getImageIcon("history"),  LEADING), NEXT_LINE);
+                parent.icons.getImageIcon("history"), LEADING), NEXT_LINE);
         try
         {
             textArea = new JEditorPane();
@@ -104,7 +104,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
     /**
      * Loads the license text.
-     * 
+     *
      * @return The license text URL.
      */
     private URL loadLicence()
@@ -123,20 +123,24 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
     /**
      * Actions-handling method (here it launches the installation).
-     * 
+     *
      * @param e The event.
      */
     public void actionPerformed(ActionEvent e)
     {
         if (yesRadio.isSelected())
+        {
             parent.unlockNextButton();
+        }
         else
+        {
             parent.lockNextButton();
+        }
     }
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return true if the user agrees with the license, false otherwise.
      */
     public boolean isValidated()
@@ -151,7 +155,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
 
     /**
      * Hyperlink events handler.
-     * 
+     *
      * @param e The event.
      */
     public void hyperlinkUpdate(HyperlinkEvent e)
@@ -159,7 +163,9 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         try
         {
             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+            {
                 textArea.setPage(e.getURL());
+            }
         }
         catch (Exception err)
         {
@@ -167,9 +173,14 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         }
     }
 
-    /** Called when the panel becomes active. */
+    /**
+     * Called when the panel becomes active.
+     */
     public void panelActivate()
     {
-        if (!yesRadio.isSelected()) parent.lockNextButton();
+        if (!yesRadio.isSelected())
+        {
+            parent.lockNextButton();
+        }
     }
 }

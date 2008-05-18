@@ -20,88 +20,111 @@
  */
 package com.izforge.izpack.util;
 
+import com.izforge.izpack.panels.PasswordGroup;
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Validator;
-import com.izforge.izpack.panels.PasswordGroup;
-import java.security.SecureRandom;
-import java.util.Map;
+import sun.misc.BASE64Encoder;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.SecretKeySpec;
-import sun.misc.BASE64Encoder;
+import java.security.SecureRandom;
+import java.util.Map;
 
 /**
  * @author Jeff Gordon
  */
-public class PasswordEncryptionValidator implements Validator {
-  private Cipher encryptCipher;
+public class PasswordEncryptionValidator implements Validator
+{
+    private Cipher encryptCipher;
 
-  public boolean validate(ProcessingClient client) {
-    boolean returnValue = true;
-    String encryptedPassword = null;
-    String key = null;
-    String algorithm = null;
-    Map params = getParams(client);
-    try {
-      key = (String)params.get("encryptionKey");
-      algorithm = (String)params.get("algorithm");
-      if (key!=null && algorithm!=null) {
-        initialize(key, algorithm);
-        encryptedPassword = encryptString(client.getFieldContents(0));
-        if (encryptedPassword!=null) {
-          PasswordGroup group = (PasswordGroup)client;
-          group.setModifiedPassword(encryptedPassword);
-        } else {
-          returnValue = false;
+    public boolean validate(ProcessingClient client)
+    {
+        boolean returnValue = true;
+        String encryptedPassword = null;
+        String key = null;
+        String algorithm = null;
+        Map params = getParams(client);
+        try
+        {
+            key = (String) params.get("encryptionKey");
+            algorithm = (String) params.get("algorithm");
+            if (key != null && algorithm != null)
+            {
+                initialize(key, algorithm);
+                encryptedPassword = encryptString(client.getFieldContents(0));
+                if (encryptedPassword != null)
+                {
+                    PasswordGroup group = (PasswordGroup) client;
+                    group.setModifiedPassword(encryptedPassword);
+                }
+                else
+                {
+                    returnValue = false;
+                }
+            }
         }
-      }
-    } catch (Exception e) {
-      Debug.trace("Password Encryption Failed: "+e);
-      returnValue = false;
+        catch (Exception e)
+        {
+            Debug.trace("Password Encryption Failed: " + e);
+            returnValue = false;
+        }
+        return (returnValue);
     }
-    return (returnValue);
-  }
-  
-  private Map getParams(ProcessingClient client) {
-    PasswordGroup group = null;
-    Map params = null;
-    try {
-      group = (PasswordGroup)client;
-      if (group.hasParams()) {
-        params = group.getValidatorParams();
-      }
-    } catch (Exception e) {
-      Debug.trace("getParams() Failed: "+e);
-    }
-    return (params);
-  }
 
-  private void initialize(String key, String algorithm) throws Exception {
-    try {
-      //Generate the key bytes
-      KeyGenerator keygen = KeyGenerator.getInstance(algorithm);
-      keygen.init(new SecureRandom(key.getBytes()));
-      byte[] keyBytes = keygen.generateKey().getEncoded();
-      SecretKeySpec specKey = new SecretKeySpec(keyBytes, algorithm);
-      //Initialize the encryption cipher
-      encryptCipher = Cipher.getInstance(algorithm);
-      encryptCipher.init(Cipher.ENCRYPT_MODE, specKey);
-    } catch (Exception e) {
-      Debug.trace("Error initializing password encryption " + e.getMessage());
-      throw e;
+    private Map getParams(ProcessingClient client)
+    {
+        PasswordGroup group = null;
+        Map params = null;
+        try
+        {
+            group = (PasswordGroup) client;
+            if (group.hasParams())
+            {
+                params = group.getValidatorParams();
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.trace("getParams() Failed: " + e);
+        }
+        return (params);
     }
-  }
 
-  public String encryptString(String string) throws Exception {
-    String result = null;
-    try {
-      byte[] cryptedbytes = null;
-      cryptedbytes = encryptCipher.doFinal(string.getBytes("UTF-8"));
-      result = (new BASE64Encoder()).encode(cryptedbytes);
-    } catch (Exception e) {
-      Debug.trace("Error encrypting string: " + e.getMessage());
-      throw e;
+    private void initialize(String key, String algorithm) throws Exception
+    {
+        try
+        {
+            //Generate the key bytes
+            KeyGenerator keygen = KeyGenerator.getInstance(algorithm);
+            keygen.init(new SecureRandom(key.getBytes()));
+            byte[] keyBytes = keygen.generateKey().getEncoded();
+            SecretKeySpec specKey = new SecretKeySpec(keyBytes, algorithm);
+            //Initialize the encryption cipher
+            encryptCipher = Cipher.getInstance(algorithm);
+            encryptCipher.init(Cipher.ENCRYPT_MODE, specKey);
+        }
+        catch (Exception e)
+        {
+            Debug.trace("Error initializing password encryption " + e.getMessage());
+            throw e;
+        }
     }
-    return result;
-  }
+
+    public String encryptString(String string) throws Exception
+    {
+        String result = null;
+        try
+        {
+            byte[] cryptedbytes = null;
+            cryptedbytes = encryptCipher.doFinal(string.getBytes("UTF-8"));
+            result = (new BASE64Encoder()).encode(cryptedbytes);
+        }
+        catch (Exception e)
+        {
+            Debug.trace("Error encrypting string: " + e.getMessage());
+            throw e;
+        }
+        return result;
+    }
 }

@@ -2,6 +2,6 @@
 
 <langpack>
 
-	<str id="string" txt="String Text" />
+    <str id="string" txt="String Text"/>
 
 </langpack>

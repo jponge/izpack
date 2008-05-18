@@ -34,47 +34,61 @@ public class Panel implements Serializable
 
     static final long serialVersionUID = 8886445274940938809L;
 
-    /** The panel classname. */
+    /**
+     * The panel classname.
+     */
     public String className;
 
-    /** The target operation system of this panel */
+    /**
+     * The target operation system of this panel
+     */
     public List<OsConstraint> osConstraints = null;
 
-    /** the unique id of this panel */
+    /**
+     * the unique id of this panel
+     */
     protected String panelid;
-    
-    /** condition for this panel */
+
+    /**
+     * condition for this panel
+     */
     private String condition = null;
 
-    public String getClassName() {
-      return this.className;
+    public String getClassName()
+    {
+        return this.className;
     }
 
-    public void setClassName(String className) {
-      this.className = className;
+    public void setClassName(String className)
+    {
+        this.className = className;
     }
 
-    public List<OsConstraint> getOsConstraints() {
-      return this.osConstraints;
+    public List<OsConstraint> getOsConstraints()
+    {
+        return this.osConstraints;
     }
 
-    public void setOsConstraints(List<OsConstraint> osConstraints) {
-      this.osConstraints = osConstraints;
+    public void setOsConstraints(List<OsConstraint> osConstraints)
+    {
+        this.osConstraints = osConstraints;
     }
 
-    public String getPanelid() {
-      if (this.panelid == null)
-      {
-        this.panelid = "UNKNOWN (" + className + ")";
-      }
-      return this.panelid;
+    public String getPanelid()
+    {
+        if (this.panelid == null)
+        {
+            this.panelid = "UNKNOWN (" + className + ")";
+        }
+        return this.panelid;
     }
 
-    public void setPanelid(String panelid) {      
-      this.panelid = panelid;
+    public void setPanelid(String panelid)
+    {
+        this.panelid = panelid;
     }
 
-    
+
     /**
      * @return the condition
      */
@@ -83,7 +97,7 @@ public class Panel implements Serializable
         return this.condition;
     }
 
-    
+
     /**
      * @param condition the condition to set
      */
@@ -91,8 +105,9 @@ public class Panel implements Serializable
     {
         this.condition = condition;
     }
-    
-    public boolean hasCondition() {
+
+    public boolean hasCondition()
+    {
         return this.condition != null;
     }
 }

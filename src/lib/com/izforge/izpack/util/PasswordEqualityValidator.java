@@ -23,76 +23,95 @@ package com.izforge.izpack.util;
 import com.izforge.izpack.panels.PasswordGroup;
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Validator;
+
 import java.util.Map;
 
 
 /**
- * This class represents a simple validator for passwords to test equality.  It is 
+ * This class represents a simple validator for passwords to test equality.  It is
  * based on the example implementation of a password validator that cooperates with the
  * password field in the <code>UserInputPanel</code>. Additional validation may
  * be done by utilizing the params added to the password field.
  *
- * @author   Elmar Grom
- * @author   Jeff Gordon
+ * @author Elmar Grom
+ * @author Jeff Gordon
  */
-public class PasswordEqualityValidator implements Validator {
+public class PasswordEqualityValidator implements Validator
+{
 
-  /**PasswordEqualityValidator
-   * Validates the contend of multiple password fields. The test 
-   *
-   * @param     client   the client object using the services of this validator.
-   *
-   * @return    <code>true</code> if the validation passes, otherwise <code>false</code>.
-   */
-  public boolean validate(ProcessingClient client) {
-    boolean returnValue = false;
-    Map<String, String> params = getParams(client);
-    try {
-      returnValue = fieldsMatch(client);
-      if (returnValue) {
-        // Additional checking if params passed...
-        if (params!=null) {
-          System.out.println("Additional "+params.size()+" params not evaluated");
+    /**
+     * PasswordEqualityValidator
+     * Validates the contend of multiple password fields. The test
+     *
+     * @param client the client object using the services of this validator.
+     * @return <code>true</code> if the validation passes, otherwise <code>false</code>.
+     */
+    public boolean validate(ProcessingClient client)
+    {
+        boolean returnValue = false;
+        Map<String, String> params = getParams(client);
+        try
+        {
+            returnValue = fieldsMatch(client);
+            if (returnValue)
+            {
+                // Additional checking if params passed...
+                if (params != null)
+                {
+                    System.out.println("Additional " + params.size() + " params not evaluated");
+                }
+            }
         }
-      }
-    } catch (Exception e) {
-      System.out.println("validate() Failed: "+e);
-    }
-    return (returnValue);
-  }
-  
-  private Map<String, String> getParams(ProcessingClient client) {
-    PasswordGroup group = null;
-    Map<String, String> params = null;
-    try {
-      group = (PasswordGroup)client;
-      if (group.hasParams()) {
-        params = group.getValidatorParams();
-      }
-    } catch (Exception e) {
-      System.out.println("getParams() Failed: "+e);
-    }
-    return (params);
-  }
-  
-  private boolean fieldsMatch(ProcessingClient client) {
-    boolean returnValue = true;
-    int numFields = client.getNumFields();
-    // ----------------------------------------------------
-    // verify that there is more than one field. If there
-    // is only one field we have to return true.
-    // ----------------------------------------------------
-    if (numFields < 2) {
-      returnValue = true;
-    } else {
-      String content = client.getFieldContents(0);
-      for (int i = 1; i < numFields; i++) {
-        if (!content.equals(client.getFieldContents(i))) {
-          returnValue = false;
+        catch (Exception e)
+        {
+            System.out.println("validate() Failed: " + e);
         }
-      }
+        return (returnValue);
     }
-    return returnValue;
-  }
-  
+
+    private Map<String, String> getParams(ProcessingClient client)
+    {
+        PasswordGroup group = null;
+        Map<String, String> params = null;
+        try
+        {
+            group = (PasswordGroup) client;
+            if (group.hasParams())
+            {
+                params = group.getValidatorParams();
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("getParams() Failed: " + e);
+        }
+        return (params);
+    }
+
+    private boolean fieldsMatch(ProcessingClient client)
+    {
+        boolean returnValue = true;
+        int numFields = client.getNumFields();
+        // ----------------------------------------------------
+        // verify that there is more than one field. If there
+        // is only one field we have to return true.
+        // ----------------------------------------------------
+        if (numFields < 2)
+        {
+            returnValue = true;
+        }
+        else
+        {
+            String content = client.getFieldContents(0);
+            for (int i = 1; i < numFields; i++)
+            {
+                if (!content.equals(client.getFieldContents(i)))
+                {
+                    returnValue = false;
+                }
+            }
+        }
+        return returnValue;
+    }
+
 }

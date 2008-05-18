@@ -38,7 +38,7 @@ import java.util.Stack;
 /**
  * NonValidator processes the DTD and handles entity definitions. It does not do any validation
  * itself.
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -48,7 +48,7 @@ public class NonValidator implements IXMLValidator
     /**
      * Delimiter for CDATA sections.
      */
-    private static final char[] END_OF_CONDSECTION = { '>', ']', ']'};
+    private static final char[] END_OF_CONDSECTION = {'>', ']', ']'};
 
     /**
      * The parameter entity resolver.
@@ -96,7 +96,7 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Sets the parameter entity resolver.
-     * 
+     *
      * @param resolver the entity resolver.
      */
     public void setParameterEntityResolver(IXMLEntityResolver resolver)
@@ -106,7 +106,7 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Returns the parameter entity resolver.
-     * 
+     *
      * @return the entity resolver.
      */
     public IXMLEntityResolver getParameterEntityResolver()
@@ -116,20 +116,19 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Parses the DTD. The validator object is responsible for reading the full DTD.
-     * 
-     * @param publicID the public ID, which may be null.
-     * @param reader the reader to read the DTD from.
+     *
+     * @param publicID       the public ID, which may be null.
+     * @param reader         the reader to read the DTD from.
      * @param entityResolver the entity resolver.
-     * @param external true if the DTD is external.
-     * 
+     * @param external       true if the DTD is external.
      * @throws java.lang.Exception if something went wrong.
      */
     public void parseDTD(String publicID, IXMLReader reader, IXMLEntityResolver entityResolver,
-            boolean external) throws Exception
+                         boolean external) throws Exception
     {
         XMLUtil.skipWhitespace(reader, '%', null, null);
 
-        for (;;)
+        for (; ;)
         {
             char ch = XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
 
@@ -148,9 +147,11 @@ public class NonValidator implements IXMLValidator
 
             do
             {
-                if (external && (peLevel == 0) && reader.atEOFOfCurrentStream()) { return; // end
-                // external
-                // DTD
+                if (external && (peLevel == 0) && reader.atEOFOfCurrentStream())
+                {
+                    return; // end
+                    // external
+                    // DTD
                 }
 
                 ch = reader.read();
@@ -164,10 +165,9 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Processes an element in the DTD.
-     * 
-     * @param reader the reader to read data from
+     *
+     * @param reader         the reader to read data from
      * @param entityResolver the entity resolver
-     * 
      * @throws java.lang.Exception if something went wrong.
      */
     protected void processElement(IXMLReader reader, IXMLEntityResolver entityResolver)
@@ -185,33 +185,32 @@ public class NonValidator implements IXMLValidator
 
         switch (ch)
         {
-        case '-':
-            XMLUtil.skipComment(reader, this.parameterEntityResolver);
-            break;
+            case '-':
+                XMLUtil.skipComment(reader, this.parameterEntityResolver);
+                break;
 
-        case '[':
-            this.processConditionalSection(reader, entityResolver);
-            break;
+            case '[':
+                this.processConditionalSection(reader, entityResolver);
+                break;
 
-        case 'E':
-            this.processEntity(reader, entityResolver);
-            break;
+            case 'E':
+                this.processEntity(reader, entityResolver);
+                break;
 
-        case 'A':
-            this.processAttList(reader, entityResolver);
-            break;
+            case 'A':
+                this.processAttList(reader, entityResolver);
+                break;
 
-        default:
-            XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
+            default:
+                XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
         }
     }
 
     /**
      * Processes a conditional section.
-     * 
-     * @param reader the reader to read data from
+     *
+     * @param reader         the reader to read data from
      * @param entityResolver the entity resolver
-     * 
      * @throws java.lang.Exception if something went wrong.
      */
     protected void processConditionalSection(IXMLReader reader, IXMLEntityResolver entityResolver)
@@ -231,16 +230,16 @@ public class NonValidator implements IXMLValidator
 
         switch (ch)
         {
-        case 'G':
-            this.processIgnoreSection(reader, entityResolver);
-            return;
+            case 'G':
+                this.processIgnoreSection(reader, entityResolver);
+                return;
 
-        case 'N':
-            break;
+            case 'N':
+                break;
 
-        default:
-            XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
-            return;
+            default:
+                XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
+                return;
         }
 
         if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "CLUDE"))
@@ -263,7 +262,7 @@ public class NonValidator implements IXMLValidator
                 NonValidator.END_OF_CONDSECTION, true, "");
         StringBuffer buf = new StringBuffer(1024);
 
-        for (;;)
+        for (; ;)
         {
             int ch2 = subreader.read();
 
@@ -281,10 +280,9 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Processes an ignore section.
-     * 
-     * @param reader the reader to read data from
+     *
+     * @param reader         the reader to read data from
      * @param entityResolver the entity resolver
-     * 
      * @throws java.lang.Exception if something went wrong.
      */
     protected void processIgnoreSection(IXMLReader reader, IXMLEntityResolver entityResolver)
@@ -313,10 +311,9 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Processes an ATTLIST element.
-     * 
-     * @param reader the reader to read data from
+     *
+     * @param reader         the reader to read data from
      * @param entityResolver the entity resolver
-     * 
      * @throws java.lang.Exception if something went wrong.
      */
     protected void processAttList(IXMLReader reader, IXMLEntityResolver entityResolver)
@@ -388,10 +385,9 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Processes an ENTITY element.
-     * 
-     * @param reader the reader to read data from
+     *
+     * @param reader         the reader to read data from
      * @param entityResolver the entity resolver
-     * 
      * @throws java.lang.Exception if something went wrong.
      */
     protected void processEntity(IXMLReader reader, IXMLEntityResolver entityResolver)
@@ -424,44 +420,44 @@ public class NonValidator implements IXMLValidator
 
         switch (ch)
         {
-        case 'P':
-            if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "UBLIC"))
-            {
+            case 'P':
+                if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "UBLIC"))
+                {
+                    XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
+                    return;
+                }
+
+                XMLUtil.skipWhitespace(reader, '%', null, null);
+                publicID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
+                XMLUtil.skipWhitespace(reader, '%', null, null);
+                systemID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
+                XMLUtil.skipWhitespace(reader, '%', null, null);
+                XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+                break;
+
+            case 'S':
+                if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "YSTEM"))
+                {
+                    XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
+                    return;
+                }
+
+                XMLUtil.skipWhitespace(reader, '%', null, null);
+                systemID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
+                XMLUtil.skipWhitespace(reader, '%', null, null);
+                XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+                break;
+
+            case '"':
+            case '\'':
+                reader.unread(ch);
+                String value = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
+                entityResolver.addInternalEntity(key, value);
+                XMLUtil.skipWhitespace(reader, '%', null, null);
+                XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
+                break;
+            default:
                 XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
-                return;
-            }
-
-            XMLUtil.skipWhitespace(reader, '%', null, null);
-            publicID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
-            XMLUtil.skipWhitespace(reader, '%', null, null);
-            systemID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
-            XMLUtil.skipWhitespace(reader, '%', null, null);
-            XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-            break;
-
-        case 'S':
-            if (!XMLUtil.checkLiteral(reader, '%', this.parameterEntityResolver, "YSTEM"))
-            {
-                XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
-                return;
-            }
-
-            XMLUtil.skipWhitespace(reader, '%', null, null);
-            systemID = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
-            XMLUtil.skipWhitespace(reader, '%', null, null);
-            XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-            break;
-
-        case '"':
-        case '\'':
-            reader.unread(ch);
-            String value = XMLUtil.scanString(reader, '%', false, this.parameterEntityResolver);
-            entityResolver.addInternalEntity(key, value);
-            XMLUtil.skipWhitespace(reader, '%', null, null);
-            XMLUtil.read(reader, null, '%', this.parameterEntityResolver);
-            break;
-        default:
-            XMLUtil.skipTag(reader, '%', this.parameterEntityResolver);
         }
 
         if (systemID != null)
@@ -472,15 +468,15 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Indicates that an element has been started.
-     * 
-     * @param name the name of the element.
-     * @param nsPrefix the prefix used to identify the namespace
+     *
+     * @param name       the name of the element.
+     * @param nsPrefix   the prefix used to identify the namespace
      * @param nsSystemId the system ID associated with the namespace
-     * @param systemId the system ID of the XML data of the element.
-     * @param lineNr the line number in the XML data of the element.
+     * @param systemId   the system ID of the XML data of the element.
+     * @param lineNr     the line number in the XML data of the element.
      */
     public void elementStarted(String name, String nsPrefix, String nsSystemId, String systemId,
-            int lineNr)
+                               int lineNr)
     {
         Properties attribs = this.attributeDefaultValues.get(name);
 
@@ -498,15 +494,15 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Indicates that the current element has ended.
-     * 
-     * @param name the name of the element.
-     * @param nsPrefix the prefix used to identify the namespace
+     *
+     * @param name       the name of the element.
+     * @param nsPrefix   the prefix used to identify the namespace
      * @param nsSystemId the system ID associated with the namespace
-     * @param systemId the system ID of the XML data of the element.
-     * @param lineNr the line number in the XML data of the element.
+     * @param systemId   the system ID of the XML data of the element.
+     * @param lineNr     the line number in the XML data of the element.
      */
     public void elementEnded(String name, String nsPrefix, String nsSystemId, String systemId,
-            int lineNr)
+                             int lineNr)
     {
         // nothing to do
     }
@@ -515,16 +511,16 @@ public class NonValidator implements IXMLValidator
      * This method is called when the attributes of an XML element have been processed. If there are
      * attributes with a default value which have not been specified yet, they have to be put into
      * <I>extraAttributes</I>.
-     * 
-     * @param name the name of the element.
-     * @param nsPrefix the prefix used to identify the namespace
-     * @param nsSystemId the system ID associated with the namespace
+     *
+     * @param name            the name of the element.
+     * @param nsPrefix        the prefix used to identify the namespace
+     * @param nsSystemId      the system ID associated with the namespace
      * @param extraAttributes where to put extra attributes.
-     * @param systemId the system ID of the XML data of the element.
-     * @param lineNr the line number in the XML data of the element.
+     * @param systemId        the system ID of the XML data of the element.
+     * @param lineNr          the line number in the XML data of the element.
      */
     public void elementAttributesProcessed(String name, String nsPrefix, String nsSystemId,
-            Properties extraAttributes, String systemId, int lineNr)
+                                           Properties extraAttributes, String systemId, int lineNr)
     {
         Properties props = this.currentElements.pop();
         Enumeration enumeration = props.keys();
@@ -538,16 +534,16 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Indicates that an attribute has been added to the current element.
-     * 
-     * @param key the name of the attribute.
-     * @param nsPrefix the prefix used to identify the namespace
+     *
+     * @param key        the name of the attribute.
+     * @param nsPrefix   the prefix used to identify the namespace
      * @param nsSystemId the system ID associated with the namespace
-     * @param value the value of the attribute.
-     * @param systemId the system ID of the XML data of the element.
-     * @param lineNr the line number in the XML data of the element.
+     * @param value      the value of the attribute.
+     * @param systemId   the system ID of the XML data of the element.
+     * @param lineNr     the line number in the XML data of the element.
      */
     public void attributeAdded(String key, String nsPrefix, String nsSystemId, String value,
-            String systemId, int lineNr)
+                               String systemId, int lineNr)
     {
         Properties props = this.currentElements.peek();
 
@@ -559,9 +555,9 @@ public class NonValidator implements IXMLValidator
 
     /**
      * Indicates that a new #PCDATA element has been encountered.
-     * 
+     *
      * @param systemId the system ID of the XML data of the element.
-     * @param lineNr the line number in the XML data of the element.
+     * @param lineNr   the line number in the XML data of the element.
      */
     public void PCDataAdded(String systemId, int lineNr)
     {

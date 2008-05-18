@@ -26,61 +26,23 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.GUIPrefs;
-import com.izforge.izpack.Info;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.Panel;
-import com.izforge.izpack.ParsableFile;
-import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.*;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
 import com.izforge.izpack.event.CompilerListener;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
-import net.n3.nanoxml.IXMLParser;
-import net.n3.nanoxml.IXMLReader;
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLBuilderFactory;
-import net.n3.nanoxml.XMLElement;
-import net.n3.nanoxml.XMLException;
-import net.n3.nanoxml.XMLParserFactory;
-import net.n3.nanoxml.XMLWriter;
+import net.n3.nanoxml.*;
 import org.apache.tools.ant.DirectoryScanner;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeMap;
-import java.util.Vector;
+import java.util.*;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -89,26 +51,36 @@ import java.util.zip.ZipInputStream;
 /**
  * A parser for the installer xml configuration. This parses a document
  * conforming to the installation.dtd and populates a Compiler instance to
- * perform the install compilation. 
- * 
+ * perform the install compilation.
+ *
  * @author Scott Stark
  * @version $Revision$
  */
 public class CompilerConfig extends Thread
 {
-    /** The compiler version. */
+    /**
+     * The compiler version.
+     */
     public final static String VERSION = "1.0";
 
-    /** Standard installer. */
+    /**
+     * Standard installer.
+     */
     public final static String STANDARD = "standard";
 
-    /** Web installer. */
+    /**
+     * Web installer.
+     */
     public final static String WEB = "web";
 
-    /** Constant for checking attributes. */
+    /**
+     * Constant for checking attributes.
+     */
     private static boolean YES = true;
 
-    /** Constant for checking attributes. */
+    /**
+     * Constant for checking attributes.
+     */
     private static boolean NO = false;
 
     private final static String IZ_TEST_FILE = "ShellLink.dll";
@@ -116,14 +88,22 @@ public class CompilerConfig extends Thread
     private final static String IZ_TEST_SUBDIR = "bin" + File.separator + "native" + File.separator
             + "izpack";
 
-    /** The xml install file */
+    /**
+     * The xml install file
+     */
     private String filename;
-    /** The xml install configuration text */
+    /**
+     * The xml install configuration text
+     */
     private String installText;
-    /** The base directory. */
+    /**
+     * The base directory.
+     */
     protected String basedir;
 
-    /** The installer packager compiler */
+    /**
+     * The installer packager compiler
+     */
     private Compiler compiler;
 
     /**
@@ -133,6 +113,7 @@ public class CompilerConfig extends Thread
 
     /**
      * Set the IzPack home directory
+     *
      * @param izHome - the izpack home directory
      */
     public static void setIzpackHome(String izHome)
@@ -142,91 +123,91 @@ public class CompilerConfig extends Thread
 
     /**
      * The constructor.
-     * 
+     *
      * @param filename The XML filename.
-     * @param basedir The base directory.
-     * @param kind The installer kind.
-     * @param output The installer filename.
+     * @param basedir  The base directory.
+     * @param kind     The installer kind.
+     * @param output   The installer filename.
      * @throws CompilerException
      */
     public CompilerConfig(String filename, String basedir, String kind, String output) throws CompilerException
     {
         this(filename, basedir, kind, output, null);
     }
+
     /**
      * The constructor.
-     * 
+     *
      * @param filename The XML filename.
-     * @param basedir The base directory.
-     * @param kind The installer kind.
-     * @param output The installer filename.
+     * @param basedir  The base directory.
+     * @param kind     The installer kind.
+     * @param output   The installer filename.
      * @param listener The PackagerListener.
      * @throws CompilerException
      */
-    public CompilerConfig(String filename, String basedir, String kind, String output, PackagerListener listener) 
-    throws CompilerException
+    public CompilerConfig(String filename, String basedir, String kind, String output, PackagerListener listener)
+            throws CompilerException
     {
-        this(filename,basedir,kind,output, "default", listener);
+        this(filename, basedir, kind, output, "default", listener);
     }
 
     /**
-     * @param filename The XML filename.
-     * @param kind The installer kind.
-     * @param output The installer filename.
+     * @param filename     The XML filename.
+     * @param kind         The installer kind.
+     * @param output       The installer filename.
      * @param compr_format The compression format to be used for packs.
-     * @param listener The PackagerListener.
+     * @param listener     The PackagerListener.
      * @throws CompilerException
      */
-    public CompilerConfig(String filename, String base, String kind, String output, String compr_format, 
-            PackagerListener listener) throws CompilerException
+    public CompilerConfig(String filename, String base, String kind, String output, String compr_format,
+                          PackagerListener listener) throws CompilerException
     {
-        this(filename,base,kind,output, compr_format,listener, null);
+        this(filename, base, kind, output, compr_format, listener, null);
     }
 
     /**
-     * 
-     * @param basedir The base directory.
-     * @param kind The installer kind.
-     * @param output The installer filename.
-     * @param listener The PackagerListener.
+     * @param basedir     The base directory.
+     * @param kind        The installer kind.
+     * @param output      The installer filename.
+     * @param listener    The PackagerListener.
      * @param installText The install xml configuration text
      * @throws CompilerException
      */
     public CompilerConfig(String basedir, String kind, String output, PackagerListener listener,
-            String installText) throws CompilerException
+                          String installText) throws CompilerException
     {
         this(null, basedir, kind, output, "default", listener, installText);
     }
+
     /**
-     * 
-     * @param filename The XML filename.
-     * @param basedir The base directory.
-     * @param kind The installer kind.
-     * @param output The installer filename.
+     * @param filename     The XML filename.
+     * @param basedir      The base directory.
+     * @param kind         The installer kind.
+     * @param output       The installer filename.
      * @param compr_format The compression format to be used for packs.
-     * @param listener The PackagerListener.
-     * @param installText The install xml configuration text
+     * @param listener     The PackagerListener.
+     * @param installText  The install xml configuration text
      * @throws CompilerException
      */
-    public CompilerConfig(String filename, String basedir, String kind, String output, String compr_format, 
-            PackagerListener listener, String installText) throws CompilerException
+    public CompilerConfig(String filename, String basedir, String kind, String output, String compr_format,
+                          PackagerListener listener, String installText) throws CompilerException
     {
-        this( filename, basedir, kind, output, compr_format, -1, listener, installText);
+        this(filename, basedir, kind, output, compr_format, -1, listener, installText);
     }
 
     /**
-     * @param filename The XML filename.
-     * @param basedir The base directory.
-     * @param kind The installer kind.
-     * @param output The installer filename.
+     * @param filename     The XML filename.
+     * @param basedir      The base directory.
+     * @param kind         The installer kind.
+     * @param output       The installer filename.
      * @param compr_format The compression format to be used for packs.
-     * @param compr_level Compression level to be used if supported.
-     * @param listener The PackagerListener.
-     * @param installText The install xml configuration text
-    * @throws CompilerException
+     * @param compr_level  Compression level to be used if supported.
+     * @param listener     The PackagerListener.
+     * @param installText  The install xml configuration text
+     * @throws CompilerException
      */
-    public CompilerConfig(String filename, String basedir, String kind, String output, String compr_format, 
-            int compr_level, PackagerListener listener, String installText) throws CompilerException
+    public CompilerConfig(String filename, String basedir, String kind, String output, String compr_format,
+                          int compr_level, PackagerListener listener, String installText) throws CompilerException
     {
         this.filename = filename;
         this.installText = installText;
@@ -236,12 +217,11 @@ public class CompilerConfig extends Thread
     }
 
 
-
     /**
      * Add a name value pair to the project property set. It is <i>not</i>
      * replaced it is already in the set of properties.
-     * 
-     * @param name the name of the property
+     *
+     * @param name  the name of the property
      * @param value the value to set
      * @return true if the property was not already set
      */
@@ -252,6 +232,7 @@ public class CompilerConfig extends Thread
 
     /**
      * Access the install compiler
+     *
      * @return the install compiler
      */
     public Compiler getCompiler()
@@ -267,13 +248,17 @@ public class CompilerConfig extends Thread
         return compiler.getPackagerListener();
     }
 
-    /** Compile the installation */
+    /**
+     * Compile the installation
+     */
     public void compile()
     {
         start();
     }
 
-    /** The run() method. */
+    /**
+     * The run() method.
+     */
     public void run()
     {
         try
@@ -299,8 +284,8 @@ public class CompilerConfig extends Thread
 
     /**
      * Compiles the installation.
-     * 
-     * @exception Exception Description of the Exception
+     *
+     * @throws Exception Description of the Exception
      */
     public void executeCompiler() throws Exception
     {
@@ -308,7 +293,9 @@ public class CompilerConfig extends Thread
         // access
         File base = new File(basedir).getAbsoluteFile();
         if (!base.canRead() || !base.isDirectory())
+        {
             throw new CompilerException("Invalid base directory: " + base);
+        }
 
         // add izpack built in property
         compiler.setProperty("basedir", base.toString());
@@ -317,7 +304,7 @@ public class CompilerConfig extends Thread
         XMLElement data = getXMLTree();
         // loads the specified packager
         loadPackagingInformation(data);
-        
+
         // Listeners to various events
         addCustomListeners(data);
 
@@ -349,28 +336,33 @@ public class CompilerConfig extends Thread
         String packagerclassname = "com.izforge.izpack.compiler.Packager";
         String unpackerclassname = "com.izforge.izpack.installer.Unpacker";
         XMLElement packager = null;
-        if (root != null){
+        if (root != null)
+        {
             packager = root.getFirstChildNamed("packager");
-            
-            if (packager != null){
+
+            if (packager != null)
+            {
                 packagerclassname = requireAttribute(packager, "class");
             }
-            
+
             XMLElement unpacker = root.getFirstChildNamed("unpacker");
-            
-            if (unpacker != null){
-                unpackerclassname = requireAttribute(unpacker, "class");                
-            }        
+
+            if (unpacker != null)
+            {
+                unpackerclassname = requireAttribute(unpacker, "class");
+            }
         }
-        compiler.initPackager(packagerclassname);  
-        if (packager != null){
+        compiler.initPackager(packagerclassname);
+        if (packager != null)
+        {
             XMLElement options = packager.getFirstChildNamed("options");
-            if (options != null){
+            if (options != null)
+            {
                 compiler.getPackager().addConfigurationInformation(options);
             }
         }
         compiler.addProperty("UNPACKER_CLASS", unpackerclassname);
-        notifyCompilerListener("loadPackager", CompilerListener.END, data);        
+        notifyCompilerListener("loadPackager", CompilerListener.END, data);
     }
 
     public boolean wasSuccessful()
@@ -380,9 +372,9 @@ public class CompilerConfig extends Thread
 
     /**
      * Returns the GUIPrefs.
-     * 
+     *
      * @param data The XML data.
-     * @exception CompilerException Description of the Exception
+     * @throws CompilerException Description of the Exception
      */
     protected void addGUIPrefs(XMLElement data) throws CompilerException
     {
@@ -441,7 +433,7 @@ public class CompilerConfig extends Thread
             lafMap.put("metouia", "metouia.jar");
             lafMap.put("looks", "looks.jar");
             lafMap.put("substance", "substance.jar");
-						lafMap.put("nimbus", "nimbus.jar");
+            lafMap.put("nimbus", "nimbus.jar");
 
             // is this really what we want? a double loop? needed, since above,
             // it's
@@ -453,7 +445,10 @@ public class CompilerConfig extends Thread
             {
                 String lafName = prefs.lookAndFeelMapping.get(kit.next());
                 String lafJarName = lafMap.get(lafName);
-                if (lafJarName == null) parseError(gp, "Unrecognized Look and Feel: " + lafName);
+                if (lafJarName == null)
+                {
+                    parseError(gp, "Unrecognized Look and Feel: " + lafName);
+                }
 
                 URL lafJarURL = findIzPackResource("lib/" + lafJarName, "Look and Feel Jar file",
                         gp);
@@ -466,7 +461,7 @@ public class CompilerConfig extends Thread
 
     /**
      * Add project specific external jar files to the installer.
-     * 
+     *
      * @param data The XML data.
      */
     protected void addJars(XMLElement data) throws Exception
@@ -501,7 +496,7 @@ public class CompilerConfig extends Thread
 
     /**
      * Add native libraries to the installer.
-     * 
+     *
      * @param data The XML data.
      */
     protected void addNativeLibraries(XMLElement data) throws Exception
@@ -556,7 +551,7 @@ public class CompilerConfig extends Thread
 
     /**
      * Add packs and their contents to the installer.
-     * 
+     *
      * @param data The XML data.
      */
     protected void addPacks(XMLElement data) throws CompilerException
@@ -566,7 +561,7 @@ public class CompilerConfig extends Thread
         // the actual adding is delegated to addPacksSingle to enable recursive
         // parsing of refpack package definitions
         addPacksSingle(data);
-        
+
         compiler.checkDependencies();
         compiler.checkExcludes();
 
@@ -574,11 +569,11 @@ public class CompilerConfig extends Thread
     }
 
     /**
-     * Add packs and their contents to the installer without checking 
+     * Add packs and their contents to the installer without checking
      * the dependencies and includes.
-     * 
+     * <p/>
      * Helper method to recursively add more packs from refpack XML packs definitions
-     * 
+     *
      * @param data The XML data
      * @throws CompilerException
      */
@@ -591,10 +586,13 @@ public class CompilerConfig extends Thread
         // at least one pack is required
         Vector<XMLElement> packElements = root.getChildrenNamed("pack");
         Vector<XMLElement> refPackElements = root.getChildrenNamed("refpack");
-        if (packElements.isEmpty() && refPackElements.isEmpty()) parseError(root, "<packs> requires a <pack> or <refpack>");
+        if (packElements.isEmpty() && refPackElements.isEmpty())
+        {
+            parseError(root, "<packs> requires a <pack> or <refpack>");
+        }
 
         File baseDir = new File(basedir);
-        
+
         Iterator<XMLElement> packIter = packElements.iterator();
         while (packIter.hasNext())
         {
@@ -604,7 +602,7 @@ public class CompilerConfig extends Thread
             String name = requireAttribute(el, "name");
             String id = el.getAttribute("id");
             String packImgId = el.getAttribute("packImgId");
-            
+
             boolean loose = "true".equalsIgnoreCase(el.getAttribute("loose", "false"));
             String description = requireChildNamed(el, "description").getContent();
             boolean required = requireYesNoAttribute(el, "required");
@@ -613,30 +611,36 @@ public class CompilerConfig extends Thread
             String excludeGroup = el.getAttribute("excludeGroup");
             boolean uninstall = "yes".equalsIgnoreCase(el.getAttribute("uninstall", "yes"));
             String parent = el.getAttribute("parent");
-            
+
             String conditionid = el.getAttribute("condition");
-            
-            if(required && excludeGroup != null)
+
+            if (required && excludeGroup != null)
             {
-                parseError(el, "Pack, which has excludeGroup can not be required.", 
-                    new Exception("Pack, which has excludeGroup can not be required."));
+                parseError(el, "Pack, which has excludeGroup can not be required.",
+                        new Exception("Pack, which has excludeGroup can not be required."));
             }
-            
+
             PackInfo pack = new PackInfo(name, id, description, required, loose, excludeGroup, uninstall);
             pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO:
             pack.setParent(parent);
             pack.setCondition(conditionid);
-            
+
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
-            if(excludeGroup == null)
+            if (excludeGroup == null)
+            {
                 pack.setPreselected(validateYesNoAttribute(el, "preselected", YES));
+            }
             else
+            {
                 pack.setPreselected(validateYesNoAttribute(el, "preselected", NO));
-            
+            }
+
             // Set the pack group if specified
             if (group != null)
+            {
                 pack.setGroup(group);
+            }
             // Set the pack install groups if specified
             if (installGroups != null)
             {
@@ -647,9 +651,10 @@ public class CompilerConfig extends Thread
                     pack.addInstallGroup(igroup);
                 }
             }
-            
+
             // Set the packImgId if specified
-            if (packImgId != null) {
+            if (packImgId != null)
+            {
                 pack.setPackImgId(packImgId);
             }
 
@@ -682,9 +687,13 @@ public class CompilerConfig extends Thread
                 // when to execute this executable
                 val = e.getAttribute("stage", "never");
                 if ("postinstall".equalsIgnoreCase(val))
+                {
                     executable.executionStage = ExecutableFile.POSTINSTALL;
+                }
                 else if ("uninstall".equalsIgnoreCase(val))
+                {
                     executable.executionStage = ExecutableFile.UNINSTALL;
+                }
 
                 // type of this executable
                 val = e.getAttribute("type", "bin");
@@ -698,9 +707,17 @@ public class CompilerConfig extends Thread
                 // what to do if execution fails
                 val = e.getAttribute("failure", "ask");
                 if ("abort".equalsIgnoreCase(val))
+                {
                     executable.onFailure = ExecutableFile.ABORT;
-                else if ("warn".equalsIgnoreCase(val)) executable.onFailure = ExecutableFile.WARN;
-                else if ("ignore".equalsIgnoreCase(val)) executable.onFailure = ExecutableFile.IGNORE;
+                }
+                else if ("warn".equalsIgnoreCase(val))
+                {
+                    executable.onFailure = ExecutableFile.WARN;
+                }
+                else if ("ignore".equalsIgnoreCase(val))
+                {
+                    executable.onFailure = ExecutableFile.IGNORE;
+                }
 
                 // whether to keep the executable after executing it
                 val = e.getAttribute("keep");
@@ -736,16 +753,23 @@ public class CompilerConfig extends Thread
                 Map additionals = getAdditionals(f);
                 boolean unpack = src.endsWith(".zip") && "true".equalsIgnoreCase(f.getAttribute("unpack"));
                 String condition = f.getAttribute("condition");
-                
+
                 File file = new File(src);
-                if (!file.isAbsolute()) file = new File(basedir, src);
+                if (!file.isAbsolute())
+                {
+                    file = new File(basedir, src);
+                }
 
                 try
                 {
                     if (unpack)
-                        addArchiveContent(baseDir, file, targetdir, osList, override, pack, additionals,condition);
+                    {
+                        addArchiveContent(baseDir, file, targetdir, osList, override, pack, additionals, condition);
+                    }
                     else
-                        addRecursively(baseDir, file, targetdir, osList, override, pack, additionals,condition);
+                    {
+                        addRecursively(baseDir, file, targetdir, osList, override, pack, additionals, condition);
+                    }
                 }
                 catch (Exception x)
                 {
@@ -765,11 +789,14 @@ public class CompilerConfig extends Thread
                 Map additionals = getAdditionals(f);
                 String condition = f.getAttribute("condition");
                 File file = new File(src);
-                if (!file.isAbsolute()) file = new File(basedir, src);
+                if (!file.isAbsolute())
+                {
+                    file = new File(basedir, src);
+                }
 
                 try
                 {
-                    pack.addFile(baseDir, file, target, osList, override, additionals,condition);
+                    pack.addFile(baseDir, file, target, osList, override, additionals, condition);
                 }
                 catch (FileNotFoundException x)
                 {
@@ -785,9 +812,14 @@ public class CompilerConfig extends Thread
                 String dir_attr = requireAttribute(f, "dir");
 
                 File dir = new File(dir_attr);
-                if (!dir.isAbsolute()) dir = new File(basedir, dir_attr);
+                if (!dir.isAbsolute())
+                {
+                    dir = new File(basedir, dir_attr);
+                }
                 if (!dir.isDirectory()) // also tests '.exists()'
+                {
                     parseError(f, "Invalid directory 'dir': " + dir_attr);
+                }
 
                 boolean casesensitive = validateYesNoAttribute(f, "casesensitive", YES);
                 boolean defexcludes = validateYesNoAttribute(f, "defaultexcludes", YES);
@@ -823,10 +855,10 @@ public class CompilerConfig extends Thread
                 }
 
                 // parse additional fileset attributes "includes" and "excludes"
-                String[] toDo = new String[] { "includes", "excludes"};
+                String[] toDo = new String[]{"includes", "excludes"};
                 // use the existing containers filled from include and exclude
                 // and add the includes and excludes to it
-                String[][] containers = new String[][] { includes, excludes};
+                String[][] containers = new String[][]{includes, excludes};
                 for (int j = 0; j < toDo.length; ++j)
                 {
                     String inex = f.getAttribute(toDo[j]);
@@ -843,15 +875,21 @@ public class CompilerConfig extends Thread
                             newSize += containers[j].length;
                             nCont = new String[newSize];
                             for (; k < containers[j].length; ++k)
+                            {
                                 nCont[k] = containers[j][k];
+                            }
                         }
                         if (nCont == null) // No container for old values
-                            // created,
-                            // create a new one.
+                        // created,
+                        // create a new one.
+                        {
                             nCont = new String[newSize];
+                        }
                         for (; k < newSize; ++k)
-                            // Fill the new one or expand the existent container
+                        // Fill the new one or expand the existent container
+                        {
                             nCont[k] = tok.nextToken();
+                        }
                         containers[j] = nCont;
                     }
                 }
@@ -864,7 +902,10 @@ public class CompilerConfig extends Thread
                 DirectoryScanner ds = new DirectoryScanner();
                 ds.setIncludes(includes);
                 ds.setExcludes(excludes);
-                if (defexcludes) ds.addDefaultExcludes();
+                if (defexcludes)
+                {
+                    ds.addDefaultExcludes();
+                }
                 ds.setBasedir(dir);
                 ds.setCaseSensitive(casesensitive);
                 ds.scan();
@@ -941,44 +982,51 @@ public class CompilerConfig extends Thread
             // We add the pack
             compiler.addPack(pack);
         }
-        
+
         Iterator<XMLElement> refPackIter = refPackElements.iterator();
         while (refPackIter.hasNext())
         {
-        	XMLElement el = refPackIter.next();
+            XMLElement el = refPackIter.next();
 
             // get the name of reference xml file
-        	String refFileName = requireAttribute(el, "file");
-        	String selfcontained = el.getAttribute("selfcontained");
-        	boolean isselfcontained = Boolean.valueOf(selfcontained);
-        	
-        	
-        	File refXMLFile = new File(refFileName);
-            if (!refXMLFile.isAbsolute()) refXMLFile = new File(basedir, refFileName);
-            if (!refXMLFile.canRead()) {
+            String refFileName = requireAttribute(el, "file");
+            String selfcontained = el.getAttribute("selfcontained");
+            boolean isselfcontained = Boolean.valueOf(selfcontained);
+
+
+            File refXMLFile = new File(refFileName);
+            if (!refXMLFile.isAbsolute())
+            {
+                refXMLFile = new File(basedir, refFileName);
+            }
+            if (!refXMLFile.canRead())
+            {
                 throw new CompilerException("Invalid file: " + refXMLFile);
             }
-            
+
             InputStream specin = null;
-            
-        	if (isselfcontained){
-        	    if (!refXMLFile.getAbsolutePath().endsWith(".zip")) {
-        	        throw new CompilerException("Invalid file: " + refXMLFile + ". Selfcontained files can only be of type zip.");
-        	    }
-        	    ZipFile zip;
+
+            if (isselfcontained)
+            {
+                if (!refXMLFile.getAbsolutePath().endsWith(".zip"))
+                {
+                    throw new CompilerException("Invalid file: " + refXMLFile + ". Selfcontained files can only be of type zip.");
+                }
+                ZipFile zip;
                 try
                 {
-                    zip = new ZipFile(refXMLFile,ZipFile.OPEN_READ);
+                    zip = new ZipFile(refXMLFile, ZipFile.OPEN_READ);
                     ZipEntry specentry = zip.getEntry("META-INF/izpack.xml");
                     specin = zip.getInputStream(specentry);
                 }
                 catch (IOException e)
                 {
                     throw new CompilerException("Error reading META-INF/izpack.xml in " + refXMLFile);
-                }        	    
-        	}
-        	else {
-        	    try
+                }
+            }
+            else
+            {
+                try
                 {
                     specin = new FileInputStream(refXMLFile.getAbsolutePath());
                 }
@@ -986,25 +1034,25 @@ public class CompilerConfig extends Thread
                 {
                     throw new CompilerException("FileNotFoundException exception while reading refXMLFile");
                 }
-        	}
-        	
-        	// Initialises the parser
+            }
+
+            // Initialises the parser
             IXMLReader refXMLReader = null;
-            
+
             // Load the reference XML file                        
             try
             {
-            	refXMLReader = new StdXMLReader(specin);
+                refXMLReader = new StdXMLReader(specin);
             }
             catch (CompilerException c)
             {
-            	throw new CompilerException("Compiler exception while reading refXMLFile");
+                throw new CompilerException("Compiler exception while reading refXMLFile");
             }
             catch (IOException io)
             {
-            	throw new CompilerException("IOException exception while reading refXMLFile");
+                throw new CompilerException("IOException exception while reading refXMLFile");
             }
-            
+
             StdXMLParser refXMLParser = new StdXMLParser();
             refXMLParser.setBuilder(XMLBuilderFactory.createXMLBuilder());
             refXMLParser.setReader(refXMLReader);
@@ -1015,28 +1063,30 @@ public class CompilerConfig extends Thread
             try
             {
                 refXMLData = (XMLElement) refXMLParser.parse();
-                
+
             }
             catch (XMLException x)
             {
                 throw new CompilerException("Error parsing installation file", x);
             }
-            
+
             // Now checked the loaded XML file for basic syntax
             // We check it
-            if (!"installation".equalsIgnoreCase(refXMLData.getName())) {
+            if (!"installation".equalsIgnoreCase(refXMLData.getName()))
+            {
                 parseError(refXMLData, "this is not an IzPack XML installation file");
             }
-            if (!VERSION.equalsIgnoreCase(requireAttribute(refXMLData, "version"))) {
+            if (!VERSION.equalsIgnoreCase(requireAttribute(refXMLData, "version")))
+            {
                 parseError(refXMLData, "the file version is different from the compiler version");
             }
-            
+
             // Read the properties and perform replacement on the rest of the tree
             substituteProperties(refXMLData);
-            
+
             // call addResources to add the referenced XML resources to this installation
             addResources(refXMLData);
-            
+
             try
             {
                 specin.close();
@@ -1069,15 +1119,20 @@ public class CompilerConfig extends Thread
         int result = dfs(packs, names);
         // @todo More informative messages to include the source of the error
         if (result == -2)
+        {
             parseError("Circular dependency detected");
-        else if (result == -1) parseError("A dependency doesn't exist");
+        }
+        else if (result == -1)
+        {
+            parseError("A dependency doesn't exist");
+        }
     }
 
     /**
      * We use the dfs graph search algorithm to check whether the graph is acyclic as described in:
      * Thomas H. Cormen, Charles Leiserson, Ronald Rivest and Clifford Stein. Introduction to
      * algorithms 2nd Edition 540-549,MIT Press, 2001
-     * 
+     *
      * @param packs The graph
      * @param names The name map
      */
@@ -1170,63 +1225,79 @@ public class CompilerConfig extends Thread
 
     /**
      * Add files in an archive to a pack
-     * @param archive the archive file to unpack
-     * @param targetdir the target directory where the content of the archive will be installed
-     * @param osList The target OS constraints.
-     * @param override Overriding behaviour.
-     * @param pack Pack to be packed into
+     *
+     * @param archive     the archive file to unpack
+     * @param targetdir   the target directory where the content of the archive will be installed
+     * @param osList      The target OS constraints.
+     * @param override    Overriding behaviour.
+     * @param pack        Pack to be packed into
      * @param additionals Map which contains additional data
-     * @param condition 
+     * @param condition
      */
-    protected void addArchiveContent(File baseDir, File archive, String targetdir, List<OsConstraint> osList, int override, PackInfo pack, Map additionals, String condition) throws IOException {
-      
-      FileInputStream fin = new FileInputStream(archive);
-      ZipInputStream zin = new ZipInputStream(fin);
-      while (true) {
-        ZipEntry zentry = zin.getNextEntry();
-        if (zentry==null) break;
-        if (zentry.isDirectory()) continue;
-        
-        try {
-            File temp = File.createTempFile("izpack", null);
-            temp.deleteOnExit();
-            
-            FileOutputStream out = new FileOutputStream(temp);
-            PackagerHelper.copyStream(zin, out);
-            out.close();
-        
-            pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override, additionals,condition);
-        } catch (IOException e) {
-            throw new IOException("Couldn't create temporary file for "+zentry.getName()+" in archive "+archive+" ("+e.getMessage()+")");
+    protected void addArchiveContent(File baseDir, File archive, String targetdir, List<OsConstraint> osList, int override, PackInfo pack, Map additionals, String condition) throws IOException
+    {
+
+        FileInputStream fin = new FileInputStream(archive);
+        ZipInputStream zin = new ZipInputStream(fin);
+        while (true)
+        {
+            ZipEntry zentry = zin.getNextEntry();
+            if (zentry == null)
+            {
+                break;
+            }
+            if (zentry.isDirectory())
+            {
+                continue;
+            }
+
+            try
+            {
+                File temp = File.createTempFile("izpack", null);
+                temp.deleteOnExit();
+
+                FileOutputStream out = new FileOutputStream(temp);
+                PackagerHelper.copyStream(zin, out);
+                out.close();
+
+                pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override, additionals, condition);
+            }
+            catch (IOException e)
+            {
+                throw new IOException("Couldn't create temporary file for " + zentry.getName() + " in archive " + archive + " (" + e.getMessage() + ")");
+            }
+
         }
-        
-      }
-      fin.close();
+        fin.close();
     }
-    
+
     /**
      * Recursive method to add files in a pack.
-     * 
-     * @param file The file to add.
-     * @param targetdir The relative path to the parent.
-     * @param osList The target OS constraints.
-     * @param override Overriding behaviour.
-     * @param pack Pack to be packed into
+     *
+     * @param file        The file to add.
+     * @param targetdir   The relative path to the parent.
+     * @param osList      The target OS constraints.
+     * @param override    Overriding behaviour.
+     * @param pack        Pack to be packed into
      * @param additionals Map which contains additional data
-     * @param condition 
-     * @exception FileNotFoundException if the file does not exist
+     * @param condition
+     * @throws FileNotFoundException if the file does not exist
      */
     protected void addRecursively(File baseDir, File file, String targetdir, List<OsConstraint> osList, int override,
-            PackInfo pack, Map additionals, String condition) throws IOException
+                                  PackInfo pack, Map additionals, String condition) throws IOException
     {
         String targetfile = targetdir + "/" + file.getName();
         if (!file.isDirectory())
-            pack.addFile(baseDir, file, targetfile, osList, override, additionals,condition);
+        {
+            pack.addFile(baseDir, file, targetfile, osList, override, additionals, condition);
+        }
         else
         {
             File[] files = file.listFiles();
             if (files.length == 0) // The directory is empty so must be added
-                pack.addFile(baseDir, file, targetfile, osList, override, additionals,condition);
+            {
+                pack.addFile(baseDir, file, targetfile, osList, override, additionals, condition);
+            }
             else
             {
                 // new targetdir = targetfile;
@@ -1240,9 +1311,9 @@ public class CompilerConfig extends Thread
 
     /**
      * Parse panels and their paramters, locate the panels resources and add to the Packager.
-     * 
+     *
      * @param data The XML data.
-     * @exception CompilerException Description of the Exception
+     * @throws CompilerException Description of the Exception
      */
     protected void addPanels(XMLElement data) throws CompilerException
     {
@@ -1251,7 +1322,10 @@ public class CompilerConfig extends Thread
 
         // at least one panel is required
         Vector<XMLElement> panels = root.getChildrenNamed("panel");
-        if (panels.isEmpty()) parseError(root, "<panels> requires a <panel>");
+        if (panels.isEmpty())
+        {
+            parseError(root, "<panels> requires a <panel>");
+        }
 
         // We process each panel markup
         Iterator<XMLElement> iter = panels.iterator();
@@ -1265,10 +1339,10 @@ public class CompilerConfig extends Thread
             String className = xmlPanel.getAttribute("classname");
             // add an id
             String panelid = xmlPanel.getAttribute("id");
-            panel.setPanelid(panelid);                   
+            panel.setPanelid(panelid);
             String condition = xmlPanel.getAttribute("condition");
             panel.setCondition(condition);
-            
+
             // Panel files come in jars packaged w/ IzPack
             String jarPath = "bin/panels/" + className + ".jar";
             URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel);
@@ -1281,9 +1355,13 @@ public class CompilerConfig extends Thread
             {
             }
             if (fullClassName != null)
+            {
                 panel.className = fullClassName;
+            }
             else
+            {
                 panel.className = className;
+            }
             // insert into the packager
             compiler.addPanelJar(panel, url);
         }
@@ -1292,15 +1370,18 @@ public class CompilerConfig extends Thread
 
     /**
      * Adds the resources.
-     * 
+     *
      * @param data The XML data.
-     * @exception CompilerException Description of the Exception
+     * @throws CompilerException Description of the Exception
      */
     protected void addResources(XMLElement data) throws CompilerException
     {
         notifyCompilerListener("addResources", CompilerListener.BEGIN, data);
         XMLElement root = data.getFirstChildNamed("resources");
-        if (root == null) return;
+        if (root == null)
+        {
+            return;
+        }
 
         // We process each res markup
         Iterator<XMLElement> iter = root.getChildrenNamed("res").iterator();
@@ -1323,7 +1404,7 @@ public class CompilerConfig extends Thread
             try
             {
                 if (parsexml ||
-                    (substitute && !compiler.getVariables().isEmpty()))
+                        (substitute && !compiler.getVariables().isEmpty()))
                 {
                     // make the substitutions into a temp file
                     File parsedFile = File.createTempFile("izpp", null);
@@ -1336,7 +1417,7 @@ public class CompilerConfig extends Thread
                 }
 
                 if (parsexml)
-                {               
+                {
                     IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
                     // this constructor will open the specified url (this is
                     // why the InputStream is not handled in a similar manner
@@ -1345,7 +1426,8 @@ public class CompilerConfig extends Thread
                     parser.setReader(reader);
                     XMLElement xml = (XMLElement) parser.parse();
 
-                    if (substitute && !compiler.getVariables().isEmpty()) {
+                    if (substitute && !compiler.getVariables().isEmpty())
+                    {
                         // if we are also performing substitutions on the file
                         // then create an in-memory copy to pass to the
                         // substitutor
@@ -1353,7 +1435,9 @@ public class CompilerConfig extends Thread
                         XMLWriter xmlWriter = new XMLWriter(baos);
                         xmlWriter.write(xml);
                         is = new ByteArrayInputStream(baos.toByteArray());
-                    } else {
+                    }
+                    else
+                    {
                         // otherwise write direct to the temp file
                         XMLWriter xmlWriter = new XMLWriter(os);
                         xmlWriter.write(xml);
@@ -1376,7 +1460,8 @@ public class CompilerConfig extends Thread
 
                         // if the xml parser did not open the url
                         // ('parsexml' was not enabled)
-                        if (null == is) {
+                        if (null == is)
+                        {
                             is = new BufferedInputStream(originalUrl.openStream());
                         }
                         VariableSubstitutor vs = new VariableSubstitutor(compiler.getVariables());
@@ -1384,22 +1469,33 @@ public class CompilerConfig extends Thread
                     }
                 }
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 parseError(res, e.getMessage(), e);
-            } finally {
-                if (null != os) {
-                    try {
+            }
+            finally
+            {
+                if (null != os)
+                {
+                    try
+                    {
                         os.close();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e)
+                    {
                         // ignore as there is nothing we can realistically do
                         // so lets at least try to close the input stream
                     }
                 }
-                if (null != is) {
-                    try {
+                if (null != is)
+                {
+                    try
+                    {
                         is.close();
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e)
+                    {
                         // ignore as there is nothing we can realistically do
                     }
                 }
@@ -1412,9 +1508,9 @@ public class CompilerConfig extends Thread
 
     /**
      * Adds the ISO3 codes of the langpacks and associated resources.
-     * 
+     *
      * @param data The XML data.
-     * @exception CompilerException Description of the Exception
+     * @throws CompilerException Description of the Exception
      */
     protected void addLangpacks(XMLElement data) throws CompilerException
     {
@@ -1423,7 +1519,10 @@ public class CompilerConfig extends Thread
 
         // at least one langpack is required
         Vector<XMLElement> locals = root.getChildrenNamed("langpack");
-        if (locals.isEmpty()) parseError(root, "<locale> requires a <langpack>");
+        if (locals.isEmpty())
+        {
+            parseError(root, "<locale> requires a <langpack>");
+        }
 
         // We process each langpack markup
         Iterator<XMLElement> iter = locals.iterator();
@@ -1446,9 +1545,9 @@ public class CompilerConfig extends Thread
 
     /**
      * Builds the Info class from the XML tree.
-     * 
+     *
      * @param data The XML data. return The Info.
-     * @exception Exception Description of the Exception
+     * @throws Exception Description of the Exception
      */
     protected void addInfo(XMLElement data) throws Exception
     {
@@ -1490,15 +1589,24 @@ public class CompilerConfig extends Thread
 
         // We get the java version required
         XMLElement javaVersion = root.getFirstChildNamed("javaversion");
-        if (javaVersion != null) info.setJavaVersion(requireContent(javaVersion));
+        if (javaVersion != null)
+        {
+            info.setJavaVersion(requireContent(javaVersion));
+        }
 
         // Is a JDK required?
         XMLElement jdkRequired = root.getFirstChildNamed("requiresjdk");
-        if (jdkRequired != null) info.setJdkRequired("yes".equals(jdkRequired.getContent()));
+        if (jdkRequired != null)
+        {
+            info.setJdkRequired("yes".equals(jdkRequired.getContent()));
+        }
 
         // validate and insert (and require if -web kind) web dir
         XMLElement webDirURL = root.getFirstChildNamed("webdir");
-        if (webDirURL != null) info.setWebDirURL(requireURLContent(webDirURL).toString());
+        if (webDirURL != null)
+        {
+            info.setWebDirURL(requireURLContent(webDirURL).toString());
+        }
         String kind = compiler.getKind();
         if (kind != null)
         {
@@ -1524,28 +1632,33 @@ public class CompilerConfig extends Thread
             if (uninstallInfo != null)
             {
                 String uninstallerName = uninstallInfo.getAttribute("name");
-                if (uninstallerName != null && uninstallerName.length() > ".jar".length()){
+                if (uninstallerName != null && uninstallerName.length() > ".jar".length())
+                {
                     info.setUninstallerName(uninstallerName);
                 }
-                if (uninstallInfo.hasAttribute("condition")){
+                if (uninstallInfo.hasAttribute("condition"))
+                {
                     // there's a condition for uninstaller
                     String uninstallerCondition = uninstallInfo.getAttribute("condition");
                     info.setUninstallerCondition(uninstallerCondition);
                 }
-            }            
-        }        
-        
+            }
+        }
+
         // Add the path for the summary log file if specified
         XMLElement slfPath = root.getFirstChildNamed("summarylogfilepath");
-        if (slfPath != null) info.setSummaryLogFilePath(requireContent(slfPath));
+        if (slfPath != null)
+        {
+            info.setSummaryLogFilePath(requireContent(slfPath));
+        }
 
-        XMLElement writeInstallInfo = root.getFirstChildNamed("writeinstallationinformation");        
+        XMLElement writeInstallInfo = root.getFirstChildNamed("writeinstallationinformation");
         if (writeInstallInfo != null)
         {
             String writeInstallInfoString = requireContent(writeInstallInfo);
             info.setWriteInstallationInformation(validateYesNo(writeInstallInfoString));
         }
-        
+
         // look for an unpacker class
         String unpackerclass = compiler.getProperty("UNPACKER_CLASS");
         info.setUnpackerClassName(unpackerclass);
@@ -1555,33 +1668,36 @@ public class CompilerConfig extends Thread
 
     /**
      * Variable declaration is a fragment of the xml file. For example:
-     * 
+     * <p/>
      * <pre>
-     * 
-     *  
-     *   
-     *    
+     * <p/>
+     * <p/>
+     * <p/>
+     * <p/>
      *        &lt;variables&gt;
      *          &lt;variable name=&quot;nom&quot; value=&quot;value&quot;/&gt;
      *          &lt;variable name=&quot;foo&quot; value=&quot;pippo&quot;/&gt;
      *        &lt;/variables&gt;
-     *      
-     *    
-     *   
-     *  
+     * <p/>
+     * <p/>
+     * <p/>
+     * <p/>
      * </pre>
-     * 
+     * <p/>
      * variable declared in this can be referred to in parsable files.
-     * 
+     *
      * @param data The XML data.
-     * @exception CompilerException Description of the Exception
+     * @throws CompilerException Description of the Exception
      */
     protected void addVariables(XMLElement data) throws CompilerException
     {
         notifyCompilerListener("addVariables", CompilerListener.BEGIN, data);
         // We get the varible list
         XMLElement root = data.getFirstChildNamed("variables");
-        if (root == null) return;
+        if (root == null)
+        {
+            return;
+        }
 
         Properties variables = compiler.getVariables();
 
@@ -1592,18 +1708,23 @@ public class CompilerConfig extends Thread
             String name = requireAttribute(var, "name");
             String value = requireAttribute(var, "value");
             if (variables.contains(name))
+            {
                 parseWarn(var, "Variable '" + name + "' being overwritten");
+            }
             variables.setProperty(name, value);
         }
         notifyCompilerListener("addVariables", CompilerListener.END, data);
     }
-    
+
     protected void addDynamicVariables(XMLElement data) throws CompilerException
     {
         notifyCompilerListener("addDynamicVariables", CompilerListener.BEGIN, data);
         // We get the dynamic variable list
         XMLElement root = data.getFirstChildNamed("dynamicvariables");
-        if (root == null) return;
+        if (root == null)
+        {
+            return;
+        }
 
         Map<String, List<DynamicVariable>> dynamicvariables = compiler.getDynamicVariables();
 
@@ -1614,28 +1735,33 @@ public class CompilerConfig extends Thread
             String name = requireAttribute(var, "name");
             String value = requireAttribute(var, "value");
             String conditionid = var.getAttribute("condition");
-            
-            List<DynamicVariable> dynamicValues = new ArrayList<DynamicVariable>(); 
-            if (dynamicvariables.containsKey(name)) {
+
+            List<DynamicVariable> dynamicValues = new ArrayList<DynamicVariable>();
+            if (dynamicvariables.containsKey(name))
+            {
                 dynamicValues = dynamicvariables.get(name);
-            } else {                
+            }
+            else
+            {
                 dynamicvariables.put(name, dynamicValues);
-            }          
-            
+            }
+
             DynamicVariable dynamicVariable = new DynamicVariable();
             dynamicVariable.setName(name);
             dynamicVariable.setValue(value);
             dynamicVariable.setConditionid(conditionid);
-            if (dynamicValues.remove(dynamicVariable)){
+            if (dynamicValues.remove(dynamicVariable))
+            {
                 parseWarn(var, "Dynamic Variable '" + name + "' will be overwritten");
             }
             dynamicValues.add(dynamicVariable);
         }
         notifyCompilerListener("addDynamicVariables", CompilerListener.END, data);
     }
-    
+
     /**
      * Parse conditions and add them to the compiler.
+     *
      * @param data
      * @throws CompilerException
      */
@@ -1645,38 +1771,41 @@ public class CompilerConfig extends Thread
         // We get the condition list
         XMLElement root = data.getFirstChildNamed("conditions");
         Map<String, Condition> conditions = compiler.getConditions();
-        if (root != null) {               
+        if (root != null)
+        {
             Iterator<XMLElement> iter = root.getChildrenNamed("condition").iterator();
             while (iter.hasNext())
             {
                 XMLElement conditionel = iter.next();
                 Condition condition = RulesEngine.analyzeCondition(conditionel);
-                if (condition != null) {
+                if (condition != null)
+                {
                     String conditionid = condition.getId();
                     if (conditions.containsKey(conditionid))
                     {
                         parseWarn(conditionel, "Condition with id '" + conditionid + "' will be overwritten");
                     }
                     conditions.put(conditionid, condition);
-                    
+
                 }
-                else {
+                else
+                {
                     parseWarn(conditionel, "Condition couldn't be instantiated.");
                 }
             }
-        }        
+        }
         notifyCompilerListener("addConditions", CompilerListener.END, data);
     }
-    
+
 
     /**
      * Properties declaration is a fragment of the xml file. For example:
-     * 
+     * <p/>
      * <pre>
-     * 
-     *  
-     *   
-     *    
+     * <p/>
+     * <p/>
+     * <p/>
+     * <p/>
      *        &lt;properties&gt;
      *          &lt;property name=&quot;app.name&quot; value=&quot;Property Laden Installer&quot;/&gt;
      *          &lt;!-- Ant styles 'location' and 'refid' are not yet supported --&gt;
@@ -1685,16 +1814,16 @@ public class CompilerConfig extends Thread
      *          &lt;!-- Ant style 'url' and 'resource' are not yet supported --&gt;
      *          &lt;property environment=&quot;prefix&quot;/&gt;
      *        &lt;/properties&gt;
-     *      
-     *    
-     *   
-     *  
+     * <p/>
+     * <p/>
+     * <p/>
+     * <p/>
      * </pre>
-     * 
+     * <p/>
      * variable declared in this can be referred to in parsable files.
-     * 
+     *
      * @param data The XML data.
-     * @exception CompilerException Description of the Exception
+     * @throws CompilerException Description of the Exception
      */
     protected void substituteProperties(XMLElement data) throws CompilerException
     {
@@ -1717,10 +1846,16 @@ public class CompilerConfig extends Thread
         // the remaining DOM, and replace properties branch.
         // TODO: enhance XMLElement with an "indexOf(XMLElement)" method
         // and addChild(XMLElement, int) so returns to the same place.
-        if (root != null) data.removeChild(root);
+        if (root != null)
+        {
+            data.removeChild(root);
+        }
 
         substituteAllProperties(data);
-        if (root != null) data.addChild(root);
+        if (root != null)
+        {
+            data.addChild(root);
+        }
 
         notifyCompilerListener("substituteProperties", CompilerListener.END, data);
     }
@@ -1756,9 +1891,9 @@ public class CompilerConfig extends Thread
      * Checks whether a File instance is a regular file, exists and is readable.
      * Throws appropriate CompilerException to report violations of these
      * conditions.
-     * 
-     * @exception CompilerException if the file is either not existing, not a regular
-     *            file or not readable.
+     *
+     * @throws CompilerException if the file is either not existing, not a regular
+     *                           file or not readable.
      */
     private void assertIsNormalReadableFile(File fileToCheck, String fileDescription) throws CompilerException
     {
@@ -1781,25 +1916,25 @@ public class CompilerConfig extends Thread
 
     /**
      * Returns the XMLElement representing the installation XML file.
-     * 
+     *
      * @return The XML tree.
-     * @exception CompilerException For problems with the installation file
-     * @exception IOException for errors reading the installation file
+     * @throws CompilerException For problems with the installation file
+     * @throws IOException       for errors reading the installation file
      */
     protected XMLElement getXMLTree() throws CompilerException, IOException
     {
         // Initialises the parser
         IXMLReader reader = null;
-        if( filename != null )
+        if (filename != null)
         {
             File file = new File(filename).getAbsoluteFile();
-	        assertIsNormalReadableFile(file, "Configuration file");
+            assertIsNormalReadableFile(file, "Configuration file");
             reader = new StdXMLReader(new FileInputStream(filename));
             reader.setSystemID(file.toURL().toExternalForm());
             // add izpack built in property
             compiler.setProperty("izpack.file", file.toString());
         }
-        else if( installText != null )
+        else if (installText != null)
         {
             reader = StdXMLReader.stringReader(installText);
         }
@@ -1826,9 +1961,13 @@ public class CompilerConfig extends Thread
 
         // We check it
         if (!"installation".equalsIgnoreCase(data.getName()))
+        {
             parseError(data, "this is not an IzPack XML installation file");
+        }
         if (!VERSION.equalsIgnoreCase(requireAttribute(data, "version")))
+        {
             parseError(data, "the file version is different from the compiler version");
+        }
 
         // We finally return the tree
         return data;
@@ -1862,7 +2001,9 @@ public class CompilerConfig extends Thread
                 override = PackFile.OVERRIDE_UPDATE;
             }
             else
+            {
                 parseError(f, "invalid value for attribute \"override\"");
+            }
         }
 
         return override;
@@ -1872,9 +2013,9 @@ public class CompilerConfig extends Thread
      * Look for a project specified resources, which, if not absolute, are sought relative to the
      * projects basedir. The path should use '/' as the fileSeparator. If the resource is not found,
      * a CompilerException is thrown indicating fault in the parent element.
-     * 
-     * @param path the relative path (using '/' as separator) to the resource.
-     * @param desc the description of the resource used to report errors
+     *
+     * @param path   the relative path (using '/' as separator) to the resource.
+     * @param desc   the description of the resource used to report errors
      * @param parent the XMLElement the resource is specified in, used to report errors
      * @return a URL to the resource.
      */
@@ -1883,10 +2024,15 @@ public class CompilerConfig extends Thread
     {
         URL url = null;
         File resource = new File(path);
-        if (!resource.isAbsolute()) resource = new File(basedir, path);
+        if (!resource.isAbsolute())
+        {
+            resource = new File(basedir, path);
+        }
 
         if (!resource.exists()) // fatal
+        {
             parseError(parent, desc + " not found: " + resource);
+        }
 
         try
         {
@@ -1905,9 +2051,9 @@ public class CompilerConfig extends Thread
      * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
      * file). If the resource is not found, a CompilerException is thrown indicating fault in the
      * parent element.
-     * 
-     * @param path the relative path (using '/' as separator) to the resource.
-     * @param desc the description of the resource used to report errors
+     *
+     * @param path   the relative path (using '/' as separator) to the resource.
+     * @param desc   the description of the resource used to report errors
      * @param parent the XMLElement the resource is specified in, used to report errors
      * @return a URL to the resource.
      */
@@ -1919,10 +2065,15 @@ public class CompilerConfig extends Thread
         {
             File resource = new File(path);
 
-            if (!resource.isAbsolute()) resource = new File(Compiler.IZPACK_HOME, path);
+            if (!resource.isAbsolute())
+            {
+                resource = new File(Compiler.IZPACK_HOME, path);
+            }
 
             if (!resource.exists()) // fatal
+            {
                 parseError(parent, desc + " not found: " + resource);
+            }
 
             try
             {
@@ -1940,7 +2091,7 @@ public class CompilerConfig extends Thread
     /**
      * Create parse error with consistent messages. Includes file name. For use When parent is
      * unknown.
-     * 
+     *
      * @param message Brief message explaining error
      */
     protected void parseError(String message) throws CompilerException
@@ -1951,8 +2102,8 @@ public class CompilerConfig extends Thread
     /**
      * Create parse error with consistent messages. Includes file name and line # of parent. It is
      * an error for 'parent' to be null.
-     * 
-     * @param parent The element in which the error occured
+     *
+     * @param parent  The element in which the error occured
      * @param message Brief message explaining error
      */
     protected void parseError(XMLElement parent, String message) throws CompilerException
@@ -1963,8 +2114,8 @@ public class CompilerConfig extends Thread
     /**
      * Create a chained parse error with consistent messages. Includes file name and line # of
      * parent. It is an error for 'parent' to be null.
-     * 
-     * @param parent The element in which the error occured
+     *
+     * @param parent  The element in which the error occured
      * @param message Brief message explaining error
      */
     protected void parseError(XMLElement parent, String message, Throwable cause)
@@ -1976,8 +2127,8 @@ public class CompilerConfig extends Thread
     /**
      * Create a parse warning with consistent messages. Includes file name and line # of parent. It
      * is an error for 'parent' to be null.
-     * 
-     * @param parent The element in which the warning occured
+     *
+     * @param parent  The element in which the warning occured
      * @param message Warning message
      */
     protected void parseWarn(XMLElement parent, String message)
@@ -1988,22 +2139,24 @@ public class CompilerConfig extends Thread
     /**
      * Call getFirstChildNamed on the parent, producing a meaningful error message on failure. It is
      * an error for 'parent' to be null.
-     * 
+     *
      * @param parent The element to search for a child
-     * @param name Name of the child element to get
+     * @param name   Name of the child element to get
      */
     protected XMLElement requireChildNamed(XMLElement parent, String name) throws CompilerException
     {
         XMLElement child = parent.getFirstChildNamed(name);
         if (child == null)
+        {
             parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">");
+        }
         return child;
     }
 
     /**
      * Call getContent on an element, producing a meaningful error message if not present, or empty,
      * or a valid URL. It is an error for 'element' to be null.
-     * 
+     *
      * @param element The element to get content of
      */
     protected URL requireURLContent(XMLElement element) throws CompilerException
@@ -2023,38 +2176,44 @@ public class CompilerConfig extends Thread
     /**
      * Call getContent on an element, producing a meaningful error message if not present, or empty.
      * It is an error for 'element' to be null.
-     * 
+     *
      * @param element The element to get content of
      */
     protected String requireContent(XMLElement element) throws CompilerException
     {
         String content = element.getContent();
         if (content == null || content.length() == 0)
+        {
             parseError(element, "<" + element.getName() + "> requires content");
+        }
         return content;
     }
-    
-    protected boolean validateYesNo(String value){
+
+    protected boolean validateYesNo(String value)
+    {
         boolean result = false;
-        if ("yes".equalsIgnoreCase(value)){
+        if ("yes".equalsIgnoreCase(value))
+        {
             result = true;
         }
-        else if ("no".equalsIgnoreCase(value)){
+        else if ("no".equalsIgnoreCase(value))
+        {
             result = false;
         }
-        else {
+        else
+        {
             Debug.trace("yes/no not found. trying true/false");
             result = Boolean.valueOf(value);
-        }   
+        }
         return result;
     }
-    
+
 
     /**
      * Call getAttribute on an element, producing a meaningful error message if not present, or
      * empty. It is an error for 'element' or 'attribute' to be null.
-     * 
-     * @param element The element to get the attribute value of
+     *
+     * @param element   The element to get the attribute value of
      * @param attribute The name of the attribute to get
      */
     protected String requireAttribute(XMLElement element, String attribute)
@@ -2062,8 +2221,10 @@ public class CompilerConfig extends Thread
     {
         String value = element.getAttribute(attribute);
         if (value == null)
+        {
             parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
                     + "'");
+        }
         return value;
     }
 
@@ -2071,8 +2232,8 @@ public class CompilerConfig extends Thread
      * Get a required attribute of an element, ensuring it is an integer. A meaningful error message
      * is generated as a CompilerException if not present or parseable as an int. It is an error for
      * 'element' or 'attribute' to be null.
-     * 
-     * @param element The element to get the attribute value of
+     *
+     * @param element   The element to get the attribute value of
      * @param attribute The name of the attribute to get
      */
     protected int requireIntAttribute(XMLElement element, String attribute)
@@ -2080,8 +2241,10 @@ public class CompilerConfig extends Thread
     {
         String value = element.getAttribute(attribute);
         if (value == null || value.length() == 0)
+        {
             parseError(element, "<" + element.getName() + "> requires attribute '" + attribute
                     + "'");
+        }
         try
         {
             return Integer.parseInt(value);
@@ -2096,16 +2259,22 @@ public class CompilerConfig extends Thread
     /**
      * Call getAttribute on an element, producing a meaningful error message if not present, or one
      * of "yes" or "no". It is an error for 'element' or 'attribute' to be null.
-     * 
-     * @param element The element to get the attribute value of
+     *
+     * @param element   The element to get the attribute value of
      * @param attribute The name of the attribute to get
      */
     protected boolean requireYesNoAttribute(XMLElement element, String attribute)
             throws CompilerException
     {
         String value = requireAttribute(element, attribute);
-        if ("yes".equalsIgnoreCase(value)) return true;
-        if ("no".equalsIgnoreCase(value)) return false;
+        if ("yes".equalsIgnoreCase(value))
+        {
+            return true;
+        }
+        if ("no".equalsIgnoreCase(value))
+        {
+            return false;
+        }
 
         parseError(element, "<" + element.getName() + "> invalid attribute '" + attribute
                 + "': Expected (yes|no)");
@@ -2116,19 +2285,28 @@ public class CompilerConfig extends Thread
     /**
      * Call getAttribute on an element, producing a meaningful warning if not "yes" or "no". If the
      * 'element' or 'attribute' are null, the default value is returned.
-     * 
-     * @param element The element to get the attribute value of
-     * @param attribute The name of the attribute to get
+     *
+     * @param element      The element to get the attribute value of
+     * @param attribute    The name of the attribute to get
      * @param defaultValue Value returned if attribute not present or invalid
      */
     protected boolean validateYesNoAttribute(XMLElement element, String attribute,
-            boolean defaultValue)
+                                             boolean defaultValue)
     {
-        if (element == null) return defaultValue;
+        if (element == null)
+        {
+            return defaultValue;
+        }
 
         String value = element.getAttribute(attribute, (defaultValue ? "yes" : "no"));
-        if ("yes".equalsIgnoreCase(value)) return true;
-        if ("no".equalsIgnoreCase(value)) return false;
+        if ("yes".equalsIgnoreCase(value))
+        {
+            return true;
+        }
+        if ("no".equalsIgnoreCase(value))
+        {
+            return false;
+        }
 
         // TODO: should this be an error if it's present but "none of the
         // above"?
@@ -2140,7 +2318,7 @@ public class CompilerConfig extends Thread
 
     /**
      * The main method if the compiler is invoked by a command-line call.
-     * 
+     *
      * @param args The arguments passed on the command-line.
      */
     public static void main(String[] args)
@@ -2161,8 +2339,11 @@ public class CompilerConfig extends Thread
         String home = ".";
         // We get the IzPack home directory 
         String izHome = System.getProperty("IZPACK_HOME");
-        if (izHome != null) home = izHome;
-                    
+        if (izHome != null)
+        {
+            home = izHome;
+        }
+
         // We analyse the command line parameters
         try
         {
@@ -2176,7 +2357,10 @@ public class CompilerConfig extends Thread
 
             // First check
             int nArgs = args.length;
-            if (nArgs < 1) throw new Exception("no arguments given");
+            if (nArgs < 1)
+            {
+                throw new Exception("no arguments given");
+            }
 
             // The users wants to know the command line parameters
             if ("-?".equalsIgnoreCase(args[0]))
@@ -2186,8 +2370,8 @@ public class CompilerConfig extends Thread
                 System.out.println("   -h (IzPack home) : the root path of IzPack. This will be needed");
                 System.out.println("               if the compiler is not called in the root directory  of IzPack.");
                 System.out.println("               Do not forget quotations if there are blanks in the path.");
-                         System.out
-                          .println("   -b (base) : indicates the base path that the compiler will use for filenames");
+                System.out
+                        .println("   -b (base) : indicates the base path that the compiler will use for filenames");
                 System.out.println("               of sources. Default is the current path. Attend to -h.");
                 System.out.println("   -k (kind) : indicates the kind of installer to generate");
                 System.out.println("               default is standard");
@@ -2219,71 +2403,87 @@ public class CompilerConfig extends Thread
                 // We parse the other ones
                 int pos = 1;
                 while (pos < nArgs)
+                {
                     if ((args[pos].startsWith("-")) && (args[pos].length() == 2))
                     {
                         switch (args[pos].toLowerCase().charAt(1))
                         {
-                        case 'b':
-                            if ((pos + 1) < nArgs)
-                            {
-                                pos++;
-                                base = args[pos];
-                            }
-                            else
-                                throw new Exception("base argument missing");
-                            break;
-                        case 'k':
-                            if ((pos + 1) < nArgs)
-                            {
-                                pos++;
-                                kind = args[pos];
-                            }
-                            else
-                                throw new Exception("kind argument missing");
-                            break;
-                        case 'o':
-                            if ((pos + 1) < nArgs)
-                            {
-                                pos++;
-                                output = args[pos];
-                            }
-                            else
-                                throw new Exception("output argument missing");
-                            break;
-                        case 'c':
-                            if ((pos + 1) < nArgs)
-                            {
-                                pos++;
-                                compr_format = args[pos];
-                            }
-                            else
-                                throw new Exception("compression format argument missing");
-                            break;
-                        case 'l':
-                            if ((pos + 1) < nArgs)
-                            {
-                                pos++;
-                                compr_level = Integer.parseInt(args[pos]);
-                            }
-                            else
-                                throw new Exception("compression level argument missing");
-                            break;
-                        case 'h':
-                            if ((pos + 1) < nArgs)
-                            {
-                                pos++;
-                                home = args[pos];
-                            }
-                            else
-                                throw new Exception("IzPack home path argument missing");
-                            break;
-                        default:
-                            throw new Exception("unknown argument");
+                            case 'b':
+                                if ((pos + 1) < nArgs)
+                                {
+                                    pos++;
+                                    base = args[pos];
+                                }
+                                else
+                                {
+                                    throw new Exception("base argument missing");
+                                }
+                                break;
+                            case 'k':
+                                if ((pos + 1) < nArgs)
+                                {
+                                    pos++;
+                                    kind = args[pos];
+                                }
+                                else
+                                {
+                                    throw new Exception("kind argument missing");
+                                }
+                                break;
+                            case 'o':
+                                if ((pos + 1) < nArgs)
+                                {
+                                    pos++;
+                                    output = args[pos];
+                                }
+                                else
+                                {
+                                    throw new Exception("output argument missing");
+                                }
+                                break;
+                            case 'c':
+                                if ((pos + 1) < nArgs)
+                                {
+                                    pos++;
+                                    compr_format = args[pos];
+                                }
+                                else
+                                {
+                                    throw new Exception("compression format argument missing");
+                                }
+                                break;
+                            case 'l':
+                                if ((pos + 1) < nArgs)
+                                {
+                                    pos++;
+                                    compr_level = Integer.parseInt(args[pos]);
+                                }
+                                else
+                                {
+                                    throw new Exception("compression level argument missing");
+                                }
+                                break;
+                            case 'h':
+                                if ((pos + 1) < nArgs)
+                                {
+                                    pos++;
+                                    home = args[pos];
+                                }
+                                else
+                                {
+                                    throw new Exception("IzPack home path argument missing");
+                                }
+                                break;
+                            default:
+                                throw new Exception("unknown argument");
                         }
                         pos++;
                     }
                     else
+                    {
                         throw new Exception("bad argument");
+                    }
+                }
 
                 home = resolveIzPackHome(home);
                 // Outputs what we are going to do
@@ -2296,21 +2496,25 @@ public class CompilerConfig extends Thread
                 System.out.println("-> IzPack home : " + home);
                 System.out.println("");
 
-                
-                Compiler.setIzpackHome(home);
 
+                Compiler.setIzpackHome(home);
 
                 // Calls the compiler
                 CmdlinePackagerListener listener = new CmdlinePackagerListener();
-                CompilerConfig compiler = new CompilerConfig(filename, base, kind, output, 
+                CompilerConfig compiler = new CompilerConfig(filename, base, kind, output,
                         compr_format, compr_level, listener, null);
                 compiler.executeCompiler();
 
                 // Waits
                 while (compiler.isAlive())
+                {
                     Thread.sleep(100);
+                }
 
-                if (compiler.wasSuccessful()) exitCode = 0;
+                if (compiler.wasSuccessful())
+                {
+                    exitCode = 0;
+                }
 
                 System.out.println("Build time: " + new Date());
             }
@@ -2332,8 +2536,10 @@ public class CompilerConfig extends Thread
     private static String resolveIzPackHome(String home)
     {
         File test = new File(home, IZ_TEST_SUBDIR + File.separator + IZ_TEST_FILE);
-        if(test.exists())
-            return( home);
+        if (test.exists())
+        {
+            return (home);
+        }
         // Try to resolve the path using compiler.jar which also should be under
         // IZPACK_HOME.
         String self = Compiler.class.getName();
@@ -2343,25 +2549,35 @@ public class CompilerConfig extends Thread
         String np = url.getFile();
         int start = np.indexOf(self);
         np = np.substring(0, start);
-        if( np.endsWith("!"))
+        if (np.endsWith("!"))
         {   // Where shut IZPACK_HOME at the standalone-compiler be??
             // No idea.
-            if(np.endsWith("standalone-compiler.jar!") || np.endsWith("standalone-compiler-4.0.0.jar!") || np.matches("standalone-compiler-[\\d\\.]+.jar!"))
-                return(".");
+            if (np.endsWith("standalone-compiler.jar!") || np.endsWith("standalone-compiler-4.0.0.jar!") || np.matches("standalone-compiler-[\\d\\.]+.jar!"))
+            {
+                return (".");
+            }
             np = np.substring(0, np.length() - 1);
         }
         File root = null;
-        if( URI.create(np).isAbsolute())
-            root = new File(URI.create(np));
-        else 
-            root = new File(np);
-        while(true)
+        if (URI.create(np).isAbsolute())
         {
-            if( root == null )
+            root = new File(URI.create(np));
+        }
+        else
+        {
+            root = new File(np);
+        }
+        while (true)
+        {
+            if (root == null)
+            {
                 throw new IllegalArgumentException("No valid IzPack home directory found");
-            test =  new File(root, IZ_TEST_SUBDIR + File.separator + IZ_TEST_FILE);
-            if( test.exists())
-                return(root.getAbsolutePath());
+            }
+            test = new File(root, IZ_TEST_SUBDIR + File.separator + IZ_TEST_FILE);
+            if (test.exists())
+            {
+                return (root.getAbsolutePath());
+            }
             root = root.getParentFile();
         }
     }
@@ -2374,24 +2590,29 @@ public class CompilerConfig extends Thread
      * posible, the listeners will be validated. Listener declaration is a fragmention in
      * install.xml like : <listeners> <listener compiler="PermissionCompilerListener"
      * installer="PermissionInstallerListener"/> </<listeners>
-     * 
+     *
      * @param data the XML data
-     * @exception Exception Description of the Exception
+     * @throws Exception Description of the Exception
      */
     private void addCustomListeners(XMLElement data) throws Exception
     {
         // We get the listeners
         XMLElement root = data.getFirstChildNamed("listeners");
-        if (root == null) return;
+        if (root == null)
+        {
+            return;
+        }
         Iterator<XMLElement> iter = root.getChildrenNamed("listener").iterator();
         while (iter.hasNext())
         {
             XMLElement xmlAction = iter.next();
             Object[] listener = getCompilerListenerInstance(xmlAction);
             if (listener != null)
+            {
                 addCompilerListener((CompilerListener) listener[0]);
-            String[] typeNames = new String[] { "installer", "uninstaller"};
-            int[] types = new int[] { CustomData.INSTALLER_LISTENER,
+            }
+            String[] typeNames = new String[]{"installer", "uninstaller"};
+            int[] types = new int[]{CustomData.INSTALLER_LISTENER,
                     CustomData.UNINSTALLER_LISTENER};
             for (int i = 0; i < typeNames.length; ++i)
             {
@@ -2401,8 +2622,10 @@ public class CompilerConfig extends Thread
                     // Check for a jar attribute on the listener
                     String jarPath = xmlAction.getAttribute("jar");
                     jarPath = compiler.replaceProperties(jarPath);
-                    if( jarPath == null )
+                    if (jarPath == null)
+                    {
                         jarPath = "bin/customActions/" + className + ".jar";
+                    }
                     List<OsConstraint> constraints = OsConstraint.getOsList(xmlAction);
                     compiler.addCustomListener(types[i], className, jarPath, constraints);
                 }
@@ -2414,7 +2637,7 @@ public class CompilerConfig extends Thread
     /**
      * Returns a list which contains the pathes of all files which are included in the given url.
      * This method expects as the url param a jar.
-     * 
+     *
      * @param url url of the jar file
      * @return full qualified paths of the contained files
      * @throws Exception
@@ -2428,7 +2651,10 @@ public class CompilerConfig extends Thread
         {
             String name = zentry.getName();
             // Add only files, no directory entries.
-            if (!zentry.isDirectory()) fullNames.add(name);
+            if (!zentry.isDirectory())
+            {
+                fullNames.add(name);
+            }
         }
         jis.close();
         return (fullNames);
@@ -2437,11 +2663,11 @@ public class CompilerConfig extends Thread
     /**
      * Returns the qualified class name for the given class. This method expects as the url param a
      * jar file which contains the given class. It scans the zip entries of the jar file.
-     * 
-     * @param url url of the jar file which contains the class
+     *
+     * @param url       url of the jar file which contains the class
      * @param className short name of the class for which the full name should be resolved
      * @return full qualified class name
-     * @throws IOException 
+     * @throws IOException
      */
     private String getFullClassName(URL url, String className) throws IOException //throws Exception
     {
@@ -2468,11 +2694,13 @@ public class CompilerConfig extends Thread
                 jis.close();
                 return (name.substring(0, lastPos));
             }
-            
+
             if (nonCasePos != -1 && name.length() == nonCasePos + className.length() + 6)
-                // "Main" class with different case found
+            // "Main" class with different case found
+            {
                 throw new IllegalArgumentException("Fatal error! The declared panel name in the xml file ("
                         + className + ") differs in case to the founded class file (" + name + ").");
+            }
         }
         jis.close();
         return (null);
@@ -2485,7 +2713,7 @@ public class CompilerConfig extends Thread
      * "bin/customActions/[className].jar", or that the listener element has
      * a jar attribute specifying the listener jar path. The class will be
      * loaded via an URLClassLoader.
-     * 
+     *
      * @param var the xml element of the "listener" node
      * @return instance of the defined compiler listener
      * @throws Exception
@@ -2495,17 +2723,23 @@ public class CompilerConfig extends Thread
         String className = var.getAttribute("compiler");
         Class listener = null;
         Object instance = null;
-        if (className == null) return (null);
+        if (className == null)
+        {
+            return (null);
+        }
 
         // CustomAction files come in jars packaged IzPack, or they can be
         // specified via a jar attribute on the listener
         String jarPath = var.getAttribute("jar");
         jarPath = compiler.replaceProperties(jarPath);
-        if( jarPath == null )
+        if (jarPath == null)
+        {
             jarPath = "bin/customActions/" + className + ".jar";
+        }
         URL url = findIzPackResource(jarPath, "CustomAction jar file", var);
         String fullName = getFullClassName(url, className);
-        if (fullName == null){
+        if (fullName == null)
+        {
             // class not found
             return null;
         }
@@ -2534,33 +2768,45 @@ public class CompilerConfig extends Thread
                 }
                 finally
                 {
-                    if (in != null) in.close();
-                    if (outFile != null) outFile.close();
+                    if (in != null)
+                    {
+                        in.close();
+                    }
+                    if (outFile != null)
+                    {
+                        outFile.close();
+                    }
                 }
                 url = tf.toURL();
 
             }
             // Use the class loader of the interface as parent, else
             // compile will fail at using it via an Ant task.
-            URLClassLoader ucl = new URLClassLoader(new URL[] { url}, CompilerListener.class
+            URLClassLoader ucl = new URLClassLoader(new URL[]{url}, CompilerListener.class
                     .getClassLoader());
             listener = ucl.loadClass(fullName);
         }
         if (listener != null)
+        {
             instance = listener.newInstance();
+        }
         else
+        {
             parseError(var, "Cannot find defined compiler listener " + className);
+        }
         if (!CompilerListener.class.isInstance(instance))
+        {
             parseError(var, "'" + className + "' must be implemented "
                     + CompilerListener.class.toString());
+        }
         List<OsConstraint> constraints = OsConstraint.getOsList(var);
-        return (new Object[] { instance, className, constraints});
+        return (new Object[]{instance, className, constraints});
     }
 
     /**
      * Add a CompilerListener. A registered CompilerListener will be called at every enhancmend
      * point of compiling.
-     * 
+     *
      * @param pe CompilerListener which should be added
      */
     private void addCompilerListener(CompilerListener pe)
@@ -2570,10 +2816,10 @@ public class CompilerConfig extends Thread
 
     /**
      * Calls all defined compile listeners notify method with the given data
-     * 
+     *
      * @param callerName name of the calling method as string
-     * @param state CompileListener.BEGIN or END
-     * @param data current install data
+     * @param state      CompileListener.BEGIN or END
+     * @param data       current install data
      * @throws CompilerException
      */
     private void notifyCompilerListener(String callerName, int state, XMLElement data)
@@ -2591,7 +2837,7 @@ public class CompilerConfig extends Thread
 
     /**
      * Calls the reviseAdditionalDataMap method of all registered CompilerListener's.
-     * 
+     *
      * @param f file releated XML node
      * @return a map with the additional attributes
      */

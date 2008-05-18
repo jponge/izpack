@@ -21,16 +21,12 @@
  */
 package com.izforge.izpack.compressor;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import com.izforge.izpack.compiler.Compiler;
+
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
-
-import com.izforge.izpack.compiler.Compiler;
 
 
 /**
@@ -38,15 +34,15 @@ import com.izforge.izpack.compiler.Compiler;
  * packs included in the installation jar file.
  * This abstract class implements the interface PackCompressor for
  * the common needed methods.
- * 
+ *
  * @author Klaus Bartz
  */
 
 public abstract class PackCompressorBase implements PackCompressor
 {
 
-    protected String [] formatNames = null;
-    protected String [] containerPaths = null;
+    protected String[] formatNames = null;
+    protected String[] containerPaths = null;
     protected String decoderMapper = null;
     /**
      * Should contain all full qualified (use dots, not slashes)
@@ -57,16 +53,17 @@ public abstract class PackCompressorBase implements PackCompressor
      * Do not forget the dot before the asterix.
      * For an other example see class BZip2PackCompressor.
      */
-    protected String [][] decoderClassNames = null;
+    protected String[][] decoderClassNames = null;
     protected String encoderClassName = null;
-    
-    protected Class [] paramsClasses = null;
+
+    protected Class[] paramsClasses = null;
 
     private Compiler compiler;
     private Constructor<Object> constructor;
     private int level = -1;
-   /**
-     * 
+
+    /**
+     *
      */
     public PackCompressorBase()
     {
@@ -78,7 +75,7 @@ public abstract class PackCompressorBase implements PackCompressor
      */
     public String[] getContainerPaths()
     {
-        return(containerPaths);
+        return (containerPaths);
     }
 
     /* (non-Javadoc)
@@ -86,14 +83,15 @@ public abstract class PackCompressorBase implements PackCompressor
      */
     public String getEncoderClassName()
     {
-        return(encoderClassName);
+        return (encoderClassName);
     }
+
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compressor.PackCompressor#getDecoderClassNames()
-     */
+    * @see com.izforge.izpack.compressor.PackCompressor#getDecoderClassNames()
+    */
     public String[][] getDecoderClassNames()
     {
-        return(decoderClassNames);
+        return (decoderClassNames);
     }
 
     /* (non-Javadoc)
@@ -101,7 +99,7 @@ public abstract class PackCompressorBase implements PackCompressor
      */
     public boolean useStandardCompression()
     {
-        return( false );
+        return (false);
     }
 
     /* (non-Javadoc)
@@ -109,7 +107,7 @@ public abstract class PackCompressorBase implements PackCompressor
      */
     public String[] getCompressionFormatSymbols()
     {
-        return(formatNames);
+        return (formatNames);
     }
 
     /* (non-Javadoc)
@@ -117,7 +115,7 @@ public abstract class PackCompressorBase implements PackCompressor
      */
     public String getDecoderMapperName()
     {
-        return(decoderMapper);
+        return (decoderMapper);
     }
 
     /* (non-Javadoc)
@@ -133,7 +131,7 @@ public abstract class PackCompressorBase implements PackCompressor
      */
     public void setCompressionLevel(int level)
     {
-        this.level =  level;
+        this.level = level;
     }
 
     /* (non-Javadoc)
@@ -141,7 +139,7 @@ public abstract class PackCompressorBase implements PackCompressor
      */
     public int getCompressionLevel()
     {
-        return( level);
+        return (level);
     }
 
     /* (non-Javadoc)
@@ -149,36 +147,41 @@ public abstract class PackCompressorBase implements PackCompressor
      */
     public boolean needsBufferedOutputStream()
     {
-        return(true);
+        return (true);
     }
 
 
     /**
      * Loads the given class from the previos setted container paths.
+     *
      * @param className full qualified name of the class to be loaded
      * @throws Exception
      */
-    public void loadClass( String className) throws Exception
+    public void loadClass(String className) throws Exception
     {
-        if( getEncoderClassName() == null)
+        if (getEncoderClassName() == null)
+        {
             return;
+        }
         Class<Object> encoder = null;
-        if( getContainerPaths() == null  )
+        if (getContainerPaths() == null)
         {   // May be class files are in the compiler.jar.
             encoder = (Class<Object>) Class.forName(className);
         }
-        if( encoder == null)
+        if (encoder == null)
         {
-            String [] rawPaths = getContainerPaths();
-            URL [] uRLs = new URL[rawPaths.length];
+            String[] rawPaths = getContainerPaths();
+            URL[] uRLs = new URL[rawPaths.length];
             Object instance = null;
             int i;
             int j = 0;
 
-            for(i = 0; i < rawPaths.length; ++i)
+            for (i = 0; i < rawPaths.length; ++i)
             {
-                if( rawPaths[i] == null )
+                if (rawPaths[i] == null)
+                {
                     continue;
+                }
                 String jarPath = compiler.replaceProperties(rawPaths[i]);
                 URL url = compiler.findIzPackResource(jarPath, "Pack compressor jar file");
                 if (url != null)
@@ -207,21 +210,29 @@ public abstract class PackCompressorBase implements PackCompressor
                         }
                         finally
                         {
-                            if (in != null) in.close();
-                            if (outFile != null) outFile.close();
+                            if (in != null)
+                            {
+                                in.close();
+                            }
+                            if (outFile != null)
+                            {
+                                outFile.close();
+                            }
                         }
                         url = tf.toURL();
-        
+
                     }
                 }
             }
-            if( j > 0 )
+            if (j > 0)
             {
-                if( j < uRLs.length)
+                if (j < uRLs.length)
                 {
-                    URL [] nurl = new URL[j];
-                    for( i = 0; i < j; ++i)
+                    URL[] nurl = new URL[j];
+                    for (i = 0; i < j; ++i)
+                    {
                         nurl[i] = uRLs[i];
+                    }
                     uRLs = nurl;
                 }
                 // Use the class loader of the interface as parent, else
@@ -239,70 +250,80 @@ public abstract class PackCompressorBase implements PackCompressor
             constructor = encoder.getDeclaredConstructor(paramsClasses);
         }
         else
-            compiler.parseError( "Cannot find defined compressor " + className);
+        {
+            compiler.parseError("Cannot find defined compressor " + className);
+        }
     }
-    
+
     /**
      * Returns a newly created instance of the output stream which should be
-     * used by this pack compressor. This method do not declare the 
+     * used by this pack compressor. This method do not declare the
      * return value as FilterOutputStream although there must be an constructor
      * with a slave output stream as argument. This is done in this way because
-     * some encoding streams from third party are only implemented as 
+     * some encoding streams from third party are only implemented as
      * "normal" output stream.
+     *
      * @param slave output stream to be used as slave
      * @return a newly created instance of the output stream which should be
-     * used by this pack compressor
+     *         used by this pack compressor
      * @throws Exception
      */
-    protected OutputStream getOutputInstance(OutputStream slave) 
-        throws Exception
+    protected OutputStream getOutputInstance(OutputStream slave)
+            throws Exception
     {
-        if( needsBufferedOutputStream())
+        if (needsBufferedOutputStream())
         {
-            slave = new BufferedOutputStream( slave);
+            slave = new BufferedOutputStream(slave);
         }
-        Object [] params = resolveConstructorParams( slave );
-        if( constructor == null )
+        Object[] params = resolveConstructorParams(slave);
+        if (constructor == null)
+        {
             loadClass(getEncoderClassName());
-        if( constructor == null )
-            return(null);
+        }
+        if (constructor == null)
+        {
+            return (null);
+        }
         Object instance = null;
-        instance = constructor.newInstance( params);
+        instance = constructor.newInstance(params);
         if (!OutputStream.class.isInstance(instance))
-            compiler.parseError( "'" + getEncoderClassName() + "' must be derived from "
+        {
+            compiler.parseError("'" + getEncoderClassName() + "' must be derived from "
                     + OutputStream.class.toString());
-        return((OutputStream) instance );
-        
+        }
+        return ((OutputStream) instance);
+
     }
-    
+
     /**
      * This method will be used to support different constructor signatures.
-     * The default is 
+     * The default is
      * <pre>XXXOutputStream( OutputStream slave )</pre>
      * if level is -1 or
      * <pre>XXXOutputStream( OutputStream slave, int level )</pre>
      * if level is other than -1.<br>
      * If the signature of the used output stream will be other, overload
      * this method in the derived pack compressor class.
+     *
      * @param slave output stream to be used as slave
      * @return the constructor params as Object [] to be used as construction
-     * of the constructor via reflection
+     *         of the constructor via reflection
      * @throws Exception
      */
-    protected Object[] resolveConstructorParams( OutputStream slave) throws Exception
+    protected Object[] resolveConstructorParams(OutputStream slave) throws Exception
     {
-        if( level == -1 )
+        if (level == -1)
         {
             paramsClasses = new Class[1];
             paramsClasses[0] = Class.forName("java.io.OutputStream");
-            Object[] params = { slave};
-            return( params );
+            Object[] params = {slave};
+            return (params);
         }
         paramsClasses = new Class[2];
         paramsClasses[0] = Class.forName("java.io.OutputStream");
         paramsClasses[1] = java.lang.Integer.TYPE;
-        Object[] params = { slave, level};
-        return( params );
-     }
+        Object[] params = {slave, level};
+        return (params);
+    }
 
 }

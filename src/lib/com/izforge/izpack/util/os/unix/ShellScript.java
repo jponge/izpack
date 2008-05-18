@@ -23,12 +23,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.util.Date;
 
 /**
  * A Generator, Wrapper and Executor for Unix ShellScripts
- * 
+ *
  * @author marc.eppelmann&#064;reddot.de
  */
 public class ShellScript
@@ -37,57 +36,84 @@ public class ShellScript
     // ~ Static fields/initializers *********************************************************
 
     // ~ Static fields/initializers *********************************************************
-    /** Author = "marc.eppelmann_at_gmx.de" */
+    /**
+     * Author = "marc.eppelmann_at_gmx.de"
+     */
     private final static String Author = "Author: marc.eppelmann_at_gmx.de";
 
-    /** Generator = "Generator: " + ShellScript.class.getName() */
+    /**
+     * Generator = "Generator: " + ShellScript.class.getName()
+     */
     private final static String Generator = "Generator: " + ShellScript.class.getName();
 
-    /** internal SourceCode Management ( currently 'svn') ID :: 'SCM_ID = "$Id$"' */
+    /**
+     * internal SourceCode Management ( currently 'svn') ID :: 'SCM_ID = "$Id$"'
+     */
     private final static String SCM_ID = "$Id$";
 
-    /** internal Revision = "$Revision$" */
+    /**
+     * internal Revision = "$Revision$"
+     */
     private final static String Revision = "$Revision$";
 
-    /** internal comment prefix; makes a line as comment:-) :: 'CommentPre = "# "' */
+    /**
+     * internal comment prefix; makes a line as comment:-) :: 'CommentPre = "# "'
+     */
     private final static String CommentPre = "# ";
 
-    /** H = CommentPre */
+    /**
+     * H = CommentPre
+     */
     private final static String H = CommentPre;
 
-    /** the linefeed: lf = "\n" */
+    /**
+     * the linefeed: lf = "\n"
+     */
     private final static String lf = "\n";
 
-    /** lh = lf + H = "\n#" */
+    /**
+     * lh = lf + H = "\n#"
+     */
     private final static String lh = lf + H;
 
-    /** the explanation header for this generated script */
+    /**
+     * the explanation header for this generated script
+     */
     private final static String explanation = lh + "This is an automatically generated Script."
             + lh + "Usually this can be removed if the Generator " + lh
             + "was unable to remove the script after execution." + lf;
 
-    /** "Generated at: " + new Date().toString() */
+    /**
+     * "Generated at: " + new Date().toString()
+     */
     private static String currentDateMsg = "Generated at: " + new Date().toString();
 
-    /** the header of this ShellScript */
+    /**
+     * the header of this ShellScript
+     */
     private final static String header = lf + explanation + lf + H + Generator + lf + H + SCM_ID
             + lf + H + Author + lf + H + Revision + lf + H + currentDateMsg + lf + lf;
 
     // ~ Instance fields ********************************************************************
 
     // ~ Instance fields ********************************************************************
-    /** Internal ContentBuffer of this ShellScript */
+    /**
+     * Internal ContentBuffer of this ShellScript
+     */
     private StringBuffer content = new StringBuffer();
 
-    /** internal field: where to write via write( itsLocation ) this shellscript. */
+    /**
+     * internal field: where to write via write( itsLocation ) this shellscript.
+     */
     private String itsLocation;
 
     // ~ Constructors ***********************************************************************
 
     // ~ Constructors ***********************************************************************
+
     /**
      * Creates and initializes the ShellScript for running on the given shell.
-     * 
+     *
      * @param aShell "sh", "bash", "ksh", "csh" and so an...
      */
     public ShellScript(String aShell)
@@ -107,9 +133,10 @@ public class ShellScript
     // ~ Methods ****************************************************************************
 
     // ~ Methods ****************************************************************************
+
     /**
      * Appends an Object or String to this ShellScript.
-     * 
+     *
      * @param anObject the Object to append
      */
     public void append(Object anObject)
@@ -119,7 +146,7 @@ public class ShellScript
 
     /**
      * Appends a Char to this ShellScript.
-     * 
+     *
      * @param aChar a char to append
      */
     public void append(char aChar)
@@ -129,7 +156,7 @@ public class ShellScript
 
     /**
      * Appends an Object or String to this ShellScript with unix linefeed ("\n").
-     * 
+     *
      * @param anObject the Object to append
      */
     public void appendln(Object anObject)
@@ -140,7 +167,7 @@ public class ShellScript
 
     /**
      * Appends a Char Object or String to this ShellScript with unix linefeed ("\n").
-     * 
+     *
      * @param aChar a char to append
      */
     public void appendln(char aChar)
@@ -159,7 +186,7 @@ public class ShellScript
 
     /**
      * gets the Content of this Script.
-     * 
+     *
      * @return the Content
      */
     public StringBuffer getContent()
@@ -168,8 +195,8 @@ public class ShellScript
     }
 
     /**
-     * Gets the Content of this Script as String 
-     * 
+     * Gets the Content of this Script as String
+     *
      * @return the script as String
      */
     public String getContentAsString()
@@ -179,8 +206,8 @@ public class ShellScript
 
     /**
      * Dumps the ShellScript Content, and Location.
-     * Use getContentAsString() to get this ShellScripts Content 
-     * 
+     * Use getContentAsString() to get this ShellScripts Content
+     *
      * @return The ShellScript as Object dump.
      */
     public String toString()
@@ -197,7 +224,7 @@ public class ShellScript
 
     /**
      * write this to the given Destination FileName
-     * 
+     *
      * @param aDestination a destination filename
      */
     public void write(String aDestination)
@@ -229,29 +256,28 @@ public class ShellScript
      * "fromFile" "toFile\""<br>
      * But this his hidden in Sun's native code ;-(<br>
      * This was the reason to write thsi class to have a Workaround :-)
-     * 
+     *
      * @param itsParams
-     * 
      * @return the output from stdout of the execution.
      */
     public String exec(String itsParams)
     {
-        FileExecutor.getExecOutput(new String[] { UnixHelper.getCustomCommand("chmod"), "+x",
+        FileExecutor.getExecOutput(new String[]{UnixHelper.getCustomCommand("chmod"), "+x",
                 itsLocation});
 
         if (itsParams != null)
         {
-            return FileExecutor.getExecOutput(new String[] { itsLocation, itsParams});
+            return FileExecutor.getExecOutput(new String[]{itsLocation, itsParams});
         }
         else
         {
-            return FileExecutor.getExecOutput(new String[] { itsLocation});
+            return FileExecutor.getExecOutput(new String[]{itsLocation});
         }
     }
 
     /**
      * Execute this ShellScript.
-     * 
+     *
      * @return the output from stdout of the execution.
      */
     public String exec()
@@ -261,16 +287,15 @@ public class ShellScript
 
     /**
      * Execs ths given lines in the creted shell stored on location.
-     * 
-     * @param aShell A Shell which will be eexecute the script.
-     * @param lines The content of the script.
+     *
+     * @param aShell    A Shell which will be eexecute the script.
+     * @param lines     The content of the script.
      * @param aLocation The location where to store.
      * @param itsParams Th eoptional params of the script.
-     * 
      * @return the exec result
      */
     public static String execute(String aShell, StringBuffer lines, String aLocation,
-            String itsParams)
+                                 String itsParams)
     {
         ShellScript s = new ShellScript((aShell == null) ? "sh" : aShell);
         s.append(lines);
@@ -281,10 +306,9 @@ public class ShellScript
 
     /**
      * Executes ths given lines in the created default shell (sh) stored on location.
-     * 
-     * @param lines the lines of the script to exec.s
+     *
+     * @param lines     the lines of the script to exec.s
      * @param aLocation where to store
-     * 
      * @return the stdout of the script.
      */
     public static String execute(StringBuffer lines, String aLocation)
@@ -296,17 +320,16 @@ public class ShellScript
      * Executes and removes the script.<br>
      * The Lines be also written in python or perl,<br>
      * In this case, the Shell must be python or perl or so.
-     * 
-     * @param aShell The Shell which should exec the script. Can be also be python or perl, if the
-     * shellcontent is given in this language.
-     * @param lines of the script.
+     *
+     * @param aShell    The Shell which should exec the script. Can be also be python or perl, if the
+     *                  shellcontent is given in this language.
+     * @param lines     of the script.
      * @param aLocation where to store.
      * @param itsParams which should be pass to the script.
-     * 
      * @return the stdout.
      */
     public static String execAndDelete(String aShell, StringBuffer lines, String aLocation,
-            String itsParams)
+                                       String itsParams)
     {
         String result = execute(aShell, lines, aLocation, itsParams);
         File location = new File(aLocation);
@@ -325,10 +348,9 @@ public class ShellScript
 
     /**
      * Executes and removes the script.
-     * 
-     * @param lines of the script.
+     *
+     * @param lines     of the script.
      * @param aLocation where to store.
-     * 
      * @return the sdtout.
      */
     public static String execAndDelete(StringBuffer lines, String aLocation)
@@ -338,7 +360,7 @@ public class ShellScript
 
     /**
      * Test Main Method Run test with: java -cp .jar com.izforge.izpack.util.os.unix.ShellScript
-     * 
+     *
      * @param args Arguments from Commandline
      */
     public static void main(String[] args)

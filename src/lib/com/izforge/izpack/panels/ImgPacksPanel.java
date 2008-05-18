@@ -23,34 +23,25 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.event.ListSelectionEvent;
-
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.IoHelper;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import java.awt.*;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
+
 /**
  * The ImgPacks panel class. Allows the packages selection with a small picture displayed for every
  * pack. This new version combines the old PacksPanel and the ImgPacksPanel so that the positive
  * characteristics of both are combined. This class handles only the layout and some related stuff.
  * Common stuff are handled by the base class.
- * 
+ *
  * @author Julien Ponge
  * @author Volker Friedritz
  * @author Klaus Bartz
@@ -59,21 +50,25 @@ public class ImgPacksPanel extends PacksPanelBase
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3977858492633659444L;
 
-    /** The images to display. */
+    /**
+     * The images to display.
+     */
     private HashMap<String, ImageIcon> images;
 
-    /** The img label. */
+    /**
+     * The img label.
+     */
     private JLabel imgLabel;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public ImgPacksPanel(InstallerFrame parent, InstallData idata)
     {
@@ -114,14 +109,18 @@ public class ImgPacksPanel extends PacksPanelBase
         Iterator pack_it = idata.availablePacks.iterator();
         Pack firstImgPack = null;
         boolean imgFound = false;
-        while ( !imgFound && pack_it.hasNext()) {
-        	firstImgPack = (Pack) pack_it.next();
-        	imgFound = firstImgPack.packImgId != null;
+        while (!imgFound && pack_it.hasNext())
+        {
+            firstImgPack = (Pack) pack_it.next();
+            imgFound = firstImgPack.packImgId != null;
         }
-        if (imgFound) {
-        	imgLabel = new JLabel(images.get(firstImgPack.packImgId));
-        } else {
-        	imgLabel = new JLabel();
+        if (imgFound)
+        {
+            imgLabel = new JLabel(images.get(firstImgPack.packImgId));
+        }
+        else
+        {
+            imgLabel = new JLabel();
         }
         JScrollPane imgScroller = new JScrollPane(imgLabel);
         imgScroller.setPreferredSize(getPreferredSizeFromImages());
@@ -168,7 +167,9 @@ public class ImgPacksPanel extends PacksPanelBase
 
     }
 
-    /** Pre-loads the images. */
+    /**
+     * Pre-loads the images.
+     */
     private void preLoadImages()
     {
         int size = idata.availablePacks.size();
@@ -177,7 +178,8 @@ public class ImgPacksPanel extends PacksPanelBase
         while (pack_it.hasNext())
         {
             Pack pack = (Pack) pack_it.next();
-            if (pack.packImgId != null) {
+            if (pack.packImgId != null)
+            {
                 try
                 {
                     URL url = ResourceManager.getInstance().getURL(pack.packImgId);
@@ -225,12 +227,14 @@ public class ImgPacksPanel extends PacksPanelBase
         // this MUST be called before calling the super's valueChanged() since
         // that method refreshes the tablemodel and thus deselects the 
         // just selected row
-        int i = packsTable.getSelectedRow(); 
+        int i = packsTable.getSelectedRow();
         super.valueChanged(e);
-        if (i < 0) {
+        if (i < 0)
+        {
             return;
         }
-        if (i >= 0) {
+        if (i >= 0)
+        {
             Pack pack = (Pack) idata.availablePacks.get(i);
             imgLabel.setIcon(images.get(pack.packImgId));
         }

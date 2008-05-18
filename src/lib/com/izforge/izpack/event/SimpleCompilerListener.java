@@ -21,23 +21,20 @@
 
 package com.izforge.izpack.event;
 
-import java.util.Map;
-
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.IPackager;
 import com.izforge.izpack.compiler.PackInfo;
+import net.n3.nanoxml.XMLElement;
+
+import java.util.Map;
 
 /**
  * <p>
  * This class implements all methods of interface CompilerListener, but do not do anything else. It
  * can be used as base class to save implementation of unneeded methods.
  * </p>
- * 
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class SimpleCompilerListener implements CompilerListener
 {

@@ -34,9 +34,9 @@ import java.util.StringTokenizer;
  * functionality. In addition it provides services that are related to OS versions and flavors. For
  * a tutorial on using some of the features in this class see the <A
  * HREF=doc-files/TargetFactory.html>TargetFactory Tutorial</A>.
- * 
- * @version 0.0.1 / 1/3/2002
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 1/3/2002
  */
 /*---------------------------------------------------------------------------*/
 /*
@@ -63,18 +63,26 @@ public class TargetFactory
 
     // Basic operating systems
 
-    /** Identifies Microsoft Windows. */
+    /**
+     * Identifies Microsoft Windows.
+     */
     public static final int WINDOWS = 0;
 
-    /** Identifies generic UNIX operating systems */
+    /**
+     * Identifies generic UNIX operating systems
+     */
     public static final int UNIX = 2;
 
-    /** Used to report a non specific operating system. */
+    /**
+     * Used to report a non specific operating system.
+     */
     public static final int GENERIC = 3;
 
     // operating system favors
 
-    /** This is the basic flavor for every operating system. */
+    /**
+     * This is the basic flavor for every operating system.
+     */
     public static final int STANDARD = 0;
 
     /**
@@ -83,15 +91,21 @@ public class TargetFactory
      */
     public static final int NT = 1;
 
-    /** Used to identify the OS X flavor of the Mac OS */
+    /**
+     * Used to identify the OS X flavor of the Mac OS
+     */
     public static final int X = 2;
 
     // system architecture
 
-    /** Identifies Intel X86 based processor types. */
+    /**
+     * Identifies Intel X86 based processor types.
+     */
     public static final int X86 = 0;
 
-    /** Nonspecific processor architecture, other than X86. */
+    /**
+     * Nonspecific processor architecture, other than X86.
+     */
     public static final int OTHER = 1;
 
     /**
@@ -106,7 +120,7 @@ public class TargetFactory
      * <li>GENERIC
      * </ul>
      */
-    static final String[] LIBRARY_EXTENSION = { "dll", "so", "", ""};
+    static final String[] LIBRARY_EXTENSION = {"dll", "so", "", ""};
 
     /**
      * The os specific class prefixes for classes that implement different versions for the various
@@ -120,7 +134,7 @@ public class TargetFactory
      * <li>GENERIC
      * </ul>
      */
-    static final String[] CLASS_PREFIX = { "Win_", "Mac_", "Unix_", ""};
+    static final String[] CLASS_PREFIX = {"Win_", "Mac_", "Unix_", ""};
 
     /**
      * The os favor specific class prefixes for classes the implement different versions for various
@@ -133,7 +147,7 @@ public class TargetFactory
      * <li>X
      * </ul>
      */
-    static final String[] CLASS_FLAVOR_PREFIX = { "", "NT_", "X_"};
+    static final String[] CLASS_FLAVOR_PREFIX = {"", "NT_", "X_"};
 
     /**
      * The list of processor architecture specific prefixes. The string positions correspond to the
@@ -144,7 +158,7 @@ public class TargetFactory
      * <li>OTHER
      * </ul>
      */
-    static final String[] CLASS_ARCHITECTURE_PREFIX = { "X86_", // Intel X86
+    static final String[] CLASS_ARCHITECTURE_PREFIX = {"X86_", // Intel X86
             // architecture
             "U_" // unknown
     };
@@ -163,7 +177,7 @@ public class TargetFactory
      * <li>GENERIC
      * </ul>
      */
-    static final String[] INSTALL_PATH_FRAGMENT = { "Program Files" + File.separator,
+    static final String[] INSTALL_PATH_FRAGMENT = {"Program Files" + File.separator,
             "/Applications" + File.separator, "/usr/local" + File.separator,
             File.separator + "apps" + File.separator};
 
@@ -178,14 +192,16 @@ public class TargetFactory
      * as <code>INSTALL_PATH_RESOURCE_KEY[UNIX][X]</code>
      */
     static final String[][] INSTALL_PATH_RESOURCE_KEY = {
-    // Standard NT X
-            { "TargetPanel.dir.windows", "TargetPanel.dir.windows", ""}, // Windows
-            { "TargetPanel.dir.mac", "", "TargetPanel.dir.macosx"}, // Mac
-            { "TargetPanel.dir.unix", "", ""}, // UNIX
-            { "TargetPanel.dir", "", ""} // Generic
+            // Standard NT X
+            {"TargetPanel.dir.windows", "TargetPanel.dir.windows", ""}, // Windows
+            {"TargetPanel.dir.mac", "", "TargetPanel.dir.macosx"}, // Mac
+            {"TargetPanel.dir.unix", "", ""}, // UNIX
+            {"TargetPanel.dir", "", ""} // Generic
     };
 
-    /** The delimiter characters used to tokenize version numbers */
+    /**
+     * The delimiter characters used to tokenize version numbers
+     */
     private static final String VERSION_DELIMITER = ".-";
 
     // ------------------------------------------------------------------------
@@ -197,16 +213,24 @@ public class TargetFactory
      */
     private static TargetFactory me = null;
 
-    /** identifies the operating system we are running on */
+    /**
+     * identifies the operating system we are running on
+     */
     private int os = -1;
 
-    /** identifies the operating system favor */
+    /**
+     * identifies the operating system favor
+     */
     private int osFlavor = -1;
 
-    /** identifies the hardware architecture we are running on */
+    /**
+     * identifies the hardware architecture we are running on
+     */
     private int architecture = -1;
 
-    /** represents the version number of the target system */
+    /**
+     * represents the version number of the target system
+     */
     private String version = "";
 
     /*--------------------------------------------------------------------------*/
@@ -278,7 +302,7 @@ public class TargetFactory
     /*--------------------------------------------------------------------------*/
     /**
      * Returns an instance of <code>TargetFactory</code> to use.
-     * 
+     *
      * @return an instance of <code>TargetFactory</code>.
      */
     /*--------------------------------------------------------------------------*/
@@ -356,14 +380,12 @@ public class TargetFactory
      * See the <A HREF=doc-files/TargetFactory.html>TargetFactory Tutorial</A> for more
      * information.<br>
      * <br>
-     * 
+     *
      * @param name the fully qualified name of the class to load without the extension.
-     * 
      * @return An instance of the requested class. Note that specific initialization that can not be
-     * accomplished in the default constructor still needs to be performed before the object can be
-     * used.
-     * 
-     * @exception Exception if all attempts to instantiate class fail
+     *         accomplished in the default constructor still needs to be performed before the object can be
+     *         used.
+     * @throws Exception if all attempts to instantiate class fail
      */
     /*--------------------------------------------------------------------------*/
     public Object makeObject(String name) throws Exception
@@ -406,11 +428,10 @@ public class TargetFactory
     /**
      * Returns true if the version in the parameter string is higher than the version of the target
      * os.
-     * 
+     *
      * @param version the version number to compare to
-     * 
      * @return <code>false</code> if the version of the target system is higher, otherwise
-     * <code>true</code>
+     *         <code>true</code>
      */
     /*--------------------------------------------------------------------------*/
     /*
@@ -450,7 +471,10 @@ public class TargetFactory
             {
                 return true;
             }
-            else if (target > compare) { return false; }
+            else if (target > compare)
+            {
+                return false;
+            }
         }
 
         return false;
@@ -459,9 +483,8 @@ public class TargetFactory
     /*--------------------------------------------------------------------------*/
     /**
      * Returns the index number for the target operating system that was detected.
-     * 
+     *
      * @return an index number for the OS
-     * 
      * @see #WINDOWS
      * @see #UNIX
      * @see #GENERIC
@@ -476,9 +499,8 @@ public class TargetFactory
     /**
      * Returns the index number for the operating system flavor that was detected on the target
      * system.
-     * 
+     *
      * @return an index for the OS flavor
-     * 
      * @see #STANDARD
      * @see #NT
      * @see #X
@@ -492,9 +514,8 @@ public class TargetFactory
     /*--------------------------------------------------------------------------*/
     /**
      * Returns an index number that identified the processor architecture of the target system.
-     * 
+     *
      * @return an index for the processor architecture
-     * 
      * @see #X86
      * @see #OTHER
      */
@@ -508,9 +529,9 @@ public class TargetFactory
     /**
      * Returns the file extension customarily used on the target OS for dynamically loadable
      * libraries.
-     * 
+     *
      * @return a <code>String</code> containing the customary library extension for the target OS.
-     * Note that the string might be empty if there no such specific extension for the target OS.
+     *         Note that the string might be empty if there no such specific extension for the target OS.
      */
     /*--------------------------------------------------------------------------*/
     public String getNativeLibraryExtension()
@@ -536,10 +557,9 @@ public class TargetFactory
      * ('_').
      * <li><code>TargetPanel.dir</code>
      * </ul>
-     * 
+     *
      * @param appName the name of the application to install. If no specific resource has been set,
-     * then this name will be appended to the OS specific default path fragment.
-     * 
+     *                then this name will be appended to the OS specific default path fragment.
      * @return the default install path for the target system
      */
     /*--------------------------------------------------------------------------*/
@@ -621,15 +641,20 @@ public class TargetFactory
                 path = line;
             }
             catch (Throwable exception)
-            {}
+            {
+            }
             finally
             {
                 try
                 {
-                    if (reader != null) reader.close();
+                    if (reader != null)
+                    {
+                        reader.close();
+                    }
                 }
                 catch (Throwable exception)
-                {}
+                {
+                }
             }
         }
 
@@ -664,7 +689,7 @@ public class TargetFactory
     /**
      * Gets a prefix alias for the current platform. "Win_" on Windows Systems "Win_NT_" on WinNT4,
      * 2000, XP Mac on Mac Mac_X on macosx and Unix_
-     * 
+     *
      * @return a prefix alias for the current platform
      */
 

@@ -23,7 +23,7 @@ package com.izforge.izpack.installer;
 
 /**
  * Describes that a resource could not be found
- * 
+ *
  * @author Marcus Stursberg
  */
 
@@ -32,7 +32,9 @@ public class ResourceNotFoundException extends Exception
 
     private static final long serialVersionUID = 3258688827575906353L;
 
-    /** creates a new ResourceNotFoundException */
+    /**
+     * creates a new ResourceNotFoundException
+     */
     public ResourceNotFoundException()
     {
         super();
@@ -40,7 +42,7 @@ public class ResourceNotFoundException extends Exception
 
     /**
      * creates a new ResourceNotFoundException
-     * 
+     *
      * @param s description of the exception
      */
     public ResourceNotFoundException(String s)

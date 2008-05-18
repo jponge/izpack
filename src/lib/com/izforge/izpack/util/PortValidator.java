@@ -21,18 +21,18 @@
 
 package com.izforge.izpack.util;
 
-import java.net.InetAddress;
-import java.net.ServerSocket;
-
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Validator;
 
+import java.net.InetAddress;
+import java.net.ServerSocket;
+
 /**
  * A validator to check whether a port is available (free) on the localhost.
- * 
+ * <p/>
  * This validator can be used for rule input fields in the UserInputPanel to make sure that the port
  * the user entered is not in use.
- * 
+ *
  * @author thorque
  */
 public class PortValidator implements Validator
@@ -49,7 +49,10 @@ public class PortValidator implements Validator
         {
             String value = client.getFieldContents(i);
 
-            if ((value == null) || (value.length() == 0)) { return false; }
+            if ((value == null) || (value.length() == 0))
+            {
+                return false;
+            }
 
             try
             {

@@ -30,7 +30,7 @@ import java.util.List;
 /**
  * Encloses information about a executable file. This class abstracts the way to do a system
  * dependent postprocessing of installation.
- * 
+ *
  * @author Olexij Tkatchenko <ot@parcs.de>
  */
 
@@ -39,46 +39,66 @@ public class ExecutableFile implements Serializable
 
     static final long serialVersionUID = 4175489415984990405L;
 
-    /** when to execute this file */
+    /**
+     * when to execute this file
+     */
     public final static int POSTINSTALL = 0;
 
     public final static int NEVER = 1;
 
     public final static int UNINSTALL = 2;
 
-    /** type of a file */
+    /**
+     * type of a file
+     */
     public final static int BIN = 0;
 
     public final static int JAR = 1;
 
-    /** what to do if execution fails */
+    /**
+     * what to do if execution fails
+     */
     public final static int ABORT = 0;
 
     public final static int WARN = 1;
 
     public final static int ASK = 2;
-    
+
     public final static int IGNORE = 3;
 
-    /** The file path */
+    /**
+     * The file path
+     */
     public String path;
 
-    /** Execution stage (NEVER, POSTINSTALL, UNINSTALL) */
+    /**
+     * Execution stage (NEVER, POSTINSTALL, UNINSTALL)
+     */
     public int executionStage;
 
-    /** Main class of jar file */
+    /**
+     * Main class of jar file
+     */
     public String mainClass;
 
-    /** type (BIN|JAR) */
+    /**
+     * type (BIN|JAR)
+     */
     public int type;
 
-    /** Failure handling (ABORT, WARN, ASK) */
+    /**
+     * Failure handling (ABORT, WARN, ASK)
+     */
     public int onFailure;
 
-    /** List of arguments */
+    /**
+     * List of arguments
+     */
     public List<String> argList = null;
 
-    /** List of operating systems to run on */
+    /**
+     * List of operating systems to run on
+     */
     public List<OsConstraint> osList = null;
 
     /**
@@ -86,11 +106,15 @@ public class ExecutableFile implements Serializable
      * compatibility.
      */
     public boolean keepFile;
-    
-    /** condition for this executable */
+
+    /**
+     * condition for this executable
+     */
     private String condition = null;
 
-    /** Constructs a new uninitialized instance. */
+    /**
+     * Constructs a new uninitialized instance.
+     */
     public ExecutableFile()
     {
         this.path = null;
@@ -105,14 +129,14 @@ public class ExecutableFile implements Serializable
 
     /**
      * Constructs and initializes a new instance.
-     * 
-     * @param path the file path
+     *
+     * @param path           the file path
      * @param executionStage when to execute
-     * @param onFailure what to do if execution fails
-     * @param osList list of operating systems to run on
+     * @param onFailure      what to do if execution fails
+     * @param osList         list of operating systems to run on
      */
     public ExecutableFile(String path, int executionStage, int onFailure, List<OsConstraint> osList,
-            boolean keepFile)
+                          boolean keepFile)
     {
         this.path = path;
         this.executionStage = executionStage;
@@ -122,7 +146,7 @@ public class ExecutableFile implements Serializable
     }
 
     public ExecutableFile(String path, int type, String mainClass, int executionStage,
-            int onFailure, List<String> argList, List<OsConstraint> osList, boolean keepFile)
+                          int onFailure, List<String> argList, List<OsConstraint> osList, boolean keepFile)
     {
         this.path = path;
         this.mainClass = mainClass;
@@ -173,7 +197,7 @@ public class ExecutableFile implements Serializable
         return retval.toString();
     }
 
-    
+
     /**
      * @return the condition
      */
@@ -182,7 +206,7 @@ public class ExecutableFile implements Serializable
         return this.condition;
     }
 
-    
+
     /**
      * @param condition the condition to set
      */
@@ -190,8 +214,9 @@ public class ExecutableFile implements Serializable
     {
         this.condition = condition;
     }
-    
-    public boolean hasCondition() {
+
+    public boolean hasCondition()
+    {
         return this.condition != null;
     }
 }

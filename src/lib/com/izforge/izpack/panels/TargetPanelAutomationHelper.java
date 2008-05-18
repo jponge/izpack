@@ -21,15 +21,14 @@
 
 package com.izforge.izpack.panels;
 
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.VariableSubstitutor;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * Functions to support automated usage of the TargetPanel
- * 
+ *
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
@@ -38,8 +37,8 @@ public class TargetPanelAutomationHelper implements PanelAutomation
 
     /**
      * Asks to make the XML panel data.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata     The installation data.
      * @param panelRoot The tree to put the data in.
      */
     public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
@@ -52,29 +51,31 @@ public class TargetPanelAutomationHelper implements PanelAutomation
 
         // Checkings to fix bug #1864
         XMLElement prev = panelRoot.getFirstChildNamed("installpath");
-        if (prev != null) panelRoot.removeChild(prev);
+        if (prev != null)
+        {
+            panelRoot.removeChild(prev);
+        }
 
         panelRoot.addChild(ipath);
     }
 
     /**
      * Asks to run in the automated mode.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata     The installation data.
      * @param panelRoot The XML tree to read the data from.
-     * 
      * @return always true.
      */
     public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
     {
         // We set the installation path
         XMLElement ipath = panelRoot.getFirstChildNamed("installpath");
-        
+
         // Allow for variable substitution of the installpath value
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
         String path = ipath.getContent();
         path = vs.substitute(path, null);
-        
+
         idata.setInstallPath(path);
         return true;
     }

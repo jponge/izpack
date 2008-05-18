@@ -34,7 +34,7 @@ import java.util.Hashtable;
 
 /**
  * An XMLEntityResolver resolves entities.
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -71,8 +71,8 @@ public class XMLEntityResolver implements IXMLEntityResolver
 
     /**
      * Adds an internal entity.
-     * 
-     * @param name the name of the entity.
+     *
+     * @param name  the name of the entity.
      * @param value the value of the entity.
      */
     public void addInternalEntity(String name, String value)
@@ -85,8 +85,8 @@ public class XMLEntityResolver implements IXMLEntityResolver
 
     /**
      * Adds an external entity.
-     * 
-     * @param name the name of the entity.
+     *
+     * @param name     the name of the entity.
      * @param publicID the public ID of the entity, which may be null.
      * @param systemID the system ID of the entity.
      */
@@ -94,16 +94,15 @@ public class XMLEntityResolver implements IXMLEntityResolver
     {
         if (!this.entities.containsKey(name))
         {
-            this.entities.put(name, new String[] { publicID, systemID});
+            this.entities.put(name, new String[]{publicID, systemID});
         }
     }
 
     /**
      * Returns a Java reader containing the value of an entity.
-     * 
+     *
      * @param xmlReader the current XML reader
-     * @param name the name of the entity.
-     * 
+     * @param name      the name of the entity.
      * @return the reader, or null if the entity could not be resolved.
      */
     public Reader getEntity(IXMLReader xmlReader, String name) throws XMLParseException
@@ -127,11 +126,10 @@ public class XMLEntityResolver implements IXMLEntityResolver
 
     /**
      * Opens an external entity.
-     * 
+     *
      * @param xmlReader the current XML reader
-     * @param publicID the public ID, which may be null
-     * @param systemID the system ID
-     * 
+     * @param publicID  the public ID, which may be null
+     * @param systemID  the system ID
      * @return the reader, or null if the reader could not be created/opened
      */
     protected Reader openExternalEntity(IXMLReader xmlReader, String publicID, String systemID)

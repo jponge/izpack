@@ -20,18 +20,18 @@
 package com.izforge.izpack.util;
 
 import com.izforge.izpack.panels.PasswordGroup;
-import java.util.Map;
-import java.util.regex.Pattern;
-
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Validator;
 
+import java.util.Map;
+import java.util.regex.Pattern;
+
 /**
  * A validator to enforce non-empty fields.
- * 
+ * <p/>
  * This validator can be used for rule input fields in the UserInputPanel to make sure that the
  * user's entry matches a specified regular expression.
- * 
+ *
  * @author Mike Cunneen <mike dot cunneen at screwfix dot com>
  */
 public class RegularExpressionValidator implements Validator
@@ -58,22 +58,29 @@ public class RegularExpressionValidator implements Validator
         Pattern pattern = Pattern.compile(patternString);
         return pattern.matcher(getString(client)).matches();
     }
-    
-    private String getString(ProcessingClient client) {
-      String returnValue = "";
-      if (client instanceof PasswordGroup) {
-        int numFields = client.getNumFields();
-        if (numFields > 0) {
-          returnValue = client.getFieldContents(0);
-        } else {
-          // Should never get here, but might as well try and grab some text
-          returnValue = client.getText();
+
+    private String getString(ProcessingClient client)
+    {
+        String returnValue = "";
+        if (client instanceof PasswordGroup)
+        {
+            int numFields = client.getNumFields();
+            if (numFields > 0)
+            {
+                returnValue = client.getFieldContents(0);
+            }
+            else
+            {
+                // Should never get here, but might as well try and grab some text
+                returnValue = client.getText();
+            }
         }
-      } else {
-        // Original way to retrieve text for validation
-        returnValue = client.getText();
-      }
-      return returnValue;
+        else
+        {
+            // Original way to retrieve text for validation
+            returnValue = client.getText();
+        }
+        return returnValue;
     }
 
 }

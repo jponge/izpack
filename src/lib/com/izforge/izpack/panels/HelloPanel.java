@@ -21,11 +21,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.LayoutManager2;
-import java.util.ArrayList;
-
-import javax.swing.JLabel;
-
 import com.izforge.izpack.Info;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
@@ -34,24 +29,28 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
 /**
  * The Hello panel class.
- * 
+ *
  * @author Julien Ponge
  */
 public class HelloPanel extends IzPanel
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3257848774955905587L;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public HelloPanel(InstallerFrame parent, InstallData idata)
     {
@@ -62,9 +61,9 @@ public class HelloPanel extends IzPanel
      * Creates a new HelloPanel object with the given layout manager. Valid layout manager are the
      * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout. If lm is
      * null, no layout manager will be created or initialized.
-     * 
+     *
      * @param parent The parent IzPack installer frame.
-     * @param idata The installer internal data.
+     * @param idata  The installer internal data.
      * @param layout layout manager to be used with this IzPanel
      */
 
@@ -138,7 +137,7 @@ public class HelloPanel extends IzPanel
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return Always true.
      */
     public boolean isValidated()

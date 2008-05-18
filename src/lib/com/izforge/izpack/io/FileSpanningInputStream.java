@@ -17,18 +17,18 @@
  */
 package com.izforge.izpack.io;
 
+import com.izforge.izpack.util.Debug;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
-import com.izforge.izpack.util.Debug;
-
 /**
  * An inputstream which transparently spans over multiple volumes. The amount of volumes has to be
  * specified
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class FileSpanningInputStream extends InputStream
@@ -77,7 +77,7 @@ public class FileSpanningInputStream extends InputStream
 
     /**
      * checks if the MagicNumber of this stream is valid. The stream has to be opened right before.
-     * 
+     *
      * @return wether the magic number is valid or not
      * @throws IOException
      */
@@ -120,9 +120,9 @@ public class FileSpanningInputStream extends InputStream
 
     /**
      * creates an inputstream to the next volume
-     * 
+     *
      * @return true - an inputstream to the next volume has been created false - the last volume was
-     * reached
+     *         reached
      * @throws IOException
      */
     private boolean createInputStreamToNextVolume() throws IOException
@@ -301,7 +301,9 @@ public class FileSpanningInputStream extends InputStream
 
                 int bytesInBuffer = this.read(buffer, 0, maxBytes);
                 if (bytesInBuffer == -1)
+                {
                     throw new IOException("Unexpected end of stream (installer corrupted?)");
+                }
 
                 bytesskipped += bytesInBuffer;
             }
@@ -316,7 +318,7 @@ public class FileSpanningInputStream extends InputStream
 
     /**
      * Returns the name of the volume
-     * 
+     *
      * @return the name of the volume
      */
     public String getVolumename()
@@ -326,7 +328,7 @@ public class FileSpanningInputStream extends InputStream
 
     /**
      * Sets the volumename
-     * 
+     *
      * @param volumename
      */
     public void setVolumename(String volumename)
@@ -353,7 +355,7 @@ public class FileSpanningInputStream extends InputStream
 
     /**
      * Returns the current position in the file. Notice: this is the global position in all volumes.
-     * 
+     *
      * @return the current position in file.
      */
     public long getFilepointer()

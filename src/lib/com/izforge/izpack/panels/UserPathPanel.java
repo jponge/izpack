@@ -21,118 +21,133 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.Pack;
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsConstraint;
-import java.util.ArrayList;
-import java.util.HashMap;
+import net.n3.nanoxml.XMLElement;
+
 import java.util.Iterator;
 
 /**
  * The taget directory selection panel.
- * 
+ *
  * @author Julien Ponge
  * @author Jeff Gordon
  */
-public class UserPathPanel extends UserPathInputPanel {
+public class UserPathPanel extends UserPathInputPanel
+{
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 3256443616359429170L;
-  private static String thisName = "UserPathPanel";
-  private boolean _skip = false;
-  public static String pathVariableName = "UserPathPanelVariable";
-  public static String pathPackDependsName = "UserPathPanelDependsName";
-  public static String pathElementName = "UserPathPanelElement";
-  private XMLElement panelElement;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 3256443616359429170L;
+    private static String thisName = "UserPathPanel";
+    private boolean _skip = false;
+    public static String pathVariableName = "UserPathPanelVariable";
+    public static String pathPackDependsName = "UserPathPanelDependsName";
+    public static String pathElementName = "UserPathPanelElement";
+    private XMLElement panelElement;
 
-  /**
-   * The constructor.
-   * 
-   * @param parent The parent window.
-   * @param idata The installation data.
-   */
-  public UserPathPanel(InstallerFrame parent, InstallData idata) {
-    super(parent, idata, thisName, parent.langpack.getString(thisName+".variableName"));
-    // load the default directory info (if present)
-    if (getDefaultDir() != null) {
-      idata.setVariable(pathVariableName, getDefaultDir());
-    }
-  }
-
-  /** Called when the panel becomes active. */
-  public void panelActivate() {
-    boolean found = false;
-    System.out.println(thisName+" looking for activation condition");
-    // Need to have a way to supress panel if not in selected packs.  
-    String dependsName = idata.getVariable(pathPackDependsName);
-    if (dependsName!=null && !(dependsName.equalsIgnoreCase(""))) {
-      System.out.println("Checking for pack dependency of "+dependsName);
-      Iterator iter = idata.selectedPacks.iterator();
-      while (iter.hasNext()) {
-        Pack pack = (Pack)iter.next();
-        System.out.println("- Checking if "+pack.name+" equals "+dependsName);
-        if (pack.name.equalsIgnoreCase(dependsName)) {
-          found = true;
-          System.out.println("-- Found "+dependsName+", panel will be shown");
-          break;
+    /**
+     * The constructor.
+     *
+     * @param parent The parent window.
+     * @param idata  The installation data.
+     */
+    public UserPathPanel(InstallerFrame parent, InstallData idata)
+    {
+        super(parent, idata, thisName, parent.langpack.getString(thisName + ".variableName"));
+        // load the default directory info (if present)
+        if (getDefaultDir() != null)
+        {
+            idata.setVariable(pathVariableName, getDefaultDir());
         }
-      }
-      _skip = !(found);
-    } else {
-      System.out.println("Not Checking for a pack dependency, panel will be shown");
-      _skip = false;
     }
-    if (_skip) {
-      System.out.println(thisName+" will not be shown");
-      parent.skipPanel();
-      return;
-    }
-    super.panelActivate();
-    // Set the default or old value to the path selection panel.
-    _pathSelectionPanel.setPath(idata.getVariable(pathVariableName));
-  }
 
-  /**
-   * Indicates whether the panel has been validated or not.
-   * 
-   * @return Whether the panel has been validated or not.
-   */
-  public boolean isValidated() {
-    // Standard behavior of PathInputPanel.
-    if (!super.isValidated()) {
-      return (false);
+    /**
+     * Called when the panel becomes active.
+     */
+    public void panelActivate()
+    {
+        boolean found = false;
+        System.out.println(thisName + " looking for activation condition");
+        // Need to have a way to supress panel if not in selected packs.
+        String dependsName = idata.getVariable(pathPackDependsName);
+        if (dependsName != null && !(dependsName.equalsIgnoreCase("")))
+        {
+            System.out.println("Checking for pack dependency of " + dependsName);
+            Iterator iter = idata.selectedPacks.iterator();
+            while (iter.hasNext())
+            {
+                Pack pack = (Pack) iter.next();
+                System.out.println("- Checking if " + pack.name + " equals " + dependsName);
+                if (pack.name.equalsIgnoreCase(dependsName))
+                {
+                    found = true;
+                    System.out.println("-- Found " + dependsName + ", panel will be shown");
+                    break;
+                }
+            }
+            _skip = !(found);
+        }
+        else
+        {
+            System.out.println("Not Checking for a pack dependency, panel will be shown");
+            _skip = false;
+        }
+        if (_skip)
+        {
+            System.out.println(thisName + " will not be shown");
+            parent.skipPanel();
+            return;
+        }
+        super.panelActivate();
+        // Set the default or old value to the path selection panel.
+        _pathSelectionPanel.setPath(idata.getVariable(pathVariableName));
     }
-    idata.setVariable(pathVariableName, _pathSelectionPanel.getPath());
-    return (true);
-  }
 
-  /**
-   * Asks to make the XML panel data.
-   * 
-   * @param panelRoot The tree to put the data in.
-   */
-  public void makeXMLData(XMLElement panelRoot) {
-    if (!(_skip)) {
-      new UserPathPanelAutomationHelper().makeXMLData(idata, panelRoot);
+    /**
+     * Indicates whether the panel has been validated or not.
+     *
+     * @return Whether the panel has been validated or not.
+     */
+    public boolean isValidated()
+    {
+        // Standard behavior of PathInputPanel.
+        if (!super.isValidated())
+        {
+            return (false);
+        }
+        idata.setVariable(pathVariableName, _pathSelectionPanel.getPath());
+        return (true);
     }
-  }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
-   */
-  public String getSummaryBody() {
-    if (_skip) {
-      return null;
-    } else {
-      return (idata.getVariable(pathVariableName));
+    /**
+     * Asks to make the XML panel data.
+     *
+     * @param panelRoot The tree to put the data in.
+     */
+    public void makeXMLData(XMLElement panelRoot)
+    {
+        if (!(_skip))
+        {
+            new UserPathPanelAutomationHelper().makeXMLData(idata, panelRoot);
+        }
     }
-  }
+
+    /*
+    * (non-Javadoc)
+    *
+    * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
+    */
+    public String getSummaryBody()
+    {
+        if (_skip)
+        {
+            return null;
+        }
+        else
+        {
+            return (idata.getVariable(pathVariableName));
+        }
+    }
 }

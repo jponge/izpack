@@ -27,14 +27,15 @@ import com.izforge.izpack.util.os.WrappedNativeLibException;
 /**
  * This class implements some methods which are needed by installer custom actions with native
  * parts.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class NativeUninstallerListener extends SimpleUninstallerListener
 {
 
-    /** The packs locale database. */
+    /**
+     * The packs locale database.
+     */
     protected static LocaleDatabase langpack = null;
 
     /**
@@ -54,13 +55,14 @@ public class NativeUninstallerListener extends SimpleUninstallerListener
                 WrappedNativeLibException.setLangpack(NativeUninstallerListener.langpack);
             }
             catch (Throwable exception)
-            {}
+            {
+            }
         }
     }
 
     /**
      * Returns the langpack.
-     * 
+     *
      * @return Returns the langpack.
      */
     public static LocaleDatabase getLangpack()

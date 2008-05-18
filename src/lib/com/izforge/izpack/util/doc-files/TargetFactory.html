@@ -1,15 +1,15 @@
 <HTML>
 <HEAD>
-<TITLE>Target Factory</TITLE>
+    <TITLE>Target Factory</TITLE>
 </HEAD>
 <BODY>
 <H2>How to use the TargetFactory</H2>
 By <font color=0000FF><i>Elmar Grom</i></font>
 <br><br>
 Here is a simple approach that you can use to automatically instantiate
-flavors of your class that are tailored to a specific operating system. 
+flavors of your class that are tailored to a specific operating system.
 If necessary you can even have different versions for different flavors
-of an operating system, such as Windows-NT. 
+of an operating system, such as Windows-NT.
 <br><br>
 Implement your API with the class name that you would like to use. The
 API can be implemented as interface, a partially or completely abastact
@@ -31,12 +31,12 @@ classes must be contained in the same package as the base class and must
 follow a prescribed naming convention. Name prefixes are defined for a
 number of operating systems and operating system flavores. Please review
 the class documentation for <code>TargetFactory</code> for a a complete
-list of these prefixes. 
+list of these prefixes.
 <br><br>
 Let's assume you have a class called <code>MyClass</code> in the package
 <code>com.izforge.izpack.installer</code>. This class contains your
 default implementation. For some reason you need modified functionality
-for Mac OS X.  You would now implement the class
+for Mac OS X. You would now implement the class
 <code>Mac_X_MyClass</code> which is extending <code>MyClass</code> and
 implements the necessary differences. This is all you need to do on the
 implementation end.
@@ -44,12 +44,13 @@ implementation end.
 To get the correct instance based on the OS, simply call
 <code>makeObject()</code>. This example illustrates the call:<br>
 <PRE>
-  <font size=2 color=000000>TargetFactory.<b>getInstance</b> ().<b>makeObject</b> (</font><font size=2 color=FF0000>"com.izforge.izpack.installer.MyClass"</font><font size=2 color=000000>);</font>
+  <font size=2 color=000000>TargetFactory.<b>getInstance</b> ().<b>makeObject</b> (</font><font size=2 color=FF0000>"com.izforge.izpack.installer.MyClass"</font><font
+        size=2 color=000000>);</font>
 </PRE>
 This call will return an instance of the proper flavor, without worry
 about the OS on your part. More specifically, you will recive an
 instance of <code>MyClass</code> on all operating systems, except on Mac
-OS X, in which case you will  receive an instance of
+OS X, in which case you will receive an instance of
 <code>Mac_X_MyClass</code>. To make this work,
 <code>TargetFactory</code> will automatically map the correct name and
 create an instance for you.
@@ -58,7 +59,7 @@ There is one drawback to this implementation that you must be aware of.
 Because of the way how instances are created, each class must have a
 default constructor. Of course this is done either by not implementing a
 constructor or by implementing a constructor without parameters (this
-must not be private). This constructor will be used when instances are 
+must not be private). This constructor will be used when instances are
 created. As a result, you can not pass parameters to the constructor.
 <br><br>
 If you need to create instances that perform initial operations based on

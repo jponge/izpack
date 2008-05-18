@@ -21,12 +21,7 @@
 
 package com.izforge.izpack.util;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -34,7 +29,6 @@ import java.util.StringTokenizer;
  * <p>
  * Class with some IO related helper.
  * </p>
- * 
  */
 public class IoHelper
 {
@@ -48,7 +42,9 @@ public class IoHelper
     // Constant Definitions
     // ------------------------------------------------------------------------
 
-    /** Placeholder during translatePath computing */
+    /**
+     * Placeholder during translatePath computing
+     */
     private static final String MASKED_SLASH_PLACEHOLDER = "~&_&~";
 
     private static Properties envVars = null;
@@ -62,8 +58,8 @@ public class IoHelper
 
     /**
      * Copies the contents of inFile into outFile.
-     * 
-     * @param inFile path of file which should be copied
+     *
+     * @param inFile  path of file which should be copied
      * @param outFile path of file to create and copy the contents of inFile into
      */
     public static void copyFile(String inFile, String outFile) throws IOException
@@ -74,10 +70,10 @@ public class IoHelper
     /**
      * Creates an in- and output stream for the given File objects and copies all the data from the
      * specified input to the specified output.
-     * 
-     * @param inFile File object for input
+     *
+     * @param inFile  File object for input
      * @param outFile File object for output
-     * @exception IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile) throws IOException
     {
@@ -88,11 +84,11 @@ public class IoHelper
      * Creates an in- and output stream for the given File objects and copies all the data from the
      * specified input to the specified output. If permissions is not null, a chmod will be done on
      * the output file.
-     * 
-     * @param inFile File object for input
-     * @param outFile File object for output
+     *
+     * @param inFile      File object for input
+     * @param outFile     File object for output
      * @param permissions permissions for the output file
-     * @exception IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions) throws IOException
     {
@@ -103,11 +99,11 @@ public class IoHelper
      * Creates an in- and output stream for the given File objects and copies all the data from the
      * specified input to the specified output. If the VariableSubstitutor is not null, a substition
      * will be done during copy.
-     * 
-     * @param inFile File object for input
+     *
+     * @param inFile  File object for input
      * @param outFile File object for output
-     * @param vss substitutor which is used during copying
-     * @exception IOException if an I/O error occurs
+     * @param vss     substitutor which is used during copying
+     * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, VariableSubstitutor vss)
             throws IOException
@@ -120,15 +116,15 @@ public class IoHelper
      * specified input to the specified output. If the VariableSubstitutor is not null, a substition
      * will be done during copy. If permissions is not null, a chmod will be done on the output
      * file.
-     * 
-     * @param inFile File object for input
-     * @param outFile File object for output
+     *
+     * @param inFile      File object for input
+     * @param outFile     File object for output
      * @param permissions permissions for the output file
-     * @param vs substitutor which is used during copying
-     * @exception IOException if an I/O error occurs
+     * @param vs          substitutor which is used during copying
+     * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions,
-            VariableSubstitutor vs) throws IOException
+                                VariableSubstitutor vs) throws IOException
     {
         copyFile(inFile, outFile, permissions, vs, null);
     }
@@ -138,16 +134,16 @@ public class IoHelper
      * specified input to the specified output. If the VariableSubstitutor is not null, a substition
      * will be done during copy. If permissions is not null, a chmod will be done on the output
      * file. If type is not null, that type is used as file type at substitution.
-     * 
-     * @param inFile File object for input
-     * @param outFile File object for output
+     *
+     * @param inFile      File object for input
+     * @param outFile     File object for output
      * @param permissions permissions for the output file
-     * @param vs substitutor which is used during copying
-     * @param type file type for the substitutor
-     * @exception IOException if an I/O error occurs
+     * @param vs          substitutor which is used during copying
+     * @param type        file type for the substitutor
+     * @throws IOException if an I/O error occurs
      */
     public static void copyFile(File inFile, File outFile, String permissions,
-            VariableSubstitutor vs, String type) throws IOException
+                                VariableSubstitutor vs, String type) throws IOException
     {
         FileOutputStream out = new FileOutputStream(outFile);
         FileInputStream in = new FileInputStream(inFile);
@@ -182,8 +178,8 @@ public class IoHelper
      * Creates a temp file with delete on exit rule. The extension is extracted from the template if
      * possible, else the default extension is used. The contents of template will be copied into
      * the temporary file.
-     * 
-     * @param template file to copy from and define file extension
+     *
+     * @param template         file to copy from and define file extension
      * @param defaultExtension file extension if no is contained in template
      * @return newly created and filled temporary file
      * @throws IOException
@@ -198,20 +194,23 @@ public class IoHelper
      * possible, else the default extension is used. The contents of template will be copied into
      * the temporary file. If the variable substitutor is not null, variables will be replaced
      * during copying.
-     * 
-     * @param template file to copy from and define file extension
+     *
+     * @param template         file to copy from and define file extension
      * @param defaultExtension file extension if no is contained in template
-     * @param vss substitutor which is used during copying
+     * @param vss              substitutor which is used during copying
      * @return newly created and filled temporary file
      * @throws IOException
      */
     public static File copyToTempFile(File template, String defaultExtension,
-            VariableSubstitutor vss) throws IOException
+                                      VariableSubstitutor vss) throws IOException
     {
         String path = template.getCanonicalPath();
         int pos = path.lastIndexOf('.');
         String ext = path.substring(pos);
-        if (ext == null) ext = defaultExtension;
+        if (ext == null)
+        {
+            ext = defaultExtension;
+        }
         File tmpFile = File.createTempFile("izpack_io", ext);
         tmpFile.deleteOnExit();
         IoHelper.copyFile(template, tmpFile, vss);
@@ -222,8 +221,8 @@ public class IoHelper
      * Creates a temp file with delete on exit rule. The extension is extracted from the template if
      * possible, else the default extension is used. The contents of template will be copied into
      * the temporary file.
-     * 
-     * @param template file to copy from and define file extension
+     *
+     * @param template         file to copy from and define file extension
      * @param defaultExtension file extension if no is contained in template
      * @return newly created and filled temporary file
      * @throws IOException
@@ -235,8 +234,8 @@ public class IoHelper
 
     /**
      * Changes the permissions of the given file to the given POSIX permissions.
-     * 
-     * @param file the file for which the permissions should be changed
+     *
+     * @param file        the file for which the permissions should be changed
      * @param permissions POSIX permissions to be set
      * @throws IOException if an I/O error occurs
      */
@@ -248,8 +247,8 @@ public class IoHelper
     /**
      * Changes the permissions of the given file to the given POSIX permissions. This method will be
      * raised an exception, if the OS is not UNIX.
-     * 
-     * @param path the absolute path of the file for which the permissions should be changed
+     *
+     * @param path        the absolute path of the file for which the permissions should be changed
      * @param permissions POSIX permissions to be set
      * @throws IOException if an I/O error occurs
      */
@@ -258,7 +257,7 @@ public class IoHelper
         // Perform UNIX
         if (OsVersion.IS_UNIX)
         {
-            String[] params = { "chmod", permissions, path};
+            String[] params = {"chmod", permissions, path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
@@ -271,7 +270,7 @@ public class IoHelper
 
     /**
      * Returns the free (disk) space for the given path. If it is not ascertainable -1 returns.
-     * 
+     *
      * @param path path for which the free space should be detected
      * @return the free space for the given path
      */
@@ -281,8 +280,11 @@ public class IoHelper
         if (OsVersion.IS_WINDOWS)
         {
             String command = "cmd.exe";
-            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1) return (-1);
-            String[] params = { command, "/C", "\"dir /D /-C \"" + path + "\"\""};
+            if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+            {
+                return (-1);
+            }
+            String[] params = {command, "/C", "\"dir /D /-C \"" + path + "\"\""};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
@@ -290,7 +292,7 @@ public class IoHelper
         }
         else if (OsVersion.IS_SUNOS)
         {
-            String[] params = { "df", "-k", path};
+            String[] params = {"df", "-k", path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
@@ -298,7 +300,7 @@ public class IoHelper
         }
         else if (OsVersion.IS_HPUX)
         {
-            String[] params = { "bdf", path };
+            String[] params = {"bdf", path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
@@ -306,7 +308,7 @@ public class IoHelper
         }
         else if (OsVersion.IS_UNIX)
         {
-            String[] params = { "df", "-Pk", path};
+            String[] params = {"df", "-Pk", path};
             String[] output = new String[2];
             FileExecutor fe = new FileExecutor();
             fe.executeCommand(params, output);
@@ -318,7 +320,7 @@ public class IoHelper
     /**
      * Returns whether the given method will be supported with the given environment. Some methods
      * of this class are not supported on all operation systems.
-     * 
+     *
      * @param method name of the method
      * @return true if the method will be supported with the current enivronment else false
      * @throws RuntimeException if the given method name does not exist
@@ -327,17 +329,25 @@ public class IoHelper
     {
         if ("getFreeSpace".equals(method))
         {
-            if (OsVersion.IS_UNIX) return true;
+            if (OsVersion.IS_UNIX)
+            {
+                return true;
+            }
             if (OsVersion.IS_WINDOWS)
             { // getFreeSpace do not work on Windows 98.
                 if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+                {
                     return (false);
+                }
                 return (true);
             }
         }
         else if ("chmod".equals(method))
         {
-            if (OsVersion.IS_UNIX) return true;
+            if (OsVersion.IS_UNIX)
+            {
+                return true;
+            }
         }
         else if ("copyFile".equals(method))
         {
@@ -345,7 +355,10 @@ public class IoHelper
         }
         else if ("getPrimaryGroup".equals(method))
         {
-            if (OsVersion.IS_UNIX) return true;
+            if (OsVersion.IS_UNIX)
+            {
+                return true;
+            }
         }
         else if ("getenv".equals(method))
         {
@@ -361,7 +374,7 @@ public class IoHelper
 
     /**
      * Returns the first existing parent directory in a path
-     * 
+     *
      * @param path path which should be scanned
      * @return the first existing parent directory in a path
      */
@@ -370,7 +383,10 @@ public class IoHelper
         File result = path;
         while (!result.exists())
         {
-            if (result.getParent() == null) return result;
+            if (result.getParent() == null)
+            {
+                return result;
+            }
             result = result.getParentFile();
         }
         return result;
@@ -381,15 +397,15 @@ public class IoHelper
      * tokens with a standard StringTokenizer. Arround the assumed place (with the given half range)
      * the tokens are scaned reverse for a token which represents a long. if useNotIdentifier is not
      * null, tokens which are contains this string will be ignored. The first founded long returns.
-     * 
-     * @param in the string which should be parsed
-     * @param assumedPlace token number which should contain the value
-     * @param halfRange half range for detection range
+     *
+     * @param in               the string which should be parsed
+     * @param assumedPlace     token number which should contain the value
+     * @param halfRange        half range for detection range
      * @param useNotIdentifier string which determines tokens which should be ignored
      * @return founded long
      */
     private static long extractLong(String in, int assumedPlace, int halfRange,
-            String useNotIdentifier)
+                                    String useNotIdentifier)
     {
         long retval = -1;
         StringTokenizer st = new StringTokenizer(in);
@@ -398,7 +414,9 @@ public class IoHelper
         int currentRange = 0;
         String[] interestedEntries = new String[halfRange + halfRange];
         for (i = 0; i < length - halfRange + assumedPlace; ++i)
+        {
             st.nextToken(); // Forget this entries.
+        }
 
         for (i = 0; i < halfRange + halfRange; ++i)
         { // Put the interesting Strings into an intermediaer array.
@@ -412,7 +430,9 @@ public class IoHelper
         for (i = currentRange - 1; i >= 0; --i)
         {
             if (useNotIdentifier != null && interestedEntries[i].indexOf(useNotIdentifier) > -1)
+            {
                 continue;
+            }
             try
             {
                 retval = Long.parseLong(interestedEntries[i]);
@@ -429,7 +449,7 @@ public class IoHelper
     /**
      * Returns the primary group of the current user. This feature will be supported only on Unix.
      * On other systems null returns.
-     * 
+     *
      * @return the primary group of the current user
      */
     public static String getPrimaryGroup()
@@ -438,7 +458,7 @@ public class IoHelper
         {
             if (OsVersion.IS_SUNOS)
             { // Standard id of SOLARIS do not support -gn.
-                String[] params = { "id"};
+                String[] params = {"id"};
                 String[] output = new String[2];
                 FileExecutor fe = new FileExecutor();
                 fe.executeCommand(params, output);
@@ -450,7 +470,9 @@ public class IoHelper
                     if (length >= 4)
                     {
                         for (int i = 0; i < 3; ++i)
+                        {
                             st.nextToken();
+                        }
                         return (st.nextToken());
                     }
                 }
@@ -458,7 +480,7 @@ public class IoHelper
             }
             else
             {
-                String[] params = { "id", "-gn"};
+                String[] params = {"id", "-gn"};
                 String[] output = new String[2];
                 FileExecutor fe = new FileExecutor();
                 fe.executeCommand(params, output);
@@ -466,7 +488,9 @@ public class IoHelper
             }
         }
         else
+        {
             return null;
+        }
     }
 
     /**
@@ -474,10 +498,10 @@ public class IoHelper
      * In opposite to the String.replaceAll method this method do not use regular expression or
      * other methods which are only available in JRE 1.4 and later. This method was special made to
      * mask masked slashes to avert a conversion during path translation.
-     * 
+     *
      * @param destination string for which the replacing should be performed
-     * @param what what string should be replaced
-     * @param with with what string what should be replaced
+     * @param what        what string should be replaced
+     * @param with        with what string what should be replaced
      * @return a new String object if what was found in the given string, else the given string self
      */
     public static String replaceString(String destination, String what, String with)
@@ -491,12 +515,18 @@ public class IoHelper
             int whatLength = what.length();
             while (current >= 0)
             { // Do not use Methods from JRE 1.4 and higher ...
-                if (current > 0) buf.append(destination.substring(last, current));
+                if (current > 0)
+                {
+                    buf.append(destination.substring(last, current));
+                }
                 buf.append(with);
                 last = current + whatLength;
                 current = destination.indexOf(what, last);
             }
-            if (destination.length() > last) buf.append(destination.substring(last));
+            if (destination.length() > last)
+            {
+                buf.append(destination.substring(last));
+            }
             return buf.toString();
         }
         return destination;
@@ -504,7 +534,7 @@ public class IoHelper
 
     /**
      * Translates a relative path to a local system path.
-     * 
+     *
      * @param destination The path to translate.
      * @return The translated path.
      */
@@ -538,7 +568,9 @@ public class IoHelper
             destination = replaceString(destination, MASKED_SLASH_PLACEHOLDER, "/");
         }
         else
+        {
             destination = destination.replace('/', File.separatorChar);
+        }
         return destination;
     }
 
@@ -546,15 +578,24 @@ public class IoHelper
      * Returns the value of the environment variable given by key. This method is a work around for
      * VM versions which do not support getenv in an other way. At the first call all environment
      * variables will be loaded via an exec. On Windows keys are not case sensitive.
-     * 
+     *
      * @param key variable name for which the value should be resolved
      * @return the value of the environment variable given by key
      */
     public static String getenv(String key)
     {
-        if (envVars == null) loadEnv();
-        if (envVars == null) return (null);
-        if (OsVersion.IS_WINDOWS) key = key.toUpperCase();
+        if (envVars == null)
+        {
+            loadEnv();
+        }
+        if (envVars == null)
+        {
+            return (null);
+        }
+        if (OsVersion.IS_WINDOWS)
+        {
+            key = key.toUpperCase();
+        }
         return (String) (envVars.get(key));
     }
 
@@ -569,18 +610,23 @@ public class IoHelper
         {
             String command = "cmd.exe";
             if (System.getProperty("os.name").toLowerCase().indexOf("windows 9") > -1)
+            {
                 command = "command.com";
-            String[] paramst = { command, "/C", "set"};
+            }
+            String[] paramst = {command, "/C", "set"};
             params = paramst;
         }
         else
         {
-            String[] paramst = { "env"};
+            String[] paramst = {"env"};
             params = paramst;
         }
         FileExecutor fe = new FileExecutor();
         fe.executeCommand(params, output);
-        if (output[0].length() <= 0) return;
+        if (output[0].length() <= 0)
+        {
+            return;
+        }
         String lineSep = System.getProperty("line.separator");
         StringTokenizer st = new StringTokenizer(output[0], lineSep);
         envVars = new Properties();
@@ -611,17 +657,26 @@ public class IoHelper
     /**
      * Extracts key and value from the given string var. The key should be separated from the value
      * by a sign. On Windows all chars of the key are translated to upper case.
-     * 
+     *
      * @param var
      */
     private static void setEnvVar(String var)
     {
-        if (var == null) return;
+        if (var == null)
+        {
+            return;
+        }
         int index = var.indexOf('=');
-        if (index < 0) return;
+        if (index < 0)
+        {
+            return;
+        }
         String key = var.substring(0, index);
         // On windows change all key chars to upper.
-        if (OsVersion.IS_WINDOWS) key = key.toUpperCase();
+        if (OsVersion.IS_WINDOWS)
+        {
+            key = key.toUpperCase();
+        }
         envVars.setProperty(key, var.substring(index + 1));
 
     }

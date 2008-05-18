@@ -21,14 +21,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
@@ -36,30 +28,37 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.VariableSubstitutor;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * The XInfo panel class - shows some adaptative text (ie by parsing for some variables.
- * 
+ *
  * @author Julien Ponge
  */
 public class XInfoPanel extends IzPanel
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3257009856274970416L;
 
-    /** The text area. */
+    /**
+     * The text area.
+     */
     private JTextArea textArea;
 
-    /** The info to display. */
+    /**
+     * The info to display.
+     */
     private String info;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public XInfoPanel(InstallerFrame parent, InstallData idata)
     {
@@ -90,7 +89,9 @@ public class XInfoPanel extends IzPanel
         add(scroller);
     }
 
-    /** Loads the info text. */
+    /**
+     * Loads the info text.
+     */
     private void loadInfo()
     {
         try
@@ -104,7 +105,9 @@ public class XInfoPanel extends IzPanel
         }
     }
 
-    /** Parses the text for special variables. */
+    /**
+     * Parses the text for special variables.
+     */
     private void parseText()
     {
         try
@@ -121,7 +124,9 @@ public class XInfoPanel extends IzPanel
         }
     }
 
-    /** Called when the panel becomes active. */
+    /**
+     * Called when the panel becomes active.
+     */
     public void panelActivate()
     {
         // Text handling
@@ -135,7 +140,7 @@ public class XInfoPanel extends IzPanel
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return Always true.
      */
     public boolean isValidated()

@@ -26,9 +26,9 @@ package com.izforge.izpack.util;
  * Any class in IzPack that uses native libraries must implement this interface. See the package
  * documentation for more details on requirements relating to the use of native libraries within
  * IzPack.
- * 
- * @version 0.0.1 / 2/6/2002
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 2/6/2002
  */
 /*---------------------------------------------------------------------------*/
 public interface NativeLibraryClient
@@ -51,7 +51,7 @@ public interface NativeLibraryClient
      * library provides the means to free itself. For instance in a MS-Windows environment the
      * library must call <code>FreeLibraryAndExitThread()</code>. This will result in a native
      * fuction call that does not return.
-     * 
+     *
      * @param name the name of the library, without path but with extension
      */
     /*--------------------------------------------------------------------------*/

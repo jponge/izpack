@@ -21,15 +21,14 @@
 
 package com.izforge.izpack.gui;
 
-import java.awt.Component;
+import java.awt.*;
 
 /**
  * The constraints class to use with <code>TwoColumnLayout</code>.
- * 
- * @see com.izforge.izpack.gui.TwoColumnLayout
- * 
- * @version 0.0.1 / 11/15/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 11/15/02
+ * @see com.izforge.izpack.gui.TwoColumnLayout
  */
 public class TwoColumnConstraints implements Cloneable
 {
@@ -71,7 +70,9 @@ public class TwoColumnConstraints implements Cloneable
      */
     public int align = LEFT;
 
-    /** If set to true, the indent setting in the layout manager will be applied. */
+    /**
+     * If set to true, the indent setting in the layout manager will be applied.
+     */
     public boolean indent = false;
 
     /**
@@ -80,12 +81,14 @@ public class TwoColumnConstraints implements Cloneable
      */
     public boolean stretch = false;
 
-    /** for private use by the layout manager */
+    /**
+     * for private use by the layout manager
+     */
     Component component = null;
 
     /**
      * Creates a copy of this two column constraint.
-     * 
+     *
      * @return a copy of this <code>TwoColumnConstraints</code>
      */
     public Object clone()

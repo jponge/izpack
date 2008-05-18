@@ -22,34 +22,38 @@ import java.io.IOException;
 
 /**
  * Exception indicating a corrupt volume.
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class CorruptVolumeException extends IOException
 {
     private static final long serialVersionUID = -1659572038393604549L;
-//  name of the corrupt volume
+    //  name of the corrupt volume
     private String volumename;
-    
+
     /**
-     * 
+     *
      */
-    public CorruptVolumeException() {   
+    public CorruptVolumeException()
+    {
     }
 
     /**
      * @param msg
      */
-    public CorruptVolumeException(String msg,  String volumename) {
-      super(msg);
-      this.volumename = volumename;
+    public CorruptVolumeException(String msg, String volumename)
+    {
+        super(msg);
+        this.volumename = volumename;
     }
 
-    public String getVolumename() {
-      return volumename;
+    public String getVolumename()
+    {
+        return volumename;
     }
 
-    public void setVolumename(String volumename) {
-      this.volumename = volumename;
+    public void setVolumename(String volumename)
+    {
+        this.volumename = volumename;
     }
 }

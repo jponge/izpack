@@ -25,7 +25,7 @@ import java.util.TreeMap;
 
 /**
  * This class holds the GUI preferences for an installer.
- * 
+ *
  * @author Julien Ponge
  */
 public class GUIPrefs implements Serializable
@@ -33,21 +33,33 @@ public class GUIPrefs implements Serializable
 
     static final long serialVersionUID = -9081878949718963824L;
 
-    /** Specifies wether the window will be resizable. */
+    /**
+     * Specifies wether the window will be resizable.
+     */
     public boolean resizable;
 
-    /** Specifies the starting window width, in pixels. */
+    /**
+     * Specifies the starting window width, in pixels.
+     */
     public int width;
 
-    /** Specifies the starting window height, in pixels. */
+    /**
+     * Specifies the starting window height, in pixels.
+     */
     public int height;
 
-    /** Specifies the OS Look and Feels mappings. */
+    /**
+     * Specifies the OS Look and Feels mappings.
+     */
     public Map<String, String> lookAndFeelMapping = new TreeMap<String, String>();
 
-    /** Specifies the OS Look and Feels optionnal parameters. */
+    /**
+     * Specifies the OS Look and Feels optionnal parameters.
+     */
     public Map<String, Map<String, String>> lookAndFeelParams = new TreeMap<String, Map<String, String>>();
 
-    /** Specifies the modifier. */
+    /**
+     * Specifies the modifier.
+     */
     public Map<String, String> modifier = new TreeMap<String, String>();
 }

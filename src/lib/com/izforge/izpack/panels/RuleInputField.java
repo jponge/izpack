@@ -21,27 +21,23 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.Toolkit;
+import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.VariableSubstitutor;
+import org.apache.regexp.RE;
+
+import javax.swing.*;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.io.Serializable;
-
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-
-import org.apache.regexp.RE;
-
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.VariableSubstitutor;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -56,7 +52,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
  * entering numbers as painless as possible. <br>
  * <br>
  * <b>Formatting:</b>
- * 
+ * <p/>
  * <ul>
  * <li><code>N:X:Y </code>- numeric field, accepts digits only
  * <li><code>H:X:Y </code>- hex field, accepts only hexadecimal digits
@@ -74,9 +70,9 @@ import com.izforge.izpack.util.VariableSubstitutor;
  * obtained with this setting: <br>
  * <br>
  * <img src="doc-files/RuleInputField-1.gif"/>
- * 
- * @version 0.0.1 / 10/19/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 10/19/02
  */
 /*---------------------------------------------------------------------------*/
 public class RuleInputField extends JComponent implements KeyListener, FocusListener,
@@ -84,7 +80,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3832616275124958257L;
 
@@ -116,7 +112,9 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      */
     public static final int ENCRYPTED = 4;
 
-    /** Used internally to identify the default setting for the return format. */
+    /**
+     * Used internally to identify the default setting for the return format.
+     */
     private static int DEFAULT = DISPLAY_FORMAT;
 
     private Vector<Serializable> items = new Vector<Serializable>();
@@ -163,36 +161,36 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     /**
      * Constructs a rule input field.
-     * 
-     * @param format a string that specifies the formatting and to a limited degree the behavior of
-     * this field.
-     * @param preset a string that specifies preset values for specific sub-fields.
-     * @param separator a string to be used for separating the contents of individual fields in the
-     * string returned by <code>getText()</code>
-     * @param validator A string that specifies a class to perform validation services. The string
-     * must completely identify the class, so that it can be instantiated. The class must implement
-     * the <code>RuleValidator</code> interface. If an attempt to instantiate this class fails, no
-     * validation will be performed.
+     *
+     * @param format          a string that specifies the formatting and to a limited degree the behavior of
+     *                        this field.
+     * @param preset          a string that specifies preset values for specific sub-fields.
+     * @param separator       a string to be used for separating the contents of individual fields in the
+     *                        string returned by <code>getText()</code>
+     * @param validator       A string that specifies a class to perform validation services. The string
+     *                        must completely identify the class, so that it can be instantiated. The class must implement
+     *                        the <code>RuleValidator</code> interface. If an attempt to instantiate this class fails, no
+     *                        validation will be performed.
      * @param validatorParams A <code>java.util.Map</code> containing name/ value pairs, which
-     * will be forwarded to the validator.
-     * @param processor A string that specifies a class to perform processing services. The string
-     * must completely identify the class, so that it can be instantiated. The class must implement
-     * the <code>Processor</code> interface. If an attempt to instantiate this class fails, no
-     * processing will be performed. Instead, the text is returned in the default formatting.
-     * @param resultFormat specifies in which format the resulting text should be returned, wehn
-     * <code>getText()</code> is called. The following values are legal:<br>
-     * <ul>
-     * <li>PLAIN_STRING
-     * <li>DISPLAY_FORMAT
-     * <li>SPECIAL_SEPARATOR
-     * <li>ENCRYPTED
-     * </ul>
-     * @param toolkit needed to gain access to <code>beep()</code>
+     *                        will be forwarded to the validator.
+     * @param processor       A string that specifies a class to perform processing services. The string
+     *                        must completely identify the class, so that it can be instantiated. The class must implement
+     *                        the <code>Processor</code> interface. If an attempt to instantiate this class fails, no
+     *                        processing will be performed. Instead, the text is returned in the default formatting.
+     * @param resultFormat    specifies in which format the resulting text should be returned, wehn
+     *                        <code>getText()</code> is called. The following values are legal:<br>
+     *                        <ul>
+     *                        <li>PLAIN_STRING
+     *                        <li>DISPLAY_FORMAT
+     *                        <li>SPECIAL_SEPARATOR
+     *                        <li>ENCRYPTED
+     *                        </ul>
+     * @param toolkit         needed to gain access to <code>beep()</code>
      */
     /*--------------------------------------------------------------------------*/
     public RuleInputField(String format, String preset, String separator, String validator,
-            Map<String, String> validatorParams, String processor, int resultFormat, Toolkit toolkit,
-            InstallData idata)
+                          Map<String, String> validatorParams, String processor, int resultFormat, Toolkit toolkit,
+                          InstallData idata)
     {
         this(format, preset, separator, validator, processor, resultFormat, toolkit, idata);
         this.validatorParams = validatorParams;
@@ -202,33 +200,33 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     /**
      * Constructs a rule input field.
-     * 
-     * @param format a string that specifies the formatting and to a limited degree the behavior of
-     * this field.
-     * @param preset a string that specifies preset values for specific sub-fields.
-     * @param separator a string to be used for separating the contents of individual fields in the
-     * string returned by <code>getText()</code>
-     * @param validator A string that specifies a class to perform validation services. The string
-     * must completely identify the class, so that it can be instantiated. The class must implement
-     * the <code>RuleValidator</code> interface. If an attempt to instantiate this class fails, no
-     * validation will be performed.
-     * @param processor A string that specifies a class to perform processing services. The string
-     * must completely identify the class, so that it can be instantiated. The class must implement
-     * the <code>Processor</code> interface. If an attempt to instantiate this class fails, no
-     * processing will be performed. Instead, the text is returned in the default formatting.
+     *
+     * @param format       a string that specifies the formatting and to a limited degree the behavior of
+     *                     this field.
+     * @param preset       a string that specifies preset values for specific sub-fields.
+     * @param separator    a string to be used for separating the contents of individual fields in the
+     *                     string returned by <code>getText()</code>
+     * @param validator    A string that specifies a class to perform validation services. The string
+     *                     must completely identify the class, so that it can be instantiated. The class must implement
+     *                     the <code>RuleValidator</code> interface. If an attempt to instantiate this class fails, no
+     *                     validation will be performed.
+     * @param processor    A string that specifies a class to perform processing services. The string
+     *                     must completely identify the class, so that it can be instantiated. The class must implement
+     *                     the <code>Processor</code> interface. If an attempt to instantiate this class fails, no
+     *                     processing will be performed. Instead, the text is returned in the default formatting.
      * @param resultFormat specifies in which format the resulting text should be returned, wehn
-     * <code>getText()</code> is called. The following values are legal:<br>
-     * <ul>
-     * <li>PLAIN_STRING
-     * <li>DISPLAY_FORMAT
-     * <li>SPECIAL_SEPARATOR
-     * <li>ENCRYPTED
-     * </ul>
-     * @param toolkit needed to gain access to <code>beep()</code>
+     *                     <code>getText()</code> is called. The following values are legal:<br>
+     *                     <ul>
+     *                     <li>PLAIN_STRING
+     *                     <li>DISPLAY_FORMAT
+     *                     <li>SPECIAL_SEPARATOR
+     *                     <li>ENCRYPTED
+     *                     </ul>
+     * @param toolkit      needed to gain access to <code>beep()</code>
      */
     /*--------------------------------------------------------------------------*/
     public RuleInputField(String format, String preset, String separator, String validator,
-            String processor, int resultFormat, Toolkit toolkit, InstallData idata)
+                          String processor, int resultFormat, Toolkit toolkit, InstallData idata)
     {
         this.toolkit = toolkit;
         this.separator = separator;
@@ -251,7 +249,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
         }
         catch (Throwable exception)
         {
-            validationService = null;            
+            validationService = null;
             Debug.trace(exception);
         }
 
@@ -291,7 +289,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     /**
      * Returns the number of sub-fields composing this <code>RuleInputField</code>.
-     * 
+     *
      * @return the number of sub-fields
      */
     /*--------------------------------------------------------------------------*/
@@ -303,17 +301,18 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     /**
      * Returns the contents of the field indicated by <code>index</code>.
-     * 
+     *
      * @param index the index of the sub-field from which the contents is requested.
-     * 
      * @return the contents of the indicated sub-field.
-     * 
-     * @exception IndexOutOfBoundsException if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     /*--------------------------------------------------------------------------*/
     public String getFieldContents(int index) throws IndexOutOfBoundsException
     {
-        if ((index < 0) || (index > (inputFields.size() - 1))) { throw (new IndexOutOfBoundsException()); }
+        if ((index < 0) || (index > (inputFields.size() - 1)))
+        {
+            throw (new IndexOutOfBoundsException());
+        }
 
         return (((JTextField) inputFields.elementAt(index)).getText());
     }
@@ -328,7 +327,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*---------------------------------------------------------------------------*/
     /**
      * Returns the field contents, assembled acording to the encryption and separator rules.
-     * 
+     *
      * @return the field contents
      */
     /*--------------------------------------------------------------------------*/
@@ -413,7 +412,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      * Creates the items that make up this field. Both separators and input fields are considered
      * items. The items created are stored in <code>items</code>. In addition, all fields are
      * stored in <code>inputFields</code>.
-     * 
+     *
      * @param format a string that specifies the layout of the input fields and separators.
      */
     /*--------------------------------------------------------------------------*/
@@ -525,11 +524,11 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     /**
      * Sets each field to a pre-defined value.
-     * 
+     *
      * @param data a <code>String</code> containing the preset values for each field. The format
-     * of the string is as follows: The content for the individuals fields must be separated by
-     * whitespace. Each data block is preceeded by the index of the field to set (counting starts at
-     * 0) followed by a colon ':'and after that the actual data for the field.
+     *             of the string is as follows: The content for the individuals fields must be separated by
+     *             whitespace. Each data block is preceeded by the index of the field to set (counting starts at
+     *             0) followed by a colon ':'and after that the actual data for the field.
      */
     /*--------------------------------------------------------------------------*/
     private void setFields(String data)
@@ -610,7 +609,8 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                     }
                 }
                 catch (Throwable exception)
-                {}
+                {
+                }
             }
         }
     }
@@ -619,9 +619,9 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /**
      * This method validates the field content. Validating is performed through a user supplied
      * service class that provides the validation rules.
-     * 
+     *
      * @return <code>true</code> if the validation passes or no implementation of a validation
-     * rule exists. Otherwise <code>false</code> is returned.
+     *         rule exists. Otherwise <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     public boolean validateContents()
@@ -641,10 +641,11 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      *---------------------------------------------------------------------------*/
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method is invoked when a key has been typed. The event occurs when a key press is
      * followed by a key release.
-     * 
+     *
      * @param event the key event forwarded by the system.
      */
     /*--------------------------------------------------------------------------*/
@@ -659,7 +660,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      * the rule specified for the field in question is invoked. In case the test result is positive,
      * focus is set to the next field. If hte test result is negative, the field content is marked
      * and the caret set to the start of the field.
-     * 
+     *
      * @param event the key event forwarded by the system.
      */
     /*--------------------------------------------------------------------------*/
@@ -687,7 +688,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     /**
      * This method is invoked when a key has been released.
-     * 
+     *
      * @param event the key event forwarded by the system.
      */
     /*--------------------------------------------------------------------------*/
@@ -700,9 +701,10 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      *---------------------------------------------------------------------------*/
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Invoked when a component gains the keyboard focus.
-     * 
+     *
      * @param event the focus event forwardes by the sytem.
      */
     /*--------------------------------------------------------------------------*/
@@ -731,7 +733,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /**
      * Invoked when a component loses the keyboard focus. This method does nothing, we are only
      * interested in 'focus gained' events.
-     * 
+     *
      * @param event the focus event forwardes by the sytem.
      */
     /*--------------------------------------------------------------------------*/
@@ -744,9 +746,10 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      *---------------------------------------------------------------------------*/
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Called when the caret position is updated.
-     * 
+     *
      * @param event the caret event received from the text field
      */
     /*--------------------------------------------------------------------------*/

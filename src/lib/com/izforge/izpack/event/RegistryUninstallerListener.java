@@ -21,23 +21,22 @@
 
 package com.izforge.izpack.event;
 
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.List;
-
 import com.coi.tools.os.win.NativeLibException;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.TargetFactory;
 import com.izforge.izpack.util.os.RegistryHandler;
 import com.izforge.izpack.util.os.WrappedNativeLibException;
 
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.util.List;
+
 /**
  * Uninstaller custom action for handling registry entries. The needed configuration data are
  * written at installation time from the corresponding installer custom action. An external
  * definiton is not needed.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class RegistryUninstallerListener extends NativeUninstallerListener
 {
@@ -68,11 +67,17 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
         List allActions = (List) objIn.readObject();
         objIn.close();
         in.close();
-        if (allActions == null || allActions.size() < 1) return;
+        if (allActions == null || allActions.size() < 1)
+        {
+            return;
+        }
         try
         {
             RegistryHandler registryHandler = initializeRegistryHandler();
-            if (registryHandler == null) return;
+            if (registryHandler == null)
+            {
+                return;
+            }
             registryHandler.activateLogging();
             registryHandler.setLoggingInfo(allActions);
             registryHandler.rewind();
@@ -84,7 +89,9 @@ public class RegistryUninstallerListener extends NativeUninstallerListener
                 throw new WrappedNativeLibException(e);
             }
             else
+            {
                 throw e;
+            }
         }
     }
 

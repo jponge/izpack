@@ -24,9 +24,9 @@ package com.izforge.izpack.panels;
 /*---------------------------------------------------------------------------*/
 /**
  * Interface for classes that provide rule validation services.
- * 
- * @version 0.0.1 / 10/26/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 10/26/02
  */
 /*---------------------------------------------------------------------------*/
 public interface Validator
@@ -35,9 +35,8 @@ public interface Validator
     /*--------------------------------------------------------------------------*/
     /**
      * Validates the contend of an input field.
-     * 
+     *
      * @param client the client object using the services of this validator.
-     * 
      * @return <code>true</code> if the validation passes, otherwise <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/

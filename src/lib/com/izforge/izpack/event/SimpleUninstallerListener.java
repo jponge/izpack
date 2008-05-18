@@ -21,25 +21,24 @@
 
 package com.izforge.izpack.event;
 
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+
 import java.io.File;
 import java.util.List;
-
-import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
  * <p>
  * This class implements all methods of interface UninstallerListener, but do not do enything. It
  * can be used as base class to save implementation of unneeded methods.
  * </p>
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class SimpleUninstallerListener implements UninstallerListener
 {
 
     /**
-     * 
+     *
      */
     public SimpleUninstallerListener()
     {

@@ -1,16 +1,16 @@
-@import url(html4css1.css);
+@import url( html4css1.css );
 
 body {
     padding: 50px;
     background-color: #dedede;
-    
+
     font-family: helvetica, sans-serif;
     font-size: 16px;
 }
 
 .document {
     padding: 2em;
-    
+
     background-color: white;
     border: solid 1px #aaaaaa;
 }

@@ -18,26 +18,9 @@
  */
 package com.izforge.izpack.util;
 
-import java.util.List;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * This class tries to remove a given list of files which are locked by this process. For this the
@@ -51,9 +34,8 @@ import java.util.TreeSet;
  * files are not locked and deletable.<br>
  * The idea for this stuff is copied from Chadwick McHenry's SelfModifier in the uninstaller stuff
  * of IzPack.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class LibraryRemover
 {
@@ -63,41 +45,61 @@ public class LibraryRemover
      * jar file. No slash in front should be used; no dot else slashes should be used;
      * extension (.class) will be required.
      */
-    private static final String[] SANDBOX_CONTENT = { "com/izforge/izpack/util/LibraryRemover.class"};
+    private static final String[] SANDBOX_CONTENT = {"com/izforge/izpack/util/LibraryRemover.class"};
 
-    /** System property name of base for log and sandbox of secondary processes. */
+    /**
+     * System property name of base for log and sandbox of secondary processes.
+     */
     private static final String BASE_KEY = "lib.rem.base";
 
-    /** System property name of phase (1, 2, or 3) indicator. */
+    /**
+     * System property name of phase (1, 2, or 3) indicator.
+     */
     private static final String PHASE_KEY = "self.mod.phase";
 
-    /** VM home Needed for the java command. */
+    /**
+     * VM home Needed for the java command.
+     */
     private static final String JAVA_HOME = System.getProperty("java.home");
 
-    /** Prefix of sandbox, path and log file. */
+    /**
+     * Prefix of sandbox, path and log file.
+     */
     private static final String PREFIX = "InstallRemover";
 
-    /** Phase of this process. */
+    /**
+     * Phase of this process.
+     */
     private int phase = 0;
 
-    /** Log for phase 2, because we can't capture the stdio from them. */
+    /**
+     * Log for phase 2, because we can't capture the stdio from them.
+     */
     private File logFile = null;
 
-    /** Directory which we extract too, invoke from, and finally delete. */
+    /**
+     * Directory which we extract too, invoke from, and finally delete.
+     */
     private File sandbox = null;
 
-    /** The file which contains the paths of the files to delete. */
+    /**
+     * The file which contains the paths of the files to delete.
+     */
     private File specFile = null;
 
-    /** For logging time. */
+    /**
+     * For logging time.
+     */
     private SimpleDateFormat isoPoint = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
-    /** Also for logging time. */
+    /**
+     * Also for logging time.
+     */
     private Date date = new Date();
 
     /**
      * Constructor for both phases. Depending on the phase different initializing will be performed.
-     * 
+     *
      * @param phase for which an object should be created.
      * @throws IOException
      */
@@ -118,7 +120,7 @@ public class LibraryRemover
 
     /**
      * Entry point for phase 1. This class tries to remove all files given in the Vector.
-     * 
+     *
      * @param temporaryFileNames
      * @throws IOException
      */
@@ -130,10 +132,10 @@ public class LibraryRemover
 
     /**
      * This call ensures that java can be exec'd in a separate process.
-     * 
-     * @throws IOException if an I/O error occurs, indicating java is unable to be exec'd
+     *
+     * @throws IOException       if an I/O error occurs, indicating java is unable to be exec'd
      * @throws SecurityException if a security manager exists and doesn't allow creation of a
-     * subprocess
+     *                           subprocess
      */
     private void initJavaExec() throws IOException
     {
@@ -156,7 +158,7 @@ public class LibraryRemover
 
     /**
      * Internal invoke method for phase 1.
-     * 
+     *
      * @param temporaryFileNames list of paths of the files which should be removed
      * @throws IOException
      */
@@ -171,11 +173,17 @@ public class LibraryRemover
             sandbox = new File(f.substring(0, f.length() - 4) + ".d");
 
             // check if the similarly named directory is free
-            if (!sandbox.exists()) break;
+            if (!sandbox.exists())
+            {
+                break;
+            }
 
             logFile.delete();
         }
-        if (!sandbox.mkdir()) throw new RuntimeException("Failed to create temp dir: " + sandbox);
+        if (!sandbox.mkdir())
+        {
+            throw new RuntimeException("Failed to create temp dir: " + sandbox);
+        }
 
         sandbox = sandbox.getCanonicalFile();
         logFile = logFile.getCanonicalFile();
@@ -217,7 +225,10 @@ public class LibraryRemover
         while (iter.hasNext())
         {
             specWriter.write(iter.next());
-            if (iter.hasNext()) specWriter.newLine();
+            if (iter.hasNext())
+            {
+                specWriter.newLine();
+            }
         }
         specWriter.flush();
         out.close();
@@ -231,9 +242,9 @@ public class LibraryRemover
 
     /**
      * Returns an ArrayList of the files to delete.
-     * 
+     *
      * @return The files list.
-     * @exception Exception Description of the Exception
+     * @throws Exception Description of the Exception
      */
     private ArrayList<File> getFilesList() throws Exception
     {
@@ -269,7 +280,8 @@ public class LibraryRemover
                 Thread.sleep(1000);
             }
             catch (Exception x)
-            {}
+            {
+            }
 
             ArrayList<File> files = getFilesList();
             int size = files.size();
@@ -281,9 +293,13 @@ public class LibraryRemover
                 File file = files.get(i);
                 file.delete();
                 if (file.exists())
+                {
                     log("    deleting of " + file.getCanonicalPath() + " failed!!!");
+                }
                 else
+                {
                     log("    " + file.getCanonicalPath());
+                }
 
             }
 
@@ -300,7 +316,7 @@ public class LibraryRemover
 
     /**
      * Copied from com.izforge.izpack.uninstaller.SelfModifier. Little addaption for this class.
-     * 
+     *
      * @param nextPhase phase of the spawn
      * @return created process object
      * @throws IOException
@@ -312,7 +328,7 @@ public class LibraryRemover
 
         // invoke from tmpdir, passing target method arguments as args, and
         // SelfModifier parameters as sustem properties
-        String[] javaCmd = new String[] { javaCommand(), "-classpath", sandbox.getAbsolutePath(),
+        String[] javaCmd = new String[]{javaCommand(), "-classpath", sandbox.getAbsolutePath(),
                 "-D" + BASE_KEY + "=" + base, "-D" + PHASE_KEY + "=" + nextPhase,
                 getClass().getName()};
 
@@ -331,7 +347,7 @@ public class LibraryRemover
     /**
      * Recursively delete a file structure. Copied from com.izforge.izpack.uninstaller.SelfModifier.
      * Little addaption to this class.
-     * 
+     *
      * @return command for spawning
      */
     public static boolean deleteTree(File file)
@@ -349,7 +365,7 @@ public class LibraryRemover
 
     /**
      * Copied from com.izforge.izpack.uninstaller.SelfModifier.
-     * 
+     *
      * @return command command extended with extension of executable
      */
     private static String addExtension(String command)
@@ -361,7 +377,7 @@ public class LibraryRemover
 
     /**
      * Copied from com.izforge.izpack.uninstaller.SelfModifier. Little addaption for this class.
-     * 
+     *
      * @return command for spawning
      */
     private static String javaCommand()
@@ -373,7 +389,10 @@ public class LibraryRemover
         // Unfortunately on Windows java.home doesn't always refer
         // to the correct location, so we need to fall back to
         // assuming java is somewhere on the PATH.
-        if (!jExecutable.exists()) return executable;
+        if (!jExecutable.exists())
+        {
+            return executable;
+        }
         return jExecutable.getAbsolutePath();
     }
 
@@ -398,7 +417,8 @@ public class LibraryRemover
         }
     }
 
-    /***********************************************************************************************
+    /**
+     * ********************************************************************************************
      * --------------------------------------------------------------------- Logging
      * --------------------------------------------------------------------- Copied from
      * com.izforge.izpack.uninstaller.SelfModifier.
@@ -410,7 +430,10 @@ public class LibraryRemover
     {
         try
         {
-            if (log == null) log = new PrintStream(new FileOutputStream(logFile.toString(), true));
+            if (log == null)
+            {
+                log = new PrintStream(new FileOutputStream(logFile.toString(), true));
+            }
         }
         catch (IOException x)
         {
@@ -433,7 +456,9 @@ public class LibraryRemover
     private void log(String msg)
     {
         if (checkLog() != null)
+        {
             log.println(isoPoint.format(date) + " Phase " + phase + ": " + msg);
+        }
     }
 
     public static class StreamProxy extends Thread
@@ -462,16 +487,25 @@ public class LibraryRemover
             try
             {
                 PrintWriter pw = null;
-                if (out != null) pw = new PrintWriter(out);
+                if (out != null)
+                {
+                    pw = new PrintWriter(out);
+                }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String line;
                 while ((line = br.readLine()) != null)
                 {
-                    if (pw != null) pw.println(line);
+                    if (pw != null)
+                    {
+                        pw.println(line);
+                    }
                     // System.out.println(name + ">" + line);
                 }
-                if (pw != null) pw.flush();
+                if (pw != null)
+                {
+                    pw.flush();
+                }
             }
             catch (IOException ioe)
             {

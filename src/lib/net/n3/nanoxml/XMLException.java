@@ -33,7 +33,7 @@ import java.io.PrintWriter;
 
 /**
  * An XMLException is thrown when an exception occurred while processing the XML data.
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -41,7 +41,7 @@ public class XMLException extends Exception
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3256727298916299056L;
 
@@ -62,7 +62,7 @@ public class XMLException extends Exception
 
     /**
      * Creates a new exception.
-     * 
+     *
      * @param msg the message of the exception.
      */
     public XMLException(String msg)
@@ -72,7 +72,7 @@ public class XMLException extends Exception
 
     /**
      * Creates a new exception.
-     * 
+     *
      * @param e the encapsulated exception.
      */
     public XMLException(Exception e)
@@ -82,10 +82,10 @@ public class XMLException extends Exception
 
     /**
      * Creates a new exception.
-     * 
+     *
      * @param systemID the system ID of the XML data where the exception occurred
-     * @param lineNr the line number in the XML data where the exception occurred.
-     * @param e the encapsulated exception.
+     * @param lineNr   the line number in the XML data where the exception occurred.
+     * @param e        the encapsulated exception.
      */
     public XMLException(String systemID, int lineNr, Exception e)
     {
@@ -94,10 +94,10 @@ public class XMLException extends Exception
 
     /**
      * Creates a new exception.
-     * 
+     *
      * @param systemID the system ID of the XML data where the exception occurred
-     * @param lineNr the line number in the XML data where the exception occurred.
-     * @param msg the message of the exception.
+     * @param lineNr   the line number in the XML data where the exception occurred.
+     * @param msg      the message of the exception.
      */
     public XMLException(String systemID, int lineNr, String msg)
     {
@@ -106,20 +106,20 @@ public class XMLException extends Exception
 
     /**
      * Creates a new exception.
-     * 
-     * @param systemID the system ID from where the data came
-     * @param lineNr the line number in the XML data where the exception occurred.
-     * @param e the encapsulated exception.
-     * @param msg the message of the exception.
+     *
+     * @param systemID     the system ID from where the data came
+     * @param lineNr       the line number in the XML data where the exception occurred.
+     * @param e            the encapsulated exception.
+     * @param msg          the message of the exception.
      * @param reportParams true if the systemID, lineNr and e params need to be appended to the
-     * message
+     *                     message
      */
     public XMLException(String systemID, int lineNr, Exception e, String msg, boolean reportParams)
     {
         super(msg
                 + (reportParams ? (((systemID == null) ? "" : (", SystemID='" + systemID + "'"))
-                        + ((lineNr == -1) ? "" : (", Line=" + lineNr)) + ((e == null) ? ""
-                        : (", Exception: " + e))) : ""));
+                + ((lineNr == -1) ? "" : (", Line=" + lineNr)) + ((e == null) ? ""
+                : (", Exception: " + e))) : ""));
         this.systemID = systemID;
         this.lineNr = lineNr;
         this.encapsulatedException = e;
@@ -163,7 +163,7 @@ public class XMLException extends Exception
 
     /**
      * Dumps the exception stack to a print writer.
-     * 
+     *
      * @param writer the print writer
      */
     public void printStackTrace(PrintWriter writer)
@@ -178,7 +178,7 @@ public class XMLException extends Exception
 
     /**
      * Dumps the exception stack to an output stream.
-     * 
+     *
      * @param stream the output stream
      */
     public void printStackTrace(PrintStream stream)

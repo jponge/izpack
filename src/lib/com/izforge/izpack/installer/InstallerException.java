@@ -23,9 +23,8 @@ package com.izforge.izpack.installer;
 
 /**
  * Indicates a Failure in a custom action.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class InstallerException extends Exception
 {
@@ -33,7 +32,7 @@ public class InstallerException extends Exception
     private static final long serialVersionUID = 3978984358113982004L;
 
     /**
-     * 
+     *
      */
     public InstallerException()
     {

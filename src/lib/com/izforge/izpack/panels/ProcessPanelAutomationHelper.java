@@ -21,19 +21,18 @@
 
 package com.izforge.izpack.panels;
 
-import java.io.IOException;
-
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.PanelAutomationHelper;
 import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
+import net.n3.nanoxml.XMLElement;
+
+import java.io.IOException;
 
 /**
  * Functions to support automated usage of the CompilePanel
- * 
+ *
  * @author Jonathan Halliday
  * @author Tino Schwarze
  */
@@ -47,9 +46,9 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Save data for running automated.
-     * 
+     *
      * @param installData installation parameters
-     * @param panelRoot unused.
+     * @param panelRoot   unused.
      */
     public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
     {
@@ -59,9 +58,8 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Perform the installation actions.
-     * 
+     *
      * @param panelRoot The panel XML tree root.
-     * 
      * @return true if processes were run successfully.
      */
     public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
@@ -71,7 +69,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
             ProcessPanelWorker worker = new ProcessPanelWorker(idata, this);
 
             worker.run();
-            
+
             return worker.getResult();
         }
         catch (IOException e)
@@ -96,7 +94,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Reports progress on System.out
-     * 
+     *
      * @see com.izforge.izpack.util.AbstractUIProcessHandler#startProcessing(int)
      */
     public void startProcessing(int noOfJobs)
@@ -106,7 +104,6 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     }
 
     /**
-     * 
      * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing()
      */
     public void finishProcessing()
@@ -115,7 +112,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     }
 
     /**
-     * 
+     *
      */
     public void startProcess(String name)
     {

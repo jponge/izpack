@@ -19,13 +19,12 @@
 
 package com.izforge.izpack.gui;
 
+import javax.swing.*;
 import java.util.TreeMap;
-
-import javax.swing.ImageIcon;
 
 /**
  * The icons database class.
- * 
+ *
  * @author Julien Ponge October 27, 2002
  */
 public class IconsDatabase extends TreeMap
@@ -33,7 +32,9 @@ public class IconsDatabase extends TreeMap
 
     private static final long serialVersionUID = 3257567287145083446L;
 
-    /** The constructor. */
+    /**
+     * The constructor.
+     */
     public IconsDatabase()
     {
         super();
@@ -41,7 +42,7 @@ public class IconsDatabase extends TreeMap
 
     /**
      * Convenience method to retrieve an element.
-     * 
+     *
      * @param key The icon key.
      * @return The icon as an ImageIcon object.
      */

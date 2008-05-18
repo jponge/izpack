@@ -21,39 +21,39 @@
 
 package com.izforge.izpack.panels;
 
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
-
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.SummaryProcessor;
 
+import javax.swing.*;
+
 /**
  * Summary panel to use before InstallPanel. This panel calls the {@link SummaryProcessor} which
  * calls all declared panels for a summary and shows the given captiond and messaged in a
  * <code>JEditorPane</code>.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class SummaryPanel extends IzPanel
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3832626166401282361L;
 
-    /** The text area. */
+    /**
+     * The text area.
+     */
     private JEditorPane textArea;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public SummaryPanel(InstallerFrame parent, InstallData idata)
     {

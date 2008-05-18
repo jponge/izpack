@@ -24,11 +24,10 @@ package com.izforge.izpack.panels;
 /*---------------------------------------------------------------------------*/
 /**
  * Interface for classes that provide input field processing services.
- * 
- * @see com.izforge.izpack.panels.ProcessingClient
- * 
- * @version 0.0.1 / 10/26/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 10/26/02
+ * @see com.izforge.izpack.panels.ProcessingClient
  */
 /*---------------------------------------------------------------------------*/
 public interface Processor
@@ -37,9 +36,8 @@ public interface Processor
     /*--------------------------------------------------------------------------*/
     /**
      * Processes the contend of an input field.
-     * 
+     *
      * @param client the client object using the services of this processor.
-     * 
      * @return The result of the encryption.
      */
     /*--------------------------------------------------------------------------*/

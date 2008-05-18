@@ -30,7 +30,7 @@ package net.n3.nanoxml;
 
 /**
  * Creates an XML parser.
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -49,16 +49,17 @@ public class XMLParserFactory
 
     /**
      * Creates a default parser.
-     * 
+     *
+     * @return the non-null parser.
+     * @throws java.lang.ClassNotFoundException
+     *          if the class of the parser or validator could not be
+     *          found.
+     * @throws java.lang.InstantiationException
+     *          if the parser could not be created
+     * @throws java.lang.IllegalAccessException
+     *          if the parser could not be created
      * @see #DEFAULT_CLASS
      * @see #CLASS_KEY
-     * 
-     * @return the non-null parser.
-     * 
-     * @throws java.lang.ClassNotFoundException if the class of the parser or validator could not be
-     * found.
-     * @throws java.lang.InstantiationException if the parser could not be created
-     * @throws java.lang.IllegalAccessException if the parser could not be created
      */
     public static IXMLParser createDefaultXMLParser() throws ClassNotFoundException,
             InstantiationException, IllegalAccessException
@@ -70,17 +71,17 @@ public class XMLParserFactory
 
     /**
      * Creates a default parser.
-     * 
+     *
+     * @param builder the XML builder.
+     * @return the non-null parser.
+     * @throws java.lang.ClassNotFoundException
+     *          if the class of the parser could not be found.
+     * @throws java.lang.InstantiationException
+     *          if the parser could not be created
+     * @throws java.lang.IllegalAccessException
+     *          if the parser could not be created
      * @see #DEFAULT_CLASS
      * @see #CLASS_KEY
-     * 
-     * @param builder the XML builder.
-     * 
-     * @return the non-null parser.
-     * 
-     * @throws java.lang.ClassNotFoundException if the class of the parser could not be found.
-     * @throws java.lang.InstantiationException if the parser could not be created
-     * @throws java.lang.IllegalAccessException if the parser could not be created
      */
     public static IXMLParser createDefaultXMLParser(IXMLBuilder builder)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException
@@ -92,15 +93,16 @@ public class XMLParserFactory
 
     /**
      * Creates a parser.
-     * 
+     *
      * @param className the name of the class of the XML parser
-     * @param builder the XML builder.
-     * 
+     * @param builder   the XML builder.
      * @return the non-null parser.
-     * 
-     * @throws java.lang.ClassNotFoundException if the class of the parser could not be found.
-     * @throws java.lang.InstantiationException if the parser could not be created
-     * @throws java.lang.IllegalAccessException if the parser could not be created
+     * @throws java.lang.ClassNotFoundException
+     *          if the class of the parser could not be found.
+     * @throws java.lang.InstantiationException
+     *          if the parser could not be created
+     * @throws java.lang.IllegalAccessException
+     *          if the parser could not be created
      */
     public static IXMLParser createXMLParser(String className, IXMLBuilder builder)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException

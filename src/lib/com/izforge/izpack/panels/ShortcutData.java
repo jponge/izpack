@@ -25,9 +25,9 @@ package com.izforge.izpack.panels;
 /**
  * This class serves as a data structure in
  * <code>{@link com.izforge.izpack.panels.ShortcutPanel}</code>
- * 
- * @version 0.0.1 / 4/1/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 4/1/02
  */
 /*---------------------------------------------------------------------------*/
 public class ShortcutData implements Cloneable
@@ -70,23 +70,26 @@ public class ShortcutData implements Cloneable
     public String deskTopEntryLinux_Encoding;
 
     public String deskTopEntryLinux_X_KDE_SubstituteUID;
-    
+
     public String deskTopEntryLinux_X_KDE_UserName;
-    
-    /** Linux Common Menu Categories */
-    public String Categories ;
-    
-    /** Linux Common Menu TryExec */
+
+    /**
+     * Linux Common Menu Categories
+     */
+    public String Categories;
+
+    /**
+     * Linux Common Menu TryExec
+     */
     public String TryExec;
 
     public Boolean createForAll;
-    
-     
+
 
     /*--------------------------------------------------------------------------*/
     /**
      * Returns a clone (copy) of this object.
-     * 
+     *
      * @return a copy of this object
      * @throws OutOfMemoryError
      */
@@ -116,10 +119,10 @@ public class ShortcutData implements Cloneable
         result.deskTopEntryLinux_Encoding = cloneString(deskTopEntryLinux_Encoding);
         result.deskTopEntryLinux_X_KDE_SubstituteUID = cloneString(deskTopEntryLinux_X_KDE_SubstituteUID);
         result.deskTopEntryLinux_X_KDE_UserName = cloneString(deskTopEntryLinux_X_KDE_UserName);
-        
+
         result.Categories = cloneString(Categories);
         result.TryExec = cloneString(TryExec);
-        
+
         result.createForAll = createForAll.booleanValue();
         return (result);
     }
@@ -129,9 +132,8 @@ public class ShortcutData implements Cloneable
      * Clones a <code>String</code>, that is it makes a copy of the content, not of the
      * reference. In addition, if the original is <code>null</code> then an empty
      * <code>String</code> is returned rather than <code>null</code>.
-     * 
+     *
      * @param original the <code>String</code> to clone
-     * 
      * @return a clone of the original
      */
     /*--------------------------------------------------------------------------*/

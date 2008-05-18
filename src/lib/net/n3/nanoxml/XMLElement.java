@@ -35,11 +35,10 @@ import java.util.Vector;
 
 /**
  * XMLElement is an XML element. The standard NanoXML builder generates a tree of such elements.
- * 
- * @see net.n3.nanoxml.StdXMLBuilder
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
+ * @see net.n3.nanoxml.StdXMLBuilder
  */
 public class XMLElement implements Serializable
 {
@@ -94,7 +93,7 @@ public class XMLElement implements Serializable
 
     /**
      * Creates an empty element.
-     * 
+     *
      * @param name the name of the element.
      */
     public XMLElement(String name)
@@ -104,10 +103,10 @@ public class XMLElement implements Serializable
 
     /**
      * Creates an empty element.
-     * 
-     * @param name the name of the element.
+     *
+     * @param name     the name of the element.
      * @param systemID the system ID of the XML data where the element starts.
-     * @param lineNr the line in the XML data where the element starts.
+     * @param lineNr   the line in the XML data where the element starts.
      */
     public XMLElement(String name, String systemID, int lineNr)
     {
@@ -134,7 +133,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns the name of the element.
-     * 
+     *
      * @return the name, or null if the element only contains #PCDATA.
      */
     public String getName()
@@ -144,24 +143,30 @@ public class XMLElement implements Serializable
 
     /**
      * Sets the name.
-     * 
+     *
      * @param name the non-null name.
      */
     public void setName(String name)
     {
-        if (name == null) { throw new IllegalArgumentException("name must not be null"); }
+        if (name == null)
+        {
+            throw new IllegalArgumentException("name must not be null");
+        }
 
         this.name = name;
     }
 
     /**
      * Adds a child element.
-     * 
+     *
      * @param child the non-null child to add.
      */
     public void addChild(XMLElement child)
     {
-        if (child == null) { throw new IllegalArgumentException("child must not be null"); }
+        if (child == null)
+        {
+            throw new IllegalArgumentException("child must not be null");
+        }
 
         if ((child.getName() == null) && (!this.children.isEmpty()))
         {
@@ -179,19 +184,22 @@ public class XMLElement implements Serializable
 
     /**
      * Removes a child element.
-     * 
+     *
      * @param child the non-null child to remove.
      */
     public void removeChild(XMLElement child)
     {
-        if (child == null) { throw new IllegalArgumentException("child must not be null"); }
+        if (child == null)
+        {
+            throw new IllegalArgumentException("child must not be null");
+        }
 
         this.children.removeElement(child);
     }
 
     /**
      * Removes the child located at a certain index.
-     * 
+     *
      * @param index the index of the child, where the first child has index 0.
      */
     public void removeChildAtIndex(int index)
@@ -201,7 +209,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns an enumeration of all child elements.
-     * 
+     *
      * @return the non-null enumeration
      */
     public Enumeration enumerateChildren()
@@ -211,7 +219,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns whether the element is a leaf element.
-     * 
+     *
      * @return true if the element has no children.
      */
     public boolean isLeaf()
@@ -221,7 +229,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns whether the element has children.
-     * 
+     *
      * @return true if the element has children.
      */
     public boolean hasChildren()
@@ -231,7 +239,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns the number of children.
-     * 
+     *
      * @return the count.
      */
     public int getChildrenCount()
@@ -241,7 +249,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns a vector containing all the child elements.
-     * 
+     *
      * @return the vector.
      */
     public Vector getChildren()
@@ -251,10 +259,10 @@ public class XMLElement implements Serializable
 
     /**
      * Returns the child at a specific index.
-     * 
+     *
      * @return the non-null child
-     * 
-     * @throws java.lang.ArrayIndexOutOfBoundsException if the index is out of bounds.
+     * @throws java.lang.ArrayIndexOutOfBoundsException
+     *          if the index is out of bounds.
      */
     public XMLElement getChildAtIndex(int index) throws ArrayIndexOutOfBoundsException
     {
@@ -263,9 +271,8 @@ public class XMLElement implements Serializable
 
     /**
      * Searches a child element.
-     * 
+     *
      * @param name the name of the child to search for.
-     * 
      * @return the child element, or null if no such child was found.
      */
     public XMLElement getFirstChildNamed(String name)
@@ -277,7 +284,10 @@ public class XMLElement implements Serializable
             XMLElement child = (XMLElement) enumeration.nextElement();
             String cName = child.getName();
 
-            if (cName != null && cName.equals(name)) { return child; }
+            if (cName != null && cName.equals(name))
+            {
+                return child;
+            }
         }
 
         return null;
@@ -285,9 +295,8 @@ public class XMLElement implements Serializable
 
     /**
      * Returns a vector of all child elements named <I>name</I>.
-     * 
+     *
      * @param name the name of the children to search for.
-     * 
      * @return the non-null vector of child elements.
      */
     public Vector<XMLElement> getChildrenNamed(String name)
@@ -311,9 +320,8 @@ public class XMLElement implements Serializable
 
     /**
      * Returns the value of an attribute.
-     * 
+     *
      * @param name the non-null name of the attribute.
-     * 
      * @return the value, or null if the attribute does not exist.
      */
     public String getAttribute(String name)
@@ -323,10 +331,9 @@ public class XMLElement implements Serializable
 
     /**
      * Returns the value of an attribute.
-     * 
-     * @param name the non-null name of the attribute.
+     *
+     * @param name         the non-null name of the attribute.
      * @param defaultValue the default value of the attribute.
-     * 
      * @return the value, or defaultValue if the attribute does not exist.
      */
     public String getAttribute(String name, String defaultValue)
@@ -336,8 +343,8 @@ public class XMLElement implements Serializable
 
     /**
      * Sets an attribute.
-     * 
-     * @param name the non-null name of the attribute.
+     *
+     * @param name  the non-null name of the attribute.
      * @param value the non-null value of the attribute.
      */
     public void setAttribute(String name, String value)
@@ -347,7 +354,7 @@ public class XMLElement implements Serializable
 
     /**
      * Removes an attribute.
-     * 
+     *
      * @param name the non-null name of the attribute.
      */
     public void removeAttribute(String name)
@@ -357,7 +364,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns an enumeration of all attribute names.
-     * 
+     *
      * @return the non-null enumeration.
      */
     public Enumeration enumerateAttributeNames()
@@ -367,7 +374,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns whether an attribute exists.
-     * 
+     *
      * @return true if the attribute exists.
      */
     public boolean hasAttribute(String name)
@@ -377,7 +384,7 @@ public class XMLElement implements Serializable
 
     /**
      * Returns all attributes as a Properties object.
-     * 
+     *
      * @return the non-null set.
      */
     public Properties getAttributes()
@@ -387,9 +394,8 @@ public class XMLElement implements Serializable
 
     /**
      * Returns the system ID of the data where the element started.
-     * 
+     *
      * @return the system ID, or null if unknown.
-     * 
      * @see #getLineNr
      */
     public String getSystemID()
@@ -399,9 +405,8 @@ public class XMLElement implements Serializable
 
     /**
      * Returns the line number in the data where the element started.
-     * 
+     *
      * @return the line number, or NO_LINE if unknown.
-     * 
      * @see #NO_LINE
      * @see #getSystemID
      */
@@ -414,7 +419,7 @@ public class XMLElement implements Serializable
      * Return the #PCDATA content of the element. If the element has a combination of #PCDATA
      * content and child elements, the #PCDATA sections can be retrieved as unnamed child objects.
      * In this case, this method returns null.
-     * 
+     *
      * @return the content.
      */
     public String getContent()
@@ -425,7 +430,7 @@ public class XMLElement implements Serializable
     /**
      * Sets the #PCDATA content. It is an error to call this method with a non-null value if there
      * are child objects.
-     * 
+     *
      * @param content the (possibly null) content.
      */
     public void setContent(String content)

@@ -21,36 +21,43 @@
 
 package com.izforge.izpack.util;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Processor;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 /**
  * @author thorsten-kamann
  */
-public class UnixGroupProcessor implements Processor {
+public class UnixGroupProcessor implements Processor
+{
 
-	public String process (ProcessingClient client){
-		String retValue = "";
-		String filepath = "/etc/group";
-		BufferedReader reader = null;
-		String line = "";
-				
-		try{
-			reader = new BufferedReader(new FileReader(filepath));
-			while ((line = reader.readLine()) != null){
-				retValue += line.substring(0, line.indexOf(":"))+":";
-			}
-			if (retValue.endsWith(":")){
-				retValue = retValue.substring(0, retValue.length()-1);
-			}			
-		}catch (Exception ex){
-			retValue = "";
-		}
-		
-		return retValue;
-	}
+    public String process(ProcessingClient client)
+    {
+        String retValue = "";
+        String filepath = "/etc/group";
+        BufferedReader reader = null;
+        String line = "";
+
+        try
+        {
+            reader = new BufferedReader(new FileReader(filepath));
+            while ((line = reader.readLine()) != null)
+            {
+                retValue += line.substring(0, line.indexOf(":")) + ":";
+            }
+            if (retValue.endsWith(":"))
+            {
+                retValue = retValue.substring(0, retValue.length() - 1);
+            }
+        }
+        catch (Exception ex)
+        {
+            retValue = "";
+        }
+
+        return retValue;
+    }
 
 }

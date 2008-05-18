@@ -22,16 +22,15 @@
 
 package com.izforge.izpack.util;
 
-import java.util.*;
-import java.text.MessageFormat;
+import com.izforge.izpack.installer.AutomatedInstallData;
+
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
-import java.text.SimpleDateFormat;
 import java.text.DateFormatSymbols;
-import javax.swing.JOptionPane;
-import javax.swing.JFileChooser;
-
-import com.izforge.izpack.installer.AutomatedInstallData;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -39,7 +38,7 @@ import com.izforge.izpack.installer.AutomatedInstallData;
  * therefore about the possibility that the installation may not have succeeded at all or may have
  * succeeded only partially. Because the logger represents a single resource it is implemented as
  * singleton.
- *
+ * <p/>
  * <h1>Usage</h1>
  * To add a message to the install log call one of the <code>addMessage()</code> methods, using
  * the appropriate message index. If the message contains placeholders for variables, provide a
@@ -50,7 +49,7 @@ import com.izforge.izpack.installer.AutomatedInstallData;
  * cause the user to be alerted about the fact that the install might not have succeeded completely.
  * <code>addError()</code> goes one step further, by alerting the user that the installation has
  * failed.
- *
+ * <p/>
  * <h1>Adding Messages</h1>
  * Messages are divided into three categories:
  * <ol>
@@ -64,7 +63,7 @@ import com.izforge.izpack.installer.AutomatedInstallData;
  * in proper order, so that other programmers have no difficulty to form a correct call for the
  * message. The constants are defined in the individual interfaces <code>LogMessage</code>,
  * <code>LogWarning</code> and <code>LogError</code>.
- * <p>
+ * <p/>
  * To derive a correct integer value for the message index add a new value to either
  * <code>MESSAGE_BASE</code>, <code>WARNING_BASE</code> or <code>ERROR_BASE</code>,
  * depending on the message category. Next, increment the MAX_ constant for the message category, to
@@ -74,41 +73,41 @@ import com.izforge.izpack.installer.AutomatedInstallData;
  * appended by the message index (without the base, since this implementation will automatically
  * subtract the base). Variable place holders must conform to the specification for
  * <code>java.text.MessageFormat</code>.
- *
+ * <p/>
  * <h1>Debug Messages</h1>
  * The output of debug messages is controlled through system properties. These properties may be set
  * using the -D command line option. Please note, that the -D option is a command line switch for
  * the VM, not for IzPack. In order for this to work, these options must be listed on the command
  * line before IzPack!
- *
+ * <p/>
  * <h2>Turning Debug On</h2>
  * In order to receive debug output, it is necessary to turn this feature on explicitely. This is
  * done with the command line otprion:
- *
+ * <p/>
  * <pre>
  * -DIzPack.debug=on
  * </pre>
- *
+ * <p/>
  * <h2>Selecting Debug Channels</h2>
  * Setting the list of specific debug channels to trace is accomplished with the following command
  * line option:
- *
+ * <p/>
  * <pre>
  * -DIzPack.debug.channel=&lt;channelA,channelB,...&gt;
  * </pre>
- *
+ * <p/>
  * The parameter is a comma separated list of one or more channel identifiers.
- *
+ * <p/>
  * <h2>Dumping a List of Debug Channels</h2>
- *
+ * <p/>
  * <pre>
  * -DIzPack.debug.dumpList=on
  * </pre>
- *
+ * <p/>
  * To turn debug messages on
  *
- * @version 0.0.1 / 11/20/06
  * @author Elmar Grom
+ * @version 0.0.1 / 11/20/06
  */
 /*---------------------------------------------------------------------------*/
 
@@ -118,25 +117,39 @@ public class Log implements LogError, LogWarning, LogMessage
     // --------------------------------------------------------------------------
     // Constant Definitions
     // --------------------------------------------------------------------------
-    /** The prefix for all text resources related to this class */
+    /**
+     * The prefix for all text resources related to this class
+     */
     private static final String RESOURCE_PREFIX = "log.";
 
-    /** The formatting used for the report time stamp */
+    /**
+     * The formatting used for the report time stamp
+     */
     private static final String DATE_FORMAT = RESOURCE_PREFIX + "timeStamp";
 
-    /** The prefix for building message keys */
+    /**
+     * The prefix for building message keys
+     */
     private static final String MESSAGE_PREFIX = RESOURCE_PREFIX + "message_";
 
-    /** The prefix for building warning message keys */
+    /**
+     * The prefix for building warning message keys
+     */
     private static final String WARNING_PREFIX = RESOURCE_PREFIX + "warning_";
 
-    /** The prefix for building error message keys */
+    /**
+     * The prefix for building error message keys
+     */
     private static final String ERROR_PREFIX = RESOURCE_PREFIX + "error_";
 
-    /** System property to turn debug output on */
+    /**
+     * System property to turn debug output on
+     */
     private static final String DEBUG_SWITCH = "IzPack.debug";
 
-    /** System property to set the debug channels to trace */
+    /**
+     * System property to set the debug channels to trace
+     */
     private static final String CHANNEL_SPEC = "IzPack.debug.channel";
 
     /**
@@ -147,25 +160,39 @@ public class Log implements LogError, LogWarning, LogMessage
     // --------------------------------------------------------------------------
     // Variable Declarations
     // --------------------------------------------------------------------------
-    /** The only instance of <code>Messenger</code> */
+    /**
+     * The only instance of <code>Messenger</code>
+     */
     private static Log me = null;
 
-    /** The system dependent newline character sequence */
+    /**
+     * The system dependent newline character sequence
+     */
     private String newline = System.getProperty("line.separator");
 
-    /** Access to the installation information and the localized text resources */
+    /**
+     * Access to the installation information and the localized text resources
+     */
     private AutomatedInstallData installData = null;
 
-    /** The collection of installation messages */
+    /**
+     * The collection of installation messages
+     */
     private ArrayList<Record> messages = new ArrayList<Record>();
 
-    /** The collection of warning messages */
+    /**
+     * The collection of warning messages
+     */
     private ArrayList<Record> warnings = new ArrayList<Record>();
 
-    /** The collection of error messages */
+    /**
+     * The collection of error messages
+     */
     private ArrayList<Record> errors = new ArrayList<Record>();
 
-    /** The collection of debug messages */
+    /**
+     * The collection of debug messages
+     */
     private ArrayList<Record> debug = new ArrayList<Record>();
 
     /**
@@ -180,7 +207,9 @@ public class Log implements LogError, LogWarning, LogMessage
      */
     private Hashtable<String, String> recordedChannels = null;
 
-    /** This flag signals if debug messages should be recorded */
+    /**
+     * This flag signals if debug messages should be recorded
+     */
     private boolean debugActive = false;
 
     /**
@@ -239,6 +268,7 @@ public class Log implements LogError, LogWarning, LogMessage
     /*--------------------------------------------------------------------------*/
     /**
      * Returns the only instance of <code>Log</code>
+     *
      * @return the only instance of <code>Log</code>
      */
     /*--------------------------------------------------------------------------*/
@@ -257,8 +287,8 @@ public class Log implements LogError, LogWarning, LogMessage
      * This method records general installation message
      *
      * @param message the numeric identifier of the message to add, as defined in
-     * {@link com.izforge.izpack.util.LogMessage <code>LogMessage</code>}
-     * @param detail a string array of variable fields that should be inserted into the message text
+     *                {@link com.izforge.izpack.util.LogMessage <code>LogMessage</code>}
+     * @param detail  a string array of variable fields that should be inserted into the message text
      */
     /*--------------------------------------------------------------------------*/
     public void addMessage(int message, String[] detail)
@@ -276,9 +306,8 @@ public class Log implements LogError, LogWarning, LogMessage
      * use the parallel version based on the message index.
      *
      * @param template the basic template of the message
-     * @param detail a string array of variable fields that should be inserted into the message
-     * text. Each array element will be inserted into the text template, replacing a marker.
-     *
+     * @param detail   a string array of variable fields that should be inserted into the message
+     *                 text. Each array element will be inserted into the text template, replacing a marker.
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
@@ -291,13 +320,12 @@ public class Log implements LogError, LogWarning, LogMessage
     /**
      * This method records a warning message to the list of messages
      *
-     * @param message the numeric identifier of the message to add, as defined in
-     * {@link com.izforge.izpack.util.LogWarning <code>LogWarning</code>}
-     * @param detail a string array of variable fields that should be inserted into the message
-     * text. Each array element will be inserted into the text template, replacing a marker.
+     * @param message   the numeric identifier of the message to add, as defined in
+     *                  {@link com.izforge.izpack.util.LogWarning <code>LogWarning</code>}
+     * @param detail    a string array of variable fields that should be inserted into the message
+     *                  text. Each array element will be inserted into the text template, replacing a marker.
      * @param exception the exception associated with the event or <code>null</code> if there was
-     * none.
-     *
+     *                  none.
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
@@ -315,12 +343,11 @@ public class Log implements LogError, LogWarning, LogMessage
      * insert message text that is not defined in IzPack. IzPack internal code should use the
      * parallel version based on the message index.
      *
-     * @param template the basic template for the message
-     * @param detail a string array of variable fields that should be inserted into the message
-     * text. Each array element will be inserted into the text template, replacing a marker.
+     * @param template  the basic template for the message
+     * @param detail    a string array of variable fields that should be inserted into the message
+     *                  text. Each array element will be inserted into the text template, replacing a marker.
      * @param exception the exception associated with the event or <code>null</code> if there was
-     * none.
-     *
+     *                  none.
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
@@ -333,13 +360,12 @@ public class Log implements LogError, LogWarning, LogMessage
     /**
      * This method records an error message to the list of messages
      *
-     * @param message the numeric identifier of the message to add, as defined in
-     * {@link com.izforge.izpack.util.LogError <code>LogError</code>}
-     * @param detail a string array of variable fields that should be inserted into the message
-     * text. Each array element will be inserted into the text template, replacing a marker.
+     * @param message   the numeric identifier of the message to add, as defined in
+     *                  {@link com.izforge.izpack.util.LogError <code>LogError</code>}
+     * @param detail    a string array of variable fields that should be inserted into the message
+     *                  text. Each array element will be inserted into the text template, replacing a marker.
      * @param exception the exception associated with the event or <code>null</code> if there was
-     * none.
-     *
+     *                  none.
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
@@ -358,12 +384,11 @@ public class Log implements LogError, LogWarning, LogMessage
      * insert message text that is not defined in IzPack. IzPack internal code should use the
      * parallel version based on the message index.
      *
-     * @param template the basic template for the message
-     * @param detail a string array of variable fields that should be inserted into the message
-     * text. Each array element will be inserted into the text template, replacing a marker.
+     * @param template  the basic template for the message
+     * @param detail    a string array of variable fields that should be inserted into the message
+     *                  text. Each array element will be inserted into the text template, replacing a marker.
      * @param exception the exception associated with the event or <code>null</code> if there was
-     * none.
-     *
+     *                  none.
      * @see java.text.MessageFormat#format(java.lang.String, java.lang.Object[])
      */
     /*--------------------------------------------------------------------------*/
@@ -379,27 +404,27 @@ public class Log implements LogError, LogWarning, LogMessage
      * notification. If the user should be notified about a specific situation, please also call the
      * appropriate (message, warning, error) method. Debug messages are not localized, please use
      * English only.
-     * <p>
+     * <p/>
      * In order to prevent flooding developers with messages that are generally of no interest, each
      * message may be associated with a specific channel. A message is associated with a channel
      * simply by providing a channel identifier as call parameter. There is no need for registering
      * channels beforehand. If <code>null</code> or an empty string is used as channel identifier
      * the message will be output, regardless of the channel filter applied. Please use this option
      * sparingly, just for really impotant messages of general interest.
-     * <p>
+     * <p/>
      * To receive output for select channels, start IzPack with the command line option
      * -DIzPack.debug.channel=, followed by a comma separated list of channel identifiers.
      *
-     * @param template the basic template for the message
-     * @param detail a string array of variable fields that should be inserted into the message
-     * text. Each array element will be inserted into the text template, replacing a marker.
-     * @param channel the debug channel the message is associated with.
+     * @param template  the basic template for the message
+     * @param detail    a string array of variable fields that should be inserted into the message
+     *                  text. Each array element will be inserted into the text template, replacing a marker.
+     * @param channel   the debug channel the message is associated with.
      * @param exception the exception associated with the event or <code>null</code> if there was
-     * none.
+     *                  none.
      */
     /*--------------------------------------------------------------------------*/
     public void addDebugMessage(String template, String[] detail, String channel,
-            Throwable exception)
+                                Throwable exception)
     {
         if (debugActive)
         {
@@ -543,7 +568,7 @@ public class Log implements LogError, LogWarning, LogMessage
             try
             {
                 JOptionPane.showMessageDialog(null, installData.langpack.getString(
-                        (RESOURCE_PREFIX + "reportWriteError"), new String[] { file}),
+                        (RESOURCE_PREFIX + "reportWriteError"), new String[]{file}),
                         installData.langpack.getString(RESOURCE_PREFIX + "reportWriteErrorTitle"),
                         JOptionPane.ERROR_MESSAGE);
             }
@@ -602,21 +627,21 @@ public class Log implements LogError, LogWarning, LogMessage
         // ----------------------------------------------------
         report.append(newline);
         report.append(installData.langpack.getString(RESOURCE_PREFIX + "messageCount",
-                new String[] { Integer.toString(messages.size()),
+                new String[]{Integer.toString(messages.size()),
                         Integer.toString(warnings.size()), Integer.toString(errors.size())}));
         report.append(newline);
         report.append(newline);
 
-        report.append(installData.langpack.getString(RESOURCE_PREFIX + "application", new String[] {
+        report.append(installData.langpack.getString(RESOURCE_PREFIX + "application", new String[]{
                 installData.info.getAppName(), installData.info.getAppVersion()}));
         report.append(newline);
         report.append(installData.langpack.getString(RESOURCE_PREFIX + "timePrefix",
-                new String[] { new SimpleDateFormat(dateFormat, new DateFormatSymbols())
+                new String[]{new SimpleDateFormat(dateFormat, new DateFormatSymbols())
                         .format(new Date())}));
 
         report.append(newline);
         report.append(installData.langpack.getString(RESOURCE_PREFIX + "pathPrefix",
-                new String[] { installData.getInstallPath()}));
+                new String[]{installData.getInstallPath()}));
         report.append(newline);
 
         // ----------------------------------------------------
@@ -712,7 +737,7 @@ public class Log implements LogError, LogWarning, LogMessage
         // append the message text
         // ----------------------------------------------------
         message.append(installData.langpack.getString(RESOURCE_PREFIX + "messagePrefix",
-                new String[] { Integer.toString(index)}));
+                new String[]{Integer.toString(index)}));
 
         if (record.message >= 0)
         {
@@ -746,7 +771,7 @@ public class Log implements LogError, LogWarning, LogMessage
         // append the message text
         // ----------------------------------------------------
         message.append(installData.langpack.getString(RESOURCE_PREFIX + "warningPrefix",
-                new String[] { Integer.toString(index)}));
+                new String[]{Integer.toString(index)}));
 
         if (record.message >= 0)
         {
@@ -767,7 +792,7 @@ public class Log implements LogError, LogWarning, LogMessage
         {
             message.append(newline);
             message.append(installData.langpack.getString(RESOURCE_PREFIX + "exceptionPrefix",
-                    new String[] { record.exception.toString()}));
+                    new String[]{record.exception.toString()}));
         }
 
         message.append(newline);
@@ -790,7 +815,7 @@ public class Log implements LogError, LogWarning, LogMessage
         // append the message text
         // ----------------------------------------------------
         message.append(installData.langpack.getString(RESOURCE_PREFIX + "errorPrefix",
-                new String[] { Integer.toString(index)}));
+                new String[]{Integer.toString(index)}));
 
         if (record.message >= 0)
         {
@@ -809,7 +834,7 @@ public class Log implements LogError, LogWarning, LogMessage
         {
             message.append(newline);
             message.append(installData.langpack.getString(RESOURCE_PREFIX + "exceptionPrefix",
-                    new String[] { record.exception.toString()}));
+                    new String[]{record.exception.toString()}));
         }
 
         message.append(newline);
@@ -862,7 +887,7 @@ public class Log implements LogError, LogWarning, LogMessage
         {
             message.append(newline);
             message.append(installData.langpack.getString(RESOURCE_PREFIX + "exceptionPrefix",
-                    new String[] { record.exception.toString()}));
+                    new String[]{record.exception.toString()}));
         }
 
         message.append(newline);

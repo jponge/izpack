@@ -21,18 +21,17 @@
 
 package com.izforge.izpack.panels;
 
-import java.util.Iterator;
-import java.util.Vector;
-
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
+import net.n3.nanoxml.XMLElement;
+
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Functions to support automated usage of the PacksPanel
- * 
+ *
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
@@ -41,8 +40,8 @@ public class PacksPanelAutomationHelper implements PanelAutomation
 
     /**
      * Asks to make the XML panel data.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata     The installation data.
      * @param panelRoot The XML tree to write the data in.
      */
     public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
@@ -63,10 +62,9 @@ public class PacksPanelAutomationHelper implements PanelAutomation
 
     /**
      * Asks to run in the automated mode.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata     The installation data.
      * @param panelRoot The root of the panel data.
-     * 
      * @return true if all packs were found and selected, false if something was wrong.
      */
     public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
@@ -75,7 +73,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         Vector<XMLElement> pm = panelRoot.getChildrenNamed("pack");
 
         boolean result = true;
-        
+
         // We figure out the selected ones
         int size = pm.size();
         idata.selectedPacks.clear();
@@ -98,10 +96,11 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                         int index = Integer.parseInt(index_str);
                         if ((index >= 0) && (index < idata.availablePacks.size()))
                         {
-                          if (el.getAttribute("selected").equalsIgnoreCase("true") ||
-                              el.getAttribute("selected").equalsIgnoreCase("on")) {
-                            idata.selectedPacks.add(idata.availablePacks.get(index));
-                          }
+                            if (el.getAttribute("selected").equalsIgnoreCase("true") ||
+                                    el.getAttribute("selected").equalsIgnoreCase("on"))
+                            {
+                                idata.selectedPacks.add(idata.availablePacks.get(index));
+                            }
                         }
                         else
                         {

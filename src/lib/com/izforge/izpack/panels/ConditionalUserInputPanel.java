@@ -34,11 +34,10 @@ import com.izforge.izpack.installer.InstallerFrame;
  * "!=" are allowed
  * <li><i>compareToValue."panel-order"</i>: The value to compare with<br/> If the compare fails,
  * the panel will be skipped.
- * 
- * @see UserInputPanel
- * 
+ *
  * @author $author$
  * @version $Revision$
+ * @see UserInputPanel
  */
 public class ConditionalUserInputPanel extends UserInputPanel
 {
@@ -47,7 +46,7 @@ public class ConditionalUserInputPanel extends UserInputPanel
 
     /**
      * Creates a new ConditionalUserInputPanel object.
-     * 
+     *
      * @param parent
      * @param installData
      */

@@ -27,7 +27,7 @@ import com.izforge.izpack.installer.AutomatedInstallData;
 /**
  * This class is the system independent base class for helpers which are system dependent in its
  * subclasses.
- * 
+ *
  * @author Klaus Bartz
  */
 /*---------------------------------------------------------------------------*/
@@ -52,7 +52,7 @@ public class OSClassHelper
      * Creates an object which contains as worker an object of the given class name if possible. If
      * not possible, only the stack trace will be printed, no exception will be raised. To determine
      * the state, there is the method good.
-     * 
+     *
      * @param className full qualified class name of the needed worker
      */
     public OSClassHelper(String className)
@@ -88,6 +88,7 @@ public class OSClassHelper
 
     /**
      * Return whether the helper can do the work or not.
+     *
      * @return whether the helper can do the work or not
      */
     public boolean good()
@@ -97,6 +98,7 @@ public class OSClassHelper
 
     /**
      * Verifies the helper.
+     *
      * @param idata current install data
      * @return whether the helper is good or not
      * @throws Exception

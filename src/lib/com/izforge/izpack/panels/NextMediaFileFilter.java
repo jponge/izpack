@@ -17,40 +17,43 @@
  */
 package com.izforge.izpack.panels;
 
-import java.io.File;
+import com.izforge.izpack.LocaleDatabase;
 
 import javax.swing.filechooser.FileFilter;
-
-import com.izforge.izpack.LocaleDatabase;
+import java.io.File;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
- *
  */
-public class NextMediaFileFilter extends FileFilter {
-  protected String volumename;
-  protected LocaleDatabase langpack;
-  
-  public NextMediaFileFilter(String volumename, LocaleDatabase langpack) {
-    this.volumename = volumename;
-    this.langpack = langpack;
-  }
-  
-  /* (non-Javadoc)
-   * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
-   */
-  public boolean accept(File f) {
-    if (f.isDirectory()) {
-      return true;
-    }
-    String filepath = f.getAbsolutePath();
-      return filepath.endsWith(this.volumename);
-  }
+public class NextMediaFileFilter extends FileFilter
+{
+    protected String volumename;
+    protected LocaleDatabase langpack;
 
-  /* (non-Javadoc)
-   * @see javax.swing.filechooser.FileFilter#getDescription()
-   */
-  public String getDescription() {
-    return this.langpack.getString("nextmedia.filedesc");
-  }
+    public NextMediaFileFilter(String volumename, LocaleDatabase langpack)
+    {
+        this.volumename = volumename;
+        this.langpack = langpack;
+    }
+
+    /* (non-Javadoc)
+    * @see javax.swing.filechooser.FileFilter#accept(java.io.File)
+    */
+    public boolean accept(File f)
+    {
+        if (f.isDirectory())
+        {
+            return true;
+        }
+        String filepath = f.getAbsolutePath();
+        return filepath.endsWith(this.volumename);
+    }
+
+    /* (non-Javadoc)
+    * @see javax.swing.filechooser.FileFilter#getDescription()
+    */
+    public String getDescription()
+    {
+        return this.langpack.getString("nextmedia.filedesc");
+    }
 }

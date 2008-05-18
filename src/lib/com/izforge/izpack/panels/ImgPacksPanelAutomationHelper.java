@@ -24,7 +24,7 @@ package com.izforge.izpack.panels;
 
 /**
  * Functions to support automated usage of the ImgPacksPanel
- * 
+ *
  * @author Jonathan Halliday
  * @author Julien Ponge
  */

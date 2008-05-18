@@ -22,93 +22,120 @@
 
 package com.izforge.izpack.compiler;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.FilterOutputStream;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Panel;
-import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.compressor.PackCompressor;
 import com.izforge.izpack.compressor.PackCompressorFactory;
+import com.izforge.izpack.rules.Condition;
+
+import java.io.File;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
 
 
 /**
  * The packager base class. The packager interface <code>IPackager</code> is used by the compiler to put files into an installer, and
  * create the actual installer files. The packager implementation depends on different requirements (e.g. normal packager versus multi volume packager).
- * This class implements the common used method which can also be overload as needed. 
- * 
- * @author Klaus Bartz
+ * This class implements the common used method which can also be overload as needed.
  *
+ * @author Klaus Bartz
  */
 public abstract class PackagerBase implements IPackager
 {
 
 
-    /** Path to the skeleton installer. */
+    /**
+     * Path to the skeleton installer.
+     */
     public static final String SKELETON_SUBPATH = "lib/installer.jar";
 
-    /** Base file name of all jar files. This has no ".jar" suffix. */
+    /**
+     * Base file name of all jar files. This has no ".jar" suffix.
+     */
     protected File baseFile = null;
 
-    /** Basic installer info. */
+    /**
+     * Basic installer info.
+     */
     protected Info info = null;
 
-    /** Gui preferences of instatller. */
+    /**
+     * Gui preferences of instatller.
+     */
     protected GUIPrefs guiPrefs = null;
 
-    /** The variables used in the project */
+    /**
+     * The variables used in the project
+     */
     protected Properties variables = new Properties();
 
-    /** The ordered panels informations. */
+    /**
+     * The ordered panels informations.
+     */
     protected List<Panel> panelList = new ArrayList<Panel>();
 
-    /** The ordered packs informations (as PackInfo objects). */
+    /**
+     * The ordered packs informations (as PackInfo objects).
+     */
     protected List<PackInfo> packsList = new ArrayList<PackInfo>();
 
-    /** The ordered langpack locale names. */
+    /**
+     * The ordered langpack locale names.
+     */
     protected List<String> langpackNameList = new ArrayList<String>();
 
-    /** The ordered custom actions informations. */
+    /**
+     * The ordered custom actions informations.
+     */
     protected List<CustomData> customDataList = new ArrayList<CustomData>();
 
-    /** The langpack URLs keyed by locale name (e.g. de_CH). */
+    /**
+     * The langpack URLs keyed by locale name (e.g. de_CH).
+     */
     protected Map<String, URL> installerResourceURLMap = new HashMap<String, URL>();
-    
-    /** the conditions */
+
+    /**
+     * the conditions
+     */
     protected Map<String, Condition> rules = new HashMap<String, Condition>();
-    
-    /** dynamic variables */
+
+    /**
+     * dynamic variables
+     */
     protected Map<String, List<DynamicVariable>> dynamicvariables = new HashMap<String, List<DynamicVariable>>();
 
-    /** Jar file URLs who's contents will be copied into the installer. */
+    /**
+     * Jar file URLs who's contents will be copied into the installer.
+     */
     protected Set<Object[]> includedJarURLs = new HashSet<Object[]>();
 
-    /** Each pack is created in a separte jar if webDirURL is non-null. */
+    /**
+     * Each pack is created in a separte jar if webDirURL is non-null.
+     */
     protected boolean packJarsSeparate = false;
 
-    /** The listeners. */
+    /**
+     * The listeners.
+     */
     protected PackagerListener listener;
 
-    /** The compression format to be used for pack compression */
+    /**
+     * The compression format to be used for pack compression
+     */
     protected PackCompressor compressor;
-    
-    /** Files which are always written into the container file */
+
+    /**
+     * Files which are always written into the container file
+     */
     protected HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles = new HashMap<FilterOutputStream, HashSet<String>>();
 
     /**
      * Dispatches a message to the listeners.
-     * 
+     *
      * @param job The job description.
      */
     protected void sendMsg(String job)
@@ -118,25 +145,38 @@ public abstract class PackagerBase implements IPackager
 
     /**
      * Dispatches a message to the listeners at specified priority.
-     * 
-     * @param job The job description.
+     *
+     * @param job      The job description.
      * @param priority The message priority.
      */
     protected void sendMsg(String job, int priority)
     {
-        if (listener != null) listener.packagerMsg(job, priority);
+        if (listener != null)
+        {
+            listener.packagerMsg(job, priority);
+        }
     }
 
-    /** Dispatches a start event to the listeners. */
+    /**
+     * Dispatches a start event to the listeners.
+     */
     protected void sendStart()
     {
-        if (listener != null) listener.packagerStart();
+        if (listener != null)
+        {
+            listener.packagerStart();
+        }
     }
 
-    /** Dispatches a stop event to the listeners. */
+    /**
+     * Dispatches a stop event to the listeners.
+     */
     protected void sendStop()
     {
-        if (listener != null) listener.packagerStop();
+        if (listener != null)
+        {
+            listener.packagerStop();
+        }
     }
 
     /* (non-Javadoc)
@@ -162,7 +202,7 @@ public abstract class PackagerBase implements IPackager
      */
     public void addJarContent(URL jarURL, List<String> files)
     {
-        Object [] cont = { jarURL, files };
+        Object[] cont = {jarURL, files};
         sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
         includedJarURLs.add(cont);
     }
@@ -264,8 +304,8 @@ public abstract class PackagerBase implements IPackager
      */
     public void initPackCompressor(String compr_format, int compr_level) throws CompilerException
     {
-        compressor = PackCompressorFactory.get( compr_format);
-        compressor.setCompressionLevel(compr_level);        
+        compressor = PackCompressorFactory.get(compr_format);
+        compressor.setCompressionLevel(compr_level);
     }
 
     /* (non-Javadoc)
@@ -284,8 +324,8 @@ public abstract class PackagerBase implements IPackager
     {
         sendMsg("Setting the installer information", PackagerListener.MSG_VERBOSE);
         this.info = info;
-        if( ! getCompressor().useStandardCompression() && 
-                getCompressor().getDecoderMapperName() != null  )
+        if (!getCompressor().useStandardCompression() &&
+                getCompressor().getDecoderMapperName() != null)
         {
             this.info.setPackDecoderClassName(getCompressor().getDecoderMapperName());
         }
@@ -299,7 +339,7 @@ public abstract class PackagerBase implements IPackager
         this.listener = listener;
     }
 
-    
+
     /**
      * @return the rules
      */
@@ -308,7 +348,7 @@ public abstract class PackagerBase implements IPackager
         return this.rules;
     }
 
-    
+
     /**
      * @param rules the rules to set
      */
@@ -317,8 +357,9 @@ public abstract class PackagerBase implements IPackager
         this.rules = rules;
     }
 
-    
-    protected void writeInstaller() throws Exception{
+
+    protected void writeInstaller() throws Exception
+    {
         // write the primary jar. MUST be first so manifest is not overwritten
         // by
         // an included jar
@@ -330,22 +371,26 @@ public abstract class PackagerBase implements IPackager
         writeInstallerObject("panelsOrder", panelList);
         writeInstallerObject("customData", customDataList);
         writeInstallerObject("langpacks.info", langpackNameList);
-        writeInstallerObject("rules", rules);        
-        writeInstallerObject("dynvariables",dynamicvariables);
+        writeInstallerObject("rules", rules);
+        writeInstallerObject("dynvariables", dynamicvariables);
         writeInstallerResources();
         writeIncludedJars();
 
         // Pack File Data may be written to separate jars
         writePacks();
     }
-    
+
     protected abstract void writeInstallerObject(String entryName, Object object) throws IOException;
-    protected abstract void writeSkeletonInstaller() throws IOException;    
+
+    protected abstract void writeSkeletonInstaller() throws IOException;
+
     protected abstract void writeInstallerResources() throws IOException;
+
     protected abstract void writeIncludedJars() throws IOException;
+
     protected abstract void writePacks() throws Exception;
 
-    
+
     /**
      * @return the dynamicvariables
      */
@@ -354,7 +399,7 @@ public abstract class PackagerBase implements IPackager
         return this.dynamicvariables;
     }
 
-    
+
     /**
      * @param dynamicvariables the dynamicvariables to set
      */

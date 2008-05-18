@@ -33,49 +33,74 @@ public class Info implements Serializable
 
     static final long serialVersionUID = 13288410782044775L;
 
-    /** The application name and version */
+    /**
+     * The application name and version
+     */
     private String appName = "";
     private String appVersion = "";
 
-    /** The installation subpath */
+    /**
+     * The installation subpath
+     */
     private String installationSubPath = null;
 
-    /** The application authors */
+    /**
+     * The application authors
+     */
     private ArrayList<Author> authors = new ArrayList<Author>();
 
-    /** The application URL */
+    /**
+     * The application URL
+     */
     private String appURL = null;
 
-    /** The required Java version (min) */
+    /**
+     * The required Java version (min)
+     */
     private String javaVersion = "1.4";
 
-    /** Is a JDK required? */
+    /**
+     * Is a JDK required?
+     */
     private boolean jdkRequired = false;
 
-    /** The name of the installer file (name without jar suffix) */
+    /**
+     * The name of the installer file (name without jar suffix)
+     */
     private String installerBase = null;
 
-    /** The application Web Directory URL */
+    /**
+     * The application Web Directory URL
+     */
     private String webDirURL = null;
 
-    /** The uninstaller name */
+    /**
+     * The uninstaller name
+     */
     private String uninstallerName = "uninstaller.jar";
-    /** condition for writing the uninstaller */
+    /**
+     * condition for writing the uninstaller
+     */
     private String uninstallerCondition = null;
 
-    /** The path of the summary log file */
+    /**
+     * The path of the summary log file
+     */
     private String summaryLogFilePath = "$INSTALL_PATH/Uninstaller/InstallSummary.htm";
 
-    /** The full qualified name of the class which should be
-     *  used for decoding the packs.
+    /**
+     * The full qualified name of the class which should be
+     * used for decoding the packs.
      */
     private String packDecoderClassName = null;
 
     private String unpackerClassName = null;
-    
+
     private boolean writeInstallationInformation = true;
 
-    /** The constructor, deliberatly void. */
+    /**
+     * The constructor, deliberatly void.
+     */
     public Info()
     {
     }
@@ -214,7 +239,7 @@ public class Info implements Serializable
      * Gets the webDir URL if it has been specified
      *
      * @return The webDir URL from which the installer is retrieved, or <tt>null</tt> if non has
-     * been set.
+     *         been set.
      */
     public String getWebDirURL()
     {
@@ -261,10 +286,14 @@ public class Info implements Serializable
 
         static final long serialVersionUID = -3090178155004960243L;
 
-        /** The author name */
+        /**
+         * The author name
+         */
         private String name;
 
-        /** The author email */
+        /**
+         * The author email
+         */
         private String email;
 
         /**
@@ -290,7 +319,7 @@ public class Info implements Serializable
         /**
          * The constructor.
          *
-         * @param name The author name.
+         * @param name  The author name.
          * @param email The author email.
          */
         public Author(String name, String email)
@@ -350,18 +379,22 @@ public class Info implements Serializable
     {
         this.summaryLogFilePath = summaryLogFilePath;
     }
+
     /**
      * Returns the full qualified class name of the class which
      * should be used for decoding the packs.
+     *
      * @return Returns the packDecoderClassName.
      */
     public String getPackDecoderClassName()
     {
         return packDecoderClassName;
     }
+
     /**
      * Sets the full qualified class name of the class which
      * should be used for decoding the packs.
+     *
      * @param packDecoderClassName The packDecoderClassName to set.
      */
     public void setPackDecoderClassName(String packDecoderClassName)
@@ -381,25 +414,25 @@ public class Info implements Serializable
         this.unpackerClassName = unpackerClassName;
     }
 
-    
+
     public boolean isWriteInstallationInformation()
     {
         return writeInstallationInformation;
     }
 
-    
+
     public void setWriteInstallationInformation(boolean writeInstallationInformation)
     {
         this.writeInstallationInformation = writeInstallationInformation;
     }
 
-    
+
     public String getUninstallerCondition()
     {
         return uninstallerCondition;
     }
 
-    
+
     public void setUninstallerCondition(String uninstallerCondition)
     {
         this.uninstallerCondition = uninstallerCondition;

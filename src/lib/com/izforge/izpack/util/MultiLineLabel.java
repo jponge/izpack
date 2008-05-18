@@ -21,14 +21,9 @@
 
 package com.izforge.izpack.util;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Vector;
-
-import javax.swing.JComponent;
 
 /*---------------------------------------------------------------------------*/
 /**
@@ -45,10 +40,9 @@ import javax.swing.JComponent;
  * <b>Note:</b> you can set the maximum width of the label either through one of the constructors
  * or you can call <code>setMaxWidth()</code> explicitly. If this is not set,
  * <code>MultiLineLabel</code> will derive its width from the parent component.
- * 
- * @version 0.0.1 / 05-15-97
- * @version 1.0 / 04-13-02
+ *
  * @author Elmar Grom
+ * @version 1.0 / 04-13-02
  */
 /*---------------------------------------------------------------------------*
  * Reviving some old code here that was written before there was swing.
@@ -60,7 +54,7 @@ public class MultiLineLabel extends JComponent
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 4051045255031894837L;
 
@@ -86,9 +80,9 @@ public class MultiLineLabel extends JComponent
 
     private static final int DONE = 1;
 
-    private static final char[] WHITE_SPACE = { ' ', '\n', '\t'};
+    private static final char[] WHITE_SPACE = {' ', '\n', '\t'};
 
-    private static final char[] SPACES = { ' ', '\t'};
+    private static final char[] SPACES = {' ', '\t'};
 
     private static final char NEW_LINE = '\n';
 
@@ -123,12 +117,12 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * Constructor
-     * 
-     * @param text the text to be displayed
-     * @param horMargin the horizontal margin for the label
+     *
+     * @param text       the text to be displayed
+     * @param horMargin  the horizontal margin for the label
      * @param vertMargin the vertical margin for the label
-     * @param maxWidth the maximum allowed width of the text
-     * @param justify the text alignment for the label
+     * @param maxWidth   the maximum allowed width of the text
+     * @param justify    the text alignment for the label
      */
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
@@ -146,9 +140,9 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * Constructor using default max-width and alignment.
-     * 
-     * @param label the text to be displayed
-     * @param marginWidth the horizontal margin for the label
+     *
+     * @param label        the text to be displayed
+     * @param marginWidth  the horizontal margin for the label
      * @param marginHeight the vertical margin for the label
      */
     /*-------------------------------------------------------------------*
@@ -164,8 +158,8 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * Constructor using default max-width, and margin.
-     * 
-     * @param label the text to be displayed
+     *
+     * @param label     the text to be displayed
      * @param alignment the text alignment for the label
      */
     /*-------------------------------------------------------------------*
@@ -180,7 +174,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * Constructor using default max-width, alignment, and margin.
-     * 
+     *
      * @param label the text to be displayed
      */
     /*-------------------------------------------------------------------*
@@ -197,13 +191,12 @@ public class MultiLineLabel extends JComponent
      * string. The return value is the position of the first hit. Based on the mode parameter the
      * hit position is either the position where any of the source characters first was found or the
      * first position where none of the source characters where found.
-     * 
-     * 
-     * @return position of the first occurence
+     *
      * @param target the text to be searched
-     * @param start the start position for the search
+     * @param start  the start position for the search
      * @param source the list of characters to be searched for
-     * @param mode the search mode FOUND = reports first found NOT_FOUND = reports first not found
+     * @param mode   the search mode FOUND = reports first found NOT_FOUND = reports first not found
+     * @return position of the first occurence
      */
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
@@ -275,10 +268,9 @@ public class MultiLineLabel extends JComponent
     /**
      * This method scans the input string until the max allowed width is reached. The return value
      * indicates the position just before this happens.
-     * 
-     * 
-     * @return position character position just before the string is too long
+     *
      * @param word word to break
+     * @return position character position just before the string is too long
      */
     /*-------------------------------------------------------------------*
      * <detailed description / implementation details if applicable>
@@ -294,7 +286,10 @@ public class MultiLineLabel extends JComponent
         endPos = word.length() - 1;
 
         // make sure we don't end up with a negative position
-        if (endPos <= 0) { return (currentPos); }
+        if (endPos <= 0)
+        {
+            return (currentPos);
+        }
         // seek the position where the word first is longer than allowed
         while ((width < maxAllowed) && (currentPos < endPos))
         {
@@ -408,7 +403,6 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method finds the font size, each line width and the widest line.
-     * 
      */
     /*-------------------------------------------------------------------*/
     protected void measure()
@@ -419,12 +413,18 @@ public class MultiLineLabel extends JComponent
         }
 
         // return if width is too small
-        if (maxAllowed < (20)) { return; }
+        if (maxAllowed < (20))
+        {
+            return;
+        }
 
         FontMetrics fm = this.getFontMetrics(this.getFont());
 
         // return if no font metrics available
-        if (fm == null) { return; }
+        if (fm == null)
+        {
+            return;
+        }
 
         divideLabel();
 
@@ -445,7 +445,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method draws the label.
-     * 
+     *
      * @param graphics the device context
      */
     /*-------------------------------------------------------------------*/
@@ -464,17 +464,17 @@ public class MultiLineLabel extends JComponent
             y += lineHeight;
             switch (alignment)
             {
-            case LEFT:
-                x = marginWidth;
-                break;
-            case CENTER:
-                x = (d.width - lineWidth[i]) / 2;
-                break;
-            case RIGHT:
-                x = d.width - marginWidth - lineWidth[i];
-                break;
-            default:
-                x = (d.width - lineWidth[i]) / 2;
+                case LEFT:
+                    x = marginWidth;
+                    break;
+                case CENTER:
+                    x = (d.width - lineWidth[i]) / 2;
+                    break;
+                case RIGHT:
+                    x = d.width - marginWidth - lineWidth[i];
+                    break;
+                default:
+                    x = (d.width - lineWidth[i]) / 2;
             }
             graphics.drawString(line.elementAt(i), x, y);
         }
@@ -483,7 +483,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to set the label text
-     * 
+     *
      * @param labelText the text to be displayed
      */
     /*-------------------------------------------------------------------*/
@@ -496,7 +496,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to set the font that should be used to draw the label
-     * 
+     *
      * @param font font to be used within the label
      */
     /*-------------------------------------------------------------------*/
@@ -509,7 +509,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to set the color in which the text should be drawn
-     * 
+     *
      * @param color the text color
      */
     /*-------------------------------------------------------------------*/
@@ -522,7 +522,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to set the text alignment for the label
-     * 
+     *
      * @param alignment the alignment, possible values are LEFT, CENTER, RIGHT
      */
     /*-------------------------------------------------------------------*/
@@ -535,7 +535,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to set the max allowed line width
-     * 
+     *
      * @param width the max allowed line width in pixels
      */
     /*-------------------------------------------------------------------*/
@@ -549,7 +549,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to set the horizontal margin
-     * 
+     *
      * @param margin the margin to the left and to the right of the label
      */
     /*-------------------------------------------------------------------*/
@@ -562,7 +562,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to set the vertical margin for the label
-     * 
+     *
      * @param margin the margin on the top and bottom of the label
      */
     /*-------------------------------------------------------------------*/
@@ -577,10 +577,10 @@ public class MultiLineLabel extends JComponent
      * Moves and resizes this component. The new location of the top-left corner is specified by
      * <code>x</code> and <code>y</code>, and the new size is specified by <code>width</code>
      * and <code>height</code>.
-     * 
-     * @param x The new x-coordinate of this component.
-     * @param y The new y-coordinate of this component.
-     * @param width The new width of this component.
+     *
+     * @param x      The new x-coordinate of this component.
+     * @param y      The new y-coordinate of this component.
+     * @param width  The new width of this component.
      * @param height The new height of this component.
      */
     /*-------------------------------------------------------------------*/
@@ -594,7 +594,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to retrieve the text alignment for the label
-     * 
+     *
      * @return alignment the text alignment currently in use for the label
      */
     /*-------------------------------------------------------------------*/
@@ -606,7 +606,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to retrieve the horizontal margin for the label
-     * 
+     *
      * @return marginWidth the margin currently in use to the left and right of the label
      */
     /*-------------------------------------------------------------------*/
@@ -618,7 +618,7 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method may be used to retrieve the vertical margin for the label
-     * 
+     *
      * @return marginHeight the margin currently in use on the top and bottom of the label
      */
     /*-------------------------------------------------------------------*/
@@ -644,7 +644,6 @@ public class MultiLineLabel extends JComponent
     /**
      * This method is typically used by the layout manager, it reports the absolute minimum space
      * required to display the entire label.
-     * 
      */
     /*-------------------------------------------------------------------*/
     public Dimension getMinimumSize()
@@ -657,7 +656,6 @@ public class MultiLineLabel extends JComponent
     /*-------------------------------------------------------------------*/
     /**
      * This method is called by the system after this object is first created.
-     * 
      */
     /*-------------------------------------------------------------------*/
     public void addNotify()

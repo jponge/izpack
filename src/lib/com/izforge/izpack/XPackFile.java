@@ -17,24 +17,22 @@
  */
 package com.izforge.izpack;
 
+import com.izforge.izpack.util.OsConstraint;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.util.OsConstraint;
-
 /**
  * Extends the packfile by the information at which file position an entry is stored
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
- * 
  */
 public class XPackFile extends PackFile
 {
     private static final long serialVersionUID = 5875050264763504283L;
-    protected long archivefileposition;    
+    protected long archivefileposition;
 
     /**
      * @param src
@@ -69,7 +67,7 @@ public class XPackFile extends PackFile
     {
         super(new File(packf.sourcePath), packf.relativePath, packf.getTargetPath(), packf.osConstraints(), packf
                 .override(), packf.getAdditionals());
-        this.archivefileposition = 0;        
+        this.archivefileposition = 0;
     }
 
     public long getArchivefileposition()

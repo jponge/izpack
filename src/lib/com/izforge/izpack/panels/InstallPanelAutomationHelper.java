@@ -21,18 +21,13 @@
 
 package com.izforge.izpack.panels;
 
-import net.n3.nanoxml.XMLElement;
-
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.IUnpacker;
-import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.installer.PanelAutomationHelper;
-import com.izforge.izpack.installer.UnpackerFactory;
+import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * Functions to support automated usage of the InstallPanel
- * 
+ *
  * @author Jonathan Halliday
  */
 public class InstallPanelAutomationHelper extends PanelAutomationHelper implements PanelAutomation,
@@ -43,9 +38,9 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Null op - this panel type has no state to serialize.
-     * 
+     *
      * @param installData unused.
-     * @param panelRoot unused.
+     * @param panelRoot   unused.
      */
     public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
     {
@@ -54,9 +49,8 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Perform the installation actions.
-     * 
+     *
      * @param panelRoot The panel XML tree root.
-     * 
      * @return true if the installation was successful.
      */
     public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
@@ -65,7 +59,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
         Unpacker unpacker = new Unpacker(idata, this);
         unpacker.start();
         */
-        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.info.getUnpackerClassName(), idata, this);        
+        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.info.getUnpackerClassName(), idata, this);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpackerthread.start();
         boolean done = false;
@@ -85,7 +79,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Reports progress on System.out
-     * 
+     *
      * @see AbstractUIProgressHandler#startAction(String, int)
      */
     public void startAction(String name, int no_of_steps)
@@ -96,7 +90,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Sets state variable for thread sync.
-     * 
+     *
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
      */
     public void stopAction()
@@ -107,7 +101,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Null op.
-     * 
+     *
      * @param val
      * @param msg
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
@@ -120,9 +114,9 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Reports progress to System.out
-     * 
+     *
      * @param packName The currently installing pack.
-     * @param stepno The number of the pack
+     * @param stepno   The number of the pack
      * @param stepsize unused
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#nextStep(String, int, int)
      */

@@ -28,16 +28,16 @@ import com.izforge.izpack.util.NativeLibraryClient;
  * Wrapper class for com.coi.tools.os.win.RegistryImpl for using it with IzPack. This class
  * implements only the methods of interface NativeLibraryClient. All other methods are used directly
  * from RegistryImpl.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class Registry extends RegistryImpl implements NativeLibraryClient
 {
 
     /**
      * Default constructor.
-     * @exception Exception if initialize of native part fails
+     *
+     * @throws Exception if initialize of native part fails
      */
     public Registry() throws Exception
     {
@@ -47,8 +47,8 @@ public class Registry extends RegistryImpl implements NativeLibraryClient
 
     /**
      * Initialize native part of this class and other settings.
-     * 
-     * @exception Exception if problems are encountered
+     *
+     * @throws Exception if problems are encountered
      */
     /*--------------------------------------------------------------------------*/
     private void initialize() throws Exception
@@ -67,10 +67,9 @@ public class Registry extends RegistryImpl implements NativeLibraryClient
      * <b>DO NOT CALL THIS METHOD DIRECTLY! </b> <br>
      * It is used by the librarian to free the native library before physically deleting it from its
      * temporary loaction. A call to this method will freeze the application irrecoverably!
-     * 
+     *
      * @param name the name of the library to free. Use only the name and extension but not the
-     * path.
-     * 
+     *             path.
      * @see com.izforge.izpack.util.NativeLibraryClient#freeLibrary
      */
     /*--------------------------------------------------------------------------*/

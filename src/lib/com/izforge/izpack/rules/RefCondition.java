@@ -24,14 +24,14 @@ import net.n3.nanoxml.XMLElement;
 
 /**
  * References an already defined condition
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class RefCondition extends Condition
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -2880915036530702269L;
     Condition referencedcondition;
@@ -50,7 +50,7 @@ public class RefCondition extends Condition
     public void readFromXML(XMLElement xmlcondition)
     {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
-        this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);        
+        this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);
     }
 
     public boolean isTrue()
@@ -59,11 +59,12 @@ public class RefCondition extends Condition
         {
             return false;
         }
-        else 
+        else
         {
-            if (this.referencedcondition == null) {
+            if (this.referencedcondition == null)
+            {
                 this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);
-            }           
+            }
             return (this.referencedcondition != null) ? this.referencedcondition.isTrue() : false;
         }
     }
@@ -75,9 +76,9 @@ public class RefCondition extends Condition
     {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
-        details.append(" depends on:<ul><li>");        
+        details.append(" depends on:<ul><li>");
         details.append(referencedcondition.getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();
-    }          
+    }
 }

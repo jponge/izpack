@@ -21,9 +21,8 @@ package com.izforge.izpack.installer;
 
 /**
  * Interface for a gui listener. This interface can be used to modify the installer frame of IzPack.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public interface GUIListener
 {
@@ -51,12 +50,12 @@ public interface GUIListener
     /**
      * This method will be called from the installer frame at end of the methods buildGUI, blockGUI,
      * releaseGUI and switchPanel.<br>
-     * 
+     * <p/>
      * The param what indicates from what method this listener was called.<br>
      * If buildGUI is the calling method, the navigation panel will be set as param. At other
      * calling methods param will be null.
-     * 
-     * @param what identifier for the calling method
+     *
+     * @param what  identifier for the calling method
      * @param param
      */
     void guiActionPerformed(int what, Object param);

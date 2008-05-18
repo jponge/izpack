@@ -21,30 +21,21 @@
 
 package com.izforge.izpack.installer;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Properties;
-import java.net.InetAddress;
-
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
+
+import java.io.File;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.InetAddress;
+import java.util.*;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
  * this class.)
- * 
+ *
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
@@ -62,10 +53,9 @@ public class InstallerBase
      * All system properties are available as $SYSTEM_<variable> where <variable> is the actual
      * name _BUT_ with all separators replaced by '_'. Properties with null values are never stored.
      * Example: $SYSTEM_java_version or $SYSTEM_os_name
-     * 
+     *
      * @param installdata Where to store the installation data.
-     * 
-     * @exception Exception Description of the Exception
+     * @throws Exception Description of the Exception
      */
     public void loadInstallData(AutomatedInstallData installdata) throws Exception
     {
@@ -94,11 +84,14 @@ public class InstallerBase
         // We put the Info data as variables
         installdata.setVariable(ScriptParser.APP_NAME, inf.getAppName());
         if (inf.getAppURL() != null)
+        {
             installdata.setVariable(ScriptParser.APP_URL, inf.getAppURL());
+        }
         installdata.setVariable(ScriptParser.APP_VER, inf.getAppVersion());
-        if (inf.getUninstallerCondition() != null){
+        if (inf.getUninstallerCondition() != null)
+        {
             installdata.setVariable("UNINSTALLER_CONDITION", inf.getUninstallerCondition());
-        }        
+        }
         // We read the panels order data
         in = InstallerBase.class.getResourceAsStream("/panelsOrder");
         objIn = new ObjectInputStream(in);
@@ -115,7 +108,10 @@ public class InstallerBase
         {
             Pack pk = (Pack) objIn.readObject();
             allPacks.add(pk);
-            if (OsConstraint.oneMatchesCurrentSystem(pk.osConstraints)) availablePacks.add(pk);
+            if (OsConstraint.oneMatchesCurrentSystem(pk.osConstraints))
+            {
+                availablePacks.add(pk);
+            }
         }
         objIn.close();
 
@@ -141,25 +137,27 @@ public class InstallerBase
                 dir = System.getProperty("user.home");
             }
         }
-        
+
         // We determine the hostname and IPAdress
         String hostname;
         String IPAddress;
-        
-        try {
+
+        try
+        {
             InetAddress addr = InetAddress.getLocalHost();
-    
-		        // Get IP Address
-		        IPAddress = addr.getHostAddress();
-		    
-		        // Get hostname
-		        hostname = addr.getHostName();
-        } catch (Exception e) {
+
+            // Get IP Address
+            IPAddress = addr.getHostAddress();
+
+            // Get hostname
+            hostname = addr.getHostName();
+        }
+        catch (Exception e)
+        {
             hostname = "";
             IPAddress = "";
         }
-        
-				
+
 
         installdata.setVariable("APPLICATIONS_DEFAULT_ROOT", dir);
         dir += File.separator;
@@ -206,7 +204,10 @@ public class InstallerBase
         while (pack_it.hasNext())
         {
             Pack pack = (Pack) pack_it.next();
-            if (pack.preselected) installdata.selectedPacks.add(pack);
+            if (pack.preselected)
+            {
+                installdata.selectedPacks.add(pack);
+            }
         }
         // Set the installation path in a default manner
         installPath = dir + inf.getAppName();
@@ -224,7 +225,7 @@ public class InstallerBase
     /**
      * Add the contents of a custom langpack (if exist) to the previos loaded comman langpack. If
      * not exist, trace an info and do nothing more.
-     * 
+     *
      * @param idata install data to be used
      */
     protected void addCustomLangpack(AutomatedInstallData idata)
@@ -246,26 +247,35 @@ public class InstallerBase
      * Get the default path for Windows (i.e Program Files/...).
      * Windows has a Setting for this in the environment and in the registry.
      * Just try to use the setting in the environment. If it fails for whatever reason, we take the former solution (buildWindowsDefaultPathFromProps).
+     *
      * @return The Windows default installation path for applications.
      */
     private String buildWindowsDefaultPath()
     {
-      try{
-        //get value from environment...
-        String prgFilesPath = IoHelper.getenv("ProgramFiles");
-        if (prgFilesPath!=null && prgFilesPath.length()>0){
-          return prgFilesPath;
-        }else{
-          return buildWindowsDefaultPathFromProps();
+        try
+        {
+            //get value from environment...
+            String prgFilesPath = IoHelper.getenv("ProgramFiles");
+            if (prgFilesPath != null && prgFilesPath.length() > 0)
+            {
+                return prgFilesPath;
+            }
+            else
+            {
+                return buildWindowsDefaultPathFromProps();
+            }
         }
-      }catch(Exception x){
-        x.printStackTrace();
-        return buildWindowsDefaultPathFromProps();
-      }
+        catch (Exception x)
+        {
+            x.printStackTrace();
+            return buildWindowsDefaultPathFromProps();
+        }
     }
-    /** 
+
+    /**
      * just plain wrong in case the programfiles are not stored where the developer expects them.
      * E.g. in custom installations of large companies or if used internationalized version of windows with a language pack.
+     *
      * @return the program files path
      */
     private String buildWindowsDefaultPathFromProps()
@@ -281,7 +291,10 @@ public class InstallerBase
 
             // We look for the drive mapping
             String drive = System.getProperty("user.home");
-            if (drive.length() > 3) drive = drive.substring(0, 3);
+            if (drive.length() > 3)
+            {
+                drive = drive.substring(0, 3);
+            }
 
             // Now we have it :-)
             dpath.append(drive);
@@ -289,7 +302,10 @@ public class InstallerBase
             // Ensure that we have a trailing backslash (in case drive was
             // something
             // like "C:")
-            if (drive.length() == 2) dpath.append("\\");
+            if (drive.length() == 2)
+            {
+                dpath.append("\\");
+            }
 
             String language = Locale.getDefault().getLanguage();
             String country = Locale.getDefault().getCountry();
@@ -319,7 +335,7 @@ public class InstallerBase
 
     /**
      * Loads custom data like listener and lib references if exist and fills the installdata.
-     * 
+     *
      * @param installdata installdata into which the custom action data should be stored
      * @throws Exception
      */
@@ -333,7 +349,9 @@ public class InstallerBase
         String[] streamNames = AutomatedInstallData.CUSTOM_ACTION_TYPES;
         List[] out = new List[streamNames.length];
         for (i = 0; i < streamNames.length; ++i)
+        {
             out[i] = new ArrayList();
+        }
         in = InstallerBase.class.getResourceAsStream("/customData");
         if (in != null)
         {
@@ -353,26 +371,30 @@ public class InstallerBase
                 }
                 switch (ca.type)
                 {
-                case CustomData.INSTALLER_LISTENER:
-                    Class clazz = Class.forName(ca.listenerName);
-                    if (clazz == null)
-                        throw new InstallerException("Custom action " + ca.listenerName
-                                + " not bound!");
-                    out[ca.type].add(clazz.newInstance());
-                    break;
-                case CustomData.UNINSTALLER_LISTENER:
-                case CustomData.UNINSTALLER_JAR:
-                    out[ca.type].add(ca);
-                    break;
-                case CustomData.UNINSTALLER_LIB:
-                    out[ca.type].add(ca.contents);
-                    break;
+                    case CustomData.INSTALLER_LISTENER:
+                        Class clazz = Class.forName(ca.listenerName);
+                        if (clazz == null)
+                        {
+                            throw new InstallerException("Custom action " + ca.listenerName
+                                    + " not bound!");
+                        }
+                        out[ca.type].add(clazz.newInstance());
+                        break;
+                    case CustomData.UNINSTALLER_LISTENER:
+                    case CustomData.UNINSTALLER_JAR:
+                        out[ca.type].add(ca);
+                        break;
+                    case CustomData.UNINSTALLER_LIB:
+                        out[ca.type].add(ca.contents);
+                        break;
                 }
 
             }
             // Add the current custem action data to the installdata hash map.
             for (i = 0; i < streamNames.length; ++i)
+            {
                 installdata.customData.put(streamNames[i], out[i]);
+            }
         }
         // uninstallerLib list if exist
 

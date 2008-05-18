@@ -23,24 +23,25 @@ package com.izforge.izpack.util.os.unix;
 import com.izforge.izpack.util.StringTool;
 
 import java.io.File;
-
 import java.util.ArrayList;
 
 /**
  * Unix Users Collection Class and related static Helper Methods
- * 
+ *
  * @author marc.eppelmann&#064;reddot.de
  */
 public class UnixUsers extends ArrayList
 {
 
     // ~ Static fields/initializers *********************************************************
-    
-    /** serialVersionUID = -4804842346742194981L; */
+
+    /**
+     * serialVersionUID = -4804842346742194981L;
+     */
     private static final long serialVersionUID = -4804842346742194981L;
 
     // ~ Constructors ***********************************************************************
-    
+
     /**
      * Creates a new UnixUsers object.
      */
@@ -53,7 +54,7 @@ public class UnixUsers extends ArrayList
     // ~ Methods ****************************************************************************
     /**
      * Gets all known users with valid shells
-     * 
+     *
      * @return an UnixUsers arraylist of these users
      */
     public ArrayList<UnixUser> getUsersWithValidShells()
@@ -75,7 +76,7 @@ public class UnixUsers extends ArrayList
 
     /**
      * Gets all known users with valid shells and really existing (not dummy) Homefolders.
-     * 
+     *
      * @return an UnixUsers Arraylist of these users
      */
     public ArrayList<UnixUser> getUsersWithValidShellsAndExistingHomes()
@@ -100,7 +101,7 @@ public class UnixUsers extends ArrayList
     /**
      * Gets all known users with valid shells and really existing (not dummy) Home And!
      * freedesktop.org/RFC-based "Desktop" folders.
-     * 
+     *
      * @return an UnixUsers Arraylist of these users
      */
     public ArrayList _getUsersWithValidShellsExistingHomesAndDesktops()
@@ -125,7 +126,7 @@ public class UnixUsers extends ArrayList
 
     /**
      * An StringArray of the existing Desktop folders of all valid users.
-     * 
+     *
      * @return the Stringlist of ValidUsersDesktopFolders
      */
     public ArrayList<String> getValidUsersDesktopFolders()
@@ -156,7 +157,7 @@ public class UnixUsers extends ArrayList
     /**
      * Gets all known users with valid shells and really existing (not dummy) Home And!
      * freedesktop.org/RFC-based "Desktop" folders.
-     * 
+     *
      * @return an UnixUsers Arraylist of these users
      */
     public static ArrayList getUsersWithValidShellsExistingHomesAndDesktops()
@@ -168,7 +169,7 @@ public class UnixUsers extends ArrayList
 
     /**
      * Builds the internal Array from the given UsersArrayList
-     * 
+     *
      * @param anUsersArrayList an Users ArrayList reded from /etc/passwd
      */
     private void fromUsersArrayList(ArrayList<String> anUsersArrayList)
@@ -181,7 +182,7 @@ public class UnixUsers extends ArrayList
 
     /**
      * Gets all Users from /etc/passwd as StringList
-     * 
+     *
      * @return the UserNames extracted from the getEtcPasswdArray()
      */
     public static ArrayList<String> getEtcPasswdUsersAsArrayList()
@@ -200,7 +201,7 @@ public class UnixUsers extends ArrayList
 
     /**
      * Gets all Users from /etc/passwd as StringList
-     * 
+     *
      * @return the UserNames extracted from the getEtcPasswdArray()
      */
     public static ArrayList<String> getYpPasswdUsersAsArrayList()
@@ -210,7 +211,7 @@ public class UnixUsers extends ArrayList
 
     /**
      * Returns all Users as ColonSeparated String
-     * 
+     *
      * @return "asterisk:at:avahi:beagleindex:bin:daemon:dhcpd:ftp:games:gdm:haldaemon:icecream:irc:ldap:lp:mail:mailman:man:...."
      */
     public static String getUsersColonString()
@@ -235,7 +236,7 @@ public class UnixUsers extends ArrayList
 
     /**
      * Test main Method
-     * 
+     *
      * @param args from Commandline
      */
     public static void main(String[] args)

@@ -24,142 +24,224 @@ package com.coi.tools.os.win;
 
 /**
  * Constants related to MS Windows DACLs.
- * @author Klaus Bartz
  *
+ * @author Klaus Bartz
  */
 public interface MSWinConstants
 {
     /*
      * Registry root values, extracted from winreg.h
      */
-    /** HKCR registry root */
+    /**
+     * HKCR registry root
+     */
     static final int HKEY_CLASSES_ROOT = 0x80000000;
 
-    /** HKCU registry root */
+    /**
+     * HKCU registry root
+     */
     static final int HKEY_CURRENT_USER = 0x80000001;
 
-    /** HKLM registry root */
+    /**
+     * HKLM registry root
+     */
     static final int HKEY_LOCAL_MACHINE = 0x80000002;
 
-    /** HKU registry root */
+    /**
+     * HKU registry root
+     */
     static final int HKEY_USERS = 0x80000003;
 
-    /** HKPD registry root */
+    /**
+     * HKPD registry root
+     */
     static final int HKEY_PERFORMANCE_DATA = 0x80000004;
 
-    /** HKCC registry root */
+    /**
+     * HKCC registry root
+     */
     static final int HKEY_CURRENT_CONFIG = 0x80000005;
 
-    /** HKDD registry root */
+    /**
+     * HKDD registry root
+     */
     static final int HKEY_DYN_DATA = 0x80000006;
 
     /*
      * Registry value types, extracted from winnt.h
      */
-    /** No value type */
-    static final int REG_NONE = 0; 
+    /**
+     * No value type
+     */
+    static final int REG_NONE = 0;
 
-    /** Unicode nul terminated string */
-    static final int REG_SZ = 1; 
+    /**
+     * Unicode nul terminated string
+     */
+    static final int REG_SZ = 1;
 
-    /** Unicode nul terminated string */
-    static final int REG_EXPAND_SZ = 2; 
+    /**
+     * Unicode nul terminated string
+     */
+    static final int REG_EXPAND_SZ = 2;
 
-    /** Free form binary */
-    static final int REG_BINARY = 3; 
+    /**
+     * Free form binary
+     */
+    static final int REG_BINARY = 3;
 
-    /** 32-bit number */
-    static final int REG_DWORD = 4; 
+    /**
+     * 32-bit number
+     */
+    static final int REG_DWORD = 4;
 
-    /** Symbolic Link (unicode) */
-    static final int REG_LINK = 6; 
+    /**
+     * Symbolic Link (unicode)
+     */
+    static final int REG_LINK = 6;
 
-    /** Multiple Unicode strings */
-    static final int REG_MULTI_SZ = 7; 
+    /**
+     * Multiple Unicode strings
+     */
+    static final int REG_MULTI_SZ = 7;
 
-   //
+    //
     // Define access rights to files and directories
     // Copied from winnt.h BUILD Version: 0095
 
-    /** Flag for permission read file or pipe date. */
+    /**
+     * Flag for permission read file or pipe date.
+     */
     static final int FILE_READ_DATA = 0x0001; // file & pipe
 
-    /** Flag for permission list contents of a directory. */
+    /**
+     * Flag for permission list contents of a directory.
+     */
     static final int FILE_LIST_DIRECTORY = 0x0001; // directory
 
-    /** Flag for permission write file or pipe data. */
+    /**
+     * Flag for permission write file or pipe data.
+     */
     static final int FILE_WRITE_DATA = 0x0002; // file & pipe
 
-    /** Flag for permission add a file to a directory. */
+    /**
+     * Flag for permission add a file to a directory.
+     */
     static final int FILE_ADD_FILE = 0x0002; // directory
 
-    /** Flag for permission add data to a file (append). */
+    /**
+     * Flag for permission add data to a file (append).
+     */
     static final int FILE_APPEND_DATA = 0x0004; // file
 
-    /** Flag for permission add a subdirectory to a directory. */
+    /**
+     * Flag for permission add a subdirectory to a directory.
+     */
     static final int FILE_ADD_SUBDIRECTORY = 0x0004; // directory
 
-    /** Flag for permission create a named pipe. */
+    /**
+     * Flag for permission create a named pipe.
+     */
     static final int FILE_CREATE_PIPE_INSTANCE = 0x0004; // named pipe
 
-    /** Flag for permission read. */
+    /**
+     * Flag for permission read.
+     */
     static final int FILE_READ_EA = 0x0008; // file & directory
 
-    /** Flag for permission write. */
+    /**
+     * Flag for permission write.
+     */
     static final int FILE_WRITE_EA = 0x0010; // file & directory
 
-    /** Flag for permission execute a file. */
+    /**
+     * Flag for permission execute a file.
+     */
     static final int FILE_EXECUTE = 0x0020; // file
 
-    /** Flag for permission traverse through a directory. */
+    /**
+     * Flag for permission traverse through a directory.
+     */
     static final int FILE_TRAVERSE = 0x0020; // directory
 
-    /** Flag for permission delete a file or subdirectory in a directory. */
+    /**
+     * Flag for permission delete a file or subdirectory in a directory.
+     */
     static final int FILE_DELETE_CHILD = 0x0040; // directory
 
-    /** Flag for permission all read attributes. */
+    /**
+     * Flag for permission all read attributes.
+     */
     static final int FILE_READ_ATTRIBUTES = 0x0080; // all
 
-    /** Flag for permission all write attributes. */
+    /**
+     * Flag for permission all write attributes.
+     */
     static final int FILE_WRITE_ATTRIBUTES = 0x0100; // all
 
-    /** Flag for permission delete. */
+    /**
+     * Flag for permission delete.
+     */
     static final int DELETE = 0x00010000;
 
-    /** Flag for permission read. */
+    /**
+     * Flag for permission read.
+     */
     static final int READ_CONTROL = 0x00020000;
 
-    /** Flag for permission write a DAC. */
+    /**
+     * Flag for permission write a DAC.
+     */
     static final int WRITE_DAC = 0x00040000;
 
-    /** Flag for permission set owner. */
+    /**
+     * Flag for permission set owner.
+     */
     static final int WRITE_OWNER = 0x00080000;
 
-    /** Flag for permission use synchronize. */
+    /**
+     * Flag for permission use synchronize.
+     */
     static final int SYNCHRONIZE = 0x00100000;
 
-    /** Flag for permission standard rights for required. */
+    /**
+     * Flag for permission standard rights for required.
+     */
     static final int STANDARD_RIGHTS_REQUIRED = 0x000F0000;
 
-    /** Flag for permission standard rights for read. */
+    /**
+     * Flag for permission standard rights for read.
+     */
     static final int STANDARD_RIGHTS_READ = 0x00020000; // original READ_CONTROL
 
-    /** Flag for permission standard rights for write. */
+    /**
+     * Flag for permission standard rights for write.
+     */
     static final int STANDARD_RIGHTS_WRITE = 0x00020000; // original READ_CONTROL
 
-    /** Flag for permission standard rights for execute. */
+    /**
+     * Flag for permission standard rights for execute.
+     */
     static final int STANDARD_RIGHTS_EXECUTE = 0x00020000; // original READ_CONTROL
 
-    /** Flag for permission all standard rights. */
+    /**
+     * Flag for permission all standard rights.
+     */
     static final int STANDARD_RIGHTS_ALL = 0x001F0000;
 
-    /** Flag for permission all specific rights. */
+    /**
+     * Flag for permission all specific rights.
+     */
     static final int SPECIFIC_RIGHTS_ALL = 0x0000FFFF;
 
-    /** Flag for permission STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x3FF. */
+    /**
+     * Flag for permission STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x3FF.
+     */
     static final int FILE_ALL_ACCESS = 0x001F03FF;
 
-    /** Flag for permission generic read. */
+    /**
+     * Flag for permission generic read.
+     */
     static final int FILE_GENERIC_READ = 0x00120089;
 
     // #define FILE_GENERIC_WRITE (STANDARD_RIGHTS_WRITE |\
@@ -169,21 +251,27 @@ public interface MSWinConstants
     // FILE_APPEND_DATA |\
     // SYNCHRONIZE)
 
-    /** Flag for permission generic write. */
+    /**
+     * Flag for permission generic write.
+     */
     static final int FILE_GENERIC_WRITE = 0x00120116;
 
     // #define FILE_GENERIC_EXECUTE (STANDARD_RIGHTS_EXECUTE |\
     // FILE_READ_ATTRIBUTES |\
     // FILE_EXECUTE |\
     // SYNCHRONIZE)
-    /** Flag for permission generic execute. */
+    /**
+     * Flag for permission generic execute.
+     */
     static final int FILE_GENERIC_EXECUTE = 0x001200A0;
 
     //
     // AccessSystemAcl access type
     //
 
-    /** Flag for permission all specific rights. */
+    /**
+     * Flag for permission all specific rights.
+     */
     static final int ACCESS_SYSTEM_SECURITY = 0x01000000;
 
     //

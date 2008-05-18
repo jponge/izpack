@@ -17,6 +17,8 @@
  */
 package com.izforge.izpack.io;
 
+import com.izforge.izpack.util.Debug;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,12 +27,10 @@ import java.util.Date;
 import java.util.Random;
 import java.util.zip.GZIPOutputStream;
 
-import com.izforge.izpack.util.Debug;
-
 /**
  * An outputstream which transparently spans over multiple volumes. The size of the volumes and an
  * additonal space for the first volume can be specified.
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class FileSpanningOutputStream extends OutputStream
@@ -86,8 +86,8 @@ public class FileSpanningOutputStream extends OutputStream
 
     /**
      * Creates a new spanning output stream with specified volume names and a maximum volume size
-     * 
-     * @param volumename - the name of the volumes
+     *
+     * @param volumename    - the name of the volumes
      * @param maxvolumesize - the maximum volume size
      * @throws IOException
      */
@@ -98,8 +98,8 @@ public class FileSpanningOutputStream extends OutputStream
 
     /**
      * Creates a new spanning output stream with specified volume names and a maximum volume size
-     * 
-     * @param volume - the first volume
+     *
+     * @param volume        - the first volume
      * @param maxvolumesize - the maximum volume size
      * @throws IOException
      */
@@ -110,8 +110,8 @@ public class FileSpanningOutputStream extends OutputStream
 
     /**
      * Creates a new spanning output stream with specified volume names and a maximum volume size
-     * 
-     * @param volume - the first volume
+     *
+     * @param volume        - the first volume
      * @param maxvolumesize - the maximum volume size
      * @param currentvolume - the current volume
      * @throws IOException
@@ -147,8 +147,8 @@ public class FileSpanningOutputStream extends OutputStream
     /**
      * Actually creates the outputstream for writing a volume with index currentvolume and a maximum
      * of maxvolumesize
-     * 
-     * @param volume - the volume to write to
+     *
+     * @param volume        - the volume to write to
      * @param maxvolumesize - the maximum volume size
      * @param currentvolume - the currentvolume index
      * @throws IOException
@@ -181,7 +181,6 @@ public class FileSpanningOutputStream extends OutputStream
     }
 
     /**
-     * 
      * @param volume
      * @throws IOException
      */
@@ -191,7 +190,6 @@ public class FileSpanningOutputStream extends OutputStream
     }
 
     /**
-     * 
      * @param volumename
      * @throws IOException
      */
@@ -201,7 +199,6 @@ public class FileSpanningOutputStream extends OutputStream
     }
 
     /**
-     * 
      * @throws IOException
      */
     public FileSpanningOutputStream() throws IOException
@@ -211,12 +208,15 @@ public class FileSpanningOutputStream extends OutputStream
 
     /**
      * Returns the size of the current volume
-     * 
+     *
      * @return the size of the current volume FILE_NOT_AVAILABLE, if there's no current volume
      */
     protected long getCurrentVolumeSize()
     {
-        if (currentfile == null) { return FILE_NOT_AVAILABLE; }
+        if (currentfile == null)
+        {
+            return FILE_NOT_AVAILABLE;
+        }
         try
         {
             flush();
@@ -244,7 +244,7 @@ public class FileSpanningOutputStream extends OutputStream
 
     /**
      * Closes the stream to the current volume and reopens to the next volume
-     * 
+     *
      * @throws IOException
      */
     protected void createStreamToNextVolume() throws IOException
@@ -277,9 +277,12 @@ public class FileSpanningOutputStream extends OutputStream
      */
     public void write(byte[] b, int off, int len) throws IOException
     {
-        if (len > maxvolumesize) { throw new IOException(
-                "file can't be written. buffer length exceeded maxvolumesize (" + " > "
-                        + maxvolumesize + ")"); }
+        if (len > maxvolumesize)
+        {
+            throw new IOException(
+                    "file can't be written. buffer length exceeded maxvolumesize (" + " > "
+                            + maxvolumesize + ")");
+        }
         // get the current size of this file
         long currentsize = getCurrentVolumeSize();
         // calculate the available bytes
@@ -340,7 +343,7 @@ public class FileSpanningOutputStream extends OutputStream
 
     /**
      * Returns the amount of currently created volumes
-     * 
+     *
      * @return the amount of created volumes
      */
     public int getVolumeCount()
@@ -349,7 +352,6 @@ public class FileSpanningOutputStream extends OutputStream
     }
 
     /**
-     * 
      * @return
      */
     public long getFirstvolumefreespacesize()
@@ -358,7 +360,6 @@ public class FileSpanningOutputStream extends OutputStream
     }
 
     /**
-     * 
      * @param firstvolumefreespacesize
      */
     public void setFirstvolumefreespacesize(long firstvolumefreespacesize)
@@ -368,7 +369,7 @@ public class FileSpanningOutputStream extends OutputStream
 
     /**
      * Returns the current position in this file
-     * 
+     *
      * @return the position in this file
      * @throws IOException
      */

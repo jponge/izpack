@@ -21,16 +21,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -39,6 +29,12 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.LayoutHelper;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
 /**
  * This is a sub panel which contains a text field and a browse button for path selection. This is
  * NOT an IzPanel, else it is made to use in an IzPanel for any path selection. If the IzPanel
@@ -46,25 +42,30 @@ import com.izforge.izpack.installer.LayoutHelper;
  * PathSelectionPanel.ActionPerformed was called with a source other than the browse button. This
  * can be used to perform parentFrame.navigateNext in the IzPanel parent. An example implementation
  * is done in com.izforge.izpack.panels.PathInputPanel.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class PathSelectionPanel extends JPanel implements ActionListener, LayoutConstants
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3618700794577105718L;
 
-    /** The text field for the path. */
+    /**
+     * The text field for the path.
+     */
     private JTextField textField;
 
-    /** The 'browse' button. */
+    /**
+     * The 'browse' button.
+     */
     private JButton browseButton;
 
-    /** IzPanel parent (not the InstallerFrame). */
+    /**
+     * IzPanel parent (not the InstallerFrame).
+     */
     private IzPanel parent;
 
     /**
@@ -74,9 +75,9 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
 
     /**
      * The constructor. Be aware, parent is the parent IzPanel, not the installer frame.
-     * 
+     *
      * @param parent The parent IzPanel.
-     * @param idata The installer internal data.
+     * @param idata  The installer internal data.
      */
     public PathSelectionPanel(IzPanel parent, InstallData idata)
     {
@@ -106,7 +107,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         textField = new JTextField(idata.getInstallPath(), 10);
         textField.addActionListener(this);
         parent.setInitialFocus(textField);
-        add(textField,ipc);
+        add(textField, ipc);
         // We would have place between text field and button.
         add(IzPanelLayout.createHorizontalFiller(3));
         // No explicit constraints for the button (else implicit) because
@@ -131,7 +132,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
 
     /**
      * Actions-handling method.
-     * 
+     *
      * @param e The event.
      */
     public void actionPerformed(ActionEvent e)
@@ -159,13 +160,16 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
         }
         else
         {
-            if (parent instanceof ActionListener) ((ActionListener) parent).actionPerformed(e);
+            if (parent instanceof ActionListener)
+            {
+                ((ActionListener) parent).actionPerformed(e);
+            }
         }
     }
 
     /**
      * Returns the chosen path.
-     * 
+     *
      * @return the chosen path
      */
     public String getPath()
@@ -175,7 +179,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
 
     /**
      * Sets the contents of the text field to the given path.
-     * 
+     *
      * @param path the path to be set
      */
     public void setPath(String path)
@@ -186,7 +190,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
     /**
      * Returns the text input field for the path. This methode can be used to differ in a
      * ActionPerformed method of the parent between the browse button and the text field.
-     * 
+     *
      * @return the text input field for the path
      */
     public JTextField getPathInputField()
@@ -196,7 +200,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
 
     /**
      * Returns the browse button object for modification or for use with a different ActionListener.
-     * 
+     *
      * @return the browse button to open the JFileChooser
      */
     public JButton getBrowseButton()
