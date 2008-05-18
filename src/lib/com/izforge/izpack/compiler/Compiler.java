@@ -64,7 +64,7 @@ import com.izforge.izpack.util.OsConstraint;
 public class Compiler extends Thread
 {
     /** The IzPack version. */
-    public final static String IZPACK_VERSION = "3.11.0";
+    public final static String IZPACK_VERSION = "4.0.0";
 
     /** The IzPack home directory. */
     public static String IZPACK_HOME = ".";

@@ -2346,7 +2346,7 @@ public class CompilerConfig extends Thread
         if( np.endsWith("!"))
         {   // Where shut IZPACK_HOME at the standalone-compiler be??
             // No idea.
-            if(np.endsWith("standalone-compiler.jar!") || np.endsWith("standalone-compiler-3.11.0.jar!") || np.matches("standalone-compiler-[\\d\\.]+.jar!"))
+            if(np.endsWith("standalone-compiler.jar!") || np.endsWith("standalone-compiler-4.0.0.jar!") || np.matches("standalone-compiler-[\\d\\.]+.jar!"))
                 return(".");
             np = np.substring(0, np.length() - 1);
         }
