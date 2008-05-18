@@ -19,9 +19,6 @@
 
 package com.izforge.izpack.panels;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
@@ -29,9 +26,11 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 
+import javax.swing.*;
+
 /**
  * The info panel class. Displays some raw-text informations.
- * 
+ *
  * @author Julien Ponge
  */
 public class InfoPanel extends IzPanel
@@ -39,14 +38,16 @@ public class InfoPanel extends IzPanel
 
     private static final long serialVersionUID = 3833748780590905399L;
 
-    /** The info string. */
+    /**
+     * The info string.
+     */
     private String info;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public InfoPanel(InstallerFrame parent, InstallData idata)
     {
@@ -66,7 +67,9 @@ public class InfoPanel extends IzPanel
         getLayoutHelper().completeLayout();
     }
 
-    /** Loads the info text. */
+    /**
+     * Loads the info text.
+     */
     private void loadInfo()
     {
         try
@@ -82,7 +85,7 @@ public class InfoPanel extends IzPanel
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return Always true.
      */
     public boolean isValidated()

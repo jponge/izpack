@@ -22,47 +22,60 @@
 
 package com.izforge.izpack.ant;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
-import java.util.ResourceBundle;
-
+import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.compiler.PackagerListener;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.EnumeratedAttribute;
 import org.apache.tools.ant.types.PropertySet;
 
-import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.PackagerListener;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 /**
  * A IzPack Ant task.
- * 
+ *
  * @author Paul Wilkinson
  */
 public class IzPackTask extends Task implements PackagerListener
 {
-    /** The embedded installation configuration */
+    /**
+     * The embedded installation configuration
+     */
     private ConfigHolder config;
 
-    /** Holds value of property input. */
+    /**
+     * Holds value of property input.
+     */
     private String input;
 
-    /** Holds value of property basedir. */
+    /**
+     * Holds value of property basedir.
+     */
     private String basedir;
 
-    /** Holds value of property output. */
+    /**
+     * Holds value of property output.
+     */
     private String output;
 
-    /** Holds value of property compression. */
+    /**
+     * Holds value of property compression.
+     */
     private String compression;
 
-    /** Holds value of property compression. */
+    /**
+     * Holds value of property compression.
+     */
     private int compressionLevel;
 
-    /** Holds value of property installerType. */
+    /**
+     * Holds value of property installerType.
+     */
     private InstallerType installerType;
 
     /**
@@ -70,13 +83,19 @@ public class IzPackTask extends Task implements PackagerListener
      */
     private String izPackDir;
 
-    /** Holds properties used to make substitutions in the install file */
+    /**
+     * Holds properties used to make substitutions in the install file
+     */
     private Properties properties;
 
-    /** should we inherit properties from the Ant file? */
+    /**
+     * should we inherit properties from the Ant file?
+     */
     private boolean inheritAll = false;
 
-    /** Creates new IZPackTask */
+    /**
+     * Creates new IZPackTask
+     */
     public IzPackTask()
     {
         basedir = null;
@@ -91,6 +110,7 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Called by ant to create the object for the config nested element.
+     *
      * @return a holder object for the config nested element.
      */
     public ConfigHolder createConfig()
@@ -101,7 +121,7 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Logs a message to the Ant log at default priority (MSG_INFO).
-     * 
+     *
      * @param str The message to log.
      */
     public void packagerMsg(String str)
@@ -111,8 +131,8 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Logs a message to the Ant log at the specified priority.
-     * 
-     * @param str The message to log.
+     *
+     * @param str      The message to log.
      * @param priority The priority of the message.
      */
     public void packagerMsg(String str, int priority)
@@ -121,35 +141,39 @@ public class IzPackTask extends Task implements PackagerListener
         switch (priority)
         // No guarantee of a direct conversion. It's an enum
         {
-        case MSG_DEBUG:
-            antPriority = Project.MSG_DEBUG;
-            break;
-        case MSG_ERR:
-            antPriority = Project.MSG_ERR;
-            break;
-        case MSG_INFO:
-            antPriority = Project.MSG_INFO;
-            break;
-        case MSG_VERBOSE:
-            antPriority = Project.MSG_VERBOSE;
-            break;
-        case MSG_WARN:
-            antPriority = Project.MSG_WARN;
-            break;
-        default: // rather than die...
-            antPriority = Project.MSG_INFO;
+            case MSG_DEBUG:
+                antPriority = Project.MSG_DEBUG;
+                break;
+            case MSG_ERR:
+                antPriority = Project.MSG_ERR;
+                break;
+            case MSG_INFO:
+                antPriority = Project.MSG_INFO;
+                break;
+            case MSG_VERBOSE:
+                antPriority = Project.MSG_VERBOSE;
+                break;
+            case MSG_WARN:
+                antPriority = Project.MSG_WARN;
+                break;
+            default: // rather than die...
+                antPriority = Project.MSG_INFO;
         }
         log(str, antPriority);
     }
 
-    /** Called when the packaging starts. */
+    /**
+     * Called when the packaging starts.
+     */
     public void packagerStart()
     {
         log(ResourceBundle.getBundle("com/izforge/izpack/ant/langpacks/messages").getString(
                 "Packager_starting"), Project.MSG_DEBUG);
     }
 
-    /** Called when the packaging stops. */
+    /**
+     * Called when the packaging stops.
+     */
     public void packagerStop()
     {
         log(ResourceBundle.getBundle("com/izforge/izpack/ant/langpacks/messages").getString(
@@ -158,28 +182,34 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Packages.
-     * 
-     * @exception BuildException Description of the Exception
+     *
+     * @throws BuildException Description of the Exception
      */
     public void execute() throws org.apache.tools.ant.BuildException
     {
         // Either the input attribute or config element must be specified
         if (input == null && config == null)
+        {
             throw new BuildException(ResourceBundle.getBundle(
                     "com/izforge/izpack/ant/langpacks/messages").getString(
                     "input_must_be_specified"));
+        }
 
         if (output == null)
+        {
             throw new BuildException(ResourceBundle.getBundle(
                     "com/izforge/izpack/ant/langpacks/messages").getString(
                     "output_must_be_specified"));
+        }
 
         // if (installerType == null) now optional
 
         if (basedir == null)
+        {
             throw new BuildException(ResourceBundle.getBundle(
                     "com/izforge/izpack/ant/langpacks/messages").getString(
                     "basedir_must_be_specified"));
+        }
 
         // if (izPackDir == null)
         // throw new
@@ -189,7 +219,7 @@ public class IzPackTask extends Task implements PackagerListener
 
         CompilerConfig c = null;
         String configText = null;
-        if(config != null )
+        if (config != null)
         {// Pass in the embedded configuration
             configText = config.getText();
             input = null;
@@ -197,7 +227,7 @@ public class IzPackTask extends Task implements PackagerListener
         try
         {
             // else use external configuration referenced by the input attribute
-            c = new CompilerConfig(input, basedir, kind, output, 
+            c = new CompilerConfig(input, basedir, kind, output,
                     compression, compressionLevel, this, configText);
         }
         catch (CompilerException e1)
@@ -228,7 +258,7 @@ public class IzPackTask extends Task implements PackagerListener
                 String value = (String) projectProps.get(name);
                 value = fixPathString(value);
                 c.addProperty(name, value);
-            }            
+            }
         }
 
         try
@@ -241,24 +271,28 @@ public class IzPackTask extends Task implements PackagerListener
             // failed
         }
     }
-    
+
     private static String fixPathString(String path)
     {
-       /*
+        /*
         * The following code fixes a bug in in codehaus classworlds loader,
         * which can't handle mixed path strings like "c:\test\../lib/mylib.jar".
         * The bug is in org.codehaus.classworlds.UrlUtils.normalizeUrlPath().
         */
-       StringBuffer fixpath = new StringBuffer(path);
-       for(int q=0; q<fixpath.length(); q++)
-          if(fixpath.charAt(q) == '\\')
-             fixpath.setCharAt(q, '/');
-       return fixpath.toString();
+        StringBuffer fixpath = new StringBuffer(path);
+        for (int q = 0; q < fixpath.length(); q++)
+        {
+            if (fixpath.charAt(q) == '\\')
+            {
+                fixpath.setCharAt(q, '/');
+            }
+        }
+        return fixpath.toString();
     }
-    
+
     /**
      * Setter for property input.
-     * 
+     *
      * @param input New value of property input.
      */
     public void setInput(String input)
@@ -268,7 +302,7 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Setter for property basedir.
-     * 
+     *
      * @param basedir New value of property basedir.
      */
     public void setBasedir(String basedir)
@@ -278,7 +312,7 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Setter for property output.
-     * 
+     *
      * @param output New value of property output.
      */
     public void setOutput(String output)
@@ -288,7 +322,7 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Setter for property installerType.
-     * 
+     *
      * @param installerType New value of property installerType.
      */
     public void setInstallerType(InstallerType installerType)
@@ -298,12 +332,15 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Setter for property izPackDir.
-     * 
+     *
      * @param izPackDir New value of property izPackDir.
      */
     public void setIzPackDir(String izPackDir)
     {
-        if (!(izPackDir.endsWith("/"))) izPackDir += "/";
+        if (!(izPackDir.endsWith("/")))
+        {
+            izPackDir += "/";
+        }
         this.izPackDir = izPackDir;
     }
 
@@ -317,6 +354,7 @@ public class IzPackTask extends Task implements PackagerListener
 
     /**
      * Setter for property compression.
+     *
      * @param compression The type compression to set for pack compression.
      */
     public void setCompression(String compression)
@@ -337,7 +375,10 @@ public class IzPackTask extends Task implements PackagerListener
      */
     public void addConfiguredProperty(Property property)
     {
-        if (properties == null) properties = new Properties();
+        if (properties == null)
+        {
+            properties = new Properties();
+        }
 
         property.execute(); // don't call perform(), so no build events triggered
 
@@ -347,8 +388,8 @@ public class IzPackTask extends Task implements PackagerListener
         {
             String name = (String) e.nextElement();
             String value = props.getProperty(name);
-            log("Adding property: " + property.getClass() + name+"=" + value,
-                Project.MSG_VERBOSE);
+            log("Adding property: " + property.getClass() + name + "=" + value,
+                    Project.MSG_VERBOSE);
 
             properties.setProperty(name, value);
         }
@@ -361,14 +402,17 @@ public class IzPackTask extends Task implements PackagerListener
      */
     public void addConfiguredPropertyset(PropertySet ps)
     {
-        if (properties == null) properties = new Properties();
+        if (properties == null)
+        {
+            properties = new Properties();
+        }
 
         properties.putAll(ps.getProperties());
     }
 
     /**
      * Enumerated attribute with the values "asis", "add" and "remove".
-     * 
+     *
      * @author Paul Wilkinson
      */
     public static class InstallerType extends EnumeratedAttribute
@@ -376,7 +420,7 @@ public class IzPackTask extends Task implements PackagerListener
 
         public String[] getValues()
         {
-            return new String[] { CompilerConfig.STANDARD, CompilerConfig.WEB};
+            return new String[]{CompilerConfig.STANDARD, CompilerConfig.WEB};
         }
     }
 }

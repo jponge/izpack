@@ -22,57 +22,41 @@
 
 package com.izforge.izpack.installer;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import com.izforge.izpack.*;
+import com.izforge.izpack.event.InstallerListener;
+import com.izforge.izpack.util.*;
+
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.ParsableFile;
-import com.izforge.izpack.UpdateCheck;
-import com.izforge.izpack.event.InstallerListener;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraint;
-
 /**
  * Unpacker class.
- * 
+ *
  * @author Julien Ponge
  * @author Johannes Lehtinen
  */
 public class Unpacker extends UnpackerBase
-{      
+{
     private static final String tempPath = "$INSTALL_PATH/Uninstaller/IzpackWebTemp";
-       
-    
+
+
     /**
      * The constructor.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata   The installation data.
      * @param handler The installation progress handler.
      */
     public Unpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler)
     {
-        super(idata,handler);
-    }              
+        super(idata, handler);
+    }
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.installer.IUnpacker#run()
-     */
+    * @see com.izforge.izpack.installer.IUnpacker#run()
+    */
     public void run()
     {
         addToInstances();
@@ -94,28 +78,31 @@ public class Unpacker extends UnpackerBase
             informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
             packs = idata.selectedPacks;
             npacks = packs.size();
-            
-            
+
             // We unpack the selected packs
             for (int i = 0; i < npacks; i++)
             {
                 // We get the pack stream
                 //int n = idata.allPacks.indexOf(packs.get(i));
                 Pack p = (Pack) packs.get(i);
-                
+
                 // evaluate condition
-                if (p.hasCondition()) {
-                    if (rules != null) {
-                        if (!rules.isConditionTrue(p.getCondition())) {
+                if (p.hasCondition())
+                {
+                    if (rules != null)
+                    {
+                        if (!rules.isConditionTrue(p.getCondition()))
+                        {
                             // skip pack, condition is not fullfilled.
                             continue;
                         }
                     }
-                    else {
+                    else
+                    {
                         // TODO: skip pack, because condition can not be checked 
                     }
                 }
-                
+
                 // Custom action listener stuff --- beforePack ----
                 informListeners(customActions, InstallerListener.BEFORE_PACK, packs.get(i),
                         npacks, handler);
@@ -143,10 +130,12 @@ public class Unpacker extends UnpackerBase
                     // We read the header
                     PackFile pf = (PackFile) objIn.readObject();
                     // TODO: reaction if condition can not be checked
-                    if (pf.hasCondition() && (rules != null)) {
-                        if (!rules.isConditionTrue(pf.getCondition())) {
+                    if (pf.hasCondition() && (rules != null))
+                    {
+                        if (!rules.isConditionTrue(pf.getCondition()))
+                        {
                             // skip, condition is not fulfilled
-							objIn.skip(pf.length());
+                            objIn.skip(pf.length());
                             continue;
                         }
                     }
@@ -156,7 +145,10 @@ public class Unpacker extends UnpackerBase
                         String path = IoHelper.translatePath(pf.getTargetPath(), vs);
                         File pathFile = new File(path);
                         File dest = pathFile;
-                        if (!pf.isDirectory()) dest = pathFile.getParentFile();
+                        if (!pf.isDirectory())
+                        {
+                            dest = pathFile.getParentFile();
+                        }
 
                         if (!dest.exists())
                         {
@@ -165,7 +157,9 @@ public class Unpacker extends UnpackerBase
                             // creating a directory, create it recursively.
                             List fileListeners = customActions[customActions.length - 1];
                             if (fileListeners != null && fileListeners.size() > 0)
+                            {
                                 mkDirsWithEnhancement(dest, pf, customActions);
+                            }
                             else
                             // Create it in on step.
                             {
@@ -180,7 +174,10 @@ public class Unpacker extends UnpackerBase
                             }
                         }
 
-                        if (pf.isDirectory()) continue;
+                        if (pf.isDirectory())
+                        {
+                            continue;
+                        }
 
                         // Custom action listener stuff --- beforeFile ----
                         informListeners(customActions, InstallerListener.BEFORE_FILE, pathFile, pf,
@@ -221,9 +218,13 @@ public class Unpacker extends UnpackerBase
                                     int def_choice = -1;
 
                                     if (pf.override() == PackFile.OVERRIDE_ASK_FALSE)
+                                    {
                                         def_choice = AbstractUIHandler.ANSWER_NO;
+                                    }
                                     if (pf.override() == PackFile.OVERRIDE_ASK_TRUE)
+                                    {
                                         def_choice = AbstractUIHandler.ANSWER_YES;
+                                    }
 
                                     int answer = handler.askQuestion(idata.langpack
                                             .getString("InstallPanel.overwrite.title")
@@ -240,7 +241,9 @@ public class Unpacker extends UnpackerBase
                             if (!overwritefile)
                             {
                                 if (!pf.isBackReference() && !((Pack) packs.get(i)).loose)
+                                {
                                     objIn.skip(pf.length());
+                                }
                                 continue;
                             }
 
@@ -261,13 +264,13 @@ public class Unpacker extends UnpackerBase
                             // bytes)
                         }
                         else if (((Pack) packs.get(i)).loose)
-                        {                            
+                        {
                             /* Old way of doing the job by using the (absolute) sourcepath.
-                             * Since this is very likely to fail and does not confirm to the documentation,
-                             * prefer using relative path's
-                            pis = new FileInputStream(pf.sourcePath);
-                             */
-                            
+                            * Since this is very likely to fail and does not confirm to the documentation,
+                            * prefer using relative path's
+                           pis = new FileInputStream(pf.sourcePath);
+                            */
+
                             //take the relative path and search for the file
                             //1. look at the location where the "info"-file is loaded from (jar)
                             //2. look into the current working directory
@@ -277,7 +280,8 @@ public class Unpacker extends UnpackerBase
                             URL url = getClass().getResource("/info");
                             String urlPath = url.getPath();
                             int pos = urlPath.indexOf('!');
-                            if (pos>=0 && urlPath.startsWith("file:/")){
+                            if (pos >= 0 && urlPath.startsWith("file:/"))
+                            {
                                 //remove jar-specific part
                                 urlPath = urlPath.substring("file:/".length(), pos);
                             }
@@ -288,21 +292,25 @@ public class Unpacker extends UnpackerBase
                             }
 
                             File resolvedFile = new File(installerDir, pf.getRelativeSourcePath());
-                            if (!resolvedFile.exists()){
+                            if (!resolvedFile.exists())
+                            {
                                 //try alternative destination - the current working directory
                                 //user.dir is likely (depends on launcher type) the current directory of the executable or jar-file...
                                 final File userDir = new File(System.getProperty("user.dir"));
                                 resolvedFile = new File(userDir, pf.getRelativeSourcePath());
                             }
-                            if (resolvedFile.exists()){
+                            if (resolvedFile.exists())
+                            {
                                 pis = new FileInputStream(resolvedFile);
                                 //may have a different length & last modified than we had at compiletime, therefore we have to build a new PackFile for the copy process...
-                                pf = new PackFile(resolvedFile.getParentFile(), resolvedFile,  pf.getTargetPath(), pf.osConstraints(), pf.override(), pf.getAdditionals());
-                            }else{
+                                pf = new PackFile(resolvedFile.getParentFile(), resolvedFile, pf.getTargetPath(), pf.osConstraints(), pf.override(), pf.getAdditionals());
+                            }
+                            else
+                            {
                                 //file not found
                                 //issue a warning (logging api pending)
                                 //since this file was loosely bundled, we continue with the installation.
-                                System.out.println("Could not find loosely bundled file: "+pf.getRelativeSourcePath());
+                                System.out.println("Could not find loosely bundled file: " + pf.getRelativeSourcePath());
                                 out.close();
                                 continue;
                             }
@@ -316,13 +324,18 @@ public class Unpacker extends UnpackerBase
                             if (performInterrupted())
                             { // Interrupt was initiated; perform it.
                                 out.close();
-                                if (pis != objIn) pis.close();
+                                if (pis != objIn)
+                                {
+                                    pis.close();
+                                }
                                 return;
                             }
                             int maxBytes = (int) Math.min(pf.length() - bytesCopied, buffer.length);
                             int bytesInBuffer = pis.read(buffer, 0, maxBytes);
                             if (bytesInBuffer == -1)
+                            {
                                 throw new IOException("Unexpected end of stream (installer corrupted?)");
+                            }
 
                             out.write(buffer, 0, bytesInBuffer);
 
@@ -330,10 +343,16 @@ public class Unpacker extends UnpackerBase
                         }
                         // Cleanings
                         out.close();
-                        if (pis != objIn) pis.close();
+                        if (pis != objIn)
+                        {
+                            pis.close();
+                        }
 
                         // Set file modification time if specified
-                        if (pf.lastModified() >= 0) pathFile.setLastModified(pf.lastModified());
+                        if (pf.lastModified() >= 0)
+                        {
+                            pathFile.setLastModified(pf.lastModified());
+                        }
                         // Custom action listener stuff --- afterFile ----
                         informListeners(customActions, InstallerListener.AFTER_FILE, pathFile, pf,
                                 null);
@@ -341,7 +360,10 @@ public class Unpacker extends UnpackerBase
                     }
                     else
                     {
-                        if (!pf.isBackReference()) objIn.skip(pf.length());
+                        if (!pf.isBackReference())
+                        {
+                            objIn.skip(pf.length());
+                        }
                     }
                 }
 
@@ -350,8 +372,10 @@ public class Unpacker extends UnpackerBase
                 for (int k = 0; k < numParsables; k++)
                 {
                     ParsableFile pf = (ParsableFile) objIn.readObject();
-                    if (pf.hasCondition() && (rules != null)) {
-                        if (!rules.isConditionTrue(pf.getCondition())) {
+                    if (pf.hasCondition() && (rules != null))
+                    {
+                        if (!rules.isConditionTrue(pf.getCondition()))
+                        {
                             // skip, condition is not fulfilled
                             continue;
                         }
@@ -365,8 +389,10 @@ public class Unpacker extends UnpackerBase
                 for (int k = 0; k < numExecutables; k++)
                 {
                     ExecutableFile ef = (ExecutableFile) objIn.readObject();
-                    if (ef.hasCondition() && (rules != null)) {
-                        if (!rules.isConditionTrue(ef.getCondition())) {
+                    if (ef.hasCondition() && (rules != null))
+                    {
+                        if (!rules.isConditionTrue(ef.getCondition()))
+                        {
                             // skip, condition is false
                             continue;
                         }
@@ -454,15 +480,15 @@ public class Unpacker extends UnpackerBase
 
             // write installation information
             writeInstallationInformation();
-            
+
             // The end :-)
             handler.stopAction();
         }
         catch (Exception err)
         {
             // TODO: finer grained error handling with useful error messages
-            handler.stopAction(); 
-            if("Installation cancelled".equals(err.getMessage()))
+            handler.stopAction();
+            if ("Installation cancelled".equals(err.getMessage()))
             {
                 handler.emitNotification("Installation cancelled");
             }
@@ -482,10 +508,10 @@ public class Unpacker extends UnpackerBase
 
     /**
      * Returns a stream to a pack, location depending on if it's web based.
-     * 
+     *
      * @param uninstall true if pack must be uninstalled
      * @return The stream or null if it could not be found.
-     * @exception Exception Description of the Exception
+     * @throws Exception Description of the Exception
      */
     private InputStream getPackAsStream(String packid, boolean uninstall) throws Exception
     {
@@ -494,7 +520,7 @@ public class Unpacker extends UnpackerBase
         String webDirURL = idata.info.getWebDirURL();
 
         packid = "-" + packid;
-        
+
         if (webDirURL == null) // local
         {
             in = Unpacker.class.getResourceAsStream("/packs/pack" + packid);
@@ -513,15 +539,19 @@ public class Unpacker extends UnpackerBase
             String tempfile;
             try
             {
-               tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tf);
-               udata.addFile(tempfile, uninstall);
+                tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tf);
+                udata.addFile(tempfile, uninstall);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-               if("Cancelled".equals(e.getMessage()))
-                  throw new InstallerException("Installation cancelled", e);
-               else
-                  throw new InstallerException("Installation failed", e);
+                if ("Cancelled".equals(e.getMessage()))
+                {
+                    throw new InstallerException("Installation cancelled", e);
+                }
+                else
+                {
+                    throw new InstallerException("Installation failed", e);
+                }
             }
             URL url = new URL("jar:" + tempfile + "!/packs/pack" + packid);
 
@@ -532,9 +562,12 @@ public class Unpacker extends UnpackerBase
             in = new WebAccessor(null).openInputStream(url);
             // TODO: Fails miserably when pack jars are not found, so this is
             // temporary
-            if (in == null) throw new InstallerException(url.toString() + " not available", new FileNotFoundException(url.toString()));
+            if (in == null)
+            {
+                throw new InstallerException(url.toString() + " not available", new FileNotFoundException(url.toString()));
+            }
         }
-        if( in != null && idata.info.getPackDecoderClassName() != null )
+        if (in != null && idata.info.getPackDecoderClassName() != null)
         {
             Class<Object> decoder = (Class<Object>) Class.forName(idata.info.getPackDecoderClassName());
             Class[] paramsClasses = new Class[1];
@@ -544,16 +577,18 @@ public class Unpacker extends UnpackerBase
             // the source. Therefore we put a buffering stream between it and the
             // source.
             InputStream buffer = new BufferedInputStream(in);
-            Object[] params = { buffer };
+            Object[] params = {buffer};
             Object instance = null;
-            instance = constructor.newInstance( params);
+            instance = constructor.newInstance(params);
             if (!InputStream.class.isInstance(instance))
-                throw new InstallerException(  "'" + idata.info.getPackDecoderClassName()
+            {
+                throw new InstallerException("'" + idata.info.getPackDecoderClassName()
                         + "' must be derived from "
                         + InputStream.class.toString());
+            }
             in = (InputStream) instance;
 
         }
         return in;
-    }   
+    }
 }

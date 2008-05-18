@@ -19,13 +19,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.net.URL;
-
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
@@ -33,9 +26,14 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.net.URL;
+
 /**
  * The HTML info panel.
- * 
+ *
  * @author Julien Ponge
  */
 public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
@@ -43,22 +41,24 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 
     private static final long serialVersionUID = 3257008769514025270L;
 
-    /** The text area. */
+    /**
+     * The text area.
+     */
     private JEditorPane textArea;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public HTMLInfoPanel(InstallerFrame parent, InstallData idata)
     {
-        super(parent, idata,new IzPanelLayout());
+        super(parent, idata, new IzPanelLayout());
         // We add the components
 
         add(LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
-                .getImageIcon("edit"),  LEADING), NEXT_LINE);
+                .getImageIcon("edit"), LEADING), NEXT_LINE);
         try
         {
             textArea = new JEditorPane();
@@ -78,7 +78,7 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 
     /**
      * Loads the info.
-     * 
+     *
      * @return The info URL.
      */
     private URL loadInfo()
@@ -97,7 +97,7 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return Always true.
      */
     public boolean isValidated()
@@ -107,48 +107,51 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 
     /**
      * Hyperlink events handler.
-     * 
+     *
      * @param e The event.
      */
     public void hyperlinkUpdate(HyperlinkEvent e)
     {
         try
         {
-             if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
-             {
+            if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
+            {
                 String urls = e.getURL().toExternalForm();
                 // if the link points to a chapter in the same page
                 // don't open a browser
-                if(urls.contains("HTMLInfoPanel.info#"))
-                   textArea.setPage(e.getURL());
+                if (urls.contains("HTMLInfoPanel.info#"))
+                {
+                    textArea.setPage(e.getURL());
+                }
                 else
                 {
-                   if(com.izforge.izpack.util.OsVersion.IS_OSX)
-                   {
-                       Runtime.getRuntime().exec("open " + urls);
-                   } else if(com.izforge.izpack.util.OsVersion.IS_UNIX)
-                   {
-                      String[] launchers = {"htmlview QqzURL", "xdg-open QqzURL", "gnome-open QqzURL", "kfmclient openURL QqzURL", "call-browser QqzURL", "firefox QqzURL", "opera QqzURL", "konqueror QqzURL", "epiphany QqzURL", "mozilla QqzURL", "netscape QqzURL"};
-                      //String launchers = "/bin/sh -c \"htmlview QqzURL || xdg-open QqzURL || gnome-open QqzURL || kfmclient openURL QqzURL || call-browser QqzURL || firefox QqzURL || opera QqzURL || konqueror QqzURL || epiphany QqzURL || mozilla QqzURL || netscape QqzURL\"";
-                       for (String launcher : launchers)
-                       {
+                    if (com.izforge.izpack.util.OsVersion.IS_OSX)
+                    {
+                        Runtime.getRuntime().exec("open " + urls);
+                    }
+                    else if (com.izforge.izpack.util.OsVersion.IS_UNIX)
+                    {
+                        String[] launchers = {"htmlview QqzURL", "xdg-open QqzURL", "gnome-open QqzURL", "kfmclient openURL QqzURL", "call-browser QqzURL", "firefox QqzURL", "opera QqzURL", "konqueror QqzURL", "epiphany QqzURL", "mozilla QqzURL", "netscape QqzURL"};
+                        //String launchers = "/bin/sh -c \"htmlview QqzURL || xdg-open QqzURL || gnome-open QqzURL || kfmclient openURL QqzURL || call-browser QqzURL || firefox QqzURL || opera QqzURL || konqueror QqzURL || epiphany QqzURL || mozilla QqzURL || netscape QqzURL\"";
+                        for (String launcher : launchers)
+                        {
 
-                           try
-                           {
-                               Runtime.getRuntime().exec(launcher.replaceAll("QqzURL", urls));
-                               System.out.println("OK");
-                               break;
-                           }
-                           catch (Exception ignore)
-                           {
-                               System.out.println(launcher + " NOT OK");
-                           }
-                       }
-                   }
-                   else // windows
-                   {
-                      Runtime.getRuntime().exec("cmd /C start " + urls);
-                   }
+                            try
+                            {
+                                Runtime.getRuntime().exec(launcher.replaceAll("QqzURL", urls));
+                                System.out.println("OK");
+                                break;
+                            }
+                            catch (Exception ignore)
+                            {
+                                System.out.println(launcher + " NOT OK");
+                            }
+                        }
+                    }
+                    else // windows
+                    {
+                        Runtime.getRuntime().exec("cmd /C start " + urls);
+                    }
                 }
             }
         }

@@ -21,21 +21,20 @@
 
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.installer.UninstallData;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Vector;
-
-import com.izforge.izpack.installer.UninstallData;
 
 /*---------------------------------------------------------------------------*/
 /**
  * This class represents a shortcut in a operating system independent way. OS specific subclasses
  * are used to implement the necessary mapping from this generic API to the classes that reflect the
  * system dependent AIP.
- * 
- * @see com.izforge.izpack.util.TargetFactory
- * 
- * @version 0.0.1 / 3/4/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 3/4/02
+ * @see com.izforge.izpack.util.TargetFactory
  */
 public class Shortcut
 {
@@ -43,19 +42,29 @@ public class Shortcut
     // ------------------------------------------------------------------------
     // Constant Definitions
     // ------------------------------------------------------------------------
-    /** APPLICATIONS = 1 */
+    /**
+     * APPLICATIONS = 1
+     */
     public static final int APPLICATIONS = 1;
 
-    /** START_MENU = 2 */
+    /**
+     * START_MENU = 2
+     */
     public static final int START_MENU = 2;
 
-    /** DESKTOP = 3 */
+    /**
+     * DESKTOP = 3
+     */
     public static final int DESKTOP = 3;
 
-    /** START_UP = 4 */
+    /**
+     * START_UP = 4
+     */
     public static final int START_UP = 4;
 
-    /** HIDE = 0 (Hide the window when starting.) */
+    /**
+     * HIDE = 0 (Hide the window when starting.)
+     */
     public static final int HIDE = 0;
 
     /**
@@ -64,29 +73,41 @@ public class Shortcut
      */
     public static final int NORMAL = 1;
 
-    /** MINIMIZED = 2 */
+    /**
+     * MINIMIZED = 2
+     */
     public static final int MINIMIZED = 2;
 
-    /** MAXIMIZED = 3 (Show the window maximized when starting.) */
+    /**
+     * MAXIMIZED = 3 (Show the window maximized when starting.)
+     */
     public static final int MAXIMIZED = 3;
 
-    /** CURRENT_USER = 1 (identifies the user type as the current user) */
+    /**
+     * CURRENT_USER = 1 (identifies the user type as the current user)
+     */
     public static final int CURRENT_USER = 1;
 
-    /** ALL_USERS = 2 (identifies the user type as valid for all users) */
+    /**
+     * ALL_USERS = 2 (identifies the user type as valid for all users)
+     */
     public static final int ALL_USERS = 2;
 
-    /** indicates that this shortcut should be created for all users or only me * */
+    /**
+     * indicates that this shortcut should be created for all users or only me *
+     */
     private Boolean createForAll;
 
-    /** internal field UninstallData uninstaller */
+    /**
+     * internal field UninstallData uninstaller
+     */
     protected UninstallData uninstaller;
 
     /*--------------------------------------------------------------------------*/
     /**
      * This method initializes the object. It is used as a replacement for the contructor because of
      * the way it is instantiated through the <code>TargetFactory</code>.
-     * 
+     *
      * @param type the type or classification of the program group in which the link should exist.
      * @param name the name of the shortcut.
      */
@@ -100,7 +121,7 @@ public class Shortcut
      * the short cut, (or its program group) will be created in. For instance, on Windows NT, a
      * shortcut with user-type ALL_USERS, and link-type DESKTOP might have the base path
      * "C:\Program&nbsp;Files\All&nbsp;Users\Desktop"
-     * 
+     *
      * @see #setLinkType(int)
      * @see #setUserType(int)
      */
@@ -114,12 +135,10 @@ public class Shortcut
      * Returns a list of currently existing program groups, based on the requested type. For example
      * if the type is <code>APPLICATIONS</code> then all the names of the program groups in the
      * Start Menu\Programs menu would be returned.
-     * 
+     *
      * @param userType the type of user for the program group set.
-     * 
      * @return a <code>Vector</code> of <code>String</code> objects that represent the names of
-     * the existing program groups. It is theoretically possible that this list is empty.
-     * 
+     *         the existing program groups. It is theoretically possible that this list is empty.
      * @see #APPLICATIONS
      * @see #START_MENU
      */
@@ -134,7 +153,7 @@ public class Shortcut
      * on disk. <b>Note:</b> this method returns valid results only if the instance was created
      * from a file on disk or after a successful save operation. An instance of this class returns
      * an empty string.
-     * 
+     *
      * @return an empty <code>String</code>
      */
     public String getFileName()
@@ -148,7 +167,7 @@ public class Shortcut
      * it was necessary during the previous save operation to create the directory. This method
      * returns <code>null</code> if no save operation was carried out or there was no need to
      * create a directory during the previous save operation.
-     * 
+     *
      * @return this implementation returns always <code>null</code>.
      */
     public String getDirectoryCreated()
@@ -159,7 +178,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Returns <code>true</code> if the target OS supports current user and all users.
-     * 
+     *
      * @return <code>true</code> if the target OS supports current and all users.
      */
     public boolean multipleUsers()
@@ -178,9 +197,9 @@ public class Shortcut
      * appropriate flavor of this class, which will cause this class itself to be instantiated. The
      * client code can now determine by calling this method if the active OS is supported and take
      * appropriate action.
-     * 
+     *
      * @return <code>true</code> if the creation of shortcuts is supported, <code>false</code>
-     * if this is not supported.
+     *         if this is not supported.
      */
     public boolean supported()
     {
@@ -190,7 +209,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the command line arguments that will be passed to the target when the link is activated.
-     * 
+     *
      * @param arguments the command line arguments
      */
     public void setArguments(String arguments)
@@ -200,7 +219,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the description string that is used to identify the link in a menu or on the desktop.
-     * 
+     *
      * @param description the descriptiojn string
      */
     public void setDescription(String description)
@@ -210,10 +229,10 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the location of the icon that is shown for the shortcut on the desktop.
-     * 
-     * @param path a fully qualified file name of a file that contains the icon.
+     *
+     * @param path  a fully qualified file name of a file that contains the icon.
      * @param index the index of the specific icon to use in the file. If there is only one icon in
-     * the file, use an index of 0.
+     *              the file, use an index of 0.
      */
     public void setIconLocation(String path, int index)
     {
@@ -222,7 +241,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * returns icon Location
-     * 
+     *
      * @return iconLocation
      */
     public String getIconLocation()
@@ -233,7 +252,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the name of the program group this ShellLinbk should be placed in.
-     * 
+     *
      * @param groupName the name of the program group
      */
     public void setProgramGroup(String groupName)
@@ -250,15 +269,14 @@ public class Shortcut
      * Using <code>HIDE</code> will cause the target window not to show at all. There is not even
      * a button on the taskbar. This is a very useful setting when batch files are used to launch a
      * Java application as it will then appear to run just like any native Windows application.<br>
-     * 
+     *
      * @param show the show command. Valid settings are: <br>
-     * <ul>
-     * <li>{@link com.izforge.izpack.util.os.Shortcut#HIDE}
-     * <li>{@link com.izforge.izpack.util.os.Shortcut#NORMAL}
-     * <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
-     * <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
-     * </ul>
-     * 
+     *             <ul>
+     *             <li>{@link com.izforge.izpack.util.os.Shortcut#HIDE}
+     *             <li>{@link com.izforge.izpack.util.os.Shortcut#NORMAL}
+     *             <li>{@link com.izforge.izpack.util.os.Shortcut#MINIMIZED}
+     *             <li>{@link com.izforge.izpack.util.os.Shortcut#MAXIMIZED}
+     *             </ul>
      * @see #getShowCommand
      */
     public void setShowCommand(int show)
@@ -276,7 +294,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the absolute path to the shortcut target.
-     * 
+     *
      * @param path the fully qualified file name of the target
      */
     public void setTargetPath(String path)
@@ -286,7 +304,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the working directory for the link target.
-     * 
+     *
      * @param dir the working directory
      */
     public void setWorkingDirectory(String dir)
@@ -296,7 +314,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Gets the working directory for the link target.
-     * 
+     *
      * @return the working directory.
      */
     public String getWorkingDirectory()
@@ -307,9 +325,9 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the name shown in a menu or on the desktop for the link.
-     * 
+     *
      * @param name The name that the link should display on a menu or on the desktop. Do not include
-     * a file extension.
+     *             a file extension.
      */
     public void setLinkName(String name)
     {
@@ -334,16 +352,15 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the type of link
-     * 
+     *
      * @param type The type of link desired. The following values can be set:<br>
-     * <ul>
-     * <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
-     * <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
-     * <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
-     * <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
-     * </ul>
-     * 
-     * @exception IllegalArgumentException if an an invalid type is passed
+     *             <ul>
+     *             <li>{@link com.izforge.izpack.util.os.Shortcut#DESKTOP}
+     *             <li>{@link com.izforge.izpack.util.os.Shortcut#APPLICATIONS}
+     *             <li>{@link com.izforge.izpack.util.os.Shortcut#START_MENU}
+     *             <li>{@link com.izforge.izpack.util.os.Shortcut#START_UP}
+     *             </ul>
+     * @throws IllegalArgumentException     if an an invalid type is passed
      * @throws UnsupportedEncodingException
      */
     public void setLinkType(int type) throws IllegalArgumentException, UnsupportedEncodingException
@@ -353,9 +370,8 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the user type for the link
-     * 
+     *
      * @param type the type of user for the link.
-     * 
      * @see #CURRENT_USER
      * @see #ALL_USERS
      */
@@ -366,7 +382,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Gets the user type for the link
-     * 
+     *
      * @return userType
      * @see #CURRENT_USER
      * @see #ALL_USERS
@@ -379,8 +395,8 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Saves this link.
-     * 
-     * @exception Exception if problems are encountered
+     *
+     * @throws Exception if problems are encountered
      */
     public void save() throws Exception
     {
@@ -389,7 +405,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Gets the link hotKey
-     * 
+     *
      * @return int hotKey
      */
     public int getHotkey()
@@ -400,7 +416,7 @@ public class Shortcut
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the link hotKey
-     * 
+     *
      * @param hotkey
      */
     public void setHotkey(int hotkey)
@@ -409,7 +425,7 @@ public class Shortcut
 
     /**
      * Sets the Encoding
-     * 
+     *
      * @param string
      */
     public void setEncoding(String string)
@@ -418,7 +434,7 @@ public class Shortcut
 
     /**
      * This sets the Mimetype
-     * 
+     *
      * @param string
      */
     public void setMimetype(String string)
@@ -427,7 +443,7 @@ public class Shortcut
 
     /**
      * Sets the terminal
-     * 
+     *
      * @param string
      */
     public void setTerminal(String string)
@@ -436,7 +452,7 @@ public class Shortcut
 
     /**
      * This sets the terminals-options
-     * 
+     *
      * @param string
      */
     public void setTerminalOptions(String string)
@@ -445,7 +461,7 @@ public class Shortcut
 
     /**
      * This sets the shortcut type
-     * 
+     *
      * @param string
      */
     public void setType(String string)
@@ -454,7 +470,7 @@ public class Shortcut
 
     /**
      * This sets the KdeUserName
-     * 
+     *
      * @param string The UserName
      */
     public void setKdeUserName(String string)
@@ -463,7 +479,7 @@ public class Shortcut
 
     /**
      * This sets the setKdeSubstUID
-     * 
+     *
      * @param string exactly &quot;true&quot; or &quot;false&quot; or nothing
      */
     public void setKdeSubstUID(String string)
@@ -472,7 +488,7 @@ public class Shortcut
 
     /**
      * This sets the URL
-     * 
+     *
      * @param string
      */
     public void setURL(String string)
@@ -482,9 +498,8 @@ public class Shortcut
     /**
      * Gets the Programs Folder for the given User. This is where to create subfolders or to place
      * or create shortcuts.
-     * 
+     *
      * @param current_user one of current or all
-     * 
      * @return The Foldername or null on unsupported platforms.
      */
     public String getProgramsFolder(int current_user)
@@ -494,7 +509,7 @@ public class Shortcut
 
     /**
      * Sets the flag which indicates, that this should created for all.
-     * 
+     *
      * @param aCreateForAll A Flag - Set to true, if to create for All.
      */
     public void setCreateForAll(Boolean aCreateForAll)
@@ -504,7 +519,7 @@ public class Shortcut
 
     /**
      * Gets the create for All Flag
-     * 
+     *
      * @return Returns True if this should be for all.
      */
     public Boolean getCreateForAll()
@@ -514,7 +529,7 @@ public class Shortcut
 
     /**
      * Sets the Categories Field On Unixes
-     * 
+     *
      * @param theCategories the categories
      */
     public void setCategories(String theCategories)
@@ -523,7 +538,7 @@ public class Shortcut
 
     /**
      * Sets the TryExecField on Unixes.
-     * 
+     *
      * @param aTryExec the try exec command
      */
     public void setTryExec(String aTryExec)
@@ -532,7 +547,7 @@ public class Shortcut
 
     /**
      * Sets the Uninstaller field with the unique Uninstaller Instance.
-     * 
+     *
      * @param theUninstaller the unique instance
      */
     public void setUninstaller(UninstallData theUninstaller)
@@ -541,8 +556,7 @@ public class Shortcut
     }
 
     /**
-     * Dummy Method especially for the Unix Root User. 
-     *
+     * Dummy Method especially for the Unix Root User.
      */
     public void execPostAction()
     {
@@ -550,7 +564,7 @@ public class Shortcut
     }
 
     /**
-     * Clean Up Method to do some cleanups after Shortcut Creation. 
+     * Clean Up Method to do some cleanups after Shortcut Creation.
      * <br>
      * currently unused.
      */

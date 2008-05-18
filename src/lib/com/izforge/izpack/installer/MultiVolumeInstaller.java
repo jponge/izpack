@@ -17,17 +17,16 @@
  */
 package com.izforge.izpack.installer;
 
-import java.io.File;
-import java.lang.reflect.Method;
-
 import com.izforge.izpack.uninstaller.SelfModifier;
 import com.izforge.izpack.util.Debug;
 
+import java.io.File;
+import java.lang.reflect.Method;
+
 /**
  * Main class, for starting the installer if it was build to support more than one volume.
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
- * 
  */
 public class MultiVolumeInstaller
 {
@@ -63,7 +62,7 @@ public class MultiVolumeInstaller
             try
             {
                 Class<MultiVolumeInstaller> clazz = MultiVolumeInstaller.class;
-                Method target = clazz.getMethod("install", new Class[] { String[].class});
+                Method target = clazz.getMethod("install", new Class[]{String[].class});
                 String[] newargs = new String[args.length + 2];
 
                 System.arraycopy(args, 0, newargs, 2, args.length);

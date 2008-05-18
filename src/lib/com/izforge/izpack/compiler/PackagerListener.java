@@ -21,45 +21,59 @@ package com.izforge.izpack.compiler;
 
 /**
  * An interface for classes that want to listen to a packager events.
- * 
+ *
  * @author Julien Ponge
  */
 public interface PackagerListener
 {
 
-    /** Message priority of "debug". */
+    /**
+     * Message priority of "debug".
+     */
     public static final int MSG_DEBUG = 0;
 
-    /** Message priority of "error". */
+    /**
+     * Message priority of "error".
+     */
     public static final int MSG_ERR = 1;
 
-    /** Message priority of "information". */
+    /**
+     * Message priority of "information".
+     */
     public static final int MSG_INFO = 2;
 
-    /** Message priority of "verbose". */
+    /**
+     * Message priority of "verbose".
+     */
     public static final int MSG_VERBOSE = 3;
 
-    /** Message priority of "warning". */
+    /**
+     * Message priority of "warning".
+     */
     public static final int MSG_WARN = 4;
 
     /**
      * Send a message with the priority MSG_INFO.
-     * 
+     *
      * @param info The information that has been sent.
      */
     public void packagerMsg(String info);
 
     /**
      * Send a message with the specified priority.
-     * 
-     * @param info The information that has been sent.
+     *
+     * @param info     The information that has been sent.
      * @param priority The priority of the message.
      */
     public void packagerMsg(String info, int priority);
 
-    /** Called when the packager starts. */
+    /**
+     * Called when the packager starts.
+     */
     public void packagerStart();
 
-    /** Called when the packager stops. */
+    /**
+     * Called when the packager stops.
+     */
     public void packagerStop();
 }

@@ -33,9 +33,9 @@ import java.util.Vector;
  * on operations like <code>deleteOnExit()</code> shutdown hooks or <code>finalize()</code>for
  * cleanup. Because <code>shutDown()</code> uses <code>System.exit()</code> to terminate, these
  * methods will not work at all or will not work reliably.
- * 
- * @version 0.0.1 / 2/9/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 2/9/02
  */
 /*---------------------------------------------------------------------------*/
 public class Housekeeper
@@ -65,7 +65,7 @@ public class Housekeeper
     /*--------------------------------------------------------------------------*/
     /**
      * Returns an instance of <code>Housekeeper</code> to use.
-     * 
+     *
      * @return an instance of <code>Housekeeper</code>.
      */
     /*--------------------------------------------------------------------------*/
@@ -83,7 +83,7 @@ public class Housekeeper
     /**
      * Use to register objects that need to perform cleanup operations before the application shuts
      * down.
-     * 
+     *
      * @param client reference of to an object that needs to perform cleanup operations.
      */
     /*--------------------------------------------------------------------------*/
@@ -99,7 +99,7 @@ public class Housekeeper
      * terminated. <br>
      * <br>
      * <b>THIS METHOD DOES NOT RETURN!</b>
-     * 
+     *
      * @param exitCode the exit code that should be returned to the calling process.
      */
     /*--------------------------------------------------------------------------*/

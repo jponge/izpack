@@ -26,33 +26,42 @@ import java.io.Serializable;
 /**
  * Data container for Windows registry logging. This container is used to hold old and new created
  * registry data used at rewinding the registry changes.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class RegistryLogItem implements Cloneable, Serializable
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3618134559108444211L;
 
     /** Types of log items */
-    
-    /** Identifier for removed key */
+
+    /**
+     * Identifier for removed key
+     */
     public static final int REMOVED_KEY = 1;
 
-    /** Identifier for created key */
+    /**
+     * Identifier for created key
+     */
     public static final int CREATED_KEY = 2;
 
-    /** Identifier for removed value */
+    /**
+     * Identifier for removed value
+     */
     public static final int REMOVED_VALUE = 3;
 
-    /** Identifier for created value */
+    /**
+     * Identifier for created value
+     */
     public static final int CREATED_VALUE = 4;
 
-    /** Identifier for changed value */
+    /**
+     * Identifier for changed value
+     */
     public static final int CHANGED_VALUE = 5;
 
     private int type;
@@ -77,18 +86,18 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Constructor with settings.
-     * 
-     * @param type type of loging item. Possible are REMOVED_KEY, CREATED_KEY, REMOVED_VALUE,
-     * CREATED_VALUE and CHANGED_VALUE
-     * @param root id for the registry root
-     * @param key key name of the item which should be logged
+     *
+     * @param type      type of loging item. Possible are REMOVED_KEY, CREATED_KEY, REMOVED_VALUE,
+     *                  CREATED_VALUE and CHANGED_VALUE
+     * @param root      id for the registry root
+     * @param key       key name of the item which should be logged
      * @param valueName name of the value of the item which should be logged if it is a value type,
-     * else null
-     * @param newValue new value of the registry entry if it is a value type, else null
-     * @param oldValue old value of the registry entry if it is a value type, else null
+     *                  else null
+     * @param newValue  new value of the registry entry if it is a value type, else null
+     * @param oldValue  old value of the registry entry if it is a value type, else null
      */
     public RegistryLogItem(int type, int root, String key, String valueName,
-            RegDataContainer newValue, RegDataContainer oldValue)
+                           RegDataContainer newValue, RegDataContainer oldValue)
     {
         this.type = type;
         this.root = root;
@@ -100,7 +109,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Returns the key name of this logging item.
-     * 
+     *
      * @return the key name of this logging item
      */
     public String getKey()
@@ -110,7 +119,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Returns the new value of this logging item.
-     * 
+     *
      * @return the new value of this logging item
      */
     public RegDataContainer getNewValue()
@@ -120,7 +129,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Returns the old value of this logging item.
-     * 
+     *
      * @return the old value of this logging item
      */
     public RegDataContainer getOldValue()
@@ -130,7 +139,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Returns the root id of this logging item.
-     * 
+     *
      * @return the root id of this logging item
      */
     public int getRoot()
@@ -140,7 +149,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Returns the type id of this logging item.
-     * 
+     *
      * @return the type id of this logging item
      */
     public int getType()
@@ -150,7 +159,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Returns the value name of this logging item.
-     * 
+     *
      * @return the value name of this logging item
      */
     public String getValueName()
@@ -160,7 +169,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Sets the key name to the given string
-     * 
+     *
      * @param string to be used as key name
      */
     public void setKey(String string)
@@ -170,7 +179,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Sets the new value to the given RegDataContainer.
-     * 
+     *
      * @param container to be used as new value
      */
     public void setNewValue(RegDataContainer container)
@@ -180,7 +189,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Sets the old value to the given RegDataContainer.
-     * 
+     *
      * @param container to be used as old value
      */
     public void setOldValue(RegDataContainer container)
@@ -190,7 +199,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Sets the root id for this logging item.
-     * 
+     *
      * @param i root id to be used for this logging item
      */
     public void setRoot(int i)
@@ -200,7 +209,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Sets the type id for this logging item.
-     * 
+     *
      * @param i type id to be used for this logging item
      */
     public void setType(int i)
@@ -210,7 +219,7 @@ public class RegistryLogItem implements Cloneable, Serializable
 
     /**
      * Sets the value name to the given string
-     * 
+     *
      * @param string to be used as value name
      */
     public void setValueName(String string)
@@ -221,8 +230,14 @@ public class RegistryLogItem implements Cloneable, Serializable
     public Object clone() throws CloneNotSupportedException
     {
         RegistryLogItem retval = (RegistryLogItem) super.clone();
-        if (newValue != null) retval.newValue = (RegDataContainer) newValue.clone();
-        if (oldValue != null) retval.oldValue = (RegDataContainer) oldValue.clone();
+        if (newValue != null)
+        {
+            retval.newValue = (RegDataContainer) newValue.clone();
+        }
+        if (oldValue != null)
+        {
+            retval.oldValue = (RegDataContainer) oldValue.clone();
+        }
         return (retval);
 
     }

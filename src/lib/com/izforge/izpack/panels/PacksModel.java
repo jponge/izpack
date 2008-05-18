@@ -24,26 +24,16 @@
 
 package com.izforge.izpack.panels;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.swing.table.AbstractTableModel;
-
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
+
+import javax.swing.table.AbstractTableModel;
+import java.io.*;
+import java.util.*;
 
 /**
  * User: Gaganis Giorgos Date: Sep 17, 2004 Time: 8:33:21 AM
@@ -52,19 +42,19 @@ class PacksModel extends AbstractTableModel
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3258128076746733110L;
-    
+
     private static final String INITAL_PACKSELECTION = "initial.pack.selection";
 
     private List packs;
 
     private List packsToInstall;
-    
+
     private Map installedpacks;
     private boolean modifyinstallation;
-    
+
 
     private PacksPanelInterface panel;
 
@@ -86,14 +76,15 @@ class PacksModel extends AbstractTableModel
     private Properties variables;
 
     public PacksModel(PacksPanelInterface panel, InstallData idata, RulesEngine rules)
-    {                
+    {
         modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
         this.installedpacks = new HashMap();
-        
-        if (modifyinstallation) {
+
+        if (modifyinstallation)
+        {
             // installation shall be modified
             // load installation information
-            
+
             try
             {
                 FileInputStream fin = new FileInputStream(new File(idata.getInstallPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION));
@@ -113,15 +104,16 @@ class PacksModel extends AbstractTableModel
                 }
                 this.removeAlreadyInstalledPacks(idata.selectedPacks);
                 Debug.trace("Found " + packsinstalled.size() + " installed packs");
-                
+
                 Properties variables = (Properties) oin.readObject();
-                
+
                 Iterator iter = variables.keySet().iterator();
-                while (iter.hasNext()) {
+                while (iter.hasNext())
+                {
                     Object key = iter.next();
                     idata.setVariable((String) key, (String) variables.get(key));
-                }                                
-                fin.close();                
+                }
+                fin.close();
             }
             catch (FileNotFoundException e)
             {
@@ -138,23 +130,24 @@ class PacksModel extends AbstractTableModel
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        }                
+        }
         this.rules = rules;
         this.packs = idata.availablePacks;
         this.packsToInstall = idata.selectedPacks;
         this.panel = panel;
         this.variables = idata.getVariables();
-        this.variables.setProperty(INITAL_PACKSELECTION,Boolean.toString(true));
+        this.variables.setProperty(INITAL_PACKSELECTION, Boolean.toString(true));
         langpack = panel.getLangpack();
         checkValues = new int[packs.size()];
         reverseDeps();
-        initvalues();        
+        initvalues();
         this.updateConditions(true);
         refreshPacksToInstall();
-        this.variables.setProperty(INITAL_PACKSELECTION,Boolean.toString(false));
-    }    
-    
-    private void removeAlreadyInstalledPacks(List selectedpacks) {
+        this.variables.setProperty(INITAL_PACKSELECTION, Boolean.toString(false));
+    }
+
+    private void removeAlreadyInstalledPacks(List selectedpacks)
+    {
         List<Pack> removepacks = new ArrayList<Pack>();
 
         for (Object selectedpack1 : selectedpacks)
@@ -189,8 +182,9 @@ class PacksModel extends AbstractTableModel
     private void updateConditions(boolean initial)
     {
         boolean changes = true;
-        
-        while (changes) {
+
+        while (changes)
+        {
             changes = false;
             // look for packages,
             for (Object pack1 : packs)
@@ -277,9 +271,12 @@ class PacksModel extends AbstractTableModel
         for (int i = 0; i < packs.size(); i++)
         {
             Pack pack = (Pack) packs.get(i);
-            if (packsToInstall.contains(pack)) checkValues[i] = 1;
-        }               
-        
+            if (packsToInstall.contains(pack))
+            {
+                checkValues[i] = 1;
+            }
+        }
+
         // Check out and disable the ones that are excluded by non fullfiled
         // deps
         for (int i = 0; i < packs.size(); i++)
@@ -307,7 +304,10 @@ class PacksModel extends AbstractTableModel
                         Pack otherpack = (Pack) packs.get(q);
                         if (pack.excludeGroup.equals(otherpack.excludeGroup))
                         {
-                            if (checkValues[q] == 1) checkValues[q] = 0;
+                            if (checkValues[q] == 1)
+                            {
+                                checkValues[q] = 0;
+                            }
                         }
                     }
                 }
@@ -325,7 +325,7 @@ class PacksModel extends AbstractTableModel
                 propRequirement(pack.name);
             }
         }
-                        
+
         refreshPacksToInstall();
     }
 
@@ -346,7 +346,7 @@ class PacksModel extends AbstractTableModel
     /**
      * Given a map of names and Integer for position and a name it return the position of this name
      * as an int
-     * 
+     *
      * @return position of the name
      */
     private int getPos(String name)
@@ -377,11 +377,11 @@ class PacksModel extends AbstractTableModel
     {
         switch (columnIndex)
         {
-        case 0:
-            return Integer.class;
+            case 0:
+                return Integer.class;
 
-        default:
-            return String.class;
+            default:
+                return String.class;
         }
     }
 
@@ -395,35 +395,41 @@ class PacksModel extends AbstractTableModel
             return false;
         }
         else
+        {
             return columnIndex == 0;
+        }
     }
 
     /*
      * @see TableModel#getValueAt(int, int)
      */
     public Object getValueAt(int rowIndex, int columnIndex)
-    {        
+    {
         Pack pack = (Pack) packs.get(rowIndex);
         switch (columnIndex)
         {
-        case 0:
+            case 0:
 
-            return checkValues[rowIndex];
+                return checkValues[rowIndex];
 
-        case 1:
+            case 1:
 
-            Object name = null;
-            if (langpack != null && pack.id != null && !pack.id.equals(""))
-                name = langpack.get(pack.id);
-            if (name == null || "".equals(name))
-                name = pack.name;
-            return name;
+                Object name = null;
+                if (langpack != null && pack.id != null && !pack.id.equals(""))
+                {
+                    name = langpack.get(pack.id);
+                }
+                if (name == null || "".equals(name))
+                {
+                    name = pack.name;
+                }
+                return name;
 
-        case 2:
-            return Pack.toByteUnitsString(pack.nbytes);
+            case 2:
+                return Pack.toByteUnitsString(pack.nbytes);
 
-        default:
-            return null;
+            default:
+                return null;
         }
     }
 
@@ -433,69 +439,82 @@ class PacksModel extends AbstractTableModel
     public void setValueAt(Object aValue, int rowIndex, int columnIndex)
     {
         if (columnIndex == 0)
-        {            
+        {
             if (aValue instanceof Integer)
             {
                 Pack pack = (Pack) packs.get(rowIndex);
-                boolean packadded=false;
+                boolean packadded = false;
                 if ((Integer) aValue == 1)
                 {
-                    packadded=true;
+                    packadded = true;
                     String packid = pack.id;
-                    if (packid != null){                        
-                        if (this.rules.canInstallPack(packid, this.variables) || this.rules.canInstallPackOptional(packid, this.variables)){
-                            if (pack.required){
+                    if (packid != null)
+                    {
+                        if (this.rules.canInstallPack(packid, this.variables) || this.rules.canInstallPackOptional(packid, this.variables))
+                        {
+                            if (pack.required)
+                            {
                                 checkValues[rowIndex] = -1;
                             }
-                            else {
+                            else
+                            {
                                 checkValues[rowIndex] = 1;
                             }
-                        }                              
+                        }
                     }
-                    else {
-                        if (pack.required){
+                    else
+                    {
+                        if (pack.required)
+                        {
                             checkValues[rowIndex] = -1;
                         }
-                        else {
+                        else
+                        {
                             checkValues[rowIndex] = 1;
                         }
-                    }                    
-                }                
+                    }
+                }
                 else
                 {
-                    packadded=false;
+                    packadded = false;
                     checkValues[rowIndex] = 0;
                 }
                 updateExcludes(rowIndex);
                 updateDeps();
 
-                if (packadded) {
-                    if (panel.getDebugger() != null) {
+                if (packadded)
+                {
+                    if (panel.getDebugger() != null)
+                    {
                         panel.getDebugger().packSelectionChanged("after adding pack " + pack.id);
                     }
                     // temporarily add pack to packstoinstall
                     this.packsToInstall.add(pack);
                 }
-                else {
-                    if (panel.getDebugger() != null) {
+                else
+                {
+                    if (panel.getDebugger() != null)
+                    {
                         panel.getDebugger().packSelectionChanged("after removing pack " + pack.id);
                     }
                     // temporarily remove pack from packstoinstall
                     this.packsToInstall.remove(pack);
                 }
                 updateConditions();
-                if (packadded) {
+                if (packadded)
+                {
                     // redo 
                     this.packsToInstall.remove(pack);
                 }
-                else {
+                else
+                {
                     // redo
                     this.packsToInstall.add(pack);
                 }
                 updateBytes();
                 fireTableDataChanged();
                 refreshPacksToInstall();
-                panel.showSpaceRequired();                
+                panel.showSpaceRequired();
             }
         }
     }
@@ -508,35 +527,41 @@ class PacksModel extends AbstractTableModel
         {
             Pack pack = (Pack) packs.get(i);
             String key = "";
-            if ((pack.id != null) && (pack.id.length() > 0)) {
+            if ((pack.id != null) && (pack.id.length() > 0))
+            {
                 key = pack.id;
             }
-            else {
+            else
+            {
                 key = pack.name;
             }
-            if ((Math.abs(checkValues[i]) == 1) && (!installedpacks.containsKey(key))) {                               
-                packsToInstall.add(pack);               
+            if ((Math.abs(checkValues[i]) == 1) && (!installedpacks.containsKey(key)))
+            {
+                packsToInstall.add(pack);
             }
 
         }
-        
-        for (int i=0; i < packs.size(); i++) {
+
+        for (int i = 0; i < packs.size(); i++)
+        {
             Pack pack = (Pack) packs.get(i);
-            
+
             String key = "";
-            if ((pack.id != null) && (pack.id.length() > 0)) {
+            if ((pack.id != null) && (pack.id.length() > 0))
+            {
                 key = pack.id;
             }
-            else {
+            else
+            {
                 key = pack.name;
             }
-            if (installedpacks.containsKey(key)) {
+            if (installedpacks.containsKey(key))
+            {
                 checkValues[i] = -3;
             }
         }
     }
-    
-    
+
 
     /**
      * This function updates the checkboxes after a change by disabling packs that cannot be
@@ -554,8 +579,14 @@ class PacksModel extends AbstractTableModel
         dfs(statusArray);
         for (int i = 0; i < statusArray.length; i++)
         {
-            if (statusArray[i] == 0 && checkValues[i] < 0) checkValues[i] += 2;
-            if (statusArray[i] == 1 && checkValues[i] >= 0) checkValues[i] = -2;
+            if (statusArray[i] == 0 && checkValues[i] < 0)
+            {
+                checkValues[i] += 2;
+            }
+            if (statusArray[i] == 1 && checkValues[i] >= 0)
+            {
+                checkValues[i] = -2;
+            }
 
         }
         // The required ones must propagate their required status to all the
@@ -601,7 +632,10 @@ class PacksModel extends AbstractTableModel
                     String name2 = pack.excludeGroup;
                     if (name2.equals(name1))
                     {
-                        if (checkValues[q] == 1) checkValues[q] = 0;
+                        if (checkValues[q] == 1)
+                        {
+                            checkValues[q] = 0;
+                        }
                     }
                 }
             }
@@ -638,7 +672,10 @@ class PacksModel extends AbstractTableModel
             Pack pack = (Pack) packs.get(i);
             boolean wipe = false;
 
-            if (dfsVisit(pack, status, wipe) != 0) return -1;
+            if (dfsVisit(pack, status, wipe) != 0)
+            {
+                return -1;
+            }
 
         }
         return 0;
@@ -678,20 +715,20 @@ class PacksModel extends AbstractTableModel
         return 0;
     }
 
-    
+
     /**
      * @return the installedpacks
      */
     public Map getInstalledpacks()
     {
         return this.installedpacks;
-    }        
-    
+    }
+
     /**
      * @return the modifyinstallation
      */
     public boolean isModifyinstallation()
     {
         return this.modifyinstallation;
-    }     
+    }
 }

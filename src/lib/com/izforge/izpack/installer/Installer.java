@@ -21,14 +21,14 @@
 
 package com.izforge.izpack.installer;
 
-import java.util.Date;
-
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
 
+import java.util.Date;
+
 /**
  * The program entry point. Selects between GUI and text install modes.
- * 
+ *
  * @author Jonathan Halliday
  */
 public class Installer
@@ -36,15 +36,15 @@ public class Installer
 
     /**
      * The main method (program entry point).
-     * 
+     *
      * @param args The arguments passed on the command-line.
      */
     public static void main(String[] args)
     {
-        Debug.log(" - Logger initialized at '"+ new Date( System.currentTimeMillis() )+ "'.");
-        
-        Debug.log(" - commandline args: " + StringTool.stringArrayToSpaceSeparatedString(args) );
-        
+        Debug.log(" - Logger initialized at '" + new Date(System.currentTimeMillis()) + "'.");
+
+        Debug.log(" - commandline args: " + StringTool.stringArrayToSpaceSeparatedString(args));
+
         // OS X tweakings
         if (System.getProperty("mrj.version") != null)
         {

@@ -20,21 +20,22 @@
  */
 package com.izforge.izpack.rules;
 
+import com.izforge.izpack.util.Debug;
+import net.n3.nanoxml.XMLElement;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Properties;
-
-import net.n3.nanoxml.XMLElement;
-import com.izforge.izpack.util.Debug;
 
 /**
  * A condition based on the value of a static java field or static java method.
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class JavaCondition extends Condition {
+public class JavaCondition extends Condition
+{
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -7649870719815066537L;
     protected String classname;
@@ -49,52 +50,77 @@ public class JavaCondition extends Condition {
     protected Field usedfield;
     protected Method usedmethod;
 
-    public JavaCondition() {
+    public JavaCondition()
+    {
 
-    }    
+    }
 
-    private boolean isTrue(Properties variables) {
-        if (!this.complete) {
+    private boolean isTrue(Properties variables)
+    {
+        if (!this.complete)
+        {
             return false;
-        } else {
-            if (this.usedclass == null) {
+        }
+        else
+        {
+            if (this.usedclass == null)
+            {
                 ClassLoader loader = ClassLoader.getSystemClassLoader();
-                try {
+                try
+                {
                     this.usedclass = loader.loadClass(this.classname);
-                } catch (ClassNotFoundException e) {
+                }
+                catch (ClassNotFoundException e)
+                {
                     Debug.log("Can't find class " + this.classname);
                     return false;
                 }
             }
-            if ((this.usedfield == null) && (this.fieldname != null)) {
-                try {
+            if ((this.usedfield == null) && (this.fieldname != null))
+            {
+                try
+                {
                     this.usedfield = this.usedclass.getField(this.fieldname);
-                } catch (SecurityException e) {
+                }
+                catch (SecurityException e)
+                {
                     Debug.log("No permission to access specified field: " + this.fieldname);
                     return false;
-                } catch (NoSuchFieldException e) {
+                }
+                catch (NoSuchFieldException e)
+                {
                     Debug.log("No such field: " + this.fieldname);
                     return false;
                 }
             }
-            if ((this.usedmethod == null) && (this.methodname != null)) {
+            if ((this.usedmethod == null) && (this.methodname != null))
+            {
                 Debug.log("not implemented yet.");
                 return false;
             }
 
-            if (this.usedfield != null) {
+            if (this.usedfield != null)
+            {
                 // access field
-                if ("boolean".equals(this.returnvaluetype)) {
-                    try {
+                if ("boolean".equals(this.returnvaluetype))
+                {
+                    try
+                    {
                         boolean returnval = this.usedfield.getBoolean(null);
                         boolean expectedreturnval = Boolean.valueOf(this.returnvalue);
                         return returnval == expectedreturnval;
-                    } catch (IllegalArgumentException e) {
+                    }
+                    catch (IllegalArgumentException e)
+                    {
                         Debug.log("IllegalArgumentexeption " + this.fieldname);
-                    } catch (IllegalAccessException e) {
+                    }
+                    catch (IllegalAccessException e)
+                    {
                         Debug.log("IllegalAccessException " + this.fieldname);
                     }
-                } else {
+                }
+                else
+                {
                     Debug.log("not implemented yet.");
                     return false;
                 }
@@ -103,36 +129,47 @@ public class JavaCondition extends Condition {
         }
     }
 
-    public void readFromXML(XMLElement xmlcondition) {
-        if (xmlcondition.getChildrenCount() != 2) {
+    public void readFromXML(XMLElement xmlcondition)
+    {
+        if (xmlcondition.getChildrenCount() != 2)
+        {
             Debug.log("Condition of type java needs (java,returnvalue)");
             return;
         }
         XMLElement javael = xmlcondition.getFirstChildNamed("java");
         XMLElement classel = javael.getFirstChildNamed("class");
-        if (classel != null) {
+        if (classel != null)
+        {
             this.classname = classel.getContent();
-        } else {
+        }
+        else
+        {
             Debug.log("Java-Element needs (class,method?,field?)");
             return;
         }
         XMLElement methodel = javael.getFirstChildNamed("method");
-        if (methodel != null) {
+        if (methodel != null)
+        {
             this.methodname = methodel.getContent();
         }
         XMLElement fieldel = javael.getFirstChildNamed("field");
-        if (fieldel != null) {
+        if (fieldel != null)
+        {
             this.fieldname = fieldel.getContent();
         }
-        if ((this.methodname == null) && (this.fieldname == null)) {
+        if ((this.methodname == null) && (this.fieldname == null))
+        {
             Debug.log("java element needs (class, method?,field?)");
             return;
         }
         XMLElement returnvalel = xmlcondition.getFirstChildNamed("returnvalue");
-        if (returnvalel != null) {
+        if (returnvalel != null)
+        {
             this.returnvalue = returnvalel.getContent();
             this.returnvaluetype = returnvalel.getAttribute("type");
-        } else {
+        }
+        else
+        {
             Debug.log("no returnvalue-element specified.");
             return;
         }
@@ -141,7 +178,7 @@ public class JavaCondition extends Condition {
 
     public boolean isTrue()
     {
-       return this.isTrue(this.installdata.getVariables());
+        return this.isTrue(this.installdata.getVariables());
     }
 
     /* (non-Javadoc)
@@ -152,12 +189,14 @@ public class JavaCondition extends Condition {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append(" depends on the ");
-        if (this.fieldname != null) {
+        if (this.fieldname != null)
+        {
             details.append("value of field <b>");
             details.append(this.fieldname);
             details.append("</b>");
         }
-        else {
+        else
+        {
             details.append("return value of method <b>");
             details.append(this.methodname);
             details.append("</b>");
@@ -165,8 +204,8 @@ public class JavaCondition extends Condition {
         details.append(" on an instance of class <b>");
         details.append(this.classname);
         details.append("</b> which should be <b>");
-        details.append(this.returnvalue);        
-        details.append("</b><br/>");        
+        details.append(this.returnvalue);
+        details.append("</b><br/>");
         return details.toString();
     }
 

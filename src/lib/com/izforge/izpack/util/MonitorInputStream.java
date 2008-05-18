@@ -19,16 +19,12 @@
 
 package com.izforge.izpack.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 
 /**
  * This is a grabber for stdout and stderr. It will be launched once at command execution end
  * terminates if the apropriate stream runs out of data.
- * 
+ *
  * @author Olexij Tkatchenko <ot@parcs.de>
  */
 public class MonitorInputStream implements Runnable
@@ -42,8 +38,8 @@ public class MonitorInputStream implements Runnable
 
     /**
      * Construct a new monitor.
-     * 
-     * @param in The input to read.
+     *
+     * @param in  The input to read.
      * @param out The writer to write to.
      */
     public MonitorInputStream(Reader in, Writer out)
@@ -73,7 +69,10 @@ public class MonitorInputStream implements Runnable
                 this.writer.write(line);
                 this.writer.newLine();
                 this.writer.flush();
-                if (this.shouldStop) return;
+                if (this.shouldStop)
+                {
+                    return;
+                }
             }
         }
         catch (IOException ioe)

@@ -21,29 +21,28 @@
 
 package com.izforge.izpack.panels;
 
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * The taget directory selection panel.
- * 
+ *
  * @author Julien Ponge
  */
 public class TargetPanel extends PathInputPanel
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3256443616359429170L;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public TargetPanel(InstallerFrame parent, InstallData idata)
     {
@@ -58,7 +57,9 @@ public class TargetPanel extends PathInputPanel
         }
     }
 
-    /** Called when the panel becomes active. */
+    /**
+     * Called when the panel becomes active.
+     */
     public void panelActivate()
     {
         // Resolve the default for chosenPath
@@ -78,13 +79,16 @@ public class TargetPanel extends PathInputPanel
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return Wether the panel has been validated or not.
      */
     public boolean isValidated()
     {
         // Standard behavior of PathInputPanel.
-        if (!super.isValidated()) return (false);
+        if (!super.isValidated())
+        {
+            return (false);
+        }
         idata.setInstallPath(pathSelectionPanel.getPath());
         return (true);
     }
@@ -92,7 +96,7 @@ public class TargetPanel extends PathInputPanel
     /**
      * Returns the default install directory. This is equal to
      * <code>PathInputPanel.getDefaultInstallDir</code>
-     * 
+     *
      * @return the default install directory
      */
     public String getDefaultDir()
@@ -103,7 +107,7 @@ public class TargetPanel extends PathInputPanel
     /**
      * Sets the default install directory to the given String. This is equal to
      * <code>PathInputPanel.setDefaultInstallDir</code>
-     * 
+     *
      * @param defaultDir path to be used for the install directory
      */
     public void setDefaultDir(String defaultDir)
@@ -113,7 +117,7 @@ public class TargetPanel extends PathInputPanel
 
     /**
      * Asks to make the XML panel data.
-     * 
+     *
      * @param panelRoot The tree to put the data in.
      */
     public void makeXMLData(XMLElement panelRoot)

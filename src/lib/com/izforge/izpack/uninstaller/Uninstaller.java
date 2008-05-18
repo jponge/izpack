@@ -20,6 +20,7 @@
 package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.util.Housekeeper;
+
 import javax.swing.*;
 import java.lang.reflect.Method;
 
@@ -46,15 +47,22 @@ public class Uninstaller
                 cmduninstall = true;
             }
         }
-        if (cmduninstall) System.out.println("Command line uninstaller.\n");
+        if (cmduninstall)
+        {
+            System.out.println("Command line uninstaller.\n");
+        }
         try
         {
             Class<Uninstaller> clazz = Uninstaller.class;
             Method target;
             if (cmduninstall)
+            {
                 target = clazz.getMethod("cmduninstall", new Class[]{String[].class});
+            }
             else
+            {
                 target = clazz.getMethod("uninstall", new Class[]{String[].class});
+            }
             new SelfModifier(target).invoke(args);
         }
         catch (Exception ioeOrTypo)
@@ -113,7 +121,7 @@ public class Uninstaller
                             displayForceOption = false;
                         }
                     }
-                    
+
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     new UninstallerFrame(displayForceOption, forceOptionState);
                 }

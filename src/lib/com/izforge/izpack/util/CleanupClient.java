@@ -25,9 +25,9 @@ package com.izforge.izpack.util;
 /**
  * Any class that wants to perform cleanup operations and to be notified by <code>Hosekeeper</code>
  * for this purpose must implement this interface.
- * 
- * @version 0.0.1 / 2/9/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 2/9/02
  */
 /*---------------------------------------------------------------------------*/
 public interface CleanupClient

@@ -22,22 +22,17 @@
 
 package com.izforge.izpack.event;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
-
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.ExtendedUIProgressHandler;
-import com.izforge.izpack.util.SpecHelper;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
+import net.n3.nanoxml.XMLElement;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * Installer listener for performing ANT actions. The definition what should be done will be made in
@@ -45,7 +40,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
  * an entry in the install.xml file in the sub ELEMENT "res" of ELEMENT "resources" which references
  * it. The specification of the xml file is done in the DTD antaction.dtd. The xml file specifies,
  * for what pack what ant call should be performed at what time of installation.
- * 
+ *
  * @author Thomas Guenter
  * @author Klaus Bartz
  */
@@ -57,7 +52,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
     // ------------------------------------------------------------------------
     // --------String constants for parsing the XML specification ------------
     // -------- see class AntAction -----------------------------------------
-    /** Name of the specification file */
+    /**
+     * Name of the specification file
+     */
     public static final String SPEC_FILE_NAME = "AntActionsSpec.xml";
 
     private HashMap<String, HashMap<Object, ArrayList<AntAction>>> actions = null;
@@ -76,7 +73,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
 
     /**
      * Returns the actions map.
-     * 
+     *
      * @return the actions map
      */
     public HashMap<String, HashMap<Object, ArrayList<AntAction>>> getActions()
@@ -91,13 +88,16 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
-            AbstractUIProgressHandler handler) throws Exception
+                            AbstractUIProgressHandler handler) throws Exception
     {
         super.beforePacks(idata, npacks, handler);
 
         getSpecHelper().readSpec(SPEC_FILE_NAME, new VariableSubstitutor(idata.getVariables()));
 
-        if (getSpecHelper().getSpec() == null) return;
+        if (getSpecHelper().getSpec() == null)
+        {
+            return;
+        }
 
         // Selected packs.
         Iterator iter = idata.selectedPacks.iterator();
@@ -108,7 +108,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
 
             // Resolve data for current pack.
             XMLElement pack = getSpecHelper().getPackForName(p.name);
-            if (pack == null) continue;
+            if (pack == null)
+            {
+                continue;
+            }
 
             // Prepare the action cache
             HashMap<Object, ArrayList<AntAction>> packActions = new HashMap<Object, ArrayList<AntAction>>();
@@ -132,7 +135,9 @@ public class AntActionInstallerListener extends SimpleInstallerListener
                 }
                 // Set for progress bar interaction.
                 if ((packActions.get(ActionBase.AFTERPACKS)).size() > 0)
+                {
                     this.setProgressBarCaller();
+                }
             }
 
             actions.put(p.name, packActions);
@@ -202,41 +207,53 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         {
             String currentPack = ((Pack) iter.next()).name;
             ArrayList<AntAction> actList = getActions(currentPack, order);
-            if (actList != null) retval += actList.size();
+            if (actList != null)
+            {
+                retval += actList.size();
+            }
         }
         return (retval);
     }
 
     /**
      * Returns the defined actions for the given pack in the requested order.
-     * 
+     *
      * @param packName name of the pack for which the actions should be returned
-     * @param order order to be used; valid are <i>beforepack</i> and <i>afterpack</i>
+     * @param order    order to be used; valid are <i>beforepack</i> and <i>afterpack</i>
      * @return a list which contains all defined actions for the given pack and order
      */
     // -------------------------------------------------------
     protected ArrayList<AntAction> getActions(String packName, String order)
     {
-        if (actions == null) return null;
+        if (actions == null)
+        {
+            return null;
+        }
 
         HashMap<Object, ArrayList<AntAction>> packActions = actions.get(packName);
-        if (packActions == null || packActions.size() == 0) return null;
+        if (packActions == null || packActions.size() == 0)
+        {
+            return null;
+        }
 
         return packActions.get(order);
     }
 
     /**
      * Performs all actions which are defined for the given pack and order.
-     * 
+     *
      * @param packName name of the pack for which the actions should be performed
-     * @param order order to be used; valid are <i>beforepack</i> and <i>afterpack</i>
+     * @param order    order to be used; valid are <i>beforepack</i> and <i>afterpack</i>
      * @throws InstallerException
      */
     private void performAllActions(String packName, String order, AbstractUIProgressHandler handler)
             throws InstallerException
     {
         ArrayList<AntAction> actList = getActions(packName, order);
-        if (actList == null || actList.size() == 0) return;
+        if (actList == null || actList.size() == 0)
+        {
+            return;
+        }
 
         Debug.trace("******* Executing all " + order + " actions of " + packName + " ...");
         for (AntAction act : actList)
@@ -267,14 +284,17 @@ public class AntActionInstallerListener extends SimpleInstallerListener
 
     /**
      * Returns an ant call which is defined in the given XML element.
-     * 
+     *
      * @param el XML element which contains the description of an ant call
      * @return an ant call which is defined in the given XML element
      * @throws InstallerException
      */
     private AntAction readAntCall(XMLElement el) throws InstallerException
     {
-        if (el == null) return null;
+        if (el == null)
+        {
+            return null;
+        }
         SpecHelper spec = getSpecHelper();
         AntAction act = new AntAction();
         try
@@ -297,7 +317,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             act.setLogFile(str);
         }
         String msgId = el.getAttribute(ActionBase.MESSAGEID);
-        if (msgId != null && msgId.length() > 0) act.setMessageID(msgId);
+        if (msgId != null && msgId.length() > 0)
+        {
+            act.setMessageID(msgId);
+        }
 
         // read propertyfiles
         Iterator<XMLElement> iter = el.getChildrenNamed(ActionBase.PROPERTYFILE).iterator();

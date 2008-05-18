@@ -21,12 +21,10 @@
  */
 package com.izforge.izpack.gui;
 
-import java.awt.Component;
-import java.awt.Rectangle;
+import java.awt.*;
 
 /**
  * Constraints class for the layout manager <code>IzPanelLayout</code>.
- * 
  */
 public class IzPanelConstraints implements Cloneable, LayoutConstants
 {
@@ -58,15 +56,19 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     private Rectangle bounds;
 
-    /** for private use by the layout manager */
+    /**
+     * for private use by the layout manager
+     */
     Component component = null;
 
-    /** for private use by the layout manager */
+    /**
+     * for private use by the layout manager
+     */
     int preferredHeight = 0;
-    
+
     /**
      * Returns the declared stretch value in x direction.
-     * 
+     *
      * @return the declared stretch value in x direction
      */
     public double getXStretch()
@@ -76,7 +78,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the given value as stretch value for x direction.
-     * 
+     *
      * @param stretch value to be set
      */
     public void setXStretch(double stretch)
@@ -86,7 +88,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Returns the declared stretch value in y direction.
-     * 
+     *
      * @return the declared stretch value in y direction
      */
     public double getYStretch()
@@ -96,7 +98,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the given value as stretch value for y direction.
-     * 
+     *
      * @param stretch value to be set
      */
     public void setYStretch(double stretch)
@@ -106,7 +108,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Returns the declared x gap value.
-     * 
+     *
      * @return the declared x gap value
      */
     public int getXGap()
@@ -116,7 +118,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the given value as x gap.
-     * 
+     *
      * @param gap value to be set
      */
     public void setXGap(int gap)
@@ -126,7 +128,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Returns the declared y gap value.
-     * 
+     *
      * @return the declared y gap value
      */
     public int getYGap()
@@ -136,7 +138,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the given value as y gap.
-     * 
+     *
      * @param gap value to be set
      */
     public void setYGap(int gap)
@@ -146,20 +148,20 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Constructor with all existent parameters.
-     * 
+     *
      * @param xCellAlignment value to be used as x alignment
      * @param yCellAlignment value to be used as y alignment
-     * @param xPos x position to be used
-     * @param yPos y position to be used
-     * @param xWeight weight at x direction
-     * @param yWeight weight at y direction
-     * @param xGap gap for x direction
-     * @param yGap gap for y direction
-     * @param xStretch stretch value for the x direction
-     * @param yStretch stretch value for the y direction
+     * @param xPos           x position to be used
+     * @param yPos           y position to be used
+     * @param xWeight        weight at x direction
+     * @param yWeight        weight at y direction
+     * @param xGap           gap for x direction
+     * @param yGap           gap for y direction
+     * @param xStretch       stretch value for the x direction
+     * @param yStretch       stretch value for the y direction
      */
     public IzPanelConstraints(int xCellAlignment, int yCellAlignment, int xPos, int yPos,
-            int xWeight, int yWeight, int xGap, int yGap, double xStretch, double yStretch)
+                              int xWeight, int yWeight, int xGap, int yGap, double xStretch, double yStretch)
     {
         this.xCellAlignment = xCellAlignment;
         this.yCellAlignment = yCellAlignment;
@@ -202,7 +204,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Returns the alignment for the x direction.
-     * 
+     *
      * @return the alignment for the x direction
      */
     public int getXCellAlignment()
@@ -212,7 +214,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the alignment for the x direction. Possible values are LEFT, RIGHT and CENTER.
-     * 
+     *
      * @param cellAlignment to be used
      */
     public void setXCellAlignment(int cellAlignment)
@@ -222,7 +224,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Returns the x position (column number).
-     * 
+     *
      * @return the x position (column number)
      */
     public int getXPos()
@@ -232,7 +234,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the x position to be used.
-     * 
+     *
      * @param pos position to be used
      */
     public void setXPos(int pos)
@@ -243,7 +245,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
     /**
      * Returns the weight for the x direction. The weight determines how many cells are occupied by
      * the component.
-     * 
+     *
      * @return the weight for the x direction
      */
     public int getXWeight()
@@ -253,7 +255,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the weight value for the x direction.
-     * 
+     *
      * @param weight to be used for the x direction
      */
     public void setXWeight(int weight)
@@ -263,7 +265,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Returns the alignment for the y direction.
-     * 
+     *
      * @return the alignment for the y direction
      */
     public int getYCellAlignment()
@@ -273,7 +275,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the alignment for the y direction. Possible values are TOP, BOTTOM and CENTER.
-     * 
+     *
      * @param cellAlignment to be used
      */
     public void setYCellAlignment(int cellAlignment)
@@ -283,7 +285,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Returns the y position (row number).
-     * 
+     *
      * @return the y position (row number)
      */
     public int getYPos()
@@ -293,7 +295,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the y position to be used.
-     * 
+     *
      * @param pos position to be used
      */
     public void setYPos(int pos)
@@ -304,7 +306,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
     /**
      * Returns the weight for the y direction. The weight determines how many cells are occupied by
      * the component.
-     * 
+     *
      * @return the weight for the y direction
      */
     public int getYWeight()
@@ -314,7 +316,7 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
 
     /**
      * Sets the weight value for the y direction.
-     * 
+     *
      * @param weight to be used for the y direction
      */
     public void setYWeight(int weight)
@@ -325,18 +327,21 @@ public class IzPanelConstraints implements Cloneable, LayoutConstants
     /**
      * Returns the bounds which should be used by the corresponding component. This will be used by
      * the layout manager at a fast layouting.
-     * 
+     *
      * @return used bounds
      */
     public Rectangle getBounds()
     {
-        if (bounds != null) return (Rectangle) (bounds.clone());
+        if (bounds != null)
+        {
+            return (Rectangle) (bounds.clone());
+        }
         return (new Rectangle());
     }
 
     /**
      * Sets the bounds which should be used for the component.
-     * 
+     *
      * @param bounds bounds to be used
      */
     public void setBounds(Rectangle bounds)

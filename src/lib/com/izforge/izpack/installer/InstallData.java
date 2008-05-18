@@ -19,17 +19,17 @@
 
 package com.izforge.izpack.installer;
 
-import java.awt.Color;
-import java.io.Serializable;
-
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Panel;
+
+import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Encloses information about the install process. This class is implemented as a singleton which
  * can be easily accessed by different components of the installer. However, this implementation is
  * not thread safe.
- * 
+ *
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
@@ -38,19 +38,26 @@ public class InstallData extends AutomatedInstallData implements Serializable
 
     private static final long serialVersionUID = 4048793450990024505L;
 
-    /** The GUI preferences. */
+    /**
+     * The GUI preferences.
+     */
     public GUIPrefs guiPrefs;
-    
-    /** Contains at IzPanel constructor call the related Panel object. This is a hack
-     *  to allow usage of the meta data stored in the Panel object during construction of
-     *  the IzPanel. Do not use this member at an other place.
+
+    /**
+     * Contains at IzPanel constructor call the related Panel object. This is a hack
+     * to allow usage of the meta data stored in the Panel object during construction of
+     * the IzPanel. Do not use this member at an other place.
      */
     public Panel currentPanel;
 
-    /** The buttons highlighting color. */
+    /**
+     * The buttons highlighting color.
+     */
     public Color buttonsHColor = new Color(230, 230, 230);
 
-    /** Constructs a new instance of this class. */
+    /**
+     * Constructs a new instance of this class.
+     */
     protected InstallData()
     {
         super();

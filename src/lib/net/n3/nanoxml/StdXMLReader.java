@@ -28,24 +28,14 @@
 
 package net.n3.nanoxml;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
-import java.io.PushbackInputStream;
-import java.io.PushbackReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Stack;
 
 /**
  * StdXMLReader reads the data to be parsed.
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -94,7 +84,7 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Creates a new reader using a string as input.
-     * 
+     *
      * @param str the string containing the XML data
      */
     public static IXMLReader stringReader(String str)
@@ -104,11 +94,10 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Creates a new reader using a file as input.
-     * 
+     *
      * @param filename the name of the file containing the XML data
-     * 
      * @throws java.io.FileNotFoundException if the file could not be found
-     * @throws java.io.IOException if an I/O error occurred
+     * @throws java.io.IOException           if an I/O error occurred
      */
     public static IXMLReader fileReader(String filename) throws FileNotFoundException, IOException
     {
@@ -119,13 +108,12 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Initializes the reader from a system and public ID.
-     * 
+     *
      * @param publicID the public ID which may be null.
      * @param systemID the non-null system ID.
-     * 
      * @throws MalformedURLException if the system ID does not contain a valid URL
      * @throws FileNotFoundException if the system ID refers to a local file which does not exist
-     * @throws IOException if an error occurred opening the stream
+     * @throws IOException           if an error occurred opening the stream
      */
     public StdXMLReader(String publicID, String systemID) throws MalformedURLException,
             FileNotFoundException, IOException
@@ -163,7 +151,7 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Initializes the XML reader.
-     * 
+     *
      * @param reader the input for the XML data.
      */
     public StdXMLReader(Reader reader)
@@ -207,14 +195,16 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Scans the encoding from an &lt;&#x3f;xml&#x3f;&gt; tag.
-     * 
+     *
      * @param str the first tag in the XML data.
-     * 
      * @return the encoding, or null if no encoding has been specified.
      */
     protected String getEncoding(String str)
     {
-        if (!str.startsWith("<?xml")) { return null; }
+        if (!str.startsWith("<?xml"))
+        {
+            return null;
+        }
 
         int index = 5;
 
@@ -264,7 +254,10 @@ public class StdXMLReader implements IXMLReader
                 break;
             }
 
-            if ("encoding".equals(key.toString())) { return str.substring(index, index2); }
+            if ("encoding".equals(key.toString()))
+            {
+                return str.substring(index, index2);
+            }
 
             index = index2 + 1;
         }
@@ -274,10 +267,9 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Converts a stream to a reader while detecting the encoding.
-     * 
-     * @param stream the input for the XML data.
+     *
+     * @param stream    the input for the XML data.
      * @param charsRead buffer where to put characters that have been read
-     * 
      * @throws java.io.IOException if an I/O error occurred
      */
     protected Reader stream2reader(InputStream stream, StringBuffer charsRead) throws IOException
@@ -287,61 +279,63 @@ public class StdXMLReader implements IXMLReader
 
         switch (b)
         {
-        case 0x00:
-        case 0xFE:
-        case 0xFF:
-            pbstream.unread(b);
-            return new InputStreamReader(pbstream, "UTF-16");
+            case 0x00:
+            case 0xFE:
+            case 0xFF:
+                pbstream.unread(b);
+                return new InputStreamReader(pbstream, "UTF-16");
 
-        case 0xEF:
-            for (int i = 0; i < 2; i++)
-            {
-                pbstream.read();
-            }
+            case 0xEF:
+                for (int i = 0; i < 2; i++)
+                {
+                    pbstream.read();
+                }
 
-            return new InputStreamReader(pbstream, "UTF-8");
-
-        case 0x3C:
-            b = pbstream.read();
-            charsRead.append('<');
-
-            while ((b > 0) && (b != 0x3E))
-            {
-                charsRead.append((char) b);
-                b = pbstream.read();
-            }
-
-            if (b > 0)
-            {
-                charsRead.append((char) b);
-            }
-
-            String encoding = this.getEncoding(charsRead.toString());
-
-            if (encoding == null) { return new InputStreamReader(pbstream, "UTF-8"); }
-
-            charsRead.setLength(0);
-
-            try
-            {
-                return new InputStreamReader(pbstream, encoding);
-            }
-            catch (UnsupportedEncodingException e)
-            {
                 return new InputStreamReader(pbstream, "UTF-8");
-            }
 
-        default:
-            charsRead.append((char) b);
-            return new InputStreamReader(pbstream, "UTF-8");
+            case 0x3C:
+                b = pbstream.read();
+                charsRead.append('<');
+
+                while ((b > 0) && (b != 0x3E))
+                {
+                    charsRead.append((char) b);
+                    b = pbstream.read();
+                }
+
+                if (b > 0)
+                {
+                    charsRead.append((char) b);
+                }
+
+                String encoding = this.getEncoding(charsRead.toString());
+
+                if (encoding == null)
+                {
+                    return new InputStreamReader(pbstream, "UTF-8");
+                }
+
+                charsRead.setLength(0);
+
+                try
+                {
+                    return new InputStreamReader(pbstream, encoding);
+                }
+                catch (UnsupportedEncodingException e)
+                {
+                    return new InputStreamReader(pbstream, "UTF-8");
+                }
+
+            default:
+                charsRead.append((char) b);
+                return new InputStreamReader(pbstream, "UTF-8");
         }
     }
 
     /**
      * Initializes the XML reader.
-     * 
+     *
      * @param stream the input for the XML data.
-     * 
      * @throws java.io.IOException if an I/O error occurred
      */
     public StdXMLReader(InputStream stream) throws IOException
@@ -369,9 +363,8 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Reads a character.
-     * 
+     *
      * @return the character
-     * 
      * @throws java.io.IOException if no character could be read
      */
     public char read() throws IOException
@@ -380,7 +373,10 @@ public class StdXMLReader implements IXMLReader
 
         while (ch < 0)
         {
-            if (this.pbreaders.empty()) { throw new IOException("Unexpected EOF"); }
+            if (this.pbreaders.empty())
+            {
+                throw new IOException("Unexpected EOF");
+            }
 
             this.currentPbReader.close();
             this.currentPbReader = this.pbreaders.pop();
@@ -409,7 +405,7 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Returns true if the current stream has no more characters left to be read.
-     * 
+     *
      * @throws java.io.IOException if an I/O error occurred
      */
     public boolean atEOFOfCurrentStream() throws IOException
@@ -429,7 +425,7 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Returns true if there are no more characters left to be read.
-     * 
+     *
      * @throws java.io.IOException if an I/O error occurred
      */
     public boolean atEOF() throws IOException
@@ -438,7 +434,10 @@ public class StdXMLReader implements IXMLReader
 
         while (ch < 0)
         {
-            if (this.pbreaders.empty()) { return true; }
+            if (this.pbreaders.empty())
+            {
+                return true;
+            }
 
             this.currentPbReader.close();
             this.currentPbReader = this.pbreaders.pop();
@@ -454,7 +453,7 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Pushes the last character read back to the stream.
-     * 
+     *
      * @throws java.io.IOException if an I/O error occurred
      */
     public void unread(char ch) throws IOException
@@ -464,14 +463,13 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Opens a stream from a public and system ID.
-     * 
+     *
      * @param publicID the public ID, which may be null
      * @param systemID the system ID, which is never null
-     * 
      * @throws java.net.MalformedURLException if the system ID does not contain a valid URL
-     * @throws java.io.FileNotFoundException if the system ID refers to a local file which does not
-     * exist
-     * @throws java.io.IOException if an error occurred opening the stream
+     * @throws java.io.FileNotFoundException  if the system ID refers to a local file which does not
+     *                                        exist
+     * @throws java.io.IOException            if an error occurred opening the stream
      */
     public Reader openStream(String publicID, String systemID) throws MalformedURLException,
             FileNotFoundException, IOException
@@ -480,7 +478,10 @@ public class StdXMLReader implements IXMLReader
         StringBuffer charsRead = new StringBuffer();
         Reader reader = this.stream2reader(url.openStream(), charsRead);
 
-        if (charsRead.length() == 0) { return reader; }
+        if (charsRead.length() == 0)
+        {
+            return reader;
+        }
 
         String charsReadStr = charsRead.toString();
         PushbackReader pbreader = new PushbackReader(reader, charsReadStr.length());
@@ -495,7 +496,7 @@ public class StdXMLReader implements IXMLReader
     /**
      * Starts a new stream from a Java reader. The new stream is used temporary to read data from.
      * If that stream is exhausted, control returns to the parent stream.
-     * 
+     *
      * @param reader the non-null reader to read the new data from
      */
     public void startNewStream(Reader reader)
@@ -518,15 +519,15 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Sets the system ID of the current stream.
-     * 
+     *
      * @param systemID the system ID
-     * 
      * @throws java.net.MalformedURLException if the system ID does not contain a valid URL
      */
     public void setSystemID(String systemID) throws MalformedURLException
     {
         this.currentSystemID = new URL(this.currentSystemID, systemID);
-        if (! this.systemIds.isEmpty()) {
+        if (!this.systemIds.isEmpty())
+        {
             this.systemIds.pop();
             this.systemIds.push(this.currentSystemID);
         }
@@ -534,7 +535,7 @@ public class StdXMLReader implements IXMLReader
 
     /**
      * Sets the public ID of the current stream.
-     * 
+     *
      * @param publicID the public ID
      */
     public void setPublicID(String publicID)

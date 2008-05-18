@@ -21,15 +21,10 @@
 
 package com.izforge.izpack.installer;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
+import java.util.Map;
 
 
 /**
@@ -37,47 +32,51 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @version $Id: $
  */
 public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer
-{           
+{
     private static final long serialVersionUID = 6779914244548965230L;
     private Map<String, VariableHistory> variablehistory;
-    
-    public VariableHistoryTableCellRenderer(Map<String, VariableHistory> variablehistory) {
+
+    public VariableHistoryTableCellRenderer(Map<String, VariableHistory> variablehistory)
+    {
         this.variablehistory = variablehistory;
     }
-    
-    
+
+
     /* (non-Javadoc)
-     * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
-     */
+    * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
+    */
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-            boolean hasFocus, int row, int column)
+                                                   boolean hasFocus, int row, int column)
     {
-        JComponent comp = null;                               
-        
-        VariableHistory vh = (VariableHistory) value;               
-        
-        JLabel label = new JLabel(); 
+        JComponent comp = null;
+
+        VariableHistory vh = (VariableHistory) value;
+
+        JLabel label = new JLabel();
         label.setAutoscrolls(true);
-        comp = label;            
-        
+        comp = label;
+
         label.setText(vh.getLastValue());
-       
+
         comp.setOpaque(true);
-        if (vh.isNewvariable()) {
+        if (vh.isNewvariable())
+        {
             comp.setBackground(Color.green);
         }
-        else if(vh.isChanged()) {
+        else if (vh.isChanged())
+        {
             comp.setBackground(Color.yellow);
         }
         return comp;
     }
-    
-    public void clearState() {
+
+    public void clearState()
+    {
         for (String s : variablehistory.keySet())
         {
             VariableHistory vh = variablehistory.get(s);
             vh.clearState();
         }
-    }            
+    }
 }
 

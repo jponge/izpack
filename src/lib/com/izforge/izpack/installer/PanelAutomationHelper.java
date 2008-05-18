@@ -25,7 +25,7 @@ import com.izforge.izpack.util.AbstractUIHandler;
 
 /**
  * Abstract class implementing basic functions needed by all panel automation helpers.
- * 
+ *
  * @author tisc
  */
 abstract public class PanelAutomationHelper implements AbstractUIHandler

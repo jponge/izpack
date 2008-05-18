@@ -46,7 +46,7 @@ import java.util.jar.Manifest;
  * java.util.jar.JarOutputStream. Therefore we create an own class
  * which supports it. Really the hole work will be delegated to the
  * ZipOutputStream from the apache team which solves the problem.
- * 
+ *
  * @author Klaus Bartz
  */
 public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
@@ -60,10 +60,11 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
      * Using this constructor it will be NOT possible to write
      * data with compression format STORED to the stream without
      * declare the info data (size, CRC) at <code>putNextEntry</code>.
+     *
      * @param out the actual output stream
-     * @exception IOException if an I/O error has occurred
+     * @throws IOException if an I/O error has occurred
      */
-    public JarOutputStream(OutputStream out) throws IOException 
+    public JarOutputStream(OutputStream out) throws IOException
     {
         super(out);
     }
@@ -71,38 +72,41 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
     /**
      * Creates a new <code>JarOutputStream</code> with the specified
      * <code>Manifest</code>. The manifest is written as the first
-     * entry to the output stream which will be created from the 
+     * entry to the output stream which will be created from the
      * file argument.
      *
      * @param fout the file object with which the output stream
-     * should be created
-     * @param man the <code>Manifest</code>
-     * @exception IOException if an I/O error has occurred
+     *             should be created
+     * @param man  the <code>Manifest</code>
+     * @throws IOException if an I/O error has occurred
      */
-    public JarOutputStream(File  fout, Manifest man) throws IOException 
+    public JarOutputStream(File fout, Manifest man) throws IOException
     {
-        super( fout );
+        super(fout);
         if (man == null)
         {
             throw new NullPointerException("man");
         }
-        org.apache.tools.zip.ZipEntry e = 
-            new org.apache.tools.zip.ZipEntry(JarFile.MANIFEST_NAME);
+        org.apache.tools.zip.ZipEntry e =
+                new org.apache.tools.zip.ZipEntry(JarFile.MANIFEST_NAME);
         putNextEntry(e);
         man.write(new BufferedOutputStream(this));
         closeEntry();
     }
+
     /**
      * Creates a new <code>JarOutputStream</code> with no manifest.
      * Will use random access if possible.
+     *
      * @param arg0 the file object with which the output stream
-     * should be created
+     *             should be created
      * @throws java.io.IOException
      */
     public JarOutputStream(File arg0) throws IOException
     {
         super(arg0);
     }
+
     /**
      * Begins writing a new JAR file entry and positions the stream
      * to the start of the entry data. This method will also close
@@ -112,24 +116,24 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
      * time.
      *
      * @param ze the ZIP/JAR entry to be written
-     * @exception java.util.zip.ZipException if a ZIP error has occurred
-     * @exception IOException if an I/O error has occurred
+     * @throws java.util.zip.ZipException if a ZIP error has occurred
+     * @throws IOException                if an I/O error has occurred
      */
-    public void putNextEntry(org.apache.tools.zip.ZipEntry ze) throws IOException 
+    public void putNextEntry(org.apache.tools.zip.ZipEntry ze) throws IOException
     {
-        if (firstEntry) 
+        if (firstEntry)
         {
             // Make sure that extra field data for first JAR
             // entry includes JAR magic number id.
             byte[] edata = ze.getExtra();
-            if (edata != null && !hasMagic(edata)) 
+            if (edata != null && !hasMagic(edata))
             {
                 // Prepend magic to existing extra data
                 byte[] tmp = new byte[edata.length + 4];
                 System.arraycopy(tmp, 4, edata, 0, edata.length);
                 edata = tmp;
-            } 
-            else 
+            }
+            else
             {
                 edata = new byte[4];
             }
@@ -148,6 +152,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
     {
         return preventClose;
     }
+
     /**
      * Determine whether a call of the close method
      * will be performed or not. This is a hack for
@@ -155,6 +160,7 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
      * of apache which calls close of the slave via
      * the final method which will be called from
      * the garbage collector.
+     *
      * @param preventClose The preventClose to set.
      */
     public void setPreventClose(boolean preventClose)
@@ -165,31 +171,33 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
     /**
      * Closes this output stream and releases any system resources
      * associated with the stream if isPreventClose is not true.
-     * Else nothing will be done. This is a hack for 
-     * FilterOutputStreams like the CBZip2OutputStream which 
+     * Else nothing will be done. This is a hack for
+     * FilterOutputStreams like the CBZip2OutputStream which
      * calls the close method of the slave at finalizing the class
      * may be triggert by the GC.
      *
-     * @exception  IOException  if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public void close() throws IOException
     {
-        if( ! isPreventClose() )
+        if (!isPreventClose())
+        {
             super.close();
+        }
     }
 
     /**
      * Closes this output stream and releases any system resources
      * associated with the stream also isPreventClose is true.
-     * This is a hack for FilterOutputStreams like the CBZip2OutputStream which 
+     * This is a hack for FilterOutputStreams like the CBZip2OutputStream which
      * calls the close method of the slave at finalizing the class
      * may be triggert by the GC.
      *
-     * @exception  IOException  if an I/O error occurs.
+     * @throws IOException if an I/O error occurs.
      */
     public void closeAlways() throws IOException
     {
-        setPreventClose( false );
+        setPreventClose(false);
         close();
     }
 
@@ -197,45 +205,45 @@ public class JarOutputStream extends org.apache.tools.zip.ZipOutputStream
      * Returns true if specified byte array contains the
      * jar magic extra field id.
      */
-    private static boolean hasMagic(byte[] edata) 
-    {   
-         
-		try 
-		{
-			int i = 0;
-			while (i < edata.length) 
-			{
-				if (get16(edata, i) == JAR_MAGIC) 
-				{
-					return true;
-				}
-				i += get16(edata, i + 2) + 4;
-			}
-		} 
-		catch (ArrayIndexOutOfBoundsException e) 
-		{
-			// Invalid extra field data
-		}
-		return false;
+    private static boolean hasMagic(byte[] edata)
+    {
+
+        try
+        {
+            int i = 0;
+            while (i < edata.length)
+            {
+                if (get16(edata, i) == JAR_MAGIC)
+                {
+                    return true;
+                }
+                i += get16(edata, i + 2) + 4;
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            // Invalid extra field data
+        }
+        return false;
     }
 
     /*
      * Fetches unsigned 16-bit value from byte array at specified offset.
      * The bytes are assumed to be in Intel (little-endian) byte order.
      */
-    private static int get16(byte[] b, int off) 
+    private static int get16(byte[] b, int off)
     {
-    	return (b[off] & 0xff) | ((b[off+1] & 0xff) << 8);
+        return (b[off] & 0xff) | ((b[off + 1] & 0xff) << 8);
     }
 
     /*
      * Sets 16-bit value at specified offset. The bytes are assumed to
      * be in Intel (little-endian) byte order.
      */
-    private static void set16(byte[] b, int off, int value) 
+    private static void set16(byte[] b, int off, int value)
     {
-		b[off] = (byte)value;
-		b[off+1] = (byte)(value >> 8);
+        b[off] = (byte) value;
+        b[off + 1] = (byte) (value >> 8);
     }
 
 }

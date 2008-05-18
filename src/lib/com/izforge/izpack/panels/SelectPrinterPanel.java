@@ -25,25 +25,17 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.print.PrintServiceLookup;
-import javax.print.PrintService;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
+
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * The SelectPrinter panel class.
@@ -58,22 +50,26 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
      */
     private static final long serialVersionUID = 3257848774955905587L;
 
-    /** The ComboBox to list the printers. */
-     private JComboBox cbPrinters;
+    /**
+     * The ComboBox to list the printers.
+     */
+    private JComboBox cbPrinters;
 
-    /** Install data variables. */
-     private InstallData iData;
+    /**
+     * Install data variables.
+     */
+    private InstallData iData;
 
     /**
      * The constructor.
      *
      * @param parent The parent.
-     * @param id The installation data.
+     * @param id     The installation data.
      */
     public SelectPrinterPanel(InstallerFrame parent, InstallData id)
     {
         super(parent, id);
-        
+
         iData = id;
 
         // The 'super' layout
@@ -92,8 +88,8 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
         add(centerPanel);
 
         cbPrinters = new JComboBox();
-    	PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
-    	iData.setVariable("SELECTED_PRINTER", pServices[0].getName());
+        PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
+        iData.setVariable("SELECTED_PRINTER", pServices[0].getName());
         for (PrintService pService : pServices)
         {
             cbPrinters.addItem(pService.getName());
@@ -104,23 +100,23 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener
         String str;
 
         centerPanel.add(Box.createVerticalStrut(10));
-        
+
         str = parent.langpack.getString("PrinterSelectPanel.select_printer");
         JLabel selectLabel = LabelFactory.create(str, JLabel.LEADING);
         selectLabel.setAlignmentX(JLabel.LEADING);
         centerPanel.add(selectLabel);
 
         centerPanel.add(Box.createVerticalStrut(20));
-        
+
         centerPanel.add(cbPrinters);
 
-        
+
     }
 
     public void actionPerformed(ActionEvent event)
     {
-    	String sPrinter = (String) cbPrinters.getSelectedItem();
-    	iData.setVariable("SELECTED_PRINTER", sPrinter);
+        String sPrinter = (String) cbPrinters.getSelectedItem();
+        iData.setVariable("SELECTED_PRINTER", sPrinter);
     }
 
     /**

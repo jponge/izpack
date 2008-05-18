@@ -29,16 +29,17 @@ import com.izforge.izpack.LocaleDatabase;
  * IzPack locale files. The getMessage methode searches in the current langpack for entries which
  * are corresponding to that one which are received from native part. If the langpack do not contain
  * the entry, the resource boundle is used.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class WrappedNativeLibException extends Exception
 {
 
     private static final long serialVersionUID = 3257562893309720112L;
 
-    /** The packs locale database. */
+    /**
+     * The packs locale database.
+     */
     protected static LocaleDatabase langpack = null;
 
     /**
@@ -95,7 +96,10 @@ public class WrappedNativeLibException extends Exception
                     {
                         String val = (String) langpack.get("NativeLibException."
                                 + nle.getLibMessage());
-                        if (val == null) break;
+                        if (val == null)
+                        {
+                            break;
+                        }
                         retval.append(val);
                         next = true;
                     }
@@ -103,8 +107,14 @@ public class WrappedNativeLibException extends Exception
                     {
                         String val = (String) langpack.get("NativeLibException.libErrNumber."
                                 + Integer.toString(nle.getLibErr()));
-                        if (val == null) break;
-                        if (next) retval.append("\n");
+                        if (val == null)
+                        {
+                            break;
+                        }
+                        if (next)
+                        {
+                            retval.append("\n");
+                        }
                         next = true;
                         retval.append(val);
                     }
@@ -113,8 +123,14 @@ public class WrappedNativeLibException extends Exception
                         String val = langpack
                                 .get("NativeLibException.libInternal.OsErrNumPraefix")
                                 + Integer.toString(nle.getOsErr());
-                        if (val == null) break;
-                        if (next) retval.append("\n");
+                        if (val == null)
+                        {
+                            break;
+                        }
+                        if (next)
+                        {
+                            retval.append("\n");
+                        }
                         next = true;
                         retval.append(val);
                     }
@@ -123,8 +139,14 @@ public class WrappedNativeLibException extends Exception
                         String val = langpack
                                 .get("NativeLibException.libInternal.OsErrStringPraefix")
                                 + nle.getOsMessage();
-                        if (val == null) break;
-                        if (next) retval.append("\n");
+                        if (val == null)
+                        {
+                            break;
+                        }
+                        if (next)
+                        {
+                            retval.append("\n");
+                        }
                         next = true;
                         retval.append(val);
                     }
@@ -133,18 +155,24 @@ public class WrappedNativeLibException extends Exception
                 }
             }
             if (ok && retval.length() > 0)
+            {
                 return (nle.reviseMsgWithArgs(retval.toString()));
+            }
             else
+            {
                 return (nle.getMessage());
+            }
 
         }
         else
+        {
             return (super.getMessage());
+        }
     }
 
     /**
      * Returns the langpack.
-     * 
+     *
      * @return Returns the langpack.
      */
     public static LocaleDatabase getLangpack()
@@ -154,7 +182,7 @@ public class WrappedNativeLibException extends Exception
 
     /**
      * Sets the langpack to the given locale database.
-     * 
+     *
      * @param langpack the langpack to set.
      */
     public static void setLangpack(LocaleDatabase langpack)

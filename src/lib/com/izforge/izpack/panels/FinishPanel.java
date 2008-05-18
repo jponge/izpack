@@ -19,16 +19,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-
 import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -39,9 +29,16 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.VariableSubstitutor;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+
 /**
  * The finish panel class.
- * 
+ *
  * @author Julien Ponge
  */
 public class FinishPanel extends IzPanel implements ActionListener
@@ -49,17 +46,21 @@ public class FinishPanel extends IzPanel implements ActionListener
 
     private static final long serialVersionUID = 3257282535107998009L;
 
-    /** The automated installers generation button. */
+    /**
+     * The automated installers generation button.
+     */
     protected JButton autoButton;
 
-    /** The variables substitutor. */
+    /**
+     * The variables substitutor.
+     */
     protected VariableSubstitutor vs;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public FinishPanel(InstallerFrame parent, InstallData idata)
     {
@@ -70,7 +71,7 @@ public class FinishPanel extends IzPanel implements ActionListener
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return true if the panel has been validated.
      */
     public boolean isValidated()
@@ -78,7 +79,9 @@ public class FinishPanel extends IzPanel implements ActionListener
         return true;
     }
 
-    /** Called when the panel becomes active. */
+    /**
+     * Called when the panel becomes active.
+     */
     public void panelActivate()
     {
         parent.lockNextButton();
@@ -112,15 +115,17 @@ public class FinishPanel extends IzPanel implements ActionListener
             add(autoButton, NEXT_LINE);
         }
         else
+        {
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("stop"), LEADING), NEXT_LINE);
+        }
         getLayoutHelper().completeLayout(); // Call, or call not?
         Log.getInstance().informUser();
     }
 
     /**
      * Actions-handling method.
-     * 
+     *
      * @param e The event.
      */
     public void actionPerformed(ActionEvent e)
@@ -158,7 +163,7 @@ public class FinishPanel extends IzPanel implements ActionListener
 
     /**
      * Translates a relative path to a local system path.
-     * 
+     *
      * @param destination The path to translate.
      * @return The translated path.
      */

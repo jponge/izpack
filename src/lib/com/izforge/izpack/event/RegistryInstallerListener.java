@@ -21,13 +21,6 @@
 
 package com.izforge.izpack.event;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import net.n3.nanoxml.XMLElement;
-
 import com.coi.tools.os.win.NativeLibException;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
@@ -39,6 +32,12 @@ import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 import com.izforge.izpack.util.os.WrappedNativeLibException;
+import net.n3.nanoxml.XMLElement;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * Installer custom action for handling registry entries on Windows. On Unix nothing will be done.
@@ -46,14 +45,15 @@ import com.izforge.izpack.util.os.WrappedNativeLibException;
  * This resource should be declared in the installation definition file (install.xml), else an
  * exception will be raised during execution of this custom action. The related DTD is
  * appl/install/IzPack/resources/registry.dtd.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class RegistryInstallerListener extends NativeInstallerListener
 {
 
-    /** The name of the XML file that specifies the registry entries. */
+    /**
+     * The name of the XML file that specifies the registry entries.
+     */
     private static final String SPEC_FILE_NAME = "RegistrySpec.xml";
 
     private static final String REG_KEY = "key";
@@ -93,7 +93,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
      * int, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
-            AbstractUIProgressHandler handler) throws Exception
+                            AbstractUIProgressHandler handler) throws Exception
     {
         super.beforePacks(idata, npacks, handler);
         initializeRegistryHandler(idata);
@@ -112,7 +112,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
         {
             // Start logging
             RegistryHandler rh = RegistryDefaultHandler.getInstance();
-            if (rh == null) return;
+            if (rh == null)
+            {
+                return;
+            }
             XMLElement uninstallerPack = null;
             // No interrupt desired after writing registry entries.
             Unpacker.setDiscardInterrupt(true);
@@ -142,7 +145,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
                 rh.setUninstallName(rh.getUninstallName() + " " + uninstallSuffix);
             }
             // Generate uninstaller key automatically if not defined in spec.
-            if (uninstallerPack == null) rh.registerUninstallKey();
+            if (uninstallerPack == null)
+            {
+                rh.registerUninstallKey();
+            }
             // Get the logging info from the registry class and put it into
             // the uninstaller. The RegistryUninstallerListener loads that data
             // and rewind the made entries.
@@ -151,30 +157,42 @@ public class RegistryInstallerListener extends NativeInstallerListener
             // CustomAction.
             List<Object> info = rh.getLoggingInfo();
             if (info != null)
+            {
                 UninstallData.getInstance().addAdditionalData("registryEntries", info);
+            }
 
         }
         catch (Exception e)
         {
             if (e instanceof NativeLibException)
+            {
                 throw new WrappedNativeLibException(e);
+            }
             else
+            {
                 throw e;
+            }
         }
     }
 
     /**
      * Performs the registry settings for the given pack.
-     * 
+     *
      * @param pack XML elemtent which contains the registry settings for one pack
      * @throws Exception
      */
     private void performPack(XMLElement pack, VariableSubstitutor substitutor) throws Exception
     {
-        if (pack == null) return;
+        if (pack == null)
+        {
+            return;
+        }
         // Get all entries for registry settings.
         Vector regEntries = pack.getChildren();
-        if (regEntries == null) return;
+        if (regEntries == null)
+        {
+            return;
+        }
         Iterator entriesIter = regEntries.iterator();
         while (entriesIter != null && entriesIter.hasNext())
         {
@@ -190,9 +208,11 @@ public class RegistryInstallerListener extends NativeInstallerListener
                 performValueSetting(regEntry, substitutor);
             }
             else
-                // No valid type.
+            // No valid type.
+            {
                 getSpecHelper().parseError(regEntry,
                         "Non-valid type of entry; only 'key' and 'value' are allowed.");
+            }
 
         }
 
@@ -200,8 +220,8 @@ public class RegistryInstallerListener extends NativeInstallerListener
 
     /**
      * Perform the setting of one value.
-     * 
-     * @param regEntry element which contains the description of the value to be set
+     *
+     * @param regEntry    element which contains the description of the value to be set
      * @param substitutor variable substitutor to be used for revising the regEntry contents
      */
     private void performValueSetting(XMLElement regEntry, VariableSubstitutor substitutor)
@@ -216,7 +236,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
         int rootId = resolveRoot(regEntry, root, substitutor);
 
         RegistryHandler rh = RegistryDefaultHandler.getInstance();
-        if (rh == null) return;
+        if (rh == null)
+        {
+            return;
+        }
 
         rh.setRoot(rootId);
 
@@ -224,7 +247,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
         if (!"true".equalsIgnoreCase(override))
         { // Do not set value if override is not true and the value exist.
 
-            if (rh.getValue(keypath, name, null) != null) return;
+            if (rh.getValue(keypath, name, null) != null)
+            {
+                return;
+            }
         }
 
         String value = regEntry.getAttribute(REG_DWORD);
@@ -267,7 +293,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
                 XMLElement element = multiIter.next();
                 String tmp = specHelper.getRequiredAttribute(element, REG_DATA);
                 buf.append(tmp);
-                if (!tmp.endsWith(",") && multiIter.hasNext()) buf.append(",");
+                if (!tmp.endsWith(",") && multiIter.hasNext())
+                {
+                    buf.append(",");
+                }
             }
             byte[] bytes = extractBytes(regEntry, substitutor.substitute(buf.toString(), null));
             rh.setValue(keypath, name, bytes);
@@ -290,8 +319,13 @@ public class RegistryInstallerListener extends NativeInstallerListener
             { // Unfortenly byte is signed ...
                 int tval = Integer.parseInt(token, 16);
                 if (tval < 0 || tval > 0xff)
+                {
                     throw new NumberFormatException("Value out of range.");
-                if (tval > 0x7f) tval -= 0x100;
+                }
+                if (tval > 0x7f)
+                {
+                    tval -= 0x100;
+                }
                 value = (byte) tval;
             }
             catch (NumberFormatException nfe)
@@ -308,8 +342,8 @@ public class RegistryInstallerListener extends NativeInstallerListener
 
     /**
      * Perform the setting of one key.
-     * 
-     * @param regEntry element which contains the description of the key to be created
+     *
+     * @param regEntry    element which contains the description of the key to be created
      * @param substitutor variable substitutor to be used for revising the regEntry contents
      */
     private void performKeySetting(XMLElement regEntry, VariableSubstitutor substitutor)
@@ -320,9 +354,15 @@ public class RegistryInstallerListener extends NativeInstallerListener
         String root = getSpecHelper().getRequiredAttribute(regEntry, REG_ROOT);
         int rootId = resolveRoot(regEntry, root, substitutor);
         RegistryHandler rh = RegistryDefaultHandler.getInstance();
-        if (rh == null) return;
+        if (rh == null)
+        {
+            return;
+        }
         rh.setRoot(rootId);
-        if (!rh.keyExist(keypath)) rh.createKey(keypath);
+        if (!rh.keyExist(keypath))
+        {
+            rh.createKey(keypath);
+        }
     }
 
     private int resolveRoot(XMLElement regEntry, String root, VariableSubstitutor substitutor)
@@ -330,7 +370,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
     {
         String root1 = substitutor.substitute(root, null);
         Integer tmp = RegistryHandler.ROOT_KEY_MAP.get(root1);
-        if (tmp != null) return (tmp);
+        if (tmp != null)
+        {
+            return (tmp);
+        }
         getSpecHelper().parseError(regEntry, "Unknown value (" + root1 + ")for registry root.");
         return 0;
     }
@@ -338,7 +381,10 @@ public class RegistryInstallerListener extends NativeInstallerListener
     private void initializeRegistryHandler(AutomatedInstallData idata) throws Exception
     {
         RegistryHandler rh = RegistryDefaultHandler.getInstance();
-        if (rh == null) return;
+        if (rh == null)
+        {
+            return;
+        }
         rh.verify(idata);
         getSpecHelper().readSpec(SPEC_FILE_NAME);
     }

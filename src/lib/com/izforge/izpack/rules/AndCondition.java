@@ -21,20 +21,19 @@
 
 package com.izforge.izpack.rules;
 
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.util.Debug;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * Defines a condition where both operands have to be true
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class AndCondition extends Condition
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5854944262991488370L;
 
@@ -43,7 +42,7 @@ public class AndCondition extends Condition
     protected Condition rightoperand;
 
     /**
-     * 
+     *
      */
     public AndCondition()
     {
@@ -51,20 +50,20 @@ public class AndCondition extends Condition
     }
 
     /**
-     * 
+     *
      */
     public AndCondition(Condition operand1, Condition operand2)
     {
         this.leftoperand = operand1;
         this.rightoperand = operand2;
     }
-  
+
 
     /*
-     * (non-Javadoc)
-     * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement)
-     */
+    * (non-Javadoc)
+    *
+    * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement)
+    */
     public void readFromXML(XMLElement xmlcondition)
     {
         try
@@ -83,9 +82,9 @@ public class AndCondition extends Condition
         }
     }
 
-  
+
     public boolean isTrue()
-    {        
+    {
         return leftoperand.isTrue() && rightoperand.isTrue();
     }
 
@@ -96,7 +95,7 @@ public class AndCondition extends Condition
     {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
-        details.append(" depends on:<ul><li>");        
+        details.append(" depends on:<ul><li>");
         details.append(leftoperand.getDependenciesDetails());
         details.append("</li> AND <li>");
         details.append(rightoperand.getDependenciesDetails());

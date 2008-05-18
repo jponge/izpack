@@ -22,19 +22,18 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.util.Debug;
+import net.n3.nanoxml.XMLElement;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-import net.n3.nanoxml.XMLElement;
-
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.util.Debug;
-
 /**
  * Functions to support automated usage of the UserInputPanel
- * 
+ *
  * @author Jonathan Halliday
  * @author Elmar Grom
  */
@@ -69,7 +68,6 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
     }
 
     /**
-     * 
      * @param entries String-String key-value pairs representing the state of the Panel
      */
     public UserInputPanelAutomationHelper(Map<String, String> entries)
@@ -79,8 +77,8 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
 
     /**
      * Serialize state to XML and insert under panelRoot.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata     The installation data.
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
     public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
@@ -113,10 +111,9 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
 
     /**
      * Deserialize state from panelRoot and set idata variables accordingly.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata     The installation data.
      * @param panelRoot The XML root element of the panels blackbox tree.
-     * 
      * @return true if the variables were found and set.
      */
     public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
@@ -131,11 +128,17 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         // ----------------------------------------------------
         userInput = panelRoot.getFirstChildNamed(AUTO_KEY_USER_INPUT);
 
-        if (userInput == null) { return false; }
+        if (userInput == null)
+        {
+            return false;
+        }
 
         Vector<XMLElement> userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
 
-        if (userEntries == null) { return false; }
+        if (userEntries == null)
+        {
+            return false;
+        }
 
         // ----------------------------------------------------
         // retieve each entry and substitute the associated
@@ -150,7 +153,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
             Debug.trace("UserInputPanel: setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);
         }
-        
+
         return true;
     }
 }

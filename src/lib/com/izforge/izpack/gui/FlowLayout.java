@@ -21,38 +21,34 @@
 
 package com.izforge.izpack.gui;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.Insets;
-import java.awt.LayoutManager;
+import java.awt.*;
 
 /*---------------------------------------------------------------------------*/
 /**
  * A flow layout arranges components in a left-to-right flow, much like lines of text in a
  * paragraph. Flow layouts are typically used to arrange buttons in a panel. It will arrange buttons
  * left to right until no more buttons fit on the same line. Each line is centered.
- * <p>
+ * <p/>
  * For example, the following picture shows an applet using the flow layout manager (its default
  * layout manager) to position three buttons:
- * <p>
+ * <p/>
  * <img src="doc-files/FlowLayout-1.gif" ALT="Graphic of Layout for Three Buttons" ALIGN=center
  * HSPACE=10 VSPACE=7>
- * <p>
+ * <p/>
  * Here is the code for this applet:
- * <p>
+ * <p/>
  * <hr>
  * <blockquote>
- * 
+ * <p/>
  * <pre>
  * import java.awt.*;
  * import java.applet.Applet;
- * 
+ * <p/>
  * public class myButtons extends Applet
  * {
- * 
+ * <p/>
  *     Button button1, button2, button3;
- * 
+ * <p/>
  *     public void init()
  *     {
  *         button1 = new Button(&quot;Ok&quot;);
@@ -63,14 +59,14 @@ import java.awt.LayoutManager;
  *         add(button3);
  *     }
  * }
- * 
+ * <p/>
  * </pre>
- * 
+ * <p/>
  * </blockquote>
  * <hr>
- * <p>
+ * <p/>
  * A flow layout lets each component assume its natural (preferred) size.
- * 
+ * <p/>
  * This class is a bit different from java.awt.FlowLayout. <blockquote> java.awt.FlowLayout has a
  * minor problem that was bugging me when I wrote the UserInputPanel. FlowLayout puts some amount of
  * space in between each component that it lays out. In addition it adds that same amount of space
@@ -79,11 +75,11 @@ import java.awt.LayoutManager;
  * appear to be slightly indented). Because there is no way to circumvent this behavior in
  * FlowLayout (it's hard coded) I copied the source and modified it so that it does not add the
  * space to the left and to the right. Now my stuff lines up properly. (Elmar Grom)</blockquote>
- * 
- * @version 1.39, 11/29/02
+ *
  * @author Arthur van Hoff
  * @author Sami Shaio
  * @author Elmar Grom
+ * @version 1.39, 11/29/02
  */
 /*---------------------------------------------------------------------------*/
 public class FlowLayout implements LayoutManager
@@ -107,7 +103,7 @@ public class FlowLayout implements LayoutManager
     /**
      * This value indicates that each row of components should be justified to the leading edge of
      * the container's orientation, for example, to the left in left-to-right orientations.
-     * 
+     *
      * @see java.awt.Component#getComponentOrientation
      * @see java.awt.ComponentOrientation
      * @since 1.2 Package-private pending API change approval
@@ -117,7 +113,7 @@ public class FlowLayout implements LayoutManager
     /**
      * This value indicates that each row of components should be justified to the leading edge of
      * the container's orientation, for example, to the right in left-to-right orientations.
-     * 
+     *
      * @see java.awt.Component#getComponentOrientation
      * @see java.awt.ComponentOrientation
      * @since 1.2 Package-private pending API change approval
@@ -129,7 +125,7 @@ public class FlowLayout implements LayoutManager
      * can be one of the following three values : <code>LEFT</code>
      * <code>RIGHT</code>
      * <code>CENTER</code>
-     * 
+     *
      * @serial
      * @see #getAlignment
      * @see #setAlignment
@@ -142,18 +138,18 @@ public class FlowLayout implements LayoutManager
      * <code>LEFT</code>
      * <code>RIGHT</code>
      * <code>CENTER</code>
-     * 
+     *
      * @serial
-     * @since 1.2
      * @see #getAlignment
      * @see #setAlignment
+     * @since 1.2
      */
     int newAlign; // This is the one we actually use
 
     /**
      * The flow layout manager allows a seperation of components with gaps. The horizontal gap will
      * specify the space between components.
-     * 
+     *
      * @serial
      * @see #getHgap
      * @see #setHgap
@@ -163,7 +159,7 @@ public class FlowLayout implements LayoutManager
     /**
      * The flow layout manager allows a seperation of components with gaps. The vertical gap will
      * specify the space between rows.
-     * 
+     *
      * @serial
      * @see #getVgap
      * @see #setVgap
@@ -186,7 +182,7 @@ public class FlowLayout implements LayoutManager
      * Constructs a new Flow Layout with the specified alignment and a default 5-unit horizontal and
      * vertical gap. The value of the alignment argument must be one of <code>FlowLayout.LEFT</code>,
      * <code>FlowLayout.RIGHT</code>, or <code>FlowLayout.CENTER</code>.
-     * 
+     *
      * @param align the alignment value
      */
     /*--------------------------------------------------------------------------*/
@@ -199,13 +195,13 @@ public class FlowLayout implements LayoutManager
     /**
      * Creates a new flow layout manager with the indicated alignment and the indicated horizontal
      * and vertical gaps.
-     * <p>
+     * <p/>
      * The value of the alignment argument must be one of <code>FlowLayout.LEFT</code>,
      * <code>FlowLayout.RIGHT</code>, or <code>FlowLayout.CENTER</code>.
-     * 
+     *
      * @param align the alignment value.
-     * @param hgap the horizontal gap between components.
-     * @param vgap the vertical gap between components.
+     * @param hgap  the horizontal gap between components.
+     * @param vgap  the vertical gap between components.
      */
     /*--------------------------------------------------------------------------*/
     public FlowLayout(int align, int hgap, int vgap)
@@ -219,9 +215,8 @@ public class FlowLayout implements LayoutManager
     /**
      * Gets the alignment for this layout. Possible values are <code>FlowLayout.LEFT</code>,
      * <code>FlowLayout.RIGHT</code>, or <code>FlowLayout.CENTER</code>.
-     * 
+     *
      * @return the alignment value for this layout.
-     * 
      * @see java.awt.FlowLayout#setAlignment
      */
     /*--------------------------------------------------------------------------*/
@@ -234,9 +229,8 @@ public class FlowLayout implements LayoutManager
     /**
      * Sets the alignment for this layout. Possible values are <code>FlowLayout.LEFT</code>,
      * <code>FlowLayout.RIGHT</code>, and <code>FlowLayout.CENTER</code>.
-     * 
+     *
      * @param align the alignment value.
-     * 
      * @see #getAlignment()
      */
     /*--------------------------------------------------------------------------*/
@@ -250,24 +244,23 @@ public class FlowLayout implements LayoutManager
 
         switch (align)
         {
-        case LEADING:
-            this.align = LEFT;
-            break;
-        case TRAILING:
-            this.align = RIGHT;
-            break;
-        default:
-            this.align = align;
-            break;
+            case LEADING:
+                this.align = LEFT;
+                break;
+            case TRAILING:
+                this.align = RIGHT;
+                break;
+            default:
+                this.align = align;
+                break;
         }
     }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Gets the horizontal gap between components.
-     * 
+     *
      * @return the horizontal gap between components.
-     * 
      * @see #setHgap(int)
      */
     /*--------------------------------------------------------------------------*/
@@ -279,9 +272,8 @@ public class FlowLayout implements LayoutManager
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the horizontal gap between components.
-     * 
+     *
      * @param hgap the horizontal gap between components
-     * 
      * @see #getHgap()
      */
     /*--------------------------------------------------------------------------*/
@@ -293,9 +285,8 @@ public class FlowLayout implements LayoutManager
     /*--------------------------------------------------------------------------*/
     /**
      * Gets the vertical gap between components.
-     * 
+     *
      * @return the vertical gap between components.\
-     * 
      * @see #setVgap(int)
      */
     /*--------------------------------------------------------------------------*/
@@ -307,9 +298,8 @@ public class FlowLayout implements LayoutManager
     /*--------------------------------------------------------------------------*/
     /**
      * Sets the vertical gap between components.
-     * 
+     *
      * @param vgap the vertical gap between components
-     * 
      * @see #getVgap()
      */
     /*--------------------------------------------------------------------------*/
@@ -321,7 +311,7 @@ public class FlowLayout implements LayoutManager
     /*--------------------------------------------------------------------------*/
     /**
      * Adds the specified component to the layout. Not used by this class.
-     * 
+     *
      * @param name the name of the component
      * @param comp the component to be added
      */
@@ -333,9 +323,8 @@ public class FlowLayout implements LayoutManager
     /*--------------------------------------------------------------------------*/
     /**
      * Removes the specified component from the layout. Not used by this class.
-     * 
+     *
      * @param comp the component to remove
-     * 
      */
     /*--------------------------------------------------------------------------*/
     public void removeLayoutComponent(Component comp)
@@ -346,9 +335,8 @@ public class FlowLayout implements LayoutManager
     /**
      * Returns the preferred dimensions for this layout given the components in the specified target
      * container.
-     * 
+     *
      * @param target the component which needs to be laid out
-     * 
      * @return the preferred dimensions to lay out the subcomponents of the specified container.
      * @see #minimumLayoutSize(Container)
      */
@@ -392,11 +380,9 @@ public class FlowLayout implements LayoutManager
     /**
      * Returns the minimum dimensions needed to layout the components contained in the specified
      * target container.
-     * 
+     *
      * @param target the component which needs to be laid out
-     * 
      * @return the minimum dimensions to lay out the subcomponents of the specified container.
-     * 
      * @see #preferredLayoutSize(Container)
      */
     /*--------------------------------------------------------------------------*/
@@ -433,37 +419,37 @@ public class FlowLayout implements LayoutManager
     /*--------------------------------------------------------------------------*/
     /**
      * Centers the elements in the specified row, if there is any slack.
-     * 
-     * @param target the component which needs to be moved
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param width the width dimensions
-     * @param height the height dimensions
+     *
+     * @param target   the component which needs to be moved
+     * @param x        the x coordinate
+     * @param y        the y coordinate
+     * @param width    the width dimensions
+     * @param height   the height dimensions
      * @param rowStart the beginning of the row
-     * @param rowEnd the the ending of the row
+     * @param rowEnd   the the ending of the row
      */
     /*--------------------------------------------------------------------------*/
     private void moveComponents(Container target, int x, int y, int width, int height,
-            int rowStart, int rowEnd, boolean ltr)
+                                int rowStart, int rowEnd, boolean ltr)
     {
         synchronized (target.getTreeLock())
         {
             switch (newAlign)
             {
-            case LEFT:
-                x += ltr ? 0 : width;
-                break;
-            case CENTER:
-                x += width / 2;
-                break;
-            case RIGHT:
-                x += ltr ? width : 0;
-                break;
-            case LEADING:
-                break;
-            case TRAILING:
-                x += width;
-                break;
+                case LEFT:
+                    x += ltr ? 0 : width;
+                    break;
+                case CENTER:
+                    x += width / 2;
+                    break;
+                case RIGHT:
+                    x += ltr ? width : 0;
+                    break;
+                case LEADING:
+                    break;
+                case TRAILING:
+                    x += width;
+                    break;
             }
 
             for (int i = rowStart; i < rowEnd; i++)
@@ -493,9 +479,8 @@ public class FlowLayout implements LayoutManager
      * Lays out the container. This method lets each component take its preferred size by reshaping
      * the components in the target container in order to satisfy the constraints of this
      * <code>FlowLayout</code> object.
-     * 
+     *
      * @param target the specified component being laid out.
-     * 
      */
     /*--------------------------------------------------------------------------*/
     public void layoutContainer(Container target)
@@ -548,7 +533,7 @@ public class FlowLayout implements LayoutManager
     /*--------------------------------------------------------------------------*/
     /**
      * Returns a string representation of this <code>FlowLayout</code> object and its values.
-     * 
+     *
      * @return a string representation of this layout.
      */
     /*--------------------------------------------------------------------------*/
@@ -558,21 +543,21 @@ public class FlowLayout implements LayoutManager
 
         switch (align)
         {
-        case LEFT:
-            str = ",align=left";
-            break;
-        case CENTER:
-            str = ",align=center";
-            break;
-        case RIGHT:
-            str = ",align=right";
-            break;
-        case LEADING:
-            str = ",align=leading";
-            break;
-        case TRAILING:
-            str = ",align=trailing";
-            break;
+            case LEFT:
+                str = ",align=left";
+                break;
+            case CENTER:
+                str = ",align=center";
+                break;
+            case RIGHT:
+                str = ",align=right";
+                break;
+            case LEADING:
+                str = ",align=leading";
+                break;
+            case TRAILING:
+                str = ",align=trailing";
+                break;
         }
 
         return (getClass().getName() + "[hgap=" + hgap + ",vgap=" + vgap + str + "]");

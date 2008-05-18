@@ -23,32 +23,46 @@ import javax.swing.plaf.ColorUIResource;
 
 /**
  * The IzPack Kunststoff L&F theme.
- * 
+ *
  * @author Julien Ponge
  */
 @Deprecated
 public class IzPackKMetalTheme extends IzPackMetalTheme
 {
 
-    /** Primary color. */
+    /**
+     * Primary color.
+     */
     private final ColorUIResource primary1 = new ColorUIResource(32, 32, 64);
 
-    /** Primary color. */
+    /**
+     * Primary color.
+     */
     private final ColorUIResource primary2 = new ColorUIResource(160, 160, 180);
 
-    /** Primary color. */
+    /**
+     * Primary color.
+     */
     private final ColorUIResource primary3 = new ColorUIResource(200, 200, 224);
 
-    /** Secondary color. */
+    /**
+     * Secondary color.
+     */
     private final ColorUIResource secondary1 = new ColorUIResource(130, 130, 130);
 
-    /** Secondary color. */
+    /**
+     * Secondary color.
+     */
     private final ColorUIResource secondary2 = new ColorUIResource(180, 180, 180);
 
-    /** Secondary color. */
+    /**
+     * Secondary color.
+     */
     private final ColorUIResource secondary3 = new ColorUIResource(224, 224, 224);
 
-    /** The constructor. */
+    /**
+     * The constructor.
+     */
     public IzPackKMetalTheme()
     {
         super();
@@ -56,7 +70,7 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
 
     /**
      * Returns the wished color.
-     * 
+     *
      * @return The wished color.
      */
     public ColorUIResource getPrimary1()
@@ -66,7 +80,7 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
 
     /**
      * Returns the wished color.
-     * 
+     *
      * @return The wished color.
      */
     public ColorUIResource getPrimary2()
@@ -76,7 +90,7 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
 
     /**
      * Returns the wished color.
-     * 
+     *
      * @return The wished color.
      */
     public ColorUIResource getPrimary3()
@@ -86,7 +100,7 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
 
     /**
      * Returns the wished color.
-     * 
+     *
      * @return The wished color.
      */
     public ColorUIResource getSecondary1()
@@ -96,7 +110,7 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
 
     /**
      * Returns the wished color.
-     * 
+     *
      * @return The wished color.
      */
     public ColorUIResource getSecondary2()
@@ -106,7 +120,7 @@ public class IzPackKMetalTheme extends IzPackMetalTheme
 
     /**
      * Returns the wished color.
-     * 
+     *
      * @return The wished color.
      */
     public ColorUIResource getSecondary3()

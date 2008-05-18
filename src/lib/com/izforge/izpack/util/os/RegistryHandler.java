@@ -22,13 +22,6 @@
 
 package com.izforge.izpack.util.os;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.NativeLibException;
 import com.coi.tools.os.win.RegDataContainer;
@@ -37,13 +30,19 @@ import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OSClassHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * This class represents a registry handler in a operating system independent way. OS specific
  * subclasses are used to implement the necessary mapping from this generic API to the classes that
  * reflect the system dependent AIP.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class RegistryHandler extends OSClassHelper implements MSWinConstants
 {
@@ -57,6 +56,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
     private static final String UNINSTALLER_ICON = "UninstallerIcon";
 
     private static RegistryHandler defaultHandler = null;
+
     static
     {
         ROOT_KEY_MAP.put("HKCR", HKEY_CLASSES_ROOT);
@@ -86,7 +86,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Creates an registry handler which uses an oblect of the given class as worker.
-     * 
+     *
      * @param className full qualified class name of the class which should be used as worker
      */
     public RegistryHandler(String className)
@@ -100,16 +100,19 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
      */
     private synchronized void setDefault()
     {
-        if (defaultHandler == null) defaultHandler = this;
+        if (defaultHandler == null)
+        {
+            defaultHandler = this;
+        }
     }
 
     /**
      * Sets the given contents to the given registry value. If a sub key or the registry value does
      * not exist, it will be created. The return value is a String array which contains the names of
      * the keys and values which are created. REG_SZ is used as registry value type.
-     * 
-     * @param key the registry key which should be used or created
-     * @param value the registry value into which the contents should be set
+     *
+     * @param key      the registry key which should be used or created
+     * @param value    the registry value into which the contents should be set
      * @param contents the contents for the value
      * @throws NativeLibException
      */
@@ -125,9 +128,9 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
      * Sets the given contents to the given registry value. If a sub key or the registry value does
      * not exist, it will be created. The return value is a String array which contains the names of
      * the keys and values which are created. REG_BINARY is used as registry value type.
-     * 
-     * @param key the registry key which should be used or created
-     * @param value the registry value into which the contents should be set
+     *
+     * @param key      the registry key which should be used or created
+     * @param value    the registry value into which the contents should be set
      * @param contents the contents for the value
      * @throws NativeLibException
      */
@@ -139,9 +142,9 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
      * Sets the given contents to the given registry value. If a sub key or the registry value does
      * not exist, it will be created. The return value is a String array which contains the names of
      * the keys and values which are created. REG_DWORD is used as registry value type.
-     * 
-     * @param key the registry key which should be used or created
-     * @param value the registry value into which the contents should be set
+     *
+     * @param key      the registry key which should be used or created
+     * @param value    the registry value into which the contents should be set
      * @param contents the contents for the value
      * @throws NativeLibException
      */
@@ -151,9 +154,9 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Returns the contents of the key/value pair if value exist, else the given default value.
-     * 
-     * @param key the registry key which should be used
-     * @param value the registry value from which the contents should be requested
+     *
+     * @param key        the registry key which should be used
+     * @param value      the registry value from which the contents should be requested
      * @param defaultVal value to be used if no value exist in the registry
      * @return requested value if exist, else the default value
      * @throws NativeLibException
@@ -165,7 +168,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Returns whether a key exist or not.
-     * 
+     *
      * @param key key to be evaluated
      * @return whether a key exist or not
      * @throws NativeLibException
@@ -177,8 +180,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Returns whether a the given value under the given key exist or not.
-     * 
-     * @param key key to be used as path for the value
+     *
+     * @param key   key to be used as path for the value
      * @param value value name to be evaluated
      * @return whether a the given value under the given key exist or not
      * @throws NativeLibException
@@ -190,7 +193,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Returns all keys which are defined under the given key.
-     * 
+     *
      * @param key key to be used as path for the sub keys
      * @return all keys which are defined under the given key
      * @throws NativeLibException
@@ -202,7 +205,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Returns all value names which are defined under the given key.
-     * 
+     *
      * @param key key to be used as path for the value names
      * @return all value names which are defined under the given key
      * @throws NativeLibException
@@ -214,8 +217,8 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Returns the contents of the key/value pair if value exist, else an exception is raised.
-     * 
-     * @param key the registry key which should be used
+     *
+     * @param key   the registry key which should be used
      * @param value the registry value from which the contents should be requested
      * @return requested value if exist, else an exception
      * @throws NativeLibException
@@ -227,37 +230,38 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Creates the given key in the registry.
-     * 
+     *
      * @param key key to be created
      * @throws NativeLibException
      */
     public void createKey(String key) throws NativeLibException
     {
     }
-    
+
     /**
      * Deletes the given key if exist, else throws an exception.
+     *
      * @param key key to be deleted
      * @throws NativeLibException
      */
-    public void deleteKey( String key) throws NativeLibException
+    public void deleteKey(String key) throws NativeLibException
     {
     }
 
     /**
      * Deletes a key under the current root if it is empty, else do nothing.
-     * 
+     *
      * @param key key to be deleted
      * @throws NativeLibException
      */
     public void deleteKeyIfEmpty(String key) throws NativeLibException
     {
     }
-    
+
     /**
      * Deletes a value.
-     * 
-     * @param key key of the value which should be deleted
+     *
+     * @param key   key of the value which should be deleted
      * @param value value name to be deleted
      * @throws NativeLibException
      */
@@ -267,7 +271,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Sets the root for the next registry access.
-     * 
+     *
      * @param i an integer which refers to a HKEY
      * @throws NativeLibException
      */
@@ -277,7 +281,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Return the root as integer (HKEY_xxx).
-     * 
+     *
      * @return the root as integer
      * @throws NativeLibException
      */
@@ -288,7 +292,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Activates logging of registry changes.
-     * 
+     *
      * @throws NativeLibException
      */
     public void activateLogging() throws NativeLibException
@@ -297,7 +301,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Suspends logging of registry changes.
-     * 
+     *
      * @throws NativeLibException
      */
     public void suspendLogging() throws NativeLibException
@@ -306,7 +310,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Resets logging of registry changes.
-     * 
+     *
      * @throws NativeLibException
      */
     public void resetLogging() throws NativeLibException
@@ -332,15 +336,24 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     public String getUninstallName()
     {
-        if (uninstallName != null) return (uninstallName);
-        if (installdata == null) return (null);
+        if (uninstallName != null)
+        {
+            return (uninstallName);
+        }
+        if (installdata == null)
+        {
+            return (null);
+        }
         return (installdata.getVariable("APP_NAME") + " " + installdata.getVariable("APP_VER"));
     }
 
     public boolean isProductRegistered() throws NativeLibException
     {
         String uninstallName = getUninstallName();
-        if (uninstallName == null) return (false);
+        if (uninstallName == null)
+        {
+            return (false);
+        }
         String keyName = UNINSTALL_ROOT + uninstallName;
         int oldVal = getRoot();
         setRoot(HKEY_LOCAL_MACHINE);
@@ -359,7 +372,10 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
     public void registerUninstallKey() throws NativeLibException
     {
         String uninstallName = getUninstallName();
-        if (uninstallName == null) return;
+        if (uninstallName == null)
+        {
+            return;
+        }
         String keyName = UNINSTALL_ROOT + uninstallName;
         String cmd = "\"" + installdata.getVariable("JAVA_HOME") + "\\bin\\javaw.exe\" -jar \""
                 + installdata.getVariable("INSTALL_PATH") + "\\uninstaller\\uninstaller.jar\"";
@@ -381,7 +397,9 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
         setValue(keyName, "UninstallString", cmd);
         setValue(keyName, "DisplayVersion", appVersion);
         if (appUrl != null && appUrl.length() > 0)
+        {
             setValue(keyName, "HelpLink", appUrl);
+        }
         // Try to write the uninstaller icon out.
         try
         {
@@ -420,7 +438,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Returns whether an action with this handler should be performed or not.
-     * 
+     *
      * @return always true
      */
     public boolean doPerform()
@@ -430,7 +448,7 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
 
     /**
      * Returns the default handler which is the first created registry handler.
-     * 
+     *
      * @return Returns the default handler.
      */
     public RegistryHandler getDefaultHandler()

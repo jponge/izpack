@@ -20,29 +20,6 @@
  */
 package com.izforge.izpack.installer;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Stack;
-import java.util.TreeSet;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
-
-import org.apache.regexp.RE;
-import org.apache.regexp.RECompiler;
-import org.apache.regexp.RESyntaxException;
-
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
@@ -53,44 +30,76 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
+import org.apache.regexp.RE;
+import org.apache.regexp.RECompiler;
+import org.apache.regexp.RESyntaxException;
+
+import java.io.*;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Abstract base class for all unpacker implementations.
+ *
  * @author Dennis Reil, <izpack@reil-online.de>
  */
 public abstract class UnpackerBase implements IUnpacker
-{    
-    /** The installdata. */
+{
+    /**
+     * The installdata.
+     */
     protected AutomatedInstallData idata;
 
-    /** The installer listener. */
+    /**
+     * The installer listener.
+     */
     protected AbstractUIProgressHandler handler;
 
-    /** The uninstallation data. */
+    /**
+     * The uninstallation data.
+     */
     protected UninstallData udata;
 
-    /** The variables substitutor. */
-    protected VariableSubstitutor vs;    
+    /**
+     * The variables substitutor.
+     */
+    protected VariableSubstitutor vs;
 
-    /** The absolute path of the installation. (NOT the canonical!) */
+    /**
+     * The absolute path of the installation. (NOT the canonical!)
+     */
     protected File absolute_installpath;
 
-    /** The packs locale database. */
-    protected LocaleDatabase langpack = null;    
+    /**
+     * The packs locale database.
+     */
+    protected LocaleDatabase langpack = null;
 
-    /** The result of the operation. */
-    protected boolean result = true;    
+    /**
+     * The result of the operation.
+     */
+    protected boolean result = true;
 
-    /** The instances of the unpacker objects. */
+    /**
+     * The instances of the unpacker objects.
+     */
     protected static HashMap<Object, String> instances = new HashMap<Object, String>();
-    
-    /** Interrupt flag if global interrupt is desired. */
+
+    /**
+     * Interrupt flag if global interrupt is desired.
+     */
     protected static boolean interruptDesired = false;
 
-    /** Do not perform a interrupt call. */
+    /**
+     * Do not perform a interrupt call.
+     */
     protected static boolean discardInterrupt = false;
 
-    /** The name of the XML file that specifies the panel langpack */
+    /**
+     * The name of the XML file that specifies the panel langpack
+     */
     protected static final String LANG_FILE_NAME = "packsLang.xml";
 
     public static final String ALIVE = "alive";
@@ -98,40 +107,41 @@ public abstract class UnpackerBase implements IUnpacker
     public static final String INTERRUPT = "doInterrupt";
 
     public static final String INTERRUPTED = "interruppted";
-    
+
     protected RulesEngine rules;
-       
+
     /**
      * The constructor.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata   The installation data.
      * @param handler The installation progress handler.
      */
     public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler)
-    {        
+    {
         try
         {
             String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
             this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
         }
         catch (Throwable exception)
-        {}
+        {
+        }
 
         this.idata = idata;
         this.handler = handler;
 
         // Initialize the variable substitutor
         vs = new VariableSubstitutor(idata.getVariables());
-    }    
-    
+    }
+
     public void setRules(RulesEngine rules)
     {
         this.rules = rules;
     }
-   
+
     /**
      * Returns a copy of the active unpacker instances.
-     * 
+     *
      * @return a copy of active unpacker instances
      */
     public static HashMap getRunningInstances()
@@ -142,7 +152,7 @@ public abstract class UnpackerBase implements IUnpacker
             return (HashMap) (instances.clone());
         }
     }
-    
+
     /**
      * Adds this to the map of all existent instances of Unpacker.
      */
@@ -188,33 +198,40 @@ public abstract class UnpackerBase implements IUnpacker
             setInterruptDesired(true);
         }
     }
-    
+
     /**
      * Initiate interrupt of all alive Unpacker and waits until all Unpacker are interrupted or the
      * wait time has arrived. If the doNotInterrupt flag in InstallerListener is set to true, the
      * interrupt will be discarded.
-     * 
+     *
      * @param waitTime wait time in millisecounds
      * @return true if the interrupt will be performed, false if the interrupt will be discarded
      */
     public static boolean interruptAll(long waitTime)
     {
         long t0 = System.currentTimeMillis();
-        if (isDiscardInterrupt()) return (false);
+        if (isDiscardInterrupt())
+        {
+            return (false);
+        }
         setInterruptAll();
         while (!isInterruptReady())
         {
-            if (System.currentTimeMillis() - t0 > waitTime) return (true);
+            if (System.currentTimeMillis() - t0 > waitTime)
+            {
+                return (true);
+            }
             try
             {
                 Thread.sleep(100);
             }
             catch (InterruptedException e)
-            {}
+            {
+            }
         }
         return (true);
-    }      
-    
+    }
+
     private static boolean isInterruptReady()
     {
         synchronized (instances)
@@ -223,7 +240,10 @@ public abstract class UnpackerBase implements IUnpacker
             while (iter.hasNext())
             {
                 Object key = iter.next();
-                if (!instances.get(key).equals(INTERRUPTED)) return (false);
+                if (!instances.get(key).equals(INTERRUPTED))
+                {
+                    return (false);
+                }
             }
             return (true);
         }
@@ -233,7 +253,7 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Sets the interrupt flag for this Unpacker to INTERRUPTED if the previos state was INTERRUPT
      * or INTERRUPTED and returns whether interrupt was initiate or not.
-     * 
+     *
      * @return whether interrupt was initiate or not
      */
     protected boolean performInterrupted()
@@ -253,7 +273,7 @@ public abstract class UnpackerBase implements IUnpacker
 
     /**
      * Returns whether interrupt was initiate or not for this Unpacker.
-     * 
+     *
      * @return whether interrupt was initiate or not
      */
     private boolean shouldInterrupt()
@@ -261,26 +281,28 @@ public abstract class UnpackerBase implements IUnpacker
         synchronized (instances)
         {
             Object doIt = instances.get(this);
-            if (doIt != null && (doIt.equals(INTERRUPT) || doIt.equals(INTERRUPTED))) { return (true); }
+            if (doIt != null && (doIt.equals(INTERRUPT) || doIt.equals(INTERRUPTED)))
+            {
+                return (true);
+            }
             return (false);
         }
 
     }
-    
+
     /**
      * Return the state of the operation.
-     * 
+     *
      * @return true if the operation was successful, false otherwise.
      */
     public boolean getResult()
     {
         return this.result;
     }
-    
+
     /**
      * @param filename
      * @param patterns
-     * 
      * @return true if the file matched one pattern, false if it did not
      */
     private boolean fileMatchesOnePattern(String filename, ArrayList<RE> patterns)
@@ -298,9 +320,8 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     /**
-     * @param list A list of file name patterns (in ant fileset syntax)
+     * @param list       A list of file name patterns (in ant fileset syntax)
      * @param recompiler The regular expression compiler (used to speed up RE compiling).
-     * 
      * @return List of org.apache.regexp.RE
      */
     private List<RE> preparePatterns(ArrayList<String> list, RECompiler recompiler)
@@ -420,71 +441,77 @@ public abstract class UnpackerBase implements IUnpacker
         return result;
     }
 
- // CUSTOM ACTION STUFF -------------- start -----------------
+    // CUSTOM ACTION STUFF -------------- start -----------------
 
     /**
      * Informs all listeners which would be informed at the given action type.
-     * 
+     *
      * @param customActions array of lists with the custom action objects
-     * @param action identifier for which callback should be called
-     * @param firstParam first parameter for the call
-     * @param secondParam second parameter for the call
-     * @param thirdParam third parameter for the call
+     * @param action        identifier for which callback should be called
+     * @param firstParam    first parameter for the call
+     * @param secondParam   second parameter for the call
+     * @param thirdParam    third parameter for the call
      */
     protected void informListeners(List[] customActions, int action, Object firstParam,
-            Object secondParam, Object thirdParam) throws Exception
+                                   Object secondParam, Object thirdParam) throws Exception
     {
         List listener = null;
         // select the right action list.
         switch (action)
         {
-        case InstallerListener.BEFORE_FILE:
-        case InstallerListener.AFTER_FILE:
-        case InstallerListener.BEFORE_DIR:
-        case InstallerListener.AFTER_DIR:
-            listener = customActions[customActions.length - 1];
-            break;
-        default:
-            listener = customActions[0];
-            break;
+            case InstallerListener.BEFORE_FILE:
+            case InstallerListener.AFTER_FILE:
+            case InstallerListener.BEFORE_DIR:
+            case InstallerListener.AFTER_DIR:
+                listener = customActions[customActions.length - 1];
+                break;
+            default:
+                listener = customActions[0];
+                break;
         }
-        if (listener == null) return;
+        if (listener == null)
+        {
+            return;
+        }
         // Iterate the action list.
         Iterator iter = listener.iterator();
         while (iter.hasNext())
         {
-            if (shouldInterrupt()) return;
+            if (shouldInterrupt())
+            {
+                return;
+            }
             InstallerListener il = (InstallerListener) iter.next();
             switch (action)
             {
-            case InstallerListener.BEFORE_FILE:
-                il.beforeFile((File) firstParam, (PackFile) secondParam);
-                break;
-            case InstallerListener.AFTER_FILE:
-                il.afterFile((File) firstParam, (PackFile) secondParam);
-                break;
-            case InstallerListener.BEFORE_DIR:
-                il.beforeDir((File) firstParam, (PackFile) secondParam);
-                break;
-            case InstallerListener.AFTER_DIR:
-                il.afterDir((File) firstParam, (PackFile) secondParam);
-                break;
-            case InstallerListener.BEFORE_PACK:
-                il.beforePack((Pack) firstParam, (Integer) secondParam,
-                        (AbstractUIProgressHandler) thirdParam);
-                break;
-            case InstallerListener.AFTER_PACK:
-                il.afterPack((Pack) firstParam, (Integer) secondParam,
-                        (AbstractUIProgressHandler) thirdParam);
-                break;
-            case InstallerListener.BEFORE_PACKS:
-                il.beforePacks((AutomatedInstallData) firstParam, (Integer) secondParam,
-                        (AbstractUIProgressHandler) thirdParam);
-                break;
-            case InstallerListener.AFTER_PACKS:
-                il.afterPacks((AutomatedInstallData) firstParam,
-                        (AbstractUIProgressHandler) secondParam);
-                break;
+                case InstallerListener.BEFORE_FILE:
+                    il.beforeFile((File) firstParam, (PackFile) secondParam);
+                    break;
+                case InstallerListener.AFTER_FILE:
+                    il.afterFile((File) firstParam, (PackFile) secondParam);
+                    break;
+                case InstallerListener.BEFORE_DIR:
+                    il.beforeDir((File) firstParam, (PackFile) secondParam);
+                    break;
+                case InstallerListener.AFTER_DIR:
+                    il.afterDir((File) firstParam, (PackFile) secondParam);
+                    break;
+                case InstallerListener.BEFORE_PACK:
+                    il.beforePack((Pack) firstParam, (Integer) secondParam,
+                            (AbstractUIProgressHandler) thirdParam);
+                    break;
+                case InstallerListener.AFTER_PACK:
+                    il.afterPack((Pack) firstParam, (Integer) secondParam,
+                            (AbstractUIProgressHandler) thirdParam);
+                    break;
+                case InstallerListener.BEFORE_PACKS:
+                    il.beforePacks((AutomatedInstallData) firstParam, (Integer) secondParam,
+                            (AbstractUIProgressHandler) thirdParam);
+                    break;
+                case InstallerListener.AFTER_PACKS:
+                    il.afterPacks((AutomatedInstallData) firstParam,
+                            (AbstractUIProgressHandler) secondParam);
+                    break;
 
             }
         }
@@ -493,7 +520,7 @@ public abstract class UnpackerBase implements IUnpacker
     /**
      * Returns the defined custom actions split into types including a constructed type for the file
      * related installer listeners.
-     * 
+     *
      * @return array of lists of custom action data like listeners
      */
     protected List[] getCustomActions()
@@ -506,7 +533,9 @@ public abstract class UnpackerBase implements IUnpacker
             retval[i] = idata.customData.get(listenerNames[i]);
             if (retval[i] == null)
             // Make a dummy list, then iterator is ever callable.
+            {
                 retval[i] = new ArrayList();
+            }
         }
         if (retval[AutomatedInstallData.INSTALLER_LISTENER_INDEX].size() > 0)
         { // Installer listeners exist
@@ -521,20 +550,23 @@ public abstract class UnpackerBase implements IUnpacker
                 // If we get a class cast exception many is wrong and
                 // we must fix it.
                 InstallerListener li = (InstallerListener) iter.next();
-                if (li.isFileListener()) retval[i].add(li);
+                if (li.isFileListener())
+                {
+                    retval[i].add(li);
+                }
             }
 
         }
         return (retval);
     }
-    
+
     // This method is only used if a file related custom action exist.
     /**
      * Creates the given directory recursive and calls the method "afterDir" of each listener with
      * the current file object and the pack file object. On error an exception is raised.
-     * 
-     * @param dest the directory which should be created
-     * @param pf current pack file object
+     *
+     * @param dest          the directory which should be created
+     * @param pf            current pack file object
      * @param customActions all defined custom actions
      * @return false on error, true else
      * @throws Exception
@@ -544,15 +576,23 @@ public abstract class UnpackerBase implements IUnpacker
             throws Exception
     {
         String path = "unknown";
-        if (dest != null) path = dest.getAbsolutePath();
+        if (dest != null)
+        {
+            path = dest.getAbsolutePath();
+        }
         if (dest != null && !dest.exists() && dest.getParentFile() != null)
         {
             if (dest.getParentFile().exists())
+            {
                 informListeners(customActions, InstallerListener.BEFORE_DIR, dest, pf, null);
+            }
             if (!dest.mkdir())
             {
                 mkDirsWithEnhancement(dest.getParentFile(), pf, customActions);
-                if (!dest.mkdir()) dest = null;
+                if (!dest.mkdir())
+                {
+                    dest = null;
+                }
             }
             informListeners(customActions, InstallerListener.AFTER_DIR, dest, pf, null);
         }
@@ -566,10 +606,10 @@ public abstract class UnpackerBase implements IUnpacker
     }
 
     // CUSTOM ACTION STUFF -------------- end -----------------
-    
+
     /**
      * Returns whether an interrupt request should be discarded or not.
-     * 
+     *
      * @return Returns the discard interrupt flag
      */
     public static synchronized boolean isDiscardInterrupt()
@@ -579,7 +619,7 @@ public abstract class UnpackerBase implements IUnpacker
 
     /**
      * Sets the discard interrupt flag.
-     * 
+     *
      * @param di the discard interrupt flag to set
      */
     public static synchronized void setDiscardInterrupt(boolean di)
@@ -590,7 +630,7 @@ public abstract class UnpackerBase implements IUnpacker
 
     /**
      * Returns the interrupt desired state.
-     * 
+     *
      * @return the interrupt desired state
      */
     public static boolean isInterruptDesired()
@@ -604,12 +644,12 @@ public abstract class UnpackerBase implements IUnpacker
     private static void setInterruptDesired(boolean interruptDesired)
     {
         UnpackerBase.interruptDesired = interruptDesired;
-    }   
-    
+    }
+
     /**
      * Puts the uninstaller.
-     * 
-     * @exception Exception Description of the Exception
+     *
+     * @throws Exception Description of the Exception
      */
     protected void putUninstaller() throws Exception
     {
@@ -617,7 +657,10 @@ public abstract class UnpackerBase implements IUnpacker
         // idata.uninstallOutJar remains null
         InputStream[] in = new InputStream[2];
         in[0] = UnpackerBase.class.getResourceAsStream("/res/IzPack.uninstaller");
-        if (in[0] == null) return;
+        if (in[0] == null)
+        {
+            return;
+        }
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
         in[1] = UnpackerBase.class.getResourceAsStream("/res/IzPack.uninstaller-ext");
@@ -687,12 +730,12 @@ public abstract class UnpackerBase implements IUnpacker
             read = in2.read();
         }
         outJar.closeEntry();
-    }   
-    
+    }
+
     /**
      * Adds additional unistall data to the uninstall data object.
-     * 
-     * @param udata unistall data
+     *
+     * @param udata      unistall data
      * @param customData array of lists of custom action data like uninstaller listeners
      */
     protected void handleAdditionalUninstallData(UninstallData udata, List[] customData)
@@ -705,8 +748,8 @@ public abstract class UnpackerBase implements IUnpacker
         udata.addAdditionalData("uninstallerJars", customData[AutomatedInstallData.UNINSTALLER_JARS_INDEX]);
     }
 
-    public abstract void run();   
-    
+    public abstract void run();
+
     /**
      * @param updatechecks
      */
@@ -734,7 +777,10 @@ public abstract class UnpackerBase implements IUnpacker
         }
 
         // do nothing if no update checks were specified
-        if (include_patterns.size() == 0) return;
+        if (include_patterns.size() == 0)
+        {
+            return;
+        }
 
         // now collect all files in the installation directory and figure
         // out files to check for deletion
@@ -773,7 +819,10 @@ public abstract class UnpackerBase implements IUnpacker
 
                 File[] files = f.listFiles();
 
-                if (files == null) { throw new IOException(f.getPath() + "is not a directory!"); }
+                if (files == null)
+                {
+                    throw new IOException(f.getPath() + "is not a directory!");
+                }
 
                 for (File newf : files)
                 {
@@ -815,34 +864,39 @@ public abstract class UnpackerBase implements IUnpacker
 
         }
     }
-    
+
     /**
      * Writes information about the installed packs and the variables at
      * installation time.
-     * @throws IOException 
-     * @throws ClassNotFoundException 
-     */    
-    public void writeInstallationInformation() throws IOException, ClassNotFoundException {
-        if (!idata.info.isWriteInstallationInformation()){
+     *
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    public void writeInstallationInformation() throws IOException, ClassNotFoundException
+    {
+        if (!idata.info.isWriteInstallationInformation())
+        {
             Debug.trace("skip writing installation information");
             return;
         }
         Debug.trace("writing installation information");
         String installdir = idata.getInstallPath();
-        
+
         List installedpacks = new ArrayList(idata.selectedPacks);
-        
+
         File installationinfo = new File(installdir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
-        if (!installationinfo.exists()) {
+        if (!installationinfo.exists())
+        {
             Debug.trace("creating info file" + installationinfo.getAbsolutePath());
             installationinfo.createNewFile();
         }
-        else {
+        else
+        {
             Debug.trace("installation information found");
             // read in old information and update
             FileInputStream fin = new FileInputStream(installationinfo);
             ObjectInputStream oin = new ObjectInputStream(fin);
-            
+
             List packs = (List) oin.readObject();
             for (Object pack1 : packs)
             {
@@ -851,9 +905,9 @@ public abstract class UnpackerBase implements IUnpacker
             }
             oin.close();
             fin.close();
-            
+
         }
-        
+
         FileOutputStream fout = new FileOutputStream(installationinfo);
         ObjectOutputStream oout = new ObjectOutputStream(fout);
         oout.writeObject(installedpacks);

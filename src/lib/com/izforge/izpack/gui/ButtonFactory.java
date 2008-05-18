@@ -21,11 +21,8 @@
 
 package com.izforge.izpack.gui;
 
-import java.awt.Color;
-
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JButton;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class makes it possible to use default buttons on macosx platform
@@ -47,7 +44,7 @@ public class ButtonFactory
 
     /**
      * Enable or disable icons for buttons This setting has no effect on OSX
-     * 
+     *
      * @param useit flag which determines the behavior
      */
     public static void useButtonIcons(boolean useit)
@@ -68,7 +65,7 @@ public class ButtonFactory
 
     /**
      * Enable or disable highlight buttons This setting has no effect on OSX
-     * 
+     *
      * @param useit flag which determines the behavior
      */
     public static void useHighlightButtons(boolean useit)
@@ -85,9 +82,13 @@ public class ButtonFactory
         if (useHighlightButtons)
         {
             if (useButtonIcons)
+            {
                 return new HighlightJButton(icon, color);
+            }
             else
+            {
                 return new HighlightJButton("", color);
+            }
 
         }
         else
@@ -120,9 +121,13 @@ public class ButtonFactory
         if (useHighlightButtons)
         {
             if (useButtonIcons)
+            {
                 return new HighlightJButton(text, icon, color);
+            }
             else
+            {
                 return new HighlightJButton(text, color);
+            }
         }
         else
         {

@@ -26,12 +26,10 @@ import com.izforge.izpack.util.Librarian;
 import com.izforge.izpack.util.NativeLibraryClient;
 
 /**
- * 
  * Base class to handle multiple native methods of multiple classes in one shared library. This is a
  * singelton class.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class COIOSHelper
 {
@@ -41,15 +39,15 @@ public class COIOSHelper
     private static int used = 0;
 
     private static boolean destroyed = false;
-    
+
     private boolean failed = false;
 
     /**
      * This method is used to free the library at the end of progam execution. After this call, any
      * instance of this class will not be usable any more!
-     * 
+     *
      * @param name the name of the library to free. Use only the name and extension but not the
-     * path.
+     *             path.
      */
     private native void FreeLibrary(String name);
 
@@ -63,12 +61,15 @@ public class COIOSHelper
 
     /**
      * Returns the one existent object of this class.
-     * 
+     *
      * @return the one existent object of this class
      */
     public static synchronized COIOSHelper getInstance()
     {
-        if (self == null) self = new COIOSHelper();
+        if (self == null)
+        {
+            self = new COIOSHelper();
+        }
         return (self);
 
     }
@@ -83,10 +84,10 @@ public class COIOSHelper
      * <b>DO NOT CALL THIS METHOD DIRECTLY! </b> <br>
      * It is used by the librarian to free the native library before physically deleting it from its
      * temporary loaction. A call to this method will freeze the application irrecoverably!
-     * 
+     *
      * @param name the name of the library to free. Use only the name and extension but not the
      * path.
-     * 
+     *
      * @see com.izforge.izpack.util.NativeLibraryClient#freeLibrary
      */
     /*--------------------------------------------------------------------------*/
@@ -106,15 +107,17 @@ public class COIOSHelper
     /**
      * Add a NativeLibraryClient as dependant to this object. The method tries to load the shared
      * library COIOSHelper which should contain native methods for the dependant.
-     * 
+     *
      * @param dependant to be added
      * @throws Exception if loadLibrary for the needed lib fails
      */
     public void addDependant(NativeLibraryClient dependant) throws Exception
     {
         used++;
-        if( failed )
+        if (failed)
+        {
             throw (new Exception("load native library failed"));
+        }
         try
         {
             Librarian.getInstance().loadLibrary("COIOSHelper", dependant);
@@ -124,12 +127,12 @@ public class COIOSHelper
             failed = true;
             throw (new Exception("could not locate native library"));
         }
-        catch( Throwable t)
+        catch (Throwable t)
         {
             failed = true;
             throw (new Exception(t));
         }
-        
+
     }
 
 }

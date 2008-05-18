@@ -21,14 +21,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
@@ -36,31 +28,39 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  * The license panel.
- * 
+ *
  * @author Julien Ponge
  */
 public class LicencePanel extends IzPanel implements ActionListener
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3691043187997552948L;
 
-    /** The license text. */
+    /**
+     * The license text.
+     */
     private String licence;
 
-    /** The radio buttons. */
+    /**
+     * The radio buttons.
+     */
     private JRadioButton yesRadio;
     private JRadioButton noRadio;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public LicencePanel(InstallerFrame parent, InstallData idata)
     {
@@ -71,7 +71,7 @@ public class LicencePanel extends IzPanel implements ActionListener
         // We put our components
 
         add(LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
-                parent.icons.getImageIcon("history"),  LEADING), NEXT_LINE);
+                parent.icons.getImageIcon("history"), LEADING), NEXT_LINE);
         JTextArea textArea = new JTextArea(licence);
         textArea.setCaretPosition(0);
         textArea.setEditable(false);
@@ -92,12 +92,14 @@ public class LicencePanel extends IzPanel implements ActionListener
         group.add(noRadio);
         add(noRadio, NEXT_LINE);
         noRadio.addActionListener(this);
-        
+
         setInitialFocus(noRadio);
         getLayoutHelper().completeLayout();
     }
 
-    /** Loads the licence text. */
+    /**
+     * Loads the licence text.
+     */
     private void loadLicence()
     {
         try
@@ -114,20 +116,24 @@ public class LicencePanel extends IzPanel implements ActionListener
 
     /**
      * Actions-handling method (here it allows the installation).
-     * 
+     *
      * @param e The event.
      */
     public void actionPerformed(ActionEvent e)
     {
         if (yesRadio.isSelected())
+        {
             parent.unlockNextButton();
+        }
         else
+        {
             parent.lockNextButton();
+        }
     }
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return true if the user has agreed.
      */
     public boolean isValidated()
@@ -140,9 +146,14 @@ public class LicencePanel extends IzPanel implements ActionListener
         return (yesRadio.isSelected());
     }
 
-    /** Called when the panel becomes active. */
+    /**
+     * Called when the panel becomes active.
+     */
     public void panelActivate()
     {
-        if (!yesRadio.isSelected()) parent.lockNextButton();
+        if (!yesRadio.isSelected())
+        {
+            parent.lockNextButton();
+        }
     }
 }

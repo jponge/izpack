@@ -27,7 +27,8 @@ import java.io.IOException;
  *
  * @author hani, Marc.Eppelmann&#064;reddot.de
  */
-public final class OsVersion implements OsVersionConstants, StringConstants {
+public final class OsVersion implements OsVersionConstants, StringConstants
+{
 
     //~ Static fields/initializers
     // *******************************************************************************************************************************
@@ -165,12 +166,14 @@ public final class OsVersion implements OsVersionConstants, StringConstants {
      *
      * @return name of the file the release info is stored in for Linux distributions
      */
-    private static String getReleaseFileName() {
+    private static String getReleaseFileName()
+    {
         String result = "";
 
         File[] etcList = new File("/etc").listFiles();
 
         if (etcList != null)
+        {
             for (File etcEntry : etcList)
             {
                 if (etcEntry.isFile())
@@ -182,6 +185,7 @@ public final class OsVersion implements OsVersionConstants, StringConstants {
                     }
                 }
             }
+        }
 
         return result;
     }
@@ -191,61 +195,89 @@ public final class OsVersion implements OsVersionConstants, StringConstants {
      *
      * @return description string of the Linux distribution
      */
-    private static String getLinuxDistribution() {
+    private static String getLinuxDistribution()
+    {
         String result = null;
 
-        if (IS_SUSE_LINUX) {
-            try {
+        if (IS_SUSE_LINUX)
+        {
+            try
+            {
                 result = SUSE + SP + LINUX + NL + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 // TODO ignore
             }
-        } else if (IS_REDHAT_LINUX) {
-            try {
+        }
+        else if (IS_REDHAT_LINUX)
+        {
+            try
+            {
                 result = REDHAT + SP + LINUX + NL + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 // TODO ignore
             }
-        } else if (IS_FEDORA_LINUX) {
-            try {
+        }
+        else if (IS_FEDORA_LINUX)
+        {
+            try
+            {
                 result = FEDORA + SP + LINUX + NL
                         + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 // TODO ignore
             }
-        } else if (IS_MANDRAKE_LINUX) {
-            try {
+        }
+        else if (IS_MANDRAKE_LINUX)
+        {
+            try
+            {
                 result = MANDRAKE + SP + LINUX + NL
                         + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 // TODO ignore
             }
-        } else if (IS_MANDRIVA_LINUX) {
-            try {
+        }
+        else if (IS_MANDRIVA_LINUX)
+        {
+            try
+            {
                 result = MANDRIVA + SP + LINUX + NL
                         + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 // TODO ignore
             }
-        } else if (IS_DEBIAN_LINUX) {
-            try {
+        }
+        else if (IS_DEBIAN_LINUX)
+        {
+            try
+            {
                 result = DEBIAN + SP + LINUX + NL
                         + StringTool.stringArrayListToString(FileUtil.getFileContent("/etc/debian_version"));
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 // TODO ignore
             }
-        } else {
-            try {
+        }
+        else
+        {
+            try
+            {
                 result = "Unknown Linux Distribution\n"
                         + StringTool.stringArrayListToString(FileUtil.getFileContent(getReleaseFileName()));
             }
-            catch (IOException e) {
+            catch (IOException e)
+            {
                 // TODO ignore
             }
         }
@@ -258,24 +290,32 @@ public final class OsVersion implements OsVersionConstants, StringConstants {
      *
      * @return the details
      */
-    public static String getOsDetails() {
+    public static String getOsDetails()
+    {
         StringBuffer result = new StringBuffer();
         result.append("OS_NAME=").append(OS_NAME).append(NL);
 
-        if (IS_UNIX) {
-            if (IS_LINUX) {
+        if (IS_UNIX)
+        {
+            if (IS_LINUX)
+            {
                 result.append(getLinuxDistribution()).append(NL);
-            } else {
-                try {
+            }
+            else
+            {
+                try
+                {
                     result.append(FileUtil.getFileContent(getReleaseFileName())).append(NL);
                 }
-                catch (IOException e) {
+                catch (IOException e)
+                {
                     Debug.log("Unable to get release file contents in 'getOsDetails'.");
                 }
             }
         }
 
-        if (IS_WINDOWS) {
+        if (IS_WINDOWS)
+        {
             result.append(System.getProperty(OSNAME)).append(SP).append(System.getProperty("sun.os.patch.level", "")).append(NL);
         }
         return result.toString();
@@ -286,7 +326,8 @@ public final class OsVersion implements OsVersionConstants, StringConstants {
      *
      * @param args Commandline Args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         System.out.println(getOsDetails());
     }
 }

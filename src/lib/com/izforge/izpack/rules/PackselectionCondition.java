@@ -20,14 +20,12 @@
  */
 package com.izforge.izpack.rules;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.util.Debug;
-
 import net.n3.nanoxml.XMLElement;
+
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -37,13 +35,13 @@ public class PackselectionCondition extends Condition
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 9193011814966195963L;
     protected String packid;
 
     /**
-     * 
+     *
      */
     public PackselectionCondition()
     {
@@ -109,7 +107,7 @@ public class PackselectionCondition extends Condition
         StringBuffer details = new StringBuffer();
         details.append(this.id);
         details.append("depends on the selection of pack <b>");
-        details.append(this.packid);        
+        details.append(this.packid);
         details.append("</b><br/>");
         return details.toString();
     }

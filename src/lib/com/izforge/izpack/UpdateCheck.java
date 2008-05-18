@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 /**
  * Encloses information about an update check.
- * 
+ *
  * @author Tino Schwarze <tino.schwarze@community4you.de>
  */
 public class UpdateCheck implements Serializable
@@ -44,17 +44,21 @@ public class UpdateCheck implements Serializable
      */
     public ArrayList<String> excludesList = null;
 
-    /** Whether pattern matching is performed case-sensitive */
+    /**
+     * Whether pattern matching is performed case-sensitive
+     */
     boolean caseSensitive = true;
 
-    /** Constructs a new uninitialized instance. */
+    /**
+     * Constructs a new uninitialized instance.
+     */
     public UpdateCheck()
     {
     }
 
     /**
      * Constructs and initializes a new instance.
-     * 
+     *
      * @param includes The patterns to include in the check.
      * @param excludes The patterns to exclude from the check.
      */
@@ -66,9 +70,9 @@ public class UpdateCheck implements Serializable
 
     /**
      * Constructs and initializes a new instance.
-     * 
-     * @param includes The patterns to include in the check.
-     * @param excludes The patterns to exclude from the check.
+     *
+     * @param includes      The patterns to include in the check.
+     * @param excludes      The patterns to exclude from the check.
      * @param casesensitive If "yes", matches are performed case sensitive.
      */
     public UpdateCheck(ArrayList<String> includes, ArrayList<String> excludes, String casesensitive)

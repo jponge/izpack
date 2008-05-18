@@ -19,6 +19,9 @@
 
 package com.izforge.izpack;
 
+import com.izforge.izpack.installer.ResourceManager;
+import net.n3.nanoxml.*;
+
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -26,17 +29,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
-import com.izforge.izpack.installer.ResourceManager;
-
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLBuilderFactory;
-import net.n3.nanoxml.XMLElement;
-
 /**
  * Represents a database of a locale.
- * 
+ *
  * @author Julien Ponge
  * @author J. Chris Folsom <jchrisfolsom@gmail.com>
  */
@@ -61,9 +56,8 @@ public class LocaleDatabase extends TreeMap
     /**
      * Load a locale database. If the database has already been loaded it will
      * not be reloaded.
-     * 
-     * @param isoCode
-     *            The io code of the locale database.
+     *
+     * @param isoCode The io code of the locale database.
      * @return The locale database or null if it cannot be found.
      * @throws Exception
      */
@@ -75,20 +69,18 @@ public class LocaleDatabase extends TreeMap
 
     /**
      * Load a LocaleDatabase.
-     * 
-     * @param isoCode
-     *            The ISO language prefix for the locale.
-     * @param reload
-     *            Whether or not to reload the locale database if it has already
-     *            been loaded.
+     *
+     * @param isoCode The ISO language prefix for the locale.
+     * @param reload  Whether or not to reload the locale database if it has already
+     *                been loaded.
      * @return The locale database or null if it cannot be found.
-     * 
-     * FIXME Maybe we should define some custom exception like
-     * LocaleLoadException or something similar so that this class can have a
-     * method signature that does not throw Exception
+     *         <p/>
+     *         FIXME Maybe we should define some custom exception like
+     *         LocaleLoadException or something similar so that this class can have a
+     *         method signature that does not throw Exception
      */
     public static synchronized LocaleDatabase getLocaleDatabase(String isoCode,
-            boolean reload) throws Exception
+                                                                boolean reload) throws Exception
     {
         LocaleDatabase langpack = cachedLocales.get(isoCode);
 
@@ -117,9 +109,8 @@ public class LocaleDatabase extends TreeMap
 
     /**
      * Load the current default LocaleDatabase.
-     * 
-     * @throws Exception
-     *             FIXME
+     *
+     * @throws Exception FIXME
      */
     public static synchronized LocaleDatabase getLocaleDatabase()
             throws Exception
@@ -137,11 +128,9 @@ public class LocaleDatabase extends TreeMap
 
     /**
      * The constructor.
-     * 
-     * @param in
-     *            An InputStream to read the translation from.
-     * @exception Exception
-     *                Description of the Exception
+     *
+     * @param in An InputStream to read the translation from.
+     * @throws Exception Description of the Exception
      */
     public LocaleDatabase(InputStream in) throws Exception
     {
@@ -153,9 +142,8 @@ public class LocaleDatabase extends TreeMap
     /**
      * Adds the contents of the given stream to the data base. The stream have
      * to contain key value pairs as declared by the DTD langpack.dtd.
-     * 
-     * @param in
-     *            an InputStream to read the translation from.
+     *
+     * @param in an InputStream to read the translation from.
      * @throws Exception
      */
     public void add(InputStream in) throws Exception
@@ -171,7 +159,9 @@ public class LocaleDatabase extends TreeMap
 
         // We check the data
         if (!"langpack".equalsIgnoreCase(data.getName()))
+        {
             throw new Exception("this is not an IzPack XML langpack file");
+        }
 
         // We fill the Hashtable
         Vector children = data.getChildren();
@@ -183,7 +173,8 @@ public class LocaleDatabase extends TreeMap
             if (text != null && !"".equals(text))
             {
                 put(e.getAttribute("id"), text.trim());
-            } else
+            }
+            else
             {
                 put(e.getAttribute("id"), e.getAttribute("txt"));
             }
@@ -193,9 +184,8 @@ public class LocaleDatabase extends TreeMap
 
     /**
      * Convenience method to retrieve an element.
-     * 
-     * @param key
-     *            The key of the element to retrieve.
+     *
+     * @param key The key of the element to retrieve.
      * @return The element value or the key if not found.
      */
     public String getString(String key)
@@ -205,7 +195,9 @@ public class LocaleDatabase extends TreeMap
         // com.izforge.izpack.installer.IzPanel.getI18nStringForClass
         // should be also addapted.
         if (val == null)
+        {
             val = key;
+        }
         return val;
     }
 
@@ -217,11 +209,9 @@ public class LocaleDatabase extends TreeMap
      * the value will be used as key into the LocalDatabase. The key can be
      * written as $MYKEY or ${MYKEY}. For all place holders an argument should
      * be exist and vis a versa.
-     * 
-     * @param key
-     *            The key of the element to retrieve.
-     * @param variables
-     *            the variables to insert
+     *
+     * @param key       The key of the element to retrieve.
+     * @param variables the variables to insert
      * @return The element value with the variables inserted or the key if not
      *         found.
      */
@@ -233,9 +223,13 @@ public class LocaleDatabase extends TreeMap
             { // Argument is also a key into the LocaleDatabase.
                 String curArg = variables[i];
                 if (curArg.startsWith("${"))
+                {
                     curArg = curArg.substring(2, curArg.length() - 1);
+                }
                 else
+                {
                     curArg = curArg.substring(1);
+                }
                 variables[i] = getString(curArg);
             }
         }

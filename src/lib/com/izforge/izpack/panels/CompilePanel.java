@@ -20,48 +20,26 @@
  */
 package com.izforge.izpack.panels;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import com.izforge.izpack.gui.ButtonFactory;
+import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.*;
+import net.n3.nanoxml.XMLElement;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-
-import net.n3.nanoxml.XMLElement;
-
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.CompileHandler;
-import com.izforge.izpack.installer.CompileResult;
-import com.izforge.izpack.installer.CompileWorker;
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-
 /**
  * The compile panel class.
- * 
+ * <p/>
  * This class allows .java files to be compiled after installation.
- * 
+ * <p/>
  * Parts of the code have been taken from InstallPanel.java and modified a lot.
- * 
+ *
  * @author Tino Schwarze
  * @author Julien Ponge
  */
@@ -69,52 +47,76 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3258408430669674552L;
 
-    /** The combobox for compiler selection. */
+    /**
+     * The combobox for compiler selection.
+     */
     protected JComboBox compilerComboBox;
 
-    /** The combobox for compiler argument selection. */
+    /**
+     * The combobox for compiler argument selection.
+     */
     protected JComboBox argumentsComboBox;
 
-    /** The start button. */
+    /**
+     * The start button.
+     */
     protected JButton startButton;
 
-    /** The browse button. */
+    /**
+     * The browse button.
+     */
     protected JButton browseButton;
 
-    /** The tip label. */
+    /**
+     * The tip label.
+     */
     protected JLabel tipLabel;
 
-    /** The operation label . */
+    /**
+     * The operation label .
+     */
     protected JLabel opLabel;
 
-    /** The pack progress bar. */
+    /**
+     * The pack progress bar.
+     */
     protected JProgressBar packProgressBar;
 
-    /** The operation label . */
+    /**
+     * The operation label .
+     */
     protected JLabel overallLabel;
 
-    /** The overall progress bar. */
+    /**
+     * The overall progress bar.
+     */
     protected JProgressBar overallProgressBar;
 
-    /** True if the compilation has been done. */
+    /**
+     * True if the compilation has been done.
+     */
     private boolean validated = false;
 
-    /** The compilation worker. Does all the work. */
+    /**
+     * The compilation worker. Does all the work.
+     */
     private CompileWorker worker;
 
-    /** Number of jobs to compile. Used for progress indication. */
+    /**
+     * Number of jobs to compile. Used for progress indication.
+     */
     private int noOfJobs;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
-     * @throws IOException 
+     * @param idata  The installation data.
+     * @throws IOException
      */
     public CompilePanel(InstallerFrame parent, InstallData idata) throws IOException
     {
@@ -189,7 +191,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         Iterator<String> it = this.worker.getAvailableCompilers().iterator();
 
         while (it.hasNext())
+        {
             compilerComboBox.addItem(it.next());
+        }
 
         subpanel.add(compilerComboBox, gridBagConstraints);
 
@@ -221,7 +225,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         it = this.worker.getAvailableArguments().iterator();
 
         while (it.hasNext())
+        {
             argumentsComboBox.addItem(it.next());
+        }
 
         subpanel.add(argumentsComboBox, gridBagConstraints);
 
@@ -282,7 +288,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return The validation state.
      */
     public boolean isValidated()
@@ -344,7 +350,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
     /**
      * Release the GUI - allow input.
-     * 
+     *
      * @param allowconfig allow the user to enter new configuration
      */
     protected void releaseGUI(boolean allowconfig)
@@ -363,7 +369,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
     /**
      * An error was encountered.
-     * 
+     *
      * @param error The error information.
      * @see com.izforge.izpack.installer.CompileHandler
      */
@@ -400,7 +406,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         parent.lockPrevButton();
     }
 
-    /** The compiler stops. */
+    /**
+     * The compiler stops.
+     */
     public void stopAction()
     {
         CompileResult result = this.worker.getResult();
@@ -425,7 +433,10 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
             validated = true;
             idata.installSuccess = true;
-            if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) parent.unlockNextButton();
+            if (idata.panels.indexOf(this) != (idata.panels.size() - 1))
+            {
+                parent.unlockNextButton();
+            }
         }
         else
         {
@@ -436,7 +447,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
     /**
      * Normal progress indicator.
-     * 
+     *
      * @param val The progression value.
      * @param msg The progression message.
      */
@@ -449,10 +460,10 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
     /**
      * Job changing.
-     * 
+     *
      * @param jobName The job name.
-     * @param max The new maximum progress.
-     * @param jobNo The job number.
+     * @param max     The new maximum progress.
+     * @param jobNo   The job number.
      */
     public void nextStep(String jobName, int max, int jobNo)
     {
@@ -472,10 +483,12 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      */
     public void setSubStepNo(int max)
     {
-        packProgressBar.setMaximum(max);        
+        packProgressBar.setMaximum(max);
     }
-    
-    /** Called when the panel becomes active. */
+
+    /**
+     * Called when the panel becomes active.
+     */
     public void panelActivate()
     {
         // get compilers again (because they might contain variables from former
@@ -485,7 +498,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         compilerComboBox.removeAllItems();
 
         while (it.hasNext())
+        {
             compilerComboBox.addItem(it.next());
+        }
 
         // We clip the panel
         Dimension dim = parent.getPanelsContainerSize();
@@ -498,7 +513,9 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
         parent.lockNextButton();
     }
 
-    /** Create XML data for automated installation. */
+    /**
+     * Create XML data for automated installation.
+     */
     public void makeXMLData(XMLElement panelRoot)
     {
         // just save the compiler chosen and the arguments
@@ -513,7 +530,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
     /**
      * Show a special dialog for compiler errors.
-     * 
+     * <p/>
      * This dialog is neccessary because we have lots of information if compilation failed. We'd
      * also like the user to chose whether to ignore the error or not.
      */
@@ -522,25 +539,38 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
         private static final long serialVersionUID = 3762537797721995317L;
 
-        /** user closed the dialog without pressing "Ignore" or "Abort" */
+        /**
+         * user closed the dialog without pressing "Ignore" or "Abort"
+         */
         public static final int RESULT_NONE = 0;
 
-        /** user pressed "Ignore" button */
+        /**
+         * user pressed "Ignore" button
+         */
         public static final int RESULT_IGNORE = 23;
 
-        /** user pressed "Abort" button */
+        /**
+         * user pressed "Abort" button
+         */
         public static final int RESULT_ABORT = 42;
 
-        /** user pressed "Reconfigure" button */
+        /**
+         * user pressed "Reconfigure" button
+         */
         public static final int RESULT_RECONFIGURE = 47;
 
-        /** visual goodie: button hightlight color */
+        /**
+         * visual goodie: button hightlight color
+         */
         private java.awt.Color buttonHColor = null;
 
-        /** Creates new form compilerErrorDialog 
-         * @param parent parent to be used
-         * @param title String to be used as title
-         * @param buttonHColor highlight color to be used*/
+        /**
+         * Creates new form compilerErrorDialog
+         *
+         * @param parent       parent to be used
+         * @param title        String to be used as title
+         * @param buttonHColor highlight color to be used
+         */
         public CompilerErrorDialog(java.awt.Frame parent, String title, java.awt.Color buttonHColor)
         {
             super(parent, title, true);
@@ -550,7 +580,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
         /**
          * This method is called from within the constructor to initialize the form.
-         * 
+         * <p/>
          * Generated with help from NetBeans IDE.
          */
         private void initComponents()
@@ -573,7 +603,8 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             abortButton = ButtonFactory.createButton(parent.langpack
                     .getString("CompilePanel.error.abort"), this.buttonHColor);
 
-            addWindowListener(new java.awt.event.WindowAdapter() {
+            addWindowListener(new java.awt.event.WindowAdapter()
+            {
 
                 public void windowClosing(java.awt.event.WindowEvent evt)
                 {
@@ -650,7 +681,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             pack();
         }
 
-        /** 
+        /**
          * Close the panel.
          */
         protected void closeDialog()
@@ -661,6 +692,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
         /**
          * Shows the given errors
+         *
          * @param error error messages to be shown
          */
         public void show(CompileResult error)
@@ -674,6 +706,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
 
         /**
          * Returns the result of this dialog.
+         *
          * @return the result of this dialog
          */
         public int getResult()

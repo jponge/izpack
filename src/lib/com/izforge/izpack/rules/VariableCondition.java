@@ -20,11 +20,10 @@
  */
 package com.izforge.izpack.rules;
 
-import java.util.HashMap;
-
+import com.izforge.izpack.util.Debug;
 import net.n3.nanoxml.XMLElement;
 
-import com.izforge.izpack.util.Debug;
+import java.util.HashMap;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -33,7 +32,7 @@ public class VariableCondition extends Condition
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 2881336115632480575L;
 
@@ -101,7 +100,8 @@ public class VariableCondition extends Condition
 
     public boolean isTrue()
     {
-        if (this.installdata != null) {
+        if (this.installdata != null)
+        {
             String val = this.installdata.getVariable(variablename);
             if (val == null)
             {
@@ -112,7 +112,8 @@ public class VariableCondition extends Condition
                 return val.equals(value);
             }
         }
-        else {
+        else
+        {
             return false;
         }
     }
@@ -124,7 +125,7 @@ public class VariableCondition extends Condition
     {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
-        details.append(" depends on a value of <b>");        
+        details.append(" depends on a value of <b>");
         details.append(this.value);
         details.append("</b> on variable <b>");
         details.append(this.variablename);

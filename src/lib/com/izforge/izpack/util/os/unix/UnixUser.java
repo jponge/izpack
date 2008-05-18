@@ -32,198 +32,212 @@ import java.util.StringTokenizer;
  */
 public class UnixUser
 {
-  //~ Instance fields ********************************************************************
+    //~ Instance fields ********************************************************************
 
-  /** internal itsName  */
-  private String itsName;
+    /**
+     * internal itsName
+     */
+    private String itsName;
 
-  /** internal itsPasswdDigest */
-  private String itsPasswdDigest;
+    /**
+     * internal itsPasswdDigest
+     */
+    private String itsPasswdDigest;
 
-  /** internal itsId */
-  private String itsId;
+    /**
+     * internal itsId
+     */
+    private String itsId;
 
-  /** internal itsGid */
-  private String itsGid;
+    /**
+     * internal itsGid
+     */
+    private String itsGid;
 
-  /** internal itsDescription */
-  private String itsDescription;
+    /**
+     * internal itsDescription
+     */
+    private String itsDescription;
 
-  /** internal itsHome */
-  private String itsHome;
+    /**
+     * internal itsHome
+     */
+    private String itsHome;
 
-  /** internal itsShell */
-  private String itsShell;
+    /**
+     * internal itsShell
+     */
+    private String itsShell;
 
-  //~ Methods ****************************************************************************
+    //~ Methods ****************************************************************************
 
-  /** 
-   * Gets the Users Login Name
-   *
-   * @return the users login Name
-   */
-  public String getName(  )
-  {
-    return itsName;
-  }
-
-  /** 
-   * Gets the users passwd Digest or X if hidden in /etc/shadow
-   *
-   * @return the passwdDigest or x
-   */
-  public String getPasswdDigest(  )
-  {
-    return itsPasswdDigest;
-  }
-
-  /** 
-   * Gets the Users UID
-   *
-   * @return The Uid
-   */
-  public String getId(  )
-  {
-    return itsId;
-  }
-
-  /** 
-   * Gtes the Users Group ID
-   *
-   * @return the gid
-   */
-  public String getGid(  )
-  {
-    return itsGid;
-  }
-
-  /** 
-   * Gets the Description aka Full Name
-   *
-   * @return the users descriptio or full name
-   */
-  public String getDescription(  )
-  {
-    return itsDescription;
-  }
-
-  /** 
-   * Gets the Users Home Directory 
-   *
-   * @return the users home dir
-   */
-  public String getHome(  )
-  {
-    return itsHome;
-  }
-
-  /** 
-   * Gets the users default Login-Shell
-   *
-   * @return The login shell or /bin/false for system users
-   */
-  public String getShell(  )
-  {
-    return itsShell;
-  }
-
-  /** 
-   * Parses a Line from /etc/passwd and stores each :token: in their field of the user. 
-   * Sample Line from /etc/passwd "eppelmann.local:x:900:100:Marc Eppelmann:/mnt/local/home/eppelmann.local:/bin/bash"
-   * @param anEtcPasswdLine A Passwd Line of the User.
-   *
-   * @return The filled User
-   */
-  public UnixUser fromEtcPasswdLine( String anEtcPasswdLine )
-  {
-    if( anEtcPasswdLine == null )
+    /**
+     * Gets the Users Login Name
+     *
+     * @return the users login Name
+     */
+    public String getName()
     {
-      return null;
+        return itsName;
     }
 
-    StringTokenizer usersToken = new StringTokenizer( anEtcPasswdLine, ":" );
-
-    UnixUser        u          = new UnixUser(  );
-
-    if( usersToken.hasMoreTokens(  ) )
+    /**
+     * Gets the users passwd Digest or X if hidden in /etc/shadow
+     *
+     * @return the passwdDigest or x
+     */
+    public String getPasswdDigest()
     {
-      u.itsName = usersToken.nextToken(  );
+        return itsPasswdDigest;
     }
 
-    if( usersToken.hasMoreTokens(  ) )
+    /**
+     * Gets the Users UID
+     *
+     * @return The Uid
+     */
+    public String getId()
     {
-      u.itsPasswdDigest = usersToken.nextToken(  );
+        return itsId;
     }
 
-    if( usersToken.hasMoreTokens(  ) )
+    /**
+     * Gtes the Users Group ID
+     *
+     * @return the gid
+     */
+    public String getGid()
     {
-      u.itsId = usersToken.nextToken(  );
+        return itsGid;
     }
 
-    if( usersToken.hasMoreTokens(  ) )
+    /**
+     * Gets the Description aka Full Name
+     *
+     * @return the users descriptio or full name
+     */
+    public String getDescription()
     {
-      u.itsGid = usersToken.nextToken(  );
+        return itsDescription;
     }
 
-    if( usersToken.hasMoreTokens(  ) )
+    /**
+     * Gets the Users Home Directory
+     *
+     * @return the users home dir
+     */
+    public String getHome()
     {
-      u.itsDescription = usersToken.nextToken(  );
+        return itsHome;
     }
 
-    if( usersToken.hasMoreTokens(  ) )
+    /**
+     * Gets the users default Login-Shell
+     *
+     * @return The login shell or /bin/false for system users
+     */
+    public String getShell()
     {
-      u.itsHome = usersToken.nextToken(  );
+        return itsShell;
     }
 
-    if( usersToken.hasMoreTokens(  ) )
+    /**
+     * Parses a Line from /etc/passwd and stores each :token: in their field of the user.
+     * Sample Line from /etc/passwd "eppelmann.local:x:900:100:Marc Eppelmann:/mnt/local/home/eppelmann.local:/bin/bash"
+     *
+     * @param anEtcPasswdLine A Passwd Line of the User.
+     * @return The filled User
+     */
+    public UnixUser fromEtcPasswdLine(String anEtcPasswdLine)
     {
-      u.itsShell = usersToken.nextToken(  );
+        if (anEtcPasswdLine == null)
+        {
+            return null;
+        }
+
+        StringTokenizer usersToken = new StringTokenizer(anEtcPasswdLine, ":");
+
+        UnixUser u = new UnixUser();
+
+        if (usersToken.hasMoreTokens())
+        {
+            u.itsName = usersToken.nextToken();
+        }
+
+        if (usersToken.hasMoreTokens())
+        {
+            u.itsPasswdDigest = usersToken.nextToken();
+        }
+
+        if (usersToken.hasMoreTokens())
+        {
+            u.itsId = usersToken.nextToken();
+        }
+
+        if (usersToken.hasMoreTokens())
+        {
+            u.itsGid = usersToken.nextToken();
+        }
+
+        if (usersToken.hasMoreTokens())
+        {
+            u.itsDescription = usersToken.nextToken();
+        }
+
+        if (usersToken.hasMoreTokens())
+        {
+            u.itsHome = usersToken.nextToken();
+        }
+
+        if (usersToken.hasMoreTokens())
+        {
+            u.itsShell = usersToken.nextToken();
+        }
+
+        return u;
     }
 
-    return u;
-  }
+    /**
+     * Dumps the USer fields
+     *
+     * @return The User representation as String
+     */
+    public String toString()
+    {
+        StringBuffer result = new StringBuffer();
 
-  /** 
-   * Dumps the USer fields
-   *
-   * @return The User representation as String
-   */
-  public String toString(  )
-  {
-    StringBuffer result = new StringBuffer(  );
+        result.append("User: ");
+        result.append(itsName);
 
-    result.append( "User: " );
-    result.append( itsName );
+        result.append(" X: ");
+        result.append(itsPasswdDigest);
 
-    result.append( " X: " );
-    result.append( itsPasswdDigest );
+        result.append(" Id: ");
+        result.append(itsId);
 
-    result.append( " Id: " );
-    result.append( itsId );
+        result.append(" Gid: ");
+        result.append(itsGid);
 
-    result.append( " Gid: " );
-    result.append( itsGid );
+        result.append(" Desc.: ");
+        result.append(itsDescription);
 
-    result.append( " Desc.: " );
-    result.append( itsDescription );
+        result.append(" Home: ");
+        result.append(itsHome);
 
-    result.append( " Home: " );
-    result.append( itsHome );
+        result.append(" Shell: ");
+        result.append(itsShell);
 
-    result.append( " Shell: " );
-    result.append( itsShell );
+        return result.toString();
+    }
 
-    return result.toString(  );
-  }
-
-  /** 
-   * Static Test Main
-   *
-   * @param args
-   */
-  public static void main( String[] args )
-  {
-    System.out.println( new UnixUser(  ).fromEtcPasswdLine( "" ) );
-    System.out.println( new UnixUser(  ).fromEtcPasswdLine( "eppelmann.local:x:500:100:Marc L Eppelmann:/mnt/local/home/eppelmann.local:/bin/bash" ) );
-  }
+    /**
+     * Static Test Main
+     *
+     * @param args
+     */
+    public static void main(String[] args)
+    {
+        System.out.println(new UnixUser().fromEtcPasswdLine(""));
+        System.out.println(new UnixUser().fromEtcPasswdLine("eppelmann.local:x:500:100:Marc L Eppelmann:/mnt/local/home/eppelmann.local:/bin/bash"));
+    }
 }

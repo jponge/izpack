@@ -20,9 +20,8 @@
  */
 package com.izforge.izpack.rules;
 
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.util.Debug;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -32,16 +31,16 @@ public class XOrCondition extends OrCondition
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3148555083095194992L;
 
     /**
-     * 
+     *
      */
     public XOrCondition()
     {
-        super();       
+        super();
     }
 
     /**
@@ -96,11 +95,11 @@ public class XOrCondition extends OrCondition
     {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
-        details.append(" depends on:<ul><li>");        
+        details.append(" depends on:<ul><li>");
         details.append(leftoperand.getDependenciesDetails());
         details.append("</li> XOR <li>");
         details.append(rightoperand.getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();
-    }   
+    }
 }

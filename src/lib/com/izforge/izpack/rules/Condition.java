@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.rules;
 
-import java.io.Serializable;
-
 import com.izforge.izpack.installer.AutomatedInstallData;
 import net.n3.nanoxml.XMLElement;
+
+import java.io.Serializable;
 
 /**
  * Abstract base class for all conditions
@@ -74,8 +74,9 @@ public abstract class Condition implements Serializable
     {
         this.installdata = installdata;
     }
-    
-    public String getDependenciesDetails() {
+
+    public String getDependenciesDetails()
+    {
         return "No dependencies for this condition.";
     }
 }

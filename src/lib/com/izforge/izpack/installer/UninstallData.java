@@ -19,45 +19,63 @@
 
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.ExecutableFile;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.izforge.izpack.ExecutableFile;
-
 /**
  * Holds uninstallation data. Implemented as a singleton.
- * 
+ *
  * @author Julien Ponge created October 27, 2002
  */
 public class UninstallData
 {
-    /** The uninstall data object. */
+    /**
+     * The uninstall data object.
+     */
     private static UninstallData instance = null;
 
-    /** The installed files list. */
+    /**
+     * The installed files list.
+     */
     private List<String> installedFilesList;
-    
-    /** The uninstallable files list. */
+
+    /**
+     * The uninstallable files list.
+     */
     private List uninstallableFilesList;
 
-    /** The executables list. */
+    /**
+     * The executables list.
+     */
     private List executablesList;
 
-    /** The uninstaller jar filename. */
+    /**
+     * The uninstaller jar filename.
+     */
     private String uninstallerJarFilename;
 
-    /** The uninstaller path. */
+    /**
+     * The uninstaller path.
+     */
     private String uninstallerPath;
 
-    /** Additional uninstall data like uninstaller listener list. */
+    /**
+     * Additional uninstall data like uninstaller listener list.
+     */
     private Map<String, Object> additionalData;
-    
-    /** Filesmap which should removed by the root user for another user */
+
+    /**
+     * Filesmap which should removed by the root user for another user
+     */
     private String rootScript;
 
-    /** The constructor. */
+    /**
+     * The constructor.
+     */
     private UninstallData()
     {
         installedFilesList = new ArrayList<String>();
@@ -66,58 +84,67 @@ public class UninstallData
         additionalData = new HashMap<String, Object>();
         rootScript = "";
     }
-    
-    /** Constant RootFiles = "rootfiles" */
+
+    /**
+     * Constant RootFiles = "rootfiles"
+     */
     public final static String ROOTSCRIPT = "rootscript";
 
     /**
      * Returns the instance (it is a singleton).
-     * 
+     *
      * @return The instance.
      */
     public synchronized static UninstallData getInstance()
     {
-        if (instance == null) instance = new UninstallData();
+        if (instance == null)
+        {
+            instance = new UninstallData();
+        }
         return instance;
     }
 
     /**
      * Adds a file to the data.
-     * 
-     * @param path The file to add.
+     *
+     * @param path      The file to add.
      * @param uninstall If true, file must be uninstalled.
      */
     public synchronized void addFile(String path, boolean uninstall)
     {
-        if(path != null) {
+        if (path != null)
+        {
             installedFilesList.add(path);
-            if (uninstall) uninstallableFilesList.add(path);
-		}
+            if (uninstall)
+            {
+                uninstallableFilesList.add(path);
+            }
+        }
     }
 
     /**
      * Returns the installed files list.
-     * 
+     *
      * @return The installed files list.
      */
     public List<String> getInstalledFilesList()
     {
         return installedFilesList;
     }
-    
+
     /**
      * Returns the uninstallable files list.
-     * 
+     *
      * @return The uninstallable files list.
      */
     public List getUninstalableFilesList()
     {
         return uninstallableFilesList;
-    }    
+    }
 
     /**
      * Adds an executable to the data.
-     * 
+     *
      * @param file The executable file.
      */
     public synchronized void addExecutable(ExecutableFile file)
@@ -127,7 +154,7 @@ public class UninstallData
 
     /**
      * Returns the executables list.
-     * 
+     *
      * @return The executables list.
      */
     public List getExecutablesList()
@@ -137,7 +164,7 @@ public class UninstallData
 
     /**
      * Returns the uninstaller jar filename.
-     * 
+     *
      * @return The uninstaller jar filename.
      */
     public synchronized String getUninstallerJarFilename()
@@ -147,7 +174,7 @@ public class UninstallData
 
     /**
      * Sets the uninstaller jar filename.
-     * 
+     *
      * @param name The uninstaller jar filename.
      */
     public synchronized void setUninstallerJarFilename(String name)
@@ -157,7 +184,7 @@ public class UninstallData
 
     /**
      * Returns the path to the uninstaller.
-     * 
+     *
      * @return The uninstaller filename path.
      */
     public String getUninstallerPath()
@@ -167,7 +194,7 @@ public class UninstallData
 
     /**
      * Sets the uninstaller path.
-     * 
+     *
      * @param path The uninstaller path.
      */
     public void setUninstallerPath(String path)
@@ -177,7 +204,7 @@ public class UninstallData
 
     /**
      * Returns additional uninstall data like uninstaller listener list.
-     * 
+     *
      * @return additional uninstall data
      */
     public Map<String, Object> getAdditionalData()
@@ -187,8 +214,8 @@ public class UninstallData
 
     /**
      * Sets additional uninstall data like uninstaller listener list.
-     * 
-     * @param name key for the additional uninstall data
+     *
+     * @param name  key for the additional uninstall data
      * @param value the additional uninstall data
      */
     public void addAdditionalData(String name, Object value)
@@ -198,24 +225,23 @@ public class UninstallData
 
     /**
      * Adds the given File to delete several Shortcuts as Root for the given Users.
-     * 
+     *
      * @param aRootUninstallScript The Script to exec as Root at uninstall.
      */
-    public void addRootUninstallScript( String aRootUninstallScript )
-    {    
+    public void addRootUninstallScript(String aRootUninstallScript)
+    {
         rootScript = aRootUninstallScript == null ? "" : aRootUninstallScript;
     }
-    
+
     /**
      * Returns the root data.
-     * 
+     *
      * @return root data
      */
     public String getRootScript()
     {
         return rootScript;
     }
-    
-    
+
 
 }

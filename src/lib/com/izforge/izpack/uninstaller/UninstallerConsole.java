@@ -21,247 +21,301 @@
 
 package com.izforge.izpack.uninstaller;
 
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.util.AbstractUIHandler;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.util.AbstractUIHandler;
-
 public class UninstallerConsole
 {
 
-   /** The installation path. */
-   protected String installPath;
+    /**
+     * The installation path.
+     */
+    protected String installPath;
 
-   /** The language pack. */
-   protected static LocaleDatabase langpack;
+    /**
+     * The language pack.
+     */
+    protected static LocaleDatabase langpack;
 
-   public UninstallerConsole() throws Exception
-   {
-      // Initializations
-      langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
-      getInstallPath();
-   }
-   /**
-    * Gets the installation path from the log file.
-    *
-    * @exception Exception Description of the Exception
-    */
-   private void getInstallPath() throws Exception
-   {
-       InputStream in = UninstallerFrame.class.getResourceAsStream("/install.log");
-       InputStreamReader inReader = new InputStreamReader(in);
-       BufferedReader reader = new BufferedReader(inReader);
-       installPath = reader.readLine();
-       reader.close();
-   }
+    public UninstallerConsole() throws Exception
+    {
+        // Initializations
+        langpack = new LocaleDatabase(UninstallerFrame.class.getResourceAsStream("/langpack.xml"));
+        getInstallPath();
+    }
 
-   /**
-    * Runs the cmd line uninstaller.
-    *
-    * @param destroy Equivallen to the destroy option in the GUI.
-    */
-   public void runUninstall(boolean destroy)
-   {
-      Destroyer destroyer = new Destroyer(installPath,
-            destroy, new DestroyerHandler());
-      destroyer.start();
-   }
+    /**
+     * Gets the installation path from the log file.
+     *
+     * @throws Exception Description of the Exception
+     */
+    private void getInstallPath() throws Exception
+    {
+        InputStream in = UninstallerFrame.class.getResourceAsStream("/install.log");
+        InputStreamReader inReader = new InputStreamReader(in);
+        BufferedReader reader = new BufferedReader(inReader);
+        installPath = reader.readLine();
+        reader.close();
+    }
 
-   /**
-    * The destroyer handler.
-    *
-    * This class also implements the InstallListener because the FileExecutor needs it. TODO: get
-    * rid of the InstallListener - implement generic Listener
-    */
-   private final class DestroyerHandler implements
-           com.izforge.izpack.util.AbstractUIProgressHandler
-   {
-       private int AUTO_ANSWER_MODE = -2;
+    /**
+     * Runs the cmd line uninstaller.
+     *
+     * @param destroy Equivallen to the destroy option in the GUI.
+     */
+    public void runUninstall(boolean destroy)
+    {
+        Destroyer destroyer = new Destroyer(installPath,
+                destroy, new DestroyerHandler());
+        destroyer.start();
+    }
 
-       private void out(String str)
-       {
-          System.out.println(str);
-       }
+    /**
+     * The destroyer handler.
+     * <p/>
+     * This class also implements the InstallListener because the FileExecutor needs it. TODO: get
+     * rid of the InstallListener - implement generic Listener
+     */
+    private final class DestroyerHandler implements
+            com.izforge.izpack.util.AbstractUIProgressHandler
+    {
+        private int AUTO_ANSWER_MODE = -2;
 
-       private boolean askOKCancel(String question, int defaultchoice)
-       {
-          if(defaultchoice == AUTO_ANSWER_MODE) return true;
-          boolean defaultanswer = defaultchoice == 1;
-          try
-          {
-             System.out.print(question + " (Ok/Cancel) [" + (defaultanswer?"O":"C") + "]:");
-             String rline = readln();
-             if(rline.toLowerCase().startsWith("o")) return true;
-             if(rline.toLowerCase().startsWith("c")) return false;
-          }
-          catch(Exception e){}
-          if( defaultchoice == -1 ) return askOKCancel(question, defaultchoice);
-          return defaultanswer;
-       }
+        private void out(String str)
+        {
+            System.out.println(str);
+        }
 
-       private int askYesNoCancel(String question, int defaultchoice)
-       {
-          if(defaultchoice == AUTO_ANSWER_MODE) return AbstractUIHandler.ANSWER_YES;
-          boolean defaultanswer = defaultchoice == 1;
-          try
-          {
-             System.out.print(question + " (Yes/No/Cancel) [" + (defaultanswer?"Y":"N") + "]:");
-             String rline = readln();
-             if(rline.toLowerCase().equals("y")) return AbstractUIHandler.ANSWER_YES;
-             if(rline.toLowerCase().equals("n")) return AbstractUIHandler.ANSWER_NO;
-             if(rline.toLowerCase().equals("c")) return AbstractUIHandler.ANSWER_CANCEL;
-          }
-          catch(Exception e){}
-          if( defaultchoice == -1 ) return askYesNoCancel(question, defaultchoice);
-          return defaultchoice;
-       }
+        private boolean askOKCancel(String question, int defaultchoice)
+        {
+            if (defaultchoice == AUTO_ANSWER_MODE)
+            {
+                return true;
+            }
+            boolean defaultanswer = defaultchoice == 1;
+            try
+            {
+                System.out.print(question + " (Ok/Cancel) [" + (defaultanswer ? "O" : "C") + "]:");
+                String rline = readln();
+                if (rline.toLowerCase().startsWith("o"))
+                {
+                    return true;
+                }
+                if (rline.toLowerCase().startsWith("c"))
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            if (defaultchoice == -1)
+            {
+                return askOKCancel(question, defaultchoice);
+            }
+            return defaultanswer;
+        }
 
-       private int askYesNo(String question, int defaultchoice)
-       {
-          if(defaultchoice == AUTO_ANSWER_MODE) return AbstractUIHandler.ANSWER_YES;
-          boolean defaultanswer = defaultchoice == 1;
-          try
-          {
-             System.out.print(question + " (Yes/No) [" + (defaultanswer?"Y":"N") + "]:");
-             String rline = readln();
-             if(rline.toLowerCase().equals("y")) return AbstractUIHandler.ANSWER_YES;
-             if(rline.toLowerCase().equals("n")) return AbstractUIHandler.ANSWER_NO;
-          }
-          catch(Exception e){}
-          if( defaultchoice == -1 ) return askYesNoCancel(question, defaultchoice);
-          return defaultchoice;
-       }
+        private int askYesNoCancel(String question, int defaultchoice)
+        {
+            if (defaultchoice == AUTO_ANSWER_MODE)
+            {
+                return AbstractUIHandler.ANSWER_YES;
+            }
+            boolean defaultanswer = defaultchoice == 1;
+            try
+            {
+                System.out.print(question + " (Yes/No/Cancel) [" + (defaultanswer ? "Y" : "N") + "]:");
+                String rline = readln();
+                if (rline.toLowerCase().equals("y"))
+                {
+                    return AbstractUIHandler.ANSWER_YES;
+                }
+                if (rline.toLowerCase().equals("n"))
+                {
+                    return AbstractUIHandler.ANSWER_NO;
+                }
+                if (rline.toLowerCase().equals("c"))
+                {
+                    return AbstractUIHandler.ANSWER_CANCEL;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            if (defaultchoice == -1)
+            {
+                return askYesNoCancel(question, defaultchoice);
+            }
+            return defaultchoice;
+        }
 
-       private String read() throws Exception
-       {
-         byte[] byteArray = {(byte)System.in.read()};
-         return new String(byteArray);
-       }
+        private int askYesNo(String question, int defaultchoice)
+        {
+            if (defaultchoice == AUTO_ANSWER_MODE)
+            {
+                return AbstractUIHandler.ANSWER_YES;
+            }
+            boolean defaultanswer = defaultchoice == 1;
+            try
+            {
+                System.out.print(question + " (Yes/No) [" + (defaultanswer ? "Y" : "N") + "]:");
+                String rline = readln();
+                if (rline.toLowerCase().equals("y"))
+                {
+                    return AbstractUIHandler.ANSWER_YES;
+                }
+                if (rline.toLowerCase().equals("n"))
+                {
+                    return AbstractUIHandler.ANSWER_NO;
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            if (defaultchoice == -1)
+            {
+                return askYesNoCancel(question, defaultchoice);
+            }
+            return defaultchoice;
+        }
 
-       private String readln() throws Exception
-       {
-         String input = read();
-         int available = System.in.available();
-         if (available > 0)
-         {
-           byte[] byteArray = new byte[available];
-           System.in.read(byteArray);
-           input += new String(byteArray);
-         }
-         return input.trim();
-       }
-       /**
-        * The destroyer starts.
-        *
-        * @param name The name of the overall action. Not used here.
-        * @param max The maximum value of the progress.
-        */
-       public void startAction(final String name, final int max)
-       {
-           out("Processing " + name);
-       }
+        private String read() throws Exception
+        {
+            byte[] byteArray = {(byte) System.in.read()};
+            return new String(byteArray);
+        }
 
-       /** The destroyer stops. */
-       public void stopAction()
-       {
-           out(langpack.getString("InstallPanel.finished"));
-       }
+        private String readln() throws Exception
+        {
+            String input = read();
+            int available = System.in.available();
+            if (available > 0)
+            {
+                byte[] byteArray = new byte[available];
+                System.in.read(byteArray);
+                input += new String(byteArray);
+            }
+            return input.trim();
+        }
 
-       /**
-        * The destroyer progresses.
-        *
-        * @param pos The actual position.
-        * @param message The message.
-        */
-       public void progress(final int pos, final String message)
-       {
-          out(message);
-       }
+        /**
+         * The destroyer starts.
+         *
+         * @param name The name of the overall action. Not used here.
+         * @param max  The maximum value of the progress.
+         */
+        public void startAction(final String name, final int max)
+        {
+            out("Processing " + name);
+        }
 
-       public void nextStep(String step_name, int step_no, int no_of_substeps)
-       {
-           // not used
-       }
+        /**
+         * The destroyer stops.
+         */
+        public void stopAction()
+        {
+            out(langpack.getString("InstallPanel.finished"));
+        }
 
-       public void setSubStepNo(int no_of_substeps)
-       {
-           // not used
-       }
-       
-       /**
-        * Output a notification.
-        *
-        * Does nothing here.
-        *
-        * @param text
-        */
-       public void emitNotification(String text)
-       {
-       }
+        /**
+         * The destroyer progresses.
+         *
+         * @param pos     The actual position.
+         * @param message The message.
+         */
+        public void progress(final int pos, final String message)
+        {
+            out(message);
+        }
 
-       /**
-        * Output a warning.
-        *
-        * @param text
-        */
-       public boolean emitWarning(String title, String text)
-       {
-           return askOKCancel(title+": "+text, AUTO_ANSWER_MODE);
-       }
+        public void nextStep(String step_name, int step_no, int no_of_substeps)
+        {
+            // not used
+        }
 
-       /**
-        * The destroyer encountered an error.
-        *
-        * @param error The error message.
-        */
-       public void emitError(String title, String error)
-       {
-           out(title+": "+error);
-       }
+        public void setSubStepNo(int no_of_substeps)
+        {
+            // not used
+        }
 
-       /**
-        * Ask the user a question.
-        *
-        * @param title Message title.
-        * @param question The question.
-        * @param choices The set of choices to present.
-        *
-        * @return The user's choice.
-        *
-        * @see AbstractUIHandler#askQuestion(String, String, int)
-        */
-       public int askQuestion(String title, String question, int choices)
-       {
-           return askQuestion(title, question, choices, AUTO_ANSWER_MODE);
-       }
+        /**
+         * Output a notification.
+         * <p/>
+         * Does nothing here.
+         *
+         * @param text
+         */
+        public void emitNotification(String text)
+        {
+        }
 
-       /**
-        * Ask the user a question.
-        *
-        * @param title Message title.
-        * @param question The question.
-        * @param choices The set of choices to present.
-        * @param default_choice The default choice. (-1 = no default choice)
-        *
-        * @return The user's choice.
-        * @see AbstractUIHandler#askQuestion(String, String, int, int)
-        */
-       public int askQuestion(String title, String question, int choices, int default_choice)
-       {
-           int choice = 0;
+        /**
+         * Output a warning.
+         *
+         * @param text
+         */
+        public boolean emitWarning(String title, String text)
+        {
+            return askOKCancel(title + ": " + text, AUTO_ANSWER_MODE);
+        }
 
-           if (choices == AbstractUIHandler.CHOICES_YES_NO)
-               choice = askYesNo(title+": "+question, default_choice);
-           else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
-               choice = askYesNoCancel(title+": "+question, default_choice);
+        /**
+         * The destroyer encountered an error.
+         *
+         * @param error The error message.
+         */
+        public void emitError(String title, String error)
+        {
+            out(title + ": " + error);
+        }
 
-           return choice;
+        /**
+         * Ask the user a question.
+         *
+         * @param title    Message title.
+         * @param question The question.
+         * @param choices  The set of choices to present.
+         * @return The user's choice.
+         * @see AbstractUIHandler#askQuestion(String, String, int)
+         */
+        public int askQuestion(String title, String question, int choices)
+        {
+            return askQuestion(title, question, choices, AUTO_ANSWER_MODE);
+        }
+
+        /**
+         * Ask the user a question.
+         *
+         * @param title          Message title.
+         * @param question       The question.
+         * @param choices        The set of choices to present.
+         * @param default_choice The default choice. (-1 = no default choice)
+         * @return The user's choice.
+         * @see AbstractUIHandler#askQuestion(String, String, int, int)
+         */
+        public int askQuestion(String title, String question, int choices, int default_choice)
+        {
+            int choice = 0;
+
+            if (choices == AbstractUIHandler.CHOICES_YES_NO)
+            {
+                choice = askYesNo(title + ": " + question, default_choice);
+            }
+            else if (choices == AbstractUIHandler.CHOICES_YES_NO_CANCEL)
+            {
+                choice = askYesNoCancel(title + ": " + question, default_choice);
+            }
+
+            return choice;
 
 
-       }
+        }
 
 
-   }
+    }
 }

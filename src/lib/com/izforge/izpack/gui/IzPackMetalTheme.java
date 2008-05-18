@@ -26,14 +26,16 @@ import java.awt.*;
 
 /**
  * The IzPack metal theme.
- * 
+ *
  * @author Julien Ponge
  */
 @Deprecated
 public class IzPackMetalTheme extends DefaultMetalTheme
 {
 
-    /** The fonts color. */
+    /**
+     * The fonts color.
+     */
     private ColorUIResource color;
 
     private FontUIResource controlFont;
@@ -42,7 +44,9 @@ public class IzPackMetalTheme extends DefaultMetalTheme
 
     private FontUIResource windowTitleFont;
 
-    /** The constructor. */
+    /**
+     * The constructor.
+     */
     public IzPackMetalTheme()
     {
         color = new ColorUIResource(0, 0, 0);
@@ -63,7 +67,7 @@ public class IzPackMetalTheme extends DefaultMetalTheme
 
     /**
      * Returns the color.
-     * 
+     *
      * @return The color.
      */
     public ColorUIResource getControlTextColor()
@@ -73,7 +77,7 @@ public class IzPackMetalTheme extends DefaultMetalTheme
 
     /**
      * Returns the color.
-     * 
+     *
      * @return The color.
      */
     public ColorUIResource getMenuTextColor()
@@ -83,7 +87,7 @@ public class IzPackMetalTheme extends DefaultMetalTheme
 
     /**
      * Returns the color.
-     * 
+     *
      * @return The color.
      */
     public ColorUIResource getSystemTextColor()
@@ -93,7 +97,7 @@ public class IzPackMetalTheme extends DefaultMetalTheme
 
     /**
      * Returns the color.
-     * 
+     *
      * @return The color.
      */
     public ColorUIResource getUserTextColor()

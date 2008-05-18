@@ -24,13 +24,13 @@
         </authors>
         <url>http://www.anotherworld-inspace-website.net/</url>
     </info>
-    
+
     <!-- 
         The gui preferences indication.
         Sets the installer window to 640x480. It will not be able to change the size.
     -->
     <guiprefs width="640" height="480" resizable="no"/>
-    
+
     <!-- 
         The locale section.
         Asks here to include the English and French langpacks.
@@ -39,7 +39,7 @@
         <langpack iso3="eng"/>
         <langpack iso3="fra"/>
     </locale>
-    
+
     <!-- 
         The resources section.
         The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
@@ -48,7 +48,7 @@
         <res id="LicencePanel.licence" src="Licence.txt"/>
         <res id="InfoPanel.info" src="Readme.txt"/>
     </resources>
-    
+
     <!-- 
         The panels section.
         We indicate here which panels we want to use. The order will be respected.
@@ -57,12 +57,12 @@
         <panel classname="HelloPanel"/>
         <panel classname="InfoPanel"/>
         <panel classname="LicencePanel"/>
-        <panel classname="TargetPanel"/> 
+        <panel classname="TargetPanel"/>
         <panel classname="PacksPanel"/>
         <panel classname="InstallPanel"/>
         <panel classname="FinishPanel"/>
     </panels>
-    
+
     <!-- 
         The packs section.
         We specify here our packs.
@@ -73,16 +73,18 @@
             <file src="Readme.txt" targetdir="$INSTALL_PATH"/>
             <file src="Licence.txt" targetdir="$INSTALL_PATH"/>
             <file src="script.bat" targetdir="$INSTALL_PATH"/>
-            <parsable targetfile="$INSTALL_PATH/script.bat"/> <!-- The file will be parsed -->
+            <parsable targetfile="$INSTALL_PATH/script.bat"/>
+            <!-- The file will be parsed -->
         </pack>
         <pack name="Docs" required="no">
             <description>The documentation</description>
-            <file src="doc" targetdir="$INSTALL_PATH"/> <!-- Reccursive adding -->
+            <file src="doc" targetdir="$INSTALL_PATH"/>
+            <!-- Reccursive adding -->
         </pack>
         <pack name="Sources" required="no">
             <description>The sources</description>
             <file src="src" targetdir="$INSTALL_PATH"/>
         </pack>
     </packs>
-    
+
 </installation>

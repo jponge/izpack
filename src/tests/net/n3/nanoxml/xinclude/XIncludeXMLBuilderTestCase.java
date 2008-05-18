@@ -16,19 +16,15 @@
 package net.n3.nanoxml.xinclude;
 
 import junit.framework.TestCase;
-import net.n3.nanoxml.IXMLReader;
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLBuilderFactory;
-import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.*;
 
 import java.util.Enumeration;
 
 /**
  * Test the XInclude style functionality added to the XMLBuilder
  */
-public class XIncludeXMLBuilderTestCase extends TestCase {
+public class XIncludeXMLBuilderTestCase extends TestCase
+{
 
 
     /**
@@ -38,14 +34,15 @@ public class XIncludeXMLBuilderTestCase extends TestCase {
      * @param fileBase the base of the test file names
      * @throws Exception
      */
-    public void doTest(String fileBase) throws Exception {
+    public void doTest(String fileBase) throws Exception
+    {
 
         String baseURL = getClass().getResource(fileBase + "-input.xml").toExternalForm();
         // set up a new parser to parse the input xml (with includes)
         StdXMLParser inputParser = new StdXMLParser();
         inputParser.setBuilder(XMLBuilderFactory.createXMLBuilder());
         IXMLReader inputReader = new StdXMLReader(
-            getClass().getResourceAsStream(fileBase + "-input.xml"));
+                getClass().getResourceAsStream(fileBase + "-input.xml"));
         inputReader.setSystemID(baseURL);
         inputParser.setReader(inputReader);
         inputParser.setValidator(new NonValidator());
@@ -54,7 +51,7 @@ public class XIncludeXMLBuilderTestCase extends TestCase {
         StdXMLParser expectedParser = new StdXMLParser();
         expectedParser.setBuilder(XMLBuilderFactory.createXMLBuilder());
         IXMLReader expectedReader = new StdXMLReader(
-            getClass().getResourceAsStream(fileBase + "-expect.xml"));
+                getClass().getResourceAsStream(fileBase + "-expect.xml"));
         expectedReader.setSystemID(baseURL);
         expectedParser.setReader(expectedReader);
         expectedParser.setValidator(new NonValidator());
@@ -63,7 +60,7 @@ public class XIncludeXMLBuilderTestCase extends TestCase {
         XMLElement expectedElement = (XMLElement) expectedParser.parse();
 
         deepEqual(expectedElement, inputElement);
-        
+
     }
 
     /**
@@ -73,107 +70,126 @@ public class XIncludeXMLBuilderTestCase extends TestCase {
      * @param fileBase the base name of the input file.
      * @throws Exception
      */
-    public void ensureFailure(String fileBase) throws Exception {
-        try {
+    public void ensureFailure(String fileBase) throws Exception
+    {
+        try
+        {
             String baseURL = getClass().getResource(fileBase + "-input.xml").toExternalForm();
             // set up a new parser to parse the input xml (with includes)
             StdXMLParser inputParser = new StdXMLParser();
             inputParser.setBuilder(XMLBuilderFactory.createXMLBuilder());
             IXMLReader inputReader = new StdXMLReader(
-                getClass().getResourceAsStream(fileBase + "-input.xml"));
+                    getClass().getResourceAsStream(fileBase + "-input.xml"));
             inputReader.setSystemID(baseURL);
             inputParser.setReader(inputReader);
             inputParser.setValidator(new NonValidator());
 
             inputParser.parse();
             fail("an exception should have been thrown");
-        } catch (Throwable t) {
+        }
+        catch (Throwable t)
+        {
             // success
         }
     }
 
     /**
      * Perform a deep equality check on the two nodes.
-     *
      */
-    public void deepEqual(XMLElement a, XMLElement b) {
+    public void deepEqual(XMLElement a, XMLElement b)
+    {
 
         assertEquals("element names", a.getName(), b.getName());
-        assertEquals("element attributes for "+ a.getName(),
-            a.getAttributes(), b.getAttributes());
+        assertEquals("element attributes for " + a.getName(),
+                a.getAttributes(), b.getAttributes());
         assertEquals("content for " + a.getName(),
-            a.getContent(), b.getContent());
+                a.getContent(), b.getContent());
         assertEquals("equal number of children" + a.getName(),
-            a.getChildrenCount(), b.getChildrenCount());
+                a.getChildrenCount(), b.getChildrenCount());
 
         Enumeration aChildren = a.enumerateChildren();
         Enumeration bChildren = b.enumerateChildren();
-        while (aChildren.hasMoreElements()) {
+        while (aChildren.hasMoreElements())
+        {
             XMLElement aChild = (XMLElement) aChildren.nextElement();
             XMLElement bChild = (XMLElement) bChildren.nextElement();
-            deepEqual(aChild,  bChild);
+            deepEqual(aChild, bChild);
         }
     }
 
     /**
      * Test Empty document with include
+     *
      * @throws Exception
      */
-    public void testIncludeOnly() throws Exception {
-       doTest("include-only");
+    public void testIncludeOnly() throws Exception
+    {
+        doTest("include-only");
     }
 
     /**
      * Test that a fragment included as the root node does not have the
      * "fragment" element removed
+     *
      * @throws Exception
      */
-    public void testIncludeFragmentOnly() throws Exception {
+    public void testIncludeFragmentOnly() throws Exception
+    {
         doTest("include-fragment-only");
     }
 
     /**
      * Test to ensure that content is correctly included when the include
      * element is not the root element
+     *
      * @throws Exception
      */
-    public void testIncludeInElement() throws Exception {
+    public void testIncludeInElement() throws Exception
+    {
         doTest("include-in-element");
     }
 
     /**
      * Test to ensure that content is correctly included when the include
      * element is not the root element
+     *
      * @throws Exception
      */
-    public void testIncludeFragmentInElement() throws Exception {
+    public void testIncludeFragmentInElement() throws Exception
+    {
         doTest("include-fragment-in-element");
     }
 
     /**
      * Test text inclusion
+     *
      * @throws Exception
      */
-    public void testIncludeTextInElement() throws Exception {
+    public void testIncludeTextInElement() throws Exception
+    {
         doTest("include-fragment-in-element");
     }
 
     /**
      * Ensure that the parse attribute accepts "text" and treats it like text
+     *
      * @throws Exception
      */
-    public void testParseAttributeText() throws Exception {
-       doTest("include-xml-as-text");
+    public void testParseAttributeText() throws Exception
+    {
+        doTest("include-xml-as-text");
     }
 
     /**
      * Ensure that the parse attribute accepts "xml" and treats like xml
      * (most other tests do not explicitly set the parse parameter and let it
      * default to "xml"
+     *
      * @throws Exception
      */
-    public void testParseAttributeXML() throws Exception {
-       doTest("include-xml-as-xml");
+    public void testParseAttributeXML() throws Exception
+    {
+        doTest("include-xml-as-xml");
     }
 
     /**
@@ -182,7 +198,8 @@ public class XIncludeXMLBuilderTestCase extends TestCase {
      *
      * @throws Exception
      */
-    public void testParseInvalidAttribute() throws Exception {
+    public void testParseInvalidAttribute() throws Exception
+    {
         ensureFailure("invalid-parse-attrib");
     }
 
@@ -191,7 +208,8 @@ public class XIncludeXMLBuilderTestCase extends TestCase {
      *
      * @throws Exception
      */
-    public void testFallback() throws Exception {
+    public void testFallback() throws Exception
+    {
         doTest("fallback");
     }
 
@@ -201,16 +219,19 @@ public class XIncludeXMLBuilderTestCase extends TestCase {
      *
      * @throws Exception
      */
-    public void testEmptyFallback() throws Exception {
+    public void testEmptyFallback() throws Exception
+    {
         doTest("empty-fallback");
     }
 
     /**
      * Ensure that two includes in the same element both get included
+     *
      * @throws Exception
      */
-    public void testMultipleIncludes() throws Exception {
-        doTest("multiple-include");        
+    public void testMultipleIncludes() throws Exception
+    {
+        doTest("multiple-include");
     }
 
 

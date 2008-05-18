@@ -24,22 +24,28 @@ package com.izforge.izpack.util;
 
 /**
  * Interface for handle error logging with IzPack Log class.
+ *
  * @author Elmar Grom
  */
 public interface LogError
 {
-  /** First index for error messages */
-  static final int ERROR_BASE = 2000;
+    /**
+     * First index for error messages
+     */
+    static final int ERROR_BASE = 2000;
 
-  /** Informs the user that a specific file could not be written<br>
-   *  Detail Paramters
-   *  <ol>
-   *  <li>name of the file that could not be written
-   *  </ol>
-   *   */
-  public static final int COULD_NOT_WRITE_FILE = ERROR_BASE;
+    /**
+     * Informs the user that a specific file could not be written<br>
+     * Detail Paramters
+     * <ol>
+     * <li>name of the file that could not be written
+     * </ol>
+     */
+    public static final int COULD_NOT_WRITE_FILE = ERROR_BASE;
 
-  /** The highest legal error message number is less than this value.  */
-  static final int MAX_ERROR  = ERROR_BASE + 1;
+    /**
+     * The highest legal error message number is less than this value.
+     */
+    static final int MAX_ERROR = ERROR_BASE + 1;
 }
 

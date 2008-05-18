@@ -20,47 +20,41 @@
 
 package com.izforge.izpack.compiler;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.PackFile;
+import com.izforge.izpack.util.FileUtil;
+import net.n3.nanoxml.XMLElement;
+import net.n3.nanoxml.XMLWriter;
+
+import java.io.*;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipInputStream;
 
-import net.n3.nanoxml.XMLElement;
-import net.n3.nanoxml.XMLWriter;
-
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.util.FileUtil;
-
 /**
  * The packager class. The packager is used by the compiler to put files into an installer, and
  * create the actual installer files.
- * 
+ *
  * @author Julien Ponge
  * @author Chadwick McHenry
  */
 public class Packager extends PackagerBase
 {
 
-    /** Executable zipped output stream. First to open, last to close. 
-     *  Attention! This is our own JarOutputStream, not the java standard! */
+    /**
+     * Executable zipped output stream. First to open, last to close.
+     * Attention! This is our own JarOutputStream, not the java standard!
+     */
     private com.izforge.izpack.util.JarOutputStream primaryJarStream;
 
-    /** The constructor. 
-     * @throws CompilerException*/
+    /**
+     * The constructor.
+     *
+     * @throws CompilerException
+     */
     public Packager() throws CompilerException
     {
         this("default");
@@ -68,32 +62,33 @@ public class Packager extends PackagerBase
 
     /**
      * Extended constructor.
+     *
      * @param compr_format Compression format to be used for packs
-     * compression format (if supported)
+     *                     compression format (if supported)
      * @throws CompilerException
      */
     public Packager(String compr_format) throws CompilerException
     {
-        this( compr_format, -1);
+        this(compr_format, -1);
     }
 
     /**
      * Extended constructor.
+     *
      * @param compr_format Compression format to be used for packs
-     * @param compr_level Compression level to be used with the chosen
-     * compression format (if supported)
+     * @param compr_level  Compression level to be used with the chosen
+     *                     compression format (if supported)
      * @throws CompilerException
      */
     public Packager(String compr_format, int compr_level) throws CompilerException
     {
         initPackCompressor(compr_format, compr_level);
     }
-    
-    
+
 
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#createInstaller(java.io.File)
-     */
+    * @see com.izforge.izpack.compiler.IPackager#createInstaller(java.io.File)
+    */
     public void createInstaller(File primaryFile) throws Exception
     {
         // preliminary work
@@ -104,7 +99,9 @@ public class Packager extends PackagerBase
             baseFile = new File(primaryFile.getParentFile(), baseName);
         }
         else
+        {
             baseFile = primaryFile;
+        }
 
         info.setInstallerBase(baseFile.getName());
         packJarsSeparate = (info.getWebDirURL() != null);
@@ -113,7 +110,7 @@ public class Packager extends PackagerBase
         primaryJarStream = getJarOutputStream(baseFile.getName() + ".jar");
 
         sendStart();
-        
+
         writeInstaller();
 
         // Finish up. closeAlways is a hack for pack compressions other than
@@ -160,7 +157,9 @@ public class Packager extends PackagerBase
         primaryJarStream.closeEntry();
     }
 
-    /** Write the data referenced by URL to primary jar. */
+    /**
+     * Write the data referenced by URL to primary jar.
+     */
     protected void writeInstallerResources() throws IOException
     {
         sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
@@ -170,11 +169,13 @@ public class Packager extends PackagerBase
         {
             String name = i.next();
             InputStream in = (installerResourceURLMap.get(name)).openStream();
-            
+
             org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(name);
             long dateTime = FileUtil.getFileDateTime(installerResourceURLMap.get(name));
             if (dateTime != -1)
+            {
                 newEntry.setTime(dateTime);
+            }
             primaryJarStream.putNextEntry(newEntry);
 
             PackagerHelper.copyStream(in, primaryJarStream);
@@ -183,7 +184,9 @@ public class Packager extends PackagerBase
         }
     }
 
-    /** Copy included jars to primary jar. */
+    /**
+     * Copy included jars to primary jar.
+     */
     protected void writeIncludedJars() throws IOException
     {
         sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
@@ -191,7 +194,7 @@ public class Packager extends PackagerBase
         Iterator<Object[]> i = includedJarURLs.iterator();
         while (i.hasNext())
         {
-            Object [] current = i.next();
+            Object[] current = i.next();
             InputStream is = ((URL) current[0]).openStream();
             ZipInputStream inJarStream = new ZipInputStream(is);
             copyZip(inJarStream, primaryJarStream, (List<String>) current[1]);
@@ -211,19 +214,20 @@ public class Packager extends PackagerBase
 
         // First write the serialized files and file metadata data for each pack
         // while counting bytes.
-        
+
         int packNumber = 0;
         Iterator<PackInfo> packIter = packsList.iterator();
-        
+
         XMLElement root = new XMLElement("packs");
-        
+
         while (packIter.hasNext())
         {
             PackInfo packInfo = packIter.next();
             Pack pack = packInfo.getPack();
             pack.nbytes = 0;
-            if ((pack.id == null) || (pack.id.length() == 0)) {
-                pack.id=pack.name;
+            if ((pack.id == null) || (pack.id.length() == 0))
+            {
+                pack.id = pack.name;
             }
 
             // create a pack specific jar if required
@@ -240,7 +244,7 @@ public class Packager extends PackagerBase
 
             // Retrieve the correct output stream
             org.apache.tools.zip.ZipEntry entry = new org.apache.tools.zip.ZipEntry("packs/pack-" + pack.id);
-            if( ! compressor.useStandardCompression())
+            if (!compressor.useStandardCompression())
             {
                 entry.setMethod(ZipEntry.STORED);
                 entry.setComment(compressor.getCompressionFormatSymbols()[0]);
@@ -253,8 +257,10 @@ public class Packager extends PackagerBase
             else
             {
                 int level = compressor.getCompressionLevel();
-                if( level >= 0 && level < 10 )
+                if (level >= 0 && level < 10)
+                {
                     packStream.setLevel(level);
+                }
                 packStream.putNextEntry(entry);
                 packStream.flush(); // flush before we start counting
             }
@@ -277,7 +283,7 @@ public class Packager extends PackagerBase
                 Object[] info = storedFiles.get(file);
                 if (info != null && !packJarsSeparate)
                 {
-                    pf.setPreviousPackFileRef((String) info[0], (Long)info[1]);
+                    pf.setPreviousPackFileRef((String) info[0], (Long) info[1]);
                     addFile = false;
                 }
 
@@ -292,10 +298,12 @@ public class Packager extends PackagerBase
                     long bytesWritten = PackagerHelper.copyStream(inStream, objOut);
 
                     if (bytesWritten != pf.length())
+                    {
                         throw new IOException("File size mismatch when reading " + file);
+                    }
 
                     inStream.close();
-                    storedFiles.put(file, new Object[] { pack.id, pos});
+                    storedFiles.put(file, new Object[]{pack.id, pos});
                 }
 
                 // even if not written, it counts towards pack size
@@ -306,23 +314,29 @@ public class Packager extends PackagerBase
             objOut.writeInt(packInfo.getParsables().size());
             iter = packInfo.getParsables().iterator();
             while (iter.hasNext())
+            {
                 objOut.writeObject(iter.next());
+            }
 
             // Write out information about executable files
             objOut.writeInt(packInfo.getExecutables().size());
             iter = packInfo.getExecutables().iterator();
             while (iter.hasNext())
+            {
                 objOut.writeObject(iter.next());
+            }
 
             // Write out information about updatecheck files
             objOut.writeInt(packInfo.getUpdateChecks().size());
             iter = packInfo.getUpdateChecks().iterator();
             while (iter.hasNext())
+            {
                 objOut.writeObject(iter.next());
+            }
 
             // Cleanup
             objOut.flush();
-            if( ! compressor.useStandardCompression())
+            if (!compressor.useStandardCompression())
             {
                 comprStream.close();
             }
@@ -330,26 +344,32 @@ public class Packager extends PackagerBase
             packStream.closeEntry();
 
             // close pack specific jar if required
-            if (packJarsSeparate) packStream.closeAlways();
+            if (packJarsSeparate)
+            {
+                packStream.closeAlways();
+            }
 
             XMLElement child = new XMLElement("pack");
             child.setAttribute("nbytes", Long.toString(pack.nbytes));
             child.setAttribute("name", pack.name);
-            if(pack.id != null) child.setAttribute("id", pack.id);
+            if (pack.id != null)
+            {
+                child.setAttribute("id", pack.id);
+            }
             root.addChild(child);
-            
+
             packNumber++;
         }
-        
+
         // Write packsinfo for web installers
-		if (packJarsSeparate)
+        if (packJarsSeparate)
         {
-			FileWriter writer = new FileWriter(baseFile.getParent()
-              + File.separator + "packsinfo.xml");
-        	XMLWriter xmlwriter = new XMLWriter(writer);
-        	xmlwriter.write(root);
-		}
-        
+            FileWriter writer = new FileWriter(baseFile.getParent()
+                    + File.separator + "packsinfo.xml");
+            XMLWriter xmlwriter = new XMLWriter(writer);
+            xmlwriter.write(root);
+        }
+
         // Now that we know sizes, write pack metadata to primary jar.
         primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry("packs.info"));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
@@ -369,73 +389,79 @@ public class Packager extends PackagerBase
      * Stream utilites for creation of the installer.
      **********************************************************************************************/
 
-    /** Return a stream for the next jar. */
+    /**
+     * Return a stream for the next jar.
+     */
     private com.izforge.izpack.util.JarOutputStream getJarOutputStream(String name) throws IOException
     {
         File file = new File(baseFile.getParentFile(), name);
         sendMsg("Building installer jar: " + file.getAbsolutePath());
 
-        com.izforge.izpack.util.JarOutputStream jar = 
-            new com.izforge.izpack.util.JarOutputStream(file);
+        com.izforge.izpack.util.JarOutputStream jar =
+                new com.izforge.izpack.util.JarOutputStream(file);
         jar.setLevel(Deflater.BEST_COMPRESSION);
         jar.setPreventClose(true); // Needed at using FilterOutputStreams which calls close
-                                    // of the slave at finalizing.
+        // of the slave at finalizing.
 
         return jar;
     }
 
     /**
      * Copies contents of one jar to another.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * TODO: it would be useful to be able to keep signature information from signed jar files, can
      * we combine manifests and still have their content signed?
-     * 
      */
     private void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out) throws IOException
     {
-        copyZip( zin, out, null );
+        copyZip(zin, out, null);
     }
 
     /**
      * Copies specified contents of one jar to another.
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * TODO: it would be useful to be able to keep signature information from signed jar files, can
      * we combine manifests and still have their content signed?
-     * 
      */
     private void copyZip(ZipInputStream zin, org.apache.tools.zip.ZipOutputStream out,
-            List<String> files)
-    throws IOException
+                         List<String> files)
+            throws IOException
     {
         java.util.zip.ZipEntry zentry;
-        if( ! alreadyWrittenFiles.containsKey( out ))
+        if (!alreadyWrittenFiles.containsKey(out))
+        {
             alreadyWrittenFiles.put(out, new HashSet<String>());
+        }
         HashSet<String> currentSet = alreadyWrittenFiles.get(out);
         while ((zentry = zin.getNextEntry()) != null)
         {
             String currentName = zentry.getName();
             String testName = currentName.replace('/', '.');
             testName = testName.replace('\\', '.');
-            if( files != null )
+            if (files != null)
             {
                 Iterator<String> i = files.iterator();
                 boolean founded = false;
-                while( i.hasNext())
+                while (i.hasNext())
                 {   // Make "includes" self to support regex.
                     String doInclude = i.next();
-                    if( testName.matches( doInclude  ) )
+                    if (testName.matches(doInclude))
                     {
                         founded = true;
                         break;
                     }
                 }
-                if( ! founded )
+                if (!founded)
+                {
                     continue;
+                }
             }
-            if( currentSet.contains(currentName))
+            if (currentSet.contains(currentName))
+            {
                 continue;
+            }
             try
             {
                 // Create new entry for zip file.
@@ -444,7 +470,9 @@ public class Packager extends PackagerBase
                 long fileTime = zentry.getTime();
                 // Make sure there is date and time set.
                 if (fileTime != -1)
+                {
                     newEntry.setTime(fileTime); // If found set it into output file.
+                }
                 out.putNextEntry(newEntry);
 
                 PackagerHelper.copyStream(zin, out);
@@ -460,13 +488,13 @@ public class Packager extends PackagerBase
             }
         }
     }
-    
+
     /* (non-Javadoc)
-     * @see com.izforge.izpack.compiler.IPackager#addConfigurationInformation(net.n3.nanoxml.XMLElement)
-     */
+    * @see com.izforge.izpack.compiler.IPackager#addConfigurationInformation(net.n3.nanoxml.XMLElement)
+    */
     public void addConfigurationInformation(XMLElement data)
     {
         // TODO Auto-generated method stub
-        
+
     }
 }

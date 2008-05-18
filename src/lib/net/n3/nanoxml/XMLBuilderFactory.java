@@ -18,14 +18,16 @@ package net.n3.nanoxml;
 /**
  * Simple factory for creating builders
  */
-public class XMLBuilderFactory {
+public class XMLBuilderFactory
+{
 
     /**
      * Return an IXMLBuilder instance
      *
      * @return an IXMLBuilder instance
      */
-    public static IXMLBuilder createXMLBuilder() {
+    public static IXMLBuilder createXMLBuilder()
+    {
         return new XIncludeXMLBuilder();
     }
 }

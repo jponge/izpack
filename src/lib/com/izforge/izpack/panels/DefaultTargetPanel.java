@@ -21,14 +21,13 @@
 
 package com.izforge.izpack.panels;
 
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * The taget directory selection panel.
- * 
+ *
  * @author Julien Ponge
  * @author Jeff Gordon
  */
@@ -39,9 +38,9 @@ public class DefaultTargetPanel extends PathInputPanel
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public DefaultTargetPanel(InstallerFrame parent, InstallData idata)
     {
@@ -56,7 +55,9 @@ public class DefaultTargetPanel extends PathInputPanel
         }
     }
 
-    /** Called when the panel becomes active. */
+    /**
+     * Called when the panel becomes active.
+     */
     public void panelActivate()
     {
         // Resolve the default for chosenPath
@@ -77,7 +78,7 @@ public class DefaultTargetPanel extends PathInputPanel
 
     /**
      * Indicates wether the panel has been validated or not.
-     * 
+     *
      * @return Whether the panel has been validated or not.
      */
     public boolean isValidated()
@@ -91,7 +92,7 @@ public class DefaultTargetPanel extends PathInputPanel
     /**
      * Returns the default install directory. This is equal to
      * <code>PathInputPanel.getDefaultInstallDir</code>
-     * 
+     *
      * @return the default install directory
      */
     public String getDefaultDir()
@@ -102,7 +103,7 @@ public class DefaultTargetPanel extends PathInputPanel
     /**
      * Sets the default install directory to the given String. This is equal to
      * <code>PathInputPanel.setDefaultInstallDir</code>
-     * 
+     *
      * @param defaultDir path to be used for the install directory
      */
     public void setDefaultDir(String defaultDir)
@@ -112,7 +113,7 @@ public class DefaultTargetPanel extends PathInputPanel
 
     /**
      * Asks to make the XML panel data.
-     * 
+     *
      * @param panelRoot The tree to put the data in.
      */
     public void makeXMLData(XMLElement panelRoot)

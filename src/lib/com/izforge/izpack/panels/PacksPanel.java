@@ -22,20 +22,17 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.Dimension;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JScrollPane;
-
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.IoHelper;
 
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * The packs selection panel class. This class handles only the layout. Common stuff are handled by
  * the base class.
- * 
+ *
  * @author Julien Ponge
  * @author Jan Blok
  * @author Klaus Bartz
@@ -44,15 +41,15 @@ public class PacksPanel extends PacksPanelBase
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 4051327842505668403L;
 
     /**
      * The constructor.
-     * 
+     *
      * @param parent The parent window.
-     * @param idata The installation data.
+     * @param idata  The installation data.
      */
     public PacksPanel(InstallerFrame parent, InstallData idata)
     {
@@ -74,7 +71,9 @@ public class PacksPanel extends PacksPanelBase
         tableScroller = new JScrollPane();
         packsTable = createPacksTable(300, tableScroller, null, null);
         if (dependenciesExist)
+        {
             dependencyArea = createTextArea("PacksPanel.dependencyList", null, null, null);
+        }
         descriptionArea = createTextArea("PacksPanel.description", null, null, null);
         spaceLabel = createPanelWithLabel("PacksPanel.space", null, null);
         if (IoHelper.supported("getFreeSpace"))

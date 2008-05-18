@@ -23,14 +23,13 @@ package com.izforge.izpack.installer;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * This class describes the result of the compilation.
- * 
+ * <p/>
  * This class is here because error handling is not straight-forward with regard to compilation.
- * 
+ * <p/>
  * The error condition consists of an error message, the full command line which failed to execute
  * plus it's stdout and stderr. The reason for this class to exist is that there are three possible
  * reactions to the error (chosen by the user).
@@ -39,7 +38,7 @@ import java.util.List;
  * <li>ignore (continue anyway)</li>
  * <li>reconfigure</li>
  * </ol>
- * 
+ *
  * @author Tino Schwarze
  */
 public class CompileResult
@@ -64,19 +63,29 @@ public class CompileResult
     // here we're pessimistic
     private int action = ACTION_ABORT;
 
-    /** the error message */
+    /**
+     * the error message
+     */
     private String message = null;
 
-    /** the command line */
+    /**
+     * the command line
+     */
     private List<String> cmdline = null;
 
-    /** the stdout of the command */
+    /**
+     * the stdout of the command
+     */
     private String stdout = null;
 
-    /** the stderr of the command */
+    /**
+     * the stderr of the command
+     */
     private String stderr = null;
 
-    /** constructor, create a new successful result */
+    /**
+     * constructor, create a new successful result
+     */
     public CompileResult()
     {
         this.status = SUCCESS;
@@ -85,25 +94,25 @@ public class CompileResult
 
     /**
      * Creates a result because of exception.
-     * 
+     *
      * @param anException The exception.
      */
-    public CompileResult (Exception anException)
+    public CompileResult(Exception anException)
     {
         StringWriter writer = new StringWriter();
-        anException.printStackTrace(new PrintWriter (writer));
+        anException.printStackTrace(new PrintWriter(writer));
         this.message = writer.toString();
         this.action = ACTION_ABORT;
         this.status = FAILED;
     }
-    
+
     /**
      * creates a new CompileResult with status FAILED
-     * 
+     *
      * @param message description of the exception
      * @param cmdline full command line of failed command
-     * @param stdout standard output of failed command
-     * @param stderr standard error of failed command
+     * @param stdout  standard output of failed command
+     * @param stderr  standard error of failed command
      */
     public CompileResult(String message, List<String> cmdline, String stdout, String stderr)
     {
@@ -142,13 +151,17 @@ public class CompileResult
         return this.action;
     }
 
-    /** check for success (convenience function) */
+    /**
+     * check for success (convenience function)
+     */
     public boolean isSuccess()
     {
         return (this.status == SUCCESS);
     }
 
-    /** check whether to abort (convenience function) */
+    /**
+     * check whether to abort (convenience function)
+     */
     public boolean isAbort()
     {
         return ((this.status == FAILED) && (this.action == ACTION_ABORT));
@@ -156,7 +169,7 @@ public class CompileResult
 
     /**
      * check whether to continue (convenience function)
-     * 
+     *
      * @return true if status is SUCCESS or action is CONTINUE
      */
     public boolean isContinue()
@@ -164,7 +177,9 @@ public class CompileResult
         return ((this.status == SUCCESS) || (this.action == ACTION_CONTINUE));
     }
 
-    /** check whether to reconfigure (convenience function) */
+    /**
+     * check whether to reconfigure (convenience function)
+     */
     public boolean isReconfigure()
     {
         return ((this.status == FAILED) && (this.action == ACTION_RECONFIGURE));
@@ -172,7 +187,7 @@ public class CompileResult
 
     /**
      * return error message
-     * 
+     *
      * @return the error message describing the action that failed (might be null)
      */
     public String getMessage()
@@ -182,7 +197,7 @@ public class CompileResult
 
     /**
      * get command line of failed command as a string
-     * 
+     *
      * @return command line of failed command
      */
     public String getCmdline()

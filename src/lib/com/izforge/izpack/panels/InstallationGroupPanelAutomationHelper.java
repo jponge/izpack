@@ -20,34 +20,33 @@
  */
 package com.izforge.izpack.panels;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
-
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.panels.InstallationGroupPanel.GroupData;
 import com.izforge.izpack.util.Debug;
+import net.n3.nanoxml.XMLElement;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Vector;
 
 /**
  * An automation helper for the InstallationGroupPanel
- * 
+ *
  * @author Scott.Stark@jboss.org
  * @version $Revision:$
  */
 public class InstallationGroupPanelAutomationHelper
-	implements PanelAutomation
+        implements PanelAutomation
 {
-	/**
-	 * 
-	 */
-	public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
-	{
-		GroupData[] rows = (GroupData[]) idata.getAttribute("GroupData");
-		HashMap packsByName = (HashMap) idata.getAttribute("packsByName");
+    /**
+     *
+     */
+    public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
+    {
+        GroupData[] rows = (GroupData[]) idata.getAttribute("GroupData");
+        HashMap packsByName = (HashMap) idata.getAttribute("packsByName");
         // Write out the group to pack mappings
         for (GroupData gd : rows)
         {
@@ -66,20 +65,20 @@ public class InstallationGroupPanelAutomationHelper
             }
             panelRoot.addChild(xgroup);
         }
-	}
+    }
 
-	/**
-	 * TODO Need to add a InstallationGroupPanelAutomationHelper to read the
-	 * xml data to allow an install group to specify the selected packs.
-	 */
-	public boolean runAutomated(AutomatedInstallData idata,
-			XMLElement panelRoot)
-	{
-		String installGroup = idata.getVariable("INSTALL_GROUP");
-		Debug.trace("InstallationGroupPanelAutomationHelper: runAutomated, INSTALL_GROUP: "+installGroup);
-		if( installGroup != null )
-		{
-			Vector<XMLElement> groups = panelRoot.getChildrenNamed("group");
+    /**
+     * TODO Need to add a InstallationGroupPanelAutomationHelper to read the
+     * xml data to allow an install group to specify the selected packs.
+     */
+    public boolean runAutomated(AutomatedInstallData idata,
+                                XMLElement panelRoot)
+    {
+        String installGroup = idata.getVariable("INSTALL_GROUP");
+        Debug.trace("InstallationGroupPanelAutomationHelper: runAutomated, INSTALL_GROUP: " + installGroup);
+        if (installGroup != null)
+        {
+            Vector<XMLElement> groups = panelRoot.getChildrenNamed("group");
             for (XMLElement group : groups)
             {
                 String name = group.getAttribute("name");
@@ -107,8 +106,8 @@ public class InstallationGroupPanelAutomationHelper
                     break;
                 }
             }
-		}
+        }
         return true;
-	}
+    }
 
 }

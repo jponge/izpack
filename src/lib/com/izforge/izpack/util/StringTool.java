@@ -26,7 +26,7 @@ import java.util.ArrayList;
 
 /**
  * A extended Java Implementation of Pythons string.replace()
- * 
+ *
  * @author marc.eppelmann&#064;gmx.de
  */
 public class StringTool
@@ -48,7 +48,7 @@ public class StringTool
 
     /**
      * Standalone callable Test method
-     * 
+     *
      * @param args Commandline Args
      */
     public static void main(String[] args)
@@ -59,11 +59,10 @@ public class StringTool
 
     /**
      * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>
-     * 
+     *
      * @param value original String
-     * @param from Search Pattern
-     * @param to Replace with this
-     * 
+     * @param from  Search Pattern
+     * @param to    Replace with this
      * @return the replaced String
      */
     public static String replace(String value, String from, String to)
@@ -73,17 +72,19 @@ public class StringTool
 
     /**
      * Replaces <b>from</b> with <b>to</b> in given String: <b>value</b>
-     * 
-     * @param value original String
-     * @param from Search Pattern
-     * @param to Replace with this
+     *
+     * @param value              original String
+     * @param from               Search Pattern
+     * @param to                 Replace with this
      * @param aCaseSensitiveFlag set to true be case sensitive.
-     * 
      * @return the replaced String
      */
     public static String replace(String value, String from, String to, boolean aCaseSensitiveFlag)
     {
-        if ((value == null) || (value.length() == 0) || (from == null) || (from.length() == 0)) { return value; }
+        if ((value == null) || (value.length() == 0) || (from == null) || (from.length() == 0))
+        {
+            return value;
+        }
 
         if (to == null)
         {
@@ -119,14 +120,13 @@ public class StringTool
 
     /**
      * Normalizes a Windows or Unix Path.
-     * 
+     * <p/>
      * Reason: Javas File accepts / or \ for Pathes. Batches or ShellScripts does it not!
-     * 
+     * <p/>
      * TODO: implement support for MAC < MacOSX
-     * 
+     *
      * @param destination
      * @param fileSeparator a target-system fileseparator
-     * 
      * @return the normalized path
      */
     public static String normalizePath(String destination, String fileSeparator)
@@ -159,9 +159,8 @@ public class StringTool
     /**
      * Normalizes a mixed Windows/Unix Path. Does Only work for Windows or Unix Pathes Reason:
      * Java.File accepts / or \ for Pathes. Batches or ShellScripts does it not!
-     * 
+     *
      * @param destination accepted mixed form by java.File like "C:/a/mixed\path\accepted/by\Java"
-     * 
      * @return the normalized Path
      */
     public static String normalizePath(String destination)
@@ -171,7 +170,7 @@ public class StringTool
 
     /**
      * Converts an String Array to a space separated String w/o any check
-     * 
+     *
      * @param args The StringArray
      * @return the space separated result.
      */
@@ -198,9 +197,8 @@ public class StringTool
 
     /**
      * Transforms a (Array)List of Strings into a line.separator="\n" separated Stringlist.
-     * 
+     *
      * @param aStringList
-     * 
      * @return a printable list
      */
     public static String stringArrayListToString(ArrayList aStringList)
@@ -210,15 +208,17 @@ public class StringTool
 
     /**
      * Transforms a (Array)List of Strings into an aLineSeparator separated Stringlist.
-     * 
+     *
      * @param aStringList
-     * 
      * @return a printable list
      */
     public static String stringArrayListToString(ArrayList aStringList, String aLineSeparator)
     {
         String LineSeparator = aLineSeparator;
-        if (LineSeparator == null) LineSeparator = System.getProperty("line.separator", "\n");
+        if (LineSeparator == null)
+        {
+            LineSeparator = System.getProperty("line.separator", "\n");
+        }
 
         StringBuffer temp = new StringBuffer();
 
@@ -232,10 +232,9 @@ public class StringTool
 
     /**
      * True if a given string starts with the another given String
-     * 
-     * @param str The String to search in
+     *
+     * @param str    The String to search in
      * @param prefix The string to search for
-     * 
      * @return True if str starts with prefix
      */
     public static boolean startsWith(String str, String prefix)
@@ -245,10 +244,9 @@ public class StringTool
 
     /**
      * The same as startsWith but ignores the case.
-     * 
-     * @param str The String to search in
+     *
+     * @param str    The String to search in
      * @param prefix The string to search for
-     * 
      * @return rue if str starts with prefix
      */
     public static boolean startsWithIgnoreCase(String str, String prefix)

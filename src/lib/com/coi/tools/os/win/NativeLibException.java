@@ -21,41 +21,48 @@
 
 package com.coi.tools.os.win;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * A exception class which will be used from the native part of system dependent classes to signal
  * exceptions. The native methods writes only symbolic error messages, the language dependant
  * mapping will be done in this class.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class NativeLibException extends Exception
 {
 
     private static final long serialVersionUID = 3257002172494721080L;
 
-    /** Map of founded resource bundles which contains the localized error messages. */
+    /**
+     * Map of founded resource bundles which contains the localized error messages.
+     */
     private final static HashMap<String, ResourceBundle> messageResourceBundles = new HashMap<String, ResourceBundle>();
 
-    /** Internal error as number. */
+    /**
+     * Internal error as number.
+     */
     private int libErr;
 
-    /** OS error as number. */
+    /**
+     * OS error as number.
+     */
     private int osErr;
 
-    /** Internal error message; contains most the symbolic error name. */
+    /**
+     * Internal error message; contains most the symbolic error name.
+     */
     private String libErrString;
 
-    /** OS error string; if possible localized. */
+    /**
+     * OS error string; if possible localized.
+     */
     private String osErrString;
 
-    /** Additional arguments. */
+    /**
+     * Additional arguments.
+     */
     private ArrayList<String> args = new ArrayList<String>();
 
     static
@@ -71,13 +78,16 @@ public class NativeLibException extends Exception
      * should not contain the locale substring. At a call to getMessage the bundle is searched with
      * the libErrString as key. If it exist, the value of it is used by getMessage, else the
      * libErrString self.
-     * 
+     *
      * @param bundlePath path of bundle without locale
      */
     public static void addResourceBundle(String bundlePath)
     {
         ResourceBundle bd = null;
-        if (messageResourceBundles.containsKey(bundlePath)) return;
+        if (messageResourceBundles.containsKey(bundlePath))
+        {
+            return;
+        }
         try
         {
             bd = ResourceBundle.getBundle(bundlePath);
@@ -100,7 +110,7 @@ public class NativeLibException extends Exception
 
     /**
      * Creates a NativeLibException with the given message.
-     * 
+     *
      * @param message to be used
      */
     public NativeLibException(String message)
@@ -110,7 +120,7 @@ public class NativeLibException extends Exception
 
     /**
      * Creates a NativeLibException with the given cause.
-     * 
+     *
      * @param cause to be used
      */
     public NativeLibException(Throwable cause)
@@ -120,9 +130,9 @@ public class NativeLibException extends Exception
 
     /**
      * Creates a NativeLibException with the given message and cause.
-     * 
+     *
      * @param message message to be used
-     * @param cause cause to be used
+     * @param cause   cause to be used
      */
     public NativeLibException(String message, Throwable cause)
     {
@@ -131,11 +141,11 @@ public class NativeLibException extends Exception
 
     /**
      * Creates a NativeLibException with the given values.
-     * 
-     * @param libErr identifier of the internal handled error
-     * @param osErr system error number
+     *
+     * @param libErr    identifier of the internal handled error
+     * @param osErr     system error number
      * @param libString message for the internal handled error
-     * @param osString system error message
+     * @param osString  system error message
      */
     public NativeLibException(int libErr, int osErr, String libString, String osString)
     {
@@ -162,30 +172,42 @@ public class NativeLibException extends Exception
         }
         else if (libErr != 0)
         {
-            if (next) retval.append("\n");
+            if (next)
+            {
+                retval.append("\n");
+            }
             next = true;
             retval.append(getMsg("libErrNumber." + Integer.toString(libErr)));
         }
         if (osErr != 0)
         {
-            if (next) retval.append("\n");
+            if (next)
+            {
+                retval.append("\n");
+            }
             next = true;
             retval.append(getMsg("libInternal.OsErrNumPraefix")).append(Integer.toString(osErr));
         }
         if (osErrString != null)
         {
-            if (next) retval.append("\n");
+            if (next)
+            {
+                retval.append("\n");
+            }
             next = true;
             // Message self should be localized in the native part
             retval.append(getMsg("libInternal.OsErrStringPraefix")).append(getOsMessage());
         }
-        if (retval.length() > 0) return (reviseMsgWithArgs(retval.toString()));
+        if (retval.length() > 0)
+        {
+            return (reviseMsgWithArgs(retval.toString()));
+        }
         return null;
     }
 
     /**
      * Returns the number of the internal handled error.
-     * 
+     *
      * @return the number of the internal handled error
      */
     public int getLibErr()
@@ -195,7 +217,7 @@ public class NativeLibException extends Exception
 
     /**
      * Returns the message of the internal handled error.
-     * 
+     *
      * @return the messager of the internal handled error
      */
     public String getLibMessage()
@@ -205,7 +227,7 @@ public class NativeLibException extends Exception
 
     /**
      * Returns the localized message of the internal handled error.
-     * 
+     *
      * @return the localized message of the internal handled error
      */
     public String getLocalizedLibMessage()
@@ -215,7 +237,7 @@ public class NativeLibException extends Exception
 
     /**
      * Returns the number of the system error.
-     * 
+     *
      * @return the number of the system error
      */
     public int getOsErr()
@@ -225,7 +247,7 @@ public class NativeLibException extends Exception
 
     /**
      * Returns the message of the system error.
-     * 
+     *
      * @return the messager of the system error
      */
     public String getOsMessage()
@@ -235,7 +257,7 @@ public class NativeLibException extends Exception
 
     /**
      * Adds a string to the internal argument list.
-     * 
+     *
      * @param arg string to be added to the internal argument list
      */
     public void addArgument(String arg)
@@ -245,7 +267,7 @@ public class NativeLibException extends Exception
 
     /**
      * Returns the internal argument list.
-     * 
+     *
      * @return the internal argument list
      */
     public ArrayList<String> getArguments()
@@ -254,9 +276,10 @@ public class NativeLibException extends Exception
     }
 
     /**
-     * Revise placeholder in the given message with the setted arguments 
+     * Revise placeholder in the given message with the setted arguments
+     *
      * @param msg message to be revised
-     * @return revised message 
+     * @return revised message
      */
     public String reviseMsgWithArgs(String msg)
     {
@@ -270,7 +293,7 @@ public class NativeLibException extends Exception
 
     /**
      * Searches the resource bundles for a string which coresponds to the given string as key.
-     * 
+     *
      * @param s string which should be used as keys for the resource bundle
      * @return the founded message as int value
      */
@@ -295,10 +318,10 @@ public class NativeLibException extends Exception
      * Returns a string resulting from replacing all occurrences of what in this string with with.
      * In opposite to the String.replaceAll method this method do not use regular expression or
      * other methods which are only available in JRE 1.4 and later.
-     * 
+     *
      * @param destination string for which the replacing should be performed
-     * @param what what string should be replaced
-     * @param with with what string what should be replaced
+     * @param what        what string should be replaced
+     * @param with        with what string what should be replaced
      * @return a new String object if what was found in the given string, else the given string self
      */
     private static String replaceString(String destination, String what, String with)
@@ -312,12 +335,18 @@ public class NativeLibException extends Exception
             int whatLength = what.length();
             while (current >= 0)
             { // Do not use Methods from JRE 1.4 and higher ...
-                if (current > 0) buf.append(destination.substring(last, current));
+                if (current > 0)
+                {
+                    buf.append(destination.substring(last, current));
+                }
                 buf.append(with);
                 last = current + whatLength;
                 current = destination.indexOf(what, last);
             }
-            if (destination.length() > last) buf.append(destination.substring(last));
+            if (destination.length() > last)
+            {
+                buf.append(destination.substring(last));
+            }
             return buf.toString();
         }
         return destination;

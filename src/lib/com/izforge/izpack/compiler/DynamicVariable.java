@@ -26,7 +26,6 @@ import java.io.Serializable;
 
 
 /**
- * 
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
@@ -36,13 +35,14 @@ public class DynamicVariable implements Serializable
     private String name;
     private String value;
     private String conditionid;
-    
-    public DynamicVariable() {
+
+    public DynamicVariable()
+    {
         name = "";
         value = "";
         conditionid = "";
     }
-    
+
     /**
      * @return the name
      */
@@ -50,17 +50,18 @@ public class DynamicVariable implements Serializable
     {
         return this.name;
     }
-    
+
     /**
      * @param name the name to set
      */
     public void setName(String name)
     {
-        if (name != null){
-            this.name = name;    
-        }        
+        if (name != null)
+        {
+            this.name = name;
+        }
     }
-    
+
     /**
      * @return the value
      */
@@ -68,17 +69,18 @@ public class DynamicVariable implements Serializable
     {
         return this.value;
     }
-    
+
     /**
      * @param value the value to set
      */
     public void setValue(String value)
     {
-        if (value != null){
-            this.value = value;    
-        }        
+        if (value != null)
+        {
+            this.value = value;
+        }
     }
-    
+
     /**
      * @return the conditionid
      */
@@ -86,21 +88,23 @@ public class DynamicVariable implements Serializable
     {
         return this.conditionid;
     }
-    
+
     /**
      * @param conditionid the conditionid to set
      */
     public void setConditionid(String conditionid)
     {
-        if (conditionid != null){
-            this.conditionid = conditionid;    
-        }        
+        if (conditionid != null)
+        {
+            this.conditionid = conditionid;
+        }
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        if ((obj == null) || !(obj instanceof DynamicVariable)){
+        if ((obj == null) || !(obj instanceof DynamicVariable))
+        {
             return false;
         }
         DynamicVariable compareObj = (DynamicVariable) obj;
@@ -109,9 +113,9 @@ public class DynamicVariable implements Serializable
 
     @Override
     public int hashCode()
-    {        
+    {
         // TODO: check if this always correct
         return name.hashCode() ^ conditionid.hashCode();
-    }       
+    }
 }
 

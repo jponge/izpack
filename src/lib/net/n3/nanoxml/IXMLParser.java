@@ -30,7 +30,7 @@ package net.n3.nanoxml;
 
 /**
  * IXMLParser is the core parser of NanoXML.
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -39,65 +39,64 @@ public interface IXMLParser
 
     /**
      * Sets the reader from which the parser retrieves its data.
-     * 
+     *
      * @param reader the reader
      */
     public void setReader(IXMLReader reader);
 
     /**
      * Returns the reader from which the parser retrieves its data.
-     * 
+     *
      * @return the reader
      */
     public IXMLReader getReader();
 
     /**
      * Sets the builder which creates the logical structure of the XML data.
-     * 
+     *
      * @param builder the builder
      */
     public void setBuilder(IXMLBuilder builder);
 
     /**
      * Returns the builder which creates the logical structure of the XML data.
-     * 
+     *
      * @return the builder
      */
     public IXMLBuilder getBuilder();
 
     /**
      * Sets the validator that validates the XML data.
-     * 
+     *
      * @param validator the validator
      */
     public void setValidator(IXMLValidator validator);
 
     /**
      * Returns the validator that validates the XML data.
-     * 
+     *
      * @return the validator
      */
     public IXMLValidator getValidator();
 
     /**
      * Sets the entity resolver.
-     * 
+     *
      * @param resolver the non-null resolver
      */
     public void setResolver(IXMLEntityResolver resolver);
 
     /**
      * Returns the entity resolver.
-     * 
+     *
      * @return the non-null resolver
      */
     public IXMLEntityResolver getResolver();
 
     /**
      * Parses the data and lets the builder create the logical data structure.
-     * 
+     *
      * @return the logical structure built by the builder
-     * 
      * @throws net.n3.nanoxml.XMLException if an error occurred reading or parsing the data
      */
     public Object parse() throws XMLException;

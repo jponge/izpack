@@ -31,7 +31,7 @@ package net.n3.nanoxml;
 /**
  * An XMLValidationException is thrown when the XML passed to the XML parser is well-formed but not
  * valid.
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
  */
@@ -39,7 +39,7 @@ public class XMLValidationException extends XMLException
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3616453380025890867L;
 
@@ -100,17 +100,17 @@ public class XMLValidationException extends XMLException
 
     /**
      * Creates a new exception.
-     * 
-     * @param errorType the type of validity error
-     * @param systemID the system ID from where the data came
-     * @param lineNr the line number in the XML data where the exception occurred.
-     * @param elementName the name of the offending element
-     * @param attributeName the name of the offending attribute
+     *
+     * @param errorType      the type of validity error
+     * @param systemID       the system ID from where the data came
+     * @param lineNr         the line number in the XML data where the exception occurred.
+     * @param elementName    the name of the offending element
+     * @param attributeName  the name of the offending attribute
      * @param attributeValue the value of the offending attribute
-     * @param msg the message of the exception.
+     * @param msg            the message of the exception.
      */
     public XMLValidationException(int errorType, String systemID, int lineNr, String elementName,
-            String attributeName, String attributeValue, String msg)
+                                  String attributeName, String attributeValue, String msg)
     {
         super(systemID, lineNr, null, msg
                 + ((elementName == null) ? "" : (", element=" + elementName))

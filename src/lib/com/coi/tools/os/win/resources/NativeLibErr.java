@@ -25,36 +25,35 @@ import java.util.ListResourceBundle;
 
 /**
  * "Global" (English) resource bundle for NativLibException.
- * 
+ *
  * @author Klaus Bartz
- * 
  */
 public class NativeLibErr extends ListResourceBundle
 {
 
     private static final Object[][] contents = {
-            { "libInternal.OsErrNumPraefix", " System error number is: "},
-            { "libInternal.OsErrStringPraefix", " System error text is: "},
-            { "system.outOfMemory", "Out of memory in the native part."},
+            {"libInternal.OsErrNumPraefix", " System error number is: "},
+            {"libInternal.OsErrStringPraefix", " System error text is: "},
+            {"system.outOfMemory", "Out of memory in the native part."},
 
-            { "functionFailed.RegOpenKeyEx", "Cannot open registry key {0}\\{1}."},
-            { "functionFailed.RegCreateKeyEx", "Cannot create registry key {0}\\{1}."},
-            { "functionFailed.RegDeleteKey", "Cannot delete registry key {0}\\{1}."},
-            { "functionFailed.RegEnumKeyEx", "Not possible to determine sub keys for key {0}\\{1}."},
-            { "functionFailed.RegEnumValue", "Not possible to determine value under key {0}\\{1}."},
-            { "functionFailed.RegSetValueEx",
+            {"functionFailed.RegOpenKeyEx", "Cannot open registry key {0}\\{1}."},
+            {"functionFailed.RegCreateKeyEx", "Cannot create registry key {0}\\{1}."},
+            {"functionFailed.RegDeleteKey", "Cannot delete registry key {0}\\{1}."},
+            {"functionFailed.RegEnumKeyEx", "Not possible to determine sub keys for key {0}\\{1}."},
+            {"functionFailed.RegEnumValue", "Not possible to determine value under key {0}\\{1}."},
+            {"functionFailed.RegSetValueEx",
                     "Cannot create value {2} under registry key {0}\\{1}."},
-            { "functionFailed.RegDeleteValue",
+            {"functionFailed.RegDeleteValue",
                     "Cannot delete value {2} under registry key {0}\\{1}."},
-            { "functionFailed.RegQueryValueEx",
+            {"functionFailed.RegQueryValueEx",
                     "No informations available for value {2} of registry key {0}\\{1}."},
-            { "functionFailed.RegQueryInfoKey",
+            {"functionFailed.RegQueryInfoKey",
                     "No informations available for registry key {0}\\{1}."},
 
-            { "registry.ValueNotFound", "Registry value not found."},
-            { "registry.KeyNotFound", "Registry key not found."},
-            { "registry.KeyExist", "Cannot create registry key {0}\\{1} because key exist already."},
-            { "registry.ACLNotSupported", "In this version of COIOSHelper permission of registry keys are not supported."}};
+            {"registry.ValueNotFound", "Registry value not found."},
+            {"registry.KeyNotFound", "Registry key not found."},
+            {"registry.KeyExist", "Cannot create registry key {0}\\{1} because key exist already."},
+            {"registry.ACLNotSupported", "In this version of COIOSHelper permission of registry keys are not supported."}};
 
     /**
      * Default constructor.
@@ -66,7 +65,7 @@ public class NativeLibErr extends ListResourceBundle
 
     /**
      * Returns the contents array.
-     * 
+     *
      * @return contents array
      */
     protected Object[][] getContents()

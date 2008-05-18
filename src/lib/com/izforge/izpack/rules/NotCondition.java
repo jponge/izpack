@@ -20,9 +20,8 @@
  */
 package com.izforge.izpack.rules;
 
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.util.Debug;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -31,13 +30,13 @@ public class NotCondition extends Condition
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3194843222487006309L;
     protected Condition operand;
 
     /**
-     * 
+     *
      */
     public NotCondition()
     {
@@ -46,7 +45,7 @@ public class NotCondition extends Condition
     }
 
     /**
-     * 
+     *
      */
     public NotCondition(Condition operand)
     {
@@ -70,6 +69,7 @@ public class NotCondition extends Condition
      * 
      * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement)
      */
+
     public void readFromXML(XMLElement xmlcondition)
     {
         try
@@ -94,7 +94,7 @@ public class NotCondition extends Condition
     }
     */
     public boolean isTrue()
-    {        
+    {
         return !operand.isTrue();
     }
 
@@ -105,7 +105,7 @@ public class NotCondition extends Condition
     {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
-        details.append(" depends on:<ul><li>NOT ");        
+        details.append(" depends on:<ul><li>NOT ");
         details.append(operand.getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();

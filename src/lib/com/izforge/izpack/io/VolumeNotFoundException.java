@@ -21,7 +21,7 @@ import java.io.IOException;
 
 /**
  * Exception, indicating, that a volume was not found.
- * 
+ *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
 public class VolumeNotFoundException extends IOException
@@ -46,7 +46,7 @@ public class VolumeNotFoundException extends IOException
 
     /**
      * Returns the name of the volume, which couldn't be found
-     * 
+     *
      * @return the name of the volume
      */
     public String getVolumename()
@@ -56,7 +56,7 @@ public class VolumeNotFoundException extends IOException
 
     /**
      * Returns the amount of skipped bytes, if a skip-operation was in progress
-     * 
+     *
      * @return the amount of skipped bytes
      */
     public long getAlreadyskippedbytes()
@@ -66,7 +66,7 @@ public class VolumeNotFoundException extends IOException
 
     /**
      * Sets the amount of already skipped bytes.
-     * 
+     *
      * @param alreadyskippedbytes
      */
     public void setAlreadyskippedbytes(long alreadyskippedbytes)

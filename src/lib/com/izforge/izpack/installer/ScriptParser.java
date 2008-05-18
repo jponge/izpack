@@ -21,80 +21,105 @@
 
 package com.izforge.izpack.installer;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
-
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 
+import java.io.*;
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
  * The script parser classe.
- * 
+ *
  * @author Julien Ponge
  * @author Johannes Lehtinen
  */
 public class ScriptParser
 {
 
-    /** The install path. */
+    /**
+     * The install path.
+     */
     public final static String INSTALL_PATH = "INSTALL_PATH";
 
-    /** The Java home path. */
+    /**
+     * The Java home path.
+     */
     public final static String JAVA_HOME = "JAVA_HOME";
-    
-    /** The ClassPath. */
-    public final static String CLASS_PATH = "CLASS_PATH";    
 
-    /** The user home path. */
+    /**
+     * The ClassPath.
+     */
+    public final static String CLASS_PATH = "CLASS_PATH";
+
+    /**
+     * The user home path.
+     */
     public final static String USER_HOME = "USER_HOME";
 
-    /** The user name. */
+    /**
+     * The user name.
+     */
     public final static String USER_NAME = "USER_NAME";
 
-		/** The hostname. */
+    /**
+     * The hostname.
+     */
     public final static String HOST_NAME = "HOST_NAME";
 
-		/** The ip address. */
+    /**
+     * The ip address.
+     */
     public final static String IP_ADDRESS = "IP_ADDRESS";
 
-    /** The file separator character. */
+    /**
+     * The file separator character.
+     */
     public final static String FILE_SEPARATOR = "FILE_SEPARATOR";
 
-    /** The application name. */
+    /**
+     * The application name.
+     */
     public final static String APP_NAME = "APP_NAME";
 
-    /** The application URL. */
+    /**
+     * The application URL.
+     */
     public final static String APP_URL = "APP_URL";
 
-    /** The application version. */
+    /**
+     * The application version.
+     */
     public final static String APP_VER = "APP_VER";
 
-    /** The language IS03 code. */
+    /**
+     * The language IS03 code.
+     */
     public final static String ISO3_LANG = "ISO3_LANG";
-    
-    /** The language code as _ll_CC like used with ResourceBoundle. */
-    public final static String LOCALE = "LOCALE_IDENTIFIER";
-    
 
-    /** The files to parse. */
+    /**
+     * The language code as _ll_CC like used with ResourceBoundle.
+     */
+    public final static String LOCALE = "LOCALE_IDENTIFIER";
+
+
+    /**
+     * The files to parse.
+     */
     private Collection<ParsableFile> files;
 
-    /** The variables substituror. */
+    /**
+     * The variables substituror.
+     */
     private VariableSubstitutor vs;
 
     /**
      * Constructs a new parser. The parsable files specified must have pretranslated paths
      * (variables expanded and file separator characters converted if necessary).
-     * 
+     *
      * @param files the parsable files to process
-     * @param vs the variable substitutor to use
+     * @param vs    the variable substitutor to use
      */
     public ScriptParser(Collection<ParsableFile> files, VariableSubstitutor vs)
     {
@@ -104,8 +129,8 @@ public class ScriptParser
 
     /**
      * Parses the files.
-     * 
-     * @exception Exception Description of the Exception
+     *
+     * @throws Exception Description of the Exception
      */
     public void parseFiles() throws Exception
     {
@@ -114,7 +139,10 @@ public class ScriptParser
         while (iter.hasNext())
         {
             // If interrupt is desired, return immediately.
-            if (Unpacker.isInterruptDesired()) return;
+            if (Unpacker.isInterruptDesired())
+            {
+                return;
+            }
             // Create a temporary file for the parsed data
             // (Use the same directory so that renaming works later)
             ParsableFile pfile = iter.next();
@@ -141,7 +169,9 @@ public class ScriptParser
             // Replace the original file with the parsed one
             file.delete();
             if (!parsedFile.renameTo(file))
+            {
                 throw new IOException("Could not rename file " + parsedFile + " to " + file);
+            }
         }
     }
 }

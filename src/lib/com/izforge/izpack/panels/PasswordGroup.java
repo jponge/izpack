@@ -22,22 +22,21 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.util.Debug;
+
+import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-
-import javax.swing.JPasswordField;
 
 /*---------------------------------------------------------------------------*/
 /**
  * This class can be used to manage multiple related password fields. This is used in the
  * <code>UserInputPanel</code> to manage communication with the validator and processor for
  * password fields.
- * 
- * @see com.izforge.izpack.panels.UserInputPanel
- * 
- * @version 0.0.1 / 2/22/03
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 2/22/03
+ * @see com.izforge.izpack.panels.UserInputPanel
  */
 /*---------------------------------------------------------------------------*/
 public class PasswordGroup implements ProcessingClient
@@ -51,7 +50,7 @@ public class PasswordGroup implements ProcessingClient
     private List<ValidatorContainer> validatorContainers = null;
 //  private Validator validator = null;
 //  private boolean hasParams = false;
-//  private Map validatorParams = null;
+    //  private Map validatorParams = null;
     private Processor processor = null;
     private String modifiedPassword = null;
     private int currentValidator = 0;
@@ -61,10 +60,10 @@ public class PasswordGroup implements ProcessingClient
     /*--------------------------------------------------------------------------*/
     /**
      * Creates a password group to manage one or more password fields.
-     * 
-     * @param idata the installation data
+     *
+     * @param idata               the installation data
      * @param validatorContainers the validator containers
-     * @param processor the processor
+     * @param processor           the processor
      */
     /*--------------------------------------------------------------------------*/
     public PasswordGroup(InstallData idata, List<ValidatorContainer> validatorContainers, String processor)
@@ -76,9 +75,10 @@ public class PasswordGroup implements ProcessingClient
         {
             this.idata = idata;
             this.validatorContainers = validatorContainers;
-        } catch (Throwable exception)
+        }
+        catch (Throwable exception)
         {
-            Debug.trace("Failed in PasswordGroup constructor: "+exception);
+            Debug.trace("Failed in PasswordGroup constructor: " + exception);
             this.validatorContainers = null;
         }
 
@@ -88,9 +88,10 @@ public class PasswordGroup implements ProcessingClient
         try
         {
             this.processor = (Processor) Class.forName(processor).newInstance();
-        } catch (Throwable exception)
+        }
+        catch (Throwable exception)
         {
-            Debug.trace("Failed in PasswordGroup constructor making processor: "+exception);
+            Debug.trace("Failed in PasswordGroup constructor making processor: " + exception);
             this.processor = null;
         }
     }
@@ -103,7 +104,7 @@ public class PasswordGroup implements ProcessingClient
     /*--------------------------------------------------------------------------*/
     /**
      * Returns the number of sub-fields.
-     * 
+     *
      * @return the number of sub-fields
      */
     /*--------------------------------------------------------------------------*/
@@ -115,12 +116,10 @@ public class PasswordGroup implements ProcessingClient
     /*--------------------------------------------------------------------------*/
     /**
      * Returns the contents of the field indicated by <code>index</code>.
-     * 
+     *
      * @param index the index of the sub-field from which the contents is requested.
-     * 
      * @return the contents of the indicated sub-field.
-     * 
-     * @exception IndexOutOfBoundsException if the index is out of bounds.
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
     /*--------------------------------------------------------------------------*/
     public String getFieldContents(int index) throws IndexOutOfBoundsException
@@ -137,7 +136,7 @@ public class PasswordGroup implements ProcessingClient
     /*--------------------------------------------------------------------------*/
     /**
      * Adds a <code>JPasswordField</code> to the group of fields being managed by this object.
-     * 
+     *
      * @param field <code>JPasswordField</code> to add
      */
     /*--------------------------------------------------------------------------*/
@@ -153,9 +152,9 @@ public class PasswordGroup implements ProcessingClient
     /**
      * This method validates the group content. Validating is performed through a user supplied
      * service class that provides the validation rules.
-     * 
+     *
      * @return <code>true</code> if the validation passes or no implementation of a validation
-     * rule exists. Otherwise <code>false</code> is returned.
+     *         rule exists. Otherwise <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     public boolean validateContents(int i)
@@ -170,10 +169,11 @@ public class PasswordGroup implements ProcessingClient
             {
                 returnValue = validator.validate(this);
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Debug.trace("validateContents(" + i + ") failed: " + e);
-        // just return true
+            // just return true
         }
         return returnValue;
     }
@@ -188,10 +188,11 @@ public class PasswordGroup implements ProcessingClient
             {
                 returnValue = container.getMessage();
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Debug.trace("getValidatorMessage(" + i + ") failed: " + e);
-        // just return true
+            // just return true
         }
         return returnValue;
     }
@@ -217,7 +218,8 @@ public class PasswordGroup implements ProcessingClient
         try
         {
             container = validatorContainers.get(i);
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             container = null;
         }
@@ -239,10 +241,11 @@ public class PasswordGroup implements ProcessingClient
             {
                 returnValue = container.hasParams();
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Debug.trace("hasParams(" + i + ") failed: " + e);
-        // just return true
+            // just return true
         }
         return returnValue;
     }
@@ -262,10 +265,11 @@ public class PasswordGroup implements ProcessingClient
             {
                 returnValue = container.getValidatorParams();
             }
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             Debug.trace("getValidatorParams(" + i + ") failed: " + e);
-        // just return true
+            // just return true
         }
         return returnValue;
     }
@@ -277,36 +281,42 @@ public class PasswordGroup implements ProcessingClient
         return getValidatorMessage(currentValidator);
     }
 
-    public void setModifiedPassword(String value) 
+    public void setModifiedPassword(String value)
     {
         modifiedPassword = value;
     }
-    
+
     /*--------------------------------------------------------------------------*/
     /**
-     * Returns the password in the following order: 
-     * If a validator sets a modified password such as an encrypted string that is returned, 
+     * Returns the password in the following order:
+     * If a validator sets a modified password such as an encrypted string that is returned,
      * OR if a processing service class was supplied it will be used to process
      * the password before it is returned, otherwise the content of the first field will be
      * returned.
-     * 
+     *
      * @return the password
      */
     /*--------------------------------------------------------------------------*/
     public String getPassword()
     {
-      String returnValue = "";
-      if (modifiedPassword!=null) {
-        returnValue = modifiedPassword;
-        if (processor!=null) {
-          Debug.trace("Validator changed password, PROCESSOR WILL NOT RUN!");
+        String returnValue = "";
+        if (modifiedPassword != null)
+        {
+            returnValue = modifiedPassword;
+            if (processor != null)
+            {
+                Debug.trace("Validator changed password, PROCESSOR WILL NOT RUN!");
+            }
         }
-      } else if (processor != null) {
-        returnValue = processor.process(this);
-      } else if (fields.size() > 0) {
-        returnValue = new String(((JPasswordField)fields.elementAt(0)).getPassword());
-      }
-      return returnValue;
+        else if (processor != null)
+        {
+            returnValue = processor.process(this);
+        }
+        else if (fields.size() > 0)
+        {
+            returnValue = new String(((JPasswordField) fields.elementAt(0)).getPassword());
+        }
+        return returnValue;
     }
 
 }

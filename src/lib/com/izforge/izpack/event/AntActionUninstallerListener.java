@@ -20,15 +20,15 @@
  */
 package com.izforge.izpack.event;
 
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.IoHelper;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.IoHelper;
 
 /**
  * Uninstaller listener for performing ANT actions at uninstall time. The definition of what should
@@ -37,13 +37,15 @@ import com.izforge.izpack.util.IoHelper;
  * of ELEMENT "resources" that references it. The specification of the xml file is done in the DTD
  * antaction.dtd. The xml file may contain an ELEMENT "uninstall_target" that should be performed
  * for uninstalling purposes.
- * 
+ *
  * @author Klaus Bartz
  */
 public class AntActionUninstallerListener extends SimpleUninstallerListener
 {
 
-    /** Ant actions to be performed after deletion */
+    /**
+     * Ant actions to be performed after deletion
+     */
     private List<AntAction> antActions = null;
 
     /**
@@ -92,7 +94,9 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener
             AntAction action = (AntAction) iter.next();
             // 
             if (action.getUninstallOrder().equals(ActionBase.BEFOREDELETION))
+            {
                 befDel.add(action);
+            }
             else
             {// We need the build and the properties file(s) outside the
                 // install dir.

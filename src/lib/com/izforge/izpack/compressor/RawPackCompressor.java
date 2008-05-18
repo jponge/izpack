@@ -28,14 +28,15 @@ import java.io.OutputStream;
  * IzPack will be able to support different compression methods for the
  * packs included in the installation jar file.
  * This class implements the PackCompressor for the compression format "raw".
- * 
+ *
  * @author Klaus Bartz
  */
 public class RawPackCompressor extends PackCompressorBase
 {
-    private static final String [] THIS_FORMAT_NAMES = {"raw", "uncompressed"};
+    private static final String[] THIS_FORMAT_NAMES = {"raw", "uncompressed"};
+
     /**
-     * 
+     *
      */
     public RawPackCompressor()
     {
@@ -50,6 +51,6 @@ public class RawPackCompressor extends PackCompressorBase
     {
         // In this pack compressor we must not use reflection because
         // the neede class will be always present (a base class of the VM).
-        return( new BufferedOutputStream(os));
+        return (new BufferedOutputStream(os));
     }
 }

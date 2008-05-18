@@ -36,12 +36,11 @@ import java.util.Enumeration;
 
 /**
  * An XMLWriter writes XML data to a stream.
- * 
- * @see net.n3.nanoxml.XMLElement
- * @see java.io.Writer
- * 
+ *
  * @author Marc De Scheemaecker
  * @version $Name$, $Revision$
+ * @see net.n3.nanoxml.XMLElement
+ * @see java.io.Writer
  */
 public class XMLWriter
 {
@@ -53,7 +52,7 @@ public class XMLWriter
 
     /**
      * Creates a new XML writer.
-     * 
+     *
      * @param writer where to write the output to.
      */
     public XMLWriter(Writer writer)
@@ -70,7 +69,7 @@ public class XMLWriter
 
     /**
      * Creates a new XML writer.
-     * 
+     *
      * @param stream where to write the output to.
      */
     public XMLWriter(OutputStream stream)
@@ -89,7 +88,7 @@ public class XMLWriter
 
     /**
      * Writes an XML element.
-     * 
+     *
      * @param xml the non-null XML element to write.
      */
     public void write(XMLElement xml) throws IOException
@@ -99,8 +98,8 @@ public class XMLWriter
 
     /**
      * Writes an XML element.
-     * 
-     * @param xml the non-null XML element to write.
+     *
+     * @param xml         the non-null XML element to write.
      * @param prettyPrint if spaces need to be inserted to make the output more readable
      */
     public void write(XMLElement xml, boolean prettyPrint) throws IOException
@@ -110,10 +109,10 @@ public class XMLWriter
 
     /**
      * Writes an XML element.
-     * 
-     * @param xml the non-null XML element to write.
+     *
+     * @param xml         the non-null XML element to write.
      * @param prettyPrint if spaces need to be inserted to make the output more readable
-     * @param indent how many spaces to indent the element.
+     * @param indent      how many spaces to indent the element.
      */
     public void write(XMLElement xml, boolean prettyPrint, int indent) throws IOException
     {
@@ -214,7 +213,7 @@ public class XMLWriter
 
     /**
      * Writes a string encoding reserved characters.
-     * 
+     *
      * @param str the string to write.
      */
     private void writeEncoded(String str)
@@ -225,42 +224,42 @@ public class XMLWriter
 
             switch (c)
             {
-            case 0x0D:
-            case 0x0A:
-                this.writer.print(c);
-                break;
-
-            case '<':
-                this.writer.print("&lt;");
-                break;
-
-            case '>':
-                this.writer.print("&gt;");
-                break;
-
-            case '&':
-                this.writer.print("&amp;");
-                break;
-
-            case '\'':
-                this.writer.print("&apos;");
-                break;
-
-            case '"':
-                this.writer.print("&quot;");
-                break;
-
-            default:
-                if ((c < ' ') || (c > 0x7E))
-                {
-                    this.writer.print("&#x");
-                    this.writer.print(Integer.toString(c, 16));
-                    this.writer.print(';');
-                }
-                else
-                {
+                case 0x0D:
+                case 0x0A:
                     this.writer.print(c);
-                }
+                    break;
+
+                case '<':
+                    this.writer.print("&lt;");
+                    break;
+
+                case '>':
+                    this.writer.print("&gt;");
+                    break;
+
+                case '&':
+                    this.writer.print("&amp;");
+                    break;
+
+                case '\'':
+                    this.writer.print("&apos;");
+                    break;
+
+                case '"':
+                    this.writer.print("&quot;");
+                    break;
+
+                default:
+                    if ((c < ' ') || (c > 0x7E))
+                    {
+                        this.writer.print("&#x");
+                        this.writer.print(Integer.toString(c, 16));
+                        this.writer.print(';');
+                    }
+                    else
+                    {
+                        this.writer.print(c);
+                    }
             }
         }
     }

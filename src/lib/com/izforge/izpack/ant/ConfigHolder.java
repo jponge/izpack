@@ -23,44 +23,47 @@
  */
 package com.izforge.izpack.ant;
 
-import java.util.Enumeration;
-import java.util.Vector;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 /**
  * A nested element holder for the installation configuration document content.
  * The installation document must be passed in using a CDATA element.
- * 
+ *
  * @author Scott Stark
  * @version $Revision$
  */
 public class ConfigHolder
 {
-    /** The parent element project */
+    /**
+     * The parent element project
+     */
     private Project project;
 
-    /** The config element body text with ${x} property references replaced */
+    /**
+     * The config element body text with ${x} property references replaced
+     */
     private String installText;
 
     /**
      * Taken from the ant org.apache.tools.ant.PropertyHelper and '$' replaced
      * with '@' to deal with @{x} style property references.
-     * 
+     * <p/>
      * Parses a string containing @{xxx} style property references
      * into two lists. The first list is a collection of text fragments, while
      * the other is a set of string property names. null entries in the
      * first list indicate a property reference from the second list.
-     * 
+     * <p/>
      * It can be overridden with a more efficient or customized version.
-     * 
-     * @param value Text to parse. Must not be null.
-     * @param fragments List to add text fragments to. Must not be null.
+     *
+     * @param value        Text to parse. Must not be null.
+     * @param fragments    List to add text fragments to. Must not be null.
      * @param propertyRefs List to add property names to. Must not be null.
-     * 
-     * @exception BuildException if the string contains an opening @{ without a
-     * closing }
+     * @throws BuildException if the string contains an opening @{ without a
+     *                        closing }
      */
     static void parseCompileProperties(String value, Vector<String> fragments, Vector<String> propertyRefs)
             throws BuildException
@@ -138,7 +141,7 @@ public class ConfigHolder
      * Called by ant to set the config element content. The content is scanned
      * for @{x} style property references and replaced with the x project
      * property.
-     * 
+     *
      * @param rawText - the raw config element body text.
      */
     public void addText(String rawText)
@@ -173,9 +176,13 @@ public class ConfigHolder
                             Project.MSG_VERBOSE);
                 }
                 if (replacement != null)
+                {
                     fragment = replacement.toString();
+                }
                 else
+                {
                     fragment = "@{" + propertyName + "}";
+                }
             }
             sb.append(fragment);
         }
@@ -185,7 +192,7 @@ public class ConfigHolder
 
     /**
      * Get the config element body text with @{x} property references replaced
-     * 
+     *
      * @return the processed config element body text.
      */
     public String getText()

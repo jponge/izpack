@@ -22,21 +22,15 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.installer.*;
+import net.n3.nanoxml.XMLElement;
+
 import java.io.IOException;
 import java.io.PrintStream;
 
-import net.n3.nanoxml.XMLElement;
-
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.CompileHandler;
-import com.izforge.izpack.installer.CompileResult;
-import com.izforge.izpack.installer.CompileWorker;
-import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.installer.PanelAutomationHelper;
-
 /**
  * Functions to support automated usage of the CompilePanel
- * 
+ *
  * @author Jonathan Halliday
  * @author Tino Schwarze
  */
@@ -55,12 +49,12 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     // when using the eclipse compiler, we're capturing System.out and System.err...
     private PrintStream stdout;
     private PrintStream stderr;
-    
+
     /**
      * Save data for running automated.
-     * 
+     *
      * @param installData installation parameters
-     * @param panelRoot unused.
+     * @param panelRoot   unused.
      */
     public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
     {
@@ -70,7 +64,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Perform the installation actions.
-     * 
+     *
      * @param panelRoot The panel XML tree root.
      */
     public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
@@ -79,7 +73,10 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
         String compiler = null;
 
-        if (compiler_xml != null) compiler = compiler_xml.getContent();
+        if (compiler_xml != null)
+        {
+            compiler = compiler_xml.getContent();
+        }
 
         if (compiler == null)
         {
@@ -91,7 +88,10 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
         String args = null;
 
-        if (args_xml != null) args = args_xml.getContent();
+        if (args_xml != null)
+        {
+            args = args_xml.getContent();
+        }
 
         if (args_xml == null)
         {
@@ -107,9 +107,9 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
             this.stdout = System.out;
             this.stderr = System.err;
-            
+
             this.worker.run();
-            
+
             return this.worker.getResult().isSuccess();
         }
         catch (IOException e)
@@ -121,7 +121,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Reports progress on System.out
-     * 
+     *
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#startAction(String, int)
      */
     public void startAction(String name, int noOfJobs)
@@ -132,7 +132,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Reports the error to System.err
-     * 
+     *
      * @param error the error
      * @see CompileHandler#handleCompileError(CompileResult)
      */
@@ -152,7 +152,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
     /**
      * Sets state variable for thread sync.
-     * 
+     *
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#stopAction()
      */
     public void stopAction()
@@ -162,16 +162,21 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
             String line = this.job_name + ": done.";
             this.stdout.print("\r" + line);
             for (int i = line.length(); i < this.last_line_len; i++)
+            {
                 this.stdout.print(' ');
+            }
             this.stdout.println();
         }
 
-        if (this.worker.getResult().isSuccess()) this.stdout.println("[ Compilation successful ]");
+        if (this.worker.getResult().isSuccess())
+        {
+            this.stdout.println("[ Compilation successful ]");
+        }
     }
 
     /**
      * Tell about progress.
-     * 
+     *
      * @param val
      * @param msg
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#progress(int, String)
@@ -187,17 +192,19 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
         this.stdout.print("\r" + line);
         for (int i = line_len; i < this.last_line_len; i++)
+        {
             this.stdout.print(' ');
+        }
 
         this.last_line_len = line_len;
     }
 
     /**
      * Reports progress to System.out
-     * 
+     *
      * @param jobName The next job's name.
-     * @param max unused
-     * @param jobNo The next job's number.
+     * @param max     unused
+     * @param jobNo   The next job's number.
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#nextStep(String, int, int)
      */
     public void nextStep(String jobName, int max, int jobNo)
@@ -207,7 +214,9 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
             String line = this.job_name + ": done.";
             this.stdout.print("\r" + line);
             for (int i = line.length(); i < this.last_line_len; i++)
+            {
                 this.stdout.print(' ');
+            }
             this.stdout.println();
         }
 
@@ -215,7 +224,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         this.job_name = jobName;
         this.last_line_len = 0;
     }
-    
+
     /**
      * {@inheritDoc}
      */

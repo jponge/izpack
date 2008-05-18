@@ -20,9 +20,8 @@
  */
 package com.izforge.izpack.rules;
 
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.util.Debug;
+import net.n3.nanoxml.XMLElement;
 
 /**
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
@@ -30,9 +29,9 @@ import com.izforge.izpack.util.Debug;
  */
 public class OrCondition extends Condition
 {
-   
+
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 8341350377205144199L;
 
@@ -41,7 +40,7 @@ public class OrCondition extends Condition
     protected Condition rightoperand;
 
     /**
-     * 
+     *
      */
     public OrCondition()
     {
@@ -50,7 +49,7 @@ public class OrCondition extends Condition
     }
 
     /**
-     * 
+     *
      */
     public OrCondition(Condition operand1, Condition operand2)
     {
@@ -107,7 +106,7 @@ public class OrCondition extends Condition
     {
         StringBuffer details = new StringBuffer();
         details.append(this.id);
-        details.append(" depends on:<ul><li>");        
+        details.append(" depends on:<ul><li>");
         details.append(leftoperand.getDependenciesDetails());
         details.append("</li> OR <li>");
         details.append(rightoperand.getDependenciesDetails());

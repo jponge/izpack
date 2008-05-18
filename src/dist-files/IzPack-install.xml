@@ -17,32 +17,33 @@
     much simpler :-)
 -->
 
-        <!-- The installation -->
+<!-- The installation -->
 <installation version="1.0">
 
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>4.0.0-SNAPSHOT</appversion>
+        <appversion>4.0.0</appversion>
         <authors>
-            <author email="" name="Julien Ponge (maintainer and original developer)"/>
-       </authors>
+            <author email="" name="Julien Ponge (project founder)"/>
+            <author email="" name="The fantastic IzPack developers and contributors"/>
+        </authors>
         <url>http://izpack.org/</url>
-        <javaversion>1.4</javaversion>
+        <javaversion>1.5</javaversion>
         <requiresjdk>no</requiresjdk>
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
     </info>
 
     <!-- Flexible and in the screen proportions -->
     <guiprefs height="700" resizable="yes" width="870">
-       <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
-    	<modifier key="layoutAnchor" value="CENTER"/>
-    	<modifier key="headingPanelCounter" value="progressbar"/>
-		<modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
-		<modifier key="allYGap" value="4"/>
-		<modifier key="paragraphYGap" value="10"/>
-		<modifier key="filler1YGap" value="5"/>
-		<modifier key="filler3XGap" value="10"/>
+        <!-- GUI addaption for more informations see "Modifying the GUI" in the documentation -->
+        <modifier key="layoutAnchor" value="CENTER"/>
+        <modifier key="headingPanelCounter" value="progressbar"/>
+        <modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
+        <modifier key="allYGap" value="4"/>
+        <modifier key="paragraphYGap" value="10"/>
+        <modifier key="filler1YGap" value="5"/>
+        <modifier key="filler3XGap" value="10"/>
     </guiprefs>
 
     <variables>
@@ -146,7 +147,7 @@
         <pack name="PDF Documentation" required="no">
             <description>The IzPack documentation (PDF version).</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-            <include name="doc/izpack/pdf/**/*" />
+                <include name="doc/izpack/pdf/**/*"/>
             </fileset>
         </pack>
         <pack name="Javadocs Documentation" required="no">
@@ -166,7 +167,7 @@
         <pack name="Utilities" required="no">
             <description>IzPack utilities (izpack2exe, izpack2app, ...)</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="utils/**/*" />
+                <include name="utils/**/*"/>
             </fileset>
         </pack>
 

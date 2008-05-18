@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>IzPack 4.0.0 release notes</title>
+</head>
+<body>
+
+
+<h1>Release Notes - IzPack - Version 4.0.0</h1>
+
+<h2>        Bug
+</h2>
+<ul>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-13'>IZPACK-13</a>] -         It appears that the &quot;parsexml&quot; resource attribute support does not read the resource that is to be parsed
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-14'>IZPACK-14</a>] -         Language XML file contains &quot;rdid&quot; (not &quot;txt&quot;)
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-15'>IZPACK-15</a>] -         The &lt;xinclude&gt; directive does not work when trying include relative resources where the compile is not run from the same directory as the installation file.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-16'>IZPACK-16</a>] -         Some panels are displayed although suitable conditions are not met
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-20'>IZPACK-20</a>] -         The launcher will never prompt you to install a JRE if there is no JRE on the system
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-24'>IZPACK-24</a>] -         Installer recursively removes install directory when cancelled.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-25'>IZPACK-25</a>] -         Dutch langpack out of date
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-27'>IZPACK-27</a>] -         Indonesian Langpack out of date
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-28'>IZPACK-28</a>] -         Logic to show the next panel can cause the current panel's isValidated method to be invoked more than once
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-30'>IZPACK-30</a>] -         Launch windows native when has file association
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-31'>IZPACK-31</a>] -         TestLangPacks: Flag settings in wrong place. Code conventions not as guided.  (Reported by Hans Aikema)
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-42'>IZPACK-42</a>] -         Ant Task documentation problem
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-43'>IZPACK-43</a>] -         RefCondition is not resolve referenced condition
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-46'>IZPACK-46</a>] -         Missing resource for id userInputLang.xml_xxx   cause nullpointer when inputValidator send error message
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-47'>IZPACK-47</a>] -         summaryCaption  text for TreePacksPanel  shows fully cqualified classname instead of proper description
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-49'>IZPACK-49</a>] -         Windows shortcuts can not be created on userless installs
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-50'>IZPACK-50</a>] -         Commandline install fails due to ShortcutPanelAutomationHelper error
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-51'>IZPACK-51</a>] -         NullPointerException occurring in MultiVolumePackager
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-52'>IZPACK-52</a>] -         UserInputPanel: NPE in  showMessage()
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-53'>IZPACK-53</a>] -         PortValidator throws exception
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-57'>IZPACK-57</a>] -         User installation fails with enabled registry support
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-58'>IZPACK-58</a>] -         Clarify support status for Win9x
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-59'>IZPACK-59</a>] -         Fix display of localized pack names in PackPanel
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-60'>IZPACK-60</a>] -         resolveIzPackHome fails when standalone-compiler.jar resides in directory with spaces
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-66'>IZPACK-66</a>] -         UserInputPanel checkbox does not set properly
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-68'>IZPACK-68</a>] -         izpack2app cannot be run outside of its parent folder context
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-69'>IZPACK-69</a>] -         If a InstallerListener throws an exception during installation, the registered CleanupClient instances are not invoked
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-70'>IZPACK-70</a>] -         After a ProcessPanel has been executed, the previous button should not be abled to allow it to be executed again.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-71'>IZPACK-71</a>] -         Debugger not showing up
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-73'>IZPACK-73</a>] -         DynamicVariables does not work as expected/documented.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-79'>IZPACK-79</a>] -         IzPack 3.11.0 seems to ignore resources declared with the 'parse' attribute
+</li>
+</ul>
+
+<h2>        Improvement
+</h2>
+<ul>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-11'>IZPACK-11</a>] -         Option for writing installation information
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-12'>IZPACK-12</a>] -         Target Java 5 instead of Java 1.4
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-22'>IZPACK-22</a>] -         Update of the Hungarian translation
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-34'>IZPACK-34</a>] -         TestLangPacks: batch files won't fit for IzPack directory structure.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-35'>IZPACK-35</a>] -         Error message if configuration file not readable can be misleading
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-44'>IZPACK-44</a>] -         ~ directory is not understood
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-56'>IZPACK-56</a>] -         Fix typos in language selection dialog
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-61'>IZPACK-61</a>] -         UserInputPanel JFileChooser should save current directory
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-62'>IZPACK-62</a>] -         To be able to choose creation of uninstaller based on some parameter/condition (e.g. type of install)
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-67'>IZPACK-67</a>] -         Corrections for italian translation
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-74'>IZPACK-74</a>] -         Deprecate the Kunststoff and IzPack Metal themes
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-75'>IZPACK-75</a>] -         Heading Image on Left
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-76'>IZPACK-76</a>] -         Revise FinishPanel and SimpleFinishPanel Icons and Spacing
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-83'>IZPACK-83</a>] -         XML File Filter For Automated Installation Scripts
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-85'>IZPACK-85</a>] -         LocaleDatabase Refactoring
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-88'>IZPACK-88</a>] -         Updating Galician language
+</li>
+</ul>
+
+<h2>        New Feature
+</h2>
+<ul>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-10'>IZPACK-10</a>] -         Single Instance
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-29'>IZPACK-29</a>] -         Adding new tool: TestLangPacks
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-64'>IZPACK-64</a>] -         Mandatory Default Installation Directory
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-65'>IZPACK-65</a>] -         Password Encryption
+</li>
+</ul>
+
+<h2>        Task
+</h2>
+<ul>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-17'>IZPACK-17</a>] -         Finnish translation is not updated.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-21'>IZPACK-21</a>] -         Bundle the native launcher in the IzPack installer 'utilities' pack.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-23'>IZPACK-23</a>] -         Update the project URL references in files
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-26'>IZPACK-26</a>] -         Archive the lists on Google Groups
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-32'>IZPACK-32</a>] -         Need for runnable jar for TestLangPacks.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-33'>IZPACK-33</a>] -         TestLangPacks: Remove jar file which sources are found in SVN.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-36'>IZPACK-36</a>] -         Global source code reformating
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-37'>IZPACK-37</a>] -         Subversion branch for 4.0.x releases
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-38'>IZPACK-38</a>] -         Subversion tag for 4.0.0
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-39'>IZPACK-39</a>] -         Add HTML release notes in the distribution.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-40'>IZPACK-40</a>] -         Tag for TestLangPacks version 0.2
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-45'>IZPACK-45</a>] -         TestLangPacks: Take Ant build file in use.
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-54'>IZPACK-54</a>] -         Set svn:eol-style=native on text files
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-55'>IZPACK-55</a>] -         Fix documentation about JRE minimum requirement to state 1.5
+</li>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-77'>IZPACK-77</a>] -         Wrong attribute in Finnish langpack.
+</li>
+</ul>
+
+<h2>        Wish
+</h2>
+<ul>
+<li>[<a href='http://jira.codehaus.org/browse/IZPACK-18'>IZPACK-18</a>] -         Should there be component for translations?
+</li>
+</ul>
+
+
+</body>
+</html>

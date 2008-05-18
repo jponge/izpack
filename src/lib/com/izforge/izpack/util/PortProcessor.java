@@ -21,16 +21,16 @@
 
 package com.izforge.izpack.util;
 
-import java.net.InetAddress;
-import java.net.ServerSocket;
-
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Processor;
+
+import java.net.InetAddress;
+import java.net.ServerSocket;
 
 /**
  * Checks whether the value of the field comtemt is a port and is free. If false the next free port
  * will be searched.
- * 
+ *
  * @author Thorsten Kamann <thorsten.kamann@planetes.de>
  */
 public class PortProcessor implements Processor
@@ -95,7 +95,8 @@ public class PortProcessor implements Processor
                     socket.close();
                 }
                 catch (Exception ex)
-                {}
+                {
+                }
             }
         }
         return retValue;
@@ -103,7 +104,7 @@ public class PortProcessor implements Processor
 
     /**
      * Creates the return value
-     * 
+     *
      * @param client The ProcessingClient
      */
     private String getReturnValue(ProcessingClient client, String host, String port)

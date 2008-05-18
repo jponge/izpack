@@ -25,17 +25,11 @@ import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.TargetFactory;
+import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
-
 import net.n3.nanoxml.XMLElement;
 
 import java.io.File;
-
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -43,7 +37,7 @@ import java.util.Vector;
 /**
  * The ShortcutPanelAutomationHelper is responsible to create Shortcuts during the automated
  * installation. Most code comes copied from the ShortcutPanel
- * 
+ *
  * @author Marc Eppelmann (marc.eppelmann&#064;gmx.de)
  * @version $Revision: 1540 $
  */
@@ -54,8 +48,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
     /**
      * dummy method
-     * 
-     * @param idata DOCUMENT ME!
+     *
+     * @param idata     DOCUMENT ME!
      * @param panelRoot DOCUMENT ME!
      */
     public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
@@ -68,10 +62,9 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
     /**
      * Implementation of the Shortcut Specific Automation Code
-     * 
+     *
      * @param installData DOCUMENT ME!
-     * @param panelRoot DOCUMENT ME!
-     * 
+     * @param panelRoot   DOCUMENT ME!
      * @return DOCUMENT ME!
      */
     public boolean runAutomated(AutomatedInstallData installData, XMLElement panelRoot)
@@ -140,7 +133,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         dataElement = panelRoot.getFirstChildNamed(ShortcutPanel.AUTO_KEY_PROGRAM_GROUP);
         String groupName = null;
 
-        if (dataElement != null) {
+        if (dataElement != null)
+        {
             groupName = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_NAME);
         }
 
@@ -229,9 +223,9 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
             try
             {
-                if( data.subgroup!=null )
+                if (data.subgroup != null)
                 {
-                  groupName = groupName + data.subgroup;
+                    groupName = groupName + data.subgroup;
                 }
                 shortcut.setUserType(data.userType);
                 shortcut.setLinkName(data.name);
@@ -315,7 +309,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
                     }
                 }
                 catch (Exception exception)
-                {}
+                {
+                }
             }
             catch (Throwable exception)
             {

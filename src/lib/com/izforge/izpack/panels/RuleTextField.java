@@ -21,47 +21,55 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.Toolkit;
-
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
+import java.awt.*;
 
 /*---------------------------------------------------------------------------*/
 /**
  * One line synopsis. <BR>
  * <BR>
  * Enter detailed class description here.
- * 
- * @see UserInputPanel
- * 
- * @version 0.0.1 / 10/20/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 10/20/02
+ * @see UserInputPanel
  */
 /*---------------------------------------------------------------------------*/
 public class RuleTextField extends JTextField
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3976731454594365493L;
 
-    /** Used to specify numeric input only */
+    /**
+     * Used to specify numeric input only
+     */
     public static final int N = 1;
 
-    /** Used to specify hexadecimal input only */
+    /**
+     * Used to specify hexadecimal input only
+     */
     public static final int H = 2;
 
-    /** Used to specify alphabetic input only */
+    /**
+     * Used to specify alphabetic input only
+     */
     public static final int A = 3;
 
-    /** Used to specify open input (no restrictions) */
+    /**
+     * Used to specify open input (no restrictions)
+     */
     public static final int O = 4;
 
-    /** Used to specify alpha-numeric input only */
+    /**
+     * Used to specify alpha-numeric input only
+     */
     public static final int AN = 5;
 
     private int columns;
@@ -121,7 +129,7 @@ public class RuleTextField extends JTextField
     {
 
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 3258134643651063862L;
 
@@ -143,7 +151,10 @@ public class RuleTextField extends JTextField
             // --------------------------------------------------
             // don't process if we get a null reference
             // --------------------------------------------------
-            if (str == null) { return; }
+            if (str == null)
+            {
+                return;
+            }
 
             // --------------------------------------------------
             // Compute the total length the string would become

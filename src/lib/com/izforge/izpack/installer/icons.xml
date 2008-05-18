@@ -21,19 +21,19 @@
     <icon res="/img/compfile.png" id="refresh_cycle"/>
     <icon res="/img/JFrameIcon.png" id="JFrameIcon"/>
     <icon res="/img/check32.png" id="check"/>
-    <icon res="/img/link16x16.png" id="link16x16"/>	
-    
-    <sysicon res="/img/ascii.png" id="FileView.fileIcon" />
-    <sysicon res="/img/error.png" id="OptionPane.errorIcon" />
-    <sysicon res="/img/floppy.png" id="FileView.floppyDriveIcon" />
-    <sysicon res="/img/folder.png" id="FileView.directoryIcon" />
-    <sysicon res="/img/folder_new.png" id="FileChooser.newFolderIcon" />
-    <sysicon res="/img/hdd.png" id="FileView.hardDriveIcon" />
-    <sysicon res="/img/home.png" id="FileChooser.homeFolderIcon" />
-    <sysicon res="/img/kcontrol.png" id="FileView.computerIcon" />
-    <sysicon res="/img/messagebox_info.png" id="OptionPane.informationIcon" />
-    <sysicon res="/img/messagebox_warning.png" id="OptionPane.warningIcon" />
-    <sysicon res="/img/question.png" id="OptionPane.questionIcon" />
-    <sysicon res="/img/uparrow.png" id="FileChooser.upFolderIcon" />
-        
+    <icon res="/img/link16x16.png" id="link16x16"/>
+
+    <sysicon res="/img/ascii.png" id="FileView.fileIcon"/>
+    <sysicon res="/img/error.png" id="OptionPane.errorIcon"/>
+    <sysicon res="/img/floppy.png" id="FileView.floppyDriveIcon"/>
+    <sysicon res="/img/folder.png" id="FileView.directoryIcon"/>
+    <sysicon res="/img/folder_new.png" id="FileChooser.newFolderIcon"/>
+    <sysicon res="/img/hdd.png" id="FileView.hardDriveIcon"/>
+    <sysicon res="/img/home.png" id="FileChooser.homeFolderIcon"/>
+    <sysicon res="/img/kcontrol.png" id="FileView.computerIcon"/>
+    <sysicon res="/img/messagebox_info.png" id="OptionPane.informationIcon"/>
+    <sysicon res="/img/messagebox_warning.png" id="OptionPane.warningIcon"/>
+    <sysicon res="/img/question.png" id="OptionPane.questionIcon"/>
+    <sysicon res="/img/uparrow.png" id="FileChooser.upFolderIcon"/>
+
 </icons>

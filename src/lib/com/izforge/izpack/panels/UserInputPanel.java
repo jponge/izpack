@@ -19,46 +19,6 @@
 
 package com.izforge.izpack.panels;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.Vector;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLElement;
-import net.n3.nanoxml.XMLBuilderFactory;
-
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
@@ -71,12 +31,22 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.MultiLineLabel;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.VariableSubstitutor;
-import java.util.ArrayList;
+import com.izforge.izpack.util.*;
+import net.n3.nanoxml.*;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.*;
 import java.util.List;
 
 /*---------------------------------------------------------------------------*/
@@ -84,10 +54,9 @@ import java.util.List;
  * This panel is designed to collect user input during the installation process. The panel is
  * initially blank and is populated with input elements based on the XML specification in a resource
  * file.
- * 
- * 
- * @version 0.0.1 / 10/19/02
+ *
  * @author getDirectoryCreated
+ * @version 0.0.1 / 10/19/02
  */
 /*---------------------------------------------------------------------------*/
 /*
@@ -142,7 +111,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     // - POS_PACKS
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 3257850965439886129L;
 
@@ -169,13 +138,17 @@ public class UserInputPanel extends IzPanel implements ActionListener
     private static final int POS_GROUP = 10;
 
     protected static final String ICON_KEY = "icon";
-    
-    /** The name of the XML file that specifies the panel layout */
+
+    /**
+     * The name of the XML file that specifies the panel layout
+     */
     private static final String SPEC_FILE_NAME = "userInputSpec.xml";
 
     private static final String LANG_FILE_NAME = "userInputLang.xml";
 
-    /** how the spec node for a specific panel is identified */
+    /**
+     * how the spec node for a specific panel is identified
+     */
     private static final String NODE_ID = "panel";
 
     private static final String FIELD_NODE_ID = "field";
@@ -196,9 +169,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
     private static final String SPEC = "spec";
 
     private static final String SET = "set";
-    
+
     private static final String REVALIDATE = "revalidate";
-    
+
     private static final String TOPBUFFER = "topBuffer";
 
     private static final String TRUE = "true";
@@ -284,9 +257,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
     private static final String PWD_SIZE = "size";
 
     private static final String SEARCH_FIELD = "search";
-    
+
     private static final String FILE_FIELD = "file";
-    
+
     private static final String DIR_FIELD = "dir";
 
     // internal value for the button used to trigger autodetection
@@ -349,18 +322,26 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     private InstallerFrame parentFrame;
 
-    /** The parsed result from reading the XML specification from the file */
+    /**
+     * The parsed result from reading the XML specification from the file
+     */
     private XMLElement spec;
 
     private boolean haveSpec = false;
 
-    /** Holds the references to all of the UI elements */
+    /**
+     * Holds the references to all of the UI elements
+     */
     private Vector<Object[]> uiElements = new Vector<Object[]>();
 
-    /** Holds the references to all radio button groups */
+    /**
+     * Holds the references to all radio button groups
+     */
     private Vector<ButtonGroup> buttonGroups = new Vector<ButtonGroup>();
 
-    /** Holds the references to all password field groups */
+    /**
+     * Holds the references to all password field groups
+     */
     private Vector<PasswordGroup> passwordGroups = new Vector<PasswordGroup>();
 
     /**
@@ -369,18 +350,22 @@ public class UserInputPanel extends IzPanel implements ActionListener
      */
     private Vector passwordGroupsRead = new Vector();
 
-    /** Used to track search fields. Contains SearchField references. */
+    /**
+     * Used to track search fields. Contains SearchField references.
+     */
     private Vector<SearchField> searchFields = new Vector<SearchField>();
 
-    /** Holds all user inputs for use in automated installation */
+    /**
+     * Holds all user inputs for use in automated installation
+     */
     private Vector<TextValuePair> entries = new Vector<TextValuePair>();
 
     private LocaleDatabase langpack = null;
-    
+
     // Used for dynamic controls to skip content validation unless the user
     // really clicks "Next"
     private boolean validating = true;
-    
+
     private String currentDirectoryPath = null;
 
     /*--------------------------------------------------------------------------*/
@@ -397,8 +382,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Constructs a <code>UserInputPanel</code>.
-     * 
-     * @param parent reference to the application frame
+     *
+     * @param parent      reference to the application frame
      * @param installData shared information about the installation
      */
     /*--------------------------------------------------------------------------*/
@@ -411,7 +396,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     protected void init()
     {
-        
+
         TwoColumnLayout layout;
         super.removeAll();
         uiElements.clear();
@@ -428,7 +413,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     resource));
         }
         catch (Throwable exception)
-        {}
+        {
+        }
 
         // ----------------------------------------------------
         // read the specifications
@@ -452,15 +438,17 @@ public class UserInputPanel extends IzPanel implements ActionListener
         int topbuff = 25;
         try
         {
-           topbuff = Integer.parseInt(spec.getAttribute(TOPBUFFER));
+            topbuff = Integer.parseInt(spec.getAttribute(TOPBUFFER));
         }
-        catch(Exception ex){}
+        catch (Exception ex)
+        {
+        }
         finally
         {
             layout = new TwoColumnLayout(10, 5, 30, topbuff, TwoColumnLayout.LEFT);
         }
         setLayout(layout);
-        
+
         if (!haveSpec)
         {
             // return if we could not read the spec. further
@@ -537,7 +525,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 else if (attribute.equals(SEARCH_FIELD))
                 {
                     addSearch(field);
-                }                
+                }
                 else if (attribute.equals(FILE_FIELD))
                 {
                     addFileField(field);
@@ -554,23 +542,28 @@ public class UserInputPanel extends IzPanel implements ActionListener
     {
         Vector<XMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
         Vector<XMLElement> forOs = field.getChildrenNamed(OS);
-        
+
         JLabel label;
         String set;
         int size;
 
         String filter = null;
         String filterdesc = null;
-        
+
         String variable = field.getAttribute(VARIABLE);
-        if ((variable == null) || (variable.length() == 0)) { return; }                      
-                
+        if ((variable == null) || (variable.length() == 0))
+        {
+            return;
+        }
+
         XMLElement element = field.getFirstChildNamed(SPEC);
-        if (element == null){            
+        if (element == null)
+        {
             Debug.trace("Error: no spec element defined in file field");
             return;
         }
-        else {
+        else
+        {
             label = new JLabel(getText(element));
             // ----------------------------------------------------
             // extract the specification details
@@ -592,7 +585,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     set = vs.substitute(set, null);
                 }
             }
-    
+
             try
             {
                 size = Integer.parseInt(element.getAttribute(TEXT_SIZE));
@@ -601,75 +594,84 @@ public class UserInputPanel extends IzPanel implements ActionListener
             {
                 size = 1;
             }
-            
+
             filter = element.getAttribute("fileext");
-            if (filter == null){
+            if (filter == null)
+            {
                 filter = "";
             }
             filterdesc = element.getAttribute("fileextdesc");
-            if (filterdesc == null){
+            if (filterdesc == null)
+            {
                 filterdesc = "";
             }
             // internationalize it
-            filterdesc = idata.langpack.getString(filterdesc);             
-        }             
-       
-        final JTextField filetxt = new JTextField(set,size);
+            filterdesc = idata.langpack.getString(filterdesc);
+        }
+
+        final JTextField filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);
-        
+
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
 
-        uiElements.add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+        uiElements.add(new Object[]{null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
-                
+
         // TODO: use separate key for button text
-        JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"),idata.buttonsHColor);
-        button.addActionListener(new ActionListener(){
+        JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"), idata.buttonsHColor);
+        button.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
-            {               
-               System.out.println("Show dirchooser"); 
-               JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
-               filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                              
-               if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION){
-                   filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
-                   currentDirectoryPath = filechooser.getSelectedFile().getAbsolutePath();
-                   Debug.trace("Setting current file chooser directory to: "+currentDirectoryPath);
-               }
+            {
+                System.out.println("Show dirchooser");
+                JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
+                filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+                if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION)
+                {
+                    filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
+                    currentDirectoryPath = filechooser.getSelectedFile().getAbsolutePath();
+                    Debug.trace("Setting current file chooser directory to: " + currentDirectoryPath);
+                }
             }
         });
         JPanel panel = new JPanel();
         panel.add(filetxt);
-        panel.add(button);        
-        uiElements.add(new Object[] { null, DIR_FIELD, variable, constraints2, panel, forPacks,
+        panel.add(button);
+        uiElements.add(new Object[]{null, DIR_FIELD, variable, constraints2, panel, forPacks,
                 forOs});
-        
+
     }
 
     private void addFileField(XMLElement field)
     {
         Vector<XMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
         Vector<XMLElement> forOs = field.getChildrenNamed(OS);
-        
+
         JLabel label;
         String set;
         int size;
 
         String filter = null;
         String filterdesc = null;
-        
+
         String variable = field.getAttribute(VARIABLE);
-        if ((variable == null) || (variable.length() == 0)) { return; }                      
-                
+        if ((variable == null) || (variable.length() == 0))
+        {
+            return;
+        }
+
         XMLElement element = field.getFirstChildNamed(SPEC);
-        if (element == null){            
+        if (element == null)
+        {
             Debug.trace("Error: no spec element defined in file field");
             return;
         }
-        else {
+        else
+        {
             label = new JLabel(getText(element));
             // ----------------------------------------------------
             // extract the specification details
@@ -691,7 +693,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     set = vs.substitute(set, null);
                 }
             }
-    
+
             try
             {
                 size = Integer.parseInt(element.getAttribute(TEXT_SIZE));
@@ -700,56 +702,60 @@ public class UserInputPanel extends IzPanel implements ActionListener
             {
                 size = 1;
             }
-            
+
             filter = element.getAttribute("fileext");
-            if (filter == null){
+            if (filter == null)
+            {
                 filter = "";
             }
             filterdesc = element.getAttribute("fileextdesc");
-            if (filterdesc == null){
+            if (filterdesc == null)
+            {
                 filterdesc = "";
             }
             // internationalize it
-            filterdesc = idata.langpack.getString(filterdesc);             
-        }             
-       
-        final JTextField filetxt = new JTextField(set,size);
+            filterdesc = idata.langpack.getString(filterdesc);
+        }
+
+        final JTextField filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);
-        
+
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
 
-        uiElements.add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+        uiElements.add(new Object[]{null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
-        
-        
+
+
         final UserInputFileFilter uiff = new UserInputFileFilter();
         uiff.setFileExt(filter);
         uiff.setFileExtDesc(filterdesc);
-        
+
         // TODO: use separate key for button text
-        JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"),idata.buttonsHColor);
-        button.addActionListener(new ActionListener(){
+        JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"), idata.buttonsHColor);
+        button.addActionListener(new ActionListener()
+        {
             public void actionPerformed(ActionEvent e)
-            {               
-               System.out.println("Show filechooser"); 
-               JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
-               filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-               filechooser.setFileFilter(uiff);
-                              
-               if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION){
-                   filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
-                   currentDirectoryPath = filechooser.getSelectedFile().getParent();
-                   Debug.trace("Setting current file chooser directory to: "+currentDirectoryPath);
-               }
+            {
+                System.out.println("Show filechooser");
+                JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
+                filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                filechooser.setFileFilter(uiff);
+
+                if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION)
+                {
+                    filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
+                    currentDirectoryPath = filechooser.getSelectedFile().getParent();
+                    Debug.trace("Setting current file chooser directory to: " + currentDirectoryPath);
+                }
             }
         });
         JPanel panel = new JPanel();
         panel.add(filetxt);
-        panel.add(button);        
-        uiElements.add(new Object[] { null, FILE_FIELD, variable, constraints2, panel, forPacks,
+        panel.add(button);
+        uiElements.add(new Object[]{null, FILE_FIELD, variable, constraints2, panel, forPacks,
                 forOs});
     }
 
@@ -815,7 +821,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     value = rulef.getText();
                 }
             }
-            else if (FIELD_BUTTON.equals(element[POS_TYPE])){
+            else if (FIELD_BUTTON.equals(element[POS_TYPE]))
+            {
                 // nothing to do
             }
             // overwrite entry;
@@ -835,12 +842,12 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * Indicates wether the panel has been validated or not. The installer won't let the user go
      * further through the installation process until the panel is validated. Default behavior is to
      * return true.
-     * 
+     *
      * @return A boolean stating wether the panel has been validated or not.
      */
     /*--------------------------------------------------------------------------*/
     public boolean isValidated()
-    {                               
+    {
         return readInput();
     }
 
@@ -897,7 +904,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /**
      * Asks the panel to set its own XML data that can be brought back for an automated installation
      * process. Use it as a blackbox if your panel needs to do something even in automated mode.
-     * 
+     *
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
     /*--------------------------------------------------------------------------*/
@@ -973,7 +980,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the input data from all UI elements and sets the associated variables.
-     * 
+     *
      * @return <code>true</code> if the operation is successdul, otherwise <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
@@ -1000,57 +1007,84 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 if (fieldType.equals(RULE_FIELD))
                 {
                     success = readRuleField(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
 
                 // ------------------------------------------------
                 if (fieldType.equals(PWD_FIELD))
                 {
                     success = readPasswordField(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
 
                 // ------------------------------------------------
                 else if (fieldType.equals(TEXT_FIELD))
                 {
                     success = readTextField(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
 
                 // ------------------------------------------------
                 else if (fieldType.equals(COMBO_FIELD))
                 {
                     success = readComboBox(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
 
                 // ------------------------------------------------
                 else if (fieldType.equals(RADIO_FIELD))
                 {
                     success = readRadioButton(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
 
                 // ------------------------------------------------
                 else if (fieldType.equals(CHECK_FIELD))
                 {
                     success = readCheckBox(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
                 else if (fieldType.equals(SEARCH_FIELD))
                 {
                     success = readSearch(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
                 else if (fieldType.equals(FILE_FIELD))
                 {
                     success = readFileField(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
                 else if (fieldType.equals(DIR_FIELD))
                 {
                     success = readDirectoryField(field);
-                    if (!success) { return (false); }
+                    if (!success)
+                    {
+                        return (false);
+                    }
                 }
             }
         }
@@ -1059,30 +1093,37 @@ public class UserInputPanel extends IzPanel implements ActionListener
     }
 
     private boolean readDirectoryField(Object[] field)
-    {        
-        try {
+    {
+        try
+        {
             JPanel panel = (JPanel) field[POS_FIELD];
             JTextField textf = (JTextField) panel.getComponent(0);
             String file = textf.getText();
-            if  (file != null){                
+            if (file != null)
+            {
                 File ffile = new File(file);
-                if (ffile.isDirectory()){
-                    idata.setVariable((String) field[POS_VARIABLE],file);
-                    entries.add(new TextValuePair((String) field[POS_VARIABLE],file));
+                if (ffile.isDirectory())
+                {
+                    idata.setVariable((String) field[POS_VARIABLE], file);
+                    entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
                     return true;
                 }
-                else {
+                else
+                {
                     showMessage("dir.notdirectory");
                     return false;
-                }                
+                }
             }
-            else {
+            else
+            {
                 showMessage("dir.nodirectory");
                 return false;
-            }               
+            }
         }
-        catch (Exception e){
-            if (Debug.stackTracing()){
+        catch (Exception e)
+        {
+            if (Debug.stackTracing())
+            {
                 Debug.trace(e);
             }
             return false;
@@ -1098,29 +1139,36 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     private boolean readFileField(Object[] field)
     {
-        try {
+        try
+        {
             JPanel panel = (JPanel) field[POS_FIELD];
             JTextField textf = (JTextField) panel.getComponent(0);
             String file = textf.getText();
-            if  (file != null){                
+            if (file != null)
+            {
                 File ffile = new File(file);
-                if (ffile.isFile()){
-                    idata.setVariable((String) field[POS_VARIABLE],file);
-                    entries.add(new TextValuePair((String) field[POS_VARIABLE],file));
+                if (ffile.isFile())
+                {
+                    idata.setVariable((String) field[POS_VARIABLE], file);
+                    entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
                     return true;
                 }
-                else {
+                else
+                {
                     showMessage("file.notfile");
                     return false;
-                }                
+                }
             }
-            else {
+            else
+            {
                 showMessage("file.nofile");
                 return false;
-            }               
+            }
         }
-        catch (Exception e){
-            if (Debug.stackTracing()){
+        catch (Exception e)
+        {
+            if (Debug.stackTracing())
+            {
                 Debug.trace(e);
             }
             return false;
@@ -1130,8 +1178,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the XML specification for the panel layout. The result is stored in spec.
-     * 
-     * @exception Exception for any problems in reading the specification
+     *
+     * @throws Exception for any problems in reading the specification
      */
     /*--------------------------------------------------------------------------*/
     private void readSpec() throws Exception
@@ -1142,11 +1190,12 @@ public class UserInputPanel extends IzPanel implements ActionListener
         String attribute;
         String panelattribute;
         String instance = Integer.toString(instanceNumber);
-        
-        String panelid=null;
+
+        String panelid = null;
         Panel p = this.getMetadata();
-        if (p != null){
-         panelid = p.getPanelid();
+        if (p != null)
+        {
+            panelid = p.getPanelid();
         }
         try
         {
@@ -1181,10 +1230,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 data = specElements.elementAt(i);
                 attribute = data.getAttribute(INSTANCE_IDENTIFIER);
                 panelattribute = data.getAttribute(PANEL_IDENTIFIER);
-                
+
                 if (((attribute != null) && instance.equals(attribute))
-                     ||
-                     ((panelattribute != null) && (panelid!=null) && (panelid.equals(panelattribute))))
+                        ||
+                        ((panelattribute != null) && (panelid != null) && (panelid.equals(panelattribute))))
                 {
                     // use the current element as spec
                     spec = data;
@@ -1207,7 +1256,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * Adds the title to the panel. There can only be one title, if mutiple titles are defined, they
      * keep overwriting what has already be defined, so that the last definition is the one that
      * prevails.
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the title.
      */
     /*--------------------------------------------------------------------------*/
@@ -1218,66 +1267,76 @@ public class UserInputPanel extends IzPanel implements ActionListener
         boolean bold = getBoolean(spec, BOLD, false);
         float multiplier = getFloat(spec, SIZE, 2.0f);
         int justify = getAlignment(spec);
-        
+
         String icon = getIconName(spec);
 
         if (title != null)
         {
-          JLabel label = null;
-          ImageIcon imgicon = null;
-          try {
-            imgicon = parent.icons.getImageIcon(icon);
-            label = LabelFactory.create(title, imgicon , JLabel.TRAILING , true);
-          }
-          catch (Exception e){
-            Debug.trace("Icon " + icon + " not found in icon list. " + e.getMessage());
-            label = LabelFactory.create(title);
-          }       
-          Font font = label.getFont();
-          float size = font.getSize();
-          int style = 0;      
-          
-          if (bold) {
-            style += Font.BOLD;
-          }
-          if (italic) {
-            style += Font.ITALIC;
-          }
+            JLabel label = null;
+            ImageIcon imgicon = null;
+            try
+            {
+                imgicon = parent.icons.getImageIcon(icon);
+                label = LabelFactory.create(title, imgicon, JLabel.TRAILING, true);
+            }
+            catch (Exception e)
+            {
+                Debug.trace("Icon " + icon + " not found in icon list. " + e.getMessage());
+                label = LabelFactory.create(title);
+            }
+            Font font = label.getFont();
+            float size = font.getSize();
+            int style = 0;
 
-          font = font.deriveFont(style, (size * multiplier));
-          label.setFont(font);
-          label.setAlignmentX(0);
+            if (bold)
+            {
+                style += Font.BOLD;
+            }
+            if (italic)
+            {
+                style += Font.ITALIC;
+            }
 
-          TwoColumnConstraints constraints = new TwoColumnConstraints();
-          constraints.align = justify;
-          constraints.position = TwoColumnConstraints.NORTH;
+            font = font.deriveFont(style, (size * multiplier));
+            label.setFont(font);
+            label.setAlignmentX(0);
 
-          add(label, constraints);          
+            TwoColumnConstraints constraints = new TwoColumnConstraints();
+            constraints.align = justify;
+            constraints.position = TwoColumnConstraints.NORTH;
+
+            add(label, constraints);
         }
     }
 
-    protected String getIconName(XMLElement element) {
-      if (element == null) {
-        return (null);
-      }
-
-      String key = element.getAttribute(ICON_KEY);
-      String text = null;
-      if ((key != null) && (langpack != null)) {
-        try {
-          text = langpack.getString(key);
-        } catch (Throwable exception) {
-          text = null;
+    protected String getIconName(XMLElement element)
+    {
+        if (element == null)
+        {
+            return (null);
         }
-      }
 
-      return (text);
-    }        
+        String key = element.getAttribute(ICON_KEY);
+        String text = null;
+        if ((key != null) && (langpack != null))
+        {
+            try
+            {
+                text = langpack.getString(key);
+            }
+            catch (Throwable exception)
+            {
+                text = null;
+            }
+        }
+
+        return (text);
+    }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Adds a rule field to the list of UI elements.
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the rule field.
      */
     /*--------------------------------------------------------------------------*/
@@ -1375,7 +1434,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
             {
                 hasParams = true;
 
-                if (validateParamMap == null) validateParamMap = new HashMap<String, String>();
+                if (validateParamMap == null)
+                {
+                    validateParamMap = new HashMap<String, String>();
+                }
 
                 for (XMLElement validateParam : validateParams)
                 {
@@ -1415,43 +1477,45 @@ public class UserInputPanel extends IzPanel implements ActionListener
         constraints.position = TwoColumnConstraints.WEST;
 
         uiElements
-                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+                .add(new Object[]{null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        uiElements.add(new Object[] { null, RULE_FIELD, variable, constraints2, field, forPacks,
+        uiElements.add(new Object[]{null, RULE_FIELD, variable, constraints2, field, forPacks,
                 forOs, null, null, message});
     }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the data from the rule input field and sets the associated variable.
-     * 
+     *
      * @param field the object array that holds the details of the field.
-     * 
      * @return <code>true</code> if there was no problem reading the data or if there was an
-     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
-     * dialog is popped up and <code>false</code> is returned.
+     *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     *         dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readRuleField(Object[] field)
     {
         RuleInputField ruleField = null;
         String variable = null;
-	String message = null;
+        String message = null;
 
         try
         {
             ruleField = (RuleInputField) field[POS_FIELD];
             variable = (String) field[POS_VARIABLE];
-            message = (String) field[POS_MESSAGE]; 
+            message = (String) field[POS_MESSAGE];
         }
         catch (Throwable exception)
         {
             return (true);
         }
-        if ((variable == null) || (ruleField == null)) { return (true); }
+        if ((variable == null) || (ruleField == null))
+        {
+            return (true);
+        }
 
 
         boolean success = !validating || ruleField.validateContents();
@@ -1469,7 +1533,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Adds a text field to the list of UI elements
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the text field.
      */
     /*--------------------------------------------------------------------------*/
@@ -1490,7 +1554,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
 
         String variable = spec.getAttribute(VARIABLE);
-        if ((variable == null) || (variable.length() == 0)) { return; }
+        if ((variable == null) || (variable.length() == 0))
+        {
+            return;
+        }
 
         // ----------------------------------------------------
         // extract the specification details
@@ -1531,7 +1598,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         // ----------------------------------------------------
         else
         {
-          Debug.trace("No specification element, returning.");
+            Debug.trace("No specification element, returning.");
             return;
         }
 
@@ -1542,7 +1609,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         if (element != null)
         {
             validator = element.getAttribute(CLASS);
-            Debug.trace("Validator found for text field: "+validator);
+            Debug.trace("Validator found for text field: " + validator);
             message = getText(element);
             // ----------------------------------------------------------
             // check and see if we have any parameters for this validator.
@@ -1551,10 +1618,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
             validateParams = element.getChildrenNamed(RULE_PARAM);
             if (validateParams != null && validateParams.size() > 0)
             {
-                Debug.trace("Validator has "+validateParams.size()+" parameters.");
+                Debug.trace("Validator has " + validateParams.size() + " parameters.");
                 hasParams = true;
 
-                if (validateParamMap == null) validateParamMap = new HashMap<String, String>();
+                if (validateParamMap == null)
+                {
+                    validateParamMap = new HashMap<String, String>();
+                }
 
                 for (XMLElement validateParam : validateParams)
                 {
@@ -1581,7 +1651,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
         if (hasParams)
         {
             inputField = new TextInputField(set, size, validator, validateParamMap);
-        } else 
+        }
+        else
         {
             inputField = new TextInputField(set, size, validator);
         }
@@ -1591,24 +1662,23 @@ public class UserInputPanel extends IzPanel implements ActionListener
         constraints.position = TwoColumnConstraints.WEST;
 
         uiElements
-                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+                .add(new Object[]{null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        uiElements.add(new Object[] { null, TEXT_FIELD, variable, constraints2, inputField, forPacks,
+        uiElements.add(new Object[]{null, TEXT_FIELD, variable, constraints2, inputField, forPacks,
                 forOs, null, null, message});
     }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Reads data from the text field and sets the associated variable.
-     * 
+     *
      * @param field the object array that holds the details of the field.
-     * 
      * @return <code>true</code> if there was no problem reading the data or if there was an
-     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
-     * dialog is popped up and <code>false</code> is returned.
+     *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     *         dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readTextField(Object[] field)
@@ -1616,29 +1686,33 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TextInputField textField = null;
         String variable = null;
         String value = null;
-	String message = null;
+        String message = null;
 
         try
         {
             textField = (TextInputField) field[POS_FIELD];
             variable = (String) field[POS_VARIABLE];
-            message = (String) field[POS_MESSAGE]; 
+            message = (String) field[POS_MESSAGE];
             value = textField.getText();
         }
         catch (Throwable exception)
         {
             return (true);
         }
-        if ((variable == null) || (value == null)) { return (true); }
+        if ((variable == null) || (value == null))
+        {
+            return (true);
+        }
 
         // validate the input
         Debug.trace("Validating text field");
         boolean success = textField.validateContents();
         if (!success)
         {
-            Debug.trace("Validation did not pass, message: "+message);
-            if (message==null) {
-              message = "Text entered did not pass validation.";
+            Debug.trace("Validation did not pass, message: " + message);
+            if (message == null)
+            {
+                message = "Text entered did not pass validation.";
             }
             showWarningMessageDialog(parentFrame, message);
             return (false);
@@ -1653,11 +1727,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /**
      * Adds a combo box to the list of UI elements. <br>
      * This is a complete example of a valid XML specification
-     * 
+     * <p/>
      * <pre>
-     *   
-     *    
-     *     
+     * <p/>
+     * <p/>
+     * <p/>
      *      &lt;field type=&quot;combo&quot; variable=&quot;testVariable&quot;&gt;
      *        &lt;description text=&quot;Description for the combo box&quot; id=&quot;a key for translated text&quot;/&gt;
      *        &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
@@ -1667,11 +1741,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
      *          &lt;choice text=&quot;choice 4&quot; id=&quot;&quot; value=&quot;combo box 4&quot;/&gt;
      *        &lt;/spec&gt;
      *      &lt;/field&gt;
-     *      
-     *     
-     *    
+     * <p/>
+     * <p/>
+     * <p/>
      * </pre>
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the combo box.
      */
     /*--------------------------------------------------------------------------*/
@@ -1695,7 +1769,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
             Vector<XMLElement> choices = element.getChildrenNamed(COMBO_CHOICE);
 
-            if (choices == null) { return; }
+            if (choices == null)
+            {
+                return;
+            }
             // get current value of associated variable
             String currentvariablevalue = idata.getVariable(variable);
             if (currentvariablevalue != null)
@@ -1751,14 +1828,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     listItem = new TextValuePair(getText(choices.elementAt(i)), value);
                     field.addItem(listItem);
                     if (userinput)
-                    {         
+                    {
                         // is the current value identical to the value associated with this element
                         if ((value != null) && (value.length() > 0)
                                 && (currentvariablevalue.equals(value)))
                         {
                             // select it
                             field.setSelectedIndex(i);
-                        }               
+                        }
                         // else do nothing
                     }
                     else
@@ -1803,24 +1880,23 @@ public class UserInputPanel extends IzPanel implements ActionListener
         constraints.position = TwoColumnConstraints.WEST;
 
         uiElements
-                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+                .add(new Object[]{null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        uiElements.add(new Object[] { null, COMBO_FIELD, variable, constraints2, field, forPacks,
+        uiElements.add(new Object[]{null, COMBO_FIELD, variable, constraints2, field, forPacks,
                 forOs});
     }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the content of the combobox field and substitutes the associated variable.
-     * 
+     *
      * @param field the object array that holds the details of the field.
-     * 
      * @return <code>true</code> if there was no problem reading the data or if there was an
-     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
-     * dialog is popped up and <code>false</code> is returned.
+     *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     *         dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readComboBox(Object[] field)
@@ -1839,7 +1915,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             return true;
         }
-        if ((variable == null) || (value == null)) { return true; }
+        if ((variable == null) || (value == null))
+        {
+            return true;
+        }
 
         idata.setVariable(variable, value);
         entries.add(new TextValuePair(variable, value));
@@ -1850,11 +1929,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /**
      * Adds a radio button set to the list of UI elements. <br>
      * This is a complete example of a valid XML specification
-     * 
+     * <p/>
      * <pre>
-     *   
-     *    
-     *     
+     * <p/>
+     * <p/>
+     * <p/>
      *      &lt;field type=&quot;radio&quot; variable=&quot;testVariable&quot;&gt;
      *        &lt;description text=&quot;Description for the radio buttons&quot; id=&quot;a key for translated text&quot;/&gt;
      *        &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot;/&gt;
@@ -1865,13 +1944,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
      *          &lt;choice text=&quot;radio 5&quot; id=&quot;&quot; value=&quot;&quot;/&gt;
      *        &lt;/spec&gt;
      *      &lt;/field&gt;
-     *      
-     *     
-     *    
+     * <p/>
+     * <p/>
+     * <p/>
      * </pre>
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the radio button
-     * set.
+     *             set.
      */
     /*--------------------------------------------------------------------------*/
     private void addRadioButton(XMLElement spec)
@@ -1905,7 +1984,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             Vector<XMLElement> choices = element.getChildrenNamed(RADIO_CHOICE);
 
-            if (choices == null) { return; }
+            if (choices == null)
+            {
+                return;
+            }
 
             // --------------------------------------------------
             // process each choice element
@@ -1915,8 +1997,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 JRadioButton choice = new JRadioButton();
                 choice.setText(getText(choices.elementAt(i)));
                 String causesValidataion = (choices.elementAt(i)).getAttribute(REVALIDATE);
-                if(causesValidataion != null && causesValidataion.equals("yes"))
+                if (causesValidataion != null && causesValidataion.equals("yes"))
+                {
                     choice.addActionListener(this);
+                }
                 value = ((choices.elementAt(i)).getAttribute(RADIO_VALUE));
 
                 group.add(choice);
@@ -1924,9 +2008,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 String set = (choices.elementAt(i)).getAttribute(SET);
                 // in order to properly initialize dependent controls
                 // we must set this variable now
-                if(idata.getVariable(variable) == null)
-                   if(set != null)
-                      idata.setVariable(variable, value);
+                if (idata.getVariable(variable) == null)
+                {
+                    if (set != null)
+                    {
+                        idata.setVariable(variable, value);
+                    }
+                }
                 if (set != null)
                 {
                     if (set != null && !"".equals(set))
@@ -1941,7 +2029,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 }
 
                 buttonGroups.add(group);
-                uiElements.add(new Object[] { null, RADIO_FIELD, variable, constraints, choice,
+                uiElements.add(new Object[]{null, RADIO_FIELD, variable, constraints, choice,
                         forPacks, forOs, value, null, null, group});
             }
         }
@@ -1950,12 +2038,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the content of the radio button field and substitutes the associated variable.
-     * 
+     *
      * @param field the object array that holds the details of the field.
-     * 
      * @return <code>true</code> if there was no problem reading the data or if there was an
-     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
-     * dialog is popped up and <code>false</code> is returned.
+     *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     *         dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readRadioButton(Object[] field)
@@ -1968,7 +2055,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             button = (JRadioButton) field[POS_FIELD];
 
-            if (!button.isSelected()) { return (true); }
+            if (!button.isSelected())
+            {
+                return (true);
+            }
 
             variable = (String) field[POS_VARIABLE];
             value = (String) field[POS_TRUE];
@@ -1987,11 +2077,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /**
      * Adds one or more password fields to the list of UI elements. <br>
      * This is a complete example of a valid XML specification
-     * 
+     * <p/>
      * <pre>
-     *   
-     *    
-     *     
+     * <p/>
+     * <p/>
+     * <p/>
      *      &lt;field type=&quot;password&quot; variable=&quot;testVariable&quot;&gt;
      *        &lt;description align=&quot;left&quot; txt=&quot;Please enter your password&quot; id=&quot;a key for translated text&quot;/&gt;
      *        &lt;spec&gt;
@@ -2001,12 +2091,12 @@ public class UserInputPanel extends IzPanel implements ActionListener
      *        &lt;validator class=&quot;com.izforge.sample.PWDValidator&quot; txt=&quot;Both versions of the password must match&quot; id=&quot;key for the error text&quot;/&gt;
      *        &lt;processor class=&quot;com.izforge.sample.PWDEncryptor&quot;/&gt;
      *      &lt;/field&gt;
-     *      
+     * <p/>
      * </pre>
      * Additionally, parameters and multiple validators can be used to provide
      * separate validation and error messages for each case.
      * <pre>
-     *     
+     * <p/>
      *    &lt;field type=&quot;password&quot; align=&quot;left&quot; variable=&quot;keystore.password&quot;&gt;
      *      &lt;spec&gt;
      *        &lt;pwd txt=&quot;Keystore Password:&quot; size=&quot;25&quot; set=&quot;&quot;/&gt;
@@ -2019,11 +2109,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
      *        &lt;param name=&quot;keystoreAlias&quot; value=&quot;${keystore.key.alias}&quot;/&gt;
      *      &lt;/validator&gt;
      *    &lt;/field&gt;
-     *      
+     * <p/>
      * </pre>
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the set of password
-     * fields.
+     *             fields.
      */
     /*--------------------------------------------------------------------------*/
     private void addPasswordField(XMLElement spec)
@@ -2100,7 +2190,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             Vector<XMLElement> inputs = element.getChildrenNamed(PWD_INPUT);
 
-            if (inputs == null) { return; }
+            if (inputs == null)
+            {
+                return;
+            }
 
             // --------------------------------------------------
             // process each input field
@@ -2134,7 +2227,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 TwoColumnConstraints constraints = new TwoColumnConstraints();
                 constraints.position = TwoColumnConstraints.WEST;
 
-                uiElements.add(new Object[] { null, FIELD_LABEL, null, constraints, label,
+                uiElements.add(new Object[]{null, FIELD_LABEL, null, constraints, label,
                         forPacks, forOs});
 
                 TwoColumnConstraints constraints2 = new TwoColumnConstraints();
@@ -2142,7 +2235,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
                 // Removed message to support pulling from multiple validators
                 uiElements.add(new Object[]{null, PWD_FIELD, variable, constraints2, field,
-                    forPacks, forOs, null, null, null, group
+                        forPacks, forOs, null, null, null, group
                 });
                 // Original
 //        uiElements.add(new Object[]{null, PWD_FIELD, variable, constraints2, field,
@@ -2158,12 +2251,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the content of the password field and substitutes the associated variable.
-     * 
+     *
      * @param field a password group that manages one or more passord fields.
-     * 
      * @return <code>true</code> if there was no problem reading the data or if there was an
-     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
-     * dialog is popped up and <code>false</code> is returned.
+     *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     *         dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readPasswordField(Object[] field)
@@ -2176,16 +2268,18 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             group = (PasswordGroup) field[POS_GROUP];
             variable = (String) field[POS_VARIABLE];
-        // Removed to support grabbing the message from multiple validators
-        // message = (String) field[POS_MESSAGE];
+            // Removed to support grabbing the message from multiple validators
+            // message = (String) field[POS_MESSAGE];
         }
         catch (Throwable exception)
         {
             return (true);
         }
-        if ((variable == null) || (passwordGroupsRead.contains(group))) { return (true); }
+        if ((variable == null) || (passwordGroupsRead.contains(group)))
+        {
+            return (true);
+        }
         passwordGroups.add(group);
-
 
         //boolean success = !validating || group.validateContents();
         boolean success = !validating;
@@ -2225,7 +2319,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Adds a chackbox to the list of UI elements.
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the checkbox.
      */
     /*--------------------------------------------------------------------------*/
@@ -2241,7 +2335,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
         String causesValidataion = null;
         XMLElement detail = spec.getFirstChildNamed(SPEC);
 
-        if (variable == null) { return; }
+        if (variable == null)
+        {
+            return;
+        }
 
         if (detail != null)
         {
@@ -2251,20 +2348,23 @@ public class UserInputPanel extends IzPanel implements ActionListener
             falseValue = detail.getAttribute(FALSE);
             causesValidataion = detail.getAttribute(REVALIDATE);
             String value = idata.getVariable(variable);
-            Debug.trace("check: value: "+value+", set: "+set);
+            Debug.trace("check: value: " + value + ", set: " + set);
             if (value != null)
             {
-              // Default is not checked so we only need to check for true
-              if (value.equals(trueValue)) {
-                set = TRUE;
-              }
+                // Default is not checked so we only need to check for true
+                if (value.equals(trueValue))
+                {
+                    set = TRUE;
+                }
             }
         }
 
         JCheckBox checkbox = new JCheckBox(label);
-        
-        if(causesValidataion != null && causesValidataion.equals("yes"))
-           checkbox.addActionListener(this);
+
+        if (causesValidataion != null && causesValidataion.equals("yes"))
+        {
+            checkbox.addActionListener(this);
+        }
         if (set != null)
         {
             if (set != null && !"".equals(set))
@@ -2294,19 +2394,18 @@ public class UserInputPanel extends IzPanel implements ActionListener
         constraints.stretch = true;
         constraints.indent = true;
 
-        uiElements.add(new Object[] { null, CHECK_FIELD, variable, constraints, checkbox, forPacks,
+        uiElements.add(new Object[]{null, CHECK_FIELD, variable, constraints, checkbox, forPacks,
                 forOs, trueValue, falseValue});
     }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the content of the checkbox field and substitutes the associated variable.
-     * 
+     *
      * @param field the object array that holds the details of the field.
-     * 
      * @return <code>true</code> if there was no problem reading the data or if there was an
-     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
-     * dialog is popped up and <code>false</code> is returned.
+     *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     *         dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readCheckBox(Object[] field)
@@ -2334,19 +2433,19 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
         catch (Throwable exception)
         {
-            Debug.trace("readCheckBox(): failed: "+exception);
+            Debug.trace("readCheckBox(): failed: " + exception);
             return (true);
         }
 
         if (box.isSelected())
         {
-            Debug.trace("readCheckBox(): selected, setting "+variable+" to "+trueValue);
+            Debug.trace("readCheckBox(): selected, setting " + variable + " to " + trueValue);
             idata.setVariable(variable, trueValue);
             entries.add(new TextValuePair(variable, trueValue));
         }
         else
         {
-            Debug.trace("readCheckBox(): not selected, setting "+variable+" to "+falseValue);
+            Debug.trace("readCheckBox(): not selected, setting " + variable + " to " + falseValue);
             idata.setVariable(variable, falseValue);
             entries.add(new TextValuePair(variable, falseValue));
         }
@@ -2357,13 +2456,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Adds a search field to the list of UI elements.
-     * <p>
+     * <p/>
      * This is a complete example of a valid XML specification
-     * 
+     * <p/>
      * <pre>
-     *   
-     *    
-     *     
+     * <p/>
+     * <p/>
+     * <p/>
      *      &lt;field type=&quot;search&quot; variable=&quot;testVariable&quot;&gt;
      *        &lt;description text=&quot;Description for the search field&quot; id=&quot;a key for translated text&quot;/&gt;
      *        &lt;spec text=&quot;label&quot; id=&quot;key for the label&quot; filename=&quot;the_file_to_search&quot; result=&quot;directory&quot; /&gt; &lt;!-- values for result: directory, file --&gt;
@@ -2371,11 +2470,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
      *          &lt;choice dir=&quot;dir2&quot; /&gt;
      *        &lt;/spec&gt;
      *      &lt;/field&gt;
-     *      
-     *     
-     *    
+     * <p/>
+     * <p/>
+     * <p/>
      * </pre>
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the search field
      */
     /*--------------------------------------------------------------------------*/
@@ -2452,13 +2551,19 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
             Vector<XMLElement> choices = element.getChildrenNamed(SEARCH_CHOICE);
 
-            if (choices == null) { return; }
+            if (choices == null)
+            {
+                return;
+            }
 
             for (int i = 0; i < choices.size(); i++)
             {
                 XMLElement choice_el = choices.elementAt(i);
 
-                if (!OsConstraint.oneMatchesCurrentSystem(choice_el)) continue;
+                if (!OsConstraint.oneMatchesCurrentSystem(choice_el))
+                {
+                    continue;
+                }
 
                 String value = choice_el.getAttribute(SEARCH_VALUE);
 
@@ -2498,7 +2603,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TwoColumnConstraints westconstraint1 = new TwoColumnConstraints();
         westconstraint1.position = TwoColumnConstraints.WEST;
 
-        uiElements.add(new Object[] { null, FIELD_LABEL, null, westconstraint1, label, forPacks,
+        uiElements.add(new Object[]{null, FIELD_LABEL, null, westconstraint1, label, forPacks,
                 forOs});
 
         TwoColumnConstraints eastconstraint1 = new TwoColumnConstraints();
@@ -2519,9 +2624,12 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     .getString("UserInputPanel.search.location.checkedfile"), new Object[]{new String[]{check_filename}}));
         }
 
-        if (tooltiptext.length() > 0) combobox.setToolTipText(tooltiptext.toString());
+        if (tooltiptext.length() > 0)
+        {
+            combobox.setToolTipText(tooltiptext.toString());
+        }
 
-        uiElements.add(new Object[] { null, SEARCH_FIELD, variable, eastconstraint1, combobox,
+        uiElements.add(new Object[]{null, SEARCH_FIELD, variable, eastconstraint1, combobox,
                 forPacks, forOs});
 
         JPanel buttonPanel = new JPanel();
@@ -2545,7 +2653,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TwoColumnConstraints eastonlyconstraint = new TwoColumnConstraints();
         eastonlyconstraint.position = TwoColumnConstraints.EASTONLY;
 
-        uiElements.add(new Object[] { null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint,
+        uiElements.add(new Object[]{null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint,
                 buttonPanel, forPacks, forOs});
 
         searchFields.add(new SearchField(filename, check_filename, parentFrame, combobox,
@@ -2555,12 +2663,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Reads the content of the search field and substitutes the associated variable.
-     * 
+     *
      * @param field the object array that holds the details of the field.
-     * 
      * @return <code>true</code> if there was no problem reading the data or if there was an
-     * irrecovarable problem. If there was a problem that can be corrected by the operator, an error
-     * dialog is popped up and <code>false</code> is returned.
+     *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
+     *         dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean readSearch(Object[] field)
@@ -2587,7 +2694,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             return (true);
         }
-        if ((variable == null) || (value == null)) { return (true); }
+        if ((variable == null) || (value == null))
+        {
+            return (true);
+        }
 
         idata.setVariable(variable, value);
         entries.add(new TextValuePair(variable, value));
@@ -2597,7 +2707,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Adds text to the list of UI elements
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the text.
      */
     /*--------------------------------------------------------------------------*/
@@ -2612,9 +2722,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Adds a dummy field to the list of UI elements to act as spacer.
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing other specifications. At present this
-     * information is not used but might be in future versions.
+     *             information is not used but might be in future versions.
      */
     /*--------------------------------------------------------------------------*/
     private void addSpace(XMLElement spec)
@@ -2628,13 +2738,13 @@ public class UserInputPanel extends IzPanel implements ActionListener
         constraints.stretch = true;
 
         uiElements
-                .add(new Object[] { null, SPACE_FIELD, null, constraints, panel, forPacks, forOs});
+                .add(new Object[]{null, SPACE_FIELD, null, constraints, panel, forPacks, forOs});
     }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Adds a dividing line to the list of UI elements act as separator.
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing additional specifications.
      */
     /*--------------------------------------------------------------------------*/
@@ -2665,14 +2775,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
         constraints.position = TwoColumnConstraints.BOTH;
         constraints.stretch = true;
 
-        uiElements.add(new Object[] { null, DIVIDER_FIELD, null, constraints, panel, forPacks,
+        uiElements.add(new Object[]{null, DIVIDER_FIELD, null, constraints, panel, forPacks,
                 forOs});
     }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Adds a description to the list of UI elements.
-     * 
+     *
      * @param spec a <code>XMLElement</code> containing the specification for the description.
      */
     /*--------------------------------------------------------------------------*/
@@ -2718,7 +2828,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 // If html tags are present enable html rendering, otherwise the JTextPane
                 // looks exactly like MultiLineLabel.
                 if (description.startsWith("<html>") && description.endsWith("</html>"))
+                {
                     label.setContentType("text/html");
+                }
                 label.setText(description);
 
                 // Background color and font to match the label's.
@@ -2728,7 +2840,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 label.getPreferredSize();
                 // end of workaround.
 
-                uiElements.add(new Object[] { null, DESCRIPTION, null, constraints, label,
+                uiElements.add(new Object[]{null, DESCRIPTION, null, constraints, label,
                         forPacks, forOs});
             }
         }
@@ -2740,16 +2852,15 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * the value of the constant <code>TRUE</code> then true is returned. If it equals
      * <code>FALSE</code> the false is returned. In all other cases, including when the attribute
      * is not found, the default value is returned.
-     * 
-     * @param element the <code>XMLElement</code> to search for the attribute.
-     * @param attribute the attribute to search for
+     *
+     * @param element      the <code>XMLElement</code> to search for the attribute.
+     * @param attribute    the attribute to search for
      * @param defaultValue the default value to use if the attribute does not exist or a illegal
-     * value was discovered.
-     * 
+     *                     value was discovered.
      * @return <code>true</code> if the attribute is found and the value equals the the constant
-     * <code>TRUE</code>. <<code> if the
-     *            attribute is <code>FALSE</code>. In all other cases the
-     *            default value is returned.
+     *         <code>TRUE</code>. <<code> if the
+     *         attribute is <code>FALSE</code>. In all other cases the
+     *         default value is returned.
      */
     /*--------------------------------------------------------------------------*/
     private boolean getBoolean(XMLElement element, String attribute, boolean defaultValue)
@@ -2780,13 +2891,15 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /**
      * Retrieves the value of an integer attribute. If the attribute is not found or the value is
      * non-numeric then the default value is returned.
-     * 
-     * @param element the <code>XMLElement</code> to search for the attribute.
-     * @param attribute the attribute to search for
+     *
+     * @param element      the <code>XMLElement</code> to search for the attribute.
+     * @param attribute    the attribute to search for
      * @param defaultValue the default value to use in case the attribute does not exist.
-     * 
+     * @param element      the <code>XMLElement</code> to search for the attribute.
+     * @param attribute    the attribute to search for
+     * @param defaultValue the default value to use in case the attribute does not exist.
      * @return the value of the attribute. If the attribute is not found or the content is not a
-     * legal integer, then the default value is returned.
+     *         legal integer, then the default value is returned.
      */
     /*--------------------------------------------------------------------------*/
     // private int getInt(XMLElement element, String attribute, int defaultValue)
@@ -2809,11 +2922,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /**
      * Retrieves the value of a floating point attribute. If the attribute is not found or the value
      * is non-numeric then the default value is returned.
-     * 
+     *
      * @param element the <code>XMLElement</code> to search for the attribute.
      * @param attribute the attribute to search for
      * @param defaultValue the default value to use in case the attribute does not exist.
-     * 
+     *
      * @return the value of the attribute. If the attribute is not found or the content is not a
      * legal integer, then the default value is returned.
      */
@@ -2829,7 +2942,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 result = Float.parseFloat(element.getAttribute(attribute));
             }
             catch (Throwable exception)
-            {}
+            {
+            }
         }
 
         return (result);
@@ -2840,16 +2954,18 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * Extracts the text from an <code>XMLElement</code>. The text must be defined in the
      * resource file under the key defined in the <code>id</code> attribute or as value of the
      * attribute <code>text</code>.
-     * 
+     *
      * @param element the <code>XMLElement</code> from which to extract the text.
-     * 
      * @return The text defined in the <code>XMLElement</code>. If no text can be located,
-     * <code>null</code> is returned.
+     *         <code>null</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
     private String getText(XMLElement element)
     {
-        if (element == null) { return (null); }
+        if (element == null)
+        {
+            return (null);
+        }
 
         String key = element.getAttribute(KEY);
         String text = null;
@@ -2874,7 +2990,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             text = element.getAttribute(TEXT);
         }
-        
+
         // try to parse the text, and substitute any variable it finds
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
 
@@ -2886,13 +3002,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * Retreives the alignment setting for the <code>XMLElement</code>. The default value in case
      * the <code>ALIGNMENT</code> attribute is not found or the value is illegal is
      * <code>TwoColumnConstraints.LEFT</code>.
-     * 
+     *
      * @param element the <code>XMLElement</code> from which to extract the alignment setting.
-     * 
      * @return the alignement setting for the <code>XMLElement</code>. The value is either
-     * <code>TwoColumnConstraints.LEFT</code>, <code>TwoColumnConstraints.CENTER</code> or
-     * <code>TwoColumnConstraints.RIGHT</code>.
-     * 
+     *         <code>TwoColumnConstraints.LEFT</code>, <code>TwoColumnConstraints.CENTER</code> or
+     *         <code>TwoColumnConstraints.RIGHT</code>.
      * @see com.izforge.izpack.gui.TwoColumnConstraints
      */
     /*--------------------------------------------------------------------------*/
@@ -2927,15 +3041,17 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * <br>
      * <b>Note:</b><br>
      * If the list of the os is empty then <code>true</code> is always returnd.
-     * 
+     *
      * @param os The <code>Vector</code> of <code>String</code>s. containing the os names
-     * 
      * @return <code>true</code> if the item is required for the os, otherwise returns
-     * <code>false</code>.
+     *         <code>false</code>.
      */
     public boolean itemRequiredForOs(Vector<XMLElement> os)
     {
-        if (os.size() == 0) { return true; }
+        if (os.size() == 0)
+        {
+            return true;
+        }
 
         for (int i = 0; i < os.size(); i++)
         {
@@ -2954,7 +3070,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
             {
                 match = OsVersion.IS_UNIX;
             }
-            if (match) { return true; }
+            if (match)
+            {
+                return true;
+            }
         }
         return false;
     }
@@ -2967,12 +3086,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * <b>Note:</b><br>
      * If the list of selected packs is empty then <code>true</code> is always returnd. The same
      * is true if the <code>packs</code> list is empty.
-     * 
+     *
      * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes
-     * a pack for which an item should be created if the pack is actually installed.
-     * 
+     *              a pack for which an item should be created if the pack is actually installed.
      * @return <code>true</code> if the item is required for at least one pack in the list,
-     * otherwise returns <code>false</code>.
+     *         otherwise returns <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     /*
@@ -2988,7 +3106,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
         String selected;
         String required;
 
-        if (packs.size() == 0) { return (true); }
+        if (packs.size() == 0)
+        {
+            return (true);
+        }
 
         // ----------------------------------------------------
         // We are getting to this point if any packs have been
@@ -3011,7 +3132,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
             for (int k = 0; k < packs.size(); k++)
             {
                 required = (packs.elementAt(k)).getAttribute(NAME, "");
-                if (selected.equals(required)) { return (true); }
+                if (selected.equals(required))
+                {
+                    return (true);
+                }
             }
         }
 
@@ -3026,12 +3150,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * <b>Note:</b><br>
      * If the list of selected packs is empty then <code>true</code> is always returnd. The same
      * is true if the <code>packs</code> list is empty.
-     * 
+     *
      * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes
-     * a pack for which an item should be created if the pack is actually installed.
-     * 
+     *              a pack for which an item should be created if the pack is actually installed.
      * @return <code>true</code> if the item is required for at least one pack in the list,
-     * otherwise returns <code>false</code>.
+     *         otherwise returns <code>false</code>.
      */
     /*--------------------------------------------------------------------------*/
     /*
@@ -3047,7 +3170,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
         String selected;
         String required;
 
-        if (packs.size() == 0) { return (true); }
+        if (packs.size() == 0)
+        {
+            return (true);
+        }
 
         // ----------------------------------------------------
         // analyze if the any of the packs for which the item
@@ -3060,7 +3186,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
             for (int k = 0; k < packs.size(); k++)
             {
                 required = (packs.elementAt(k)).getAttribute(NAME, "");
-                if (selected.equals(required)) { return (false); }
+                if (selected.equals(required))
+                {
+                    return (false);
+                }
             }
         }
 
@@ -3070,7 +3199,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     // ----------- Inheritance stuff -----------------------------------------
     /**
      * Returns the uiElements.
-     * 
+     *
      * @return Returns the uiElements.
      */
     protected Vector<Object[]> getUiElements()
@@ -3083,6 +3212,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     // --------------------------------------------------------------------------
 
     /*---------------------------------------------------------------------------*/
+
     /**
      * This class can be used to associate a text string and a (text) value.
      */
@@ -3097,8 +3227,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /*--------------------------------------------------------------------------*/
         /**
          * Constructs a new Text/Value pair, initialized with the text and a value.
-         * 
-         * @param text the text that this object should represent
+         *
+         * @param text  the text that this object should represent
          * @param value the value that should be associated with this object
          */
         /*--------------------------------------------------------------------------*/
@@ -3111,7 +3241,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /*--------------------------------------------------------------------------*/
         /**
          * Sets the text
-         * 
+         *
          * @param text the text for this object
          */
         /*--------------------------------------------------------------------------*/
@@ -3123,7 +3253,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /*--------------------------------------------------------------------------*/
         /**
          * Sets the value of this object
-         * 
+         *
          * @param value the value for this object
          */
         /*--------------------------------------------------------------------------*/
@@ -3135,7 +3265,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /*--------------------------------------------------------------------------*/
         /**
          * This method returns the text that was set for the object
-         * 
+         *
          * @return the object's text
          */
         /*--------------------------------------------------------------------------*/
@@ -3147,7 +3277,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /*--------------------------------------------------------------------------*/
         /**
          * This method returns the value that was associated with this object
-         * 
+         *
          * @return the object's value
          */
         /*--------------------------------------------------------------------------*/
@@ -3160,7 +3290,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*---------------------------------------------------------------------------*/
     /**
      * This class encapsulates a lot of search field functionality.
-     * 
+     * <p/>
      * A search field supports searching directories and files on the target system. This is a
      * helper class to manage all data belonging to a search field.
      */
@@ -3169,19 +3299,29 @@ public class UserInputPanel extends IzPanel implements ActionListener
     private class SearchField implements ActionListener
     {
 
-        /** used in constructor - we search for a directory. */
+        /**
+         * used in constructor - we search for a directory.
+         */
         public static final int TYPE_DIRECTORY = 1;
 
-        /** used in constructor - we search for a file. */
+        /**
+         * used in constructor - we search for a file.
+         */
         public static final int TYPE_FILE = 2;
 
-        /** used in constructor - result of search is the directory. */
+        /**
+         * used in constructor - result of search is the directory.
+         */
         public static final int RESULT_DIRECTORY = 1;
 
-        /** used in constructor - result of search is the whole file name. */
+        /**
+         * used in constructor - result of search is the whole file name.
+         */
         public static final int RESULT_FILE = 2;
 
-        /** used in constructor - result of search is the parent directory. */
+        /**
+         * used in constructor - result of search is the parent directory.
+         */
         public static final int RESULT_PARENTDIR = 3;
 
         private String filename = null;
@@ -3204,24 +3344,24 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /**
          * Constructor - initializes the object, adds it as action listener to the "autodetect"
          * button.
-         * 
-         * @param filename the name of the file to search for (might be null for searching
-         * directories)
+         *
+         * @param filename      the name of the file to search for (might be null for searching
+         *                      directories)
          * @param checkFilename the name of the file to check when searching for directories (the
-         * checkFilename is appended to a found directory to figure out whether it is the right
-         * directory)
-         * @param combobox the <code>JComboBox</code> holding the list of choices; it should be
-         * editable and contain only Strings
-         * @param autobutton the autodetection button for triggering autodetection
-         * @param browsebutton the browse button to look for the file
-         * @param search_type what to search for - TYPE_FILE or TYPE_DIRECTORY
-         * @param result_type what to return as the result - RESULT_FILE or RESULT_DIRECTORY or
-         * RESULT_PARENTDIR
+         *                      checkFilename is appended to a found directory to figure out whether it is the right
+         *                      directory)
+         * @param combobox      the <code>JComboBox</code> holding the list of choices; it should be
+         *                      editable and contain only Strings
+         * @param autobutton    the autodetection button for triggering autodetection
+         * @param browsebutton  the browse button to look for the file
+         * @param search_type   what to search for - TYPE_FILE or TYPE_DIRECTORY
+         * @param result_type   what to return as the result - RESULT_FILE or RESULT_DIRECTORY or
+         *                      RESULT_PARENTDIR
          */
         /*---------------------------------------------------------------------------*/
         public SearchField(String filename, String checkFilename, InstallerFrame parent,
-                JComboBox combobox, JButton autobutton, JButton browsebutton, int search_type,
-                int result_type)
+                           JComboBox combobox, JButton autobutton, JButton browsebutton, int search_type,
+                           int result_type)
         {
             this.filename = filename;
             this.checkFilename = checkFilename;
@@ -3238,39 +3378,50 @@ public class UserInputPanel extends IzPanel implements ActionListener
             /*
              * add DocumentListener to manage nextButton if user enters input
              */
-            ((JTextField)this.pathComboBox.getEditor().getEditorComponent()).getDocument().addDocumentListener(new DocumentListener()
+            ((JTextField) this.pathComboBox.getEditor().getEditorComponent()).getDocument().addDocumentListener(new DocumentListener()
             {
                 public void changedUpdate(DocumentEvent e)
                 {
                     checkNextButtonState();
                 }
+
                 public void insertUpdate(DocumentEvent e)
                 {
                     checkNextButtonState();
                 }
+
                 public void removeUpdate(DocumentEvent e)
                 {
                     checkNextButtonState();
                 }
+
                 private void checkNextButtonState()
                 {
-                    Document doc = ((JTextField)pathComboBox.getEditor().getEditorComponent()).getDocument();
-                    try {
+                    Document doc = ((JTextField) pathComboBox.getEditor().getEditorComponent()).getDocument();
+                    try
+                    {
                         if (pathMatches(doc.getText(0, doc.getLength())))
+                        {
                             getInstallerFrame().unlockNextButton(false);
-                        else    
+                        }
+                        else
+                        {
                             getInstallerFrame().lockNextButton();
-                    } catch (BadLocationException e) {/*ignore, it not happens*/}
+                        }
+                    }
+                    catch (BadLocationException e)
+                    {/*ignore, it not happens*/}
                 }
             });
 
             autodetect();
         }
-        
+
         /**
          * convenient method
          */
-        private InstallerFrame getInstallerFrame() {
+        private InstallerFrame getInstallerFrame()
+        {
             return parent;
         }
 
@@ -3283,7 +3434,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
             return (this.pathComboBox == combobox);
         }
 
-        /** check whether the given path matches */
+        /**
+         * check whether the given path matches
+         */
         private boolean pathMatches(String path)
         {
             if (path != null)
@@ -3308,7 +3461,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
                             || ((this.searchType == TYPE_FILE) && (file.isFile())))
                     {
                         // no file to check for
-                        if (this.checkFilename == null) return true;
+                        if (this.checkFilename == null)
+                        {
+                            return true;
+                        }
 
                         file = new File(file, this.checkFilename);
 
@@ -3322,7 +3478,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
             return false;
         }
 
-        /** perform autodetection */
+        /**
+         * perform autodetection
+         */
         public boolean autodetect()
         {
             Vector<String> items = new Vector<String>();
@@ -3331,7 +3489,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
              * Check if the user has entered data into the ComboBox and add it to the Itemlist
              */
             String selected = (String) this.pathComboBox.getSelectedItem();
-            if (selected == null) {
+            if (selected == null)
+            {
                 parent.lockNextButton();
                 return false;
             }
@@ -3410,7 +3569,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
             }
 
             // if the user entered something else, it's not listed as an item
-            if (this.pathMatches((String) this.pathComboBox.getSelectedItem())) {
+            if (this.pathMatches((String) this.pathComboBox.getSelectedItem()))
+            {
                 parent.unlockNextButton();
                 return true;
             }
@@ -3421,7 +3581,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /*--------------------------------------------------------------------------*/
         /**
          * This is called if one of the buttons has been pressed.
-         * 
+         * <p/>
          * It checks, which button caused the action and acts accordingly.
          */
         /*--------------------------------------------------------------------------*/
@@ -3432,16 +3592,20 @@ public class UserInputPanel extends IzPanel implements ActionListener
             if (event.getSource() == this.autodetectButton)
             {
                 if (!autodetect())
-                    showMessageDialog(parent, "UserInputPanel.search.autodetect.failed.message", 
-                            "UserInputPanel.search.autodetect.failed.caption", 
+                {
+                    showMessageDialog(parent, "UserInputPanel.search.autodetect.failed.message",
+                            "UserInputPanel.search.autodetect.failed.caption",
                             JOptionPane.WARNING_MESSAGE);
+                }
             }
             else if (event.getSource() == this.browseButton)
             {
                 JFileChooser chooser = new JFileChooser();
 
                 if (this.resultType != TYPE_FILE)
+                {
                     chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                }
 
                 int result = chooser.showOpenDialog(this.parent);
 
@@ -3454,8 +3618,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     // use any given directory directly
                     if (this.resultType != TYPE_FILE && !this.pathMatches(f.getAbsolutePath()))
                     {
-                        showMessageDialog(parent, "UserInputPanel.search.wrongselection.message", 
-                                "UserInputPanel.search.wrongselection.caption", 
+                        showMessageDialog(parent, "UserInputPanel.search.wrongselection.message",
+                                "UserInputPanel.search.wrongselection.caption",
                                 JOptionPane.WARNING_MESSAGE);
 
                     }
@@ -3469,17 +3633,20 @@ public class UserInputPanel extends IzPanel implements ActionListener
         /*--------------------------------------------------------------------------*/
         /**
          * Return the result of the search according to result type.
-         * 
+         * <p/>
          * Sometimes, the whole path of the file is wanted, sometimes only the directory where the
          * file is in, sometimes the parent directory.
-         * 
+         *
          * @return null on error
          */
         /*--------------------------------------------------------------------------*/
         public String getResult()
         {
             String item = (String) this.pathComboBox.getSelectedItem();
-            if (item != null) item = item.trim();
+            if (item != null)
+            {
+                item = item.trim();
+            }
             String path = item;
 
             File f = new File(item);
@@ -3530,7 +3697,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
             XMLElement variable = variables.elementAt(i);
             String vname = variable.getAttribute(ATTRIBUTE_VARIABLE_NAME);
             String vvalue = variable.getAttribute(ATTRIBUTE_VARIABLE_VALUE);
-            
+
             if (vvalue == null)
             {
                 // try to read value element
@@ -3540,7 +3707,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     vvalue = value.getContent();
                 }
             }
-            
+
             String conditionid = variable.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
             if (conditionid != null)
             {
@@ -3571,31 +3738,33 @@ public class UserInputPanel extends IzPanel implements ActionListener
                     idata.setVariable(vname, vvalue);
 
                     // for save this variable to be used later by Automation Helper
-                    entries.add(new TextValuePair(vname, vvalue));                       
+                    entries.add(new TextValuePair(vname, vvalue));
                 }
             }
         }
     }
-    
+
     // Repaint all controls and validate them agains the current variables
-    public void actionPerformed(ActionEvent e) {
-       validating = false;
-       readInput();
-       panelActivate();
-       validating = true;
-   }
+    public void actionPerformed(ActionEvent e)
+    {
+        validating = false;
+        readInput();
+        panelActivate();
+        validating = true;
+    }
 
     /*--------------------------------------------------------------------------*/
     /**
      * Show localized message dialog basing on given parameters.
-     * 
+     *
      * @param parentFrame The parent frame.
-     * @param message The message to print out in dialog box.
-     * @param caption The caption of dialog box.
+     * @param message     The message to print out in dialog box.
+     * @param caption     The caption of dialog box.
      * @param messageType The message type (JOptionPane.*_MESSAGE)
      */
     /*--------------------------------------------------------------------------*/
-    private void showMessageDialog(InstallerFrame parentFrame, String message, String caption, int messageType) {
+    private void showMessageDialog(InstallerFrame parentFrame, String message, String caption, int messageType)
+    {
         String localizedMessage = parentFrame.langpack.getString(message);
         if ((localizedMessage == null) || (localizedMessage.trim().length() == 0))
         {
@@ -3607,44 +3776,50 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     /**
      * Show localized warning message dialog basing on given parameters.
-     * 
+     *
      * @param parentFrame parent frame.
-     * @param message the message to print out in dialog box.
+     * @param message     the message to print out in dialog box.
      */
     /*--------------------------------------------------------------------------*/
-    private void showWarningMessageDialog(InstallerFrame parentFrame, String message) {
-        showMessageDialog(parentFrame, message, 
-                parentFrame.langpack.getString("UserInputPanel.error.caption"), 
-                JOptionPane.WARNING_MESSAGE);    
+    private void showWarningMessageDialog(InstallerFrame parentFrame, String message)
+    {
+        showMessageDialog(parentFrame, message,
+                parentFrame.langpack.getString("UserInputPanel.error.caption"),
+                JOptionPane.WARNING_MESSAGE);
     }
 
 } // public class UserInputPanel
 
 /*---------------------------------------------------------------------------*/
-class UserInputFileFilter extends FileFilter{
+class UserInputFileFilter extends FileFilter
+{
     String fileext = "";
     String description = "";
-    
-    public void setFileExt(String fileext){                    
-        this.fileext = fileext;                    
+
+    public void setFileExt(String fileext)
+    {
+        this.fileext = fileext;
     }
-    
-    public void setFileExtDesc(String desc){
+
+    public void setFileExtDesc(String desc)
+    {
         this.description = desc;
     }
-   
+
     public boolean accept(File pathname)
     {
-        if (pathname.isDirectory()){
+        if (pathname.isDirectory())
+        {
             return true;
         }
-        else {
+        else
+        {
             return pathname.getAbsolutePath().endsWith(this.fileext);
-        }                    
+        }
     }
 
     public String getDescription()
     {
         return this.description;
-    }                  
+    }
 }

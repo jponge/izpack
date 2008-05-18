@@ -21,32 +21,16 @@
 
 package com.izforge.izpack.installer;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.io.InputStream;
-import java.net.Authenticator;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.InetAddress;
-import java.net.PasswordAuthentication;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.Locale;
-
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 /**
  * Dialogs for password authentication and firewall specification, when needed, during web
  * installation.
- * 
+ *
  * @author Chadwick McHenry
  * @author <a href="vralev@redhat.com">Vladimir Ralev</a>
  * @version 1.0
@@ -54,313 +38,331 @@ import javax.swing.UIManager;
 public class WebAccessor
 {
 
-   private Thread openerThread = null;
+    private Thread openerThread = null;
 
-   private InputStream iStream = null;
+    private InputStream iStream = null;
 
-   private Exception exception = null;
+    private Exception exception = null;
 
-   private Object soloCancelOption = null;
+    private Object soloCancelOption = null;
 
-   private Component parent = null;
+    private Component parent = null;
 
-   private JDialog dialog = null;
+    private JDialog dialog = null;
 
-   private boolean tryProxy = false;
+    private boolean tryProxy = false;
 
-   private JPanel passwordPanel = null;
+    private JPanel passwordPanel = null;
 
-   private JLabel promptLabel;
+    private JLabel promptLabel;
 
-   private JTextField nameField;
+    private JTextField nameField;
 
-   private JPasswordField passField;
+    private JPasswordField passField;
 
-   private JPanel proxyPanel = null;
+    private JPanel proxyPanel = null;
 
-   private JLabel errorLabel;
+    private JLabel errorLabel;
 
-   private JTextField hostField;
+    private JTextField hostField;
 
-   private JTextField portField;
+    private JTextField portField;
 
-   private String url;
+    private String url;
 
-   private int contentLength = -1;
+    private int contentLength = -1;
 
-   /**
-    * Not yet Implemented: placeholder for headless installs.
-    * 
-    * @throws UnsupportedOperationException
-    */
-   public WebAccessor()
-   {
-      // the class should probably be rearranged to do this.
-      throw new UnsupportedOperationException();
-   }
+    /**
+     * Not yet Implemented: placeholder for headless installs.
+     *
+     * @throws UnsupportedOperationException
+     */
+    public WebAccessor()
+    {
+        // the class should probably be rearranged to do this.
+        throw new UnsupportedOperationException();
+    }
 
-   /**
-    * Create a WebAccessor that prompts for proxies and passwords using a JDialog.
-    * 
-    * @param parent determines the frame in which the dialog is displayed; if the parentComponent
-    * has no Frame, a default Frame is used
-    */
-   public WebAccessor(Component parent)
-   {
-      this.parent = parent;
-      Locale l = null;
-      if (parent != null)
-         parent.getLocale();
-      soloCancelOption = UIManager.get("OptionPane.cancelButtonText", l);// TODO:
-      // i18n?
-      Authenticator.setDefault(new MyDialogAuthenticator());
-   }
+    /**
+     * Create a WebAccessor that prompts for proxies and passwords using a JDialog.
+     *
+     * @param parent determines the frame in which the dialog is displayed; if the parentComponent
+     *               has no Frame, a default Frame is used
+     */
+    public WebAccessor(Component parent)
+    {
+        this.parent = parent;
+        Locale l = null;
+        if (parent != null)
+        {
+            parent.getLocale();
+        }
+        soloCancelOption = UIManager.get("OptionPane.cancelButtonText", l);// TODO:
+        // i18n?
+        Authenticator.setDefault(new MyDialogAuthenticator());
+    }
 
-   /**
-    * Opens a URL connection and returns it's InputStream for the specified URL.
-    * 
-    * @param url the url to open the stream to.
-    * @return an input stream ready to read, or null on failure
-    */
-   public InputStream openInputStream(URL url)
-   {
-      setUrl(url.toExternalForm());
-      OPEN_URL : while (true)
-      {
-         startOpening(url); // this starts a thread
+    /**
+     * Opens a URL connection and returns it's InputStream for the specified URL.
+     *
+     * @param url the url to open the stream to.
+     * @return an input stream ready to read, or null on failure
+     */
+    public InputStream openInputStream(URL url)
+    {
+        setUrl(url.toExternalForm());
+        OPEN_URL:
+        while (true)
+        {
+            startOpening(url); // this starts a thread
 
-         Thread.yield();
+            Thread.yield();
 
-         
-         // Wait a bit to see if the stream comes up
-         int retry = 28;
-         while (exception == null && iStream == null && retry > 0)
-            try
+            // Wait a bit to see if the stream comes up
+            int retry = 28;
+            while (exception == null && iStream == null && retry > 0)
             {
-               Thread.sleep(200);
-               retry--;
+                try
+                {
+                    Thread.sleep(200);
+                    retry--;
+                }
+                catch (Exception e)
+                {
+                    System.out.println("In openInputStream: " + e);
+                }
             }
-            catch (Exception e)
+
+            /* Try to find a proxy if that failed */
+
+            // success!
+            if (iStream != null)
             {
-               System.out.println("In openInputStream: " + e);
+                break;
             }
 
-         /* Try to find a proxy if that failed */
-
-         // success!
-         if (iStream != null)
-            break;
-
-         // an exception we don't expect setting a proxy to fix
-         if (!tryProxy)
-            break;
-
-         // else (exception != null)
-         // show proxy dialog until valid values or cancel
-         JPanel panel = getProxyPanel();
-         errorLabel.setText("Unable to connect: " + exception.getMessage());
-         while (true)
-         {
-            int result = JOptionPane.showConfirmDialog(parent, panel, "Proxy Configuration",
-                  JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (result != JOptionPane.OK_OPTION) // canceled
-               break OPEN_URL;
-
-            String host = null;
-            String port = null;
-
-            try
+            // an exception we don't expect setting a proxy to fix
+            if (!tryProxy)
             {
-               InetAddress addr = InetAddress.getByName(hostField.getText());
-               host = addr.getHostName();
+                break;
             }
-            catch (Exception x)
+
+            // else (exception != null)
+            // show proxy dialog until valid values or cancel
+            JPanel panel = getProxyPanel();
+            errorLabel.setText("Unable to connect: " + exception.getMessage());
+            while (true)
             {
-               errorLabel.setText("Unable to resolve Host");
-               Toolkit.getDefaultToolkit().beep();
-            }
+                int result = JOptionPane.showConfirmDialog(parent, panel, "Proxy Configuration",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (result != JOptionPane.OK_OPTION) // canceled
+                {
+                    break OPEN_URL;
+                }
 
-            try
+                String host = null;
+                String port = null;
+
+                try
+                {
+                    InetAddress addr = InetAddress.getByName(hostField.getText());
+                    host = addr.getHostName();
+                }
+                catch (Exception x)
+                {
+                    errorLabel.setText("Unable to resolve Host");
+                    Toolkit.getDefaultToolkit().beep();
+                }
+
+                try
+                {
+                    if (host != null)
+                    {
+                        port = Integer.valueOf(portField.getText()).toString();
+                    }
+                }
+                catch (NumberFormatException x)
+                {
+                    errorLabel.setText("Invalid Port");
+                    Toolkit.getDefaultToolkit().beep();
+                }
+
+                if (host != null && port != null)
+                {
+                    // System.err.println ("Setting http proxy: "+ host
+                    // +":"+ port);
+                    System.getProperties().put("proxySet", "true");
+                    System.getProperties().put("proxyHost", host);
+                    System.getProperties().put("proxyPort", port);
+                    break;
+                }
+            }
+        }
+
+        if (iStream == null)
+        {
+            openerThread.interrupt();
+        }
+
+        return iStream;
+    }
+
+    private void startOpening(final URL url)
+    {
+        final WebAccessor wa = this;
+        openerThread = new Thread()
+        {
+            public void run()
             {
-               if (host != null)
-                  port = Integer.valueOf(portField.getText()).toString();
+                iStream = null;
+                try
+                {
+                    tryProxy = false;
+
+                    URLConnection connection = url.openConnection();
+
+                    if (connection instanceof HttpURLConnection)
+                    {
+                        HttpURLConnection htc = (HttpURLConnection) connection;
+                        contentLength = htc.getContentLength();
+                    }
+
+                    //InputStream iii = echoSocket.getInputStream();
+                    InputStream i = connection.getInputStream();
+                    iStream = new LoggedInputStream(i, wa); // just to make
+
+                }
+                catch (ConnectException x)
+                { // could be an incorrect proxy
+                    tryProxy = true;
+                    exception = x;
+
+                }
+                catch (Exception x)
+                {
+                    // Exceptions that get here are considered cancels or
+                    // missing
+                    // pages, eg 401 if user finally cancels auth
+                    exception = x;
+
+                }
+                finally
+                {
+                    // if dialog is in use, allow it to become visible /before/
+                    // closing
+                    // it, else on /fast/ connectinos, it may open later and
+                    // hang!
+                    if (dialog != null)
+                    {
+                        Thread.yield();
+                        dialog.setVisible(false);
+                    }
+                }
             }
-            catch (NumberFormatException x)
+        };
+        openerThread.start();
+    }
+
+    /**
+     * Only to be called after an initial error has indicated a connection problem
+     */
+    private JPanel getProxyPanel()
+    {
+        if (proxyPanel == null)
+        {
+            proxyPanel = new JPanel(new BorderLayout(5, 5));
+
+            errorLabel = new JLabel();
+
+            JPanel fields = new JPanel(new GridLayout(2, 2));
+            String h = (String) System.getProperties().get("proxyHost");
+            String p = (String) System.getProperties().get("proxyPort");
+            hostField = new JTextField(h != null ? h : "");
+            portField = new JTextField(p != null ? p : "");
+            JLabel host = new JLabel("Host: "); // TODO: i18n
+            JLabel port = new JLabel("Port: "); // TODO: i18n
+            fields.add(host);
+            fields.add(hostField);
+            fields.add(port);
+            fields.add(portField);
+
+            JLabel exampleLabel = new JLabel("e.g. host=\"gatekeeper.example.com\" port=\"80\"");
+
+            proxyPanel.add(errorLabel, BorderLayout.NORTH);
+            proxyPanel.add(fields, BorderLayout.CENTER);
+            proxyPanel.add(exampleLabel, BorderLayout.SOUTH);
+        }
+        proxyPanel.validate();
+
+        return proxyPanel;
+    }
+
+    private JPanel getPasswordPanel()
+    {
+        if (passwordPanel == null)
+        {
+            passwordPanel = new JPanel(new BorderLayout(5, 5));
+
+            promptLabel = new JLabel();
+
+            JPanel fields = new JPanel(new GridLayout(2, 2));
+            nameField = new JTextField();
+            passField = new JPasswordField();
+            JLabel name = new JLabel("Name: "); // TODO: i18n
+            JLabel pass = new JLabel("Password: "); // TODO: i18n
+            fields.add(name);
+            fields.add(nameField);
+            fields.add(pass);
+            fields.add(passField);
+
+            passwordPanel.add(promptLabel, BorderLayout.NORTH);
+            passwordPanel.add(fields, BorderLayout.CENTER);
+        }
+        passField.setText("");
+
+        return passwordPanel;
+    }
+
+    /**
+     * Authenticates via dialog when needed.
+     */
+    private class MyDialogAuthenticator extends Authenticator
+    {
+
+        public PasswordAuthentication getPasswordAuthentication()
+        {
+            // TODO: i18n
+            JPanel p = getPasswordPanel();
+            String prompt = getRequestingPrompt();
+            InetAddress addr = getRequestingSite();
+            if (addr != null)
             {
-               errorLabel.setText("Invalid Port");
-               Toolkit.getDefaultToolkit().beep();
+                prompt += " (" + addr.getHostName() + ")";
             }
-
-            if (host != null && port != null)
+            promptLabel.setText(prompt);
+            int result = JOptionPane.showConfirmDialog(parent, p, "Enter Password", JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            if (result != JOptionPane.OK_OPTION)
             {
-               // System.err.println ("Setting http proxy: "+ host
-               // +":"+ port);
-               System.getProperties().put("proxySet", "true");
-               System.getProperties().put("proxyHost", host);
-               System.getProperties().put("proxyPort", port);
-               break;
+                return null;
             }
-         }
-      }
 
-      if (iStream == null)
-         openerThread.interrupt();
+            return new PasswordAuthentication(nameField.getText(), passField.getPassword());
+        }
+    }
 
-      return iStream;
-   }
+    public String getUrl()
+    {
+        return url;
+    }
 
-   private void startOpening(final URL url)
-   {
-      final WebAccessor wa = this;
-      openerThread = new Thread()
-      {
-         public void run()
-         {
-            iStream = null;
-            try
-            {
-               tryProxy = false;
+    public void setUrl(String url)
+    {
+        this.url = url;
+    }
 
-               URLConnection connection = url.openConnection();
-
-               if (connection instanceof HttpURLConnection)
-               {
-                  HttpURLConnection htc = (HttpURLConnection) connection;
-                  contentLength = htc.getContentLength();
-               }
-
-               //InputStream iii = echoSocket.getInputStream();
-               InputStream i = connection.getInputStream();
-               iStream = new LoggedInputStream(i, wa); // just to make
-
-            }
-            catch (ConnectException x)
-            { // could be an incorrect proxy
-               tryProxy = true;
-               exception = x;
-
-            }
-            catch (Exception x)
-            {
-               // Exceptions that get here are considered cancels or
-               // missing
-               // pages, eg 401 if user finally cancels auth
-               exception = x;
-
-            }
-            finally
-            {
-               // if dialog is in use, allow it to become visible /before/
-               // closing
-               // it, else on /fast/ connectinos, it may open later and
-               // hang!
-               if (dialog != null)
-               {
-                  Thread.yield();
-                  dialog.setVisible(false);
-               }
-            }
-         }
-      };
-      openerThread.start();
-   }
-
-   /**
-    * Only to be called after an initial error has indicated a connection problem
-    */
-   private JPanel getProxyPanel()
-   {
-      if (proxyPanel == null)
-      {
-         proxyPanel = new JPanel(new BorderLayout(5, 5));
-
-         errorLabel = new JLabel();
-
-         JPanel fields = new JPanel(new GridLayout(2, 2));
-         String h = (String) System.getProperties().get("proxyHost");
-         String p = (String) System.getProperties().get("proxyPort");
-         hostField = new JTextField(h != null ? h : "");
-         portField = new JTextField(p != null ? p : "");
-         JLabel host = new JLabel("Host: "); // TODO: i18n
-         JLabel port = new JLabel("Port: "); // TODO: i18n
-         fields.add(host);
-         fields.add(hostField);
-         fields.add(port);
-         fields.add(portField);
-
-         JLabel exampleLabel = new JLabel("e.g. host=\"gatekeeper.example.com\" port=\"80\"");
-
-         proxyPanel.add(errorLabel, BorderLayout.NORTH);
-         proxyPanel.add(fields, BorderLayout.CENTER);
-         proxyPanel.add(exampleLabel, BorderLayout.SOUTH);
-      }
-      proxyPanel.validate();
-
-      return proxyPanel;
-   }
-
-   private JPanel getPasswordPanel()
-   {
-      if (passwordPanel == null)
-      {
-         passwordPanel = new JPanel(new BorderLayout(5, 5));
-
-         promptLabel = new JLabel();
-
-         JPanel fields = new JPanel(new GridLayout(2, 2));
-         nameField = new JTextField();
-         passField = new JPasswordField();
-         JLabel name = new JLabel("Name: "); // TODO: i18n
-         JLabel pass = new JLabel("Password: "); // TODO: i18n
-         fields.add(name);
-         fields.add(nameField);
-         fields.add(pass);
-         fields.add(passField);
-
-         passwordPanel.add(promptLabel, BorderLayout.NORTH);
-         passwordPanel.add(fields, BorderLayout.CENTER);
-      }
-      passField.setText("");
-
-      return passwordPanel;
-   }
-
-   /**
-    * Authenticates via dialog when needed.
-    */
-   private class MyDialogAuthenticator extends Authenticator
-   {
-
-      public PasswordAuthentication getPasswordAuthentication()
-      {
-         // TODO: i18n
-         JPanel p = getPasswordPanel();
-         String prompt = getRequestingPrompt();
-         InetAddress addr = getRequestingSite();
-         if (addr != null)
-            prompt += " (" + addr.getHostName() + ")";
-         promptLabel.setText(prompt);
-         int result = JOptionPane.showConfirmDialog(parent, p, "Enter Password", JOptionPane.OK_CANCEL_OPTION,
-               JOptionPane.QUESTION_MESSAGE);
-         if (result != JOptionPane.OK_OPTION)
-            return null;
-
-         return new PasswordAuthentication(nameField.getText(), passField.getPassword());
-      }
-   }
-
-   public String getUrl()
-   {
-      return url;
-   }
-
-   public void setUrl(String url)
-   {
-      this.url = url;
-   }
-
-   public int getContentLength()
-   {
-      return contentLength;
-   }
+    public int getContentLength()
+    {
+        return contentLength;
+    }
 }

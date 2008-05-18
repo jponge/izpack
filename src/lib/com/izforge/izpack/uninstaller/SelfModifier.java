@@ -21,17 +21,10 @@
 
 package com.izforge.izpack.uninstaller;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.RandomAccessFile;
+import com.izforge.izpack.installer.MultiVolumeInstaller;
+import com.izforge.izpack.util.OsVersion;
+
+import java.io.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URI;
@@ -41,37 +34,34 @@ import java.text.SimpleDateFormat;
 import java.text.StringCharacterIterator;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.jar.JarFile;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
-
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.installer.MultiVolumeInstaller;
 
 /**
  * Allows an application to modify the jar file from which it came, including outright deletion. The
  * jar file of an app is usually locked when java is run so this is normally not possible.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * Create a SelfModifier with a target method, then invoke the SelfModifier with arguments to be
  * passed to the target method. The jar file containing the target method's class (obtained by
  * reflection) will be extracted to a temporary directory, and a new java process will be spawned to
  * invoke the target method. The original jar file may now be modified.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * If the constructor or invoke() methods fail, it is generally because secondary java processes
  * could not be started.
- * 
+ * <p/>
  * <b>Requirements</b>
  * <ul>
  * <li>The target method, and all it's required classes must be in a jar file.
  * <li>The Self Modifier, and its inner classes must also be in the jar file.
  * </ul>
- * 
+ * <p/>
  * There are three system processes (or "phases") involved, the first invoked by the user, the
  * second and third by the SelfModifier.
- * <p>
- * 
+ * <p/>
+ * <p/>
  * <b>Phase 1:</b>
  * <ol>
  * <li>Program is launched, SelfModifier is created, invoke(String[]) is called
@@ -82,7 +72,7 @@ import com.izforge.izpack.installer.MultiVolumeInstaller;
  * href="#selfmodsysprops">SelfModifier system properties</a> set.
  * <li>Immidiately exit so the system unlocks the jar file
  * </ol>
- * 
+ * <p/>
  * <b>Phase 2:</b>
  * <ol>
  * <li>Initializes from system properties.
@@ -90,7 +80,7 @@ import com.izforge.izpack.installer.MultiVolumeInstaller;
  * <li>Wait for phase 3 to die
  * <li>Delete the temporary sandbox
  * </ol>
- * 
+ * <p/>
  * <b>Phase 3:</b>
  * <ol>
  * <li>Initializes from system properties.
@@ -99,7 +89,7 @@ import com.izforge.izpack.installer.MultiVolumeInstaller;
  * <li>The target method is expected to call exit(), or to not start any looping threads (e.g. AWT
  * thread). In other words, the target is the new "main" method.
  * </ol>
- * 
+ * <p/>
  * <a name="selfmodsysprops"><b>SelfModifier system properties</b></a> used to pass information
  * between processes. <table border="1">
  * <tr>
@@ -127,47 +117,71 @@ import com.izforge.izpack.installer.MultiVolumeInstaller;
  * <td>self.mod.base
  * <td>phase of operation to run</tr>
  * </table>
- * 
+ *
  * @author Chadwick McHenry
  * @version 1.0
  */
 public class SelfModifier
 {
 
-    /** System property name of base for log and sandbox of secondary processes. */
+    /**
+     * System property name of base for log and sandbox of secondary processes.
+     */
     public static final String BASE_KEY = "self.mod.base";
 
-    /** System property name of original jar file containing application. */
+    /**
+     * System property name of original jar file containing application.
+     */
     public static final String JAR_KEY = "self.mod.jar";
 
-    /** System property name of class declaring target method. */
+    /**
+     * System property name of class declaring target method.
+     */
     public static final String CLASS_KEY = "self.mod.class";
 
-    /** System property name of target method to invoke in secondary process. */
+    /**
+     * System property name of target method to invoke in secondary process.
+     */
     public static final String METHOD_KEY = "self.mod.method";
 
-    /** System property name of phase (1, 2, or 3) indicator. */
+    /**
+     * System property name of phase (1, 2, or 3) indicator.
+     */
     public static final String PHASE_KEY = "self.mod.phase";
 
-    /** Base prefix name for sandbox and log, used only in phase 1. */
+    /**
+     * Base prefix name for sandbox and log, used only in phase 1.
+     */
     private String prefix = "izpack";
 
-    /** Target method to be invoked in sandbox. */
+    /**
+     * Target method to be invoked in sandbox.
+     */
     private Method method = null;
 
-    /** Log for phase 2 and 3, because we can't capture the stdio from them. */
+    /**
+     * Log for phase 2 and 3, because we can't capture the stdio from them.
+     */
     private File logFile = null;
 
-    /** Directory which we extract too, invoke from, and finally delete. */
+    /**
+     * Directory which we extract too, invoke from, and finally delete.
+     */
     private File sandbox = null;
 
-    /** Original jar file program was launched from. */
+    /**
+     * Original jar file program was launched from.
+     */
     private File jarFile = null;
 
-    /** Current phase of execution: 1, 2, or 3. */
+    /**
+     * Current phase of execution: 1, 2, or 3.
+     */
     private int phase = 0;
 
-    /** For logging time. */
+    /**
+     * For logging time.
+     */
     private SimpleDateFormat isoPoint = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     private Date date = new Date();
@@ -209,10 +223,15 @@ public class SelfModifier
 
             // phase 2: invoke a process for phase 3, wait, and clean up
             if (selfModifier.phase == 2)
+            {
                 selfModifier.invoke2(args);
+            }
 
             // phase 3: invoke method and die
-            else if (selfModifier.phase == 3) selfModifier.invoke3(args);
+            else if (selfModifier.phase == 3)
+            {
+                selfModifier.invoke3(args);
+            }
         }
         catch (IOException ioe)
         {
@@ -224,8 +243,8 @@ public class SelfModifier
 
     /**
      * Internal constructor where target class and method are obtained from system properties.
-     * 
-     * @throws IOException for errors getting to the sandbox.
+     *
+     * @throws IOException       for errors getting to the sandbox.
      * @throws SecurityException if access to the target method is denied
      */
     private SelfModifier() throws IOException
@@ -243,7 +262,7 @@ public class SelfModifier
         try
         {
             Class clazz = Class.forName(cName);
-            Method method = clazz.getMethod(tName, new Class[] { String[].class});
+            Method method = clazz.getMethod(tName, new Class[]{String[].class});
 
             initMethod(method);
         }
@@ -260,21 +279,20 @@ public class SelfModifier
     /**
      * Creates a SelfModifier which will invoke the target method in a separate process from which
      * it may modify it's own jar file.
-     * 
+     * <p/>
      * The target method must be public, static, and take a single array of strings as its only
      * parameter. The class which declares the method must also be public. Reflection is used to
      * ensure this.
-     * 
+     *
      * @param method a public, static method that accepts a String array as it's only parameter. Any
-     * return value is ignored.
-     * 
-     * @throws NullPointerException if <code>method</code> is null
+     *               return value is ignored.
+     * @throws NullPointerException     if <code>method</code> is null
      * @throws IllegalArgumentException if <code>method</code> is not public, static, and take a
-     * String array as it's only argument, or of it's declaring class is not public.
-     * @throws IllegalStateException if process was not invoked from a jar file, or an IOExceptioin
-     * occured while accessing it
-     * @throws IOException if java is unable to be executed as a separte process
-     * @throws SecurityException if access to the method, or creation of a subprocess is denied
+     *                                  String array as it's only argument, or of it's declaring class is not public.
+     * @throws IllegalStateException    if process was not invoked from a jar file, or an IOExceptioin
+     *                                  occured while accessing it
+     * @throws IOException              if java is unable to be executed as a separte process
+     * @throws SecurityException        if access to the method, or creation of a subprocess is denied
      */
     public SelfModifier(Method method) throws IOException
     {
@@ -285,37 +303,43 @@ public class SelfModifier
 
     /**
      * Check the method for the required properties (public, static, params:(String[])).
-     * 
-     * @throws NullPointerException if <code>method</code> is null
+     *
+     * @throws NullPointerException     if <code>method</code> is null
      * @throws IllegalArgumentException if <code>method</code> is not public, static, and take a
-     * String array as it's only argument, or of it's declaring class is not public.
-     * @throws SecurityException if access to the method is denied
+     *                                  String array as it's only argument, or of it's declaring class is not public.
+     * @throws SecurityException        if access to the method is denied
      */
     private void initMethod(Method method)
     {
         int mod = method.getModifiers();
         if ((mod & Modifier.PUBLIC) == 0 || (mod & Modifier.STATIC) == 0)
+        {
             throw new IllegalArgumentException("Method not public and static");
+        }
 
         Class[] params = method.getParameterTypes();
         if (params.length != 1 || !params[0].isArray()
                 || !"java.lang.String".equals(params[0].getComponentType().getName()))
+        {
             throw new IllegalArgumentException("Method must accept String array");
+        }
 
         Class clazz = method.getDeclaringClass();
         mod = clazz.getModifiers();
         if ((mod & Modifier.PUBLIC) == 0 || (mod & Modifier.INTERFACE) != 0)
+        {
             throw new IllegalArgumentException("Method must be in a public class");
+        }
 
         this.method = method;
     }
 
     /**
      * This call ensures that java can be exec'd in a separate process.
-     * 
-     * @throws IOException if an I/O error occurs, indicating java is unable to be exec'd
+     *
+     * @throws IOException       if an I/O error occurs, indicating java is unable to be exec'd
      * @throws SecurityException if a security manager exists and doesn't allow creation of a
-     * subprocess
+     *                           subprocess
      */
     private void initJavaExec() throws IOException
     {
@@ -346,17 +370,16 @@ public class SelfModifier
      * This method does not normally return. After spawning the secondary process, the current
      * process must die before the jar file is unlocked, therefore calling this method is akin to
      * calling {@link System#exit(int)}.
-     * <p>
-     * 
+     * <p/>
+     * <p/>
      * The contents of the current jar file are extracted copied to a 'sandbox' directory from which
      * the method is invoked. The path to the original jar file is placed in the system property
      * {@link #JAR_KEY}.
-     * <p>
-     * 
+     * <p/>
+     *
      * @param args arguments to pass to the target method. May be empty or null to indicate no
-     * arguments.
-     * 
-     * @throws IOException for lots of things
+     *             arguments.
+     * @throws IOException           for lots of things
      * @throws IllegalStateException if method's class was not loaded from a jar
      */
     public void invoke(String[] args) throws IOException
@@ -369,22 +392,34 @@ public class SelfModifier
             sandbox = new File(f.substring(0, f.length() - 4) + ".d");
 
             // check if the similarly named directory is free
-            if (!sandbox.exists()) break;
+            if (!sandbox.exists())
+            {
+                break;
+            }
 
             logFile.delete();
         }
-        if (!sandbox.mkdir()) throw new RuntimeException("Failed to create temp dir: " + sandbox);
+        if (!sandbox.mkdir())
+        {
+            throw new RuntimeException("Failed to create temp dir: " + sandbox);
+        }
 
         sandbox = sandbox.getCanonicalFile();
         logFile = logFile.getCanonicalFile();
 
         jarFile = findJarFile((Class<MultiVolumeInstaller>) method.getDeclaringClass()).getCanonicalFile();
-        if (jarFile == null) throw new IllegalStateException("SelfModifier must be in a jar file");
+        if (jarFile == null)
+        {
+            throw new IllegalStateException("SelfModifier must be in a jar file");
+        }
         log("JarFile: " + jarFile);
 
         extractJarFile();
 
-        if (args == null) args = new String[0];
+        if (args == null)
+        {
+            args = new String[0];
+        }
         spawn(args, 2);
 
         // finally, if all went well, the invoking process must exit
@@ -394,7 +429,7 @@ public class SelfModifier
 
     /**
      * Run a new jvm with all the system parameters needed for phases 2 and 3.
-     * 
+     *
      * @throws IOException if there is an error getting the cononical name of a path
      */
     private Process spawn(String[] args, int nextPhase) throws IOException
@@ -404,7 +439,7 @@ public class SelfModifier
 
         // invoke from tmpdir, passing target method arguments as args, and
         // SelfModifier parameters as sustem properties
-        String[] javaCmd = new String[] { javaCommand(), "-classpath", sandbox.getAbsolutePath(),
+        String[] javaCmd = new String[]{javaCommand(), "-classpath", sandbox.getAbsolutePath(),
                 "-D" + BASE_KEY + "=" + base, "-D" + JAR_KEY + "=" + jarFile.getPath(),
                 "-D" + CLASS_KEY + "=" + method.getDeclaringClass().getName(),
                 "-D" + METHOD_KEY + "=" + method.getName(), "-D" + PHASE_KEY + "=" + nextPhase,
@@ -425,14 +460,18 @@ public class SelfModifier
         // Just invoke it and let it go, the exception will be caught above
         // Won't compile on < jdk1.3, but will run on jre1.2
         if (JAVA_SPECIFICATION_VERSION < 1.3)
+        {
             return Runtime.getRuntime().exec(entireCmd, null);
+        }
         else
+        {
             return Runtime.getRuntime().exec(entireCmd, null, null); // workDir);
+        }
     }
 
     /**
      * Retrieve the jar file the specified class was loaded from.
-     * 
+     *
      * @return null if file was not loaded from a jar file
      * @throws SecurityException if access to is denied by SecurityManager
      */
@@ -441,7 +480,10 @@ public class SelfModifier
         String resource = clazz.getName().replace('.', '/') + ".class";
 
         URL url = ClassLoader.getSystemResource(resource);
-        if (!"jar".equals(url.getProtocol())) return null;
+        if (!"jar".equals(url.getProtocol()))
+        {
+            return null;
+        }
 
         String path = url.getFile();
         // starts at "file:..." (use getPath() as of 1.3)
@@ -455,9 +497,13 @@ public class SelfModifier
         // properly
         // deal with escaping back and forth, but didn't exist until 1.4
         if (JAVA_SPECIFICATION_VERSION < 1.4)
+        {
             file = new File(fromURI(path));
+        }
         else
+        {
             file = new File(URI.create(path));
+        }
 
         return file;
     }
@@ -481,22 +527,33 @@ public class SelfModifier
             while (entries.hasMoreElements())
             {
                 ZipEntry entry = entries.nextElement();
-                if (entry.isDirectory()) continue;
+                if (entry.isDirectory())
+                {
+                    continue;
+                }
 
                 String pathname = entry.getName();
-                if (MANIFEST.equals(pathname.toUpperCase())) continue;
+                if (MANIFEST.equals(pathname.toUpperCase()))
+                {
+                    continue;
+                }
 
                 in = jar.getInputStream(entry);
 
                 File outFile = new File(sandbox, pathname);
                 File parent = outFile.getParentFile();
-                if (parent != null && !parent.exists()) parent.mkdirs();
+                if (parent != null && !parent.exists())
+                {
+                    parent.mkdirs();
+                }
 
                 out = new BufferedOutputStream(new FileOutputStream(outFile));
 
                 int n;
                 while ((n = in.read(buf, 0, buf.length)) > 0)
+                {
                     out.write(buf, 0, n);
+                }
 
                 out.close();
                 extracted++;
@@ -513,7 +570,8 @@ public class SelfModifier
                 jar.close();
             }
             catch (IOException ioe)
-            {}
+            {
+            }
             if (out != null)
             {
                 try
@@ -521,7 +579,8 @@ public class SelfModifier
                     out.close();
                 }
                 catch (IOException ioe)
-                {}
+                {
+                }
             }
             if (in != null)
             {
@@ -530,7 +589,8 @@ public class SelfModifier
                     in.close();
                 }
                 catch (IOException ioe)
-                {}
+                {
+                }
             }
         }
     }
@@ -564,7 +624,8 @@ public class SelfModifier
                 Thread.sleep(1000);
             }
             catch (Exception x)
-            {}
+            {
+            }
 
             // spawn phase 3, capture its stdio and wait for it to exit
             Process p = spawn(args, 3);
@@ -593,7 +654,9 @@ public class SelfModifier
         log("Phase 3 return value = " + retVal);
     }
 
-    /** Recursively delete a file structure. */
+    /**
+     * Recursively delete a file structure.
+     */
     public static boolean deleteTree(File file)
     {
         if (file.isDirectory())
@@ -624,7 +687,7 @@ public class SelfModifier
             errlog("Invoking method: " + method.getDeclaringClass().getName() + "."
                     + method.getName() + "(String[] args)");
 
-            method.invoke(null, new Object[] { args});
+            method.invoke(null, new Object[]{args});
         }
         catch (Throwable t)
         {
@@ -640,7 +703,8 @@ public class SelfModifier
         // now let the method call exit...
     }
 
-    /***********************************************************************************************
+    /**
+     * ********************************************************************************************
      * --------------------------------------------------------------------- Logging
      * ---------------------------------------------------------------------
      */
@@ -657,7 +721,10 @@ public class SelfModifier
     {
         try
         {
-            if (log == null) log = new PrintStream(new FileOutputStream(logFile.toString(), true));
+            if (log == null)
+            {
+                log = new PrintStream(new FileOutputStream(logFile.toString(), true));
+            }
         }
         catch (IOException x)
         {
@@ -680,7 +747,9 @@ public class SelfModifier
     private void log(String msg)
     {
         if (checkLog() != null)
+        {
             log.println(isoPoint.format(date) + " Phase " + phase + ": " + msg);
+        }
     }
 
     public static class StreamProxy extends Thread
@@ -709,16 +778,25 @@ public class SelfModifier
             try
             {
                 PrintWriter pw = null;
-                if (out != null) pw = new PrintWriter(out);
+                if (out != null)
+                {
+                    pw = new PrintWriter(out);
+                }
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(in));
                 String line;
                 while ((line = br.readLine()) != null)
                 {
-                    if (pw != null) pw.println(line);
+                    if (pw != null)
+                    {
+                        pw.println(line);
+                    }
                     // System.out.println(name + ">" + line);
                 }
-                if (pw != null) pw.flush();
+                if (pw != null)
+                {
+                    pw.flush();
+                }
             }
             catch (IOException ioe)
             {
@@ -727,7 +805,8 @@ public class SelfModifier
         }
     }
 
-    /***********************************************************************************************
+    /**
+     * ********************************************************************************************
      * --------------------------------------------------------------------- Apache ant code
      * ---------------------------------------------------------------------
      */
@@ -741,27 +820,33 @@ public class SelfModifier
 
     /**
      * Constructs a file path from a <code>file:</code> URI.
-     * 
+     * <p/>
      * <p>
      * Will be an absolute path if the given URI is absolute.
      * </p>
-     * 
+     * <p/>
      * <p>
      * Swallows '%' that are not followed by two characters, doesn't deal with non-ASCII characters.
      * </p>
-     * 
+     *
      * @param uri the URI designating a file in the local filesystem.
      * @return the local file system path for the file.
      */
     public static String fromURI(String uri)
     {
         if (!uri.startsWith("file:"))
+        {
             throw new IllegalArgumentException("Can only handle file: URIs");
+        }
 
         if (uri.startsWith("file://"))
+        {
             uri = uri.substring(7);
+        }
         else
+        {
             uri = uri.substring(5);
+        }
 
         uri = uri.replace('/', File.separatorChar);
         if (File.pathSeparatorChar == ';' && uri.startsWith("\\") && uri.length() > 2
@@ -824,7 +909,10 @@ public class SelfModifier
         // Unfortunately on Windows java.home doesn't always refer
         // to the correct location, so we need to fall back to
         // assuming java is somewhere on the PATH.
-        if (!jExecutable.exists()) return executable;
+        if (!jExecutable.exists())
+        {
+            return executable;
+        }
         return jExecutable.getAbsolutePath();
     }
 }

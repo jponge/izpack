@@ -26,15 +26,16 @@ public interface IUnpacker extends Runnable
 {
     /**
      * Return the state of the operation.
-     * 
+     *
      * @return true if the operation was successful, false otherwise.
      */
     public abstract boolean getResult();
-    
+
     /**
      * Called by the InstallerFrame to set a reference to the RulesEngine, which will
      * be used to check conditions.
+     *
      * @param rules - an instantiated RulesEngine
      */
-    public void setRules(RulesEngine rules); 
+    public void setRules(RulesEngine rules);
 }

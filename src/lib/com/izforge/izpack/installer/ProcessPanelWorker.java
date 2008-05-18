@@ -21,52 +21,38 @@
 
 package com.izforge.izpack.installer;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.rules.Condition;
+import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.util.*;
+import net.n3.nanoxml.*;
+
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLElement;
-import net.n3.nanoxml.XMLBuilderFactory;
-
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.rules.Condition;
-import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.AbstractUIProcessHandler;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.VariableSubstitutor;
-
 /**
  * This class does alle the work for the process panel.
- * 
+ * <p/>
  * It responsible for
  * <ul>
  * <li>parsing the process spec XML file
  * <li>performing the actions described therein
  * </ul>
- * 
+ *
  * @author Tino Schwarze
  */
 public class ProcessPanelWorker implements Runnable
 {
 
-    /** Name of resource for specifying processing parameters. */
+    /**
+     * Name of resource for specifying processing parameters.
+     */
     private static final String SPEC_RESOURCE_NAME = "ProcessPanel.Spec.xml";
 
     private VariableSubstitutor vs;
@@ -76,7 +62,7 @@ public class ProcessPanelWorker implements Runnable
     private ArrayList<ProcessingJob> jobs = new ArrayList<ProcessingJob>();
 
     private boolean result = true;
-    
+
     private static PrintWriter logfile = null;
 
     private String logfiledir = null;
@@ -85,8 +71,8 @@ public class ProcessPanelWorker implements Runnable
 
     /**
      * The constructor.
-     * 
-     * @param idata The installation data.
+     *
+     * @param idata   The installation data.
      * @param handler The handler to notify of progress.
      */
     public ProcessPanelWorker(AutomatedInstallData idata, AbstractUIProcessHandler handler)
@@ -133,7 +119,10 @@ public class ProcessPanelWorker implements Runnable
             return false;
         }
 
-        if (!spec.hasChildren()) return false;
+        if (!spec.hasChildren())
+        {
+            return false;
+        }
 
         // Handle logfile
         XMLElement lfd = spec.getFirstChildNamed("logfiledir");
@@ -224,7 +213,7 @@ public class ProcessPanelWorker implements Runnable
 
     /**
      * This is called when the processing thread is activated.
-     * 
+     * <p/>
      * Can also be called directly if asynchronous processing is not desired.
      */
     public void run()
@@ -258,9 +247,13 @@ public class ProcessPanelWorker implements Runnable
             String appVersion = idata.getVariable("APP_VER");
 
             if (appVersion != null)
+            {
                 appVersion = "V" + appVersion;
+            }
             else
+            {
                 appVersion = "undef";
+            }
 
             String identifier = (new SimpleDateFormat("yyyyMMddHHmmss")).format(new Date());
 
@@ -296,10 +289,15 @@ public class ProcessPanelWorker implements Runnable
         }
 
         this.handler.finishProcessing();
-        if (logfile != null) logfile.close();
+        if (logfile != null)
+        {
+            logfile.close();
+        }
     }
 
-    /** Start the compilation in a separate thread. */
+    /**
+     * Start the compilation in a separate thread.
+     */
     public void startThread()
     {
         Thread processingThread = new Thread(this, "processing thread");
@@ -309,14 +307,14 @@ public class ProcessPanelWorker implements Runnable
 
     /**
      * Return the result of the process execution.
-     * 
+     *
      * @return true if all processes succeeded, false otherwise.
      */
     public boolean getResult()
     {
         return this.result;
     }
-    
+
     interface Processable
     {
 
@@ -443,9 +441,13 @@ public class ProcessPanelWorker implements Runnable
                 t.join(softTimeout);
             }
             catch (InterruptedException e)
-            {}
+            {
+            }
 
-            if (!t.isAlive()) return;
+            if (!t.isAlive())
+            {
+                return;
+            }
 
             t.interrupt();
             long hardTimeout = 500;
@@ -454,7 +456,8 @@ public class ProcessPanelWorker implements Runnable
                 t.join(hardTimeout);
             }
             catch (InterruptedException e)
-            {}
+            {
+            }
         }
 
         static public class OutputMonitor implements Runnable
@@ -486,11 +489,17 @@ public class ProcessPanelWorker implements Runnable
 
                         // log output also to file given in ProcessPanelSpec
 
-                        if (logfile != null) logfile.println(line);
+                        if (logfile != null)
+                        {
+                            logfile.println(line);
+                        }
 
                         synchronized (this.stop)
                         {
-                            if (stop) return;
+                            if (stop)
+                            {
+                                return;
+                            }
                         }
                     }
                 }
@@ -500,7 +509,10 @@ public class ProcessPanelWorker implements Runnable
 
                     // log errors also to file given in ProcessPanelSpec
 
-                    if (logfile != null) logfile.println(ioe.toString());
+                    if (logfile != null)
+                    {
+                        logfile.println(ioe.toString());
+                    }
 
                 }
 
@@ -557,10 +569,10 @@ public class ProcessPanelWorker implements Runnable
                 Class procClass = loader.loadClass(myClassName);
 
                 Object o = procClass.newInstance();
-                Method m = procClass.getMethod("run", new Class[] { AbstractUIProcessHandler.class,
+                Method m = procClass.getMethod("run", new Class[]{AbstractUIProcessHandler.class,
                         String[].class});
 
-                m.invoke(o, new Object[] { myHandler, params});
+                m.invoke(o, new Object[]{myHandler, params});
                 result = true;
             }
             catch (SecurityException e)
@@ -638,7 +650,10 @@ public class ProcessPanelWorker implements Runnable
         String selected;
         String required;
 
-        if (packs.size() == 0) { return (true); }
+        if (packs.size() == 0)
+        {
+            return (true);
+        }
 
         // System.out.println ("Number of selected packs is "
         // +idata.selectedPacks.size () );

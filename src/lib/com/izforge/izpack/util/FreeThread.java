@@ -24,9 +24,9 @@ package com.izforge.izpack.util;
 /*---------------------------------------------------------------------------*/
 /**
  * This class implements a thred that can be used to free native libraries safely.
- * 
- * @version 0.0.1 / 2/6/02
+ *
  * @author Elmar Grom
+ * @version 0.0.1 / 2/6/02
  */
 /*---------------------------------------------------------------------------*/
 public class FreeThread extends Thread
@@ -39,10 +39,10 @@ public class FreeThread extends Thread
     /*--------------------------------------------------------------------------*/
     /**
      * Standard constructor.
-     * 
-     * @param name the name of the library to free. The exact form of the name may be operating
-     * system dependent. On Microsoft Windows this must be just the library name, without path but
-     * with extension.
+     *
+     * @param name   the name of the library to free. The exact form of the name may be operating
+     *               system dependent. On Microsoft Windows this must be just the library name, without path but
+     *               with extension.
      * @param client reference of the client object that is linked with the library to be freed.
      */
     /*--------------------------------------------------------------------------*/
