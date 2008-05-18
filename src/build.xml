@@ -206,7 +206,7 @@
     <property name="cwd" value="${basedir}"/>
 
     <property file="src/ant.properties"/>
-    <property name="ver" value="3.11"/>
+    <property name="ver" value="4.0"/>
     <property name="rel" value="0"/>
     <property name="build.number" value="${ver}.${rel}"/>
 
@@ -1030,6 +1030,7 @@
                 <include name="src/**"/>
                 <include name="sample/**"/>
                 <include name="*.txt"/>
+                <include name="*.html"/>
             </fileset>
         </copy>
         <echo message="Copies the langpacks to the dist directory"/>
