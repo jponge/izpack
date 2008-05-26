@@ -161,3 +161,6 @@ Normally, a build process will call IzPack from Ant using something like the fol
 		  <native type="izpack" name="ShellLink.dll"/>
 		  
 		</installation>
+
+
+.. include:: include-bottom.inc
