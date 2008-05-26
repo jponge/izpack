@@ -176,3 +176,6 @@ Here's an example 3 panel userInputSpec.xml file. You specify the use of this XM
 		        <field type="divider" align="bottom"/>
 		    </panel> 
 		</userInput>
+
+
+.. include:: include-bottom.inc
