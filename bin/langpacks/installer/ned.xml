@@ -162,6 +162,7 @@
          txt="Maak een automatisch installatie-script."/>
     <str id="FinishPanel.auto.tip"
          txt="Gebruik dit script om de installatie te herhalen op andere computers."/>
+    <str id="FinishPanel.auto.dialog.filterdesc" txt="XML Bestanden"/>
 
     <str id="ImgPacksPanel.packs"
          txt="The volgende pakketten zijn beschikbaar :"/>

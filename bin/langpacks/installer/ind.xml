@@ -134,6 +134,7 @@
     <str id="FinishPanel.auto" txt="Buat naskah pemasangan otomatis"/>
     <str id="FinishPanel.auto.tip"
          txt="Gunakan naskah ini untuk mengulangi pemasangan ini ke komputer lain."/>
+    <str id="FinishPanel.auto.dialog.filterdesc" txt="Arsip-arsip XML"/>
 
     <str id="ImgPacksPanel.packs" txt="Paket-paket berikut tersedia:"/>
     <str id="ImgPacksPanel.snap" txt="Gambaran paket:"/>

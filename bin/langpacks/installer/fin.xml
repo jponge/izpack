@@ -132,6 +132,7 @@
     <str id="FinishPanel.auto" txt="Luo automaattisen asennuksen komentotiedosto"/>
     <str id="FinishPanel.auto.tip"
          txt="Tätä komentotiedostoa voit käyttää toistaaksesi asennuksen toisella koneella."/>
+    <str id="FinishPanel.auto.dialog.filterdesc" txt="XML tiedostot"/>
 
     <str id="ImgPacksPanel.packs" txt="Seuraavat paketit ovat saatavilla:"/>
     <str id="ImgPacksPanel.snap" txt="Pakettinäkymä:"/>
@@ -191,8 +192,7 @@
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
     <str id="UserInputPanel.search.autodetect.failed.message" txt="Automaattinen tunnistus epäonnistui."/>
     <str id="UserInputPanel.search.autodetect.failed.caption" txt="Automaattinen tunnistus"/>
-    <str id="UserInputPanel.search.autodetect.tooltip"
-         txt="Tarkista ylläolevissa poluissa oleva hakemisto tai tiedosto."/>
+    <str id="UserInputPanel.search.autodetect.tooltip" txt="Tarkista ylläolevissa poluissa oleva hakemisto tai tiedosto."/>
     <str id="UserInputPanel.search.location" txt="Anna sijainti: {0}."/>
     <str id="UserInputPanel.search.location.checkedfile" txt="Tiedoston {0} olemassaolo on tarkistettu."/>
     <str id="UserInputPanel.search.browse" txt="Selaa..."/>
