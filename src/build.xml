@@ -931,7 +931,7 @@
 
     <!-- Builds all compilation targets -->
     <target name="all"
-            depends="splashscreen, copy.dist.natives,build.compiler, src.tar.gz, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler"
+            depends="splashscreen, copy.dist.natives,build.compiler, build.compiler, build.installer, build.uninstaller, build.uninstaller-ext, build.panels, build.listeners, build.standalone-compiler"
             description="base: compiles a developer version"/>
 
     <!-- Builds the Javadoc -->
@@ -1168,7 +1168,7 @@
 
     <!-- Makes everything, from compilation, customer and javadoc to generating an installer. -->
     <target name="dist"
-            depends="all, create.docu, generate.installer"
+            depends="src.tar.gz, all, create.docu, generate.installer"
             description="makes a complete installer"/>
 
     <!-- Makes everything, from Cleaning to generating both installers: normal and reg support. -->
