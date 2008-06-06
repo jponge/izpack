@@ -28,7 +28,7 @@ import net.n3.nanoxml.XMLElement;
 import java.util.Iterator;
 
 /**
- * The taget directory selection panel.
+ * The target directory selection panel.
  *
  * @author Julien Ponge
  * @author Jeff Gordon
@@ -36,16 +36,15 @@ import java.util.Iterator;
 public class UserPathPanel extends UserPathInputPanel
 {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 3256443616359429170L;
+
     private static String thisName = "UserPathPanel";
-    private boolean _skip = false;
+
+    private boolean skip = false;
+
     public static String pathVariableName = "UserPathPanelVariable";
     public static String pathPackDependsName = "UserPathPanelDependsName";
     public static String pathElementName = "UserPathPanelElement";
-    private XMLElement panelElement;
 
     /**
      * The constructor.
@@ -87,14 +86,14 @@ public class UserPathPanel extends UserPathInputPanel
                     break;
                 }
             }
-            _skip = !(found);
+            skip = !(found);
         }
         else
         {
             System.out.println("Not Checking for a pack dependency, panel will be shown");
-            _skip = false;
+            skip = false;
         }
-        if (_skip)
+        if (skip)
         {
             System.out.println(thisName + " will not be shown");
             parent.skipPanel();
@@ -128,7 +127,7 @@ public class UserPathPanel extends UserPathInputPanel
      */
     public void makeXMLData(XMLElement panelRoot)
     {
-        if (!(_skip))
+        if (!(skip))
         {
             new UserPathPanelAutomationHelper().makeXMLData(idata, panelRoot);
         }
@@ -141,7 +140,7 @@ public class UserPathPanel extends UserPathInputPanel
     */
     public String getSummaryBody()
     {
-        if (_skip)
+        if (skip)
         {
             return null;
         }
