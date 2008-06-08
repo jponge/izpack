@@ -329,7 +329,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                 {
                     try
                     {
-                        in = _parent.getResource(_targetPanel + ".dir.macosx");
+                        in = _parent.getResource(_targetPanel + ".dir.mac");
                     }
                     catch (ResourceNotFoundException rnfe)
                     {
