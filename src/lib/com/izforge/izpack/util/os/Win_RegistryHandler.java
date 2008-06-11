@@ -22,11 +22,14 @@
 
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.util.VariableSubstitutor;
+
 import com.coi.tools.os.izpack.Registry;
 import com.coi.tools.os.win.NativeLibException;
 import com.coi.tools.os.win.RegDataContainer;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * This is the Microsoft Windows specific implementation of <code>RegistryHandler</code>.
@@ -66,6 +69,17 @@ public class Win_RegistryHandler extends RegistryHandler
         if (!good())
         {
             return;
+        }
+        if(contents.indexOf("OLD_KEY_VALUE") > -1 && regWorker.valueExist(key, value))
+        {
+            Object ob = regWorker.getValueAsObject(key, value);
+            if(ob instanceof String)
+            {
+                Properties props = new Properties();
+                props.put("OLD_KEY_VALUE", ob);
+                VariableSubstitutor vs = new VariableSubstitutor(props);
+                contents = vs.substitute(contents, null);
+            }
         }
         regWorker.setValue(key, value, contents);
     }

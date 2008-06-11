@@ -681,6 +681,22 @@ Value to be set at installation time into the Windows registry.
 
         -   ``data`` : the contents for the element <multi>.
 
+In the case of string values being updated, it is possible to reuse the old
+value and have it for substitution through the ``OLD_KEY_VALUE`` variable,
+like in the following example:
+
+::
+
+	<value name="PATH"
+	       keypath="Environment"
+       	       root="HKCU"
+       	       string="$OLD_KEY_VALUE;&quot;$INSTALL_PATH\bin&quot;"/>
+     	<value name="PATH"
+	       keypath="SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+       	       root="HKLM"
+      	       string="$OLD_KEY_VALUE;&quot;$INSTALL_PATH\bin&quot;"/>
+
+
 Maybe the descriptions for type BINARY and MULTI_STRING are not fully
 descriptive. Therefore as example the test entries in the registry
 specification file of IzPack:
