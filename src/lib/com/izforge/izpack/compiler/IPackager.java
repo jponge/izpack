@@ -165,6 +165,8 @@ public interface IPackager
      * @param data the describing custom action data object
      */
     public abstract void addNativeUninstallerLibrary(CustomData data);
+    
+    public abstract void addInstallerConditions(List<String> conditions);
 
     /**
      * Returns the current pack compressor

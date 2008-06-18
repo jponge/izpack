@@ -165,7 +165,7 @@ public class Compiler extends Thread
         setProperty("basedir", basedir);
 
         this.compr_format = compr_format;
-        this.compr_level = compr_level;
+        this.compr_level = compr_level;     
     }
 
     /**
@@ -454,6 +454,10 @@ public class Compiler extends Thread
     public void addCustomJar(CustomData ca, URL url)
     {
         packager.addCustomJar(ca, url);
+    }
+    
+    public void addInstallerConditions(List<String> conditions){
+        packager.addInstallerConditions(conditions);
     }
 
     /**
@@ -975,6 +979,5 @@ public class Compiler extends Thread
     public void setDynamicVariables(Map<String, List<DynamicVariable>> dynamicvariables)
     {
         this.packager.setDynamicVariables(dynamicvariables);
-    }
-
+    }       
 }

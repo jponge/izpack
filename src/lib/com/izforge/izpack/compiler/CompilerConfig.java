@@ -35,6 +35,7 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 import net.n3.nanoxml.*;
+
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
@@ -323,9 +324,28 @@ public class CompilerConfig extends Thread
         addJars(data);
         addPanels(data);
         addPacks(data);
+        addInstallerConditions(data);
 
         // We ask the packager to create the installer
         compiler.createInstaller();
+    }
+
+    private void addInstallerConditions(XMLElement data) throws CompilerException
+    {
+        notifyCompilerListener("addInstallerConditions", CompilerListener.BEGIN, data);
+        XMLElement root = data.getFirstChildNamed("installerconditions");
+        List<String> installerconditions = new ArrayList<String>();
+        
+        if (root != null){
+            Vector<XMLElement> installerconditionels = root.getChildrenNamed("installercondition");
+            for (XMLElement installercondition : installerconditionels)
+            {
+                String condition = installercondition.getAttribute("condition");
+                installerconditions.add(condition);
+            }            
+        }    
+        compiler.addInstallerConditions(installerconditions);
+        notifyCompilerListener("addInstallerConditions", CompilerListener.END, data);
     }
 
     private void loadPackagingInformation(XMLElement data) throws CompilerException

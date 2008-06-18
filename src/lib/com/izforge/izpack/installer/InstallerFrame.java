@@ -30,6 +30,7 @@ import com.izforge.izpack.compiler.DynamicVariable;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import net.n3.nanoxml.*;
@@ -178,6 +179,8 @@ public class InstallerFrame extends JFrame
 
     // If a heading image is defined should it be displayed on the left
     private boolean imageLeft = false;
+    
+    private List<Condition> installerconditions;
 
 
     /**
@@ -203,6 +206,15 @@ public class InstallerFrame extends JFrame
         // initialize rules by loading the conditions
         loadConditions();
 
+        // loads installer conditions
+        loadInstallerConditions();      
+        
+        // check installer conditions
+        if (!checkInstallerConditions()){
+            Debug.log("not all installerconditions are fulfilled.");
+            return;
+        }
+        
         // load dynamic variables
         loadDynamicVariables();
         // Builds the GUI
@@ -216,9 +228,45 @@ public class InstallerFrame extends JFrame
         switchPanel(0);
     }
 
+    private boolean checkInstallerConditions()
+    {
+       boolean result = true;
+        
+       for (Condition condition : this.installerconditions){
+          if (!condition.isTrue()){
+              result = false;
+              break;
+          }
+       }
+       return result;
+    }
+
     public Debugger getDebugger()
     {
         return this.debugger;
+    }
+    
+    /**
+     * Load installer conditions
+     *
+     * @throws Exception
+     */
+    public void loadInstallerConditions() throws Exception
+    {
+        InputStream in = GUIInstaller.class.getResourceAsStream("/installerconditions");
+        ObjectInputStream objIn = new ObjectInputStream(in);
+        List<String> installerconditions = (List<String>) objIn.readObject();
+        this.installerconditions = new ArrayList<Condition>(); 
+        for (String conditionid : installerconditions)
+        {
+            Condition condition = RulesEngine.getCondition(conditionid);
+            if (condition != null){
+                Debug.log(conditionid + " not a valid condition.");
+                throw new Exception(conditionid + "could not be found as a defined condition");
+            }
+            this.installerconditions.add(condition);
+        } 
+        objIn.close();
     }
 
     /**

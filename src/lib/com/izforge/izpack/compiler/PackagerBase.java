@@ -133,6 +133,8 @@ public abstract class PackagerBase implements IPackager
      */
     protected HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles = new HashMap<FilterOutputStream, HashSet<String>>();
 
+    private List<String> installerconditions;
+
     /**
      * Dispatches a message to the listeners.
      *
@@ -373,6 +375,8 @@ public abstract class PackagerBase implements IPackager
         writeInstallerObject("langpacks.info", langpackNameList);
         writeInstallerObject("rules", rules);
         writeInstallerObject("dynvariables", dynamicvariables);
+        writeInstallerObject("installerconditions",installerconditions);
+        
         writeInstallerResources();
         writeIncludedJars();
 
@@ -406,5 +410,10 @@ public abstract class PackagerBase implements IPackager
     public void setDynamicVariables(Map<String, List<DynamicVariable>> dynamicvariables)
     {
         this.dynamicvariables = dynamicvariables;
+    }
+
+    public void addInstallerConditions(List<String> conditions)
+    {
+        this.installerconditions = conditions;        
     }
 }
