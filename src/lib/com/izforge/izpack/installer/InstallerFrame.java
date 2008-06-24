@@ -180,7 +180,7 @@ public class InstallerFrame extends JFrame
     // If a heading image is defined should it be displayed on the left
     private boolean imageLeft = false;
     
-    private List<Condition> installerconditions;
+    private List<InstallerCondition> installerconditions;
 
 
     /**
@@ -228,16 +228,27 @@ public class InstallerFrame extends JFrame
         switchPanel(0);
     }
 
-    private boolean checkInstallerConditions()
+    private boolean checkInstallerConditions() throws Exception
     {
        boolean result = true;
-        
-       for (Condition condition : this.installerconditions){
-          if (!condition.isTrue()){
-              result = false;
-              break;
-          }
-       }
+       
+       for (InstallerCondition installercondition : this.installerconditions){
+           String conditionid = installercondition.getCondition();
+           Condition condition = RulesEngine.getCondition(conditionid);
+           if (condition == null){
+               Debug.log(conditionid + " not a valid condition.");
+               throw new Exception(conditionid + "could not be found as a defined condition");
+           }
+           if (!condition.isTrue()){
+               String message = installercondition.getMessage();
+               if ((message != null) && (message.length() > 0)){
+                   String localizedMessage = this.installdata.langpack.getString(message);
+                   JOptionPane.showMessageDialog(this, localizedMessage);
+               }
+               result = false;
+               break;
+           } 
+       }             
        return result;
     }
 
@@ -254,18 +265,8 @@ public class InstallerFrame extends JFrame
     public void loadInstallerConditions() throws Exception
     {
         InputStream in = GUIInstaller.class.getResourceAsStream("/installerconditions");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        List<String> installerconditions = (List<String>) objIn.readObject();
-        this.installerconditions = new ArrayList<Condition>(); 
-        for (String conditionid : installerconditions)
-        {
-            Condition condition = RulesEngine.getCondition(conditionid);
-            if (condition != null){
-                Debug.log(conditionid + " not a valid condition.");
-                throw new Exception(conditionid + "could not be found as a defined condition");
-            }
-            this.installerconditions.add(condition);
-        } 
+        ObjectInputStream objIn = new ObjectInputStream(in);        
+        this.installerconditions = (List<InstallerCondition>) objIn.readObject();         
         objIn.close();
     }
 

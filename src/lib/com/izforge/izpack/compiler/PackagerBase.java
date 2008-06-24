@@ -28,6 +28,7 @@ import com.izforge.izpack.Info;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.compressor.PackCompressor;
 import com.izforge.izpack.compressor.PackCompressorFactory;
+import com.izforge.izpack.installer.InstallerCondition;
 import com.izforge.izpack.rules.Condition;
 
 import java.io.File;
@@ -133,7 +134,7 @@ public abstract class PackagerBase implements IPackager
      */
     protected HashMap<FilterOutputStream, HashSet<String>> alreadyWrittenFiles = new HashMap<FilterOutputStream, HashSet<String>>();
 
-    private List<String> installerconditions;
+    private List<InstallerCondition> installerconditions;
 
     /**
      * Dispatches a message to the listeners.
@@ -412,7 +413,7 @@ public abstract class PackagerBase implements IPackager
         this.dynamicvariables = dynamicvariables;
     }
 
-    public void addInstallerConditions(List<String> conditions)
+    public void addInstallerConditions(List<InstallerCondition> conditions)
     {
         this.installerconditions = conditions;        
     }

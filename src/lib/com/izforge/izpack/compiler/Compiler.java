@@ -27,6 +27,7 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.compressor.PackCompressor;
+import com.izforge.izpack.installer.InstallerCondition;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
@@ -456,7 +457,7 @@ public class Compiler extends Thread
         packager.addCustomJar(ca, url);
     }
     
-    public void addInstallerConditions(List<String> conditions){
+    public void addInstallerConditions(List<InstallerCondition> conditions){
         packager.addInstallerConditions(conditions);
     }
 

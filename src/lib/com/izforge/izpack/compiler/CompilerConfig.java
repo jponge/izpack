@@ -29,6 +29,7 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.*;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
 import com.izforge.izpack.event.CompilerListener;
+import com.izforge.izpack.installer.InstallerCondition;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
@@ -334,14 +335,18 @@ public class CompilerConfig extends Thread
     {
         notifyCompilerListener("addInstallerConditions", CompilerListener.BEGIN, data);
         XMLElement root = data.getFirstChildNamed("installerconditions");
-        List<String> installerconditions = new ArrayList<String>();
+        List<InstallerCondition> installerconditions = new ArrayList<InstallerCondition>();
         
         if (root != null){
             Vector<XMLElement> installerconditionels = root.getChildrenNamed("installercondition");
             for (XMLElement installercondition : installerconditionels)
             {
+                InstallerCondition basicInstallerCondition = new InstallerCondition();
                 String condition = installercondition.getAttribute("condition");
-                installerconditions.add(condition);
+                basicInstallerCondition.setCondition(condition);
+                String message = installercondition.getAttribute("message");
+                basicInstallerCondition.setMessage(message);                
+                installerconditions.add(basicInstallerCondition);
             }            
         }    
         compiler.addInstallerConditions(installerconditions);

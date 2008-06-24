@@ -23,6 +23,7 @@ import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.compressor.PackCompressor;
+import com.izforge.izpack.installer.InstallerCondition;
 import com.izforge.izpack.rules.Condition;
 import net.n3.nanoxml.XMLElement;
 
@@ -166,7 +167,7 @@ public interface IPackager
      */
     public abstract void addNativeUninstallerLibrary(CustomData data);
     
-    public abstract void addInstallerConditions(List<String> conditions);
+    public abstract void addInstallerConditions(List<InstallerCondition> conditions);
 
     /**
      * Returns the current pack compressor
