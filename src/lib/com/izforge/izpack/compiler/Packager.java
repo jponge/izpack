@@ -212,6 +212,9 @@ public class Packager extends PackagerBase
         // Map to remember pack number and bytes offsets of back references
         Map<File, Object[]> storedFiles = new HashMap<File, Object[]>();
 
+        // Force UTF-8 encoding in order to have proper ZipEntry names.
+        primaryJarStream.setEncoding("utf-8");
+
         // First write the serialized files and file metadata data for each pack
         // while counting bytes.
 
