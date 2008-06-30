@@ -470,6 +470,28 @@ Neverthless if you define really complex conditions it's much easier to define t
 
 More types of conditions can be defined by inheriting com.izforge.izpack.Condition class.
 
+The Installer Requirements Element ``<installerrequirements>``
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+This element allows to specify requirements for running the installation. This will be done based
+on conditions defined in the conditons section. 
+
+An installer requirement consists of a condition and a message which will be shown if the condition
+is not fulfilled. If so, the installer will show the message and exit after that.
+
+-   ``installerrequirement``: specifies a single installer requirement. You can define an unlimited number of them.
+
+Installerrequirements have the following attributes:
+-   ``condition``: an id of a condition defined in the conditions section
+-   ``message``: a message text or a langpack key defining which message should be shown before exiting the installer in case of a missing requirement.
+   
+
+::
+
+    <installerrequirements>
+       <installerrequirement conditon="installonwindows" message="This installer could only be run on Windows operating systems."/>
+    </installerrequirements>
+       
 
 The GUI Preferences Element ``<guiprefs>``
 '''''''''''''''''''''''''''''''''''''''''''
