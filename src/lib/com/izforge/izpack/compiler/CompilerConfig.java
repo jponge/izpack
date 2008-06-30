@@ -29,7 +29,7 @@ package com.izforge.izpack.compiler;
 import com.izforge.izpack.*;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
 import com.izforge.izpack.event.CompilerListener;
-import com.izforge.izpack.installer.InstallerCondition;
+import com.izforge.izpack.installer.InstallerRequirement;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
@@ -325,32 +325,32 @@ public class CompilerConfig extends Thread
         addJars(data);
         addPanels(data);
         addPacks(data);
-        addInstallerConditions(data);
+        addInstallerRequirement(data);
 
         // We ask the packager to create the installer
         compiler.createInstaller();
     }
 
-    private void addInstallerConditions(XMLElement data) throws CompilerException
+    private void addInstallerRequirement(XMLElement data) throws CompilerException
     {
-        notifyCompilerListener("addInstallerConditions", CompilerListener.BEGIN, data);
-        XMLElement root = data.getFirstChildNamed("installerconditions");
-        List<InstallerCondition> installerconditions = new ArrayList<InstallerCondition>();
+        notifyCompilerListener("addInstallerRequirement", CompilerListener.BEGIN, data);
+        XMLElement root = data.getFirstChildNamed("installerrequirements");
+        List<InstallerRequirement> installerrequirements = new ArrayList<InstallerRequirement>();
         
         if (root != null){
-            Vector<XMLElement> installerconditionels = root.getChildrenNamed("installercondition");
-            for (XMLElement installercondition : installerconditionels)
+            Vector<XMLElement> installerrequirementsels = root.getChildrenNamed("installerrequirement");
+            for (XMLElement installerrequirement : installerrequirementsels)
             {
-                InstallerCondition basicInstallerCondition = new InstallerCondition();
-                String condition = installercondition.getAttribute("condition");
+                InstallerRequirement basicInstallerCondition = new InstallerRequirement();
+                String condition = installerrequirement.getAttribute("condition");
                 basicInstallerCondition.setCondition(condition);
-                String message = installercondition.getAttribute("message");
+                String message = installerrequirement.getAttribute("message");
                 basicInstallerCondition.setMessage(message);                
-                installerconditions.add(basicInstallerCondition);
+                installerrequirements.add(basicInstallerCondition);
             }            
         }    
-        compiler.addInstallerConditions(installerconditions);
-        notifyCompilerListener("addInstallerConditions", CompilerListener.END, data);
+        compiler.addInstallerRequirement(installerrequirements);
+        notifyCompilerListener("addInstallerRequirement", CompilerListener.END, data);
     }
 
     private void loadPackagingInformation(XMLElement data) throws CompilerException

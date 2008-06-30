@@ -77,7 +77,7 @@ public class GUIInstaller extends InstallerBase
      * holds language to ISO-3 language code translation
      */
     private static HashMap isoTable;
-
+    
     /**
      * The constructor.
      *
@@ -85,8 +85,8 @@ public class GUIInstaller extends InstallerBase
      */
     public GUIInstaller() throws Exception
     {
-        this.installdata = new InstallData();
-
+        this.installdata = new InstallData();                
+        
         // Loads the installation data
         loadInstallData(installdata);
 
@@ -103,6 +103,8 @@ public class GUIInstaller extends InstallerBase
         // Check for already running instance
         checkLockFile();
 
+        
+        
         // Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable()
         {
@@ -155,7 +157,7 @@ public class GUIInstaller extends InstallerBase
         ObjectInputStream objIn = new ObjectInputStream(in);
         this.installdata.guiPrefs = (GUIPrefs) objIn.readObject();
         objIn.close();
-    }
+    }    
 
     /**
      * Sets a lock file. Not using java.nio.channels.FileLock to prevent

@@ -180,7 +180,7 @@ public class InstallerFrame extends JFrame
     // If a heading image is defined should it be displayed on the left
     private boolean imageLeft = false;
     
-    private List<InstallerCondition> installerconditions;
+    private List<InstallerRequirement> installerrequirements;
 
 
     /**
@@ -207,10 +207,10 @@ public class InstallerFrame extends JFrame
         loadConditions();
 
         // loads installer conditions
-        loadInstallerConditions();      
+        loadInstallerRequirements();      
         
         // check installer conditions
-        if (!checkInstallerConditions()){
+        if (!checkInstallerRequirements()){
             Debug.log("not all installerconditions are fulfilled.");
             return;
         }
@@ -228,19 +228,19 @@ public class InstallerFrame extends JFrame
         switchPanel(0);
     }
 
-    private boolean checkInstallerConditions() throws Exception
+    private boolean checkInstallerRequirements() throws Exception
     {
        boolean result = true;
        
-       for (InstallerCondition installercondition : this.installerconditions){
-           String conditionid = installercondition.getCondition();
+       for (InstallerRequirement installerrequirement : this.installerrequirements){
+           String conditionid = installerrequirement.getCondition();
            Condition condition = RulesEngine.getCondition(conditionid);
            if (condition == null){
                Debug.log(conditionid + " not a valid condition.");
                throw new Exception(conditionid + "could not be found as a defined condition");
            }
            if (!condition.isTrue()){
-               String message = installercondition.getMessage();
+               String message = installerrequirement.getMessage();
                if ((message != null) && (message.length() > 0)){
                    String localizedMessage = this.installdata.langpack.getString(message);
                    JOptionPane.showMessageDialog(this, localizedMessage);
@@ -262,11 +262,11 @@ public class InstallerFrame extends JFrame
      *
      * @throws Exception
      */
-    public void loadInstallerConditions() throws Exception
+    public void loadInstallerRequirements() throws Exception
     {
-        InputStream in = GUIInstaller.class.getResourceAsStream("/installerconditions");
+        InputStream in = GUIInstaller.class.getResourceAsStream("/installerrequirements");
         ObjectInputStream objIn = new ObjectInputStream(in);        
-        this.installerconditions = (List<InstallerCondition>) objIn.readObject();         
+        this.installerrequirements = (List<InstallerRequirement>) objIn.readObject();         
         objIn.close();
     }
 
