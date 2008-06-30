@@ -411,6 +411,7 @@ There are several built-in types of conditions. At the time of writing this, Izp
 -	``VariableCondition``: a condition based on the value of a certain variable
 -	``PackSelectionCondition``: a condition based on a pack selected for installation
 -	``JavaCondition``: a condition based on a static java field or method.
+-   ``CompareNumericsCondition``: a condition based on the comparison of a certain variable with a given value and operator.
 
 There are also boolean types to combine more than one condition:
 
