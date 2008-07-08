@@ -95,14 +95,14 @@
     <str id="JDKPathPanel.intro"
          txt="Für den Betrieb des Produktes wird ein JDK benötigt. Eine Java-Runtime-Umgebung (JRE) ist nicht ausreichend."/>
     <str id="JDKPathPanel.info" txt="Pfad des JDK-Verzeichnisses:"/>
-    <str id="JDKPathPanel.badVersion1" txt="Der gewählte JDK hat die falsche Version (vorhanden: "/>
+    <str id="JDKPathPanel.badVersion1" txt="Das gewählte JDK hat die falsche Version (vorhanden: "/>
     <str id="JDKPathPanel.badVersion2" txt=" benötigt: "/>
-    <str id="JDKPathPanel.badVersion3" txt=") Soll der JDK trotzdem benutzt werden?"/>
+    <str id="JDKPathPanel.badVersion3" txt=") Soll das JDK trotzdem benutzt werden?"/>
     <str id="JDKPathPanel.nonValidPathInReg"
-         txt="Die Windows-Registry enthält für diesen JDK einen fehlerhaften Pfad-Eintrag. Soll der JDK trotzdem benutzt werden?"/>
+         txt="Die Windows-Registry enthält für dieses JDK einen fehlerhaften Pfad-Eintrag. Soll das JDK trotzdem benutzt werden?"/>
 
     <str id="PacksPanel.info" txt="Bitte wählen Sie hier die Installationspakete aus:"/>
-    <str id="PacksPanel.tip" txt="Hinweis: die grau markierten Pakete können nicht optional ausgewählt werden."/>
+    <str id="PacksPanel.tip" txt="Hinweis: Die grau markierten Pakete können nicht optional ausgewählt werden."/>
     <str id="PacksPanel.space" txt="Erforderlicher Speicherplatz: "/>
     <str id="PacksPanel.freespace" txt="Verfügbarer Speicherplatz: "/>
     <str id="PacksPanel.description" txt="Beschreibung"/>
@@ -142,7 +142,7 @@
     <str id="ShortcutPanel.headline" txt="Verknüpfungen einrichten"/>
     <str id="ShortcutPanel.regular.list" txt="Wählen Sie eine Programmgruppe für die Verknüpfung:"/>
     <str id="ShortcutPanel.regular.default" txt="Standard"/>
-    <str id="ShortcutPanel.regular.desktop" txt="zusätzliche Verknüpfungen auf dem Desktop erstellen"/>
+    <str id="ShortcutPanel.regular.desktop" txt="Zusätzliche Verknüpfungen auf dem Desktop erstellen"/>
     <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Start-Menü"/>
     <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menü"/>
     <!-- StartMenu is a placeholder will be replaced at runtime -->
@@ -171,9 +171,9 @@
     <str id="ShortcutPanel.textFile.work" txt="Arbeitsverzeichnis   : "/>
 
     <str id="ShortcutPanel.location.desktop" txt="Desktop"/>
-    <str id="ShortcutPanel.location.applications" txt="Programm Menü"/>
-    <str id="ShortcutPanel.location.startMenu" txt="Start Menü"/>
-    <str id="ShortcutPanel.location.startup" txt="Startup-Gruppe"/>
+    <str id="ShortcutPanel.location.applications" txt="Programm-Menü"/>
+    <str id="ShortcutPanel.location.startMenu" txt="Start-Menü"/>
+    <str id="ShortcutPanel.location.startup" txt="Autostart-Gruppe"/>
 
     <str id="UserInputPanel.error.caption" txt="Eingabeproblem"/>
     <str id="UserInputPanel.search.autodetect" txt="Automatisch erkennen"/>
@@ -214,7 +214,7 @@
 
     <!-- Strings for the summary of panels - START -->
     <str id="SummaryPanel.info"
-         txt="Alle für die Installation notwendigen Daten liegen nun vor. Die wichtigsten sind nachfolgend aufgeführt. Klicken Sie auf &quot;Weiter&quot; um mit der Installation zu beginnen. "/>
+         txt="Alle für die Installation notwendigen Daten liegen nun vor. Die wichtigsten sind nachfolgend aufgeführt. Klicken Sie auf &quot;Weiter&quot;, um mit der Installation zu beginnen. "/>
     <str id="TargetPanel.summaryCaption" txt="Installationspfad"/>
     <str id="JDKPathPanel.summaryCaption" txt="Pfad des JDK-Verzeichnisses"/>
     <str id="PacksPanel.summaryCaption" txt="Gewählte Installationspakete"/>
@@ -278,7 +278,7 @@
 
     <str id="InstallationGroupPanel.colNameSelected" txt="Selektiert"/>
     <str id="InstallationGroupPanel.colNameInstallType" txt="Installationstyp"/>
-    <str id="InstallationGroupPanel.colNameSize" txt="Grösse"/>
+    <str id="InstallationGroupPanel.colNameSize" txt="Größe"/>
 
     <str id="debug.changevariable" txt="Wert ändern"/>
 </langpack>
