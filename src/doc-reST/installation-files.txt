@@ -271,6 +271,12 @@ It contains the following elements :
     `SummaryLoggerInstallerListener`.
 -   ``<writeinstallationinformation>`` : (yes or no) specifies if the file .installinformation should 
     be written which includes the information about installed packs. The default if not specified is yes.
+-   ``<pack200/>``: adding this element will cause every JAR file that you will add to your packs to be compressed
+    using Pack200 (see http://java.sun.com/j2se/1.5.0/docs/guide/deployment/deployment-guide/pack200.html).
+    This makes the compilation process a little bit longer, but it usually results in drasticaly smaller installer
+    files. The decompression is relatively fast. Please note that Pack200 compression is destructive, i.e., after
+    decompression a JAR won't be identical to its original version (yet the code in the class files remains
+    semantically equivalent).
 
 Here is an example of a typical ``<info>`` section :
 

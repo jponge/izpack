@@ -52,9 +52,9 @@ public class PackCompressorFactory
 
     static
     {   // Add the well known pack compressors to this factory
-        catchedRegister(new RawPackCompressor());
-        catchedRegister(new DefaultPackCompressor());
-        catchedRegister(new BZip2PackCompressor());
+        cachedRegister(new RawPackCompressor());
+        cachedRegister(new DefaultPackCompressor());
+        cachedRegister(new BZip2PackCompressor());
     }
 
     /**
@@ -73,7 +73,7 @@ public class PackCompressorFactory
      * @param pc an instance of the pack compressor which describes
      *           encoder and decoder for a special compression format
      */
-    public static void catchedRegister(PackCompressor pc)
+    public static void cachedRegister(PackCompressor pc)
     {
         if (!good())
         {

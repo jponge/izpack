@@ -29,6 +29,8 @@ import net.n3.nanoxml.XMLWriter;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+import java.util.jar.JarFile;
+import java.util.jar.Pack200;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -212,6 +214,10 @@ public class Packager extends PackagerBase
         // Map to remember pack number and bytes offsets of back references
         Map<File, Object[]> storedFiles = new HashMap<File, Object[]>();
 
+        // Pack200 files map
+        Map<Integer, File> pack200Map = new HashMap<Integer, File>();
+        int pack200Counter = 0;
+
         // Force UTF-8 encoding in order to have proper ZipEntry names.
         primaryJarStream.setEncoding("utf-8");
 
@@ -278,8 +284,15 @@ public class Packager extends PackagerBase
             while (iter.hasNext())
             {
                 boolean addFile = !pack.loose;
+                boolean pack200 = false;
                 PackFile pf = (PackFile) iter.next();
                 File file = packInfo.getFile(pf);
+
+                if (file.getName().toLowerCase().endsWith(".jar") && info.isPack200Compression())
+                {
+                    pf.setPack200Jar(true);
+                    pack200 = true;
+                }
 
                 // use a back reference if file was in previous pack, and in
                 // same jar
@@ -291,21 +304,36 @@ public class Packager extends PackagerBase
                 }
 
                 objOut.writeObject(pf); // base info
-                objOut.flush(); // make sure it is written
 
                 if (addFile && !pf.isDirectory())
                 {
                     long pos = dos.getByteCount(); // get the position
 
-                    FileInputStream inStream = new FileInputStream(file);
-                    long bytesWritten = PackagerHelper.copyStream(inStream, objOut);
-
-                    if (bytesWritten != pf.length())
+                    if (pack200)
                     {
-                        throw new IOException("File size mismatch when reading " + file);
+                        /*
+                         * Warning!
+                         * 
+                         * Pack200 archives must be stored in separated streams, as the Pack200 unpacker
+                         * reads the entire stream...
+                         *
+                         * See http://java.sun.com/javase/6/docs/api/java/util/jar/Pack200.Unpacker.html
+                         */
+                        pack200Map.put(pack200Counter, file);
+                        objOut.writeInt(pack200Counter);
+                        pack200Counter = pack200Counter + 1;
+                    }
+                    else
+                    {
+                        FileInputStream inStream = new FileInputStream(file);
+                        long bytesWritten = PackagerHelper.copyStream(inStream, objOut);
+                        inStream.close();
+                        if (bytesWritten != pf.length())
+                        {
+                            throw new IOException("File size mismatch when reading " + file);
+                        }
                     }
 
-                    inStream.close();
                     storedFiles.put(file, new Object[]{pack.id, pos});
                 }
 
@@ -386,6 +414,24 @@ public class Packager extends PackagerBase
         }
         out.flush();
         primaryJarStream.closeEntry();
+
+        // Pack200 files
+        Pack200.Packer packer = Pack200.newPacker();
+        Map<String, String> m = packer.properties();
+        m.put(Pack200.Packer.EFFORT, "9");
+        m.put(Pack200.Packer.SEGMENT_LIMIT, "-1");
+        m.put(Pack200.Packer.KEEP_FILE_ORDER, Pack200.Packer.FALSE);
+        m.put(Pack200.Packer.DEFLATE_HINT, Pack200.Packer.FALSE);
+        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LineNumberTable", Pack200.Packer.STRIP);
+        for (Integer key : pack200Map.keySet())
+        {
+            File file = pack200Map.get(key);
+            primaryJarStream.putNextEntry(new org.apache.tools.zip.ZipEntry("packs/pack200-" + key));
+            JarFile jar = new JarFile(file);
+            packer.pack(jar, primaryJarStream);
+            jar.close();
+            primaryJarStream.closeEntry();
+        }
     }
 
     /***********************************************************************************************

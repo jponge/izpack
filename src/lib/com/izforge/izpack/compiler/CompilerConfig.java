@@ -1647,6 +1647,10 @@ public class CompilerConfig extends Thread
             }
         }
 
+        // Pack200 support
+        XMLElement pack200 = root.getFirstChildNamed("pack200");
+        info.setPack200Compression(pack200 != null);
+
         // Add the uninstaller as a resource if specified
         XMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
         if (validateYesNoAttribute(uninstallInfo, "write", YES))

@@ -98,6 +98,8 @@ public class Info implements Serializable
 
     private boolean writeInstallationInformation = true;
 
+    private boolean pack200Compression;
+
     /**
      * The constructor, deliberatly void.
      */
@@ -274,6 +276,16 @@ public class Info implements Serializable
     public void setJdkRequired(boolean jdkRequired)
     {
         this.jdkRequired = jdkRequired;
+    }
+
+    public void setPack200Compression(boolean pack200Support)
+    {
+        this.pack200Compression = pack200Support;
+    }
+
+    public boolean isPack200Compression()
+    {
+        return pack200Compression;
     }
 
     /**

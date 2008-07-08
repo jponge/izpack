@@ -31,6 +31,7 @@ import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Pack200;
 
 /**
  * Unpacker class.
@@ -41,6 +42,8 @@ import java.util.List;
 public class Unpacker extends UnpackerBase
 {
     private static final String tempPath = "$INSTALL_PATH/Uninstaller/IzpackWebTemp";
+
+    private Pack200.Unpacker unpacker;
 
 
     /**
@@ -316,33 +319,45 @@ public class Unpacker extends UnpackerBase
                             }
                         }
 
-                        out = new FileOutputStream(pathFile);
-                        byte[] buffer = new byte[5120];
-                        long bytesCopied = 0;
-                        while (bytesCopied < pf.length())
+                        if (pf.isPack200Jar())
                         {
-                            if (performInterrupted())
-                            { // Interrupt was initiated; perform it.
-                                out.close();
-                                if (pis != objIn)
-                                {
-                                    pis.close();
-                                }
-                                return;
-                            }
-                            int maxBytes = (int) Math.min(pf.length() - bytesCopied, buffer.length);
-                            int bytesInBuffer = pis.read(buffer, 0, maxBytes);
-                            if (bytesInBuffer == -1)
-                            {
-                                throw new IOException("Unexpected end of stream (installer corrupted?)");
-                            }
-
-                            out.write(buffer, 0, bytesInBuffer);
-
-                            bytesCopied += bytesInBuffer;
+                            int key = objIn.readInt();
+                            InputStream pack200Input = Unpacker.class.getResourceAsStream("/packs/pack200-" + key);
+                            Pack200.Unpacker unpacker = getPack200Unpacker();
+                            java.util.jar.JarOutputStream jarOut = new java.util.jar.JarOutputStream(new FileOutputStream(pathFile));
+                            unpacker.unpack(pack200Input, jarOut);
+                            jarOut.close();
                         }
-                        // Cleanings
-                        out.close();
+                        else
+                        {
+                            out = new FileOutputStream(pathFile);
+                            byte[] buffer = new byte[5120];
+                            long bytesCopied = 0;
+                            while (bytesCopied < pf.length())
+                            {
+                                if (performInterrupted())
+                                { // Interrupt was initiated; perform it.
+                                    out.close();
+                                    if (pis != objIn)
+                                    {
+                                        pis.close();
+                                    }
+                                    return;
+                                }
+                                int maxBytes = (int) Math.min(pf.length() - bytesCopied, buffer.length);
+                                int bytesInBuffer = pis.read(buffer, 0, maxBytes);
+                                if (bytesInBuffer == -1)
+                                {
+                                    throw new IOException("Unexpected end of stream (installer corrupted?)");
+                                }
+
+                                out.write(buffer, 0, bytesInBuffer);
+
+                                bytesCopied += bytesInBuffer;
+                            }
+                            out.close();
+                        }
+
                         if (pis != objIn)
                         {
                             pis.close();
@@ -504,6 +519,15 @@ public class Unpacker extends UnpackerBase
         {
             removeFromInstances();
         }
+    }
+
+    private Pack200.Unpacker getPack200Unpacker()
+    {
+        if (unpacker == null)
+        {
+            unpacker = Pack200.newUnpacker();
+        }
+        return unpacker;
     }
 
     /**

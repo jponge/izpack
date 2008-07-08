@@ -100,6 +100,11 @@ public class PackFile implements Serializable
     public long offsetInPreviousPack = -1;
 
     /**
+     * True if the file is a Jar and pack200 compression us activated.
+     */
+    private boolean pack200Jar = false;
+
+    /**
      * condition for this packfile
      */
     private String condition = null;
@@ -304,5 +309,15 @@ public class PackFile implements Serializable
     public boolean hasCondition()
     {
         return this.condition != null;
+    }
+
+    public boolean isPack200Jar()
+    {
+        return pack200Jar;
+    }
+
+    public void setPack200Jar(boolean pack200Jar)
+    {
+        this.pack200Jar = pack200Jar;
     }
 }
