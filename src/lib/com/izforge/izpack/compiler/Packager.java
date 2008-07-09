@@ -31,6 +31,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.jar.JarFile;
 import java.util.jar.Pack200;
+import java.util.jar.JarEntry;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -288,7 +289,7 @@ public class Packager extends PackagerBase
                 PackFile pf = (PackFile) iter.next();
                 File file = packInfo.getFile(pf);
 
-                if (file.getName().toLowerCase().endsWith(".jar") && info.isPack200Compression())
+                if (file.getName().toLowerCase().endsWith(".jar") && info.isPack200Compression() && isNotSignedJar(file))
                 {
                     pf.setPack200Jar(true);
                     pack200 = true;
@@ -416,13 +417,7 @@ public class Packager extends PackagerBase
         primaryJarStream.closeEntry();
 
         // Pack200 files
-        Pack200.Packer packer = Pack200.newPacker();
-        Map<String, String> m = packer.properties();
-        m.put(Pack200.Packer.EFFORT, "9");
-        m.put(Pack200.Packer.SEGMENT_LIMIT, "-1");
-        m.put(Pack200.Packer.KEEP_FILE_ORDER, Pack200.Packer.FALSE);
-        m.put(Pack200.Packer.DEFLATE_HINT, Pack200.Packer.FALSE);
-        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LineNumberTable", Pack200.Packer.STRIP);
+        Pack200.Packer packer = createAgressivePack200Packer();
         for (Integer key : pack200Map.keySet())
         {
             File file = pack200Map.get(key);
@@ -432,6 +427,38 @@ public class Packager extends PackagerBase
             jar.close();
             primaryJarStream.closeEntry();
         }
+    }
+
+    private Pack200.Packer createAgressivePack200Packer()
+    {
+        Pack200.Packer packer = Pack200.newPacker();
+        Map<String, String> m = packer.properties();
+        m.put(Pack200.Packer.EFFORT, "9");
+        m.put(Pack200.Packer.SEGMENT_LIMIT, "-1");
+        m.put(Pack200.Packer.KEEP_FILE_ORDER, Pack200.Packer.FALSE);
+        m.put(Pack200.Packer.DEFLATE_HINT, Pack200.Packer.FALSE);
+        m.put(Pack200.Packer.MODIFICATION_TIME, Pack200.Packer.LATEST);
+        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX +"LineNumberTable", Pack200.Packer.STRIP);
+        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "LocalVariableTable", Pack200.Packer.STRIP);
+        m.put(Pack200.Packer.CODE_ATTRIBUTE_PFX + "SourceFile", Pack200.Packer.STRIP);
+        return packer;
+    }
+
+    private boolean isNotSignedJar(File file) throws IOException
+    {
+        JarFile jar = new JarFile(file);
+        Enumeration<JarEntry> entries = jar.entries();
+        while (entries.hasMoreElements())
+        {
+            JarEntry entry = entries.nextElement();
+            if (entry.getName().startsWith("META-INF") && entry.getName().endsWith(".SF"))
+            {
+                jar.close();
+                return false;
+            }
+        }
+        jar.close();
+        return true;
     }
 
     /***********************************************************************************************
