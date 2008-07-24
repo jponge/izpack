@@ -132,9 +132,10 @@ public class ProcessPanelWorker implements Runnable
         }
 
         for (XMLElement job_el : spec.getChildrenNamed("job"))
-        {
-            String conditionid = job_el.getAttribute("conditionid");
-            if (conditionid != null)
+        {                               
+            // normally use condition attribute, but also read conditionid to not break older versions.
+            String conditionid = job_el.hasAttribute("condition") ? job_el.getAttribute("condition") : job_el.hasAttribute("conditionid") ? job_el.getAttribute("conditionid") : null;
+            if ((conditionid != null) && (conditionid.length() > 0)){
             {
                 Debug.trace("Condition for job.");
                 Condition cond = RulesEngine.getCondition(conditionid);
@@ -144,7 +145,7 @@ public class ProcessPanelWorker implements Runnable
                     // skip, if there is a condition and this condition isn't true
                     continue;
                 }
-            }
+            }                                   
             Debug.trace("Condition is fulfilled or not existent.");
             // ExecuteForPack Patch
             // Check if processing required for pack
