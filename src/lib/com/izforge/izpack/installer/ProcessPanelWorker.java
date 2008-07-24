@@ -135,7 +135,7 @@ public class ProcessPanelWorker implements Runnable
         {                               
             // normally use condition attribute, but also read conditionid to not break older versions.
             String conditionid = job_el.hasAttribute("condition") ? job_el.getAttribute("condition") : job_el.hasAttribute("conditionid") ? job_el.getAttribute("conditionid") : null;
-            if ((conditionid != null) && (conditionid.length() > 0)){
+            if ((conditionid != null) && (conditionid.length() > 0))
             {
                 Debug.trace("Condition for job.");
                 Condition cond = RulesEngine.getCondition(conditionid);
@@ -205,8 +205,7 @@ public class ProcessPanelWorker implements Runnable
                     ef_list.add(new ExecutableClass(ef_name, args));
                 }
                 this.jobs.add(new ProcessingJob(job_name, ef_list));
-            }
-
+            }            
         }
 
         return true;
