@@ -19,17 +19,17 @@
 
 package com.izforge.izpack.panels;
 
+import javax.swing.JEditorPane;
+import javax.swing.JScrollPane;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
-
-import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-import java.net.URL;
 
 /**
  * The HTML info panel.
@@ -66,7 +66,12 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
             textArea.setEditable(false);
             textArea.addHyperlinkListener(this);
             JScrollPane scroller = new JScrollPane(textArea);
-            textArea.setPage(loadInfo());
+            // TODO: it would be nice to give the Panel the parse attribute but by now the content is simply parsed
+            String content=loadHTMLInfoContent();
+            if (content!=null)
+            {
+               textArea.setText(this.parseText(loadHTMLInfoContent()));
+            }
             add(scroller, NEXT_LINE);
         }
         catch (Exception err)
@@ -75,18 +80,30 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
         }
         getLayoutHelper().completeLayout();
     }
-
-    /**
-     * Loads the info.
-     *
-     * @return The info URL.
+    
+    /*
+     * loads the content of the info resource as text so that it can be parsed afterwards  
      */
-    private URL loadInfo()
+    private String loadHTMLInfoContent()
     {
         String resNamePrifix = "HTMLInfoPanel.info";
+        if (this.getMetadata()!=null && this.getMetadata().getPanelid()!=null)
+        {
+           String panelspecificResNamePrifix="HTMLInfoPanel."+this.getMetadata().getPanelid();
+           String panelspecificResContent=null;
+           try
+           {
+              panelspecificResContent = ResourceManager.getInstance().getTextResource(panelspecificResNamePrifix);
+           }
+           catch (Exception e){}
+           if (panelspecificResContent!=null)
+           {
+               return panelspecificResContent;
+           }
+        }
         try
         {
-            return ResourceManager.getInstance().getURL(resNamePrifix);
+            return ResourceManager.getInstance().getTextResource(resNamePrifix);
         }
         catch (Exception ex)
         {
@@ -160,4 +177,15 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
             //TODO: Handle exception.
         }
     }
+    
+    public void panelActivate()
+    {
+        // TODO: it would be nice to give the Panel the parse attribute but by now the content is simply parsed
+        String content=loadHTMLInfoContent();
+        if (content!=null)
+        {
+           textArea.setText(this.parseText(loadHTMLInfoContent()));
+        }
+    }
+    
 }

@@ -61,7 +61,10 @@ and in file.html:
 ::
 
     <img src="GHGHGH" />
+    
 
+Note that variables are being substituted in HTMLINfoPanel (e.g., ``$JINSTALL_PATH`` will be
+replaced with the installation path).
 
 LicencePanel and HTMLLicencePanel
 ----------------------------------

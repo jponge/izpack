@@ -1004,4 +1004,25 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     {
         this.metadata = p;
     }
+
+    /**
+     * Parses the text for special variables.
+     */
+    protected String parseText(String string_to_parse)
+    {
+        try
+        {
+            // Initialize the variable substitutor
+            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+
+            // Parses the info text
+            string_to_parse=vs.substitute(string_to_parse, null);
+        }
+        catch (Exception err)
+        {
+            err.printStackTrace();
+        }
+        return string_to_parse;
+    }
+
 }
