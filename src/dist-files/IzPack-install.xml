@@ -31,7 +31,7 @@
         <url>http://izpack.org/</url>
         <javaversion>1.5</javaversion>
         <requiresjdk>no</requiresjdk>
-        <pack200/>
+        <!--><pack200/>-->
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
     </info>
 

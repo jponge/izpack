@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -183,7 +184,17 @@ public class ProcessPanelWorker implements Runnable
                         args.add(arg_val);
                     }
 
-                    ef_list.add(new ExecutableFile(ef_name, args));
+                    List<String> envvars = new ArrayList<String>();
+
+                    for (XMLElement env_el : ef.getChildrenNamed("env"))
+                    {
+                        String env_val = env_el.getContent();
+
+                        envvars.add(env_val);
+                    }
+
+
+                    ef_list.add(new ExecutableFile(ef_name, args, envvars));
                 }
 
                 for (XMLElement ef : job_el.getChildrenNamed("executeclass"))
@@ -360,31 +371,46 @@ public class ProcessPanelWorker implements Runnable
 
         private List<String> arguments;
 
+        private List<String> envvariables;
+
         protected AbstractUIProcessHandler handler;
 
-        public ExecutableFile(String fn, List<String> args)
+        public ExecutableFile(String fn, List<String> args, List<String> envvars)
         {
             this.filename = fn;
             this.arguments = args;
+            this.envvariables = envvars;
         }
 
         public boolean run(AbstractUIProcessHandler handler, VariableSubstitutor vs)
         {
             this.handler = handler;
 
-            String params[] = new String[this.arguments.size() + 1];
+            List<String> params = new ArrayList<String>(this.arguments.size() + 1);
 
-            params[0] = vs.substitute(this.filename, "plain");
+            params.add(vs.substitute(this.filename, "plain"));
 
-            int i = 1;
             for (String argument : this.arguments)
             {
-                params[i++] = vs.substitute(argument, "plain");
+                params.add(vs.substitute(argument, "plain"));
+            }
+
+            ProcessBuilder pb = new ProcessBuilder(params);
+            Map<String, String> environment = pb.environment();
+            for (String envvar : envvariables)
+            {
+                String ev = vs.substitute(envvar, "plain");
+                int i = ev.indexOf("=");
+                if (i > 0)
+                {
+                    environment.put(ev.substring(0, i), ev.substring(i + 1));
+                }
             }
 
             try
             {
-                Process p = Runtime.getRuntime().exec(params);
+
+                Process p = pb.start();
 
                 OutputMonitor stdoutMon = new OutputMonitor(this.handler, p.getInputStream(), false);
                 OutputMonitor stderrMon = new OutputMonitor(this.handler, p.getErrorStream(), true);

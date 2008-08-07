@@ -310,6 +310,9 @@ The XML file has the following format:
 
 Each job may have an ``<os>`` attribute.
 
+In addition to ``<arg>`` elements, the ``<executefile>`` element also accepts ``<env>`` elements to set variables in the environment of the target process. This can be useful if this process requires some environment variables, such as its installation directory, to work properly.
+An ``<env>`` element has the following syntax: ``<env>variable=value</env>``. Note the value supports variable substitution, for example:
+``<env>MY_PRODUCT_HOME=$INSTALL_PATH</env>``.
 
 
 ``<executeclass>`` - Execute Java Classes
