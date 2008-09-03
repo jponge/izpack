@@ -23,6 +23,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.util.Debug;
 import net.n3.nanoxml.XMLElement;
 
 import java.util.Iterator;
@@ -68,21 +69,21 @@ public class UserPathPanel extends UserPathInputPanel
     public void panelActivate()
     {
         boolean found = false;
-        System.out.println(thisName + " looking for activation condition");
+        Debug.trace(thisName + " looking for activation condition");
         // Need to have a way to supress panel if not in selected packs.
         String dependsName = idata.getVariable(pathPackDependsName);
         if (dependsName != null && !(dependsName.equalsIgnoreCase("")))
         {
-            System.out.println("Checking for pack dependency of " + dependsName);
+            Debug.trace("Checking for pack dependency of " + dependsName);
             Iterator iter = idata.selectedPacks.iterator();
             while (iter.hasNext())
             {
                 Pack pack = (Pack) iter.next();
-                System.out.println("- Checking if " + pack.name + " equals " + dependsName);
+                Debug.trace("- Checking if " + pack.name + " equals " + dependsName);
                 if (pack.name.equalsIgnoreCase(dependsName))
                 {
                     found = true;
-                    System.out.println("-- Found " + dependsName + ", panel will be shown");
+                    Debug.trace("-- Found " + dependsName + ", panel will be shown");
                     break;
                 }
             }
@@ -90,12 +91,12 @@ public class UserPathPanel extends UserPathInputPanel
         }
         else
         {
-            System.out.println("Not Checking for a pack dependency, panel will be shown");
+            Debug.trace("Not Checking for a pack dependency, panel will be shown");
             skip = false;
         }
         if (skip)
         {
-            System.out.println(thisName + " will not be shown");
+            Debug.trace(thisName + " will not be shown");
             parent.skipPanel();
             return;
         }
