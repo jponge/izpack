@@ -776,7 +776,7 @@ public class CompilerConfig extends Thread
                 List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
                 Map additionals = getAdditionals(f);
-                boolean unpack = src.endsWith(".zip") && "true".equalsIgnoreCase(f.getAttribute("unpack"));
+                boolean unpack = "true".equalsIgnoreCase(f.getAttribute("unpack"));
                 String condition = f.getAttribute("condition");
 
                 File file = new File(src);
