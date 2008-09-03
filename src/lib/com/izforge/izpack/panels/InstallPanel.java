@@ -109,6 +109,10 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
 
         overallProgressBar = new JProgressBar();
         overallProgressBar.setStringPainted(true);
+        if (noOfPacks == 1)
+        {
+            overallProgressBar.setIndeterminate(true);
+        }
         overallProgressBar.setString("");
         overallProgressBar.setValue(0);
         add(this.overallProgressBar, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
@@ -186,6 +190,10 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler
                 packProgressBar.setString(parent.langpack.getString("InstallPanel.finished"));
                 packProgressBar.setEnabled(false);
                 String no_of_packs = Integer.toString(noOfPacks);
+                if (noOfPacks == 1)
+                {
+                    overallProgressBar.setIndeterminate(false);
+                }
                 overallProgressBar.setString(no_of_packs + " / " + no_of_packs);
                 overallProgressBar.setEnabled(false);
                 packOpLabel.setText(" ");
