@@ -56,7 +56,7 @@ public class Compiler extends Thread
     /**
      * The IzPack version.
      */
-    public final static String IZPACK_VERSION = "4.0.1";
+    public final static String IZPACK_VERSION = "4.1.0";
 
     /**
      * The IzPack home directory.
