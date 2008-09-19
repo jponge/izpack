@@ -179,7 +179,7 @@ public class InstallerFrame extends JFrame
 
     // If a heading image is defined should it be displayed on the left
     private boolean imageLeft = false;
-    
+
     private List<InstallerRequirement> installerrequirements;
 
 
@@ -207,14 +207,15 @@ public class InstallerFrame extends JFrame
         loadConditions();
 
         // loads installer conditions
-        loadInstallerRequirements();      
-        
+        loadInstallerRequirements();
+
         // check installer conditions
-        if (!checkInstallerRequirements()){
+        if (!checkInstallerRequirements())
+        {
             Debug.log("not all installerconditions are fulfilled.");
             return;
         }
-        
+
         // load dynamic variables
         loadDynamicVariables();
         // Builds the GUI
@@ -230,33 +231,37 @@ public class InstallerFrame extends JFrame
 
     private boolean checkInstallerRequirements() throws Exception
     {
-       boolean result = true;
-       
-       for (InstallerRequirement installerrequirement : this.installerrequirements){
-           String conditionid = installerrequirement.getCondition();
-           Condition condition = RulesEngine.getCondition(conditionid);
-           if (condition == null){
-               Debug.log(conditionid + " not a valid condition.");
-               throw new Exception(conditionid + "could not be found as a defined condition");
-           }
-           if (!condition.isTrue()){
-               String message = installerrequirement.getMessage();
-               if ((message != null) && (message.length() > 0)){
-                   String localizedMessage = this.installdata.langpack.getString(message);
-                   JOptionPane.showMessageDialog(this, localizedMessage);
-               }
-               result = false;
-               break;
-           } 
-       }             
-       return result;
+        boolean result = true;
+
+        for (InstallerRequirement installerrequirement : this.installerrequirements)
+        {
+            String conditionid = installerrequirement.getCondition();
+            Condition condition = RulesEngine.getCondition(conditionid);
+            if (condition == null)
+            {
+                Debug.log(conditionid + " not a valid condition.");
+                throw new Exception(conditionid + "could not be found as a defined condition");
+            }
+            if (!condition.isTrue())
+            {
+                String message = installerrequirement.getMessage();
+                if ((message != null) && (message.length() > 0))
+                {
+                    String localizedMessage = this.installdata.langpack.getString(message);
+                    JOptionPane.showMessageDialog(this, localizedMessage);
+                }
+                result = false;
+                break;
+            }
+        }
+        return result;
     }
 
     public Debugger getDebugger()
     {
         return this.debugger;
     }
-    
+
     /**
      * Load installer conditions
      *
@@ -265,8 +270,8 @@ public class InstallerFrame extends JFrame
     public void loadInstallerRequirements() throws Exception
     {
         InputStream in = GUIInstaller.class.getResourceAsStream("/installerrequirements");
-        ObjectInputStream objIn = new ObjectInputStream(in);        
-        this.installerrequirements = (List<InstallerRequirement>) objIn.readObject();         
+        ObjectInputStream objIn = new ObjectInputStream(in);
+        this.installerrequirements = (List<InstallerRequirement>) objIn.readObject();
         objIn.close();
     }
 
@@ -1602,7 +1607,20 @@ public class InstallerFrame extends JFrame
         nextButton.setEnabled(true);
         if (requestFocus)
         {
-            nextButton.requestFocus();
+            nextButton.requestFocusInWindow();
+            getRootPane().setDefaultButton(nextButton);
+            if (this.getFocusOwner() != null)
+            {
+                Debug.trace("Current focus owner: " + this.getFocusOwner().getName());
+            }
+            if (!(getRootPane().getDefaultButton() == nextButton))
+            {
+                Debug.trace("Next button not default button, setting...");
+                quitButton.setDefaultCapable(false);
+                prevButton.setDefaultCapable(false);
+                nextButton.setDefaultCapable(true);
+                getRootPane().setDefaultButton(nextButton);
+            }
         }
     }
 
