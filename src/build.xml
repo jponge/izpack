@@ -951,7 +951,7 @@
     </target>
 
     <target name="build.docu" description="Builds the customer documentation">
-        <exec executable="python" dir="${basedir}/src/doc-reST">
+        <exec executable="${basedir}/src/doc-reST/build.py" dir="${basedir}/src/doc-reST">
             <arg value="build.py"/>
         </exec>
 
