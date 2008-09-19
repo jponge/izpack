@@ -850,7 +850,7 @@ into the pack. It takes the following attributes:
     windows, mac``) - this means that the file will only be installed on its
     target operating system
 -   ``override``: if ``true`` then if the file is already installed, it
-    will be overwritten. Alternative values: ``asktrue`` and ``askfalse`` -
+    will be overwritten (use ``false`` otherwise). Alternative values: ``asktrue`` and ``askfalse`` -
     ask the user what to do and supply default value for non-interactive use.
     Another possible values is ``update``. It means that the new file is only
     installed if it's modification time is newer than the modification time
