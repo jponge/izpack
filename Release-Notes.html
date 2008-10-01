@@ -2,52 +2,100 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>IzPack 4.0.1 release notes</title>
+  <title>IzPack 4.1.0 release notes</title>
 </head>
 <body>
 
 
-<h1>Release Notes - IzPack - Version 4.0.1</h1>
+	<h1>Release Notes - IzPack - Version 4.1.0</h1>
 
-<h2>        Bug
-</h2>
-<ul>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-97'>IZPACK-97</a>] -         UserPathPanel default dir not shown on mac
-</li>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-98'>IZPACK-98</a>] -         UserPathPanel: browse button clipped
-</li>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-100'>IZPACK-100</a>] -         Resize problem
-</li>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-106'>IZPACK-106</a>] -         The packs list in PacksPanel does not behave correctly on clicks
-</li>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-109'>IZPACK-109</a>] -         Web installer: NoClassDefFoundError: com/izforge/izpack/compiler/CompilerException when downloading packs
-</li>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-113'>IZPACK-113</a>] -         Scandinavian characters (&#xE5;&#xE4;&#xF6;) in packet name will cause installation fail
-</li>
-</ul>
+	<h2>        Bug
+	</h2>
+	<ul>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-72'>IZPACK-72</a>] -         PortProcessor does not catch invalid error
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-93'>IZPACK-93</a>] -         Re-enabled button does not gain focus
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-126'>IZPACK-126</a>] -         Lost input data when navigating forward/backward in installer
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-127'>IZPACK-127</a>] -         Conditionid used instead of condition for job definitions
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-141'>IZPACK-141</a>] -         Information defined in info section are not available as build-in variable during compile time
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-142'>IZPACK-142</a>] -         Custom panel jars are not found with maven plugin
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-151'>IZPACK-151</a>] -         file unpack does not work with war files
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-152'>IZPACK-152</a>] -         UserPathPanel prints debug messages to console
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-159'>IZPACK-159</a>] -         IzPack2App: executable bit should be forced to be set on the Java application stub
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-160'>IZPACK-160</a>] -         Documention for file's override attribute missing &quot;false&quot; value
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-167'>IZPACK-167</a>] -         izpack2exe crashes when called from a different directory than where it resides
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-168'>IZPACK-168</a>] -         izpack2app does not properly work when called from the same folder as the script
+	</li>
+	</ul>
 
-<h2>        Improvement
-</h2>
-<ul>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-117'>IZPACK-117</a>] -         Improve German Language Pack
-</li>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-120'>IZPACK-120</a>] -         TestLangPacks: Added new feature: find same strings and updates.
-</li>
-</ul>
+	<h2>        Improvement
+	</h2>
+	<ul>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-63'>IZPACK-63</a>] -         Reduce the installers size
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-112'>IZPACK-112</a>] -         Registry interaction: allow string key values to be extended
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-114'>IZPACK-114</a>] -         Ability to set environment variables when using ProcessPanel
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-123'>IZPACK-123</a>] -         Multiple HTMLInfo Panels showing different html files...
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-124'>IZPACK-124</a>] -         Parsing/Variable substitution of the content in HTMLInfoPanel
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-130'>IZPACK-130</a>] -         TestLangPacks: build.xml update: Added distribution dir and files and some other tasks. Added zip creation.
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-149'>IZPACK-149</a>] -         support encoding when interpolating izpack descriptor
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-155'>IZPACK-155</a>] -         InstallPanel overall progress bar should be indeterminate if there is only one pack to install
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-157'>IZPACK-157</a>] -         Raise the JVM heap size in IzPack scripts
+	</li>
+	</ul>
 
-<h2>        New Feature
-</h2>
-<ul>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-111'>IZPACK-111</a>] -         Add Installer Conditions
-</li>
-</ul>
+	<h2>        New Feature
+	</h2>
+	<ul>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-82'>IZPACK-82</a>] -         Pack200 support
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-84'>IZPACK-84</a>] -         Install Script Locator Framework
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-110'>IZPACK-110</a>] -         User Condition
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-145'>IZPACK-145</a>] -         Ablility to disable the attaching of the artifact in maven plugin
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-147'>IZPACK-147</a>] -         ability to customize the final name
+	</li>
+	</ul>
 
-<h2>        Task
-</h2>
-<ul>
-<li>[<a href='http://jira.codehaus.org/browse/IZPACK-121'>IZPACK-121</a>] -         TestLangPacks: Documentation addition. Update build.xml encoding.
-</li>
-</ul>
+	<h2>        Task
+	</h2>
+	<ul>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-129'>IZPACK-129</a>] -         TestLangPacks: Added directory for distribution files.
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-131'>IZPACK-131</a>] -         TestLangPacks: Added version stamping into use for various files.
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-132'>IZPACK-132</a>] -         TestLangPacks: application name and version are taken from Manifest.mf file. Documentation update.
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-134'>IZPACK-134</a>] -         TestLangPacks: Tag for version 1.0-beta1
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-137'>IZPACK-137</a>] -         TestLangPacks: Added license file.
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-139'>IZPACK-139</a>] -         Italian langpack update.
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-143'>IZPACK-143</a>] -         TestLangPacks: Documentation update.
+	</li>
+	<li>[<a href='http://jira.codehaus.org/browse/IZPACK-144'>IZPACK-144</a>] -         TestLangPacks: Tag for version 1.0.
+	</li>
+	</ul>
 
 
 </body>
