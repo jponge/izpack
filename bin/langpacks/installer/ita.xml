@@ -128,6 +128,8 @@
     <str id="FinishPanel.uninst.info" txt="E' stato creato un programma di disinstallazione in:"/>
     <str id="FinishPanel.auto" txt="Genera uno script d'installazione automatica"/>
     <str id="FinishPanel.auto.tip" txt="Usa questo script per ripetere l'installazione in altri computer."/>
+    <str id="FinishPanel.auto.dialog.filterdesc" txt="File XML"/>
+
 
     <str id="ImgPacksPanel.packs" txt="Sono disponibili questi componenti:"/>
     <str id="ImgPacksPanel.snap" txt="Elenco componenti: "/>
@@ -251,7 +253,7 @@
     <str id="nextmedia.okbtn" txt="Applica"/>
     <str id="nextmedia.cancelbtn" txt="Annulla"/>
     <str id="nextmedia.choosertitle" txt="Selezionare il supporto per l'installazione"/>
-    <str id="nextmedia.filedesc" rdid="Componenti da installare (.pak*)"/>
+    <str id="nextmedia.filedesc" txt="Componenti da installare (.pak*)"/>
 
     <!-- Strings for the logging/reporting system (Messenger) -->
 
