@@ -97,4 +97,28 @@ The usage is straightforward::
 
 wraps *installer.jar* as *Installer.app*
 
+Java Web Start JNLP file generator (izpack2jnlp)
+------------------------------------------------
+
+Description
+'''''''''''
+
+**izpack2jnlp** is able to generate Java Web Start JNLP files so that IzPack-based installers can also be shipped via Java Web Start.
+
+Requirements
+''''''''''''
+
+**izpack2jnlp** is written in Python and does not need third-party modules to work.
+
+Please note that it only generates JNLP files: **you must sign your installer JAR** before you actually upload them to a web server as **Java Web Start refuses to launch unsigned JARs**.
+
+Usage
+'''''
+
+You need to pass a few arguments on the command-line, run::
+
+  izpack2jnlp.py --help
+
+to see them.
+
 .. include:: include-bottom.inc
