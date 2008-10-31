@@ -60,6 +60,8 @@ public class RulesEngine
      */
     private void init()
     {
+        Debug.trace("RulesEngine.init()");
+        
         createBuiltinOsCondition("IS_WINDOWS", "izpack.windowsinstall");
         createBuiltinOsCondition("IS_LINUX", "izpack.linuxinstall");
         createBuiltinOsCondition("IS_SUNOS", "izpack.solarisinstall");
@@ -70,6 +72,7 @@ public class RulesEngine
 
         if ((installdata != null) && (installdata.allPacks != null))
         {
+            Debug.trace("Initializing builtin conditions for packs.");
             for (Pack pack : installdata.allPacks)
             {
                 if (pack.id != null)
@@ -80,7 +83,14 @@ public class RulesEngine
                     packselcond.id = "izpack.selected." + pack.id;
                     packselcond.packid = pack.id;
                     conditionsmap.put(packselcond.id, packselcond);
+                    
+                    Debug.trace("Pack.getCondition(): " + pack.getCondition() + " for pack " + pack.id);
+                    if ((pack.getCondition() != null) && pack.getCondition().length() > 0){
+                        Debug.trace("Adding pack condition " + pack.getCondition() + " for pack " + pack.id);
+                        packconditions.put(pack.id, pack.getCondition());
+                    }
                 }
+                
             }
         }
     }
@@ -113,6 +123,7 @@ public class RulesEngine
     public RulesEngine(Map rules, InstallData installdata)
     {
         this();
+        Debug.trace("Initializing RulesEngine");
         RulesEngine.installdata = installdata;
         conditionsmap = rules;
         Iterator keyiter = conditionsmap.keySet().iterator();
