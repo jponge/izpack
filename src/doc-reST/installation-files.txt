@@ -716,8 +716,8 @@ The Packs Element ``<packs>``
 '''''''''''''''''''''''''''''''
 
 This is a crucial section as it is used to specify the files that need to be
-installed. The ``<packs>`` section consists of several ``<pack>`` and
-``<refpack>`` tags.
+installed. The ``<packs>`` section consists of several ``<pack>``, 
+``<refpack>`` and ``<refpackset>`` tags.
 
 The ``<pack>`` takes the following attributes :
 
@@ -757,6 +757,21 @@ resources related to the development-package assigned to him. The main
 install XML references these xml-files to avoid synchronization efforts
 between the central installation XML and the developer-maintained installer
 XMLs.
+
+The ``<refpackset>`` tag can be used in situations were there is no predefined
+set of ``<refpack>`` files, but a given directory should be scanned for 
+``<refpack>`` files to be included instead. This element takes the following 
+parameters:
+
+-   ``dir``: the base directory for the refpackset (relative path)
+-   ``includes``: a pattern of files in ``<refpack>`` format that must be included 
+
+An example:
+
+::
+
+    <refpackset dir="" includes="**/refpack.xml" />
+
 
 Internationalization of the PacksPanel
 '''''''''''''''''''''''''''''''''''''''

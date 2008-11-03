@@ -611,9 +611,10 @@ public class CompilerConfig extends Thread
         // at least one pack is required
         Vector<XMLElement> packElements = root.getChildrenNamed("pack");
         Vector<XMLElement> refPackElements = root.getChildrenNamed("refpack");
-        if (packElements.isEmpty() && refPackElements.isEmpty())
+        Vector<XMLElement> refPackSets = root.getChildrenNamed("refpackset");
+        if (packElements.isEmpty() && refPackElements.isEmpty() && refPackSets.isEmpty())
         {
-            parseError(root, "<packs> requires a <pack> or <refpack>");
+            parseError(root, "<packs> requires a <pack>, <refpack> or <refpackset>");
         }
 
         File baseDir = new File(basedir);
@@ -1018,113 +1019,165 @@ public class CompilerConfig extends Thread
             String selfcontained = el.getAttribute("selfcontained");
             boolean isselfcontained = Boolean.valueOf(selfcontained);
 
+            // parsing ref-pack-set file
+            XMLElement refXMLData = this.readRefPackData(refFileName, isselfcontained);
 
-            File refXMLFile = new File(refFileName);
-            if (!refXMLFile.isAbsolute())
-            {
-                refXMLFile = new File(basedir, refFileName);
-            }
-            if (!refXMLFile.canRead())
-            {
-                throw new CompilerException("Invalid file: " + refXMLFile);
-            }
-
-            InputStream specin = null;
-
-            if (isselfcontained)
-            {
-                if (!refXMLFile.getAbsolutePath().endsWith(".zip"))
-                {
-                    throw new CompilerException("Invalid file: " + refXMLFile + ". Selfcontained files can only be of type zip.");
-                }
-                ZipFile zip;
-                try
-                {
-                    zip = new ZipFile(refXMLFile, ZipFile.OPEN_READ);
-                    ZipEntry specentry = zip.getEntry("META-INF/izpack.xml");
-                    specin = zip.getInputStream(specentry);
-                }
-                catch (IOException e)
-                {
-                    throw new CompilerException("Error reading META-INF/izpack.xml in " + refXMLFile);
-                }
-            }
-            else
-            {
-                try
-                {
-                    specin = new FileInputStream(refXMLFile.getAbsolutePath());
-                }
-                catch (FileNotFoundException e)
-                {
-                    throw new CompilerException("FileNotFoundException exception while reading refXMLFile");
-                }
-            }
-
-            // Initialises the parser
-            IXMLReader refXMLReader = null;
-
-            // Load the reference XML file                        
-            try
-            {
-                refXMLReader = new StdXMLReader(specin);
-            }
-            catch (CompilerException c)
-            {
-                throw new CompilerException("Compiler exception while reading refXMLFile");
-            }
-            catch (IOException io)
-            {
-                throw new CompilerException("IOException exception while reading refXMLFile");
-            }
-
-            StdXMLParser refXMLParser = new StdXMLParser();
-            refXMLParser.setBuilder(XMLBuilderFactory.createXMLBuilder());
-            refXMLParser.setReader(refXMLReader);
-            refXMLParser.setValidator(new NonValidator());
-
-            // We get it
-            XMLElement refXMLData = null;
-            try
-            {
-                refXMLData = (XMLElement) refXMLParser.parse();
-
-            }
-            catch (XMLException x)
-            {
-                throw new CompilerException("Error parsing installation file", x);
-            }
-
-            // Now checked the loaded XML file for basic syntax
-            // We check it
-            if (!"installation".equalsIgnoreCase(refXMLData.getName()))
-            {
-                parseError(refXMLData, "this is not an IzPack XML installation file");
-            }
-            if (!VERSION.equalsIgnoreCase(requireAttribute(refXMLData, "version")))
-            {
-                parseError(refXMLData, "the file version is different from the compiler version");
-            }
-
-            // Read the properties and perform replacement on the rest of the tree
-            substituteProperties(refXMLData);
-
-            // call addResources to add the referenced XML resources to this installation
-            addResources(refXMLData);
-
-            try
-            {
-                specin.close();
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
             // Recursively call myself to add all packs and refpacks from the reference XML
             addPacksSingle(refXMLData);
         }
+        
+        Iterator<XMLElement> refPackSetIter = refPackSets.iterator();
+        while (refPackSetIter.hasNext())
+        {
+            XMLElement el = refPackSetIter.next();
+                    
+            // the directory to scan
+            String dir_attr = this.requireAttribute(el, "dir");
+            
+            File dir = new File(dir_attr);
+            if (!dir.isAbsolute())
+            {
+                dir = new File(basedir, dir_attr);
+            }
+            if (!dir.isDirectory()) // also tests '.exists()'
+            {
+                parseError(el, "Invalid refpackset directory 'dir': " + dir_attr);
+            }
+            
+            // include pattern
+            String includeString = this.requireAttribute(el, "includes");            
+            String[] includes = includeString.split(", ");
+            
+            // scan for refpack files
+            DirectoryScanner ds = new DirectoryScanner();
+            ds.setIncludes(includes);
+            ds.setBasedir(dir);
+            ds.setCaseSensitive(true);
+            ds.scan();
+
+            // loop through all found fils and handle them as normal refpack files
+            String[] files = ds.getIncludedFiles();
+            for (int i = 0; i < files.length; i++) 
+            {
+                String refFileName = new File(dir, files[i]).toString();
+                
+                // parsing ref-pack-set file
+                XMLElement refXMLData = this.readRefPackData(refFileName, false);
+
+                // Recursively call myself to add all packs and refpacks from the reference XML
+                addPacksSingle(refXMLData);
+            }            
+        }        
+        
         notifyCompilerListener("addPacksSingle", CompilerListener.END, data);
+    }
+    
+    private XMLElement readRefPackData(String refFileName, boolean isselfcontained) throws CompilerException 
+    {
+        File refXMLFile = new File(refFileName);
+        if (!refXMLFile.isAbsolute())
+        {
+            refXMLFile = new File(basedir, refFileName);
+        }
+        if (!refXMLFile.canRead())
+        {
+            throw new CompilerException("Invalid file: " + refXMLFile);
+        }
+
+        InputStream specin = null;
+
+        if (isselfcontained)
+        {
+            if (!refXMLFile.getAbsolutePath().endsWith(".zip"))
+            {
+                throw new CompilerException("Invalid file: " + refXMLFile + ". Selfcontained files can only be of type zip.");
+            }
+            ZipFile zip;
+            try
+            {
+                zip = new ZipFile(refXMLFile, ZipFile.OPEN_READ);
+                ZipEntry specentry = zip.getEntry("META-INF/izpack.xml");
+                specin = zip.getInputStream(specentry);
+            }
+            catch (IOException e)
+            {
+                throw new CompilerException("Error reading META-INF/izpack.xml in " + refXMLFile);
+            }
+        }
+        else
+        {
+            try
+            {
+                specin = new FileInputStream(refXMLFile.getAbsolutePath());
+            }
+            catch (FileNotFoundException e)
+            {
+                throw new CompilerException("FileNotFoundException exception while reading refXMLFile");
+            }
+        }
+
+        // Initialises the parser
+        IXMLReader refXMLReader = null;
+
+        // Load the reference XML file                        
+        try
+        {
+            refXMLReader = new StdXMLReader(specin);
+        }
+        catch (CompilerException c)
+        {
+            throw new CompilerException("Compiler exception while reading refXMLFile");
+        }
+        catch (IOException io)
+        {
+            throw new CompilerException("IOException exception while reading refXMLFile");
+        }
+
+        StdXMLParser refXMLParser = new StdXMLParser();
+        refXMLParser.setBuilder(XMLBuilderFactory.createXMLBuilder());
+        refXMLParser.setReader(refXMLReader);
+        refXMLParser.setValidator(new NonValidator());
+
+        // We get it
+        XMLElement refXMLData = null;
+        try
+        {
+            refXMLData = (XMLElement) refXMLParser.parse();
+
+        }
+        catch (XMLException x)
+        {
+            throw new CompilerException("Error parsing installation file", x);
+        }
+
+        // Now checked the loaded XML file for basic syntax
+        // We check it
+        if (!"installation".equalsIgnoreCase(refXMLData.getName()))
+        {
+            parseError(refXMLData, "this is not an IzPack XML installation file");
+        }
+        if (!VERSION.equalsIgnoreCase(requireAttribute(refXMLData, "version")))
+        {
+            parseError(refXMLData, "the file version is different from the compiler version");
+        }
+
+        // Read the properties and perform replacement on the rest of the tree
+        substituteProperties(refXMLData);
+
+        // call addResources to add the referenced XML resources to this installation
+        addResources(refXMLData);
+
+        try
+        {
+            specin.close();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return refXMLData;
     }
 
     /**
