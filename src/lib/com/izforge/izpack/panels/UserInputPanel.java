@@ -2898,6 +2898,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * @param element      the <code>XMLElement</code> to search for the attribute.
      * @param attribute    the attribute to search for
      * @param defaultValue the default value to use in case the attribute does not exist.
+     * @param element      the <code>XMLElement</code> to search for the attribute.
+     * @param attribute    the attribute to search for
+     * @param defaultValue the default value to use in case the attribute does not exist.
      * @return the value of the attribute. If the attribute is not found or the content is not a
      *         legal integer, then the default value is returned.
      */
@@ -3441,8 +3444,6 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             if (path != null)
             { // Make sure, path is not null
-                // System.out.println ("checking path " + path);
-
                 File file = null;
 
                 if ((this.filename == null) || (this.searchType == TYPE_DIRECTORY))
@@ -3512,9 +3513,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
             // and resolve the pathes automatically:
             // /usr/lib/* searches all folders in usr/lib to find
             // /usr/lib/*/lib/tools.jar
+            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
             for (int i = 0; i < this.pathComboBox.getItemCount(); ++i)
             {
-                String path = (String) this.pathComboBox.getItemAt(i);
+                String path = vs.substitute((String) this.pathComboBox.getItemAt(i), null);
+// 					System.out.println ("autodetecting " + path);
 
                 if (path.endsWith("*"))
                 {
@@ -3548,10 +3551,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
             // Now clear the combobox and add the items out of the newly
             // generated vector
             this.pathComboBox.removeAllItems();
-            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
             for (String item : items)
             {
-                this.pathComboBox.addItem(vs.substitute(item, "plain"));
+                String res = vs.substitute(item, "plain");
+// 					System.out.println ("substitution " + item + ", result " + res);
+                this.pathComboBox.addItem(res);
             }
 
             // loop through all items
