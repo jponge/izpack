@@ -177,7 +177,7 @@ public class ShellScript
     }
 
     /**
-     * Appends an Object or String to this ShellScript with unix linefeed ("\n").
+     * Appends an unix linefeed to this script ("\n").
      */
     public void appendln()
     {
@@ -255,7 +255,7 @@ public class ShellScript
      * This means for the sample. runtime.exec() would ever execute such as: su "-c" "\"cp"
      * "fromFile" "toFile\""<br>
      * But this his hidden in Sun's native code ;-(<br>
-     * This was the reason to write thsi class to have a Workaround :-)
+     * This was the reason to write this class to have a Workaround :-)
      *
      * @param itsParams
      * @return the output from stdout of the execution.
