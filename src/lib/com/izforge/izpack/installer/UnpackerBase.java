@@ -653,6 +653,14 @@ public abstract class UnpackerBase implements IUnpacker
      */
     protected void putUninstaller() throws Exception
     {
+        String uninstallerCondition = idata.info.getUninstallerCondition();
+        if ((uninstallerCondition != null) &&
+             (uninstallerCondition.length() > 0) &&
+             !this.rules.isConditionTrue(uninstallerCondition)){
+            Debug.log("Uninstaller has a condition (" + uninstallerCondition  + ") which is not fulfilled.");
+            Debug.log("Skipping creation of uninstaller.");
+            return;
+        }
         // get the uninstaller base, returning if not found so that
         // idata.uninstallOutJar remains null
         InputStream[] in = new InputStream[2];
