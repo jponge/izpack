@@ -100,6 +100,18 @@ public class Info implements Serializable
 
     private boolean pack200Compression;
 
+    private boolean requirePrivilegedExecution = false;
+
+    public boolean isPrivilegedExecutionRequired()
+    {
+        return requirePrivilegedExecution;
+    }
+
+    public void setRequirePrivilegedExecution(boolean requirePrivilegedExecution)
+    {
+        this.requirePrivilegedExecution = requirePrivilegedExecution;
+    }
+
     /**
      * The constructor, deliberatly void.
      */

@@ -26,9 +26,11 @@ import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.util.*;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.*;
 
@@ -80,6 +82,8 @@ public class InstallerBase
         objIn = new ObjectInputStream(in);
         Info inf = (Info) objIn.readObject();
         objIn.close();
+
+        checkForPrivilegedExecution(inf);
 
         // We put the Info data as variables
         installdata.setVariable(ScriptParser.APP_NAME, inf.getAppName());
@@ -219,6 +223,45 @@ public class InstallerBase
         installdata.setInstallPath(installPath);
         // Load custom action data.
         loadCustomData(installdata);
+
+    }
+
+    private void checkForPrivilegedExecution(Info info)
+    {
+        if (System.getenv("izpack.mode") != null && System.getenv("izpack.mode").equals("privileged"))
+        {
+            // We have been launched through a privileged execution, so stop the checkings here!
+            return;
+        }
+        else if (info.isPrivilegedExecutionRequired())
+        {
+            PrivilegedRunner runner = new PrivilegedRunner();
+            if (runner.isPlatformSupported() && runner.isElevationNeeded())
+            {
+                try
+                {
+                    if (runner.relaunchWithElevatedRights() == 0)
+                    {
+                        System.exit(0);
+                    }
+                    else
+                    {
+                        throw new RuntimeException("Launching an installer with elevated permissions failed.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "The installer could not launch itself with administrator permissions.\n" +
+                        "The installation will still continue but you may encounter problems due to insufficient permissions.");
+                }
+            }
+            else if (!runner.isPlatformSupported())
+            {
+                JOptionPane.showMessageDialog(null, "This installer should be run by an administrator.\n" +
+                    "The installation will still continue but you may encounter problems due to insufficient permissions.");
+            }
+        }
 
     }
 

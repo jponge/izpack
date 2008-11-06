@@ -241,6 +241,8 @@
     <!-- Compilation parameters -->
     <property name="debug" value="off"/>
     <property name="debuglevel" value=""/>
+    <!--><property name="debug" value="true"/>
+    <property name="debuglevel" value="lines,vars,source"/>-->
     <property name="compat.source" value="1.5"/>
     <property name="compat.target" value="1.5"/>
 
@@ -428,6 +430,8 @@
             <fileset dir="${src.dir}">
                 <include name="com/izforge/izpack/installer/*.xml"/>
                 <include name="com/izforge/izpack/installer/*.properties"/>
+                <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
+                <include name="com/izforge/izpack/installer/elevate.js"/>
             </fileset>
             <fileset dir="${img.dir}/installer"/>
         </jar>
