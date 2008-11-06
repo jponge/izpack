@@ -24,6 +24,7 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.VariableSubstitutor;
 import net.n3.nanoxml.XMLElement;
 
 import java.util.Iterator;
@@ -102,7 +103,9 @@ public class UserPathPanel extends UserPathInputPanel
         }
         super.panelActivate();
         // Set the default or old value to the path selection panel.
-        _pathSelectionPanel.setPath(idata.getVariable(pathVariableName));
+        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+		String expandedPath = vs.substitute(idata.getVariable(pathVariableName), null);
+		_pathSelectionPanel.setPath(expandedPath);
     }
 
     /**
