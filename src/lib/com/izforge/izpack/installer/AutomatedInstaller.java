@@ -75,6 +75,7 @@ public class AutomatedInstaller extends InstallerBase
 
         // Loads the installation data
         loadInstallData(this.idata);
+        
 
         // Loads the xml data
         this.idata.xmlData = getXMLData(input);
@@ -92,6 +93,14 @@ public class AutomatedInstaller extends InstallerBase
         addCustomLangpack(this.idata);
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
+        // load conditions
+        loadConditions(this.idata);
+        
+        // loads installer conditions
+        loadInstallerRequirements();              
+
+        // load dynamic variables
+        loadDynamicVariables();       
     }
 
 
@@ -314,6 +323,13 @@ public class AutomatedInstaller extends InstallerBase
      */
     protected void doInstall() throws Exception
     {
+        // check installer conditions
+        if (!checkInstallerRequirements(this.idata))
+        {
+            Debug.log("not all installerconditions are fulfilled.");
+            return;
+        }        
+
         // TODO: i18n
         System.out.println("[ Starting automated installation ]");
         Debug.log("[ Starting automated installation ]");

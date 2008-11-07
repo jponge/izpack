@@ -164,23 +164,20 @@ public class InstallerFrame extends JFrame
      */
     protected RulesEngine rules;
 
-    /**
-     * Resource name of the conditions specification
-     */
-    private static final String CONDITIONS_SPECRESOURCENAME = "conditions.xml";
+    
     /**
      * Resource name for custom icons
      */
     private static final String CUSTOM_ICONS_RESOURCEFILE = "customicons.xml";
 
-    private Map<String, List<DynamicVariable>> dynamicvariables;
+   
     private VariableSubstitutor substitutor;
     private Debugger debugger;
 
     // If a heading image is defined should it be displayed on the left
     private boolean imageLeft = false;
 
-    private List<InstallerRequirement> installerrequirements;
+    private InstallerBase parentInstaller;
 
 
     /**
@@ -190,9 +187,11 @@ public class InstallerFrame extends JFrame
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata) throws Exception
+    public InstallerFrame(String title, InstallData installdata, InstallerBase parentInstaller) throws Exception
     {
         super(title);
+        this.parentInstaller = parentInstaller;
+        this.rules = this.parentInstaller.getRules();
         substitutor = new VariableSubstitutor(installdata.variables);
         guiListener = new ArrayList<GUIListener>();
         visiblePanelMapping = new ArrayList<Integer>();
@@ -201,23 +200,8 @@ public class InstallerFrame extends JFrame
 
         // Sets the window events handler
         addWindowListener(new WindowHandler());
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-
-        // initialize rules by loading the conditions
-        loadConditions();
-
-        // loads installer conditions
-        loadInstallerRequirements();
-
-        // check installer conditions
-        if (!checkInstallerRequirements())
-        {
-            Debug.log("not all installerconditions are fulfilled.");
-            return;
-        }
-
-        // load dynamic variables
-        loadDynamicVariables();
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);                   
+        
         // Builds the GUI
         loadIcons();
         loadCustomIcons();
@@ -229,158 +213,11 @@ public class InstallerFrame extends JFrame
         switchPanel(0);
     }
 
-    private boolean checkInstallerRequirements() throws Exception
-    {
-        boolean result = true;
-
-        for (InstallerRequirement installerrequirement : this.installerrequirements)
-        {
-            String conditionid = installerrequirement.getCondition();
-            Condition condition = RulesEngine.getCondition(conditionid);
-            if (condition == null)
-            {
-                Debug.log(conditionid + " not a valid condition.");
-                throw new Exception(conditionid + "could not be found as a defined condition");
-            }
-            if (!condition.isTrue())
-            {
-                String message = installerrequirement.getMessage();
-                if ((message != null) && (message.length() > 0))
-                {
-                    String localizedMessage = this.installdata.langpack.getString(message);
-                    JOptionPane.showMessageDialog(this, localizedMessage);
-                }
-                result = false;
-                break;
-            }
-        }
-        return result;
-    }
+   
 
     public Debugger getDebugger()
     {
         return this.debugger;
-    }
-
-    /**
-     * Load installer conditions
-     *
-     * @throws Exception
-     */
-    public void loadInstallerRequirements() throws Exception
-    {
-        InputStream in = GUIInstaller.class.getResourceAsStream("/installerrequirements");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        this.installerrequirements = (List<InstallerRequirement>) objIn.readObject();
-        objIn.close();
-    }
-
-    /**
-     * Refreshes Dynamic Variables.
-     */
-    private void refreshDynamicVariables()
-    {
-        if (dynamicvariables != null)
-        {
-            for (String dynvarname : dynamicvariables.keySet())
-            {
-                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname))
-                {
-                    boolean refresh = false;
-                    String conditionid = dynvar.getConditionid();
-                    if ((conditionid != null) && (conditionid.length() > 0))
-                    {
-                        if ((rules != null) && rules.isConditionTrue(conditionid))
-                        {
-                            // condition for this rule is true
-                            refresh = true;
-                        }
-                    }
-                    else
-                    {
-                        // empty condition
-                        refresh = true;
-                    }
-                    if (refresh)
-                    {
-                        String newvalue = substitutor.substitute(dynvar.getValue(), null);
-                        installdata.variables.setProperty(dynvar.getName(), newvalue);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Loads Dynamic Variables.
-     */
-    private void loadDynamicVariables()
-    {
-        try
-        {
-            InputStream in = InstallerFrame.class.getResourceAsStream("/dynvariables");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            dynamicvariables = (Map<String, List<DynamicVariable>>) objIn.readObject();
-            objIn.close();
-        }
-        catch (Exception e)
-        {
-            Debug.trace("Cannot find optional dynamic variables");
-            System.out.println(e);
-        }
-    }
-
-    /**
-     * Reads the conditions specification file and initializes the rules engine.
-     */
-    protected void loadConditions()
-    {
-        // try to load already parsed conditions
-        try
-        {
-            InputStream in = InstallerFrame.class.getResourceAsStream("/rules");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            Map rules = (Map) objIn.readObject();
-            if ((rules != null) && (rules.size() != 0))
-            {
-                this.rules = new RulesEngine(rules, installdata);
-            }
-            objIn.close();
-        }
-        catch (Exception e)
-        {
-            Debug.trace("Can not find optional rules");
-        }
-        if (rules != null)
-        {
-            // rules already read
-            return;
-        }
-        try
-        {
-            InputStream input = null;
-            input = this.getResource(CONDITIONS_SPECRESOURCENAME);
-            if (input == null)
-            {
-                this.rules = new RulesEngine((XMLElement) null, installdata);
-                return;
-            }
-
-            StdXMLParser parser = new StdXMLParser();
-            parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
-            parser.setValidator(new NonValidator());
-            parser.setReader(new StdXMLReader(input));
-
-            // get the data
-            XMLElement conditionsxml = (XMLElement) parser.parse();
-            this.rules = new RulesEngine(conditionsxml, installdata);
-        }
-        catch (Exception e)
-        {
-            Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
-            // there seem to be no conditions
-            this.rules = new RulesEngine((XMLElement) null, installdata);
-        }
     }
 
     /**
@@ -880,7 +717,7 @@ public class InstallerFrame extends JFrame
     protected void switchPanel(int last)
     {
         // refresh dynamic variables every time, a panel switch is done
-        refreshDynamicVariables();
+        this.parentInstaller.refreshDynamicVariables(substitutor,installdata);
         try
         {
             if (installdata.curPanelNumber < last)

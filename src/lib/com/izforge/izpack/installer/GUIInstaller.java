@@ -90,6 +90,22 @@ public class GUIInstaller extends InstallerBase
         // Loads the installation data
         loadInstallData(installdata);
 
+        // load conditions
+        loadConditions(installdata);
+        
+        // loads installer conditions
+        loadInstallerRequirements();
+
+        // load dynamic variables
+        loadDynamicVariables();
+        
+        // check installer conditions
+        if (!checkInstallerRequirements(installdata))
+        {
+            Debug.log("not all installerconditions are fulfilled.");
+            return;
+        }
+        
         // add the GUI install data
         loadGUIInstallData();
 
@@ -102,7 +118,6 @@ public class GUIInstaller extends InstallerBase
 
         // Check for already running instance
         checkLockFile();
-
         
         
         // Loads the suitable langpack
@@ -144,6 +159,10 @@ public class GUIInstaller extends InstallerBase
                 }
             }
         });
+    }
+    
+    public void showMissingRequirementMessage(String message){
+        JOptionPane.showMessageDialog(null, message);
     }
 
     /**
@@ -573,7 +592,7 @@ public class GUIInstaller extends InstallerBase
             VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
             title = vs.substitute(message, null);
         }
-        new InstallerFrame(title, this.installdata);
+        new InstallerFrame(title, this.installdata,this);
     }
 
     /**

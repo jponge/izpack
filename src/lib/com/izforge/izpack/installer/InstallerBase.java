@@ -21,18 +21,37 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.Info;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.util.*;
-
-import javax.swing.*;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.swing.JOptionPane;
+
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLBuilderFactory;
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.CustomData;
+import com.izforge.izpack.Info;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.compiler.DynamicVariable;
+import com.izforge.izpack.rules.Condition;
+import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
@@ -45,11 +64,24 @@ public class InstallerBase
 {
 
     /**
+     * Resource name of the conditions specification
+     */
+    private static final String CONDITIONS_SPECRESOURCENAME = "conditions.xml";
+    
+    private RulesEngine rules; 
+    private List<InstallerRequirement> installerrequirements;
+    private Map<String, List<DynamicVariable>> dynamicvariables;
+    
+    /**
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
      * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
 
+    public RulesEngine getRules(){
+        return this.rules;
+    }
+    
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
      * All system properties are available as $SYSTEM_<variable> where <variable> is the actual
@@ -441,5 +473,191 @@ public class InstallerBase
         }
         // uninstallerLib list if exist
 
+    }
+    
+    /**
+     * Reads the conditions specification file and initializes the rules engine.
+     */
+    protected void loadConditions(AutomatedInstallData installdata)
+    {
+        // try to load already parsed conditions
+        try
+        {
+            InputStream in = InstallerBase.class.getResourceAsStream("/rules");
+            ObjectInputStream objIn = new ObjectInputStream(in);
+            Map rules = (Map) objIn.readObject();
+            if ((rules != null) && (rules.size() != 0))
+            {
+                this.rules = new RulesEngine(rules, installdata);
+            }
+            objIn.close();
+        }
+        catch (Exception e)
+        {
+            Debug.trace("Can not find optional rules");
+        }
+        if (rules != null)
+        {
+            // rules already read
+            return;
+        }
+        try
+        {
+            InputStream input = null;
+            input = this.getResource(CONDITIONS_SPECRESOURCENAME);
+            if (input == null)
+            {
+                this.rules = new RulesEngine((XMLElement) null, installdata);
+                return;
+            }
+
+            StdXMLParser parser = new StdXMLParser();
+            parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
+            parser.setValidator(new NonValidator());
+            parser.setReader(new StdXMLReader(input));
+
+            // get the data
+            XMLElement conditionsxml = (XMLElement) parser.parse();
+            this.rules = new RulesEngine(conditionsxml, installdata);
+        }
+        catch (Exception e)
+        {
+            Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
+            // there seem to be no conditions
+            this.rules = new RulesEngine((XMLElement) null, installdata);
+        }
+    }
+    
+    /**
+     * Loads Dynamic Variables.
+     */
+    protected void loadDynamicVariables()
+    {
+        try
+        {
+            InputStream in = InstallerFrame.class.getResourceAsStream("/dynvariables");
+            ObjectInputStream objIn = new ObjectInputStream(in);
+            dynamicvariables = (Map<String, List<DynamicVariable>>) objIn.readObject();
+            objIn.close();
+        }
+        catch (Exception e)
+        {
+            Debug.trace("Cannot find optional dynamic variables");
+            System.out.println(e);
+        }
+    }
+    
+    /**
+     * Load installer conditions
+     *
+     * @throws Exception
+     */
+    public void loadInstallerRequirements() throws Exception
+    {
+        InputStream in = InstallerBase.class.getResourceAsStream("/installerrequirements");
+        ObjectInputStream objIn = new ObjectInputStream(in);
+        this.installerrequirements = (List<InstallerRequirement>) objIn.readObject();
+        objIn.close();
+    }
+    
+    public boolean checkInstallerRequirements(AutomatedInstallData installdata) throws Exception
+    {
+        boolean result = true;
+
+        for (InstallerRequirement installerrequirement : this.installerrequirements)
+        {
+            String conditionid = installerrequirement.getCondition();
+            Condition condition = RulesEngine.getCondition(conditionid);
+            if (condition == null)
+            {
+                Debug.log(conditionid + " not a valid condition.");
+                throw new Exception(conditionid + "could not be found as a defined condition");
+            }
+            if (!condition.isTrue())
+            {
+                String message = installerrequirement.getMessage();
+                if ((message != null) && (message.length() > 0))
+                {
+                    String localizedMessage = installdata.langpack.getString(message);
+                    this.showMissingRequirementMessage(localizedMessage);
+                }
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+    
+    protected void showMissingRequirementMessage(String message){
+        Debug.log(message);
+    }
+    
+    /**
+     * Gets the stream to a resource.
+     *
+     * @param res The resource id.
+     * @return The resource value, null if not found
+     * @throws Exception
+     */
+    public InputStream getResource(String res) throws Exception
+    {
+        InputStream result;
+        String basePath = "";
+        ResourceManager rm = null;
+
+        try
+        {
+            rm = ResourceManager.getInstance();
+            basePath = rm.resourceBasePath;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        result = this.getClass().getResourceAsStream(basePath + res);
+
+        if (result == null)
+        {
+            throw new ResourceNotFoundException("Warning: Resource not found: "
+                    + res);
+        }
+        return result;
+    }
+    
+    /**
+     * Refreshes Dynamic Variables.
+     */
+    protected void refreshDynamicVariables(VariableSubstitutor substitutor, AutomatedInstallData installdata)
+    {
+        if (dynamicvariables != null)
+        {
+            for (String dynvarname : dynamicvariables.keySet())
+            {
+                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname))
+                {
+                    boolean refresh = false;
+                    String conditionid = dynvar.getConditionid();
+                    if ((conditionid != null) && (conditionid.length() > 0))
+                    {
+                        if ((rules != null) && rules.isConditionTrue(conditionid))
+                        {
+                            // condition for this rule is true
+                            refresh = true;
+                        }
+                    }
+                    else
+                    {
+                        // empty condition
+                        refresh = true;
+                    }
+                    if (refresh)
+                    {
+                        String newvalue = substitutor.substitute(dynvar.getValue(), null);
+                        installdata.variables.setProperty(dynvar.getName(), newvalue);
+                    }
+                }
+            }
+        }
     }
 }
