@@ -21,6 +21,7 @@
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.util.Debug;
 import net.n3.nanoxml.XMLElement;
@@ -45,7 +46,7 @@ public class RulesEngine
 
     protected static Map conditionsmap = new Hashtable();
 
-    protected static InstallData installdata;
+    protected static AutomatedInstallData installdata;
 
     private RulesEngine()
     {
@@ -111,7 +112,7 @@ public class RulesEngine
     /**
      *
      */
-    public RulesEngine(XMLElement conditionsspecxml, InstallData installdata)
+    public RulesEngine(XMLElement conditionsspecxml, AutomatedInstallData installdata)
     {
         this();
         this.conditionsspec = conditionsspecxml;
@@ -120,7 +121,7 @@ public class RulesEngine
         init();
     }
 
-    public RulesEngine(Map rules, InstallData installdata)
+    public RulesEngine(Map rules, AutomatedInstallData installdata)
     {
         this();
         Debug.trace("Initializing RulesEngine");
