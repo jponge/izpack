@@ -108,7 +108,8 @@ public class PrivilegedRunner
             elevator.add("wscript");
             elevator.add(extractVistaElevator().getCanonicalPath());
             elevator.add(javaCommand);
-            elevator.add("\"-jar " + installer + "\"");
+            elevator.add("-jar");
+            elevator.add(installer);
         }
 
         return elevator;

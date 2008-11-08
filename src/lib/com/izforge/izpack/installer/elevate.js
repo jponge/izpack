@@ -34,6 +34,6 @@ for (Index = 1; Index < WScript.Arguments.Length; Index += 1)
     {
         Arguments += " ";
     }
-    Arguments += WScript.Arguments(Index);
+    Arguments += "\"" + WScript.Arguments(Index) + "\"";
 }
 new ActiveXObject("Shell.Application").ShellExecute(Application, Arguments, "", "runas");
