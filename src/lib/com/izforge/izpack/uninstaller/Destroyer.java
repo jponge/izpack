@@ -21,6 +21,7 @@ package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.event.UninstallerListener;
+import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
@@ -114,7 +115,13 @@ public class Destroyer extends Thread
 
             if (OsVersion.IS_UNIX)
             {
-                execRootScript(getRootScript());
+                ArrayList<String> rootScripts = getRootScripts(); 
+                Iterator<String> rsi = rootScripts.iterator();
+                while (rsi.hasNext())
+                {
+                  execRootScript((String) rsi.next() );                    
+                }
+                
             }
             // We make a complementary cleanup
             handler.progress(size, "[ cleanups ]");
@@ -216,15 +223,27 @@ public class Destroyer extends Thread
      * @return The files which should remove by root for another user
      * @throws Exception
      */
-    private String getRootScript() throws Exception
+    private ArrayList<String> getRootScripts() throws Exception
     {
-        String result = "";
-        ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
-                + UninstallData.ROOTSCRIPT));
-
-        result = in.readUTF();
-
-
+        ArrayList<String> result = new ArrayList<String>();
+        
+        int idx=0;
+        while(true)
+        {
+          try
+          {
+            ObjectInputStream in = new ObjectInputStream(Destroyer.class.getResourceAsStream("/"
+                  + UninstallData.ROOTSCRIPT+Integer.toString(idx)));
+        
+            result.add( in.readUTF() );
+          }
+          catch (Exception e) 
+          {
+             Debug.log("Last RootScript Index=" + idx);
+             break;
+          }        
+          idx++;
+        }
         return result;
     }
 
