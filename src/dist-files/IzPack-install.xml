@@ -50,6 +50,7 @@
 
     <variables>
         <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
+        <variable name="ApplicationShortcutPath" value="ApplicationShortcuts"/>
     </variables>
 
     <!-- We include every langpack -->
