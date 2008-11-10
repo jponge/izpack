@@ -71,7 +71,7 @@ public class UninstallData
     /**
      * Filesmap which should removed by the root user for another user
      */
-    private String rootScript;
+    private ArrayList<String> unInstallScripts;
 
     /**
      * The constructor.
@@ -82,7 +82,7 @@ public class UninstallData
         uninstallableFilesList = new ArrayList();
         executablesList = new ArrayList();
         additionalData = new HashMap<String, Object>();
-        rootScript = "";
+        unInstallScripts = new ArrayList<String>();
     }
 
     /**
@@ -228,9 +228,9 @@ public class UninstallData
      *
      * @param aRootUninstallScript The Script to exec as Root at uninstall.
      */
-    public void addRootUninstallScript(String aRootUninstallScript)
+    public void addUninstallScript(String aRootUninstallScript)
     {
-        rootScript = aRootUninstallScript == null ? "" : aRootUninstallScript;
+        unInstallScripts.add( aRootUninstallScript == null ? "" : aRootUninstallScript );
     }
 
     /**
@@ -238,9 +238,9 @@ public class UninstallData
      *
      * @return root data
      */
-    public String getRootScript()
+    public ArrayList<String> getUninstallScripts()
     {
-        return rootScript;
+        return unInstallScripts;
     }
 
 
