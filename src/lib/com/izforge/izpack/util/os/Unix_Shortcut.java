@@ -50,6 +50,8 @@
  */
 package com.izforge.izpack.util.os;
 
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
@@ -58,6 +60,7 @@ import com.izforge.izpack.util.os.unix.ShellScript;
 import com.izforge.izpack.util.os.unix.UnixHelper;
 import com.izforge.izpack.util.os.unix.UnixUser;
 import com.izforge.izpack.util.os.unix.UnixUsers;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 import java.io.*;
 import java.util.*;
@@ -169,6 +172,22 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      * Internal Help Buffer
      */
     public StringBuffer hlp;
+    
+    
+    /** my Install ShellScript **/ 
+    public ShellScript myInstallScript;
+    
+    /**  Internal Constant: FS = File.separator // **/
+    public final String FS = File.separator;
+    
+    /** Internal Constant: myHome = System.getProperty("user.home")  **/
+    public final String myHome = System.getProperty("user.home");    
+
+    /** Internal Constant: su = UnixHelper.getSuCommand() **/ 
+    public final String su = UnixHelper.getSuCommand();
+    
+    /** Internal Constant: xdgDesktopIconCmd = UnixHelper.getCustomCommand("xdg-desktop-icon") **/
+    public final String xdgDesktopIconCmd = UnixHelper.getCustomCommand("xdg-desktop-icon");
 
     // ~ Constructors ***********************************************************************
 
@@ -237,6 +256,11 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         {
             uninstallScript = new ShellScript();
         }
+        if( myInstallScript == null)
+        {
+            myInstallScript = new ShellScript();
+        }
+        
     }
 
     // ~ Methods ****************************************************************************
@@ -441,15 +465,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
      */
     public void save() throws Exception
     {
-        String FS = File.separator;
-        String chmod = UnixHelper.getCustomCommand("chmod");
-        String chown = UnixHelper.getCustomCommand("chown");
-        String rm = UnixHelper.getRmCommand();
-        String copy = UnixHelper.getCpCommand();
-        String su = UnixHelper.getSuCommand();
-
-        String myHome = System.getProperty("user.home");
-
+        
         String target = null;
 
         String shortCutDef = this.replace();
@@ -462,118 +478,74 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
         {
 
             this.itsFileName = target;
-
-            // write my own ShortCut
-            File writtenDesktopFile = writeSafeShortcut(myHome + FS + "Desktop" + FS, this.itsName, shortCutDef);
+            AutomatedInstallData idata;
+            idata = AutomatedInstallData.getInstance();
+            
+            // read the userdefined / overridden / wished Shortcut Location
+            // This can be an absolute Path name or a relative Path to the InstallPath
+            File shortCutLocation = null;
+            File ApplicationShortcutPath;
+            String ApplicationShortcutPathName = idata.getVariable( "ApplicationShortcutPath" /** TODO <-- Put in Docu and in Un/InstallerConstantsClass */  );
+            if( null != ApplicationShortcutPathName && ! ApplicationShortcutPathName.equals( "" ) )
+            {
+                ApplicationShortcutPath = new File( ApplicationShortcutPathName );
+                
+                if( ApplicationShortcutPath.isAbsolute() )
+                {
+                  // I know :-) Can be m"ORed" elegant :) 
+                  if( !ApplicationShortcutPath.exists() && ApplicationShortcutPath.mkdirs() && ApplicationShortcutPath.canWrite() )
+                    shortCutLocation = ApplicationShortcutPath;
+                  if( ApplicationShortcutPath.exists() && ApplicationShortcutPath.isDirectory() && ApplicationShortcutPath.canWrite() )
+                      shortCutLocation = ApplicationShortcutPath;   
+                }
+                else
+                {
+                  File relativePath = new File( idata.getInstallPath() + FS + ApplicationShortcutPath );
+                  relativePath.mkdirs();
+                  shortCutLocation = new File( relativePath.toString() );
+                }
+            }
+            else
+              shortCutLocation = new File( idata.getInstallPath() );
+            
+            // write the App ShortCut
+            File writtenDesktopFile = writeAppShortcutWithOutSpace( shortCutLocation.toString(), this.itsName, shortCutDef );
             uninstaller.addFile(writtenDesktopFile.toString(), true);
-
+            
+            // Now install my Own with xdg-if available // Note the The reverse Uninstall-Task is on TODO: "WHICH another place"
+            if( xdgDesktopIconCmd != null )
+            {        
+              
+              myInstallScript.appendln( new String[]{ xdgDesktopIconCmd, "install", "--novendor", StringTool.escapeSpaces( writtenDesktopFile.toString() ) } );
+              ShellScript myUninstallScript = new ShellScript();
+              myUninstallScript.appendln( new String[]{ xdgDesktopIconCmd, "uninstall", "--novendor", StringTool.escapeSpaces( writtenDesktopFile.toString() ) });              
+              uninstaller.addUninstallScript(myUninstallScript.getContentAsString());
+            }
+            else
+            {
+              //otherwise copy to my desktop and add to uninstaller
+              File myDesktopFile;  
+              do
+              {
+                  myDesktopFile = new File( myHome+ FS + "Desktop" + writtenDesktopFile.getName() + "-" + System.currentTimeMillis() + DESKTOP_EXT );
+              }
+              while (myDesktopFile.exists());
+              
+              copyTo( writtenDesktopFile, myDesktopFile );
+              uninstaller.addFile(myDesktopFile.toString(), true);
+            }
+            
             // If I'm root and this Desktop.ShortCut should be for all other users
             if (rootUser4All && create4All)
             {
-                File dest = null;
-
-                // Create a tempFileName of this ShortCut
-                File tempFile = File.createTempFile(this.getClass().getName(), Long.toString(System
-                        .currentTimeMillis())
-                        + ".tmp");
-
-                copyTo(writtenDesktopFile, tempFile);
-
-                //Debug.log("Wrote Tempfile: " + tempFile.toString());               
-
-                FileExecutor.getExecOutput(new String[]{chmod, "uga+rwx", tempFile.toString()});
-
-                // su marc.eppelmann -c "/bin/cp /home/marc.eppelmann/backup.job.out.txt
-                // /home/marc.eppelmann/backup.job.out2.txt"
-
-                //StringBuffer script = new StringBuffer();
-                //
-
-                for (Object user1 : users)
-                {
-                    UnixUser user = ((UnixUser) user1);
-
-                    if (user.getHome().equals(myHome))
-                    {
-                        Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
-                        continue;
-                    }
-                    try
-                    {
-                        // aHomePath = userHomesList[idx];
-                        dest = new File(user.getHome() + FS + "Desktop" + FS
-                                + writtenDesktopFile.getName());
-                        //
-                        // I'm root and cannot write into Users Home as root;
-                        // But I'm Root and I can slip in every users skin :-)
-                        // 
-                        // by# su username
-                        //
-                        // This works as well
-                        // su $username -c "cp /tmp/desktopfile $HOME/Desktop/link.desktop"
-                        // chown $username $HOME/Desktop/link.desktop
-
-                        //Debug.log("Will Copy: " + tempFile.toString() + " to " + dest.toString());
-
-                        rootScript.append(su);
-                        rootScript.append(S);
-                        rootScript.append(user.getName());
-                        rootScript.append(S);
-                        rootScript.append("-c");
-                        rootScript.append(S);
-                        rootScript.append('"');
-                        rootScript.append(copy);
-                        rootScript.append(S);
-                        rootScript.append(tempFile.toString());
-                        rootScript.append(S);
-                        rootScript.append(StringTool.replace(dest.toString(), " ", "\\ "));
-                        rootScript.appendln('"');
-
-                        rootScript.append('\n');
-
-                        //Debug.log("Will exec: " + script.toString());
-
-                        rootScript.append(chown);
-                        rootScript.append(S);
-                        rootScript.append(user.getName());
-                        rootScript.append(S);
-                        rootScript.appendln(StringTool.replace(dest.toString(), " ", "\\ "));
-                        rootScript.append('\n');
-                        rootScript.append('\n');
-
-                        //Debug.log("Will exec: " + script.toString());
-
-                        uninstallScript.append(su);
-                        uninstallScript.append(S);
-                        uninstallScript.append(user.getName());
-                        uninstallScript.append(S);
-                        uninstallScript.append("-c");
-                        uninstallScript.append(S);
-                        uninstallScript.append('"');
-                        uninstallScript.append(rm);
-                        uninstallScript.append(S);
-                        uninstallScript.append(StringTool.replace(dest.toString(), " ", "\\ "));
-                        uninstallScript.appendln('"');
-                        uninstallScript.appendln();
-                        //Debug.log("Uninstall will exec: " + uninstallScript.toString());
-                    }
-                    catch (Exception rex)
-                    {
-                        System.out.println("Error while su Copy: " + rex.getLocalizedMessage() + "\n\n");
-                        rex.printStackTrace();
-
-                        /* ignore */
-                        // most distros does not allow root to access any user
-                        // home (ls -la /home/user drwx------)
-                        // But try it anyway...
-                    }
-                }
-
-
-                rootScript.append(rm);
-                rootScript.append(S);
-                rootScript.appendln(tempFile.toString());
-                rootScript.appendln();
+              if( xdgDesktopIconCmd != null )
+              {
+                installDesktopFileToAllUsersDesktop( writtenDesktopFile );                    
+              }
+              else // OLD ( Backward-Compatible/hardwired-"Desktop"-Foldername Styled Mechanic  )
+              {
+                copyDesktopFileToAllUsersDesktop( writtenDesktopFile );
+              }
             }
         }
 
@@ -621,7 +593,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                     // write *.desktop
 
                     this.itsFileName = target;
-                    File writtenFile = writeSafeShortcut("/usr/share/applications/", this.itsName, shortCutDef);
+                    File writtenFile = writeAppShortcut("/usr/share/applications/", this.itsName, shortCutDef);
                     setWrittenFileName(writtenFile.getName());
                     uninstaller.addFile(writtenFile.toString(), true);
 
@@ -666,12 +638,161 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 // write *.desktop in the local folder
 
                 this.itsFileName = target;
-                File writtenFile = writeSafeShortcut(localApps, this.itsName, shortCutDef);
+                File writtenFile = writeAppShortcut(localApps, this.itsName, shortCutDef);
                 setWrittenFileName(writtenFile.getName());
                 uninstaller.addFile(writtenFile.toString(), true);
             }
 
         }
+    }
+    
+    
+    /**
+     * Calls Geaterates the Install/Unistall Script Komplenet which installs 
+     * Desktop Icons using  xdgDesktopIconCmd uninstall
+     * @param writtenDesktopFile An applications desktop file, which should be installed.
+     */
+    private void installDesktopFileToAllUsersDesktop( File writtenDesktopFile )
+    {
+      for (Object user1 : users)
+      {
+        UnixUser user = ((UnixUser) user1);
+    
+        if (user.getHome().equals(myHome))
+        {
+          Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
+          continue;
+        }
+        try
+        {
+          /// THE Following does such as #> su username -c "xdg-desktopicon install --novendor  /Path/to/Filename\ with\ or\ without\ Space.desktop" 
+          rootScript.append(   new String[]{ su, user.getName(), "-c", "\"" } );
+          rootScript.appendln( new String[]{ xdgDesktopIconCmd, "install", "--novendor", StringTool.escapeSpaces( writtenDesktopFile.toString() ), "\"" });
+                    
+          uninstallScript.append(   new String[]{ su, user.getName(), "-c", "\"" } );
+          uninstallScript.appendln( new String[]{ xdgDesktopIconCmd, "uninstall", "--novendor", StringTool.escapeSpaces( writtenDesktopFile.toString() ), "\"" });                
+        }
+        catch (Exception e) 
+        {
+          Debug.log( e.getMessage() );
+          Debug.log( e.toString() );
+        }
+      }
+    }
+
+    
+    /**
+     * @param writtenDesktopFile
+     * @throws IOException
+     */
+    private void copyDesktopFileToAllUsersDesktop( File writtenDesktopFile) throws IOException
+    {
+      String chmod = UnixHelper.getCustomCommand("chmod");
+        String chown = UnixHelper.getCustomCommand("chown");
+        String rm = UnixHelper.getRmCommand();
+        String copy = UnixHelper.getCpCommand();
+        
+        
+        File dest = null;
+
+        // Create a tempFileName of this ShortCut
+        File tempFile = File.createTempFile(this.getClass().getName(), Long.toString(System
+                .currentTimeMillis())
+                + ".tmp");
+
+        copyTo(writtenDesktopFile, tempFile);
+
+        //Debug.log("Wrote Tempfile: " + tempFile.toString());             
+
+        FileExecutor.getExecOutput(new String[]{chmod, "uga+rwx", tempFile.toString()});
+
+        // su marc.eppelmann -c "/bin/cp /home/marc.eppelmann/backup.job.out.txt
+        // /home/marc.eppelmann/backup.job.out2.txt"
+
+        for (Object user1 : users)
+        {
+            UnixUser user = ((UnixUser) user1);
+
+            if (user.getHome().equals(myHome))
+            {
+                Debug.log("need not to copy for itself: " + user.getHome() + "==" + myHome);
+                continue;
+            }
+            try
+            {
+                // aHomePath = userHomesList[idx];
+                dest = new File(user.getHome() + FS + "Desktop" + FS
+                        + writtenDesktopFile.getName());
+                //
+                // I'm root and cannot write into Users Home as root;
+                // But I'm Root and I can slip in every users skin :-)
+                // 
+                // by# su username
+                //
+                // This works as well
+                // su $username -c "cp /tmp/desktopfile $HOME/Desktop/link.desktop"
+                // chown $username $HOME/Desktop/link.desktop
+
+                //Debug.log("Will Copy: " + tempFile.toString() + " to " + dest.toString());
+
+                rootScript.append(su);
+                rootScript.append(S);
+                rootScript.append(user.getName());
+                rootScript.append(S);
+                rootScript.append("-c");
+                rootScript.append(S);
+                rootScript.append('"');
+                rootScript.append(copy);
+                rootScript.append(S);
+                rootScript.append(tempFile.toString());
+                rootScript.append(S);
+                rootScript.append(StringTool.replace(dest.toString(), " ", "\\ "));
+                rootScript.appendln('"');
+
+                rootScript.append('\n');
+
+                //Debug.log("Will exec: " + script.toString());
+
+                rootScript.append(chown);
+                rootScript.append(S);
+                rootScript.append(user.getName());
+                rootScript.append(S);
+                rootScript.appendln(StringTool.replace(dest.toString(), " ", "\\ "));
+                rootScript.append('\n');
+                rootScript.append('\n');
+
+                //Debug.log("Will exec: " + script.toString());
+
+                uninstallScript.append(su);
+                uninstallScript.append(S);
+                uninstallScript.append(user.getName());
+                uninstallScript.append(S);
+                uninstallScript.append("-c");
+                uninstallScript.append(S);
+                uninstallScript.append('"');
+                uninstallScript.append(rm);
+                uninstallScript.append(S);
+                uninstallScript.append(StringTool.replace(dest.toString(), " ", "\\ "));
+                uninstallScript.appendln('"');
+                uninstallScript.appendln();
+                //Debug.log("Uninstall will exec: " + uninstallScript.toString());
+            }
+            catch (Exception rex)
+            {
+                System.out.println("Error while su Copy: " + rex.getLocalizedMessage() + "\n\n");
+                rex.printStackTrace();
+
+                /* ignore */
+                // most distros does not allow root to access any user
+                // home (ls -la /home/user drwx------)
+                // But try it anyway...
+            }
+        }
+
+        rootScript.append(rm);
+        rootScript.append(S);
+        rootScript.appendln(tempFile.toString());
+        rootScript.appendln();
     }
 
 
@@ -700,13 +821,28 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         rootScript.write(scriptFilename);
         rootScript.exec();
-
         Debug.log(rootScript);
+        
+        // Quick an dirty copy & paste code - will be cleanup in one of 4.1.1++       
+        pseudoUnique = this.getClass().getName() + Long.toString(System.currentTimeMillis());        
+        try
+        {
+            scriptFilename = File.createTempFile(pseudoUnique, ".sh").toString();
+        }
+        catch (IOException e)
+        {
+            scriptFilename = System.getProperty("java.io.tmpdir", "/tmp") + "/" + pseudoUnique + ".sh";
+            e.printStackTrace();
+        }
 
+        myInstallScript.write(scriptFilename);
+        myInstallScript.exec();
 
+        Debug.log( myInstallScript );
+        // End OF Quick AND Dirty
         Debug.log(uninstallScript);
 
-        uninstaller.addRootUninstallScript(uninstallScript.getContentAsString());
+        uninstaller.addUninstallScript( uninstallScript.getContentAsString() );
     }
 
     /**
@@ -746,8 +882,46 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
     {
         writtenFileName = s;
     }
+    
+    /**
+     * Write the given ShortDefinition in a File $ShortcutName-$timestamp.desktop in the given TargetPath.
+     *  
+     * @param targetPath The Path in which the files should be written.
+     * @param shortcutName The Name for the File
+     * @param shortcutDef The Shortcut FileContent
 
-    private File writeSafeShortcut(String targetPath, String shortcutName, String shortcutDef)
+     * @return The written File
+     */    
+    private File writeAppShortcut(String targetPath, String shortcutName, String shortcutDef )
+    {
+        return writeAppShortcutWithSimpleSpacehandling( targetPath, shortcutName, shortcutDef, false );                
+    }
+    
+    /**
+     * Write the given ShortDefinition in a File $ShortcutName-$timestamp.desktop in the given TargetPath.
+     * ALSO all WhiteSpaces in the ShortCutName will be repalced with "-" 
+     * @param targetPath The Path in which the files should be written.
+     * @param shortcutName The Name for the File
+     * @param shortcutDef The Shortcut FileContent
+
+     * @return The written File
+     */
+    private File writeAppShortcutWithOutSpace(String targetPath, String shortcutName, String shortcutDef )
+    {
+        return writeAppShortcutWithSimpleSpacehandling( targetPath, shortcutName, shortcutDef, true );                
+    }
+    
+    
+    /**
+     * Write the given ShortDefinition in a File $ShortcutName-$timestamp.desktop in the given TargetPath.
+     * If the given  replaceSpaces was true ALSO all WhiteSpaces in the ShortCutName will be replaced with "-" 
+     * @param targetPath The Path in which the files should be written.
+     * @param shortcutName The Name for the File
+     * @param shortcutDef The Shortcut FileContent
+     * @param replaceSpaces Replaces Spaces in the Filename if true was given
+     * @return The written File
+     */
+    private File writeAppShortcutWithSimpleSpacehandling(String targetPath, String shortcutName, String shortcutDef, boolean replaceSpacesWithMinus )
     {
         if (!(targetPath.endsWith("/") || targetPath.endsWith("\\")))
         {
@@ -758,9 +932,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         do
         {
-            shortcutFile = new File(targetPath + shortcutName + "-" + System.currentTimeMillis() + DESKTOP_EXT);
+            shortcutFile = new File( targetPath + ( replaceSpacesWithMinus == true ? StringTool.replaceSpacesWithMinus(shortcutName) : shortcutName ) + "-" + System.currentTimeMillis() + DESKTOP_EXT);
         }
-        while (shortcutFile.exists());
+        while ( shortcutFile.exists() );
 
 
         FileWriter fileWriter = null;
