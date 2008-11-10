@@ -1116,17 +1116,23 @@ public class InstallerFrame extends JFrame
                     }
                 }
             }
-            // write the files which should be deleted by root for another user
 
-            outJar.putNextEntry(new ZipEntry(UninstallData.ROOTSCRIPT));
-            ObjectOutputStream rootStream = new ObjectOutputStream(outJar);
-
-            String rootScript = udata.getRootScript();
-
-            rootStream.writeUTF(rootScript);
-
-            rootStream.flush();
-            outJar.closeEntry();
+            // write the script files, which will 
+            // perform several complement and unindependend uninstall actions            
+            ArrayList<String> unInstallScripts = udata.getUninstallScripts();
+            Iterator<String> unInstallIter = unInstallScripts.iterator();
+            ObjectOutputStream rootStream;
+            int idx = 0;
+            while (unInstallIter.hasNext())
+            {
+                outJar.putNextEntry( new ZipEntry( UninstallData.ROOTSCRIPT + Integer.toString( idx ) ) );
+                rootStream = new ObjectOutputStream(outJar);
+                String unInstallScript = (String) unInstallIter.next();                  
+                rootStream.writeUTF(unInstallScript);
+                rootStream.flush();
+                outJar.closeEntry();
+                idx++;
+            }            
 
             // Cleanup
             outJar.flush();
