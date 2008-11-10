@@ -117,6 +117,68 @@ public class StringTool
 
         return result;
     }
+    
+    
+    /**
+     * Escapes all white Space Characters
+     * @param apathString
+     * @return
+     */
+    public static String escapeSpaces( String aPathString )
+    {  
+       return replaceOrEscapeAll( aPathString, null, null, true ); 
+    }
+    
+    
+    /**
+     * Escapes all white Space Characters
+     * @param apathString
+     * @return
+     */
+    public static String replaceSpacesWithMinus( String aPathString )
+    {  
+       return replaceSpaces( aPathString, "-" ); 
+    }
+    
+    /**
+     * Escapes all white Space Characters
+     * @param apathString
+     * @return
+     */
+    public static String replaceSpaces( String aPathString, String replaceWith )
+    {  
+       return replaceOrEscapeAll( aPathString, replaceWith, null, false ); 
+    }
+    
+    /**
+     * Replaces all given white Space Characters with the replaceOrEscapeWith or Escapes with replaceOrEscapeWith
+     * 
+     * If true was given as Escape-Flag , the Method escapes each whitespace with the replaceOrEscapeWith + replaceWhat[x] 
+     * Otherwise the replaces each replaceWhat[x] with the replaceOrEscapeWith.
+     * 
+     * @param aPathString The input string in which the white space should be handled.
+     * @param replaceOrEscapeWith The Repace or Escape Char Interpreted depended on the escape Flag
+     * @param replaceWhat The atring array with the Characters, which should be replaced
+     * @param escape The flag, wihch indeicates, how to handle the given replaceOrEscapeWith String.
+     * 
+     */
+    public static String replaceOrEscapeAll( String aPathString, String replaceOrEscapeWith, String[] replaceWhat,  boolean escape )
+    {       
+        if( replaceWhat == null )
+       
+            replaceWhat = new String[]{" ", "\t", "\n"};
+       
+        if( replaceOrEscapeWith == null )
+            replaceOrEscapeWith = "\\";
+               
+       for (int i = 0; i < replaceWhat.length; i++)
+       {
+         
+           aPathString = replace(aPathString, replaceWhat[i], escape == true ? replaceOrEscapeWith + replaceWhat[i]: replaceOrEscapeWith );
+       }
+       
+       return aPathString; 
+    }
 
     /**
      * Normalizes a Windows or Unix Path.
