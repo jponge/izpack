@@ -153,7 +153,46 @@ public class ShellScript
     {
         content.append(aChar);
     }
+    
+    
+    /**
+     * Appends the Array as one Commandline Space Separated
+     * This is usefull with our FileExecutor 
+     * @param anArray
+     */    
+    public void append( String[] anArray )
+    {
+        for (int i = 0; i < anArray.length; i++)
+        {
+            String string = anArray[i];
+            
+            append( string );
+            if( anArray.length>i)
+              append(' ');
+        }
+    }
 
+
+    /**
+     * Appends the Array as ONE! Commandline Space Separated 
+     * And additionionally append an linefeed "\n" 
+     * This is usefull with our FileExecutor 
+     * @param anArray
+     */    
+    public void appendln( String[] anArray )
+    {
+        for (int i = 0; i < anArray.length; i++)
+        {
+            String string = anArray[i];
+            
+            append( string );
+            if( anArray.length>i)
+              append(' ');
+        }
+        appendln();
+    }
+
+    
     /**
      * Appends an Object or String to this ShellScript with unix linefeed ("\n").
      *
