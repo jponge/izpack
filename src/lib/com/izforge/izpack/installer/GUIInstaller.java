@@ -89,22 +89,6 @@ public class GUIInstaller extends InstallerBase
         
         // Loads the installation data
         loadInstallData(installdata);
-
-        // load conditions
-        loadConditions(installdata);
-        
-        // loads installer conditions
-        loadInstallerRequirements();
-
-        // load dynamic variables
-        loadDynamicVariables();
-        
-        // check installer conditions
-        if (!checkInstallerRequirements(installdata))
-        {
-            Debug.log("not all installerconditions are fulfilled.");
-            return;
-        }
         
         // add the GUI install data
         loadGUIInstallData();
@@ -119,8 +103,7 @@ public class GUIInstaller extends InstallerBase
         // Check for already running instance
         checkLockFile();
         
-        
-        // Loads the suitable langpack
+//      Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable()
         {
 
@@ -136,9 +119,25 @@ public class GUIInstaller extends InstallerBase
                 }
             }
         });
-
+        
         // create the resource manager (after the language selection!)
         ResourceManager.create(this.installdata);
+        
+//      load conditions
+        loadConditions(installdata);
+        
+        // loads installer conditions
+        loadInstallerRequirements();
+
+        // load dynamic variables
+        loadDynamicVariables();
+        
+        // check installer conditions
+        if (!checkInstallerRequirements(installdata))
+        {
+            Debug.log("not all installerconditions are fulfilled.");
+            return;
+        }
 
         // Load custom langpack if exist.
         addCustomLangpack(installdata);
