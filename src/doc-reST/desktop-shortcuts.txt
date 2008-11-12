@@ -487,12 +487,15 @@ If you want, the user can see the console output of a program (in Java
 applications "System.outs"), set the ``terminal`` attribute to **true**.
 
 
-**KdeSubstUID** ``- unused``
+**KdeSubstUID** ``- optional``
 
+This is the sudo option for a shortcut. If set to **true** you will be
+asked for the password of the following ``KdeUsername``.
 
-This is not fully implemented by IzPack. i the future this is the sudo option
-for a shortcut.
+**KdeUsername** ``- optional``
 
+This sould be the user, with the right permission. This is ``root`` 
+in most cases.
 
 
 Selective Creation of Shortcuts
@@ -572,6 +575,15 @@ checks the "Create Desktop Shortcuts" button. To see how to use it, go to
 
 Be careful this variable is case sensitve !
 
+ApplicationShortcutPath Builtin Variable
+-----------------------------------------------
+
+``$ApplicationShortcutPath`` : To define the path for the application shortcuts, 
+absolute or relative to the ``$$INSTALL_PATH``.
+If undefined, the application shortcuts will be directly written in the ``$$INSTALL_PATH``.
+
+From Version 4.1.1 the ``xdg-desktop-icon`` commandline tool will be used to copy 
+this application shortcuts to your, or all users desktop.
 
 Summary
 -------
