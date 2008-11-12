@@ -23,7 +23,7 @@
     <!-- The info section -->
     <info>
         <appname>IzPack</appname>
-        <appversion>4.1.0</appversion>
+        <appversion>4.1.1</appversion>
         <authors>
             <author email="" name="Julien Ponge (project founder)"/>
             <author email="" name="The fantastic IzPack developers and contributors"/>
@@ -31,7 +31,7 @@
         <url>http://izpack.org/</url>
         <javaversion>1.5</javaversion>
         <requiresjdk>no</requiresjdk>
-        <!--><pack200/>-->
+        <pack200/>
         <!--><run-privileged/>-->
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
     </info>
