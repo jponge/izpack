@@ -168,11 +168,11 @@
 
         <!-- Utilities pack -->
         <pack name="Utilities" required="no">
-            <description>IzPack utilities (izpack2exe, izpack2app, ...)</description>
+            <description>IzPack utilities (izpack2exe, izpack2app, izpack2jnlp)</description>
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="utils/**/*"/>
             </fileset>
-            <executable targetfile="$INSTALL_PATH/utils/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
+            <executable targetfile="$INSTALL_PATH/utils/wrappers/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
                         stage="never"/>
         </pack>
 
