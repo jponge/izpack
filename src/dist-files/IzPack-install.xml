@@ -32,7 +32,7 @@
         <javaversion>1.5</javaversion>
         <requiresjdk>no</requiresjdk>
         <pack200/>
-        <!--><run-privileged/>-->
+        <run-privileged/>
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
     </info>
 

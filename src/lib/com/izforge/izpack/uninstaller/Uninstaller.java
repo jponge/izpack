@@ -20,6 +20,7 @@
 package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.installer.PrivilegedRunner;
 
 import javax.swing.*;
 import java.lang.reflect.Method;
@@ -39,6 +40,8 @@ public class Uninstaller
      */
     public static void main(String[] args)
     {
+        checkForPrivilegedExecution();
+
         boolean cmduninstall = false;
         for (String arg : args)
         {
@@ -72,6 +75,45 @@ public class Uninstaller
             System.err.println("Unable to exec java as a subprocess.");
             System.err.println("The uninstall may not fully complete.");
             uninstall(args);
+        }
+    }
+
+    private static void checkForPrivilegedExecution()
+    {
+        if (System.getenv("izpack.mode") != null && System.getenv("izpack.mode").equals("privileged"))
+        {
+            // We have been launched through a privileged execution, so stop the checkings here!
+            return;
+        }
+
+        if (Uninstaller.class.getResource("/exec-admin") != null)
+        {
+            PrivilegedRunner runner = new PrivilegedRunner();
+            if (runner.isPlatformSupported() && runner.isElevationNeeded())
+            {
+                try
+                {
+                    if (runner.relaunchWithElevatedRights() == 0)
+                    {
+                        System.exit(0);
+                    }
+                    else
+                    {
+                        throw new RuntimeException("Launching an uninstaller with elevated permissions failed.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "The uninstaller could not launch itself with administrator permissions.\n" +
+                        "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
+                }
+            }
+            else if (!runner.isPlatformSupported())
+            {
+                JOptionPane.showMessageDialog(null, "This uninstaller should be run by an administrator.\n" +
+                    "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
+            }
         }
     }
 

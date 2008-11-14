@@ -475,6 +475,11 @@
                 <include name="com/izforge/izpack/ExecutableFile.class"/>
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class"/>
                 <include name="net/n3/nanoxml/*.class"/>
+                <include name="com/izforge/izpack/installer/PrivilegedRunner.class"/>
+            </fileset>
+            <fileset dir="${src.dir}">
+                <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
+                <include name="com/izforge/izpack/installer/elevate.js"/>
             </fileset>
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/util/**/*.class"/>

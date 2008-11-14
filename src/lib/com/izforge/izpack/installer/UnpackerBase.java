@@ -728,6 +728,13 @@ public abstract class UnpackerBase implements IUnpacker
             inRes.close();
         }
 
+        // Should we relaunch with privileges?
+        if (idata.info.isPrivilegedExecutionRequired())
+        {
+            outJar.putNextEntry(new ZipEntry("exec-admin"));
+            outJar.closeEntry();
+        }
+
         // We put the langpack
         InputStream in2 = Unpacker.class.getResourceAsStream("/langpacks/" + idata.localeISO3 + ".xml");
         outJar.putNextEntry(new ZipEntry("langpack.xml"));
