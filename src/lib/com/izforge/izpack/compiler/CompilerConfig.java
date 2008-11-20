@@ -114,6 +114,15 @@ public class CompilerConfig extends Thread
     protected List<CompilerListener> compilerListeners = new ArrayList<CompilerListener>();
 
     /**
+     * A list of packsLang-files that were defined by the user in the resource-section
+     * The key of this map is an packsLang-file identifier, e.g. <code>packsLang.xml_eng</code>,
+     * the values are lists of {@link URL} pointing to the concrete packsLang-files.
+     * 
+     * @see #mergePacksLangFiles()
+     */
+    private HashMap<String,List<URL>> packsLangUrlMap = new HashMap<String,List<URL>>();    
+    
+    /**
      * Set the IzPack home directory
      *
      * @param izHome - the izpack home directory
@@ -327,6 +336,9 @@ public class CompilerConfig extends Thread
         addPacks(data);
         addInstallerRequirement(data);
 
+        // merge multiple packlang.xml files
+        mergePacksLangFiles();
+        
         // We ask the packager to create the installer
         compiler.createInstaller();
     }
@@ -1580,6 +1592,23 @@ public class CompilerConfig extends Thread
             }
 
             compiler.addResource(id, url);
+            
+            // remembering references to all added packsLang.xml files
+            if (id.startsWith("packsLang.xml")) 
+            {
+                List<URL> packsLangURLs = null;
+                if (packsLangUrlMap.containsKey(id)) 
+                {
+                    packsLangURLs = packsLangUrlMap.get(id);
+                }
+                else 
+                {
+                    packsLangURLs = new ArrayList<URL>();
+                    packsLangUrlMap.put(id, packsLangURLs);
+                }
+                packsLangURLs.add(url);
+            }
+            
         }
         notifyCompilerListener("addResources", CompilerListener.END, data);
     }
@@ -2943,5 +2972,109 @@ public class CompilerConfig extends Thread
             parseError(f, ce.getMessage());
         }
         return (retval);
+    }
+    
+    /**
+     * A function to merge multiple packsLang-files into a single file for each identifier,
+     * e.g. two resource files
+     * <pre>
+     *    &lt;res src="./packsLang01.xml" id="packsLang.xml"/&gt;
+     *    &lt;res src="./packsLang02.xml" id="packsLang.xml"/&gt;
+     * </pre> 
+     * are merged into a single temp-file to act as if the user had defined:
+     * <pre>
+     *    &lt;res src="/tmp/izpp47881.tmp" id="packsLang.xml"/&gt;
+     * </pre>
+     *    
+     * @throws CompilerException 
+     */
+    private void mergePacksLangFiles() throws CompilerException 
+    {
+        // just one packslang file. nothing to do here
+        if (packsLangUrlMap.size() <= 0) return;
+        
+        OutputStream os = null;
+        try
+        {            
+            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();            
+            
+            // loop through all packsLang resources, e.g. packsLang.xml_eng, packsLang.xml_deu, ...
+            for (String id : packsLangUrlMap.keySet())
+            {
+                URL mergedPackLangFileURL = null;
+                
+                List<URL> packsLangURLs = packsLangUrlMap.get(id);
+                if (packsLangURLs.size() == 0) continue; // should not occure
+                
+                if (packsLangURLs.size() == 1)
+                {
+                    // no need to merge files. just use the first URL
+                    mergedPackLangFileURL = packsLangURLs.get(0);
+                }
+                else
+                {                
+                    XMLElement mergedPacksLang = null;
+                    
+                    // loop through all that belong to the given identifier
+                    for (URL packslangURL : packsLangURLs)
+                    {                
+                        // parsing xml
+                        IXMLReader reader = new StdXMLReader(null, packslangURL.toExternalForm());
+                        parser.setReader(reader);
+                        XMLElement xml = (XMLElement) parser.parse();
+                        if (mergedPacksLang == null) 
+                        {
+                            // just keep the first file
+                            mergedPacksLang = xml;
+                        } 
+                        else 
+                        {
+                            // append data of all xml-docs into the first document 
+                            Vector<XMLElement> langStrings = xml.getChildrenNamed("str");
+                            for (XMLElement langString : langStrings)
+                            {
+                                mergedPacksLang.addChild(langString);
+                            }
+                        }
+                    }
+                    
+                    // writing merged strings to a new file
+                    File mergedPackLangFile = File.createTempFile("izpp", null);
+                    mergedPackLangFile.deleteOnExit();
+                    
+                    FileOutputStream outFile = new FileOutputStream(mergedPackLangFile);
+                    os = new BufferedOutputStream(outFile);
+                    
+                    XMLWriter xmlWriter = new XMLWriter(os);
+                    xmlWriter.write(mergedPacksLang);                    
+                    os.close();
+                    os = null;
+                    
+                    // getting the URL to the new merged file
+                    mergedPackLangFileURL = mergedPackLangFile.toURL();
+                }
+                
+                compiler.addResource(id, mergedPackLangFileURL);
+            }
+        }
+        catch (Exception e)
+        {
+            throw new CompilerException("Unable to merge multiple packsLang.xml files: " + e.getMessage(), e);
+        }
+        finally
+        {
+            if (null != os)
+            {
+                try
+                {
+                    os.close();
+                }
+                catch (IOException e)
+                {
+                    // ignore as there is nothing we can realistically do
+                    // so lets at least try to close the input stream
+                }
+            }
+        }
     }
 }

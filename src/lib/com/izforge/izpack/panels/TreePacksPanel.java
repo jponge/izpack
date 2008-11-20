@@ -137,7 +137,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         try
         {
             this.langpack = parent.langpack;
-            InputStream langPackStream;
+            InputStream langPackStream = null;
             String webdir = idata.info.getWebDirURL();
             if (webdir != null)
             {
@@ -148,10 +148,11 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
                 }
                 catch (Exception e)
                 {
-                    langPackStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
+                    // just ignore this. we use the fallback below
                 }
             }
-            else
+            
+            if(langPackStream == null)
             {
                 langPackStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
             }
