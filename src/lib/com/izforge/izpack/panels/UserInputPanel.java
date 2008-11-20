@@ -3774,7 +3774,12 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             localizedMessage = message;
         }
-        JOptionPane.showMessageDialog(parentFrame, localizedMessage, caption, messageType);
+        String localizedCaption = parentFrame.langpack.getString(caption);
+        if ((localizedCaption == null) || (localizedCaption.trim().length() == 0))
+        {
+            localizedCaption = caption; 
+        }
+        JOptionPane.showMessageDialog(parentFrame, localizedMessage, localizedCaption, messageType);
     }
 
     /*--------------------------------------------------------------------------*/
@@ -3787,11 +3792,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void showWarningMessageDialog(InstallerFrame parentFrame, String message)
     {
-        showMessageDialog(parentFrame, message,
-                parentFrame.langpack.getString("UserInputPanel.error.caption"),
-                JOptionPane.WARNING_MESSAGE);
+        showMessageDialog(parentFrame, message, "UserInputPanel.error.caption", JOptionPane.WARNING_MESSAGE); 
     }
-
+    
 } // public class UserInputPanel
 
 /*---------------------------------------------------------------------------*/
