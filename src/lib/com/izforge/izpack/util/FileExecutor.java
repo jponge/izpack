@@ -282,7 +282,7 @@ public class FileExecutor
                 exitStatus = executeCommand(params, output);
                 if (exitStatus != 0)
                 {
-                    handler.emitError("file execution error", "Error executing \n" + params[0]
+                    handler.emitWarning("file execution error", "Error executing \n" + params[0]
                             + " " + params[1] + " " + params[2]);
                     continue;
                 }

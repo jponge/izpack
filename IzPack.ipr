@@ -260,7 +260,7 @@
       <module fileurl="file://$PROJECT_DIR$/IzPack.iml" filepath="$PROJECT_DIR$/IzPack.iml" />
     </modules>
   </component>
-  <component name="ProjectRootManager" version="2" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.5" project-jdk-type="JavaSDK" />
   <component name="ResourceManagerContainer">
     <option name="myResourceBundles">
       <value>
@@ -293,7 +293,7 @@
         </entry>
       </map>
     </option>
-    <option name="myVersion" value="123" />
+    <option name="myVersion" value="124" />
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="svn" />

@@ -133,7 +133,7 @@ public class ProcessPanelWorker implements Runnable
         }
 
         for (XMLElement job_el : spec.getChildrenNamed("job"))
-        {                               
+        {
             // normally use condition attribute, but also read conditionid to not break older versions.
             String conditionid = job_el.hasAttribute("condition") ? job_el.getAttribute("condition") : job_el.hasAttribute("conditionid") ? job_el.getAttribute("conditionid") : null;
             if ((conditionid != null) && (conditionid.length() > 0))
@@ -146,7 +146,7 @@ public class ProcessPanelWorker implements Runnable
                     // skip, if there is a condition and this condition isn't true
                     continue;
                 }
-            }                                   
+            }
             Debug.trace("Condition is fulfilled or not existent.");
             // ExecuteForPack Patch
             // Check if processing required for pack
@@ -216,7 +216,7 @@ public class ProcessPanelWorker implements Runnable
                     ef_list.add(new ExecutableClass(ef_name, args));
                 }
                 this.jobs.add(new ProcessingJob(job_name, ef_list));
-            }            
+            }
         }
 
         return true;
@@ -430,15 +430,12 @@ public class ProcessPanelWorker implements Runnable
 
                     if (exitStatus != 0)
                     {
-                        // New bahavior: make it fail
-                        this.handler.emitError("Process execution failure", "The process has returned an error.");
-                        return false;
-                        /*if (this.handler.askQuestion("process execution failed",
+                        if (this.handler.askQuestion("Process execution failed",
                                 "Continue anyway?", AbstractUIHandler.CHOICES_YES_NO,
                                 AbstractUIHandler.ANSWER_YES) == AbstractUIHandler.ANSWER_NO)
                         {
                             return false;
-                        }*/
+                        }
                     }
                 }
                 catch (InterruptedException ie)
