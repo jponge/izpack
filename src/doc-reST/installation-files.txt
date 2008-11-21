@@ -688,6 +688,13 @@ Here's a sample :
       <res id="LicencePanel.licence" src="legal/License.txt"/>
     </resources>
 
+Please note that in general a resource ``id`` is unique. Thus if you define
+multiple resources with the same ``id`` the later definition (e.g. a
+resource defined in a referenced pack-file) will overwrite the previous definition.
+However there is an exception for ``packsLang.xml_xyz`` files 
+(see `Internationalization of the PacksPanel`). 
+If multiple packsLang-files were defined, all files will be merged into a single temporary 
+file. This allows ``refpack`` files to provide their own internationalization-information.
 
 The Panels Element ``<panels>``
 '''''''''''''''''''''''''''''''''
@@ -743,7 +750,7 @@ The ``<pack>`` takes the following attributes :
     files on disk instead of from the installer. *Please make sure that your
     relative files paths are correct !*
 -   ``id``: this attribute is used to give a unique id to the pack to be
-    used for internationalization.
+    used for internationalization via ``packsLang.xml`` file.
 -   ``packImgId``: this attribute is used to reference a unique resource
     that represents the pack's image for the ImgPacksPanel. The resource
     should be defined in the ``<resources>`` element of the installation XML
@@ -757,10 +764,11 @@ packs-definition. This external packs definition is a regular IzPack
 installation XML. However the only elements that are used from that XML file
 are the ``<packs>`` and the ``<resources>`` elements. This enables a model in
 which a single developer is responsible for maintaining the packs and
-resources related to the development-package assigned to him. The main
-install XML references these xml-files to avoid synchronization efforts
-between the central installation XML and the developer-maintained installer
-XMLs.
+resources (e.g. separate ``packsLang.xml_xyz`` files providing internationalization;
+see `Internationalization of the PacksPanel`) related to the development-package 
+assigned to him. The main install XML references these xml-files to avoid 
+synchronization efforts between the central installation XML and the 
+developer-maintained installer XMLs.
 
 The ``<refpackset>`` tag can be used in situations were there is no predefined
 set of ``<refpack>`` files, but a given directory should be scanned for 
@@ -791,6 +799,23 @@ distribution langpack files located at ``
 $IZPACK_HOME/bin/langpacks/installer``. For the name of the panel you just
 use the pack ``id`` as the txt ``id``. For the description you use the pack
 ``id`` suffixed with ``.description``.
+
+An example:
+::
+
+    <resources>
+        <res id="packsLang.xml_eng" src="i18n/myPacksLang.xml_eng"/>
+    </resources>
+
+The ``packsLang.xml_eng`` file:
+::
+
+    <langpack>
+        <str id="myApplication" txt="Main Application"/>
+        <str id="myApplication.description" txt="A description of my main application"/>
+        [...]
+    </langpack>
+
 
 The following sections describe the tags available for a ``<pack>`` section.
 
