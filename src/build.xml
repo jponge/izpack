@@ -422,6 +422,7 @@
                 <include name="com/izforge/izpack/rules/*.class"/>
                 <include name="com/izforge/izpack/compiler/DynamicVariable.class"/>
                 <include name="com/izforge/izpack/compiler/CompilerException.class"/>
+				<include name="com/izforge/izpack/panels/Validator*.class"/>
                 <include name="net/n3/nanoxml/*.class"/>
             </fileset>
             <zipfileset src="${basedir}/lib/jakarta-regexp-1.3.jar">
