@@ -187,6 +187,7 @@ are available:
 -   ``javaprop`` - use this type if the substitution happens in a Java
     properties file. Individual variables might be modified to function
     properly within the context of Java property files.
+-   ``java`` - use this type for Java files.
 -   ``xml`` - use this type if the substitution happens in a XML file.
     Individual variables might be modified to function properly within the
     context of XML files.
@@ -674,7 +675,7 @@ attributes to specify :
     time. For instance you could set the application version in a readme file
     used by ``InfoPanel``.
 -   ``type`` : specifies the parse type. This makes sense only for a text
-    resource - the default is ``plain``, other values are ``javaprop, xml``
+    resource - the default is ``plain``, other values are ``javaprop, xml, plain, java, shell, at, ant``
     (Java properties file and XML files)
 -   ``encoding`` : specifies the resource encoding if the receiver needs
     to know. This makes sense only for a text resource.
