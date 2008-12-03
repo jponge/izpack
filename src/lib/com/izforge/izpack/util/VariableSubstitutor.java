@@ -449,10 +449,12 @@ public class VariableSubstitutor implements Serializable
         switch (type)
         {
             case TYPE_PLAIN:
-            case TYPE_SHELL:
             case TYPE_AT:
             case TYPE_ANT:
                 return str;
+            case TYPE_SHELL:
+                //apple mac has major problem with \r, make sure they are gone
+                return str.replace("\r","");
             case TYPE_JAVA_PROPERTIES:
             case TYPE_JAVA:
                 buffer = new StringBuffer(str);
@@ -540,3 +542,4 @@ public class VariableSubstitutor implements Serializable
         }
     }
 }
+
