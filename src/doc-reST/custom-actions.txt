@@ -665,7 +665,10 @@ Value to be set at installation time into the Windows registry.
 -   ``Contents part``: accurately one of the following content elements
     should be defined. It implicit defines the type of the value.
 
-    -   ``string`` : contents for value to be set if it is a string.
+    -   ``string`` : contents for value to be set if it is a string (REG_SZ).
+    -   ``string`` : if the string value starts with `%`, then the string is considered as
+        an expandable string (REG_EXPAND_SZ) which is useful to reference Windows environment
+        variables (e.g., in paths, etc).
     -   ``dword`` : contents for value to be set if it is an integer
         (Windows DWORD). Only digits are valid. "48" is valid, "0x30" will be
         raise an NumberFormatException from ``java.lang.Long.parseLong``.

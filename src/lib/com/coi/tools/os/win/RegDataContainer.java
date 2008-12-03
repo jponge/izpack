@@ -95,7 +95,14 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
     public RegDataContainer(String data)
     {
         super();
-        type = REG_SZ;
+		if(containsPlaceholder(data))
+    	{
+    		setType(REG_EXPAND_SZ);
+    	}
+    	else
+    	{
+    		setType(REG_SZ);
+    	}
         stringData = data;
     }
 
@@ -364,6 +371,11 @@ public class RegDataContainer implements Cloneable, Serializable, MSWinConstants
         result = 29 * result + (stringData != null ? stringData.hashCode() : 0);
         result = 29 * result + type;
         return result;
+    }
+	
+	private boolean containsPlaceholder(String str)
+    {
+    	return str.indexOf("%") >= 0;
     }
 
 }
