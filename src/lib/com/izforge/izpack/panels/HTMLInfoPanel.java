@@ -19,17 +19,15 @@
 
 package com.izforge.izpack.panels;
 
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
-
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.installer.*;
+
+import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import java.io.IOException;
+import java.net.URL;
 
 /**
  * The HTML info panel.
@@ -66,12 +64,7 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
             textArea.setEditable(false);
             textArea.addHyperlinkListener(this);
             JScrollPane scroller = new JScrollPane(textArea);
-            // TODO: it would be nice to give the Panel the parse attribute but by now the content is simply parsed
-            String content=loadHTMLInfoContent();
-            if (content!=null)
-            {
-               textArea.setText(this.parseText(loadHTMLInfoContent()));
-            }
+            textArea.setPage(loadHTMLInfoContent());
             add(scroller, NEXT_LINE);
         }
         catch (Exception err)
@@ -80,35 +73,39 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
         }
         getLayoutHelper().completeLayout();
     }
-    
+
     /*
-     * loads the content of the info resource as text so that it can be parsed afterwards  
-     */
-    private String loadHTMLInfoContent()
+    * loads the content of the info resource as text so that it can be parsed afterwards
+    */
+    private URL loadHTMLInfoContent()
     {
-        String resNamePrifix = "HTMLInfoPanel.info";
-        if (this.getMetadata()!=null && this.getMetadata().getPanelid()!=null)
+        String resPrefix = "HTMLInfoPanel.info";
+        if (getMetadata() != null && getMetadata().getPanelid() != null)
         {
-           String panelspecificResNamePrifix="HTMLInfoPanel."+this.getMetadata().getPanelid();
-           String panelspecificResContent=null;
-           try
-           {
-              panelspecificResContent = ResourceManager.getInstance().getTextResource(panelspecificResNamePrifix);
-           }
-           catch (Exception e){}
-           if (panelspecificResContent!=null)
-           {
-               return panelspecificResContent;
-           }
+            try
+            {
+                String panelSpecificResName = "HTMLInfoPanel." + this.getMetadata().getPanelid();
+                String panelspecificResContent = ResourceManager.getInstance().getTextResource(panelSpecificResName);
+                if (panelspecificResContent != null)
+                {
+                    return ResourceManager.getInstance().getURL(panelspecificResContent);
+                }
+            }
+            catch (Exception e)
+            {
+                // Those ones can be skipped
+            }
         }
+
         try
         {
-            return ResourceManager.getInstance().getTextResource(resNamePrifix);
+            return ResourceManager.getInstance().getURL(resPrefix);
         }
         catch (Exception ex)
         {
             ex.printStackTrace();
         }
+
         return null;
     }
 
@@ -177,15 +174,17 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
             //TODO: Handle exception.
         }
     }
-    
+
     public void panelActivate()
     {
-        // TODO: it would be nice to give the Panel the parse attribute but by now the content is simply parsed
-        String content=loadHTMLInfoContent();
-        if (content!=null)
+        try
         {
-           textArea.setText(this.parseText(loadHTMLInfoContent()));
+            textArea.setPage(loadHTMLInfoContent());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
         }
     }
-    
+
 }
