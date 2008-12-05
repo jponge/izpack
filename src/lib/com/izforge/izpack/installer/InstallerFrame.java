@@ -161,6 +161,11 @@ public class InstallerFrame extends JFrame
     protected JPanel contentPane;
 
     /**
+     * The help button.
+     */
+    protected JButton helpButton = null;
+
+    /**
      * The previous button.
      */
     protected JButton prevButton;
@@ -325,6 +330,8 @@ public class InstallerFrame extends JFrame
             {
                 panel.setValidationService(DataValidatorFactory.createDataValidator(dataValidator));
             }
+
+            panel.setHelps(p.getHelpsMap());
 
             installdata.panels.add(panel);
             if (panel.isHidden())
@@ -496,6 +503,14 @@ public class InstallerFrame extends JFrame
                 .getString("installer.madewith")
                 + " ", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font(
                 "Dialog", Font.PLAIN, 10))));
+
+        // Add help Button to the navigation panel
+        this.helpButton = ButtonFactory.createButton(langpack.getString("installer.help"), icons
+                .getImageIcon("help"), installdata.buttonsHColor);
+        navPanel.add(this.helpButton);
+        this.helpButton.setName("HelpButton");
+        this.helpButton.addActionListener(new HelpHandler());
+
         navPanel.add(Box.createHorizontalGlue());
 
         prevButton = ButtonFactory.createButton(langpack.getString("installer.prev"), icons
@@ -782,6 +797,7 @@ public class InstallerFrame extends JFrame
             panelsContainer.setVisible(false);
             IzPanel panel = installdata.panels.get(installdata.curPanelNumber);
             IzPanel l_panel = installdata.panels.get(last);
+            showHelpButton(panel.canShowHelp());
             if (Debug.isTRACE())
             {
                 debugger.switchPanel(panel.getMetadata(), l_panel.getMetadata());
@@ -1686,6 +1702,14 @@ public class InstallerFrame extends JFrame
     }
 
     /**
+     * Show help Window
+     */
+    public void showHelp()
+    {
+        installdata.panels.get(installdata.curPanelNumber).showHelp();
+    }
+
+    /**
      * Handles the events from the navigation bar elements.
      * 
      * @author Julien Ponge
@@ -1714,6 +1738,20 @@ public class InstallerFrame extends JFrame
                 exit();
             }
 
+        }
+    }
+
+    class HelpHandler implements ActionListener
+    {
+
+        /**
+         * Actions handler.
+         * 
+         * @param e The event.
+         */
+        public void actionPerformed(ActionEvent e)
+        {
+            showHelp();
         }
     }
 
@@ -2178,5 +2216,16 @@ public class InstallerFrame extends JFrame
     public void setRules(RulesEngine rules)
     {
         this.rules = rules;
+    }
+
+    /**
+     * Shows or hides Help button depending on <code>show</code> parameter
+     * 
+     * @param show - flag to show or hide Help button
+     */
+    private void showHelpButton(boolean show)
+    {
+        if (this.helpButton == null) return;
+        this.helpButton.setVisible(show);
     }
 }

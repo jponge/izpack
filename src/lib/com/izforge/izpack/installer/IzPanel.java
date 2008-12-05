@@ -19,13 +19,9 @@
  */
 package com.izforge.izpack.installer;
 
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager2;
+import java.awt.*;
+import java.net.URL;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -42,6 +38,7 @@ import net.n3.nanoxml.XMLElement;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
+import com.izforge.izpack.panels.HelpWindow;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.MultiLineLabel;
@@ -1091,6 +1088,58 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             err.printStackTrace();
         }
         return string_to_parse;
+    }
+
+    private HashMap<String, String> helps = null;
+
+    public void setHelps(HashMap helps)
+    {
+        this.helps = helps;
+    }
+
+    public String getHelpUrl(String isoCode)
+    {
+        String url = null;
+        if (this.helps != null)
+        {
+            url = helps.get(isoCode);
+        }
+        return url;
+    }
+
+    /**
+     * Indicates wether the panel can display help. The installer will hide Help button if current
+     * panel does not support help functions. Default behaviour is to return <code>false</code>.
+     * 
+     * @return A boolean stating wether the panel supports Help function.
+     */
+    public boolean canShowHelp()
+    {
+        return getHelpUrl(this.idata.localeISO3) != null;
+    }
+
+    /**
+     * This method is called when Help button has been clicked. By default it doesn't do anything.
+     */
+    public void showHelp()
+    {
+        String helpName = getHelpUrl(this.idata.localeISO3);
+        // System.out.println("Help function called, helpName: " + helpName);
+        if (helpName != null)
+        {
+            URL helpUrl = getClass().getResource("/res/" + helpName);
+            getHelpWindow().showHelp(getString("installer.help"), helpUrl);
+        }
+    }
+
+    private HelpWindow helpWindow = null;
+
+    private HelpWindow getHelpWindow()
+    {
+        if (this.helpWindow != null) { return this.helpWindow; }
+
+        this.helpWindow = new HelpWindow(parent, getString("installer.prev"));
+        return this.helpWindow;
     }
 
 }

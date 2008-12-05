@@ -83,6 +83,7 @@ import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
 import com.izforge.izpack.event.CompilerListener;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.InstallerRequirement;
+import com.izforge.izpack.panels.HelpWindow;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
@@ -1504,6 +1505,23 @@ public class CompilerConfig extends Thread
                     panel.setValidator(validator);
                 }
             }
+            // adding helps
+            Vector helps = xmlPanel.getChildrenNamed(HelpWindow.HELP_TAG);
+            if (helps != null)
+            {
+                for (int helpIndex = 0; helpIndex < helps.size(); helpIndex++)
+                {
+                    XMLElement help = (XMLElement) helps.get(helpIndex);
+                    String iso3 = help.getAttribute(HelpWindow.ISO3_ATTRIBUTE);
+                    String resourceId = className + "_help_" + iso3 + ".html";
+                    panel.addHelp(iso3, resourceId);
+
+                    URL originalUrl = findProjectResource(help
+                            .getAttribute(HelpWindow.SRC_ATTRIBUTE), "Help", help);
+                    URL helpUrl = originalUrl;
+                    compiler.addResource(resourceId, helpUrl);
+                }
+            }
             // insert into the packager
             compiler.addPanelJar(panel, url);
         }
@@ -2794,7 +2812,7 @@ public class CompilerConfig extends Thread
      * @throws IOException
      */
     private String getFullClassName(URL url, String className) throws IOException // throws
-                                                                                    // Exception
+    // Exception
     {
         JarInputStream jis = new JarInputStream(url.openStream());
         ZipEntry zentry = null;
