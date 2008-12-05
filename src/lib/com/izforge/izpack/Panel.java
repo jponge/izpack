@@ -54,6 +54,11 @@ public class Panel implements Serializable
      */
     private String condition = null;
 
+    /**
+     * The validator for this panel
+     */
+    private String validator = null;
+
     public String getClassName()
     {
         return this.className;
@@ -88,7 +93,6 @@ public class Panel implements Serializable
         this.panelid = panelid;
     }
 
-
     /**
      * @return the condition
      */
@@ -96,7 +100,6 @@ public class Panel implements Serializable
     {
         return this.condition;
     }
-
 
     /**
      * @param condition the condition to set
@@ -109,5 +112,15 @@ public class Panel implements Serializable
     public boolean hasCondition()
     {
         return this.condition != null;
+    }
+
+    public String getValidator()
+    {
+        return validator;
+    }
+
+    public void setValidator(String validator)
+    {
+        this.validator = validator;
     }
 }

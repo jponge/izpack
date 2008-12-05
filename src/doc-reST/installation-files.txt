@@ -722,7 +722,49 @@ Here's a sample :
       <panel classname="UserInputPanel" id="myuserinput" condition="pack2selected" />
       <panel classname="FinishPanel"/>
     </panels>
+    
+The following sections describe the tags available for a ``<panel>`` section.
 
+
+``<help>`` - optional file for a help
+'''''''''''''''''''''''''''''''''''''
+
+The content of the help file is shown in a small window on the panel, when User 
+clicks on the help button. The button is only shown, when a help in the language
+exists.
+
+The ``<help>`` takes the following attributes :
+
+-   ``iso3``: iso3 representation of the language the help is written
+-   ``src``: path to the help file to display
+
+Here's a sample :
+
+::
+
+    <panel classname="HelloPanel">
+      <help iso3="deu" src="HelloPanelHelp_deu.html" />
+      <help iso3="eng" src="HelloPanelHelp_eng.html" />
+    </panel>
+
+``<validator>`` - optional validation on idata
+'''''''''''''''''''''''''''''''''''''''''''''''
+
+This validation is done, when going on for the next panel. It is also done in case 
+of an automatic installation. The class must implement the interface 
+com.izforge.izpack.installer.DataValidator.
+
+The ``<validator>`` takes the following attributes :
+
+-   ``classname``: The class implementing com.izforge.izpack.installer.DataValidator
+
+Here's a sample :
+
+::
+
+    <panel classname="UserInputPanel" id="jdbc.connection.parameters">
+      <validator classname="JdbcConnectionValidator" />
+    </panel>
 
 The Packs Element ``<packs>``
 '''''''''''''''''''''''''''''''

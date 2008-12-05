@@ -21,24 +21,42 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.Panel;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsConstraint;
-import net.n3.nanoxml.*;
-
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLBuilderFactory;
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.CustomData;
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.Panel;
+import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Housekeeper;
+import com.izforge.izpack.util.OsConstraint;
+
 /**
  * Runs the install process in text only (no GUI) mode.
- *
+ * 
  * @author Jonathan Halliday <jonathan.halliday@arjuna.com>
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
@@ -63,7 +81,7 @@ public class AutomatedInstaller extends InstallerBase
 
     /**
      * Constructing an instance triggers the install.
-     *
+     * 
      * @param inputFilename Name of the file containing the installation data.
      * @throws Exception Description of the Exception
      */
@@ -75,14 +93,14 @@ public class AutomatedInstaller extends InstallerBase
 
         // Loads the installation data
         loadInstallData(this.idata);
-        
 
         // Loads the xml data
         this.idata.xmlData = getXMLData(input);
 
         // Loads the langpack
         this.idata.localeISO3 = this.idata.xmlData.getAttribute("langpack", "eng");
-        InputStream in = getClass().getResourceAsStream("/langpacks/" + this.idata.localeISO3 + ".xml");
+        InputStream in = getClass().getResourceAsStream(
+                "/langpacks/" + this.idata.localeISO3 + ".xml");
         this.idata.langpack = new LocaleDatabase(in);
         this.idata.setVariable(ScriptParser.ISO3_LANG, this.idata.localeISO3);
 
@@ -95,22 +113,18 @@ public class AutomatedInstaller extends InstallerBase
         this.panelInstanceCount = new TreeMap<String, Integer>();
         // load conditions
         loadConditions(this.idata);
-        
+
         // loads installer conditions
-        loadInstallerRequirements();              
+        loadInstallerRequirements();
 
         // load dynamic variables
-        loadDynamicVariables();       
+        loadDynamicVariables();
     }
 
-
     /**
-     * Writes the uninstalldata.
-     * <p/>
-     * Unfortunately, Java doesn't allow multiple inheritance, so <code>AutomatedInstaller</code>
-     * and <code>InstallerFrame</code> can't share this code ... :-/
-     * <p/>
-     * TODO: We should try to fix this in the future.
+     * Writes the uninstalldata. <p/> Unfortunately, Java doesn't allow multiple inheritance, so
+     * <code>AutomatedInstaller</code> and <code>InstallerFrame</code> can't share this code ...
+     * :-/ <p/> TODO: We should try to fix this in the future.
      */
     private boolean writeUninstallData()
     {
@@ -121,9 +135,7 @@ public class AutomatedInstaller extends InstallerBase
             List files = udata.getUninstalableFilesList();
             ZipOutputStream outJar = this.idata.uninstallOutJar;
 
-            if (outJar == null)
-            {
-                return true; // it is allowed not to have an installer
+            if (outJar == null) { return true; // it is allowed not to have an installer
             }
 
             System.out.println("[ Writing the uninstaller data ... ]");
@@ -167,7 +179,7 @@ public class AutomatedInstaller extends InstallerBase
             execStream.flush();
             outJar.closeEntry();
 
-            // ***  ADDED code bellow 
+            // *** ADDED code bellow
             // Write out additional uninstall data
             // Do not "kill" the installation if there is a problem
             // with custom uninstall data. Therefore log it to Debug,
@@ -290,23 +302,23 @@ public class AutomatedInstaller extends InstallerBase
                     }
                 }
             }
-            
-            // write the script files, which will 
-            // perform several complement and unindependend uninstall actions            
+
+            // write the script files, which will
+            // perform several complement and unindependend uninstall actions
             ArrayList<String> unInstallScripts = udata.getUninstallScripts();
             Iterator<String> unInstallIter = unInstallScripts.iterator();
             ObjectOutputStream rootStream;
             int idx = 0;
             while (unInstallIter.hasNext())
             {
-                outJar.putNextEntry( new ZipEntry( UninstallData.ROOTSCRIPT + Integer.toString( idx ) ) );
+                outJar.putNextEntry(new ZipEntry(UninstallData.ROOTSCRIPT + Integer.toString(idx)));
                 rootStream = new ObjectOutputStream(outJar);
-                String unInstallScript = (String) unInstallIter.next();                  
+                String unInstallScript = (String) unInstallIter.next();
                 rootStream.writeUTF(unInstallScript);
                 rootStream.flush();
                 outJar.closeEntry();
-            } 
-            
+            }
+
             // Cleanup
             outJar.flush();
             outJar.close();
@@ -321,7 +333,7 @@ public class AutomatedInstaller extends InstallerBase
 
     /**
      * Runs the automated installation logic for each panel in turn.
-     *
+     * 
      * @throws Exception
      */
     protected void doInstall() throws Exception
@@ -331,7 +343,7 @@ public class AutomatedInstaller extends InstallerBase
         {
             Debug.log("not all installerconditions are fulfilled.");
             return;
-        }        
+        }
 
         // TODO: i18n
         System.out.println("[ Starting automated installation ]");
@@ -368,13 +380,16 @@ public class AutomatedInstaller extends InstallerBase
                 try
                 {
 
-                    automationHelperClass = (Class<PanelAutomation>) Class.forName(automationHelperClassName);
+                    automationHelperClass = (Class<PanelAutomation>) Class
+                            .forName(automationHelperClassName);
 
                 }
                 catch (ClassNotFoundException e)
                 {
                     // this is OK - not all panels have/need automation support.
                     Debug.log("ClassNotFoundException-skip :" + automationHelperClassName);
+                    // but validate anyway
+                    validatePanel(p);
                     continue;
                 }
 
@@ -385,13 +400,14 @@ public class AutomatedInstaller extends InstallerBase
                     try
                     {
                         Debug.log("Instantiate :" + automationHelperClassName);
-                        automationHelperInstance = automationHelperClass
-                                .newInstance();
+                        automationHelperInstance = automationHelperClass.newInstance();
                     }
                     catch (Exception e)
                     {
-                        Debug.log("ERROR: no default constructor for "
-                                + automationHelperClassName + ", skipping...");
+                        Debug.log("ERROR: no default constructor for " + automationHelperClassName
+                                + ", skipping...");
+                        // but validate anyway
+                        validatePanel(p);
                         continue;
                     }
                 }
@@ -416,7 +432,8 @@ public class AutomatedInstaller extends InstallerBase
                 {
                     try
                     {
-                        Debug.log("automationHelperInstance.runAutomated :" + automationHelperClassName + " entered.");
+                        Debug.log("automationHelperInstance.runAutomated :"
+                                + automationHelperClassName + " entered.");
                         if (!automationHelperInstance.runAutomated(this.idata, panelRoot))
                         {
                             // make installation fail instantly
@@ -425,7 +442,8 @@ public class AutomatedInstaller extends InstallerBase
                         }
                         else
                         {
-                            Debug.log("automationHelperInstance.runAutomated :" + automationHelperClassName + " successfully done.");
+                            Debug.log("automationHelperInstance.runAutomated :"
+                                    + automationHelperClassName + " successfully done.");
                         }
                     }
                     catch (Exception e)
@@ -437,6 +455,7 @@ public class AutomatedInstaller extends InstallerBase
                     }
 
                 }
+                validatePanel(p);
 
             }
 
@@ -467,8 +486,37 @@ public class AutomatedInstaller extends InstallerBase
     }
 
     /**
+     * @param p
+     */
+    private void validatePanel(final Panel p) throws InstallerException
+    {
+        String dataValidator = p.getValidator();
+        if (dataValidator != null)
+        {
+            DataValidator validator = DataValidatorFactory.createDataValidator(dataValidator);
+            com.izforge.izpack.installer.DataValidator.Status validationResult = validator
+                    .validateData(idata);
+            if (validationResult != DataValidator.Status.OK)
+            {
+                // make installation fail instantly
+                this.result = false;
+                // if defaultAnswer is true, result is ok
+                if (validationResult == Status.WARNING && validator.getDefaultAnswer())
+                {
+                    System.out
+                            .println("Configuration said, it's ok to go on, if validation is not successfull");
+                    this.result = true;
+                    return;
+                }
+                throw new InstallerException("Validating data was not successfull");
+            }
+        }
+        return;
+    }
+
+    /**
      * Loads the xml data for the automated mode.
-     *
+     * 
      * @param input The file containing the installation data.
      * @return The root of the XML file.
      * @throws Exception thrown if there are problems reading the file.
@@ -491,7 +539,7 @@ public class AutomatedInstaller extends InstallerBase
 
     /**
      * Get the result of the installation.
-     *
+     * 
      * @return True if the installation was successful.
      */
     public boolean getResult()
