@@ -55,9 +55,12 @@ public class ResourceManager
     private String locale = "";
 
     /**
-     * The base path where to find the resources
+     * The base path where to find the resources: resourceBasePathDefaultConstant = "/res/"
      */
-    protected final String resourceBasePath = "/res/";
+    public final String resourceBasePathDefaultConstant = "/res/";
+    
+    /** Internel used resourceBasePath = "/res/" */
+    protected String resourceBasePath = "/res/";
 
     /**
      * Contains the given InstallData
@@ -86,6 +89,7 @@ public class ResourceManager
             // try to figure out ourself
             this.locale = installData.xmlData.getAttribute("langpack", "eng");
         }
+        
     }
 
     /**
@@ -115,8 +119,28 @@ public class ResourceManager
      */
     public static ResourceManager getInstance()
     {
+        if (ResourceManager.instance == null)
+        {
+            ResourceManager.instance = new ResourceManager( new AutomatedInstallData() );
+        }
         return ResourceManager.instance;
     }
+    
+    /**
+     * If null was given the Default BasePath "/res/" is set
+     * If otherwise the Basepath is set to the given String.
+     * This is useful if someone needs direct access to Reosurces in the jar. 
+     * @param aDefaultBasePath If null was given the DefaultBasepath is re/set "/res/"
+     */
+    public void setDefaultOrResourceBasePath( String aDefaultBasePath )
+    {
+       // For direct access of named resources the BasePath should be empty
+       if( null != aDefaultBasePath )
+         this.resourceBasePath = aDefaultBasePath;
+       else
+         this.resourceBasePath = resourceBasePathDefaultConstant;
+    }
+    
 
     /**
      * This method is used to get the language dependent path of the given resource. If there is a
@@ -130,12 +154,15 @@ public class ResourceManager
     private String getLanguageResourceString(String resource) throws ResourceNotFoundException
     {
         InputStream in;
-        String resourcePath = this.resourceBasePath + resource + "_" + this.locale;
+        String resourcePath = this.resourceBasePath + resource + "_" + this.locale;        
+        
         in = ResourceManager.class.getResourceAsStream(resourcePath);
         if (in != null)
         {
+            
             return resourcePath;
         }
+        
         else
         {
             // if there's no language dependent resource found
@@ -147,10 +174,10 @@ public class ResourceManager
             }
             else
             {
-                throw new ResourceNotFoundException("Can not find Resource " + resource
-                        + " for language " + this.locale);
+                throw new ResourceNotFoundException( "Cannot find named Resource: '" + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource + "_" + this.locale + "'"  );
             }
         }
+        
     }
 
     /**
