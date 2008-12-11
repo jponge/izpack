@@ -1,12 +1,18 @@
 package com.izforge.izpack.installer;
 
+import java.io.Serializable;
+
 /**
  * A requirement which has to be fulfilled to start the installer.
  * @author dennis.reil
  *
  */
-public class InstallerRequirement
+public class InstallerRequirement implements Serializable
 {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2567455022706542974L;
     private String condition;
     private String message;
     
