@@ -118,8 +118,12 @@ public class ShellScript
      */
     public ShellScript(String aShell)
     {
-        content.append("#!/usr/bin/env ").append(aShell);
-        content.append(header);
+        // Null was given the Header has to be self created 
+        if( null != aShell )
+        {
+          content.append("#!/usr/bin/env ").append(aShell);
+          content.append(header);
+        }
     }
 
     /**
