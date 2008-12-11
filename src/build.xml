@@ -416,7 +416,7 @@
                 <include name="com/izforge/izpack/io/*.class"/>
                 <include name="com/izforge/izpack/installer/*.class"/>
                 <include name="com/izforge/izpack/util/*.class"/>
-                <include name="com/izforge/izpack/util/**/*.class"/>
+                <include name="com/izforge/izpack/util/**/*.class"/>            	  
                 <include name="com/izforge/izpack/panels/NextMedia*.class"/>
                 <include name="com/izforge/izpack/rules/*.class"/>
                 <include name="com/izforge/izpack/uninstaller/SelfModifier*.class"/>
@@ -435,6 +435,7 @@
                 <include name="com/izforge/izpack/installer/*.properties"/>
                 <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
                 <include name="com/izforge/izpack/installer/elevate.js"/>
+            	  <include name="com/izforge/izpack/util/**/*.sh"/>
             </fileset>
             <fileset dir="${img.dir}/installer"/>
         </jar>
