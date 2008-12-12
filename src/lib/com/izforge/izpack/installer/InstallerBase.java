@@ -498,6 +498,7 @@ public class InstallerBase
         }
         if (rules != null)
         {
+            installdata.setRules(rules);
             // rules already read
             return;
         }
@@ -518,7 +519,7 @@ public class InstallerBase
 
             // get the data
             XMLElement conditionsxml = (XMLElement) parser.parse();
-            this.rules = new RulesEngine(conditionsxml, installdata);
+            this.rules = new RulesEngine(conditionsxml, installdata);         
         }
         catch (Exception e)
         {
@@ -526,6 +527,7 @@ public class InstallerBase
             // there seem to be no conditions
             this.rules = new RulesEngine((XMLElement) null, installdata);
         }
+        installdata.setRules(rules);
     }
     
     /**
@@ -630,30 +632,36 @@ public class InstallerBase
      */
     protected void refreshDynamicVariables(VariableSubstitutor substitutor, AutomatedInstallData installdata)
     {
+        Debug.log("refreshing dyamic variables.");
         if (dynamicvariables != null)
         {
             for (String dynvarname : dynamicvariables.keySet())
             {
+                Debug.log("Variable: " + dynvarname);
                 for (DynamicVariable dynvar : dynamicvariables.get(dynvarname))
                 {
                     boolean refresh = false;
                     String conditionid = dynvar.getConditionid();
+                    Debug.log("condition: " + conditionid);
                     if ((conditionid != null) && (conditionid.length() > 0))
                     {
                         if ((rules != null) && rules.isConditionTrue(conditionid))
                         {
+                            Debug.log("refresh condition");
                             // condition for this rule is true
                             refresh = true;
                         }
                     }
                     else
                     {
+                        Debug.log("refresh condition");
                         // empty condition
                         refresh = true;
                     }
                     if (refresh)
                     {
                         String newvalue = substitutor.substitute(dynvar.getValue(), null);
+                        Debug.log("newvalue: " + newvalue);
                         installdata.variables.setProperty(dynvar.getName(), newvalue);
                     }
                 }
