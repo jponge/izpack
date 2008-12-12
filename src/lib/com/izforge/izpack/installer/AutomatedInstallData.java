@@ -22,6 +22,8 @@ package com.izforge.izpack.installer;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.rules.RulesEngine;
+
 import net.n3.nanoxml.XMLElement;
 
 import java.util.*;
@@ -57,10 +59,12 @@ public class AutomatedInstallData
 
     public static final int UNINSTALLER_LIBS_INDEX = 2;
 
-    public static final int UNINSTALLER_JARS_INDEX = 3;
+    public static final int UNINSTALLER_JARS_INDEX = 3;    
 
     // --- Instance members -----------------------------------------------
 
+    private RulesEngine rules;
+    
     /**
      * The language code.
      */
@@ -278,5 +282,17 @@ public class AutomatedInstallData
             attributes.put(attr, val);
         }
 
+    }
+
+    
+    public RulesEngine getRules()
+    {
+        return rules;
+    }
+
+    
+    public void setRules(RulesEngine rules)
+    {
+        this.rules = rules;
     }
 }
