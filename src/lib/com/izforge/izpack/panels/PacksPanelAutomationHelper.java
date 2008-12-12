@@ -99,7 +99,12 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                             if (el.getAttribute("selected").equalsIgnoreCase("true") ||
                                     el.getAttribute("selected").equalsIgnoreCase("on"))
                             {
-                                idata.selectedPacks.add(idata.availablePacks.get(index));
+                                Pack pack = (Pack) idata.availablePacks.get(index);
+                                if ((pack.id != null) && (!idata.getRules().canInstallPack(pack.id,idata.getVariables()))){
+                                    System.out.println("Condition for pack " + pack.name + " not fulfilled. Skipping pack.");
+                                    continue;
+                                }
+                                idata.selectedPacks.add(pack);
                             }
                         }
                         else
@@ -132,7 +137,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                             Pack pack = (Pack) pack_it.next();
 
                             if (pack.name.equals(name))
-                            {
+                            {                                           
                                 idata.selectedPacks.add(pack);
                                 found = true;
                             }
