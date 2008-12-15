@@ -106,6 +106,19 @@ public class ShellScript
      * internal field: where to write via write( itsLocation ) this shellscript.
      */
     private String itsLocation;
+    
+    /** internal field: holds the shell */
+    private String itsShell;
+    
+    public final static String SH = "sh";
+    
+    public final static String BOURNE_SHELL = SH;
+    
+    public final static String BASH = "bash";
+    
+    public final static String BOURNE_AGAIN_SHELL = BASH;
+    
+    
 
     // ~ Constructors ***********************************************************************
 
@@ -121,7 +134,8 @@ public class ShellScript
         // Null was given the Header has to be self created 
         if( null != aShell )
         {
-          content.append("#!/usr/bin/env ").append(aShell);
+          setShell(aShell);
+          content.append("#!/usr/bin/env ").append(getShell());
           content.append(header);
         }
     }
@@ -131,7 +145,26 @@ public class ShellScript
      */
     public ShellScript()
     {
-        this("sh");
+        this(SH);
+    }
+    
+    
+    /**
+     * Sets the current used shell
+     * @param aShell The Shell which should set and used.
+     */
+    public void setShell( String aShell)
+    {
+        itsShell = aShell;
+    }
+    
+    /**
+     * Gets the current used shell. Can be null.
+     * @return the Shell 
+     */
+    public String getShell()
+    {
+      return itsShell;
     }
 
     // ~ Methods ****************************************************************************
@@ -289,7 +322,7 @@ public class ShellScript
     }
 
     /**
-     * Executes thsi ShellScript with the given Params.<br>
+     * Executes this ShellScript with the given Params.<br>
      * NOTE: the params cannot be contain whitespaces.<br>
      * This (su -c &lt;br&gt;"cp from to"&lt;/br&gt;) would not work:<br>
      * because the underlaying java.runtime.exec("command") does not handle balanced or unbalanced
@@ -327,7 +360,33 @@ public class ShellScript
     {
         return exec(null);
     }
-
+    
+    
+//    /**
+//     * Prepared for later use and for refactoring 
+//     **/    
+//    public String storeAndExecInTemp()
+//    {
+//        String pseudoUnique = this.getClass().getName() + Long.toString(System.currentTimeMillis());
+//
+//        String scriptFilename = null;
+//
+//        try
+//        {
+//            scriptFilename = File.createTempFile(pseudoUnique, ".sh").toString();
+//        }
+//        catch (IOException e)
+//        {
+//            scriptFilename = System.getProperty("java.io.tmpdir", "/tmp") + "/" + pseudoUnique
+//                    + ".sh";
+//            e.printStackTrace();
+//        }
+//
+//        write( scriptFilename );
+//        return exec();
+//        
+//    }
+    
     /**
      * Execs ths given lines in the creted shell stored on location.
      *
