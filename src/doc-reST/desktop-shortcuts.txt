@@ -497,6 +497,32 @@ asked for the password of the following ``KdeUsername``.
 This sould be the user, with the right permission. This is ``root`` 
 in most cases.
 
+**createForAll** ``- optional``
+
+If an user with administrative rights, such as root, performs the installation
+this flag allows to determine, if the shortcut should be appear to the other users 
+or only for root.
+
+**Categories** ``- optional``
+
+This is the category where to put in the Desktop Application Menu.
+  Here are some Sample Categories and their apps
+  examine the desktop files in /usr/share/applications ...
+  Categories="Application;Network;WebDevelopment;" - Nvu,
+  Categories="Qt;Development;GUIDesigner;" -  QtDesigner3,
+  Categories="Application;System;" - VMwareServer-console,  
+  Categories="Network;WebBrowser;" -  Opera,
+  Categories="Development;Debugger;" -  DDD debugger,
+  Categories="Development;IDE;" -   Eclipse IDE,
+  Categories="SystemSetup;X-SuSE-Core-System;" - Yast2,
+  Categories="System;Archiving;" - Sesam archiving,
+  Categories="System;Database;" - MySQL Administrator, 
+
+**TryExec** ``- optional``
+
+TryExec="aTryExecCommand" will passes raw thru
+and tries to execute the command. 
+
 
 Selective Creation of Shortcuts
 -------------------------------
