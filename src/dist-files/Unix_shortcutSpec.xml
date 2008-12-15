@@ -20,20 +20,21 @@
 	
 	New Attibute for Root Installation on Linux:	
 		 
-	Categories="Development;IDE" 
+	Categories="Development;IDE;" 
 	   
 	TryExec="java -jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
 	   
-    Here are some Sample Categories and their apps
-		 examine *.desktop files in /usr/share/applications ...
-     Categories="Application;Network;WebDevelopment"    Nvu
-	 Categories="Qt;Development;GUIDesigner"    QtDesigner3
-	 Categories="Application;System;"   VwareServer-console  
-	 Categories="Network;WebBrowser"    Opera
-	 Categories="Development;Debugger"    DDD debugger
-     Categories="Development;IDE"    Eclipse IDE
-	 Categories="SystemSetup;X-SuSE-Core-System" Yast2
-	 Categories="System;Archiving" Sesam archiving
+  Here are some Sample Categories and their apps
+	examine *.desktop files in /usr/share/applications ...
+  Categories="Application;Network;WebDevelopment;"    Nvu
+	Categories="Qt;Development;GUIDesigner;"    QtDesigner3
+	Categories="Application;System;"   VMwareServer-console  
+	Categories="Network;WebBrowser;"    Opera
+	Categories="Development;Debugger;"    DDD debugger
+  Categories="Development;IDE;"    Eclipse IDE
+	Categories="SystemSetup;X-SuSE-Core-System;" Yast2
+	Categories="System;Archiving;" Sesam archiving
+	Categories="System;Database;" MySQL Administrator 
     
 -->
 
@@ -81,6 +82,7 @@
             type="Application"
             encoding="UTF-8"
             createForAll="true"
+            Categories="Application;Development;"
             description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) user documentation">
 
         <createForPack name="HTML Documentation"/>
@@ -103,6 +105,7 @@
             type="Application"
             encoding="UTF-8"
             createForAll="true"
+            Categories="Application;Development;"
             description="This opens a WebBrowser to look into the IzPack @build.number@ (HTML) Java documentation">
 
         <createForPack name="Javadocs Documentation"/>
@@ -124,6 +127,7 @@
             type="Application"
             encoding="UTF-8"
             createForAll="true"
+            Categories="Application;Development;"
             description="This opens Adobe (Acrobat) Reader (if available) to look into or print the NanoXML (PDF) user documentation">
 
         <createForPack name="NanoXML Documentation"/>
@@ -145,6 +149,7 @@
             type="Application"
             encoding="UTF-8"
             createForAll="true"
+            Categories="Application;Development;"
             description="This opens Adobe (Acrobat) Reader (if available) to look into or print the IzPack @build.number@ (PDF) user documentation">
 
         <createForPack name="PDF Documentation"/>
@@ -172,7 +177,7 @@
             createForAll="false"
 
 
-            Categories="Development;IDE"
+            Categories="Application;Development;"
 
             TryExec="java -jar &quot;$INSTALL_PATH/Uninstaller/uninstaller.jar&quot;"
 
