@@ -47,9 +47,9 @@ public class PacksPanelAutomationHelper implements PanelAutomation
     public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
     {
         // We add each pack to the panelRoot element
-        for (int i = 0; i < idata.allPacks.size(); i++)
+        for (int i = 0; i < idata.availablePacks.size(); i++)
         {
-            Pack pack = idata.allPacks.get(i);
+            Pack pack = idata.availablePacks.get(i);
             XMLElement el = new XMLElement("pack");
             el.setAttribute("index", Integer.toString(i));
             el.setAttribute("name", pack.name);

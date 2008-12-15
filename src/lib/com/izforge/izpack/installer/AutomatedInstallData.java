@@ -98,7 +98,7 @@ public class AutomatedInstallData
     /**
      * The available packs.
      */
-    public List availablePacks;
+    public List<Pack> availablePacks;
 
     /**
      * The selected packs.
