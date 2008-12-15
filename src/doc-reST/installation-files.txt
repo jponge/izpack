@@ -279,13 +279,12 @@ It contains the following elements :
     files. The decompression is relatively fast. Please note that Pack200 compression is destructive, i.e., after
     decompression a JAR won't be identical to its original version (yet the code in the class files remains
     semantically equivalent).
--   ``<run-privileged/>'': adding this element will make the installer attempt to launch itself with administrator
+-   ``<run-privileged/>``: adding this element will make the installer attempt to launch itself with administrator
     permissions. This is not supported on all platforms, in which case a message will be provided to the user before
     continuing the installation. Only use this feature if you really need to be an administrator as part of your
     installation process...
 
 Here is an example of a typical ``<info>`` section :
-
 
 ::
 
@@ -300,6 +299,8 @@ Here is an example of a typical ``<info>`` section :
       </authors>
       <javaversion>1.2</javaversion>
     </info>
+
+
 
 The Packaging Element ``<packaging>``
 ''''''''''''''''''''''''''''''''''''''

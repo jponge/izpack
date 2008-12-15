@@ -66,6 +66,22 @@ and in file.html:
 Note that variables are being substituted in HTMLINfoPanel (e.g., ``$JINSTALL_PATH`` will be
 replaced with the installation path).
 
+You can define multiple HTMLInfoPanel with individual HTML texts by giving them a specific id. The resources are named ``HTMLInfoPanel.<panelid>`` :
+
+::
+
+    <resources>
+    <res id="HTMLInfoPanel.readme" src="readme.html"/>
+    <res id="HTMLInfoPanel.disclaimer" src="disclaimer.html"/>
+    ...
+    <resources>
+    ...
+    <panels>
+    <panel classname="HTMLInfoPanel" id="readme" />
+    <panel classname="HTMLInfoPanel" id="disclaimer" />
+    ...
+    </panels>
+
 LicencePanel and HTMLLicencePanel
 ----------------------------------
 
