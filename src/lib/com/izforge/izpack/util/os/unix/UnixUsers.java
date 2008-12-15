@@ -115,7 +115,7 @@ public class UnixUsers extends ArrayList
             UnixUser user = usersWithValidShellsAndExistingHomes.get(idx);
 
             if ((user.getHome() != null)
-                    && new File(user.getHome().trim() + File.separator + "Desktop").exists())
+                    && new File( user.getXdgDesktopfolder() ).exists())
             {
                 result.add(user);
             }
@@ -138,11 +138,10 @@ public class UnixUsers extends ArrayList
         for (int idx = 0; idx < validUserDesktops.size(); idx++)
         {
             UnixUser user = (UnixUser) validUserDesktops.get(idx);
-            new File(user.getHome().trim() + File.separator + "Desktop");
 
             if (user.getHome() != null)
             {
-                File DesktopFolder = new File(user.getHome().trim() + File.separator + "Desktop");
+                File DesktopFolder = new File( user.getXdgDesktopfolder() );
 
                 if (DesktopFolder.exists() && DesktopFolder.isDirectory())
                 {
