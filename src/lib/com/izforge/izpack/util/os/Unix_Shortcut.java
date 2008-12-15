@@ -722,14 +722,14 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             {
                 // / THE Following does such as #> su username -c "xdg-desktopicon install
                 // --novendor /Path/to/Filename\ with\ or\ without\ Space.desktop"
-                rootScript.append(new String[] { su, user.getName(), "-c", "\""});
-                rootScript.appendln(new String[] { myXdgDesktopIconCmd, "install", "--novendor",
-                        StringTool.escapeSpaces(writtenDesktopFile.toString()), "\""});
+                rootScript.append(new String[] { su, user.getName(), "-c" });
+                rootScript.appendln(new String[] { "\"" + myXdgDesktopIconCmd, "install", "--novendor",
+                        StringTool.escapeSpaces(writtenDesktopFile.toString()) + "\"" });
 
-                uninstallScript.append(new String[] { su, user.getName(), "-c", "\""});
+                uninstallScript.append(new String[] { su, user.getName(), "-c" });
                 uninstallScript
-                        .appendln(new String[] { myXdgDesktopIconCmd, "uninstall", "--novendor",
-                                StringTool.escapeSpaces(writtenDesktopFile.toString()), "\""});
+                        .appendln(new String[] { "\"" + myXdgDesktopIconCmd, "uninstall", "--novendor",
+                                StringTool.escapeSpaces(writtenDesktopFile.toString()) + "\""});
             }
             catch (Exception e)
             {
@@ -737,6 +737,8 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
                 Debug.log(e.toString());
             }
         }
+        Debug.log("==============================");
+        Debug.log(rootScript.getContentAsString());
     }
 
     /**
