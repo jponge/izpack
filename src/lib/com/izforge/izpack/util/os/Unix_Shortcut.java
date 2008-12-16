@@ -62,7 +62,7 @@ import com.izforge.izpack.util.os.unix.ShellScript;
 import com.izforge.izpack.util.os.unix.UnixHelper;
 import com.izforge.izpack.util.os.unix.UnixUser;
 import com.izforge.izpack.util.os.unix.UnixUsers;
-import com.sun.corba.se.impl.orbutil.closure.Constant;
+//import com.sun.corba.se.impl.orbutil.closure.Constant;
 
 import java.io.*;
 import java.util.*;
