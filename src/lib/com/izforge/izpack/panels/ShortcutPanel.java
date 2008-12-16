@@ -461,6 +461,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * UI element instruct this panel to create shortcuts for all users
      */
     private JRadioButton allUsers;
+    
+    
+    /**
+     * UI Element to show the shortcut creation Progress 
+     */
+    JProgressBar progressbar;
 
     /**
      * The layout for this panel
@@ -1135,7 +1141,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     SPEC_ATTRIBUTE_KDE_USERNAME, "root");
 
             data.Categories = shortcutSpec.getAttribute(
-                    SPEC_CATEGORIES, "Application;Development");
+                    SPEC_CATEGORIES, "");
 
             data.TryExec = shortcutSpec.getAttribute(
                     SPEC_TRYEXEC, "");
@@ -1429,11 +1435,28 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         //fix: don't influence other shortcuts when altering group name...
         String gn = groupName;
+        setCursor( Cursor.getPredefinedCursor( Cursor.WAIT_CURSOR ) );
+        
+        progressbar = new JProgressBar( JProgressBar.HORIZONTAL, 0,shortcuts.size() );
+        
+        constraints.gridx = col ;
+        constraints.gridy = line + 7;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        layout.addLayoutComponent(progressbar, constraints);
+        add(progressbar);        
+        invalidate();
+        
+        progressbar.setStringPainted(true);
+        invalidate();
 
         ArrayList startMenuShortcuts = new ArrayList();
         for (int i = 0; i < shortcuts.size(); i++)
         {
             data = (ShortcutData) shortcuts.elementAt(i);
+            
+            progressbar.setString( "create " + data.name + " [" + data.description + "]" );
 
             try
             {
@@ -1543,6 +1566,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             catch (Throwable exception)
             {
             }
+            progressbar.setValue( i );
+            invalidate();
         }
         if (OsVersion.IS_UNIX)
         {
@@ -1578,6 +1603,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
 
         shortcut.cleanUp();
+        setCursor( Cursor.getDefaultCursor() );
     }
 
     /*--------------------------------------------------------------------------*/
