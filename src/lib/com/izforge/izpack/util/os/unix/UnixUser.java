@@ -260,12 +260,15 @@ public class UnixUser
           FileExecutor.getExecOutput( new String[] { UnixHelper.getCustomCommand("chmod"), "+x", XDGDesktopFolderNameScriptFilename }, true );                    
           //
           String xdgDesktopfolder = FileExecutor.getExecOutput( new String[] { UnixHelper.getSuCommand(), itsName, "-c", XDGDesktopFolderNameScriptFilename }, true ).trim();
+          
+          File scriptToDelete = new File( XDGDesktopFolderNameScriptFilename ); 
+          scriptToDelete.delete();
           //
           return xdgDesktopfolder;
                    
         }
         else
-          return itsHome.trim() + File.separator + "Desktop";
+          return getHome() + File.separator + "Desktop";
     }
 
     /**
