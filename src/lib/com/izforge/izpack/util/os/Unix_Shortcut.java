@@ -535,9 +535,9 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
             if (xdgDesktopIconCmd != null)
             {
                 createExtXdgDesktopIconCmd(shortCutLocation);
-                // / TODO: TEST
+                // / TODO: DELETE the ScriptFiles
                 myInstallScript.appendln(new String[] { myXdgDesktopIconCmd, "install",
-                        "--novendor", StringTool.escapeSpaces(writtenDesktopFile.toString())});
+                        "--novendor", StringTool.escapeSpaces(writtenDesktopFile.toString())});                
                 ShellScript myUninstallScript = new ShellScript();
                 myUninstallScript.appendln(new String[] { myXdgDesktopIconCmd, "uninstall",
                         "--novendor", StringTool.escapeSpaces(writtenDesktopFile.toString())});
@@ -878,6 +878,7 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         rootScript.write(scriptFilename);
         rootScript.exec();
+        rootScript.delete();
         Debug.log(rootScript);
 
         // Quick an dirty copy & paste code - will be cleanup in one of 4.1.1++
@@ -895,11 +896,13 @@ public class Unix_Shortcut extends Shortcut implements Unix_ShortcutConstants
 
         myInstallScript.write(scriptFilename);
         myInstallScript.exec();
+        myInstallScript.delete();
+        
 
         Debug.log(myInstallScript);
         // End OF Quick AND Dirty
         Debug.log(uninstallScript);
-
+        
         uninstaller.addUninstallScript(uninstallScript.getContentAsString());
     }
 
