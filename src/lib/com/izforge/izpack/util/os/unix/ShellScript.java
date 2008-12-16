@@ -478,4 +478,24 @@ public class ShellScript
          * "test.sh"));
          */
     }
+
+    /**
+     * Deletes only  if Location is not null. 
+     */
+    public void delete()
+    {
+        if(itsLocation!=null)
+        {
+          File location = new File(itsLocation);
+
+          try
+          {
+              location.delete();
+          }
+          catch (Exception e)
+          {
+             location.deleteOnExit();
+          }
+        }
+    }
 }
