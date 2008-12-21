@@ -1477,14 +1477,25 @@ public class CompilerConfig extends Thread
 
             // Panel files come in jars packaged w/ IzPack
             String jarPath = "bin/panels/" + className + ".jar";
-            URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel);
+            URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
+
+            //when the expected panel jar file is not found under bin/panels resource path
+            // it is assumed that user will do the jar merge themselves via <jar> tag
             String fullClassName = null;
-            try
+            if (url == null)
             {
-                fullClassName = getFullClassName(url, className);
+                fullClassName = className;
             }
-            catch (IOException e)
-            {}
+            else
+            {
+                try
+                {
+                    fullClassName = getFullClassName(url, className);
+                }
+                catch (IOException e)
+                {}
+            }
+            
             if (fullClassName != null)
             {
                 panel.className = fullClassName;
@@ -2215,18 +2226,28 @@ public class CompilerConfig extends Thread
         return url;
     }
 
+    private URL findIzPackResource(String path, String desc, XMLElement parent)
+        throws CompilerException
+    {
+        return findIzPackResource( path, desc, parent, false );
+    }
+    
     /**
      * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
      * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
-     * file). If the resource is not found, a CompilerException is thrown indicating fault in the
+     * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag
+     *  a CompilerException is thrown indicating fault in the
      * parent element.
      * 
      * @param path the relative path (using '/' as separator) to the resource.
      * @param desc the description of the resource used to report errors
      * @param parent the XMLElement the resource is specified in, used to report errors
+     * @param ignoreWhenNotFound when false, throws a CompilerException is thrown indicating 
+     *        fault in the parent element when resource not found.
+     * 
      * @return a URL to the resource.
      */
-    private URL findIzPackResource(String path, String desc, XMLElement parent)
+    private URL findIzPackResource(String path, String desc, XMLElement parent, boolean ignoreWhenNotFound)
             throws CompilerException
     {
         URL url = getClass().getResource("/" + path);
@@ -2239,19 +2260,29 @@ public class CompilerConfig extends Thread
                 resource = new File(Compiler.IZPACK_HOME, path);
             }
 
-            if (!resource.exists()) // fatal
+            if (resource.exists()) 
             {
-                parseError(parent, desc + " not found: " + resource);
+                try
+                {
+                    url = resource.toURL();
+                }
+                catch (MalformedURLException how)
+                {
+                    parseError(parent, desc + "(" + resource + ")", how);
+                }
+            }
+            else
+            {
+                if ( ignoreWhenNotFound )
+                {
+                    parseWarn(parent, desc + " not found: " + resource);
+                }
+                else
+                {
+                    parseError(parent, desc + " not found: " + resource);
+                }
             }
 
-            try
-            {
-                url = resource.toURL();
-            }
-            catch (MalformedURLException how)
-            {
-                parseError(parent, desc + "(" + resource + ")", how);
-            }
         }
 
         return url;

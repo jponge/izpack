@@ -257,8 +257,11 @@ public abstract class PackagerBase implements IPackager
     public void addPanelJar(Panel panel, URL jarURL)
     {
         panelList.add(panel); // serialized to keep order/variables correct
-        addJarContent(jarURL); // each included once, no matter how many times
-        // added
+        
+        if ( jarURL != null )
+        {
+            addJarContent(jarURL); // each included once, no matter how many times added
+        }
     }
 
     /* (non-Javadoc)

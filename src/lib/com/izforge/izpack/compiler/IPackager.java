@@ -88,8 +88,9 @@ public interface IPackager
     public abstract Properties getVariables();
 
     /**
-     * Add a panel, where order is important. Only one copy of the class files neeed are inserted in
-     * the installer.
+     * Add a panel, where order is important. Only one copy of the class files needd are inserted in
+     * the installer. When jarURL is null, it is assumed that user will do the manual merged 
+     * using <Jar> tag themselves
      */
     public abstract void addPanelJar(Panel panel, URL jarURL);
 
