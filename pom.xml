@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <parent>
+    <groupId>org.codehaus.izpack</groupId>
+    <artifactId>izpack-parent</artifactId>
+    <version>2</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  
+  <artifactId>izpack-standalone-compiler</artifactId>
+  <version>4.2.1-SNAPSHOT</version>
+  
+  <name>IZPack Standalone Compiler</name>
+
+  <description>
+    Use this pom to install/deploy standalone compiler snapshot for test and early feed back purpose.
+    To deploy the release version, use the one under izpack-maven 
+  </description>
+
+  <packaging>pom</packaging>  
+  
+
+  <distributionManagement>
+    <site>
+      <id>codehaus.org</id>
+      <name>IZPack Website</name>
+      <url>dav:https://dav.codehaus.org/izpack/izpack-standalone-compiler</url>
+    </site>
+  </distributionManagement>
+
+  <build>
+  
+    <defaultGoal>package</defaultGoal>
+    
+    <sourceDirectory>src/lib</sourceDirectory>
+    
+     <plugins>
+     
+      <!-- copy the real standlone-compiler to this project and overwrite the implicit jar already built by the jar packaging -->
+      <plugin>
+         <artifactId>maven-antrun-plugin</artifactId>
+         <executions>
+           <execution>
+             <id>build-izpack-with-ant</id>
+             <goals><goal>run</goal></goals>
+             <phase>package</phase>
+             <configuration>
+               <tasks>
+                  <exec executable="${env.ANT_HOME}/bin/ant${antExeExt}" dir="${basedir}/src"/>
+               </tasks>
+             </configuration>
+           </execution>
+         </executions>
+       </plugin>
+       
+      <plugin>
+         <artifactId>maven-source-plugin</artifactId>
+         <executions>
+           <execution>
+             <id>build-izpack-source</id>
+             <goals><goal>jar</goal></goals>
+             <phase>package</phase>
+           </execution>
+         </executions>
+       </plugin>
+       
+      <plugin>
+         <groupId>org.codehaus.mojo</groupId>
+         <artifactId>build-helper-maven-plugin</artifactId>
+         <version>1.2</version>
+         <executions>
+           <execution>
+             <id>attach</id>
+             <goals><goal>attach-artifact</goal></goals>
+             <phase>package</phase>
+             <configuration>
+               <artifacts>
+                 <artifact>
+                   <file>${basedir}/lib/standalone-compiler.jar</file>
+                 </artifact>
+               </artifacts>
+             </configuration>
+           </execution>
+         </executions>
+       </plugin>
+       
+     </plugins>
+     
+  </build>
+  
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os>
+          <family>Windows</family>
+        </os>
+      </activation>
+      <properties>
+        <antExeExt>.bat</antExeExt>
+      </properties>
+    </profile>
+  </profiles>
+
+  <properties>
+    <antExeExt></antExeExt>
+  </properties>
+</project>
