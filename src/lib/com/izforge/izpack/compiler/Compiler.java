@@ -40,6 +40,8 @@ import java.util.*;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
+import net.n3.nanoxml.XMLElement;
+
 /**
  * The IzPack compiler class. This is now a java bean style class that can be
  * configured using the object representations of the install.xml
@@ -711,18 +713,25 @@ public class Compiler extends Thread
         return 0;
     }
 
+    public URL findIzPackResource(String path, String desc)
+        throws CompilerException
+    {
+        return findIzPackResource(path, desc, false);
+    }
+    
     /**
      * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
      * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
-     * file). If the resource is not found, a CompilerException is thrown indicating fault in the
-     * parent element.
+     * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag.
      *
      * @param path the relative path (using '/' as separator) to the resource.
      * @param desc the description of the resource used to report errors
+     * @param ignoreWhenNotFound when false, throws a CompilerException indicate 
+     *        fault in the parent element when resource not found. 
      * @return a URL to the resource.
      * @throws CompilerException
      */
-    public URL findIzPackResource(String path, String desc)
+    public URL findIzPackResource(String path, String desc, boolean ignoreWhenNotFound)
             throws CompilerException
     {
         URL url = getClass().getResource("/" + path);
@@ -734,24 +743,38 @@ public class Compiler extends Thread
                 resource = new File(IZPACK_HOME, path);
             }
 
-            if (!resource.exists()) // fatal
+            if (!resource.exists()) 
             {
-                parseError(desc + " not found: " + resource);
+                if ( ignoreWhenNotFound )
+                {
+                    parseWarn(desc + " not found: " + resource);
+                }
+                else
+                {
+                    parseError(desc + " not found: " + resource); // fatal
+                }
             }
-
-            try
+            else
             {
-                url = resource.toURI().toURL();
-            }
-            catch (MalformedURLException how)
-            {
-                parseError(desc + "(" + resource + ")", how);
+                try
+                {   
+                    url = resource.toURI().toURL();
+                }
+                catch (MalformedURLException how)
+                {
+                    parseError(desc + "(" + resource + ")", how);
+                }
             }
         }
 
         return url;
     }
 
+    private void parseWarn(String message)
+    {
+        System.out.println("Warning: " + message);
+    }
+    
     /**
      * Create parse error with consistent messages. Includes file name. For use When parent is
      * unknown.
@@ -808,14 +831,22 @@ public class Compiler extends Thread
     public void addCustomListener(int type, String className, String jarPath, List<OsConstraint> constraints) throws Exception
     {
         jarPath = replaceProperties(jarPath);
-        URL url = findIzPackResource(jarPath, "CustomAction jar file");
-        List<String> filePaths = getContainedFilePaths(url);
-        String fullClassName = getFullClassName(url, className);
-        if (fullClassName == null)
+        String fullClassName = className;
+        List<String> filePaths = null;
+
+        URL url = findIzPackResource(jarPath, "CustomAction jar file", true);
+        
+        if ( url != null )
         {
-            throw new CompilerException("CustomListener class '" + className + "' not found in '"
+             fullClassName = getFullClassName(url, className);
+             if (fullClassName == null)
+             {
+                throw new CompilerException("CustomListener class '" + className + "' not found in '"
                     + url + "'. The class and listener name must match");
+             }
+             filePaths = getContainedFilePaths(url);
         }
+        
         CustomData ca = new CustomData(fullClassName, filePaths, constraints, type);
         packager.addCustomJar(ca, url);
     }

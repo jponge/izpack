@@ -2235,14 +2235,12 @@ public class CompilerConfig extends Thread
     /**
      * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
      * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
-     * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag
-     *  a CompilerException is thrown indicating fault in the
-     * parent element.
+     * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag.
      * 
      * @param path the relative path (using '/' as separator) to the resource.
      * @param desc the description of the resource used to report errors
      * @param parent the XMLElement the resource is specified in, used to report errors
-     * @param ignoreWhenNotFound when false, throws a CompilerException is thrown indicating 
+     * @param ignoreWhenNotFound when false, throws a CompilerException indicating 
      *        fault in the parent element when resource not found.
      * 
      * @return a URL to the resource.
@@ -2333,7 +2331,7 @@ public class CompilerConfig extends Thread
      */
     protected void parseWarn(XMLElement parent, String message)
     {
-        System.out.println(filename + ":" + parent.getLineNr() + ": " + message);
+        System.out.println("Warning: " + filename + ":" + parent.getLineNr() + ": " + message);
     }
 
     /**

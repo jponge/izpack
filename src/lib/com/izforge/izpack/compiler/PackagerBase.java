@@ -188,8 +188,10 @@ public abstract class PackagerBase implements IPackager
     public void addCustomJar(CustomData ca, URL url)
     {
         customDataList.add(ca); // serialized to keep order/variables correct
-        addJarContent(url); // each included once, no matter how many times
-        // added
+        if ( url != null )
+        {
+            addJarContent(url); // each included once, no matter how many times added
+        }
     }
 
     /* (non-Javadoc)
