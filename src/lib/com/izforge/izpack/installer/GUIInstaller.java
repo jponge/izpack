@@ -136,6 +136,7 @@ public class GUIInstaller extends InstallerBase
         if (!checkInstallerRequirements(installdata))
         {
             Debug.log("not all installerconditions are fulfilled.");
+            System.exit(-1);
             return;
         }
 
