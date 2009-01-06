@@ -342,6 +342,7 @@ public class AutomatedInstaller extends InstallerBase
         if (!checkInstallerRequirements(this.idata))
         {
             Debug.log("not all installerconditions are fulfilled.");
+            System.exit(-1);
             return;
         }
 
