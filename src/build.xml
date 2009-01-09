@@ -348,6 +348,7 @@
                 <exclude name="com/izforge/izpack/util/*.class"/>
                 <exclude name="net/n3/nanoxml/*.class"/>
             </zipfileset>
+            <zipfileset src="${izevent.jar}"/>
             <zipfileset src="lib/ant.jar"/>
             <fileset dir="${basedir}">
                 <include name="bin/langpacks/flags/*"/>
