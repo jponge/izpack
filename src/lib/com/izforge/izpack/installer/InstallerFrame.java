@@ -347,6 +347,12 @@ public class InstallerFrame extends JFrame
             count++;
             // We add the XML data panel root
             XMLElement panelRoot = new XMLElement(className);
+            // if set, we add the id as an attribute to the panelRoot
+            String panelId = p.getPanelid();
+            if (panelId != null)
+            {
+                panelRoot.setAttribute("id", panelId);
+            }
             installdata.xmlData.addChild(panelRoot);
         }
         visiblePanelMapping.add(count, lastVis);
