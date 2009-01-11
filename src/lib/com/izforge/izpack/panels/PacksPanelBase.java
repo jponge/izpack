@@ -42,6 +42,7 @@ import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -553,6 +554,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             packTextColumnRenderer.setHorizontalAlignment(RIGHT);
             packsTable.getColumnModel().getColumn(2).setCellRenderer(packTextColumnRenderer);
             packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
+
+            for (MouseListener mouseListener : packsTable.getMouseListeners())
+            {
+                packsTable.removeMouseListener(mouseListener);
+            }
 
             packsTable.addMouseListener(new MouseAdapter()
             {
