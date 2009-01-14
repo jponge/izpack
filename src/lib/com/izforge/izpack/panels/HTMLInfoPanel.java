@@ -26,8 +26,11 @@ import com.izforge.izpack.installer.*;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
-import java.io.IOException;
 import java.net.URL;
+import java.io.InputStream;
+import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 
 /**
  * The HTML info panel.
@@ -38,6 +41,12 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 {
 
     private static final long serialVersionUID = 3257008769514025270L;
+
+    /** Resource prefix for panel. */
+    protected String panelResourcePrefixStr;
+
+    /** Resource name for panel content. */
+    protected String panelResourceNameStr;
 
     /**
      * The text area.
@@ -52,19 +61,64 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
      */
     public HTMLInfoPanel(InstallerFrame parent, InstallData idata)
     {
+        this(parent,idata,"HTMLInfoPanel",true);
+    }
+
+    /**
+     * Alternate constructor with additional parameters.  For use with
+     * subclasses.
+     *
+     * @param parent The parent.
+     * @param idata  The installation data.
+     * @param resPrefixStr prefix string for content resource name.
+     * @param showInfoLabelFlag true to show "please read..." label
+     * above content.
+     */
+    public HTMLInfoPanel(InstallerFrame parent, InstallData idata,
+                             String resPrefixStr, boolean showInfoLabelFlag)
+    {
         super(parent, idata, new IzPanelLayout());
+                   //setup given resource prefix and name:
+        panelResourcePrefixStr = resPrefixStr;
+        panelResourceNameStr = resPrefixStr + ".info";
+
         // We add the components
 
+        if(showInfoLabelFlag)
+        {  //flag is set; add label above content
         add(LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
                 .getImageIcon("edit"), LEADING), NEXT_LINE);
+        }
         try
         {
-            textArea = new JEditorPane();
+            textArea = new JEditorPane()
+                {       //override get-stream method to parse variable
+                        // declarations in HTML content:
+                    protected InputStream getStream(URL urlObj)
+                                                          throws IOException
+                    {                  //get original stream contents:
+                        final InputStream inStm = super.getStream(urlObj);
+                        final ByteArrayOutputStream btArrOutStm =
+                                                new ByteArrayOutputStream();
+                        int b;         //copy contents to output stream:
+                        final byte [] buff = new byte[2048];
+                        while((b=inStm.read(buff,0,buff.length)) > 0)
+                            btArrOutStm.write(buff,0,b);
+                                  //convert to string and parse variables:
+                        final String parsedStr =
+                                          parseText(btArrOutStm.toString());
+                                  //return input stream to parsed string:
+                        return new ByteArrayInputStream(
+                                                      parsedStr.getBytes());
+                    }
+                };
             textArea.setContentType("text/html; charset=utf-8");
             textArea.setEditable(false);
             textArea.addHyperlinkListener(this);
             JScrollPane scroller = new JScrollPane(textArea);
             textArea.setPage(loadHTMLInfoContent());
+                   //set caret so beginning of file is displayed:
+            textArea.setCaretPosition(0);
             add(scroller, NEXT_LINE);
         }
         catch (Exception err)
@@ -79,16 +133,15 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
     */
     private URL loadHTMLInfoContent()
     {
-        String resPrefix = "HTMLInfoPanel.info";
         if (getMetadata() != null && getMetadata().getPanelid() != null)
         {
             try
             {
-                String panelSpecificResName = "HTMLInfoPanel." + this.getMetadata().getPanelid();
+                String panelSpecificResName = panelResourcePrefixStr + '.' + this.getMetadata().getPanelid();
                 String panelspecificResContent = ResourceManager.getInstance().getTextResource(panelSpecificResName);
                 if (panelspecificResContent != null)
                 {
-                    return ResourceManager.getInstance().getURL(panelspecificResContent);
+                    panelResourceNameStr = panelSpecificResName;
                 }
             }
             catch (Exception e)
@@ -99,7 +152,7 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
 
         try
         {
-            return ResourceManager.getInstance().getURL(resPrefix);
+            return ResourceManager.getInstance().getURL(panelResourceNameStr);
         }
         catch (Exception ex)
         {
@@ -133,7 +186,7 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
                 String urls = e.getURL().toExternalForm();
                 // if the link points to a chapter in the same page
                 // don't open a browser
-                if (urls.contains("HTMLInfoPanel.info#"))
+                if (urls.contains(panelResourceNameStr + '#'))
                 {
                     textArea.setPage(e.getURL());
                 }
@@ -180,6 +233,8 @@ public class HTMLInfoPanel extends IzPanel implements HyperlinkListener
         try
         {
             textArea.setPage(loadHTMLInfoContent());
+                   //set caret so beginning of file is displayed:
+            textArea.setCaretPosition(0);
         }
         catch (IOException e)
         {

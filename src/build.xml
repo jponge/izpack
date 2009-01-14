@@ -725,6 +725,10 @@
         <build-panel name="InstallationTypePanel">
             <include name="com/izforge/izpack/panels/InstallationTypePanel.java"/>
         </build-panel>
+        <build-panel name="HTMLHelloPanel">
+            <include name="com/izforge/izpack/panels/HTMLHelloPanel.java"/>
+            <include name="com/izforge/izpack/panels/HTMLInfoPanel.java"/>
+        </build-panel>
     </target>
 
     <!--
