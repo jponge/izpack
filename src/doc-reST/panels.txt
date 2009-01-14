@@ -194,7 +194,11 @@ path) :
     TargetPanel.dir.linux``. You should have a Unix-resource in case it
     wouldn't work though.
 
-
+The 'ShowCreateDirectoryMessage' variable may be used to suppress the
+"target directory will be created" dialog. If the 'ShowCreateDirectoryMessage'
+variable is set to "false" then the dialog will not be shown. If the 'ShowCreateDirectoryMessage'
+variable is set to "true" or is not specified then the dialog will be shown if the target directory
+does not exist. See the "Variables Element" section for information on how to specify variables.
 
 DefaultTargetPanel
 -------------------

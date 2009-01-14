@@ -215,9 +215,15 @@ public class PathInputPanel extends IzPanel implements ActionListener
             }
             else
             {
-                ok = this.emitNotificationFeedback(getI18nStringForClass("createdir", "TargetPanel") + "\n"
-                        + chosenPath);
-
+                   //if 'ShowCreateDirectoryMessage' variable set to 'false'
+                   // then don't show "directory will be created" dialog:
+                final String vStr =
+                            idata.getVariable("ShowCreateDirectoryMessage");
+                if (vStr == null || Boolean.getBoolean(vStr))
+                {
+                    ok = this.emitNotificationFeedback(getI18nStringForClass(
+                            "createdir", "TargetPanel") + "\n" + chosenPath);
+                }
             }
         }
         return ok;
