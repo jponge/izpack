@@ -19,15 +19,20 @@
 
 package com.izforge.izpack;
 
-import com.izforge.izpack.installer.ResourceManager;
-import net.n3.nanoxml.*;
-
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
+
+import net.n3.nanoxml.NonValidator;
+import net.n3.nanoxml.StdXMLParser;
+import net.n3.nanoxml.StdXMLReader;
+import net.n3.nanoxml.XMLBuilderFactory;
+import net.n3.nanoxml.XMLElement;
+
+import com.izforge.izpack.installer.ResourceManager;
 
 /**
  * Represents a database of a locale.
@@ -37,14 +42,14 @@ import java.util.Vector;
  */
 public class LocaleDatabase extends TreeMap
 {
+
     /*
      * Static cache of locale databases mapped by their iso name.
      */
     private static Map<String, LocaleDatabase> cachedLocales = new HashMap<String, LocaleDatabase>();
 
     /**
-     * The directory where language packs are kept inside the installer jar
-     * file.
+     * The directory where language packs are kept inside the installer jar file.
      */
     public static final String LOCALE_DATABASE_DIRECTORY = "/langpacks/";
 
@@ -53,16 +58,21 @@ public class LocaleDatabase extends TreeMap
      */
     public static final String LOCALE_DATABASE_DEF_SUFFIX = ".xml";
 
+    /*
+     * static character for replacing quotes
+     */
+    private static final char TEMP_QUOTING_CHARACTER = '\uffff';
+
     /**
-     * Load a locale database. If the database has already been loaded it will
-     * not be reloaded.
+     * Load a locale database. If the database has already been loaded it will not be reloaded.
      *
      * @param isoCode The io code of the locale database.
+     *
      * @return The locale database or null if it cannot be found.
+     *
      * @throws Exception
      */
-    public static synchronized LocaleDatabase getLocaleDatabase(String isoCode)
-            throws Exception
+    public static synchronized LocaleDatabase getLocaleDatabase(String isoCode) throws Exception
     {
         return getLocaleDatabase(isoCode, false);
     }
@@ -71,16 +81,14 @@ public class LocaleDatabase extends TreeMap
      * Load a LocaleDatabase.
      *
      * @param isoCode The ISO language prefix for the locale.
-     * @param reload  Whether or not to reload the locale database if it has already
-     *                been loaded.
-     * @return The locale database or null if it cannot be found.
-     *         <p/>
-     *         FIXME Maybe we should define some custom exception like
-     *         LocaleLoadException or something similar so that this class can have a
-     *         method signature that does not throw Exception
+     * @param reload  Whether or not to reload the locale database if it has already been loaded.
+     *
+     * @return The locale database or null if it cannot be found. <p/> FIXME Maybe we should define
+     *         some custom exception like LocaleLoadException or something similar so that this class can
+     *         have a method signature that does not throw Exception
      */
-    public static synchronized LocaleDatabase getLocaleDatabase(String isoCode,
-                                                                boolean reload) throws Exception
+    public static synchronized LocaleDatabase getLocaleDatabase(String isoCode, boolean reload)
+            throws Exception
     {
         LocaleDatabase langpack = cachedLocales.get(isoCode);
 
@@ -97,8 +105,7 @@ public class LocaleDatabase extends TreeMap
             // The resource exists
             if (LocaleDatabase.class.getResource(path) != null)
             {
-                langpack = new LocaleDatabase(LocaleDatabase.class
-                        .getResourceAsStream(path));
+                langpack = new LocaleDatabase(LocaleDatabase.class.getResourceAsStream(path));
 
                 cachedLocales.put(isoCode, langpack);
             }
@@ -112,8 +119,7 @@ public class LocaleDatabase extends TreeMap
      *
      * @throws Exception FIXME
      */
-    public static synchronized LocaleDatabase getLocaleDatabase()
-            throws Exception
+    public static synchronized LocaleDatabase getLocaleDatabase() throws Exception
     {
         ResourceManager resourceManager = ResourceManager.getInstance();
 
@@ -130,6 +136,7 @@ public class LocaleDatabase extends TreeMap
      * The constructor.
      *
      * @param in An InputStream to read the translation from.
+     *
      * @throws Exception Description of the Exception
      */
     public LocaleDatabase(InputStream in) throws Exception
@@ -140,10 +147,11 @@ public class LocaleDatabase extends TreeMap
     }
 
     /**
-     * Adds the contents of the given stream to the data base. The stream have
-     * to contain key value pairs as declared by the DTD langpack.dtd.
+     * Adds the contents of the given stream to the data base. The stream have to contain key value
+     * pairs as declared by the DTD langpack.dtd.
      *
      * @param in an InputStream to read the translation from.
+     *
      * @throws Exception
      */
     public void add(InputStream in) throws Exception
@@ -160,7 +168,8 @@ public class LocaleDatabase extends TreeMap
         // We check the data
         if (!"langpack".equalsIgnoreCase(data.getName()))
         {
-            throw new Exception("this is not an IzPack XML langpack file");
+            throw new Exception(
+                    "this is not an IzPack XML langpack file");
         }
 
         // We fill the Hashtable
@@ -186,6 +195,7 @@ public class LocaleDatabase extends TreeMap
      * Convenience method to retrieve an element.
      *
      * @param key The key of the element to retrieve.
+     *
      * @return The element value or the key if not found.
      */
     public String getString(String key)
@@ -202,24 +212,27 @@ public class LocaleDatabase extends TreeMap
     }
 
     /**
-     * Convenience method to retrieve an element and simultaneously insert
-     * variables into the string. A place holder has to be build with the
-     * substring {n} where n is the parameter argument beginning with 0. The
-     * first argument is therefore {0}. If a parameter starts with a dollar sign
-     * the value will be used as key into the LocalDatabase. The key can be
-     * written as $MYKEY or ${MYKEY}. For all place holders an argument should
-     * be exist and vis a versa.
+     * Convenience method to retrieve an element and simultaneously insert variables into the
+     * string. A place holder has to be build with the substring {n} where n is the parameter
+     * argument beginning with 0. The first argument is therefore {0}. If a parameter starts with a
+     * dollar sign the value will be used as key into the LocalDatabase. The key can be written as
+     * $MYKEY or ${MYKEY}. For all place holders an argument should be exist and vis a versa.
      *
      * @param key       The key of the element to retrieve.
      * @param variables the variables to insert
-     * @return The element value with the variables inserted or the key if not
-     *         found.
+     *
+     * @return The element value with the variables inserted or the key if not found.
      */
     public String getString(String key, String[] variables)
     {
         for (int i = 0; i < variables.length; ++i)
         {
-            if (variables[i].startsWith("$"))
+            if (variables[i] == null)
+            {
+                // The argument array with index is NULL! Replace it with N/A
+                variables[i] = "N/A";
+            }
+            else if (variables[i].startsWith("$"))
             { // Argument is also a key into the LocaleDatabase.
                 String curArg = variables[i];
                 if (curArg.startsWith("${"))
@@ -234,7 +247,16 @@ public class LocaleDatabase extends TreeMap
             }
         }
 
-        return MessageFormat.format(getString(key), variables);
+        String message = getString(key);
+
+        // replace all ' characters because MessageFormat.format()
+        // don't substitute quoted place holders '{0}'
+        message = message.replace('\'', TEMP_QUOTING_CHARACTER);
+
+        message = MessageFormat.format(message, variables);
+
+        // replace all ' characters back
+        return message.replace(TEMP_QUOTING_CHARACTER, '\'');
     }
 
 }

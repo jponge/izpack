@@ -3,5 +3,7 @@
 <langpack>
 
     <str id="string" txt="String Text"/>
+    <str id="string.with.arguments" txt="Argument1: {0}, Argument2: {1}"/>
+    <str id="string.with.quoted.arguments" txt="Argument1: '{0}', Argument2: '{1}'"/>
 
 </langpack>
