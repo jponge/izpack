@@ -217,7 +217,7 @@ experiment with these files.
 
 Both specification files have one root element called ``<shortcuts>``. This
 root elements recognizes 3 different child elements:
-``<programGroup>``, ``<skipIfNotSupported/>`` and ``<shortcut>``.
+``<programGroup>``, ``<skipIfNotSupported/>``, ``<defaultCurrentUser/>`` and ``<shortcut>``.
 
 
 ``<skipIfNotSupported/>`` can be used to avoid the panel to show the
@@ -225,6 +225,9 @@ alternative UI which shows the shortcut information that would have been
 created on a system that supports it. In other words, using this tag will
 make the panel be silent on non-supported systems. The default is to show the
 alternative UI.
+
+``<defaultCurrentUser/>`` may be specified to make "current user" be the default selection on the panel.
+If not specified then "all users" will be the default selection (if available).
 
 
 The ``<programGroup>`` tag allows you to specify the name of the menu, or

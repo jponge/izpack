@@ -165,6 +165,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private static final String SPEC_KEY_NOT_SUPPORTED = "notSupported";
 
     /**
+     * SPEC_KEY_DEF_CUR_USER = "defaultCurrentUser"
+     */
+    private static final String SPEC_KEY_DEF_CUR_USER = "defaultCurrentUser";
+
+    /**
      * SPEC_KEY_PROGRAM_GROUP = "programGroup"
      */
     private static final String SPEC_KEY_PROGRAM_GROUP = "programGroup";
@@ -522,6 +527,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     private boolean skipIfNotSupported = false;
 
     /**
+     * Set 'true' to force current-user icons as default.
+     */
+    private boolean defaultCurrentUserFlag = false;
+
+    /**
      * the one shortcut instance for reuse in many locations
      */
     private Shortcut shortcut;
@@ -838,7 +848,19 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                 Debug.log("You " + perm + " write into '" + allUsersProgramsFolder + "'");
 
-                if (isRootUser)
+                final boolean rUserFlag;
+                if (defaultCurrentUserFlag)
+                {  //'defaultCurrentUser' element was specified
+                    rUserFlag = false;
+                    Debug.log("Element '" + SPEC_KEY_DEF_CUR_USER +
+                                                         "' was specified");
+                }
+                else
+                {  //'defaultCurrentUser' element not specified
+                    rUserFlag = isRootUser;
+                }
+
+                if (rUserFlag)
                 {
                     itsUserType = Shortcut.ALL_USERS;
                 }
@@ -849,7 +871,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
                 if (firstTime)
                 {
-                    buildUI(getProgramsFolder(isRootUser ? Shortcut.ALL_USERS : Shortcut.CURRENT_USER));
+                    buildUI(getProgramsFolder(rUserFlag ? Shortcut.ALL_USERS : Shortcut.CURRENT_USER));
                 }
 
                 // addSelectionList();
@@ -1020,6 +1042,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         XMLElement skipper = spec.getFirstChildNamed(SPEC_KEY_SKIP_IFNOT_SUPPORTED);
         skipIfNotSupported = (skipper != null);
+
+              //set flag if 'defaultCurrentUser' element found:
+        defaultCurrentUserFlag =
+                   (spec.getFirstChildNamed(SPEC_KEY_DEF_CUR_USER) != null);
 
         // ----------------------------------------------------
         // find out if we should simulate a not supported
@@ -1817,15 +1843,19 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         if (shortcut.multipleUsers())
         {
+              //if 'defaultCurrentUser' specified, default to current user:
+            final boolean rUserFlag = defaultCurrentUserFlag ? false :
+                                                                 isRootUser;
+
             JPanel usersPanel = new JPanel(new GridLayout(2, 1));
             ButtonGroup usersGroup = new ButtonGroup();
             currentUser = new JRadioButton(parent.langpack
-                    .getString("ShortcutPanel.regular.currentUser"), !isRootUser);
+                    .getString("ShortcutPanel.regular.currentUser"), !rUserFlag);
             currentUser.addActionListener(this);
             usersGroup.add(currentUser);
             usersPanel.add(currentUser);
             allUsers = new JRadioButton(
-                    parent.langpack.getString("ShortcutPanel.regular.allUsers"), isRootUser);
+                    parent.langpack.getString("ShortcutPanel.regular.allUsers"), rUserFlag);
 
             Debug.log("allUsers.setEnabled(), I'm Root: " + isRootUser);
 
