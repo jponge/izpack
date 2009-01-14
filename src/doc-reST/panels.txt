@@ -22,7 +22,11 @@ HelloPanel
 This panel welcomes the user by displaying the project name, the version, the
 URL as well as the authors.
 
+HTMLHelloPanel
+---------------
 
+This panel allows an HTML document to be used as the "welcome" panel.  It operates like the 'HTMLInfoPanel',
+except that the resource name "HTMLHelloPanel" is used (i.e., "HTMLHelloPanel.info").
 
 CheckedHelloPanel
 ------------------
