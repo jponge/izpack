@@ -595,8 +595,16 @@ public class ProcessPanelWorker implements Runnable
                 Method m = procClass.getMethod("run", new Class[]{AbstractUIProcessHandler.class,
                         String[].class});
 
-                m.invoke(o, new Object[]{myHandler, params});
-                result = true;
+                if (m.getReturnType().getName().equals("boolean"))
+                {
+                    result = ((Boolean) m.invoke(o, new Object[] { myHandler, params}))
+                            .booleanValue();
+                }
+                else
+                {
+                    m.invoke(o, new Object[] { myHandler, params});
+                    result = true;
+                }
             }
             catch (SecurityException e)
             {
