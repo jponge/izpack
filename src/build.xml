@@ -1026,6 +1026,11 @@
               verbose="true"
               overwrite="yes"
               preservelastmodified="true"/>
+        <copy todir="${basedir}/bin/native/izpack"
+              file="${basedir}/src/native/ShellLink_x64/Release_Unicode/ShellLink_x64.dll"
+              verbose="true"
+              overwrite="yes"
+              preservelastmodified="true"/>
         <copy todir="${basedir}/bin/native/3rdparty"
               file="${basedir}/src/native/win/COIOSHelper/Release_Unicode/COIOSHelper.dll"
               verbose="true"
