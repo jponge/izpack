@@ -403,7 +403,7 @@
     </target>
 
     <!-- Package installer.jar -->
-    <target name="build.installer" depends="compile.installer">
+    <target name="build.installer" depends="compile.installer, build.listener-base">
         <jar jarfile="${installer.jar}">
             <manifest>
                 <attribute name="Built-By" value="IzPack"/>
@@ -439,6 +439,7 @@
             	  <include name="com/izforge/izpack/util/**/*.sh"/>
             </fileset>
             <fileset dir="${img.dir}/installer"/>
+            <zipfileset src="${izevent.jar}"/>
         </jar>
     </target>
 
