@@ -320,4 +320,13 @@ public class PackFile implements Serializable
     {
         this.pack200Jar = pack200Jar;
     }
+    
+    public void setLoosePackInfo(boolean loose)
+    {
+        if (loose)
+        {
+            // file is part of a loose pack
+            length = 0;
+        }
+    }
 }

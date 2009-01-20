@@ -238,6 +238,7 @@ public class PackInfo
         }
 
         PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, additionals);
+        packFile.setLoosePackInfo(pack.loose);
         packFile.setCondition(condition);
         files.put(packFile, file);
     }
