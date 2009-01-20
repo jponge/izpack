@@ -360,6 +360,13 @@ public class AutomatedInstaller extends InstallerBase
             while (panelsIterator.hasNext())
             {
                 Panel p = (Panel) panelsIterator.next();
+                if (p.hasCondition()
+                        && !this.idata.getRules().isConditionTrue(p.getCondition(),
+                                this.idata.variables))
+                {
+                    Debug.log("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
+                    continue;
+                }
 
                 String praefix = "com.izforge.izpack.panels.";
                 if (p.className.compareTo(".") > -1)
