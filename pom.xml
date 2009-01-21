@@ -43,7 +43,9 @@
          <executions>
            <execution>
              <id>build-izpack-with-ant</id>
-             <goals><goal>run</goal></goals>
+             <goals>
+               <goal>run</goal>
+             </goals>
              <phase>package</phase>
              <configuration>
                <tasks>
@@ -51,6 +53,22 @@
                </tasks>
              </configuration>
            </execution>
+           
+           <execution>
+             <id>clean-ant-build</id>
+             <goals>
+               <goal>run</goal>
+             </goals>
+             <phase>pre-clean</phase>
+             <configuration>
+               <tasks>
+                  <exec executable="${env.ANT_HOME}/bin/ant${antExeExt}" dir="${basedir}/src">
+                    <arg value="clean"/>
+                  </exec>
+               </tasks>
+             </configuration>
+           </execution>
+           
          </executions>
        </plugin>
        
