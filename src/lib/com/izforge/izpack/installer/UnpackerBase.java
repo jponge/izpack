@@ -674,7 +674,7 @@ public abstract class UnpackerBase implements IUnpacker
         in[1] = UnpackerBase.class.getResourceAsStream("/res/IzPack.uninstaller-ext");
 
         // Me make the .uninstaller directory
-        String dest = IoHelper.translatePath("$INSTALL_PATH", vs) + File.separator + "Uninstaller";
+        String dest = IoHelper.translatePath(idata.info.getUninstallerPath(), vs);
         String jar = dest + File.separator + idata.info.getUninstallerName();
         File pathMaker = new File(dest);
         pathMaker.mkdirs();

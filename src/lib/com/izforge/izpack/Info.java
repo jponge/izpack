@@ -79,6 +79,10 @@ public class Info implements Serializable
      */
     private String uninstallerName = "uninstaller.jar";
     /**
+     * The uninstaller path
+     */
+    private String uninstallerPath = "$INSTALL_PATH/Uninstaller";
+    /**
      * condition for writing the uninstaller
      */
     private String uninstallerCondition = null;
@@ -280,6 +284,24 @@ public class Info implements Serializable
         return this.uninstallerName;
     }
 
+    /**
+     * Sets the path to the uninstaller
+     * 
+     * @param path the path to the uninstaller
+     */
+    public void setUninstallerPath(String path) {
+      this.uninstallerPath = path;
+    }
+
+    /**
+     * Returns the path to the uninstaller
+     * 
+     * @return the path to the uninstaller
+     */
+    public String getUninstallerPath() {
+      return this.uninstallerPath;
+    }
+    
     public boolean isJdkRequired()
     {
         return jdkRequired;

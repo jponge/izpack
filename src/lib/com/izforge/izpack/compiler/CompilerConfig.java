@@ -1828,6 +1828,11 @@ public class CompilerConfig extends Thread
                 {
                     info.setUninstallerName(uninstallerName);
                 }
+                String uninstallerPath = uninstallInfo.getAttribute("path");
+                if (uninstallerPath != null)
+                {
+                    info.setUninstallerPath(uninstallerPath);
+                }
                 if (uninstallInfo.hasAttribute("condition"))
                 {
                     // there's a condition for uninstaller

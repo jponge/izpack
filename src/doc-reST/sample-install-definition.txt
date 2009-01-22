@@ -45,7 +45,7 @@ Normally, a build process will call IzPack from Ant using something like the fol
 		  <info>
 		    <appname>@{product.name}</appname>
 		    <appversion>@{product.version}</appversion>
-		    <uninstaller name="remove.task" write="yes"/>
+		    <uninstaller name="remove.task" path="${INSTALL_PATH}/Uninstall" write="yes"/>
 		  </info>
 		  
 		  <guiprefs width="600" height="480" resizable="no">

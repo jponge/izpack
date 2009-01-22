@@ -965,7 +965,7 @@ public class InstallerFrame extends JFrame
         {
             if (logfile.toLowerCase().startsWith("default"))
             {
-                logfile = "$INSTALL_PATH/Uninstaller/install.log";
+                logfile = installdata.info.getUninstallerPath() + "/install.log";
             }
             logfile = IoHelper.translatePath(logfile, new VariableSubstitutor(installdata
                     .getVariables()));

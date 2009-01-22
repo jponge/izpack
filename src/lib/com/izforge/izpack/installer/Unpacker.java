@@ -41,7 +41,7 @@ import java.util.jar.Pack200;
  */
 public class Unpacker extends UnpackerBase
 {
-    private static final String tempPath = "$INSTALL_PATH/Uninstaller/IzpackWebTemp";
+    private static final String tempSubPath = "/IzpackWebTemp";
 
     private Pack200.Unpacker unpacker;
 
@@ -559,7 +559,7 @@ public class Unpacker extends UnpackerBase
             // See compiler.Packager#getJarOutputStream for the counterpart
             String baseName = idata.info.getInstallerBase();
             String packURL = webDirURL + "/" + baseName + ".pack" + packid + ".jar";
-            String tf = IoHelper.translatePath(Unpacker.tempPath, vs);
+            String tf = IoHelper.translatePath(idata.info.getUninstallerPath()+ Unpacker.tempSubPath, vs);
             String tempfile;
             try
             {

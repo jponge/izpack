@@ -258,6 +258,8 @@ It contains the following elements :
     change the default name of the generated uninstaller, *i.e.* ``
     uninstaller.jar``. The ``condition`` attribute can be used to specify a
     condition which has to be fullfilled for creating the uninstaller. 
+    The ``path`` attribute can be used to define the destination path where the uninstaller 
+    is written to, *i.e.* ``${INSTALL_PATH}/Uninstaller``.
 -   ``<javaversion>`` : specifies the minimum version of Java required to
     install your program. Values can be ``1.2``, ``1.2.2``, ``1.4``, etc. The
     test is a lexical comparison against the ``java.version`` System property
