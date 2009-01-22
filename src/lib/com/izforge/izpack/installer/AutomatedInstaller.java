@@ -365,6 +365,12 @@ public class AutomatedInstaller extends InstallerBase
                                 this.idata.variables))
                 {
                     Debug.log("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
+                    if (this.panelInstanceCount.containsKey(p.className))
+                    {
+                       // get number of panel instance to process
+                        this.panelInstanceCount.put(p.className, this.panelInstanceCount
+                                .get(p.className) + 1);
+                    }
                     continue;
                 }
 
