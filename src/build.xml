@@ -845,11 +845,14 @@
     <macrodef name="build-uninstaller-listener">
         <attribute name="name"/>
         <attribute name="srcdir" default="${src.dir}"/>
+        <attribute name="classpath-ext" description="An extension of the classpath required to build the listener"
+                   default=""/>
         <element name="uninstaller-fileset"
                  implicit="yes"
                  description="include and exclude elements indicating listener sources"/>
         <sequential>
-            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Installer*">
+            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Installer*"
+                            classpath-ext="@{classpath-ext}">
                 <uninstaller-fileset/>
             </build-listener>
         </sequential>
@@ -904,6 +907,16 @@
             <include name="com/coi/tools/os/win/resources/NativeLibErr*.java"/>
             <include name="com/coi/tools/os/izpack/Registry.java"/>
             <include name="com/coi/tools/os/izpack/COIOSHelper.java"/>
+        </build-uninstaller-listener>
+
+        <build-installer-listener name="BSFInstallerListener" classpath-ext="$${basedir}/lib/bsf.jar">
+            <include name="com/izforge/izpack/event/BSFInstallerListener.java" />
+            <include name="com/izforge/izpack/event/BSFAction.java" />
+        </build-installer-listener>
+
+        <build-uninstaller-listener name="BSFUninstallerListener" classpath-ext="$${basedir}/lib/bsf.jar">
+            <include name="com/izforge/izpack/event/BSFUninstallerListener.java" />
+            <include name="com/izforge/izpack/event/BSFAction.java" />
         </build-uninstaller-listener>
 
         <!-- CUSTOM ACTION test START
