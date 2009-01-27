@@ -71,6 +71,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     // ~ Static fields/initializers *********************************************************
 
+    public final static String SPEC_ATTRIBUTE_CONDITION="condition";
+    
     /**
      * SPEC_ATTRIBUTE_KDE_USERNAME ="KdeUsername"
      */
@@ -1318,20 +1320,24 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      */
     private boolean checkConditions(XMLElement shortcutSpec)
     {
-        /*
-         * Vector conditions = shortcutSpec.getChildrenNamed( Condition.CONDITION );
-         * 
-         * for( int i = 0; i < conditions.size(); i++ ) { Condition condition = new Condition(
-         * conditions.elementAt( i ) );
-         * 
-         * //System.out.println( "Readed: " + condition.toString( true ) ); boolean result =
-         * condition.eval();
-         * 
-         * if( result == false ) { System.out.println( "Unresolved Condition: " + condition );
-         * 
-         * return result; } }
-         */
-        return true; // If there is no Condition defined, just create the shortcut.
+        boolean result = true;
+         String conditionid = shortcutSpec.getAttribute(SPEC_ATTRIBUTE_CONDITION);
+         if (conditionid != null){
+             result = this.parent.getRules().isConditionTrue(conditionid);
+         }
+//          Vector conditions = shortcutSpec.getChildrenNamed( Condition.CONDITION );
+//          
+//          for( int i = 0; i < conditions.size(); i++ ) { Condition condition = new Condition(
+//          conditions.elementAt( i ) );
+//          
+//          //System.out.println( "Readed: " + condition.toString( true ) ); boolean result =
+//          condition.eval();
+//          
+//          if( result == false ) { System.out.println( "Unresolved Condition: " + condition );
+//          
+//          return result; } }
+         
+        return result; // If there is no Condition defined, just create the shortcut.
     }
 
     /*--------------------------------------------------------------------------*/
