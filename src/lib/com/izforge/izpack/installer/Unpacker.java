@@ -137,8 +137,10 @@ public class Unpacker extends UnpackerBase
                     {
                         if (!rules.isConditionTrue(pf.getCondition()))
                         {
-                            // skip, condition is not fulfilled
-                            objIn.skip(pf.length());
+                            if (!pf.isBackReference()){
+                                // skip, condition is not fulfilled
+                                objIn.skip(pf.length());                                                          
+                            }
                             continue;
                         }
                     }
