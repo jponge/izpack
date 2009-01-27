@@ -1461,10 +1461,13 @@ public class CompilerConfig extends Thread
 
         // We process each panel markup
         Iterator<XMLElement> iter = panels.iterator();
+        // We need a panel counter to build unique panel dependet resource names
+        int panelCounter = 0;        
         while (iter.hasNext())
         {
             XMLElement xmlPanel = iter.next();
-
+            panelCounter++;
+            
             // create the serialized Panel data
             Panel panel = new Panel();
             panel.osConstraints = OsConstraint.getOsList(xmlPanel);
@@ -1524,7 +1527,15 @@ public class CompilerConfig extends Thread
                 {
                     XMLElement help = (XMLElement) helps.get(helpIndex);
                     String iso3 = help.getAttribute(HelpWindow.ISO3_ATTRIBUTE);
-                    String resourceId = className + "_help_" + iso3 + ".html";
+                    String resourceId;
+                    if (panelid == null)
+                    {
+                        resourceId = className + "_" + panelCounter + "_help_" + iso3 + ".html";
+                    }
+                    else
+                    {
+                        resourceId = panelid + "_" + panelCounter + "_help_" + iso3 + ".html";
+                    }
                     panel.addHelp(iso3, resourceId);
 
                     URL originalUrl = findProjectResource(help
