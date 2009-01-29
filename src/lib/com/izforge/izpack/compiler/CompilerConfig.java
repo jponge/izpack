@@ -26,17 +26,7 @@
 
 package com.izforge.izpack.compiler;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -89,6 +79,7 @@ import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.IoHelper;
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -1574,6 +1565,12 @@ public class CompilerConfig extends Thread
             // the parsexml attribute causes the xml document to be parsed
             boolean parsexml = validateYesNoAttribute(res, "parsexml", NO);
 
+            String encoding = res.getAttribute("encoding");
+            if (encoding == null)
+            {
+                encoding = "";
+            }
+
             // basedir is not prepended if src is already an absolute path
             URL originalUrl = findProjectResource(src, "Resource", res);
             URL url = originalUrl;
@@ -1582,7 +1579,28 @@ public class CompilerConfig extends Thread
             OutputStream os = null;
             try
             {
-                if (parsexml || (substitute && !compiler.getVariables().isEmpty()))
+                if (!"".equals(encoding))
+                {
+                    File recodedFile = File.createTempFile("izenc", null);
+                    recodedFile.deleteOnExit();
+
+                    InputStreamReader reader = new InputStreamReader(originalUrl.openStream(), encoding);
+                    OutputStreamWriter writer = new OutputStreamWriter(
+                            new FileOutputStream(recodedFile), "UTF-8");
+
+                    char[] buffer = new char[1024];
+                    int read = 0;
+                    while ((read = reader.read(buffer)) != -1)
+                    {
+                        writer.write(buffer, 0, read);
+                    }
+                    reader.close();
+                    writer.close();
+
+                    originalUrl = recodedFile.toURL();
+                }                
+
+                if (parsexml || (!"".equals(encoding)) || (substitute && !compiler.getVariables().isEmpty()))
                 {
                     // make the substitutions into a temp file
                     File parsedFile = File.createTempFile("izpp", null);
@@ -1634,7 +1652,6 @@ public class CompilerConfig extends Thread
                     else
                     {
                         String type = res.getAttribute("type");
-                        String encoding = res.getAttribute("encoding");
 
                         // if the xml parser did not open the url
                         // ('parsexml' was not enabled)
@@ -1643,7 +1660,7 @@ public class CompilerConfig extends Thread
                             is = new BufferedInputStream(originalUrl.openStream());
                         }
                         VariableSubstitutor vs = new VariableSubstitutor(compiler.getVariables());
-                        vs.substitute(is, os, type, encoding);
+                        vs.substitute(is, os, type, "UTF-8");
                     }
                 }
 
