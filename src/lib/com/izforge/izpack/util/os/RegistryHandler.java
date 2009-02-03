@@ -291,6 +291,33 @@ public class RegistryHandler extends OSClassHelper implements MSWinConstants
     }
 
     /**
+     * Sets up whether or not previous contents of registry values will
+     * be logged by the 'setValue()' method.  When registry values are
+     * overwritten by repeated installations, the desired behavior can
+     * be to have the registry value removed rather than rewound to the
+     * last-set contents (acheived via 'false').  If this method is not
+     * called then the flag wll default to 'true'.
+     *
+     * @param flagVal true to have the previous contents of registry
+     * values logged by the 'setValue()' method.
+     */
+    public void setLogPrevSetValueFlag(boolean flagVal)
+    {
+    }
+
+    /**
+     * Determines whether or not previous contents of registry values
+     * will be logged by the 'setValue()' method.
+     *
+     * @return true if the previous contents of registry values will be
+     * logged by the 'setValue()' method.
+     */
+    public boolean getLogPrevSetValueFlag()
+    {
+        return (true);
+    }
+
+    /**
      * Activates logging of registry changes.
      *
      * @throws NativeLibException

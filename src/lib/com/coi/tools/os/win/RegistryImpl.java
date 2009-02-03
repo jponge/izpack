@@ -41,6 +41,8 @@ public class RegistryImpl implements MSWinConstants
 
     private int currentRoot = HKEY_CURRENT_USER;
 
+    private boolean logPrevSetValueFlag = true;
+
     private List logging = new ArrayList();
 
     private boolean doLogging = false;
@@ -71,6 +73,34 @@ public class RegistryImpl implements MSWinConstants
     public void setRoot(int i)
     {
         currentRoot = i;
+    }
+
+    /**
+     * Determines whether or not previous contents of registry values
+     * will be logged by the 'setValue()' method.
+     *
+     * @return true if the previous contents of registry values will be
+     * logged by the 'setValue()' method.
+     */
+    public boolean getLogPrevSetValueFlag()
+    {
+        return logPrevSetValueFlag;
+    }
+
+    /**
+     * Sets up whether or not previous contents of registry values will
+     * be logged by the 'setValue()' method.  When registry values are
+     * overwritten by repeated installations, the desired behavior can
+     * be to have the registry value removed rather than rewound to the
+     * last-set contents (acheived via 'false').  If this method is not
+     * called then the flag wll default to 'true'.
+     *
+     * @param flagVal true to have the previous contents of registry
+     * values logged by the 'setValue()' method.
+     */
+    public void setLogPrevSetValueFlag(boolean flagVal)
+    {
+        logPrevSetValueFlag = flagVal;
     }
 
     /**
@@ -355,6 +385,11 @@ public class RegistryImpl implements MSWinConstants
 
         synchronized (logging)
         {
+            if (!logPrevSetValueFlag)
+            {  //flag not set; don't log previous contents
+                setValueR(root, key, value, contents);
+                return;
+            }
             try
             {
                 oldContents = getValue(currentRoot, key, value);

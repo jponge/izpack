@@ -662,6 +662,9 @@ Value to be set at installation time into the Windows registry.
     HKCR HKCU HKLM HKU HKPD HKCC HKDDS.
 -   ``override`` : optional. Override an existent value or not. Valid is
     "true" or "false", default is "true".
+-   ``saveprevious`` : optional. Save the previous value or not. Valid is "true" 
+    or "false", default is "true". Setting to "false" can result in better uninstall
+    behavior when an install is performed on top of an existing installation.
 -   ``Contents part``: accurately one of the following content elements
     should be defined. It implicit defines the type of the value.
 

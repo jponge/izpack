@@ -78,6 +78,8 @@ public class RegistryInstallerListener extends NativeInstallerListener
 
     private static final String REG_OVERRIDE = "override";
 
+    private static final String SAVE_PREVIOUS = "saveprevious";
+
     /**
      * Default constructor.
      */
@@ -252,6 +254,11 @@ public class RegistryInstallerListener extends NativeInstallerListener
                 return;
             }
         }
+
+              //set flag for logging previous contents if "saveprevious"
+              // attribute not specified or specified as 'true':
+        rh.setLogPrevSetValueFlag("true".equalsIgnoreCase(
+                              regEntry.getAttribute(SAVE_PREVIOUS,"true")));
 
         String value = regEntry.getAttribute(REG_DWORD);
         if (value != null)

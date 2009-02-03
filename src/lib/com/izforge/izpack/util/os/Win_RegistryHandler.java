@@ -337,6 +337,42 @@ public class Win_RegistryHandler extends RegistryHandler
     }
 
     /**
+     * Sets up whether or not previous contents of registry values will
+     * be logged by the 'setValue()' method.  When registry values are
+     * overwritten by repeated installations, the desired behavior can
+     * be to have the registry value removed rather than rewound to the
+     * last-set contents (acheived via 'false').  If this method is not
+     * called then the flag wll default to 'true'.
+     *
+     * @param flagVal true to have the previous contents of registry
+     * values logged by the 'setValue()' method.
+     */
+    public void setLogPrevSetValueFlag(boolean flagVal)
+    {
+        if (!good())
+        {
+            return;
+        }
+        regWorker.setLogPrevSetValueFlag(flagVal);
+    }
+
+    /**
+     * Determines whether or not previous contents of registry values
+     * will be logged by the 'setValue()' method.
+     *
+     * @return true if the previous contents of registry values will be
+     * logged by the 'setValue()' method.
+     */
+    public boolean getLogPrevSetValueFlag()
+    {
+        if (!good())
+        {
+            return (true);
+        }
+        return (regWorker.getLogPrevSetValueFlag());
+    }
+
+    /**
      * Activates logging of registry changes.
      *
      * @throws NativeLibException
