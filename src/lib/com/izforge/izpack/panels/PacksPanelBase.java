@@ -246,6 +246,46 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                     .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
             return (false);
         }
+        
+        for (Pack pack : idata.availablePacks) {
+            for (String validator : pack.getValidators())
+            {
+                /*
+                 * This will call
+                 * public static boolean validate(AbstractUIHandler handler,
+                 *   InstallData idata, String packsId, boolean isSelected)
+                 * from the validator class  
+                 */
+                        
+                PackValidator validatorInst;
+                try
+                {
+                    validatorInst = (PackValidator) Class.forName(validator).newInstance();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    System.err.println("Error: Validator class "+validator
+                            +" for pack "+pack.name+" not available.");
+                    continue;
+                }
+                
+                try
+                {
+                    if (validatorInst.validate(this, idata, pack.id, (idata.selectedPacks.indexOf(pack) > -1)))
+                        continue;
+                    else
+                        return false;
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    System.err.println("Error: Exception in "+validator+".validate("
+                            +(idata.selectedPacks.indexOf(pack) > -1)+") for pack "+pack.name);
+                    continue;
+                }
+            }
+        }
         return (true);
     }
 

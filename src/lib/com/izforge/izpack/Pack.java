@@ -138,6 +138,8 @@ public class Pack implements Serializable
      */
     public String packImgId;
 
+    private List<String> validators = new ArrayList<String>();
+
     /**
      * white colour
      */
@@ -316,5 +318,15 @@ public class Pack implements Serializable
     public boolean hasCondition()
     {
         return this.condition != null;
+    }
+    
+    public void addValidator(String validatorClassName)
+    {
+        validators.add(validatorClassName);
+    }
+    
+    public List<String> getValidators()
+    {
+        return validators;
     }
 }

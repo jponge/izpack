@@ -1055,6 +1055,13 @@ public class CompilerConfig extends Thread
                 pack.addDependency(depName);
 
             }
+            
+            iter = el.getChildrenNamed("validator").iterator();
+            while (iter.hasNext()) {
+                XMLElement validator = iter.next();
+                pack.addValidator(requireContent(validator));
+            }
+            
             // We add the pack
             compiler.addPack(pack);
         }

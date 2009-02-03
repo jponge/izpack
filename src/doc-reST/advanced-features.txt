@@ -384,4 +384,32 @@ then the related entries of the langpacks will look like this: ::
   <str id="core.package" txt="Core Package"/>
   <str id="core.package.description" txt="The core package provides
 
+Validators for Packs
+---------------------
+
+It's possible to create custom java validators (as you may know from `Panels`__). To do that, add the validator element to your packs definition like this:
+
+__ installation-files.html#validator-optional-validation-on-idata
+
+::
+
+  <pack name="foo" id="foo.package" ...>
+    <validator>my.Validatorclass</validator>
+  </pack>
+
+Now you have to create and include a class implementing the 'PackValidator' interface: ::
+
+  package my;
+  import com.izforge.izpack.installer.InstallData;
+  import com.izforge.izpack.installer.PackValidator;
+  import com.izforge.izpack.util.AbstractUIHandler;
+  public class Validatorclass implements PackValidator {
+    public boolean validate(AbstractUIHandler handler,
+        InstallData idata, String packsId, boolean isSelected) {
+      [ your validation code here ]
+      return false; // returns to the pack selection without further notice
+      return true; // passes on to the next defined validator for this pack
+    }
+  }
+
 .. include:: include-bottom.inc

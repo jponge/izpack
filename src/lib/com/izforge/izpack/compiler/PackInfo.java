@@ -365,4 +365,8 @@ public class PackInfo
         this.pack.setCondition(condition);
     }
 
+    public void addValidator(String validatorClassName)
+    {
+        pack.addValidator(validatorClassName);
+    }
 }
