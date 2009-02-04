@@ -44,7 +44,7 @@ public class IsPortValidator implements Validator
         try
         {
             port = Integer.parseInt(client.getFieldContents(0));
-            if (port > 0 && port < 32000)
+            if (port > 0 && port < 65535)
             {
                 return true;
             }

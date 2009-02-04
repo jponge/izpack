@@ -319,7 +319,7 @@ public class RulesEngine
                     // xor-condition
                     op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
-                    result = new XOrCondition(op1, getConditionByExpr(conditionexpr));
+                    result = new XorCondition(op1, getConditionByExpr(conditionexpr));
                     result.setInstalldata(RulesEngine.installdata);
                     break;
                 case '!':

@@ -192,24 +192,24 @@ public class PackFile implements Serializable
      */
     public static String computeRelativePathFrom(File baseDir, File file)
     {
-        if (baseDir == null || file == null)
-        {
-            return null;
+        if (baseDir == null || file == null) {
+          return null;
         }
         try
-        { //extract relative path...
-            if (file.getCanonicalPath().startsWith(baseDir.getCanonicalPath()))
-            {
-                return file.getCanonicalPath().substring(baseDir.getCanonicalPath().length());
+        { // extract relative path...
+            if (file.getAbsolutePath().startsWith(baseDir.getAbsolutePath()))
+            { 
+              return file.getAbsolutePath().substring(baseDir.getAbsolutePath().length() + 1); 
             }
         }
-        catch (Exception x)//don't throw an exception here. return null instead!
+        catch (Exception x)// don't throw an exception here. return null instead!
         {
-            //if we cannot build the relative path because of an error, the developer should be informed about.
+            // if we cannot build the relative path because of an error, the developer should be
+            // informed about.
             x.printStackTrace();
         }
 
-        //we can not build a relative path for whatever reason
+        // we can not build a relative path for whatever reason
         return null;
     }
 
@@ -319,5 +319,14 @@ public class PackFile implements Serializable
     public void setPack200Jar(boolean pack200Jar)
     {
         this.pack200Jar = pack200Jar;
+    }
+    
+    public void setLoosePackInfo(boolean loose)
+    {
+        if (loose)
+        {
+            // file is part of a loose pack
+            length = 0;
+        }
     }
 }

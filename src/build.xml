@@ -348,6 +348,7 @@
                 <exclude name="com/izforge/izpack/util/*.class"/>
                 <exclude name="net/n3/nanoxml/*.class"/>
             </zipfileset>
+            <zipfileset src="${izevent.jar}"/>
             <zipfileset src="lib/ant.jar"/>
             <fileset dir="${basedir}">
                 <include name="bin/langpacks/flags/*"/>
@@ -402,7 +403,7 @@
     </target>
 
     <!-- Package installer.jar -->
-    <target name="build.installer" depends="compile.installer">
+    <target name="build.installer" depends="compile.installer, build.listener-base">
         <jar jarfile="${installer.jar}">
             <manifest>
                 <attribute name="Built-By" value="IzPack"/>
@@ -438,6 +439,7 @@
             	  <include name="com/izforge/izpack/util/**/*.sh"/>
             </fileset>
             <fileset dir="${img.dir}/installer"/>
+            <zipfileset src="${izevent.jar}"/>
         </jar>
     </target>
 
@@ -1018,6 +1020,11 @@
 		-->
         <copy todir="${basedir}/bin/native/izpack"
               file="${basedir}/src/native/ShellLink/Release_Unicode/ShellLink.dll"
+              verbose="true"
+              overwrite="yes"
+              preservelastmodified="true"/>
+        <copy todir="${basedir}/bin/native/izpack"
+              file="${basedir}/src/native/ShellLink_x64/Release_Unicode/ShellLink_x64.dll"
               verbose="true"
               overwrite="yes"
               preservelastmodified="true"/>

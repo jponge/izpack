@@ -406,14 +406,14 @@ public class UserInputPanel extends IzPanel implements ActionListener
         // ----------------------------------------------------
         try
         {
-            // this.langpack = parent.langpack;
+            this.langpack = (LocaleDatabase) parent.langpack.clone();
 
             String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
-            this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(
-                    resource));
+            this.langpack.add(ResourceManager.getInstance().getInputStream(resource));
         }
         catch (Throwable exception)
         {
+            exception.printStackTrace();
         }
 
         // ----------------------------------------------------

@@ -342,6 +342,7 @@ public class AutomatedInstaller extends InstallerBase
         if (!checkInstallerRequirements(this.idata))
         {
             Debug.log("not all installerconditions are fulfilled.");
+            System.exit(-1);
             return;
         }
 
@@ -359,6 +360,19 @@ public class AutomatedInstaller extends InstallerBase
             while (panelsIterator.hasNext())
             {
                 Panel p = (Panel) panelsIterator.next();
+                if (p.hasCondition()
+                        && !this.idata.getRules().isConditionTrue(p.getCondition(),
+                                this.idata.variables))
+                {
+                    Debug.log("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
+                    if (this.panelInstanceCount.containsKey(p.className))
+                    {
+                       // get number of panel instance to process
+                        this.panelInstanceCount.put(p.className, this.panelInstanceCount
+                                .get(p.className) + 1);
+                    }
+                    continue;
+                }
 
                 String praefix = "com.izforge.izpack.panels.";
                 if (p.className.compareTo(".") > -1)

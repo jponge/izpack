@@ -137,8 +137,10 @@ public class Unpacker extends UnpackerBase
                     {
                         if (!rules.isConditionTrue(pf.getCondition()))
                         {
-                            // skip, condition is not fulfilled
-                            objIn.skip(pf.length());
+                            if (!pf.isBackReference()){
+                                // skip, condition is not fulfilled
+                                objIn.skip(pf.length());                                                          
+                            }
                             continue;
                         }
                     }
@@ -274,27 +276,8 @@ public class Unpacker extends UnpackerBase
                            pis = new FileInputStream(pf.sourcePath);
                             */
 
-                            //take the relative path and search for the file
-                            //1. look at the location where the "info"-file is loaded from (jar)
-                            //2. look into the current working directory
-                            //maybe look into other other locations after that (configurable ?)
-
-                            //find directory of jar file
-                            URL url = getClass().getResource("/info");
-                            String urlPath = url.getPath();
-                            int pos = urlPath.indexOf('!');
-                            if (pos >= 0 && urlPath.startsWith("file:/"))
-                            {
-                                //remove jar-specific part
-                                urlPath = urlPath.substring("file:/".length(), pos);
-                            }
-                            File installerDir = new File(urlPath);
-                            if (!installerDir.isDirectory())
-                            {
-                                installerDir = installerDir.getParentFile();
-                            }
-
-                            File resolvedFile = new File(installerDir, pf.getRelativeSourcePath());
+                          File resolvedFile = new File(getAbsolutInstallSource(), pf
+                              .getRelativeSourcePath());
                             if (!resolvedFile.exists())
                             {
                                 //try alternative destination - the current working directory

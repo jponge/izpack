@@ -188,8 +188,10 @@ public abstract class PackagerBase implements IPackager
     public void addCustomJar(CustomData ca, URL url)
     {
         customDataList.add(ca); // serialized to keep order/variables correct
-        addJarContent(url); // each included once, no matter how many times
-        // added
+        if ( url != null )
+        {
+            addJarContent(url); // each included once, no matter how many times added
+        }
     }
 
     /* (non-Javadoc)
@@ -257,8 +259,11 @@ public abstract class PackagerBase implements IPackager
     public void addPanelJar(Panel panel, URL jarURL)
     {
         panelList.add(panel); // serialized to keep order/variables correct
-        addJarContent(jarURL); // each included once, no matter how many times
-        // added
+        
+        if ( jarURL != null )
+        {
+            addJarContent(jarURL); // each included once, no matter how many times added
+        }
     }
 
     /* (non-Javadoc)

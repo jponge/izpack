@@ -26,8 +26,8 @@ import com.izforge.izpack.util.OsVersion;
 import java.io.*;
 import java.net.URI;
 import java.net.URL;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is responsible for allowing the installer to re-launch itself with administrator permissions.
@@ -57,7 +57,7 @@ public class PrivilegedRunner
     {
         if (OsVersion.IS_WINDOWS)
         {
-            return true;
+            return (!"privileged".equals(System.getenv("izpack.mode"))) && (!canWriteToProgramFiles());
         }
         else
         {
@@ -65,10 +65,32 @@ public class PrivilegedRunner
         }
     }
 
+    private boolean canWriteToProgramFiles()
+    {
+        try
+        {
+            File temp = new File("C:\\Program Files\\foo.txt");
+            if (temp.createNewFile())
+            {
+                temp.delete();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
+    }
+
     /**
      * Relaunches the installer with elevated rights.
      *
      * @return the status code returned by the launched process (by convention, 0 means a success).
+     *
      * @throws IOException
      * @throws InterruptedException
      */
@@ -84,7 +106,7 @@ public class PrivilegedRunner
     private List<String> getElevator(String javaCommand, String installer) throws IOException, InterruptedException
     {
         List<String> elevator = new ArrayList<String>();
-        
+
         if (OsVersion.IS_OSX)
         {
             elevator.add(extractMacElevator().getCanonicalPath());

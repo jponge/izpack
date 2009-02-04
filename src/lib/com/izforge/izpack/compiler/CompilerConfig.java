@@ -26,17 +26,7 @@
 
 package com.izforge.izpack.compiler;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
@@ -89,6 +79,7 @@ import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.IoHelper;
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -1461,10 +1452,13 @@ public class CompilerConfig extends Thread
 
         // We process each panel markup
         Iterator<XMLElement> iter = panels.iterator();
+        // We need a panel counter to build unique panel dependet resource names
+        int panelCounter = 0;        
         while (iter.hasNext())
         {
             XMLElement xmlPanel = iter.next();
-
+            panelCounter++;
+            
             // create the serialized Panel data
             Panel panel = new Panel();
             panel.osConstraints = OsConstraint.getOsList(xmlPanel);
@@ -1477,14 +1471,25 @@ public class CompilerConfig extends Thread
 
             // Panel files come in jars packaged w/ IzPack
             String jarPath = "bin/panels/" + className + ".jar";
-            URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel);
+            URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
+
+            //when the expected panel jar file is not found under bin/panels resource path
+            // it is assumed that user will do the jar merge themselves via <jar> tag
             String fullClassName = null;
-            try
+            if (url == null)
             {
-                fullClassName = getFullClassName(url, className);
+                fullClassName = className;
             }
-            catch (IOException e)
-            {}
+            else
+            {
+                try
+                {
+                    fullClassName = getFullClassName(url, className);
+                }
+                catch (IOException e)
+                {}
+            }
+            
             if (fullClassName != null)
             {
                 panel.className = fullClassName;
@@ -1513,7 +1518,15 @@ public class CompilerConfig extends Thread
                 {
                     XMLElement help = (XMLElement) helps.get(helpIndex);
                     String iso3 = help.getAttribute(HelpWindow.ISO3_ATTRIBUTE);
-                    String resourceId = className + "_help_" + iso3 + ".html";
+                    String resourceId;
+                    if (panelid == null)
+                    {
+                        resourceId = className + "_" + panelCounter + "_help_" + iso3 + ".html";
+                    }
+                    else
+                    {
+                        resourceId = panelid + "_" + panelCounter + "_help_" + iso3 + ".html";
+                    }
                     panel.addHelp(iso3, resourceId);
 
                     URL originalUrl = findProjectResource(help
@@ -1552,6 +1565,12 @@ public class CompilerConfig extends Thread
             // the parsexml attribute causes the xml document to be parsed
             boolean parsexml = validateYesNoAttribute(res, "parsexml", NO);
 
+            String encoding = res.getAttribute("encoding");
+            if (encoding == null)
+            {
+                encoding = "";
+            }
+
             // basedir is not prepended if src is already an absolute path
             URL originalUrl = findProjectResource(src, "Resource", res);
             URL url = originalUrl;
@@ -1560,7 +1579,28 @@ public class CompilerConfig extends Thread
             OutputStream os = null;
             try
             {
-                if (parsexml || (substitute && !compiler.getVariables().isEmpty()))
+                if (!"".equals(encoding))
+                {
+                    File recodedFile = File.createTempFile("izenc", null);
+                    recodedFile.deleteOnExit();
+
+                    InputStreamReader reader = new InputStreamReader(originalUrl.openStream(), encoding);
+                    OutputStreamWriter writer = new OutputStreamWriter(
+                            new FileOutputStream(recodedFile), "UTF-8");
+
+                    char[] buffer = new char[1024];
+                    int read = 0;
+                    while ((read = reader.read(buffer)) != -1)
+                    {
+                        writer.write(buffer, 0, read);
+                    }
+                    reader.close();
+                    writer.close();
+
+                    originalUrl = recodedFile.toURL();
+                }                
+
+                if (parsexml || (!"".equals(encoding)) || (substitute && !compiler.getVariables().isEmpty()))
                 {
                     // make the substitutions into a temp file
                     File parsedFile = File.createTempFile("izpp", null);
@@ -1612,7 +1652,6 @@ public class CompilerConfig extends Thread
                     else
                     {
                         String type = res.getAttribute("type");
-                        String encoding = res.getAttribute("encoding");
 
                         // if the xml parser did not open the url
                         // ('parsexml' was not enabled)
@@ -1621,7 +1660,7 @@ public class CompilerConfig extends Thread
                             is = new BufferedInputStream(originalUrl.openStream());
                         }
                         VariableSubstitutor vs = new VariableSubstitutor(compiler.getVariables());
-                        vs.substitute(is, os, type, encoding);
+                        vs.substitute(is, os, type, "UTF-8");
                     }
                 }
 
@@ -2215,18 +2254,26 @@ public class CompilerConfig extends Thread
         return url;
     }
 
+    private URL findIzPackResource(String path, String desc, XMLElement parent)
+        throws CompilerException
+    {
+        return findIzPackResource( path, desc, parent, false );
+    }
+    
     /**
      * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
      * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
-     * file). If the resource is not found, a CompilerException is thrown indicating fault in the
-     * parent element.
+     * file). If the resource is not found, take appropriate action base on ignoreWhenNotFound flag.
      * 
      * @param path the relative path (using '/' as separator) to the resource.
      * @param desc the description of the resource used to report errors
      * @param parent the XMLElement the resource is specified in, used to report errors
+     * @param ignoreWhenNotFound when false, throws a CompilerException indicating 
+     *        fault in the parent element when resource not found.
+     * 
      * @return a URL to the resource.
      */
-    private URL findIzPackResource(String path, String desc, XMLElement parent)
+    private URL findIzPackResource(String path, String desc, XMLElement parent, boolean ignoreWhenNotFound)
             throws CompilerException
     {
         URL url = getClass().getResource("/" + path);
@@ -2239,19 +2286,29 @@ public class CompilerConfig extends Thread
                 resource = new File(Compiler.IZPACK_HOME, path);
             }
 
-            if (!resource.exists()) // fatal
+            if (resource.exists()) 
             {
-                parseError(parent, desc + " not found: " + resource);
+                try
+                {
+                    url = resource.toURL();
+                }
+                catch (MalformedURLException how)
+                {
+                    parseError(parent, desc + "(" + resource + ")", how);
+                }
+            }
+            else
+            {
+                if ( ignoreWhenNotFound )
+                {
+                    parseWarn(parent, desc + " not found: " + resource);
+                }
+                else
+                {
+                    parseError(parent, desc + " not found: " + resource);
+                }
             }
 
-            try
-            {
-                url = resource.toURL();
-            }
-            catch (MalformedURLException how)
-            {
-                parseError(parent, desc + "(" + resource + ")", how);
-            }
         }
 
         return url;
@@ -2302,7 +2359,7 @@ public class CompilerConfig extends Thread
      */
     protected void parseWarn(XMLElement parent, String message)
     {
-        System.out.println(filename + ":" + parent.getLineNr() + ": " + message);
+        System.out.println("Warning: " + filename + ":" + parent.getLineNr() + ": " + message);
     }
 
     /**
@@ -2491,11 +2548,20 @@ public class CompilerConfig extends Thread
         // exit code 1 means: error
         int exitCode = 1;
         String home = ".";
+        
         // We get the IzPack home directory
-        String izHome = System.getProperty("IZPACK_HOME");
+        String izHome = System.getProperty("izpack.home");
         if (izHome != null)
         {
             home = izHome;
+        }
+        else
+        {
+            izHome = System.getenv("IZPACK_HOME");
+            if (izHome != null)
+            {
+                home = izHome;
+            }
         }
 
         // We analyse the command line parameters

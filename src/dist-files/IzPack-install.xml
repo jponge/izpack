@@ -31,8 +31,8 @@
         <url>http://izpack.org/</url>
         <javaversion>1.5</javaversion>
         <requiresjdk>no</requiresjdk>
-        <pack200/>
-        <run-privileged/>
+        <!--><pack200/>
+        <run-privileged/>-->
         <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
     </info>
 
@@ -105,7 +105,7 @@
     <!-- The panels in a classic order -->
     <panels>
         <panel classname="CheckedHelloPanel" id="hellopanel"/>
-        <panel classname="HTMLInfoPanel" id="infopanel"/>
+        <panel classname="HTMLInfoPanel" id="infopanel" encoding="ISO-8859-1"/>
         <panel classname="HTMLLicencePanel" id="licensepanel"/>
         <panel classname="TargetPanel" id="targetpanel"/>
         <panel classname="PacksPanel" id="packspanel"/>
@@ -197,6 +197,7 @@
 
     <!-- The native libraries to add -->
     <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink_x64.dll"/>
     <native type="3rdparty" name="COIOSHelper.dll" stage="both">
         <os family="windows"/>
     </native>
