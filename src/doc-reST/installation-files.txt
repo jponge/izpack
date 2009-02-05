@@ -168,9 +168,30 @@ the ``<dynamicvariables>`` element. The value of dynamic variables will be evalu
 is switched, i.e. between the panels. Dynamic variables can have a condition which will be evaluated
 first. If it's true, the value would be assigned, otherwise nothing happens to the variable.
 
-Example: To change a certain directory based on user input, use the following
+As and addition to normal variables, the value of a variable can either be defined by using the value
+attribute or by using a child element called value.
+
+Example1: To change a certain directory based on user input, use the following
 ``<variable name="test" value="/test/${USER_INPUT}" condition="hasuserinput" />`` 
 The condition has userinput has to be specified in the condition section of installation XML.
+
+Example2: To comment out something in a xml file if a certain pack with id mycoolfeature is not activated, 
+you could use "two" dynamic variables to create a xml comment or not.
+
+::
+
+	<variable name="XML_Comment_Start" condition="!izpack.selected.mycoolfeature">
+		<value><![CDATA[<!--]]></value>
+	</variable>
+	<variable name="XML_Comment_End" condition="!izpack.selected.mycoolfeature">
+		<value><![CDATA[-->]]></value>
+	</variable>
+	<variable name="XML_Comment_Start" value="" condition="izpack.selected.mycoolfeature" />
+	<variable name="XML_Comment_End" value="" condition="izpack.selected.mycoolfeature" />
+
+The condition izpack.selected.mycoolfeature is generated automatically when a pack with id mycoolfeature 
+was specified. You would now use ``${XML_Comment_Start}`` and ``${XML_Comment_End}`` in a file which 
+should be parsed.
 
 Parse Types
 -----------
