@@ -1959,7 +1959,19 @@ public class CompilerConfig extends Thread
         {
             XMLElement var = iter.next();
             String name = requireAttribute(var, "name");
-            String value = requireAttribute(var, "value");
+            String value = var.getAttribute("value");
+            if (value==null){
+                XMLElement valueElement = var.getFirstChildNamed("value");
+                if (valueElement != null){
+                    value = valueElement.getContent();
+                    if (value != null){
+                       parseError("A dynamic variable needs either a value attribute or a value element.");
+                    }
+                }
+                else {
+                    parseError("A dynamic variable needs either a value attribute or a value element.");
+                }
+            }
             String conditionid = var.getAttribute("condition");
 
             List<DynamicVariable> dynamicValues = new ArrayList<DynamicVariable>();
