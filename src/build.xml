@@ -716,6 +716,7 @@
         </build-panel>
         <build-panel name="TreePacksPanel">
             <include name="com/izforge/izpack/panels/TreePacksPanel.java"/>
+            <include name="com/izforge/izpack/panels/TreePacksPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/ImgPacksPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/ImgPacksPanelBase.java"/>
             <include name="com/izforge/izpack/panels/PacksModel.java"/>
