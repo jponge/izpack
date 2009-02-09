@@ -236,8 +236,11 @@ public class LibraryRemover
         spawn(2);
 
         // finally, if all went well, the invoking process must exit
-        log("Exit");
-        System.exit(0);
+        log("library cleanup done");
+        //
+        // IZPACK-276:
+        // Do never call System.exit during a cleanup otherwise the correct exit value is lost!
+        // System.exit(0);
     }
 
     /**
