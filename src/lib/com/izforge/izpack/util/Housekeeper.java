@@ -89,7 +89,17 @@ public class Housekeeper
     /*--------------------------------------------------------------------------*/
     public void registerForCleanup(CleanupClient client)
     {
-        cleanupClients.add(client);
+        // IZPACK-276:
+        // if the client is an instance of Librarian hold it at a special place to call it at the
+        // very last time
+        if (client instanceof Librarian)
+        {
+            cleanupClients.add(0, client);
+        }
+        else
+        {
+            cleanupClients.add(client);
+        }
     }
 
     /*--------------------------------------------------------------------------*/
@@ -105,7 +115,9 @@ public class Housekeeper
     /*--------------------------------------------------------------------------*/
     public void shutDown(int exitCode)
     {
-        for (int i = 0; i < cleanupClients.size(); i++)
+        // IZPACK-276
+		// Do the cleanup of the last registered client at the fist time (first in last out)
+        for (int i = cleanupClients.size() - 1; i > 0; i--)
         {
             try
             {
