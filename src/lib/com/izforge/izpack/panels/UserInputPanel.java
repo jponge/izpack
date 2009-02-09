@@ -915,7 +915,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
         for (int i = 0; i < entries.size(); i++)
         {
             TextValuePair pair = entries.elementAt(i);
-            entryMap.put(pair.toString(), pair.getValue());
+            // IZPACK-283: read the value from idata instead of panel data
+            final String key = pair.toString();
+            entryMap.put(key, idata.getVariable(key));
         }
 
         new UserInputPanelAutomationHelper(entryMap).makeXMLData(idata, panelRoot);
