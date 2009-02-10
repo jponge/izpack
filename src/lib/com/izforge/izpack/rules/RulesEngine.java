@@ -44,12 +44,19 @@ public class RulesEngine
 
     protected XMLElement conditionsspec;
 
-    protected static Map conditionsmap = new Hashtable();
+    protected static Map conditionsmap;
 
     protected static AutomatedInstallData installdata;
 
     static
     {
+        loadStaticConditions();
+    }
+
+    private static void loadStaticConditions()
+    {
+        conditionsmap = new Hashtable();
+
         createBuiltinOsCondition("IS_WINDOWS", "izpack.windowsinstall");
         createBuiltinOsCondition("IS_WINDOWS_XP", "izpack.windowsinstall.xp");
         createBuiltinOsCondition("IS_WINDOWS_2003", "izpack.windowsinstall.2003");
@@ -65,9 +72,6 @@ public class RulesEngine
 
     private RulesEngine()
     {
-
-        init();
-
         this.panelconditions = new Hashtable<String, String>();
         this.packconditions = new Hashtable<String, String>();
         this.optionalpackconditions = new Hashtable<String, String>();
@@ -79,6 +83,8 @@ public class RulesEngine
     private void init()
     {
         Debug.trace("RulesEngine.init()");
+
+        loadStaticConditions();
 
         if ((installdata != null) && (installdata.allPacks != null))
         {
@@ -127,6 +133,7 @@ public class RulesEngine
         this.conditionsspec = conditionsspecxml;
         RulesEngine.installdata = installdata;
         this.readConditions();
+        init();
     }
 
     public RulesEngine(Map rules, AutomatedInstallData installdata)
@@ -142,6 +149,7 @@ public class RulesEngine
             Condition condition = (Condition) conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }
+        init();
     }
 
     /**
