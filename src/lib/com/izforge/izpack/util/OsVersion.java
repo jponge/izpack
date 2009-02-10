@@ -44,6 +44,11 @@ public final class OsVersion implements OsVersionConstants, StringConstants
     public static final String OS_ARCH = System.getProperty(OSARCH);
 
     /**
+     * OS_VERSION = System.getProperty("os.aversion")
+     */
+    public static final String OS_VERSION = System.getProperty(OSVERSION);
+
+    /**
      * True if the processor is in the Intel x86 family.
      */
     public static final boolean IS_X86 = StringTool.startsWithIgnoreCase(OS_ARCH, X86) ||
@@ -114,6 +119,26 @@ public final class OsVersion implements OsVersionConstants, StringConstants
      * True if this is Windows.
      */
     public static final boolean IS_WINDOWS = StringTool.startsWith(OS_NAME, WINDOWS);
+
+    /**
+     * True if this is Windows XP
+     */
+    public static final boolean IS_WINDOWS_XP = IS_WINDOWS && OS_VERSION.equals(WINDOWS_XP_VERSION);
+
+    /**
+     * True if this is Windows 2003
+     */
+    public static final boolean IS_WINDOWS_2003 = IS_WINDOWS && OS_VERSION.equals(WINDOWS_2003_VERSION);
+
+    /**
+     * True if this is Windows VISTA
+     */
+    public static final boolean IS_WINDOWS_VISTA = IS_WINDOWS && OS_VERSION.equals(WINDOWS_VISTA_VERSION);
+
+    /**
+     * True if this is Windows 7
+     */
+    public static final boolean IS_WINDOWS_7 = IS_WINDOWS && OS_VERSION.equals(WINDOWS_7_VERSION);
 
     /**
      * True if this is some variant of Unix (OSX, Linux, Solaris, FreeBSD, etc).

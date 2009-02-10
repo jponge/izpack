@@ -22,6 +22,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.rules.RulesEngine;
 
 import java.io.*;
 import java.net.URI;
@@ -38,6 +39,35 @@ import java.util.List;
  */
 public class PrivilegedRunner
 {
+    private String executionConditionID;
+
+    /**
+     * Builds a default privileged runner.
+     */
+    public PrivilegedRunner()
+    {
+    }
+
+    /**
+     * Builds a privileged runner with a rules engine condition.
+     *
+     * @param executionConditionID the privileged execution condition string
+     */
+    public PrivilegedRunner(String executionConditionID)
+    {
+        this.executionConditionID = executionConditionID;
+    }
+
+    /**
+     * Getter for the execution condition property.
+     * 
+     * @return the execution condition property.
+     */
+    public String getExecutionConditionID()
+    {
+        return executionConditionID;
+    }
+
     /**
      * Checks if the current platform is supported.
      *
@@ -55,6 +85,14 @@ public class PrivilegedRunner
      */
     public boolean isElevationNeeded()
     {
+        if (getExecutionConditionID() != null)
+        {
+            if (!RulesEngine.getCondition(getExecutionConditionID()).isTrue())
+            {
+                return false;
+            }
+        }
+
         if (OsVersion.IS_WINDOWS)
         {
             return (!"privileged".equals(System.getenv("izpack.mode"))) && (!canWriteToProgramFiles());
