@@ -482,7 +482,6 @@
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class"/>
                 <include name="net/n3/nanoxml/*.class"/>
                 <include name="com/izforge/izpack/installer/PrivilegedRunner.class"/>
-                <include name="com/izforge/izpack/rules/*.class"/>
             </fileset>
             <fileset dir="${src.dir}">
                 <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>

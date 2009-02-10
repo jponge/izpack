@@ -267,7 +267,8 @@ public class InstallerBase
         }
         else if (info.isPrivilegedExecutionRequired())
         {
-            PrivilegedRunner runner = new PrivilegedRunner(info.getPrivilegedExecutionConditionID());
+            final Condition condition = RulesEngine.getCondition(info.getPrivilegedExecutionConditionID());
+            PrivilegedRunner runner = new PrivilegedRunner(!condition.isTrue());
             if (runner.isPlatformSupported() && runner.isElevationNeeded())
             {
                 try
