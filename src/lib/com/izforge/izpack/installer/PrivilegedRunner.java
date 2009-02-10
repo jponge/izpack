@@ -22,7 +22,6 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.rules.RulesEngine;
 
 import java.io.*;
 import java.net.URI;
@@ -39,7 +38,7 @@ import java.util.List;
  */
 public class PrivilegedRunner
 {
-    private String executionConditionID;
+    private boolean vetoed = false;
 
     /**
      * Builds a default privileged runner.
@@ -49,23 +48,23 @@ public class PrivilegedRunner
     }
 
     /**
-     * Builds a privileged runner with a rules engine condition.
+     * Builds a privileged runner with a vetoing parameter.
      *
-     * @param executionConditionID the privileged execution condition string
+     * @param vetoed should the elevation be vetoed?
      */
-    public PrivilegedRunner(String executionConditionID)
+    public PrivilegedRunner(boolean vetoed)
     {
-        this.executionConditionID = executionConditionID;
+        this.vetoed = vetoed;
     }
 
     /**
-     * Getter for the execution condition property.
-     * 
-     * @return the execution condition property.
+     * Tells whether the elevation is vetoed by some of the invoker logic.
+     *
+     * @return <code>true</code> if the elevation is to be vetoed.
      */
-    public String getExecutionConditionID()
+    public boolean isVetoed()
     {
-        return executionConditionID;
+        return vetoed;
     }
 
     /**
@@ -85,12 +84,9 @@ public class PrivilegedRunner
      */
     public boolean isElevationNeeded()
     {
-        if (getExecutionConditionID() != null)
+        if (vetoed)
         {
-            if (!RulesEngine.getCondition(getExecutionConditionID()).isTrue())
-            {
-                return false;
-            }
+            return false;
         }
 
         if (OsVersion.IS_WINDOWS)

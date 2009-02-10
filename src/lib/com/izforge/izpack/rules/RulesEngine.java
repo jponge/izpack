@@ -44,7 +44,7 @@ public class RulesEngine
 
     protected XMLElement conditionsspec;
 
-    protected static Map conditionsmap;
+    protected static Map conditionsmap = new HashMap();
 
     protected static AutomatedInstallData installdata;
 
@@ -55,8 +55,6 @@ public class RulesEngine
 
     private static void loadStaticConditions()
     {
-        conditionsmap = new Hashtable();
-
         createBuiltinOsCondition("IS_WINDOWS", "izpack.windowsinstall");
         createBuiltinOsCondition("IS_WINDOWS_XP", "izpack.windowsinstall.xp");
         createBuiltinOsCondition("IS_WINDOWS_2003", "izpack.windowsinstall.2003");
@@ -72,6 +70,7 @@ public class RulesEngine
 
     private RulesEngine()
     {
+        conditionsmap = new Hashtable();
         this.panelconditions = new Hashtable<String, String>();
         this.packconditions = new Hashtable<String, String>();
         this.optionalpackconditions = new Hashtable<String, String>();
