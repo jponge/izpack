@@ -25,7 +25,6 @@ import net.n3.nanoxml.XMLElement;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Properties;
 
 /**
  * A condition based on the value of a static java field or static java method.
@@ -55,7 +54,7 @@ public class JavaCondition extends Condition
 
     }
 
-    private boolean isTrue(Properties variables)
+    public boolean isTrue()
     {
         if (!this.complete)
         {
@@ -174,11 +173,6 @@ public class JavaCondition extends Condition
             return;
         }
         this.complete = true;
-    }
-
-    public boolean isTrue()
-    {
-        return this.isTrue(this.installdata.getVariables());
     }
 
     /* (non-Javadoc)

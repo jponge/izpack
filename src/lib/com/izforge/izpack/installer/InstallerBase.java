@@ -267,7 +267,7 @@ public class InstallerBase
         }
         else if (info.isPrivilegedExecutionRequired())
         {
-            PrivilegedRunner runner = new PrivilegedRunner();
+            PrivilegedRunner runner = new PrivilegedRunner(info.getPrivilegedExecutionConditionID());
             if (runner.isPlatformSupported() && runner.isElevationNeeded())
             {
                 try

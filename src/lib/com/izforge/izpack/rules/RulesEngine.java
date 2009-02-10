@@ -48,9 +48,26 @@ public class RulesEngine
 
     protected static AutomatedInstallData installdata;
 
+    static
+    {
+        createBuiltinOsCondition("IS_WINDOWS", "izpack.windowsinstall");
+        createBuiltinOsCondition("IS_WINDOWS_XP", "izpack.windowsinstall.xp");
+        createBuiltinOsCondition("IS_WINDOWS_2003", "izpack.windowsinstall.2003");
+        createBuiltinOsCondition("IS_WINDOWS_VISTA", "izpack.windowsinstall.vista");
+        createBuiltinOsCondition("IS_WINDOWS_7", "izpack.windowsinstall.7");
+        createBuiltinOsCondition("IS_LINUX", "izpack.linuxinstall");
+        createBuiltinOsCondition("IS_SUNOS", "izpack.solarisinstall");
+        createBuiltinOsCondition("IS_MAC", "izpack.macinstall");
+        createBuiltinOsCondition("IS_SUNOS", "izpack.solarisinstall");
+        createBuiltinOsCondition("IS_SUNOS_X86", "izpack.solarisinstall.x86");
+        createBuiltinOsCondition("IS_SUNOS_SPARC", "izpack.solarisinstall.sparc");
+    }
+
     private RulesEngine()
     {
-        conditionsmap = new Hashtable();
+
+        init();
+
         this.panelconditions = new Hashtable<String, String>();
         this.packconditions = new Hashtable<String, String>();
         this.optionalpackconditions = new Hashtable<String, String>();
@@ -62,14 +79,6 @@ public class RulesEngine
     private void init()
     {
         Debug.trace("RulesEngine.init()");
-        
-        createBuiltinOsCondition("IS_WINDOWS", "izpack.windowsinstall");
-        createBuiltinOsCondition("IS_LINUX", "izpack.linuxinstall");
-        createBuiltinOsCondition("IS_SUNOS", "izpack.solarisinstall");
-        createBuiltinOsCondition("IS_MAC", "izpack.macinstall");
-        createBuiltinOsCondition("IS_SUNOS", "izpack.solarisinstall");
-        createBuiltinOsCondition("IS_SUNOS_X86", "izpack.solarisinstall.x86");
-        createBuiltinOsCondition("IS_SUNOS_SPARC", "izpack.solarisinstall.sparc");
 
         if ((installdata != null) && (installdata.allPacks != null))
         {
@@ -96,7 +105,7 @@ public class RulesEngine
         }
     }
 
-    private void createBuiltinOsCondition(String osVersionField, String conditionId)
+    private static void createBuiltinOsCondition(String osVersionField, String conditionId)
     {
         JavaCondition condition = new JavaCondition();
         condition.setInstalldata(installdata);
@@ -118,7 +127,6 @@ public class RulesEngine
         this.conditionsspec = conditionsspecxml;
         RulesEngine.installdata = installdata;
         this.readConditions();
-        init();
     }
 
     public RulesEngine(Map rules, AutomatedInstallData installdata)
@@ -134,7 +142,6 @@ public class RulesEngine
             Condition condition = (Condition) conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }
-        init();
     }
 
     /**

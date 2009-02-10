@@ -40,6 +40,11 @@ public interface OsVersionConstants
     public final static String OSARCH = "os.arch";
 
     /**
+     * OSARCH = "os.arch"
+     */
+    public final static String OSVERSION = "os.version";
+
+    /**
      * X86 = "x86"
      */
     public static final String X86 = "x86";
@@ -108,6 +113,26 @@ public interface OsVersionConstants
      * WINDOWS = "Windows"
      */
     public final static String WINDOWS = "Windows";
+
+    /**
+     * Windows XP
+     */
+    public final static String WINDOWS_XP_VERSION = "5.1";
+
+    /**
+     * Windows Server 2003
+     */
+    public final static String WINDOWS_2003_VERSION = "5.2";
+
+    /**
+     * Windows Vista
+     */
+    public final static String WINDOWS_VISTA_VERSION = "6.0";
+
+    /**
+     * Windows 7
+     */
+    public final static String WINDOWS_7_VERSION = "7.0";
 
     /**
      * REDHAT  = "RedHat"

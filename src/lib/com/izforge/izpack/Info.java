@@ -102,6 +102,8 @@ public class Info implements Serializable
 
     private boolean requirePrivilegedExecution = false;
 
+    private String privilegedExecutionConditionID = null;
+
     public boolean isPrivilegedExecutionRequired()
     {
         return requirePrivilegedExecution;
@@ -110,6 +112,16 @@ public class Info implements Serializable
     public void setRequirePrivilegedExecution(boolean requirePrivilegedExecution)
     {
         this.requirePrivilegedExecution = requirePrivilegedExecution;
+    }
+
+    public String getPrivilegedExecutionConditionID()
+    {
+        return privilegedExecutionConditionID;
+    }
+
+    public void setPrivilegedExecutionConditionID(String privilegedExecutionConditionID)
+    {
+        this.privilegedExecutionConditionID = privilegedExecutionConditionID;
     }
 
     /**

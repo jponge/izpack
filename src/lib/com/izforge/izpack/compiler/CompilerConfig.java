@@ -79,7 +79,6 @@ import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
-import com.izforge.izpack.util.IoHelper;
 
 /**
  * A parser for the installer xml configuration. This parses a document conforming to the
@@ -1841,6 +1840,10 @@ public class CompilerConfig extends Thread
         // Privileged execution
         XMLElement privileged = root.getFirstChildNamed("run-privileged");
         info.setRequirePrivilegedExecution(privileged != null);
+        if (privileged != null && privileged.hasAttribute("condition"))
+        {
+            info.setPrivilegedExecutionConditionID(privileged.getAttribute("condition"));
+        }
 
         // Add the uninstaller as a resource if specified
         XMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");

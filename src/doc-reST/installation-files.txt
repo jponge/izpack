@@ -280,7 +280,9 @@ It contains the following elements :
     decompression a JAR won't be identical to its original version (yet the code in the class files remains
     semantically equivalent).
 -   ``<run-privileged/>``: adding this element will make the installer attempt to launch itself with administrator
-    permissions. This is not supported on all platforms, in which case a message will be provided to the user before
+    permissions. Il also supports a ``condition`` attribute to reference a condition id so that the elevation
+    is not always attempted (e.g., you may want to activate it only for Windows Vista).
+    This is not supported on all platforms, in which case a message will be provided to the user before
     continuing the installation. Only use this feature if you really need to be an administrator as part of your
     installation process...
 
@@ -300,6 +302,24 @@ Here is an example of a typical ``<info>`` section :
       <javaversion>1.2</javaversion>
     </info>
 
+
+Here is one where the privileges elevation is attempted on Windows Vista and Mac OS X :
+
+::
+
+    <info>
+        <appname>IzPack</appname>
+        <appversion>4.2.0</appversion>
+        <authors>
+            <author email="" name="Julien Ponge (project founder)"/>
+            <author email="" name="The fantastic IzPack developers and contributors"/>
+        </authors>
+        <url>http://izpack.org/</url>
+        <javaversion>1.5</javaversion>
+        <requiresjdk>no</requiresjdk>
+        <run-privileged condition="izpack.windowsinstall.vista|izpack.macinstall"/>
+        <summarylogfilepath>$INSTALL_PATH/installinfo/Summary.htm</summarylogfilepath>
+    </info>
 
 
 The Packaging Element ``<packaging>``
@@ -482,6 +502,27 @@ expression language. The language has the following operators:
 Neverthless if you define really complex conditions it's much easier to define them using the xml structure. 
 
 More types of conditions can be defined by inheriting com.izforge.izpack.Condition class.
+
+Built-in conditions
+''''''''''''''''''''
+
+A number of built-in condition IDs are available for you.
+
+=============================== ===================================
+Name                            Condition
+=============================== ===================================
+izpack.windowsinstall           The OS is Windows
+izpack.windowsinstall.xp        The OS is Windows XP
+izpack.windowsinstall.2003      The OS is Windows Server 2003
+izpack.windowsinstall.vista     The OS is Windows Vista
+izpack.windowsinstall.7         The OS is Windows 7
+izpack.macinstall               The OS is Mac OS X
+izpack.linuxinstall             The OS is a Linux variant
+izpack.solarisinstall           The OS is a Solaris variant
+izpack.solarisinstall.x86       The OS is a Solaris,x86 variant
+izpack.solarisinstall.sparc     The OS is a Solaris sparc variant
+=============================== ===================================
+
 
 The Installer Requirements Element ``<installerrequirements>``
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''

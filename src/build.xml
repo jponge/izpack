@@ -241,7 +241,7 @@
     <!-- Compilation parameters -->
     <property name="debug" value="off"/>
     <property name="debuglevel" value=""/>
-    <!--><property name="debug" value="true"/>
+    <!--<property name="debug" value="true"/>
     <property name="debuglevel" value="lines,vars,source"/>-->
     <property name="compat.source" value="1.5"/>
     <property name="compat.target" value="1.5"/>
@@ -482,6 +482,7 @@
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class"/>
                 <include name="net/n3/nanoxml/*.class"/>
                 <include name="com/izforge/izpack/installer/PrivilegedRunner.class"/>
+                <include name="com/izforge/izpack/rules/*.class"/>
             </fileset>
             <fileset dir="${src.dir}">
                 <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
