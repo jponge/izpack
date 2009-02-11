@@ -157,7 +157,7 @@ public class VariableSubstitutor implements Serializable
             return null;
         }
 
-        // Create reader and writer for the strings
+        // Create reader and write for the strings
         StringReader reader = new StringReader(str);
         StringWriter writer = new StringWriter();
 
@@ -207,7 +207,7 @@ public class VariableSubstitutor implements Serializable
             }
         }
 
-        // Create the reader and writer
+        // Create the reader and write
         InputStreamReader reader = (encoding != null ? new InputStreamReader(in, encoding)
                 : new InputStreamReader(in));
         OutputStreamWriter writer = (encoding != null ? new OutputStreamWriter(out, encoding)
@@ -216,7 +216,7 @@ public class VariableSubstitutor implements Serializable
         // Copy the data and substitute variables
         int subs = substitute(reader, writer, type);
 
-        // Flush the writer so that everything gets written out
+        // Flush the write so that everything gets written out
         writer.flush();
 
         return subs;
@@ -256,7 +256,7 @@ public class VariableSubstitutor implements Serializable
             }
         }
 
-        // Create the reader and writer
+        // Create the reader and write
         InputStreamReader reader = ((encoding != null)
                 ? new InputStreamReader(in, encoding)
                 : new InputStreamReader(in));
@@ -265,7 +265,7 @@ public class VariableSubstitutor implements Serializable
         // Copy the data and substitute variables
         substitute(reader, writer, type);
 
-        // Flush the writer so that everything gets written out
+        // Flush the write so that everything gets written out
         writer.flush();
 
         return writer.getBuffer().toString();

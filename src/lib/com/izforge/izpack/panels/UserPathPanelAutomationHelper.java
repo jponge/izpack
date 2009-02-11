@@ -23,7 +23,8 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.VariableSubstitutor;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 /**
  * Functions to support automated usage of the UserPathPanel
@@ -41,16 +42,16 @@ public class UserPathPanelAutomationHelper implements PanelAutomation
      * @param idata     The installation data.
      * @param panelRoot The tree to put the data in.
      */
-    public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         // Installation path markup
-        XMLElement ipath = new XMLElement(UserPathPanel.pathElementName);
+        IXMLElement ipath = new XMLElementImpl(UserPathPanel.pathElementName,panelRoot);
         // check this writes even if value is the default,
         // because without the constructor, default does not get set.
         ipath.setContent(idata.getVariable(UserPathPanel.pathVariableName));
 
         // Checkings to fix bug #1864
-        XMLElement prev = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);
+        IXMLElement prev = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);
         if (prev != null)
         {
             panelRoot.removeChild(prev);
@@ -65,10 +66,10 @@ public class UserPathPanelAutomationHelper implements PanelAutomation
      * @param panelRoot The XML tree to read the data from.
      * @return always true.
      */
-    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         // We set the installation path
-        XMLElement ipath = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);
+        IXMLElement ipath = panelRoot.getFirstChildNamed(UserPathPanel.pathElementName);
 
         // Allow for variable substitution of the installpath value
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());

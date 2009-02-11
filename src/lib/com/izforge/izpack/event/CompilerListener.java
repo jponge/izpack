@@ -23,7 +23,7 @@ package com.izforge.izpack.event;
 
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.IPackager;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.Map;
 
@@ -42,7 +42,7 @@ public interface CompilerListener
     public final static int END = 2;
 
     /**
-     * This method is called from the compiler for each file (or dir) parsing. The XMLElement is a
+     * This method is called from the compiler for each file (or dir) parsing. The IXMLElement is a
      * node of the file related children of the XML element "pack" (see installation.dtd). Current
      * these are "file", "singlefile" or "fileset". If an additional data should be set, it should
      * be added to the given data map (if exist). If no map exist a new should be created and
@@ -56,7 +56,7 @@ public interface CompilerListener
      *         added, null returns
      * @throws CompilerException
      */
-    Map reviseAdditionalDataMap(Map existentDataMap, XMLElement element) throws CompilerException;
+    Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element) throws CompilerException;
 
     /**
      * This method will be called from each step of packaging.
@@ -66,6 +66,6 @@ public interface CompilerListener
      * @param data     current install data
      * @param packager current packager object
      */
-    void notify(String position, int state, XMLElement data, IPackager packager);
+    void notify(String position, int state, IXMLElement data, IPackager packager);
 
 }

@@ -22,20 +22,18 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.IXMLParser;
+import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
-import net.n3.nanoxml.*;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * This class does alle the work for the process panel.
@@ -101,17 +99,12 @@ public class ProcessPanelWorker implements Runnable
             e.printStackTrace();
             return false;
         }
-
-        StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
-        parser.setValidator(new NonValidator());
-
-        XMLElement spec;
+	
+        IXMLParser parser = new XMLParser();
+        IXMLElement spec;
         try
         {
-            parser.setReader(new StdXMLReader(input));
-
-            spec = (XMLElement) parser.parse();
+            spec = parser.parse(input);
         }
         catch (Exception e)
         {
@@ -126,13 +119,13 @@ public class ProcessPanelWorker implements Runnable
         }
 
         // Handle logfile
-        XMLElement lfd = spec.getFirstChildNamed("logfiledir");
+        IXMLElement lfd = spec.getFirstChildNamed("logfiledir");
         if (lfd != null)
         {
             logfiledir = lfd.getContent();
         }
 
-        for (XMLElement job_el : spec.getChildrenNamed("job"))
+        for (IXMLElement job_el : spec.getChildrenNamed("job"))
         {
             // normally use condition attribute, but also read conditionid to not break older versions.
             String conditionid = job_el.hasAttribute("condition") ? job_el.getAttribute("condition") : job_el.hasAttribute("conditionid") ? job_el.getAttribute("conditionid") : null;
@@ -150,7 +143,7 @@ public class ProcessPanelWorker implements Runnable
             Debug.trace("Condition is fulfilled or not existent.");
             // ExecuteForPack Patch
             // Check if processing required for pack
-            Vector<XMLElement> forPacks = job_el.getChildrenNamed("executeForPack");
+            Vector<IXMLElement> forPacks = job_el.getChildrenNamed("executeForPack");
             if (!jobRequiredFor(forPacks))
             {
                 continue;
@@ -165,7 +158,7 @@ public class ProcessPanelWorker implements Runnable
 
                 String job_name = job_el.getAttribute("name", "");
 
-                for (XMLElement ef : job_el.getChildrenNamed("executefile"))
+                for (IXMLElement ef : job_el.getChildrenNamed("executefile"))
                 {
                     String ef_name = ef.getAttribute("name");
 
@@ -177,7 +170,7 @@ public class ProcessPanelWorker implements Runnable
 
                     List<String> args = new ArrayList<String>();
 
-                    for (XMLElement arg_el : ef.getChildrenNamed("arg"))
+                    for (IXMLElement arg_el : ef.getChildrenNamed("arg"))
                     {
                         String arg_val = arg_el.getContent();
 
@@ -186,7 +179,7 @@ public class ProcessPanelWorker implements Runnable
 
                     List<String> envvars = new ArrayList<String>();
 
-                    for (XMLElement env_el : ef.getChildrenNamed("env"))
+                    for (IXMLElement env_el : ef.getChildrenNamed("env"))
                     {
                         String env_val = env_el.getContent();
 
@@ -197,7 +190,7 @@ public class ProcessPanelWorker implements Runnable
                     ef_list.add(new ExecutableFile(ef_name, args, envvars));
                 }
 
-                for (XMLElement ef : job_el.getChildrenNamed("executeclass"))
+                for (IXMLElement ef : job_el.getChildrenNamed("executeclass"))
                 {
                     String ef_name = ef.getAttribute("name");
                     if ((ef_name == null) || (ef_name.length() == 0))
@@ -207,7 +200,7 @@ public class ProcessPanelWorker implements Runnable
                     }
 
                     List<String> args = new ArrayList<String>();
-                    for (XMLElement arg_el : ef.getChildrenNamed("arg"))
+                    for (IXMLElement arg_el : ef.getChildrenNamed("arg"))
                     {
                         String arg_val = arg_el.getContent();
                         args.add(arg_val);
@@ -676,7 +669,7 @@ public class ProcessPanelWorker implements Runnable
      * /*--------------------------------------------------------------------------
      */
 
-    private boolean jobRequiredFor(Vector<XMLElement> packs)
+    private boolean jobRequiredFor(Vector<IXMLElement> packs)
     {
         String selected;
         String required;

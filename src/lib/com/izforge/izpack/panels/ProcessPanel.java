@@ -26,7 +26,7 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import javax.swing.*;
 import java.awt.*;
@@ -244,7 +244,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler
     /**
      * Create XML data for automated installation.
      */
-    public void makeXMLData(XMLElement panelRoot)
+    public void makeXMLData(IXMLElement panelRoot)
     {
         // does nothing (no state to save)
     }

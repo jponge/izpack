@@ -23,7 +23,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.*;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -56,7 +56,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * @param installData installation parameters
      * @param panelRoot   unused.
      */
-    public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
+    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
     {
         // not used here - during automatic installation, no automatic
         // installation information is generated
@@ -67,9 +67,9 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      *
      * @param panelRoot The panel XML tree root.
      */
-    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
     {
-        XMLElement compiler_xml = panelRoot.getFirstChildNamed("compiler");
+        IXMLElement compiler_xml = panelRoot.getFirstChildNamed("compiler");
 
         String compiler = null;
 
@@ -84,7 +84,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
             return false;
         }
 
-        XMLElement args_xml = panelRoot.getFirstChildNamed("arguments");
+        IXMLElement args_xml = panelRoot.getFirstChildNamed("arguments");
 
         String args = null;
 

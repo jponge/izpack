@@ -20,10 +20,10 @@
  */ 
 package com.izforge.izpack.rules; 
   
-import com.izforge.izpack.util.Debug; 
-import net.n3.nanoxml.XMLElement; 
- 
- /** 
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.adaptator.IXMLElement;
+
+/**
  * @author Dennis Reil, <Dennis.Reil@reddot.de> 
   * @version $Id: XOrCondition.java,v 1.1 2006/09/29 14:40:38 dennis Exp $ 
   */ 
@@ -55,7 +55,7 @@ public class XorCondition extends OrCondition
     *  
     * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement) 
     */ 
-  public void readFromXML(XMLElement xmlcondition) 
+  public void readFromXML(IXMLElement xmlcondition) 
     { 
     try 
       { 

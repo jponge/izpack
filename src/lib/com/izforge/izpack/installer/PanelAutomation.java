@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer;
 
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
  * Defines the Interface that must be implemented for running Panels in automated (or "silent",
@@ -44,7 +44,7 @@ public interface PanelAutomation
      * @param installData The installation data
      * @param panelRoot   The XML root element of the panels blackbox tree.
      */
-    public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot);
+    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot);
 
     /**
      * Makes the panel work in automated mode. Default is to do nothing, but any panel doing
@@ -54,5 +54,5 @@ public interface PanelAutomation
      * @param panelRoot   The XML root element of the panels blackbox tree.
      * @return true if the automated work was performed successful, false if it failed critically.
      */
-    public boolean runAutomated(AutomatedInstallData installData, XMLElement panelRoot);
+    public boolean runAutomated(AutomatedInstallData installData, IXMLElement panelRoot);
 }

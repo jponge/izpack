@@ -25,7 +25,8 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.util.Debug;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -81,15 +82,15 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
      * @param idata     The installation data.
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
-    public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
-        XMLElement userInput;
-        XMLElement dataElement;
+        IXMLElement userInput;
+        IXMLElement dataElement;
 
         // ----------------------------------------------------
         // add the item that combines all entries
         // ----------------------------------------------------
-        userInput = new XMLElement(AUTO_KEY_USER_INPUT);
+        userInput = new XMLElementImpl(AUTO_KEY_USER_INPUT,panelRoot);
         panelRoot.addChild(userInput);
 
         // ----------------------------------------------------
@@ -100,8 +101,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         {
             String key = keys.next();
             String value = this.entries.get(key);
-
-            dataElement = new XMLElement(AUTO_KEY_ENTRY);
+            dataElement = new XMLElementImpl(AUTO_KEY_ENTRY,userInput);
             dataElement.setAttribute(AUTO_ATTRIBUTE_KEY, key);
             dataElement.setAttribute(AUTO_ATTRIBUTE_VALUE, value);
 
@@ -116,10 +116,10 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
      * @param panelRoot The XML root element of the panels blackbox tree.
      * @return true if the variables were found and set.
      */
-    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
     {
-        XMLElement userInput;
-        XMLElement dataElement;
+        IXMLElement userInput;
+        IXMLElement dataElement;
         String variable;
         String value;
 
@@ -133,7 +133,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
             return false;
         }
 
-        Vector<XMLElement> userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
+        Vector<IXMLElement> userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
 
         if (userEntries == null)
         {

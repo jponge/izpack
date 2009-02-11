@@ -23,12 +23,12 @@ package com.izforge.izpack.event;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;
-import net.n3.nanoxml.XMLElement;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -76,7 +76,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
         {
             p = (Pack) iter.next();
 
-            XMLElement pack = getSpecHelper().getPackForName(p.name);
+            IXMLElement pack = getSpecHelper().getPackForName(p.name);
             if (pack == null)
             {
                 continue;
@@ -84,10 +84,10 @@ public class BSFInstallerListener extends SimpleInstallerListener
 
             ArrayList<BSFAction> packActions = new ArrayList<BSFAction>();
 
-            Vector<XMLElement> scriptEntries = pack.getChildrenNamed("script");
+            Vector<IXMLElement> scriptEntries = pack.getChildrenNamed("script");
             if (scriptEntries != null && scriptEntries.size() >= 1)
             {
-                Iterator<XMLElement> entriesIter = scriptEntries.iterator();
+                Iterator<IXMLElement> entriesIter = scriptEntries.iterator();
                 while (entriesIter != null && entriesIter.hasNext())
                 {
                     BSFAction action = readAction(entriesIter.next(), idata);
@@ -251,7 +251,7 @@ public class BSFInstallerListener extends SimpleInstallerListener
 
     }
 
-    private BSFAction readAction(XMLElement element, AutomatedInstallData idata) throws InstallerException
+    private BSFAction readAction(IXMLElement element, AutomatedInstallData idata) throws InstallerException
     {
         BSFAction action = new BSFAction();
         String src = element.getAttribute("src");

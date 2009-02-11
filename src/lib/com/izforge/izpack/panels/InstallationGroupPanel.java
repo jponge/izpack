@@ -25,7 +25,7 @@ import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -221,9 +221,9 @@ public class InstallationGroupPanel extends IzPanel
     }
 
     /* Add the installation group to pack mappings
-	 * @see com.izforge.izpack.installer.IzPanel#makeXMLData(net.n3.nanoxml.XMLElement)
+	 * @see com.izforge.izpack.installer.IzPanel#makeXMLData(com.izforge.izpack.adaptator.IXMLElement)
 	 */
-    public void makeXMLData(XMLElement panelRoot)
+    public void makeXMLData(IXMLElement panelRoot)
     {
         InstallationGroupPanelAutomationHelper helper = new InstallationGroupPanelAutomationHelper();
         idata.setAttribute("GroupData", rows);

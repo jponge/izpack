@@ -24,7 +24,7 @@ package com.izforge.izpack.event;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.IPackager;
 import com.izforge.izpack.compiler.PackInfo;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.Map;
 
@@ -51,9 +51,9 @@ public class SimpleCompilerListener implements CompilerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.CompilerListener#reviseAttributSetFile(java.util.Map,
-     * net.n3.nanoxml.XMLElement)
+     * com.izforge.izpack.adaptator.IXMLElement)
      */
-    public Map reviseAdditionalDataMap(Map existentDataMap, XMLElement element)
+    public Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element)
             throws CompilerException
     {
         return null;
@@ -84,9 +84,9 @@ public class SimpleCompilerListener implements CompilerListener
      * (non-Javadoc)
      * 
      * @see com.izforge.izpack.compiler.CompilerListener#notify(java.lang.String, int,
-     * net.n3.nanoxml.XMLElement, com.izforge.izpack.compiler.Packager)
+     * com.izforge.izpack.adaptator.IXMLElement, com.izforge.izpack.compiler.Packager)
      */
-    public void notify(String position, int state, XMLElement data, IPackager packager)
+    public void notify(String position, int state, IXMLElement data, IPackager packager)
     {
     }
 

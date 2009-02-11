@@ -23,7 +23,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
  * The taget directory selection panel.
@@ -116,7 +116,7 @@ public class DefaultTargetPanel extends PathInputPanel
      *
      * @param panelRoot The tree to put the data in.
      */
-    public void makeXMLData(XMLElement panelRoot)
+    public void makeXMLData(IXMLElement panelRoot)
     {
         new DefaultTargetPanelAutomationHelper().makeXMLData(idata, panelRoot);
     }

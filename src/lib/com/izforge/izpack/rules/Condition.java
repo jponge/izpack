@@ -22,7 +22,7 @@
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.io.Serializable;
 
@@ -60,7 +60,7 @@ public abstract class Condition implements Serializable
         this.id = id;
     }
 
-    public abstract void readFromXML(XMLElement xmlcondition);
+    public abstract void readFromXML(IXMLElement xmlcondition);
 
     public abstract boolean isTrue();
 

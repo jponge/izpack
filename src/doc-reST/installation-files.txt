@@ -1271,45 +1271,49 @@ A sample :
 XInclude-style constructs
 -------------------------
 
-The xinclude element is used to include xml or text documents in your configuration files.
+The xi:include element is used to include xml or text documents in your configuration files.
 
-The xinclude element can be used anywhere in pretty much any of the xml files used by IzPack. It is based on the XInclude recomendation produced by the W3C (http://www.w3.org/TR/xinclude/) and should be able to be used as decribed in that document. Note that as namespaces are not supported in IzPack the elements specified by the w3c have been prefixed with 'x' so 'xsi:include' becomes 'xinclude' and 'xsi:fallback' becomes 'xfallback'.
+The xi:include element can be used anywhere in pretty much any of the xml files used by IzPack. It is supported by the javax DocumentBuilder. It follows the XInclude recommandation produced by the W3C (http://www.w3.org/TR/xinclude/) and should be able to be used as decribed in that document. 
 
-The xinclude element has the following attributes:
+To use the xi:include, you have to specify the namespace xmlns:xi="http://www.w3.org/2001/XInclude" in your xml.
+
+If a logical error appear in an included file, the line number shown will indicate the xinclude element in the main xml file.
+
+The xi:include element has the following attributes:
 
 href
-  The location of the file to include. If this is a relative path (e.g. href='../bob.xml') then the file is resolved relative to the document that includes the xinclude element. The href element can be a remote url (e.g. href='http://example.com/file.txt') but this is not recommended. The href attribute can also be ommitted however as xpointers are not currently supported this has no meaning.
+  The location of the file to include. If this is a relative path (e.g. href='../bob.xml') then the file is resolved relative to the path of execution. The href element can be a remote url (e.g. href='http://example.com/file.txt') but this is not recommended.
 
 parse
-  Indicates that the included file should be treated as xml, forcing the included file to be parsed (which results in all xinclude elements in the included file to also be included), or as text which includes the specified file as a text node. It can have a value of 'xml' or 'text' and defaults to 'xml' if ommitted
+  Indicates that the included file should be treated as xml, forcing the included file to be parsed (which results in all xinclude elements in the included file to also be included), or as text which includes the specified file as a text node. It can have a value of 'xml' or 'text' and defaults to 'xml' if ommitted.
 
 xpointer
-  This element is not supported
+  In case in parse="xml", you can use xpointer to get a part of the included xml. The details of the xpointer framework can be found http://www.w3.org/TR/2003/REC-xptr-framework-20030325/.
 
 encoding
-  This is used when the parse attribute is 'text' to specify the character encoding of the included text document. It has no effect if parse is 'xml'
+  This is used when the parse attribute is 'text' to specify the character encoding of the included text document. It has no effect if parse is 'xml'.
 
 accept
   Used if the href attribute specifies a url accessible via HTTP. The value of this attribute will be added as the accpet header on the HTTP request.
 
 
-The xfallback element
+The fallback element
 ''''''''''''''''''''''
 
-The xfallback element is used to provide a fallback if the xinclude element fails. It can be empty or can contain a CDATA section containing valid xml (no document fragments allowed). If it is empty then a failure to include the specified document is supressed. If it contains a CDATA section then a failure to include the specified document causes the xml specified in the CDATA is parsed (evaluating nested xinclude elements) and inserted into the document in its place.
+The xi:fallback element is used to provide a fallback if the xi:include element fails. It can be empty or can contain a valid xml. If it is empty then a failure to include the specified document is supressed. If it contains a xml then a failure to include the specified document causes the xml specified in the fallback is parsed (evaluating nested xinclude elements) and inserted into the document in its place.
 
 
-For example the following use of xinclude
+For example the following use of xi:include
 
 ::
 
   <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
   <installation version="1.0" xmlns:xi="http://www.izforge.com/izpack/include">
-      <xinclude href="does-not-exist.xml">
-          <xfallback>
-              <![CDATA[<bbb>hello</bbb>]]>
-          </xfallback>
-      </xinclude>
+      <xi:include href="does-not-exist.xml">
+          <xi:fallback>
+              <bbb>hello</bbb>
+          </xi:fallback>
+      </xi:include>
   </installation>
 
 will result in 
@@ -1317,7 +1321,7 @@ will result in
 ::
   
   <installation version="1.0" xmlns:xi="http://www.izforge.com/izpack/include">
-      <bbb>hello</bbb>]]>
+      <bbb>hello</bbb>
   </installation>
 
 if the file 'does-not-exist.xml' does indeed not exist.
@@ -1328,7 +1332,7 @@ The xfragment element
 
 The xfragment element allows document fragments (xml documents without a single top level element) to be included. Simply use the xfragment as the top level element in the included document. It will be removed when the document is included.
 
-e.g. If I want to use xinclude to include a file containing the following fragments:
+e.g. If I want to use xi:include to include a file containing the following fragments:
 
 ::
 

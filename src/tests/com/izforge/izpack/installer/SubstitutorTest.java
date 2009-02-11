@@ -22,37 +22,38 @@
 package com.izforge.izpack.installer;
 
 
-import junit.framework.TestCase;
 import com.izforge.izpack.util.VariableSubstitutor;
+import junit.framework.TestCase;
 
 
 /**
  * This will test some characters as UTF-8.
  *
- * @note    This test will create VariableSubstitutor object with null parameter!
- *          There won't be Properties object available!
- *
- * @author  Ari Voutilainen, ari.voutilainen (at) iki.fi
+ * @author Ari Voutilainen, ari.voutilainen (at) iki.fi
+ * @note This test will create VariableSubstitutor object with null parameter!
+ * There won't be Properties object available!
  */
 public class SubstitutorTest extends TestCase
 {
-    private final String umlautString ="ÄöäÖüÜ";
-    private final String cyrillicString ="Закончить";
+    private final String umlautString = "ÄöäÖüÜ";
+    private final String cyrillicString = "Закончить";
     private final String japanesString = "ƒCƒ“ƒXƒg[ƒ‹‚Ì’†Ž~";
-    
+
     protected VariableSubstitutor subst = new VariableSubstitutor(null);
-    
+
     /**
      * Constructor for the test.
-     * 
-     * @param arg0  Parameter string for the constructor.
+     *
+     * @param arg0 Parameter string for the constructor.
      */
     public SubstitutorTest(String arg0)
     {
         super(arg0);
     }
-    
-    /** (non-Javadoc)
+
+    /**
+     * (non-Javadoc)
+     *
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception
@@ -60,15 +61,17 @@ public class SubstitutorTest extends TestCase
         super.setUp();
     }
 
-    /** (non-Javadoc)
+    /**
+     * (non-Javadoc)
+     *
      * @see junit.framework.TestCase#tearDown()
      */
     protected void tearDown() throws Exception
     {
         super.tearDown();
     }
-    
-    
+
+
     /**
      * Tests return value of substitute for string containing umlaut characters.
      */

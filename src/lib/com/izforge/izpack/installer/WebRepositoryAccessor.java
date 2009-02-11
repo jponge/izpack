@@ -25,14 +25,16 @@ import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.adaptator.*;
+import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.compiler.PackInfo;
 import com.izforge.izpack.util.OsConstraint;
-import net.n3.nanoxml.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -195,10 +197,9 @@ public class WebRepositoryAccessor
     {
         try
         {
-            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-            IXMLReader reader = StdXMLReader.stringReader(installXmlString);
-            parser.setReader(reader);
-            XMLElement xml = (XMLElement) parser.parse();
+            IXMLParser parser = new XMLParser();
+
+            IXMLElement xml = parser.parse(installXmlString);
             return loadPacksList(xml);
         }
         catch (Exception e)
@@ -216,14 +217,13 @@ public class WebRepositoryAccessor
     {
         try
         {
-            IXMLParser parser = XMLParserFactory.createDefaultXMLParser();
-            IXMLReader reader = StdXMLReader.stringReader(packsInfo);
-            parser.setReader(reader);
-            XMLElement xml = (XMLElement) parser.parse();
-            XMLElement root = xml; //requireChildNamed(xml, "packs");
+            IXMLParser parser = new XMLParser();
+
+            IXMLElement xml = parser.parse(packsInfo);
+            IXMLElement root = xml; //requireChildNamed(xml, "packs");
             for (int q = 0; q < root.getChildrenCount(); q++)
             {
-                XMLElement ch = root.getChildAtIndex(q);
+                IXMLElement ch = root.getChildAtIndex(q);
                 PackInfo pi = packs.get(q);
                 Pack p = pi.getPack();
                 p.nbytes = Long.parseLong(ch.getAttribute("nbytes"));
@@ -283,24 +283,24 @@ public class WebRepositoryAccessor
     }
 
 
-    protected ArrayList<PackInfo> loadPacksList(XMLElement data) throws CompilerException
+    protected ArrayList<PackInfo> loadPacksList(IXMLElement data) throws CompilerException
     {
         ArrayList<PackInfo> result = new ArrayList<PackInfo>();
 
         // Initialisation
-        XMLElement root = requireChildNamed(data, "packs");
+        IXMLElement root = requireChildNamed(data, "packs");
 
         // at least one pack is required
-        Vector<XMLElement> packElements = root.getChildrenNamed("pack");
+        Vector<IXMLElement> packElements = root.getChildrenNamed("pack");
         if (packElements.isEmpty())
         {
             parseError(root, "<packs> requires a <pack>");
         }
 
-        Iterator<XMLElement> packIter = packElements.iterator();
+        Iterator<IXMLElement> packIter = packElements.iterator();
         while (packIter.hasNext())
         {
-            XMLElement el = packIter.next();
+            IXMLElement el = packIter.next();
 
             // Trivial initialisations
             String name = requireAttribute(el, "name");
@@ -353,10 +353,10 @@ public class WebRepositoryAccessor
             }
 
             // We get the parsables list
-            Iterator<XMLElement> iter = el.getChildrenNamed("parsable").iterator();
+            Iterator<IXMLElement> iter = el.getChildrenNamed("parsable").iterator();
             while (iter.hasNext())
             {
-                XMLElement p = iter.next();
+                IXMLElement p = iter.next();
                 String target = requireAttribute(p, "targetfile");
                 String type = p.getAttribute("type", "plain");
                 String encoding = p.getAttribute("encoding", null);
@@ -369,7 +369,7 @@ public class WebRepositoryAccessor
             iter = el.getChildrenNamed("executable").iterator();
             while (iter.hasNext())
             {
-                XMLElement e = iter.next();
+                IXMLElement e = iter.next();
                 ExecutableFile executable = new ExecutableFile();
                 String val; // temp value
 
@@ -411,13 +411,13 @@ public class WebRepositoryAccessor
                 executable.keepFile = "true".equalsIgnoreCase(val);
 
                 // get arguments for this executable
-                XMLElement args = e.getFirstChildNamed("args");
+                IXMLElement args = e.getFirstChildNamed("args");
                 if (null != args)
                 {
-                    Iterator<XMLElement> argIterator = args.getChildrenNamed("arg").iterator();
+                    Iterator<IXMLElement> argIterator = args.getChildrenNamed("arg").iterator();
                     while (argIterator.hasNext())
                     {
-                        XMLElement arg = argIterator.next();
+                        IXMLElement arg = argIterator.next();
                         executable.argList.add(requireAttribute(arg, "value"));
                     }
                 }
@@ -432,7 +432,7 @@ public class WebRepositoryAccessor
             iter = el.getChildrenNamed("updatecheck").iterator();
             while (iter.hasNext())
             {
-                XMLElement f = iter.next();
+                IXMLElement f = iter.next();
 
                 String casesensitive = f.getAttribute("casesensitive");
 
@@ -441,17 +441,17 @@ public class WebRepositoryAccessor
                 ArrayList<String> excludesList = new ArrayList<String>();
 
                 // get includes and excludes
-                Iterator<XMLElement> include_it = f.getChildrenNamed("include").iterator();
+                Iterator<IXMLElement> include_it = f.getChildrenNamed("include").iterator();
                 while (include_it.hasNext())
                 {
-                    XMLElement inc_el = include_it.next();
+                    IXMLElement inc_el = include_it.next();
                     includesList.add(requireAttribute(inc_el, "name"));
                 }
 
-                Iterator<XMLElement> exclude_it = f.getChildrenNamed("exclude").iterator();
+                Iterator<IXMLElement> exclude_it = f.getChildrenNamed("exclude").iterator();
                 while (exclude_it.hasNext())
                 {
-                    XMLElement excl_el = exclude_it.next();
+                    IXMLElement excl_el = exclude_it.next();
                     excludesList.add(requireAttribute(excl_el, "name"));
                 }
 
@@ -461,7 +461,7 @@ public class WebRepositoryAccessor
             iter = el.getChildrenNamed("depends").iterator();
             while (iter.hasNext())
             {
-                XMLElement dep = iter.next();
+                IXMLElement dep = iter.next();
                 String depName = requireAttribute(dep, "packname");
                 pack.addDependency(depName);
 
@@ -489,7 +489,7 @@ public class WebRepositoryAccessor
      * @param parent  The element in which the error occured
      * @param message Brief message explaining error
      */
-    protected void parseError(XMLElement parent, String message) throws CompilerException
+    protected void parseError(IXMLElement parent, String message) throws CompilerException
     {
         throw new CompilerException(installFilename + ":" + parent.getLineNr() + ": " + message);
     }
@@ -501,7 +501,7 @@ public class WebRepositoryAccessor
      * @param parent  The element in which the error occured
      * @param message Brief message explaining error
      */
-    protected void parseError(XMLElement parent, String message, Throwable cause) throws CompilerException
+    protected void parseError(IXMLElement parent, String message, Throwable cause) throws CompilerException
     {
         throw new CompilerException(installFilename + ":" + parent.getLineNr() + ": " + message, cause);
     }
@@ -513,7 +513,7 @@ public class WebRepositoryAccessor
      * @param parent  The element in which the warning occured
      * @param message Warning message
      */
-    protected void parseWarn(XMLElement parent, String message)
+    protected void parseWarn(IXMLElement parent, String message)
     {
         System.out.println(installFilename + ":" + parent.getLineNr() + ": " + message);
     }
@@ -525,9 +525,9 @@ public class WebRepositoryAccessor
      * @param parent The element to search for a child
      * @param name   Name of the child element to get
      */
-    protected XMLElement requireChildNamed(XMLElement parent, String name) throws CompilerException
+    protected IXMLElement requireChildNamed(IXMLElement parent, String name) throws CompilerException
     {
-        XMLElement child = parent.getFirstChildNamed(name);
+        IXMLElement child = parent.getFirstChildNamed(name);
         if (child == null)
         {
             parseError(parent, "<" + parent.getName() + "> requires child <" + name + ">");
@@ -541,7 +541,7 @@ public class WebRepositoryAccessor
      *
      * @param element The element to get content of
      */
-    protected URL requireURLContent(XMLElement element) throws CompilerException
+    protected URL requireURLContent(IXMLElement element) throws CompilerException
     {
         URL url = null;
         try
@@ -561,7 +561,7 @@ public class WebRepositoryAccessor
      *
      * @param element The element to get content of
      */
-    protected String requireContent(XMLElement element) throws CompilerException
+    protected String requireContent(IXMLElement element) throws CompilerException
     {
         String content = element.getContent();
         if (content == null || content.length() == 0)
@@ -578,7 +578,7 @@ public class WebRepositoryAccessor
      * @param element   The element to get the attribute value of
      * @param attribute The name of the attribute to get
      */
-    protected String requireAttribute(XMLElement element, String attribute) throws CompilerException
+    protected String requireAttribute(IXMLElement element, String attribute) throws CompilerException
     {
         String value = element.getAttribute(attribute);
         if (value == null)
@@ -596,7 +596,7 @@ public class WebRepositoryAccessor
      * @param element   The element to get the attribute value of
      * @param attribute The name of the attribute to get
      */
-    protected int requireIntAttribute(XMLElement element, String attribute) throws CompilerException
+    protected int requireIntAttribute(IXMLElement element, String attribute) throws CompilerException
     {
         String value = element.getAttribute(attribute);
         if (value == null || value.length() == 0)
@@ -621,7 +621,7 @@ public class WebRepositoryAccessor
      * @param element   The element to get the attribute value of
      * @param attribute The name of the attribute to get
      */
-    protected boolean requireYesNoAttribute(XMLElement element, String attribute) throws CompilerException
+    protected boolean requireYesNoAttribute(IXMLElement element, String attribute) throws CompilerException
     {
         String value = requireAttribute(element, attribute);
         if ("yes".equalsIgnoreCase(value))
@@ -646,7 +646,7 @@ public class WebRepositoryAccessor
      * @param attribute    The name of the attribute to get
      * @param defaultValue Value returned if attribute not present or invalid
      */
-    protected boolean validateYesNoAttribute(XMLElement element, String attribute, boolean defaultValue)
+    protected boolean validateYesNoAttribute(IXMLElement element, String attribute, boolean defaultValue)
     {
         if (element == null)
         {

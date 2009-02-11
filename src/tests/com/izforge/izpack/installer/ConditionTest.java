@@ -17,9 +17,10 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.rules.RulesEngine;
 import junit.framework.TestCase;
-import net.n3.nanoxml.XMLElement;
 
 
 /**
@@ -50,8 +51,7 @@ public class ConditionTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        XMLElement conditionspec = new XMLElement();
-        conditionspec.setName("conditions");
+        IXMLElement conditionspec = new XMLElementImpl("conditions");
 
         conditionspec.addChild(this.createVariableCondition("test.true", "TEST", "true"));
         conditionspec.addChild(this.createRefCondition("test.true2", "test.true"));
@@ -72,10 +72,9 @@ public class ConditionTest extends TestCase
         }
     }
 
-    protected XMLElement createNotCondition(String id, XMLElement condition)
+    protected IXMLElement createNotCondition(String id, IXMLElement condition)
     {
-        XMLElement not = new XMLElement();
-        not.setName("condition");
+        IXMLElement not = new XMLElementImpl("condition");
         not.setAttribute("type", "not");
         not.setAttribute("id", id);
         not.addChild(condition);
@@ -83,19 +82,14 @@ public class ConditionTest extends TestCase
         return not;
     }
 
-    protected XMLElement createVariableCondition(String id, String variable, String expvalue)
+    protected IXMLElement createVariableCondition(String id, String variable, String expvalue)
     {
-        XMLElement variablecondition = new XMLElement();
-        variablecondition.setName("condition");
+        IXMLElement variablecondition = new XMLElementImpl("condition");
         variablecondition.setAttribute("type", "variable");
         variablecondition.setAttribute("id", id);
-
-        XMLElement name = new XMLElement();
-        name.setName("name");
+        IXMLElement name = new XMLElementImpl("name");
         name.setContent(variable);
-
-        XMLElement value = new XMLElement();
-        value.setName("value");
+        IXMLElement value = new XMLElementImpl("value");
         value.setContent(expvalue);
 
         variablecondition.addChild(name);
@@ -104,10 +98,9 @@ public class ConditionTest extends TestCase
         return variablecondition;
     }
 
-    protected XMLElement createRefCondition(String id, String refid)
+    protected IXMLElement createRefCondition(String id, String refid)
     {
-        XMLElement refcondition = new XMLElement();
-        refcondition.setName("condition");
+        IXMLElement refcondition = new XMLElementImpl("condition");
         refcondition.setAttribute("type", "ref");
         refcondition.setAttribute("refid", refid);
         refcondition.setAttribute("id", id);

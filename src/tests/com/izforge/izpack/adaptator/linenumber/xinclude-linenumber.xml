@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<foo ln="2">
+    <bar ln="3">
+        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+                    href="src/tests/com/izforge/izpack/adaptator/linenumber/content.xml">
+        </xi:include>
+    </bar>
+    <not ln="8" xmlns:xi="http://www.w3.org/2001/XInclude">
+        <logical ln="9"/>
+        <element ln="10"/>
+        <xi:include href="src/tests/com/izforge/izpack/adaptator/linenumber/content2.xml"/>
+    </not>
+</foo>

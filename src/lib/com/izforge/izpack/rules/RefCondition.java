@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.rules;
 
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
  * References an already defined condition
@@ -47,7 +47,7 @@ public class RefCondition extends Condition
      * public boolean isTrue(Properties variables) { if (referencedcondition == null) { return
      * false; } else { return referencedcondition.isTrue(variables); } }
      */
-    public void readFromXML(XMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition)
     {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
         this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);

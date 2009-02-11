@@ -35,15 +35,11 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLBuilderFactory;
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.compiler.DynamicVariable;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
@@ -509,24 +505,20 @@ public class InstallerBase
             input = this.getResource(CONDITIONS_SPECRESOURCENAME);
             if (input == null)
             {
-                this.rules = new RulesEngine((XMLElement) null, installdata);
+                this.rules = new RulesEngine((IXMLElement) null, installdata);
                 return;
             }
-
-            StdXMLParser parser = new StdXMLParser();
-            parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
-            parser.setValidator(new NonValidator());
-            parser.setReader(new StdXMLReader(input));
+            XMLParser xmlParser = new XMLParser();
 
             // get the data
-            XMLElement conditionsxml = (XMLElement) parser.parse();
+            IXMLElement conditionsxml = xmlParser.parse(input);
             this.rules = new RulesEngine(conditionsxml, installdata);         
         }
         catch (Exception e)
         {
             Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
             // there seem to be no conditions
-            this.rules = new RulesEngine((XMLElement) null, installdata);
+            this.rules = new RulesEngine((IXMLElement) null, installdata);
         }
         installdata.setRules(rules);
     }

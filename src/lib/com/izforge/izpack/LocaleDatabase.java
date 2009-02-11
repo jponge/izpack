@@ -19,20 +19,17 @@
 
 package com.izforge.izpack;
 
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.IXMLParser;
+import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.installer.ResourceManager;
+
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
-
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLBuilderFactory;
-import net.n3.nanoxml.XMLElement;
-
-import com.izforge.izpack.installer.ResourceManager;
 
 /**
  * Represents a database of a locale.
@@ -157,13 +154,9 @@ public class LocaleDatabase extends TreeMap
     public void add(InputStream in) throws Exception
     {
         // Initialises the parser
-        StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
-        parser.setReader(new StdXMLReader(in));
-        parser.setValidator(new NonValidator());
-
+        IXMLParser parser = new XMLParser();
         // We get the data
-        XMLElement data = (XMLElement) parser.parse();
+        IXMLElement data = parser.parse(in);
 
         // We check the data
         if (!"langpack".equalsIgnoreCase(data.getName()))
@@ -177,7 +170,7 @@ public class LocaleDatabase extends TreeMap
         int size = children.size();
         for (int i = 0; i < size; i++)
         {
-            XMLElement e = (XMLElement) children.get(i);
+            IXMLElement e = (IXMLElement) children.get(i);
             String text = e.getContent();
             if (text != null && !"".equals(text))
             {

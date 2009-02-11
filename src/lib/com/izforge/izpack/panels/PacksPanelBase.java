@@ -31,7 +31,7 @@ import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -294,7 +294,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      *
      * @param panelRoot The XML tree to write the data in.
      */
-    public void makeXMLData(XMLElement panelRoot)
+    public void makeXMLData(IXMLElement panelRoot)
     {
         new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
     }

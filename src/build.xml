@@ -293,10 +293,15 @@
             <include name="com/izforge/izpack/util/OsConstraint.java"/>
             <include name="com/izforge/izpack/util/JarOutputStream.java"/>
             <include name="com/izforge/izpack/rules/*.java"/>
-            <include name="net/n3/nanoxml/*.java"/>
+            <!--<include name="net/n3/nanoxml/*.java"/>-->
+            <include name="com/izforge/izpack/adaptator/**/*.java"/>
+            <include name="com/izforge/izpack/adaptator/*.java"/>
         </javac>
         <copy todir="${build.dir}/com/izforge/izpack/ant/langpacks">
             <fileset dir="${src.dir}/com/izforge/izpack/ant/langpacks"/>
+        </copy>
+        <copy todir="${build.dir}/com/izforge/izpack/adaptator">
+            <fileset dir="${src.dir}/com/izforge/izpack/adaptator"/>
         </copy>
     </target>
 
@@ -322,11 +327,13 @@
                 <include name="com/izforge/izpack/util/FileUtil.class"/>
                 <include name="com/izforge/izpack/ant/*.class"/>
                 <include name="com/izforge/izpack/ant/langpacks/*.properties"/>
+                <include name="com/izforge/izpack/adaptator/*.xsl"/>
                 <include name="com/izforge/izpack/event/CompilerListener.class"/>
                 <include name="com/izforge/izpack/event/SimpleCompilerListener.class"/>
                 <include name="com/izforge/izpack/rules/*.class"/>
                 <include name="com/izforge/izpack/installer/*.class"/>
-                <include name="net/n3/nanoxml/*.class"/>
+                <include name="com/izforge/izpack/adaptator/**/*.class"/>
+                <include name="com/izforge/izpack/adaptator/*.class"/>
             </fileset>
         </jar>
     </target>
@@ -346,7 +353,9 @@
                 <exclude name="com/izforge/izpack/*.class"/>
                 <exclude name="com/izforge/izpack/installer/*.class"/>
                 <exclude name="com/izforge/izpack/util/*.class"/>
-                <exclude name="net/n3/nanoxml/*.class"/>
+                <!--<exclude name="net/n3/nanoxml/*.class"/>-->
+            		<exclude name="com/izforge/izpack/adaptator/**/*.class"/>
+            		<exclude name="com/izforge/izpack/adaptator/*.class"/>
             </zipfileset>
             <zipfileset src="${izevent.jar}"/>
             <zipfileset src="lib/ant.jar"/>
@@ -397,8 +406,10 @@
             <include name="com/izforge/izpack/uninstaller/SelfModifier*.java"/>
             <include name="com/izforge/izpack/rules/*.java"/>
             <include name="com/izforge/izpack/compiler/DynamicVariable.java"/>
-            <include name="net/n3/nanoxml/*.java"/>
+            <!--<include name="net/n3/nanoxml/*.java"/>-->
             <include name="com/izforge/izpack/panels/HelpWindow.java" />
+            <include name="com/izforge/izpack/adaptator/**/*.java"/>
+            <include name="com/izforge/izpack/adaptator/*.java"/>
         </javac>
     </target>
 
@@ -417,16 +428,18 @@
                 <include name="com/izforge/izpack/io/*.class"/>
                 <include name="com/izforge/izpack/installer/*.class"/>
                 <include name="com/izforge/izpack/util/*.class"/>
-                <include name="com/izforge/izpack/util/**/*.class"/>            	  
+                <include name="com/izforge/izpack/util/**/*.class"/>
                 <include name="com/izforge/izpack/panels/NextMedia*.class"/>
                 <include name="com/izforge/izpack/rules/*.class"/>
                 <include name="com/izforge/izpack/uninstaller/SelfModifier*.class"/>
                 <include name="com/izforge/izpack/rules/*.class"/>
                 <include name="com/izforge/izpack/compiler/DynamicVariable.class"/>
                 <include name="com/izforge/izpack/compiler/CompilerException.class"/>
-	        			<include name="com/izforge/izpack/panels/Validator*.class"/>
-                <include name="net/n3/nanoxml/*.class"/>
-                <include name="com/izforge/izpack/panels/HelpWindow.class" />
+                <include name="com/izforge/izpack/panels/Validator*.class"/>
+                <!--<include name="net/n3/nanoxml/*.class"/>-->
+            	<include name="com/izforge/izpack/adaptator/**/*.class"/>
+            	<include name="com/izforge/izpack/adaptator/*.class"/>
+                <include name="com/izforge/izpack/panels/HelpWindow.class" />                
             </fileset>
             <zipfileset src="${basedir}/lib/jakarta-regexp-1.3.jar">
                 <include name="org/apache/regexp/*.class"/>
@@ -436,7 +449,8 @@
                 <include name="com/izforge/izpack/installer/*.properties"/>
                 <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
                 <include name="com/izforge/izpack/installer/elevate.js"/>
-            	  <include name="com/izforge/izpack/util/**/*.sh"/>
+            	<include name="com/izforge/izpack/util/**/*.sh"/>
+            	<include name="com/izforge/izpack/adaptator/styleSheet.xsl"/>
             </fileset>
             <fileset dir="${img.dir}/installer"/>
             <zipfileset src="${izevent.jar}"/>
@@ -462,7 +476,9 @@
 
             <include name="com/izforge/izpack/uninstaller/*.java"/>
             <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java"/>
-            <include name="net/n3/nanoxml/*.java"/>
+            <!--<include name="net/n3/nanoxml/*.java"/>-->
+            <include name="com/izforge/izpack/adaptator/**/*.java"/>
+            <include name="com/izforge/izpack/adaptator/*.java"/>
         </javac>
     </target>
 
@@ -480,8 +496,10 @@
                 <include name="com/izforge/izpack/uninstaller/*.class"/>
                 <include name="com/izforge/izpack/ExecutableFile.class"/>
                 <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.class"/>
-                <include name="net/n3/nanoxml/*.class"/>
-                <include name="com/izforge/izpack/installer/PrivilegedRunner.class"/>
+                <!--<include name="net/n3/nanoxml/*.class"/>-->
+            	<include name="com/izforge/izpack/adaptator/**/*.class"/>
+            	<include name="com/izforge/izpack/adaptator/*.class"/>
+                <include name="com/izforge/izpack/installer/PrivilegedRunner.class"/>		
             </fileset>
             <fileset dir="${src.dir}">
                 <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
@@ -512,7 +530,9 @@
             <include name="com/izforge/izpack/util/xml/*.java"/>
 
             <exclude name="com/izforge/izpack/gui/IzPackKMetalTheme.java"/>
-            <include name="net/n3/nanoxml/*.java"/>
+            <!--<include name="net/n3/nanoxml/*.java"/>-->
+            <include name="com/izforge/izpack/adaptator/**/*.java"/>
+            <include name="com/izforge/izpack/adaptator/*.java"/>
         </javac>
     </target>
     <!-- Package extended uninstaller.jar used if one ore more native libs are

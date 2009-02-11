@@ -39,6 +39,7 @@
       <entry name="?*.html" />
       <entry name="?*.dtd" />
       <entry name="?*.tld" />
+      <entry name="?*.xsl" />
     </wildcardResourcePatterns>
   </component>
   <component name="DependenciesAnalyzeManager">

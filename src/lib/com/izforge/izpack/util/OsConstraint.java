@@ -21,7 +21,7 @@
 package com.izforge.izpack.util;
 
 
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -182,19 +182,19 @@ public class OsConstraint
     /**
      * Extract a list of OS constraints from given element.
      *
-     * @param element parent XMLElement
+     * @param element parent IXMLElement
      * @return List of OsConstraint (or empty List if no constraints found)
      */
-    public static List<OsConstraint> getOsList(XMLElement element)
+    public static List<OsConstraint> getOsList(IXMLElement element)
     {
         // get os info on this executable
         ArrayList<OsConstraint> osList = new ArrayList<OsConstraint>();
-        Iterator<XMLElement> osIterator = element.getChildrenNamed("os").iterator();
+        Iterator<IXMLElement> osIterator = element.getChildrenNamed("os").iterator();
 
 
         while (osIterator.hasNext())
         {
-            XMLElement os = osIterator.next();
+            IXMLElement os = osIterator.next();
 
 
             osList.add(new OsConstraint(os.getAttribute("family",
@@ -273,12 +273,12 @@ public class OsConstraint
 
 
     /**
-     * Helper function: Check whether the given XMLElement is "suitable" for the current OS.
+     * Helper function: Check whether the given IXMLElement is "suitable" for the current OS.
      *
-     * @param el The XMLElement to check for OS constraints.
+     * @param el The IXMLElement to check for OS constraints.
      * @return true if there were no OS constraints or the constraints matched the current OS.
      */
-    public static boolean oneMatchesCurrentSystem(XMLElement el)
+    public static boolean oneMatchesCurrentSystem(IXMLElement el)
     {
         return oneMatchesCurrentSystem(getOsList(el));
     }    // end oneMatchesCurrentSystem()

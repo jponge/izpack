@@ -2,7 +2,7 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.util.Debug;
 
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
  * Checks to see whether the user who is running the installer is the same as the user who should be
@@ -39,9 +39,9 @@ public class UserCondition extends Condition
     }
 
     @Override
-    public void readFromXML(XMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition)
     {
-        XMLElement userElement = xmlcondition.getFirstChildNamed("requiredusername");
+        IXMLElement userElement = xmlcondition.getFirstChildNamed("requiredusername");
 
         if (userElement == null)
         {

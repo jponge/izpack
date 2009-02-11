@@ -159,12 +159,6 @@
                 <include name="doc/izpack/javadoc/**/*"/>
             </fileset>
         </pack>
-        <pack name="NanoXML Documentation" required="no">
-            <description>NanoXML documentation (for IzPack developers).</description>
-            <fileset dir="" targetdir="$INSTALL_PATH">
-                <include name="doc/nanoxml/**/*"/>
-            </fileset>
-        </pack>
 
         <!-- Utilities pack -->
         <pack name="Utilities" required="no">
@@ -172,7 +166,7 @@
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="utils/**/*"/>
             </fileset>
-            <executable targetfile="$INSTALL_PATH/utils/wrappers/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
+            <executable targetfile="$INSTALL_PATH/utils/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
                         stage="never"/>
         </pack>
 

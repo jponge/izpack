@@ -25,7 +25,7 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.Iterator;
 
@@ -129,7 +129,7 @@ public class UserPathPanel extends UserPathInputPanel
      *
      * @param panelRoot The tree to put the data in.
      */
-    public void makeXMLData(XMLElement panelRoot)
+    public void makeXMLData(IXMLElement panelRoot)
     {
         if (!(skip))
         {

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<!-- included on line 5 -->
+<eeee ln="5">
+    <ffff ln="5">
+        <gggg ln="5">hello</gggg>
+    </ffff>
+
+    <hhhh ln="5">
+        <iiii ln="5">there</iiii>
+    </hhhh>
+</eeee>

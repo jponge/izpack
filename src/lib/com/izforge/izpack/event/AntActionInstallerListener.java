@@ -27,7 +27,7 @@ import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,7 +107,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             p = (Pack) iter.next();
 
             // Resolve data for current pack.
-            XMLElement pack = getSpecHelper().getPackForName(p.name);
+            IXMLElement pack = getSpecHelper().getPackForName(p.name);
             if (pack == null)
             {
                 continue;
@@ -121,10 +121,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             packActions.put(ActionBase.AFTERPACKS, new ArrayList<AntAction>());
 
             // Get all entries for antcalls.
-            Vector<XMLElement> antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
+            Vector<IXMLElement> antCallEntries = pack.getChildrenNamed(AntAction.ANTCALL);
             if (antCallEntries != null && antCallEntries.size() >= 1)
             {
-                Iterator<XMLElement> entriesIter = antCallEntries.iterator();
+                Iterator<IXMLElement> entriesIter = antCallEntries.iterator();
                 while (entriesIter != null && entriesIter.hasNext())
                 {
                     AntAction act = readAntCall(entriesIter.next());
@@ -289,7 +289,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * @return an ant call which is defined in the given XML element
      * @throws InstallerException
      */
-    private AntAction readAntCall(XMLElement el) throws InstallerException
+    private AntAction readAntCall(IXMLElement el) throws InstallerException
     {
         if (el == null)
         {
@@ -323,10 +323,10 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
 
         // read propertyfiles
-        Iterator<XMLElement> iter = el.getChildrenNamed(ActionBase.PROPERTYFILE).iterator();
+        Iterator<IXMLElement> iter = el.getChildrenNamed(ActionBase.PROPERTYFILE).iterator();
         while (iter.hasNext())
         {
-            XMLElement propEl = iter.next();
+            IXMLElement propEl = iter.next();
             act.addPropertyFile(spec.getRequiredAttribute(propEl, ActionBase.PATH));
         }
 
@@ -334,7 +334,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         iter = el.getChildrenNamed(ActionBase.PROPERTY).iterator();
         while (iter.hasNext())
         {
-            XMLElement propEl = iter.next();
+            IXMLElement propEl = iter.next();
             act.setProperty(spec.getRequiredAttribute(propEl, ActionBase.NAME), spec
                     .getRequiredAttribute(propEl, ActionBase.VALUE));
         }
@@ -343,7 +343,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         iter = el.getChildrenNamed(ActionBase.TARGET).iterator();
         while (iter.hasNext())
         {
-            XMLElement targEl = iter.next();
+            IXMLElement targEl = iter.next();
             act.addTarget(spec.getRequiredAttribute(targEl, ActionBase.NAME));
         }
 
@@ -351,7 +351,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         iter = el.getChildrenNamed(ActionBase.UNINSTALL_TARGET).iterator();
         while (iter.hasNext())
         {
-            XMLElement utargEl = iter.next();
+            IXMLElement utargEl = iter.next();
             act.addUninstallTarget(spec.getRequiredAttribute(utargEl, ActionBase.NAME));
         }
 

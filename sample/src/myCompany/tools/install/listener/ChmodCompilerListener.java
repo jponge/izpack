@@ -25,7 +25,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
 import com.izforge.izpack.event.SimpleCompilerListener;
 
@@ -43,7 +43,7 @@ public class ChmodCompilerListener extends SimpleCompilerListener
   /* (non-Javadoc)
    * @see com.izforge.izpack.compiler.CompilerListener#reviseAdditionalDataMap(java.util.Map, net.n3.nanoxml.XMLElement)
    */
-  public Map reviseAdditionalDataMap(Map existentDataMap, XMLElement element)
+  public Map reviseAdditionalDataMap(Map existentDataMap, IXMLElement element)
     throws CompilerException
   {
     Map retval = existentDataMap != null ? 
@@ -55,7 +55,7 @@ public class ChmodCompilerListener extends SimpleCompilerListener
     iter = dataList.iterator();
     while( iter.hasNext() )
     {
-      XMLElement data = (XMLElement) iter.next();
+      IXMLElement data = (IXMLElement) iter.next();
       String [] relevantKeys = { "permission.dir", "permission.file"};
       for( int i = 0; i < relevantKeys.length; ++i )
       {

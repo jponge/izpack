@@ -22,7 +22,7 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.util.Debug;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.List;
 import java.util.Properties;
@@ -62,9 +62,9 @@ public class PackselectionCondition extends Condition
     /*
      * (non-Javadoc)
      * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement)
+     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.adaptator.IXMLElement)
      */
-    public void readFromXML(XMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition)
     {
         try
         {

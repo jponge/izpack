@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.util.xml;
 
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 
 /**
@@ -107,14 +107,14 @@ public class XMLHelper
      * <br> Every other string, including the empty string as well as the non-existence of
      * the attribute will cuase <code>false</code> to be returned.
      *
-     * @param element the <code>XMLElement</code> to search for the attribute.
+     * @param element the <code>IXMLElement</code> to search for the attribute.
      * @param name    the name of the attribute to test.
      * @return <code>true</code> if the attribute value equals one of the pre-defined
      *         strings, <code>false</code> otherwise.
      */
 
     /*--------------------------------------------------------------------------*/
-    public static boolean attributeIsTrue(XMLElement element, String name)
+    public static boolean attributeIsTrue(IXMLElement element, String name)
     {
         String value = element.getAttribute(name, "").toUpperCase();
 
@@ -145,7 +145,7 @@ public class XMLHelper
      * @param name    the attribute to inspect
      * @return returns true if name attribute of the given element contains &quot;false&quot;
      */
-    public static boolean attributeIsFalse(XMLElement element, String name)
+    public static boolean attributeIsFalse(IXMLElement element, String name)
     {
         String value = element.getAttribute(name, "").toUpperCase();
 

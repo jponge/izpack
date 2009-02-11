@@ -23,7 +23,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
  * Functions to support automated usage of the InstallPanel
@@ -42,7 +42,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param installData unused.
      * @param panelRoot   unused.
      */
-    public void makeXMLData(AutomatedInstallData installData, XMLElement panelRoot)
+    public void makeXMLData(AutomatedInstallData installData, IXMLElement panelRoot)
     {
         // do nothing.
     }
@@ -53,7 +53,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param panelRoot The panel XML tree root.
      * @return true if the installation was successful.
      */
-    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         /*
         Unpacker unpacker = new Unpacker(idata, this);

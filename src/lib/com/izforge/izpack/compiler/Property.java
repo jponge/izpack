@@ -22,7 +22,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.util.VariableSubstitutor;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 import org.apache.tools.ant.taskdefs.Execute;
 
 import java.io.*;
@@ -96,12 +96,12 @@ public class Property
     // protected Reference ref;
     protected String prefix;
 
-    protected XMLElement xmlProp;
+    protected IXMLElement xmlProp;
 
     protected CompilerConfig config;
     protected Compiler compiler;
 
-    public Property(XMLElement xmlProp, CompilerConfig config)
+    public Property(IXMLElement xmlProp, CompilerConfig config)
     {
         this.xmlProp = xmlProp;
         this.config = config;

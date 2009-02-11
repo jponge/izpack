@@ -40,8 +40,6 @@ import java.util.*;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 
-import net.n3.nanoxml.XMLElement;
-
 /**
  * The IzPack compiler class. This is now a java bean style class that can be
  * configured using the object representations of the install.xml
@@ -168,7 +166,7 @@ public class Compiler extends Thread
         setProperty("basedir", basedir);
 
         this.compr_format = compr_format;
-        this.compr_level = compr_level;     
+        this.compr_level = compr_level;
     }
 
     /**
@@ -458,7 +456,7 @@ public class Compiler extends Thread
     {
         packager.addCustomJar(ca, url);
     }
-    
+
     public void addInstallerRequirement(List<InstallerRequirement> conditions){
         packager.addInstallerRequirements(conditions);
     }
@@ -718,7 +716,7 @@ public class Compiler extends Thread
     {
         return findIzPackResource(path, desc, false);
     }
-    
+
     /**
      * Look for an IzPack resource either in the compiler jar, or within IZPACK_HOME. The path must
      * not be absolute. The path must use '/' as the fileSeparator (it's used to access the jar
@@ -726,8 +724,8 @@ public class Compiler extends Thread
      *
      * @param path the relative path (using '/' as separator) to the resource.
      * @param desc the description of the resource used to report errors
-     * @param ignoreWhenNotFound when false, throws a CompilerException indicate 
-     *        fault in the parent element when resource not found. 
+     * @param ignoreWhenNotFound when false, throws a CompilerException indicate
+     *        fault in the parent element when resource not found.
      * @return a URL to the resource.
      * @throws CompilerException
      */
@@ -743,7 +741,7 @@ public class Compiler extends Thread
                 resource = new File(IZPACK_HOME, path);
             }
 
-            if (!resource.exists()) 
+            if (!resource.exists())
             {
                 if ( ignoreWhenNotFound )
                 {
@@ -757,7 +755,7 @@ public class Compiler extends Thread
             else
             {
                 try
-                {   
+                {
                     url = resource.toURI().toURL();
                 }
                 catch (MalformedURLException how)
@@ -774,7 +772,7 @@ public class Compiler extends Thread
     {
         System.out.println("Warning: " + message);
     }
-    
+
     /**
      * Create parse error with consistent messages. Includes file name. For use When parent is
      * unknown.
@@ -835,7 +833,7 @@ public class Compiler extends Thread
         List<String> filePaths = null;
 
         URL url = findIzPackResource(jarPath, "CustomAction jar file", true);
-        
+
         if ( url != null )
         {
              fullClassName = getFullClassName(url, className);
@@ -846,7 +844,7 @@ public class Compiler extends Thread
              }
              filePaths = getContainedFilePaths(url);
         }
-        
+
         CustomData ca = new CustomData(fullClassName, filePaths, constraints, type);
         packager.addCustomJar(ca, url);
     }
@@ -1011,5 +1009,5 @@ public class Compiler extends Thread
     public void setDynamicVariables(Map<String, List<DynamicVariable>> dynamicvariables)
     {
         this.packager.setDynamicVariables(dynamicvariables);
-    }       
+    }
 }

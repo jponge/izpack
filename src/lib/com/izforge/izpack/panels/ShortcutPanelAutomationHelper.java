@@ -27,7 +27,7 @@ import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
      * @param idata     DOCUMENT ME!
      * @param panelRoot DOCUMENT ME!
      */
-    public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         Debug.log(this.getClass().getName() + "::entering makeXMLData()");
 
@@ -67,7 +67,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
      * @param panelRoot   DOCUMENT ME!
      * @return DOCUMENT ME!
      */
-    public boolean runAutomated(AutomatedInstallData installData, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData installData, IXMLElement panelRoot)
     {
         Shortcut shortcut;
 
@@ -123,9 +123,9 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
 
         shortcuts = new Vector<ShortcutData>();
 
-        Vector<XMLElement> shortcutElements;
+        Vector<IXMLElement> shortcutElements;
         ShortcutData data;
-        XMLElement dataElement;
+        IXMLElement dataElement;
 
         // ----------------------------------------------------
         // set the name of the program group

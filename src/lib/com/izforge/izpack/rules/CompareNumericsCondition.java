@@ -22,7 +22,7 @@ package com.izforge.izpack.rules;
 
 import java.util.HashMap;
 
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import com.izforge.izpack.util.Debug;
 
@@ -81,9 +81,9 @@ public class CompareNumericsCondition extends Condition
     /*
      * (non-Javadoc)
      * 
-     * @see de.reddot.installer.rules.Condition#readFromXML(net.n3.nanoxml.XMLElement)
+     * @see de.reddot.installer.rules.Condition#readFromXML(com.izforge.izpack.adaptator.IXMLElement)
      */
-    public void readFromXML(XMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition)
     {
         try
         {

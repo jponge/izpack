@@ -24,7 +24,7 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.util.Debug;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.*;
 
@@ -42,7 +42,7 @@ public class RulesEngine
 
     protected Map<String, String> optionalpackconditions;
 
-    protected XMLElement conditionsspec;
+    protected IXMLElement conditionsspec;
 
     protected static Map conditionsmap = new HashMap();
 
@@ -126,7 +126,7 @@ public class RulesEngine
     /**
      *
      */
-    public RulesEngine(XMLElement conditionsspecxml, AutomatedInstallData installdata)
+    public RulesEngine(IXMLElement conditionsspecxml, AutomatedInstallData installdata)
     {
         this();
         this.conditionsspec = conditionsspecxml;
@@ -184,7 +184,7 @@ public class RulesEngine
         }
     }
 
-    public static Condition analyzeCondition(XMLElement condition)
+    public static Condition analyzeCondition(IXMLElement condition)
     {
         String condid = condition.getAttribute("id");
         String condtype = condition.getAttribute("type");
@@ -245,9 +245,9 @@ public class RulesEngine
             if (this.conditionsspec.hasChildren())
             {
                 // read in the condition specs
-                Vector<XMLElement> childs = this.conditionsspec.getChildrenNamed("condition");
+                Vector<IXMLElement> childs = this.conditionsspec.getChildrenNamed("condition");
 
-                for (XMLElement condition : childs)
+                for (IXMLElement condition : childs)
                 {
                     Condition cond = analyzeCondition(condition);
                     if (cond != null)
@@ -262,16 +262,16 @@ public class RulesEngine
                     }
                 }
 
-                Vector<XMLElement> panelconditionels = this.conditionsspec.getChildrenNamed("panelcondition");
-                for (XMLElement panelel : panelconditionels)
+                Vector<IXMLElement> panelconditionels = this.conditionsspec.getChildrenNamed("panelcondition");
+                for (IXMLElement panelel : panelconditionels)
                 {
                     String panelid = panelel.getAttribute("panelid");
                     String conditionid = panelel.getAttribute("conditionid");
                     this.panelconditions.put(panelid, conditionid);
                 }
 
-                Vector<XMLElement> packconditionels = this.conditionsspec.getChildrenNamed("packcondition");
-                for (XMLElement panelel : packconditionels)
+                Vector<IXMLElement> packconditionels = this.conditionsspec.getChildrenNamed("packcondition");
+                for (IXMLElement panelel : packconditionels)
                 {
                     String panelid = panelel.getAttribute("packid");
                     String conditionid = panelel.getAttribute("conditionid");

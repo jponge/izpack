@@ -21,7 +21,7 @@
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.util.Debug;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -128,15 +128,15 @@ public class JavaCondition extends Condition
         }
     }
 
-    public void readFromXML(XMLElement xmlcondition)
+    public void readFromXML(IXMLElement xmlcondition)
     {
         if (xmlcondition.getChildrenCount() != 2)
         {
             Debug.log("Condition of type java needs (java,returnvalue)");
             return;
         }
-        XMLElement javael = xmlcondition.getFirstChildNamed("java");
-        XMLElement classel = javael.getFirstChildNamed("class");
+        IXMLElement javael = xmlcondition.getFirstChildNamed("java");
+        IXMLElement classel = javael.getFirstChildNamed("class");
         if (classel != null)
         {
             this.classname = classel.getContent();
@@ -146,12 +146,12 @@ public class JavaCondition extends Condition
             Debug.log("Java-Element needs (class,method?,field?)");
             return;
         }
-        XMLElement methodel = javael.getFirstChildNamed("method");
+        IXMLElement methodel = javael.getFirstChildNamed("method");
         if (methodel != null)
         {
             this.methodname = methodel.getContent();
         }
-        XMLElement fieldel = javael.getFirstChildNamed("field");
+        IXMLElement fieldel = javael.getFirstChildNamed("field");
         if (fieldel != null)
         {
             this.fieldname = fieldel.getContent();
@@ -161,7 +161,7 @@ public class JavaCondition extends Condition
             Debug.log("java element needs (class, method?,field?)");
             return;
         }
-        XMLElement returnvalel = xmlcondition.getFirstChildNamed("returnvalue");
+        IXMLElement returnvalel = xmlcondition.getFirstChildNamed("returnvalue");
         if (returnvalel != null)
         {
             this.returnvalue = returnvalel.getContent();

@@ -39,17 +39,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
-import net.n3.nanoxml.NonValidator;
-import net.n3.nanoxml.StdXMLParser;
-import net.n3.nanoxml.StdXMLReader;
-import net.n3.nanoxml.XMLBuilderFactory;
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.adaptator.*;
 import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
@@ -427,7 +423,7 @@ public class AutomatedInstaller extends InstallerBase
                 }
 
                 // We get the panels root xml markup
-                Vector<XMLElement> panelRoots = this.idata.xmlData.getChildrenNamed(panelClassName);
+                Vector<IXMLElement> panelRoots = this.idata.xmlData.getChildrenNamed(panelClassName);
                 int panelRootNo = 0;
 
                 if (this.panelInstanceCount.containsKey(panelClassName))
@@ -436,7 +432,7 @@ public class AutomatedInstaller extends InstallerBase
                     panelRootNo = this.panelInstanceCount.get(panelClassName);
                 }
 
-                XMLElement panelRoot = panelRoots.elementAt(panelRootNo);
+                IXMLElement panelRoot = panelRoots.elementAt(panelRootNo);
 
                 this.panelInstanceCount.put(panelClassName, panelRootNo + 1);
 
@@ -535,17 +531,13 @@ public class AutomatedInstaller extends InstallerBase
      * @return The root of the XML file.
      * @throws Exception thrown if there are problems reading the file.
      */
-    public XMLElement getXMLData(File input) throws Exception
+    public IXMLElement getXMLData(File input) throws Exception
     {
         FileInputStream in = new FileInputStream(input);
 
         // Initialises the parser
-        StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
-        parser.setReader(new StdXMLReader(in));
-        parser.setValidator(new NonValidator());
-
-        XMLElement rtn = (XMLElement) parser.parse();
+        IXMLParser parser = new XMLParser();
+        IXMLElement rtn = parser.parse(in);
         in.close();
 
         return rtn;

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+<a xmlns:xi="http://www.w3.org/2001/XInclude" xmlns="http://www.w3.org/1999/xhtml">
+    <xi:include href="src/tests/com/izforge/izpack/adaptator/xinclude/text.txt" parse="text"/>
+</a>

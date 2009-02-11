@@ -24,7 +24,8 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import java.util.Iterator;
 import java.util.Vector;
@@ -44,13 +45,13 @@ public class PacksPanelAutomationHelper implements PanelAutomation
      * @param idata     The installation data.
      * @param panelRoot The XML tree to write the data in.
      */
-    public void makeXMLData(AutomatedInstallData idata, XMLElement panelRoot)
+    public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         // We add each pack to the panelRoot element
         for (int i = 0; i < idata.availablePacks.size(); i++)
         {
             Pack pack = idata.availablePacks.get(i);
-            XMLElement el = new XMLElement("pack");
+            IXMLElement el = new XMLElementImpl("pack",panelRoot);
             el.setAttribute("index", Integer.toString(i));
             el.setAttribute("name", pack.name);
             Boolean selected = idata.selectedPacks.contains(pack);
@@ -67,10 +68,10 @@ public class PacksPanelAutomationHelper implements PanelAutomation
      * @param panelRoot The root of the panel data.
      * @return true if all packs were found and selected, false if something was wrong.
      */
-    public boolean runAutomated(AutomatedInstallData idata, XMLElement panelRoot)
+    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
     {
         // We get the packs markups
-        Vector<XMLElement> pm = panelRoot.getChildrenNamed("pack");
+        Vector<IXMLElement> pm = panelRoot.getChildrenNamed("pack");
 
         boolean result = true;
 
@@ -79,7 +80,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         idata.selectedPacks.clear();
         for (int i = 0; i < size; i++)
         {
-            XMLElement el = pm.get(i);
+            IXMLElement el = pm.get(i);
             Boolean selected = Boolean.TRUE; // No longer needed.
 
             if (selected)

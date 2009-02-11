@@ -22,11 +22,13 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.IXMLParser;
+import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
-import net.n3.nanoxml.*;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -64,19 +66,19 @@ public class CompileWorker implements Runnable
 
     private VariableSubstitutor vs;
 
-    private XMLElement spec;
+    private IXMLElement spec;
 
     private AutomatedInstallData idata;
 
     private CompileHandler handler;
 
-    private XMLElement compilerSpec;
+    private IXMLElement compilerSpec;
 
     private ArrayList<String> compilerList;
 
     private String compilerToUse;
 
-    private XMLElement compilerArgumentsSpec;
+    private IXMLElement compilerArgumentsSpec;
 
     private ArrayList<String> compilerArgumentsList;
 
@@ -228,16 +230,11 @@ public class CompileWorker implements Runnable
             e.printStackTrace();
             return false;
         }
-
-        StdXMLParser parser = new StdXMLParser();
-        parser.setBuilder(XMLBuilderFactory.createXMLBuilder());
-        parser.setValidator(new NonValidator());
+        IXMLParser parser = new XMLParser();
 
         try
         {
-            parser.setReader(new StdXMLReader(input));
-
-            this.spec = (XMLElement) parser.parse();
+            this.spec = (IXMLElement) parser.parse(input);
         }
         catch (Exception e)
         {
@@ -255,7 +252,7 @@ public class CompileWorker implements Runnable
         this.compilerList = new ArrayList<String>();
 
         // read <global> information
-        XMLElement global = this.spec.getFirstChildNamed("global");
+        IXMLElement global = this.spec.getFirstChildNamed("global");
 
         // use some default values if no <global> section found
         if (global != null)
@@ -298,9 +295,9 @@ public class CompileWorker implements Runnable
     }
 
     // helper function
-    private void readChoices(XMLElement element, ArrayList<String> choiceList)
+    private void readChoices(IXMLElement element, ArrayList<String> choiceList)
     {
-        Vector<XMLElement> choices = element.getChildrenNamed("choice");
+        Vector<IXMLElement> choices = element.getChildrenNamed("choice");
 
         if (choices == null)
         {
@@ -309,11 +306,11 @@ public class CompileWorker implements Runnable
 
         choiceList.clear();
 
-        Iterator<XMLElement> choice_it = choices.iterator();
+        Iterator<IXMLElement> choice_it = choices.iterator();
 
         while (choice_it.hasNext())
         {
-            XMLElement choice = choice_it.next();
+            IXMLElement choice = choice_it.next();
 
             String value = choice.getAttribute("value");
 
@@ -356,7 +353,7 @@ public class CompileWorker implements Runnable
      */
     private boolean collectJobs() throws Exception
     {
-        XMLElement data = this.spec.getFirstChildNamed("jobs");
+        IXMLElement data = this.spec.getFirstChildNamed("jobs");
 
         if (data == null)
         {
@@ -425,16 +422,15 @@ public class CompileWorker implements Runnable
         return new CompileResult();
     }
 
-    private CompilationJob collectJobsRecursive(XMLElement node, ArrayList classpath)
+    private CompilationJob collectJobsRecursive(IXMLElement node, ArrayList classpath)
             throws Exception
     {
-        Enumeration toplevel_tags = node.enumerateChildren();
+        Vector<IXMLElement> toplevel_tags = node.getChildren();
         ArrayList ourclasspath = (ArrayList) classpath.clone();
         ArrayList<File> files = new ArrayList<File>();
 
-        while (toplevel_tags.hasMoreElements())
-        {
-            XMLElement child = (XMLElement) toplevel_tags.nextElement();
+        for (int i = 0; i < toplevel_tags.size(); i++) {
+            IXMLElement child = (IXMLElement) toplevel_tags.elementAt(i);
 
             if ("classpath".equals(child.getName()))
             {
@@ -521,7 +517,7 @@ public class CompileWorker implements Runnable
     /**
      * helper: process a <code>&lt;classpath&gt;</code> tag.
      */
-    private void changeClassPath(ArrayList classpath, XMLElement child) throws Exception
+    private void changeClassPath(ArrayList classpath, IXMLElement child) throws Exception
     {
         String add = child.getAttribute("add");
         if (add != null)

@@ -25,7 +25,7 @@ import com.izforge.izpack.Panel;
 import com.izforge.izpack.compressor.PackCompressor;
 import com.izforge.izpack.installer.InstallerRequirement;
 import com.izforge.izpack.rules.Condition;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.io.File;
 import java.net.URL;
@@ -190,7 +190,7 @@ public interface IPackager
      *
      * @param data - the xml-element packaging from the install.xml
      */
-    public abstract void addConfigurationInformation(XMLElement data);
+    public abstract void addConfigurationInformation(IXMLElement data);
 
     /**
      * @return the rules

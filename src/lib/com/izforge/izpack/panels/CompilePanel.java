@@ -23,7 +23,8 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -516,14 +517,13 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /**
      * Create XML data for automated installation.
      */
-    public void makeXMLData(XMLElement panelRoot)
+    public void makeXMLData(IXMLElement panelRoot)
     {
         // just save the compiler chosen and the arguments
-        XMLElement compiler = new XMLElement("compiler");
+        IXMLElement compiler = new XMLElementImpl("compiler",panelRoot);
         compiler.setContent(this.worker.getCompiler());
         panelRoot.addChild(compiler);
-
-        XMLElement args = new XMLElement("arguments");
+        IXMLElement args = new XMLElementImpl("arguments",panelRoot);
         args.setContent(this.worker.getCompilerArguments());
         panelRoot.addChild(args);
     }

@@ -32,7 +32,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 import com.izforge.izpack.util.os.WrappedNativeLibException;
-import net.n3.nanoxml.XMLElement;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 import java.util.Iterator;
 import java.util.List;
@@ -118,7 +118,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
             {
                 return;
             }
-            XMLElement uninstallerPack = null;
+            IXMLElement uninstallerPack = null;
             // No interrupt desired after writing registry entries.
             Unpacker.setDiscardInterrupt(true);
             rh.activateLogging();
@@ -136,7 +136,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
                 while (iter != null && iter.hasNext())
                 {
                     // Resolve data for current pack.
-                    XMLElement pack = getSpecHelper().getPackForName(((Pack) iter.next()).name);
+                    IXMLElement pack = getSpecHelper().getPackForName(((Pack) iter.next()).name);
                     performPack(pack, substitutor);
 
                 }
@@ -183,7 +183,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
      * @param pack XML elemtent which contains the registry settings for one pack
      * @throws Exception
      */
-    private void performPack(XMLElement pack, VariableSubstitutor substitutor) throws Exception
+    private void performPack(IXMLElement pack, VariableSubstitutor substitutor) throws Exception
     {
         if (pack == null)
         {
@@ -198,7 +198,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
         Iterator entriesIter = regEntries.iterator();
         while (entriesIter != null && entriesIter.hasNext())
         {
-            XMLElement regEntry = (XMLElement) entriesIter.next();
+            IXMLElement regEntry = (IXMLElement) entriesIter.next();
             // Perform one registry entry.
             String type = regEntry.getName();
             if (type.equalsIgnoreCase(REG_KEY))
@@ -226,7 +226,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
      * @param regEntry    element which contains the description of the value to be set
      * @param substitutor variable substitutor to be used for revising the regEntry contents
      */
-    private void performValueSetting(XMLElement regEntry, VariableSubstitutor substitutor)
+    private void performValueSetting(IXMLElement regEntry, VariableSubstitutor substitutor)
             throws Exception
     {
         SpecHelper specHelper = getSpecHelper();
@@ -274,14 +274,14 @@ public class RegistryInstallerListener extends NativeInstallerListener
             rh.setValue(keypath, name, value);
             return;
         }
-        Vector<XMLElement> values = regEntry.getChildrenNamed(REG_MULTI);
+        Vector<IXMLElement> values = regEntry.getChildrenNamed(REG_MULTI);
         if (values != null && !values.isEmpty())
         { // Value type is REG_MULTI_SZ; placeholder possible.
-            Iterator<XMLElement> multiIter = values.iterator();
+            Iterator<IXMLElement> multiIter = values.iterator();
             String[] multiString = new String[values.size()];
             for (int i = 0; multiIter.hasNext(); ++i)
             {
-                XMLElement element = multiIter.next();
+                IXMLElement element = multiIter.next();
                 multiString[i] = specHelper.getRequiredAttribute(element, REG_DATA);
                 multiString[i] = substitutor.substitute(multiString[i], null);
             }
@@ -292,12 +292,12 @@ public class RegistryInstallerListener extends NativeInstallerListener
         if (values != null && !values.isEmpty())
         { // Value type is REG_BINARY; placeholder possible or not ??? why not
             // ...
-            Iterator<XMLElement> multiIter = values.iterator();
+            Iterator<IXMLElement> multiIter = values.iterator();
 
             StringBuffer buf = new StringBuffer();
             for (int i = 0; multiIter.hasNext(); ++i)
             {
-                XMLElement element = multiIter.next();
+                IXMLElement element = multiIter.next();
                 String tmp = specHelper.getRequiredAttribute(element, REG_DATA);
                 buf.append(tmp);
                 if (!tmp.endsWith(",") && multiIter.hasNext())
@@ -313,7 +313,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
 
     }
 
-    private byte[] extractBytes(XMLElement element, String byteString) throws Exception
+    private byte[] extractBytes(IXMLElement element, String byteString) throws Exception
     {
         StringTokenizer st = new StringTokenizer(byteString, ",");
         byte[] retval = new byte[st.countTokens()];
@@ -353,7 +353,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
      * @param regEntry    element which contains the description of the key to be created
      * @param substitutor variable substitutor to be used for revising the regEntry contents
      */
-    private void performKeySetting(XMLElement regEntry, VariableSubstitutor substitutor)
+    private void performKeySetting(IXMLElement regEntry, VariableSubstitutor substitutor)
             throws Exception
     {
         String keypath = getSpecHelper().getRequiredAttribute(regEntry, REG_KEYPATH);
@@ -372,7 +372,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
         }
     }
 
-    private int resolveRoot(XMLElement regEntry, String root, VariableSubstitutor substitutor)
+    private int resolveRoot(IXMLElement regEntry, String root, VariableSubstitutor substitutor)
             throws Exception
     {
         String root1 = substitutor.substitute(root, null);

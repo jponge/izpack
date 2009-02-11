@@ -33,8 +33,6 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
-import net.n3.nanoxml.XMLElement;
-
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
@@ -43,6 +41,7 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.MultiLineLabel;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
  * Defines the base class for the IzPack panels. Any panel should be a subclass of it and should
@@ -404,7 +403,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * 
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
-    public void makeXMLData(XMLElement panelRoot)
+    public void makeXMLData(IXMLElement panelRoot)
     {
     }
 
