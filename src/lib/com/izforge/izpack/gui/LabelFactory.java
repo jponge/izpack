@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.gui;
 
+import java.awt.Font;
 import javax.swing.*;
 
 /**
@@ -34,6 +35,8 @@ public class LabelFactory implements SwingConstants
 {
 
     private static boolean useLabelIcons = true;
+    private static float labelFontSizeVal = 1.0f;
+    private static Font customLabelFontObj = null;
 
     /**
      * Returns whether the factory creates labels with icons or without icons.
@@ -53,6 +56,34 @@ public class LabelFactory implements SwingConstants
     public static void setUseLabelIcons(boolean b)
     {
         useLabelIcons = b;
+    }
+
+    /**
+     * Returns the current label-font-size multiplier.
+     *
+     * @return the current label-font-size multiplier (or 1.0 if none
+     * has been entered).
+     */
+    public static float getLabelFontSize()
+    {
+        return labelFontSizeVal;
+    }
+
+    /**
+     * Sets the label-font-size multiplier.  If the value is not greater
+     * than zero or is greater than 5.0 then it will not be used.
+     *
+     * @param val label-font-size multiplier value to use.
+     */
+    public static void setLabelFontSize(float val)
+    {
+        if (val > 0.0f && val <= 5.0f && val != labelFontSizeVal)
+        {
+            labelFontSizeVal = val;
+            final Font fontObj = (new JLabel()).getFont();
+            customLabelFontObj =
+                              fontObj.deriveFont(fontObj.getSize2D() * val);
+        }
     }
 
     /**
@@ -188,6 +219,10 @@ public class LabelFactory implements SwingConstants
         if (text != null)
         {
             retval.setText(text);
+        }
+        if (customLabelFontObj != null)
+        {
+            retval.setFont(customLabelFontObj);
         }
         retval.setHorizontalAlignment(horizontalAlignment);
         return (retval);

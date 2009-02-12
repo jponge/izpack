@@ -422,6 +422,20 @@ public class GUIInstaller extends InstallerBase
             useLabelIcons = false;
         }
         LabelFactory.setUseLabelIcons(useLabelIcons);
+        if (installdata.guiPrefs.modifier.containsKey("labelFontSize"))
+        {  //'labelFontSize' modifier found in 'guiprefs'
+            final String valStr =
+                         installdata.guiPrefs.modifier.get("labelFontSize");
+            try
+            {      //parse value and enter as label-font-size multiplier:
+                LabelFactory.setLabelFontSize(Float.parseFloat(valStr));
+            }
+            catch (NumberFormatException ex)
+            {      //error parsing value; log message
+                Debug.log("Error parsing guiprefs 'labelFontSize' value (" +
+                                                              valStr + ')');
+            }
+        }
         if (laf == null)
         {
             if (!"mac".equals(syskey))

@@ -747,7 +747,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public Font getControlTextFont()
     {
-        return (getLAF() != null ? MetalLookAndFeel.getControlTextFont() : getFont());
+        Font fontObj = (getLAF() != null) ?
+                          MetalLookAndFeel.getControlTextFont() : getFont();
+              //if guiprefs 'labelFontSize' multiplier value
+              // has been setup then apply it to the font:
+        final float val;
+        if ((val=LabelFactory.getLabelFontSize()) != 1.0f)
+            fontObj = fontObj.deriveFont(fontObj.getSize2D()*val);
+        return fontObj;
     }
 
     protected static MetalLookAndFeel getLAF()
