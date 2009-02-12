@@ -1048,6 +1048,7 @@ public class CompilerConfig extends Thread {
             // parsing ref-pack-set file
             IXMLElement refXMLData = this.readRefPackData(refFileName, isselfcontained);
 
+            Debug.log("Reading refpack from " + refFileName);
             // Recursively call myself to add all packs and refpacks from the reference XML
             addPacksSingle(refXMLData);
         }
@@ -1923,12 +1924,9 @@ public class CompilerConfig extends Thread {
                 IXMLElement valueElement = var.getFirstChildNamed("value");
                 if (valueElement != null){
                     value = valueElement.getContent();
-                    if (value != null){
+                    if (value == null){
                        parseError("A dynamic variable needs either a value attribute or a value element.");
-                    }
-                    else {
-                        parseError("A dynamic variable needs either a value attribute or a value element. Variable name: " + name);
-                    }    
+                    }                       
                 }
                 else {
                     parseError("A dynamic variable needs either a value attribute or a value element. Variable name: " + name);    
