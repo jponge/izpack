@@ -26,6 +26,7 @@ import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -34,8 +35,13 @@ import java.util.*;
  *
  * @author Chadwick McHenry
  */
-public class PackInfo
+public class PackInfo implements Serializable
 {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3604642858885697783L;
 
     /**
      * The pack object serialized in the installer.
