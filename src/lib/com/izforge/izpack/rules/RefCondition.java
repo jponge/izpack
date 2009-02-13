@@ -51,6 +51,7 @@ public class RefCondition extends Condition
     {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
         this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);
+        this.id = "ref." + this.referencedConditionId;
     }
 
     public boolean isTrue()

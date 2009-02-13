@@ -22,7 +22,6 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
 
@@ -121,7 +120,7 @@ public class RulesEngine
         condition.returnvaluetype = "boolean";
         condition.complete = true;
         conditionsmap.put(condition.id, condition);
-    }
+    }   
 
     /**
      *
@@ -203,15 +202,17 @@ public class RulesEngine
                         + conditiontype.substring(0, 1).toUpperCase()
                         + conditiontype.substring(1, conditiontype.length());
                 conditionclassname += "Condition";
-            }
-            //ClassLoader loader = ClassLoader.getSystemClassLoader();
-            ClassLoader loader = RulesEngine.class.getClassLoader();
+            }            
+            
+            ClassLoader loader = Thread.currentThread().getContextClassLoader(); //RulesEngine.class.getClassLoader();
             try
             {
                 Class<Condition> conditionclass = (Class<Condition>) loader.loadClass(conditionclassname);
                 result = conditionclass.newInstance();
                 result.readFromXML(condition);
-                result.setId(condid);
+                if (condid != null){
+                    result.setId(condid);    
+                }                
                 result.setInstalldata(RulesEngine.installdata);
             }
             catch (ClassNotFoundException e)
