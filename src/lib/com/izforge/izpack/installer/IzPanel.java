@@ -21,6 +21,7 @@ package com.izforge.izpack.installer;
 
 import java.awt.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
@@ -119,6 +120,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     private DataValidator validationService = null;
 
+    private java.util.List<PanelAction> preActivateActions = null;
+    
+    private java.util.List<PanelAction> preValidateActions = null;
+    
+    private java.util.List<PanelAction> postValidateActions = null;
+    
     /**
      * X_ORIGIN = 0
      */
@@ -1146,6 +1153,66 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
         this.helpWindow = new HelpWindow(parent, getString("installer.prev"));
         return this.helpWindow;
+    }
+
+    public void addPreActivationAction(PanelAction preActivateAction)
+    {
+        if (preActivateActions == null)
+        {
+            preActivateActions = new ArrayList<PanelAction>();
+        }
+        this.preActivateActions.add(preActivateAction);
+    }
+
+    public void addPreValidationAction(PanelAction preValidateAction)
+    {
+        if (preValidateActions == null)
+        {
+            preValidateActions = new ArrayList<PanelAction>();
+        }
+        this.preValidateActions.add(preValidateAction);
+    }
+
+    public void addPostValidationAction(PanelAction postValidateAction)
+    {
+        if (postValidateActions == null)
+        {
+            postValidateActions = new ArrayList<PanelAction>();
+        }
+        this.postValidateActions.add(postValidateAction);
+    }
+    
+    protected final void executePreActivationActions()
+    {
+        if (preActivateActions != null)
+        {
+            for (int actionIndex = 0; actionIndex < preActivateActions.size(); actionIndex++)
+            {
+                preActivateActions.get(actionIndex).executeAction(idata, this);
+            }
+        }
+    }
+
+    protected final void executePreValidationActions()
+    {
+        if (preValidateActions != null)
+        {
+            for (int actionIndex = 0; actionIndex < preValidateActions.size(); actionIndex++)
+            {
+                preValidateActions.get(actionIndex).executeAction(idata, this);
+            }
+        }
+    }
+
+    protected final void executePostValidationActions()
+    {
+        if (postValidateActions != null)
+        {
+            for (int actionIndex = 0; actionIndex < postValidateActions.size(); actionIndex++)
+            {
+                postValidateActions.get(actionIndex).executeAction(idata, this);
+            }
+        }
     }
 
 }

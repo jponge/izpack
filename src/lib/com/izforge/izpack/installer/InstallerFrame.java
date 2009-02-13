@@ -265,6 +265,16 @@ public class InstallerFrame extends JFrame {
             installdata.currentPanel = p; // A hack to use meta data in IzPanel constructor
             // Do not call constructor of IzPanel or it's derived at an other place else
             // metadata will be not set.
+            List<String> preConstgructionActions = p.getPreConstructionActions();
+            if (preConstgructionActions != null)
+            {
+                for (int actionIndex = 0; actionIndex < preConstgructionActions.size(); actionIndex++)
+                {
+                    PanelAction action = PanelActionFactory
+                            .createPanelAction(preConstgructionActions.get(actionIndex));
+                    action.executeAction(AutomatedInstallData.getInstance(), null);
+                }
+            }
             object = constructor.newInstance(params);
             panel = (IzPanel) object;
             String dataValidator = p.getValidator();
@@ -273,6 +283,34 @@ public class InstallerFrame extends JFrame {
             }
 
             panel.setHelps(p.getHelpsMap());
+            
+            List<String> preActivateActions = p.getPreActivationActions();
+            if (preActivateActions != null)
+            {
+                for (int actionIndex = 0; actionIndex < preActivateActions.size(); actionIndex++)
+                {
+                    panel.addPreActivationAction(PanelActionFactory
+                            .createPanelAction(preActivateActions.get(actionIndex)));
+                }
+            }
+            List<String> preValidateActions = p.getPreValidationActions();
+            if (preValidateActions != null)
+            {
+                for (int actionIndex = 0; actionIndex < preValidateActions.size(); actionIndex++)
+                {
+                    panel.addPreValidationAction(PanelActionFactory
+                            .createPanelAction(preValidateActions.get(actionIndex)));
+                }
+            }
+            List<String> postValidateActions = p.getPostValidationActions();
+            if (postValidateActions != null)
+            {
+                for (int actionIndex = 0; actionIndex < postValidateActions.size(); actionIndex++)
+                {
+                    panel.addPostValidationAction(PanelActionFactory
+                            .createPanelAction(postValidateActions.get(actionIndex)));
+                }
+            }
 
             installdata.panels.add(panel);
             if (panel.isHidden()) {
@@ -788,6 +826,7 @@ public class InstallerFrame extends JFrame {
             }
             performHeading(panel);
             performHeadingCounter(panel);
+            panel.executePreActivationActions();
             panel.panelActivate();
             panelsContainer.setVisible(true);
             Panel metadata = panel.getMetadata();
@@ -1381,8 +1420,10 @@ public class InstallerFrame extends JFrame {
         if ((installdata.curPanelNumber < installdata.panels.size() - 1)) {
             // We must trasfer all fields into the variables before
             // panelconditions try to resolve the rules based on unassigned vars.
-            boolean isValid = doValidation ? ((IzPanel) installdata.panels.get(startPanel))
-                    .panelValidated() : true;
+            final IzPanel panel = installdata.panels.get(startPanel);
+            panel.executePreValidationActions();
+            boolean isValid = doValidation ? panel.panelValidated() : true;
+            panel.executePostValidationActions();
 
             // if this is not here, validation will
             // occur mutilple times while skipping panels through the recursion

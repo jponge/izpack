@@ -36,6 +36,8 @@ import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
 import com.izforge.izpack.event.CompilerListener;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.InstallerRequirement;
+import com.izforge.izpack.installer.PanelAction;
+import com.izforge.izpack.installer.PanelAction.ActionStage;
 import com.izforge.izpack.panels.HelpWindow;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
@@ -1490,6 +1492,8 @@ public class CompilerConfig extends Thread {
                     compiler.addResource(resourceId, helpUrl);
                 }
             }
+            // adding actions
+            addPanelActions(xmlPanel, panel);
             // insert into the packager
             compiler.addPanelJar(panel, url);
         }
@@ -3162,4 +3166,60 @@ public class CompilerConfig extends Thread {
             }
         }
     }
+    
+    /**
+     * @param xmlPanel
+     * @param panel
+     * @throws CompilerException
+     */
+    private void addPanelActions(IXMLElement xmlPanel, Panel panel) throws CompilerException
+    {
+      IXMLElement xmlActions = xmlPanel.getFirstChildNamed(PanelAction.PANEL_ACTIONS_TAG);
+        if (xmlActions != null)
+        {
+            Vector<IXMLElement> actionList = xmlActions
+                    .getChildrenNamed(PanelAction.PANEL_ACTION_TAG);
+            if (actionList != null)
+            {
+                for (int actionIndex = 0; actionIndex < actionList.size(); actionIndex++)
+                {
+                  IXMLElement action = actionList.get(actionIndex);
+                    String stage = action.getAttribute(PanelAction.PANEL_ACTION_STAGE_TAG);
+                    String actionName = action
+                            .getAttribute(PanelAction.PANEL_ACTION_CLASSNAME_TAG);
+
+                    try
+                    {
+                        ActionStage actionStage = ActionStage.valueOf(stage);
+                        switch (actionStage)
+                        {
+                        case preconstruct:
+                            panel.addPreConstructionActions(actionName);
+                            break;
+                        case preactivate:
+                            panel.addPreActivationAction(actionName);
+                            break;
+                        case prevalidate:
+                            panel.addPreValidationAction(actionName);
+                            break;
+                        case postvalidate:
+                            panel.addPostValidationAction(actionName);
+                            break;
+                        }
+                    }
+                    catch (IllegalArgumentException e)
+                    {
+                        parseError(action, "Invalid value [" + stage + "] for attribute : "
+                                + PanelAction.PANEL_ACTION_STAGE_TAG);
+                    }
+                }
+            }
+            else
+            {
+                parseError(xmlActions, "<" + PanelAction.PANEL_ACTIONS_TAG + "> requires a <"
+                        + PanelAction.PANEL_ACTION_TAG + ">");
+            }
+        }
+         }
+
 }

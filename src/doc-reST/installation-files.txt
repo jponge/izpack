@@ -830,6 +830,32 @@ Here's a sample :
     <panel classname="UserInputPanel" id="jdbc.connection.parameters">
       <validator classname="JdbcConnectionValidator" />
     </panel>
+    
+``<actions>`` - optional actions for the panel
+'''''''''''''''''''''''''''''''''''''''''''''''
+
+Here you can define multiple actions that are done during the lifetime of the panel. 
+The class must implement the interface com.izforge.izpack.installer.PanelAction.
+
+The ``<actions>`` tag has no attributes but has ``<action>``markups with the following attributes :
+
+-   ``stage``: The stage when the action should be triggered.
+		Possible values are ``preconstruct``, ``preactivate``, ``prevalidate`` or ``postvalidate``.
+-   ``classname``: The class implementing com.izforge.izpack.installer.PanelAction
+
+Here's a sample :
+
+::
+
+    <panel classname="UserInputPanel" id="jdbc.connection.parameters">
+      <actions>
+        <action stage="preconstruct" classname="ConnectionPreConstructAction" />
+        <action stage="preactivate" classname="ConnectionPreActivateAction" />
+        <action stage="prevalidate" classname="ConnectionPreVAlidateAction" />
+        <action stage="postvalidate" classname="ConnectionPostValidateAction" />
+      </actions> 
+    </panel>
+
 
 The Packs Element ``<packs>``
 '''''''''''''''''''''''''''''''
