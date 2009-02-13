@@ -46,6 +46,7 @@ import com.izforge.izpack.Panel;
 import com.izforge.izpack.adaptator.*;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
@@ -398,8 +399,11 @@ public class AutomatedInstaller extends InstallerBase
                 {
                     // this is OK - not all panels have/need automation support.
                     Debug.log("ClassNotFoundException-skip :" + automationHelperClassName);
-                    // but validate anyway
+                    // but run actions and validate it anyway
+                    executePreConstructActions(p, null);
+                    executePreValidateActions(p, null);
                     validatePanel(p);
+                    executePostValidateActions(p, null);
                     continue;
                 }
 
@@ -409,6 +413,7 @@ public class AutomatedInstaller extends InstallerBase
                 {
                     try
                     {
+                        executePreConstructActions(p, null);
                         Debug.log("Instantiate :" + automationHelperClassName);
                         automationHelperInstance = automationHelperClass.newInstance();
                     }
@@ -416,8 +421,10 @@ public class AutomatedInstaller extends InstallerBase
                     {
                         Debug.log("ERROR: no default constructor for " + automationHelperClassName
                                 + ", skipping...");
-                        // but validate anyway
+                        // but run actions and validate it anyway
+                        executePreValidateActions(p, null);
                         validatePanel(p);
+                        executePostValidateActions(p, null);
                         continue;
                     }
                 }
@@ -442,6 +449,7 @@ public class AutomatedInstaller extends InstallerBase
                 {
                     try
                     {
+                        executePreActivateActions(p, null);
                         Debug.log("automationHelperInstance.runAutomated :"
                                 + automationHelperClassName + " entered.");
                         if (!automationHelperInstance.runAutomated(this.idata, panelRoot))
@@ -465,9 +473,9 @@ public class AutomatedInstaller extends InstallerBase
                     }
 
                 }
+                executePreValidateActions(p, null);
                 validatePanel(p);
-
-            }
+                executePostValidateActions(p, null);            }
 
             // this does nothing if the uninstaller was not included
             writeUninstallData();
@@ -551,5 +559,71 @@ public class AutomatedInstaller extends InstallerBase
     public boolean getResult()
     {
         return this.result;
+    }
+    
+    private final List<PanelAction> createPanelActionsFromStringList(List<String> actions)
+    {
+        List<PanelAction> actionList = null;
+        if (actions != null)
+        {
+            actionList = new ArrayList<PanelAction>();
+            for (int actionIndex = 0; actionIndex < actions.size(); actionIndex++)
+            {
+                actionList.add(PanelActionFactory.createPanelAction(actions.get(actionIndex)));
+            }
+        }
+        return actionList;
+    }
+
+    private final void executePreConstructActions(Panel panel, AbstractUIHandler handler)
+    {
+        List<PanelAction> preConstructActions = createPanelActionsFromStringList(panel
+                .getPreConstructionActions());
+        if (preConstructActions != null)
+        {
+            for (int actionIndex = 0; actionIndex < preConstructActions.size(); actionIndex++)
+            {
+                preConstructActions.get(actionIndex).executeAction(idata, handler);
+            }
+        }
+    }
+
+    private final void executePreActivateActions(Panel panel, AbstractUIHandler handler)
+    {
+        List<PanelAction> preActivateActions = createPanelActionsFromStringList(panel
+                .getPreActivationActions());
+        if (preActivateActions != null)
+        {
+            for (int actionIndex = 0; actionIndex < preActivateActions.size(); actionIndex++)
+            {
+                preActivateActions.get(actionIndex).executeAction(idata, handler);
+            }
+        }
+    }
+
+    private final void executePreValidateActions(Panel panel, AbstractUIHandler handler)
+    {
+        List<PanelAction> preValidateActions = createPanelActionsFromStringList(panel
+                .getPreValidationActions());
+        if (preValidateActions != null)
+        {
+            for (int actionIndex = 0; actionIndex < preValidateActions.size(); actionIndex++)
+            {
+                preValidateActions.get(actionIndex).executeAction(idata, handler);
+            }
+        }
+    }
+
+    private final void executePostValidateActions(Panel panel, AbstractUIHandler handler)
+    {
+        List<PanelAction> postValidateActions = createPanelActionsFromStringList(panel
+                .getPostValidationActions());
+        if (postValidateActions != null)
+        {
+            for (int actionIndex = 0; actionIndex < postValidateActions.size(); actionIndex++)
+            {
+                postValidateActions.get(actionIndex).executeAction(idata, handler);
+            }
+        }
     }
 }

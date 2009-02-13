@@ -836,6 +836,7 @@ Here's a sample :
 
 Here you can define multiple actions that are done during the lifetime of the panel. 
 The class must implement the interface com.izforge.izpack.installer.PanelAction.
+The actions are also called during an automated installation.
 
 The ``<actions>`` tag has no attributes but has ``<action>``markups with the following attributes :
 

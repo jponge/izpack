@@ -58,8 +58,10 @@ public interface PanelAction
 
     /**
      * @param adata - AutomatedInstallData instance
-     * @param handler - actual UIHandler (NOTE: on a preconstruct action the handler is null because
-     * it is not available until it is constructed)
+     * @param handler - actual UIHandler (
+     * NOTE: 
+     * On a preconstruct action the handler is null because it is not available until it is constructed.
+     * During an automated installation the handler is null on each action because we have no GUI to handle.
      */
     public void executeAction(final AutomatedInstallData adata, AbstractUIHandler handler);
 }
