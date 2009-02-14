@@ -341,6 +341,22 @@ In addition to ``<arg>`` elements, the ``<executefile>`` element also accepts ``
 An ``<env>`` element has the following syntax: ``<env>variable=value</env>``. Note the value supports variable substitution, for example:
 ``<env>MY_PRODUCT_HOME=$INSTALL_PATH</env>``.
 
+The ProcessPanel now also supports configurable behaviour for the panel's "Previous" and "Next" buttons. By adding ``<onFail>`` and ``<onSuccess>`` childs to the ``<processing>`` element, you define which buttons you want unlocked in case of failure and in case of success, respectively.
+
+::
+
+    <processing>
+      <job name="do xyz">
+        <executefile name="$INSTALL_PATH/scripts/xyz.bat">
+          <arg>doit</arg><arg>$variable</arg>
+        </executefile>
+      </job>
+      <onFail previous="true" next="false" />
+      <onSuccess previous="true" next="true" condition="mycondition" />
+      <onSuccess previous="false" next="true" condition="!mycondition" />
+    </processing>
+
+In the above example the job *do xyz* would be run, and if it returned with an error, the *next* button would be greyed out, and the button to the *previous* page would be enabled. If it returned without an error, the conditions of the ``<onSuccess>`` elements would be checked and the respective action would be taken.
 
 ``<executeclass>`` - Execute Java Classes
 ''''''''''''''''''''''''''''''''''''''''''

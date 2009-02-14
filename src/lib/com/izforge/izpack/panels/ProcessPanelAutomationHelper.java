@@ -106,8 +106,9 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     /**
      * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing()
      */
-    public void finishProcessing()
+    public void finishProcessing(boolean unlockPrev, boolean unlockNext)
     {
+        /* FIXME: maybe we should abort if unlockNext is false...? */
         System.out.println("[ Processing finished ]");
     }
 

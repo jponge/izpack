@@ -48,5 +48,5 @@ public interface AbstractUIProcessHandler extends AbstractUIHandler
 
     public void finishProcess();
 
-    public void finishProcessing();
+    public void finishProcessing(boolean unlockPrev, boolean unlockNext);
 }

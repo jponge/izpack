@@ -67,6 +67,8 @@ public class ProcessPanelWorker implements Runnable
     private String logfiledir = null;
 
     protected AutomatedInstallData idata;
+    
+    private Map<Boolean,List<ButtonConfig>> buttonConfigs = new Hashtable<Boolean, List<ButtonConfig>>();
 
     /**
      * The constructor.
@@ -211,6 +213,21 @@ public class ProcessPanelWorker implements Runnable
                 this.jobs.add(new ProcessingJob(job_name, ef_list));
             }
         }
+        
+        buttonConfigs.put(Boolean.FALSE, new ArrayList<ButtonConfig>());
+        buttonConfigs.put(Boolean.TRUE, new ArrayList<ButtonConfig>());
+        
+        for (IXMLElement ef : spec.getChildrenNamed("onFail")) {
+            String conditionid = ef.hasAttribute("condition") ? ef.getAttribute("condition") : ef.hasAttribute("conditionid") ? ef.getAttribute("conditionid") : null;
+            boolean unlockPrev = ef.hasAttribute("previous") ? Boolean.parseBoolean(ef.getAttribute("previous")) : false;
+            boolean unlockNext = ef.hasAttribute("next") ? Boolean.parseBoolean(ef.getAttribute("next")) : false;
+            buttonConfigs.get(Boolean.FALSE).add(new ButtonConfig(conditionid, unlockPrev, unlockNext));
+        }
+        for (IXMLElement ef : spec.getChildrenNamed("onSuccess")) {
+            String conditionid = ef.hasAttribute("condition") ? ef.getAttribute("condition") : ef.hasAttribute("conditionid") ? ef.getAttribute("conditionid") : null;
+            boolean unlockPrev = ef.hasAttribute("previous") ? Boolean.parseBoolean(ef.getAttribute("previous")) : false;
+            buttonConfigs.get(Boolean.TRUE).add(new ButtonConfig(conditionid, unlockPrev, true));
+        }
 
         return true;
     }
@@ -292,7 +309,31 @@ public class ProcessPanelWorker implements Runnable
             }
         }
 
-        this.handler.finishProcessing();
+        boolean unlockNext = true;
+        boolean unlockPrev = false;
+        
+        // get the ButtonConfigs matching the this.result
+        for (ButtonConfig bc : buttonConfigs.get(Boolean.valueOf(this.result)))
+        {
+            String conditionid = bc.getConditionid();
+            if ((conditionid != null) && (conditionid.length() > 0))
+            {
+                Debug.trace("Condition for job.");
+                Condition cond = RulesEngine.getCondition(conditionid);
+                if ((cond != null) && !cond.isTrue())
+                {
+                    Debug.trace("condition is not fulfilled.");
+                    // skip, if there is a condition and this condition isn't true
+                    continue;
+                }
+            }
+            
+            unlockNext = bc.isUnlockNext();
+            unlockPrev = bc.isUnlockPrev();
+            break;
+        }
+        
+        this.handler.finishProcessing(unlockPrev, unlockNext);
         if (logfile != null)
         {
             logfile.close();
@@ -702,4 +743,47 @@ public class ProcessPanelWorker implements Runnable
         return (false);
     }
 
+}
+
+class  ButtonConfig {
+    private final String conditionid;
+    private final boolean unlockPrev;
+    private final boolean unlockNext;
+    
+    /**
+     * @param conditionid
+     * @param unlockPrev
+     * @param unlockNext
+     */
+    public ButtonConfig(String conditionid, boolean unlockPrev, boolean unlockNext)
+    {
+        this.conditionid = conditionid;
+        this.unlockPrev = unlockPrev;
+        this.unlockNext = unlockNext;
+    }
+
+    /**
+     * @return the unlockPrev
+     */
+    public boolean isUnlockPrev()
+    {
+        return unlockPrev;
+    }
+    
+    /**
+     * @return the unlockNext
+     */
+    public boolean isUnlockNext()
+    {
+        return unlockNext;
+    }
+
+    
+    /**
+     * @return the conditionid
+     */
+    public String getConditionid()
+    {
+        return conditionid;
+    }
 }
