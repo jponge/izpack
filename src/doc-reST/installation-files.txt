@@ -838,11 +838,12 @@ Here you can define multiple actions that are done during the lifetime of the pa
 The class must implement the interface com.izforge.izpack.installer.PanelAction.
 The actions are also called during an automated installation.
 
-The ``<actions>`` tag has no attributes but has ``<action>``markups with the following attributes :
+The ``<actions>`` tag has no attributes but has ``<action>`` markups with the following attributes :
 
 -   ``stage``: The stage when the action should be triggered.
 		Possible values are ``preconstruct``, ``preactivate``, ``prevalidate`` or ``postvalidate``.
 -   ``classname``: The class implementing com.izforge.izpack.installer.PanelAction
+
 
 Here's a sample :
 
