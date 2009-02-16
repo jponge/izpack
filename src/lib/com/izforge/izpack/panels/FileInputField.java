@@ -1,7 +1,29 @@
+/*
+ * IzPack - Copyright 2001-2009 Julien Ponge, All Rights Reserved.
+ * 
+ * Copyright 2009 Dennis Reil
+ * 
+ * http://izpack.org/
+ * http://izpack.codehaus.org/
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.izforge.izpack.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.util.List;
 
@@ -18,7 +40,7 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.util.Debug;
 
 
-public class FileInputField extends JPanel implements ActionListener
+public class FileInputField extends JPanel implements ActionListener, FocusListener
 {
     private static final long serialVersionUID = 4673684743657328492L;
     
@@ -55,6 +77,7 @@ public class FileInputField extends JPanel implements ActionListener
     public void initialize(){
         filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);        
+        filetxt.addFocusListener(this);
         
         // TODO: use separate key for button text
         browseBtn = ButtonFactory.createButton(data.langpack.getString("UserInputPanel.search.browse"), data.buttonsHColor);
@@ -182,5 +205,18 @@ public class FileInputField extends JPanel implements ActionListener
     public void setAllowEmptyInput(boolean allowEmpty)
     {
         this.allowEmpty = allowEmpty;
+    }
+
+    public void focusGained(FocusEvent e)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void focusLost(FocusEvent e)
+    {
+        if (e.getSource() == this.filetxt){
+            
+        }        
     }
 }
