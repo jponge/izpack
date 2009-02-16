@@ -596,11 +596,10 @@ public class UserInputPanel extends IzPanel implements ActionListener {
                 filterdesc = "";
             }
             // internationalize it
-            filterdesc = idata.langpack.getString(filterdesc);
-            
-            validatorConfig = analyzeValidator(element);
+            filterdesc = idata.langpack.getString(filterdesc);                        
         }
-
+        validatorConfig = analyzeValidator(field);
+        
         final JTextField filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);
 
@@ -692,6 +691,8 @@ public class UserInputPanel extends IzPanel implements ActionListener {
             filterdesc = idata.langpack.getString(filterdesc);
         }
 
+        List<ValidatorContainer> validatorConfig = analyzeValidator(field);
+        
         final JTextField filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);
 
@@ -728,7 +729,7 @@ public class UserInputPanel extends IzPanel implements ActionListener {
         panel.add(filetxt);
         panel.add(button);
         uiElements.add(new Object[]{null, FILE_FIELD, variable, constraints2, panel, forPacks,
-                forOs});
+                forOs,null,null,null,null,validatorConfig});
     }
 
     protected void updateUIElements() {
