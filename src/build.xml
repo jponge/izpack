@@ -685,6 +685,7 @@
         <build-panel name="UserInputPanel">
             <include name="com/izforge/izpack/panels/PasswordGroup.java"/>
             <include name="com/izforge/izpack/panels/ProcessingClient.java"/>
+        	<include name="com/izforge/izpack/panels/StringInputProcessingClient.java"/>
             <include name="com/izforge/izpack/panels/Processor.java"/>
             <include name="com/izforge/izpack/panels/RuleInputField.java"/>
             <include name="com/izforge/izpack/panels/RuleTextField.java"/>
@@ -704,6 +705,7 @@
             <include name="com/izforge/izpack/panels/ConditionalUserInputPanel.java"/>
             <include name="com/izforge/izpack/panels/PasswordGroup.java"/>
             <include name="com/izforge/izpack/panels/ProcessingClient.java"/>
+        	<include name="com/izforge/izpack/panels/StringInputProcessingClient.java"/>
             <include name="com/izforge/izpack/panels/Processor.java"/>
             <include name="com/izforge/izpack/panels/RuleInputField.java"/>
             <include name="com/izforge/izpack/panels/RuleTextField.java"/>
