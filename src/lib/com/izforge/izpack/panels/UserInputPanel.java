@@ -137,6 +137,8 @@ public class UserInputPanel extends IzPanel implements ActionListener {
     private static final int POS_MESSAGE = 9;
 
     private static final int POS_GROUP = 10;
+    
+    private static final int POS_VALIDATORS = 11;
 
     protected static final String ICON_KEY = "icon";
 
@@ -499,6 +501,45 @@ public class UserInputPanel extends IzPanel implements ActionListener {
             }
         }
     }
+    
+    private List<ValidatorContainer> analyzeValidator(IXMLElement specElement){
+        List<ValidatorContainer> result = null;
+
+        // ----------------------------------------------------
+        // get the validator and processor if they are defined
+        // ----------------------------------------------------
+
+        Vector<IXMLElement> validatorsElem = specElement.getChildrenNamed(VALIDATOR);
+        if (validatorsElem != null && validatorsElem.size() > 0) {
+            int vsize = validatorsElem.size();
+            
+            result = new ArrayList<ValidatorContainer>(vsize);
+            
+            for (int i = 0; i < vsize; i++) {
+                IXMLElement element = validatorsElem.get(i);
+                String validator = element.getAttribute(CLASS);
+                String message = getText(element);
+                HashMap<String, String> validateParamMap = new HashMap<String, String>();
+                // ----------------------------------------------------------
+                // check and see if we have any parameters for this validator.
+                // If so, then add them to validateParamMap.
+                // ----------------------------------------------------------
+                Vector<IXMLElement> validateParams = element.getChildrenNamed(RULE_PARAM);
+                if (validateParams != null && validateParams.size() > 0) {
+                    Iterator<IXMLElement> iter = validateParams.iterator();
+                    while (iter.hasNext()) {
+                        element = iter.next();
+                        String paramName = element.getAttribute(RULE_PARAM_NAME);
+                        String paramValue = element.getAttribute(RULE_PARAM_VALUE);
+                
+                        validateParamMap.put(paramName, paramValue);
+                    }
+                }                
+                result.add(new ValidatorContainer(validator, message, validateParamMap));
+            }
+        }        
+        return result;
+    }
 
     private void addDirectoryField(IXMLElement field) {
         Vector<IXMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
@@ -515,7 +556,8 @@ public class UserInputPanel extends IzPanel implements ActionListener {
         if ((variable == null) || (variable.length() == 0)) {
             return;
         }
-
+                
+        List<ValidatorContainer> validatorConfig;
         IXMLElement element = field.getFirstChildNamed(SPEC);
         if (element == null) {
             Debug.trace("Error: no spec element defined in file field");
@@ -555,6 +597,8 @@ public class UserInputPanel extends IzPanel implements ActionListener {
             }
             // internationalize it
             filterdesc = idata.langpack.getString(filterdesc);
+            
+            validatorConfig = analyzeValidator(element);
         }
 
         final JTextField filetxt = new JTextField(set, size);
@@ -587,7 +631,7 @@ public class UserInputPanel extends IzPanel implements ActionListener {
         panel.add(filetxt);
         panel.add(button);
         uiElements.add(new Object[]{null, DIR_FIELD, variable, constraints2, panel, forPacks,
-                forOs});
+                forOs,null,null,null,null,validatorConfig});
 
     }
 
@@ -959,6 +1003,7 @@ public class UserInputPanel extends IzPanel implements ActionListener {
     }
 
     private boolean readDirectoryField(Object[] field) {
+        boolean result = false;
         try {
             JPanel panel = (JPanel) field[POS_FIELD];
             JTextField textf = (JTextField) panel.getComponent(0);
@@ -966,24 +1011,31 @@ public class UserInputPanel extends IzPanel implements ActionListener {
             if (file != null) {
                 File ffile = new File(file);
                 if (ffile.isDirectory()) {
-                    idata.setVariable((String) field[POS_VARIABLE], file);
-                    entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
-                    return true;
+                    StringInputProcessingClient processingClient = new StringInputProcessingClient(file,(List<ValidatorContainer>) field[POS_VALIDATORS]);
+                    boolean success = processingClient.validate();
+                    if (!success){
+                        JOptionPane.showMessageDialog(parentFrame, processingClient.getValidationMessage(),
+                                parentFrame.langpack.getString("UserInputPanel.error.caption"),
+                                JOptionPane.WARNING_MESSAGE);    
+                    }
+                    else {
+                        idata.setVariable((String) field[POS_VARIABLE], file);
+                        entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
+                        result = true;
+                    }
                 } else {
                     showMessage("dir.notdirectory");
-                    return false;
                 }
             } else {
                 showMessage("dir.nodirectory");
-                return false;
             }
         }
         catch (Exception e) {
             if (Debug.stackTracing()) {
                 Debug.trace(e);
             }
-            return false;
         }
+        return result;
     }
 
     private void showMessage(String messageType) {
@@ -993,6 +1045,7 @@ public class UserInputPanel extends IzPanel implements ActionListener {
     }
 
     private boolean readFileField(Object[] field) {
+        boolean result = false;
         try {
             JPanel panel = (JPanel) field[POS_FIELD];
             JTextField textf = (JTextField) panel.getComponent(0);
@@ -1000,24 +1053,31 @@ public class UserInputPanel extends IzPanel implements ActionListener {
             if (file != null) {
                 File ffile = new File(file);
                 if (ffile.isFile()) {
-                    idata.setVariable((String) field[POS_VARIABLE], file);
-                    entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
-                    return true;
+                    StringInputProcessingClient processingClient = new StringInputProcessingClient(file,(List<ValidatorContainer>) field[POS_VALIDATORS]);
+                    boolean success = processingClient.validate();
+                    if (!success){
+                        JOptionPane.showMessageDialog(parentFrame,processingClient.getValidationMessage(),
+                                parentFrame.langpack.getString("UserInputPanel.error.caption"),
+                                JOptionPane.WARNING_MESSAGE);    
+                    }
+                    else {
+                        idata.setVariable((String) field[POS_VARIABLE], file);
+                        entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
+                        result = true;
+                    }                    
                 } else {
-                    showMessage("file.notfile");
-                    return false;
+                    showMessage("file.notfile");                   
                 }
             } else {
-                showMessage("file.nofile");
-                return false;
+                showMessage("file.nofile");                
             }
         }
         catch (Exception e) {
             if (Debug.stackTracing()) {
                 Debug.trace(e);
-            }
-            return false;
+            }            
         }
+        return result;
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1860,11 +1920,7 @@ public class UserInputPanel extends IzPanel implements ActionListener {
         IXMLElement element = null;
         PasswordGroup group = null;
         int size = 0;
-        // For multiple validator support
-        Vector<IXMLElement> validatorsElem = null;
-        List<ValidatorContainer> validatorsList = new ArrayList<ValidatorContainer>();
-        int vsize = 0;
-
+        
         // ----------------------------------------------------
         // get the description and add it to the list of UI
         // elements if it exists.
@@ -1872,35 +1928,9 @@ public class UserInputPanel extends IzPanel implements ActionListener {
         element = spec.getFirstChildNamed(DESCRIPTION);
         addDescription(element, forPacks, forOs);
 
-        // ----------------------------------------------------
-        // get the validator and processor if they are defined
-        // ----------------------------------------------------
-
-        validatorsElem = spec.getChildrenNamed(VALIDATOR);
-        if (validatorsElem != null && validatorsElem.size() > 0) {
-            vsize = validatorsElem.size();
-            for (int i = 0; i < vsize; i++) {
-                element = validatorsElem.get(i);
-                String validator = element.getAttribute(CLASS);
-                message = getText(element);
-                HashMap<String, String> validateParamMap = new HashMap<String, String>();
-                // ----------------------------------------------------------
-                // check and see if we have any parameters for this validator.
-                // If so, then add them to validateParamMap.
-                // ----------------------------------------------------------
-                Vector<IXMLElement> validateParams = element.getChildrenNamed(RULE_PARAM);
-                if (validateParams != null && validateParams.size() > 0) {
-                    Iterator<IXMLElement> iter = validateParams.iterator();
-                    while (iter.hasNext()) {
-                        element = iter.next();
-                        String paramName = element.getAttribute(RULE_PARAM_NAME);
-                        String paramValue = element.getAttribute(RULE_PARAM_VALUE);
-                        // System.out.println("Adding parameter: "+paramName+"="+paramValue);
-                        validateParamMap.put(paramName, paramValue);
-                    }
-                }
-                validatorsList.add(new ValidatorContainer(validator, message, validateParamMap));
-            }
+        List<ValidatorContainer> validatorsList = analyzeValidator(spec);
+        if (validatorsList == null){
+            validatorsList = new ArrayList<ValidatorContainer>();
         }
 
         element = spec.getFirstChildNamed(PROCESSOR);
