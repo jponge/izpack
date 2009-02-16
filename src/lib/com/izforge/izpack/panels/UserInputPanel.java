@@ -42,6 +42,7 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputMethodListener;
 import java.io.File;
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -549,14 +550,16 @@ public class UserInputPanel extends IzPanel implements ActionListener {
         String set;
         int size;
 
-        String filter = null;
-        String filterdesc = null;
+//        String filter = null;
+//        String filterdesc = null;
 
         String variable = field.getAttribute(VARIABLE);
         if ((variable == null) || (variable.length() == 0)) {
             return;
         }
-                
+        
+        boolean allowEmptyValue = false;
+        
         List<ValidatorContainer> validatorConfig;
         IXMLElement element = field.getFirstChildNamed(SPEC);
         if (element == null) {
@@ -587,22 +590,20 @@ public class UserInputPanel extends IzPanel implements ActionListener {
                 size = 1;
             }
 
-            filter = element.getAttribute("fileext");
-            if (filter == null) {
-                filter = "";
-            }
-            filterdesc = element.getAttribute("fileextdesc");
-            if (filterdesc == null) {
-                filterdesc = "";
-            }
-            // internationalize it
-            filterdesc = idata.langpack.getString(filterdesc);                        
+            allowEmptyValue = Boolean.parseBoolean(element.getAttribute("allowEmptyValue", "false"));
+//            filter = element.getAttribute("fileext");
+//            if (filter == null) {
+//                filter = "";
+//            }
+//            filterdesc = element.getAttribute("fileextdesc");
+//            if (filterdesc == null) {
+//                filterdesc = "";
+//            }
+//            // internationalize it
+//            filterdesc = idata.langpack.getString(filterdesc);                        
         }
         validatorConfig = analyzeValidator(field);
         
-        final JTextField filetxt = new JTextField(set, size);
-        filetxt.setCaretPosition(0);
-
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
 
@@ -610,27 +611,12 @@ public class UserInputPanel extends IzPanel implements ActionListener {
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
-
-        // TODO: use separate key for button text
-        JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"), idata.buttonsHColor);
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Show dirchooser");
-                JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
-                filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-                if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION) {
-                    filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
-                    currentDirectoryPath = filechooser.getSelectedFile().getAbsolutePath();
-                    Debug.trace("Setting current file chooser directory to: " + currentDirectoryPath);
-                }
-            }
-        });
-        JPanel panel = new JPanel();
-        panel.add(filetxt);
-        panel.add(button);
-        uiElements.add(new Object[]{null, DIR_FIELD, variable, constraints2, panel, forPacks,
-                forOs,null,null,null,null,validatorConfig});
+        
+        FileInputField fileInput = new FileInputField(parentFrame, idata, true, set, size, validatorConfig);
+        fileInput.setAllowEmptyInput(allowEmptyValue);
+                
+        uiElements.add(new Object[]{null, DIR_FIELD, variable, constraints2, fileInput, forPacks,
+                forOs});
 
     }
 
@@ -650,6 +636,8 @@ public class UserInputPanel extends IzPanel implements ActionListener {
             return;
         }
 
+        boolean allowEmptyValue = false;
+        
         IXMLElement element = field.getFirstChildNamed(SPEC);
         if (element == null) {
             Debug.trace("Error: no spec element defined in file field");
@@ -689,13 +677,12 @@ public class UserInputPanel extends IzPanel implements ActionListener {
             }
             // internationalize it
             filterdesc = idata.langpack.getString(filterdesc);
+            
+            allowEmptyValue = Boolean.parseBoolean(element.getAttribute("allowEmptyValue", "false"));
         }
 
         List<ValidatorContainer> validatorConfig = analyzeValidator(field);
-        
-        final JTextField filetxt = new JTextField(set, size);
-        filetxt.setCaretPosition(0);
-
+                
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
 
@@ -704,32 +691,11 @@ public class UserInputPanel extends IzPanel implements ActionListener {
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-
-        final UserInputFileFilter uiff = new UserInputFileFilter();
-        uiff.setFileExt(filter);
-        uiff.setFileExtDesc(filterdesc);
-
-        // TODO: use separate key for button text
-        JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"), idata.buttonsHColor);
-        button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Show filechooser");
-                JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
-                filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                filechooser.setFileFilter(uiff);
-
-                if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION) {
-                    filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
-                    currentDirectoryPath = filechooser.getSelectedFile().getParent();
-                    Debug.trace("Setting current file chooser directory to: " + currentDirectoryPath);
-                }
-            }
-        });
-        JPanel panel = new JPanel();
-        panel.add(filetxt);
-        panel.add(button);
-        uiElements.add(new Object[]{null, FILE_FIELD, variable, constraints2, panel, forPacks,
-                forOs,null,null,null,null,validatorConfig});
+        FileInputField fileInputField = new FileInputField(parentFrame,idata,false,set,size,validatorConfig,filter,filterdesc);
+        fileInputField.setAllowEmptyInput(allowEmptyValue);
+        
+        uiElements.add(new Object[]{null, FILE_FIELD, variable, constraints2, fileInputField, forPacks,
+                forOs});
     }
 
     protected void updateUIElements() {
@@ -1006,30 +972,40 @@ public class UserInputPanel extends IzPanel implements ActionListener {
     private boolean readDirectoryField(Object[] field) {
         boolean result = false;
         try {
-            JPanel panel = (JPanel) field[POS_FIELD];
-            JTextField textf = (JTextField) panel.getComponent(0);
-            String file = textf.getText();
-            if (file != null) {
-                File ffile = new File(file);
-                if (ffile.isDirectory()) {
-                    StringInputProcessingClient processingClient = new StringInputProcessingClient(file,(List<ValidatorContainer>) field[POS_VALIDATORS]);
-                    boolean success = processingClient.validate();
-                    if (!success){
-                        JOptionPane.showMessageDialog(parentFrame, processingClient.getValidationMessage(),
-                                parentFrame.langpack.getString("UserInputPanel.error.caption"),
-                                JOptionPane.WARNING_MESSAGE);    
-                    }
-                    else {
-                        idata.setVariable((String) field[POS_VARIABLE], file);
-                        entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
-                        result = true;
-                    }
-                } else {
-                    showMessage("dir.notdirectory");
-                }
-            } else {
-                showMessage("dir.nodirectory");
+            FileInputField panel = (FileInputField) field[POS_FIELD];
+            if (panel.validateField()){
+                idata.setVariable((String) field[POS_VARIABLE], panel.getSelectedFile().getAbsolutePath());
+                entries.add(new TextValuePair((String) field[POS_VARIABLE], panel.getSelectedFile().getAbsolutePath()));
             }
+            
+//            JTextField textf = (JTextField) panel.getComponent(0);
+//            String file = textf.getText();
+//            if (file != null) {
+//                File ffile = new File(file);
+//                if (ffile.isDirectory()) {
+//                    if ()
+//                        idata.setVariable((String) field[POS_VARIABLE], file);
+//                        entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
+//                        result = true;
+//                    }  
+//                    StringInputProcessingClient processingClient = new StringInputProcessingClient(file,(List<ValidatorContainer>) field[POS_VALIDATORS]);
+//                    boolean success = processingClient.validate();
+//                    if (!success){
+//                        JOptionPane.showMessageDialog(parentFrame, processingClient.getValidationMessage(),
+//                                parentFrame.langpack.getString("UserInputPanel.error.caption"),
+//                                JOptionPane.WARNING_MESSAGE);    
+//                    }
+//                    else {
+//                        idata.setVariable((String) field[POS_VARIABLE], file);
+//                        entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
+//                        result = true;
+//                    }
+//                } else {
+//                    showMessage("dir.notdirectory");
+//                }
+//            } else {
+//                showMessage("dir.nodirectory");
+//            }
         }
         catch (Exception e) {
             if (Debug.stackTracing()) {
@@ -1039,39 +1015,44 @@ public class UserInputPanel extends IzPanel implements ActionListener {
         return result;
     }
 
-    private void showMessage(String messageType) {
-        JOptionPane.showMessageDialog(parent, parent.langpack.getString("UserInputPanel." + messageType + ".message"),
-                parent.langpack.getString("UserInputPanel." + messageType + ".caption"),
-                JOptionPane.WARNING_MESSAGE);
-    }
+//    private void showMessage(String messageType) {
+//        JOptionPane.showMessageDialog(parent, parent.langpack.getString("UserInputPanel." + messageType + ".message"),
+//                parent.langpack.getString("UserInputPanel." + messageType + ".caption"),
+//                JOptionPane.WARNING_MESSAGE);
+//    }
 
     private boolean readFileField(Object[] field) {
         boolean result = false;
         try {
-            JPanel panel = (JPanel) field[POS_FIELD];
-            JTextField textf = (JTextField) panel.getComponent(0);
-            String file = textf.getText();
-            if (file != null) {
-                File ffile = new File(file);
-                if (ffile.isFile()) {
-                    StringInputProcessingClient processingClient = new StringInputProcessingClient(file,(List<ValidatorContainer>) field[POS_VALIDATORS]);
-                    boolean success = processingClient.validate();
-                    if (!success){
-                        JOptionPane.showMessageDialog(parentFrame,processingClient.getValidationMessage(),
-                                parentFrame.langpack.getString("UserInputPanel.error.caption"),
-                                JOptionPane.WARNING_MESSAGE);    
-                    }
-                    else {
-                        idata.setVariable((String) field[POS_VARIABLE], file);
-                        entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
-                        result = true;
-                    }                    
-                } else {
-                    showMessage("file.notfile");                   
-                }
-            } else {
-                showMessage("file.nofile");                
+            FileInputField input = (FileInputField) field[POS_FIELD];
+            if (input.validateField()){
+                idata.setVariable((String) field[POS_VARIABLE],input.getSelectedFile().getAbsolutePath());
+                entries.add(new TextValuePair((String) field[POS_VARIABLE], input.getSelectedFile().getAbsolutePath()));
             }
+//            JPanel panel = (JPanel) field[POS_FIELD];
+//            JTextField textf = (JTextField) panel.getComponent(0);
+//            String file = textf.getText();
+//            if (file != null) {
+//                File ffile = new File(file);
+//                if (ffile.isFile()) {
+//                    StringInputProcessingClient processingClient = new StringInputProcessingClient(file,(List<ValidatorContainer>) field[POS_VALIDATORS]);
+//                    boolean success = processingClient.validate();
+//                    if (!success){
+//                        JOptionPane.showMessageDialog(parentFrame,processingClient.getValidationMessage(),
+//                                parentFrame.langpack.getString("UserInputPanel.error.caption"),
+//                                JOptionPane.WARNING_MESSAGE);    
+//                    }
+//                    else {
+//                        idata.setVariable((String) field[POS_VARIABLE], file);
+//                        entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
+//                        result = true;
+//                    }                    
+//                } else {
+//                    showMessage("file.notfile");                   
+//                }
+//            } else {
+//                showMessage("file.nofile");                
+//            }
         }
         catch (Exception e) {
             if (Debug.stackTracing()) {
