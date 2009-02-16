@@ -130,8 +130,8 @@ The following variables are built-in :
 -   ``$JAVA_HOME`` : the JavaTM virtual machine home path
 -   ``$CLASS_PATH`` : the Class Path used mainly for Java Applications
 -   ``$USER_HOME`` : the user's home directory path
--   ``$USER_name`` : the user name
--   ``$APP_name`` : the application name
+-   ``$USER_NAME`` : the user name
+-   ``$APP_NAME`` : the application name
 -   ``$APP_URL`` : the application URL
 -   ``$APP_VER`` : the application version
 -   ``$ISO3_LANG`` : the ISO3 language code of the selected langpack.
