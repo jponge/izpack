@@ -71,6 +71,7 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
         this.size = size;
         this.fileExtension = fileExt;
         this.fileExtensionDescription = fileExtDesc;
+        this.isDirectory = directory;
         this.initialize();
     }
     
