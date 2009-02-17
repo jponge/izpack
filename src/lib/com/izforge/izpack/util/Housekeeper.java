@@ -117,7 +117,7 @@ public class Housekeeper
     {
         // IZPACK-276
         // Do the cleanup of the last registered client at the fist time (first in last out)
-        for (int i = cleanupClients.size() - 1; i > 0; i--)
+        for (int i = cleanupClients.size() - 1; i >= 0; i--)
         {
             try
             {
