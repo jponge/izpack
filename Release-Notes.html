@@ -2,97 +2,87 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>IzPack 4.2.0 release notes</title>
+  <title>IzPack 4.2.1 release notes</title>
 </head>
 <body>
 
-
-            <h1>Release Notes - IzPack - Version 4.2.0</h1>
-
-    <h2>        Sub-task
-    </h2>
-    <ul>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-194'>IZPACK-194</a>] -         Remove ConditionalUserInputPanel
-    </li>
-    </ul>
+    <h1>Release Notes - IzPack - Version 4.2.1</h1>
 
     <h2>        Bug
     </h2>
     <ul>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-101'>IZPACK-101</a>] -         Rules not corrected evaluated when performing an automated install
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-165'>IZPACK-165</a>] -         The value of the encoding attribute of &lt;res&gt; element is ignored
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-103'>IZPACK-103</a>] -         ConditionalUserInputPanel missing AutomationHelper
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-166'>IZPACK-166</a>] -         VariableSubstitutor.substitute(Reader, Writer, String) method Ignore BOM of UTF-8
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-188'>IZPACK-188</a>] -         Localisation key for caption not looked up in UserInputPanel.java
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-195'>IZPACK-195</a>] -         Packs checkboxs do not work after &quot;previous&quot; to the PacksPanel from the next panel
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-191'>IZPACK-191</a>] -         Installer Requirements Broken
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-212'>IZPACK-212</a>] -         First non-latin character sometimes missing
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-199'>IZPACK-199</a>] -         Conditions not evaluated in InstallPanel while doing automated installation
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-223'>IZPACK-223</a>] -         TreePacksPanel does not pay attention to &quot;selected&quot; attribute in auto install mode
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-201'>IZPACK-201</a>] -         Shortcut creation on non-english Linux (Ubuntu 8.10)
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-230'>IZPACK-230</a>] -         does not terminate if &lt;installerrequirements&gt; are not fulfilled
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-204'>IZPACK-204</a>] -         Interface com.izforge.izpack.panels.Validator is missing in official Jar
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-239'>IZPACK-239</a>] -         NullPointerException in LocalDatabase &amp; enabling quoting placeholders
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-208'>IZPACK-208</a>] -         image in the HTMLInfoPanel does not show
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-244'>IZPACK-244</a>] -         build.xml does not copy ShellLink_x64.dll
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-213'>IZPACK-213</a>] -         AutomatedInstaller complains about &quot;invalid pack index&quot;
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-248'>IZPACK-248</a>] -         IsPortValidator requires ports to be &lt; 32000
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-216'>IZPACK-216</a>] -         Izpack installer for SVN fails to start because of wrong ant file
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-249'>IZPACK-249</a>] -         izpack-standalone-compiler does not have all needed classes
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-221'>IZPACK-221</a>] -         HTMLInfoPanel does not display html text that contains a meta content tag in its head area
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-256'>IZPACK-256</a>] -         Vista shortcuts bug workaround
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-260'>IZPACK-260</a>] -         Relative directories starting with &quot;..&quot; will not be recognized as relative this throws NullPointer Exception during installation
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-261'>IZPACK-261</a>] -         izpack2app - __file__ variable not found
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-262'>IZPACK-262</a>] -         Conditions on panels are not respected on automated installation
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-264'>IZPACK-264</a>] -         Capitalization leads to ClassNotFound exception in com.izforge.izpack.rules.RulesEngine.java when using XOr condition
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-265'>IZPACK-265</a>] -         Installation of loose pack throws EndOfFileException
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-269'>IZPACK-269</a>] -         Java process is not existing correctly if installer requirement feature is used
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-271'>IZPACK-271</a>] -         The same help is displayed on each UserInputPanel
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-272'>IZPACK-272</a>] -         Conditions not working correctly with backreferenced files
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-273'>IZPACK-273</a>] -         Loose pack only create direcotry structure on linux
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-275'>IZPACK-275</a>] -         CompilerConfig fails retrieving the IzPack home directory
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-276'>IZPACK-276</a>] -         Librarian cleanup calls System.exit()
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-281'>IZPACK-281</a>] -         Creation of Web Installers throws an exception
+    </li>
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-283'>IZPACK-283</a>] -         UserinputPanel stores wrong data in autoinstall.xml
     </li>
     </ul>
 
     <h2>        Improvement
     </h2>
     <ul>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-140'>IZPACK-140</a>] -         Registry access functionality shall allow creating registry items of type REG_EXPAND_SZ 
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-217'>IZPACK-217</a>] -         with &lt;run-privileged/&gt;, always asks for user account on winxp even if user is an administrator
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-164'>IZPACK-164</a>] -         Validating Data on every panel
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-226'>IZPACK-226</a>] -         Option not the merge panel jar at compile time since it can be done by &lt;jar&gt; tag instead
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-170'>IZPACK-170</a>] -         Italian langpack update
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-227'>IZPACK-227</a>] -         Adding PanelId to the AutoInstall.Xml
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-187'>IZPACK-187</a>] -         Improve visual look of installer UI
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-228'>IZPACK-228</a>] -         upgrade to izpack 4.2.1 when release to pick up IZPACK-226 
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-214'>IZPACK-214</a>] -         resource/parsable types are missing in docs
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-231'>IZPACK-231</a>] -         Reformat and upgrading Galician langpack
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-215'>IZPACK-215</a>] -         Since mac and linux does not want ctrl-m (carriage return) in shell script, make sure they are gone if marked as shell type
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-238'>IZPACK-238</a>] -         Installation will be treated as successfull even if a process in the ProcessPanel returns a boolean value of false
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-220'>IZPACK-220</a>] -         Document hidden feature of HTMLInfoPanel
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-259'>IZPACK-259</a>] -         On UserInputPanel only the LocaleDatabase form userInputLang.xml resource is available
     </li>
-    </ul>
-
-    <h2>        New Feature
-    </h2>
-    <ul>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-80'>IZPACK-80</a>] -         Ignore errors on execution of external executable programs
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-282'>IZPACK-282</a>] -         Make the privileges escalation configurable through conditions
     </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-163'>IZPACK-163</a>] -         Possibility of registering Helps
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-177'>IZPACK-177</a>] -         Fileset for Refpacks
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-184'>IZPACK-184</a>] -         JNLP (java Web Start) generator
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-190'>IZPACK-190</a>] -         Run an installer with privileged permissions
-    </li>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-200'>IZPACK-200</a>] -         Multiple packsLang.xml files
+    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-286'>IZPACK-286</a>] -         Fixes for Italian translation
     </li>
     </ul>
-
-    <h2>        Task
-    </h2>
-    <ul>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-207'>IZPACK-207</a>] -         Reformat Finnish LangPack
-    </li>
-    </ul>
-
-    <h2>        Test
-    </h2>
-    <ul>
-    <li>[<a href='http://jira.codehaus.org/browse/IZPACK-150'>IZPACK-150</a>] -         Add integration tests
-    </li>
-    </ul>
-
 
 </body>
 </html>
