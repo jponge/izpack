@@ -37,6 +37,7 @@ import com.izforge.izpack.event.CompilerListener;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.InstallerRequirement;
 import com.izforge.izpack.installer.PanelAction;
+import com.izforge.izpack.installer.PanelActionConfiguration;
 import com.izforge.izpack.installer.PanelAction.ActionStage;
 import com.izforge.izpack.panels.HelpWindow;
 import com.izforge.izpack.rules.Condition;
@@ -3185,8 +3186,18 @@ public class CompilerConfig extends Thread {
                     String stage = action.getAttribute(PanelAction.PANEL_ACTION_STAGE_TAG);
                     String actionName = action.getAttribute(PanelAction.PANEL_ACTION_CLASSNAME_TAG);
                     if (actionName != null){
-                        IXMLElement configuration = action.getFirstChildNamed(PanelAction.PANEL_ACTION_CONFIGURATION_TAG);
-                        panel.putPanelActionConfiguration(actionName, configuration);
+                        Vector<IXMLElement> params = action.getChildrenNamed("param");
+                        PanelActionConfiguration config = new PanelActionConfiguration();
+                        
+                        for(IXMLElement param : params){                            
+                            IXMLElement keyElement = param.getFirstChildNamed("key");
+                            IXMLElement valueElement = param.getFirstChildNamed("value");
+                            if ((keyElement != null) && (valueElement != null)){
+                                Debug.trace("Adding configuration property " + keyElement.getContent() + " with value " + valueElement.getContent() + " for action " + actionName);
+                                config.addProperty(keyElement.getContent(),valueElement.getContent());
+                            }                            
+                        }                                                
+                        panel.putPanelActionConfiguration(actionName, config);
                     }
                     try
                     {

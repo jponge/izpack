@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.installer.PanelActionConfiguration;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
@@ -83,7 +85,7 @@ public class Panel implements Serializable
      */
     private List<String> postValidationActions = null;
     
-    private HashMap<String,IXMLElement> actionConfiguration = null;
+    private HashMap<String,PanelActionConfiguration> actionConfiguration = null;
 
 
     /**
@@ -226,15 +228,15 @@ public class Panel implements Serializable
         this.postValidationActions.add(postValidationAction);
      }
     
-    public void putPanelActionConfiguration(String panelActionClassName,IXMLElement configuration){
+    public void putPanelActionConfiguration(String panelActionClassName, PanelActionConfiguration configuration){
         if (this.actionConfiguration == null){
-            this.actionConfiguration = new HashMap<String, IXMLElement>();
-        }
+            this.actionConfiguration = new HashMap<String, PanelActionConfiguration>();
+        }                
         this.actionConfiguration.put(panelActionClassName, configuration);
     }
     
-    public IXMLElement getPanelActionConfiguration(String panelActionClassName){
-        IXMLElement result = null;
+    public PanelActionConfiguration getPanelActionConfiguration(String panelActionClassName){
+        PanelActionConfiguration result = null;
         if (this.actionConfiguration != null){
             result = this.actionConfiguration.get(panelActionClassName);
         }
