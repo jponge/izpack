@@ -32,7 +32,6 @@ import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
-import com.izforge.izpack.event.PanelSwitchListener;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
@@ -136,12 +135,7 @@ public class InstallerFrame extends JFrame {
      * Registered GUICreationListener.
      */
     protected ArrayList<GUIListener> guiListener;
-    
-    /**
-     * Registered panel switch listener.
-     */
-    protected ArrayList<PanelSwitchListener> switchListener;
-
+       
     /**
      * Heading major text.
      */
@@ -217,20 +211,13 @@ public class InstallerFrame extends JFrame {
         // Builds the GUI
         loadIcons();
         loadCustomIcons();
-        loadPanels();
-        loadPanelSwitchListener();        
+        loadPanels();               
         buildGUI();
 
         // We show the frame
         showFrame();
         switchPanel(0);
-    }
-
-    private void loadPanelSwitchListener()
-    {
-        this.switchListener = new ArrayList<PanelSwitchListener>();
-        
-    }
+    }   
 
     public Debugger getDebugger() {
         return this.debugger;
