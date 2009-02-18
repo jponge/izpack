@@ -1,10 +1,11 @@
 /*
- * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
+ * IzPack - Copyright 2001-2009 Julien Ponge, All Rights Reserved.
  * 
  * http://izpack.org/
  * http://izpack.codehaus.org/
  * 
  * Copyright 2002 Elmar Grom
+ * Copyright 2009 Dennis Reil
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -19,9 +20,52 @@
 
 package com.izforge.izpack.panels;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.IXMLParser;
+import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
@@ -31,117 +75,189 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.OsVersion;
+import com.izforge.izpack.util.VariableSubstitutor;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputMethodListener;
-import java.io.File;
-import java.io.InputStream;
-import java.text.MessageFormat;
-import java.util.*;
-import java.util.List;
+enum UIElementType{
+    LABEL,
+    TEXT,
+    CHECKBOX,
+    FILE,
+    DIRECTORY,
+    RULE, 
+    COMBOBOX, 
+    RADIOBUTTON, 
+    PASSWORD, 
+    SEARCH, 
+    SEARCHBUTTON, 
+    SPACE, 
+    DIVIDER, 
+    DESCRIPTION
+}
 
-import com.izforge.izpack.adaptator.*;
-import com.izforge.izpack.adaptator.impl.XMLParser;
+class PasswordUIElement extends UIElement{
+    PasswordGroup passwordGroup;
 
-/*---------------------------------------------------------------------------*/
-/**
- * This panel is designed to collect user input during the installation process. The panel is
- * initially blank and is populated with input elements based on the XML specification in a resource
- * file.
- * 
- * @author getDirectoryCreated
- * @version 0.0.1 / 10/19/02
- */
-/*---------------------------------------------------------------------------*/
-/*
- * $ @design
- * 
- * Each field is specified in its own node, containing attributes and data. When this class is
- * instantiated, the specification is read and analyzed. Each field node is processed based on its
- * type. An specialized member function is called for each field type that creates the necessary UI
- * elements. All UI elements are stored in the uiElements vector. Elements are packaged in an object
- * array that must follow this pattern:
- * 
- * index 0 - a String object, that specifies the field type. This is identical to the string used to
- * identify the field type in the XML file. index 1 - a String object that contains the variable
- * name for substitution. index 2 - the constraints object that should be used for positioning the
- * UI element index 3 - the UI element itself index 4 - a Vector containg a list of pack for which
- * the item should be created. This is used by buildUI() to decide if the item should be added to
- * the UI.
- * 
- * In some cases additional entries are used. The use depends on the specific needs of the type of
- * input field.
- * 
- * When the panel is activated, the method buildUI() walks the list of UI elements adds them to the
- * panel together with the matching constraint.
- * 
- * When an attempt is made to move on to another panel, the method readInput() walks the list of UI
- * elements again and calls specialized methods that know how to read the user input from each of
- * the UI elemnts and set the associated varaible.
- * 
- * The actual variable substitution is not performed by this panel but by the variable substitutor.
- * 
- * To Do: ------ * make sure all header documentation is complete and correct
- * --------------------------------------------------------------------------
- */
-public class UserInputPanel extends IzPanel implements ActionListener
+    public PasswordGroup getPasswordGroup()
+    {
+        return passwordGroup;
+    }
+    
+    public void setPasswordGroup(PasswordGroup passwordGroup)
+    {
+        this.passwordGroup = passwordGroup;
+    }    
+}
+
+class RadioButtonUIElement extends UIElement {
+    ButtonGroup buttonGroup;
+    
+    public ButtonGroup getButtonGroup()
+    {
+        return buttonGroup;
+    }
+    
+    public void setButtonGroup(ButtonGroup buttonGroup)
+    {
+        this.buttonGroup = buttonGroup;
+    }   
+}
+
+
+
+class UIElement{
+    boolean displayed;
+    UIElementType type;
+    String associatedVariable;
+    JComponent component;
+    Object constraints;
+    Vector<IXMLElement> forPacks;
+    Vector<IXMLElement> forOs;
+    String trueValue;
+    String falseValue;    
+    String message;    
+    
+    public boolean hasVariableAssignment(){
+        return this.associatedVariable != null;
+    }    
+    
+    public String getMessage()
+    {
+        return message;
+    }
+
+    
+    public void setMessage(String message)
+    {
+        this.message = message;
+    }    
+    
+    public UIElementType getType()
+    {
+        return type;
+    }
+    
+    public void setType(UIElementType type)
+    {
+        this.type = type;
+    }
+    
+    public String getAssociatedVariable()
+    {
+        return associatedVariable;
+    }
+    
+    public void setAssociatedVariable(String associatedVariable)
+    {
+        this.associatedVariable = associatedVariable;
+    }
+    
+    public JComponent getComponent()
+    {
+        return component;
+    }
+    
+    public void setComponent(JComponent component)
+    {
+        this.component = component;
+    }
+    
+    public Object getConstraints()
+    {
+        return constraints;
+    }
+    
+    public void setConstraints(Object constraints)
+    {
+        this.constraints = constraints;
+    }
+    
+    public Vector<IXMLElement> getForPacks()
+    {
+        return forPacks;
+    }
+    
+    public void setForPacks(Vector<IXMLElement> forPacks)
+    {
+        this.forPacks = forPacks;
+    }
+    
+    public Vector<IXMLElement> getForOs()
+    {
+        return forOs;
+    }
+    
+    public void setForOs(Vector<IXMLElement> forOs)
+    {
+        this.forOs = forOs;
+    }
+    
+    public String getTrueValue()
+    {
+        return trueValue;
+    }
+    
+    public void setTrueValue(String trueValue)
+    {
+        this.trueValue = trueValue;
+    }
+    
+    public String getFalseValue()
+    {
+        return falseValue;
+    }
+    
+    public void setFalseValue(String falseValue)
+    {
+        this.falseValue = falseValue;
+    }
+
+
+    
+    public boolean isDisplayed()
+    {
+        return displayed;
+    }
+
+
+    
+    public void setDisplayed(boolean displayed)
+    {
+        this.displayed = displayed;
+    }
+    
+     
+}
+
+public class UserInputPanel extends IzPanel implements ActionListener, ItemListener, FocusListener
 {
-
-    // ------------------------------------------------------------------------
-    // Constant Definitions
-    // ------------------------------------------------------------------------
-
-    // The constants beginning with 'POS_' define locations in the object arrays
-    // that used to hold all information for the individual fields. Some data is
-    // not required for all field types. If this happens withing the array, that
-    // location must be padded with 'null'. At the end of the array it can be
-    // omitted. The data stored in this way is in most cases only known by
-    // convention between the add and the associated read method. the following
-    // positions are also used by other service methods in this class and must
-    // not be used for other purposes:
-    // - POS_DISPLAYED
-    // - POS_TYPE
-    // - POS_CONSTRAINTS
-    // - POS_PACKS
-
     /**
      * 
      */
     private static final long serialVersionUID = 3257850965439886129L;
-
-    private static final int POS_DISPLAYED = 0;
-
-    private static final int POS_TYPE = 1;
-
-    private static final int POS_VARIABLE = 2;
-
-    private static final int POS_CONSTRAINTS = 3;
-
-    private static final int POS_FIELD = 4;
-
-    private static final int POS_PACKS = 5;
-
-    private static final int POS_OS = 6;
-
-    private static final int POS_TRUE = 7;
-
-    private static final int POS_FALSE = 8;
-
-    private static final int POS_MESSAGE = 9;
-
-    private static final int POS_GROUP = 10;
-
-    private static final int POS_VALIDATORS = 11;
-
+  
     protected static final String ICON_KEY = "icon";
 
     /**
@@ -206,8 +322,6 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     private static final String CLASS = "class";
 
-    private static final String FIELD_LABEL = "label";
-
     private static final String TITLE_FIELD = "title";
 
     private static final String TEXT_FIELD = "text";
@@ -268,9 +382,6 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     private static final String DIR_FIELD = "dir";
 
-    // internal value for the button used to trigger autodetection
-    private static final String SEARCH_BUTTON_FIELD = "autodetect";
-
     private static final String SEARCH_CHOICE = "choice";
 
     private static final String SEARCH_FILENAME = "filename";
@@ -309,7 +420,6 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     private static final String FAMILY = "family";
 
-    private static final String FIELD_BUTTON = "button";
 
     // ------------------------------------------------------------------------
     // Variable Declarations
@@ -338,7 +448,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /**
      * Holds the references to all of the UI elements
      */
-    private Vector<Object[]> uiElements = new Vector<Object[]>();
+//    private Vector<Object[]> uiElements = new Vector<Object[]>();
 
     /**
      * Holds the references to all radio button groups
@@ -371,9 +481,12 @@ public class UserInputPanel extends IzPanel implements ActionListener
     // Used for dynamic controls to skip content validation unless the user
     // really clicks "Next"
     private boolean validating = true;
+    
 
-    private String currentDirectoryPath = null;
-
+    private boolean eventsActivated = false;
+    
+    private Vector<UIElement> elements = new Vector<UIElement>();
+    
     /*--------------------------------------------------------------------------*/
     // This method can be used to search for layout problems. If this class is
     // compiled with this method uncommented, the layout guides will be shown
@@ -402,10 +515,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
     protected void init()
     {
-
+        eventsActivated = false;
         TwoColumnLayout layout;
         super.removeAll();
-        uiElements.clear();
+        elements.clear();
 
         // ----------------------------------------------------
         // get a locale database
@@ -541,6 +654,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 }
             }
         }
+        eventsActivated = true;
     }
 
     private List<ValidatorContainer> analyzeValidator(IXMLElement specElement)
@@ -662,8 +776,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
 
-        uiElements
-                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+        UIElement labelUiElement = new UIElement();
+        labelUiElement.setType(UIElementType.LABEL);
+        labelUiElement.setConstraints(constraints);
+        labelUiElement.setComponent(label);
+        labelUiElement.setForPacks(forPacks);
+        labelUiElement.setForOs(forOs);
+        elements.add(labelUiElement);
+        
+//        uiElements
+//                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
@@ -672,8 +794,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 validatorConfig);
         fileInput.setAllowEmptyInput(allowEmptyValue);
 
-        uiElements.add(new Object[] { null, DIR_FIELD, variable, constraints2, fileInput, forPacks,
-                forOs});
+        UIElement dirUiElement = new UIElement();
+        dirUiElement.setType(UIElementType.DIRECTORY);
+        dirUiElement.setConstraints(constraints2);
+        dirUiElement.setComponent(fileInput);
+        dirUiElement.setForPacks(forPacks);
+        dirUiElement.setForOs(forOs);
+        dirUiElement.setAssociatedVariable(variable);
+        elements.add(dirUiElement);
+//        uiElements.add(new Object[] { null, DIR_FIELD, variable, constraints2, fileInput, forPacks,
+//                forOs});
 
     }
 
@@ -755,8 +885,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
 
-        uiElements
-                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+        UIElement labelUiElement = new UIElement();
+        labelUiElement.setType(UIElementType.LABEL);
+        labelUiElement.setConstraints(constraints);
+        labelUiElement.setComponent(label);
+        labelUiElement.setForPacks(forPacks);
+        labelUiElement.setForOs(forOs);
+        elements.add(labelUiElement);
+        
+//        uiElements
+//                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
@@ -765,8 +903,17 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 validatorConfig, filter, filterdesc);
         fileInputField.setAllowEmptyInput(allowEmptyValue);
 
-        uiElements.add(new Object[] { null, FILE_FIELD, variable, constraints2, fileInputField,
-                forPacks, forOs});
+        UIElement fileUiElement = new UIElement();
+        fileUiElement.setType(UIElementType.FILE);
+        fileUiElement.setConstraints(constraints2);
+        fileUiElement.setComponent(fileInputField);
+        fileUiElement.setForPacks(forPacks);
+        fileUiElement.setForOs(forOs);
+        fileUiElement.setAssociatedVariable(variable);
+        elements.add(fileUiElement);
+        
+//        uiElements.add(new Object[] { null, FILE_FIELD, variable, constraints2, fileInputField,
+//                forPacks, forOs});
     }
 
     protected void updateUIElements()
@@ -774,76 +921,53 @@ public class UserInputPanel extends IzPanel implements ActionListener
         boolean updated = false;
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
 
-        for (int i = 0; i < uiElements.size(); i++)
-        {
-            Object[] element = uiElements.get(i);
-            if (element[POS_VARIABLE] == null)
-            {
-                continue;
-            }
-            String value = idata.getVariable((String) element[POS_VARIABLE]);
+        for (UIElement element : elements){
+            if (element.hasVariableAssignment()){
+                String value = idata.getVariable(element.getAssociatedVariable());
+                if (element.getType() == UIElementType.RADIOBUTTON)
+                {
+                    // we have a radio field, which should be updated
+                    JRadioButton choice = (JRadioButton) element.getComponent();
+                    if (value == null)
+                    {
+                        continue;
+                    }
+                    if (value.equals(element.getTrueValue()))
+                    {
+                        choice.setSelected(true);
+                    }
+                    else
+                    {
+                        choice.setSelected(false);
+                    }                    
+                }
+                else if (element.getType() == UIElementType.TEXT)
+                {
+                    // update TextField
+                    TextInputField textf = (TextInputField) element.getComponent();
 
-            if (RADIO_FIELD.equals(element[POS_TYPE]))
-            {
-                // we have a radio field, which should be updated
-                JRadioButton choice = (JRadioButton) element[POS_FIELD];
-                if (value == null)
-                {
-                    continue;
+                    if (value == null)
+                    {
+                        value = textf.getText();
+                    }
+                    textf.setText(vs.substitute(value, null));                  
                 }
-                if (value.equals(element[POS_TRUE]))
+                else if (element.getType() == UIElementType.RULE)
                 {
-                    choice.setSelected(true);
-                }
-                else
-                {
-                    choice.setSelected(false);
-                }
-                element[POS_FIELD] = choice;
-            }
-            else if (TEXT_FIELD.equals(element[POS_TYPE]))
-            {
-                // update TextField
-                TextInputField textf = (TextInputField) element[POS_FIELD];
 
-                if (value == null)
-                {
-                    value = textf.getText();
-                }
-                textf.setText(vs.substitute(value, null));
-                element[POS_FIELD] = textf;
+                    RuleInputField rulef = (RuleInputField) element.getComponent();                   
+                    if (value == null)
+                    {
+                        value = rulef.getText();
+                    }
+                }                
+                updated = true;
             }
-            else if (CHECK_FIELD.equals(element[POS_TYPE]))
-            {
-                // TODO: HAS TO BE IMPLEMENTED
-            }
-            else if (SEARCH_FIELD.equals(element[POS_TYPE]))
-            {
-                // TODO: HAS TO BE IMPLEMENTED
-            }
-            else if (RULE_FIELD.equals(element[POS_TYPE]))
-            {
-
-                RuleInputField rulef = (RuleInputField) element[POS_FIELD];
-                // System.out.println("RuleInputField: " + value);
-                if (value == null)
-                {
-                    value = rulef.getText();
-                }
-            }
-            else if (FIELD_BUTTON.equals(element[POS_TYPE]))
-            {
-                // nothing to do
-            }
-            // overwrite entry;
-            uiElements.set(i, element);
-            updated = true;
         }
+                
         if (updated)
-        {
-            // super.removeAll();
-            super.invalidate();
-            // buildUI();
+        {        
+            super.invalidate();        
         }
     }
 
@@ -894,13 +1018,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
             parentFrame.skipPanel();
             return;
         }
-        // if (uiBuilt)
-        // {
-        // return;
-        // }
-
-        buildUI();
-        // need a validation, else ui is scrambled
+       
+        buildUI();       
 
         this.setSize(this.getMaximumSize().width, this.getMaximumSize().height);
         validate();
@@ -940,53 +1059,20 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private void buildUI()
     {
-        Object[] uiElement;
-
-        for (int i = 0; i < uiElements.size(); i++)
-        {
-            uiElement = uiElements.elementAt(i);
-
-            if (itemRequiredFor((Vector<IXMLElement>) uiElement[POS_PACKS])
-                    && itemRequiredForOs((Vector<IXMLElement>) uiElement[POS_OS]))
-            {
-                try
-                {
-                    if (uiElement[POS_DISPLAYED] == null
-                            || "false".equals(uiElement[POS_DISPLAYED].toString()))
-                    {
-                        add((JComponent) uiElement[POS_FIELD], uiElement[POS_CONSTRAINTS]);
-                    }
-
-                    uiElement[POS_DISPLAYED] = true;
-                    uiElements.remove(i);
-                    uiElements.add(i, uiElement);
-                }
-                catch (Throwable exception)
-                {
-                    System.out.println("Internal format error in field: "
-                            + uiElement[POS_TYPE].toString()); // !!! logging
+        for (UIElement element : elements){
+            if (itemRequiredFor(element.getForPacks()) && itemRequiredForOs(element.getForOs())){
+                if (!element.isDisplayed()){
+                    element.setDisplayed(true);
+                    add(element.getComponent(),element.getConstraints());    
+                }                
+            }
+            else {
+                if (element.isDisplayed()){
+                    element.setDisplayed(false);
+                    remove(element.getComponent());
                 }
             }
-            else
-            {
-                try
-                {
-                    if (uiElement[POS_DISPLAYED] != null
-                            && "true".equals(uiElement[POS_DISPLAYED].toString()))
-                    {
-                        remove((JComponent) uiElement[POS_FIELD]);
-                    }
-                }
-                catch (Throwable exception)
-                {
-                    System.out.println("Internal format error in field: "
-                            + uiElement[POS_TYPE].toString()); // !!! logging
-                }
-                uiElement[POS_DISPLAYED] = false;
-                uiElements.remove(i);
-                uiElements.add(i, uiElement);
-            }
-        }
+        }        
     }
 
     /*--------------------------------------------------------------------------*/
@@ -998,129 +1084,68 @@ public class UserInputPanel extends IzPanel implements ActionListener
     /*--------------------------------------------------------------------------*/
     private boolean readInput()
     {
-        boolean success;
-        String fieldType = null;
-        Object[] field = null;
+        boolean success = true;       
 
         passwordGroupsRead.clear();
-        // ----------------------------------------------------
-        // cycle through all but the password fields and read
-        // their contents
-        // ----------------------------------------------------
-        for (int i = 0; i < uiElements.size(); i++)
-        {
-            field = uiElements.elementAt(i);
-
-            if ((field != null) && ((Boolean) field[POS_DISPLAYED]))
-            {
-                fieldType = (String) (field[POS_TYPE]);
-
-                // ------------------------------------------------
-                if (fieldType.equals(RULE_FIELD))
+        
+        for (UIElement element : elements){
+            if (element.isDisplayed()){
+                if (element.getType() == UIElementType.RULE)
                 {
-                    success = readRuleField(field);
-                    if (!success) { return (false); }
+                    success = readRuleField(element);                   
                 }
-
-                // ------------------------------------------------
-                if (fieldType.equals(PWD_FIELD))
+                else if (element.getType() == UIElementType.PASSWORD)
                 {
-                    success = readPasswordField(field);
-                    if (!success) { return (false); }
+                    success = readPasswordField(element);                    
                 }
-
-                // ------------------------------------------------
-                else if (fieldType.equals(TEXT_FIELD))
+                else if (element.getType() == UIElementType.TEXT)
                 {
-                    success = readTextField(field);
-                    if (!success) { return (false); }
+                    success = readTextField(element);
                 }
-
-                // ------------------------------------------------
-                else if (fieldType.equals(COMBO_FIELD))
+                else if (element.getType() == UIElementType.COMBOBOX)
                 {
-                    success = readComboBox(field);
-                    if (!success) { return (false); }
+                    success = readComboBox(element);
                 }
-
-                // ------------------------------------------------
-                else if (fieldType.equals(RADIO_FIELD))
+                else if (element.getType() == UIElementType.RADIOBUTTON)
                 {
-                    success = readRadioButton(field);
-                    if (!success) { return (false); }
+                    success = readRadioButton(element);
                 }
-
-                // ------------------------------------------------
-                else if (fieldType.equals(CHECK_FIELD))
+                else if (element.getType() == UIElementType.CHECKBOX)
                 {
-                    success = readCheckBox(field);
-                    if (!success) { return (false); }
+                    success = readCheckBox(element);
                 }
-                else if (fieldType.equals(SEARCH_FIELD))
+                else if (element.getType() == UIElementType.SEARCH)
                 {
-                    success = readSearch(field);
-                    if (!success) { return (false); }
+                    success = readSearch(element);
                 }
-                else if (fieldType.equals(FILE_FIELD))
+                else if (element.getType() == UIElementType.FILE)
                 {
-                    success = readFileField(field);
-                    if (!success) { return (false); }
+                    success = readFileField(element);
                 }
-                else if (fieldType.equals(DIR_FIELD))
+                else if (element.getType() == UIElementType.DIRECTORY)
                 {
-                    success = readDirectoryField(field);
-                    if (!success) { return (false); }
+                    success = readDirectoryField(element);
                 }
+                if (!success) { return (false); }
             }
-        }
-
+        }               
         return (true);
     }
 
-    private boolean readDirectoryField(Object[] field)
+    private boolean readDirectoryField(UIElement field)
     {
         boolean result = false;
         try
         {
-            FileInputField panel = (FileInputField) field[POS_FIELD];
+            FileInputField panel = (FileInputField) field.getComponent();
             result = panel.validateField();
             if (result)
             {
-                idata.setVariable((String) field[POS_VARIABLE], panel.getSelectedFile()
+                idata.setVariable(field.getAssociatedVariable(), panel.getSelectedFile()
                         .getAbsolutePath());
-                entries.add(new TextValuePair((String) field[POS_VARIABLE], panel.getSelectedFile()
+                entries.add(new TextValuePair(field.getAssociatedVariable(), panel.getSelectedFile()
                         .getAbsolutePath()));
-            }
-
-            // JTextField textf = (JTextField) panel.getComponent(0);
-            // String file = textf.getText();
-            // if (file != null) {
-            // File ffile = new File(file);
-            // if (ffile.isDirectory()) {
-            // if ()
-            // idata.setVariable((String) field[POS_VARIABLE], file);
-            // entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
-            // result = true;
-            // }
-            // StringInputProcessingClient processingClient = new
-            // StringInputProcessingClient(file,(List<ValidatorContainer>) field[POS_VALIDATORS]);
-            // boolean success = processingClient.validate();
-            // if (!success){
-            // JOptionPane.showMessageDialog(parentFrame, processingClient.getValidationMessage(),
-            // parentFrame.langpack.getString("UserInputPanel.error.caption"),
-            // JOptionPane.WARNING_MESSAGE);
-            // }
-            // else {
-            // idata.setVariable((String) field[POS_VARIABLE], file);
-            // entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
-            // result = true;
-            // }
-            // } else {
-            // showMessage("dir.notdirectory");
-            // }
-            // } else {
-            // showMessage("dir.nodirectory");
-            // }
+            }            
         }
         catch (Exception e)
         {
@@ -1132,52 +1157,20 @@ public class UserInputPanel extends IzPanel implements ActionListener
         return result;
     }
 
-    // private void showMessage(String messageType) {
-    // JOptionPane.showMessageDialog(parent, parent.langpack.getString("UserInputPanel." +
-    // messageType + ".message"),
-    // parent.langpack.getString("UserInputPanel." + messageType + ".caption"),
-    // JOptionPane.WARNING_MESSAGE);
-    // }
-
-    private boolean readFileField(Object[] field)
+    private boolean readFileField(UIElement field)
     {
         boolean result = false;
         try
         {
-            FileInputField input = (FileInputField) field[POS_FIELD];
+            FileInputField input = (FileInputField) field.getComponent();
             result = input.validateField();
             if (result)
             {
-                idata.setVariable((String) field[POS_VARIABLE], input.getSelectedFile()
+                idata.setVariable(field.getAssociatedVariable(), input.getSelectedFile()
                         .getAbsolutePath());
-                entries.add(new TextValuePair((String) field[POS_VARIABLE], input.getSelectedFile()
+                entries.add(new TextValuePair(field.getAssociatedVariable(), input.getSelectedFile()
                         .getAbsolutePath()));
-            }
-            // JPanel panel = (JPanel) field[POS_FIELD];
-            // JTextField textf = (JTextField) panel.getComponent(0);
-            // String file = textf.getText();
-            // if (file != null) {
-            // File ffile = new File(file);
-            // if (ffile.isFile()) {
-            // StringInputProcessingClient processingClient = new
-            // StringInputProcessingClient(file,(List<ValidatorContainer>) field[POS_VALIDATORS]);
-            // boolean success = processingClient.validate();
-            // if (!success){
-            // JOptionPane.showMessageDialog(parentFrame,processingClient.getValidationMessage(),
-            // parentFrame.langpack.getString("UserInputPanel.error.caption"),
-            // JOptionPane.WARNING_MESSAGE);
-            // }
-            // else {
-            // idata.setVariable((String) field[POS_VARIABLE], file);
-            // entries.add(new TextValuePair((String) field[POS_VARIABLE], file));
-            // result = true;
-            // }
-            // } else {
-            // showMessage("file.notfile");
-            // }
-            // } else {
-            // showMessage("file.nofile");
-            // }
+            }          
         }
         catch (Exception e)
         {
@@ -1349,7 +1342,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      */
     /*--------------------------------------------------------------------------*/
     private void addRuleField(IXMLElement spec)
-    {
+    {               
         Vector<IXMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
         Vector<IXMLElement> forOs = spec.getChildrenNamed(OS);
         IXMLElement element = spec.getFirstChildNamed(SPEC);
@@ -1484,14 +1477,32 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
 
-        uiElements
-                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+        
+        UIElement labelUiElement = new UIElement();
+        labelUiElement.setType(UIElementType.LABEL);
+        labelUiElement.setConstraints(constraints);
+        labelUiElement.setComponent(label);
+        labelUiElement.setForPacks(forPacks);
+        labelUiElement.setForOs(forOs);
+        elements.add(labelUiElement);
+        
+//        uiElements
+//                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
-
-        uiElements.add(new Object[] { null, RULE_FIELD, variable, constraints2, field, forPacks,
-                forOs, null, null, message});
+        
+        UIElement ruleField = new UIElement();
+        ruleField.setType(UIElementType.RULE);
+        ruleField.setConstraints(constraints2);
+        ruleField.setComponent(field);
+        ruleField.setForPacks(forPacks);
+        ruleField.setForOs(forOs);
+        ruleField.setAssociatedVariable(variable);
+        ruleField.setMessage(message);
+        
+//        uiElements.add(new Object[] { null, RULE_FIELD, variable, constraints2, field, forPacks,
+//                forOs, null, null, message});
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1504,7 +1515,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private boolean readRuleField(Object[] field)
+    private boolean readRuleField(UIElement field)
     {
         RuleInputField ruleField = null;
         String variable = null;
@@ -1512,9 +1523,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         try
         {
-            ruleField = (RuleInputField) field[POS_FIELD];
-            variable = (String) field[POS_VARIABLE];
-            message = (String) field[POS_MESSAGE];
+            ruleField = (RuleInputField) field.getComponent();
+            variable = field.getAssociatedVariable();
+            message = field.getMessage();
         }
         catch (Throwable exception)
         {
@@ -1656,18 +1667,36 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             inputField = new TextInputField(set, size, validator);
         }
-
+        inputField.addFocusListener(this);
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
-
-        uiElements
-                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+        
+        UIElement labelUiElement = new UIElement();
+        labelUiElement.setType(UIElementType.LABEL);
+        labelUiElement.setConstraints(constraints);
+        labelUiElement.setComponent(label);
+        labelUiElement.setForPacks(forPacks);
+        labelUiElement.setForOs(forOs);
+        elements.add(labelUiElement);
+        
+//        uiElements
+//                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        uiElements.add(new Object[] { null, TEXT_FIELD, variable, constraints2, inputField,
-                forPacks, forOs, null, null, message});
+        UIElement textUiElement = new UIElement();
+        textUiElement.setType(UIElementType.TEXT);
+        textUiElement.setConstraints(constraints2);
+        textUiElement.setComponent(inputField);
+        textUiElement.setForPacks(forPacks);
+        textUiElement.setForOs(forOs);
+        textUiElement.setAssociatedVariable(variable);
+        textUiElement.setMessage(message);
+        elements.add(textUiElement);
+        
+//        uiElements.add(new Object[] { null, TEXT_FIELD, variable, constraints2, inputField,
+//                forPacks, forOs, null, null, message});
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1680,7 +1709,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private boolean readTextField(Object[] field)
+    private boolean readTextField(UIElement field)
     {
         TextInputField textField = null;
         String variable = null;
@@ -1689,9 +1718,9 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         try
         {
-            textField = (TextInputField) field[POS_FIELD];
-            variable = (String) field[POS_VARIABLE];
-            message = (String) field[POS_MESSAGE];
+            textField = (TextInputField) field.getComponent();
+            variable = field.getAssociatedVariable();
+            message = field.getMessage();
             value = textField.getText();
         }
         catch (Throwable exception)
@@ -1754,7 +1783,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TextValuePair listItem = null;
         JComboBox field = new JComboBox();
         JLabel label;
-
+        field.addItemListener(this);
         boolean userinput = false; // is there already user input?
         // ----------------------------------------------------
         // extract the specification details
@@ -1870,15 +1899,31 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.WEST;
-
-        uiElements
-                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
+        
+        UIElement labelUiElement = new UIElement();
+        labelUiElement.setType(UIElementType.LABEL);
+        labelUiElement.setConstraints(constraints);
+        labelUiElement.setComponent(label);
+        labelUiElement.setForPacks(forPacks);
+        labelUiElement.setForOs(forOs);
+        elements.add(labelUiElement);
+       
+//        uiElements
+//                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        uiElements.add(new Object[] { null, COMBO_FIELD, variable, constraints2, field, forPacks,
-                forOs});
+        UIElement comboUiElement = new UIElement();
+        comboUiElement.setType(UIElementType.COMBOBOX);
+        comboUiElement.setConstraints(constraints2);
+        comboUiElement.setComponent(field);
+        comboUiElement.setForPacks(forPacks);
+        comboUiElement.setForOs(forOs);
+        comboUiElement.setAssociatedVariable(variable);
+        elements.add(comboUiElement);
+//        uiElements.add(new Object[] { null, COMBO_FIELD, variable, constraints2, field, forPacks,
+//                forOs});
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1891,7 +1936,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private boolean readComboBox(Object[] field)
+    private boolean readComboBox(UIElement field)
     {
         String variable;
         String value;
@@ -1899,8 +1944,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         try
         {
-            variable = (String) field[POS_VARIABLE];
-            comboBox = (JComboBox) field[POS_FIELD];
+            variable = (String) field.getAssociatedVariable();
+            comboBox = (JComboBox) field.getComponent();
             value = ((TextValuePair) comboBox.getSelectedItem()).getValue();
         }
         catch (Throwable exception)
@@ -2015,8 +2060,20 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 }
 
                 buttonGroups.add(group);
-                uiElements.add(new Object[] { null, RADIO_FIELD, variable, constraints, choice,
-                        forPacks, forOs, value, null, null, group});
+                
+                RadioButtonUIElement radioUiElement = new RadioButtonUIElement();
+                radioUiElement.setType(UIElementType.RADIOBUTTON);
+                radioUiElement.setConstraints(constraints);
+                radioUiElement.setComponent(choice);
+                radioUiElement.setForPacks(forPacks);
+                radioUiElement.setForOs(forOs);
+                radioUiElement.setButtonGroup(group);
+                radioUiElement.setAssociatedVariable(variable);
+                radioUiElement.setTrueValue(value);
+                elements.add(radioUiElement);
+                
+//                uiElements.add(new Object[] { null, RADIO_FIELD, variable, constraints, choice,
+//                        forPacks, forOs, value, null, null, group});
             }
         }
     }
@@ -2031,7 +2088,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private boolean readRadioButton(Object[] field)
+    private boolean readRadioButton(UIElement field)
     {
         String variable = null;
         String value = null;
@@ -2039,12 +2096,12 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         try
         {
-            button = (JRadioButton) field[POS_FIELD];
+            button = (JRadioButton) field.getComponent();
 
             if (!button.isSelected()) { return (true); }
 
-            variable = (String) field[POS_VARIABLE];
-            value = (String) field[POS_TRUE];
+            variable = field.getAssociatedVariable();
+            value = field.getTrueValue();
         }
         catch (Throwable exception)
         {
@@ -2106,7 +2163,6 @@ public class UserInputPanel extends IzPanel implements ActionListener
         Vector<IXMLElement> forPacks = spec.getChildrenNamed(SELECTEDPACKS);
         Vector<IXMLElement> forOs = spec.getChildrenNamed(OS);
         String variable = spec.getAttribute(VARIABLE);
-        String message = null;
         String processor = null;
         IXMLElement element = null;
         PasswordGroup group = null;
@@ -2175,16 +2231,34 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
                 TwoColumnConstraints constraints = new TwoColumnConstraints();
                 constraints.position = TwoColumnConstraints.WEST;
-
-                uiElements.add(new Object[] { null, FIELD_LABEL, null, constraints, label,
-                        forPacks, forOs});
+                
+                UIElement labelUiElement = new UIElement();
+                labelUiElement.setType(UIElementType.LABEL);
+                labelUiElement.setConstraints(constraints);
+                labelUiElement.setComponent(label);
+                labelUiElement.setForPacks(forPacks);
+                labelUiElement.setForOs(forOs);
+                elements.add(labelUiElement);
+                
+//                uiElements.add(new Object[] { null, FIELD_LABEL, null, constraints, label,
+//                        forPacks, forOs});
 
                 TwoColumnConstraints constraints2 = new TwoColumnConstraints();
                 constraints2.position = TwoColumnConstraints.EAST;
 
+                PasswordUIElement passwordUiElement = new PasswordUIElement();
+                passwordUiElement.setType(UIElementType.PASSWORD);
+                passwordUiElement.setConstraints(constraints2);
+                passwordUiElement.setComponent(field);
+                passwordUiElement.setForPacks(forPacks);
+                passwordUiElement.setForOs(forOs);
+                passwordUiElement.setPasswordGroup(group);
+                passwordUiElement.setAssociatedVariable(variable);
+                elements.add(passwordUiElement);
+                
                 // Removed message to support pulling from multiple validators
-                uiElements.add(new Object[] { null, PWD_FIELD, variable, constraints2, field,
-                        forPacks, forOs, null, null, null, group});
+//                uiElements.add(new Object[] { null, PWD_FIELD, variable, constraints2, field,
+//                        forPacks, forOs, null, null, null, group});
                 // Original
                 // uiElements.add(new Object[]{null, PWD_FIELD, variable, constraints2, field,
                 // forPacks, forOs, null, null, message, group
@@ -2206,16 +2280,17 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private boolean readPasswordField(Object[] field)
+    private boolean readPasswordField(UIElement field)
     {
+        PasswordUIElement pwdField = (PasswordUIElement) field;
+        
         PasswordGroup group = null;
         String variable = null;
-        String message = null;
 
         try
         {
-            group = (PasswordGroup) field[POS_GROUP];
-            variable = (String) field[POS_VARIABLE];
+            group = (PasswordGroup) pwdField.getPasswordGroup();
+            variable = field.getAssociatedVariable();
             // Removed to support grabbing the message from multiple validators
             // message = (String) field[POS_MESSAGE];
         }
@@ -2225,8 +2300,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
         if ((variable == null) || (passwordGroupsRead.contains(group))) { return (true); }
         passwordGroups.add(group);
-
-        // boolean success = !validating || group.validateContents();
+       
         boolean success = !validating;
 
         // Use each validator to validate contents
@@ -2246,14 +2320,6 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 }
             }
         }
-
-        // // Changed to show messages for each validator
-        // if (!success) {
-        // JOptionPane.showMessageDialog(parentFrame, message,
-        // parentFrame.langpack.getString("UserInputPanel.error.caption"),
-        // JOptionPane.WARNING_MESSAGE);
-        // return (false);
-        // }
 
         if (success)
         {
@@ -2304,6 +2370,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
         }
 
         JCheckBox checkbox = new JCheckBox(label);
+        checkbox.addItemListener(this);
 
         if (causesValidataion != null && causesValidataion.equals("yes"))
         {
@@ -2338,8 +2405,19 @@ public class UserInputPanel extends IzPanel implements ActionListener
         constraints.stretch = true;
         constraints.indent = true;
 
-        uiElements.add(new Object[] { null, CHECK_FIELD, variable, constraints, checkbox, forPacks,
-                forOs, trueValue, falseValue});
+        UIElement checkboxUiElement = new UIElement();
+        checkboxUiElement.setType(UIElementType.CHECKBOX);
+        checkboxUiElement.setConstraints(constraints);
+        checkboxUiElement.setComponent(checkbox);
+        checkboxUiElement.setForPacks(forPacks);
+        checkboxUiElement.setForOs(forOs);
+        checkboxUiElement.setTrueValue(trueValue);
+        checkboxUiElement.setFalseValue(falseValue);
+        checkboxUiElement.setAssociatedVariable(variable);
+        elements.add(checkboxUiElement);
+        
+//        uiElements.add(new Object[] { null, CHECK_FIELD, variable, constraints, checkbox, forPacks,
+//                forOs, trueValue, falseValue});
     }
 
     /*--------------------------------------------------------------------------*/
@@ -2352,7 +2430,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private boolean readCheckBox(Object[] field)
+    private boolean readCheckBox(UIElement field)
     {
         String variable = null;
         String trueValue = null;
@@ -2361,15 +2439,15 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         try
         {
-            box = (JCheckBox) field[POS_FIELD];
-            variable = (String) field[POS_VARIABLE];
-            trueValue = (String) field[POS_TRUE];
+            box = (JCheckBox) field.getComponent();
+            variable = field.getAssociatedVariable();
+            trueValue = field.getTrueValue();
             if (trueValue == null)
             {
                 trueValue = "";
             }
 
-            falseValue = (String) field[POS_FALSE];
+            falseValue = field.getFalseValue();
             if (falseValue == null)
             {
                 falseValue = "";
@@ -2542,9 +2620,17 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         TwoColumnConstraints westconstraint1 = new TwoColumnConstraints();
         westconstraint1.position = TwoColumnConstraints.WEST;
-
-        uiElements.add(new Object[] { null, FIELD_LABEL, null, westconstraint1, label, forPacks,
-                forOs});
+        
+        UIElement labelUiElement = new UIElement();
+        labelUiElement.setType(UIElementType.LABEL);
+        labelUiElement.setConstraints(westconstraint1);
+        labelUiElement.setComponent(label);
+        labelUiElement.setForPacks(forPacks);
+        labelUiElement.setForOs(forOs);
+        elements.add(labelUiElement);
+        
+//        uiElements.add(new Object[] { null, FIELD_LABEL, null, westconstraint1, label, forPacks,
+//                forOs});
 
         TwoColumnConstraints eastconstraint1 = new TwoColumnConstraints();
         eastconstraint1.position = TwoColumnConstraints.EAST;
@@ -2570,9 +2656,18 @@ public class UserInputPanel extends IzPanel implements ActionListener
         {
             combobox.setToolTipText(tooltiptext.toString());
         }
-
-        uiElements.add(new Object[] { null, SEARCH_FIELD, variable, eastconstraint1, combobox,
-                forPacks, forOs});
+        
+        UIElement searchUiElement = new UIElement();
+        searchUiElement.setType(UIElementType.SEARCH);
+        searchUiElement.setConstraints(eastconstraint1);
+        searchUiElement.setComponent(combobox);
+        searchUiElement.setForPacks(forPacks);
+        searchUiElement.setForOs(forOs);
+        searchUiElement.setAssociatedVariable(variable);
+        elements.add(searchUiElement);
+        
+//        uiElements.add(new Object[] { null, SEARCH_FIELD, variable, eastconstraint1, combobox,
+//                forPacks, forOs});
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new com.izforge.izpack.gui.FlowLayout(
@@ -2595,8 +2690,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TwoColumnConstraints eastonlyconstraint = new TwoColumnConstraints();
         eastonlyconstraint.position = TwoColumnConstraints.EASTONLY;
 
-        uiElements.add(new Object[] { null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint,
-                buttonPanel, forPacks, forOs});
+        UIElement searchbuttonUiElement = new UIElement();
+        searchbuttonUiElement.setType(UIElementType.SEARCHBUTTON);
+        searchbuttonUiElement.setConstraints(eastonlyconstraint);
+        searchbuttonUiElement.setComponent(buttonPanel);
+        searchbuttonUiElement.setForPacks(forPacks);
+        searchbuttonUiElement.setForOs(forOs);        
+        elements.add(searchbuttonUiElement);
+        
+//        uiElements.add(new Object[] { null, SEARCH_BUTTON_FIELD, null, eastonlyconstraint,
+//                buttonPanel, forPacks, forOs});
 
         searchFields.add(new SearchField(filename, check_filename, parentFrame, combobox,
                 autodetectButton, browseButton, search_type, result_type));
@@ -2612,7 +2715,7 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * dialog is popped up and <code>false</code> is returned.
      */
     /*--------------------------------------------------------------------------*/
-    private boolean readSearch(Object[] field)
+    private boolean readSearch(UIElement field)
     {
         String variable = null;
         String value = null;
@@ -2620,8 +2723,8 @@ public class UserInputPanel extends IzPanel implements ActionListener
 
         try
         {
-            variable = (String) field[POS_VARIABLE];
-            comboBox = (JComboBox) field[POS_FIELD];
+            variable = field.getAssociatedVariable();
+            comboBox = (JComboBox) field.getComponent();
             for (int i = 0; i < this.searchFields.size(); ++i)
             {
                 SearchField sf = this.searchFields.elementAt(i);
@@ -2676,8 +2779,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
         constraints.position = TwoColumnConstraints.BOTH;
         constraints.stretch = true;
 
-        uiElements
-                .add(new Object[] { null, SPACE_FIELD, null, constraints, panel, forPacks, forOs});
+        UIElement spaceUiElement = new UIElement();
+        spaceUiElement.setType(UIElementType.SPACE);
+        spaceUiElement.setConstraints(constraints);
+        spaceUiElement.setComponent(panel);
+        spaceUiElement.setForPacks(forPacks);
+        spaceUiElement.setForOs(forOs);
+        elements.add(spaceUiElement);
+        
+//        uiElements
+//                .add(new Object[] { null, SPACE_FIELD, null, constraints, panel, forPacks, forOs});
     }
 
     /*--------------------------------------------------------------------------*/
@@ -2713,9 +2824,17 @@ public class UserInputPanel extends IzPanel implements ActionListener
         TwoColumnConstraints constraints = new TwoColumnConstraints();
         constraints.position = TwoColumnConstraints.BOTH;
         constraints.stretch = true;
-
-        uiElements.add(new Object[] { null, DIVIDER_FIELD, null, constraints, panel, forPacks,
-                forOs});
+        
+        UIElement dividerUiElement = new UIElement();
+        dividerUiElement.setType(UIElementType.DIVIDER);
+        dividerUiElement.setConstraints(constraints);
+        dividerUiElement.setComponent(panel);
+        dividerUiElement.setForPacks(forPacks);
+        dividerUiElement.setForOs(forOs);
+        elements.add(dividerUiElement);
+        
+//        uiElements.add(new Object[] { null, DIVIDER_FIELD, null, constraints, panel, forPacks,
+//                forOs});
     }
 
     /*--------------------------------------------------------------------------*/
@@ -2740,25 +2859,25 @@ public class UserInputPanel extends IzPanel implements ActionListener
             // if we have a description, add it to the UI elements
             if (description != null)
             {
-                String alignment = spec.getAttribute(ALIGNMENT);
+//                String alignment = spec.getAttribute(ALIGNMENT);
                 // FIX needed: where do we use this variable at all? i dont think so...
-                int justify = MultiLineLabel.LEFT;
-
-                if (alignment != null)
-                {
-                    if (alignment.equals(LEFT))
-                    {
-                        justify = MultiLineLabel.LEFT;
-                    }
-                    else if (alignment.equals(CENTER))
-                    {
-                        justify = MultiLineLabel.CENTER;
-                    }
-                    else if (alignment.equals(RIGHT))
-                    {
-                        justify = MultiLineLabel.RIGHT;
-                    }
-                }
+//                int justify = MultiLineLabel.LEFT;
+//
+//                if (alignment != null)
+//                {
+//                    if (alignment.equals(LEFT))
+//                    {
+//                        justify = MultiLineLabel.LEFT;
+//                    }
+//                    else if (alignment.equals(CENTER))
+//                    {
+//                        justify = MultiLineLabel.CENTER;
+//                    }
+//                    else if (alignment.equals(RIGHT))
+//                    {
+//                        justify = MultiLineLabel.RIGHT;
+//                    }
+//                }
 
                 javax.swing.JTextPane label = new javax.swing.JTextPane();
 
@@ -2780,8 +2899,16 @@ public class UserInputPanel extends IzPanel implements ActionListener
                 label.getPreferredSize();
                 // end of workaround.
 
-                uiElements.add(new Object[] { null, DESCRIPTION, null, constraints, label,
-                        forPacks, forOs});
+                UIElement descUiElement = new UIElement();
+                descUiElement.setType(UIElementType.DESCRIPTION);
+                descUiElement.setConstraints(constraints);
+                descUiElement.setComponent(label);
+                descUiElement.setForPacks(forPacks);
+                descUiElement.setForOs(forOs);
+                elements.add(descUiElement);
+                
+//                uiElements.add(new Object[] { null, DESCRIPTION, null, constraints, label,
+//                        forPacks, forOs});
             }
         }
     }
@@ -3126,10 +3253,10 @@ public class UserInputPanel extends IzPanel implements ActionListener
      * 
      * @return Returns the uiElements.
      */
-    protected Vector<Object[]> getUiElements()
-    {
-        return uiElements;
-    }
+//    protected Vector<Object[]> getUiElements()
+//    {
+//        return uiElements;
+//    }
 
     // --------------------------------------------------------------------------
     // Inner Classes
@@ -3667,10 +3794,11 @@ public class UserInputPanel extends IzPanel implements ActionListener
     // Repaint all controls and validate them agains the current variables
     public void actionPerformed(ActionEvent e)
     {
-        validating = false;
-        readInput();
-        panelActivate();
-        validating = true;
+//        validating = false;
+//        readInput();
+//        panelActivate();
+//        validating = true;
+        updateDialog();
     }
 
     /*--------------------------------------------------------------------------*/
@@ -3711,6 +3839,40 @@ public class UserInputPanel extends IzPanel implements ActionListener
     {
         showMessageDialog(parentFrame, message, "UserInputPanel.error.caption",
                 JOptionPane.WARNING_MESSAGE);
+    }
+
+    public void itemStateChanged(ItemEvent arg0)
+    {
+         updateDialog();     
+    }
+    
+    private void updateDialog(){
+        if (this.eventsActivated){
+            this.eventsActivated = false;
+            if (isValidated()){
+                // read input 
+                // and update elements
+                //panelActivate();
+                init();
+                updateVariables();
+                updateUIElements();
+                buildUI();
+                validate();                
+                repaint();
+            }
+            this.eventsActivated = true;
+        }  
+    }
+
+    public void focusGained(FocusEvent e)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void focusLost(FocusEvent e)
+    {
+        updateDialog();        
     }
 
 } // public class UserInputPanel

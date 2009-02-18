@@ -29,7 +29,6 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -86,31 +85,6 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
         this.add(filetxt);
         this.add(browseBtn);           
     }
-    
-//    final UserInputFileFilter uiff = new UserInputFileFilter();
-//    uiff.setFileExt(filter);
-//    uiff.setFileExtDesc(filterdesc);
-//
-//    // TODO: use separate key for button text
-//    JButton button = ButtonFactory.createButton(idata.langpack.getString("UserInputPanel.search.browse"), idata.buttonsHColor);
-//    button.addActionListener(new ActionListener() {
-//        public void actionPerformed(ActionEvent e) {
-//            System.out.println("Show filechooser");
-//            JFileChooser filechooser = new JFileChooser(currentDirectoryPath);
-//            filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-//            filechooser.setFileFilter(uiff);
-//
-//            if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION) {
-//                filetxt.setText(filechooser.getSelectedFile().getAbsolutePath());
-//                currentDirectoryPath = filechooser.getSelectedFile().getParent();
-//                Debug.trace("Setting current file chooser directory to: " + currentDirectoryPath);
-//            }
-//        }
-//    });
-//    JPanel panel = new JPanel();
-//    panel.add(filetxt);
-//    panel.add(button);
-
 
     public void actionPerformed(ActionEvent arg0)
     {
