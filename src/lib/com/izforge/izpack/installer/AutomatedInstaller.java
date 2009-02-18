@@ -561,23 +561,23 @@ public class AutomatedInstaller extends InstallerBase
         return this.result;
     }
     
-    private final List<PanelAction> createPanelActionsFromStringList(List<String> actions)
+    private final List<PanelAction> createPanelActionsFromStringList(Panel panel, List<String> actions)
     {
         List<PanelAction> actionList = null;
         if (actions != null)
         {
             actionList = new ArrayList<PanelAction>();
-            for (int actionIndex = 0; actionIndex < actions.size(); actionIndex++)
-            {
-                actionList.add(PanelActionFactory.createPanelAction(actions.get(actionIndex)));
-            }
+            for (String actionClassName : actions){
+                PanelAction action = PanelActionFactory.createPanelAction(actionClassName);
+                action.initialize(panel.getPanelActionConfiguration(actionClassName));
+            }            
         }
         return actionList;
     }
 
     private final void executePreConstructActions(Panel panel, AbstractUIHandler handler)
     {
-        List<PanelAction> preConstructActions = createPanelActionsFromStringList(panel
+        List<PanelAction> preConstructActions = createPanelActionsFromStringList(panel, panel
                 .getPreConstructionActions());
         if (preConstructActions != null)
         {
@@ -590,7 +590,7 @@ public class AutomatedInstaller extends InstallerBase
 
     private final void executePreActivateActions(Panel panel, AbstractUIHandler handler)
     {
-        List<PanelAction> preActivateActions = createPanelActionsFromStringList(panel
+        List<PanelAction> preActivateActions = createPanelActionsFromStringList(panel, panel
                 .getPreActivationActions());
         if (preActivateActions != null)
         {
@@ -603,7 +603,7 @@ public class AutomatedInstaller extends InstallerBase
 
     private final void executePreValidateActions(Panel panel, AbstractUIHandler handler)
     {
-        List<PanelAction> preValidateActions = createPanelActionsFromStringList(panel
+        List<PanelAction> preValidateActions = createPanelActionsFromStringList(panel, panel
                 .getPreValidationActions());
         if (preValidateActions != null)
         {
@@ -616,7 +616,7 @@ public class AutomatedInstaller extends InstallerBase
 
     private final void executePostValidateActions(Panel panel, AbstractUIHandler handler)
     {
-        List<PanelAction> postValidateActions = createPanelActionsFromStringList(panel
+        List<PanelAction> postValidateActions = createPanelActionsFromStringList(panel,panel
                 .getPostValidationActions());
         if (postValidateActions != null)
         {

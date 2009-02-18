@@ -32,6 +32,7 @@ import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
+import com.izforge.izpack.event.PanelSwitchListener;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
@@ -135,6 +136,11 @@ public class InstallerFrame extends JFrame {
      * Registered GUICreationListener.
      */
     protected ArrayList<GUIListener> guiListener;
+    
+    /**
+     * Registered panel switch listener.
+     */
+    protected ArrayList<PanelSwitchListener> switchListener;
 
     /**
      * Heading major text.
@@ -212,11 +218,18 @@ public class InstallerFrame extends JFrame {
         loadIcons();
         loadCustomIcons();
         loadPanels();
+        loadPanelSwitchListener();        
         buildGUI();
 
         // We show the frame
         showFrame();
         switchPanel(0);
+    }
+
+    private void loadPanelSwitchListener()
+    {
+        this.switchListener = new ArrayList<PanelSwitchListener>();
+        
     }
 
     public Debugger getDebugger() {
@@ -270,8 +283,8 @@ public class InstallerFrame extends JFrame {
             {
                 for (int actionIndex = 0; actionIndex < preConstgructionActions.size(); actionIndex++)
                 {
-                    PanelAction action = PanelActionFactory
-                            .createPanelAction(preConstgructionActions.get(actionIndex));
+                    PanelAction action = PanelActionFactory.createPanelAction(preConstgructionActions.get(actionIndex));
+                    action.initialize(p.getPanelActionConfiguration(preConstgructionActions.get(actionIndex)));
                     action.executeAction(AutomatedInstallData.getInstance(), null);
                 }
             }
@@ -289,8 +302,10 @@ public class InstallerFrame extends JFrame {
             {
                 for (int actionIndex = 0; actionIndex < preActivateActions.size(); actionIndex++)
                 {
-                    panel.addPreActivationAction(PanelActionFactory
-                            .createPanelAction(preActivateActions.get(actionIndex)));
+                    String panelActionClass = preActivateActions.get(actionIndex);
+                    PanelAction action = PanelActionFactory.createPanelAction(panelActionClass);
+                    action.initialize(p.getPanelActionConfiguration(panelActionClass));
+                    panel.addPreActivationAction(action);
                 }
             }
             List<String> preValidateActions = p.getPreValidationActions();
@@ -298,8 +313,10 @@ public class InstallerFrame extends JFrame {
             {
                 for (int actionIndex = 0; actionIndex < preValidateActions.size(); actionIndex++)
                 {
-                    panel.addPreValidationAction(PanelActionFactory
-                            .createPanelAction(preValidateActions.get(actionIndex)));
+                    String panelActionClass = preValidateActions.get(actionIndex);
+                    PanelAction action = PanelActionFactory.createPanelAction(panelActionClass);
+                    action.initialize(p.getPanelActionConfiguration(panelActionClass));
+                    panel.addPreValidationAction(action);
                 }
             }
             List<String> postValidateActions = p.getPostValidationActions();
@@ -307,8 +324,10 @@ public class InstallerFrame extends JFrame {
             {
                 for (int actionIndex = 0; actionIndex < postValidateActions.size(); actionIndex++)
                 {
-                    panel.addPostValidationAction(PanelActionFactory
-                            .createPanelAction(postValidateActions.get(actionIndex)));
+                    String panelActionClass = postValidateActions.get(actionIndex);
+                    PanelAction action = PanelActionFactory.createPanelAction(panelActionClass);
+                    action.initialize(p.getPanelActionConfiguration(panelActionClass));
+                    panel.addPostValidationAction(action);
                 }
             }
 

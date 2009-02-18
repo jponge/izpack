@@ -7,6 +7,7 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.util.AbstractUIHandler;
 
 /*
@@ -43,6 +44,11 @@ public interface PanelAction
      * attribute for the stage of the action
      */
     public static final String PANEL_ACTION_STAGE_TAG = "stage";
+    
+    /**
+     * tag-name for the configuration of an action. 
+     */
+    public static final String PANEL_ACTION_CONFIGURATION_TAG = "configuration";
 
     /**
      * pre panel activation stage
@@ -64,4 +70,12 @@ public interface PanelAction
      * During an automated installation the handler is null on each action because we have no GUI to handle.
      */
     public void executeAction(final AutomatedInstallData adata, AbstractUIHandler handler);
+       
+    
+    /**
+     * Initializes the PanelAction with the given configuration.
+     * @param configuration an IXMLElement containing the configuration of the action or
+     *                      null if no configuration was found.
+     */
+    public void initialize(IXMLElement configuration);
 }
