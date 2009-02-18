@@ -24,7 +24,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.util.OsConstraint;
 
 /**
@@ -80,6 +82,8 @@ public class Panel implements Serializable
      * list of all post panel validation actions
      */
     private List<String> postValidationActions = null;
+    
+    private HashMap<String,IXMLElement> actionConfiguration = null;
 
 
     /**
@@ -221,4 +225,19 @@ public class Panel implements Serializable
         }
         this.postValidationActions.add(postValidationAction);
      }
+    
+    public void putPanelActionConfiguration(String panelActionClassName,IXMLElement configuration){
+        if (this.actionConfiguration == null){
+            this.actionConfiguration = new HashMap<String, IXMLElement>();
+        }
+        this.actionConfiguration.put(panelActionClassName, configuration);
+    }
+    
+    public IXMLElement getPanelActionConfiguration(String panelActionClassName){
+        IXMLElement result = null;
+        if (this.actionConfiguration != null){
+            result = this.actionConfiguration.get(panelActionClassName);
+        }
+        return result;
+    }
 }
