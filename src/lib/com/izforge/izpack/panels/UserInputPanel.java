@@ -1500,6 +1500,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         ruleField.setForOs(forOs);
         ruleField.setAssociatedVariable(variable);
         ruleField.setMessage(message);
+        elements.add(ruleField);
         
 //        uiElements.add(new Object[] { null, RULE_FIELD, variable, constraints2, field, forPacks,
 //                forOs, null, null, message});
