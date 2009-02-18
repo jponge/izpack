@@ -3181,13 +3181,13 @@ public class CompilerConfig extends Thread {
                     .getChildrenNamed(PanelAction.PANEL_ACTION_TAG);
             if (actionList != null)
             {
-                for (int actionIndex = 0; actionIndex < actionList.size(); actionIndex++)
-                {
-                  IXMLElement action = actionList.get(actionIndex);
+                for (IXMLElement action : actionList){
                     String stage = action.getAttribute(PanelAction.PANEL_ACTION_STAGE_TAG);
-                    String actionName = action
-                            .getAttribute(PanelAction.PANEL_ACTION_CLASSNAME_TAG);
-
+                    String actionName = action.getAttribute(PanelAction.PANEL_ACTION_CLASSNAME_TAG);
+                    if (actionName != null){
+                        IXMLElement configuration = action.getFirstChildNamed(PanelAction.PANEL_ACTION_CONFIGURATION_TAG);
+                        panel.putPanelActionConfiguration(actionName, configuration);
+                    }
                     try
                     {
                         ActionStage actionStage = ActionStage.valueOf(stage);
@@ -3212,7 +3212,7 @@ public class CompilerConfig extends Thread {
                         parseError(action, "Invalid value [" + stage + "] for attribute : "
                                 + PanelAction.PANEL_ACTION_STAGE_TAG);
                     }
-                }
+                }                   
             }
             else
             {
