@@ -37,6 +37,7 @@ The following types of user input elements are supported:
 -   Check Box
 -   Password
 -   File
+- 	Multiple files
 -   Directory
 -   Rule Input Field
 -   Search Field
@@ -656,6 +657,46 @@ Note: Mixing file fields with other fields that have text in front of
 them can lead to formatting (layout) issues. Placing these types of elements on
 different panels can provide a much better user experience.
 
+Multiple File Field
+--------------------
+
+This field allows the user to select multiple files from the file system.  Text can be added before
+the selection or a static text element can be added to display above the selection box
+(a little more visually appealing). 
+
+The files in the list can be created as a semi-colon separated string in one varibale. It's also
+possible to let the input field create multiple variables with the given variable appended with indexes.
+E.g. specifying a variable with name the.file and three files selected in the box would lead to three 
+variables in the installer (the.file, the.file_1, the.file_2).  
+
+::
+
+        <field type="multifile" align="left" variable="the.file">
+          <spec txt="" size="25" set=""/>
+        </field>
+
+::
+
+       <field type="staticText" align="left" txt="Existing SSL keystore to import:"/>
+        <field type="file" align="left" variable="existing.ssl.keystore">
+          <spec txt="" size="25" set=""/>
+        </field>
+
+Messages for the file field can be customized by creating a custom lang pack and
+overriding the following values (attribute values wrapped for readability):
+
+::
+
+    <str id="UserInputPanel.file.nofile.message"   txt="You must select a valid file."/>
+    <str id="UserInputPanel.file.nofile.caption"   txt="No File Selected"/>
+    <str id="UserInputPanel.file.notfile.message"   txt="The file you have chosen either 
+    		does not exist or is not valid."/>
+    <str id="UserInputPanel.file.notfile.caption"   txt="Invalid File"/>
+
+
+Note: Mixing multiple file fields with other fields that have text in front of 
+them can lead to formatting (layout) issues. Placing these types of elements on
+different panels can provide a much better user experience.
 
 Directory Field
 --------------------
