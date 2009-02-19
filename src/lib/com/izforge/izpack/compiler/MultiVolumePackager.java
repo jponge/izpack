@@ -421,7 +421,8 @@ public class MultiVolumePackager extends PackagerBase
             iter = packInfo.getParsables().iterator();
             while (iter.hasNext())
             {
-                objOut.writeObject(aPacksList);
+                
+                objOut.writeObject(iter.next());
             }
 
             // Write out information about executable files
@@ -429,7 +430,7 @@ public class MultiVolumePackager extends PackagerBase
             iter = packInfo.getExecutables().iterator();
             while (iter.hasNext())
             {
-                objOut.writeObject(aPacksList);
+                objOut.writeObject(iter.next());
             }
 
             // Write out information about updatecheck files
@@ -437,7 +438,7 @@ public class MultiVolumePackager extends PackagerBase
             iter = packInfo.getUpdateChecks().iterator();
             while (iter.hasNext())
             {
-                objOut.writeObject(aPacksList);
+                objOut.writeObject(iter.next());
             }
 
             // Cleanup
