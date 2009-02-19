@@ -104,10 +104,16 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
     
     public void initialize(){
         JPanel main = new JPanel();
+        
+        
         main.setLayout(new BoxLayout(main,BoxLayout.Y_AXIS));        
         
+        JPanel labelPanel = new JPanel();
+        labelPanel.setLayout(new BoxLayout(labelPanel,BoxLayout.X_AXIS));
         JLabel label = new JLabel(this.labeltext);
-        main.add(label);
+        labelPanel.add(label);
+        labelPanel.add(Box.createHorizontalGlue());
+        main.add(labelPanel);
         
         model = new DefaultListModel();
         fileList = new JList(model);
