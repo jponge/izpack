@@ -1129,6 +1129,18 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         }                        
                     }
                 }
+                else if (element.getType() == UIElementType.FILE){
+                    FileInputField fileInput = (FileInputField) element.getComponent();
+                    if (value != null){
+                        fileInput.setFile(value);
+                    }
+                }
+                else if (element.getType() == UIElementType.DIRECTORY){
+                    FileInputField fileInput = (FileInputField) element.getComponent();
+                    if (value != null){
+                        fileInput.setFile(value);
+                    }
+                }
                 updated = true;
             }
         }

@@ -85,6 +85,10 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
         this.add(filetxt);
         this.add(browseBtn);           
     }
+    
+    public void setFile(String filename){
+        filetxt.setText(filename);
+    }
 
     public void actionPerformed(ActionEvent arg0)
     {
