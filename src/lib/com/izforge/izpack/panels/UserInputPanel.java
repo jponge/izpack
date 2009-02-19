@@ -84,6 +84,7 @@ enum UIElementType{
     LABEL,
     TEXT,
     CHECKBOX,
+    MULTIPLE_FILE,
     FILE,
     DIRECTORY,
     RULE, 
@@ -420,6 +421,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private static final String FAMILY = "family";
 
+    private static final String MULTIPLE_FILE_FIELD = "multiFile";
+
 
     // ------------------------------------------------------------------------
     // Variable Declarations
@@ -644,6 +647,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 {
                     addSearch(field);
                 }
+                else if (attribute.equals(MULTIPLE_FILE_FIELD)){
+                    addMultipleFileField(field);
+                }
                 else if (attribute.equals(FILE_FIELD))
                 {
                     addFileField(field);
@@ -802,9 +808,142 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         dirUiElement.setForOs(forOs);
         dirUiElement.setAssociatedVariable(variable);
         elements.add(dirUiElement);
-//        uiElements.add(new Object[] { null, DIR_FIELD, variable, constraints2, fileInput, forPacks,
-//                forOs});
+    }
+    
+    private void addMultipleFileField(IXMLElement field){
+        Vector<IXMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
+        Vector<IXMLElement> forOs = field.getChildrenNamed(OS);
 
+        String labelText;
+        String set;
+        int size;
+
+        String filter = null;
+        String filterdesc = null;
+
+        String variable = field.getAttribute(VARIABLE);
+        if ((variable == null) || (variable.length() == 0)) { return; }
+
+        boolean allowEmptyValue = false;
+        boolean createMultipleVariables = false;
+
+        int preferredX = 200;
+        int preferredY = 200;
+        int visibleRows = 10;
+        
+        IXMLElement element = field.getFirstChildNamed(SPEC);
+        if (element == null)
+        {
+            Debug.trace("Error: no spec element defined in multi file field");
+            return;
+        }
+        else
+        {
+            labelText =getText(element);
+            // ----------------------------------------------------
+            // extract the specification details
+            // ----------------------------------------------------
+            set = element.getAttribute(SET);
+            if (set == null)
+            {
+                set = idata.getVariable(variable);
+                if (set == null)
+                {
+                    set = "";
+                }
+            }
+            else
+            {
+                if (set != null && !"".equals(set))
+                {
+                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    set = vs.substitute(set, null);
+                }
+            }
+
+            try
+            {
+                size = Integer.parseInt(element.getAttribute(TEXT_SIZE));
+            }
+            catch (Throwable exception)
+            {
+                size = 1;
+            }
+
+            filter = element.getAttribute("fileext");
+            if (filter == null)
+            {
+                filter = "";
+            }
+            filterdesc = element.getAttribute("fileextdesc");
+            if (filterdesc == null)
+            {
+                filterdesc = "";
+            }
+            // internationalize it
+            filterdesc = idata.langpack.getString(filterdesc);
+
+            String visRows = element.getAttribute("visibleRows");
+            if (visRows != null){
+                try {
+                    visibleRows = Integer.parseInt(visRows);    
+                }
+                catch (Exception e){
+                    Debug.error("Illegal value for visibleRows found.");
+                }
+            }
+            
+            String prefX = element.getAttribute("prefX");
+            if (prefX != null){
+                try {
+                    preferredX = Integer.parseInt(prefX);
+                }
+                catch (Exception e){
+                    Debug.error("Illegal value for prefX found.");
+                }
+            }
+            String prefY = element.getAttribute("prefY");
+            if (prefY != null){
+                try {
+                    preferredY = Integer.parseInt(prefY);
+                }
+                catch (Exception e){
+                    Debug.error("Illegal value for prefY found.");
+                }
+            }
+            
+            createMultipleVariables = Boolean.parseBoolean(element.getAttribute("multipleVariables", "false"));
+            allowEmptyValue = Boolean.parseBoolean(element.getAttribute("allowEmptyValue", "false"));
+        }
+
+        List<ValidatorContainer> validatorConfig = analyzeValidator(field);
+
+//        TwoColumnConstraints constraints = new TwoColumnConstraints();
+//        constraints.position = TwoColumnConstraints.WEST;
+//
+//        UIElement labelUiElement = new UIElement();
+//        labelUiElement.setType(UIElementType.LABEL);
+//        labelUiElement.setConstraints(constraints);
+//        labelUiElement.setComponent(label);
+//        labelUiElement.setForPacks(forPacks);
+//        labelUiElement.setForOs(forOs);
+//        elements.add(labelUiElement);
+        
+        TwoColumnConstraints constraints2 = new TwoColumnConstraints();
+        constraints2.position = TwoColumnConstraints.EAST;
+
+        MultipleFileInputField fileInputField = new MultipleFileInputField(parentFrame, idata, false, set, size,
+                validatorConfig, filter, filterdesc,createMultipleVariables,visibleRows,preferredX,preferredY,labelText);
+        fileInputField.setAllowEmptyInput(allowEmptyValue);
+
+        UIElement fileUiElement = new UIElement();
+        fileUiElement.setType(UIElementType.MULTIPLE_FILE);
+        fileUiElement.setConstraints(constraints2);
+        fileUiElement.setComponent(fileInputField);
+        fileUiElement.setForPacks(forPacks);
+        fileUiElement.setForOs(forOs);
+        fileUiElement.setAssociatedVariable(variable);
+        elements.add(fileUiElement);
     }
 
     private void addFileField(IXMLElement field)
@@ -960,7 +1099,36 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     {
                         value = rulef.getText();
                     }
-                }                
+                }
+                else if (element.getType() == UIElementType.MULTIPLE_FILE){
+                    MultipleFileInputField multifile = (MultipleFileInputField) element.getComponent();
+                    if (value != null){
+                        multifile.clearFiles();
+                        if (multifile.isCreateMultipleVariables()){
+                            multifile.addFile(value);
+                            // try to read more files
+                            String basevariable = element.getAssociatedVariable();
+                            int index = 1;
+                            
+                            while (value != null){
+                                StringBuffer builder = new StringBuffer(basevariable);
+                                builder.append("_");
+                                builder.append(index++);
+                                value = idata.getVariable(builder.toString());
+                                if (value != null){
+                                    multifile.addFile(value);
+                                }
+                            }
+                        }
+                        else {
+                            // split file string
+                            String[] files = value.split(";");
+                            for(String file : files){
+                                multifile.addFile(file);
+                            }                            
+                        }                        
+                    }
+                }
                 updated = true;
             }
         }
@@ -1118,6 +1286,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 {
                     success = readSearch(element);
                 }
+                else if (element.getType() == UIElementType.MULTIPLE_FILE)
+                {
+                    success = readMultipleFileField(element);
+                }
                 else if (element.getType() == UIElementType.FILE)
                 {
                     success = readFileField(element);
@@ -1170,6 +1342,52 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         .getAbsolutePath());
                 entries.add(new TextValuePair(field.getAssociatedVariable(), input.getSelectedFile()
                         .getAbsolutePath()));
+            }          
+        }
+        catch (Exception e)
+        {
+            if (Debug.stackTracing())
+            {
+                Debug.trace(e);
+            }
+        }
+        return result;
+    }
+    
+    private boolean readMultipleFileField(UIElement field)
+    {
+        boolean result = false;
+        try
+        {
+            MultipleFileInputField input = (MultipleFileInputField) field.getComponent();
+            result = input.validateField();
+            if (result)
+            {
+                List<String> files = input.getSelectedFiles();
+                String variable = field.getAssociatedVariable();
+                if (input.isCreateMultipleVariables()){
+                    int index = 0;
+                    for (String file: files){
+                        StringBuffer indexedVariableName = new StringBuffer(variable);
+                        if (index > 0){
+                            indexedVariableName.append("_");
+                            indexedVariableName.append(index);
+                        }
+                        index++;
+                        idata.setVariable(indexedVariableName.toString(),file);
+                        entries.add(new TextValuePair(indexedVariableName.toString(), file));
+                    }
+                    
+                }
+                else {
+                    StringBuffer buffer = new StringBuffer();
+                    for(String file : files){
+                        buffer.append(file);
+                        buffer.append(";");
+                    }
+                    idata.setVariable(variable,buffer.toString());
+                    entries.add(new TextValuePair(variable, buffer.toString()));
+                }                               
             }          
         }
         catch (Exception e)
@@ -1486,8 +1704,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         labelUiElement.setForOs(forOs);
         elements.add(labelUiElement);
         
-//        uiElements
-//                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
@@ -1500,10 +1716,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         ruleField.setForOs(forOs);
         ruleField.setAssociatedVariable(variable);
         ruleField.setMessage(message);
-        elements.add(ruleField);
-        
-//        uiElements.add(new Object[] { null, RULE_FIELD, variable, constraints2, field, forPacks,
-//                forOs, null, null, message});
+        elements.add(ruleField);        
     }
 
     /*--------------------------------------------------------------------------*/
