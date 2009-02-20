@@ -43,7 +43,7 @@ public class RulesEngine
 
     protected IXMLElement conditionsspec;
 
-    protected static Map conditionsmap = new HashMap();
+    protected static Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
 
     protected static AutomatedInstallData installdata;
 
@@ -69,7 +69,7 @@ public class RulesEngine
 
     private RulesEngine()
     {
-        conditionsmap = new Hashtable();
+        conditionsmap = new Hashtable<String, Condition>();
         this.panelconditions = new Hashtable<String, String>();
         this.packconditions = new Hashtable<String, String>();
         this.optionalpackconditions = new Hashtable<String, String>();
@@ -134,17 +134,17 @@ public class RulesEngine
         init();
     }
 
-    public RulesEngine(Map rules, AutomatedInstallData installdata)
+    public RulesEngine(Map<String, Condition> rules, AutomatedInstallData installdata)
     {
         this();
         Debug.trace("Initializing RulesEngine");
         RulesEngine.installdata = installdata;
         conditionsmap = rules;
-        Iterator keyiter = conditionsmap.keySet().iterator();
+        Iterator<String> keyiter = conditionsmap.keySet().iterator();
         while (keyiter.hasNext())
         {
-            String key = (String) keyiter.next();
-            Condition condition = (Condition) conditionsmap.get(key);
+            String key = keyiter.next();
+            Condition condition = conditionsmap.get(key);
             condition.setInstalldata(installdata);
         }
         init();
@@ -157,7 +157,7 @@ public class RulesEngine
      */
     public String[] getKnownConditionIds()
     {
-        String[] conditionids = (String[]) this.conditionsmap.keySet().toArray(new String[this.conditionsmap.size()]);
+        String[] conditionids = conditionsmap.keySet().toArray(new String[this.conditionsmap.size()]);
         Arrays.sort(conditionids);
         return conditionids;
     }
@@ -299,7 +299,7 @@ public class RulesEngine
 
     public static Condition getCondition(String id)
     {
-        Condition result = (Condition) conditionsmap.get(id);
+        Condition result = conditionsmap.get(id);
         if (result == null)
         {
             result = getConditionByExpr(new StringBuffer(id));
@@ -318,21 +318,21 @@ public class RulesEngine
             {
                 case '+':
                     // and-condition
-                    Condition op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                    Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new AndCondition(op1, getConditionByExpr(conditionexpr));
                     result.setInstalldata(RulesEngine.installdata);
                     break;
                 case '|':
                     // or-condition
-                    op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                    op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new OrCondition(op1, getConditionByExpr(conditionexpr));
                     result.setInstalldata(RulesEngine.installdata);
                     break;
                 case '\\':
                     // xor-condition
-                    op1 = (Condition) conditionsmap.get(conditionexpr.substring(0, index));
+                    op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new XorCondition(op1, getConditionByExpr(conditionexpr));
                     result.setInstalldata(RulesEngine.installdata);
@@ -358,7 +358,7 @@ public class RulesEngine
         }
         if (conditionexpr.length() > 0)
         {
-            result = (Condition) conditionsmap.get(conditionexpr.toString());
+            result = conditionsmap.get(conditionexpr.toString());
             if (result != null)
             {
                 result.setInstalldata(RulesEngine.installdata);
@@ -496,6 +496,24 @@ public class RulesEngine
         {
             Debug.trace("optional install possible");
             return true;
+        }
+    }
+    
+    /**
+     * 
+     * @param condition
+     */
+    public void addCondition(Condition condition){
+        if (condition != null){            
+            if (conditionsmap.containsKey(condition.id)){
+                Debug.error("Condition already registered.");
+            }
+            else {
+               conditionsmap.put(condition.id, condition);
+            }
+        }
+        else {
+            Debug.error("Cannot add condition. Condition was null.");
         }
     }
 }
