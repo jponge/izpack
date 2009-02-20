@@ -49,6 +49,7 @@ class PacksModel extends AbstractTableModel
     private static final String INITAL_PACKSELECTION = "initial.pack.selection";
 
     private List packs;
+    private List<Pack> hiddenPacks;
 
     private List packsToInstall;
 
@@ -132,7 +133,19 @@ class PacksModel extends AbstractTableModel
             }
         }
         this.rules = rules;
-        this.packs = idata.availablePacks;
+        
+        this.packs = new ArrayList();
+        this.hiddenPacks = new ArrayList<Pack>();
+        for(Pack availablePack : idata.availablePacks){
+            // only add a pack if not hidden
+            if (!availablePack.isHidden()){
+                this.packs.add(availablePack);
+            }
+            else {
+                this.hiddenPacks.add(availablePack);
+            }
+        }        
+        
         this.packsToInstall = idata.selectedPacks;
         this.panel = panel;
         this.variables = idata.getVariables();
@@ -511,9 +524,9 @@ class PacksModel extends AbstractTableModel
                     // redo
                     this.packsToInstall.add(pack);
                 }
-                updateBytes();
-                fireTableDataChanged();
                 refreshPacksToInstall();
+                updateBytes();
+                fireTableDataChanged();                
                 panel.showSpaceRequired();
             }
         }
@@ -558,6 +571,12 @@ class PacksModel extends AbstractTableModel
             if (installedpacks.containsKey(key))
             {
                 checkValues[i] = -3;
+            }
+        }
+        // add hidden packs
+        for (Pack hiddenpack : this.hiddenPacks){
+            if (this.rules.canInstallPack(hiddenpack.id,variables)){
+                packsToInstall.add(hiddenpack);
             }
         }
     }
@@ -651,6 +670,13 @@ class PacksModel extends AbstractTableModel
             {
                 Pack pack = (Pack) packs.get(q);
                 bytes += pack.nbytes;
+            }
+        }
+        
+        // add selected hidden bytes
+        for (Pack hidden : this.hiddenPacks){
+            if (this.rules.canInstallPack(hidden.id, variables)){
+                bytes += hidden.nbytes;
             }
         }
         panel.setBytes(bytes);
