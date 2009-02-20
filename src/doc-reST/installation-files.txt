@@ -893,6 +893,12 @@ The ``<pack>`` takes the following attributes :
     using the same value for the ``id`` attribute of the ``<res>`` element.
 -	``condition``: an id of a condition which has to be fullfilled to install this 
 	package. 
+-   ``hidden``: takes ``true`` or ``false`` and specifies whether the pack 
+    shall be shown in the packs panel. The bytes of such a hidden pack will be
+    used to calculate the required space, but the pack itself won't be shown. A
+    hidden pack can be selected conditionally. So you have to specify a condition to
+    enable it for installation.
+    The default for this attribute is ``false``
 
 The ``<refpack>`` takes only one attribute ``file``, which contains the
 relative path (from the installation compiler) to an externally defined
