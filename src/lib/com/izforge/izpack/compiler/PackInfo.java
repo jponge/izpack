@@ -202,6 +202,17 @@ public class PackInfo implements Serializable
     {
         return pack;
     }
+    
+    public boolean isHidden()
+    {
+        return pack.isHidden();
+    }
+
+    
+    public void setHidden(boolean hidden)
+    {
+        pack.setHidden(hidden);
+    }
 
     /***********************************************************************************************
      * Public methods to add data to the Installer being packed

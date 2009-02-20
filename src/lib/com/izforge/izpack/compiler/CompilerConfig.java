@@ -653,7 +653,8 @@ public class CompilerConfig extends Thread {
             String excludeGroup = el.getAttribute("excludeGroup");
             boolean uninstall = "yes".equalsIgnoreCase(el.getAttribute("uninstall", "yes"));
             String parent = el.getAttribute("parent");
-
+            boolean hidden = "true".equalsIgnoreCase(el.getAttribute("hidden","false"));
+            
             String conditionid = el.getAttribute("condition");
 
             if (required && excludeGroup != null)
@@ -667,6 +668,7 @@ public class CompilerConfig extends Thread {
             pack.setOsConstraints(OsConstraint.getOsList(el)); // TODO:
             pack.setParent(parent);
             pack.setCondition(conditionid);
+            pack.setHidden(hidden);
 
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
