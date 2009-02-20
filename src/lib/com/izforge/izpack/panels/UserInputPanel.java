@@ -75,6 +75,7 @@ import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.rules.VariableExistenceCondition;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.OsVersion;
@@ -98,7 +99,17 @@ enum UIElementType{
     DESCRIPTION
 }
 
+/**
+ * Additional metadata for password elements.
+ * @author Dennis Reil
+ *
+ */
 class PasswordUIElement extends UIElement{
+    public PasswordUIElement()
+    {
+        super();       
+    }
+
     PasswordGroup passwordGroup;
 
     public PasswordGroup getPasswordGroup()
@@ -112,7 +123,16 @@ class PasswordUIElement extends UIElement{
     }    
 }
 
+/**
+ * Additional metadata for radio buttons.
+ * @author Dennis Reil
+ */
 class RadioButtonUIElement extends UIElement {
+    public RadioButtonUIElement()
+    {
+        super();        
+    }
+
     ButtonGroup buttonGroup;
     
     public ButtonGroup getButtonGroup()
@@ -127,7 +147,11 @@ class RadioButtonUIElement extends UIElement {
 }
 
 
-
+/**
+ * Metadata for elements shown in the dialog.
+ * 
+ * @author Dennis Reil
+ */
 class UIElement{
     boolean displayed;
     UIElementType type;
@@ -139,6 +163,12 @@ class UIElement{
     String trueValue;
     String falseValue;    
     String message;    
+    
+    public UIElement(){
+      
+    }
+    
+    
     
     public boolean hasVariableAssignment(){
         return this.associatedVariable != null;
@@ -172,7 +202,7 @@ class UIElement{
     
     public void setAssociatedVariable(String associatedVariable)
     {
-        this.associatedVariable = associatedVariable;
+        this.associatedVariable = associatedVariable;      
     }
     
     public JComponent getComponent()
@@ -515,7 +545,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         instanceNumber = instanceCount++;
         this.parentFrame = parent;
     }
-
+    
+    private void createBuiltInVariableConditions(String variable){
+        if (variable != null){
+            VariableExistenceCondition variableCondition = new VariableExistenceCondition();
+            variableCondition.setId("izpack.input." + variable);
+            variableCondition.setInstalldata(idata);
+            variableCondition.setVariable(variable);
+            parent.getRules().addCondition(variableCondition);    
+        }        
+    }
     protected void init()
     {
         eventsActivated = false;
@@ -592,6 +631,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         {
             IXMLElement field = fields.elementAt(i);
             String attribute = field.getAttribute(TYPE);
+            String associatedVariable = field.getAttribute(VARIABLE);    
+            if (associatedVariable != null){
+                // create automatic existence condition
+                createBuiltInVariableConditions(associatedVariable);
+            }
+            
             String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
             if (conditionid != null)
             {
@@ -716,9 +761,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         String set;
         int size;
 
-        // String filter = null;
-        // String filterdesc = null;
-
         String variable = field.getAttribute(VARIABLE);
         if ((variable == null) || (variable.length() == 0)) { return; }
 
@@ -765,17 +807,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             }
 
             allowEmptyValue = Boolean
-                    .parseBoolean(element.getAttribute("allowEmptyValue", "false"));
-            // filter = element.getAttribute("fileext");
-            // if (filter == null) {
-            // filter = "";
-            // }
-            // filterdesc = element.getAttribute("fileextdesc");
-            // if (filterdesc == null) {
-            // filterdesc = "";
-            // }
-            // // internationalize it
-            // filterdesc = idata.langpack.getString(filterdesc);
+                    .parseBoolean(element.getAttribute("allowEmptyValue", "false")); 
         }
         validatorConfig = analyzeValidator(field);
 
@@ -790,9 +822,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         labelUiElement.setForOs(forOs);
         elements.add(labelUiElement);
         
-//        uiElements
-//                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
-
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
@@ -917,18 +946,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         List<ValidatorContainer> validatorConfig = analyzeValidator(field);
-
-//        TwoColumnConstraints constraints = new TwoColumnConstraints();
-//        constraints.position = TwoColumnConstraints.WEST;
-//
-//        UIElement labelUiElement = new UIElement();
-//        labelUiElement.setType(UIElementType.LABEL);
-//        labelUiElement.setConstraints(constraints);
-//        labelUiElement.setComponent(label);
-//        labelUiElement.setForPacks(forPacks);
-//        labelUiElement.setForOs(forOs);
-//        elements.add(labelUiElement);
-        
+      
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
@@ -1031,9 +1049,6 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         labelUiElement.setForPacks(forPacks);
         labelUiElement.setForOs(forOs);
         elements.add(labelUiElement);
-        
-//        uiElements
-//                .add(new Object[] { null, FIELD_LABEL, null, constraints, label, forPacks, forOs});
 
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
@@ -1050,11 +1065,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         fileUiElement.setForOs(forOs);
         fileUiElement.setAssociatedVariable(variable);
         elements.add(fileUiElement);
-        
-//        uiElements.add(new Object[] { null, FILE_FIELD, variable, constraints2, fileInputField,
-//                forPacks, forOs});
-    }
-
+    }    
+    
     protected void updateUIElements()
     {
         boolean updated = false;
@@ -1063,6 +1075,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         for (UIElement element : elements){
             if (element.hasVariableAssignment()){
                 String value = idata.getVariable(element.getAssociatedVariable());
+                
                 if (element.getType() == UIElementType.RADIOBUTTON)
                 {
                     // we have a radio field, which should be updated
