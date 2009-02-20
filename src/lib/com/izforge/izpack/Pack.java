@@ -39,6 +39,8 @@ public class Pack implements Serializable
 
     static final long serialVersionUID = -5458360562175088671L;
 
+    private boolean hidden;
+    
     /**
      * Flag for store files of this pack outside the installation jar file
      */
@@ -328,5 +330,17 @@ public class Pack implements Serializable
     public List<String> getValidators()
     {
         return validators;
+    }
+
+    
+    public boolean isHidden()
+    {
+        return hidden;
+    }
+
+    
+    public void setHidden(boolean hidden)
+    {
+        this.hidden = hidden;
     }
 }
