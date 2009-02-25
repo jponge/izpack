@@ -29,7 +29,7 @@ import java.util.Map;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  */
-public class XPackFile extends PackFile
+public class XPackFile extends PackFile implements Comparable<XPackFile>
 {
     private static final long serialVersionUID = 5875050264763504283L;
     protected long archivefileposition;
@@ -45,7 +45,7 @@ public class XPackFile extends PackFile
             throws FileNotFoundException
     {
         super(baseDir, src, target, osList, override);
-        this.archivefileposition = 0;
+        this.archivefileposition = 0;        
     }
 
     /**
@@ -68,6 +68,7 @@ public class XPackFile extends PackFile
         super(new File(packf.sourcePath), packf.relativePath, packf.getTargetPath(), packf.osConstraints(), packf
                 .override(), packf.getAdditionals());
         this.archivefileposition = 0;
+        this.setCondition(packf.getCondition());
     }
 
     public long getArchivefileposition()
@@ -83,5 +84,11 @@ public class XPackFile extends PackFile
     public PackFile getPackfile()
     {
         return this;
+    }
+
+    
+    public int compareTo(XPackFile arg0)
+    {
+        return this.getTargetPath().compareTo(arg0.getTargetPath());        
     }
 }
