@@ -353,8 +353,19 @@ To create a web installer, add the '<webdir>' element to the <info> element. The
      <url>http://www.superextractor.com/</url>
      <webdir>http://www.superextractor.com/download</url>
    </info>
-  
-You can force creation of a standard installer even if 'webdir' is specified, by specifically creating a standard installer from the command line invocation or ant task.
+
+By default, the compiler will create a standard installer even if 'webdir' is specified. You can generate your web installer with the 'web' option like this : ::
+
+    compile installer.xml -k web
+
+It will generate a jar for each pack and an installer jar. For instance, the sample installation will generate those 4 jars. ::
+
+    install.jar
+    install.pack-Base.jar
+    install.pack-Docs.jar
+    install.pack-Sources.jar
+
+The pack jars must be copied in the webdir. The installer generated is configured as a web installer and will download those packs if necessary.
 
 When installing, if the user is behind a firewall, attempting download the jar files may fail. If this happens, the user will be prompted to enter the name host name and port of their firewall.
 
