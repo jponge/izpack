@@ -84,14 +84,13 @@ public class XMLParser implements IXMLParser
         return null;
     }
 
-    private DOMResult parseLineNr(InputStream stream)
+    private DOMResult parseLineNrFromInputSource(InputSource inputSource)
     {
-
-        DOMResult result = new DOMResult();
-
+        DOMResult result = null;
         try
         {
-            SAXSource source = new SAXSource(new InputSource(stream));
+            result = new DOMResult();
+            SAXSource source = new SAXSource(inputSource);
             source.setXMLReader(filter);
             Source xsltSource = new StreamSource(IXMLParser.class.getResource("styleSheet.xsl").openStream());
             Transformer xformer = TransformerFactory.newInstance().newTransformer(xsltSource);
@@ -104,13 +103,13 @@ public class XMLParser implements IXMLParser
         {
             e.printStackTrace();
         }
-
         return result;
     }
 
     public IXMLElement parse(InputStream inputStream)
     {
-        DOMResult result = parseLineNr(inputStream);
+        InputSource inputSource = new InputSource(inputStream);
+        DOMResult result = parseLineNrFromInputSource(inputSource);
         return searchFirstElement(result);
     }
 
@@ -119,8 +118,10 @@ public class XMLParser implements IXMLParser
         return parse(new ByteArrayInputStream(inputString.getBytes()));
     }
 
-    public IXMLElement parse(URL inputURL) throws IOException
+    public IXMLElement parse(URL inputURL)
     {
-        return parse(inputURL.openStream());
+        InputSource inputSource = new InputSource(inputURL.toExternalForm());
+        DOMResult domResult = parseLineNrFromInputSource(inputSource);
+        return searchFirstElement(domResult);
     }
 }

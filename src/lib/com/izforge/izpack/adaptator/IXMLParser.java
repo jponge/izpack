@@ -22,7 +22,6 @@
 
 package com.izforge.izpack.adaptator;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -38,7 +37,6 @@ public interface IXMLParser
      * Parse the given stream to a XML
      *
      * @param inputStream Stream to parse
-     *
      * @return Root element of the parsed xml
      */
     IXMLElement parse(InputStream inputStream);
@@ -47,7 +45,6 @@ public interface IXMLParser
      * Parse the given text as an xml
      *
      * @param inputString Xml written in a string
-     *
      * @return Root element of the parsed xml
      */
     IXMLElement parse(String inputString);
@@ -56,10 +53,7 @@ public interface IXMLParser
      * Parse the resource at the url specified
      *
      * @param inputURL Url of the resource
-     *
      * @return Root element of the parsed xml
-     *
-     * @throws IOException Exception in the parsed of the resource
      */
-    IXMLElement parse(URL inputURL) throws IOException;
+    IXMLElement parse(URL inputURL);
 }

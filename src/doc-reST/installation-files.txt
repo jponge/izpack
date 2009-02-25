@@ -1316,7 +1316,7 @@ If a logical error appear in an included file, the line number shown will indica
 The xi:include element has the following attributes:
 
 href
-  The location of the file to include. If this is a relative path (e.g. href='../bob.xml') then the file is resolved relative to the path of execution. The href element can be a remote url (e.g. href='http://example.com/file.txt') but this is not recommended.
+  The location of the file to include. If this is a relative path (e.g. href='../bob.xml') then the file is resolved relative to the document that includes the xinclude element. The href element can be a remote url (e.g. href='http://example.com/file.txt') but this is not recommended.
 
 parse
   Indicates that the included file should be treated as xml, forcing the included file to be parsed (which results in all xinclude elements in the included file to also be included), or as text which includes the specified file as a text node. It can have a value of 'xml' or 'text' and defaults to 'xml' if ommitted.
