@@ -1,18 +1,3 @@
-/*
- * Copyright 2007 Volantis Systems Ltd., All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.izforge.izpack.adaptator.xinclude;
 
 import com.izforge.izpack.adaptator.IXMLElement;
@@ -24,38 +9,25 @@ import java.net.URL;
 import java.util.Vector;
 
 /**
- * Test the XInclude style functionality added to the XMLBuilder
+ * Base class for xinclude tests.
  */
-public class XIncludeXMLBuilderTestCase extends TestCase
+public abstract class BaseXIncludeTestCase extends TestCase
 {
-
 
     /**
      * This method takes the fileBase name and attempts to find two files
      * called &lt;fileBase&gt;-input.xml and &lt;fileBase&gt;-expected.xml
      *
      * @param fileBase the base of the test file names
-     *
      * @throws Exception
      */
-    public void doTest(String fileBase) throws Exception
-    {
-
-        URL inputURL = getClass().getResource(fileBase + "-input.xml");
-        URL expectURL = getClass().getResource(fileBase + "-expect.xml");
-        // set up a new parser to parse the input xml (with includes)
-        IXMLParser parser = new XMLParser();
-        IXMLElement inputElement = parser.parse(inputURL);
-        IXMLElement expectedElement = parser.parse(expectURL);
-        deepEqual(expectedElement, inputElement);
-    }
+    public abstract void doTest(String fileBase) throws Exception;
 
     /**
      * This method is used to ensure that the contents of the specified file
      * (when having "-input.xml" appended) cause the parser to fail
      *
      * @param fileBase the base name of the input file.
-     *
      * @throws Exception
      */
     public void ensureFailure(String fileBase) throws Exception
@@ -107,6 +79,16 @@ public class XIncludeXMLBuilderTestCase extends TestCase
     public void testIncludeOnly() throws Exception
     {
         doTest("include-only");
+    }
+
+    /**
+     * Test Empty document with include
+     *
+     * @throws Exception
+     */
+    public void testIncludeSubdirectoryOnly() throws Exception
+    {
+        doTest("include-subdirectory-only");
     }
 
     /**
@@ -215,6 +197,4 @@ public class XIncludeXMLBuilderTestCase extends TestCase
     {
         doTest("multiple-include");
     }
-
-
 }

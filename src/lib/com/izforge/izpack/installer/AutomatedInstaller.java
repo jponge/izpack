@@ -21,35 +21,24 @@
 
 package com.izforge.izpack.installer;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipOutputStream;
-
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Panel;
-import com.izforge.izpack.adaptator.*;
-import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
+
+import java.io.*;
+import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Runs the install process in text only (no GUI) mode.
@@ -545,7 +534,7 @@ public class AutomatedInstaller extends InstallerBase
 
         // Initialises the parser
         IXMLParser parser = new XMLParser();
-        IXMLElement rtn = parser.parse(in);
+        IXMLElement rtn = parser.parse(in,input.getAbsolutePath());
         in.close();
 
         return rtn;

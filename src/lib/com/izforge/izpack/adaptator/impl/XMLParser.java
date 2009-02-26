@@ -113,6 +113,14 @@ public class XMLParser implements IXMLParser
         return searchFirstElement(result);
     }
 
+    public IXMLElement parse(InputStream inputStream, String systemId)
+    {
+        InputSource inputSource = new InputSource(inputStream);
+        inputSource.setSystemId(systemId);
+        DOMResult result = parseLineNrFromInputSource(inputSource);
+        return searchFirstElement(result);
+    }
+    
     public IXMLElement parse(String inputString)
     {
         return parse(new ByteArrayInputStream(inputString.getBytes()));

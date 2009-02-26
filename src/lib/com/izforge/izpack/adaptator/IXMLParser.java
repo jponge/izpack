@@ -42,6 +42,16 @@ public interface IXMLParser
     IXMLElement parse(InputStream inputStream);
 
     /**
+     * Parse the given stream to a XML and set the systemId to the inputSource.
+     * It is useful for the xinclude feature, as the path of the resolution depends on the systemId.
+     *
+     * @param inputStream Stran to parse
+     * @param systemId    System id of the file parsed
+     * @return Root element of the parsed XML
+     */
+    IXMLElement parse(InputStream inputStream, String systemId);
+
+    /**
      * Parse the given text as an xml
      *
      * @param inputString Xml written in a string
