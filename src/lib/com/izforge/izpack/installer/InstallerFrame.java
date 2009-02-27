@@ -230,7 +230,7 @@ public class InstallerFrame extends JFrame {
      */
     private void loadPanels() throws Exception {
         // Initialisation
-        java.util.List panelsOrder = installdata.panelsOrder;
+        java.util.List<Panel> panelsOrder = installdata.panelsOrder;
         int i;
         int size = panelsOrder.size();
         String className;
@@ -249,7 +249,7 @@ public class InstallerFrame extends JFrame {
         int count = 0;
         for (i = 0; i < size; i++) {
             // We add the panel
-            Panel p = (Panel) panelsOrder.get(i);
+            Panel p = panelsOrder.get(i);
             if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) {
                 continue;
             }

@@ -24,6 +24,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
@@ -114,9 +115,9 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
      *
      * @param idata     The installation data.
      * @param panelRoot The XML root element of the panels blackbox tree.
-     * @return true if the variables were found and set.
+     * @throws InstallerException if some elements are missing.
      */
-    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         IXMLElement userInput;
         IXMLElement dataElement;
@@ -130,14 +131,14 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
 
         if (userInput == null)
         {
-            return false;
+            throw new InstallerException("Missing userInput element on line " + panelRoot.getLineNr());
         }
 
         Vector<IXMLElement> userEntries = userInput.getChildrenNamed(AUTO_KEY_ENTRY);
 
         if (userEntries == null)
         {
-            return false;
+            throw new InstallerException("Missing entry element(s) on line " + panelRoot.getLineNr());
         }
 
         // ----------------------------------------------------
@@ -153,7 +154,5 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
             Debug.trace("UserInputPanel: setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);
         }
-
-        return true;
     }
 }

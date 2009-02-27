@@ -65,9 +65,8 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
      *
      * @param installData DOCUMENT ME!
      * @param panelRoot   DOCUMENT ME!
-     * @return DOCUMENT ME!
      */
-    public boolean runAutomated(AutomatedInstallData installData, IXMLElement panelRoot)
+    public void runAutomated(AutomatedInstallData installData, IXMLElement panelRoot)
     {
         Shortcut shortcut;
 
@@ -99,7 +98,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
             Debug.log("Could not create shortcut instance");
             exception.printStackTrace();
 
-            return true;
+            return;
         }
 
         // ----------------------------------------------------
@@ -111,14 +110,14 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         {
             Debug.log("shortcuts not supported here");
 
-            return true;
+            return;
         }
 
         if (!OsConstraint.oneMatchesCurrentSystem(panelRoot))
         {
             Debug.log("Shortcuts Not oneMatchesCurrentSystem");
 
-            return true;
+            return;
         }
 
         shortcuts = new Vector<ShortcutData>();
@@ -357,7 +356,5 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation
         }
 
         System.out.println(" done. ]");
-
-        return true;
     }
 }

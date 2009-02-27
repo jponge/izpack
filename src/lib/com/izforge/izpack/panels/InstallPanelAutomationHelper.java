@@ -53,7 +53,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      * @param panelRoot The panel XML tree root.
      * @return true if the installation was successful.
      */
-    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         /*
         Unpacker unpacker = new Unpacker(idata, this);
@@ -63,8 +63,7 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpacker.setRules(idata.getRules());
         unpackerthread.start();
-        boolean done = false;
-        while (!done && unpackerthread.isAlive())
+        while (unpackerthread.isAlive())
         {
             try
             {
@@ -75,7 +74,9 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
                 // ignore it, we're waiting for the unpacker to finish...
             }
         }
-        return unpacker.getResult();
+        if(!unpacker.getResult()) {
+            throw new InstallerException("Unpack failed (xml line "+ panelRoot.getLineNr() + ")");
+        }
     }
 
     /**

@@ -72,7 +72,7 @@ public class InstallationGroupPanelAutomationHelper
      * TODO Need to add a InstallationGroupPanelAutomationHelper to read the
      * xml data to allow an install group to specify the selected packs.
      */
-    public boolean runAutomated(AutomatedInstallData idata,
+    public void runAutomated(AutomatedInstallData idata,
                                 IXMLElement panelRoot)
     {
         String installGroup = idata.getVariable("INSTALL_GROUP");
@@ -108,7 +108,6 @@ public class InstallationGroupPanelAutomationHelper
                 }
             }
         }
-        return true;
     }
 
 }
