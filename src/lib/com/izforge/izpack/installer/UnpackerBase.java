@@ -956,7 +956,13 @@ public abstract class UnpackerBase implements IUnpacker
             {
                 url = new URL(url.getFile());
             }
-            absolutInstallSource = new File(url.getFile()).getAbsoluteFile().getParentFile();
+            String urlFile = url.getFile();
+            if (url.getAuthority() != null)
+            {
+                // we have a UNC path...
+                urlFile = "//" + url.getAuthority() + urlFile;
+            }
+            absolutInstallSource = new File(urlFile).getAbsoluteFile().getParentFile();
             if (absolutInstallSource.getAbsolutePath().endsWith("!"))
             {
                 absolutInstallSource = absolutInstallSource.getParentFile();
