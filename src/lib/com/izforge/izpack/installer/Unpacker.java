@@ -493,7 +493,7 @@ public class Unpacker extends UnpackerBase
             }
             else
             {
-            	if (message == null || message.isEmpty())
+            	if (message == null || "".equals(message))
             	{
             		message = "Internal error occured : " + err.toString();
             	}
