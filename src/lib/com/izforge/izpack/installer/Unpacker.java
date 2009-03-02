@@ -486,13 +486,18 @@ public class Unpacker extends UnpackerBase
         {
             // TODO: finer grained error handling with useful error messages
             handler.stopAction();
-            if ("Installation cancelled".equals(err.getMessage()))
+            String message = err.getMessage();
+			if ("Installation cancelled".equals(message))
             {
                 handler.emitNotification("Installation cancelled");
             }
             else
             {
-                handler.emitError("An error occured", err.getMessage());
+            	if (message == null || message.isEmpty())
+            	{
+            		message = "Internal error occured : " + err.toString();
+            	}
+                handler.emitError("An error occured", message);
                 err.printStackTrace();
             }
             this.result = false;
