@@ -158,6 +158,10 @@ class PacksModel extends AbstractTableModel
         refreshPacksToInstall();
         this.variables.setProperty(INITAL_PACKSELECTION, Boolean.toString(false));
     }
+    
+    public Pack getPackAtRow(int row){
+        return (Pack) this.packs.get(row);
+    }
 
     private void removeAlreadyInstalledPacks(List selectedpacks)
     {
