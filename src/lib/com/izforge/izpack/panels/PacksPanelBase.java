@@ -311,7 +311,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         // Operations for the description
         if ((descriptionArea != null) && (selectedRow != -1))
         {
-            Pack pack = (Pack) idata.availablePacks.get(selectedRow);
+            Pack pack = this.packsModel.getPackAtRow(selectedRow);
             String desc = "";
             String key = pack.id + ".description";
             if (langpack != null && pack.id != null && !"".equals(pack.id))
@@ -329,7 +329,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         // Operation for the dependency listing
         if ((dependencyArea != null) && (selectedRow != -1))
         {
-            Pack pack = (Pack) idata.availablePacks.get(selectedRow);
+            Pack pack = this.packsModel.getPackAtRow(selectedRow);
             List<String> dep = pack.dependencies;
             String list = "";
             if (dep != null)
