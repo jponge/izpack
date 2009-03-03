@@ -74,6 +74,11 @@ public class PackFile implements Serializable
      * The length of the file in bytes
      */
     private long length = 0;
+    
+    /**
+     * The size of the file used to calculate the pack size
+     */
+    private transient long size = 0;
 
     /**
      * The last-modification time of the file.
@@ -161,6 +166,7 @@ public class PackFile implements Serializable
         this.override = override;
 
         this.length = src.length();
+        this.size = this.length;
         this.mtime = src.lastModified();
         this.isDirectory = src.isDirectory();
         this.additionals = additionals;
@@ -234,7 +240,15 @@ public class PackFile implements Serializable
     {
         return length;
     }
-
+    
+    /**
+     *  The size of the file in bytes (is the same as the length if it is not a loose pack)
+     */
+    public final long size()
+    {
+    	return size;
+    }
+    
     /**
      * The last-modification time of the file.
      */
