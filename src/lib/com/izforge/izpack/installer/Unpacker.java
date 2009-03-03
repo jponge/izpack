@@ -116,16 +116,21 @@ public class Unpacker extends UnpackerBase
 
                 // We get the internationalized name of the pack
                 final Pack pack = ((Pack) packs.get(i));
-                String stepname = pack.name;// the message to be passed to the
+                String stepname = pack.name;// the message to be passed to the                
+                
                 // installpanel
                 if (langpack != null && !(pack.id == null || "".equals(pack.id)))
                 {
-
                     final String name = langpack.getString(pack.id);
                     if (name != null && !"".equals(name))
                     {
                         stepname = name;
                     }
+                }
+                if (pack.isHidden()){
+                    // TODO: hide the pack completely
+                    // hide the pack name if pack is hidden
+                    stepname = "";                                           
                 }
                 handler.nextStep(stepname, i + 1, nfiles);
                 for (int j = 0; j < nfiles; j++)

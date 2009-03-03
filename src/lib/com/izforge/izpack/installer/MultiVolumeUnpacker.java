@@ -207,6 +207,11 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         stepname = name;
                     }
                 }
+                if (pack.isHidden()){
+                    // TODO: hide the pack completely
+                    // hide the pack name if pack is hidden
+                    stepname = "";                                           
+                }
                 handler.nextStep(stepname, i + 1, nfiles);
                 for (int j = 0; j < nfiles; j++)
                 {
