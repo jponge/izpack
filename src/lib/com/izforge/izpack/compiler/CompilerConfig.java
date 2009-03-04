@@ -1455,6 +1455,21 @@ public class CompilerConfig extends Thread {
             {
                 panel.className = className;
             }
+            IXMLElement configurationElement = xmlPanel.getFirstChildNamed("configuration");
+            if (configurationElement != null){
+                Debug.trace("found a configuration for this panel.");
+                Vector<IXMLElement> params = configurationElement.getChildrenNamed("param");
+                if (params != null){
+                    for(IXMLElement param : params){
+                        IXMLElement keyElement = param.getFirstChildNamed("key");
+                        IXMLElement valueElement = param.getFirstChildNamed("value");
+                        if ((keyElement != null) && (valueElement != null)){
+                            panel.addConfiguration(keyElement.getContent(), valueElement.getContent());
+                        }
+                    }    
+                }                
+            }
+            
             // adding validator
             IXMLElement validatorElement = xmlPanel
                     .getFirstChildNamed(DataValidator.DATA_VALIDATOR_TAG);
