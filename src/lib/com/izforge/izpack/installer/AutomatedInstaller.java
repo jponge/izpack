@@ -357,6 +357,10 @@ public class AutomatedInstaller extends InstallerBase
                         this.panelInstanceCount.put(p.className, this.panelInstanceCount
                                 .get(p.className) + 1);
                     }
+                    else
+                    {
+                        this.panelInstanceCount.put(p.className, 1);
+                    }
                     continue;
                 }
 
