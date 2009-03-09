@@ -1058,26 +1058,26 @@
         <echo message="Copies the recent changed native files to the ${basedir}/bin directory"/>
 
         <mkdir dir="${basedir}/bin/native/izpack"/>
-        <!-- If unicode support of ShellLink.dll will be not used, change between  both copy blocks -->
-        <!--
-		<copy todir="${basedir}/bin/native/izpack" file="${basedir}/src/native/ShellLink/Release/ShellLink.dll" verbose="true" overwrite="yes" preservelastmodified="true"/>
-		<copy todir="${basedir}/bin/native/3rdparty" file="${basedir}/src/native/win/COIOSHelper/Release/COIOSHelper.dll" verbose="true" overwrite="yes" preservelastmodified="true"/>
-		-->
         <copy todir="${basedir}/bin/native/izpack"
-              file="${basedir}/src/native/ShellLink/Release_Unicode/ShellLink.dll"
+              file="${basedir}/src/native/ShellLink/src/lib/ShellLink.dll"
               verbose="true"
               overwrite="yes"
               preservelastmodified="true"/>
         <copy todir="${basedir}/bin/native/izpack"
-              file="${basedir}/src/native/ShellLink_x64/Release_Unicode/ShellLink_x64.dll"
+              file="${basedir}/src/native/ShellLink/src/lib/ShellLink_x64.dll"
               verbose="true"
               overwrite="yes"
               preservelastmodified="true"/>
         <copy todir="${basedir}/bin/native/3rdparty"
-              file="${basedir}/src/native/win/COIOSHelper/Release_Unicode/COIOSHelper.dll"
+              file="${basedir}/src/native/COIOSHelper/src/lib/COIOSHelper.dll"
               verbose="true"
               overwrite="yes"
               preservelastmodified="true"/>
+      	<copy todir="${basedir}/bin/native/3rdparty"
+        	    file="${basedir}/src/native/COIOSHelper/src/lib/COIOSHelper_x64.dll"
+          	  verbose="true"
+            	overwrite="yes"
+            	preservelastmodified="true"/>
     </target>
 
 
