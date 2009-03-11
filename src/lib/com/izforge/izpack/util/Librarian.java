@@ -83,12 +83,6 @@ public class Librarian implements CleanupClient
      */
     private static final int BLOCK_SIZE = 4096;
 
-    /**
-     * VM version needed to select clean up method.
-     */
-    private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
-            .getProperty("java.specification.version"));
-
     // ------------------------------------------------------------------------
     // Variable Declarations
     // ------------------------------------------------------------------------
@@ -667,7 +661,8 @@ public class Librarian implements CleanupClient
     /**
      * This method attempts to remove all native libraries that have been temporarily created from
      * the system.
-     * The used method for clean up depends on the VM version.
+     * This method calls LibraryRemover which starts a new process which
+     * waits a little bit for exit of this process and tries than to delete the given files.
      * If the ersion is 1.5.x or higher this process should be exit in one second, else
      * the native libraries will be not deleted.
      * Tests with the different methods produces hinds that the
@@ -683,76 +678,8 @@ public class Librarian implements CleanupClient
     /*--------------------------------------------------------------------------*/
     public void cleanUp()
     {
-        if (JAVA_SPECIFICATION_VERSION < 1.5)
-        {
-            oldCleanUp();
-        }
-        else
-        {
-            newCleanUp();
-        }
-
-    }
-
-    /*--------------------------------------------------------------------------*/
-    /**
-     * This method attempts to remove all native libraries that have been temporarily created from
-     * the system.
-     * This method will be invoked if the VM has version 1.4.x or less. Version 1.5.x or higher
-     * uses newCleanUp.
-     * This method starts a new thread which calls a method in the dll which should unload the
-     * dll. The thread never returns.
-     */
-    /*--------------------------------------------------------------------------*/
-    private void oldCleanUp()
-    {
-        for (int i = 0; i < clients.size(); i++)
-        {
-            // --------------------------------------------------
-            // free the library
-            // --------------------------------------------------
-            NativeLibraryClient client = clients.elementAt(i);
-            String libraryName = libraryNames.elementAt(i);
-
-            FreeThread free = new FreeThread(libraryName, client);
-            free.start();
-            try
-            {
-                // give the thread some time to get the library
-                // freed before attempting to delete it.
-                free.join(50);
-            }
-            catch (Throwable exception)
-            {
-            } // nothing I can do
-
-            // --------------------------------------------------
-            // delete the library
-            // --------------------------------------------------
-            String tempFileName = temporaryFileNames.elementAt(i);
-            try
-            {
-                File file = new File(tempFileName);
-                file.delete();
-            }
-            catch (Throwable exception)
-            {
-            } // nothing I can do
-        }
-    }
-
-    /*--------------------------------------------------------------------------*/
-    /**
-     * This method attempts to remove all native libraries that have been temporarily created from
-     * the system. This method will be invoked if the VM has version 1.5.x or higher. Version 1.4.x
-     * or less uses oldCleanUp. This method calls LibraryRemover which starts a new process which
-     * waits a little bit for exit of this process and tries than to delete the given files.
-     */
-    /*--------------------------------------------------------------------------*/
-    private void newCleanUp()
-    {
-        // This method will be used the SelfModifier stuff of uninstall 
-        // instead of killing the thread in the dlls which provokes a 
+        // This method will be used the SelfModifier stuff of uninstall
+        // instead of killing the thread in the dlls which provokes a
         // segmentation violation with a 1.5 (also known as 5.0) VM.
 
         try
