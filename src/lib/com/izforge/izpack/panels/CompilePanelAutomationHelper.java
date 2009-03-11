@@ -66,8 +66,9 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
      * Perform the installation actions.
      *
      * @param panelRoot The panel XML tree root.
+     * @throws InstallerException if something went wrong.
      */
-    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         IXMLElement compiler_xml = panelRoot.getFirstChildNamed("compiler");
 
@@ -80,8 +81,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
         if (compiler == null)
         {
-            System.out.println("invalid automation data: could not find compiler");
-            return false;
+            throw new InstallerException("invalid automation data: could not find compiler");
         }
 
         IXMLElement args_xml = panelRoot.getFirstChildNamed("arguments");
@@ -95,8 +95,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
         if (args_xml == null)
         {
-            System.out.println("invalid automation data: could not find compiler arguments");
-            return false;
+            throw new InstallerException("invalid automation data: could not find compiler arguments");
         }
 
         try
@@ -110,12 +109,13 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
 
             this.worker.run();
 
-            return this.worker.getResult().isSuccess();
+            if(this.worker.getResult().isSuccess()) {
+                throw new InstallerException("Compilation failed (xml line " + panelRoot.getLineNr() + ")");
+            }
         }
         catch (IOException e)
         {
-            e.printStackTrace();
-            return false;
+            throw new InstallerException(e);
         }
     }
 

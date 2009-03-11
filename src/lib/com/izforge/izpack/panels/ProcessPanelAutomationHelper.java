@@ -21,10 +21,7 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.AutomatedInstallData;
-import com.izforge.izpack.installer.PanelAutomation;
-import com.izforge.izpack.installer.PanelAutomationHelper;
-import com.izforge.izpack.installer.ProcessPanelWorker;
+import com.izforge.izpack.installer.*;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 import com.izforge.izpack.adaptator.IXMLElement;
 
@@ -60,9 +57,8 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
      * Perform the installation actions.
      *
      * @param panelRoot The panel XML tree root.
-     * @return true if processes were run successfully.
      */
-    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         try
         {
@@ -70,12 +66,15 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
 
             worker.run();
 
-            return worker.getResult();
+            if (!worker.getResult())
+            {
+                throw new InstallerException("The work done by the ProcessPanel (line " + panelRoot.getLineNr() + ") failed");
+            }
         }
         catch (IOException e)
         {
             e.printStackTrace();
-            return false;
+            throw new InstallerException("The work done by the ProcessPanel (line " + panelRoot.getLineNr() + ") failed", e);
         }
 
     }
@@ -104,7 +103,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     }
 
     /**
-     * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing()
+     * @see com.izforge.izpack.util.AbstractUIProcessHandler#finishProcessing
      */
     public void finishProcessing(boolean unlockPrev, boolean unlockNext)
     {

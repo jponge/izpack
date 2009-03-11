@@ -24,6 +24,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
@@ -51,7 +52,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
         for (int i = 0; i < idata.availablePacks.size(); i++)
         {
             Pack pack = idata.availablePacks.get(i);
-            IXMLElement el = new XMLElementImpl("pack",panelRoot);
+            IXMLElement el = new XMLElementImpl("pack", panelRoot);
             el.setAttribute("index", Integer.toString(i));
             el.setAttribute("name", pack.name);
             Boolean selected = idata.selectedPacks.contains(pack);
@@ -66,14 +67,12 @@ public class PacksPanelAutomationHelper implements PanelAutomation
      *
      * @param idata     The installation data.
      * @param panelRoot The root of the panel data.
-     * @return true if all packs were found and selected, false if something was wrong.
+     * @throws InstallerException if not all packs were found and selected.
      */
-    public boolean runAutomated(AutomatedInstallData idata, IXMLElement panelRoot)
+    public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException
     {
         // We get the packs markups
         Vector<IXMLElement> pm = panelRoot.getChildrenNamed("pack");
-
-        boolean result = true;
 
         // We figure out the selected ones
         int size = pm.size();
@@ -101,7 +100,8 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                                     el.getAttribute("selected").equalsIgnoreCase("on"))
                             {
                                 Pack pack = (Pack) idata.availablePacks.get(index);
-                                if ((pack.id != null) && (!idata.getRules().canInstallPack(pack.id,idata.getVariables()))){
+                                if ((pack.id != null) && (!idata.getRules().canInstallPack(pack.id, idata.getVariables())))
+                                {
                                     System.out.println("Condition for pack " + pack.name + " not fulfilled. Skipping pack.");
                                     continue;
                                 }
@@ -110,16 +110,14 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                         }
                         else
                         {
-                            System.err.println("Invalid pack index \"" + index_str + "\" in line "
+                            throw new InstallerException("Invalid pack index \"" + index_str + "\" in line "
                                     + el.getLineNr());
-                            result = false;
                         }
                     }
                     catch (NumberFormatException e)
                     {
-                        System.err.println("Invalid pack index \"" + index_str + "\" in line "
+                        throw new InstallerException("Invalid pack index \"" + index_str + "\" in line "
                                 + el.getLineNr());
-                        result = false;
                     }
                 }
                 else
@@ -138,7 +136,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                             Pack pack = (Pack) pack_it.next();
 
                             if (pack.name.equals(name))
-                            {                                           
+                            {
                                 idata.selectedPacks.add(pack);
                                 found = true;
                             }
@@ -147,9 +145,8 @@ public class PacksPanelAutomationHelper implements PanelAutomation
 
                         if (!found)
                         {
-                            System.err.println("Could not find selected pack named \"" + name
+                            throw new InstallerException("Could not find selected pack named \"" + name
                                     + "\" in line " + el.getLineNr());
-                            result = false;
                         }
 
                     }
@@ -160,7 +157,6 @@ public class PacksPanelAutomationHelper implements PanelAutomation
 
         }
 
-        return result;
     }
 
 }

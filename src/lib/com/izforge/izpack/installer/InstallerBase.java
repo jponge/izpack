@@ -21,33 +21,23 @@
 
 package com.izforge.izpack.installer;
 
-import java.io.File;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.swing.JOptionPane;
-
 import com.izforge.izpack.CustomData;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.compiler.DynamicVariable;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.InetAddress;
+import java.util.*;
 
 /**
  * Common utility functions for the GUI and text installers. (Do not import swing/awt classes to
@@ -127,7 +117,7 @@ public class InstallerBase
         // We read the panels order data
         in = InstallerBase.class.getResourceAsStream("/panelsOrder");
         objIn = new ObjectInputStream(in);
-        List panelsOrder = (List) objIn.readObject();
+        List<Panel> panelsOrder = (List<Panel>) objIn.readObject();
         objIn.close();
 
         // We read the packs data

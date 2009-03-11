@@ -22,6 +22,7 @@ package com.izforge.izpack.installer;
 import com.izforge.izpack.Info;
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.Panel;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
@@ -104,7 +105,7 @@ public class AutomatedInstallData
     /**
      * The selected packs.
      */
-    public List selectedPacks;
+    public List<Pack> selectedPacks;
 
     /**
      * The panels list.
@@ -114,7 +115,7 @@ public class AutomatedInstallData
     /**
      * The panels order.
      */
-    public List panelsOrder;
+    public List<Panel> panelsOrder;
 
     /**
      * The current panel.
@@ -175,10 +176,10 @@ public class AutomatedInstallData
      */
     public AutomatedInstallData()
     {
-        availablePacks = new ArrayList();
+        availablePacks = new ArrayList<Pack>();
         selectedPacks = new ArrayList();
         panels = new ArrayList<IzPanel>();
-        panelsOrder = new ArrayList();
+        panelsOrder = new ArrayList<Panel>();
         xmlData = new XMLElementImpl("AutomatedInstallation");
         variables = new Properties();
         attributes = new HashMap<String, Object>();
