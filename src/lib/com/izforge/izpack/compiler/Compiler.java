@@ -901,7 +901,7 @@ public class Compiler extends Thread
             if (className != null)
             {
                 pos = name.indexOf(className);
-                if (name.length() == pos + className.length() + 6) // "Main" class
+                if (pos >= 0 && name.length() == pos + className.length() + 6) // "Main" class
                 // found
                 {
                     jis.close();
