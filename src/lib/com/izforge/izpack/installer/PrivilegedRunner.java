@@ -103,7 +103,12 @@ public class PrivilegedRunner
     {
         try
         {
-            File temp = new File("C:\\Program Files\\foo.txt");
+            String programFiles = System.getenv("ProgramFiles");
+            if (programFiles == null)
+            {
+                programFiles = "C:\\Program Files";
+            }
+            File temp = new File(programFiles, "foo.txt");
             if (temp.createNewFile())
             {
                 temp.delete();
