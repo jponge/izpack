@@ -158,6 +158,23 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         computePacks(idata.availablePacks);
 
         createNormalLayout();
+
+        packsTable.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent event)
+            {
+                int row = packsTable.rowAtPoint(event.getPoint());
+                int col = packsTable.columnAtPoint(event.getPoint());
+                if (col == 0)
+                {
+                    Integer checked = (Integer) packsModel.getValueAt(row, 0);
+                    checked = (checked == 0) ? 1 : 0;
+                    packsModel.setValueAt(checked, row, 0);
+                    packsTable.repaint();
+                }
+            }
+        });
     }
 
     /**
@@ -594,28 +611,6 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             packTextColumnRenderer.setHorizontalAlignment(RIGHT);
             packsTable.getColumnModel().getColumn(2).setCellRenderer(packTextColumnRenderer);
             packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
-
-            for (MouseListener mouseListener : packsTable.getMouseListeners())
-            {
-                packsTable.removeMouseListener(mouseListener);
-            }
-
-            packsTable.addMouseListener(new MouseAdapter()
-            {
-                @Override
-                public void mouseClicked(MouseEvent event)
-                {
-                    int row = packsTable.rowAtPoint(event.getPoint());
-                    int col = packsTable.columnAtPoint(event.getPoint());
-                    if (col == 0)
-                    {
-                        Integer checked = (Integer) packsModel.getValueAt(row, 0);
-                        checked = (checked == 0) ? 1 : 0;
-                        packsModel.setValueAt(checked, row, 0);
-                        packsTable.repaint();
-                    }
-                }
-            });
 
             // remove header,so we don't need more strings
             tableScroller.remove(packsTable.getTableHeader());
