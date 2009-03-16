@@ -1098,9 +1098,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             {
                 String variable = element.getAssociatedVariable();
                 String value = idata.getVariable(variable);
-
-                System.out.printf("updateUIElements() variable=%s value=%s\n", variable, value);
-
+                
+                Debug.trace("updateUIElements() variable=" + variable + " value=" + value + "\n");
                 if (element.getType() == UIElementType.RADIOBUTTON)
                 {
                     // we have a radio field, which should be updated
