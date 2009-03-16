@@ -302,6 +302,10 @@ public class Unpacker extends UnpackerBase
                                 //issue a warning (logging api pending)
                                 //since this file was loosely bundled, we continue with the installation.
                                 System.out.println("Could not find loosely bundled file: " + pf.getRelativeSourcePath());
+                                if (!handler.emitWarning("File not found", "Could not find loosely bundled file: " + pf.getRelativeSourcePath()))
+                                {
+                                    throw new InstallerException("Installation cancelled");
+                                }
                                 continue;
                             }
                         }
