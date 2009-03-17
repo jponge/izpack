@@ -33,6 +33,7 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.*;
 import java.util.*;
@@ -342,7 +343,8 @@ public class AutomatedInstaller extends InstallerBase
         {
             // assume that installation will succeed
             this.result = true;
-
+            VariableSubstitutor substitutor = new VariableSubstitutor(this.idata.getVariables());
+            
             // walk the panels in order
             for (Panel p : this.idata.panelsOrder)
             {
@@ -381,6 +383,7 @@ public class AutomatedInstaller extends InstallerBase
 
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
+                refreshDynamicVariables(substitutor, this.idata);
             }
 
             // this does nothing if the uninstaller was not included
@@ -418,26 +421,15 @@ public class AutomatedInstaller extends InstallerBase
      */
     private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot) throws InstallerException
     {
-        try
-        {
-            executePreActivateActions(p, null);
+        executePreActivateActions(p, null);
 
-            Debug.log("automationHelperInstance.runAutomated :"
-                    + automationHelper.getClass().getName() + " entered.");
+        Debug.log("automationHelperInstance.runAutomated :"
+                + automationHelper.getClass().getName() + " entered.");
 
-            automationHelper.runAutomated(this.idata, panelRoot);
+        automationHelper.runAutomated(this.idata, panelRoot);
 
-            Debug.log("automationHelperInstance.runAutomated :"
-                    + automationHelper.getClass().getName() + " successfully done.");
-        }
-        catch (InstallerException e)
-        {
-            Debug.log("ERROR: automated installation failed for panel " + p.className);
-            e.printStackTrace();
-            this.result = false;
-            // shouldn't a exception in runAutomated make the install to die ?
-            //throw new InstallerException("ERROR: automated installation failed for panel " + p.className, e);
-        }
+        Debug.log("automationHelperInstance.runAutomated :"
+                + automationHelper.getClass().getName() + " successfully done.");
 
         executePreValidateActions(p, null);
         validatePanel(p);

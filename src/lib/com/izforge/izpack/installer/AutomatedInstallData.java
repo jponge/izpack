@@ -28,6 +28,7 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.zip.ZipOutputStream;
 
@@ -37,7 +38,7 @@ import java.util.zip.ZipOutputStream;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class AutomatedInstallData
+public class AutomatedInstallData implements Serializable
 {
 
     // --- Static members -------------------------------------------------
