@@ -73,7 +73,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
     }
 
 
-    protected IMultiVolumeUnpackerHelper getHelper(){
+    public IMultiVolumeUnpackerHelper getHelper(){
         return this.helper;
     }
 
