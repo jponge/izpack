@@ -506,9 +506,11 @@ public class InstallerFrame extends JFrame {
         quitButton.addActionListener(navHandler);
         contentPane.add(navPanel, BorderLayout.SOUTH);
 
+        // always initialize debugger
+        debugger = new Debugger(installdata, icons, rules);
+        
         // create a debug panel if TRACE is enabled
-        if (Debug.isTRACE()) {
-            debugger = new Debugger(installdata, icons, rules);
+        if (Debug.isTRACE()) {            
             JPanel debugpanel = debugger.getDebugPanel();
             if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")
                     && Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow"))) {
@@ -728,7 +730,7 @@ public class InstallerFrame extends JFrame {
             IzPanel panel = installdata.panels.get(installdata.curPanelNumber);
             IzPanel l_panel = installdata.panels.get(last);
             showHelpButton(panel.canShowHelp());
-            if (Debug.isTRACE()) {
+            if (Debug.isTRACE()) {                
                 debugger.switchPanel(panel.getMetadata(), l_panel.getMetadata());
             }
             Log.getInstance().addDebugMessage(
