@@ -508,10 +508,11 @@ public class InstallerFrame extends JFrame {
 
         // always initialize debugger
         debugger = new Debugger(installdata, icons, rules);
+        // this needed to fully initialize the debugger.
+        JPanel debugpanel = debugger.getDebugPanel();
         
         // create a debug panel if TRACE is enabled
-        if (Debug.isTRACE()) {            
-            JPanel debugpanel = debugger.getDebugPanel();
+        if (Debug.isTRACE()) {                       
             if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")
                     && Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow"))) {
                 JFrame debugframe = new JFrame("Debug information");
