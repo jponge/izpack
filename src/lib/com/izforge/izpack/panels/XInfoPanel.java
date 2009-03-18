@@ -82,6 +82,14 @@ public class XInfoPanel extends IzPanel
 
         textArea = new JTextArea();
         textArea.setEditable(false);
+
+        String textAreaFont = idata.getVariable("XInfoPanel.font");
+        if( textAreaFont!=null && textAreaFont.length()>0 )
+        {
+            Font font = Font.decode(textAreaFont);
+            textArea.setFont( font );
+        }
+
         JScrollPane scroller = new JScrollPane(textArea);
         parent.buildConstraints(gbConstraints, 0, 1, 1, 1, 1.0, 0.9);
         gbConstraints.anchor = GridBagConstraints.CENTER;
