@@ -585,6 +585,7 @@ public class AutomatedInstaller extends InstallerBase
             {
                 PanelAction action = PanelActionFactory.createPanelAction(actionClassName);
                 action.initialize(panel.getPanelActionConfiguration(actionClassName));
+                actionList.add(action);
             }
         }
         return actionList;
