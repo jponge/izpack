@@ -194,6 +194,17 @@ public class RegistryInstallerListener extends NativeInstallerListener
         {
             return;
         }
+        
+        String packcondition = pack.getAttribute("condition");
+        if (packcondition != null){
+            Debug.trace("condition " + packcondition + " found for pack of registry entries.");
+            if (!rules.isConditionTrue(packcondition)){
+                // condition not fulfilled, continue with next element.
+                Debug.trace("not fulfilled.");
+                return;
+            }
+        }
+        
         // Get all entries for registry settings.
         Vector regEntries = pack.getChildren();
         if (regEntries == null)
