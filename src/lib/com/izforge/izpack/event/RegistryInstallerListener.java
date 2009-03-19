@@ -26,7 +26,9 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.Unpacker;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.SpecHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
@@ -80,6 +82,8 @@ public class RegistryInstallerListener extends NativeInstallerListener
 
     private static final String SAVE_PREVIOUS = "saveprevious";
 
+    private RulesEngine rules;
+    
     /**
      * Default constructor.
      */
@@ -98,6 +102,7 @@ public class RegistryInstallerListener extends NativeInstallerListener
                             AbstractUIProgressHandler handler) throws Exception
     {
         super.beforePacks(idata, npacks, handler);
+        rules = idata.getRules();
         initializeRegistryHandler(idata);
     }
 
@@ -199,6 +204,16 @@ public class RegistryInstallerListener extends NativeInstallerListener
         while (entriesIter != null && entriesIter.hasNext())
         {
             IXMLElement regEntry = (IXMLElement) entriesIter.next();
+            String condition = regEntry.getAttribute("condition");
+            if (condition != null){
+                Debug.trace("condition " + condition + " found for registry entry.");
+                if (!rules.isConditionTrue(condition)){
+                    // condition not fulfilled, continue with next element.
+                    Debug.trace("not fulfilled.");
+                    continue;
+                }
+            }
+            
             // Perform one registry entry.
             String type = regEntry.getName();
             if (type.equalsIgnoreCase(REG_KEY))
