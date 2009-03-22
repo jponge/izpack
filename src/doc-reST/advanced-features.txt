@@ -92,7 +92,27 @@ So run once the installation on a machine and save your automatic installation d
 
   java -jar installer.jar auto-install.xml
 
-It has reproduced the same installation :-)
+It reproduced the same installation.
+
+Console (headless) installers
+------------------------------
+
+An IzPack installer can be run in a full headless mode, i.e., without needing a graphical user interface. This is useful, e.g.,  in the case of remotely accessed servers through SSH or similar means.
+
+It differs from automated installers in the sense that a console installer is not "just" a replay of a previous installation but a true console-based installation. It shares a common feature though: it can be automated as well.
+
+To launch an installer in console mode rather than in GUI mode (the default), you can specify one of the following parameters on the command line:
+
+* ``-console``: to run the installation in interactive console mode
+* ``-options-template``: to generate a properties file whose name is specified in args[1]
+* ``-options``: to run an installation while reading the properties from the properties file specified in args[1].
+
+As an example, to launch an interactive console installation, just type in a console:
+
+::
+
+    java -jar installer.jar -console
+
 
 Picture on the Language Selection Dialog
 -----------------------------------------
