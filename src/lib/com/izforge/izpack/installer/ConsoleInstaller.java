@@ -23,6 +23,7 @@ package com.izforge.izpack.installer;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.FileInputStream;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -242,12 +243,11 @@ public class ConsoleInstaller extends InstallerBase
 
     protected void doInstallFromPropertiesFile(String strFile) throws Exception
     {
-        FileReader fileReader = null;
+        FileInputStream in = new FileInputStream(strFile);
         try
         {
-            fileReader = new FileReader(strFile);
-            this.properties = new Properties();
-            properties.load(fileReader);
+            properties = new Properties();
+            properties.load(in);
             iterateAndPerformAction("doInstallFromPropertiesFile");
         }
         catch (Exception e)
@@ -256,10 +256,7 @@ public class ConsoleInstaller extends InstallerBase
         }
         finally
         {
-            if (fileReader != null)
-            {
-                fileReader.close();
-            }
+            in.close();
             Housekeeper.getInstance().shutDown(this.result ? 0 : 1);
         }
     }
