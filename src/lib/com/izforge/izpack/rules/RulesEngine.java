@@ -204,10 +204,10 @@ public class RulesEngine
                 conditionclassname += "Condition";
             }            
             
-            ClassLoader loader = Thread.currentThread().getContextClassLoader(); //RulesEngine.class.getClassLoader();
+         //   ClassLoader loader = Thread.currentThread().getContextClassLoader(); //RulesEngine.class.getClassLoader();
             try
             {
-                Class<Condition> conditionclass = (Class<Condition>) loader.loadClass(conditionclassname);
+                Class<Condition> conditionclass = (Class<Condition>) Class.forName(conditionclassname);
                 result = conditionclass.newInstance();
                 result.readFromXML(condition);
                 if (condid != null){

@@ -21,60 +21,68 @@
 
 package com.izforge.izpack.installer;
 
+import java.util.Date;
+
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
-
-import java.util.Date;
 
 /**
  * The program entry point. Selects between GUI and text install modes.
  *
  * @author Jonathan Halliday
  */
-public class Installer
-{
+public class Installer {
 
-    /**
-     * The main method (program entry point).
-     *
-     * @param args The arguments passed on the command-line.
-     */
-    public static void main(String[] args)
-    {
-        Debug.log(" - Logger initialized at '" + new Date(System.currentTimeMillis()) + "'.");
+	/*
+	 * The main method (program entry point).
+	 * 
+	 * @param args The arguments passed on the command-line.
+	 */
+	public static void main(String[] args) {
+		Debug.log(" - Logger initialized at '" + new Date(System.currentTimeMillis()) + "'.");
 
-        Debug.log(" - commandline args: " + StringTool.stringArrayToSpaceSeparatedString(args));
+		Debug.log(" - commandline args: " + StringTool.stringArrayToSpaceSeparatedString(args));
 
-        // OS X tweakings
-        if (System.getProperty("mrj.version") != null)
-        {
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", "IzPack");
-            System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
-            System.setProperty("com.apple.mrj.application.live-resize", "true");
-        }
+		// OS X tweakings
+		if (System.getProperty("mrj.version") != null) {
+			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "IzPack");
+			System.setProperty("com.apple.mrj.application.growbox.intrudes", "false");
+			System.setProperty("com.apple.mrj.application.live-resize", "true");
+		}
 
-        try
-        {
-            if (args.length == 0)
-            {
-                // can't load the GUIInstaller class on headless machines,
-                // so we use Class.forName to force lazy loading.
-                Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
-            }
-            else
-            {
-                AutomatedInstaller ai = new AutomatedInstaller(args[0]);
-                // this method will also exit!
-                ai.doInstall();
-            }
-        }
-        catch (Exception e)
-        {
-            System.err.println("- ERROR -");
-            System.err.println(e.toString());
-            e.printStackTrace();
-            System.exit(1);
-        }
-    }
-
+		try {
+			if (args.length == 0) {
+				// can't load the GUIInstaller class on headless machines,
+				// so we use Class.forName to force lazy loading.
+				Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
+			} else if (args.length == 1) {
+				if ("-console".equals(args[0].trim())) {
+					Debug.log("starting in console mode");
+					ConsoleInstaller consoleInstaller = new ConsoleInstaller();
+					consoleInstaller.doInstall();
+				} else {
+					AutomatedInstaller ai = new AutomatedInstaller(args[0]);
+					ai.doInstall();
+				}
+			} else if (args.length == 2) {
+				if ("-options-template".equals(args[0].trim())) {
+					Debug.log("Generating properties file");
+					ConsoleInstaller consoleInstaller = new ConsoleInstaller();
+					consoleInstaller.doGeneratePropertiesFile(args[1]);					
+				}
+				if ("-options".equals(args[0].trim())) {
+					Debug.log("Installing from  properties file");
+					ConsoleInstaller consoleInstaller = new ConsoleInstaller();
+					consoleInstaller.doInstallFromPropertiesFile(args[1]);
+				} else {
+					System.out.println("not a valid option!!!!");
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("- ERROR -");
+			System.err.println(e.toString());
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
 }
