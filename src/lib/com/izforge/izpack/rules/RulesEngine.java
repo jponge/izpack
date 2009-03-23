@@ -20,14 +20,25 @@
  */
 package com.izforge.izpack.rules;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Vector;
+
+import javax.xml.transform.TransformerException;
+
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.adaptator.IXMLElement;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * The rules engine class is the central point for checking conditions
@@ -45,11 +56,11 @@ public class RulesEngine implements Serializable
 
     protected Map<String, String> optionalpackconditions;
 
-    protected transient IXMLElement conditionsspec;
+    protected IXMLElement conditionsspec;
 
     protected static Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
     
-    protected static transient AutomatedInstallData installdata;
+    protected static AutomatedInstallData installdata;
 
     static
     {
@@ -78,25 +89,7 @@ public class RulesEngine implements Serializable
         this.panelconditions = new Hashtable<String, String>();
         this.packconditions = new Hashtable<String, String>();
         this.optionalpackconditions = new Hashtable<String, String>();
-    }
-
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException
-    {
-        out.writeObject(RulesEngine.conditionsmap);
-        out.writeObject(this.panelconditions);
-        out.writeObject(this.packconditions);
-        out.writeObject(this.optionalpackconditions);
-    }
-
-    @SuppressWarnings("unchecked")
-    private void readObject(java.io.ObjectInputStream in) throws IOException,
-            ClassNotFoundException
-    {
-        RulesEngine.conditionsmap = (Map<String, Condition>) in.readObject();
-        this.panelconditions = (Map<String, String>) in.readObject();
-        this.packconditions = (Map<String, String>) in.readObject();
-        this.optionalpackconditions = (Map<String, String>) in.readObject();
-    }
+    }   
 
     /**
      * initializes builtin conditions
@@ -543,5 +536,27 @@ public class RulesEngine implements Serializable
         {
             Debug.error("Cannot add condition. Condition was null.");
         }
+    }
+    
+    public void writeSpec(OutputStream out){
+        if (conditionsspec != null){
+            XMLWriter xmlOut = new XMLWriter();
+            xmlOut.setOutput(out);
+            try
+            {
+                xmlOut.write(conditionsspec);
+            }
+            catch (TransformerException e)
+            {
+               Debug.error("Error writing condition specification: " + e);
+            }            
+        }         
+    }
+    
+    public void readSpec(InputStream in){
+        XMLParser parser = new XMLParser();
+        conditionsspec = parser.parse(in);
+        readConditions();
+        init();
     }
 }
