@@ -231,7 +231,7 @@ public class PrivilegedRunner
         path = path.substring(0, path.lastIndexOf('!'));
         try
         {
-            return new File(URI.create(path)).getCanonicalPath();
+            return new File(URI.create(path).getSchemeSpecificPart()).getCanonicalPath();
         }
         catch (IOException e)
         {
