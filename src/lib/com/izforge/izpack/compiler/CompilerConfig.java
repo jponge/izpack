@@ -1429,12 +1429,24 @@ public class CompilerConfig extends Thread {
             String condition = xmlPanel.getAttribute("condition");
             panel.setCondition(condition);
 
-            // Panel files come in jars packaged w/ IzPack
-            String jarPath = "bin/panels/" + className + ".jar";
-            URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
+            // Panel files come in jars packaged w/ IzPack, or they can be
+            // specified via a jar attribute on the panel element
+            String jarPath = xmlPanel.getAttribute("jar");
+            if (jarPath == null)
+            {
+				jarPath = "bin/panels/" + className + ".jar";
+			}
+			URL url = null;
+			// jar="" may be used to suppress the warning message ("Panel jar
+			// file not found")
+			if (!jarPath.equals(""))
+			{
+				url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
+			}
 
-            //when the expected panel jar file is not found under bin/panels resource path
-            // it is assumed that user will do the jar merge themselves via <jar> tag
+			// when the expected panel jar file is not found, it is assumed that
+			// user will do the jar merge themselves via <jar> tag
+
             String fullClassName = null;
             if (url == null)
             {
