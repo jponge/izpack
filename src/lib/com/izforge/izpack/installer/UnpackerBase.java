@@ -36,7 +36,8 @@ import org.apache.regexp.RESyntaxException;
 
 import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -947,23 +948,17 @@ public abstract class UnpackerBase implements IUnpacker
         fout.close();
     }
     
-    protected File getAbsolutInstallSource() throws MalformedURLException
+    protected File getAbsolutInstallSource() throws Exception
     {
         if (absolutInstallSource == null)
         {
-            URL url = getClass().getResource("/info");
-            if (url.getPath().startsWith("file:"))
+            URI uri = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
+            if (!"file".equals(uri.getScheme()))
             {
-                url = new URL(url.getFile());
+                throw new Exception ("Unexpected scheme in JAR file URI: "+uri);
             }
-            String urlFile = url.getFile();
-            if (url.getAuthority() != null)
-            {
-                // we have a UNC path...
-                urlFile = "//" + url.getAuthority() + urlFile;
-            }
-            absolutInstallSource = new File(urlFile).getAbsoluteFile().getParentFile();
-            if (absolutInstallSource.getAbsolutePath().endsWith("!"))
+            absolutInstallSource = new File(uri.getSchemeSpecificPart()).getAbsoluteFile();
+            if (absolutInstallSource.getName().endsWith(".jar"))
             {
                 absolutInstallSource = absolutInstallSource.getParentFile();
             }
