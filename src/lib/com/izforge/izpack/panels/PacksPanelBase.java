@@ -663,14 +663,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             }
             first = false;
             Pack pack = (Pack) iter.next();
-            if (langpack != null && pack.id != null && !"".equals(pack.id))
-            {
-                retval.append(langpack.getString(pack.id));
-            }
-            else
-            {
-                retval.append(pack.name);
-            }
+            retval.append(getI18NPackName(pack));
         }
         if (packsModel.isModifyinstallation())
         {
@@ -683,14 +676,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             while (iter.hasNext())
             {
                 Pack pack = (Pack) installedpacks.get(iter.next());
-                if (langpack != null && pack.id != null && !"".equals(pack.id))
-                {
-                    retval.append(langpack.getString(pack.id));
-                }
-                else
-                {
-                    retval.append(pack.name);
-                }
+                retval.append(getI18NPackName(pack));
                 retval.append("<br>");
             }
         }
