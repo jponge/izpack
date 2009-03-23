@@ -115,6 +115,7 @@ $Id$
         <!ATTLIST panel classname CDATA #REQUIRED>
         <!ATTLIST panel condition CDATA #IMPLIED>
         <!ATTLIST panel	id CDATA #IMPLIED>
+        <!ATTLIST panel jar CDATA #IMPLIED>
 
 <!-- The listener section (indicates which listener where to use) -->
 <!ELEMENT listeners (listener*)>
