@@ -45,11 +45,11 @@ public class RulesEngine implements Serializable
 
     protected Map<String, String> optionalpackconditions;
 
-    protected IXMLElement conditionsspec;
+    protected transient IXMLElement conditionsspec;
 
     protected static Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
-
-    protected static AutomatedInstallData installdata;
+    
+    protected static transient AutomatedInstallData installdata;
 
     static
     {
