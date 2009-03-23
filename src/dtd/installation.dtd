@@ -30,7 +30,8 @@ $Id$
     <!ELEMENT uninstaller EMPTY>
         <!ATTLIST uninstaller write (yes|no) "yes">
         <!ATTLIST uninstaller name CDATA "uninstaller.jar">
-        <!ATTLIST uninstaller condition CDATA>
+        <!ATTLIST uninstaller condition CDATA #IMPLIED>
+        <!ATTLIST uninstaller path CDATA #IMPLIED>
     <!ELEMENT webdir (#PCDATA)>
     <!ELEMENT summarylogfilepath (#PCDATA)>
 	<!ELEMENT writeinstallationinformation (#PCDATA)>
@@ -204,6 +205,7 @@ $Id$
     <!ATTLIST native type (izpack|3rdparty) #REQUIRED>
     <!ATTLIST native name CDATA #REQUIRED>
     <!ATTLIST native stage (install|uninstall|both) "install">
+    <!ATTLIST native src CDATA #IMPLIED>
 
 <!-- Allows the inclusion in the installer of an additional jar file content -->
 <!ELEMENT jar EMPTY>
