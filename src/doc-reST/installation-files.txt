@@ -1265,6 +1265,7 @@ the following attributes :
 -   ``type`` : ``izpack`` or ``3rdparty``
 -   ``name`` : the library filename
 -   ``stage``: stage where to use the library (install|uninstall|both)
+-   ``src``  : source directory where to find the library to build the installer
 
 
 ``<os>`` - make a library OS-dependent

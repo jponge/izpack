@@ -550,7 +550,11 @@ public class CompilerConfig extends Thread {
             IXMLElement el = iter.next();
             String type = requireAttribute(el, "type");
             String name = requireAttribute(el, "name");
-            String path = "bin/native/" + type + "/" + name;
+            String path = el.getAttribute("src");
+            if (path == null)
+            {
+                path = "bin/native/" + type + "/" + name;
+            }
             URL url = findIzPackResource(path, "Native Library", el);
             compiler.addNativeLibrary(name, url);
             // Additionals for mark a native lib also used in the uninstaller
