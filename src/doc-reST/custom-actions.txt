@@ -612,7 +612,9 @@ notation.
 The top level XML section is called ``<registry>``. Only one is possible. The
 ``<registry>`` is segregated in one or more ``<pack>`` elements. The single
 attribute ``<name>`` of the ``<pack>`` corresponds to the same structure in
-install.xml (for more information see also installation.dtd). Only the
+install.xml (for more information see also installation.dtd). ``<pack>`` elements
+can have a condition attribute to express that a certain pack shall only be
+performed if the condition is fulfilled. Only the
 "things" included in the ``<pack>`` are performed, if a pack with the same
 name was chosen to be installed. Valid "things" are <key> <value>.
 
@@ -648,6 +650,8 @@ Key to be set at installation time into the Windows registry.
 
 Value to be set at installation time into the Windows registry.
 
+-   ``condition```: optional. The id of condition which has to be fulfilled to write this value into
+    the registry.
 -   ``name`` : required. The name of the value to be set or modified
     without a path.
     The default value will be written as the empty string "".
@@ -693,7 +697,7 @@ like in the following example:
 
 ::
 
-	<value name="PATH"
+	<value condition="izpack.windowsinstall.7" name="PATH"
 	       keypath="Environment"
        	       root="HKCU"
        	       string="$OLD_KEY_VALUE;&quot;$INSTALL_PATH\bin&quot;"/>
@@ -702,6 +706,9 @@ like in the following example:
        	       root="HKLM"
       	       string="$OLD_KEY_VALUE;&quot;$INSTALL_PATH\bin&quot;"/>
 
+Please note that the first value will only be written if the installation is 
+running on Windows 7. This is expressed through the reference to the builtin condition
+izpack.windowsinstall.7.
 
 Maybe the descriptions for type BINARY and MULTI_STRING are not fully
 descriptive. Therefore as example the test entries in the registry
@@ -711,7 +718,7 @@ specification file of IzPack:
 
     <registry>
       ...
-      <pack name="Core">
+      <pack name="Core" condition="izpack.windowsinstall.vista">
         <value name="Path"
           keypath="SOFTWARE\IzForge\IzPack\$APP_VER"
           root="HKLM"
