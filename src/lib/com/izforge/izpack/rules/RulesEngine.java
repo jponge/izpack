@@ -557,6 +557,7 @@ public class RulesEngine implements Serializable
             XMLElementImpl conditionsel = new XMLElementImpl("conditions");
             for(Condition condition : conditionsmap.values()){
                 IXMLElement conditionEl = createConditionElement(condition, conditionsel);
+                condition.makeXMLData(conditionEl);
                 conditionsel.addChild(conditionEl);
             }
             Debug.trace("Writing generated conditions specification.");
