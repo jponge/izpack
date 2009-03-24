@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.izforge.izpack.adaptator.IXMLElement;
 /**
  * References an already defined condition
  *
- * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class RefCondition extends Condition
 {
@@ -81,5 +81,11 @@ public class RefCondition extends Condition
         details.append(referencedcondition.getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();
+    }
+
+    @Override
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
+       conditionRoot.setAttribute("refid", this.referencedConditionId);        
     }
 }

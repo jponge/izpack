@@ -21,6 +21,7 @@
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.util.Debug;
 
 /**
@@ -77,6 +78,15 @@ public class VariableExistenceCondition extends Condition
     public void setVariable(String variable)
     {
         this.variable = variable;
+    }
+
+
+    @Override
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
+        XMLElementImpl variableEl = new XMLElementImpl("variable",conditionRoot);
+        variableEl.setContent(this.variable);
+        conditionRoot.addChild(variableEl);        
     }
 
 }

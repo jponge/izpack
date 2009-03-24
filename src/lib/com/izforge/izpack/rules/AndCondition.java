@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,20 +21,16 @@
 
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.util.Debug;
 
 /**
  * Defines a condition where both operands have to be true
  *
- * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class AndCondition extends Condition
 {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = -5854944262991488370L;
 
     protected Condition leftoperand;
@@ -101,5 +97,16 @@ public class AndCondition extends Condition
         details.append(rightoperand.getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();
+    }
+
+    @Override
+    public void makeXMLData(IXMLElement root)
+    {
+        IXMLElement left = RulesEngine.createConditionElement(this.leftoperand, root);
+        this.leftoperand.makeXMLData(left);
+        root.addChild(left);        
+        IXMLElement right = RulesEngine.createConditionElement(this.rightoperand, root);
+        this.rightoperand.makeXMLData(right);
+        root.addChild(right);                
     }
 }

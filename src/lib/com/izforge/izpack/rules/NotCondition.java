@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,14 +24,11 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
- * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class NotCondition extends Condition
 {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 3194843222487006309L;
     protected Condition operand;
 
@@ -109,5 +106,13 @@ public class NotCondition extends Condition
         details.append(operand.getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();
+    }
+
+    @Override
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
+        IXMLElement op = RulesEngine.createConditionElement(this.operand,conditionRoot);
+        this.operand.makeXMLData(op);
+        conditionRoot.addChild(op);                        
     }
 }

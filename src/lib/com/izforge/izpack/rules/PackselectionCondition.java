@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,13 @@ package com.izforge.izpack.rules;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import java.util.List;
 import java.util.Properties;
 
 /**
- * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @author Dennis Reil, <izpack@reil-online.de>
  * @version $Id: PackselectionCondition.java,v 1.1 2006/11/03 13:03:26 dennis Exp $
  */
 public class PackselectionCondition extends Condition
@@ -110,6 +111,14 @@ public class PackselectionCondition extends Condition
         details.append(this.packid);
         details.append("</b><br/>");
         return details.toString();
+    }
+
+    @Override
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
+        XMLElementImpl packel = new XMLElementImpl("packid",conditionRoot);
+        packel.setContent(this.packid);
+        conditionRoot.addChild(packel);        
     }
 
 }

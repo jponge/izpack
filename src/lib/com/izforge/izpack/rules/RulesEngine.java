@@ -35,6 +35,7 @@ import javax.xml.transform.TransformerException;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.installer.AutomatedInstallData;
@@ -252,7 +253,7 @@ public class RulesEngine implements Serializable
             }
         }
         return result;
-    }
+    }       
 
     /**
      * Read the spec for the conditions
@@ -538,10 +539,11 @@ public class RulesEngine implements Serializable
         }
     }
     
-    public void writeSpec(OutputStream out){
+    public void writeRulesXML(OutputStream out){
+        XMLWriter xmlOut = new XMLWriter();
+        xmlOut.setOutput(out);
         if (conditionsspec != null){
-            XMLWriter xmlOut = new XMLWriter();
-            xmlOut.setOutput(out);
+            Debug.trace("Writing original conditions specification.");            
             try
             {
                 xmlOut.write(conditionsspec);
@@ -550,13 +552,29 @@ public class RulesEngine implements Serializable
             {
                Debug.error("Error writing condition specification: " + e);
             }            
-        }         
+        }       
+        else {
+            XMLElementImpl conditionsel = new XMLElementImpl("conditions");
+            for(Condition condition : conditionsmap.values()){
+                IXMLElement conditionEl = createConditionElement(condition, conditionsel);
+                conditionsel.addChild(conditionEl);
+            }
+            Debug.trace("Writing generated conditions specification.");
+            try
+            {
+                xmlOut.write(conditionsel);
+            }
+            catch (TransformerException e)
+            {
+               Debug.error("Error writing condition specification: " + e);
+            }
+        }
     }
     
-    public void readSpec(InputStream in){
-        XMLParser parser = new XMLParser();
-        conditionsspec = parser.parse(in);
-        readConditions();
-        init();
-    }
+    public static IXMLElement createConditionElement(Condition condition,IXMLElement root){
+        XMLElementImpl xml = new XMLElementImpl("condition",root);
+        xml.setAttribute("id", condition.getId());
+        xml.setAttribute("type", condition.getClass().getCanonicalName());        
+        return xml;
+    }    
 }

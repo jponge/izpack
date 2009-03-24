@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -29,7 +30,7 @@ import java.lang.reflect.Method;
 /**
  * A condition based on the value of a static java field or static java method.
  *
- * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class JavaCondition extends Condition
 {
@@ -174,6 +175,26 @@ public class JavaCondition extends Condition
         }
         this.complete = true;
     }
+    
+    @Override
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
+        XMLElementImpl javael = new XMLElementImpl("java",conditionRoot);
+        conditionRoot.addChild(javael);
+        XMLElementImpl classel = new XMLElementImpl("class",javael);
+        classel.setContent(this.classname);
+        javael.addChild(classel);
+        XMLElementImpl methodel = new XMLElementImpl("method",javael);
+        methodel.setContent(this.methodname);
+        javael.addChild(methodel);
+        XMLElementImpl fieldel = new XMLElementImpl("field",javael);
+        fieldel.setContent(this.fieldname);
+        javael.addChild(fieldel);
+        XMLElementImpl returnvalel = new XMLElementImpl("returnvalue",javael);
+        returnvalel.setContent(this.returnvalue);
+        returnvalel.setAttribute("type", this.returnvaluetype);
+        javael.addChild(returnvalel);
+    }
 
     /* (non-Javadoc)
      * @see com.izforge.izpack.rules.Condition#getDependenciesDetails()
@@ -202,5 +223,7 @@ public class JavaCondition extends Condition
         details.append("</b><br/>");
         return details.toString();
     }
+
+    
 
 }
