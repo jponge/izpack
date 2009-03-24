@@ -184,12 +184,16 @@ public class JavaCondition extends Condition
         XMLElementImpl classel = new XMLElementImpl("class",javael);
         classel.setContent(this.classname);
         javael.addChild(classel);
-        XMLElementImpl methodel = new XMLElementImpl("method",javael);
-        methodel.setContent(this.methodname);
-        javael.addChild(methodel);
-        XMLElementImpl fieldel = new XMLElementImpl("field",javael);
-        fieldel.setContent(this.fieldname);
-        javael.addChild(fieldel);
+        if (this.methodname != null){
+            XMLElementImpl methodel = new XMLElementImpl("method",javael);
+            methodel.setContent(this.methodname);
+            javael.addChild(methodel);    
+        }
+        if (this.fieldname != null){
+            XMLElementImpl fieldel = new XMLElementImpl("field",javael);
+            fieldel.setContent(this.fieldname);
+            javael.addChild(fieldel);    
+        }        
         XMLElementImpl returnvalel = new XMLElementImpl("returnvalue",javael);
         returnvalel.setContent(this.returnvalue);
         returnvalel.setAttribute("type", this.returnvaluetype);
