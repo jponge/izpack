@@ -1433,6 +1433,10 @@ public class InstallerFrame extends JFrame {
             panel.executePreValidationActions();
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
+            
+            // check if we can display the next panel or if there was an error during actions that
+            // disables the next button
+            if (!nextButton.isEnabled()) { return; }
 
             // if this is not here, validation will
             // occur mutilple times while skipping panels through the recursion

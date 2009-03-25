@@ -94,6 +94,11 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
     {
         System.err.println("[ ERROR: " + message + " ]");
     }
+    
+    public void emitErrorAndBlockNext(String title, String message)
+    {
+        System.err.println("[ ERROR: " + message + " ]");
+    }
 
     public int askQuestion(String title, String question, int choices)
     {
