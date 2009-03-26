@@ -706,6 +706,10 @@
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/Validator.java"/>
             <include name="com/izforge/izpack/panels/ValidatorContainer.java"/>
+        	<include name="com/izforge/izpack/panels/UIElementType.java"/>
+            <include name="com/izforge/izpack/panels/UIElement.java"/>
+            <include name="com/izforge/izpack/panels/RadioButtonUIElement.java"/>
+            <include name="com/izforge/izpack/panels/PasswordUIElement.java"/>   
         	<include name="com/izforge/izpack/panels/UserInputPanelConsoleHelper.java" />
         </build-panel>
         <build-panel name="UserPathPanel">
@@ -729,6 +733,10 @@
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/Validator.java"/>
             <include name="com/izforge/izpack/panels/ValidatorContainer.java"/>
+        	<include name="com/izforge/izpack/panels/UIElementType.java"/>
+            <include name="com/izforge/izpack/panels/UIElement.java"/>
+            <include name="com/izforge/izpack/panels/RadioButtonUIElement.java"/>
+            <include name="com/izforge/izpack/panels/PasswordUIElement.java"/>           	
         </build-panel>
         <build-panel name="CompilePanel">
             <include name="com/izforge/izpack/panels/CompilePanel.java"/>
