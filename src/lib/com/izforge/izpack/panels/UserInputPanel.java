@@ -916,7 +916,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 filterdesc = "";
             }
             // internationalize it
-            filterdesc = idata.langpack.getString(filterdesc);
+            filterdesc = this.langpack.getString(filterdesc);
 
             String visRows = element.getAttribute("visibleRows");
             if (visRows != null)
