@@ -478,6 +478,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             layout.addLayoutComponent(panel, constraints);
         }
         add(panel);
+        boolean doNotShowRequiredSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("doNotShowRequiredSize"));
+        panel.setVisible(!doNotShowRequiredSize);
         return (label);
     }
 
