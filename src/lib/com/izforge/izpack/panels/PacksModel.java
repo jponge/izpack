@@ -387,10 +387,10 @@ class PacksModel extends AbstractTableModel
      */
     public int getColumnCount()
     {
-        boolean showPackSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("showPackSize"));
+        boolean doNotShowPackSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("doNotShowPackSize"));
         
         int result=0;
-        if (showPackSize){
+        if (!doNotShowPackSize){
             result = 3;
         }
         else {
