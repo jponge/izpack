@@ -75,9 +75,12 @@ class PacksModel extends AbstractTableModel
 
     // reference to the current variables, needed for condition validation
     private Properties variables;
+    
+    private InstallData idata;
 
     public PacksModel(PacksPanelInterface panel, InstallData idata, RulesEngine rules)
     {
+        this.idata = idata;
         modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
         this.installedpacks = new HashMap();
 
@@ -384,7 +387,16 @@ class PacksModel extends AbstractTableModel
      */
     public int getColumnCount()
     {
-        return 3;
+        boolean showPackSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("showPackSize"));
+        
+        int result=0;
+        if (showPackSize){
+            result = 3;
+        }
+        else {
+            result = 2;
+        }        
+        return result;
     }
 
     /*
