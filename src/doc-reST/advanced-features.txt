@@ -312,6 +312,23 @@ Key/value pairs for modifying IzPack GUI (references for panel images removed): 
 .. figure:: modTargetPanel2.png
 
    IzPack frame (TargetPanel) with heading panel and a progressbar counter in the  navigation panel without panel image.
+   
+Don't show pack size in PacksPanel
+''''''''''''''''''''''''''''''''''
+
+The PacksPanel dialog supports the modifier ``doNotShowPackSizeColumn`` which hides the third column showing the size of each pack. With ``doNotShowPackSizeColumn`` set
+to true, the third column will not be shown. The required size of all packs is still shown with this setting. The required size can be hidden by setting the ``doNotShowRequiredSize``
+to true.
+
+Example ::
+  <guiprefs width="640" height="480" resizable="no">
+     ...
+     <modifier key="doNotShowPackSizeColumn" value="true"/>
+     <modifier key="doNotShowRequiredSize" value="yes"/>
+     ...
+   </guiprefs>
+   
+   The PacksPanel will not show the column with the sizes of each pack, but will show the total required space.
 
 Alternative Cancel Dialog
 ''''''''''''''''''''''''''
