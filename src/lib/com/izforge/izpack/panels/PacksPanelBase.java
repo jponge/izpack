@@ -609,8 +609,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             packsTable.getColumnModel().getColumn(1).setCellRenderer(new PacksPanelTableCellRenderer());
             PacksPanelTableCellRenderer packTextColumnRenderer = new PacksPanelTableCellRenderer();
             packTextColumnRenderer.setHorizontalAlignment(RIGHT);
-            packsTable.getColumnModel().getColumn(2).setCellRenderer(packTextColumnRenderer);
-            packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
+            if (packsTable.getColumnCount() > 2){
+                packsTable.getColumnModel().getColumn(2).setCellRenderer(packTextColumnRenderer);
+                packsTable.getColumnModel().getColumn(2).setMaxWidth(100);    
+            }
+            
 
             // remove header,so we don't need more strings
             tableScroller.remove(packsTable.getTableHeader());
