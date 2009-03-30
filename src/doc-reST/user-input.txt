@@ -17,7 +17,11 @@ need to use the user input panel.
 To use this panel, list it in the install file with the class name
 ``UserInputPanel``. In addition, you must write a XML specification and add
 it to the install resources. The name of this resource must be
-``userInputSpec.xml``.
+``userInputSpec.xml``. 
+
+A UserInputPanel can be highly dynamic from IzPack 4.3 on, as it will be refreshed
+every time the user input changes and will be rendered based on conditions. Thus
+it would be possible to enable or disable some more options by clicking a checkbox.
 
 Here's an example userInputSpec.xml_ showing 3 panels.  There are some advanced
 features in this example, but the general flow should be looked at first.
@@ -83,7 +87,10 @@ important to place the associated input panel in the process before the
 variables are used.
 
 
-At this point I would also like to mention that it is possible to hide select
+At this point I would also like to mention that it is possible to hide every
+field element based on conditions. 
+
+It would also be possible to hide select
 elements on the panel or the panel altogether if certain packs are not
 selected. For this to work you must place this panel after the packs panel.
 One side effect of using this feature is that it is not possible to step back
@@ -91,7 +98,6 @@ once the user input panel is displayed. This is because the user might make
 changes in the packs selection that would require a complete rebuild of the
 UI. Unfortunately, building the UI is an irreversible process, therefore the
 user can not be allowed to go back to the packs panel.
-
 
 
 The Basic XML Structure
@@ -203,7 +209,12 @@ default.
 
 All input fields can be pre-set with a value of your choice. Although the
 details vary a bit from field type to field type, the ``set`` attribute is
-always used to accomplish this. The ``set`` attribute is of course optional.
+always used to accomplish this. The ``set`` attribute is of course optional. 
+Please note that if you use the ``set`` attribute, you would have to keep in 
+mind, that the UserInputPanel will be rendered after each user input. Thus it will
+be set back to the default value if you don't use a condition to handle that.
+IzPack generates builtin conditions for every variable used as target for a field 
+to be able to check if there's any input.
 
 
 All fields that take user input use a ``<spec>`` tag to define the details of
