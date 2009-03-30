@@ -28,6 +28,10 @@ import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.adaptator.IXMLElement;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,7 +131,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener
                 Iterator<IXMLElement> entriesIter = antCallEntries.iterator();
                 while (entriesIter != null && entriesIter.hasNext())
                 {
-                    AntAction act = readAntCall(entriesIter.next());
+                    AntAction act = readAntCall(entriesIter.next(), idata);
                     if (act != null)
                     {
                         (packActions.get(act.getOrder())).add(act);
@@ -286,11 +290,15 @@ public class AntActionInstallerListener extends SimpleInstallerListener
      * Returns an ant call which is defined in the given XML element.
      *
      * @param el XML element which contains the description of an ant call
+     * @param idata The installation data
      * @return an ant call which is defined in the given XML element
      * @throws InstallerException
      */
-    private AntAction readAntCall(IXMLElement el) throws InstallerException
+    private AntAction readAntCall(IXMLElement el, AutomatedInstallData idata) throws InstallerException
     {
+        String buildFile = null;
+        String buildResource = null;
+        
         if (el == null)
         {
             return null;
@@ -309,8 +317,25 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         }
 
         act.setQuiet(spec.isAttributeYes(el, ActionBase.QUIET, false));
-        act.setVerbose(spec.isAttributeYes(el, ActionBase.VERBOSE, false));
-        act.setBuildFile(spec.getRequiredAttribute(el, ActionBase.BUILDFILE));
+        act.setVerbose(spec.isAttributeYes(el, ActionBase.VERBOSE, false));                
+        buildFile = el.getAttribute(ActionBase.BUILDFILE);
+        buildResource = processBuildfileResource(spec, idata, el);
+        if (null == buildFile && null == buildResource)
+        {
+            throw new InstallerException("Invalid " + SPEC_FILE_NAME + ": either buildfile or buildresource must be specified");
+        }
+        if (null != buildFile && null != buildResource)
+        {
+            throw new InstallerException("Invalid " + SPEC_FILE_NAME + ": cannot specify both buildfile and buildresource");
+        }
+        if (null != buildFile) 
+        {
+            act.setBuildFile(buildFile);
+        }
+        else
+        {
+            act.setBuildFile(buildResource);
+        }
         String str = el.getAttribute(ActionBase.LOGFILE);
         if (str != null)
         {
@@ -358,4 +383,56 @@ public class AntActionInstallerListener extends SimpleInstallerListener
         return act;
     }
 
+    private String processBuildfileResource(SpecHelper spec, AutomatedInstallData idata, IXMLElement el) throws InstallerException 
+    {
+        String buildResource = null;
+        
+        // See if the build file is a resource
+        String attr = el.getAttribute(ActionBase.BUILDRESOURCE);
+        if (null != attr) 
+        {
+            // Get the resource
+            BufferedInputStream bis = new BufferedInputStream(spec.getResource(attr));
+            if (null == bis) 
+            {
+                // Resource not found
+                throw new InstallerException("Failed to find buildfile_resource: " + attr);
+            }
+            BufferedOutputStream bos = null;
+            try 
+            {
+                // Write the resource to a temporary file
+                File tempFile = File.createTempFile("buildfile_resource", "xml");
+                tempFile.deleteOnExit();
+                bos = new BufferedOutputStream(new FileOutputStream(tempFile));
+                int c;
+                while (-1 != (c = bis.read()))
+                {
+                    bos.write(c);
+                }
+                bis.close();
+                bos.close();
+                buildResource = tempFile.getAbsolutePath();
+            } 
+            catch (Exception x) 
+            {
+                throw new InstallerException("Failed to write buildfile_resource", x);
+            } 
+            finally 
+            {
+                if (bos != null) 
+                {
+                    try 
+                    {
+                        bos.close();
+                    } 
+                    catch (Exception x) 
+                    {
+                        // Ignore this exception
+                    }
+                }
+            }
+        }
+        return buildResource;
+    }
 }

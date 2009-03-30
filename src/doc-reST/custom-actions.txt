@@ -430,11 +430,19 @@ The ``<antcall>`` takes the following attributes:
 -   ``logfile``: optional. Path of the file for logging should be
     performed. The logfile should be not marked for uninstallation otherwise
     it will be deleted too.
--   ``buildfile``: required. Path of the file which contains the antcall.
+-   ``buildfile``: either ``buildfile`` or ``buildresource`` is required but not both. 
+    Path of the file which contains the antcall.
     This is the file you normally use as ``-buildfile`` during an ant call
     via the command line. In this file variables are not substituted. For
     substitution there are properties in ant which can be used. Never write
     an ``IzPack`` variable in an ant buildfile.
+-   ``buildresource``: either ``buildresource`` or ``buildfile`` is required but not both.
+    The value is the id of the resource which contains the antcall.  This resource will be extracted
+    out into a temporary file and the path to this file will be passed as if
+    ``-buildfile`` were specified during the ant call via the command line.  The
+    temporary file is removed after the ant call.  In this file variables are 
+    not substituted. For substitution there are properties in ant which can be used. 
+    Never write an ``IzPack`` variable in an ant buildfile.
 -   ``messageid``: optional. A string ID which refers to
     ``bin/langpacks/installer/<lang>.xml``. If it is defined, the message
     will be displayed in the InstallPanel whilst performing the ant call.
