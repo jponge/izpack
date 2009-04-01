@@ -20,6 +20,7 @@ package com.izforge.izpack.installer;
 import com.izforge.izpack.uninstaller.SelfModifier;
 import com.izforge.izpack.util.Debug;
 
+import java.awt.HeadlessException;
 import java.io.File;
 import java.lang.reflect.Method;
 
@@ -39,6 +40,17 @@ public class MultiVolumeInstaller
      */
     public static void main(String[] args)
     {
+        ProgressDialog progressDialog = null;
+        
+        try {
+            progressDialog = new ProgressDialog();
+            progressDialog.startProgress();    
+        }
+        catch (HeadlessException ex){
+            // this exception is expected if we're running in console or 
+            // auto installation mode
+            Debug.log("Progress will not be shown. No display found.");
+        }
         // default is to look in the current directory
         MultiVolumeInstaller.setMediadirectory(new File(".").getParent());
         if ((args.length > 0) && ("-direct".equals(args[0])))
@@ -73,12 +85,16 @@ public class MultiVolumeInstaller
                 System.out.println("Setting mediadir: " + newargs[1]);
                 MultiVolumeInstaller.setMediadirectory(SelfModifier.findJarFile(clazz).getParent());
                 new SelfModifier(target).invoke(newargs);
+                
             }
             catch (Exception e)
             {
                 Debug.trace(e);
             }
-        }
+        }        
+        if (progressDialog != null){
+            progressDialog.stopProgress();    
+        }        
     }
 
     public static String getMediadirectory()
