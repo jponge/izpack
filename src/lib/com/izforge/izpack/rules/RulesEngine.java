@@ -60,7 +60,7 @@ public class RulesEngine implements Serializable
     protected IXMLElement conditionsspec;
 
     protected static Map<String, Condition> conditionsmap = new HashMap<String, Condition>();
-    
+
     protected static AutomatedInstallData installdata;
 
     static
@@ -90,7 +90,7 @@ public class RulesEngine implements Serializable
         this.panelconditions = new Hashtable<String, String>();
         this.packconditions = new Hashtable<String, String>();
         this.optionalpackconditions = new Hashtable<String, String>();
-    }   
+    }
 
     /**
      * initializes builtin conditions
@@ -225,23 +225,18 @@ public class RulesEngine implements Serializable
                 conditionclassname += "Condition";
             }
 
-            ClassLoader loader = Thread.currentThread().getContextClassLoader(); // RulesEngine.class.getClassLoader();
-
             try
             {
-                Class<Condition> conditionclass = (Class<Condition>) loader
-                        .loadClass(conditionclassname);
-                result = conditionclass.newInstance();
-                result.readFromXML(condition);
-                if (condid != null)
-                {
-                    result.setId(condid);
-                }
-                result.setInstalldata(RulesEngine.installdata);
-            }
-            catch (ClassNotFoundException e)
-            {
-                Debug.trace(conditionclassname + " not found.");
+                Class<Condition> conditionClass = getConditionClass(conditionclassname);
+                if (conditionClass != null){
+                    result = conditionClass.newInstance();
+                    result.readFromXML(condition);
+                    if (condid != null)
+                    {
+                        result.setId(condid);
+                    }
+                    result.setInstalldata(RulesEngine.installdata);    
+                }                
             }
             catch (InstantiationException e)
             {
@@ -253,7 +248,32 @@ public class RulesEngine implements Serializable
             }
         }
         return result;
-    }       
+    }
+
+    private static Class<Condition> getConditionClass(String conditionClassName)
+    {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader(); // 
+        Class<Condition> conditionclass = null;
+        try
+        {
+            conditionclass = (Class<Condition>) loader.loadClass(conditionClassName);
+        }
+        catch (ClassNotFoundException e)
+        {
+            Debug.trace(conditionClassName + " not found in context class loader.");
+        }
+        try
+        {
+            // try with a different classloader
+            loader = RulesEngine.class.getClassLoader();
+            conditionclass = (Class<Condition>) loader.loadClass(conditionClassName);
+        }
+        catch (ClassNotFoundException e)
+        {
+            Debug.trace(conditionClassName + " not found.");
+        }
+        return conditionclass;
+    }
 
     /**
      * Read the spec for the conditions
@@ -538,24 +558,28 @@ public class RulesEngine implements Serializable
             Debug.error("Cannot add condition. Condition was null.");
         }
     }
-    
-    public void writeRulesXML(OutputStream out){
+
+    public void writeRulesXML(OutputStream out)
+    {
         XMLWriter xmlOut = new XMLWriter();
         xmlOut.setOutput(out);
-        if (conditionsspec != null){
-            Debug.trace("Writing original conditions specification.");            
+        if (conditionsspec != null)
+        {
+            Debug.trace("Writing original conditions specification.");
             try
             {
                 xmlOut.write(conditionsspec);
             }
             catch (TransformerException e)
             {
-               Debug.error("Error writing condition specification: " + e);
-            }            
-        }       
-        else {
+                Debug.error("Error writing condition specification: " + e);
+            }
+        }
+        else
+        {
             XMLElementImpl conditionsel = new XMLElementImpl("conditions");
-            for(Condition condition : conditionsmap.values()){
+            for (Condition condition : conditionsmap.values())
+            {
                 IXMLElement conditionEl = createConditionElement(condition, conditionsel);
                 condition.makeXMLData(conditionEl);
                 conditionsel.addChild(conditionEl);
@@ -567,15 +591,16 @@ public class RulesEngine implements Serializable
             }
             catch (TransformerException e)
             {
-               Debug.error("Error writing condition specification: " + e);
+                Debug.error("Error writing condition specification: " + e);
             }
         }
     }
-    
-    public static IXMLElement createConditionElement(Condition condition,IXMLElement root){
-        XMLElementImpl xml = new XMLElementImpl("condition",root);
+
+    public static IXMLElement createConditionElement(Condition condition, IXMLElement root)
+    {
+        XMLElementImpl xml = new XMLElementImpl("condition", root);
         xml.setAttribute("id", condition.getId());
-        xml.setAttribute("type", condition.getClass().getCanonicalName());        
+        xml.setAttribute("type", condition.getClass().getCanonicalName());
         return xml;
-    }    
+    }
 }
