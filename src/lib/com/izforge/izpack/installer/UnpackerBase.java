@@ -736,11 +736,14 @@ public abstract class UnpackerBase implements IUnpacker
             inRes.close();
         }
 
-        // Should we relaunch with privileges?
+        // Should we relaunch the uninstaller with privileges?
         if (idata.info.isPrivilegedExecutionRequired())
         {
-            outJar.putNextEntry(new ZipEntry("exec-admin"));
-            outJar.closeEntry();
+            if (System.getenv("izpack.mode") != null && System.getenv("izpack.mode").equals("privileged"))
+            {
+                outJar.putNextEntry(new ZipEntry("exec-admin"));
+                outJar.closeEntry();
+            }
         }
 
         // We put the langpack
