@@ -1247,7 +1247,9 @@ native libraries are placed under ``bin/native/..``. There are 2 kinds of
 native libraries : the iZPACK libraries and the third-party ones. The IzPack
 libraries are located at ``bin/native/izpack``, you can place your own
 libraries at `` bin/native/3rdparty``. It is possible to place a native
-library also into the uninstaller. It is useable from CustomActions.
+library also into the uninstaller.
+
+It is usable from CustomActions.
 If one or more are referenced for it, the needed support classes are
 automatically placed into the uninstaller. To place it only on operating
 systems for which they are build, it is possible to define an OS restriction.
@@ -1259,6 +1261,8 @@ the following attributes :
 -   ``stage``: stage where to use the library (install|uninstall|both)
 -   ``src``  : source directory where to find the library to build the installer
 
+Note for developers: ``com.izforge.izpack.util.Librarian.loadLibrary()`` must be used to 
+load custom native libraries, as it performs some housekeeping.
 
 ``<os>`` - make a library OS-dependent
 ''''''''''''''''''''''''''''''''''''''''''''''''''
