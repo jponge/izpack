@@ -1205,7 +1205,7 @@ executable:
 
 The ``<os>`` tag can be used inside the ``<file>``, ``<fileset>``,
 ``<singlefile>``, ``<parsable>``, ``<executable>`` tags to restrict it's
-effect to a specific operating system family, architecture or version:
+effect to a specific operating system family, architecture or version using the following attributes:
 
 -   ``family``: ``unix, windows, mac`` to specify the operating system
     family
@@ -1214,38 +1214,28 @@ effect to a specific operating system family, architecture or version:
 -   ``arch``: the operating system architecture (for instance the Linux
     kernel can run on i386, sparc, and so on)
 
-Here's an example installation file :
+Here's an example installation file fragment:
 
 ::
 
     <packs>
-        <!-- The core files -->
+    
+    (...)
+        
         <pack name="Core" required="yes">
-            <description>The IzPack core files.</description>
-            <file targetdir="$INSTALL_PATH" src="bin"/>
-            <file targetdir="$INSTALL_PATH" src="lib"/>
-            <file targetdir="$INSTALL_PATH" src="legal"/>
-            <file targetdir="$INSTALL_PATH" src="Readme.txt"/>
-            <file targetdir="$INSTALL_PATH" src="Versions.txt"/>
-            <file targetdir="$INSTALL_PATH" src="Thanks.txt"/>
-            <parsable targetfile="$INSTALL_PATH/bin/izpack-fe"/>
-            <parsable targetfile="$INSTALL_PATH/bin/izpack-
-            fe.bat"/>
-            <parsable targetfile="$INSTALL_PATH/bin/compile"/>
-            <parsable
-            targetfile="$INSTALL_PATH/bin/compile.bat"/>
-            <executable targetfile="$INSTALL_PATH/bin/compile"
-            stage="never"/>
-            <executable targetfile="$INSTALL_PATH/bin/izpack-fe"
-            stage="never"/>
+
+        (...)
+
+            <executable targetfile="$INSTALL_PATH/bin/compile" stage="never">
+                <os family="unix"/>
+            </executable>
+
+        (...)
+
         </pack>
 
-        <!-- The documentation (1 directory) -->
-        <pack name="Documentation" required="no">
-            <description>The IzPack documentation (HTML and
-            PDF).</description>
-            <file targetdir="$INSTALL_PATH" src="doc"/>
-        </pack>
+    (...)
+
     </packs>
 
 
@@ -1281,7 +1271,9 @@ Here's a sample :
 
 ::
 
-    <native type="izpack" name="ShellLink.dll"/>
+    <native type="izpack" name="ShellLink.dll">
+        <os family="windows"/>
+    </native>
 
 
 The Jar Merging Element ``<jar>``
