@@ -74,6 +74,13 @@ Property references of the form
 
 are replaced by the associated x ant property if it is defined.
 
+A few variables are made available by both Ant and IzPack:
+
+* ``basedir`` (base directory from Ant)
+* ``izpack.file``
+* ``UNPACKER_CLASS`` the name of the unpacker class
+* ``user.dir`` the user directory.
+
 System properties as variables
 -------------------------------
 
