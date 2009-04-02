@@ -468,5 +468,24 @@ Now you have to create and include a class implementing the 'PackValidator' inte
       return true; // passes on to the next defined validator for this pack
     }
   }
+  
+
+Automatic privileges elevation on Windows
+-----------------------------------------
+
+As an alternative to using the ``<run-privileged> element``, a Java launcher EXE with the name 
+``setup.exe`` or ``install.exe`` can be used (see http://msdn.microsoft.com/en-us/library/bb530410.aspx).
+
+Windows Vista has a feature called "installer detection". When an EXE file name contains one of the words
+``install``, ``setup`` or ``update``, the operating system automatically prompts the user for UAC privilege 
+elevation when the program is started. This automatic privilege elevation can be overridden using a 
+manifest file for the EXE and setting the requestedExecutionLevel in the manifest.
+
+Under Windows XP, when the following conditions are met, the operating system prompts the user to run
+ the program with the administrator account:
+
+* the user is not part of the administrators group, and
+* the name of the EXE file is ``setup.exe`` or ``install.exe``, and
+* the EXE is started via Windows Explorer, e.g. by double-clicking on the icon of the EXE file.
 
 .. include:: include-bottom.inc
