@@ -158,10 +158,10 @@ public class PackFile implements Serializable
             target = target.substring(0, target.length() - 1);
         }
 
-        this.sourcePath = src.getPath();
-        this.relativePath = relativeSourcePath;
+        this.sourcePath = src.getPath().replace(File.separatorChar, '/');
+        this.relativePath = (relativeSourcePath != null) ? relativeSourcePath.replace(File.separatorChar, '/') : relativeSourcePath;
 
-        this.targetPath = target;
+        this.targetPath = (target != null) ? target.replace(File.separatorChar, '/') : target;
         this.osConstraints = osList;
         this.override = override;
 
