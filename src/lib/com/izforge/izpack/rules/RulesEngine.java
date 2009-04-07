@@ -466,6 +466,9 @@ public class RulesEngine implements Serializable
 
     public boolean isConditionTrue(Condition cond)
     {
+        if (cond.getInstalldata() == null){
+            cond.setInstalldata(RulesEngine.installdata);
+        }
         return cond.isTrue();
     }
 
