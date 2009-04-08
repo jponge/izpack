@@ -47,6 +47,7 @@ public class NotCondition extends Condition
     public NotCondition(Condition operand)
     {
         this.operand = operand;
+        this.operand.setInstalldata(this.installdata);
     }
 
     /*
@@ -92,6 +93,11 @@ public class NotCondition extends Condition
     */
     public boolean isTrue()
     {
+        if ((this.operand == null)){
+            Debug.trace("Operand of condition " + this.id + " not initialized correctly.");
+            return false;
+        }
+        this.operand.setInstalldata(this.installdata);        
         return !operand.isTrue();
     }
 

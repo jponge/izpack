@@ -50,7 +50,9 @@ public class OrCondition extends Condition
     public OrCondition(Condition operand1, Condition operand2)
     {
         this.leftoperand = operand1;
+        this.leftoperand.setInstalldata(this.installdata);
         this.rightoperand = operand2;
+        this.rightoperand.setInstalldata(this.installdata);
     }
 
     /*
@@ -92,6 +94,12 @@ public class OrCondition extends Condition
      */
     public boolean isTrue()
     {
+        if ((this.leftoperand == null) || (this.rightoperand == null)){
+            Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
+            return false;
+        }
+        this.leftoperand.setInstalldata(this.installdata);
+        this.rightoperand.setInstalldata(this.installdata);
         return this.leftoperand.isTrue() || this.rightoperand.isTrue();
     }
 
