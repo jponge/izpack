@@ -27,7 +27,7 @@ import java.util.Vector;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.event.SimpleCompilerListener;
+import com.izforge.izpack.event.*;
 
 
 /**
