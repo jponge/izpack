@@ -23,6 +23,7 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -87,6 +88,8 @@ public class PackInfo implements Serializable
      * Update check specifications in this Pack.
      */
     private List updateChecks = new ArrayList();
+
+    private VariableSubstitutor varsubst = null;
 
     /**
      * Constructor with required info.
@@ -251,7 +254,11 @@ public class PackInfo implements Serializable
     {
         if (!file.exists())
         {
-            throw new FileNotFoundException(file.toString());
+            if (varsubst == null ||
+                    !(file = new File(varsubst.substitute(file.getAbsolutePath(), null))).exists())
+            {
+                throw new FileNotFoundException(file.toString());
+            }
         }
 
         PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, additionals);
@@ -385,5 +392,10 @@ public class PackInfo implements Serializable
     public void addValidator(String validatorClassName)
     {
         pack.addValidator(validatorClassName);
+    }
+
+    public void setVariables(Properties variables)
+    {
+        this.varsubst = new VariableSubstitutor(variables); 
     }
 }

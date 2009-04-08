@@ -670,6 +670,7 @@ public class CompilerConfig extends Thread {
             pack.setParent(parent);
             pack.setCondition(conditionid);
             pack.setHidden(hidden);
+            pack.setVariables(compiler.getVariables());
 
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default

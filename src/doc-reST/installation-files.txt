@@ -1031,7 +1031,8 @@ The ``<file>`` tag specifies a file (a directory is a file too) to include
 into the pack. It takes the following attributes:
 
 -   ``src``: the file location (relative path) - if this is a directory
-    its content will be added recursively
+    its content will be added recursively. It may contain previously defined
+    static variables (see ``<variables>``).
 -   ``targetdir``: the destination directory, could be something like
     ``$INSTALL_PATH/subdirX``
 -   ``os``: can optionally specify a target operating system (``unix,
@@ -1069,7 +1070,8 @@ Specifies a single file to include. The difference to ``<file>`` is that this
 tag allows the file to be renamed, therefore it has a ``target`` attribute
 instead of `` targetdir``.
 
--   ``src``: the file location (relative path)
+-   ``src``: the file location (relative path). It may contain previously
+    defined static variables (see ``<variables>``).
 -   ``target``: the destination file name, could be something like
     ``$INSTALL_PATH/subdirX/fileY``
 -   ``os``: can optionally specify a target operating system (``unix,
