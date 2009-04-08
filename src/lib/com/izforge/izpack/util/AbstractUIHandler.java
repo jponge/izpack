@@ -46,7 +46,7 @@ public interface AbstractUIHandler
      *
      * @param title   The message title (used for dialog name, might not be displayed)
      * @param message The warning message.
-     * @return true if the user decided not to continue
+     * @return true if the user decided to continue
      */
     public boolean emitWarning(String title, String message);
 
