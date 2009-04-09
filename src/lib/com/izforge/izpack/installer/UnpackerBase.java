@@ -866,7 +866,7 @@ public abstract class UnpackerBase implements IUnpacker
                         files_to_delete.add(newf);
                     }
 
-                    if (newf.isDirectory())
+                    if (newf.isDirectory() && !fileMatchesOnePattern(newfname, exclude_patterns))
                     {
                         scanstack.push(newf);
                     }
