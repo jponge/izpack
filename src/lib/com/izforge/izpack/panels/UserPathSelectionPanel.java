@@ -105,7 +105,7 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
         IzPanelConstraints ipc = IzPanelLayout.getDefaultConstraint(TEXT_CONSTRAINT);
         // The text field should be stretched.
         ipc.setXStretch(1.0);
-        textField = new JTextField(idata.getVariable(variableName));
+        textField = new JTextField(idata.getVariable(variableName), 10);
         textField.addActionListener(this);
         parent.setInitialFocus(textField);
         add(textField, ipc);
