@@ -47,7 +47,9 @@ public class NotCondition extends Condition
     public NotCondition(Condition operand)
     {
         this.operand = operand;
-        this.operand.setInstalldata(this.installdata);
+        if (operand != null){
+            this.operand.setInstalldata(this.installdata);
+        }        
     }
 
     /*

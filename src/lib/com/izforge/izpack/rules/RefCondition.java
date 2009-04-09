@@ -66,7 +66,9 @@ public class RefCondition extends Condition
             {
                 this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);
             }
-            this.referencedcondition.setInstalldata(this.installdata);
+            if (this.referencedcondition != null){
+                this.referencedcondition.setInstalldata(this.installdata);
+            }            
             return (this.referencedcondition != null) ? this.referencedcondition.isTrue() : false;
         }
     }
