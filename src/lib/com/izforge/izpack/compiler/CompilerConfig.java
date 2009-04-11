@@ -670,7 +670,7 @@ public class CompilerConfig extends Thread {
             pack.setParent(parent);
             pack.setCondition(conditionid);
             pack.setHidden(hidden);
-            pack.setVariables(compiler.getVariables());
+            VariableSubstitutor varsubst = new VariableSubstitutor(compiler.getVariables());
 
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
@@ -806,6 +806,13 @@ public class CompilerConfig extends Thread {
                 {
                     file = new File(basedir, src);
                 }
+                
+                // if the path does not exist, maybe it contains variables 
+                if (!file.exists()) 
+                {
+                    file = new File(varsubst.substitute(file.getAbsolutePath(), null));
+                    // next existance checking appears in pack.addFile
+                }
 
                 try
                 {
@@ -841,6 +848,13 @@ public class CompilerConfig extends Thread {
                 if (!file.isAbsolute())
                 {
                     file = new File(basedir, src);
+                }
+
+                // if the path does not exist, maybe it contains variables 
+                if (!file.exists()) 
+                {
+                    file = new File(varsubst.substitute(file.getAbsolutePath(), null));
+                    // next existance checking appears in pack.addFile
                 }
 
                 try
