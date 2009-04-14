@@ -811,7 +811,6 @@
             <fileset dir="${build.dir}">
                 <include name="com/izforge/izpack/event/*.class"/>
                 <include name="com/izforge/izpack/util/IoHelper.class"/>
-                <exclude name="com/izforge/izpack/event/*Compiler*.class"/>
             </fileset>
         </jar>
     </target>
@@ -880,7 +879,7 @@
                  implicit="yes"
                  description="include and exclude elements indicating listener sources"/>
         <sequential>
-            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Uninstaller*"
+            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Uninstaller*,**/*Compiler*"
                             classpath-ext="@{classpath-ext}">
                 <installer-fileset/>
             </build-listener>
@@ -897,7 +896,7 @@
                  implicit="yes"
                  description="include and exclude elements indicating listener sources"/>
         <sequential>
-            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Installer*"
+            <build-listener name="@{name}" srcdir="@{srcdir}" izeventExcludes="**/*Installer*,**/*Compiler*"
                             classpath-ext="@{classpath-ext}">
                 <uninstaller-fileset/>
             </build-listener>
