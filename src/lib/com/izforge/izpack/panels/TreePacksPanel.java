@@ -328,18 +328,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
         {
             return packId;
         }
-        // Internationalization code
-        String packName = pack.name;
-        String key = pack.id;
-        if (langpack != null && pack.id != null && !"".equals(pack.id))
-        {
-            packName = langpack.getString(key);
-        }
-        if ("".equals(packName) || key == null || key.equals(packName))
-        {
-            packName = pack.name;
-        }
-        return (packName);
+        return getI18NPackName(pack);
     }
 
     /**
@@ -931,16 +920,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface
             }
             first = false;
             Pack pack = (Pack) iter.next();
-            if (langpack != null && pack.id != null && !"".equals(pack.id))
-            {
-                retval.append(langpack.getString(pack.id));
-            }
-            else
-            {
-                retval.append(pack.name);
-            }
+            retval.append(getI18NPackName(pack));
         }
-        return (retval.toString());
+        return retval.toString();
     }
 
 
