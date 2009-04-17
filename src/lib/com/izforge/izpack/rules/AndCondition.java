@@ -51,9 +51,14 @@ public class AndCondition extends Condition
     public AndCondition(Condition operand1, Condition operand2)
     {
         this.leftoperand = operand1;
-        this.leftoperand.setInstalldata(this.installdata);
+        if (this.leftoperand != null){
+            this.leftoperand.setInstalldata(this.installdata);    
+        }
+        
         this.rightoperand = operand2;
-        this.rightoperand.setInstalldata(this.installdata);
+        if (this.rightoperand != null){
+            this.rightoperand.setInstalldata(this.installdata);    
+        }        
     }
 
 
