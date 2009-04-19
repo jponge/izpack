@@ -196,9 +196,9 @@ public class PacksPanelAutomationHelper implements PanelAutomation
             }
         }
         // Update panelRoot to reflect the changes made by the automation helper, panel validate or panel action
-        for (int childIndex = panelRoot.getChildrenCount(); childIndex > 0; childIndex--)
+        for (int counter = panelRoot.getChildrenCount(); counter > 0; counter--)
         {
-            panelRoot.removeChild(panelRoot.getChildAtIndex(childIndex));
+            panelRoot.removeChild(panelRoot.getChildAtIndex(0));
         }
         makeXMLData(idata, panelRoot);
     }
