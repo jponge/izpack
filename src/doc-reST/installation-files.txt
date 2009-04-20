@@ -773,22 +773,22 @@ The ``<panel>`` markup takes the following attributes:
 -	``classname``: which is the classname of the panel.
 -	``id``: an identifier for a panel which can be used e.g. for referencing in userinput panel definitions.
 - 	``condition``: an id of a condition which has to be fullfilled to show this panel
-- 	``jar``: jar file where the classes for this panel can be found
-     This attribute is optional. If it is empty (jar="") the classes for this panel must be murged using the <jar> tag.
+- 	``jar``: jar file where the classes for this panel can be found. This attribute is optional. If it is empty (jar="") the classes for this panel must be murged using the <jar> tag.
 
 
-Here's a sample :
+Here is a sample :
 
 ::
 
     <panels>
-      <panel classname="HelloPanel"/>
-      <panel classname="LicencePanel"/>
-      <panel classname="TargetPanel"/>
-      <panel classname="InstallPanel"/>
-      <panel classname="UserInputPanel" id="myuserinput" condition="pack2selected" />
-      <panel classname="FinishPanel" jar="MyFinishPanel.jar"/>
+        <panel classname="HelloPanel"/>
+        <panel classname="LicencePanel"/>
+        <panel classname="TargetPanel"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="UserInputPanel" id="myuserinput" condition="pack2selected" />
+        <panel classname="FinishPanel" jar="MyFinishPanel.jar"/>
     </panels>
+
     
 The following sections describe the tags available for a ``<panel>`` section.
 

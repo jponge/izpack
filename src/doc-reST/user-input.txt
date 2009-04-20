@@ -680,7 +680,7 @@ possible to let the input field create multiple variables with the given variabl
 E.g. specifying a variable with name the.file and three files selected in the box would lead to three 
 variables in the installer (the.file, the.file_1, the.file_2).  
 
-Set-Parameter ::
+Set-Parameter :
 
 **visibleRows**
 How many rows shall be shown in the list box.
@@ -702,7 +702,6 @@ If set to true, multiple variables will be created. Each file will get one varia
 
 **allowEmptyValue**
 If set to true, no file has to be selected and the box can be left empty.
-
 
 ::
 
