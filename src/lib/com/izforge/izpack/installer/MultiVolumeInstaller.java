@@ -73,15 +73,22 @@ public class MultiVolumeInstaller
         {
             try
             {
+                long maxmem = Runtime.getRuntime().maxMemory() / (1024*1024);
+                Debug.trace("Currently using maximum memory of " + maxmem + "m");
+                // just use a static fraction of memory for perm gen size.
+                long maxpermgensize = maxmem / 4; 
+                                
                 Class<MultiVolumeInstaller> clazz = MultiVolumeInstaller.class;
                 Method target = clazz.getMethod("install", new Class[]{String[].class});
-                String[] newargs = new String[args.length + 2];
-
-                System.arraycopy(args, 0, newargs, 2, args.length);
+                String[] newargs = new String[args.length + 4];
+                System.arraycopy(args, 0, newargs, 4, args.length);
+               
                 // try to find the directory, where the jar file is located, this class was loaded
                 // from
-                newargs[0] = "-mediadir";
-                newargs[1] = SelfModifier.findJarFile(clazz).getParent();
+                newargs[0] = "-Xmx" + maxmem + "m";
+                newargs[1] = "-XX:MaxPermSize=" + maxpermgensize + "m";               
+                newargs[2] = "-mediadir";
+                newargs[3] = SelfModifier.findJarFile(clazz).getParent();
                 System.out.println("Setting mediadir: " + newargs[1]);
                 MultiVolumeInstaller.setMediadirectory(SelfModifier.findJarFile(clazz).getParent());
                 new SelfModifier(target).invoke(newargs);
