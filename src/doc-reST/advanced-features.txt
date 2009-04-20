@@ -327,7 +327,10 @@ The PacksPanel dialog supports the modifier ``doNotShowPackSizeColumn`` which hi
 to true, the third column will not be shown. The required size of all packs is still shown with this setting. The required size can be hidden by setting the ``doNotShowRequiredSize``
 to true.
 
-Example ::
+Example :
+
+::
+
   <guiprefs width="640" height="480" resizable="no">
      ...
      <modifier key="doNotShowPackSizeColumn" value="true"/>
@@ -335,7 +338,8 @@ Example ::
      ...
    </guiprefs>
    
-   The PacksPanel will not show the column with the sizes of each pack, but will show the total required space.
+
+The PacksPanel will not show the column with the sizes of each pack, but will show the total required space.
 
 Alternative Cancel Dialog
 ''''''''''''''''''''''''''
