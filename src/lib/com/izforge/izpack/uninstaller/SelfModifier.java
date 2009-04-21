@@ -418,7 +418,7 @@ public class SelfModifier
         sandbox = sandbox.getCanonicalFile();
         logFile = logFile.getCanonicalFile();
 
-        jarFile = findJarFile((Class<MultiVolumeInstaller>) method.getDeclaringClass()).getCanonicalFile();
+        jarFile = findJarFile((Class<?>) method.getDeclaringClass()).getCanonicalFile();
         if (jarFile == null)
         {
             throw new IllegalStateException("SelfModifier must be in a jar file");
@@ -491,7 +491,7 @@ public class SelfModifier
      * @return null if file was not loaded from a jar file
      * @throws SecurityException if access to is denied by SecurityManager
      */
-    public static File findJarFile(Class<MultiVolumeInstaller> clazz)
+    public static File findJarFile(Class<?> clazz)
     {
         String resource = clazz.getName().replace('.', '/') + ".class";
 
