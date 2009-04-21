@@ -185,6 +185,10 @@ public class SelfModifier
     private SimpleDateFormat isoPoint = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     private Date date = new Date();
+    
+    private long maxmemory = 64;
+    private long maxpermgensize = 16;
+    private boolean useMemorySettings = false;
 
     public static void test(String[] args)
     {
@@ -299,6 +303,13 @@ public class SelfModifier
         phase = 1;
         initJavaExec();
         initMethod(method);
+    }
+    
+    public SelfModifier(Method method, long maxmemory, long maxpermgensize) throws IOException {
+        this(method);
+        this.maxmemory = maxmemory;
+        this.maxpermgensize = maxpermgensize;
+        this.useMemorySettings = true;
     }
 
     /**
@@ -439,7 +450,12 @@ public class SelfModifier
 
         // invoke from tmpdir, passing target method arguments as args, and
         // SelfModifier parameters as sustem properties
-        String[] javaCmd = new String[]{javaCommand(), "-classpath", sandbox.getAbsolutePath(),
+        String javaCommand = javaCommand();
+        if (this.useMemorySettings){
+            javaCommand += " -Xmx" + this.maxmemory + "m -XX:MaxPermSize=" + maxpermgensize + "m"; 
+        }
+        
+        String[] javaCmd = new String[]{javaCommand, "-classpath", sandbox.getAbsolutePath(),
                 "-D" + BASE_KEY + "=" + base, "-D" + JAR_KEY + "=" + jarFile.getPath(),
                 "-D" + CLASS_KEY + "=" + method.getDeclaringClass().getName(),
                 "-D" + METHOD_KEY + "=" + method.getName(), "-D" + PHASE_KEY + "=" + nextPhase,
