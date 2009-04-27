@@ -276,10 +276,13 @@ public class Destroyer extends Thread
         if (file.isDirectory())
         {
             File[] files = file.listFiles();
-            int size = files.length;
-            for (int i = 0; i < size; i++)
+            if (files != null)
             {
-                cleanup(files[i]);
+                int size = files.length;
+                for (int i = 0; i < size; i++)
+                {
+                    cleanup(files[i]);
+                }
             }
             file.delete();
         }
