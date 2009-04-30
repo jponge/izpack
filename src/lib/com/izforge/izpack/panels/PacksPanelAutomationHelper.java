@@ -174,7 +174,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation
                             // Check if the conditions allow to select the pack
                             if ((idata.selectedPacks.indexOf(pack) < 0)
                                     && (pack.id != null)
-                                    && (!idata.getRules().canInstallPack(pack.id,
+                                    && (idata.getRules().canInstallPack(pack.id,
                                             idata.getVariables())))
                             {
                                 idata.selectedPacks.add(pack);
