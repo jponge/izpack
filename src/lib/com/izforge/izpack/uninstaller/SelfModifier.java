@@ -465,7 +465,7 @@ public class SelfModifier
         command.add("-XX:MaxPermSize=" + maxpermgensize + "m");
 // activate for debugging purposes.        
 //        command.add("-Xdebug");        
-//        int debugPort = 8000;        
+//        int debugPort = 8000 + nextPhase;        
 //        command.add("-Xrunjdwp:transport=dt_socket,address=" + debugPort + ",server=y,suspend=y");
         command.add("-classpath");
         command.add(sandbox.getAbsolutePath());
@@ -489,9 +489,9 @@ public class SelfModifier
         }
         log(sb.toString());
 
-        ProcessBuilder process = new ProcessBuilder(command);
-        process.redirectErrorStream(true);
-        return process.start();
+//        ProcessBuilder process = new ProcessBuilder(command);       
+//        return process.start();
+        return Runtime.getRuntime().exec(command.toArray(new String[command.size()]),null,null);
     }
 
     /**
