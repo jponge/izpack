@@ -450,13 +450,13 @@ public class SelfModifier
 
         // invoke from tmpdir, passing target method arguments as args, and
         // SelfModifier parameters as sustem properties
-        String javaCommand = javaCommand();
+        String javaCommand = "\"" + javaCommand() + "\"";
         if (this.useMemorySettings){
             javaCommand += " -Xmx" + this.maxmemory + "m -XX:MaxPermSize=" + maxpermgensize + "m"; 
         }
         
-        String[] javaCmd = new String[]{javaCommand, "-classpath", sandbox.getAbsolutePath(),
-                "-D" + BASE_KEY + "=" + base, "-D" + JAR_KEY + "=" + jarFile.getPath(),
+        String[] javaCmd = new String[]{javaCommand, "-classpath", "\"" + sandbox.getAbsolutePath() + "\"",
+                "-D" + BASE_KEY + "=" + base, "-D" + JAR_KEY + "=\"" + jarFile.getPath() + "\"",
                 "-D" + CLASS_KEY + "=" + method.getDeclaringClass().getName(),
                 "-D" + METHOD_KEY + "=" + method.getName(), "-D" + PHASE_KEY + "=" + nextPhase,
                 getClass().getName()};
