@@ -89,7 +89,7 @@ public class MultiVolumeInstaller
                 newargs[1] = "-XX:MaxPermSize=" + maxpermgensize + "m";               
                 newargs[2] = "-mediadir";
                 newargs[3] = SelfModifier.findJarFile(clazz).getParent();
-                System.out.println("Setting mediadir: " + newargs[1]);
+                System.out.println("Setting mediadir: " + newargs[3]);
                 MultiVolumeInstaller.setMediadirectory(SelfModifier.findJarFile(clazz).getParent());
                 new SelfModifier(target).invoke(newargs);
                 
