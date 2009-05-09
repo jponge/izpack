@@ -470,7 +470,7 @@ public class SelfModifier
         command.add("-classpath");
         command.add(sandbox.getAbsolutePath());
         command.add("-D" + BASE_KEY + "=" + base);
-        command.add("-D" + JAR_KEY + "=\"" + jarFile.getPath() + "\"");
+        command.add("-D" + JAR_KEY + "=" + jarFile.getPath() + "");
         command.add("-D" + CLASS_KEY + "=" + method.getDeclaringClass().getName());
         command.add("-D" + METHOD_KEY + "=" + method.getName());
         command.add("-D" + PHASE_KEY + "=" + nextPhase);
