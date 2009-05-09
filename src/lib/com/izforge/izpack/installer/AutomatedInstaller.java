@@ -339,6 +339,8 @@ public class AutomatedInstaller extends InstallerBase
         System.out.println("[ Starting automated installation ]");
         Debug.log("[ Starting automated installation ]");
 
+        ConsolePanelAutomationHelper uihelper = new ConsolePanelAutomationHelper(); 
+        
         try
         {
             // assume that installation will succeed
@@ -373,9 +375,9 @@ public class AutomatedInstaller extends InstallerBase
 
                 if (automationHelper == null)
                 {
-                    executePreValidateActions(p, null);
+                    executePreValidateActions(p, uihelper);
                     validatePanel(p);
-                    executePostValidateActions(p, null);
+                    executePostValidateActions(p, uihelper);
                     continue;
                 }
 
