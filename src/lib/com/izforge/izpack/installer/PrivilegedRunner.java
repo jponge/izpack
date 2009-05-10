@@ -225,15 +225,16 @@ public class PrivilegedRunner
 
     private String getInstallerJar()
     {
-        String res = PrivilegedRunner.class.getName().replace('.', '/') + ".class";
-        URL url = ClassLoader.getSystemResource(res);
-        String path = url.getFile();
-        path = path.substring(0, path.lastIndexOf('!'));
         try
         {
-            return new File(URI.create(path).getSchemeSpecificPart()).getCanonicalPath();
+            URI uri = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
+            if (!"file".equals(uri.getScheme()))
+            {
+                throw new Exception("Unexpected scheme in JAR file URI: "+uri);
+            }
+            return new File(uri.getSchemeSpecificPart()).getCanonicalPath();
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
