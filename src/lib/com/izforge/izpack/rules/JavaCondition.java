@@ -65,10 +65,9 @@ public class JavaCondition extends Condition
         {
             if (this.usedclass == null)
             {
-                ClassLoader loader = ClassLoader.getSystemClassLoader();
                 try
                 {
-                    this.usedclass = loader.loadClass(this.classname);
+                    this.usedclass = Class.forName(this.classname); 
                 }
                 catch (ClassNotFoundException e)
                 {

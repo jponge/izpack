@@ -80,7 +80,7 @@ public class Uninstaller
 
     private static void checkForPrivilegedExecution()
     {
-        if (System.getenv("izpack.mode") != null && System.getenv("izpack.mode").equals("privileged"))
+        if (PrivilegedRunner.isPrivilegedMode())
         {
             // We have been launched through a privileged execution, so stop the checkings here!
             return;
