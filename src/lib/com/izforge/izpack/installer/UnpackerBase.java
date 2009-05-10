@@ -739,7 +739,7 @@ public abstract class UnpackerBase implements IUnpacker
         // Should we relaunch the uninstaller with privileges?
         if (idata.info.isPrivilegedExecutionRequired())
         {
-            if (System.getenv("izpack.mode") != null && System.getenv("izpack.mode").equals("privileged"))
+            if (PrivilegedRunner.isPrivilegedMode())
             {
                 outJar.putNextEntry(new ZipEntry("exec-admin"));
                 outJar.closeEntry();
