@@ -57,11 +57,12 @@ The usage is quite easy: ::
 
   options:
     -h, --help       show this help message and exit
-    --file=FILE      The installer JAR file
+    --file=FILE      The installer JAR file / files (1 per bundled file, specify at least the installer JAR!)
     --output=OUTPUT  The executable file
     --with-7z=P7Z    Path to the 7-Zip executable
     --with-upx=UPX   Path to the UPX executable
     --no-upx         Do not use UPX to further compress the output
+    --launch-file    File to launch after extract (e.g., native launcher)
 
 A typical wrapping will be done like::
 
