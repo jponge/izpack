@@ -25,9 +25,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import com.izforge.izpack.Panel;
@@ -70,6 +72,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String TEXT = "txt";
 
     private static final String SPEC = "spec";
+    
+    private static final String PWD = "pwd";
 
     private static final String TYPE_ATTRIBUTE = "type";
 
@@ -80,25 +84,59 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String STATIC_TEXT = "staticText";
 
     private static final String CHOICE = "choice";
+    
+    private static final String FILE = "file";
+    
+    private static final String PASSWORD = "password";
 
     private static final String VALUE = "value";
 
     private static final String RADIO_FIELD = "radio";
 
+    private static final String TITLE_FIELD = "title";
+
+    private static final String CHECK_FIELD = "check";
+
+    private static final String RULE_FIELD = "rule";
+    
+    private static final String SPACE = "space";
+    
+    private static final String DIVIDER = "divider";
+
+    static final String DISPLAY_FORMAT = "displayFormat";
+
+    static final String PLAIN_STRING = "plainString";
+
+    static final String SPECIAL_SEPARATOR = "specialSeparator";
+
+    static final String LAYOUT = "layout";
+
+    static final String RESULT_FORMAT = "resultFormat";
+
     private static final String DESCRIPTION = "description";
 
-    private static final String TRUE = "true";
-
+    private static final String TRUE = "true";   
+    
+    
+    private static Input SPACE_INTPUT_FIELD ;
+    private static Input DIVIDER_INPUT_FIELD;
+    
     public List<Input> listInputs;
 
+   
     public UserInputPanelConsoleHelper()
     {
         instanceNumber = instanceCount++;
         listInputs = new ArrayList<Input>();
+        
+        SPACE_INTPUT_FIELD = new Input(SPACE, null, null, SPACE, "\r", 0);
+        DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER, "------------------------------------------", 0);
+        
     }
 
     public boolean runConsoleFromPropertiesFile(AutomatedInstallData installData, Properties p)
     {
+    	
         collectInputs(installData);
         Iterator<Input> inputIterator = listInputs.iterator();
         while (inputIterator.hasNext())
@@ -116,6 +154,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData,
             PrintWriter printWriter)
     {
+
         collectInputs(installData);
         Iterator<Input> inputIterator = listInputs.iterator();
         while (inputIterator.hasNext())
@@ -127,18 +166,17 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     public boolean runConsole(AutomatedInstallData idata)
     {
+
         collectInputs(idata);
         boolean status = true;
         Iterator<Input> inputsIterator = listInputs.iterator();
         while (inputsIterator.hasNext())
         {
             Input input = inputsIterator.next();
-            String text = input.strText;
-            if (text != null)
-            {
-                System.out.println(text);
-            }
-            if (TEXT_FIELD.equals(input.strFieldType))
+ 
+            if (TEXT_FIELD.equals(input.strFieldType) 
+        		|| FILE.equals(input.strFieldType) 
+        		|| RULE_FIELD.equals(input.strFieldType))
             {
                 status = status && processTextField(input, idata);
             }
@@ -147,6 +185,20 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             {
                 status = status && processComboRadioField(input, idata);
             }
+            else if (CHECK_FIELD.equals(input.strFieldType))
+            {
+                status = status && processCheckField(input, idata);
+            } 
+           else if(STATIC_TEXT.equals(input.strFieldType) 
+        		   || TITLE_FIELD.equals(input.strFieldType)
+        		   || DIVIDER.equals(input.strFieldType)
+        		   || SPACE.equals(input.strFieldType) )
+           {
+        	   status = status && processSimpleField(input, idata);
+           } 
+           else if (PASSWORD.equals(input.strFieldType) ) {
+               status = status && processPasswordField(input, idata);
+           }
 
         }
 
@@ -168,6 +220,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     public boolean collectInputs(AutomatedInstallData idata)
     {
+    	
         listInputs.clear();
         IXMLElement data;
         IXMLElement spec = null;
@@ -213,9 +266,32 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     continue;
                 }
             }
-            listInputs.add(getInputFromField(field));
-        }
+            Input in = getInputFromField(field, idata);
+            if (in != null) {
+            	listInputs.add(in);
+            }
+         }
         return true;
+    }
+    
+    boolean processSimpleField(Input input, AutomatedInstallData idata)
+    {
+         System.out.println(input.strText);       
+         return true;
+    }
+    
+    boolean processPasswordField(Input input, AutomatedInstallData idata) {
+
+        Password pwd = (Password) input;
+        
+        boolean rtn = false;
+        for (int i=0; i < pwd.input.length; i++) {
+            rtn = processTextField(pwd.input[i], idata);
+            if (!rtn) return rtn;
+        }
+    
+        return rtn;
+        
     }
 
     boolean processTextField(Input input, AutomatedInstallData idata)
@@ -230,10 +306,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             Debug.trace("Error: no spec element defined in file field");
             return false;
         }
-        set = input.strDefaultValue;
+       
+        set = idata.getVariable(variable);
         if (set == null)
         {
-            set = idata.getVariable(variable);
+            set = input.strDefaultValue;
             if (set == null)
             {
                 set = "";
@@ -357,17 +434,107 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     }
 
-    public Input getInputFromField(IXMLElement field)
+    boolean processCheckField(Input input, AutomatedInstallData idata)
+    {
+        String variable = input.strVariableName;
+        if ((variable == null) || (variable.length() == 0)) { return false; }
+        String currentvariablevalue = idata.getVariable(variable);
+        if (currentvariablevalue == null)
+        {
+            currentvariablevalue = "";
+        }
+        List<Choice> lisChoices = input.listChoices;
+        if (lisChoices.size() == 0)
+        {
+            Debug.trace("Error: no spec element defined in check field");
+            return false;
+        }
+        Choice choice = null;
+        for (int i = 0; i < lisChoices.size(); i++)
+        {
+            choice = lisChoices.get(i);
+            String value = choice.strValue;
+
+            if ((value != null) && (value.length() > 0) && (currentvariablevalue.equals(value)))
+            {
+                input.iSelectedChoice = i;
+            }
+            else
+            {
+                String set = input.strDefaultValue;
+                if (set != null)
+                {
+                    if (set != null && !"".equals(set))
+                    {
+                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        set = vs.substitute(set, null);
+                    }
+                    if (set.equals(TRUE))
+                    {
+                        input.iSelectedChoice = 1;
+                    }
+                }
+            }
+        }
+        System.out.println("  [" + (input.iSelectedChoice == 1 ? "x" : " ") + "] "
+                + (choice.strText != null ? choice.strText : ""));
+        try
+        {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            boolean bKeepAsking = true;
+
+            while (bKeepAsking)
+            {
+                System.out.println("input 1 to select, 0 to deseclect:");
+                String strIn = br.readLine();
+                // take default value if default value exists and no user input
+                if (strIn.trim().equals(""))
+                {
+                    bKeepAsking = false;
+                }
+                int j = -1;
+                try
+                {
+                    j = Integer.valueOf(strIn).intValue();
+                }
+                catch (Exception ex)
+                {}
+                // take user input if user input is valid
+                if ((j == 0) || j == 1)
+                {
+                    input.iSelectedChoice = j;
+                    bKeepAsking = false;
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        idata.setVariable(variable, input.listChoices.get(input.iSelectedChoice).strValue);
+        return true;
+
+    }
+
+    public Input getInputFromField(IXMLElement field, AutomatedInstallData idata)
     {
         String strVariableName = field.getAttribute(VARIABLE);
         String strFieldType = field.getAttribute(TYPE_ATTRIBUTE);
+        if (TITLE_FIELD.equals(strFieldType))
+        {
+            String strText = null;
+            strText = field.getAttribute(TEXT);
+            return new Input(strVariableName, null, null, TITLE_FIELD, strText, 0);
+        }
+        
         if (STATIC_TEXT.equals(strFieldType))
         {
             String strText = null;
             strText = field.getAttribute(TEXT);
             return new Input(strVariableName, null, null, STATIC_TEXT, strText, 0);
         }
-        if (TEXT_FIELD.equals(strFieldType))
+        
+        if (TEXT_FIELD.equals(strFieldType) || FILE.equals(strFieldType) )
         {
             List<Choice> choicesList = new ArrayList<Choice>();
             String strFieldText = null;
@@ -377,21 +544,94 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             IXMLElement description = field.getFirstChildNamed(DESCRIPTION);
             if (spec != null)
             {
-                strText = field.getFirstChildNamed(SPEC).getAttribute(TEXT);
-                strSet = field.getFirstChildNamed(SPEC).getAttribute(SET);
+                strText = spec.getAttribute(TEXT);
+                strSet = spec.getAttribute(SET);
             }
             if (description != null)
             {
                 strFieldText = description.getAttribute(TEXT);
             }
             choicesList.add(new Choice(strText, null, strSet));
+            return new Input(strVariableName, strSet, choicesList, strFieldType, strFieldText, 0);
+
+        }
+         
+        if (RULE_FIELD.equals(strFieldType))
+        {
+
+            List<Choice> choicesList = new ArrayList<Choice>();
+            String strFieldText = null;
+            String strSet = null;
+            String strText = null;
+            IXMLElement spec = field.getFirstChildNamed(SPEC);
+            IXMLElement description = field.getFirstChildNamed(DESCRIPTION);
+            if (spec != null)
+            {
+                strText = spec.getAttribute(TEXT);
+                strSet = spec.getAttribute(SET);
+            }
+            if (description != null)
+            {
+                strFieldText = description.getAttribute(TEXT);
+            }
+            if (strSet != null && spec.getAttribute(LAYOUT) != null)
+            {
+                StringTokenizer layoutTokenizer = new StringTokenizer(spec.getAttribute(LAYOUT));
+                List<String> listSet = Arrays.asList(new String[layoutTokenizer.countTokens()]);
+                StringTokenizer setTokenizer = new StringTokenizer(strSet);
+                String token;
+                while (setTokenizer.hasMoreTokens())
+                {
+                    token = setTokenizer.nextToken();
+                    if (token.indexOf(":") > -1)
+                    {
+                        listSet.set(new Integer(token.substring(0, token.indexOf(":"))).intValue(),
+                                token.substring(token.indexOf(":") + 1));
+                    }
+                }
+
+                int iCounter = 0;
+                StringBuffer sb = new StringBuffer();
+                String strRusultFormat = spec.getAttribute(RESULT_FORMAT);
+                String strSpecialSeparator = spec.getAttribute(SPECIAL_SEPARATOR);
+                while (layoutTokenizer.hasMoreTokens())
+                {
+                    token = layoutTokenizer.nextToken();
+                    if (token.matches(".*:.*:.*"))
+                    {
+                        sb.append(listSet.get(iCounter) != null ? listSet.get(iCounter) : "");
+                        iCounter++;
+                    }
+                    else
+                    {
+                        if (SPECIAL_SEPARATOR.equals(strRusultFormat))
+                        {
+                            sb.append(strSpecialSeparator);
+                        }
+                        else if (PLAIN_STRING.equals(strRusultFormat))
+                        {
+
+                        }
+                        else
+                        // if (DISPLAY_FORMAT.equals(strRusultFormat))
+                        {
+                            sb.append(token);
+                        }
+
+                    }
+                }
+                strSet = sb.toString();
+            }
+            choicesList.add(new Choice(strText, null, strSet));
             return new Input(strVariableName, strSet, choicesList, TEXT_FIELD, strFieldText, 0);
 
         }
-        else if (COMBO_FIELD.equals(strFieldType) || RADIO_FIELD.equals(strFieldType))
+
+        if (COMBO_FIELD.equals(strFieldType) || RADIO_FIELD.equals(strFieldType))
         {
             List<Choice> choicesList = new ArrayList<Choice>();
             String strFieldText = null;
+            int selection = -1;
             IXMLElement spec = field.getFirstChildNamed(SPEC);
             IXMLElement description = field.getFirstChildNamed(DESCRIPTION);
             Vector<IXMLElement> choices = null;
@@ -405,22 +645,178 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             }
             for (int i = 0; i < choices.size(); i++)
             {
+
                 IXMLElement choice = choices.elementAt(i);
-                choicesList.add(new Choice(choice.getAttribute(TEXT), choice.getAttribute(VALUE),
-                        choice.getAttribute(SET)));
-            }
-            return new Input(strVariableName, null, choicesList, COMBO_FIELD, strFieldText, -1);
+                String processorClass = choice.getAttribute("processor");
+
+                if (processorClass != null && !"".equals(processorClass))
+                {
+                    String choiceValues = "";
+                    try
+                    {
+                        choiceValues = ((Processor) Class.forName(processorClass).newInstance())
+                                .process(null);
+                    }
+                    catch (Throwable t)
+                    {
+                        t.printStackTrace();
+                    }
+                    String set = choice.getAttribute(SET);
+                    if (set == null)
+                    {
+                        set = "";
+                    }
+                    if (set != null && !"".equals(set))
+                    {
+                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        set = vs.substitute(set, null);
+                    }
+
+                    StringTokenizer tokenizer = new StringTokenizer(choiceValues, ":");
+                    int counter = 0;
+                    while (tokenizer.hasMoreTokens())
+                    {
+                        String token = tokenizer.nextToken();
+                        
+                        choicesList.add(new Choice(
+                                    token, 
+                                    token,
+                                    set));
+                        
+                    }
+                }
+                else
+                {
+                    String value = choice.getAttribute(VALUE);
+                    
+                    String set = choice.getAttribute(SET);
+                     if (set != null)
+                    {
+                        if (set != null && !"".equals(set))
+                        {
+                            VariableSubstitutor vs = new VariableSubstitutor(idata
+                                    .getVariables());
+                            set = vs.substitute(set, null);
+                        }
+                        if (set.equals(TRUE))
+                        {
+                            selection=i;
+                            
+                        }
+                    }
+
+                    
+                    choicesList.add(new Choice(
+                                choice.getAttribute(TEXT), 
+                                value,
+                                set));
+
+                    }
+                }
+
+          
+            return new Input(strVariableName, null, choicesList, strFieldType, strFieldText, selection);
         }
-        else
+        
+        if (CHECK_FIELD.equals(strFieldType))
         {
-            System.out.println(strFieldType + " field collection not implemented");
+            List<Choice> choicesList = new ArrayList<Choice>();
+            String strFieldText = null;
+            String strSet = null;
+            String strText = null;
+            int iSelectedChoice = 0;
+            IXMLElement spec = field.getFirstChildNamed(SPEC);
+            IXMLElement description = field.getFirstChildNamed(DESCRIPTION);
+            if (spec != null)
+            {
+                strText = spec.getAttribute(TEXT);
+                strSet = spec.getAttribute(SET);
+                choicesList.add(new Choice(strText, spec.getAttribute("false"), null));
+                choicesList.add(new Choice(strText, spec.getAttribute("true"), null));
+                if (strSet != null)
+                {
+                    if ("true".equals(strSet))
+                    {
+                        iSelectedChoice = 1;
+                    }
+                }
+            }
+            else
+            {
+                System.out.println("No spec specified for input of type check");
+            }
+
+            if (description != null)
+            {
+                strFieldText = description.getAttribute(TEXT);
+            }
+            return new Input(strVariableName, strSet, choicesList, CHECK_FIELD, strFieldText,
+                    iSelectedChoice);
+        }
+
+
+        if (SPACE.equals(strFieldType) )
+        {
+            return SPACE_INTPUT_FIELD;
 
         }
+        
+        if (DIVIDER.equals(strFieldType)) 
+        {
+            return DIVIDER_INPUT_FIELD;
+        }
+        
+        
+        if (PASSWORD.equals(strFieldType))
+        {
+            List<Choice> choicesList = new ArrayList<Choice>();
+            String strFieldText = null;
+            String strSet = null;
+            String strText = null;
+            
+            IXMLElement spec = field.getFirstChildNamed(SPEC);
+            if (spec != null)
+            {
+                
+                Vector<IXMLElement> pwds = spec.getChildrenNamed(PWD);
+                if (pwds == null || pwds.size() == 0) {
+                    System.out.println("No pwd specified in the spec for type password");
+                    return null;                   
+                }
+
+                Input[] inputs = new Input[pwds.size()];
+                for (int i = 0; i < pwds.size(); i++)
+                {
+                  
+                    IXMLElement pwde = pwds.elementAt(i);
+                    strText = pwde.getAttribute(TEXT);
+                    strSet = pwde.getAttribute(SET);
+                    choicesList.add(new Choice(strText, null, strSet));
+                    inputs[i] = new Input(strVariableName, strSet, choicesList, strFieldType, strFieldText, 0);
+                
+                }
+                 return new Password(strFieldType, inputs);                
+                
+             } 
+            
+            System.out.println("No spec specified for input of type password");
+            return null;
+        }
+
+        
+        System.out.println(strFieldType + " field collection not implemented");
+
         return null;
     }
+    
 
     public class Input
     {
+        
+        public Input(String strFieldType) 
+        {
+                this.strFieldType = strFieldType;
+        }
 
         public Input(String strVariableName, String strDefaultValue, List<Choice> listChoices,
                 String strFieldType, String strText, int iSelectedChoice)
@@ -462,4 +858,18 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         String strSet;
     }
+    
+    public class Password extends Input
+    {
+               
+        public Password(String strFieldType, Input[] input) {
+            super(strFieldType);
+            this.input = input;
+        }
+       
+        Input[] input;
+
+        
+    }
+
 }
