@@ -29,6 +29,7 @@ import java.util.Properties;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Panel;
+import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
@@ -85,6 +86,7 @@ public class ConsoleInstaller extends InstallerBase
             this.result = true;
             Iterator<Panel> panelsIterator = this.installdata.panelsOrder.iterator();
             this.installdata.curPanelNumber = -1;
+            VariableSubstitutor substitutor = new VariableSubstitutor(this.installdata.getVariables());
             while (panelsIterator.hasNext())
             {
                 Panel p = (Panel) panelsIterator.next();
@@ -121,8 +123,7 @@ public class ConsoleInstaller extends InstallerBase
                     try
                     {
                         Debug.log("Instantiate :" + consoleHelperClassName);
-                        refreshDynamicVariables(
-                                new VariableSubstitutor(installdata.getVariables()), installdata);
+                        refreshDynamicVariables(substitutor, installdata);
                         consoleHelperInstance = consoleHelperClass.newInstance();
                     }
                     catch (Exception e)
@@ -148,16 +149,21 @@ public class ConsoleInstaller extends InstallerBase
                                     strCondition);
                         }
 
-                        if (strAction.equals("doInstall") &&bIsConditionFulfilled)
+                        if (strAction.equals("doInstall") && bIsConditionFulfilled)
                         {
-                            bActionResult = consoleHelperInstance.runConsole(this.installdata);
+                            do
+                            {
+                                bActionResult = consoleHelperInstance.runConsole(this.installdata);
+                            }
+                            while (!validatePanel(p));
                         }
                         else if (strAction.equals("doGeneratePropertiesFile"))
                         {
                             bActionResult = consoleHelperInstance.runGeneratePropertiesFile(
                                     this.installdata, this.printWriter);
                         }
-                        else if (strAction.equals("doInstallFromPropertiesFile") &&bIsConditionFulfilled)
+                        else if (strAction.equals("doInstallFromPropertiesFile")
+                                && bIsConditionFulfilled)
                         {
                             bActionResult = consoleHelperInstance.runConsoleFromPropertiesFile(
                                     this.installdata, this.properties);
@@ -259,5 +265,36 @@ public class ConsoleInstaller extends InstallerBase
             in.close();
             Housekeeper.getInstance().shutDown(this.result ? 0 : 1);
         }
+    }
+
+    /**
+     * Validate a panel.
+     * 
+     * @param p The panel to validate
+     * @throws InstallerException thrown if the validation fails.
+     */
+    private boolean validatePanel(final Panel p) throws InstallerException
+    {
+        boolean bValidity = true;
+        String dataValidator = p.getValidator();
+        if (dataValidator != null)
+        {
+            DataValidator validator = DataValidatorFactory.createDataValidator(dataValidator);
+            Status validationResult = validator.validateData(installdata);
+            if (validationResult != DataValidator.Status.OK)
+            {
+                // if defaultAnswer is true, result is ok
+                if (validationResult == Status.WARNING && validator.getDefaultAnswer())
+                {
+                    System.out
+                            .println("Configuration said, it's ok to go on, if validation is not successfull");
+
+                }
+                // make installation fail instantly
+                bValidity = false;
+                System.out.println("Validation failed, please verify your input");
+            }
+        }
+        return bValidity;
     }
 }

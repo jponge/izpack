@@ -168,6 +168,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     {
 
         collectInputs(idata);
+        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
         boolean status = true;
         Iterator<Input> inputsIterator = listInputs.iterator();
         while (inputsIterator.hasNext())
