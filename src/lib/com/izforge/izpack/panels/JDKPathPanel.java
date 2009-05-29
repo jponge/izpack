@@ -48,13 +48,13 @@ public class JDKPathPanel extends PathInputPanel
 
     private static final long serialVersionUID = 3257006553327810104L;
 
-    private static final String[] testFiles = new String[]{"lib" + File.separator + "tools.jar"};
+    public static final String[] testFiles = new String[]{"lib" + File.separator + "tools.jar"};
 
-    private static final String JDK_ROOT_KEY = "Software\\JavaSoft\\Java Development Kit";
+    public static final String JDK_ROOT_KEY = "Software\\JavaSoft\\Java Development Kit";
 
-    private static final String JDK_VALUE_NAME = "JavaHome";
+    public static final String JDK_VALUE_NAME = "JavaHome";
 
-    private static final String OSX_JDK_HOME = "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/";
+    public static final String OSX_JDK_HOME = "/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/";
 
     private static final int OK = 0;
     private static final int BAD_VERSION = 1;
@@ -306,9 +306,22 @@ public class JDKPathPanel extends PathInputPanel
         // No get the version ...
         // We cannot look to the version of this vm because we should
         // test the given JDK VM.
-        String[] params = {
+        String[] params;
+        if ( System.getProperty("os.name").indexOf("Windows") >= 0 ) {
+            String[] paramsp = {
+                "cmd",
+                "/c",
                 pathSelectionPanel.getPath() + File.separator + "bin" + File.separator + "java",
-                "-version"};
+                "-version"
+            };
+            params=paramsp;
+        } else {
+            String[] paramsp = {
+                pathSelectionPanel.getPath() + File.separator + "bin" + File.separator + "java",
+                "-version"
+            };
+            params=paramsp;
+        }
         String[] output = new String[2];
         FileExecutor fe = new FileExecutor();
         fe.executeCommand(params, output);
@@ -345,8 +358,8 @@ public class JDKPathPanel extends PathInputPanel
     }
 
     private boolean compareVersions(String in, String template, boolean isMin,
-                                    int assumedPlace, int halfRange, String useNotIdentifier)
-    {
+            int assumedPlace, int halfRange, String useNotIdentifier)
+            {
         StringTokenizer st = new StringTokenizer(in, " \t\n\r\f\"");
         int i;
         int currentRange = 0;
@@ -427,7 +440,7 @@ public class JDKPathPanel extends PathInputPanel
                 }
                 return (true);
             }
-            if (Integer.parseInt(cur) > Integer.parseInt(nee))
+            if (curVal > neededVal)
             {
                 if (isMin)
                 {

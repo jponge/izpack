@@ -2461,7 +2461,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         JCheckBox checkbox = new JCheckBox(label);
-        checkbox.addItemListener(this);
+        // What are we doing here anyway??? BDA 20090518
+        //checkbox.addItemListener(this);
 
         if (causesValidataion != null && causesValidataion.equals("yes"))
         {
