@@ -118,19 +118,15 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String TRUE = "true";   
     
     
-    private static Input SPACE_INTPUT_FIELD ;
-    private static Input DIVIDER_INPUT_FIELD;
+    private static Input SPACE_INTPUT_FIELD = new Input(SPACE, null, null, SPACE, "\r", 0);
+    private static Input DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER, "------------------------------------------", 0);
     
     public List<Input> listInputs;
-
-   
+          
     public UserInputPanelConsoleHelper()
     {
         instanceNumber = instanceCount++;
         listInputs = new ArrayList<Input>();
-        
-        SPACE_INTPUT_FIELD = new Input(SPACE, null, null, SPACE, "\r", 0);
-        DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER, "------------------------------------------", 0);
         
     }
 
@@ -168,7 +164,6 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     {
                 
         collectInputs(idata);
-        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
         boolean status = true;
         Iterator<Input> inputsIterator = listInputs.iterator();
         while (inputsIterator.hasNext())
@@ -356,6 +351,12 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         if ((variable == null) || (variable.length() == 0)) { return false; }
         String currentvariablevalue = idata.getVariable(variable);
         boolean userinput = false;
+        
+        // display the description for this combo or radio field
+        if (input.strText != null) {
+            System.out.println(input.strText);
+        }
+        
         List<Choice> lisChoices = input.listChoices;
         if (lisChoices.size() == 0)
         {
@@ -370,6 +371,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
             Choice choice = lisChoices.get(i);
             String value = choice.strValue;
+            // if the choice value is provided via a property to the process, then
+            // set it as the selected choice, rather than defaulting to what the
+            // spec defines.
             if (userinput)
             {
                 if ((value != null) && (value.length() > 0) && (currentvariablevalue.equals(value)))
@@ -678,11 +682,17 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     while (tokenizer.hasMoreTokens())
                     {
                         String token = tokenizer.nextToken();
-                        
+                        String choiceSet = null;
+                        if (token.equals(set) 
+                                ) {
+                            choiceSet="true";
+                            selection=counter;
+                        }
                         choicesList.add(new Choice(
                                     token, 
                                     token,
-                                    set));
+                                    choiceSet));
+                        counter++;
                         
                     }
                 }
@@ -699,7 +709,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                                     .getVariables());
                             set = vs.substitute(set, null);
                         }
-                        if (set.equals(TRUE))
+                        if (set.equalsIgnoreCase(TRUE))
                         {
                             selection=i;
                             
@@ -715,6 +725,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     }
                 }
 
+            if (choicesList.size() == 1) {
+                selection = 0;
+            }
           
             return new Input(strVariableName, null, choicesList, strFieldType, strFieldText, selection);
         }
@@ -736,7 +749,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 choicesList.add(new Choice(strText, spec.getAttribute("true"), null));
                 if (strSet != null)
                 {
-                    if ("true".equals(strSet))
+                    if (strSet.equalsIgnoreCase(TRUE))
                     {
                         iSelectedChoice = 1;
                     }
@@ -811,7 +824,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     }
     
 
-    public class Input
+    public static class Input
     {
         
         public Input(String strFieldType) 
@@ -820,13 +833,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
 
         public Input(String strVariableName, String strDefaultValue, List<Choice> listChoices,
-                String strFieldType, String strText, int iSelectedChoice)
+                String strFieldType, String strFieldText, int iSelectedChoice)
         {
             this.strVariableName = strVariableName;
             this.strDefaultValue = strDefaultValue;
             this.listChoices = listChoices;
             this.strFieldType = strFieldType;
-            this.strText = strText;
+            this.strText = strFieldText;
             this.iSelectedChoice = iSelectedChoice;
         }
 
@@ -843,7 +856,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         int iSelectedChoice = -1;
     }
 
-    public class Choice
+    public static class Choice
     {
 
         public Choice(String strText, String strValue, String strSet)
@@ -860,7 +873,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         String strSet;
     }
     
-    public class Password extends Input
+    public static class Password extends Input
     {
                
         public Password(String strFieldType, Input[] input) {
