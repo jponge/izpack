@@ -69,10 +69,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
 import com.izforge.izpack.gui.TwoColumnLayout;
-import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
-import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.installer.*;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.VariableExistenceCondition;
 import com.izforge.izpack.util.Debug;
@@ -372,10 +369,15 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
             this.langpack.add(ResourceManager.getInstance().getInputStream(resource));
         }
-        catch (Throwable exception)
+        catch (ResourceNotFoundException e)
         {
-            exception.printStackTrace();
+            Debug.trace(e);
         }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
 
         // ----------------------------------------------------
         // read the specifications
