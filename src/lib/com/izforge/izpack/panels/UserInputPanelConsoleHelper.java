@@ -273,8 +273,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     
     boolean processSimpleField(Input input, AutomatedInstallData idata)
     {
-         System.out.println(input.strText);       
-         return true;
+        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        System.out.println(vs.substitute(input.strText, null));
+        return true;
     }
     
     boolean processPasswordField(Input input, AutomatedInstallData idata) {
