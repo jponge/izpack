@@ -32,12 +32,14 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.SpecHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 
@@ -116,8 +118,16 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String DESCRIPTION = "description";
 
     private static final String TRUE = "true";   
-    
-    
+        
+    private static final String NAME = "name";
+
+    private static final String FAMILY = "family";
+
+    private static final String OS = "os";
+
+    private static final String SELECTEDPACKS = "createForPack";
+
+   
     private static Input SPACE_INTPUT_FIELD = new Input(SPACE, null, null, SPACE, "\r", 0);
     private static Input DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER, "------------------------------------------", 0);
     
@@ -162,8 +172,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     public boolean runConsole(AutomatedInstallData idata)
     {
-                
-        collectInputs(idata);
+
+        boolean processpanel = collectInputs(idata);
+        if (!processpanel) {
+            return true;
+        }
         boolean status = true;
         Iterator<Input> inputsIterator = listInputs.iterator();
         while (inputsIterator.hasNext())
@@ -235,6 +248,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         {
 
             e1.printStackTrace();
+            return false;
         }
 
         specElements = specHelper.getSpec().getChildrenNamed(NODE_ID);
@@ -246,25 +260,43 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             if (((attribute != null) && instance.equals(attribute))
                     || ((dataID != null) && (panelid != null) && (panelid.equals(dataID))))
             {
-                spec = data;
+
+                Vector<IXMLElement> forPacks = data.getChildrenNamed(SELECTEDPACKS);
+                Vector<IXMLElement> forOs = data.getChildrenNamed(OS);
+
+                if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs)) {
+                    spec = data;
+                    break;
+                }
             }
+        }
+        
+        if (spec == null) {
+            return false;
         }
         Vector<IXMLElement> fields = spec.getChildrenNamed(FIELD_NODE_ID);
         for (int i = 0; i < fields.size(); i++)
         {
             IXMLElement field = fields.elementAt(i);
-            String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
-            if (conditionid != null)
-            {
-                // check if condition is fulfilled
-                if (!idata.getRules().isConditionTrue(conditionid, idata.getVariables()))
+
+            Vector<IXMLElement> forPacks = field.getChildrenNamed(SELECTEDPACKS);
+            Vector<IXMLElement> forOs = field.getChildrenNamed(OS);
+
+            if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs)) {
+        
+                String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
+                if (conditionid != null)
                 {
-                    continue;
+                    // check if condition is fulfilled
+                    if (!idata.getRules().isConditionTrue(conditionid, idata.getVariables()))
+                    {
+                        continue;
+                    }
                 }
-            }
-            Input in = getInputFromField(field, idata);
-            if (in != null) {
-            	listInputs.add(in);
+                Input in = getInputFromField(field, idata);
+                if (in != null) {
+                	listInputs.add(in);
+                }
             }
          }
         return true;
@@ -311,16 +343,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             if (set == null)
             {
                 set = "";
-            }
+            } 
         }
-        else
-        {
-            if (set != null && !"".equals(set))
-            {
 
-                VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
-                set = vs.substitute(set, null);
-            }
+        if (set != null && !"".equals(set))
+        {
+            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+            set = vs.substitute(set, null);
         }
 
         fieldText = input.listChoices.get(0).strText;
@@ -823,6 +852,103 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         return null;
     }
+    
+    /*--------------------------------------------------------------------------*/
+    /**
+     * Verifies if an item is required for any of the packs listed. An item is required for a pack
+     * in the list if that pack is actually selected for installation. <br>
+     * <br>
+     * <b>Note:</b><br>
+     * If the list of selected packs is empty then <code>true</code> is always returnd. The same is
+     * true if the <code>packs</code> list is empty.
+     *
+     * @param packs a <code>Vector</code> of <code>String</code>s. Each of the strings denotes a
+     * pack for which an item should be created if the pack is actually installed.
+     * @return <code>true</code> if the item is required for at least one pack in the list,
+     * otherwise returns <code>false</code>.
+     */
+    /*--------------------------------------------------------------------------*/
+    /*
+     * $ @design
+     *
+     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * that this panel is presented to the user AFTER the PacksPanel.
+     * --------------------------------------------------------------------------
+     */
+    private boolean itemRequiredFor(Vector<IXMLElement> packs, AutomatedInstallData idata)
+    {
+
+        String selected;
+        String required;
+
+        if (packs.size() == 0) { return (true); }
+
+        // ----------------------------------------------------
+        // We are getting to this point if any packs have been
+        // specified. This means that there is a possibility
+        // that some UI elements will not get added. This
+        // means that we can not allow to go back to the
+        // PacksPanel, because the process of building the
+        // UI is not reversable.
+        // ----------------------------------------------------
+        // packsDefined = true;
+
+        // ----------------------------------------------------
+        // analyze if the any of the packs for which the item
+        // is required have been selected for installation.
+        // ----------------------------------------------------
+        for (int i = 0; i < idata.selectedPacks.size(); i++)
+        {
+            selected = ((Pack) idata.selectedPacks.get(i)).name;
+
+            for (int k = 0; k < packs.size(); k++)
+            {
+                required = (packs.elementAt(k)).getAttribute(NAME, "");
+                if (selected.equals(required)) { return (true); }
+            }
+        }
+
+        return (false);
+    }
+    
+    /**
+     * Verifies if an item is required for the operating system the installer executed. The
+     * configuration for this feature is: <br/>
+     * &lt;os family="unix"/&gt; <br>
+     * <br>
+     * <b>Note:</b><br>
+     * If the list of the os is empty then <code>true</code> is always returnd.
+     *
+     * @param os The <code>Vector</code> of <code>String</code>s. containing the os names
+     * @return <code>true</code> if the item is required for the os, otherwise returns
+     * <code>false</code>.
+     */
+    public boolean itemRequiredForOs(Vector<IXMLElement> os)
+    {
+        if (os.size() == 0) { return true; }
+
+        for (int i = 0; i < os.size(); i++)
+        {
+            String family = (os.elementAt(i)).getAttribute(FAMILY);
+            boolean match = false;
+
+            if ("windows".equals(family))
+            {
+                match = OsVersion.IS_WINDOWS;
+            }
+            else if ("mac".equals(family))
+            {
+                match = OsVersion.IS_OSX;
+            }
+            else if ("unix".equals(family))
+            {
+                match = OsVersion.IS_UNIX;
+            }
+            if (match) { return true; }
+        }
+        return false;
+    }
+
     
 
     public static class Input
