@@ -30,9 +30,12 @@ import com.izforge.izpack.util.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -380,6 +383,13 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             act.addUninstallTarget(spec.getRequiredAttribute(utargEl, ActionBase.NAME));
         }
 
+        // see if this was an build_resource and there were uninstall actions
+        if (null != buildResource &&  act.getUninstallTargets().size() > 0)
+        {
+            // We need to add the build_resource file to the uninstaller
+            addBuildResourceToUninstallerData(buildResource);
+        }
+
         return act;
     }
 
@@ -434,5 +444,30 @@ public class AntActionInstallerListener extends SimpleInstallerListener
             }
         }
         return buildResource;
+    }
+
+    private void addBuildResourceToUninstallerData(String buildResource) throws InstallerException {
+        byte[] content = null;
+        File buildFile = new File(buildResource);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream((int) buildFile.length());
+        BufferedInputStream bis = null;
+        try {
+            bis = new BufferedInputStream(new FileInputStream(buildFile));
+            int c;
+            while (-1 != (c = bis.read())) {
+                bos.write(c);
+            }
+            content = bos.toByteArray();
+            UninstallData.getInstance().addAdditionalData("build_resource", content);
+        } catch (Exception x) {
+            throw new InstallerException("Failed to add buildfile_resource to uninstaller", x);
+        } finally {
+            try {
+                bis.close();
+                bos.close();
+            } catch (IOException iOException) {
+                // Ignore the error
+            }
+        }
     }
 }
