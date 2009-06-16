@@ -495,11 +495,11 @@ refer to two of the first conditions.
    <conditions>
       <condition type="variable" id="standardinstallation">
          <name>setup.type</name>
-         <value>standard</name>
+         <value>standard</value>
       </condition>
       <condition type="variable" id="expertinstallation">
          <name>setup.type</name>
-         <value>expert</name>
+         <value>expert</value>
       </condition>
       <condition type="java" id="installonwindows">
 		<java>
