@@ -51,6 +51,8 @@ public class XMLParserTest extends TestCase
     private static final String shortFilename = "short.xml";
     private static final String lnFilename = "linenumber/linenumber.xml";
     private static final String xlnFilename = "linenumber/xinclude-linenumber.xml";
+    private static final String parseErrorFilename = "notvalid.xml";
+    private static final String parseErrorXincludeFilename = "xinclude-notvalid.xml";
 
     private IXMLElement root;
 
@@ -121,4 +123,37 @@ public class XMLParserTest extends TestCase
 
         checkEltLN(elt);
     }
+
+    public void testXMLExceptionThrown()
+    {
+        InputStream input = XMLParserTest.class.getResourceAsStream(parseErrorFilename);
+
+        IXMLParser parser = new XMLParser();
+        try
+        {
+            parser.parse(input, parseErrorFilename);
+            fail("No exception were thrown will reading an invalid xml !");
+        }
+        catch (XMLException e)
+        {
+            //e.printStackTrace();
+        }
+    }
+
+    public void testXMLExceptionThrownXInclude()
+    {
+        InputStream input = XMLParserTest.class.getResourceAsStream(parseErrorXincludeFilename);
+
+        IXMLParser parser = new XMLParser();
+        try
+        {
+            parser.parse(input, parseErrorXincludeFilename);
+            fail("No exception were thrown will reading an xincluded invalid xml !");
+        }
+        catch (XMLException e)
+        {
+            //e.printStackTrace();
+        }
+    }
+
 }

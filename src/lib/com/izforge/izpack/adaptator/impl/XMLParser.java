@@ -25,17 +25,13 @@ package com.izforge.izpack.adaptator.impl;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
+import com.izforge.izpack.adaptator.XMLException;
 import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
+import org.xml.sax.*;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
@@ -52,6 +48,7 @@ public class XMLParser implements IXMLParser
 {
 
     private LineNumberFilter filter;
+    private String parsedItem = null;
 
     public XMLParser()
     {
@@ -65,10 +62,10 @@ public class XMLParser implements IXMLParser
 
         } catch (ParserConfigurationException e)
         {
-            e.printStackTrace();
+            throw new XMLException(e);
         } catch (SAXException e)
         {
-            e.printStackTrace();
+            throw new XMLException(e);
         }
     }
 
@@ -98,16 +95,34 @@ public class XMLParser implements IXMLParser
             filter.applyLN(result);
         } catch (TransformerException e)
         {
-            e.printStackTrace();
+            String extraInfos = null;
+            if (this.parsedItem != null)
+            {
+                extraInfos = " in " + parsedItem;
+            }
+            // we try to get the location of the error.
+            // can't use an ErrorHander here !
+            if (e.getLocator() == null && filter.getDocumentLocator() != null)
+            {
+                Locator locator = filter.getDocumentLocator();
+                extraInfos += " at line " + locator.getLineNumber() + ", column " + locator.getColumnNumber();
+            }
+            if (extraInfos != null) throw new XMLException("Error" + extraInfos + " : " + e.getMessage(), e);
+            throw new XMLException(e);
         } catch (IOException e)
         {
-            e.printStackTrace();
+            throw new XMLException(e);
+        }
+        finally
+        {
+            this.parsedItem = null;
         }
         return result;
     }
 
     public IXMLElement parse(InputStream inputStream)
     {
+        this.parsedItem = null;
         InputSource inputSource = new InputSource(inputStream);
         DOMResult result = parseLineNrFromInputSource(inputSource);
         return searchFirstElement(result);
@@ -115,19 +130,22 @@ public class XMLParser implements IXMLParser
 
     public IXMLElement parse(InputStream inputStream, String systemId)
     {
+        this.parsedItem = systemId;
         InputSource inputSource = new InputSource(inputStream);
         inputSource.setSystemId(systemId);
         DOMResult result = parseLineNrFromInputSource(inputSource);
         return searchFirstElement(result);
     }
-    
+
     public IXMLElement parse(String inputString)
     {
+        this.parsedItem = null;
         return parse(new ByteArrayInputStream(inputString.getBytes()));
     }
 
     public IXMLElement parse(URL inputURL)
     {
+        this.parsedItem = inputURL.toString();
         InputSource inputSource = new InputSource(inputURL.toExternalForm());
         DOMResult domResult = parseLineNrFromInputSource(inputSource);
         return searchFirstElement(domResult);

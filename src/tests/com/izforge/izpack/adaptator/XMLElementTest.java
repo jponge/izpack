@@ -35,7 +35,8 @@ import java.util.Vector;
  * Test on the XMLElement
  *
  * @author Anthonin Bonnefoy
- * @author David Duponchel *
+ * @author David Duponchel
+ *
  */
 public class XMLElementTest extends TestCase
 {

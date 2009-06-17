@@ -24,11 +24,11 @@ package com.izforge.izpack.adaptator;
 
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -67,9 +67,8 @@ public class XMLWriterTest extends TestCase
      * Try to write a file with an outputStream
      *
      * @throws FileNotFoundException
-     * @throws TransformerException
      */
-    public void testWriteFile() throws FileNotFoundException, TransformerException
+    public void testWriteFile() throws FileNotFoundException
     {
         IXMLWriter writer = new XMLWriter();
         File file = new File(output);
@@ -86,9 +85,8 @@ public class XMLWriterTest extends TestCase
      * Try to write a file with an Url to a resource
      *
      * @throws FileNotFoundException
-     * @throws TransformerException
      */
-    public void testWriteURL() throws FileNotFoundException, TransformerException
+    public void testWriteURL() throws FileNotFoundException
     {
         IXMLWriter writer = new XMLWriter();
         File file = new File(output);
@@ -100,5 +98,19 @@ public class XMLWriterTest extends TestCase
         assertEquals(root.getName(), element.getName());
     }
 
-
+    public void testFail()
+    {
+        // TODO : don't use XMLElementImpl !
+        IXMLElement elt = new XMLElementImpl("root");
+        IXMLWriter writer = new XMLWriter();
+        writer.setOutput(""); // will take the current directory, which is not a file !
+        try
+        {
+            writer.write(elt);
+            fail("No exception were thrown will writing on an invalid file !");
+        }
+        catch (XMLException e)
+        {
+        }
+    }
 }

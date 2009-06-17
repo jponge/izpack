@@ -24,6 +24,7 @@ package com.izforge.izpack.adaptator.impl;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLWriter;
+import com.izforge.izpack.adaptator.XMLException;
 
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
@@ -64,23 +65,29 @@ public class XMLWriter implements IXMLWriter
         this.outputStream = outputStream;
     }
 
-    public void write(IXMLElement element) throws TransformerException
+    public void write(IXMLElement element)
     {
-        Source source = new DOMSource(element.getElement().getOwnerDocument());
-        TransformerFactory fabrique = TransformerFactory.newInstance();
-        Transformer transformer = fabrique.newTransformer();
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        Result result;
-        if (outputStream != null)
+        try
         {
-            result = new StreamResult(outputStream);
+            Source source = new DOMSource(element.getElement().getOwnerDocument());
+            TransformerFactory fabrique = TransformerFactory.newInstance();
+            Transformer transformer = fabrique.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            Result result;
+            if (outputStream != null)
+            {
+                result = new StreamResult(outputStream);
+            } else
+            {
+                result = new StreamResult(systemId);
+            }
+            transformer.transform(source, result);
         }
-        else
+        catch (TransformerException e)
         {
-            result = new StreamResult(systemId);
+            throw new XMLException(e);
         }
-        transformer.transform(source, result);
     }
 
     public void setOutput(OutputStream outputStream)
