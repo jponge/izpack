@@ -35,6 +35,7 @@ import javax.xml.transform.TransformerException;
 
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.XMLException;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
@@ -576,7 +577,7 @@ public class RulesEngine implements Serializable
             {
                 xmlOut.write(conditionsspec);
             }
-            catch (TransformerException e)
+            catch (XMLException e)
             {
                 Debug.error("Error writing condition specification: " + e);
             }
@@ -595,7 +596,7 @@ public class RulesEngine implements Serializable
             {
                 xmlOut.write(conditionsel);
             }
-            catch (TransformerException e)
+            catch (XMLException e)
             {
                 Debug.error("Error writing condition specification: " + e);
             }

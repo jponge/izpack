@@ -64,6 +64,16 @@ public class LineNumberFilter extends XMLFilterImpl
     }
 
     /**
+     * Return the locator on the current position.
+     *
+     * @return the current locator.
+     */
+    public Locator getDocumentLocator()
+    {
+        return locator;
+    }
+
+    /**
      * Return the first element found from the given Node.
      *
      * @param elt The Node start point.
@@ -139,6 +149,9 @@ public class LineNumberFilter extends XMLFilterImpl
         boolean end = false;
         Stack<Element> stack = new Stack<Element>();
 
+        /*
+         * We collected the line numbers, now we walk through the xml tree to apply them.
+         */
         while (!end)
         {
             if (hasChildElements(elt))

@@ -38,6 +38,7 @@ public interface IXMLParser
      *
      * @param inputStream Stream to parse
      * @return Root element of the parsed xml
+     * @throws XMLException if something went wrong.
      */
     IXMLElement parse(InputStream inputStream);
 
@@ -48,6 +49,7 @@ public interface IXMLParser
      * @param inputStream Stran to parse
      * @param systemId    System id of the file parsed
      * @return Root element of the parsed XML
+     * @throws XMLException if something went wrong.
      */
     IXMLElement parse(InputStream inputStream, String systemId);
 
@@ -56,6 +58,7 @@ public interface IXMLParser
      *
      * @param inputString Xml written in a string
      * @return Root element of the parsed xml
+     * @throws XMLException if something went wrong.
      */
     IXMLElement parse(String inputString);
 
@@ -64,6 +67,7 @@ public interface IXMLParser
      *
      * @param inputURL Url of the resource
      * @return Root element of the parsed xml
+     * @throws XMLException
      */
     IXMLElement parse(URL inputURL);
 }
