@@ -58,6 +58,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 
 import com.izforge.izpack.LocaleDatabase;
 import com.izforge.izpack.Pack;
@@ -926,6 +927,17 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 {
                     // update TextField
                     TextInputField textf = (TextInputField) element.getComponent();
+
+                    if (value == null)
+                    {
+                        value = textf.getText();
+                    }
+                    textf.setText(vs.substitute(value, null));
+                }
+                else if (element.getType() == UIElementType.PASSWORD)
+                {
+                    // update PasswordField
+                    JTextComponent textf = (JTextComponent) element.getComponent();
 
                     if (value == null)
                     {
@@ -2394,12 +2406,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if ((variable == null) || (passwordGroupsRead.contains(group))) { return (true); }
         passwordGroups.add(group);
 
-        boolean success = !validating;
+        int size = group.validatorSize();
+        boolean success = !validating || size < 1;
 
         // Use each validator to validate contents
         if (!success)
         {
-            int size = group.validatorSize();
             // System.out.println("Found "+(size)+" validators");
             for (int i = 0; i < size; i++)
             {
