@@ -106,6 +106,8 @@ public class Info implements Serializable
 
     private boolean requirePrivilegedExecution = false;
 
+    private boolean requirePrivilegedExecutionUninstaller = false;
+
     private String privilegedExecutionConditionID = null;
 
     public boolean isPrivilegedExecutionRequired()
@@ -116,6 +118,16 @@ public class Info implements Serializable
     public void setRequirePrivilegedExecution(boolean requirePrivilegedExecution)
     {
         this.requirePrivilegedExecution = requirePrivilegedExecution;
+    }
+    
+    public boolean isPrivilegedExecutionRequiredUninstaller()
+    {
+        return requirePrivilegedExecutionUninstaller;
+    }
+    
+    public void setRequirePrivilegedExecutionUninstaller(boolean required)
+    {
+        this.requirePrivilegedExecutionUninstaller = required;
     }
 
     public String getPrivilegedExecutionConditionID()
