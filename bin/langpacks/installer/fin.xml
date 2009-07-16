@@ -233,6 +233,7 @@
     <str id="ImgPacksPanel.summaryCaption" txt="Valitut asennuspaketit"/>
     <str id="TreePacksPanel.summaryCaption" txt="Valitut asennuspaketit"/>
     <str id="UserPathPanel.summaryCaption" txt="Valittu polku"/>
+    <str id="DefaultTargetPanel.summaryCaption" txt="Asennuspolku"/>
     
     <!-- Strings for the Registry -->
     <str id="functionFailed.RegOpenKeyEx" txt="Ei voida avata rekisteriavainta {0}\\{1}."/>
