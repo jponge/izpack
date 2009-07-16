@@ -1858,6 +1858,13 @@ public class CompilerConfig extends Thread {
         {
             URL url = findIzPackResource("lib/uninstaller.jar", "Uninstaller", root);
             compiler.addResource("IzPack.uninstaller", url);
+            
+            if (privileged != null)
+            {
+                // default behavior for uninstaller elevation: elevate if installer has to be elevated too
+                info.setRequirePrivilegedExecutionUninstaller(validateYesNoAttribute(privileged,
+                        "uninstaller", YES));
+            }
 
             if (uninstallInfo != null)
             {
