@@ -512,7 +512,7 @@ refer to two of the first conditions.
 	  	<condition type="ref" refid="standardinstallation"/>
 	  	<condition type="ref" refid="installonwindows" />
 	  </condition>
-   </condition>
+   </conditions>
    
 Note, from IzPack 3.11 on normally, you don't have to define the compound conditions because you can use a simple
 expression language. The language has the following operators:
@@ -1343,21 +1343,22 @@ For example the following use of xi:include
 ::
 
   <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
-  <installation version="1.0" xmlns:xi="http://www.izforge.com/izpack/include">
-      <xi:include href="does-not-exist.xml">
-          <xi:fallback>
-              <bbb>hello</bbb>
-          </xi:fallback>
-      </xi:include>
-  </installation>
+  <aaa xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:include href="does-not-exist.xml">
+        <xi:fallback>
+            <bbb/>
+        </xi:fallback>
+    </xi:include>
+  </aaa>
 
 will result in 
 
 ::
   
-  <installation version="1.0" xmlns:xi="http://www.izforge.com/izpack/include">
-      <bbb>hello</bbb>
-  </installation>
+  <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+  <aaa>
+    <bbb/>
+  </aaa>
 
 if the file 'does-not-exist.xml' does indeed not exist.
 
