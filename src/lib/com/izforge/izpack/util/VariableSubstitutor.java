@@ -368,7 +368,7 @@ public class VariableSubstitutor implements Serializable
                 {
                     varvalue = IoHelper.getenv(name.substring(4, name.length() - 1));
                     if (varvalue == null)
-                        varvalue = ""
+                        varvalue = "";
                 }
                 else
                 {
