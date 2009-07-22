@@ -347,7 +347,7 @@ public class VariableSubstitutor implements Serializable
             // Read the variable name
             StringBuffer nameBuffer = new StringBuffer();
             while (c != -1 && (braces && c != '}') || (c >= 'a' && c <= 'z')
-                    || (c >= 'A' && c <= 'Z') || (braces && (c == '[') || (c == ']'))
+                    || (c >= 'A' && c <= 'Z') || (braces && ((c == '[') || (c == ']')))
                     || (((c >= '0' && c <= '9') || c == '_' || c == '.' || c == '-') && nameBuffer.length() > 0))
             {
                 nameBuffer.append((char) c);
