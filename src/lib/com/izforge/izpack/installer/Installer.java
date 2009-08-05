@@ -110,8 +110,9 @@ public class Installer {
 		            break;
 		            
 		        case INSTALLER_CONSOLE:
-		            ConsoleInstaller consoleInstaller = new ConsoleInstaller();
-		            consoleInstaller.run(type, path, langcode);
+		            ConsoleInstaller consoleInstaller = new ConsoleInstaller(langcode);
+		            consoleInstaller.run(consoleAction, path);
+		            break;
 		    }
 		    
 		} catch (Exception e) {

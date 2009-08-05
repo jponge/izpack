@@ -50,14 +50,17 @@ public class ConsoleInstaller extends InstallerBase
 
     private PrintWriter printWriter;
 
-    public ConsoleInstaller() throws Exception
+    public ConsoleInstaller(String langcode) throws Exception
     {
         super();
         loadInstallData(this.installdata);
         
+        this.installdata.localeISO3 = langcode;
         // Fallback: choose the first listed language pack if not specified via commandline
         if (this.installdata.localeISO3 == null)
+        {
             this.installdata.localeISO3 = getAvailableLangPacks().get(0);
+        }
         
         InputStream in = getClass().getResourceAsStream(
                 "/langpacks/" + this.installdata.localeISO3 + ".xml");
@@ -301,9 +304,8 @@ public class ConsoleInstaller extends InstallerBase
         return bValidity;
     }
 
-    public void run(int type, String path, String langcode) throws Exception
+    public void run(int type, String path) throws Exception
     {
-        this.installdata.localeISO3 = langcode;
         switch (type)
         {
             case Installer.CONSOLE_GEN_TEMPLATE:
