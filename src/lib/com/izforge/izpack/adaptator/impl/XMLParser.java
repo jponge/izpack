@@ -39,6 +39,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 /**
  * @author Anthonin Bonnefoy
@@ -140,7 +141,7 @@ public class XMLParser implements IXMLParser
     public IXMLElement parse(String inputString)
     {
         this.parsedItem = null;
-        return parse(new ByteArrayInputStream(inputString.getBytes()));
+        return parse(new ByteArrayInputStream(inputString.getBytes(Charset.forName("UTF-8"))));
     }
 
     public IXMLElement parse(URL inputURL)
