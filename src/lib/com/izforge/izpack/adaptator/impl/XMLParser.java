@@ -35,10 +35,10 @@ import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 /**
@@ -47,6 +47,41 @@ import java.nio.charset.Charset;
  */
 public class XMLParser implements IXMLParser
 {
+
+    
+    public class ByteBufferInputStream extends InputStream
+    {
+        private final ByteBuffer buf;
+
+        public ByteBufferInputStream(ByteBuffer buf)
+        {
+            this.buf = buf;
+        }
+        
+        @Override
+        public synchronized int read() throws IOException {
+            if (!buf.hasRemaining()) {
+                return -1;
+            }
+            int c = buf.get() & 0xff;
+            return c;
+        }
+
+        @Override
+        public synchronized int read(byte[] bytes, int off, int len) throws IOException {
+            if (!buf.hasRemaining()) {
+                return -1;
+            }
+            len = Math.min(len, buf.remaining());
+            buf.get(bytes, off, len);
+            return len;
+        }
+        
+        @Override
+        public int available() throws IOException {
+            return buf.remaining();
+        }
+    }
 
     private LineNumberFilter filter;
     private String parsedItem = null;
@@ -141,7 +176,10 @@ public class XMLParser implements IXMLParser
     public IXMLElement parse(String inputString)
     {
         this.parsedItem = null;
-        return parse(new ByteArrayInputStream(inputString.getBytes(Charset.forName("UTF-8"))));
+        
+        final ByteBuffer buf = Charset.forName("UTF-8").encode(inputString);
+
+        return parse(new ByteBufferInputStream(buf));
     }
 
     public IXMLElement parse(URL inputURL)
