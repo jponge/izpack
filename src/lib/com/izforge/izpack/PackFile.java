@@ -170,6 +170,11 @@ public class PackFile implements Serializable
         this.mtime = src.lastModified();
         this.isDirectory = src.isDirectory();
         this.additionals = additionals;
+        
+        // File.length is undefined for directories - we don't add any data, so don't skip
+        // any please!
+        if (isDirectory)
+            length = 0;
     }
 
     /**
