@@ -113,6 +113,7 @@ To launch an installer in console mode rather than in GUI mode (the default), yo
 * ``-console``: to run the installation in interactive console mode
 * ``-options-template``: to generate a properties file whose name is specified in args[1]
 * ``-options``: to run an installation while reading the properties from the properties file specified in args[1].
+* ``-language``: specifies the iso3 code of the language pack to use in the next argument. Note: the first specified language pack will be used if this argument was not passed.
 
 As an example, to launch an interactive console installation, just type in a console:
 
