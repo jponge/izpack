@@ -21,7 +21,10 @@
 
 package com.izforge.izpack.installer;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
@@ -33,7 +36,10 @@ import com.izforge.izpack.util.StringTool;
  */
 public class Installer {
 
-	/*
+	public static final int INSTALLER_GUI = 0, INSTALLER_AUTO = 1, INSTALLER_CONSOLE = 2;
+	public static final int CONSOLE_INSTALL = 0, CONSOLE_GEN_TEMPLATE = 1, CONSOLE_FROM_TEMPLATE = 2;
+
+    /*
 	 * The main method (program entry point).
 	 * 
 	 * @param args The arguments passed on the command-line.
@@ -51,33 +57,63 @@ public class Installer {
 		}
 
 		try {
-			if (args.length == 0) {
-				// can't load the GUIInstaller class on headless machines,
-				// so we use Class.forName to force lazy loading.
-				Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
-			} else if (args.length == 1) {
-				if ("-console".equals(args[0].trim())) {
-					Debug.log("starting in console mode");
-					ConsoleInstaller consoleInstaller = new ConsoleInstaller();
-					consoleInstaller.doInstall();
-				} else {
-					AutomatedInstaller ai = new AutomatedInstaller(args[0]);
-					ai.doInstall();
-				}
-			} else if (args.length == 2) {
-				if ("-options-template".equals(args[0].trim())) {
-					Debug.log("Generating properties file");
-					ConsoleInstaller consoleInstaller = new ConsoleInstaller();
-					consoleInstaller.doGeneratePropertiesFile(args[1]);					
-				}
-				if ("-options".equals(args[0].trim())) {
-					Debug.log("Installing from  properties file");
-					ConsoleInstaller consoleInstaller = new ConsoleInstaller();
-					consoleInstaller.doInstallFromPropertiesFile(args[1]);
-				} else {
-					System.out.println("not a valid option!!!!");
-				}
-			}
+		    Iterator<String> args_it = Arrays.asList(args).iterator();
+		    
+		    int type = INSTALLER_GUI;
+		    int consoleAction = CONSOLE_INSTALL;
+		    String path = null, langcode = null;
+		    
+		    while (args_it.hasNext())
+		    {
+		        String arg = args_it.next().trim();
+		        try {
+    		        if ("-console".equalsIgnoreCase(arg))
+    		        {
+    		            type = INSTALLER_CONSOLE;
+    		        }
+    		        else if ("-options-template".equalsIgnoreCase(arg))
+    		        {
+    		            consoleAction = CONSOLE_GEN_TEMPLATE;
+    		            path = args_it.next().trim();
+    		        }
+    		        else if ("-options".equalsIgnoreCase(arg))
+                    {
+                        consoleAction = CONSOLE_FROM_TEMPLATE;
+                        path = args_it.next().trim();
+                    }
+    		        else if ("-language".equalsIgnoreCase(arg))
+    		        {
+    		            langcode = args_it.next().trim();
+    		        }
+    		        else
+    		        {
+    		            type = INSTALLER_AUTO;
+    		            path = arg; 
+    		        }
+		        }
+		        catch (NoSuchElementException e) {
+		            System.err.println("- ERROR -");
+		            System.err.println("Option \"" + arg + "\" requires an argument!");
+		            System.exit(1);
+		        }
+		    }
+		    
+		    switch (type)
+		    {
+		        case INSTALLER_GUI:
+		            Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
+		            break;
+		        
+		        case INSTALLER_AUTO:
+		            AutomatedInstaller ai = new AutomatedInstaller(path);
+		            ai.doInstall();
+		            break;
+		            
+		        case INSTALLER_CONSOLE:
+		            ConsoleInstaller consoleInstaller = new ConsoleInstaller();
+		            consoleInstaller.run(type, path, langcode);
+		    }
+		    
 		} catch (Exception e) {
 			System.err.println("- ERROR -");
 			System.err.println(e.toString());

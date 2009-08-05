@@ -388,23 +388,6 @@ public class GUIInstaller extends InstallerBase
     }
 
     /**
-     * Returns an ArrayList of the available langpacks ISO3 codes.
-     *
-     * @return The available langpacks list.
-     * @throws Exception Description of the Exception
-     */
-    private List getAvailableLangPacks() throws Exception
-    {
-        // We read from the langpacks file in the jar
-        InputStream in = getClass().getResourceAsStream("/langpacks.info");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        List available = (List) objIn.readObject();
-        objIn.close();
-
-        return available;
-    }
-
-    /**
      * Loads the suitable L&F.
      *
      * @throws Exception Description of the Exception

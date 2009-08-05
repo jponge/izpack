@@ -63,6 +63,23 @@ public class InstallerBase
      * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
+    
+    /**
+     * Returns an ArrayList of the available langpacks ISO3 codes.
+     *
+     * @return The available langpacks list.
+     * @throws Exception Description of the Exception
+     */
+    public List<String> getAvailableLangPacks() throws Exception
+    {
+        // We read from the langpacks file in the jar
+        InputStream in = getClass().getResourceAsStream("/langpacks.info");
+        ObjectInputStream objIn = new ObjectInputStream(in);
+        List<String> available = (List<String>) objIn.readObject();
+        objIn.close();
+
+        return available;
+    }
 
     public RulesEngine getRules(){
         return this.rules;

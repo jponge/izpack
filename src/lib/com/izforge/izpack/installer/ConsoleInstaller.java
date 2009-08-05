@@ -20,7 +20,6 @@
  */
 package com.izforge.izpack.installer;
 
-import java.io.FileReader;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.FileInputStream;
@@ -55,7 +54,11 @@ public class ConsoleInstaller extends InstallerBase
     {
         super();
         loadInstallData(this.installdata);
-        this.installdata.localeISO3 = "eng";
+        
+        // Fallback: choose the first listed language pack if not specified via commandline
+        if (this.installdata.localeISO3 == null)
+            this.installdata.localeISO3 = getAvailableLangPacks().get(0);
+        
         InputStream in = getClass().getResourceAsStream(
                 "/langpacks/" + this.installdata.localeISO3 + ".xml");
         this.installdata.langpack = new LocaleDatabase(in);
@@ -296,5 +299,23 @@ public class ConsoleInstaller extends InstallerBase
             }
         }
         return bValidity;
+    }
+
+    public void run(int type, String path, String langcode) throws Exception
+    {
+        this.installdata.localeISO3 = langcode;
+        switch (type)
+        {
+            case Installer.CONSOLE_GEN_TEMPLATE:
+                doGeneratePropertiesFile(path);
+                break;
+
+            case Installer.CONSOLE_FROM_TEMPLATE:
+                doInstallFromPropertiesFile(path);
+                break;
+                
+            default:
+                doInstall();
+        }
     }
 }

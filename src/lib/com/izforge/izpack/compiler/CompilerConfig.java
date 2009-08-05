@@ -802,18 +802,19 @@ public class CompilerConfig extends Thread {
                 String condition = f.getAttribute("condition");
 
                 File file = new File(src);
-                if (!file.isAbsolute())
-                {
-                    file = new File(basedir, src);
-                }
-                
+
                 // if the path does not exist, maybe it contains variables 
                 if (!file.exists()) 
                 {
-                    file = new File(varsubst.substitute(file.getAbsolutePath(), null));
-                    // next existance checking appears in pack.addFile
+                    file = new File(varsubst.substitute(src, null));
+                    // next existence check appears in pack.addFile
                 }
 
+                if (!file.isAbsolute())
+                {
+                    file = new File(basedir, file.getPath());
+                }
+                
                 try
                 {
                     if (unpack)
