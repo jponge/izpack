@@ -252,7 +252,12 @@ public class Unpacker extends UnpackerBase
                             {
                                 if (!pf.isBackReference() && !((Pack) packs.get(i)).loose)
                                 {
+                                    if ( pf.isPack200Jar() ) {
+                                        objIn.skip( Integer.SIZE / 8 );
+                                    }
+                                    else {
                                     objIn.skip(pf.length());
+                                }
                                 }
                                 continue;
                             }
