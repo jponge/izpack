@@ -315,41 +315,40 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
             try
             {
                 InputStream in = null;
-                if (OsVersion.IS_WINDOWS)
+                String os = System.getProperty("os.name");
+                // first try to look up by specific os name
+                os = os.replace(' ', '_'); // avoid spaces in file names
+                os = os.toLowerCase(); // for consistency among targetPanel res files
+                try
                 {
-                    try
-                    {
-                        in = _parent.getResource(_targetPanel + ".dir.windows");
-                    }
-                    catch (ResourceNotFoundException rnfe)
-                    {
-                    }//it's usual, that the resource does not exist
+                    in = _parent.getResource(_targetPanel + ".dir.".concat(os));
                 }
-                else if (OsVersion.IS_OSX)
+                catch (ResourceNotFoundException rnfe)
                 {
-                    try
-                    {
-                        in = _parent.getResource(_targetPanel + ".dir.mac");
-                    }
-                    catch (ResourceNotFoundException rnfe)
-                    {
-                    }//it's usual, that the resource does not exist
                 }
-                else
+                if (in == null)
                 {
-                    String os = System.getProperty("os.name");
-                    // first try to look up by specific os name
-                    os = os.replace(' ', '_'); // avoid spaces in file names
-                    os = os.toLowerCase(); // for consistency among targetPanel res files
-                    try
+                    if (OsVersion.IS_WINDOWS)
                     {
-                        in = _parent.getResource(_targetPanel + ".dir.".concat(os));
+                        try
+                        {
+                            in = _parent.getResource(_targetPanel + ".dir.windows");
+                        }
+                        catch (ResourceNotFoundException rnfe)
+                        {
+                        }//it's usual, that the resource does not exist
                     }
-                    catch (ResourceNotFoundException rnfe)
+                    else if (OsVersion.IS_OSX)
                     {
+                        try
+                        {
+                            in = _parent.getResource(_targetPanel + ".dir.mac");
+                        }
+                        catch (ResourceNotFoundException rnfe)
+                        {
+                        }//it's usual, that the resource does not exist
                     }
-                    // if not specific os, try getting generic 'unix' resource file
-                    if (in == null)
+                    else
                     {
                         try
                         {
@@ -357,7 +356,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener
                         }
                         catch (ResourceNotFoundException eee)
                         {
-                        }
+                        }//it's usual, that the resource does not exist
                     }
                 }
                 // if all above tests failed, there is no resource file,
