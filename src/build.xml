@@ -961,6 +961,10 @@
             <include name="com/izforge/izpack/event/BSFInstallerListener.java" />
             <include name="com/izforge/izpack/event/BSFAction.java" />
         </build-installer-listener>
+        
+        <build-installer-listener name="ProgressBarInstallerListener">
+            <include name="com/izforge/izpack/event/ProgressBarInstallerListener.java"/>
+        </build-installer-listener>
 
         <build-uninstaller-listener name="BSFUninstallerListener" classpath-ext="$${basedir}/lib/bsf.jar">
             <include name="com/izforge/izpack/event/BSFUninstallerListener.java" />
