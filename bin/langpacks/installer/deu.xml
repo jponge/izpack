@@ -33,6 +33,10 @@
     <str id="installer.prev" txt="Zurück"/>
     <str id="installer.quit" txt="Beenden"/>
     <str id="installer.madewith" txt="(Erstellt mit IzPack - http://izpack.org/)"/>
+    <str id="installer.reboot.ask.title" txt="Reboot erforderlich"/>
+    <str id="installer.reboot.ask.message" txt="Ein Reboot ist erforderlich, um die Installation abzuschließen. Jetzt Rechner neu starten?"/>
+    <str id="installer.reboot.notice.title" txt="Reboot empfohlen"/>
+    <str id="installer.reboot.notice.message" txt="Ein Reboot wird empfohlen, um die Installation abzuschließen."/>
     <str id="installer.quit.title" txt="Wollen Sie wirklich beenden?"/>
     <str id="installer.quit.message" txt="Die Installation wird jetzt abgebrochen!"/>
     <str id="installer.warning" txt="Warnung!"/>

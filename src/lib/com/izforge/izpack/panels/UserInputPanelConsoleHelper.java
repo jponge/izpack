@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Jan Blok
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,7 +45,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * The user input panel console helper class.
- * 
+ *
  * @author Mounir El Hajj
  */
 public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
@@ -74,7 +74,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String TEXT = "txt";
 
     private static final String SPEC = "spec";
-    
+
     private static final String PWD = "pwd";
 
     private static final String TYPE_ATTRIBUTE = "type";
@@ -86,9 +86,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String STATIC_TEXT = "staticText";
 
     private static final String CHOICE = "choice";
-    
+
     private static final String FILE = "file";
-    
+
     private static final String PASSWORD = "password";
 
     private static final String VALUE = "value";
@@ -100,9 +100,9 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     private static final String CHECK_FIELD = "check";
 
     private static final String RULE_FIELD = "rule";
-    
+
     private static final String SPACE = "space";
-    
+
     private static final String DIVIDER = "divider";
 
     static final String DISPLAY_FORMAT = "displayFormat";
@@ -117,8 +117,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     private static final String DESCRIPTION = "description";
 
-    private static final String TRUE = "true";   
-        
+    private static final String TRUE = "true";
+
     private static final String NAME = "name";
 
     private static final String FAMILY = "family";
@@ -127,22 +127,22 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     private static final String SELECTEDPACKS = "createForPack";
 
-   
+
     private static Input SPACE_INTPUT_FIELD = new Input(SPACE, null, null, SPACE, "\r", 0);
     private static Input DIVIDER_INPUT_FIELD = new Input(DIVIDER, null, null, DIVIDER, "------------------------------------------", 0);
-    
+
     public List<Input> listInputs;
-          
+
     public UserInputPanelConsoleHelper()
     {
         instanceNumber = instanceCount++;
         listInputs = new ArrayList<Input>();
-        
+
     }
 
-    public boolean runConsoleFromPropertiesFile(AutomatedInstallData installData, Properties p)
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
     {
-    	
+
         collectInputs(installData);
         Iterator<Input> inputIterator = listInputs.iterator();
         while (inputIterator.hasNext())
@@ -182,10 +182,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         while (inputsIterator.hasNext())
         {
             Input input = inputsIterator.next();
- 
-            if (TEXT_FIELD.equals(input.strFieldType) 
-        		|| FILE.equals(input.strFieldType) 
-        		|| RULE_FIELD.equals(input.strFieldType))
+
+            if (TEXT_FIELD.equals(input.strFieldType)
+                || FILE.equals(input.strFieldType)
+                || RULE_FIELD.equals(input.strFieldType))
             {
                 status = status && processTextField(input, idata);
             }
@@ -197,14 +197,14 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             else if (CHECK_FIELD.equals(input.strFieldType))
             {
                 status = status && processCheckField(input, idata);
-            } 
-           else if(STATIC_TEXT.equals(input.strFieldType) 
-        		   || TITLE_FIELD.equals(input.strFieldType)
-        		   || DIVIDER.equals(input.strFieldType)
-        		   || SPACE.equals(input.strFieldType) )
+            }
+           else if(STATIC_TEXT.equals(input.strFieldType)
+                || TITLE_FIELD.equals(input.strFieldType)
+                || DIVIDER.equals(input.strFieldType)
+                || SPACE.equals(input.strFieldType) )
            {
-        	   status = status && processSimpleField(input, idata);
-           } 
+            status = status && processSimpleField(input, idata);
+           }
            else if (PASSWORD.equals(input.strFieldType) ) {
                status = status && processPasswordField(input, idata);
            }
@@ -229,7 +229,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
     public boolean collectInputs(AutomatedInstallData idata)
     {
-    	
+
         listInputs.clear();
         IXMLElement data;
         IXMLElement spec = null;
@@ -270,7 +270,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 }
             }
         }
-        
+
         if (spec == null) {
             return false;
         }
@@ -283,7 +283,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             Vector<IXMLElement> forOs = field.getChildrenNamed(OS);
 
             if (itemRequiredFor(forPacks, idata) && itemRequiredForOs(forOs)) {
-        
+
                 String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
                 if (conditionid != null)
                 {
@@ -295,32 +295,32 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 }
                 Input in = getInputFromField(field, idata);
                 if (in != null) {
-                	listInputs.add(in);
+                    listInputs.add(in);
                 }
             }
          }
         return true;
     }
-    
+
     boolean processSimpleField(Input input, AutomatedInstallData idata)
     {
         VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
         System.out.println(vs.substitute(input.strText, null));
         return true;
     }
-    
+
     boolean processPasswordField(Input input, AutomatedInstallData idata) {
 
         Password pwd = (Password) input;
-        
+
         boolean rtn = false;
         for (int i=0; i < pwd.input.length; i++) {
             rtn = processTextField(pwd.input[i], idata);
             if (!rtn) return rtn;
         }
-    
+
         return rtn;
-        
+
     }
 
     boolean processTextField(Input input, AutomatedInstallData idata)
@@ -335,7 +335,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             Debug.trace("Error: no spec element defined in file field");
             return false;
         }
-       
+
         set = idata.getVariable(variable);
         if (set == null)
         {
@@ -343,7 +343,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             if (set == null)
             {
                 set = "";
-            } 
+            }
         }
 
         if (set != null && !"".equals(set))
@@ -381,12 +381,12 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         if ((variable == null) || (variable.length() == 0)) { return false; }
         String currentvariablevalue = idata.getVariable(variable);
         boolean userinput = false;
-        
+
         // display the description for this combo or radio field
         if (input.strText != null) {
             System.out.println(input.strText);
         }
-        
+
         List<Choice> lisChoices = input.listChoices;
         if (lisChoices.size() == 0)
         {
@@ -561,14 +561,14 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             strText = field.getAttribute(TEXT);
             return new Input(strVariableName, null, null, TITLE_FIELD, strText, 0);
         }
-        
+
         if (STATIC_TEXT.equals(strFieldType))
         {
             String strText = null;
             strText = field.getAttribute(TEXT);
             return new Input(strVariableName, null, null, STATIC_TEXT, strText, 0);
         }
-        
+
         if (TEXT_FIELD.equals(strFieldType) || FILE.equals(strFieldType) )
         {
             List<Choice> choicesList = new ArrayList<Choice>();
@@ -590,7 +590,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             return new Input(strVariableName, strSet, choicesList, strFieldType, strFieldText, 0);
 
         }
-         
+
         if (RULE_FIELD.equals(strFieldType))
         {
 
@@ -713,23 +713,23 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     {
                         String token = tokenizer.nextToken();
                         String choiceSet = null;
-                        if (token.equals(set) 
+                        if (token.equals(set)
                                 ) {
                             choiceSet="true";
                             selection=counter;
                         }
                         choicesList.add(new Choice(
-                                    token, 
+                                    token,
                                     token,
                                     choiceSet));
                         counter++;
-                        
+
                     }
                 }
                 else
                 {
                     String value = choice.getAttribute(VALUE);
-                    
+
                     String set = choice.getAttribute(SET);
                      if (set != null)
                     {
@@ -742,13 +742,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         if (set.equalsIgnoreCase(TRUE))
                         {
                             selection=i;
-                            
+
                         }
                     }
 
-                    
+
                     choicesList.add(new Choice(
-                                choice.getAttribute(TEXT), 
+                                choice.getAttribute(TEXT),
                                 value,
                                 set));
 
@@ -758,10 +758,10 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             if (choicesList.size() == 1) {
                 selection = 0;
             }
-          
+
             return new Input(strVariableName, null, choicesList, strFieldType, strFieldText, selection);
         }
-        
+
         if (CHECK_FIELD.equals(strFieldType))
         {
             List<Choice> choicesList = new ArrayList<Choice>();
@@ -804,55 +804,55 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
             return SPACE_INTPUT_FIELD;
 
         }
-        
-        if (DIVIDER.equals(strFieldType)) 
+
+        if (DIVIDER.equals(strFieldType))
         {
             return DIVIDER_INPUT_FIELD;
         }
-        
-        
+
+
         if (PASSWORD.equals(strFieldType))
         {
             List<Choice> choicesList = new ArrayList<Choice>();
             String strFieldText = null;
             String strSet = null;
             String strText = null;
-            
+
             IXMLElement spec = field.getFirstChildNamed(SPEC);
             if (spec != null)
             {
-                
+
                 Vector<IXMLElement> pwds = spec.getChildrenNamed(PWD);
                 if (pwds == null || pwds.size() == 0) {
                     System.out.println("No pwd specified in the spec for type password");
-                    return null;                   
+                    return null;
                 }
 
                 Input[] inputs = new Input[pwds.size()];
                 for (int i = 0; i < pwds.size(); i++)
                 {
-                  
+
                     IXMLElement pwde = pwds.elementAt(i);
                     strText = pwde.getAttribute(TEXT);
                     strSet = pwde.getAttribute(SET);
                     choicesList.add(new Choice(strText, null, strSet));
                     inputs[i] = new Input(strVariableName, strSet, choicesList, strFieldType, strFieldText, 0);
-                
+
                 }
-                 return new Password(strFieldType, inputs);                
-                
-             } 
-            
+                 return new Password(strFieldType, inputs);
+
+             }
+
             System.out.println("No spec specified for input of type password");
             return null;
         }
 
-        
+
         System.out.println(strFieldType + " field collection not implemented");
 
         return null;
     }
-    
+
     /*--------------------------------------------------------------------------*/
     /**
      * Verifies if an item is required for any of the packs listed. An item is required for a pack
@@ -910,7 +910,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         return (false);
     }
-    
+
     /**
      * Verifies if an item is required for the operating system the installer executed. The
      * configuration for this feature is: <br/>
@@ -949,12 +949,12 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         return false;
     }
 
-    
+
 
     public static class Input
     {
-        
-        public Input(String strFieldType) 
+
+        public Input(String strFieldType)
         {
                 this.strFieldType = strFieldType;
         }
@@ -999,18 +999,18 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
 
         String strSet;
     }
-    
+
     public static class Password extends Input
     {
-               
+
         public Password(String strFieldType, Input[] input) {
             super(strFieldType);
             this.input = input;
         }
-       
+
         Input[] input;
 
-        
+
     }
 
 }

@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -62,12 +62,12 @@ public class AutomatedInstallData implements Serializable
 
     public static final int UNINSTALLER_LIBS_INDEX = 2;
 
-    public static final int UNINSTALLER_JARS_INDEX = 3;    
+    public static final int UNINSTALLER_JARS_INDEX = 3;
 
     // --- Instance members -----------------------------------------------
 
     private RulesEngine rules;
-    
+
     /**
      * The language code.
      */
@@ -132,6 +132,11 @@ public class AutomatedInstallData implements Serializable
      * Did the installation succeed ?
      */
     public boolean installSuccess = true;
+
+    /**
+     * Is a reboot necessary to complete the installation ?
+     */
+    public boolean rebootNecessary = false;
 
     /**
      * The xmlData for automated installers.
@@ -287,13 +292,13 @@ public class AutomatedInstallData implements Serializable
 
     }
 
-    
+
     public RulesEngine getRules()
     {
         return rules;
     }
 
-    
+
     public void setRules(RulesEngine rules)
     {
         this.rules = rules;

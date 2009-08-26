@@ -1,16 +1,16 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,6 +32,25 @@ public class Info implements Serializable
 {
 
     static final long serialVersionUID = 13288410782044775L;
+
+    /**
+     * Force ignoring pending file operations
+     */
+    public static final int REBOOT_ACTION_IGNORE = 0;
+    /**
+     * Notice the user interactively but don't actually reboot,
+     * on pending file operations only
+     */
+    public static final int REBOOT_ACTION_NOTICE = 1;
+    /**
+     * Ask before reboot automatically,
+     * on pending file operations only
+     */
+    public static final int REBOOT_ACTION_ASK = 2;
+    /**
+     * Force rebooting regardless whether there are pending operations
+     */
+    public static final int REBOOT_ACTION_ALWAYS = 3;
 
     /**
      * The application name and version
@@ -110,6 +129,10 @@ public class Info implements Serializable
 
     private String privilegedExecutionConditionID = null;
 
+    private int rebootAction = REBOOT_ACTION_IGNORE;
+
+    private String rebootActionConditionID = null;
+
     public boolean isPrivilegedExecutionRequired()
     {
         return requirePrivilegedExecution;
@@ -138,6 +161,26 @@ public class Info implements Serializable
     public void setPrivilegedExecutionConditionID(String privilegedExecutionConditionID)
     {
         this.privilegedExecutionConditionID = privilegedExecutionConditionID;
+    }
+
+    public int getRebootAction()
+    {
+        return rebootAction;
+    }
+
+    public void setRebootAction(int rebootAction)
+    {
+        this.rebootAction = rebootAction;
+    }
+
+    public String getRebootActionConditionID()
+    {
+        return rebootActionConditionID;
+    }
+
+    public void setRebootActionConditionID(String rebootActionConditionID)
+    {
+        this.rebootActionConditionID = rebootActionConditionID;
     }
 
     /**
@@ -310,7 +353,7 @@ public class Info implements Serializable
 
     /**
      * Sets the path to the uninstaller
-     * 
+     *
      * @param path the path to the uninstaller
      */
     public void setUninstallerPath(String path) {
@@ -319,13 +362,13 @@ public class Info implements Serializable
 
     /**
      * Returns the path to the uninstaller
-     * 
+     *
      * @return the path to the uninstaller
      */
     public String getUninstallerPath() {
       return this.uninstallerPath;
     }
-    
+
     public boolean isJdkRequired()
     {
         return jdkRequired;

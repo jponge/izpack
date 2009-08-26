@@ -23,11 +23,9 @@ package com.izforge.izpack.installer;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.FileInputStream;
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.*;
 
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.Panel;
+import com.izforge.izpack.*;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
@@ -36,7 +34,7 @@ import com.izforge.izpack.util.VariableSubstitutor;
 
 /**
  * Runs the console installer
- * 
+ *
  * @author Mounir el hajj
  */
 public class ConsoleInstaller extends InstallerBase
@@ -54,14 +52,14 @@ public class ConsoleInstaller extends InstallerBase
     {
         super();
         loadInstallData(this.installdata);
-        
+
         this.installdata.localeISO3 = langcode;
         // Fallback: choose the first listed language pack if not specified via commandline
         if (this.installdata.localeISO3 == null)
         {
             this.installdata.localeISO3 = getAvailableLangPacks().get(0);
         }
-        
+
         InputStream in = getClass().getResourceAsStream(
                 "/langpacks/" + this.installdata.localeISO3 + ".xml");
         this.installdata.langpack = new LocaleDatabase(in);
@@ -171,7 +169,7 @@ public class ConsoleInstaller extends InstallerBase
                         else if (strAction.equals("doInstallFromPropertiesFile")
                                 && bIsConditionFulfilled)
                         {
-                            bActionResult = consoleHelperInstance.runConsoleFromPropertiesFile(
+                            bActionResult = consoleHelperInstance.runConsoleFromProperties(
                                     this.installdata, this.properties);
                         }
                         if (!bActionResult)
@@ -225,14 +223,13 @@ public class ConsoleInstaller extends InstallerBase
         {
             throw e;
         }
-
         finally
         {
-            Housekeeper.getInstance().shutDown(this.result ? 0 : 1);
+            checkedReboot();
         }
     }
 
-    protected void doGeneratePropertiesFile(String strFile) throws Exception
+   protected void doGeneratePropertiesFile(String strFile) throws Exception
     {
         try
         {
@@ -269,13 +266,51 @@ public class ConsoleInstaller extends InstallerBase
         finally
         {
             in.close();
-            Housekeeper.getInstance().shutDown(this.result ? 0 : 1);
+            checkedReboot();
+        }
+    }
+
+    protected void doInstallFromSystemProperties() throws Exception
+    {
+        try
+        {
+            properties = System.getProperties();
+            iterateAndPerformAction("doInstallFromPropertiesFile");
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            checkedReboot();
+        }
+    }
+
+    protected void doInstallFromSystemPropertiesMerge(String strFile) throws Exception
+    {
+        FileInputStream in = new FileInputStream(strFile);
+        try
+        {
+            properties = new Properties();
+            properties.load(in);
+            mergeAndOverwriteFromSysProperties();
+            iterateAndPerformAction("doInstallFromPropertiesFile");
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+        finally
+        {
+            in.close();
+            checkedReboot();
         }
     }
 
     /**
      * Validate a panel.
-     * 
+     *
      * @param p The panel to validate
      * @throws InstallerException thrown if the validation fails.
      */
@@ -304,6 +339,41 @@ public class ConsoleInstaller extends InstallerBase
         return bValidity;
     }
 
+    private void mergeAndOverwriteFromSysProperties()
+    {
+        Properties p = System.getProperties();
+        Enumeration<?> e = p.propertyNames();
+        while (e.hasMoreElements())
+        {
+            String key = (String)e.nextElement();
+            String newval = p.getProperty(key);
+            String oldval = (String) properties.setProperty(key, newval);
+            if (oldval != null)
+            {
+                System.out.println(
+                        "Warning: Property "+key+" overwritten: '"
+                        +oldval+"' --> '"+newval+"'");
+            }
+        }
+    }
+
+    private void checkedReboot()
+    {
+        // FIXME !!! Reboot handling
+        boolean reboot = false;
+        if (installdata.rebootNecessary)
+        {
+            System.out.println("[ There are file operations pending after reboot ]");
+            switch( installdata.info.getRebootAction()) {
+                case Info.REBOOT_ACTION_ALWAYS:
+                    reboot = true;
+            }
+            if (reboot)
+                System.out.println("[ Rebooting now automatically ]");
+        }
+        Housekeeper.getInstance().shutDown(this.result ? 0 : 1, reboot);
+    }
+
     public void run(int type, String path) throws Exception
     {
         switch (type)
@@ -315,7 +385,15 @@ public class ConsoleInstaller extends InstallerBase
             case Installer.CONSOLE_FROM_TEMPLATE:
                 doInstallFromPropertiesFile(path);
                 break;
-                
+
+            case Installer.CONSOLE_FROM_SYSTEMPROPERTIES:
+                doInstallFromSystemProperties();
+                break;
+
+            case Installer.CONSOLE_FROM_SYSTEMPROPERTIESMERGE:
+                doInstallFromSystemPropertiesMerge(path);
+                break;
+
             default:
                 doInstall();
         }

@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -41,11 +41,11 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
      * @param override
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override)
+    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, int blockable)
             throws FileNotFoundException
     {
-        super(baseDir, src, target, osList, override);
-        this.archivefileposition = 0;        
+        super(baseDir, src, target, osList, override, blockable);
+        this.archivefileposition = 0;
     }
 
     /**
@@ -56,17 +56,17 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
      * @param additionals
      * @throws FileNotFoundException
      */
-    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Map additionals)
+    public XPackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, int blockable, Map additionals)
             throws FileNotFoundException
     {
-        super(baseDir, src, target, osList, override, additionals);
+        super(baseDir, src, target, osList, override, blockable, additionals);
         this.archivefileposition = 0;
     }
 
     public XPackFile(PackFile packf) throws FileNotFoundException
     {
         super(new File(packf.sourcePath), packf.relativePath, packf.getTargetPath(), packf.osConstraints(), packf
-                .override(), packf.getAdditionals());
+                .override(), packf.blockable(), packf.getAdditionals());
         this.archivefileposition = 0;
         this.setCondition(packf.getCondition());
     }
@@ -86,9 +86,9 @@ public class XPackFile extends PackFile implements Comparable<XPackFile>
         return this;
     }
 
-    
+
     public int compareTo(XPackFile arg0)
     {
-        return this.getTargetPath().compareTo(arg0.getTargetPath());        
+        return this.getTargetPath().compareTo(arg0.getTargetPath());
     }
 }

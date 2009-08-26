@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Jan Blok
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,15 +40,15 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
 {
 
     private int noOfPacks = 0;
-    
-    
-    
+
+
+
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter)
     {
         return true;
     }
 
-    public boolean runConsoleFromPropertiesFile(AutomatedInstallData installData, Properties p)
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
     {
         return runConsole(installData);
     }
@@ -76,7 +76,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
         return unpacker.getResult();
 
     }
-    
+
 
     public void emitNotification(String message)
     {
@@ -94,7 +94,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
     {
         System.err.println("[ ERROR: " + message + " ]");
     }
-    
+
     public void emitErrorAndBlockNext(String title, String message)
     {
         System.err.println("[ ERROR: " + message + " ]");
@@ -109,7 +109,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
     public int askQuestion(String title, String question, int choices, int default_choice)
     {
         return default_choice;
-    }   
+    }
 
     public void startAction(String name, int no_of_steps)
     {

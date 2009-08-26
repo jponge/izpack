@@ -172,25 +172,25 @@ As and addition to normal variables, the value of a variable can either be defin
 attribute or by using a child element called value.
 
 Example1: To change a certain directory based on user input, use the following
-``<variable name="test" value="/test/${USER_INPUT}" condition="hasuserinput" />`` 
+``<variable name="test" value="/test/${USER_INPUT}" condition="hasuserinput" />``
 The condition has userinput has to be specified in the condition section of installation XML.
 
-Example2: To comment out something in a xml file if a certain pack with id mycoolfeature is not activated, 
+Example2: To comment out something in a xml file if a certain pack with id mycoolfeature is not activated,
 you could use "two" dynamic variables to create a xml comment or not.
 
 ::
 
-	<variable name="XML_Comment_Start" condition="!izpack.selected.mycoolfeature">
-		<value><![CDATA[<!--]]></value>
-	</variable>
-	<variable name="XML_Comment_End" condition="!izpack.selected.mycoolfeature">
-		<value><![CDATA[-->]]></value>
-	</variable>
-	<variable name="XML_Comment_Start" value="" condition="izpack.selected.mycoolfeature" />
-	<variable name="XML_Comment_End" value="" condition="izpack.selected.mycoolfeature" />
+  <variable name="XML_Comment_Start" condition="!izpack.selected.mycoolfeature">
+    <value><![CDATA[<!--]]></value>
+  </variable>
+  <variable name="XML_Comment_End" condition="!izpack.selected.mycoolfeature">
+    <value><![CDATA[-->]]></value>
+  </variable>
+  <variable name="XML_Comment_Start" value="" condition="izpack.selected.mycoolfeature" />
+  <variable name="XML_Comment_End" value="" condition="izpack.selected.mycoolfeature" />
 
-The condition izpack.selected.mycoolfeature is generated automatically when a pack with id mycoolfeature 
-was specified. You would now use ``${XML_Comment_Start}`` and ``${XML_Comment_End}`` in a file which 
+The condition izpack.selected.mycoolfeature is generated automatically when a pack with id mycoolfeature
+was specified. You would now use ``${XML_Comment_Start}`` and ``${XML_Comment_End}`` in a file which
 should be parsed.
 
 Parse Types
@@ -216,19 +216,19 @@ are available:
     script. Because shell scripts use ``$variable`` themselves, an
     alternative variable marker is used: ``%variable`` or ``%{variable}``.
 -   ``at`` - use this type if the substitution must occure on files
-    where paramters are marked with leading AT characters. 
+    where paramters are marked with leading AT characters.
     The example: ``@variable``.
 -   ``ant`` - use this type if the substitution must occure on files
-    where parameters are surrounded with AT characters (similar to ANT 
+    where parameters are surrounded with AT characters (similar to ANT
     filters, hence the type name). The example: ``@variable@``.
 
-Unless using braces to surround variable's name (``${variable}`` or ``%{variable}``}, 
+Unless using braces to surround variable's name (``${variable}`` or ``%{variable}``},
 the variable name can contain following characters:
-letters, digits, dots, dashes (-), underbars (_). 
+letters, digits, dots, dashes (-), underbars (_).
 Example:
 ``$this.is-my_variable``
 
-If you want to have two variables separated by character that is allowed 
+If you want to have two variables separated by character that is allowed
 to appear in variable name, for example: ``$major-version.$minor-version``,
 then you must use braces, and the above example should look like:
 ``${major-version}.${minor-version}``.
@@ -278,8 +278,8 @@ It contains the following elements :
     uninstaller will still be written. The ``name`` attribute can be used to
     change the default name of the generated uninstaller, *i.e.* ``
     uninstaller.jar``. The ``condition`` attribute can be used to specify a
-    condition which has to be fullfilled for creating the uninstaller. 
-    The ``path`` attribute can be used to define the destination path where the uninstaller 
+    condition which has to be fullfilled for creating the uninstaller.
+    The ``path`` attribute can be used to define the destination path where the uninstaller
     is written to, *i.e.* ``${INSTALL_PATH}/Uninstaller``.
 -   ``<javaversion>`` : specifies the minimum version of Java required to
     install your program. Values can be ``1.2``, ``1.2.2``, ``1.4``, etc. The
@@ -293,7 +293,7 @@ It contains the following elements :
     content of the tag must be a properly formed URL.
 -   ``<summarylogfilepath>`` : specifies the path for the logfile of the
     `SummaryLoggerInstallerListener`.
--   ``<writeinstallationinformation>`` : (yes or no) specifies if the file .installinformation should 
+-   ``<writeinstallationinformation>`` : (yes or no) specifies if the file .installinformation should
     be written which includes the information about installed packs. The default if not specified is yes.
 -   ``<pack200/>``: adding this element will cause every JAR file that you will add to your packs to be compressed
     using Pack200 (see http://java.sun.com/j2se/1.5.0/docs/guide/deployment/deployment-guide/pack200.html).
@@ -309,6 +309,34 @@ It contains the following elements :
     continuing the installation. You can disable this feature for the uninstaller by specifying 
     ``uninstaller="yes"`` as an attribute. Only use this feature if you really need to be an administrator
     as part of your installation process.
+
+.. _rebootaction:
+
+-   ``<rebootaction>``: defines what to do if there were pending file operations left which require a reboot;
+    otherwise any of the options below will be ignored. Possible values are:
+
+    - ``ignore`` (default):
+      Doesn't reboot at all even if there are pending operations.
+      Pending operations can be recognized only on the installer command line output (for all options).
+    - ``notice``:
+      Doesn't reboot, but notices the user interactively at the end of an installation, which must be confirmed.
+      Notification works only for interactive installation types (no auto-installation).
+    - ``ask``:
+      Reboots only if the user confirms it interactively at the end of an installation.
+    - ``always``:
+      Reboots always without any confirmation at the end of an installation.
+
+    Notes:
+
+    #. The usage of ``<rebootaction>`` is bound to using the attribute blockable_ with the values ``auto`` or ``force`` at least in one of the elements ``<file>``, ``<singlefile>`` or ``<fileset>``, for being able to recognize blocked files before IzPack tries to overwrite them (which would result in a failing installation of the file). See the documentation of these elements later.
+    #. ``<rebootaction>`` works and makes sense only on Windows, where target files (as device drivers, EXE or DLL files) might be blocked during an installation. On other platforms than Windows the ``<rebootaction>`` element will be ignored.
+    #. ``<rebootaction>`` supports the ``condition`` attribute to limit reboot processing on particular conditions.
+    #. Without setting at least one attribute blockable = ``auto`` or blockable = ``force`` rebootaction will not have any effect.
+
+    See also the description of the blockable_ attribute.
+
+    For getting more information see the chapter *Advanced features*.
+
 
 Here is an example of a typical ``<info>`` section :
 
@@ -350,7 +378,7 @@ The Packaging Element ``<packaging>``
 ''''''''''''''''''''''''''''''''''''''
 
 This element allows to specify packaging options. If not specified, the default will be to create an all in one
-installer. This element will usually be used to create an installer which spans over multiple volumes, 
+installer. This element will usually be used to create an installer which spans over multiple volumes,
 e.g. the output will be two CDs. The packaging-element contains the following elements:
 
 -   ``<packager>`` : specifies options used by the packager. The packager tag has the ``class`` attribute,
@@ -358,29 +386,29 @@ e.g. the output will be two CDs. The packaging-element contains the following el
     are available (com.izforge.izpack.compiler.Packager, com.izforge.izpack.compiler.MultiVolumePackager).
     The packager-element can contain the ``<options>`` element which can have different attributes for the different
     implementations of packagers. For the MultiVolumePackager, it can have the following attributes:
-    
-    -	``volumesize``: the size of the volumes
-    -	``firstvolumefreespace``: free space on the first volume used for the installer jar and additional resources like
-    	readme-files etc.
-    
-    
+
+    -  ``volumesize``: the size of the volumes
+    -  ``firstvolumefreespace``: free space on the first volume used for the installer jar and additional resources like
+       readme-files etc.
+
+
 -   ``<unpacker>`` : specifies which unpacker class should be used. Currently there are two unpacker implementations
-	(com.izforge.izpack.compiler.UnPacker, com.izforge.izpack.compiler.MultiVolumeUnPacker).
-  
+    (com.izforge.izpack.compiler.UnPacker, com.izforge.izpack.compiler.MultiVolumeUnPacker).
+
 Here's an example how to specify an installer which will create multiple volumes. In this example the volumes shall be
 CDs with 650 megabytes. There will be an additional free space of 150 megabytes on the first volume. This will result in
 the creation of an installer.jar and multiple installer.pak* files. The installer.jar plus installer.pak plus the additional
-resources have to be copied on the first volume, each installer.pak.<number> on several volumes. 
-  
+resources have to be copied on the first volume, each installer.pak.<number> on several volumes.
+
 ::
 
- 	  <packaging>
-	    <packager class="com.izforge.izpack.compiler.MultiVolumePackager">
-			<!-- 650 MB volumes, 150 MB space on the first volume -->
-	        <options volumesize="681574400" firstvolumefreespace="157286400"/>
-	    </packager>
-	    <unpacker class="com.izforge.izpack.installer.MultiVolumeUnpacker" />
-	  </packaging>
+    <packaging>
+      <packager class="com.izforge.izpack.compiler.MultiVolumePackager">
+      <!-- 650 MB volumes, 150 MB space on the first volume -->
+          <options volumesize="681574400" firstvolumefreespace="157286400"/>
+      </packager>
+      <unpacker class="com.izforge.izpack.installer.MultiVolumeUnpacker" />
+    </packaging>
 
 The Variables Element ``<variables>``
 ''''''''''''''''''''''''''''''''''''''
@@ -433,9 +461,9 @@ This element allows you to define dynamic variables for the variables substituti
 system. In contrast to the static ``<variables``, dynamic variables will be evaluated
 every time, a panel switch is done.
 
-When you define a set of variables, you just have to place as many ``<variable>`` tags 
-in the file as needed. Normally you would use the condition attribute to specify, when 
-a certain value will be set. 
+When you define a set of variables, you just have to place as many ``<variable>`` tags
+in the file as needed. Normally you would use the condition attribute to specify, when
+a certain value will be set.
 
 One ``<variable>`` tag take the following attributes :
 
@@ -458,32 +486,32 @@ Here's a sample ``<dynamicvariables>`` section :
 The Conditions Element ``<conditions>``
 ''''''''''''''''''''''''''''''''''''''''
 
-This element allows you to define conditions which can be used to dynamically change the installer, 
+This element allows you to define conditions which can be used to dynamically change the installer,
 e.g. the panels shown, the variables set, files parsed, files
 executed and much more. When you define a condition it will get a type and an id. The id has to be unique. Conditions can be referenced
-based on this id (e.g. with the ``RefCondition``). 
+based on this id (e.g. with the ``RefCondition``).
 
 There are several built-in types of conditions. At the time of writing this, Izpack has the following built-in types:
 
--	``VariableCondition``: a condition based on the value of a certain variable
--	``PackSelectionCondition``: a condition based on a pack selected for installation
--	``JavaCondition``: a condition based on a static java field or method.
+-  ``VariableCondition``: a condition based on the value of a certain variable
+-  ``PackSelectionCondition``: a condition based on a pack selected for installation
+-  ``JavaCondition``: a condition based on a static java field or method.
 -   ``CompareNumericsCondition``: a condition based on the comparison of a certain variable with a given value and operator.
 
 There are also boolean types to combine more than one condition:
 
-- 	``AndCondition``: both conditions have to be true
--	``OrCondition``: only one of both conditions has to be true
-- 	``XOrCondition``: one condition has to be true, the other one has to be false
-- 	``NotCondition``: the condition has to be false
+-   ``AndCondition``: both conditions have to be true
+-  ``OrCondition``: only one of both conditions has to be true
+-   ``XOrCondition``: one condition has to be true, the other one has to be false
+-   ``NotCondition``: the condition has to be false
 
 When you define a set of conditions, you just have to write as many ``<condition>`` tags as you like. A
 condition can take the following attributes:
 
-- 	``type``: the type of the condition. For built-in types, this is the lowercase portion of the condition class
+-   ``type``: the type of the condition. For built-in types, this is the lowercase portion of the condition class
               name without condition appended (variable,packselection,java, ...). Custom condition types should be
               referenced by the full qualified class name, e.g. de.dr.rules.MyCoolCondition.
-- 	``id``: the id of the condition. This will be used to refer to this conditions in other elements
+-   ``id``: the id of the condition. This will be used to refer to this conditions in other elements
 
 The condition element can have several child elements depending on the type of this conditions. E.g. the VariableCondition
 has a name and value child element to specify, which variable should have a certain value to fullfil this condition.
@@ -492,7 +520,7 @@ This is an example which defines four conditions, two VariableConditions, a Java
 refer to two of the first conditions.
 
 ::
-    
+
    <conditions>
       <condition type="variable" id="standardinstallation">
          <name>setup.type</name>
@@ -503,27 +531,27 @@ refer to two of the first conditions.
          <value>expert</value>
       </condition>
       <condition type="java" id="installonwindows">
-		<java>
-			<class>com.izforge.izpack.util.OsVersion</class>
-			<field>IS_WINDOWS</field>
-		</java>
-		<returnvalue type="boolean">true</returnvalue>
-	  </condition>
-	  <condition type="and" id="standardinstallation.onwindows">
-	  	<condition type="ref" refid="standardinstallation"/>
-	  	<condition type="ref" refid="installonwindows" />
-	  </condition>
+    <java>
+      <class>com.izforge.izpack.util.OsVersion</class>
+      <field>IS_WINDOWS</field>
+    </java>
+    <returnvalue type="boolean">true</returnvalue>
+    </condition>
+    <condition type="and" id="standardinstallation.onwindows">
+      <condition type="ref" refid="standardinstallation"/>
+      <condition type="ref" refid="installonwindows" />
+    </condition>
    </conditions>
-   
+
 Note, from IzPack 3.11 on normally, you don't have to define the compound conditions because you can use a simple
 expression language. The language has the following operators:
 
--	``+``: an operator for the Andcondition
-- 	``|``: an operator for the OrCondition
-- 	``\``: an operator for the XOrCondition
--	``!``: an operator for the NotCondition
+-  ``+``: an operator for the Andcondition
+-   ``|``: an operator for the OrCondition
+-   ``\``: an operator for the XOrCondition
+-  ``!``: an operator for the NotCondition
 
-Neverthless if you define really complex conditions it's much easier to define them using the xml structure. 
+Neverthless if you define really complex conditions it's much easier to define them using the xml structure.
 
 More types of conditions can be defined by inheriting com.izforge.izpack.Condition class.
 
@@ -552,7 +580,7 @@ The Installer Requirements Element ``<installerrequirements>``
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 This element allows to specify requirements for running the installation. This will be done based
-on conditions defined in the conditons section. 
+on conditions defined in the conditons section.
 
 An installer requirement consists of a condition and a message which will be shown if the condition
 is not fulfilled. If so, the installer will show the message and exit after that.
@@ -562,14 +590,14 @@ is not fulfilled. If so, the installer will show the message and exit after that
 Installerrequirements have the following attributes:
 -   ``condition``: an id of a condition defined in the conditions section
 -   ``message``: a message text or a langpack key defining which message should be shown before exiting the installer in case of a missing requirement.
-   
+
 
 ::
 
     <installerrequirements>
        <installerrequirement conditon="installonwindows" message="This installer could only be run on Windows operating systems."/>
     </installerrequirements>
-       
+
 
 The GUI Preferences Element ``<guiprefs>``
 '''''''''''''''''''''''''''''''''''''''''''
@@ -758,9 +786,9 @@ Here's a sample :
 Please note that in general a resource ``id`` is unique. Thus if you define
 multiple resources with the same ``id`` the later definition (e.g. a
 resource defined in a referenced pack-file) will overwrite the previous definition.
-However there is an exception for ``packsLang.xml_xyz`` files 
-(see `Internationalization of the PacksPanel`). 
-If multiple packsLang-files were defined, all files will be merged into a single temporary 
+However there is an exception for ``packsLang.xml_xyz`` files
+(see `Internationalization of the PacksPanel`).
+If multiple packsLang-files were defined, all files will be merged into a single temporary
 file. This allows ``refpack`` files to provide their own internationalization-information.
 
 The Panels Element ``<panels>``
@@ -771,10 +799,10 @@ the installer in the order in which they are listed in your XML installation
 file. Take a look at the different panels in order to find the ones you need.
 The ``<panel>`` markup takes the following attributes:
 
--	``classname``: which is the classname of the panel.
--	``id``: an identifier for a panel which can be used e.g. for referencing in userinput panel definitions.
-- 	``condition``: an id of a condition which has to be fullfilled to show this panel
-- 	``jar``: jar file where the classes for this panel can be found. This attribute is optional. If it is empty (jar="") the classes for this panel must be murged using the <jar> tag.
+-  ``classname``: which is the classname of the panel.
+-  ``id``: an identifier for a panel which can be used e.g. for referencing in userinput panel definitions.
+-   ``condition``: an id of a condition which has to be fullfilled to show this panel
+-   ``jar``: jar file where the classes for this panel can be found. This attribute is optional. If it is empty (jar="") the classes for this panel must be murged using the <jar> tag.
 
 
 Here is a sample :
@@ -790,14 +818,14 @@ Here is a sample :
         <panel classname="FinishPanel" jar="MyFinishPanel.jar"/>
     </panels>
 
-    
+
 The following sections describe the tags available for a ``<panel>`` section.
 
 
 ``<help>`` - optional file for a help
 '''''''''''''''''''''''''''''''''''''
 
-The content of the help file is shown in a small window on the panel, when User 
+The content of the help file is shown in a small window on the panel, when User
 clicks on the help button. The button is only shown, when a help in the language
 exists.
 
@@ -818,8 +846,8 @@ Here's a sample :
 ``<validator>`` - optional validation on idata
 '''''''''''''''''''''''''''''''''''''''''''''''
 
-This validation is done, when going on for the next panel. It is also done in case 
-of an automatic installation. The class must implement the interface 
+This validation is done, when going on for the next panel. It is also done in case
+of an automatic installation. The class must implement the interface
 com.izforge.izpack.installer.DataValidator.
 
 The ``<validator>`` takes the following attributes :
@@ -833,18 +861,18 @@ Here's a sample :
     <panel classname="UserInputPanel" id="jdbc.connection.parameters">
       <validator classname="JdbcConnectionValidator" />
     </panel>
-    
+
 ``<actions>`` - optional actions for the panel
 '''''''''''''''''''''''''''''''''''''''''''''''
 
-Here you can define multiple actions that are done during the lifetime of the panel. 
+Here you can define multiple actions that are done during the lifetime of the panel.
 The class must implement the interface com.izforge.izpack.installer.PanelAction.
 The actions are also called during an automated installation.
 
 The ``<actions>`` tag has no attributes but has ``<action>`` markups with the following attributes :
 
 -   ``stage``: The stage when the action should be triggered.
-		Possible values are ``preconstruct``, ``preactivate``, ``prevalidate`` or ``postvalidate``.
+    Possible values are ``preconstruct``, ``preactivate``, ``prevalidate`` or ``postvalidate``.
 -   ``classname``: The class implementing com.izforge.izpack.installer.PanelAction
 
 
@@ -858,7 +886,7 @@ Here's a sample :
         <action stage="preactivate" classname="ConnectionPreActivateAction" />
         <action stage="prevalidate" classname="ConnectionPreVAlidateAction" />
         <action stage="postvalidate" classname="ConnectionPostValidateAction" />
-      </actions> 
+      </actions>
     </panel>
 
 
@@ -866,7 +894,7 @@ The Packs Element ``<packs>``
 '''''''''''''''''''''''''''''''
 
 This is a crucial section as it is used to specify the files that need to be
-installed. The ``<packs>`` section consists of several ``<pack>``, 
+installed. The ``<packs>`` section consists of several ``<pack>``,
 ``<refpack>`` and ``<refpackset>`` tags.
 
 The ``<pack>`` takes the following attributes :
@@ -894,14 +922,14 @@ The ``<pack>`` takes the following attributes :
     that represents the pack's image for the ImgPacksPanel. The resource
     should be defined in the ``<resources>`` element of the installation XML
     using the same value for the ``id`` attribute of the ``<res>`` element.
--	``condition``: an id of a condition which has to be fullfilled to install this 
-	package. 
--   ``hidden``: takes ``true`` or ``false`` and specifies whether the pack 
-    shall be shown in the packs panel. The bytes of such a hidden pack will be
-    used to calculate the required space, but the pack itself won't be shown. A
-    hidden pack can be selected conditionally. So you have to specify a condition to
-    enable it for installation.
-    The default for this attribute is ``false``
+-  ``condition``: an id of a condition which has to be fullfilled to install this
+   package.
+-  ``hidden``: takes ``true`` or ``false`` and specifies whether the pack
+   shall be shown in the packs panel. The bytes of such a hidden pack will be
+   used to calculate the required space, but the pack itself won't be shown. A
+   hidden pack can be selected conditionally. So you have to specify a condition to
+   enable it for installation.
+   The default for this attribute is ``false``
 
 The ``<refpack>`` takes only one attribute ``file``, which contains the
 relative path (from the installation compiler) to an externally defined
@@ -910,18 +938,18 @@ installation XML. However the only elements that are used from that XML file
 are the ``<packs>`` and the ``<resources>`` elements. This enables a model in
 which a single developer is responsible for maintaining the packs and
 resources (e.g. separate ``packsLang.xml_xyz`` files providing internationalization;
-see `Internationalization of the PacksPanel`) related to the development-package 
-assigned to him. The main install XML references these xml-files to avoid 
-synchronization efforts between the central installation XML and the 
+see `Internationalization of the PacksPanel`) related to the development-package
+assigned to him. The main install XML references these xml-files to avoid
+synchronization efforts between the central installation XML and the
 developer-maintained installer XMLs.
 
 The ``<refpackset>`` tag can be used in situations were there is no predefined
-set of ``<refpack>`` files, but a given directory should be scanned for 
-``<refpack>`` files to be included instead. This element takes the following 
+set of ``<refpack>`` files, but a given directory should be scanned for
+``<refpack>`` files to be included instead. This element takes the following
 parameters:
 
 -   ``dir``: the base directory for the refpackset (relative path)
--   ``includes``: a pattern of files in ``<refpack>`` format that must be included 
+-   ``includes``: a pattern of files in ``<refpack>`` format that must be included
 
 An example:
 
@@ -1047,9 +1075,45 @@ into the pack. It takes the following attributes:
     of the already existing file (note that this is not a reliable mechanism
     for updates - you cannot detect whether a file was altered after
     installation this way.) By default it is set to `` update``.
+
+.. _blockable:
+
+-   ``blockable`` :
+    Defines whether and how blocked target files on Windows should be recognized.
+    This might result in pending file operations which require a system reboot. The reboot behavior
+    at the end of an installation for pending file operations can be set using the nested
+    rebootaction_ in the ``info`` element. See above for possible reboot options.
+    Possible values:
+
+    - ``none`` (default):
+      No recognition of blocked target files will be done at all, this is the default behavior
+      of previous IzPack versions.
+    - ``auto``:
+      Automatic recognition of a blocked target file by the operating system, resulting in leaving a pending
+      file operation to be finished after system reboot. Using ``auto`` this applies only for files
+      that are really blocked, the other files are copied normally, which can result in mixed, old
+      and new target files at the end of the installation, unless the system won't be really rebooted.
+    - ``force``:
+      Forces target file to be always assumed a blocked, resulting in leaving a pending
+      file operation to be finished after system reboot. Using ``force`` this applies for each file,
+      regardless whether it is really blocked during installation. This makes sense if you don't want
+      to mix files old and new files at the end of the installation to not disturbing a running process,
+      but having the complete set of target files installed after system reboot.
+
+    Notes:
+
+    #. Using ``blockable`` does not necessarily force you to limit such files on
+       Windows systems. For multi-platform installations there is a compiler
+       warning thrown that ``blockable`` will be ignored on non-Windows systems.
+    #. The native library ``WinSetupAPI`` must be explicitely included using this feature.
+
+    For setting up the according reboot behaviour see the rebootaction_ element.
+
+    For getting more information see the chapter *Advanced features*.
+
 -   ``unpack``: if ``true`` and the file is an archive then its content
     will be unpacked and added as individual files
--	``condition``: an id of a condition which has to be fullfilled to install this file
+-    ``condition``: an id of a condition which has to be fullfilled to install this file
 
 
 
@@ -1079,7 +1143,8 @@ instead of `` targetdir``.
     windows, mac``) - this means that the file will only be installed on its
     target operating system
 -   ``override``: see ``<file>`` for description
--	``condition``: an id of a condition which has to be fullfilled to install this file
+-   ``blockable``: see ``<file>`` for description
+-    ``condition``: an id of a condition which has to be fullfilled to install this file
 
 A ``<additionaldata>`` tag can also be specified for customizing.
 
@@ -1099,13 +1164,14 @@ Ant set syntax. It takes the following parameters:
     excludes will be used - takes ``yes`` or ``no``.
 -   ``os``: specifies the operating system, works like for ``<file>``
 -   ``override``: see ``<file>`` for description
+-   ``blockable``: see ``<file>`` for description (applied for all files in the fileset)
 -   ``includes``: comma- or space-separated list of patterns of files
     that must be included; all files are included when omitted. This is an
     alternative for multiple include tags.
 -   ``excludes``: comma- or space-separated list of patterns of files
     that must be excluded; no files (except default excludes) are excluded
     when omitted. This is an alternative for multiple exclude tags.
--	``condition``: an id of a condition which has to be fullfilled to install the files in this fileset
+-  ``condition``: an id of a condition which has to be fullfilled to install the files in this fileset
 
 You specify the files with ``<include>`` and ``<exclude>`` tags that take the
 ``name`` parameter to specify the Ant-like pattern :
@@ -1163,7 +1229,7 @@ variables substituted.
     default is ``plain``
 -   ``encoding`` : specifies the file encoding
 -   ``os``: specifies the operating system, works like for ``<file>``
--	``condition``: an id of a condition which has to be fullfilled to parse this file
+-  ``condition``: an id of a condition which has to be fullfilled to parse this file
 
 
 ``<executable>`` - mark file executable or execute it
@@ -1192,7 +1258,7 @@ executable flag on Unix-like systems. Here are the attributes :
 -   ``keep`` : specifies whether the file will be kept after execution.
     The default is to delete the file after is has been executed. This can be
     changed by specifying ``keep="true"``.
--	``condition``: an id of a condition which has to be fullfilled to execute this file    
+-  ``condition``: an id of a condition which has to be fullfilled to execute this file
 
 A ``<args>`` tag can also be specified in order to pass arguments to the
 executable:
@@ -1222,9 +1288,9 @@ Here's an example installation file fragment:
 ::
 
     <packs>
-    
+
     (...)
-        
+
         <pack name="Core" required="yes">
 
         (...)
@@ -1264,7 +1330,7 @@ the following attributes :
 -   ``stage``: stage where to use the library (install|uninstall|both)
 -   ``src``  : source directory where to find the library to build the installer
 
-Note for developers: ``com.izforge.izpack.util.Librarian.loadLibrary()`` must be used to 
+Note for developers: ``com.izforge.izpack.util.Librarian.loadLibrary()`` must be used to
 load custom native libraries, as it performs some housekeeping.
 
 ``<os>`` - make a library OS-dependent
@@ -1309,7 +1375,7 @@ XInclude-style constructs
 
 The xi:include element is used to include xml or text documents in your configuration files.
 
-The xi:include element can be used anywhere in pretty much any of the xml files used by IzPack. It is supported by the javax DocumentBuilder. It follows the XInclude recommandation produced by the W3C (http://www.w3.org/TR/xinclude/) and should be able to be used as decribed in that document. 
+The xi:include element can be used anywhere in pretty much any of the xml files used by IzPack. It is supported by the javax DocumentBuilder. It follows the XInclude recommandation produced by the W3C (http://www.w3.org/TR/xinclude/) and should be able to be used as decribed in that document.
 
 To use the xi:include, you have to specify the namespace xmlns:xi="http://www.w3.org/2001/XInclude" in your xml.
 
@@ -1352,10 +1418,10 @@ For example the following use of xi:include
     </xi:include>
   </aaa>
 
-will result in 
+will result in
 
 ::
-  
+
   <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
   <aaa>
     <bbb/>

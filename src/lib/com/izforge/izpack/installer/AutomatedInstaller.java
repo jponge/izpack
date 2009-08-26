@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2003 Jonathan Halliday
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,10 +21,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.Panel;
+import com.izforge.izpack.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
@@ -43,7 +40,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * Runs the install process in text only (no GUI) mode.
- * 
+ *
  * @author Jonathan Halliday <jonathan.halliday@arjuna.com>
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
@@ -346,7 +343,7 @@ public class AutomatedInstaller extends InstallerBase
             // assume that installation will succeed
             this.result = true;
             VariableSubstitutor substitutor = new VariableSubstitutor(this.idata.getVariables());
-            
+
             // walk the panels in order
             for (Panel p : this.idata.panelsOrder)
             {
@@ -410,7 +407,19 @@ public class AutomatedInstaller extends InstallerBase
         finally
         {
             // Bye
-            Housekeeper.getInstance().shutDown(this.result ? 0 : 1);
+            // FIXME !!! Reboot handling
+            boolean reboot = false;
+            if (idata.rebootNecessary)
+            {
+                System.out.println("[ There are file operations pending after reboot ]");
+                switch( idata.info.getRebootAction()) {
+                    case Info.REBOOT_ACTION_ALWAYS:
+                        reboot = true;
+                }
+                if (reboot)
+                    System.out.println("[ Rebooting now automatically ]");
+            }
+            Housekeeper.getInstance().shutDown(this.result ? 0 : 1, reboot);
         }
     }
 

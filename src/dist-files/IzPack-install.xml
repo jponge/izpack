@@ -166,7 +166,7 @@
             <fileset dir="" targetdir="$INSTALL_PATH">
                 <include name="utils/**/*"/>
             </fileset>
-            <executable 
+            <executable
                 targetfile="$INSTALL_PATH/utils/wrappers/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
                 stage="never"/>
         </pack>
@@ -193,6 +193,8 @@
     <!-- The native libraries to add -->
     <native type="izpack" name="ShellLink.dll"/>
     <native type="izpack" name="ShellLink_x64.dll"/>
+    <native type="izpack" name="WinSetupAPI.dll"/>
+    <native type="izpack" name="WinSetupAPI_x64.dll"/>
     <native type="3rdparty" name="COIOSHelper.dll" stage="both">
         <os family="windows"/>
     </native>

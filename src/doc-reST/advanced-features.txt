@@ -36,7 +36,7 @@ Here is a sample of the task invocation: ::
           installerType="standard"
           basedir="${dist.dir}"
           IzPackDir="${dist.dir}/"/>
-          
+
 Embedding the installation file using a config element
 --------------------------------------------------------
 
@@ -66,7 +66,7 @@ Instead of using the 'install' attribute to specify an external installation doc
           ]]></config>
   </IzPack>
 
-Property references of the form 
+Property references of the form
 
 ::
 
@@ -90,8 +90,11 @@ Examples:
 
 '$SYSTEM_java_version' or '$SYSTEM_os_name'
 
-Automated Installers
----------------------
+Unattended installations
+------------------------
+
+Installations using saved records of user inputs
+''''''''''''''''''''''''''''''''''''''''''''''''
 
 When you conclude your installation with a FinishPanel, the user can save the data for an automatic installation. With this data, he will be able to run the same installation on another similar machine. In an environment where many computers need to be supported this can save a lot of time.
 
@@ -101,8 +104,54 @@ So run once the installation on a machine and save your automatic installation d
 
 It reproduced the same installation.
 
-Console (headless) installers
-------------------------------
+Installations using properties
+''''''''''''''''''''''''''''''
+
+IzPack installers can be executed replacing possible user inputs from
+properties, which can be overgiven either in property files or directly
+specified on the command line.
+
+* ``-options-template <propsfile>``:
+  Generates an empty properties file whose name is specified as  <propsfile>. Does not install anything.
+* ``-options <propsfile>``:
+  Runs an unattended installation while reading the properties from the properties file specified in <propsfile>
+* ``-options-system``:
+  Runs an unattended installation using system properties given on the command line.
+* ``-options-auto <propsfile>``:
+  Runs an unattended installation while reading the properties from the properties file specified in <propsfile> and overwriting them with particular system properties given on the command line.
+
+Examples:
+
+::
+
+    java -jar myinstaller.jar \
+         -options-template myinstaller.properties
+
+Generates a properties file myinstaller.properties with all user-changeable
+variables provided by my myinstaller. The property ``INSTALL_PATH`` is always
+exported. There will be only the property keys, the names are left empty and
+must be added manually.
+
+::
+
+    java -jar myinstaller.jar \
+         -options myinstaller.properties
+
+Executes an unattended installation replacing possible user inputs by the
+property values defined in the file myinstaller.properties.
+An empty template of the property file can be created for each compiled
+installer using ``-options-template``.
+
+::
+
+    java -DINSTALL_PATH=/opt/myplace \
+         -jar myinstaller.jar \
+         -options-system
+
+Executes myinstaller in unattended mode in a UNIX console and forces the main installation path to be set to /opt/myplace.
+
+Console installations
+---------------------
 
 An IzPack installer can be run in a full headless mode, i.e., without needing a graphical user interface. This is useful, e.g.,  in the case of remotely accessed servers through SSH or similar means.
 
@@ -110,12 +159,13 @@ It differs from automated installers in the sense that a console installer is no
 
 To launch an installer in console mode rather than in GUI mode (the default), you can specify one of the following parameters on the command line:
 
-* ``-console``: to run the installation in interactive console mode
-* ``-options-template``: to generate a properties file whose name is specified in args[1]
-* ``-options``: to run an installation while reading the properties from the properties file specified in args[1].
+* ``-console``:
+  Runs the installation in interactive console mode.
 * ``-language``: specifies the iso3 code of the language pack to use in the next argument. Note: the first specified language pack will be used if this argument was not passed.
 
-As an example, to launch an interactive console installation, just type in a console:
+Example:
+
+To launch an interactive console installation, just type in a console:
 
 ::
 
@@ -171,7 +221,7 @@ There are some graphic elements and behavior which are preferred by some people 
 * 'labelFontSize': A float value used as a multiplier for the font size on labels created via the LabelFactory and IzPanel. Directly created labels are not affected.
 
 * 'layoutAnchor':layout anchor for IzPanels. Valid are "NORTH", "NORTHWEST", "SOUTHWEST", "SOUTH" and "CENTER". Only panels which are using the layout helper of IzPanels are supported. These are not all standard panels. At developing custom panels it is recommended to use the layout helper with an IzPanelLayout. Note: The anchor definition will be used for all panels!
-  
+
 * Gaps: there are defined different gaps between different components of a IzPanel if using IzPanelLayout. The gaps can be set also via the element '<modifier>' of '<guiprefs>'. It is possible to declare different values for X and Y axis. This will be determined in the key word name. X Gaps are insert after Y gaps under the control for which the gap was declared. Following key words are defined:
 
   * 'labelXGap | labelYGap': gap in pixel between two labels in X or Y direction.
@@ -230,7 +280,7 @@ Then the messages can be declared in 'CustomLangpack.xml_eng' like ::
       <str id="UserInputPanel.headinfo1.two" txt="Info 2 two"/>
       ...
   <langpack>
-  
+
 It is possible to place an icon on the right side of the heading (see below to display on left side). To do this a simple resource entry will be needed: ::
 
   <resources>
@@ -260,8 +310,8 @@ Key/value pairs to create IzPack installation with heading, no button and label 
    <guiprefs width="600" height="480" resizable="no">
      <modifier key="useButtonIcons" value="no"/>
      <modifier key="useLabelIcons" value="no"/>
-     <modifier key="labelGap" value="2"/>    
-     <modifier key="layoutAnchor" value="NORTHWEST"/>    
+     <modifier key="labelGap" value="2"/>
+     <modifier key="layoutAnchor" value="NORTHWEST"/>
      <modifier key="useHeadingPanel" value="yes"/>
      <modifier key="headingImageOnLeft" value="yes"/>
      <modifier key="headingLineCount" value="1"/>
@@ -274,7 +324,7 @@ Key/value pairs to create IzPack installation with heading, no button and label 
 .. figure:: modTargetPanel3.png
 
    IzPack frame (TargetPanel) with heading panel and a text counter in the heading panel with panel image.
-   
+
 Changed resources and langpack keys to create IzPack installation with alternatively frame title, heading, no button and label icons and a text counter in the heading panel.
 
 In install.xml  ::
@@ -307,8 +357,8 @@ Key/value pairs for modifying IzPack GUI (references for panel images removed): 
    <guiprefs width="640" height="480" resizable="no">
      <modifier key="useButtonIcons" value="no"/>
      <modifier key="useLabelIcons" value="no"/>
-     <modifier key="layoutAnchor" value="NORTHWEST"/>    
-     <modifier key="labelGap" value="2"/>    
+     <modifier key="layoutAnchor" value="NORTHWEST"/>
+     <modifier key="labelGap" value="2"/>
      <modifier key="useHeadingPanel" value="yes"/>
      <modifier key="headingLineCount" value="1"/>
      <modifier key="headingFontSize" value="1.5"/>
@@ -316,11 +366,11 @@ Key/value pairs for modifying IzPack GUI (references for panel images removed): 
      <modifier key="headingPanelCounter" value="progressbar"/>
      <modifier key="headingPanelCounterPos" value="inNavigationPanel"/>
    </guiprefs>
-   
+
 .. figure:: modTargetPanel2.png
 
    IzPack frame (TargetPanel) with heading panel and a progressbar counter in the  navigation panel without panel image.
-   
+
 Don't show pack size in PacksPanel
 ''''''''''''''''''''''''''''''''''
 
@@ -338,7 +388,7 @@ Example :
      <modifier key="doNotShowRequiredSize" value="yes"/>
      ...
    </guiprefs>
-   
+
 
 The PacksPanel will not show the column with the sizes of each pack, but will show the total required space.
 
@@ -372,19 +422,19 @@ Logging the Installation
 1. Debug Information
 
    There is a rudimentary debug capability in IzPack. The class 'com.izforge.IzPack.util.Debug' is used by some other classes to write debug information on 'stdout'. The class can be used by custom panels or actions or other custom classes. To activate it, add '-DTRACE=TRUE' in front of '-jar' of the installer call.
-   
+
 2. Summary of Panels
-   
+
    There is a summary panel which shows some information of previous shown panels. The same contents can be written to a summary log file.
-   
+
 3. Logging of Installed File Set
 
    The files which are installed are logged into the uninstaller jar file to be used at uninstallation. The contents can be also duplicated into a logfile.
-   
+
 4. Logging of the Process Panel
 
    The process panel logs information of each performed process in a scrollable text area. The contents can be duplicated into a logfile where the used directory can be selected (but not the logfile name).
-   
+
 5. Logging of Ant Actions
 
    It is possible to perform ant actions with the 'AntActionInstallerListener'. The grade of logging and the path of a logfile can by determined.
@@ -440,7 +490,7 @@ Thanks to Thorsten Kamann, it is possible to translate the packs names and descr
   <pack name="core" id="core.package" ...>
     <description/>
   </pack>
-  
+
 then the related entries of the langpacks will look like this: ::
 
   <str id="core.package" txt="Core Package"/>
@@ -473,17 +523,17 @@ Now you have to create and include a class implementing the 'PackValidator' inte
       return true; // passes on to the next defined validator for this pack
     }
   }
-  
+
 
 Automatic privileges elevation on Windows
 -----------------------------------------
 
-As an alternative to using the ``<run-privileged> element``, a Java launcher EXE with the name 
+As an alternative to using the ``<run-privileged> element``, a Java launcher EXE with the name
 ``setup.exe`` or ``install.exe`` can be used (see http://msdn.microsoft.com/en-us/library/bb530410.aspx).
 
 Windows Vista has a feature called "installer detection". When an EXE file name contains one of the words
-``install``, ``setup`` or ``update``, the operating system automatically prompts the user for UAC privilege 
-elevation when the program is started. This automatic privilege elevation can be overridden using a 
+``install``, ``setup`` or ``update``, the operating system automatically prompts the user for UAC privilege
+elevation when the program is started. This automatic privilege elevation can be overridden using a
 manifest file for the EXE and setting the requestedExecutionLevel in the manifest.
 
 Under Windows XP, when the following conditions are met, the operating system prompts the user to run
@@ -492,5 +542,106 @@ Under Windows XP, when the following conditions are met, the operating system pr
 * the user is not part of the administrators group, and
 * the name of the EXE file is ``setup.exe`` or ``install.exe``, and
 * the EXE is started via Windows Explorer, e.g. by double-clicking on the icon of the EXE file.
+
+
+Replacing blocked files after reboot on Windows
+-----------------------------------------------
+
+.. _`Setup API`: http://msdn.microsoft.com/en-us/library/cc185682(VS.85).aspx
+.. _NSIS: http://nsis.sourceforge.net/
+
+All Windows systems block executable files that are currently in use, as device
+drivers, EXE, DLL and even JAR files. Normally, a running application is to be
+shut down before such files can be overwritten, for instance by an IzPack installer.
+This might fit most of the use cases IzPack is used with.
+
+There can be situations where the application cannot be shut down at the installation
+time, but has to be updated anyway. This is where this new feature comes into the
+game.
+
+Microsoft offers a Windows API for handling such cases: `Setup API`_.
+From the view of the pure interface it has been quiet stable over the different Windows
+distributions. Although Microsoft recommends using it only for installing
+device drivers Setup API can be used for any kind of file to be installed.
+Several independent installers which are not based on Windows Installer make
+usage of it. For example, the native NSIS_ installer uses a ``/rebootok`` flag for
+copying files which might be potentially in use.
+
+Here is how blockable file handling is integrated into IzPack:
+
+Lets start with an example of install.xml:
+::
+
+  <installation version="1.0">
+
+    <info>
+      ...
+      <rebootaction>ask</rebootaction>
+      ...
+    </info>
+
+    ...
+
+    <native type="izpack" name="WinSetupAPI.dll">
+      <os family="windows"/>
+    </native>
+
+    ...
+
+    <packs>
+      <pack name="Core files" required="yes">
+        <description>The core files needed for this test</description>
+        <singlefile
+         src="plain/my_exefile_v1.exe"
+         target="${INSTALL_PATH}/my_exefile.exe"
+         override="true" blockable="auto"/>
+      </pack>
+    </packs>
+
+  </installation>
+
+Explanation:
+
+The file ``${INSTALL_PATH}/my_exefile.exe`` on the target system is assumed to be
+potentially running and therefore blocked at installation time, for instance as
+a system service.  It might be not convenient to shut it down before installation.
+Instead, we intend to replace it after the next system reboot.
+
+For this purpose we mark the according file as ``blockable``. The value ``auto``
+means that the OS recognizes automatically whether the file is blocked or not,
+instead of forcing marking it blocked (using ``force``).
+If it is blocked it will be internally enqueued by Windows to be replaced after
+a system reboot. Otherwise the file is overwritten directly due to the
+``override=true``. If we had ``override=false`` and the file would be blocked
+during installation time copying of the file would be skipped as expected.
+
+With ``<rebootaction>ask</rebootaction>`` we force IzPack to ask the user in case of
+using interactive installers whether the system should be rebooted immediately.
+The user has the chance to confirm or deny the reboot action. Anyway, if there
+are pending file operations the system has to be rebooted sooner or later
+to apply the changes that came with the installation.
+
+The ``blockable`` attribute applies also on the packs elements
+``file`` and ``fileset``. For using it there must be included the
+``WinSetupAPI.dll`` as can be seen above. This library is built-in into
+IzPack natively.
+
+Note that if there no explicit constraint for the OS family = ``windows``
+defined on the according parent element ``file``, ``singlefile`` or ``fileset``
+copying a file with a valid ``blockable`` value different to ``none``
+there is a compiler warning given to the user:
+::
+
+"blockable" will implicitely apply only on Windows target systems
+
+Anyway, it is possible to mark files as blockable even for multi-platform installations,
+for instance in case of blockable jar files. The ``blockable`` attribute
+will be simply ignored on non-Windows platforms, resulting in a "classic"
+behaviour for copying files.
+
+For a complete specification of the according elements and attributes see
+the documentation of ``<rebootaction>`` and
+``blockable`` in the chapter *Writing Installation XML Files*.
+
 
 .. include:: include-bottom.inc

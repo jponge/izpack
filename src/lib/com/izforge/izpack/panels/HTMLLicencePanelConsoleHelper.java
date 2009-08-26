@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Jan Blok
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,14 +36,14 @@ import com.izforge.izpack.installer.ResourceManager;
  *
  */
 public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
-{   
-    
+{
+
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter)
     {
         return true;
     }
 
-    public boolean runConsoleFromPropertiesFile(AutomatedInstallData installData, Properties p)
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
     {
         return true;
     }
@@ -64,14 +64,14 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
             System.out.println(license);
             return false;
         }
-        
+
         // controls # of lines to display at a time, to allow simulated scrolling down
         int lines=25;
         int l = 0;
 
-        
+
         String strippedHTML = this.removeHTML(license);
-        
+
         StringTokenizer st = new StringTokenizer(strippedHTML, "\n");
         while (st.hasMoreTokens())
         {
@@ -83,10 +83,10 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
                      return false;
                  }
                  l=0;
-             }             
+             }
 
         }
-   
+
         int i = askToAcceptLicense();
 
         if (i == 1)
@@ -103,7 +103,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         }
 
     }
-    
+
     private boolean doContinue()
     {
         try
@@ -129,7 +129,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         }
         return false;
     }
-    
+
     private int askToAcceptLicense()
     {
         try
@@ -157,7 +157,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
         }
         return 2;
     }
-    
+
     private String removeHTML(String source)
     {
         String result = "";
@@ -170,47 +170,47 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
             // Remove step-formatting
             result = result.replaceAll("\t", "");
             // Remove repeating spaces because browsers ignore them
-            
+
             result = result.replaceAll("( )+", " ");
 
-            
+
             result = result.replaceAll("<( )*head([^>])*>","<head>");
             result = result.replaceAll("(<( )*(/)( )*head( )*>)","</head>");
             result = result.replaceAll("(<head>).*(</head>)", "");
             result = result.replaceAll("<( )*script([^>])*>","<script>");
             result = result.replaceAll("(<( )*(/)( )*script( )*>)","</script>");
             result = result.replaceAll("(<script>).*(</script>)","");
-            
+
          // remove all styles (prepare first by clearing attributes)
             result = result.replaceAll("<( )*style([^>])*>","<style>");
             result = result.replaceAll("(<( )*(/)( )*style( )*>)","</style>");
             result = result.replaceAll("(<style>).*(</style>)","");
-            
+
             result = result.replaceAll("(<( )*(/)( )*sup( )*>)","</sup>");
             result = result.replaceAll("<( )*sup([^>])*>","<sup>");
             result = result.replaceAll("(<sup>).*(</sup>)", "");
-            
+
          // insert tabs in spaces of <td> tags
             result = result.replaceAll("<( )*td([^>])*>","\t");
-            
+
          // insert line breaks in places of <BR> and <LI> tags
             result = result.replaceAll("<( )*br( )*>","\r");
             result = result.replaceAll("<( )*li( )*>","\r");
-            
+
             // insert line paragraphs (double line breaks) in place
             // if <P>, <DIV> and <TR> tags
             result = result.replaceAll("<( )*div([^>])*>","\r\r");
             result = result.replaceAll("<( )*tr([^>])*>","\r\r");
-            
+
             result = result.replaceAll("(<) h (\\w+) >","\r");
             result = result.replaceAll("(\\b) (</) h (\\w+) (>) (\\b)","");
             result = result.replaceAll("<( )*p([^>])*>","\r\r");
-            
+
             // Remove remaining tags like <a>, links, images,
             // comments etc - anything that's enclosed inside < >
             result = result.replaceAll("<[^>]*>","");
-            
-            
+
+
             result = result.replaceAll("&bull;"," * ");
             result = result.replaceAll("&lsaquo;","<");
             result = result.replaceAll("&rsaquo;",">");
@@ -222,7 +222,7 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
             result = result.replaceAll("&copy;","(c)");
             result = result.replaceAll("&reg;","(r)");
             result = result.replaceAll("&(.{2,6});","");
- 
+
             // Remove extra line breaks and tabs:
             // replace over 2 breaks with 2 and over 4 tabs with 4.
             // Prepare first to remove any whitespaces in between
@@ -233,14 +233,14 @@ public class HTMLLicencePanelConsoleHelper extends PanelConsoleHelper implements
             result = result.replaceAll("(\r)( )+(\t)","\r\t");
             result = result.replaceAll("(\r)(\t)+(\\r)","\r\r");
             result = result.replaceAll("(\r)(\t)+","\r\t");
- 
+
         } catch (Exception e)
         {
             e.printStackTrace();
-           
+
         }
-        
+
         return result;
     }
-    
+
 }

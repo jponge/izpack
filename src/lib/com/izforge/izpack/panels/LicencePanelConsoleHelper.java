@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Jan Blok
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,14 +36,14 @@ import com.izforge.izpack.installer.ResourceManager;
  *
  */
 public class LicencePanelConsoleHelper extends PanelConsoleHelper implements PanelConsole
-{   
-    
+{
+
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData,PrintWriter printWriter)
     {
         return true;
     }
 
-    public boolean runConsoleFromPropertiesFile(AutomatedInstallData installData, Properties p)
+    public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p)
     {
         return true;
     }
@@ -64,11 +64,11 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
             System.out.println(license);
             return false;
         }
-        
+
         // controls # of lines to display at a time, to allow simulated scrolling down
         int lines=25;
         int l = 0;
-        
+
         StringTokenizer st = new StringTokenizer(license, "\n");
         while (st.hasMoreTokens())
         {
@@ -80,10 +80,10 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
                      return false;
                  }
                  l=0;
-             }             
+             }
 
         }
-   
+
         int i = askToAcceptLicense();
 
         if (i == 1)
@@ -100,7 +100,7 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         }
 
     }
-    
+
     private boolean doContinue()
     {
         try
@@ -126,7 +126,7 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         }
         return false;
     }
-    
+
     private int askToAcceptLicense()
     {
         try
@@ -154,5 +154,5 @@ public class LicencePanelConsoleHelper extends PanelConsoleHelper implements Pan
         }
         return 2;
     }
-    
+
 }

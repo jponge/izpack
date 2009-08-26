@@ -1,18 +1,18 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Jan Blok
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,9 +22,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.*;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
@@ -135,7 +133,7 @@ public class InstallerFrame extends JFrame {
      * Registered GUICreationListener.
      */
     protected ArrayList<GUIListener> guiListener;
-       
+
     /**
      * Heading major text.
      */
@@ -211,13 +209,13 @@ public class InstallerFrame extends JFrame {
         // Builds the GUI
         loadIcons();
         loadCustomIcons();
-        loadPanels();               
+        loadPanels();
         buildGUI();
 
         // We show the frame
         showFrame();
         switchPanel(0);
-    }   
+    }
 
     public Debugger getDebugger() {
         return this.debugger;
@@ -283,7 +281,7 @@ public class InstallerFrame extends JFrame {
             }
 
             panel.setHelps(p.getHelpsMap());
-            
+
             List<String> preActivateActions = p.getPreActivationActions();
             if (preActivateActions != null)
             {
@@ -510,9 +508,9 @@ public class InstallerFrame extends JFrame {
         debugger = new Debugger(installdata, icons, rules);
         // this needed to fully initialize the debugger.
         JPanel debugpanel = debugger.getDebugPanel();
-        
+
         // create a debug panel if TRACE is enabled
-        if (Debug.isTRACE()) {                       
+        if (Debug.isTRACE()) {
             if (installdata.guiPrefs.modifier.containsKey("showDebugWindow")
                     && Boolean.valueOf(installdata.guiPrefs.modifier.get("showDebugWindow"))) {
                 JFrame debugframe = new JFrame("Debug information");
@@ -731,7 +729,7 @@ public class InstallerFrame extends JFrame {
             IzPanel panel = installdata.panels.get(installdata.curPanelNumber);
             IzPanel l_panel = installdata.panels.get(last);
             showHelpButton(panel.canShowHelp());
-            if (Debug.isTRACE()) {                
+            if (Debug.isTRACE()) {
                 debugger.switchPanel(panel.getMetadata(), l_panel.getMetadata());
             }
             Log.getInstance().addDebugMessage(
@@ -1154,12 +1152,43 @@ public class InstallerFrame extends JFrame {
      * Makes a clean closing.
      */
     public void exit() {
+        // FIXME !!! Reboot handling
         if (installdata.canClose
                 || ((!nextButton.isVisible() || !nextButton.isEnabled()) && (!prevButton
                 .isVisible() || !prevButton.isEnabled()))) {
             // this does nothing if the uninstaller was not included
             writeUninstallData();
-            Housekeeper.getInstance().shutDown(0);
+
+            boolean reboot = false;
+            if (installdata.rebootNecessary)
+            {
+                String message, title;
+                VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
+                System.out.println("[ There are file operations pending after reboot ]");
+                switch( installdata.info.getRebootAction()) {
+                    case Info.REBOOT_ACTION_ALWAYS:
+                        reboot = true;
+                        break;
+                    case Info.REBOOT_ACTION_ASK:
+                        message = vs.substitute(langpack.getString("installer.reboot.ask.message"), null);
+                        title = vs.substitute(langpack.getString("installer.reboot.ask.title"), null);
+                        int res = JOptionPane
+                                .showConfirmDialog(this, message, title, JOptionPane.YES_NO_OPTION);
+                        if (res == JOptionPane.YES_OPTION) {
+                            reboot = true;
+                        }
+                        break;
+                    case Info.REBOOT_ACTION_NOTICE:
+                        message = vs.substitute(langpack.getString("installer.reboot.notice.message"), null);
+                        title = vs.substitute(langpack.getString("installer.reboot.notice.title"), null);
+                        JOptionPane.showConfirmDialog(this, message, title, JOptionPane.OK_OPTION);
+                        break;
+                }
+                if (reboot)
+                    System.out.println("[ Rebooting now automatically ]");
+            }
+
+            Housekeeper.getInstance().shutDown(0, reboot);
         } else {
             // The installation is not over
             if (Unpacker.isDiscardInterrupt() && interruptCount < MAX_INTERRUPT) { // But we should not interrupt.
@@ -1433,7 +1462,7 @@ public class InstallerFrame extends JFrame {
             panel.executePreValidationActions();
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
-            
+
             // check if we can display the next panel or if there was an error during actions that
             // disables the next button
             if (!nextButton.isEnabled()) { return; }

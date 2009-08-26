@@ -168,6 +168,9 @@
   08.11.2007: (Julien Ponge)
      Call the new docutils-based documentation build system.
 
+  28.04.2009: (René Krell)
+     Added native Windows support of the Setup API.
+
 
   Mini-HowTo:
 
@@ -435,11 +438,11 @@
                 <include name="com/izforge/izpack/rules/*.class"/>
                 <include name="com/izforge/izpack/compiler/DynamicVariable.class"/>
                 <include name="com/izforge/izpack/compiler/CompilerException.class"/>
-                <include name="com/izforge/izpack/panels/Validator*.class"/>
+				<include name="com/izforge/izpack/panels/Validator*.class"/>
                 <!--<include name="net/n3/nanoxml/*.class"/>-->
             	<include name="com/izforge/izpack/adaptator/**/*.class"/>
             	<include name="com/izforge/izpack/adaptator/*.class"/>
-                <include name="com/izforge/izpack/panels/HelpWindow.class" />                
+                <include name="com/izforge/izpack/panels/HelpWindow.class" />
             </fileset>
             <zipfileset src="${basedir}/lib/jakarta-regexp-1.3.jar">
                 <include name="org/apache/regexp/*.class"/>
@@ -501,7 +504,7 @@
                 <!--<include name="net/n3/nanoxml/*.class"/>-->
             	<include name="com/izforge/izpack/adaptator/**/*.class"/>
             	<include name="com/izforge/izpack/adaptator/*.class"/>
-                <include name="com/izforge/izpack/installer/PrivilegedRunner.class"/>		
+                <include name="com/izforge/izpack/installer/PrivilegedRunner.class"/>
             </fileset>
             <fileset dir="${src.dir}">
                 <include name="com/izforge/izpack/installer/run-with-privileges-on-osx"/>
@@ -704,14 +707,14 @@
             <include name="com/izforge/izpack/panels/TextInputField.java"/>
         	<include name="com/izforge/izpack/panels/FileInputField.java"/>
         	<include name="com/izforge/izpack/panels/MultipleFileInputField.java"/>
-            <include name="com/izforge/izpack/panels/UserInputPanel.java"/>        	
+            <include name="com/izforge/izpack/panels/UserInputPanel.java"/>
             <include name="com/izforge/izpack/panels/UserInputPanelAutomationHelper.java"/>
             <include name="com/izforge/izpack/panels/Validator.java"/>
             <include name="com/izforge/izpack/panels/ValidatorContainer.java"/>
         	<include name="com/izforge/izpack/panels/UIElementType.java"/>
             <include name="com/izforge/izpack/panels/UIElement.java"/>
             <include name="com/izforge/izpack/panels/RadioButtonUIElement.java"/>
-            <include name="com/izforge/izpack/panels/PasswordUIElement.java"/>   
+            <include name="com/izforge/izpack/panels/PasswordUIElement.java"/>
         	<include name="com/izforge/izpack/panels/UserInputPanelConsoleHelper.java" />
         </build-panel>
         <build-panel name="UserPathPanel">
@@ -738,7 +741,7 @@
         	<include name="com/izforge/izpack/panels/UIElementType.java"/>
             <include name="com/izforge/izpack/panels/UIElement.java"/>
             <include name="com/izforge/izpack/panels/RadioButtonUIElement.java"/>
-            <include name="com/izforge/izpack/panels/PasswordUIElement.java"/>           	
+            <include name="com/izforge/izpack/panels/PasswordUIElement.java"/>
         </build-panel>
         <build-panel name="CompilePanel">
             <include name="com/izforge/izpack/panels/CompilePanel.java"/>
@@ -1092,6 +1095,16 @@
               verbose="true"
               overwrite="yes"
               preservelastmodified="true"/>
+        <copy todir="${basedir}/bin/native/izpack"
+              file="${basedir}/src/native/SetupAPI/WinSetupAPI.dll"
+              verbose="true"
+              overwrite="yes"
+              preservelastmodified="true"/>
+        <copy todir="${basedir}/bin/native/izpack"
+              file="${basedir}/src/native/SetupAPI/WinSetupAPI_x64.dll"
+              verbose="true"
+              overwrite="yes"
+              preservelastmodified="true"/>
         <copy todir="${basedir}/bin/native/3rdparty"
               file="${basedir}/src/native/COIOSHelper/src/lib/COIOSHelper.dll"
               verbose="true"
@@ -1099,9 +1112,9 @@
               preservelastmodified="true"/>
       	<copy todir="${basedir}/bin/native/3rdparty"
         	    file="${basedir}/src/native/COIOSHelper/src/lib/COIOSHelper_x64.dll"
-          	  verbose="true"
-            	overwrite="yes"
-            	preservelastmodified="true"/>
+	            verbose="true"
+    	        overwrite="yes"
+        	    preservelastmodified="true"/>
     </target>
 
 
@@ -1326,6 +1339,19 @@
             description="--> rebuilds the shelllink jni *.h header file">
         <javah class="com.izforge.izpack.util.os.ShellLink"
                destdir="${basedir}/src/native/ShellLink">
+            <classpath path="${build.dir}"/>
+        </javah>
+    </target>
+
+
+    <!-- =================================
+          target: SetupAPI.Javah
+         ================================= -->
+    <target name="SetupAPI.Javah"
+            depends="compile.installer"
+            description="--> rebuilds the setupapi jni *.h header file">
+        <javah class="com.izforge.izpack.util.os.WinSetupAPIBase"
+               destdir="${basedir}/src/native/SetupAPI">
             <classpath path="${build.dir}"/>
         </javah>
     </target>

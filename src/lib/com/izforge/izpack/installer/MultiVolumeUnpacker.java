@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -47,6 +47,7 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.os.*;
 
 
 /**
@@ -57,13 +58,13 @@ import com.izforge.izpack.util.OsConstraint;
 public class MultiVolumeUnpacker extends UnpackerBase
 {
     protected IMultiVolumeUnpackerHelper helper;
-    
+
     public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler)
     {
         super(idata, handler);
         if (handler instanceof PanelAutomation){
             Debug.trace("running in auto installation mode.");
-            helper = new MultiVolumeUnpackerAutomationHelper();           
+            helper = new MultiVolumeUnpackerAutomationHelper();
         }
         else {
             Debug.trace("running in normal installation mode.");
@@ -88,6 +89,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
             //
             // Initialisations
             FileOutputStream out = null;
+            FileQueue fq = null;
             ArrayList<ParsableFile> parsables = new ArrayList<ParsableFile>();
             ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
             ArrayList<UpdateCheck> updatechecks = new ArrayList<UpdateCheck>();
@@ -186,7 +188,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
                 if (pack.isHidden()){
                     // TODO: hide the pack completely
                     // hide the pack name if pack is hidden
-                    stepname = "";                                           
+                    stepname = "";
                 }
                 handler.nextStep(stepname, i + 1, nfiles);
                 for (int j = 0; j < nfiles; j++)
@@ -312,7 +314,21 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         }
 
                         // We copy the file
-                        out = new FileOutputStream(pathFile);
+                        //out = new FileOutputStream(pathFile);
+                        File tmpFile = null;
+                        if (blockableForCurrentOs(pf))
+                        {
+                            // If target file might be blocked the output file must first
+                            // refer to a temporary file, because Windows Setup API
+                            // doesn't work on streams but only on physical files
+                            tmpFile = File.createTempFile("__FQ__", null, pathFile.getParentFile());
+                            out = new FileOutputStream(tmpFile);
+                        }
+                        else
+                        {
+                            out=new FileOutputStream(pathFile);
+                        }
+
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
                         // InputStream pis = objIn;
@@ -403,11 +419,41 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         // Set file modification time if specified
                         if (pf.lastModified() >= 0)
                         {
-                            pathFile.setLastModified(pf.lastModified());
+                            if (blockableForCurrentOs(pf))
+                                tmpFile.setLastModified(pf.lastModified());
+                            else
+                                pathFile.setLastModified(pf.lastModified());
                         }
-                        // Custom action listener stuff --- afterFile ----
-                        informListeners(customActions, InstallerListener.AFTER_FILE, pathFile, pf,
-                                null);
+
+                        if (blockableForCurrentOs(pf))
+                        {
+                            if (fq == null)
+                            {
+                                fq = new FileQueue();
+                            }
+
+                            FileQueueMove fqmv = new FileQueueMove(tmpFile, pathFile);
+                            if (blockableForCurrentOs(pf))
+                            {
+                                fqmv.setForceInUse(true);
+                            }
+                            fqmv.setOverwrite(true);
+                            fq.add(fqmv);
+                            Debug.log(tmpFile.getAbsolutePath()
+                                    + " -> "
+                                    + pathFile.getAbsolutePath()
+                                    + " added to file queue for being copied after reboot"
+                                    );
+                            // The temporary file must not be deleted
+                            // until the file queue will be committed
+                            tmpFile.deleteOnExit();
+                        }
+                        else
+                        {
+                            // Custom action listener stuff --- afterFile ----
+                            informListeners(customActions, InstallerListener.AFTER_FILE, pathFile, pf,
+                                    null);
+                        }
                     }
                     else
                     {
@@ -572,16 +618,16 @@ public class MultiVolumeUnpacker extends UnpackerBase
             // TODO: finer grained error handling with useful error messages
             handler.stopAction();
             String message = err.getMessage();
-			if ("Installation cancelled".equals(message))
+            if ("Installation cancelled".equals(message))
             {
                 handler.emitNotification("Installation cancelled");
             }
             else
             {
-            	if (message == null || "".equals(message))
-            	{
-            		message = "Internal error occured : " + err.toString();
-            	}
+                if (message == null || "".equals(message))
+                {
+                    message = "Internal error occured : " + err.toString();
+                }
                 handler.emitError("An error occured", message);
                 err.printStackTrace();
             }
