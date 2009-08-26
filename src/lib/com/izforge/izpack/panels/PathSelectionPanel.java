@@ -151,7 +151,7 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
             fc.addChoosableFileFilter(fc.getAcceptAllFileFilter());
 
             // Shows it
-            if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+            if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
             {
                 String path = fc.getSelectedFile().getAbsolutePath();
                 textField.setText(path);

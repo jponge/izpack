@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,12 @@ package com.izforge.izpack.rules;
 
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import java.util.HashMap;
 
 /**
- * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @author Dennis Reil, <izpack@reil-online.de>
  */
 public class VariableCondition extends Condition
 {
@@ -134,5 +135,17 @@ public class VariableCondition extends Condition
         details.append(")");
         details.append("</b><br/>");
         return details.toString();
+    }
+
+    @Override
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
+       XMLElementImpl nameEl = new XMLElementImpl("name",conditionRoot);
+       nameEl.setContent(this.variablename);               
+       conditionRoot.addChild(nameEl);
+       
+       XMLElementImpl valueEl = new XMLElementImpl("value",conditionRoot);
+       valueEl.setContent(this.value);
+       conditionRoot.addChild(valueEl);
     }
 }

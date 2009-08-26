@@ -129,22 +129,15 @@ public class Destroyer extends Thread
 
             handler.stopAction();
         }
-        catch (Exception err)
+        catch (Throwable err)
         {
             handler.stopAction();
             err.printStackTrace();
 
-            StackTraceElement str[] = err.getStackTrace();
-            for (StackTraceElement aStr : str)
-            {
-
-            }
-
             StringWriter trace = new StringWriter();
-            //err.printStackTrace(new PrintStream);
             err.printStackTrace(new PrintWriter(trace));
 
-            handler.emitError("exception caught", err.toString() + "\n" + trace.toString());
+            handler.emitError("exception caught", trace.toString());
         }
     }
 
@@ -283,10 +276,13 @@ public class Destroyer extends Thread
         if (file.isDirectory())
         {
             File[] files = file.listFiles();
-            int size = files.length;
-            for (int i = 0; i < size; i++)
+            if (files != null)
             {
-                cleanup(files[i]);
+                int size = files.length;
+                for (int i = 0; i < size; i++)
+                {
+                    cleanup(files[i]);
+                }
             }
             file.delete();
         }

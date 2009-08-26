@@ -39,11 +39,9 @@ public interface IXMLWriter
      * Write the xml in the writer output
      *
      * @param element Xml to write
-     *
-     * @throws javax.xml.transform.TransformerException
-     *
+     * @throws XMLException if something went wrong.
      */
-    void write(IXMLElement element) throws TransformerException;
+    void write(IXMLElement element);
 
     /**
      * Set the outputStream of the writer

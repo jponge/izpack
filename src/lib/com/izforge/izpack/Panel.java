@@ -92,6 +92,11 @@ public class Panel implements Serializable
      * A HashMap for URLs to Helpfiles, key should be iso3-code
      */
     private HashMap<String, String> helps = null;
+    
+    /**
+     * Contains configuration values for a panel.
+     */
+    private HashMap<String, String> configuration = null;
 
     public String getClassName()
     {
@@ -239,6 +244,25 @@ public class Panel implements Serializable
         PanelActionConfiguration result = null;
         if (this.actionConfiguration != null){
             result = this.actionConfiguration.get(panelActionClassName);
+        }
+        return result;
+    }
+    
+    public boolean hasConfiguration(){
+        return this.configuration != null;
+    }
+    
+    public void addConfiguration(String key, String value){
+        if (this.configuration == null){
+            this.configuration = new HashMap<String, String>();
+        }
+        this.configuration.put(key, value);
+    }
+    
+    public String getConfiguration(String key){
+        String result = null;
+        if (this.configuration != null){
+            result = this.configuration.get(key);
         }
         return result;
     }

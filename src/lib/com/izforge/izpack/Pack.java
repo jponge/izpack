@@ -116,7 +116,7 @@ public class Pack implements Serializable
     public boolean required;
 
     /**
-     * The bumber of bytes contained in the pack.
+     * The number of bytes contained in the pack.
      */
     public long nbytes;
 

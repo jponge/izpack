@@ -158,8 +158,7 @@
             <fileset dir="" targetdir="$INSTALL_PATH" ln="158">
                 <include name="utils/**/*" ln="159"/>
             </fileset>
-            <executable
-                    targetfile="$INSTALL_PATH/utils/wrappers/izpack2app/Mac-App-Template/Contents/MacOS/JavaApplicationStub"
+            <executable targetfile="$INSTALL_PATH/utils/wrappers/..."
                     stage="never" ln="162"/>
         </pack>
 

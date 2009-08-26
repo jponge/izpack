@@ -22,7 +22,6 @@
 
 package com.izforge.izpack.adaptator;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -38,17 +37,28 @@ public interface IXMLParser
      * Parse the given stream to a XML
      *
      * @param inputStream Stream to parse
-     *
      * @return Root element of the parsed xml
+     * @throws XMLException if something went wrong.
      */
     IXMLElement parse(InputStream inputStream);
+
+    /**
+     * Parse the given stream to a XML and set the systemId to the inputSource.
+     * It is useful for the xinclude feature, as the path of the resolution depends on the systemId.
+     *
+     * @param inputStream Stran to parse
+     * @param systemId    System id of the file parsed
+     * @return Root element of the parsed XML
+     * @throws XMLException if something went wrong.
+     */
+    IXMLElement parse(InputStream inputStream, String systemId);
 
     /**
      * Parse the given text as an xml
      *
      * @param inputString Xml written in a string
-     *
      * @return Root element of the parsed xml
+     * @throws XMLException if something went wrong.
      */
     IXMLElement parse(String inputString);
 
@@ -56,10 +66,8 @@ public interface IXMLParser
      * Parse the resource at the url specified
      *
      * @param inputURL Url of the resource
-     *
      * @return Root element of the parsed xml
-     *
-     * @throws IOException Exception in the parsed of the resource
+     * @throws XMLException
      */
-    IXMLElement parse(URL inputURL) throws IOException;
+    IXMLElement parse(URL inputURL);
 }

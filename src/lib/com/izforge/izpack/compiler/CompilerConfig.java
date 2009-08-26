@@ -1,22 +1,22 @@
 /*
  * $Id$
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2001 Johannes Lehtinen
  * Copyright 2002 Paul Wilkinson
  * Copyright 2004 Gaganis Giorgos
  * Copyright 2007 Syed Khadeer / Hans Aikema
  *
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,8 +37,8 @@ import com.izforge.izpack.event.CompilerListener;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.InstallerRequirement;
 import com.izforge.izpack.installer.PanelAction;
-import com.izforge.izpack.installer.PanelActionConfiguration;
 import com.izforge.izpack.installer.PanelAction.ActionStage;
+import com.izforge.izpack.installer.PanelActionConfiguration;
 import com.izforge.izpack.panels.HelpWindow;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
@@ -47,9 +47,6 @@ import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 import org.apache.tools.ant.DirectoryScanner;
 
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -553,7 +550,11 @@ public class CompilerConfig extends Thread {
             IXMLElement el = iter.next();
             String type = requireAttribute(el, "type");
             String name = requireAttribute(el, "name");
-            String path = "bin/native/" + type + "/" + name;
+            String path = el.getAttribute("src");
+            if (path == null)
+            {
+                path = "bin/native/" + type + "/" + name;
+            }
             URL url = findIzPackResource(path, "Native Library", el);
             compiler.addNativeLibrary(name, url);
             // Additionals for mark a native lib also used in the uninstaller
@@ -654,7 +655,7 @@ public class CompilerConfig extends Thread {
             boolean uninstall = "yes".equalsIgnoreCase(el.getAttribute("uninstall", "yes"));
             String parent = el.getAttribute("parent");
             boolean hidden = "true".equalsIgnoreCase(el.getAttribute("hidden","false"));
-            
+
             String conditionid = el.getAttribute("condition");
 
             if (required && excludeGroup != null)
@@ -669,6 +670,7 @@ public class CompilerConfig extends Thread {
             pack.setParent(parent);
             pack.setCondition(conditionid);
             pack.setHidden(hidden);
+            VariableSubstitutor varsubst = new VariableSubstitutor(compiler.getVariables());
 
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
@@ -795,27 +797,36 @@ public class CompilerConfig extends Thread {
                 String targetdir = requireAttribute(f, "targetdir");
                 List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
+                int blockable = getBlockableValue(f, osList);
                 Map additionals = getAdditionals(f);
                 boolean unpack = "true".equalsIgnoreCase(f.getAttribute("unpack"));
                 String condition = f.getAttribute("condition");
 
                 File file = new File(src);
+
+                // if the path does not exist, maybe it contains variables
+                if (!file.exists())
+                {
+                    file = new File(varsubst.substitute(src, null));
+                    // next existence check appears in pack.addFile
+                }
+
                 if (!file.isAbsolute())
                 {
-                    file = new File(basedir, src);
+                    file = new File(basedir, file.getPath());
                 }
 
                 try
                 {
                     if (unpack)
                     {
-                        addArchiveContent(baseDir, file, targetdir, osList, override, pack,
-                                additionals, condition);
+                        addArchiveContent(baseDir, file, targetdir, osList, override, blockable,
+                                pack, additionals, condition);
                     }
                     else
                     {
-                        addRecursively(baseDir, file, targetdir, osList, override, pack,
-                                additionals, condition);
+                        addRecursively(baseDir, file, targetdir, osList, override, blockable,
+                                pack, additionals, condition);
                     }
                 }
                 catch (Exception x)
@@ -833,6 +844,7 @@ public class CompilerConfig extends Thread {
                 String target = requireAttribute(f, "target");
                 List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
+                int blockable = getBlockableValue(f, osList);
                 Map additionals = getAdditionals(f);
                 String condition = f.getAttribute("condition");
                 File file = new File(src);
@@ -841,9 +853,16 @@ public class CompilerConfig extends Thread {
                     file = new File(basedir, src);
                 }
 
+                // if the path does not exist, maybe it contains variables
+                if (!file.exists())
+                {
+                    file = new File(varsubst.substitute(file.getAbsolutePath(), null));
+                    // next existance checking appears in pack.addFile
+                }
+
                 try
                 {
-                    pack.addFile(baseDir, file, target, osList, override, additionals, condition);
+                    pack.addFile(baseDir, file, target, osList, override, blockable, additionals, condition);
                 }
                 catch (FileNotFoundException x)
                 {
@@ -873,6 +892,7 @@ public class CompilerConfig extends Thread {
                 String targetdir = requireAttribute(f, "targetdir");
                 List<OsConstraint> osList = OsConstraint.getOsList(f); // TODO: unverified
                 int override = getOverrideValue(f);
+                int blockable = getBlockableValue(f, osList);
                 Map additionals = getAdditionals(f);
                 String condition = f.getAttribute("condition");
 
@@ -968,7 +988,7 @@ public class CompilerConfig extends Thread {
                     {
                         String target = new File(targetdir, file).getPath();
                         pack.addFile(baseDir, new File(dir, file), target, osList, override,
-                                additionals, condition);
+                                blockable, additionals, condition);
                     }
                     catch (FileNotFoundException x)
                     {
@@ -981,7 +1001,7 @@ public class CompilerConfig extends Thread {
                     {
                         String target = new File(targetdir, dir1).getPath();
                         pack.addFile(baseDir, new File(dir, dir1), target, osList, override,
-                                additionals, condition);
+                                blockable, additionals, condition);
                     }
                     catch (FileNotFoundException x)
                     {
@@ -1153,7 +1173,7 @@ public class CompilerConfig extends Thread {
 
         IXMLParser refXMLParser = new XMLParser();
         // We get it
-        IXMLElement refXMLData = refXMLParser.parse(specin);
+        IXMLElement refXMLData = refXMLParser.parse(specin,refXMLFile.getAbsolutePath());
 
         // Now checked the loaded XML file for basic syntax
         // We check it
@@ -1312,7 +1332,8 @@ public class CompilerConfig extends Thread {
      * @param condition
      */
     protected void addArchiveContent(File baseDir, File archive, String targetdir,
-                                     List<OsConstraint> osList, int override, PackInfo pack, Map additionals,
+                                     List<OsConstraint> osList, int override, int blockable,
+                                     PackInfo pack, Map additionals,
                                      String condition) throws IOException {
 
         FileInputStream fin = new FileInputStream(archive);
@@ -1339,7 +1360,7 @@ public class CompilerConfig extends Thread {
                 out.close();
 
                 pack.addFile(baseDir, temp, targetdir + "/" + zentry.getName(), osList, override,
-                        additionals, condition);
+                        blockable, additionals, condition);
             }
             catch (IOException e)
             {
@@ -1365,27 +1386,27 @@ public class CompilerConfig extends Thread {
      * @throws FileNotFoundException if the file does not exist
      */
     protected void addRecursively(File baseDir, File file, String targetdir,
-                                  List<OsConstraint> osList, int override, PackInfo pack, Map additionals,
-                                  String condition) throws IOException {
+                                  List<OsConstraint> osList, int override, int blockable,
+                                  PackInfo pack, Map additionals, String condition) throws IOException {
         String targetfile = targetdir + "/" + file.getName();
         if (!file.isDirectory())
         {
-            pack.addFile(baseDir, file, targetfile, osList, override, additionals, condition);
+            pack.addFile(baseDir, file, targetfile, osList, override, blockable, additionals, condition);
         }
         else
         {
             File[] files = file.listFiles();
             if (files.length == 0) // The directory is empty so must be added
             {
-                pack.addFile(baseDir, file, targetfile, osList, override, additionals, condition);
+                pack.addFile(baseDir, file, targetfile, osList, override, blockable, additionals, condition);
             }
             else
             {
                 // new targetdir = targetfile;
                 for (File file1 : files)
                 {
-                    addRecursively(baseDir, file1, targetfile, osList, override, pack, additionals,
-                            condition);
+                    addRecursively(baseDir, file1, targetfile, osList, override, blockable,
+                            pack, additionals, condition);
                 }
             }
         }
@@ -1428,12 +1449,24 @@ public class CompilerConfig extends Thread {
             String condition = xmlPanel.getAttribute("condition");
             panel.setCondition(condition);
 
-            // Panel files come in jars packaged w/ IzPack
-            String jarPath = "bin/panels/" + className + ".jar";
-            URL url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
+            // Panel files come in jars packaged w/ IzPack, or they can be
+            // specified via a jar attribute on the panel element
+            String jarPath = xmlPanel.getAttribute("jar");
+            if (jarPath == null)
+            {
+                jarPath = "bin/panels/" + className + ".jar";
+            }
+            URL url = null;
+            // jar="" may be used to suppress the warning message ("Panel jar
+            // file not found")
+            if (!jarPath.equals(""))
+            {
+                url = findIzPackResource(jarPath, "Panel jar file", xmlPanel, true);
+            }
 
-            //when the expected panel jar file is not found under bin/panels resource path
-            // it is assumed that user will do the jar merge themselves via <jar> tag
+            // when the expected panel jar file is not found, it is assumed that
+            // user will do the jar merge themselves via <jar> tag
+
             String fullClassName = null;
             if (url == null)
             {
@@ -1458,6 +1491,21 @@ public class CompilerConfig extends Thread {
             {
                 panel.className = className;
             }
+            IXMLElement configurationElement = xmlPanel.getFirstChildNamed("configuration");
+            if (configurationElement != null){
+                Debug.trace("found a configuration for this panel.");
+                Vector<IXMLElement> params = configurationElement.getChildrenNamed("param");
+                if (params != null){
+                    for(IXMLElement param : params){
+                        IXMLElement keyElement = param.getFirstChildNamed("key");
+                        IXMLElement valueElement = param.getFirstChildNamed("value");
+                        if ((keyElement != null) && (valueElement != null)){
+                            panel.addConfiguration(keyElement.getContent(), valueElement.getContent());
+                        }
+                    }
+                }
+            }
+
             // adding validator
             IXMLElement validatorElement = xmlPanel
                     .getFirstChildNamed(DataValidator.DATA_VALIDATOR_TAG);
@@ -1584,8 +1632,6 @@ public class CompilerConfig extends Thread {
                     // why the InputStream is not handled in a similar manner
                     // to the OutputStream)
 
-                    // IXMLReader reader = new StdXMLReader(null, originalUrl.toExternalForm());
-
                     IXMLElement xml = parser.parse(originalUrl);
                     IXMLWriter writer = new XMLWriter();
                     if (substitute && !compiler.getVariables().isEmpty())
@@ -1634,7 +1680,7 @@ public class CompilerConfig extends Thread {
             {
                 parseError(res, e.getMessage(), e);
             }
-            finally           
+            finally
             {
                 if (null != os)
                 {
@@ -1811,12 +1857,41 @@ public class CompilerConfig extends Thread {
             info.setPrivilegedExecutionConditionID(privileged.getAttribute("condition"));
         }
 
+        // Reboot if necessary
+        IXMLElement reboot = root.getFirstChildNamed("rebootaction");
+        if (reboot != null)
+        {
+            String content = reboot.getContent();
+            if ("ignore".equalsIgnoreCase(content))
+                info.setRebootAction(Info.REBOOT_ACTION_IGNORE);
+            else if ("notice".equalsIgnoreCase(content))
+                info.setRebootAction(Info.REBOOT_ACTION_NOTICE);
+            else if ("ask".equalsIgnoreCase(content))
+                info.setRebootAction(Info.REBOOT_ACTION_ASK);
+            else if ("always".equalsIgnoreCase(content))
+                info.setRebootAction(Info.REBOOT_ACTION_ALWAYS);
+            else
+                throw new CompilerException("Invalid value ''"+content+"'' of element ''reboot''");
+
+            if (reboot.hasAttribute("condition"))
+            {
+                info.setRebootActionConditionID(reboot.getAttribute("condition"));
+            }
+        }
+
         // Add the uninstaller as a resource if specified
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
         if (validateYesNoAttribute(uninstallInfo, "write", YES))
         {
             URL url = findIzPackResource("lib/uninstaller.jar", "Uninstaller", root);
             compiler.addResource("IzPack.uninstaller", url);
+
+            if (privileged != null)
+            {
+                // default behavior for uninstaller elevation: elevate if installer has to be elevated too
+                info.setRequirePrivilegedExecutionUninstaller(validateYesNoAttribute(privileged,
+                        "uninstaller", YES));
+            }
 
             if (uninstallInfo != null)
             {
@@ -1933,11 +2008,11 @@ public class CompilerConfig extends Thread {
                     value = valueElement.getContent();
                     if (value == null){
                        parseError("A dynamic variable needs either a value attribute or a value element.");
-                    }                       
+                    }
                 }
                 else {
-                    parseError("A dynamic variable needs either a value attribute or a value element. Variable name: " + name);    
-                }                
+                    parseError("A dynamic variable needs either a value attribute or a value element. Variable name: " + name);
+                }
             }
             String conditionid = var.getAttribute("condition");
 
@@ -2134,7 +2209,7 @@ public class CompilerConfig extends Thread {
         {
             File file = new File(filename).getAbsoluteFile();
             assertIsNormalReadableFile(file, "Configuration file");
-            data = parser.parse(new FileInputStream(filename));
+            data = parser.parse(new FileInputStream(filename),file.getAbsolutePath());
             // add izpack built in property
             compiler.setProperty("izpack.file", file.toString());
         }
@@ -2193,6 +2268,66 @@ public class CompilerConfig extends Thread {
         }
 
         return override;
+    }
+
+    /**
+     * Parses the blockable element value and adds automatically the OS constraint
+     * family=windows if not already se in the given constraint list.
+     * Throws a parsing warning if the constraint list was implicitely modified.
+     * @param f the blockable XML element to parse
+     * @param osList constraint list to maintain and return
+     * @return blockable level
+     * @throws CompilerException
+     */
+    protected int getBlockableValue(IXMLElement f, List<OsConstraint> osList) throws CompilerException {
+        int blockable = PackFile.BLOCKABLE_NONE;
+
+        String blockable_val = f.getAttribute("blockable");
+        if (blockable_val != null)
+        {
+            if ("none".equalsIgnoreCase(blockable_val))
+            {
+                blockable = PackFile.BLOCKABLE_NONE;
+            }
+            else if ("auto".equalsIgnoreCase(blockable_val))
+            {
+                blockable = PackFile.BLOCKABLE_AUTO;
+            }
+            else if ("force".equalsIgnoreCase(blockable_val))
+            {
+                blockable = PackFile.BLOCKABLE_FORCE;
+            }
+            else
+            {
+                parseError(f, "invalid value for attribute \"blockable\"");
+            }
+        }
+
+        if (blockable != PackFile.BLOCKABLE_NONE)
+        {
+            Iterator<OsConstraint> it = osList.iterator();
+            boolean found = false;
+            while (it.hasNext())
+            {
+                OsConstraint constraint = it.next();
+                if ("windows".equals(constraint.getFamily()))
+                {
+                    found = true;
+                    continue;
+                }
+            }
+
+            if (!found)
+            {
+                // We cannot add this constraint here explicitely, because it
+                // the copied files might be multi-platform.
+                // Print out a warning to inform the user about this fact.
+                //osList.add(new OsConstraint("windows", null, null, null));
+                parseWarn(f, "'blockable' will implicitely apply only on Windows target systems");
+            }
+        }
+
+        return blockable;
     }
 
     /**
@@ -3112,7 +3247,7 @@ public class CompilerConfig extends Thread {
                     for (URL packslangURL : packsLangURLs)
                     {
                         // parsing xml
-                        IXMLElement xml = (IXMLElement) parser.parse(packslangURL.toExternalForm());
+                        IXMLElement xml = parser.parse(packslangURL);
                         if (mergedPacksLang == null)
                         {
                             // just keep the first file
@@ -3169,7 +3304,7 @@ public class CompilerConfig extends Thread {
             }
         }
     }
-    
+
     /**
      * @param xmlPanel
      * @param panel
@@ -3190,15 +3325,15 @@ public class CompilerConfig extends Thread {
                     if (actionName != null){
                         Vector<IXMLElement> params = action.getChildrenNamed("param");
                         PanelActionConfiguration config = new PanelActionConfiguration();
-                        
-                        for(IXMLElement param : params){                            
+
+                        for(IXMLElement param : params){
                             IXMLElement keyElement = param.getFirstChildNamed("key");
                             IXMLElement valueElement = param.getFirstChildNamed("value");
                             if ((keyElement != null) && (valueElement != null)){
                                 Debug.trace("Adding configuration property " + keyElement.getContent() + " with value " + valueElement.getContent() + " for action " + actionName);
                                 config.addProperty(keyElement.getContent(),valueElement.getContent());
-                            }                            
-                        }                                                
+                            }
+                        }
                         panel.putPanelActionConfiguration(actionName, config);
                     }
                     try
@@ -3225,7 +3360,7 @@ public class CompilerConfig extends Thread {
                         parseError(action, "Invalid value [" + stage + "] for attribute : "
                                 + PanelAction.PANEL_ACTION_STAGE_TAG);
                     }
-                }                   
+                }
             }
             else
             {

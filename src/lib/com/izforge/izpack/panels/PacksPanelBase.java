@@ -158,6 +158,23 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         computePacks(idata.availablePacks);
 
         createNormalLayout();
+
+        packsTable.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent event)
+            {
+                int row = packsTable.rowAtPoint(event.getPoint());
+                int col = packsTable.columnAtPoint(event.getPoint());
+                if (col == 0)
+                {
+                    Integer checked = (Integer) packsModel.getValueAt(row, 0);
+                    checked = (checked == 0) ? 1 : 0;
+                    packsModel.setValueAt(checked, row, 0);
+                    packsTable.repaint();
+                }
+            }
+        });
     }
 
     /**
@@ -311,7 +328,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         // Operations for the description
         if ((descriptionArea != null) && (selectedRow != -1))
         {
-            Pack pack = (Pack) idata.availablePacks.get(selectedRow);
+            Pack pack = this.packsModel.getPackAtRow(selectedRow);
             String desc = "";
             String key = pack.id + ".description";
             if (langpack != null && pack.id != null && !"".equals(pack.id))
@@ -329,7 +346,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         // Operation for the dependency listing
         if ((dependencyArea != null) && (selectedRow != -1))
         {
-            Pack pack = (Pack) idata.availablePacks.get(selectedRow);
+            Pack pack = this.packsModel.getPackAtRow(selectedRow);
             List<String> dep = pack.dependencies;
             String list = "";
             if (dep != null)
@@ -461,6 +478,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             layout.addLayoutComponent(panel, constraints);
         }
         add(panel);
+        boolean doNotShowRequiredSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("doNotShowRequiredSize"));
+        panel.setVisible(!doNotShowRequiredSize);
         return (label);
     }
 
@@ -592,30 +611,11 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             packsTable.getColumnModel().getColumn(1).setCellRenderer(new PacksPanelTableCellRenderer());
             PacksPanelTableCellRenderer packTextColumnRenderer = new PacksPanelTableCellRenderer();
             packTextColumnRenderer.setHorizontalAlignment(RIGHT);
-            packsTable.getColumnModel().getColumn(2).setCellRenderer(packTextColumnRenderer);
-            packsTable.getColumnModel().getColumn(2).setMaxWidth(100);
-
-            for (MouseListener mouseListener : packsTable.getMouseListeners())
-            {
-                packsTable.removeMouseListener(mouseListener);
+            if (packsTable.getColumnCount() > 2){
+                packsTable.getColumnModel().getColumn(2).setCellRenderer(packTextColumnRenderer);
+                packsTable.getColumnModel().getColumn(2).setMaxWidth(100);    
             }
-
-            packsTable.addMouseListener(new MouseAdapter()
-            {
-                @Override
-                public void mouseClicked(MouseEvent event)
-                {
-                    int row = packsTable.rowAtPoint(event.getPoint());
-                    int col = packsTable.columnAtPoint(event.getPoint());
-                    if (col == 0)
-                    {
-                        Integer checked = (Integer) packsModel.getValueAt(row, 0);
-                        checked = (checked == 0) ? 1 : 0;
-                        packsModel.setValueAt(checked, row, 0);
-                        packsTable.repaint();
-                    }
-                }
-            });
+            
 
             // remove header,so we don't need more strings
             tableScroller.remove(packsTable.getTableHeader());
@@ -668,14 +668,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             }
             first = false;
             Pack pack = (Pack) iter.next();
-            if (langpack != null && pack.id != null && !"".equals(pack.id))
-            {
-                retval.append(langpack.getString(pack.id));
-            }
-            else
-            {
-                retval.append(pack.name);
-            }
+            retval.append(getI18NPackName(pack));
         }
         if (packsModel.isModifyinstallation())
         {
@@ -688,14 +681,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             while (iter.hasNext())
             {
                 Pack pack = (Pack) installedpacks.get(iter.next());
-                if (langpack != null && pack.id != null && !"".equals(pack.id))
-                {
-                    retval.append(langpack.getString(pack.id));
-                }
-                else
-                {
-                    retval.append(pack.name);
-                }
+                retval.append(getI18NPackName(pack));
                 retval.append("<br>");
             }
         }

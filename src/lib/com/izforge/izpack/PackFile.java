@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2001 Johannes Lehtinen
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,6 +50,10 @@ public class PackFile implements Serializable
 
     public static final int OVERRIDE_UPDATE = 4;
 
+    public static final int BLOCKABLE_NONE = 0;
+    public static final int BLOCKABLE_AUTO = 1;
+    public static final int BLOCKABLE_FORCE = 2;
+
     /**
      * Only available when compiling. Makes no sense when installing, use relativePath instead.
      */
@@ -76,6 +80,11 @@ public class PackFile implements Serializable
     private long length = 0;
 
     /**
+     * The size of the file used to calculate the pack size
+     */
+    private transient long size = 0;
+
+    /**
      * The last-modification time of the file.
      */
     private long mtime = -1;
@@ -89,6 +98,11 @@ public class PackFile implements Serializable
      * Whether or not this file is going to override any existing ones
      */
     private int override = OVERRIDE_FALSE;
+
+    /**
+     * Whether or not this file might be blocked by the operating system
+     */
+    private int blockable = BLOCKABLE_NONE;
 
     /**
      * Additional attributes or any else for customisation
@@ -119,10 +133,10 @@ public class PackFile implements Serializable
      * @param override what to do when the file already exists
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override)
+    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, int blockable)
             throws FileNotFoundException
     {
-        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, null);
+        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, null);
     }
 
     /**
@@ -136,7 +150,7 @@ public class PackFile implements Serializable
      * @param additionals        additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File src, String relativeSourcePath, String target, List<OsConstraint> osList, int override, Map additionals)
+    public PackFile(File src, String relativeSourcePath, String target, List<OsConstraint> osList, int override, int blockable, Map additionals)
             throws FileNotFoundException
     {
         if (!src.exists()) // allows cleaner client co
@@ -153,17 +167,24 @@ public class PackFile implements Serializable
             target = target.substring(0, target.length() - 1);
         }
 
-        this.sourcePath = src.getPath();
-        this.relativePath = relativeSourcePath;
+        this.sourcePath = src.getPath().replace(File.separatorChar, '/');
+        this.relativePath = (relativeSourcePath != null) ? relativeSourcePath.replace(File.separatorChar, '/') : relativeSourcePath;
 
-        this.targetPath = target;
+        this.targetPath = (target != null) ? target.replace(File.separatorChar, '/') : target;
         this.osConstraints = osList;
         this.override = override;
+        this.blockable = blockable;
 
         this.length = src.length();
+        this.size = this.length;
         this.mtime = src.lastModified();
         this.isDirectory = src.isDirectory();
         this.additionals = additionals;
+        
+        // File.length is undefined for directories - we don't add any data, so don't skip
+        // any please!
+        if (isDirectory)
+            length = 0;
     }
 
     /**
@@ -177,10 +198,10 @@ public class PackFile implements Serializable
      * @param additionals additional attributes
      * @throws FileNotFoundException if the specified file does not exist.
      */
-    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, Map additionals)
+    public PackFile(File baseDir, File src, String target, List<OsConstraint> osList, int override, int blockable, Map additionals)
             throws FileNotFoundException
     {
-        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, additionals);
+        this(src, computeRelativePathFrom(baseDir, src), target, osList, override, blockable, additionals);
     }
 
     /**
@@ -198,8 +219,8 @@ public class PackFile implements Serializable
         try
         { // extract relative path...
             if (file.getAbsolutePath().startsWith(baseDir.getAbsolutePath()))
-            { 
-              return file.getAbsolutePath().substring(baseDir.getAbsolutePath().length() + 1); 
+            {
+              return file.getAbsolutePath().substring(baseDir.getAbsolutePath().length() + 1);
             }
         }
         catch (Exception x)// don't throw an exception here. return null instead!
@@ -236,6 +257,14 @@ public class PackFile implements Serializable
     }
 
     /**
+     *  The size of the file in bytes (is the same as the length if it is not a loose pack)
+     */
+    public final long size()
+    {
+        return size;
+    }
+
+    /**
      * The last-modification time of the file.
      */
     public final long lastModified()
@@ -249,6 +278,14 @@ public class PackFile implements Serializable
     public final int override()
     {
         return override;
+    }
+
+    /**
+     * Whether or not this file might be blocked during installation/uninstallation
+     */
+    public final int blockable()
+    {
+        return blockable;
     }
 
     public final boolean isDirectory()
@@ -320,7 +357,7 @@ public class PackFile implements Serializable
     {
         this.pack200Jar = pack200Jar;
     }
-    
+
     public void setLoosePackInfo(boolean loose)
     {
         if (loose)

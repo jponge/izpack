@@ -4,7 +4,7 @@
  * http://izpack.org/
  * http://izpack.codehaus.org/
  *
- * Copyright 2007 Dennis Reil
+ * Copyright 2007-2009 Dennis Reil
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +24,11 @@ import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.adaptator.IXMLElement;
 
 /**
- * @author Dennis Reil, <Dennis.Reil@reddot.de>
+ * @author Dennis Reil, <izpack@reil-online.de>
  * @version $Id: OrCondition.java,v 1.1 2006/09/29 14:40:38 dennis Exp $
  */
 public class OrCondition extends Condition
 {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = 8341350377205144199L;
 
     protected Condition leftoperand;
@@ -54,7 +50,9 @@ public class OrCondition extends Condition
     public OrCondition(Condition operand1, Condition operand2)
     {
         this.leftoperand = operand1;
+        this.leftoperand.setInstalldata(this.installdata);
         this.rightoperand = operand2;
+        this.rightoperand.setInstalldata(this.installdata);
     }
 
     /*
@@ -96,6 +94,12 @@ public class OrCondition extends Condition
      */
     public boolean isTrue()
     {
+        if ((this.leftoperand == null) || (this.rightoperand == null)){
+            Debug.trace("Operands of condition " + this.id + " not initialized correctly.");
+            return false;
+        }
+        this.leftoperand.setInstalldata(this.installdata);
+        this.rightoperand.setInstalldata(this.installdata);
         return this.leftoperand.isTrue() || this.rightoperand.isTrue();
     }
 
@@ -112,5 +116,16 @@ public class OrCondition extends Condition
         details.append(rightoperand.getDependenciesDetails());
         details.append("</li></ul>");
         return details.toString();
+    }
+
+    @Override
+    public void makeXMLData(IXMLElement conditionRoot)
+    {
+        IXMLElement left = RulesEngine.createConditionElement(this.leftoperand, conditionRoot);
+        this.leftoperand.makeXMLData(left);
+        conditionRoot.addChild(left);        
+        IXMLElement right = RulesEngine.createConditionElement(this.rightoperand, conditionRoot);
+        this.rightoperand.makeXMLData(right);
+        conditionRoot.addChild(right);     
     }
 }

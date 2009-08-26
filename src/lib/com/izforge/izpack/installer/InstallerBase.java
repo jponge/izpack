@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2003 Jonathan Halliday
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,21 +53,38 @@ public class InstallerBase
      * Resource name of the conditions specification
      */
     private static final String CONDITIONS_SPECRESOURCENAME = "conditions.xml";
-    
-    private RulesEngine rules; 
+
+    private RulesEngine rules;
     private List<InstallerRequirement> installerrequirements;
     private Map<String, List<DynamicVariable>> dynamicvariables;
-    
+
     /**
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
      * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
+    
+    /**
+     * Returns an ArrayList of the available langpacks ISO3 codes.
+     *
+     * @return The available langpacks list.
+     * @throws Exception Description of the Exception
+     */
+    public List<String> getAvailableLangPacks() throws Exception
+    {
+        // We read from the langpacks file in the jar
+        InputStream in = getClass().getResourceAsStream("/langpacks.info");
+        ObjectInputStream objIn = new ObjectInputStream(in);
+        List<String> available = (List<String>) objIn.readObject();
+        objIn.close();
+
+        return available;
+    }
 
     public RulesEngine getRules(){
         return this.rules;
     }
-    
+
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
      * All system properties are available as $SYSTEM_<variable> where <variable> is the actual
@@ -102,6 +119,8 @@ public class InstallerBase
         objIn.close();
 
         checkForPrivilegedExecution(inf);
+
+        checkForRebootAction(inf);
 
         // We put the Info data as variables
         installdata.setVariable(ScriptParser.APP_NAME, inf.getAppName());
@@ -246,15 +265,20 @@ public class InstallerBase
 
     private void checkForPrivilegedExecution(Info info)
     {
-        if (System.getenv("izpack.mode") != null && System.getenv("izpack.mode").equals("privileged"))
+        if (PrivilegedRunner.isPrivilegedMode())
         {
             // We have been launched through a privileged execution, so stop the checkings here!
             return;
         }
         else if (info.isPrivilegedExecutionRequired())
         {
-            final Condition condition = RulesEngine.getCondition(info.getPrivilegedExecutionConditionID());
-            PrivilegedRunner runner = new PrivilegedRunner(!condition.isTrue());
+            boolean shouldElevate = true;
+            final String conditionId = info.getPrivilegedExecutionConditionID();
+            if (conditionId != null)
+            {
+                shouldElevate = RulesEngine.getCondition(conditionId).isTrue();
+            }
+            PrivilegedRunner runner = new PrivilegedRunner(!shouldElevate);
             if (runner.isPlatformSupported() && runner.isElevationNeeded())
             {
                 try
@@ -282,6 +306,16 @@ public class InstallerBase
             }
         }
 
+    }
+
+    private void checkForRebootAction(Info info)
+    {
+        final String conditionId = info.getRebootActionConditionID();
+        if (conditionId != null)
+        {
+            if (!RulesEngine.getCondition(conditionId).isTrue())
+                info.setRebootAction(Info.REBOOT_ACTION_IGNORE);
+        }
     }
 
     /**
@@ -461,7 +495,7 @@ public class InstallerBase
         // uninstallerLib list if exist
 
     }
-    
+
     /**
      * Reads the conditions specification file and initializes the rules engine.
      */
@@ -502,7 +536,7 @@ public class InstallerBase
 
             // get the data
             IXMLElement conditionsxml = xmlParser.parse(input);
-            this.rules = new RulesEngine(conditionsxml, installdata);         
+            this.rules = new RulesEngine(conditionsxml, installdata);
         }
         catch (Exception e)
         {
@@ -512,7 +546,7 @@ public class InstallerBase
         }
         installdata.setRules(rules);
     }
-    
+
     /**
      * Loads Dynamic Variables.
      */
@@ -531,7 +565,7 @@ public class InstallerBase
             System.out.println(e);
         }
     }
-    
+
     /**
      * Load installer conditions
      *
@@ -544,7 +578,7 @@ public class InstallerBase
         this.installerrequirements = (List<InstallerRequirement>) objIn.readObject();
         objIn.close();
     }
-    
+
     public boolean checkInstallerRequirements(AutomatedInstallData installdata) throws Exception
     {
         boolean result = true;
@@ -572,11 +606,11 @@ public class InstallerBase
         }
         return result;
     }
-    
+
     protected void showMissingRequirementMessage(String message){
         Debug.log(message);
     }
-    
+
     /**
      * Gets the stream to a resource.
      *
@@ -609,7 +643,7 @@ public class InstallerBase
         }
         return result;
     }
-    
+
     /**
      * Refreshes Dynamic Variables.
      */

@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,17 +26,13 @@ import com.izforge.izpack.PackFile;
 import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
 import org.apache.regexp.RE;
 import org.apache.regexp.RECompiler;
 import org.apache.regexp.RESyntaxException;
 
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -78,7 +74,7 @@ public abstract class UnpackerBase implements IUnpacker
      * The absolute path of the source installation jar.
      */
     private File absolutInstallSource;
-    
+
     /**
      * The packs locale database.
      */
@@ -735,8 +731,8 @@ public abstract class UnpackerBase implements IUnpacker
             inRes.close();
         }
 
-        // Should we relaunch with privileges?
-        if (idata.info.isPrivilegedExecutionRequired())
+        // Should we relaunch the uninstaller with privileges?
+        if (idata.info.isPrivilegedExecutionRequiredUninstaller())
         {
             outJar.putNextEntry(new ZipEntry("exec-admin"));
             outJar.closeEntry();
@@ -862,7 +858,7 @@ public abstract class UnpackerBase implements IUnpacker
                         files_to_delete.add(newf);
                     }
 
-                    if (newf.isDirectory())
+                    if (newf.isDirectory() && !fileMatchesOnePattern(newfname, exclude_patterns))
                     {
                         scanstack.push(newf);
                     }
@@ -946,23 +942,30 @@ public abstract class UnpackerBase implements IUnpacker
         oout.close();
         fout.close();
     }
-    
-    protected File getAbsolutInstallSource() throws MalformedURLException
+
+    protected File getAbsolutInstallSource() throws Exception
     {
         if (absolutInstallSource == null)
         {
-            URL url = getClass().getResource("/info");
-            if (url.getPath().startsWith("file:"))
+            URI uri = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
+            if (!"file".equals(uri.getScheme()))
             {
-                url = new URL(url.getFile());
+                throw new Exception ("Unexpected scheme in JAR file URI: "+uri);
             }
-            absolutInstallSource = new File(url.getFile()).getAbsoluteFile().getParentFile();
-            if (absolutInstallSource.getAbsolutePath().endsWith("!"))
+            absolutInstallSource = new File(uri.getSchemeSpecificPart()).getAbsoluteFile();
+            if (absolutInstallSource.getName().endsWith(".jar"))
             {
                 absolutInstallSource = absolutInstallSource.getParentFile();
             }
         }
         return absolutInstallSource;
+    }
+
+    protected boolean blockableForCurrentOs(PackFile pf)
+    {
+        return
+            (pf.blockable() != PackFile.BLOCKABLE_NONE)
+            && (OsVersion.IS_WINDOWS);
     }
 }
 

@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2004 Chadwick McHenry
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ public class PackInfo implements Serializable
 {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -3604642858885697783L;
 
@@ -202,13 +202,13 @@ public class PackInfo implements Serializable
     {
         return pack;
     }
-    
+
     public boolean isHidden()
     {
         return pack.isHidden();
     }
 
-    
+
     public void setHidden(boolean hidden)
     {
         pack.setHidden(hidden);
@@ -233,20 +233,20 @@ public class PackInfo implements Serializable
     /*
      * public void addFile(File file, String targetfile, List osList, int override) throws
      * FileNotFoundException { addFile( file,targetfile, osList, override, null); }
-     * 
-     * 
+     *
+     *
      * /** Add a file or directory to be installed.
-     * 
+     *
      * @param file the file or basedir to be installed. @param targetfile path file will be
      * installed to. @param osList the target operation system(s) of this pack. @param override what
      * to do if the file already exists when installing @param additionals Map which contains
      * additional data
-     * 
+     *
      * @throws FileNotFoundException if the file specified does not exist. The file is not read
      * until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      * then, if the file is deleted in between.
      */
-    public void addFile(File baseDir, File file, String targetfile, List<OsConstraint> osList, int override, Map additionals, String condition)
+    public void addFile(File baseDir, File file, String targetfile, List<OsConstraint> osList, int override, int blockable, Map additionals, String condition)
             throws FileNotFoundException
     {
         if (!file.exists())
@@ -254,7 +254,7 @@ public class PackInfo implements Serializable
             throw new FileNotFoundException(file.toString());
         }
 
-        PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, additionals);
+        PackFile packFile = new PackFile(baseDir, file, targetfile, osList, override, blockable, additionals);
         packFile.setLoosePackInfo(pack.loose);
         packFile.setCondition(condition);
         files.put(packFile, file);

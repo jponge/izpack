@@ -340,7 +340,7 @@ public class Packager extends PackagerBase
                 }
 
                 // even if not written, it counts towards pack size
-                pack.nbytes += pf.length();
+                pack.nbytes += pf.size();
             }
 
             // Write out information about parsable files

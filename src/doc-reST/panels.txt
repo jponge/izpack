@@ -223,8 +223,16 @@ XInfoPanel
 A panel showing text parsed by the variable substitutor. The text can be
 specified through the ``XInfoPanel.info`` resource. This panel can be useful
 when you have to show information after the installation process is completed
-(for instance if the text contains the target path).
+(for instance if the text contains the target path).  The font can
+be set on this text through the optional variable ``XinfoPanel.font``, and its value is
+to be formatted consistent with the support provided by java.awt.Font.decode().
 
+In the following example the font size and type are omitted, but they
+can also be part of the value:
+
+::
+
+    <variable name="XInfoPanel.font" value="monospaced"/>
 
 
 FinishPanel

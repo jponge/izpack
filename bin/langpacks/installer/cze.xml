@@ -10,6 +10,10 @@
     <str id="installer.prev" txt="Pøedcházející"/>
     <str id="installer.quit" txt="Konec"/>
     <str id="installer.madewith" txt="(Vytvoøené pomocí IzPack - http://izpack.org/)"/>
+    <str id="installer.reboot.ask.title" txt="Po¾adován reboot"/>
+    <str id="installer.reboot.ask.message" txt="Reboot je po¾adovaný pro ukonèení instalace. Chcete nyní restartovat poèitaè?"/>
+    <str id="installer.reboot.notice.title" txt="Doporuèen reboot"/>
+    <str id="installer.reboot.notice.message" txt="Reboot je doporuèený pro ukonèení instalace."/>
     <str id="installer.quit.title" txt="Skuteènì chcete ukonèit instalaci ?"/>
     <str id="installer.quit.message" txt="Tato operace ukonèí instalaci !"/>
     <str id="installer.warning" txt="Varování !"/>

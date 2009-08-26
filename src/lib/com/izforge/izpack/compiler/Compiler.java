@@ -56,7 +56,7 @@ public class Compiler extends Thread
     /**
      * The IzPack version.
      */
-    public final static String IZPACK_VERSION = "4.2.0";
+    public final static String IZPACK_VERSION = "4.3.1";
 
     /**
      * The IzPack home directory.
@@ -901,7 +901,7 @@ public class Compiler extends Thread
             if (className != null)
             {
                 pos = name.indexOf(className);
-                if (name.length() == pos + className.length() + 6) // "Main" class
+                if (pos >= 0 && name.length() == pos + className.length() + 6) // "Main" class
                 // found
                 {
                     jis.close();

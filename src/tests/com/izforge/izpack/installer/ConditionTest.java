@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2006 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://www.izforge.com/izpack/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -21,6 +21,7 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.rules.RulesEngine;
 import junit.framework.TestCase;
+import org.w3c.dom.Document;
 
 
 /**
@@ -53,10 +54,11 @@ public class ConditionTest extends TestCase
         super.setUp();
         IXMLElement conditionspec = new XMLElementImpl("conditions");
 
-        conditionspec.addChild(this.createVariableCondition("test.true", "TEST", "true"));
-        conditionspec.addChild(this.createRefCondition("test.true2", "test.true"));
+        Document ownerDocument = conditionspec.getElement().getOwnerDocument();
+        conditionspec.addChild(this.createVariableCondition("test.true", "TEST", "true", ownerDocument));
+        conditionspec.addChild(this.createRefCondition("test.true2", "test.true", ownerDocument));
         //conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true")));
-        conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true")));
+        conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true", ownerDocument), ownerDocument));
         rules = new RulesEngine(conditionspec, idata);
     }
 
@@ -72,9 +74,9 @@ public class ConditionTest extends TestCase
         }
     }
 
-    protected IXMLElement createNotCondition(String id, IXMLElement condition)
+    protected IXMLElement createNotCondition(String id, IXMLElement condition, Document ownerDocument)
     {
-        IXMLElement not = new XMLElementImpl("condition");
+        IXMLElement not = new XMLElementImpl("condition", ownerDocument);
         not.setAttribute("type", "not");
         not.setAttribute("id", id);
         not.addChild(condition);
@@ -82,14 +84,14 @@ public class ConditionTest extends TestCase
         return not;
     }
 
-    protected IXMLElement createVariableCondition(String id, String variable, String expvalue)
+    protected IXMLElement createVariableCondition(String id, String variable, String expvalue, Document ownerDocument)
     {
-        IXMLElement variablecondition = new XMLElementImpl("condition");
+        IXMLElement variablecondition = new XMLElementImpl("condition", ownerDocument);
         variablecondition.setAttribute("type", "variable");
         variablecondition.setAttribute("id", id);
-        IXMLElement name = new XMLElementImpl("name");
+        IXMLElement name = new XMLElementImpl("name", ownerDocument);
         name.setContent(variable);
-        IXMLElement value = new XMLElementImpl("value");
+        IXMLElement value = new XMLElementImpl("value", ownerDocument);
         value.setContent(expvalue);
 
         variablecondition.addChild(name);
@@ -98,9 +100,9 @@ public class ConditionTest extends TestCase
         return variablecondition;
     }
 
-    protected IXMLElement createRefCondition(String id, String refid)
+    protected IXMLElement createRefCondition(String id, String refid, Document ownerDocument)
     {
-        IXMLElement refcondition = new XMLElementImpl("condition");
+        IXMLElement refcondition = new XMLElementImpl("condition", ownerDocument);
         refcondition.setAttribute("type", "ref");
         refcondition.setAttribute("refid", refid);
         refcondition.setAttribute("id", id);
@@ -121,7 +123,6 @@ public class ConditionTest extends TestCase
 
     public void testVariableCondition()
     {
-
         assertNotNull(RulesEngine.getCondition("test.true"));
         assertNotNull(RulesEngine.getCondition("test.true2"));
 

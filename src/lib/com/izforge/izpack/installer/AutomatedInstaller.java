@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2003 Jonathan Halliday
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,10 +21,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.Panel;
+import com.izforge.izpack.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
@@ -33,6 +30,7 @@ import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.*;
 import java.util.*;
@@ -338,10 +336,13 @@ public class AutomatedInstaller extends InstallerBase
         System.out.println("[ Starting automated installation ]");
         Debug.log("[ Starting automated installation ]");
 
+        ConsolePanelAutomationHelper uihelper = new ConsolePanelAutomationHelper(); 
+        
         try
         {
             // assume that installation will succeed
             this.result = true;
+            VariableSubstitutor substitutor = new VariableSubstitutor(this.idata.getVariables());
 
             // walk the panels in order
             for (Panel p : this.idata.panelsOrder)
@@ -355,6 +356,10 @@ public class AutomatedInstaller extends InstallerBase
                         // get number of panel instance to process
                         this.panelInstanceCount.put(p.className, this.panelInstanceCount.get(p.className) + 1);
                     }
+                    else
+                    {
+                        this.panelInstanceCount.put(p.className, 1);
+                    }
                     continue;
                 }
 
@@ -367,9 +372,9 @@ public class AutomatedInstaller extends InstallerBase
 
                 if (automationHelper == null)
                 {
-                    executePreValidateActions(p, null);
+                    executePreValidateActions(p, uihelper);
                     validatePanel(p);
-                    executePostValidateActions(p, null);
+                    executePostValidateActions(p, uihelper);
                     continue;
                 }
 
@@ -377,6 +382,7 @@ public class AutomatedInstaller extends InstallerBase
 
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
+                refreshDynamicVariables(substitutor, this.idata);
             }
 
             // this does nothing if the uninstaller was not included
@@ -401,39 +407,40 @@ public class AutomatedInstaller extends InstallerBase
         finally
         {
             // Bye
-            Housekeeper.getInstance().shutDown(this.result ? 0 : 1);
+            // FIXME !!! Reboot handling
+            boolean reboot = false;
+            if (idata.rebootNecessary)
+            {
+                System.out.println("[ There are file operations pending after reboot ]");
+                switch( idata.info.getRebootAction()) {
+                    case Info.REBOOT_ACTION_ALWAYS:
+                        reboot = true;
+                }
+                if (reboot)
+                    System.out.println("[ Rebooting now automatically ]");
+            }
+            Housekeeper.getInstance().shutDown(this.result ? 0 : 1, reboot);
         }
     }
 
     /**
      * Run the installation logic for a panel.
-     * @param p The panel to install.
-     * @param automationHelper The helper of the panel.
-     * @param panelRoot The xml element describing the panel.
+     * @param p                   The panel to install.
+     * @param automationHelper    The helper of the panel.
+     * @param panelRoot           The xml element describing the panel.
      * @throws InstallerException if something went wrong while installing.
      */
     private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot) throws InstallerException
     {
-        try
-        {
-            executePreActivateActions(p, null);
+        executePreActivateActions(p, null);
 
-            Debug.log("automationHelperInstance.runAutomated :"
-                    + automationHelper.getClass().getName() + " entered.");
+        Debug.log("automationHelperInstance.runAutomated :"
+                + automationHelper.getClass().getName() + " entered.");
 
-            automationHelper.runAutomated(this.idata, panelRoot);
+        automationHelper.runAutomated(this.idata, panelRoot);
 
-            Debug.log("automationHelperInstance.runAutomated :"
-                    + automationHelper.getClass().getName() + " successfully done.");
-        }
-        catch (InstallerException e)
-        {
-            Debug.log("ERROR: automated installation failed for panel " + p.className);
-            e.printStackTrace();
-            this.result = false;
-            // shouldn't a exception in runAutomated make the install to die ?
-            //throw new InstallerException("ERROR: automated installation failed for panel " + p.className, e);
-        }
+        Debug.log("automationHelperInstance.runAutomated :"
+                + automationHelper.getClass().getName() + " successfully done.");
 
         executePreValidateActions(p, null);
         validatePanel(p);
@@ -563,7 +570,7 @@ public class AutomatedInstaller extends InstallerBase
 
         // Initialises the parser
         IXMLParser parser = new XMLParser();
-        IXMLElement rtn = parser.parse(in);
+        IXMLElement rtn = parser.parse(in,input.getAbsolutePath());
         in.close();
 
         return rtn;
@@ -589,6 +596,7 @@ public class AutomatedInstaller extends InstallerBase
             {
                 PanelAction action = PanelActionFactory.createPanelAction(actionClassName);
                 action.initialize(panel.getPanelActionConfiguration(actionClassName));
+                actionList.add(action);
             }
         }
         return actionList;

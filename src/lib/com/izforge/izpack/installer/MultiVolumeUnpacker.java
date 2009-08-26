@@ -1,15 +1,15 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/ http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2007 Dennis Reil
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -17,22 +17,37 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.*;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
+
+import com.izforge.izpack.ExecutableFile;
+import com.izforge.izpack.Pack;
+import com.izforge.izpack.PackFile;
+import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.XPackFile;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.io.CorruptVolumeException;
 import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.io.VolumeNotFoundException;
-import com.izforge.izpack.panels.NextMediaDialog;
-import com.izforge.izpack.util.*;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.FileExecutor;
+import com.izforge.izpack.util.IoHelper;
+import com.izforge.izpack.util.OsConstraint;
+import com.izforge.izpack.util.os.*;
 
 
 /**
@@ -42,63 +57,25 @@ import java.util.Properties;
  */
 public class MultiVolumeUnpacker extends UnpackerBase
 {
+    protected IMultiVolumeUnpackerHelper helper;
+
     public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler)
     {
         super(idata, handler);
+        if (handler instanceof PanelAutomation){
+            Debug.trace("running in auto installation mode.");
+            helper = new MultiVolumeUnpackerAutomationHelper();
+        }
+        else {
+            Debug.trace("running in normal installation mode.");
+            helper = new MultiVolumeUnpackerHelper();
+        }
+        helper.init(idata, handler);
     }
 
-    protected File enterNextMediaMessage(String volumename, boolean lastcorrupt)
-    {
-        if (lastcorrupt)
-        {
-            Component parent = null;
-            if ((this.handler != null) && (this.handler instanceof IzPanel))
-            {
-                parent = ((IzPanel) this.handler).getInstallerFrame();
-            }
-            JOptionPane.showMessageDialog(parent, idata.langpack
-                    .getString("nextmedia.corruptmedia"), idata.langpack
-                    .getString("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
-        }
-        Debug.trace("Enter next media: " + volumename);
 
-        File nextvolume = new File(volumename);
-        NextMediaDialog nmd = null;
-
-        while (!nextvolume.exists() || lastcorrupt)
-        {
-            if ((this.handler != null) && (this.handler instanceof IzPanel))
-            {
-                InstallerFrame installframe = ((IzPanel) this.handler).getInstallerFrame();
-                nmd = new NextMediaDialog(installframe, idata, volumename);
-            }
-            else
-            {
-                nmd = new NextMediaDialog(null, idata, volumename);
-            }
-            nmd.setVisible(true);
-            String nextmediainput = nmd.getNextMedia();
-            if (nextmediainput != null)
-            {
-                nextvolume = new File(nextmediainput);
-            }
-            else
-            {
-                Debug.trace("Input from NextMediaDialog was null");
-                nextvolume = new File(volumename);
-            }
-            // selection equal to last selected which was corrupt?
-            if (!(volumename.equals(nextvolume.getAbsolutePath()) && lastcorrupt))
-            {
-                lastcorrupt = false;
-            }
-        }
-        return nextvolume;
-    }
-
-    protected File enterNextMediaMessage(String volumename)
-    {
-        return enterNextMediaMessage(volumename, false);
+    public IMultiVolumeUnpackerHelper getHelper(){
+        return this.helper;
     }
 
     /**
@@ -112,6 +89,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
             //
             // Initialisations
             FileOutputStream out = null;
+            FileQueue fq = null;
             ArrayList<ParsableFile> parsables = new ArrayList<ParsableFile>();
             ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
             ArrayList<UpdateCheck> updatechecks = new ArrayList<UpdateCheck>();
@@ -165,7 +143,7 @@ public class MultiVolumeUnpacker extends UnpackerBase
             File volume = new File(mediadirectory + File.separator + volumename);
             if (!volume.exists())
             {
-                volume = enterNextMediaMessage(volume.getAbsolutePath());
+                volume = helper.enterNextMediaMessage(volume.getAbsolutePath());
             }
             FileSpanningInputStream fin = new FileSpanningInputStream(volume, volumes);
 
@@ -206,6 +184,11 @@ public class MultiVolumeUnpacker extends UnpackerBase
                     {
                         stepname = name;
                     }
+                }
+                if (pack.isHidden()){
+                    // TODO: hide the pack completely
+                    // hide the pack name if pack is hidden
+                    stepname = "";
                 }
                 handler.nextStep(stepname, i + 1, nfiles);
                 for (int j = 0; j < nfiles; j++)
@@ -331,7 +314,21 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         }
 
                         // We copy the file
-                        out = new FileOutputStream(pathFile);
+                        //out = new FileOutputStream(pathFile);
+                        File tmpFile = null;
+                        if (blockableForCurrentOs(pf))
+                        {
+                            // If target file might be blocked the output file must first
+                            // refer to a temporary file, because Windows Setup API
+                            // doesn't work on streams but only on physical files
+                            tmpFile = File.createTempFile("__FQ__", null, pathFile.getParentFile());
+                            out = new FileOutputStream(tmpFile);
+                        }
+                        else
+                        {
+                            out=new FileOutputStream(pathFile);
+                        }
+
                         byte[] buffer = new byte[5120];
                         long bytesCopied = 0;
                         // InputStream pis = objIn;
@@ -359,13 +356,13 @@ public class MultiVolumeUnpacker extends UnpackerBase
                             }
                             catch (VolumeNotFoundException vnfe)
                             {
-                                File nextmedia = enterNextMediaMessage(vnfe.getVolumename());
+                                File nextmedia = helper.enterNextMediaMessage(vnfe.getVolumename());
                                 fin.setVolumename(nextmedia.getAbsolutePath());
                             }
                             catch (CorruptVolumeException cve)
                             {
                                 Debug.trace("corrupt media found. magic number is not correct");
-                                File nextmedia = enterNextMediaMessage(cve.getVolumename(), true);
+                                File nextmedia = helper.enterNextMediaMessage(cve.getVolumename(), true);
                                 fin.setVolumename(nextmedia.getAbsolutePath());
                             }
                         }
@@ -405,13 +402,13 @@ public class MultiVolumeUnpacker extends UnpackerBase
                             }
                             catch (VolumeNotFoundException vnfe)
                             {
-                                File nextmedia = enterNextMediaMessage(vnfe.getVolumename());
+                                File nextmedia = helper.enterNextMediaMessage(vnfe.getVolumename());
                                 fin.setVolumename(nextmedia.getAbsolutePath());
                             }
                             catch (CorruptVolumeException cve)
                             {
                                 Debug.trace("corrupt media found. magic number is not correct");
-                                File nextmedia = enterNextMediaMessage(cve.getVolumename(), true);
+                                File nextmedia = helper.enterNextMediaMessage(cve.getVolumename(), true);
                                 fin.setVolumename(nextmedia.getAbsolutePath());
                             }
                         }
@@ -422,11 +419,41 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         // Set file modification time if specified
                         if (pf.lastModified() >= 0)
                         {
-                            pathFile.setLastModified(pf.lastModified());
+                            if (blockableForCurrentOs(pf))
+                                tmpFile.setLastModified(pf.lastModified());
+                            else
+                                pathFile.setLastModified(pf.lastModified());
                         }
-                        // Custom action listener stuff --- afterFile ----
-                        informListeners(customActions, InstallerListener.AFTER_FILE, pathFile, pf,
-                                null);
+
+                        if (blockableForCurrentOs(pf))
+                        {
+                            if (fq == null)
+                            {
+                                fq = new FileQueue();
+                            }
+
+                            FileQueueMove fqmv = new FileQueueMove(tmpFile, pathFile);
+                            if (blockableForCurrentOs(pf))
+                            {
+                                fqmv.setForceInUse(true);
+                            }
+                            fqmv.setOverwrite(true);
+                            fq.add(fqmv);
+                            Debug.log(tmpFile.getAbsolutePath()
+                                    + " -> "
+                                    + pathFile.getAbsolutePath()
+                                    + " added to file queue for being copied after reboot"
+                                    );
+                            // The temporary file must not be deleted
+                            // until the file queue will be committed
+                            tmpFile.deleteOnExit();
+                        }
+                        else
+                        {
+                            // Custom action listener stuff --- afterFile ----
+                            informListeners(customActions, InstallerListener.AFTER_FILE, pathFile, pf,
+                                    null);
+                        }
                     }
                     else
                     {
@@ -451,18 +478,18 @@ public class MultiVolumeUnpacker extends UnpackerBase
                         }
                         catch (VolumeNotFoundException vnfe)
                         {
-                            File nextmedia = enterNextMediaMessage(vnfe.getVolumename());
+                            File nextmedia = helper.enterNextMediaMessage(vnfe.getVolumename());
                             fin.setVolumename(nextmedia.getAbsolutePath());
                         }
                         catch (CorruptVolumeException cve)
                         {
                             Debug.trace("corrupt media found. magic number is not correct");
-                            File nextmedia = enterNextMediaMessage(cve.getVolumename(), true);
+                            File nextmedia = helper.enterNextMediaMessage(cve.getVolumename(), true);
                             fin.setVolumename(nextmedia.getAbsolutePath());
                         }
                         catch (EOFException eofe)
                         {
-                            File nextmedia = enterNextMediaMessage("");
+                            File nextmedia = helper.enterNextMediaMessage("");
                             fin.setVolumename(nextmedia.getAbsolutePath());
                         }
                     }
@@ -590,9 +617,20 @@ public class MultiVolumeUnpacker extends UnpackerBase
         {
             // TODO: finer grained error handling with useful error messages
             handler.stopAction();
-            handler.emitError("An error occured", err.toString());
-            err.printStackTrace();
-            Debug.trace("Error while installing: " + err.toString());
+            String message = err.getMessage();
+            if ("Installation cancelled".equals(message))
+            {
+                handler.emitNotification("Installation cancelled");
+            }
+            else
+            {
+                if (message == null || "".equals(message))
+                {
+                    message = "Internal error occured : " + err.toString();
+                }
+                handler.emitError("An error occured", message);
+                err.printStackTrace();
+            }
             this.result = false;
         }
         finally

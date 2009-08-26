@@ -128,6 +128,8 @@ public class Debug
     public static String LOGFILENAME = LOGFILE_PREFIX + System.currentTimeMillis()
             + LOGFILE_EXTENSION;
 
+    public static boolean LOG_TRACE_STATEMENTS = false;
+    
     /**
      * The log initializion bloc.
      */
@@ -227,6 +229,9 @@ public class Debug
         if (TRACE)
         {
             // console.println(s.toString());
+            if (LOG_TRACE_STATEMENTS){
+                log(s);
+            }
             System.out.println(s);
 
             if (STACKTRACE && (s instanceof Throwable))

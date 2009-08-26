@@ -1,17 +1,17 @@
 /*
  * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
+ *
  * http://izpack.org/
  * http://izpack.codehaus.org/
- * 
+ *
  * Copyright 2002 Elmar Grom
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.util;
 
+import java.io.*;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
@@ -115,8 +116,13 @@ public class Housekeeper
     /*--------------------------------------------------------------------------*/
     public void shutDown(int exitCode)
     {
+        shutDown(exitCode, false);
+    }
+
+    public void shutDown(int exitCode, boolean reboot)
+    {
         // IZPACK-276
-		// Do the cleanup of the last registered client at the fist time (first in last out)
+        // Do the cleanup of the last registered client at the fist time (first in last out)
         for (int i = cleanupClients.size() - 1; i >= 0; i--)
         {
             try
@@ -135,7 +141,32 @@ public class Housekeeper
             }
         }
 
+        if (reboot)
+        {
+            try {
+                systemReboot();
+            } catch (IOException e)
+            {
+                // Do nothing at the moment
+            }
+        }
+
         System.exit(exitCode);
+    }
+
+    private void systemReboot() throws IOException
+    {
+        final int waitseconds = 2;
+
+        if (OsVersion.IS_UNIX) {
+            Runtime.getRuntime().exec("sudo /sbin/shutdown -r -t "+waitseconds+" now");
+        }
+        else if (OsVersion.IS_WINDOWS) {
+            Runtime.getRuntime().exec("shutdown /r /f /t "+waitseconds);
+        }
+        else {
+            throw new IOException("Reboot not implemented for your OS");
+        }
     }
 }
 /*---------------------------------------------------------------------------*/

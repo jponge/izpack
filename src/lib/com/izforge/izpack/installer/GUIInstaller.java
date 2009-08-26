@@ -85,6 +85,29 @@ public class GUIInstaller extends InstallerBase
      */
     public GUIInstaller() throws Exception
     {
+        try {
+            init();
+        } catch (Exception e) { 
+            showFatalError(e);
+            throw e;
+        } catch (Error e) { 
+            showFatalError(e);
+            throw e;
+        }
+    }
+    
+    private void showFatalError(Throwable e)
+    {
+        try {
+            JOptionPane.showMessageDialog (null, "Error: "+e.toString(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e2) {
+            e2.printStackTrace();
+        }
+    }
+    
+    private void init() throws Exception
+    {
+    
         this.installdata = new InstallData();                
         
         // Loads the installation data
@@ -362,23 +385,6 @@ public class GUIInstaller extends InstallerBase
         InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
         this.installdata.langpack = new LocaleDatabase(in);
 
-    }
-
-    /**
-     * Returns an ArrayList of the available langpacks ISO3 codes.
-     *
-     * @return The available langpacks list.
-     * @throws Exception Description of the Exception
-     */
-    private List getAvailableLangPacks() throws Exception
-    {
-        // We read from the langpacks file in the jar
-        InputStream in = getClass().getResourceAsStream("/langpacks.info");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        List available = (List) objIn.readObject();
-        objIn.close();
-
-        return available;
     }
 
     /**

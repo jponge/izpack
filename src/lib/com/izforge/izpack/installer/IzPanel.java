@@ -505,6 +505,17 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     /**
+     * Notify the user of some error and block the next button.
+     * 
+     * @param message The error message.
+     */
+    public void emitErrorAndBlockNext(String title, String message)
+    {
+        emitError(title, message);
+        parent.lockNextButton();
+    }
+    
+    /**
      * Returns the component which should be get the focus at activation of this panel.
      * 
      * @return the component which should be get the focus at activation of this panel

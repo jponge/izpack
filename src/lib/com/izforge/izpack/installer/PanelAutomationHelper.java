@@ -22,6 +22,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.Housekeeper;
 
 /**
  * Abstract class implementing basic functions needed by all panel automation helpers.
@@ -56,6 +57,16 @@ abstract public class PanelAutomationHelper implements AbstractUIHandler
     public void emitError(String title, String message)
     {
         System.err.println("[ ERROR: " + message + " ]");
+    }
+    
+    /*
+     * @see com.izforge.izpack.util.AbstractUIHandler#emitErrorAndBlockNext(java.lang.String,
+     * java.lang.String)
+     */
+    public void emitErrorAndBlockNext(String title, String message)
+    {
+        emitError(title, message);
+        Housekeeper.getInstance().shutDown(10);
     }
 
     /*

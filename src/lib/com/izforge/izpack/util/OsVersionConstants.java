@@ -132,7 +132,7 @@ public interface OsVersionConstants
     /**
      * Windows 7
      */
-    public final static String WINDOWS_7_VERSION = "7.0";
+    public final static String WINDOWS_7_VERSION = "6.1";
 
     /**
      * REDHAT  = "RedHat"

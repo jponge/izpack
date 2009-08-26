@@ -32,8 +32,10 @@ import java.net.URL;
 import java.text.CharacterIterator;
 import java.text.SimpleDateFormat;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -148,6 +150,8 @@ public class SelfModifier
      * System property name of phase (1, 2, or 3) indicator.
      */
     public static final String PHASE_KEY = "self.mod.phase";
+    
+    public static final String MEMORY_KEY = "self.memory";
 
     /**
      * Base prefix name for sandbox and log, used only in phase 1.
@@ -185,6 +189,10 @@ public class SelfModifier
     private SimpleDateFormat isoPoint = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     private Date date = new Date();
+    
+    private long maxmemory = 64;
+    private long maxpermgensize = 16;
+    private boolean useMemorySettings = false;
 
     public static void test(String[] args)
     {
@@ -257,6 +265,9 @@ public class SelfModifier
         jarFile = new File(System.getProperty(JAR_KEY));
         logFile = new File(System.getProperty(BASE_KEY) + ".log");
         sandbox = new File(System.getProperty(BASE_KEY) + ".d");
+        
+        this.maxmemory = Long.parseLong(System.getProperty(MEMORY_KEY, "64"));
+        this.maxpermgensize = this.maxmemory / 4;
 
         // retrieve refrence to target method
         try
@@ -299,6 +310,13 @@ public class SelfModifier
         phase = 1;
         initJavaExec();
         initMethod(method);
+    }
+    
+    public SelfModifier(Method method, long maxmemory, long maxpermgensize) throws IOException {
+        this(method);
+        this.maxmemory = maxmemory;
+        this.maxpermgensize = maxpermgensize;
+        this.useMemorySettings = true;
     }
 
     /**
@@ -407,7 +425,7 @@ public class SelfModifier
         sandbox = sandbox.getCanonicalFile();
         logFile = logFile.getCanonicalFile();
 
-        jarFile = findJarFile((Class<MultiVolumeInstaller>) method.getDeclaringClass()).getCanonicalFile();
+        jarFile = findJarFile((Class<?>) method.getDeclaringClass()).getCanonicalFile();
         if (jarFile == null)
         {
             throw new IllegalStateException("SelfModifier must be in a jar file");
@@ -420,7 +438,7 @@ public class SelfModifier
         {
             args = new String[0];
         }
-        spawn(args, 2);
+        spawn(args, 2);        
 
         // finally, if all went well, the invoking process must exit
         log("Exit");
@@ -439,34 +457,41 @@ public class SelfModifier
 
         // invoke from tmpdir, passing target method arguments as args, and
         // SelfModifier parameters as sustem properties
-        String[] javaCmd = new String[]{javaCommand(), "-classpath", sandbox.getAbsolutePath(),
-                "-D" + BASE_KEY + "=" + base, "-D" + JAR_KEY + "=" + jarFile.getPath(),
-                "-D" + CLASS_KEY + "=" + method.getDeclaringClass().getName(),
-                "-D" + METHOD_KEY + "=" + method.getName(), "-D" + PHASE_KEY + "=" + nextPhase,
-                getClass().getName()};
-
-        String[] entireCmd = new String[javaCmd.length + args.length];
-        System.arraycopy(javaCmd, 0, entireCmd, 0, javaCmd.length);
-        System.arraycopy(args, 0, entireCmd, javaCmd.length, args.length);
+        String javaCommand = javaCommand();
+        
+        List<String> command = new ArrayList<String>();
+        command.add(javaCommand);
+        command.add("-Xmx" + this.maxmemory + "m");
+        command.add("-XX:MaxPermSize=" + maxpermgensize + "m");
+// activate for debugging purposes.        
+//        command.add("-Xdebug");        
+//        int debugPort = 8000 + nextPhase;        
+//        command.add("-Xrunjdwp:transport=dt_socket,address=" + debugPort + ",server=y,suspend=y");
+        command.add("-classpath");
+        command.add(sandbox.getAbsolutePath());
+        command.add("-D" + BASE_KEY + "=" + base);
+        command.add("-D" + JAR_KEY + "=" + jarFile.getPath() + "");
+        command.add("-D" + CLASS_KEY + "=" + method.getDeclaringClass().getName());
+        command.add("-D" + METHOD_KEY + "=" + method.getName());
+        command.add("-D" + PHASE_KEY + "=" + nextPhase);
+        command.add("-D" + MEMORY_KEY + "=" + this.maxmemory);
+        command.add(getClass().getName());
+        
+        for(String arg : args){
+            command.add(arg);
+        }        
 
         StringBuffer sb = new StringBuffer("Spawning phase ");
         sb.append(nextPhase).append(": ");
-        for (String anEntireCmd : entireCmd)
+        for (String anEntireCmd : command)
         {
             sb.append("\n\t").append(anEntireCmd);
         }
         log(sb.toString());
 
-        // Just invoke it and let it go, the exception will be caught above
-        // Won't compile on < jdk1.3, but will run on jre1.2
-        if (JAVA_SPECIFICATION_VERSION < 1.3)
-        {
-            return Runtime.getRuntime().exec(entireCmd, null);
-        }
-        else
-        {
-            return Runtime.getRuntime().exec(entireCmd, null, null); // workDir);
-        }
+//        ProcessBuilder process = new ProcessBuilder(command);       
+//        return process.start();
+        return Runtime.getRuntime().exec(command.toArray(new String[command.size()]),null,null);
     }
 
     /**
@@ -475,7 +500,7 @@ public class SelfModifier
      * @return null if file was not loaded from a jar file
      * @throws SecurityException if access to is denied by SecurityManager
      */
-    public static File findJarFile(Class<MultiVolumeInstaller> clazz)
+    public static File findJarFile(Class<?> clazz)
     {
         String resource = clazz.getName().replace('.', '/') + ".class";
 
@@ -627,6 +652,8 @@ public class SelfModifier
             {
             }
 
+            
+            
             // spawn phase 3, capture its stdio and wait for it to exit
             Process p = spawn(args, 3);
 
