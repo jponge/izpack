@@ -148,10 +148,13 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         while (inputIterator.hasNext())
         {
             String strVariableName = ((Input) inputIterator.next()).strVariableName;
-            String strVariableValue = p.getProperty(strVariableName);
-            if (strVariableValue != null)
+            if (strVariableName != null)
             {
-                installData.setVariable(strVariableName, strVariableValue);
+                String strVariableValue = p.getProperty(strVariableName);
+                if (strVariableValue != null)
+                {
+                    installData.setVariable(strVariableName, strVariableValue);
+                }
             }
         }
         return true;
@@ -165,7 +168,11 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         Iterator<Input> inputIterator = listInputs.iterator();
         while (inputIterator.hasNext())
         {
-            printWriter.println(((Input) inputIterator.next()).strVariableName + "=");
+            Input input = (Input) inputIterator.next();
+            if (input.strVariableName != null)
+            {
+                printWriter.println(input.strVariableName + "=");
+            }
         }
         return true;
     }
