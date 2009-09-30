@@ -31,6 +31,9 @@ import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 
 import java.util.Iterator;
 import java.util.Map;
+// Add variable substitution
+import com.izforge.izpack.util.VariableSubstitutor;
+
 import java.util.Vector;
 
 /**
@@ -149,7 +152,11 @@ public class UserInputPanelAutomationHelper implements PanelAutomation
         {
             dataElement = userEntries.elementAt(i);
             variable = dataElement.getAttribute(AUTO_ATTRIBUTE_KEY);
+
+            // Substitute variable used in the 'value' field
+            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
             value = dataElement.getAttribute(AUTO_ATTRIBUTE_VALUE);
+            value = vs.substitute(value, null);            
 
             Debug.trace("UserInputPanel: setting variable " + variable + " to " + value);
             idata.setVariable(variable, value);
