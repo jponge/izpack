@@ -21,6 +21,7 @@ package com.izforge.izpack.uninstaller;
 
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.installer.PrivilegedRunner;
+import com.izforge.izpack.util.OsVersion;
 
 import javax.swing.*;
 import java.lang.reflect.Method;
@@ -86,7 +87,7 @@ public class Uninstaller
             return;
         }
 
-        if (Uninstaller.class.getResource("/exec-admin") != null)
+        if (elevationShouldBeInvestigated())
         {
             PrivilegedRunner runner = new PrivilegedRunner();
             if (runner.isPlatformSupported() && runner.isElevationNeeded())
@@ -115,6 +116,12 @@ public class Uninstaller
                     "The uninstallation will still continue but you may encounter problems due to insufficient permissions.");
             }
         }
+    }
+
+    private static boolean elevationShouldBeInvestigated()
+    {
+        return (Uninstaller.class.getResource("/exec-admin") != null) ||
+                (OsVersion.IS_WINDOWS && !(new PrivilegedRunner().canWriteToProgramFiles()));
     }
 
     public static void cmduninstall(String[] args)
