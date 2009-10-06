@@ -22,8 +22,6 @@ package com.izforge.izpack.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.io.*;
 import java.util.List;
 
@@ -38,15 +36,11 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.OsVersion;
 
-public class FileInputField extends JPanel implements ActionListener, FocusListener
+public class FileInputField extends JPanel implements ActionListener
 {
 
     private static final long serialVersionUID = 4673684743657328492L;
-
-    boolean isDirectory;
 
     InstallerFrame parentFrame;
 
@@ -69,18 +63,17 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
     String fileExtensionDescription;
 
     boolean allowEmpty;
+    
+    protected static final int INVALID = 0, EMPTY = 1; 
 
-    boolean mustExist;
-
-    public FileInputField(IzPanel parent, InstallData data, boolean directory, boolean mustExist,
-            String set, int size, List<ValidatorContainer> validatorConfig)
+    public FileInputField(IzPanel parent, InstallData data, boolean directory, String set,
+            int size, List<ValidatorContainer> validatorConfig)
     {
-        this(parent, data, directory, mustExist, set, size, validatorConfig, null, null);
+        this(parent, data, directory, set, size, validatorConfig, null, null);
     }
 
-    public FileInputField(IzPanel parent, InstallData data, boolean directory, boolean mustExist,
-            String set, int size, List<ValidatorContainer> validatorConfig, String fileExt,
-            String fileExtDesc)
+    public FileInputField(IzPanel parent, InstallData data, boolean directory, String set,
+            int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc)
     {
         this.parent = parent;
         this.parentFrame = parent.getInstallerFrame();
@@ -90,16 +83,13 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
         this.size = size;
         this.fileExtension = fileExt;
         this.fileExtensionDescription = fileExtDesc;
-        this.isDirectory = directory;
-        this.mustExist = mustExist;
         this.initialize();
     }
 
-    public void initialize()
+    private void initialize()
     {
         filetxt = new JTextField(set, size);
         filetxt.setCaretPosition(0);
-        filetxt.addFocusListener(this);
 
         // TODO: use separate key for button text
         browseBtn = ButtonFactory.createButton(data.langpack
@@ -125,21 +115,7 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
                 initialPath = filetxt.getText();
             }
             JFileChooser filechooser = new JFileChooser(initialPath);
-            if (isDirectory)
-            {
-                filechooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            }
-            else
-            {
-                filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                if ((fileExtension != null) && (fileExtensionDescription != null))
-                {
-                    UserInputFileFilter fileFilter = new UserInputFileFilter();
-                    fileFilter.setFileExt(fileExtension);
-                    fileFilter.setFileExtDesc(fileExtensionDescription);
-                    filechooser.setFileFilter(fileFilter);
-                }
-            }
+            prepareFileChooser(filechooser);
 
             if (filechooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION)
             {
@@ -147,6 +123,17 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
                 filetxt.setText(selectedFile);
                 Debug.trace("Setting current file chooser directory to: " + selectedFile);
             }
+        }
+    }
+    
+    protected void prepareFileChooser(JFileChooser filechooser) {
+        filechooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        if ((fileExtension != null) && (fileExtensionDescription != null))
+        {
+            UserInputFileFilter fileFilter = new UserInputFileFilter();
+            fileFilter.setFileExt(fileExtension);
+            fileFilter.setFileExtDesc(fileExtensionDescription);
+            filechooser.setFileFilter(fileFilter);
         }
     }
 
@@ -160,7 +147,19 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
         return result;
     }
 
-    private void showMessage(String messageType)
+    protected void showMessage(int k)
+    {
+        if (k == INVALID)
+        {
+            showMessage("file.notfile");
+        }
+        else if (k == EMPTY)
+        {
+            showMessage("file.nofile");
+        }
+    }
+    
+    protected void showMessage(String messageType)
     {
         JOptionPane.showMessageDialog(parentFrame, parentFrame.langpack.getString("UserInputPanel."
                 + messageType + ".message"), parentFrame.langpack.getString("UserInputPanel."
@@ -171,37 +170,30 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
     {
         boolean result = false;
         String input = filetxt.getText();
+        
         if (allowEmpty && ((input == null) || (input.length() == 0)))
         {
             result = true;
         }
         else if (input != null)
         {
-            File file = new File(input);
-
-            if (isDirectory && !file.isDirectory())
+            // Expand unix home reference
+            if (input.startsWith("~"))
             {
-                if (mustExist)
-                {
-                    result = false;
-                    showMessage("dir.notdirectory");
-                }
-                else
-                {
-                    result = verifyCreateOK();
-                }
+                String home = System.getProperty("user.home");
+                input = home + input.substring(1);
             }
-            else if (!isDirectory && !file.isFile())
+
+            // Normalize the path
+            File file = new File(input).getAbsoluteFile();
+            input = file.toString();
+
+            filetxt.setText(input);
+            
+            if (!_validate(file))
             {
-                if (mustExist)
-                {
-                    result = false;
-                    showMessage("file.notfile");
-                }
-                else
-                {
-                    result = verifyCreateOK();
-                }
+                result = false;
+                showMessage(INVALID);
             }
             else
             {
@@ -221,81 +213,14 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
         }
         else
         {
-            if (isDirectory)
-            {
-                showMessage("dir.nodirectory");
-            }
-            else
-            {
-                showMessage("file.nofile");
-            }
+            showMessage(EMPTY);
         }
         return result;
     }
 
-    public boolean verifyCreateOK()
+    protected boolean _validate(File file)
     {
-        String chosenPath = filetxt.getText();
-
-        // Expand unix home reference
-        if (chosenPath.startsWith("~"))
-        {
-            String home = System.getProperty("user.home");
-            chosenPath = home + chosenPath.substring(1);
-        }
-
-        // Normalize the path
-        File path = new File(chosenPath).getAbsoluteFile();
-        chosenPath = path.toString();
-
-        filetxt.setText(chosenPath);
-
-        if (!path.exists())
-        {
-            if (!parent.emitNotificationFeedback(parent.getI18nStringForClass("createdir",
-                    "TargetPanel")
-                    + "\n" + chosenPath)) return false;
-        }
-
-        // We assume, that we would install something into this dir
-        if (!isWriteable())
-        {
-            parent.emitError(parentFrame.langpack.getString("installer.error"), parent
-                    .getI18nStringForClass("notwritable", "TargetPanel"));
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * This method determines whether the chosen dir is writeable or not.
-     * 
-     * @return whether the chosen dir is writeable or not
-     */
-    public boolean isWriteable()
-    {
-        File existParent = IoHelper.existingParent(new File(filetxt.getText()));
-        if (existParent == null) { return false; }
-
-        // On windows we cannot use canWrite because
-        // it looks to the dos flags which are not valid
-        // on NT or 2k XP or ...
-        if (OsVersion.IS_WINDOWS)
-        {
-            File tmpFile;
-            try
-            {
-                tmpFile = File.createTempFile("izWrTe", ".tmp", existParent);
-                tmpFile.deleteOnExit();
-            }
-            catch (IOException e)
-            {
-                Debug.trace(e.toString());
-                return false;
-            }
-            return true;
-        }
-        return existParent.canWrite();
+        return file.isFile();
     }
 
     public boolean isAllowEmptyInput()
@@ -306,19 +231,5 @@ public class FileInputField extends JPanel implements ActionListener, FocusListe
     public void setAllowEmptyInput(boolean allowEmpty)
     {
         this.allowEmpty = allowEmpty;
-    }
-
-    public void focusGained(FocusEvent e)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void focusLost(FocusEvent e)
-    {
-        if (e.getSource() == this.filetxt)
-        {
-
-        }
     }
 }
