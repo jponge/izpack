@@ -570,7 +570,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if ((variable == null) || (variable.length() == 0)) { return; }
 
         boolean allowEmptyValue = false;
-        boolean mustExist = true;
+        boolean mustExist = true, create = true;
 
         List<ValidatorContainer> validatorConfig;
         IXMLElement element = field.getFirstChildNamed(SPEC);
@@ -618,6 +618,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                     .parseBoolean(element.getAttribute("allowEmptyValue", "false"));
 
             mustExist = Boolean.parseBoolean(element.getAttribute("mustExist", "true"));
+            create = Boolean.parseBoolean(element.getAttribute("create", "false"));
         }
         validatorConfig = analyzeValidator(field);
 
@@ -635,9 +636,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        FileInputField fileInput = new FileInputField(this, idata, true, mustExist, set, size,
-                validatorConfig);
-
+        FileInputField fileInput = new DirInputField(this, idata, true, set, size,
+                validatorConfig, mustExist, create);
+        
         fileInput.setAllowEmptyInput(allowEmptyValue);
 
         UIElement dirUiElement = new UIElement();
@@ -878,7 +879,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        FileInputField fileInputField = new FileInputField(this, idata, false, true, set, size,
+        FileInputField fileInputField = new FileInputField(this, idata, false, set, size,
                 validatorConfig, filter, filterdesc);
 
         fileInputField.setAllowEmptyInput(allowEmptyValue);
