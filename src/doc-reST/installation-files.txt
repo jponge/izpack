@@ -693,6 +693,7 @@ dan       Danish
 glg       Galician
 deu       German
 eng       English
+eus       Basque
 fin       Finnish
 fra       French
 hun       Hungarian
