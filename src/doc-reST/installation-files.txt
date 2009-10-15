@@ -732,6 +732,7 @@ ned       Nederlands
 nor       Norwegian
 pol       Polnish
 por       Portuguese (Brazilian)
+prt       Portuguese (European)
 rom       Romanian
 rus       Russian
 scg       Serbian
