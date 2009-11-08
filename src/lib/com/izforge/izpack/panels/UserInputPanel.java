@@ -20,6 +20,7 @@
 
 package com.izforge.izpack.panels;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -52,7 +53,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
@@ -315,6 +318,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     private Vector<UIElement> elements = new Vector<UIElement>();
 
+    private JPanel panel;
+
     /*--------------------------------------------------------------------------*/
     // This method can be used to search for layout problems. If this class is
     // compiled with this method uncommented, the layout guides will be shown
@@ -410,7 +415,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         {
             layout = new TwoColumnLayout(10, 5, 30, topbuff, TwoColumnLayout.LEFT);
         }
-        setLayout(layout);
+        setLayout(new BorderLayout());
+
+        panel = new JPanel();
+        panel.setLayout(layout);
 
         if (!haveSpec)
         {
@@ -1114,7 +1122,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 if (!element.isDisplayed())
                 {
                     element.setDisplayed(true);
-                    add(element.getComponent(), element.getConstraints());
+                    panel.add(element.getComponent(), element.getConstraints());
                 }
             }
             else
@@ -1122,10 +1130,17 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 if (element.isDisplayed())
                 {
                     element.setDisplayed(false);
-                    remove(element.getComponent());
+                    panel.remove(element.getComponent());
                 }
             }
         }
+
+        JScrollPane scroller = new JScrollPane(panel);
+        Border emptyBorder = BorderFactory.createEmptyBorder();
+        scroller.setViewportBorder(emptyBorder);
+        scroller.getVerticalScrollBar().setBorder(emptyBorder);
+        scroller.getHorizontalScrollBar().setBorder(emptyBorder);
+        add(scroller, BorderLayout.CENTER);
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1419,7 +1434,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             constraints.align = justify;
             constraints.position = TwoColumnConstraints.NORTH;
 
-            add(label, constraints);
+            panel.add(label, constraints);
         }
     }
 
