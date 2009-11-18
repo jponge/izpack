@@ -22,7 +22,7 @@
 package com.izforge.izpack;
 
 /**
- * TwoColumnLayoutTest.java is a 1.4 application that 
+ * TwoColumnLayoutTestManual.java is a 1.4 application that
  * demonstrates the use of JButton, JTextField and
  * JLabel.  It requires no other files.
  * @author abhayani Amit Bhayani
@@ -36,7 +36,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class TwoColumnLayoutTest implements ActionListener {
+public class TwoColumnLayoutTestManual implements ActionListener {
     JFrame converterFrame;
     JPanel converterPanel;
     JTextField tempText;
@@ -46,9 +46,9 @@ public class TwoColumnLayoutTest implements ActionListener {
 
     boolean removed = false;
 
-    public TwoColumnLayoutTest() {
+    public TwoColumnLayoutTestManual() {
         //Create and set up the window.
-        converterFrame = new JFrame("TwoColumnLayoutTest");
+        converterFrame = new JFrame("TwoColumnLayoutTestManual");
         converterFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         converterFrame.setSize(new Dimension(240, 80));
 
@@ -134,7 +134,7 @@ public class TwoColumnLayoutTest implements ActionListener {
         //Make sure we have nice window decorations.
         JFrame.setDefaultLookAndFeelDecorated(true);
 
-        TwoColumnLayoutTest converter = new TwoColumnLayoutTest();
+        TwoColumnLayoutTestManual converter = new TwoColumnLayoutTestManual();
     }
 
     public static void main(String[] args) {
