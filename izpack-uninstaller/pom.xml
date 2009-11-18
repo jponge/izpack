@@ -11,6 +11,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>izpack-uninstaller</artifactId>
-
+    <name>IZpack uninstaller</name>
 
 </project>

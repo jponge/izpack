@@ -11,6 +11,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>izpack-installer</artifactId>
-
+    <name>IZpack installer module</name>
 
 </project>

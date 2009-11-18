@@ -9,8 +9,16 @@
         <relativePath>../izpack-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <artifactId>izpack-samples</artifactId>
+    <name>izpack samples module</name>
+    <description>
+        Agregator of multiple samples
+    </description>
 
-    <artifactId>izpack-native</artifactId>
-    <name>IZpack native module</name>
+    <modules>
+        <module>simple-sample</module>
+    </modules>
+
 
 </project>
