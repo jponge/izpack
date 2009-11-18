@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <artifactId>izpack-samples</artifactId>
-    <name>izpack samples module</name>
+    <name>IZpack samples module</name>
     <description>
         Agregator of multiple samples
     </description>
