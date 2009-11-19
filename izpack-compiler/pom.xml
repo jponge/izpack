@@ -59,6 +59,8 @@
                     <archive>
                         <manifest>
                             <mainClass>com.izforge.izpack.compiler.Compiler</mainClass>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                     </archive>
                 </configuration>
