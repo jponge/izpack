@@ -51,7 +51,20 @@ public abstract class PackagerBase implements IPackager {
     /**
      * Path to the skeleton installer.
      */
-    public static final String SKELETON_SUBPATH = "lib/installer.jar";
+    private String SKELETON_SUBPATH = null;
+
+    public String getSkeletonSubpath() {
+        if (SKELETON_SUBPATH == null) {
+            Properties properties = new Properties();
+            try {
+                properties.load(Compiler.class.getResourceAsStream("path.properties"));
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+            SKELETON_SUBPATH = properties.getProperty("installer");
+        }
+        return SKELETON_SUBPATH;
+    }
 
     /**
      * Base file name of all jar files. This has no ".jar" suffix.

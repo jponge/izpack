@@ -549,7 +549,7 @@ public class CompilerConfig extends Thread {
             IXMLElement root = requireChildNamed(data, "info");
             IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
             if (validateYesNoAttribute(uninstallInfo, "write", YES)) {
-                URL url = findIzPackResource("lib/uninstaller-ext.jar", "Uninstaller extensions",
+                URL url = findIzPackResource(compiler.getProperty("uninstaller-ext"), "Uninstaller extensions",
                         root);
                 compiler.addResource("IzPack.uninstaller-ext", url);
             }

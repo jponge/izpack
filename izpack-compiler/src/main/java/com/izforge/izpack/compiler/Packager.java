@@ -129,9 +129,9 @@ public class Packager extends PackagerBase {
     protected void writeSkeletonInstaller() throws IOException {
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
 
-        InputStream is = Packager.class.getResourceAsStream("/" + SKELETON_SUBPATH);
+        InputStream is = Packager.class.getResourceAsStream("/" + getSkeletonSubpath());
         if (is == null) {
-            File skeleton = new File(Compiler.IZPACK_HOME, SKELETON_SUBPATH);
+            File skeleton = new File(Compiler.IZPACK_HOME, getSkeletonSubpath());
             is = new FileInputStream(skeleton);
         }
         ZipInputStream inJarStream = new ZipInputStream(is);

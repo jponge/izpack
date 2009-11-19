@@ -22,6 +22,7 @@
         <module>izpack-installer</module>
         <module>izpack-event</module>
         <module>izpack-samples</module>
+        <module>izpack-uninstaller-ext</module>
     </modules>
 
 </project>

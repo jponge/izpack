@@ -162,9 +162,9 @@ public class MultiVolumePackager extends PackagerBase {
         sendMsg("Copying the skeleton installer", PackagerListener.MSG_VERBOSE);
 
 
-        InputStream is = MultiVolumePackager.class.getResourceAsStream("/" + SKELETON_SUBPATH);
+        InputStream is = MultiVolumePackager.class.getResourceAsStream("/" + getSkeletonSubpath());
         if (is == null) {
-            File skeleton = new File(Compiler.IZPACK_HOME, SKELETON_SUBPATH);
+            File skeleton = new File(Compiler.IZPACK_HOME, getSkeletonSubpath());
             is = new FileInputStream(skeleton);
         }
         ZipInputStream inJarStream = new ZipInputStream(is);
@@ -176,9 +176,9 @@ public class MultiVolumePackager extends PackagerBase {
 
         // ugly code to modify the manifest-file to set MultiVolumeInstaller as main class
         // reopen Stream
-        is = MultiVolumePackager.class.getResourceAsStream("/" + SKELETON_SUBPATH);
+        is = MultiVolumePackager.class.getResourceAsStream("/" + getSkeletonSubpath());
         if (is == null) {
-            File skeleton = new File(Compiler.IZPACK_HOME, SKELETON_SUBPATH);
+            File skeleton = new File(Compiler.IZPACK_HOME, getSkeletonSubpath());
             is = new FileInputStream(skeleton);
         }
         inJarStream = new ZipInputStream(is);
