@@ -34,7 +34,7 @@ import java.io.OutputStream;
 public class BZip2PackCompressor extends PackCompressorBase {
 
     private static final String[] THIS_FORMAT_NAMES = {"bzip2"};
-    private static final String[] THIS_CONTAINER_PATH = {"lib/ant.jar"};
+    private static final String[] THIS_CONTAINER_PATH = {"lib/ant-1.6.5.jar"};
     private static final String THIS_DECODER_MAPPER = "org.apache.tools.bzip2.CBZip2InputStream";
     private static final String[][] THIS_DECODER_CLASS_NAMES =
             {{"org.apache.tools.bzip2.BZip2Constants.*",

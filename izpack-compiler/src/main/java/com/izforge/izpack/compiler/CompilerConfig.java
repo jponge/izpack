@@ -1675,7 +1675,7 @@ public class CompilerConfig extends Thread {
         // Add the uninstaller as a resource if specified
         IXMLElement uninstallInfo = root.getFirstChildNamed("uninstaller");
         if (validateYesNoAttribute(uninstallInfo, "write", YES)) {
-            URL url = findIzPackResource("lib/uninstaller.jar", "Uninstaller", root);
+            URL url = findIzPackResource(compiler.getProperty("uninstaller"), "Uninstaller", root);
             compiler.addResource("IzPack.uninstaller", url);
 
             if (privileged != null) {

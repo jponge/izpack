@@ -31,7 +31,6 @@
             <artifactId>izpack-uninstaller</artifactId>
         </dependency>
 
-
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
@@ -48,20 +47,31 @@
         <finalName>izpack-standalone</finalName>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <stripVersion>true</stripVersion>
+                            <excludeArtifactIds>izpack-compiler</excludeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <descriptors>
                         <descriptor>src/assembly/assembly.xml</descriptor>
                     </descriptors>
-                    <!--<descriptorRefs>-->
-                    <!--<descriptor>jar-with-dependencies</descriptor>-->
-                    <!--</descriptorRefs>-->
                     <archive>
-                        <manifest>
-                            <mainClass>com.izforge.izpack.compiler.Compiler</mainClass>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                        </manifest>
+
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
                 <executions>
@@ -71,7 +81,7 @@
                         <phase>package</phase>
                         <!-- append to the packaging phase. -->
                         <goals>
-                            <goal>assembly</goal>
+                            <goal>single</goal>
                             <!-- goals == mojos -->
                         </goals>
                     </execution>

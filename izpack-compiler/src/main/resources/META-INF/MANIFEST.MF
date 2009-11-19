@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Built-By: IzPack
+Main-Class: com.izforge.izpack.compiler.Compiler
+Class-Path: ant-1.6.5.jar
+
+

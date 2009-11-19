@@ -34,6 +34,7 @@ import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -154,6 +155,11 @@ public class Compiler extends Thread {
 
         // initialize backed by system properties
         properties = new Properties(System.getProperties());
+        try {
+            properties.load(getClass().getResourceAsStream("path.properties"));
+        } catch (IOException e) {
+            throw new CompilerException("Can't load path.properties");
+        }
         propertySubstitutor = new VariableSubstitutor(properties);
 
         // add izpack built in property
