@@ -83,20 +83,24 @@
     <!-- TargetPanel strings -->
     <str id="TargetPanel.info" txt="Select the installation path: "/>
     <str id="TargetPanel.browse" txt="Browse..."/>
-    <str id="TargetPanel.warn" txt="The directory already exists! Are you sure you want to install here and possibly overwrite existing files?"/>
+    <str id="TargetPanel.warn"
+         txt="The directory already exists! Are you sure you want to install here and possibly overwrite existing files?"/>
     <str id="TargetPanel.empty_target" txt="You have not specified a target location! Is this correct?"/>
     <str id="TargetPanel.createdir" txt="The target directory will be created: "/>
     <str id="TargetPanel.nodir" txt="This file is not a directory! Please choose a directory!"/>
     <str id="TargetPanel.notwritable" txt="This directory can not be written! Please choose another directory!"/>
 
     <!-- JDKPathPanel strings -->
-    <str id="JDKPathPanel.extendedIntro" txt="The installed application needs a JDK between version ${JDKPathPanel.minVersion} and ${JDKPathPanel.maxVersion}. A java runtime environment (JRE) will be not sufficient."/>
-    <str id="JDKPathPanel.intro" txt="The installed application needs a JDK. A java runtime environment (JRE) will be not sufficient."/>
+    <str id="JDKPathPanel.extendedIntro"
+         txt="The installed application needs a JDK between version ${JDKPathPanel.minVersion} and ${JDKPathPanel.maxVersion}. A java runtime environment (JRE) will be not sufficient."/>
+    <str id="JDKPathPanel.intro"
+         txt="The installed application needs a JDK. A java runtime environment (JRE) will be not sufficient."/>
     <str id="JDKPathPanel.info" txt="Select the JDK path:"/>
     <str id="JDKPathPanel.badVersion1" txt="The chosen JDK has the wrong version (available: "/>
     <str id="JDKPathPanel.badVersion2" txt=" required: "/>
     <str id="JDKPathPanel.badVersion3" txt=") should this JDK be used anyway?"/>
-    <str id="JDKPathPanel.nonValidPathInReg" txt="The Windows registry contains a non-valid path for this JDK. Should this JDK be used anyway?"/>
+    <str id="JDKPathPanel.nonValidPathInReg"
+         txt="The Windows registry contains a non-valid path for this JDK. Should this JDK be used anyway?"/>
 
     <!-- PacksPanel strings -->
     <str id="PacksPanel.info" txt="Select the packs you want to install:"/>
@@ -153,11 +157,15 @@
     <str id="ShortcutPanel.regular.userIntro" txt="create shortcut for:"/>
     <str id="ShortcutPanel.regular.currentUser" txt="current user"/>
     <str id="ShortcutPanel.regular.allUsers" txt="all users"/>
-    <str id="ShortcutPanel.alternate.apology" txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
-    <str id="ShortcutPanel.alternate.targetsLabel" txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
-    <str id="ShortcutPanel.alternate.textFileExplanation" txt="You can save detailed information about the application targets in a text file for later reference."/>
+    <str id="ShortcutPanel.alternate.apology"
+         txt="We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual."/>
+    <str id="ShortcutPanel.alternate.targetsLabel"
+         txt="The following is a list of targets that the manufacturer of this software product wanted you to have access to."/>
+    <str id="ShortcutPanel.alternate.textFileExplanation"
+         txt="You can save detailed information about the application targets in a text file for later reference."/>
     <str id="ShortcutPanel.alternate.saveButton" txt="Save Text File"/>
-    <str id="ShortcutPanel.textFile.header" txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
+    <str id="ShortcutPanel.textFile.header"
+         txt="Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n"/>
     <str id="ShortcutPanel.textFile.name" txt="Shortcut          : "/>
     <str id="ShortcutPanel.textFile.location" txt="Intended Location : "/>
     <str id="ShortcutPanel.textFile.description" txt="Description       : "/>
@@ -177,11 +185,13 @@
     <str id="UserInputPanel.error.caption" txt="Error"/>
     <str id="UserInputPanel.dir.nodirectory.message" txt="You must select a valid directory."/>
     <str id="UserInputPanel.dir.nodirectory.caption" txt="No Directory Selected"/>
-    <str id="UserInputPanel.dir.notdirectory.message" txt="The directory you have chosen either does not exist or is not valid."/>
+    <str id="UserInputPanel.dir.notdirectory.message"
+         txt="The directory you have chosen either does not exist or is not valid."/>
     <str id="UserInputPanel.dir.notdirectory.caption" txt="Invalid Directory"/>
     <str id="UserInputPanel.file.nofile.message" txt="You must select a valid file."/>
     <str id="UserInputPanel.file.nofile.caption" txt="No File Selected"/>
-    <str id="UserInputPanel.file.notfile.message" txt="The file you have chosen either does not exist or is not valid."/>
+    <str id="UserInputPanel.file.notfile.message"
+         txt="The file you have chosen either does not exist or is not valid."/>
     <str id="UserInputPanel.file.notfile.caption" txt="Invalid File"/>
     <!-- more descriptive error message would be cool, like specifying what file we looked for -->
     <str id="UserInputPanel.search.autodetect" txt="Autodetect"/>
@@ -191,14 +201,16 @@
     <str id="UserInputPanel.search.location" txt="Enter location of {0}."/>
     <str id="UserInputPanel.search.location.checkedfile" txt="The existence of {0} is checked."/>
     <str id="UserInputPanel.search.browse" txt="Browse..."/>
-    <str id="UserInputPanel.search.wrongselection.message" txt="The file or directory you have chosen either does not exist or is not appropriate."/>
+    <str id="UserInputPanel.search.wrongselection.message"
+         txt="The file or directory you have chosen either does not exist or is not appropriate."/>
     <str id="UserInputPanel.search.wrongselection.caption" txt="Invalid Selection"/>
 
     <!-- UserPathPanel strings -->
     <str id="UserPathPanel.required" txt="The chosen directory should exist."/>
     <str id="UserPathPanel.info" txt="Select the path: "/>
     <str id="UserPathPanel.browse" txt="Browse"/>
-    <str id="UserPathPanel.exists_warn" txt="The directory already exists! Are you sure you want to install here and possibly overwrite existing files?"/>
+    <str id="UserPathPanel.exists_warn"
+         txt="The directory already exists! Are you sure you want to install here and possibly overwrite existing files?"/>
     <str id="UserPathPanel.empty_target" txt="You have not specified a target location! Is this correct?"/>
     <str id="UserPathPanel.createdir" txt="The target directory will be created: "/>
     <str id="UserPathPanel.nodir" txt="This file is not a directory! Please choose a directory!"/>
@@ -242,7 +254,8 @@
     <str id="functionFailed.RegOpenKeyEx" txt="Cannot open registry key {0}\\{1}."/>
 
     <!-- CheckedHelloPanel strings -->
-    <str id="CheckedHelloPanel.productAlreadyExist0" txt="This product is already installed on this computer under the path "/>
+    <str id="CheckedHelloPanel.productAlreadyExist0"
+         txt="This product is already installed on this computer under the path "/>
     <str id="CheckedHelloPanel.productAlreadyExist1" txt=" . Are you sure you want to install another entity?"/>
     <str id="CheckedHelloPanel.infoOverUninstallKey" txt="The uninstall key will be named: "/>
 
@@ -279,8 +292,10 @@
     <str id="log.informUserTitle" txt="Installation Problems"/>
     <str id="log.saveLogTitle" txt="Save Log File"/>
     <str id="log.LogFileName" txt="installLog.txt"/>
-    <str id="log.informUserFail" txt="&lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt;"/>
-    <str id="log.informUserPartial" txt="&lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt;"/>
+    <str id="log.informUserFail"
+         txt="&lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt;"/>
+    <str id="log.informUserPartial"
+         txt="&lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt;"/>
 
     <!-- Strings for individual messages in the logging/reporting system.
          Numbers for each category (message/warning/error) start at 0  -->

@@ -147,11 +147,11 @@
     <str id="ProcessPanel.heading" txt="處理中"/>
 
     <!-- Add your own panels specific strings here if you need -->
-    
+
     <str id="InstallationGroupPanel.colNameSelected" txt="安裝套件選擇"/>
     <str id="InstallationGroupPanel.colNameInstallType" txt="安裝類型"/>
     <str id="InstallationGroupPanel.colNameSize" txt="所須容量大小"/>
-    
+
     <!-- Strings for the summary of panels - START -->
     <str id="SummaryPanel.info" txt="安裝程式會執行下面設定，請按下一步繼續。"/>
     <str id="TargetPanel.summaryCaption" txt="安裝路徑"/>
