@@ -4,6 +4,7 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.CompilerException;
 import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.internal.matchers.StringContains;
@@ -21,27 +22,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Test for an Izpack compilation
  */
 public class CompilationTest {
+
+    private File baseDir = new File(getClass().getClassLoader().getResource("samples1").getFile());
+    private File installerFile = new File(getClass().getClassLoader().getResource("samples1/install.xml").getFile());
+    private File out = new File(baseDir.getParentFile(), "out.jar");
+
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+    @Before
+    public void cleanFiles(){
+        out.delete();        
+    }
+
     @Test
     public void compilerShouldCompile() throws Exception {
-        File baseDir = new File(getClass().getClassLoader().getResource("samples1").getFile());
-        File installerFile = new File(getClass().getClassLoader().getResource("samples1/install.xml").getFile());
-        File out = new File(baseDir.getParentFile(), "out.jar");
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         c.executeCompiler();
         assertThat(c.wasSuccessful(), Is.is(true));
     }
 
     @Test
-    public void installerShouldContainBasicFiles() throws Exception {
-        File baseDir = new File(getClass().getClassLoader().getResource("samples1").getFile());
-        File installerFile = new File(getClass().getClassLoader().getResource("samples1/install.xml").getFile());
-        File out = new File(baseDir.getParentFile(), "out.jar");
+    public void installerShouldContainInstallerClass() throws Exception {
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         c.executeCompiler();
-        assertZipContainFile(out, "Installer.class");
         assertZipContainFile(out, "HelloPanel.class");
     }
 

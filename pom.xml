@@ -15,7 +15,6 @@
         <module>izpack-core</module>
         <module>izpack-compiler</module>
         <module>izpack-dist</module>
-        <module>izpack-util</module>
         <module>izpack-uninstaller</module>
         <module>izpack-panel</module>
         <module>izpack-native</module>
