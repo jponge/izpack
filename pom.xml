@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>izpack-parent</module>
+        <module>izpack-maven-plugin</module>
         <module>izpack-core</module>
         <module>izpack-compiler</module>
         <module>izpack-dist</module>
