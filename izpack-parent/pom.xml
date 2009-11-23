@@ -18,6 +18,26 @@
         </site>
     </distributionManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.easytesting</groupId>
+            <artifactId>fest-swing</artifactId>
+        </dependency>
+
+    </dependencies>
+
     <dependencyManagement>
         <dependencies>
             <!-- Compile libs -->
@@ -41,6 +61,12 @@
                 <artifactId>izpack-compiler</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
+            </dependency
+            <dependency>
+                <artifactId>izpack-test</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <artifactId>izpack-panel</artifactId>
@@ -113,6 +139,12 @@
                 <version>1.1</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.easytesting</groupId>
+                <artifactId>fest-swing</artifactId>
+                <version>1.2a3</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -126,7 +158,13 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>fest-repo</id>
+            <url>http://repository.codehaus.org/org/easytesting/</url>
+        </repository>
+    </repositories>
+
 </project>

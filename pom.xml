@@ -23,6 +23,7 @@
         <module>izpack-event</module>
         <module>izpack-samples</module>
         <module>izpack-uninstaller-ext</module>
+        <module>izpack-test</module>
     </modules>
 
 </project>
