@@ -1,5 +1,5 @@
 <assembly>
-    <id>compiler</id>
+    <id>standalone</id>
     <formats>
         <format>jar</format>
     </formats>
@@ -10,6 +10,7 @@
             <scope>runtime</scope>
             <includes>
                 <include>org.codehaus.izpack:izpack-native</include>
+                <include>org.codehaus.izpack:izpack-core</include>
             </includes>
             <useStrictFiltering>true</useStrictFiltering>
             <outputDirectory>/</outputDirectory>

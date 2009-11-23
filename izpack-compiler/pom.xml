@@ -22,6 +22,11 @@
 
         <dependency>
             <groupId>${groupId}</groupId>
+            <artifactId>izpack-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
             <artifactId>izpack-installer</artifactId>
         </dependency>
 
@@ -35,21 +40,10 @@
             <artifactId>izpack-uninstaller-ext</artifactId>
         </dependency>
 
-        <!-- Test -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-all</artifactId>
-        </dependency>
 
     </dependencies>
 
     <build>
-        <finalName>izpack-standalone</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
