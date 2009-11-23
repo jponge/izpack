@@ -58,6 +58,16 @@
             </dependency>
             <!-- Internal -->
             <dependency>
+                <artifactId>izpack-api</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>izpack-util</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-compiler</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>

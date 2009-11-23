@@ -25,6 +25,7 @@
         <module>izpack-uninstaller-ext</module>
         <module>izpack-test</module>
         <module>izpack-api</module>
+        <module>izpack-util</module>
     </modules>
 
 </project>
