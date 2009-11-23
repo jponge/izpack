@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.codehaus.izpack</groupId>
+  <artifactId>izpack-maven-plugin-integration-test</artifactId>
+  <packaging>jar</packaging>
+  <version>testing</version>
+  <name>izpack-172-it</name>
+
+  <build>
+
+    <defaultGoal>package</defaultGoal>
+
+    <finalName>${project.artifactId}</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.izpack</groupId>
+        <artifactId>izpack-maven-plugin</artifactId>
+        <version>${version}</version>
+        <executions>
+          <execution>
+            <id>standard-installer</id>
+            <phase>package</phase>
+            <goals>
+              <goal>izpack</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <properties>
+    <archive>${project.build.directory}/${project.build.finalName}.jar</archive>
+    <version>testing</version>
+    <app.group>${project.groupId}</app.group>
+    <app.title>${project.name}</app.title>
+    <app.subpath>${project.artifactId}-${project.version}</app.subpath>
+    <app.version>${project.version}</app.version>
+    <app.version.static>some.dummy.version</app.version.static>
+    <app>theApp</app>
+
+  </properties>
+
+</project>

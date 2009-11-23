@@ -1,0 +1,409 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+
+  <groupId>org.codehaus.mojo</groupId>
+  <artifactId>izpack-groovy-installer</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>IZPack Groovy Installer</name>
+
+  <packaging>jar</packaging>
+
+
+  <dependencies>
+
+    <!-- this will override the one in the plugin -->
+    <dependency>
+      <groupId>org.codehaus.izpack</groupId>
+      <artifactId>izpack-standalone-compiler</artifactId>
+      <version>4.0.1</version>
+      <!-- dont want to download this artifact when retrieve the installer as transitive dependency -->
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <defaultGoal>package</defaultGoal>
+
+    <plugins>
+
+      <!--  fetch resource files from the orignal Ant build project -->
+      <plugin>
+        <artifactId>maven-scm-plugin</artifactId>
+        <version>1.1</version>
+        <executions>
+          <execution>
+            <id>svn-co-resource-to-staging</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>checkout</goal>
+            </goals>
+            <configuration>
+              <skipCheckoutIfExists>true</skipCheckoutIfExists>
+              <connectionUrl>
+                scm:svn:http://svn.codehaus.org/izpack/izpack-showcases/groovy/trunk/resource
+              </connectionUrl>
+              <checkoutDirectory>${staging.dir}/resource</checkoutDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- fetch and unpack all dependent bundles into staging area -->
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.0</version>
+        <executions>
+          <execution>
+            <id>unpack-bundle-dependencies</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>izpack.demo</groupId>
+                  <artifactId>groovy</artifactId>
+                  <version>${groovy.version}</version>
+                  <classifier>binary</classifier>
+                  <type>zip</type>
+                  <outputDirectory>${staging.dir}/binary</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>izpack.demo</groupId>
+                  <artifactId>groovy</artifactId>
+                  <version>${groovy.version}</version>
+                  <classifier>docs</classifier>
+                  <type>zip</type>
+                  <outputDirectory>${staging.dir}/docs</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>izpack.demo</groupId>
+                  <artifactId>gant</artifactId>
+                  <version>${gant.version}</version>
+                  <classifier>binary</classifier>
+                  <type>zip</type>
+                  <outputDirectory>${staging.dir}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>izpack.demo</groupId>
+                  <artifactId>graphicsbuilder</artifactId>
+                  <version>${graphicsbuilder.version}</version>
+                  <classifier>binary</classifier>
+                  <type>zip</type>
+                  <outputDirectory>${staging.dir}</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+
+          <!-- izpack can't match include="scriptcom*.jar"
+            so, split into separate bin and lib directories -->
+
+          <execution>
+            <id>unpack-scriptom-dlls</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>izpack.demo</groupId>
+                  <artifactId>scriptom</artifactId>
+                  <version>${scriptom.version}</version>
+                  <classifier>binary</classifier>
+                  <type>zip</type>
+                  <includes>scriptom*.dll</includes>
+                  <outputDirectory>${staging.dir}/scriptom/bin</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-scriptom-jars</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>izpack.demo</groupId>
+                  <artifactId>scriptom</artifactId>
+                  <version>${scriptom.version}</version>
+                  <classifier>binary</classifier>
+                  <type>zip</type>
+                  <includes>scriptom*.jar</includes>
+                  <outputDirectory>${staging.dir}/scriptom/lib</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+              <!--  need to use a explicit cache marker, to distinguish the execution from previous one
+                    since both executions share the same artifact -->
+              <markersDirectory>${project.build.directory}/scriptomJarsMarker</markersDirectory>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>copy-jars-dependencies</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>izpack.demo</groupId>
+                  <artifactId>svg-salamander</artifactId>
+                  <version>${svg-salamander.version}</version>
+                  <type>jar</type>
+                  <outputDirectory>${staging.dir}/jars</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>izpack.demo</groupId>
+                  <artifactId>jidebuilder</artifactId>
+                  <version>${jidebuilder.version}</version>
+                  <type>jar</type>
+                  <outputDirectory>${staging.dir}/jars</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.izpack</groupId>
+        <artifactId>izpack-maven-plugin</artifactId>
+        <version>1.0-alpha-3</version>
+
+        <!-- common configuration by all executions -->
+        <configuration>
+          <descriptor>${basedir}/src/izpack/install.xml</descriptor>
+          <izpackBasedir>${staging.dir}</izpackBasedir>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>standard-installer</id>
+            <phase>package</phase>
+            <goals>
+              <goal>izpack</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <profiles>
+    <profile>
+      <id>install-dependencies</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.2</version>
+            <executions>
+              <execution>
+                <id>create-staging-area</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <tasks>
+                    <mkdir dir="${download.dir}" />
+                    <get src="${groovy.bin.url}" dest="${download.dir}/${groovy.bin.archive}" verbose="on"
+                      usetimestamp="yes" />
+                    <get src="${groovy.docs.url}" dest="${download.dir}/${groovy.docs.archive}" verbose="on"
+                      usetimestamp="yes" />
+                    <get src="${gant.url}" dest="${download.dir}/${gant.archive}" verbose="on" usetimestamp="yes" />
+                    <get src="${scriptom.url}" dest="${download.dir}/${scriptom.archive}" verbose="on"
+                      usetimestamp="yes" />
+                    <get src="${graphicsbuilder.url}" dest="${download.dir}/${graphicsbuilder.archive}" verbose="on"
+                      usetimestamp="yes" />
+                    <get src="${jidebuilder.url}" dest="${download.dir}/${jidebuilder.archive}" verbose="on"
+                      usetimestamp="yes" />
+                    <get src="${svg-salamander.url}" dest="${download.dir}/${svg-salamander.archive}" verbose="on"
+                      usetimestamp="yes" />
+                  </tasks>
+                </configuration>
+              </execution>
+
+            </executions>
+          </plugin>
+
+          <plugin>
+            <artifactId>maven-install-plugin</artifactId>
+            <configuration>
+              <generatePom>true</generatePom>
+              <!--  use fake id for demo purpose  -->
+              <groupId>izpack.demo</groupId>
+            </configuration>
+            <executions>
+              <execution>
+                <id>install-groovy-binary</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-file</goal>
+                </goals>
+                <configuration>
+                  <file>${groovy.binary.zip}</file>
+                  <artifactId>groovy</artifactId>
+                  <version>${groovy.version}</version>
+                  <classifier>binary</classifier>
+                  <packaging>zip</packaging>
+                </configuration>
+              </execution>
+              <execution>
+                <id>install-groovy-docs</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-file</goal>
+                </goals>
+                <configuration>
+                  <file>${groovy.docs.zip}</file>
+                  <artifactId>groovy</artifactId>
+                  <version>${groovy.version}</version>
+                  <classifier>docs</classifier>
+                  <packaging>zip</packaging>
+                </configuration>
+              </execution>
+              <execution>
+                <id>install-gant-binary</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-file</goal>
+                </goals>
+                <configuration>
+                  <file>${gant.zip}</file>
+                  <artifactId>gant</artifactId>
+                  <version>${gant.version}</version>
+                  <classifier>binary</classifier>
+                  <packaging>zip</packaging>
+                </configuration>
+              </execution>
+              <execution>
+                <id>install-scriptom-binary</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-file</goal>
+                </goals>
+                <configuration>
+                  <file>${scriptom.zip}</file>
+                  <artifactId>scriptom</artifactId>
+                  <version>${scriptom.version}</version>
+                  <classifier>binary</classifier>
+                  <packaging>zip</packaging>
+                </configuration>
+              </execution>
+              <execution>
+                <id>install-graphicsbuilder-binary</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-file</goal>
+                </goals>
+                <configuration>
+                  <file>${graphicsbuilder.zip}</file>
+                  <artifactId>graphicsbuilder</artifactId>
+                  <version>${graphicsbuilder.version}</version>
+                  <classifier>binary</classifier>
+                  <packaging>zip</packaging>
+                </configuration>
+              </execution>
+
+              <execution>
+                <id>install-jidebuilder-bundle</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-file</goal>
+                </goals>
+                <configuration>
+                  <file>${jidebuilder.jar}</file>
+                  <artifactId>jidebuilder</artifactId>
+                  <version>${jidebuilder.version}</version>
+                  <packaging>jar</packaging>
+                </configuration>
+              </execution>
+              <execution>
+                <id>install-svg-salamander-jar</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>install-file</goal>
+                </goals>
+                <configuration>
+                  <file>${svg-salamander.jar}</file>
+                  <artifactId>svg-salamander</artifactId>
+                  <version>${svg-salamander.version}</version>
+                  <packaging>jar</packaging>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <properties>
+    <app.group>${project.groupId}</app.group>
+    <app.title>${project.name}</app.title>
+    <app.subpath>${project.artifactId}-${project.version}</app.subpath>
+    <app.version>${project.version}</app.version>
+  
+    <staging.dir>${project.build.directory}/staging</staging.dir>
+    <download.dir>${project.build.directory}/downloads</download.dir>
+
+    <groovy.version>1.5.6</groovy.version>
+    <gant.version>1.3.0</gant.version>
+    <scriptom.version>1.5.4</scriptom.version>
+    <graphicsbuilder.version>0.5.1</graphicsbuilder.version>
+    <jidebuilder.version>1.0</jidebuilder.version>
+    <svg-salamander.version>1.0</svg-salamander.version>
+
+    <groovy.bin.archive>groovy-binary-${groovy.version}.zip</groovy.bin.archive>
+    <groovy.bin.url>http://dist.codehaus.org/groovy/distributions/${groovy.bin.archive}</groovy.bin.url>
+
+    <groovy.docs.archive>groovy-docs-${groovy.version}.zip</groovy.docs.archive>
+    <groovy.docs.url>http://dist.codehaus.org/groovy/distributions/${groovy.docs.archive}</groovy.docs.url>
+
+    <gant.archive>gant-${gant.version}_groovy-${groovy.version}.zip</gant.archive>
+    <gant.url>http://dist.codehaus.org/gant/distributions/${gant.archive}</gant.url>
+
+    <scriptom.archive>scriptom-${scriptom.version}.zip</scriptom.archive>
+    <scriptom.url>http://docs.codehaus.org/download/attachments/24576222/${scriptom.archive}?version=1</scriptom.url>
+
+    <graphicsbuilder.archive>graphicsbuilder-${graphicsbuilder.version}.zip</graphicsbuilder.archive>
+    <graphicsbuilder.url>
+      http://docs.codehaus.org/download/attachments/12190076/${graphicsbuilder.archive}
+    </graphicsbuilder.url>
+
+    <jidebuilder.archive>jidebuilder-${jidebuilder.version}.jar</jidebuilder.archive>
+    <jidebuilder.url>
+      http://svn.codehaus.org/groovy-contrib/jidebuilder/trunk/dist/jidebuilder-${jidebuilder.version}.jar
+    </jidebuilder.url>
+
+    <svg-salamander.archive>svg-salamander-${svg-salamander.version}.jar</svg-salamander.archive>
+    <svg-salamander.url>
+      http://docs.codehaus.org/download/attachments/34701376/svg-salamander-${svg-salamander.version}.jar
+    </svg-salamander.url>
+
+    <groovy.binary.zip>${download.dir}/${groovy.bin.archive}</groovy.binary.zip>
+    <groovy.docs.zip>${download.dir}/${groovy.docs.archive}</groovy.docs.zip>
+    <gant.zip>${download.dir}/${gant.archive}</gant.zip>
+    <scriptom.zip>${download.dir}/${scriptom.archive}</scriptom.zip>
+    <graphicsbuilder.zip>${download.dir}/${graphicsbuilder.archive}</graphicsbuilder.zip>
+    <svg-salamander.jar>${download.dir}/svg-salamander-${svg-salamander.version}.jar</svg-salamander.jar>
+    <jidebuilder.jar>${download.dir}/jidebuilder-${jidebuilder.version}.jar</jidebuilder.jar>
+
+  </properties>
+
+</project>

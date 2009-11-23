@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<installation version="1.0">
+
+    <info>
+      <appname>${project.name}</appname>
+      <appversion>@{app.version.static}</appversion>    <!-- make sure we can interpolate this -->
+      <authors>
+        <author name="${user.name}" email="jpz@superman.org"/>
+        <author name="Hidden Man" email="hidden@hisdomain.com"/>
+        <author name="${app.group}" email="@{app.group}@domain.com"/>
+      </authors>
+      <url>http://www.anotherworld-inspace-website.net/</url>
+    </info>
+    
+    <locale>
+      <langpack iso3="eng"/>
+    </locale>
+
+    <panels>
+      <panel classname="HelloPanel"/>
+    </panels>
+
+    <packs>
+      <pack name="Base" required="yes">
+        <description>The base files</description>
+        <file src="install.xml" targetdir="$INSTALL_PATH"/>
+      </pack>
+    </packs>
+
+</installation>

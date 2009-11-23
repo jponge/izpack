@@ -1,0 +1,108 @@
+ ------
+ Maven IzPack Plugin - Usage Scenarios
+ ------
+ Dan T. Tran
+ ------
+ 15 June 2008
+ -----
+
+
+Maven IzPack Plugin
+
+ This plug-in compiles {{{http://izpack.org} IzPack installer xml configuration}} and produces IzPack installer.
+ 
+ The recommended practice is:
+ 
+   * Create a jar packaging project to compile all your izpack related sources ( ie custom panels, events, etc )
+     and package them into project jar file. Note: You dont have to package your own custom and event jars.
+     (starting izpack-standalone-compiler 4.2.1 ) 
+   
+   * Configure your izpack's descriptor file to merge the produced jar into final installer using <jar> tag.
+
+   * Configure your izpack's descriptor file to merge the required dependencies into your final installer.
+     Use maven-dependency-plugin to place all required jar files into one place. 
+ 
+   * Use the helps from  maven-resource-plugin,maven-assembly-plugin, maven-ant-plugin, maven-dependency-plugin, 
+     etc to copy, assemble, interpolate all required files and directories to a staging directory
+     prior to <package> phase. 
+     
+   * Configure this plugin to run at <package> phase to produce the final installer using the staging area.
+     If you need to install/deploy the output installer to local/remote repositories, invoke
+     this plugin at <install/deploy> phase.
+     
+   * Make sure izpack-standalone-compiler is added to both project's dependencies and plugin's dependencies section.
+     See below usage for detail.
+    
+  []
+
+* How to Use
+
+  In your pom.xml, insert this segment:
+
+-------------------
+<project>
+  ...
+  
+    <dependencies>
+      <dependency>
+        <groupId>org.codehaus.izpack</groupId>
+        <artifactId>izpack-standalone-compiler</artifactId>
+        <version>${your.standalone-compiler.version}</version>
+      </dependency>
+    </dependencies>
+    
+    <build>
+      ...
+      <plugins>
+        
+        <!-- this makes maven to compile and package your related izpack sources into a predictable name and location
+        	 ie your target directory's ${project.artifactId}.jar, to that you can configure your izpack descriptor
+        	 to merge it to finally installer via <jar> tag
+        -->
+        <finalName>${project.artifactId}</finalName>
+        
+        <plugin>
+          <!-- use the helps from other Maven plugin to produce a staging area prior to package phase, example target/staging -->
+        </plugin>
+        
+        <plugin>
+          <groupId>org.codehaus.izpack</groupId>
+          <artifactId>izpack-maven-plugin</artifactId>
+          <version>${your.izpackpluing.version}</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>izpack</goal>
+              </goals>
+              <configuration>
+                 <izpackBasedir>${your.staging.dir}</izpackBasedir>
+                 .....
+              </configuration>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.izpack</groupId>
+              <artifactId>izpack-standalone-compiler</artifactId>
+              <version>${your.standalone-compiler.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        ...
+      </plugins>
+      ...
+    </build>
+    
+    <properties>
+        <your.standalone-compiler.version>4.x</your.standalone-compiler.version>
+    </properties>
+  ...
+</project>
+-------------------
+
+  Refer to {{{plugin-info.html}this plugin documentation }} 
+  to override default configurations if neccessary.
+  
+  A {{{http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin/src/it/sample/} live example}}
+  is available at http://svn.codehause.org/izpack/izpack-maven/trunk/izpack-maven-plugin/src/it

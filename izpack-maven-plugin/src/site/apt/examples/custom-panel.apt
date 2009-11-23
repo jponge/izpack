@@ -1,0 +1,34 @@
+ ------
+ Maven IzPack Plugin - Custom Panel Example
+ ------
+ Dan T. Tran
+ ------
+ 12 December 2008
+ -----
+
+A Simple example with custom panel
+
+  This example shows how to compile, package, and place custom panel jars and its dependencies
+  to staging area to be picked up by standalone compiler.
+  
+  Before the starting of izpack compiler at the end of package phase: 
+  
+  * Custom panel files are compiled implicitly at compile phase.
+  
+  * Explicitly use maven-jar-plugin to package custom panel jar according to 
+    {{{http://www.nabble.com/Adding-custom-panels-without-rebuilding-standalone-compiler.jar-td18297470.html}this}}
+
+  * Use maven-dependency-plugin to copy custom panel's dependencies ( in this example, 
+    plexus-utils.jar) to a location in staging area to be picked up by izpack's jar tag.
+
+  * Use maven-antrun-plugin to copy other files to staging area.
+  
+  []
+  
+  The live example is at {{{http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin/src/it/sample}
+  http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin/src/it/sample}}
+  
+  
+   
+
+ 

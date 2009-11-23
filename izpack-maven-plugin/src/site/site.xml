@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven IzPack Plugin">
+  <bannerLeft>
+      <name>IzPack</name>
+      <src>http://media.xircles.codehaus.org/_projects/izpack/_logos/medium.png</src>
+      <href>http://izpack.org</href>
+  </bannerLeft>
+   <bannerRight>
+      <name>Codehaus</name>
+      <src>http://mojo.codehaus.org/images/codehaus-small.png</src>
+      <href>http://www.codehaus.org</href>
+   </bannerRight>
+  <body>
+    <links>
+         <item name="IzPack" href="http://izpack.org"/>
+         <item name="IzPack Wiki" href="http://docs.codehaus.org/display/IZPACK/Home"/>
+         <item name="Maven" href="http://maven.apache.org/"/>
+    </links>
+    
+    <menu name="Maven IzPack Plugin">
+      <item name="Introduction" href="index.html"/>
+      <item name="Usage" href="usage.html"/>
+      <item name="Goals" href="plugin-info.html"/>
+      <item name="FAQ" href="faq.html"/>
+    </menu>
+
+    <menu name="Examples">
+      <item name="Custom Panel Example" href="examples/custom-panel.html"/>
+      <item name="Groovy Example" href="examples/groovy.html"/>
+    </menu>
+
+    ${reports}
+
+  </body>
+</project>
