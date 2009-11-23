@@ -22,18 +22,15 @@ public class CompilationTest {
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
-    public void testCompile() throws Exception {
+    public void testSuccessful() throws Exception {
         File baseDir = new File(getClass().getClassLoader().getResource("samples1").getFile());
-
         File installerFile = new File(getClass().getClassLoader().getResource("samples1/install.xml").getFile());
+        File out = new File(baseDir.getParentFile(), "out.jar");
 
-        System.out.println(installerFile.getAbsolutePath());
-        System.out.println(baseDir.getAbsolutePath());
-        CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", "out.jar");
+        CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         CompilerConfig.setIzpackHome(".");
         c.executeCompiler();
         assertThat(c.wasSuccessful(), Is.is(true));
-
     }
 
 }
