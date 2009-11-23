@@ -20,8 +20,6 @@
  */
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.installer.Installer;
-
 import java.io.*;
 import java.util.Date;
 import java.util.Enumeration;
@@ -174,7 +172,7 @@ public class Debug {
             System.out.println(DLOG + " enabled.");
             PrintWriter logfile = createLogFile();
 
-            Debug.log(Installer.class.getName() + " LogFile created at ");
+            Debug.log("Installer LogFile created at ");
 
             // ** write some runtime system properties into the logfile **
             Debug.log("System.Properties:", LOG_WITH_TIME_STAMP);
@@ -188,7 +186,7 @@ public class Debug {
                 Debug.log(aKey + "  =  " + sysProps.getProperty(aKey), LOG_WITHOUT_DATE);
             }
             Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
-            Debug.log("\n " + Installer.class.getName() + " installs on: \n", LOG_WITHOUT_DATE);
+            Debug.log("\n Instraller installs on: \n", LOG_WITHOUT_DATE);
             Debug.log(OsVersion.getOsDetails(), LOG_WITHOUT_DATE);
             Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
         }
