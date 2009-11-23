@@ -2,17 +2,20 @@ package org.izforge.izpack;
 
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.compiler.CompilerException;
-import org.apache.commons.io.FileUtils;
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
+import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.internal.matchers.StringContains;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Test for an Izpack compilation
@@ -22,15 +25,38 @@ public class CompilationTest {
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
-    public void testSuccessful() throws Exception {
+    public void compilerShouldCompile() throws Exception {
         File baseDir = new File(getClass().getClassLoader().getResource("samples1").getFile());
         File installerFile = new File(getClass().getClassLoader().getResource("samples1/install.xml").getFile());
         File out = new File(baseDir.getParentFile(), "out.jar");
-
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
-        CompilerConfig.setIzpackHome(".");
         c.executeCompiler();
         assertThat(c.wasSuccessful(), Is.is(true));
     }
 
+    @Test
+    public void installerShouldContainBasicFiles() throws Exception {
+        File baseDir = new File(getClass().getClassLoader().getResource("samples1").getFile());
+        File installerFile = new File(getClass().getClassLoader().getResource("samples1/install.xml").getFile());
+        File out = new File(baseDir.getParentFile(), "out.jar");
+        CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
+        c.executeCompiler();
+        assertZipContainFile(out, "Installer.class");
+        assertZipContainFile(out, "HelloPanel.class");
+    }
+
+    private void assertZipContainFile(File inFile, String file) throws IOException {
+        List<String> fileList = new ArrayList<String>();
+        FileInputStream fis = new FileInputStream(inFile);
+        ZipInputStream zis = new ZipInputStream(fis);
+        ZipEntry ze;
+        while ((ze = zis.getNextEntry()) != null) {
+            fileList.add(ze.getName());
+            zis.closeEntry();
+        }
+        zis.close();
+        assertThat(fileList, IsCollectionContaining.hasItem(
+                StringContains.containsString(file)
+        ));
+    }
 }
