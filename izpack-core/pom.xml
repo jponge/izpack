@@ -10,7 +10,21 @@
         <relativePath>../izpack-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>izpack-api</artifactId>
-    <name>IZpack api module</name>
-    
+    <artifactId>izpack-core</artifactId>
+    <name>IZpack core module</name>
+
+    <dependencies>        
+        <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta-regexp</groupId>
+            <artifactId>jakarta-regexp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>bsf</groupId>
+            <artifactId>bsf</artifactId>
+        </dependency>
+    </dependencies>
 </project>

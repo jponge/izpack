@@ -116,7 +116,7 @@
                 <type>tar.gz</type>
             </dependency>
             <dependency>
-                <artifactId>izpack-api</artifactId>
+                <artifactId>izpack-core</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
             </dependency>

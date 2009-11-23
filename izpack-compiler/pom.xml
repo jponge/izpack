@@ -19,18 +19,6 @@
             <classifier>dll</classifier>
             <type>tar.gz</type>
         </dependency>
-        <dependency>
-            <groupId>ant</groupId>
-            <artifactId>ant</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta-regexp</groupId>
-            <artifactId>jakarta-regexp</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>bsf</groupId>
-            <artifactId>bsf</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>${groupId}</groupId>

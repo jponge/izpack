@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>izpack-parent</module>
-        <module>izpack-api</module>
+        <module>izpack-core</module>
         <module>izpack-compiler</module>
         <module>izpack-dist</module>
         <module>izpack-util</module>
