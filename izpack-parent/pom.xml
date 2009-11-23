@@ -61,7 +61,7 @@
                 <artifactId>izpack-compiler</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
-            </dependency
+            </dependency>
             <dependency>
                 <artifactId>izpack-test</artifactId>
                 <groupId>${groupId}</groupId>
@@ -162,9 +162,9 @@
     </build>
     <repositories>
         <repository>
-            <id>fest-repo</id>
-            <url>http://repository.codehaus.org/org/easytesting/</url>
+            <id>fest</id>
+            <name>Fest repository</name>
+            <url>http://fest.googlecode.com/svn/trunk/fest/m2/repository/</url>
         </repository>
     </repositories>
-
 </project>
