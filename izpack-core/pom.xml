@@ -13,7 +13,7 @@
     <artifactId>izpack-core</artifactId>
     <name>IZpack core module</name>
 
-    <dependencies>        
+    <dependencies>
         <dependency>
             <groupId>ant</groupId>
             <artifactId>ant</artifactId>
