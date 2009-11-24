@@ -51,7 +51,7 @@ public class Packager extends PackagerBase {
      * Executable zipped output stream. First to open, last to close.
      * Attention! This is our own JarOutputStream, not the java standard!
      */
-    private com.izforge.izpack.util.JarOutputStream primaryJarStream;
+    private JarOutputStream primaryJarStream;
 
     /**
      * The constructor.
@@ -222,7 +222,7 @@ public class Packager extends PackagerBase {
             }
 
             // create a pack specific jar if required
-            com.izforge.izpack.util.JarOutputStream packStream = primaryJarStream;
+            JarOutputStream packStream = primaryJarStream;
             if (packJarsSeparate) {
                 // See installer.Unpacker#getPackAsStream for the counterpart
                 String name = baseFile.getName() + ".pack-" + pack.id + ".jar";
@@ -415,12 +415,12 @@ public class Packager extends PackagerBase {
     /**
      * Return a stream for the next jar.
      */
-    private com.izforge.izpack.util.JarOutputStream getJarOutputStream(String name) throws IOException {
+    private JarOutputStream getJarOutputStream(String name) throws IOException {
         File file = new File(baseFile.getParentFile(), name);
         sendMsg("Building installer jar: " + file.getAbsolutePath());
 
-        com.izforge.izpack.util.JarOutputStream jar =
-                new com.izforge.izpack.util.JarOutputStream(file);
+        JarOutputStream jar =
+                new JarOutputStream(file);
         jar.setLevel(Deflater.BEST_COMPRESSION);
         jar.setPreventClose(true); // Needed at using FilterOutputStreams which calls close
         // of the slave at finalizing.
