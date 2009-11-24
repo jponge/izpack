@@ -38,7 +38,7 @@ public class ByteCountingOutputStreamTest extends TestCase {
         out.write(1024);
         out.close();
 
-        TestCase.assertEquals(16, out.getByteCount());
+        assertEquals(16, out.getByteCount());
     }
 
 }
