@@ -17,7 +17,7 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.uninstaller.SelfModifier;
+import com.izforge.izpack.util.SelfModifier;
 import com.izforge.izpack.util.Debug;
 
 import java.awt.*;

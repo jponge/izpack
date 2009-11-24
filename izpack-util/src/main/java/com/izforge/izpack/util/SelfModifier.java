@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.uninstaller;
+package com.izforge.izpack.util;
 
 import com.izforge.izpack.util.OsVersion;
 
