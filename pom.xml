@@ -26,6 +26,7 @@
         <module>izpack-test</module>
         <module>izpack-api</module>
         <module>izpack-util</module>
+        <module>izpack-ant</module>
     </modules>
 
 </project>

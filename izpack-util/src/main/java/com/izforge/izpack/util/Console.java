@@ -1,24 +1,3 @@
-/*
- * IzPack - Copyright 2001-2008 Julien Ponge, All Rights Reserved.
- * 
- * http://izpack.org/
- * http://izpack.codehaus.org/
- * 
- * Copyright 2002 Jan Blok
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- *     
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.izforge.izpack.util;
 
 import javax.swing.*;
@@ -32,6 +11,13 @@ import java.awt.event.KeyListener;
 import java.io.*;
 import java.util.Vector;
 
+/**
+ * Created by IntelliJ IDEA.
+ * User: sora
+ * Date: Nov 23, 2009
+ * Time: 11:37:06 PM
+ * To change this template use File | Settings | File Templates.
+ */
 public final class Console {
 
     public static final int INITIAL_WIDTH = 800;
@@ -137,156 +123,6 @@ public final class Console {
             System.out.println(e);
         }
         frame.setVisible(false);
-    }
-}
-
-class StdIn extends Thread {
-
-    private BufferedReader kb;
-
-    private boolean processRunning;
-
-    private PrintWriter op;
-
-    public StdIn(Process p, ConsoleTextArea cta) {
-        setDaemon(true);
-        InputStreamReader ir = new InputStreamReader(cta.getIn());
-        kb = new BufferedReader(ir);
-
-        BufferedOutputStream os = new BufferedOutputStream(p.getOutputStream());
-        op = new PrintWriter((new OutputStreamWriter(os)), true);
-        processRunning = true;
-    }
-
-    public void run() {
-        try {
-            while (kb.ready() || processRunning) {
-                if (kb.ready()) {
-                    op.println(kb.readLine());
-                }
-            }
-        }
-        catch (IOException e) {
-            System.err.println("Problem reading standard input.");
-            System.err.println(e);
-        }
-    }
-
-    public void done() {
-        processRunning = false;
-    }
-}
-
-class StdOut extends Thread {
-
-    private InputStreamReader output;
-
-    private boolean processRunning;
-
-    private ConsoleTextArea cta;
-
-    private StringBuffer data;
-
-    public StdOut(Process p, ConsoleTextArea cta) {
-        setDaemon(true);
-        output = new InputStreamReader(p.getInputStream());
-        this.cta = cta;
-        processRunning = true;
-        data = new StringBuffer();
-    }
-
-    public void run() {
-        try {
-            /*
-             * Loop as long as there is output from the process to be displayed or as long as the
-             * process is still running even if there is presently no output.
-             */
-            while (output.ready() || processRunning) {
-
-                // If there is output get it and display it.
-                if (output.ready()) {
-                    char[] array = new char[255];
-                    int num = output.read(array);
-                    if (num != -1) {
-                        String s = new String(array, 0, num);
-                        data.append(s);
-                        SwingUtilities.invokeAndWait(new ConsoleWrite(cta, s));
-                    }
-                }
-            }
-        }
-        catch (Exception e) {
-            System.err.println("Problem writing to standard output.");
-            System.err.println(e);
-        }
-    }
-
-    public void done() {
-        processRunning = false;
-    }
-
-    public String getData() {
-        return data.toString();
-    }
-}
-
-class ConsoleWrite implements Runnable {
-
-    private ConsoleTextArea textArea;
-
-    private String str;
-
-    public ConsoleWrite(ConsoleTextArea textArea, String str) {
-        this.textArea = textArea;
-        this.str = str;
-    }
-
-    public void run() {
-        textArea.write(str);
-    }
-}
-
-class ConsoleWriter extends java.io.OutputStream {
-
-    private ConsoleTextArea textArea;
-
-    private StringBuffer buffer;
-
-    public ConsoleWriter(ConsoleTextArea textArea) {
-        this.textArea = textArea;
-        buffer = new StringBuffer();
-    }
-
-    public synchronized void write(int ch) {
-        buffer.append((char) ch);
-        if (ch == '\n') {
-            flushBuffer();
-        }
-    }
-
-    public synchronized void write(char[] data, int off, int len) {
-        for (int i = off; i < len; i++) {
-            buffer.append(data[i]);
-            if (data[i] == '\n') {
-                flushBuffer();
-            }
-        }
-    }
-
-    public synchronized void flush() {
-        if (buffer.length() > 0) {
-            flushBuffer();
-        }
-    }
-
-    public void close() {
-        flush();
-    }
-
-    private void flushBuffer() {
-        String str = buffer.toString();
-        buffer.setLength(0);
-        SwingUtilities.invokeLater(new ConsoleWrite(textArea, str));
     }
 }
 
