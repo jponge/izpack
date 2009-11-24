@@ -19,11 +19,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compiler;
+package com.izforge.izpack.data;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.PackColor;
+import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;
@@ -198,7 +196,7 @@ public class PackInfo implements Serializable {
      * @param override   what to do if the file already exists when installing
      * @param condition
      * @throws FileNotFoundException if the file specified does not exist. The file is not read
-     *                               until the {@link Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
+     *                               until the {@link com.izforge.izpack.compiler.Packager#createInstaller} is invoked, thus a FileNotFoundEception will occur
      *                               then, if the file is deleted in between.
      */
     /*

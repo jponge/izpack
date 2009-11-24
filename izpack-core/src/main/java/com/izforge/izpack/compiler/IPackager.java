@@ -22,6 +22,7 @@ import com.izforge.izpack.CustomData;
 import com.izforge.izpack.GUIPrefs;
 import com.izforge.izpack.data.DynamicVariable;
 import com.izforge.izpack.data.Info;
+import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.compressor.PackCompressor;

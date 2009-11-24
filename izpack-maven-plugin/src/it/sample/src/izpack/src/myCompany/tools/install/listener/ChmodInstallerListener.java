@@ -24,7 +24,7 @@ package com.myCompany.tools.install.listener;
 import java.io.File;
 import java.io.IOException;
 
-import com.izforge.izpack.PackFile;
+import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.event.SimpleInstallerListener;
 import com.izforge.izpack.installer.InstallerException;

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack;
+package com.izforge.izpack.data;
 
 import java.io.Serializable;
 import java.util.ArrayList;

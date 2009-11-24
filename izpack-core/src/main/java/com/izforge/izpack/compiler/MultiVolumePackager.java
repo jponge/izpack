@@ -18,8 +18,9 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.XPackFile;
+import com.izforge.izpack.data.PackFile;
+import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.data.XPackFile;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.util.Debug;

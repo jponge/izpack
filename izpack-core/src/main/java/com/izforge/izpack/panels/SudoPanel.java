@@ -22,7 +22,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;

@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.ParsableFile;
+import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
 

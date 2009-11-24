@@ -21,9 +21,10 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.PackFile;
+import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.data.PackInfo;
 import com.izforge.izpack.util.FileUtil;
 
 import java.io.*;

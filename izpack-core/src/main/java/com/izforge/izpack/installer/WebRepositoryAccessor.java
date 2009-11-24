@@ -23,13 +23,13 @@ package com.izforge.izpack.installer;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.ParsableFile;
-import com.izforge.izpack.UpdateCheck;
+import com.izforge.izpack.data.PackInfo;
+import com.izforge.izpack.data.ParsableFile;
+import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.PackInfo;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;

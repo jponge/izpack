@@ -21,7 +21,7 @@
 
 package com.myCompany.tools.install.listener;
 
-import com.izforge.izpack.PackFile;
+import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.event.SimpleInstallerListener;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.util.FileExecutor;

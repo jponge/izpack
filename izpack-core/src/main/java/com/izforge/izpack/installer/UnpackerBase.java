@@ -20,12 +20,9 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.PackFile;
-import com.izforge.izpack.UpdateCheck;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.data.*;
+import com.izforge.izpack.data.PackFile;
+import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
