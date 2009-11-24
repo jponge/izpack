@@ -20,6 +20,8 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.data.PanelAction;
+
 public class PanelActionFactory {
 
     public static PanelAction createPanelAction(String className) {

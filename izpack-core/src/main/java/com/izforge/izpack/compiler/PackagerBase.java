@@ -26,7 +26,7 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.compressor.PackCompressorFactory;
-import com.izforge.izpack.installer.InstallerRequirement;
+import com.izforge.izpack.data.InstallerRequirement;
 import com.izforge.izpack.rules.Condition;
 
 import java.io.File;

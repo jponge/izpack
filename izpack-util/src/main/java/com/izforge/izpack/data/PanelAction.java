@@ -5,7 +5,7 @@
  *
  * Version: $Id: PanelAction.java,v 1.1.2.1 2009/02/12 12:21:01 blf Exp $
  */
-package com.izforge.izpack.installer;
+package com.izforge.izpack.data;
 
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.PanelActionConfiguration;

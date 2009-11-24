@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer;
+package com.izforge.izpack.data;
 
 import java.io.Serializable;
 

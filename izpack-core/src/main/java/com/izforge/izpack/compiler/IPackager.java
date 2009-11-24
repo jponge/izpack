@@ -18,15 +18,10 @@
  */
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.data.CustomData;
-import com.izforge.izpack.data.GUIPrefs;
-import com.izforge.izpack.data.DynamicVariable;
-import com.izforge.izpack.data.Info;
-import com.izforge.izpack.data.PackInfo;
-import com.izforge.izpack.data.Panel;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
-import com.izforge.izpack.installer.InstallerRequirement;
+import com.izforge.izpack.data.InstallerRequirement;
 import com.izforge.izpack.rules.Condition;
 
 import java.io.File;
