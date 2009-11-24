@@ -38,11 +38,6 @@ import java.util.Iterator;
 public class ScriptParser {
 
     /**
-     * The install path.
-     */
-    public final static String INSTALL_PATH = "INSTALL_PATH";
-
-    /**
      * The Java home path.
      */
     public final static String JAVA_HOME = "JAVA_HOME";

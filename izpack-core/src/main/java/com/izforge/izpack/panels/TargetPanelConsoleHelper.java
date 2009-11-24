@@ -23,7 +23,6 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.installer.ScriptParser;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.BufferedReader;
@@ -40,12 +39,12 @@ import java.util.Properties;
 public class TargetPanelConsoleHelper extends PanelConsoleHelper implements PanelConsole {
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter) {
-        printWriter.println(ScriptParser.INSTALL_PATH + "=");
+        printWriter.println(AutomatedInstallData.INSTALL_PATH + "=");
         return true;
     }
 
     public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p) {
-        String strTargetPath = p.getProperty(ScriptParser.INSTALL_PATH);
+        String strTargetPath = p.getProperty(AutomatedInstallData.INSTALL_PATH);
         if (strTargetPath == null || "".equals(strTargetPath.trim())) {
             System.err.println("Missing mandatory target path!");
             return false;

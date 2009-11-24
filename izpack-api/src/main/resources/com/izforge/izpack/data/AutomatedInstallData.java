@@ -19,14 +19,8 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.data.Info;
-import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.installer.ScriptParser;
-import com.izforge.izpack.rules.RulesEngine;
 
 import java.io.Serializable;
 import java.util.*;
@@ -163,6 +157,10 @@ public class AutomatedInstallData implements Serializable {
      * static member.
      */
     private static AutomatedInstallData self = null;
+    /**
+     * The install path.
+     */
+    public final static String INSTALL_PATH = "INSTALL_PATH";
 
     /**
      * Returns the one possible object of this class.
@@ -234,7 +232,7 @@ public class AutomatedInstallData implements Serializable {
      * @see #getInstallPath
      */
     public void setInstallPath(String path) {
-        setVariable(ScriptParser.INSTALL_PATH, path);
+        setVariable(INSTALL_PATH, path);
     }
 
     /**
@@ -244,7 +242,7 @@ public class AutomatedInstallData implements Serializable {
      * @see #setInstallPath
      */
     public String getInstallPath() {
-        return getVariable(ScriptParser.INSTALL_PATH);
+        return getVariable(INSTALL_PATH);
     }
 
     /**

@@ -25,7 +25,6 @@ import com.coi.tools.os.win.NativeLibException;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
-import com.izforge.izpack.installer.ScriptParser;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
@@ -47,12 +46,12 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
     private String detectedVersion;
 
     public boolean runGeneratePropertiesFile(AutomatedInstallData installData, PrintWriter printWriter) {
-        printWriter.println(ScriptParser.INSTALL_PATH + "=");
+        printWriter.println(AutomatedInstallData.INSTALL_PATH + "=");
         return true;
     }
 
     public boolean runConsoleFromProperties(AutomatedInstallData installData, Properties p) {
-        String strTargetPath = p.getProperty(ScriptParser.INSTALL_PATH);
+        String strTargetPath = p.getProperty(AutomatedInstallData.INSTALL_PATH);
         if (strTargetPath == null || "".equals(strTargetPath.trim())) {
             System.err.println("Missing mandatory target path!");
             return false;
