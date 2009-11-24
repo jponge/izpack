@@ -18,6 +18,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.*;
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.io.CorruptVolumeException;
 import com.izforge.izpack.io.FileSpanningInputStream;

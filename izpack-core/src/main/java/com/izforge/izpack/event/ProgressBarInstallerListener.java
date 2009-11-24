@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;

@@ -30,6 +30,7 @@ import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -452,7 +453,7 @@ public class InstallerFrame extends JFrame {
 
         // We put the first panel
         installdata.setCurPanelNumber(0);
-        IzPanel panel_0 = installdata.getPanels().get(0);
+        IzPanel panel_0 = (IzPanel) installdata.getPanels().get(0);
         panelsContainer.add(panel_0);
 
         // We add the navigation buttons & labels
@@ -714,8 +715,8 @@ public class InstallerFrame extends JFrame {
                 isBack = true;
             }
             panelsContainer.setVisible(false);
-            IzPanel panel = installdata.getPanels().get(installdata.getCurPanelNumber());
-            IzPanel l_panel = installdata.getPanels().get(last);
+            IzPanel panel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
+            IzPanel l_panel = (IzPanel) installdata.getPanels().get(last);
             showHelpButton(panel.canShowHelp());
             if (Debug.isTRACE()) {
                 debugger.switchPanel(panel.getMetadata(), l_panel.getMetadata());
@@ -1249,7 +1250,7 @@ public class InstallerFrame extends JFrame {
         // fix bug# 4551
         // write.write(root);
         for (int i = 0; i < installdata.getPanels().size(); i++) {
-            IzPanel panel = installdata.getPanels().get(i);
+            IzPanel panel = (IzPanel) installdata.getPanels().get(i);
             panel.makeXMLData(installdata.getXmlData().getChildAtIndex(i));
         }
         writer.write(root);
@@ -1399,7 +1400,7 @@ public class InstallerFrame extends JFrame {
      * @return true or false
      */
     public boolean canShow(int panelnumber) {
-        IzPanel panel = installdata.getPanels().get(panelnumber);
+        IzPanel panel = (IzPanel) installdata.getPanels().get(panelnumber);
         Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
         Debug.trace("Current Panel: " + panelid);
@@ -1441,7 +1442,7 @@ public class InstallerFrame extends JFrame {
         if ((installdata.getCurPanelNumber() < installdata.getPanels().size() - 1)) {
             // We must trasfer all fields into the variables before
             // panelconditions try to resolve the rules based on unassigned vars.
-            final IzPanel panel = installdata.getPanels().get(startPanel);
+            final IzPanel panel = (IzPanel) installdata.getPanels().get(startPanel);
             panel.executePreValidationActions();
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
@@ -1550,7 +1551,8 @@ public class InstallerFrame extends JFrame {
      * Show help Window
      */
     public void showHelp() {
-        installdata.getPanels().get(installdata.getCurPanelNumber()).showHelp();
+        IzPanel izPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
+        izPanel.showHelp();
     }
 
     /**

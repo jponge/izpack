@@ -20,6 +20,7 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;

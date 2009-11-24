@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.data;
 
 import com.izforge.izpack.Info;
 import com.izforge.izpack.data.LocaleDatabase;
@@ -25,6 +25,7 @@ import com.izforge.izpack.Pack;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.installer.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
 
 import java.io.Serializable;
@@ -51,7 +52,7 @@ public class AutomatedInstallData implements Serializable {
     // Attention !! Do not change the existent names and the order.
     // Add a / as first char at new types. Add new type handling in
     // Unpacker.
-    static final String[] CUSTOM_ACTION_TYPES = new String[]{"/installerListeners",
+    public static final String[] CUSTOM_ACTION_TYPES = new String[]{"/installerListeners",
             "/uninstallerListeners", "/uninstallerLibs", "/uninstallerJars"};
 
     public static final int INSTALLER_LISTENER_INDEX = 0;
@@ -109,7 +110,7 @@ public class AutomatedInstallData implements Serializable {
     /**
      * The panels list.
      */
-    private List<IzPanel> panels;
+    private List panels;
 
     /**
      * The panels order.
@@ -180,7 +181,7 @@ public class AutomatedInstallData implements Serializable {
     public AutomatedInstallData() {
         setAvailablePacks(new ArrayList<Pack>());
         setSelectedPacks(new ArrayList());
-        setPanels(new ArrayList<IzPanel>());
+        setPanels(new ArrayList());
         setPanelsOrder(new ArrayList<Panel>());
         setXmlData(new XMLElementImpl("AutomatedInstallation"));
         setVariables(new Properties());
@@ -351,11 +352,11 @@ public class AutomatedInstallData implements Serializable {
         this.selectedPacks = selectedPacks;
     }
 
-    public List<IzPanel> getPanels() {
+    public List getPanels() {
         return panels;
     }
 
-    public void setPanels(List<IzPanel> panels) {
+    public void setPanels(List panels) {
         this.panels = panels;
     }
 

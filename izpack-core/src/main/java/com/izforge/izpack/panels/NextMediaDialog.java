@@ -17,11 +17,11 @@
  */
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 
 import javax.swing.*;

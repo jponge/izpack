@@ -21,6 +21,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.Info;
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.Panel;
 import com.izforge.izpack.data.ResourceManager;

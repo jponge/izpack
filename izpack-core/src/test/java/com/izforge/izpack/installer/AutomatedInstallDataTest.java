@@ -18,6 +18,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.data.AutomatedInstallData;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;

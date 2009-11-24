@@ -22,7 +22,7 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.data.AutomatedInstallData;
 
 import javax.swing.*;
 import java.io.File;

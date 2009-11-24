@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.panels.NextMediaDialog;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;

@@ -21,7 +21,7 @@
 package com.izforge.izpack.rules;
 
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.data.AutomatedInstallData;
 
 import java.io.Serializable;
 

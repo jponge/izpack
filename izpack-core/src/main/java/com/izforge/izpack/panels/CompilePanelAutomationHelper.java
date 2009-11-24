@@ -23,6 +23,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.*;
 
 import java.io.IOException;

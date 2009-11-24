@@ -22,6 +22,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.data.AutomatedInstallData;
 
 /**
  * Defines the Interface that must be implemented for running Panels in automated (or "silent",

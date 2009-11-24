@@ -20,6 +20,8 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.data.AutomatedInstallData;
+
 public interface DataValidator {
 
     public enum Status {

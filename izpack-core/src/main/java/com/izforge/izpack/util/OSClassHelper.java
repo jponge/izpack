@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.data.AutomatedInstallData;
 
 /*---------------------------------------------------------------------------*/
 /**

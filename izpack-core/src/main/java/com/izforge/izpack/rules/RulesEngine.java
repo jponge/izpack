@@ -25,7 +25,7 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.XMLException;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
-import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;
 
 import java.io.OutputStream;

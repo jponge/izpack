@@ -20,6 +20,7 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;

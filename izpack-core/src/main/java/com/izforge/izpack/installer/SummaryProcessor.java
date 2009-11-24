@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.IzPanel;
 
 import java.util.Iterator;

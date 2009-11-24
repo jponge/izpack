@@ -21,6 +21,8 @@
 
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.data.AutomatedInstallData;
+
 import java.io.PrintWriter;
 import java.util.Properties;
 
