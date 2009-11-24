@@ -17,7 +17,7 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.data.LocaleDatabase;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;

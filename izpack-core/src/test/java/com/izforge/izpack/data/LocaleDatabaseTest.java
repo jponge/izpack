@@ -17,8 +17,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack;
+package com.izforge.izpack.data;
 
+import com.izforge.izpack.data.LocaleDatabase;
 import junit.framework.TestCase;
 
 public class LocaleDatabaseTest extends TestCase {

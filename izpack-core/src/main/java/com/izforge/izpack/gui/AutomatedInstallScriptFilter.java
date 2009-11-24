@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.gui;
 
-import com.izforge.izpack.LocaleDatabase;
-import com.izforge.izpack.installer.ResourceManager;
+import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.filechooser.FileFilter;

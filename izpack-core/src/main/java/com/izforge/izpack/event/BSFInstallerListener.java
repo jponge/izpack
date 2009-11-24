@@ -24,9 +24,9 @@ package com.izforge.izpack.event;
 import com.izforge.izpack.Pack;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.InstallerException;
-import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;
 

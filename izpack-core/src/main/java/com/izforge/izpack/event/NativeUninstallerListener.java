@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.util.os.WrappedNativeLibException;
 
 /**

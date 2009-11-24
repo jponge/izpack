@@ -21,10 +21,11 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;

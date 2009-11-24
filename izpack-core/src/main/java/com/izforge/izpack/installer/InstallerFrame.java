@@ -30,6 +30,8 @@ import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
+import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
@@ -1076,7 +1078,7 @@ public class InstallerFrame extends JFrame {
 
         try {
             rm = ResourceManager.getInstance();
-            basePath = rm.resourceBasePath;
+            basePath = rm.getResourceBasePath();
         }
         catch (Exception e) {
             e.printStackTrace();

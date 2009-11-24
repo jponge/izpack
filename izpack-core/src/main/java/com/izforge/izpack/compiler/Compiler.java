@@ -26,7 +26,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.*;
-import com.izforge.izpack.compressor.PackCompressor;
+import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.installer.InstallerRequirement;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;

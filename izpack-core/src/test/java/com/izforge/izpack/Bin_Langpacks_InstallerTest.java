@@ -19,6 +19,7 @@
 
 package com.izforge.izpack;
 
+import com.izforge.izpack.data.LocaleDatabase;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;

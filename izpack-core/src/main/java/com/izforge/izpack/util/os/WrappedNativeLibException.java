@@ -22,7 +22,7 @@
 package com.izforge.izpack.util.os;
 
 import com.coi.tools.os.win.NativeLibException;
-import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.data.LocaleDatabase;
 
 /**
  * This class allows it to define error messages for <code>NativeLibException</code> s in the

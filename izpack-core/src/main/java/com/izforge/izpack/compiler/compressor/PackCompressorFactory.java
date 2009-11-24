@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.compressor;
+package com.izforge.izpack.compiler.compressor;
 
 import com.izforge.izpack.compiler.CompilerException;
 

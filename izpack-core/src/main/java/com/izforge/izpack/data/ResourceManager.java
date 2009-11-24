@@ -19,7 +19,10 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.data;
+
+import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.ResourceNotFoundException;
 
 import javax.swing.*;
 import java.io.ByteArrayOutputStream;
@@ -61,7 +64,7 @@ public class ResourceManager {
     /**
      * Internel used resourceBasePath = "/res/"
      */
-    protected String resourceBasePath = "/res/";
+    private String resourceBasePath = "/res/";
 
     /**
      * Contains the given InstallData
@@ -129,9 +132,9 @@ public class ResourceManager {
     public void setDefaultOrResourceBasePath(String aDefaultBasePath) {
         // For direct access of named resources the BasePath should be empty
         if (null != aDefaultBasePath)
-            this.resourceBasePath = aDefaultBasePath;
+            this.setResourceBasePath(aDefaultBasePath);
         else
-            this.resourceBasePath = resourceBasePathDefaultConstant;
+            this.setResourceBasePath(resourceBasePathDefaultConstant);
     }
 
 
@@ -142,11 +145,11 @@ public class ResourceManager {
      *
      * @param resource Resource to load language dependen
      * @return the language dependent path of the given resource
-     * @throws ResourceNotFoundException If the resource is not found
+     * @throws com.izforge.izpack.installer.ResourceNotFoundException If the resource is not found
      */
     private String getLanguageResourceString(String resource) throws ResourceNotFoundException {
         InputStream in;
-        String resourcePath = this.resourceBasePath + resource + "_" + this.locale;
+        String resourcePath = this.getResourceBasePath() + resource + "_" + this.locale;
 
         in = ResourceManager.class.getResourceAsStream(resourcePath);
         if (in != null) {
@@ -154,12 +157,12 @@ public class ResourceManager {
             return resourcePath;
         } else {
             // if there's no language dependent resource found
-            resourcePath = this.resourceBasePath + resource;
+            resourcePath = this.getResourceBasePath() + resource;
             in = ResourceManager.class.getResourceAsStream(resourcePath);
             if (in != null) {
                 return resourcePath;
             } else {
-                throw new ResourceNotFoundException("Cannot find named Resource: '" + this.resourceBasePath + resource + "' AND '" + this.resourceBasePath + resource + "_" + this.locale + "'");
+                throw new ResourceNotFoundException("Cannot find named Resource: '" + this.getResourceBasePath() + resource + "' AND '" + this.getResourceBasePath() + resource + "_" + this.locale + "'");
             }
         }
 
@@ -280,5 +283,13 @@ public class ResourceManager {
      */
     public String getLocale() {
         return this.locale;
+    }
+
+    public String getResourceBasePath() {
+        return resourceBasePath;
+    }
+
+    public void setResourceBasePath(String resourceBasePath) {
+        this.resourceBasePath = resourceBasePath;
     }
 }

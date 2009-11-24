@@ -21,7 +21,8 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.GUIPrefs;
-import com.izforge.izpack.LocaleDatabase;
+import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.util.Debug;

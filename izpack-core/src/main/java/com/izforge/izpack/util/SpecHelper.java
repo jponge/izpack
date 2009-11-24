@@ -24,8 +24,8 @@ package com.izforge.izpack.util;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerException;
-import com.izforge.izpack.installer.ResourceManager;
 
 import java.io.File;
 import java.io.FileInputStream;

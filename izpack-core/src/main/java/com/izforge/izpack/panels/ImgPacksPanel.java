@@ -24,9 +24,9 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.ResourceManager;
 import com.izforge.izpack.util.IoHelper;
 
 import javax.swing.*;

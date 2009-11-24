@@ -28,6 +28,7 @@ import com.izforge.izpack.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.compiler.DynamicVariable;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
@@ -541,7 +542,7 @@ public class InstallerBase {
 
         try {
             rm = ResourceManager.getInstance();
-            basePath = rm.resourceBasePath;
+            basePath = rm.getResourceBasePath();
         }
         catch (Exception e) {
             e.printStackTrace();
