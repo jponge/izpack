@@ -23,7 +23,7 @@ import com.izforge.izpack.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.panels.HelpWindow;
+import com.izforge.izpack.installer.HelpWindow;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.MultiLineLabel;

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer;
 
 import com.izforge.izpack.util.Debug;
 
