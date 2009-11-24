@@ -34,7 +34,7 @@ import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.event.CompilerListener;
+import com.izforge.izpack.compiler.CompilerListener;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.HelpWindow;
 import com.izforge.izpack.installer.InstallerRequirement;

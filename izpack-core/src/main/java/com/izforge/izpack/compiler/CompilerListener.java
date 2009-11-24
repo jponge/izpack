@@ -19,11 +19,9 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.event;
+package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.compiler.IPackager;
 
 import java.util.Map;
 
@@ -65,6 +63,6 @@ public interface CompilerListener {
      * @param data     current install data
      * @param packager current packager object
      */
-//    void notify(String position, int state, IXMLElement data, IPackager packager);
+    void notify(String position, int state, IXMLElement data, IPackager packager);
 
 }

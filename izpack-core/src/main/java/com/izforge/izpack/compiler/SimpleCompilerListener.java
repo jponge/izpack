@@ -19,10 +19,10 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.event;
+package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.compiler.CompilerException;
+import com.izforge.izpack.data.PackInfo;
 
 import java.util.Map;
 
@@ -54,32 +54,32 @@ public class SimpleCompilerListener implements CompilerListener {
         return null;
     }
 
-//    /*
-//     * (non-Javadoc)
-//     *
-//     * @see com.izforge.izpack.compiler.CompilerListener#AfterPack(com.izforge.izpack.compiler.Compiler.Pack,
-//     * int, com.izforge.izpack.compiler.Packager)
-//     */
-//    public void afterPack(PackInfo pack, int packNumber, IPackager packager)
-//            throws CompilerException {
-//    }
-//
-//    /*
-//     * (non-Javadoc)
-//     *
-//     * @see com.izforge.izpack.compiler.CompilerListener#BeforePack(com.izforge.izpack.compiler.Compiler.Pack,
-//     * int, com.izforge.izpack.compiler.Packager)
-//     */
-//    public void beforePack(PackInfo pack, int packNumber, IPackager packager) {
-//    }
-//
-//    /*
-//     * (non-Javadoc)
-//     *
-//     * @see com.izforge.izpack.compiler.CompilerListener#notify(java.lang.String, int,
-//     * com.izforge.izpack.adaptator.IXMLElement, com.izforge.izpack.compiler.Packager)
-//     */
-//    public void notify(String position, int state, IXMLElement data, IPackager packager) {
-//    }
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.izforge.izpack.compiler.CompilerListener#AfterPack(com.izforge.izpack.compiler.Compiler.Pack,
+     * int, com.izforge.izpack.compiler.Packager)
+     */
+    public void afterPack(PackInfo pack, int packNumber, IPackager packager)
+            throws CompilerException {
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.izforge.izpack.compiler.CompilerListener#BeforePack(com.izforge.izpack.compiler.Compiler.Pack,
+     * int, com.izforge.izpack.compiler.Packager)
+     */
+    public void beforePack(PackInfo pack, int packNumber, IPackager packager) {
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see com.izforge.izpack.compiler.CompilerListener#notify(java.lang.String, int,
+     * com.izforge.izpack.adaptator.IXMLElement, com.izforge.izpack.compiler.Packager)
+     */
+    public void notify(String position, int state, IXMLElement data, IPackager packager) {
+    }
 
 }

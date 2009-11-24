@@ -23,7 +23,7 @@ package com.myCompany.tools.install.listener;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.compiler.CompilerException;
-import com.izforge.izpack.event.SimpleCompilerListener;
+import com.izforge.izpack.compiler.SimpleCompilerListener;
 
 import java.util.HashMap;
 import java.util.Iterator;
