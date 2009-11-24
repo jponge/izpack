@@ -23,7 +23,6 @@
 package com.izforge.izpack.adaptator;
 
 import com.izforge.izpack.adaptator.impl.XMLParser;
-import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.util.VariableSubstitutor;
 import org.junit.Assert;
 import org.junit.Test;
@@ -55,7 +54,7 @@ public class XMLParserTest {
 
 
     @org.junit.Test
-    public void testParseFile() throws NoSuchMethodException, ResourceNotFoundException, IOException {
+    public void testParseFile() throws Exception {
         InputStream input;
         IXMLElement spec;
         input = XMLParserTest.class.getResourceAsStream(shortFilename);
@@ -66,7 +65,7 @@ public class XMLParserTest {
     }
 
     @Test
-    public void testParseString() throws NoSuchMethodException, ResourceNotFoundException, IOException {
+    public void testParseString() throws Exception {
         InputStream input;
         IXMLElement spec;
         input = XMLParserTest.class.getResourceAsStream(filename);
