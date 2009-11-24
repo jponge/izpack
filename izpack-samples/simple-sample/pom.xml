@@ -17,6 +17,10 @@
             <artifactId>izpack-compiler</artifactId>
             <groupId>${groupId}</groupId>
         </dependency>
+        <dependency>
+            <artifactId>izpack-installer</artifactId>
+            <groupId>${groupId}</groupId>
+        </dependency>
     </dependencies>
 
     <build>

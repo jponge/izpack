@@ -13,4 +13,10 @@
     <artifactId>izpack-uninstaller</artifactId>
     <name>IZpack uninstaller</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-installer</artifactId>
+        </dependency>
+    </dependencies>
 </project>

@@ -15,7 +15,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.panels;
+package com.izforge.izpack.installer.panels;
 
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;

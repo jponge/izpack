@@ -29,22 +29,22 @@ public class StringToolTest extends TestCase {
     public void testReplace() {
         String ref = "ABC-012-def";
 
-        TestCase.assertEquals(null, StringTool.replace(null, null, null));
-        TestCase.assertEquals("ABC-012-def", StringTool.replace(ref, null, null));
-        TestCase.assertEquals("ABC-012-def", StringTool.replace(ref, "something", null));
-        TestCase.assertEquals("ABC012def", StringTool.replace(ref, "-", null));
-        TestCase.assertEquals("abc-012-def", StringTool.replace(ref, "ABC", "abc"));
-        TestCase.assertEquals("ABC-012-def", StringTool.replace(ref, "abc", "abc", false));
-        TestCase.assertEquals("ABC-012-def", StringTool.replace(ref, "abc", "abc", true));
+        assertEquals(null, StringTool.replace(null, null, null));
+        assertEquals("ABC-012-def", StringTool.replace(ref, null, null));
+        assertEquals("ABC-012-def", StringTool.replace(ref, "something", null));
+        assertEquals("ABC012def", StringTool.replace(ref, "-", null));
+        assertEquals("abc-012-def", StringTool.replace(ref, "ABC", "abc"));
+        assertEquals("ABC-012-def", StringTool.replace(ref, "abc", "abc", false));
+        assertEquals("ABC-012-def", StringTool.replace(ref, "abc", "abc", true));
     }
 
     /*
      * Class under test for String normalizePath(String[, String])
      */
     public void testNormalizePath() {
-        TestCase.assertEquals("C:\\Foo\\Bar\\is\\so\\boring;plop;plop", StringTool.normalizePath(
+        assertEquals("C:\\Foo\\Bar\\is\\so\\boring;plop;plop", StringTool.normalizePath(
                 "C:\\Foo/Bar/is\\so\\boring:plop;plop", "\\"));
-        TestCase.assertEquals("/some/where/that:matters:really", StringTool.normalizePath(
+        assertEquals("/some/where/that:matters:really", StringTool.normalizePath(
                 "/some/where\\that:matters;really", "/"));
     }
 

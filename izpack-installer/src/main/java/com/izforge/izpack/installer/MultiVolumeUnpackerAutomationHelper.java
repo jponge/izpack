@@ -1,33 +1,28 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.panels.NextMediaDialog;
+import com.izforge.izpack.installer.panels.NextMediaDialog;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.Debug;
 
-import javax.swing.*;
-import java.awt.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
-public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper {
 
+public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpackerHelper {
     private AutomatedInstallData idata;
-
     private AbstractUIProgressHandler handler;
 
-    public MultiVolumeUnpackerHelper() {
+    public MultiVolumeUnpackerAutomationHelper() {
 
     }
 
     public File enterNextMediaMessage(String volumename, boolean lastcorrupt) {
         if (lastcorrupt) {
-            Component parent = null;
-            if ((this.handler != null) && (this.handler instanceof IzPanel)) {
-                parent = ((IzPanel) this.handler).getInstallerFrame();
-            }
-            JOptionPane.showMessageDialog(parent, idata.getLangpack()
-                    .getString("nextmedia.corruptmedia"), idata.getLangpack()
-                    .getString("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
+            System.err.println(" [ " + idata.getLangpack().getString("nextmedia.corruptmedia.title") + " ] ");
+            System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
         }
         Debug.trace("Enter next media: " + volumename);
 
@@ -35,14 +30,19 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper {
         NextMediaDialog nmd = null;
 
         while (!nextvolume.exists() || lastcorrupt) {
-            if ((this.handler != null) && (this.handler instanceof IzPanel)) {
-                InstallerFrame installframe = ((IzPanel) this.handler).getInstallerFrame();
-                nmd = new NextMediaDialog(installframe, idata, volumename);
-            } else {
-                nmd = new NextMediaDialog(null, idata, volumename);
+            System.out.println(" [ " + idata.getLangpack().getString("nextmedia.title") + " ] ");
+            System.out.println(idata.getLangpack().getString("nextmedia.msg"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+            String nextmediainput = null;
+            try {
+                nextmediainput = reader.readLine();
             }
-            nmd.setVisible(true);
-            String nextmediainput = nmd.getNextMedia();
+            catch (IOException e) {
+                Debug.error("Error reading next media path: " + e.getMessage());
+                e.printStackTrace();
+            }
+
             if (nextmediainput != null) {
                 nextvolume = new File(nextmediainput);
             } else {
