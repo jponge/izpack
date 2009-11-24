@@ -43,10 +43,17 @@ public class CompilationTest {
     }
 
     @Test
-    public void installerShouldContainInstallerClass() throws Exception {
+    public void installerShouldContainHelloPanelClass() throws Exception {
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         c.executeCompiler();
         assertZipContainFile(out, "HelloPanel.class");
+    }
+
+    @Test
+    public void installerShouldContainDebugClass() throws Exception {
+        CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
+        c.executeCompiler();
+        assertZipContainFile(out, "Debug.class");
     }
 
     private void assertZipContainFile(File inFile, String file) throws IOException {
