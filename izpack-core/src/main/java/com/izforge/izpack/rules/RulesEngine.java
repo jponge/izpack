@@ -87,9 +87,9 @@ public class RulesEngine implements Serializable {
 
         loadStaticConditions();
 
-        if ((installdata != null) && (installdata.allPacks != null)) {
+        if ((installdata != null) && (installdata.getAllPacks() != null)) {
             Debug.trace("Initializing builtin conditions for packs.");
-            for (Pack pack : installdata.allPacks) {
+            for (Pack pack : installdata.getAllPacks()) {
                 if (pack.id != null) {
                     // automatically add packselection condition
                     PackselectionCondition packselcond = new PackselectionCondition();

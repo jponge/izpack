@@ -48,7 +48,7 @@ public class InstallPanelConsoleHelper extends PanelConsoleHelper implements Pan
 
     public boolean runConsole(AutomatedInstallData idata) {
 
-        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.info.getUnpackerClassName(), idata,
+        IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata,
                 this);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpacker.setRules(idata.getRules());

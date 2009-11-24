@@ -140,7 +140,7 @@ public class SimpleInstallerListener implements InstallerListener {
         if (installdata != null && SimpleInstallerListener.langpack == null) {
             // Load langpack.
             try {
-                String resource = LANG_FILE_NAME + "_" + installdata.localeISO3;
+                String resource = LANG_FILE_NAME + "_" + installdata.getLocaleISO3();
                 SimpleInstallerListener.langpack = new LocaleDatabase(ResourceManager.getInstance()
                         .getInputStream(resource));
             }
@@ -284,7 +284,7 @@ public class SimpleInstallerListener implements InstallerListener {
             retval = SimpleInstallerListener.langpack.getString(id);
         }
         if (retval.equals(id) && getInstalldata() != null) {
-            retval = getInstalldata().langpack.getString(id);
+            retval = getInstalldata().getLangpack().getString(id);
         }
         return (retval);
     }

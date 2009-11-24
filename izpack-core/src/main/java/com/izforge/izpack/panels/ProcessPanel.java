@@ -163,8 +163,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
         processLabel.setEnabled(false);
 
         validated = true;
-        idata.installSuccess = worker.getResult();
-        if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) {
+        idata.setInstallSuccess(worker.getResult());
+        if (idata.getPanels().indexOf(this) != (idata.getPanels().size() - 1)) {
             if (unlockNext)
                 parent.unlockNextButton();
         }
@@ -172,7 +172,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
             parent.unlockPrevButton();
 
         // set to finished only in case of success
-        finishedWork = idata.installSuccess;
+        finishedWork = idata.isInstallSuccess();
     }
 
     /**

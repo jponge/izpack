@@ -135,10 +135,10 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         try {
             this.langpack = parent.langpack;
             InputStream langPackStream = null;
-            String webdir = idata.info.getWebDirURL();
+            String webdir = idata.getInfo().getWebDirURL();
             if (webdir != null) {
                 try {
-                    java.net.URL url = new java.net.URL(webdir + "/langpacks/" + LANG_FILE_NAME + idata.localeISO3);
+                    java.net.URL url = new java.net.URL(webdir + "/langpacks/" + LANG_FILE_NAME + idata.getLocaleISO3());
                     langPackStream = new WebAccessor(null).openInputStream(url);
                 }
                 catch (Exception e) {
@@ -158,7 +158,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         }
 
         // init the map
-        computePacks(idata.availablePacks);
+        computePacks(idata.getAvailablePacks());
 
     }
 
@@ -355,13 +355,13 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     }
 
     private void refreshPacksToInstall() {
-        idata.selectedPacks.clear();
+        idata.getSelectedPacks().clear();
         CheckBoxNode cbn = (CheckBoxNode) getTree().getModel().getRoot();
         Enumeration e = cbn.depthFirstEnumeration();
         while (e.hasMoreElements()) {
             CheckBoxNode c = (CheckBoxNode) e.nextElement();
             if (c.isSelected() || c.isPartial()) {
-                idata.selectedPacks.add(c.getPack());
+                idata.getSelectedPacks().add(c.getPack());
             }
         }
     }
@@ -566,7 +566,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         treeData = new HashMap<String, ArrayList<String>>();
         idToPack = new HashMap<String, Pack>();
 
-        java.util.Iterator iter = idata.availablePacks.iterator();
+        java.util.Iterator iter = idata.getAvailablePacks().iterator();
         while (iter.hasNext()) {
             Pack p = (Pack) iter.next();
             idToPack.put(p.id, p);
@@ -633,8 +633,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
             int numexcludes = 0;
             int i = getRowIndex(pack);
             if (pack.excludeGroup != null) {
-                for (int q = 0; q < idata.availablePacks.size(); q++) {
-                    Pack otherpack = (Pack) idata.availablePacks.get(q);
+                for (int q = 0; q < idata.getAvailablePacks().size(); q++) {
+                    Pack otherpack = (Pack) idata.getAvailablePacks().get(q);
                     String exgroup = otherpack.excludeGroup;
                     if (exgroup != null) {
                         if (q != i && pack.excludeGroup.equals(exgroup)) {
@@ -681,7 +681,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     private Object populateTreePacks(String parent) {
         if (parent == null) // the root node
         {
-            java.util.Iterator iter = idata.availablePacks.iterator();
+            java.util.Iterator iter = idata.getAvailablePacks().iterator();
             ArrayList rootNodes = new ArrayList();
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
@@ -742,10 +742,10 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
             //initialize helper map to increa performance
             packToRowNumber = new HashMap<Pack, Integer>();
-            java.util.Iterator rowpack = idata.availablePacks.iterator();
+            java.util.Iterator rowpack = idata.getAvailablePacks().iterator();
             while (rowpack.hasNext()) {
                 Pack p = (Pack) rowpack.next();
-                packToRowNumber.put(p, idata.availablePacks.indexOf(p));
+                packToRowNumber.put(p, idata.getAvailablePacks().indexOf(p));
             }
 
             // Init tree structures
@@ -772,7 +772,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
             // set the JCheckBoxes to the currently selected panels. The
             // selection might have changed in another panel
-            java.util.Iterator iter = idata.availablePacks.iterator();
+            java.util.Iterator iter = idata.getAvailablePacks().iterator();
             bytes = 0;
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
@@ -780,7 +780,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
                     bytes += p.nbytes;
                     continue;
                 }
-                if (idata.selectedPacks.contains(p)) {
+                if (idata.getSelectedPacks().contains(p)) {
                     bytes += p.nbytes;
                 }
             }
@@ -799,7 +799,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     */
     public String getSummaryBody() {
         StringBuffer retval = new StringBuffer(256);
-        Iterator iter = idata.selectedPacks.iterator();
+        Iterator iter = idata.getSelectedPacks().iterator();
         boolean first = true;
         while (iter.hasNext()) {
             if (!first) {

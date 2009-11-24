@@ -65,7 +65,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
             return;
         }
 
-        Iterator iter = idata.selectedPacks.iterator();
+        Iterator iter = idata.getSelectedPacks().iterator();
         Pack p;
         while (iter != null && iter.hasNext()) {
             p = (Pack) iter.next();
@@ -103,7 +103,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
 
         }
 
-        iter = idata.availablePacks.iterator();
+        iter = idata.getAvailablePacks().iterator();
         while (iter.hasNext()) {
             String currentPack = ((Pack) iter.next()).name;
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null, new Object[]{idata, npacks, handler});
@@ -121,7 +121,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
             handler.nextStep(getMsg("BSFAction.pack"), getProgressBarCallerId(), getActionCount(
                     idata));
         }
-        for (Object selectedPack : idata.selectedPacks) {
+        for (Object selectedPack : idata.getSelectedPacks()) {
             String currentPack = ((Pack) selectedPack).name;
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler, new Object[]{idata, handler});
         }
@@ -167,7 +167,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
 
     private int getActionCount(AutomatedInstallData idata) {
         int retval = 0;
-        for (Object selectedPack : idata.selectedPacks) {
+        for (Object selectedPack : idata.getSelectedPacks()) {
             String currentPack = ((Pack) selectedPack).name;
             ArrayList<BSFAction> actList = getActions(currentPack);
             if (actList != null) {

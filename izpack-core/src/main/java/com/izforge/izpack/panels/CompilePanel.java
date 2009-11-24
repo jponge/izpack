@@ -411,12 +411,12 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
             opLabel.setEnabled(false);
 
             validated = true;
-            idata.installSuccess = true;
-            if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) {
+            idata.setInstallSuccess(true);
+            if (idata.getPanels().indexOf(this) != (idata.getPanels().size() - 1)) {
                 parent.unlockNextButton();
             }
         } else {
-            idata.installSuccess = false;
+            idata.setInstallSuccess(false);
         }
 
     }

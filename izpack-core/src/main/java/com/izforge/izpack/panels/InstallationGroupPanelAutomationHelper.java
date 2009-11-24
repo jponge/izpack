@@ -54,7 +54,7 @@ public class InstallationGroupPanelAutomationHelper
             while (names.hasNext()) {
                 String name = names.next();
                 Pack pack = (Pack) packsByName.get(name);
-                int index = idata.availablePacks.indexOf(pack);
+                int index = idata.getAvailablePacks().indexOf(pack);
                 IXMLElement xpack = new XMLElementImpl("pack", xgroup);
                 xpack.setAttribute("name", name);
                 xpack.setAttribute("index", "" + index);
@@ -79,21 +79,21 @@ public class InstallationGroupPanelAutomationHelper
                 Debug.trace("InstallationGroupPanelAutomationHelper: Checking INSTALL_GROUP against: " + name);
                 if (name.equalsIgnoreCase(installGroup)) {
                     Debug.trace("Found INSTALL_GROUP match for: " + installGroup);
-                    idata.selectedPacks.clear();
+                    idata.getSelectedPacks().clear();
                     Vector<IXMLElement> packs = group.getChildrenNamed("pack");
                     Debug.trace(name + " pack count: " + packs.size());
-                    Debug.trace("Available pack count: " + idata.availablePacks.size());
+                    Debug.trace("Available pack count: " + idata.getAvailablePacks().size());
                     for (IXMLElement xpack : packs) {
                         String pname = xpack.getAttribute("name");
                         String indexStr = xpack.getAttribute("index");
                         int index = Integer.parseInt(indexStr);
                         if (index >= 0) {
-                            Pack pack = (Pack) idata.availablePacks.get(index);
-                            idata.selectedPacks.add(pack);
+                            Pack pack = (Pack) idata.getAvailablePacks().get(index);
+                            idata.getSelectedPacks().add(pack);
                             Debug.trace("Added pack: " + pack.name);
                         }
                     }
-                    Debug.trace("Set selectedPacks to: " + idata.selectedPacks);
+                    Debug.trace("Set selectedPacks to: " + idata.getSelectedPacks());
                     break;
                 }
             }

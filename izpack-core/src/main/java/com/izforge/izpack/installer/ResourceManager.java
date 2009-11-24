@@ -80,11 +80,11 @@ public class ResourceManager {
      */
     protected ResourceManager(AutomatedInstallData data) {
         this.installData = data;
-        if (data.localeISO3 != null) {
-            this.locale = data.localeISO3;
+        if (data.getLocaleISO3() != null) {
+            this.locale = data.getLocaleISO3();
         } else {
             // try to figure out ourself
-            this.locale = installData.xmlData.getAttribute("langpack", "eng");
+            this.locale = installData.getXmlData().getAttribute("langpack", "eng");
         }
 
     }
@@ -192,7 +192,7 @@ public class ResourceManager {
     public URL getURL(String resource) throws ResourceNotFoundException {
         try {
             return this.getClass().getResource(
-                    this.getLanguageResourceString(resource + "_" + installData.localeISO3));
+                    this.getLanguageResourceString(resource + "_" + installData.getLocaleISO3()));
         }
         catch (Exception ex) {
             return this.getClass().getResource(this.getLanguageResourceString(resource));
@@ -213,7 +213,7 @@ public class ResourceManager {
     public String getTextResource(String resource, String encoding) throws ResourceNotFoundException, IOException {
         InputStream in = null;
         try {
-            in = this.getInputStream(resource + "_" + this.installData.localeISO3);
+            in = this.getInputStream(resource + "_" + this.installData.getLocaleISO3());
         }
         catch (Exception ex) {
             in = this.getInputStream(resource);

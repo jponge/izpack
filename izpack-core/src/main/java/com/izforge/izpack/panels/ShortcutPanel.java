@@ -1534,8 +1534,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             return (true);
         }
 
-        for (int i = 0; i < idata.selectedPacks.size(); i++) {
-            selected = ((Pack) idata.selectedPacks.get(i)).name;
+        for (int i = 0; i < idata.getSelectedPacks().size(); i++) {
+            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
 
             for (int k = 0; k < packs.size(); k++) {
                 required = (packs.elementAt(k)).getAttribute(

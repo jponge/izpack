@@ -69,92 +69,92 @@ public class AutomatedInstallData implements Serializable {
     /**
      * The language code.
      */
-    public String localeISO3;
+    private String localeISO3;
 
     /**
      * The used locale.
      */
-    public Locale locale;
+    private Locale locale;
 
     /**
      * The language pack.
      */
-    public LocaleDatabase langpack;
+    private LocaleDatabase langpack;
 
     /**
      * The uninstaller jar stream.
      */
-    public ZipOutputStream uninstallOutJar;
+    private ZipOutputStream uninstallOutJar;
 
     /**
      * The inforamtions.
      */
-    public Info info;
+    private Info info;
 
     /**
      * The complete list of packs.
      */
-    public List<Pack> allPacks;
+    private List<Pack> allPacks;
 
     /**
      * The available packs.
      */
-    public List<Pack> availablePacks;
+    private List<Pack> availablePacks;
 
     /**
      * The selected packs.
      */
-    public List<Pack> selectedPacks;
+    private List<Pack> selectedPacks;
 
     /**
      * The panels list.
      */
-    public List<IzPanel> panels;
+    private List<IzPanel> panels;
 
     /**
      * The panels order.
      */
-    public List<Panel> panelsOrder;
+    private List<Panel> panelsOrder;
 
     /**
      * The current panel.
      */
-    public int curPanelNumber;
+    private int curPanelNumber;
 
     /**
      * Can we close the installer ?
      */
-    public boolean canClose = false;
+    private boolean canClose = false;
 
     /**
      * Did the installation succeed ?
      */
-    public boolean installSuccess = true;
+    private boolean installSuccess = true;
 
     /**
      * Is a reboot necessary to complete the installation ?
      */
-    public boolean rebootNecessary = false;
+    private boolean rebootNecessary = false;
 
     /**
      * The xmlData for automated installers.
      */
-    public IXMLElement xmlData;
+    private IXMLElement xmlData;
 
     /**
      * Custom data.
      */
-    public Map<String, List> customData;
+    private Map<String, List> customData;
 
     /**
      * Maps the variable names to their values
      */
-    protected Properties variables;
+    private Properties variables;
 
     /**
      * The attributes used by the panels
      */
-    protected Map<String, Object> attributes;
+    private Map<String, Object> attributes;
 
     /**
      * This class should be a singleton. Therefore
@@ -178,14 +178,14 @@ public class AutomatedInstallData implements Serializable {
      * will be raised.
      */
     public AutomatedInstallData() {
-        availablePacks = new ArrayList<Pack>();
-        selectedPacks = new ArrayList();
-        panels = new ArrayList<IzPanel>();
-        panelsOrder = new ArrayList<Panel>();
-        xmlData = new XMLElementImpl("AutomatedInstallation");
-        variables = new Properties();
-        attributes = new HashMap<String, Object>();
-        customData = new HashMap<String, List>();
+        setAvailablePacks(new ArrayList<Pack>());
+        setSelectedPacks(new ArrayList());
+        setPanels(new ArrayList<IzPanel>());
+        setPanelsOrder(new ArrayList<Panel>());
+        setXmlData(new XMLElementImpl("AutomatedInstallation"));
+        setVariables(new Properties());
+        setAttributes(new HashMap<String, Object>());
+        setCustomData(new HashMap<String, List>());
         if (self != null) {
             throw new RuntimeException("Panic!! second call of the InstallData Ctor!!");
         }
@@ -211,7 +211,7 @@ public class AutomatedInstallData implements Serializable {
      * @see #getVariable
      */
     public void setVariable(String var, String val) {
-        variables.setProperty(var, val);
+        getVariables().setProperty(var, val);
     }
 
     /**
@@ -223,7 +223,7 @@ public class AutomatedInstallData implements Serializable {
      * @see #setVariable
      */
     public String getVariable(String var) {
-        return variables.getProperty(var);
+        return getVariables().getProperty(var);
     }
 
     /**
@@ -254,7 +254,7 @@ public class AutomatedInstallData implements Serializable {
      * @see #setAttribute
      */
     public Object getAttribute(String attr) {
-        return attributes.get(attr);
+        return getAttributes().get(attr);
     }
 
     /**
@@ -270,9 +270,9 @@ public class AutomatedInstallData implements Serializable {
      */
     public void setAttribute(String attr, Object val) {
         if (val == null) {
-            attributes.remove(attr);
+            getAttributes().remove(attr);
         } else {
-            attributes.put(attr, val);
+            getAttributes().put(attr, val);
         }
 
     }
@@ -285,5 +285,145 @@ public class AutomatedInstallData implements Serializable {
 
     public void setRules(RulesEngine rules) {
         this.rules = rules;
+    }
+
+    public String getLocaleISO3() {
+        return localeISO3;
+    }
+
+    public void setLocaleISO3(String localeISO3) {
+        this.localeISO3 = localeISO3;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+    public LocaleDatabase getLangpack() {
+        return langpack;
+    }
+
+    public void setLangpack(LocaleDatabase langpack) {
+        this.langpack = langpack;
+    }
+
+    public ZipOutputStream getUninstallOutJar() {
+        return uninstallOutJar;
+    }
+
+    public void setUninstallOutJar(ZipOutputStream uninstallOutJar) {
+        this.uninstallOutJar = uninstallOutJar;
+    }
+
+    public Info getInfo() {
+        return info;
+    }
+
+    public void setInfo(Info info) {
+        this.info = info;
+    }
+
+    public List<Pack> getAllPacks() {
+        return allPacks;
+    }
+
+    public void setAllPacks(List<Pack> allPacks) {
+        this.allPacks = allPacks;
+    }
+
+    public List<Pack> getAvailablePacks() {
+        return availablePacks;
+    }
+
+    public void setAvailablePacks(List<Pack> availablePacks) {
+        this.availablePacks = availablePacks;
+    }
+
+    public List<Pack> getSelectedPacks() {
+        return selectedPacks;
+    }
+
+    public void setSelectedPacks(List<Pack> selectedPacks) {
+        this.selectedPacks = selectedPacks;
+    }
+
+    public List<IzPanel> getPanels() {
+        return panels;
+    }
+
+    public void setPanels(List<IzPanel> panels) {
+        this.panels = panels;
+    }
+
+    public List<Panel> getPanelsOrder() {
+        return panelsOrder;
+    }
+
+    public void setPanelsOrder(List<Panel> panelsOrder) {
+        this.panelsOrder = panelsOrder;
+    }
+
+    public int getCurPanelNumber() {
+        return curPanelNumber;
+    }
+
+    public void setCurPanelNumber(int curPanelNumber) {
+        this.curPanelNumber = curPanelNumber;
+    }
+
+    public boolean isCanClose() {
+        return canClose;
+    }
+
+    public void setCanClose(boolean canClose) {
+        this.canClose = canClose;
+    }
+
+    public boolean isInstallSuccess() {
+        return installSuccess;
+    }
+
+    public void setInstallSuccess(boolean installSuccess) {
+        this.installSuccess = installSuccess;
+    }
+
+    public boolean isRebootNecessary() {
+        return rebootNecessary;
+    }
+
+    public void setRebootNecessary(boolean rebootNecessary) {
+        this.rebootNecessary = rebootNecessary;
+    }
+
+    public IXMLElement getXmlData() {
+        return xmlData;
+    }
+
+    public void setXmlData(IXMLElement xmlData) {
+        this.xmlData = xmlData;
+    }
+
+    public Map<String, List> getCustomData() {
+        return customData;
+    }
+
+    public void setCustomData(Map<String, List> customData) {
+        this.customData = customData;
+    }
+
+    public void setVariables(Properties variables) {
+        this.variables = variables;
+    }
+
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, Object> attributes) {
+        this.attributes = attributes;
     }
 }

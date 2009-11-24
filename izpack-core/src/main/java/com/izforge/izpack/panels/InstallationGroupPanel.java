@@ -75,10 +75,10 @@ public class InstallationGroupPanel extends IzPanel
      */
     public void panelActivate() {
         // Set/restore availablePacks from allPacks; consider OS constraints
-        idata.availablePacks = new ArrayList();
-        for (Pack p : idata.allPacks) {
+        idata.setAvailablePacks(new ArrayList());
+        for (Pack p : idata.getAllPacks()) {
             if (OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) {
-                idata.availablePacks.add(p);
+                idata.getAvailablePacks().add(p);
             }
         }
 
@@ -226,7 +226,7 @@ public class InstallationGroupPanel extends IzPanel
         descriptionField.setOpaque(false);
         descriptionField.setText("<b>Install group description text</b>");
         descriptionField.setContentType("text/html");
-        descriptionField.setBorder(new TitledBorder(idata.langpack.getString("PacksPanel.description")));
+        descriptionField.setBorder(new TitledBorder(idata.getLangpack().getString("PacksPanel.description")));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -249,7 +249,7 @@ public class InstallationGroupPanel extends IzPanel
         Debug.trace("InstallationGroupPanel.removeUnusedPacks, GroupData=" + data.name);
 
         // Now remove the packs not in groupPackNames
-        Iterator iter = idata.availablePacks.iterator();
+        Iterator iter = idata.getAvailablePacks().iterator();
         while (iter.hasNext()) {
             Pack p = (Pack) iter.next();
 
@@ -263,14 +263,14 @@ public class InstallationGroupPanel extends IzPanel
             }
         }
 
-        idata.selectedPacks.clear();
+        idata.getSelectedPacks().clear();
         if (!"no".equals(idata.getVariable("InstallationGroupPanel.selectPacks"))) {
-            idata.selectedPacks.addAll(idata.availablePacks);
+            idata.getSelectedPacks().addAll(idata.getAvailablePacks());
         } else {
-            for (Object availablePack : idata.availablePacks) {
+            for (Object availablePack : idata.getAvailablePacks()) {
                 Pack p = (Pack) availablePack;
                 if (p.preselected) {
-                    idata.selectedPacks.add(p);
+                    idata.getSelectedPacks().add(p);
                 }
             }
         }
@@ -311,8 +311,8 @@ public class InstallationGroupPanel extends IzPanel
         */
         packsByName = new HashMap<String, Pack>();
         HashMap installGroups = new HashMap();
-        for (int n = 0; n < idata.availablePacks.size(); n++) {
-            Pack p = (Pack) idata.availablePacks.get(n);
+        for (int n = 0; n < idata.getAvailablePacks().size(); n++) {
+            Pack p = (Pack) idata.getAvailablePacks().get(n);
             packsByName.put(p.name, p);
             Set<String> groups = p.installGroups;
             Iterator<String> iter = groups.iterator();
@@ -337,7 +337,7 @@ public class InstallationGroupPanel extends IzPanel
         while (gditer.hasNext()) {
             GroupData data = (GroupData) gditer.next();
             Debug.trace("Adding dependents for: " + data.name);
-            Iterator iter = idata.availablePacks.iterator();
+            Iterator iter = idata.getAvailablePacks().iterator();
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
                 Set<String> groups = p.installGroups;
@@ -370,12 +370,12 @@ public class InstallationGroupPanel extends IzPanel
     protected String getGroupDescription(String group) {
         String description = null;
         String key = "InstallationGroupPanel.description." + group;
-        if (idata.langpack != null) {
+        if (idata.getLangpack() != null) {
             String htmlKey = key + ".html";
-            String html = idata.langpack.getString(htmlKey);
+            String html = idata.getLangpack().getString(htmlKey);
             // This will equal the key if there is no entry
             if (htmlKey.equalsIgnoreCase(html)) {
-                description = idata.langpack.getString(key);
+                description = idata.getLangpack().getString(key);
             } else {
                 description = html;
             }
@@ -434,12 +434,12 @@ public class InstallationGroupPanel extends IzPanel
     protected String getLocalizedGroupName(String group) {
         String gname = null;
         String key = "InstallationGroupPanel.group." + group;
-        if (idata.langpack != null) {
+        if (idata.getLangpack() != null) {
             String htmlKey = key + ".html";
-            String html = idata.langpack.getString(htmlKey);
+            String html = idata.getLangpack().getString(htmlKey);
             // This will equal the key if there is no entry
             if (htmlKey.equalsIgnoreCase(html)) {
-                gname = idata.langpack.getString(key);
+                gname = idata.getLangpack().getString(key);
             } else {
                 gname = html;
             }

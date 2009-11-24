@@ -70,7 +70,7 @@ public class Unpacker extends UnpackerBase {
             ArrayList<ParsableFile> parsables = new ArrayList<ParsableFile>();
             ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
             ArrayList<UpdateCheck> updatechecks = new ArrayList<UpdateCheck>();
-            List packs = idata.selectedPacks;
+            List packs = idata.getSelectedPacks();
             int npacks = packs.size();
             handler.startAction("Unpacking", npacks);
             udata = UninstallData.getInstance();
@@ -78,7 +78,7 @@ public class Unpacker extends UnpackerBase {
             List[] customActions = getCustomActions();
             // Custom action listener stuff --- beforePacks ----
             informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
-            packs = idata.selectedPacks;
+            packs = idata.getSelectedPacks();
             npacks = packs.size();
 
             // We unpack the selected packs
@@ -208,9 +208,9 @@ public class Unpacker extends UnpackerBase {
                                         def_choice = AbstractUIHandler.ANSWER_YES;
                                     }
 
-                                    int answer = handler.askQuestion(idata.langpack
+                                    int answer = handler.askQuestion(idata.getLangpack()
                                             .getString("InstallPanel.overwrite.title")
-                                            + " - " + pathFile.getName(), idata.langpack
+                                            + " - " + pathFile.getName(), idata.getLangpack()
                                             .getString("InstallPanel.overwrite.question")
                                             + pathFile.getAbsolutePath(),
                                             AbstractUIHandler.CHOICES_YES_NO, def_choice);
@@ -427,7 +427,7 @@ public class Unpacker extends UnpackerBase {
             // Use one file queue for all packs
             if (fq != null) {
                 fq.execute();
-                idata.rebootNecessary = fq.isRebootNecessary();
+                idata.setRebootNecessary(fq.isRebootNecessary());
             }
 
             // We use the scripts parser
@@ -508,7 +508,7 @@ public class Unpacker extends UnpackerBase {
     private InputStream getPackAsStream(String packid, boolean uninstall) throws Exception {
         InputStream in = null;
 
-        String webDirURL = idata.info.getWebDirURL();
+        String webDirURL = idata.getInfo().getWebDirURL();
 
         packid = "-" + packid;
 
@@ -523,9 +523,9 @@ public class Unpacker extends UnpackerBase {
             // TODO: download and cache them all before starting copy process
 
             // See compiler.Packager#getJarOutputStream for the counterpart
-            String baseName = idata.info.getInstallerBase();
+            String baseName = idata.getInfo().getInstallerBase();
             String packURL = webDirURL + "/" + baseName + ".pack" + packid + ".jar";
-            String tf = IoHelper.translatePath(idata.info.getUninstallerPath() + Unpacker.tempSubPath, vs);
+            String tf = IoHelper.translatePath(idata.getInfo().getUninstallerPath() + Unpacker.tempSubPath, vs);
             String tempfile;
             try {
                 tempfile = WebRepositoryAccessor.getCachedUrl(packURL, tf);
@@ -551,8 +551,8 @@ public class Unpacker extends UnpackerBase {
                 throw new InstallerException(url.toString() + " not available", new FileNotFoundException(url.toString()));
             }
         }
-        if (in != null && idata.info.getPackDecoderClassName() != null) {
-            Class<Object> decoder = (Class<Object>) Class.forName(idata.info.getPackDecoderClassName());
+        if (in != null && idata.getInfo().getPackDecoderClassName() != null) {
+            Class<Object> decoder = (Class<Object>) Class.forName(idata.getInfo().getPackDecoderClassName());
             Class[] paramsClasses = new Class[1];
             paramsClasses[0] = Class.forName("java.io.InputStream");
             Constructor<Object> constructor = decoder.getDeclaredConstructor(paramsClasses);
@@ -564,7 +564,7 @@ public class Unpacker extends UnpackerBase {
             Object instance = null;
             instance = constructor.newInstance(params);
             if (!InputStream.class.isInstance(instance)) {
-                throw new InstallerException("'" + idata.info.getPackDecoderClassName()
+                throw new InstallerException("'" + idata.getInfo().getPackDecoderClassName()
                         + "' must be derived from "
                         + InputStream.class.toString());
             }

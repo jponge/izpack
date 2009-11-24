@@ -27,7 +27,7 @@ public class AutomatedInstallDataTest {
     @Test
     public void testContruction() {
         AutomatedInstallData auto = new AutomatedInstallData();
-        IXMLElement xmlElement = auto.xmlData;
+        IXMLElement xmlElement = auto.getXmlData();
         Assert.assertEquals("AutomatedInstallation", xmlElement.getName());
     }
 }

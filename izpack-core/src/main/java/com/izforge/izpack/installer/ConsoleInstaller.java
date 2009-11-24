@@ -55,16 +55,16 @@ public class ConsoleInstaller extends InstallerBase {
         super();
         loadInstallData(this.installdata);
 
-        this.installdata.localeISO3 = langcode;
+        this.installdata.setLocaleISO3(langcode);
         // Fallback: choose the first listed language pack if not specified via commandline
-        if (this.installdata.localeISO3 == null) {
-            this.installdata.localeISO3 = getAvailableLangPacks().get(0);
+        if (this.installdata.getLocaleISO3() == null) {
+            this.installdata.setLocaleISO3(getAvailableLangPacks().get(0));
         }
 
         InputStream in = getClass().getResourceAsStream(
-                "/langpacks/" + this.installdata.localeISO3 + ".xml");
-        this.installdata.langpack = new LocaleDatabase(in);
-        this.installdata.setVariable(ScriptParser.ISO3_LANG, this.installdata.localeISO3);
+                "/langpacks/" + this.installdata.getLocaleISO3() + ".xml");
+        this.installdata.setLangpack(new LocaleDatabase(in));
+        this.installdata.setVariable(ScriptParser.ISO3_LANG, this.installdata.getLocaleISO3());
         ResourceManager.create(this.installdata);
         loadConditions(installdata);
         loadInstallerRequirements();
@@ -85,12 +85,12 @@ public class ConsoleInstaller extends InstallerBase {
 
         try {
             this.result = true;
-            Iterator<Panel> panelsIterator = this.installdata.panelsOrder.iterator();
-            this.installdata.curPanelNumber = -1;
+            Iterator<Panel> panelsIterator = this.installdata.getPanelsOrder().iterator();
+            this.installdata.setCurPanelNumber(-1);
             VariableSubstitutor substitutor = new VariableSubstitutor(this.installdata.getVariables());
             while (panelsIterator.hasNext()) {
                 Panel p = (Panel) panelsIterator.next();
-                this.installdata.curPanelNumber++;
+                this.installdata.setCurPanelNumber(this.installdata.getCurPanelNumber() + 1);
                 String praefix = "com.izforge.izpack.panels.";
                 if (p.className.compareTo(".") > -1) {
                     praefix = "";
@@ -305,9 +305,9 @@ public class ConsoleInstaller extends InstallerBase {
     private void checkedReboot() {
         // FIXME !!! Reboot handling
         boolean reboot = false;
-        if (installdata.rebootNecessary) {
+        if (installdata.isRebootNecessary()) {
             System.out.println("[ There are file operations pending after reboot ]");
-            switch (installdata.info.getRebootAction()) {
+            switch (installdata.getInfo().getRebootAction()) {
                 case Info.REBOOT_ACTION_ALWAYS:
                     reboot = true;
             }

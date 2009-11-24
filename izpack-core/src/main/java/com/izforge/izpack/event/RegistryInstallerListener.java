@@ -126,7 +126,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
             if (getSpecHelper().getSpec() != null) {
                 VariableSubstitutor substitutor = new VariableSubstitutor(idata.getVariables());
-                Iterator iter = idata.selectedPacks.iterator();
+                Iterator iter = idata.getSelectedPacks().iterator();
                 // Get the special pack "UninstallStuff" which contains values
                 // for the uninstaller entry.
                 uninstallerPack = getSpecHelper().getPackForName("UninstallStuff");
@@ -176,7 +176,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
      */
     public void cleanUp() {
         // installation was not successful now rewind all registry changes
-        if (AutomatedInstallData.getInstance().installSuccess || registryModificationLog == null || registryModificationLog.size() < 1) {
+        if (AutomatedInstallData.getInstance().isInstallSuccess() || registryModificationLog == null || registryModificationLog.size() < 1) {
             return;
         }
         RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();

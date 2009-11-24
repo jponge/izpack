@@ -195,11 +195,11 @@ public class InstallerFrame extends JFrame {
         super(title);
         this.parentInstaller = parentInstaller;
         this.rules = this.parentInstaller.getRules();
-        substitutor = new VariableSubstitutor(installdata.variables);
+        substitutor = new VariableSubstitutor(installdata.getVariables());
         guiListener = new ArrayList<GUIListener>();
         visiblePanelMapping = new ArrayList<Integer>();
         this.installdata = installdata;
-        this.langpack = installdata.langpack;
+        this.langpack = installdata.getLangpack();
 
         // Sets the window events handler
         addWindowListener(new WindowHandler());
@@ -227,7 +227,7 @@ public class InstallerFrame extends JFrame {
      */
     private void loadPanels() throws Exception {
         // Initialisation
-        java.util.List<Panel> panelsOrder = installdata.panelsOrder;
+        java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
         int i;
         int size = panelsOrder.size();
         String className;
@@ -307,7 +307,7 @@ public class InstallerFrame extends JFrame {
                 }
             }
 
-            installdata.panels.add(panel);
+            installdata.getPanels().add(panel);
             if (panel.isHidden()) {
                 visiblePanelMapping.add(count, -1);
             } else {
@@ -317,13 +317,13 @@ public class InstallerFrame extends JFrame {
             }
             count++;
             // We add the XML data panel root
-            IXMLElement panelRoot = new XMLElementImpl(className, installdata.xmlData);
+            IXMLElement panelRoot = new XMLElementImpl(className, installdata.getXmlData());
             // if set, we add the id as an attribute to the panelRoot
             String panelId = p.getPanelid();
             if (panelId != null) {
                 panelRoot.setAttribute("id", panelId);
             }
-            installdata.xmlData.addChild(panelRoot);
+            installdata.getXmlData().addChild(panelRoot);
         }
         visiblePanelMapping.add(count, lastVis);
     }
@@ -449,8 +449,8 @@ public class InstallerFrame extends JFrame {
         contentPane.add(panelsContainer, BorderLayout.CENTER);
 
         // We put the first panel
-        installdata.curPanelNumber = 0;
-        IzPanel panel_0 = installdata.panels.get(0);
+        installdata.setCurPanelNumber(0);
+        IzPanel panel_0 = installdata.getPanels().get(0);
         panelsContainer.add(panel_0);
 
         // We add the navigation buttons & labels
@@ -708,12 +708,12 @@ public class InstallerFrame extends JFrame {
         // refresh dynamic variables every time, a panel switch is done
         this.parentInstaller.refreshDynamicVariables(substitutor, installdata);
         try {
-            if (installdata.curPanelNumber < last) {
+            if (installdata.getCurPanelNumber() < last) {
                 isBack = true;
             }
             panelsContainer.setVisible(false);
-            IzPanel panel = installdata.panels.get(installdata.curPanelNumber);
-            IzPanel l_panel = installdata.panels.get(last);
+            IzPanel panel = installdata.getPanels().get(installdata.getCurPanelNumber());
+            IzPanel l_panel = installdata.getPanels().get(last);
             showHelpButton(panel.canShowHelp());
             if (Debug.isTRACE()) {
                 debugger.switchPanel(panel.getMetadata(), l_panel.getMetadata());
@@ -721,7 +721,7 @@ public class InstallerFrame extends JFrame {
             Log.getInstance().addDebugMessage(
                     "InstallerFrame.switchPanel: try switching panel from {0} to {1} ({2} to {3})",
                     new String[]{l_panel.getClass().getName(), panel.getClass().getName(),
-                            Integer.toString(last), Integer.toString(installdata.curPanelNumber)},
+                            Integer.toString(last), Integer.toString(installdata.getCurPanelNumber())},
                     DebugConstants.PANEL_TRACE, null);
 
             // instead of writing data here which leads to duplicated entries in
@@ -729,26 +729,26 @@ public class InstallerFrame extends JFrame {
             // writing out that script.
             // l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
             // No previos button in the first visible panel
-            if (visiblePanelMapping.get(installdata.curPanelNumber) == 0) {
+            if (visiblePanelMapping.get(installdata.getCurPanelNumber()) == 0) {
                 prevButton.setVisible(false);
                 lockPrevButton();
                 unlockNextButton(); // if we push the button back at the license
                 // panel
             }
             // Only the exit button in the last panel.
-            else if (visiblePanelMapping.get(installdata.panels.size()) == installdata.curPanelNumber) {
+            else if (visiblePanelMapping.get(installdata.getPanels().size()) == installdata.getCurPanelNumber()) {
                 prevButton.setVisible(false);
                 nextButton.setVisible(false);
                 lockNextButton();
             } else {
-                if (hasNavigatePrevious(installdata.curPanelNumber, true) != -1) {
+                if (hasNavigatePrevious(installdata.getCurPanelNumber(), true) != -1) {
                     prevButton.setVisible(true);
                     unlockPrevButton();
                 } else {
                     lockPrevButton();
                     prevButton.setVisible(false);
                 }
-                if (hasNavigateNext(installdata.curPanelNumber, true) != -1) {
+                if (hasNavigateNext(installdata.getCurPanelNumber(), true) != -1) {
                     nextButton.setVisible(true);
                     unlockNextButton();
                 } else {
@@ -824,10 +824,10 @@ public class InstallerFrame extends JFrame {
             panelsContainer.setVisible(true);
             Panel metadata = panel.getMetadata();
             if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid()))) {
-                loadAndShowImage(visiblePanelMapping.get(installdata.curPanelNumber), metadata
+                loadAndShowImage(visiblePanelMapping.get(installdata.getCurPanelNumber()), metadata
                         .getPanelid());
             } else {
-                loadAndShowImage(visiblePanelMapping.get(installdata.curPanelNumber));
+                loadAndShowImage(visiblePanelMapping.get(installdata.getCurPanelNumber()));
             }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
@@ -848,7 +848,7 @@ public class InstallerFrame extends JFrame {
         BufferedWriter extLogWriter = null;
         if (logfile != null) {
             if (logfile.toLowerCase().startsWith("default")) {
-                logfile = installdata.info.getUninstallerPath() + "/install.log";
+                logfile = installdata.getInfo().getUninstallerPath() + "/install.log";
             }
             logfile = IoHelper.translatePath(logfile, new VariableSubstitutor(installdata
                     .getVariables()));
@@ -879,7 +879,7 @@ public class InstallerFrame extends JFrame {
             // We get the data
             UninstallData udata = UninstallData.getInstance();
             List files = udata.getUninstalableFilesList();
-            ZipOutputStream outJar = installdata.uninstallOutJar;
+            ZipOutputStream outJar = installdata.getUninstallOutJar();
 
             if (outJar == null) {
                 return;
@@ -1137,18 +1137,18 @@ public class InstallerFrame extends JFrame {
      */
     public void exit() {
         // FIXME !!! Reboot handling
-        if (installdata.canClose
+        if (installdata.isCanClose()
                 || ((!nextButton.isVisible() || !nextButton.isEnabled()) && (!prevButton
                 .isVisible() || !prevButton.isEnabled()))) {
             // this does nothing if the uninstaller was not included
             writeUninstallData();
 
             boolean reboot = false;
-            if (installdata.rebootNecessary) {
+            if (installdata.isRebootNecessary()) {
                 String message, title;
                 VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
                 System.out.println("[ There are file operations pending after reboot ]");
-                switch (installdata.info.getRebootAction()) {
+                switch (installdata.getInfo().getRebootAction()) {
                     case Info.REBOOT_ACTION_ALWAYS:
                         reboot = true;
                         break;
@@ -1228,7 +1228,7 @@ public class InstallerFrame extends JFrame {
      * @param listener The installation listener.
      */
     public void install(AbstractUIProgressHandler listener) {
-        IUnpacker unpacker = UnpackerFactory.getUnpacker(this.installdata.info
+        IUnpacker unpacker = UnpackerFactory.getUnpacker(this.installdata.getInfo()
                 .getUnpackerClassName(), installdata, listener);
         unpacker.setRules(this.rules);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
@@ -1246,9 +1246,9 @@ public class InstallerFrame extends JFrame {
         IXMLWriter writer = new XMLWriter(out);
         // fix bug# 4551
         // write.write(root);
-        for (int i = 0; i < installdata.panels.size(); i++) {
-            IzPanel panel = installdata.panels.get(i);
-            panel.makeXMLData(installdata.xmlData.getChildAtIndex(i));
+        for (int i = 0; i < installdata.getPanels().size(); i++) {
+            IzPanel panel = installdata.getPanels().get(i);
+            panel.makeXMLData(installdata.getXmlData().getChildAtIndex(i));
         }
         writer.write(root);
 
@@ -1381,11 +1381,11 @@ public class InstallerFrame extends JFrame {
      * Allows a panel to ask to be skipped.
      */
     public void skipPanel() {
-        if (installdata.curPanelNumber < installdata.panels.size() - 1) {
+        if (installdata.getCurPanelNumber() < installdata.getPanels().size() - 1) {
             if (isBack) {
-                navigatePrevious(installdata.curPanelNumber);
+                navigatePrevious(installdata.getCurPanelNumber());
             } else {
-                navigateNext(installdata.curPanelNumber, false);
+                navigateNext(installdata.getCurPanelNumber(), false);
             }
         }
     }
@@ -1397,7 +1397,7 @@ public class InstallerFrame extends JFrame {
      * @return true or false
      */
     public boolean canShow(int panelnumber) {
-        IzPanel panel = installdata.panels.get(panelnumber);
+        IzPanel panel = installdata.getPanels().get(panelnumber);
         Panel panelmetadata = panel.getMetadata();
         String panelid = panelmetadata.getPanelid();
         Debug.trace("Current Panel: " + panelid);
@@ -1406,7 +1406,7 @@ public class InstallerFrame extends JFrame {
             Debug.log("Checking panelcondition");
             return rules.isConditionTrue(panelmetadata.getCondition());
         } else {
-            if (!rules.canShowPanel(panelid, this.installdata.variables)) {
+            if (!rules.canShowPanel(panelid, this.installdata.getVariables())) {
                 // skip panel, if conditions for panel aren't met
                 Debug.log("Skip panel with panelid=" + panelid);
                 // panel should be skipped, so we have to decrement panelnumber for skipping
@@ -1426,7 +1426,7 @@ public class InstallerFrame extends JFrame {
         if (!nextButton.isEnabled()) {
             return;
         }
-        this.navigateNext(installdata.curPanelNumber, true);
+        this.navigateNext(installdata.getCurPanelNumber(), true);
     }
 
     /**
@@ -1436,10 +1436,10 @@ public class InstallerFrame extends JFrame {
      * @param doValidation whether to do panel validation
      */
     public void navigateNext(int startPanel, boolean doValidation) {
-        if ((installdata.curPanelNumber < installdata.panels.size() - 1)) {
+        if ((installdata.getCurPanelNumber() < installdata.getPanels().size() - 1)) {
             // We must trasfer all fields into the variables before
             // panelconditions try to resolve the rules based on unassigned vars.
-            final IzPanel panel = installdata.panels.get(startPanel);
+            final IzPanel panel = installdata.getPanels().get(startPanel);
             panel.executePreValidationActions();
             boolean isValid = doValidation ? panel.panelValidated() : true;
             panel.executePostValidationActions();
@@ -1459,7 +1459,7 @@ public class InstallerFrame extends JFrame {
             // We try to show the next panel that we can.
             int nextPanel = hasNavigateNext(startPanel, false);
             if (-1 != nextPanel) {
-                installdata.curPanelNumber = nextPanel;
+                installdata.setCurPanelNumber(nextPanel);
                 switchPanel(startPanel);
             }
         }
@@ -1480,7 +1480,7 @@ public class InstallerFrame extends JFrame {
         int res = -1;
         // Start from the panel given and check each one until we find one
         // that we can navigate to or until there are no more panels
-        for (int panel = startPanel + 1; res == -1 && panel < installdata.panels.size(); panel++) {
+        for (int panel = startPanel + 1; res == -1 && panel < installdata.getPanels().size(); panel++) {
             // See if we can show this panel
             if (!visibleOnly || ((Integer) visiblePanelMapping.get(panel)).intValue() != -1) {
                 if (canShow(panel)) {
@@ -1527,7 +1527,7 @@ public class InstallerFrame extends JFrame {
         if (!prevButton.isEnabled()) {
             return;
         }
-        this.navigatePrevious(installdata.curPanelNumber);
+        this.navigatePrevious(installdata.getCurPanelNumber());
     }
 
     /**
@@ -1539,7 +1539,7 @@ public class InstallerFrame extends JFrame {
         // We try to show the previous panel that we can.
         int prevPanel = hasNavigatePrevious(endingPanel, false);
         if (-1 != prevPanel) {
-            installdata.curPanelNumber = prevPanel;
+            installdata.setCurPanelNumber(prevPanel);
             switchPanel(endingPanel);
         }
     }
@@ -1548,7 +1548,7 @@ public class InstallerFrame extends JFrame {
      * Show help Window
      */
     public void showHelp() {
-        installdata.panels.get(installdata.curPanelNumber).showHelp();
+        installdata.getPanels().get(installdata.getCurPanelNumber()).showHelp();
     }
 
     /**
@@ -1946,7 +1946,7 @@ public class InstallerFrame extends JFrame {
         // Do not forgett the first headline.
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
-        int curPanelNo = visiblePanelMapping.get(installdata.curPanelNumber);
+        int curPanelNo = visiblePanelMapping.get(installdata.getCurPanelNumber());
         if (headingLabels[headingLines] != null) {
             loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
             headingLabels[headingLines].setVisible(true);
@@ -1957,9 +1957,9 @@ public class InstallerFrame extends JFrame {
 
     private void performHeadingCounter(IzPanel panel) {
         if (headingCounterComponent != null) {
-            int curPanelNo = visiblePanelMapping.get(installdata.curPanelNumber);
+            int curPanelNo = visiblePanelMapping.get(installdata.getCurPanelNumber());
             int visPanelsCount = visiblePanelMapping.get((visiblePanelMapping
-                    .get(installdata.panels.size())).intValue());
+                    .get(installdata.getPanels().size())).intValue());
 
             StringBuffer buf = new StringBuffer();
             buf.append(langpack.getString("installer.step")).append(" ").append(curPanelNo + 1)

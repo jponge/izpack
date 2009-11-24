@@ -65,7 +65,7 @@ public class ConditionTest extends TestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
         if (idata != null) {
-            idata.variables.clear();
+            idata.getVariables().clear();
         }
     }
 
@@ -105,35 +105,35 @@ public class ConditionTest extends TestCase {
     public void testNotCondition() {
         assertNull(RulesEngine.getCondition("test.not"));
         assertNotNull(RulesEngine.getCondition("test.not.true"));
-        assertTrue(rules.isConditionTrue("test.not.true", idata.variables));
+        assertTrue(rules.isConditionTrue("test.not.true", idata.getVariables()));
 
         assertNotNull(RulesEngine.getCondition("!test.not.true"));
 
-        assertFalse(rules.isConditionTrue("!test.not.true", idata.variables));
+        assertFalse(rules.isConditionTrue("!test.not.true", idata.getVariables()));
     }
 
     public void testVariableCondition() {
         assertNotNull(RulesEngine.getCondition("test.true"));
         assertNotNull(RulesEngine.getCondition("test.true2"));
 
-        assertFalse(rules.isConditionTrue("test.true", idata.variables));
-        assertFalse(rules.isConditionTrue("test.true2", idata.variables));
+        assertFalse(rules.isConditionTrue("test.true", idata.getVariables()));
+        assertFalse(rules.isConditionTrue("test.true2", idata.getVariables()));
 
         idata.setVariable("TEST", "true");
 
-        assertTrue(rules.isConditionTrue("test.true", idata.variables));
-        assertTrue(rules.isConditionTrue("test.true2", idata.variables));
+        assertTrue(rules.isConditionTrue("test.true", idata.getVariables()));
+        assertTrue(rules.isConditionTrue("test.true2", idata.getVariables()));
 
-        assertFalse(rules.isConditionTrue("!test.true", idata.variables));
-        assertFalse(rules.isConditionTrue("!test.true2", idata.variables));
+        assertFalse(rules.isConditionTrue("!test.true", idata.getVariables()));
+        assertFalse(rules.isConditionTrue("!test.true2", idata.getVariables()));
 
-        assertTrue(rules.isConditionTrue("test.true+test.true2", idata.variables));
-        assertTrue(rules.isConditionTrue("test.true2+test.true", idata.variables));
+        assertTrue(rules.isConditionTrue("test.true+test.true2", idata.getVariables()));
+        assertTrue(rules.isConditionTrue("test.true2+test.true", idata.getVariables()));
 
-        assertFalse(rules.isConditionTrue("!test.true2+test.true", idata.variables));
+        assertFalse(rules.isConditionTrue("!test.true2+test.true", idata.getVariables()));
 
-        assertTrue(rules.isConditionTrue("test.true2|test.true", idata.variables));
+        assertTrue(rules.isConditionTrue("test.true2|test.true", idata.getVariables()));
 
-        assertFalse(rules.isConditionTrue("test.true2\\test.true", idata.variables));
+        assertFalse(rules.isConditionTrue("test.true2\\test.true", idata.getVariables()));
     }
 }

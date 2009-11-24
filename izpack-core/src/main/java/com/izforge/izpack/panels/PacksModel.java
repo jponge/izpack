@@ -98,7 +98,7 @@ class PacksModel extends AbstractTableModel {
                         this.installedpacks.put(installedpack.name, installedpack);
                     }
                 }
-                this.removeAlreadyInstalledPacks(idata.selectedPacks);
+                this.removeAlreadyInstalledPacks(idata.getSelectedPacks());
                 Debug.trace("Found " + packsinstalled.size() + " installed packs");
 
                 Properties variables = (Properties) oin.readObject();
@@ -127,7 +127,7 @@ class PacksModel extends AbstractTableModel {
 
         this.packs = new ArrayList();
         this.hiddenPacks = new ArrayList<Pack>();
-        for (Pack availablePack : idata.availablePacks) {
+        for (Pack availablePack : idata.getAvailablePacks()) {
             // only add a pack if not hidden
             if (!availablePack.isHidden()) {
                 this.packs.add(availablePack);
@@ -136,7 +136,7 @@ class PacksModel extends AbstractTableModel {
             }
         }
 
-        this.packsToInstall = idata.selectedPacks;
+        this.packsToInstall = idata.getSelectedPacks();
         this.panel = panel;
         this.variables = idata.getVariables();
         this.variables.setProperty(INITAL_PACKSELECTION, Boolean.toString(true));

@@ -46,12 +46,12 @@ public class PacksPanelAutomationHelper implements PanelAutomation {
      */
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
         // We add each pack to the panelRoot element
-        for (int i = 0; i < idata.availablePacks.size(); i++) {
-            Pack pack = idata.availablePacks.get(i);
+        for (int i = 0; i < idata.getAvailablePacks().size(); i++) {
+            Pack pack = idata.getAvailablePacks().get(i);
             IXMLElement el = new XMLElementImpl("pack", panelRoot);
             el.setAttribute("index", Integer.toString(i));
             el.setAttribute("name", pack.name);
-            Boolean selected = Boolean.valueOf(idata.selectedPacks.contains(pack));
+            Boolean selected = Boolean.valueOf(idata.getSelectedPacks().contains(pack));
             el.setAttribute("selected", selected.toString());
 
             panelRoot.addChild(el);
@@ -134,9 +134,9 @@ public class PacksPanelAutomationHelper implements PanelAutomation {
         // Now merge the selected pack from automated install data with the selected packs form
         // autoinstall.xml
         System.out.println("Modify pack selection.");
-        for (Pack pack : idata.availablePacks) {
+        for (Pack pack : idata.getAvailablePacks()) {
             // Check if the pack is in the List of autoinstall.xml (search by name and index)
-            final int indexOfAvailablePack = idata.availablePacks.indexOf(pack);
+            final int indexOfAvailablePack = idata.getAvailablePacks().indexOf(pack);
             for (PInfo packInfo : autoinstallPackInfoList) {
                 // Check if we have a pack available that is referenced in autoinstall.xml
                 if ((packInfo.equals(pack.name)) || (packInfo.equals(indexOfAvailablePack))) {
@@ -149,17 +149,17 @@ public class PacksPanelAutomationHelper implements PanelAutomation {
                     } else {
                         if (packInfo.isSelected()) {
                             // Check if the conditions allow to select the pack
-                            if ((idata.selectedPacks.indexOf(pack) < 0)
+                            if ((idata.getSelectedPacks().indexOf(pack) < 0)
                                     && (pack.id != null)
                                     && (idata.getRules().canInstallPack(pack.id,
                                     idata.getVariables()))) {
-                                idata.selectedPacks.add(pack);
+                                idata.getSelectedPacks().add(pack);
                                 System.out.println("Pack [" + packInfo.toString()
                                         + "] added to selection.");
                             }
                         } else {
                             // Pack can be removed from selection because it is not required
-                            idata.selectedPacks.remove(pack);
+                            idata.getSelectedPacks().remove(pack);
                             System.out.println("Pack [" + packInfo.toString()
                                     + "] removed from selection.");
 

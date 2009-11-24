@@ -150,7 +150,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      */
     public void emitError(String title, String error) {
         this.packOpLabel.setText(error);
-        idata.installSuccess = false;
+        idata.setInstallSuccess(false);
         JOptionPane.showMessageDialog(this, error, parent.langpack.getString("installer.error"),
                 JOptionPane.ERROR_MESSAGE);
     }
@@ -185,9 +185,9 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
                 overallProgressBar.setEnabled(false);
                 packOpLabel.setText(" ");
                 packOpLabel.setEnabled(false);
-                idata.canClose = true;
+                idata.setCanClose(true);
                 validated = true;
-                if (idata.panels.indexOf(this) != (idata.panels.size() - 1)) {
+                if (idata.getPanels().indexOf(this) != (idata.getPanels().size() - 1)) {
                     parent.unlockNextButton();
                 }
             }

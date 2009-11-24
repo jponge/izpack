@@ -188,7 +188,7 @@ public class CompileWorker implements Runnable {
                 List<String> args = new ArrayList<String>();
                 args.add("nothing to do");
 
-                this.result = new CompileResult(this.idata.langpack
+                this.result = new CompileResult(this.idata.getLangpack()
                         .getString("CompilePanel.worker.nofiles"), args, "", "");
             } else {
                 this.result = compileJobs();
@@ -421,7 +421,7 @@ public class CompileWorker implements Runnable {
                 }
 
                 // check whether the wanted pack was selected for installation
-                Iterator pack_it = this.idata.selectedPacks.iterator();
+                Iterator pack_it = this.idata.getSelectedPacks().iterator();
                 boolean found = false;
 
                 while (pack_it.hasNext()) {
@@ -547,7 +547,7 @@ public class CompileWorker implements Runnable {
                               ArrayList<File> files, ArrayList classpath) {
             this.listener = listener;
             this.idata = idata;
-            this.langpack = idata.langpack;
+            this.langpack = idata.getLangpack();
             this.name = name;
             this.files = files;
             this.classpath = classpath;

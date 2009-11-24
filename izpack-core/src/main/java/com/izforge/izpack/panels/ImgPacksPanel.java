@@ -103,7 +103,7 @@ public class ImgPacksPanel extends PacksPanelBase {
 
         // Create the image label with a scroller.
         // Use the image of the first pack having an image as initial image
-        Iterator pack_it = idata.availablePacks.iterator();
+        Iterator pack_it = idata.getAvailablePacks().iterator();
         Pack firstImgPack = null;
         boolean imgFound = false;
         while (!imgFound && pack_it.hasNext()) {
@@ -162,9 +162,9 @@ public class ImgPacksPanel extends PacksPanelBase {
      * Pre-loads the images.
      */
     private void preLoadImages() {
-        int size = idata.availablePacks.size();
+        int size = idata.getAvailablePacks().size();
         images = new HashMap<String, ImageIcon>(size);
-        Iterator pack_it = idata.availablePacks.iterator();
+        Iterator pack_it = idata.getAvailablePacks().iterator();
         while (pack_it.hasNext()) {
             Pack pack = (Pack) pack_it.next();
             if (pack.packImgId != null) {
@@ -216,7 +216,7 @@ public class ImgPacksPanel extends PacksPanelBase {
             return;
         }
         if (i >= 0) {
-            Pack pack = (Pack) idata.availablePacks.get(i);
+            Pack pack = (Pack) idata.getAvailablePacks().get(i);
             imgLabel.setIcon(images.get(pack.packImgId));
         }
     }

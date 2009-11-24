@@ -74,7 +74,7 @@ public class SimpleFinishPanel extends IzPanel {
         parent.lockPrevButton();
         parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
-        if (idata.installSuccess) {
+        if (idata.isInstallSuccess()) {
 
             // We set the information
             add(LabelFactory.create(parent.icons.getImageIcon("check")));
@@ -82,7 +82,7 @@ public class SimpleFinishPanel extends IzPanel {
             add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
                     parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
-            if (idata.uninstallOutJar != null) {
+            if (idata.getUninstallOutJar() != null) {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 

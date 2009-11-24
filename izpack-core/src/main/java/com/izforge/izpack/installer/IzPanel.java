@@ -436,7 +436,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     public boolean emitNotificationFeedback(String message) {
-        return (JOptionPane.showConfirmDialog(this, message, idata.langpack
+        return (JOptionPane.showConfirmDialog(this, message, idata.getLangpack()
                 .getString("installer.Message"), JOptionPane.WARNING_MESSAGE,
                 JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
     }
@@ -1040,14 +1040,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return A boolean stating wether the panel supports Help function.
      */
     public boolean canShowHelp() {
-        return getHelpUrl(this.idata.localeISO3) != null;
+        return getHelpUrl(this.idata.getLocaleISO3()) != null;
     }
 
     /**
      * This method is called when Help button has been clicked. By default it doesn't do anything.
      */
     public void showHelp() {
-        String helpName = getHelpUrl(this.idata.localeISO3);
+        String helpName = getHelpUrl(this.idata.getLocaleISO3());
         // System.out.println("Help function called, helpName: " + helpName);
         if (helpName != null) {
             URL helpUrl = getClass().getResource("/res/" + helpName);

@@ -212,7 +212,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         Vector<IXMLElement> specElements;
         String attribute;
         String dataID;
-        String panelid = ((Panel) idata.panelsOrder.get(idata.curPanelNumber)).getPanelid();
+        String panelid = ((Panel) idata.getPanelsOrder().get(idata.getCurPanelNumber())).getPanelid();
         String instance = Integer.toString(instanceNumber);
 
         SpecHelper specHelper = new SpecHelper();
@@ -782,8 +782,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         // analyze if the any of the packs for which the item
         // is required have been selected for installation.
         // ----------------------------------------------------
-        for (int i = 0; i < idata.selectedPacks.size(); i++) {
-            selected = ((Pack) idata.selectedPacks.get(i)).name;
+        for (int i = 0; i < idata.getSelectedPacks().size(); i++) {
+            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
 
             for (int k = 0; k < packs.size(); k++) {
                 required = (packs.elementAt(k)).getAttribute(NAME, "");

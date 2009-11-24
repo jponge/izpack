@@ -108,7 +108,7 @@ public class DataCheckPanel extends IzPanel {
         Pack iPack;
         for (i = 0; i < packList.size(); i++) {
             iPack = packList.get(i);
-            if (iData.selectedPacks.indexOf(iPack) != -1) {
+            if (iData.getSelectedPacks().indexOf(iPack) != -1) {
                 pStatus = "Selected";
             } else {
                 pStatus = "Unselected";
@@ -138,7 +138,7 @@ public class DataCheckPanel extends IzPanel {
         for (i = 0; i < alphaName.length; i++) {
             sInfo = sInfo + "\tName: " + alphaName[i] + ", Value: " + varList.getProperty(alphaName[i]) + "\n";
         }
-        sInfo = sInfo + "\nAvailable Packs: \n" + getPackNames(iData.allPacks) + "\n";
+        sInfo = sInfo + "\nAvailable Packs: \n" + getPackNames(iData.getAllPacks()) + "\n";
         System.out.println(sInfo);
         staticText.setText(sInfo);
     }

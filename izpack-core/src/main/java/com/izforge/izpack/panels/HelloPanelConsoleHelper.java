@@ -47,13 +47,13 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
 
     public boolean runConsole(AutomatedInstallData idata) {
         String str;
-        str = idata.langpack.getString("HelloPanel.welcome1") + idata.info.getAppName() + " "
-                + idata.info.getAppVersion() + idata.langpack.getString("HelloPanel.welcome2");
+        str = idata.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
+                + idata.getInfo().getAppVersion() + idata.getLangpack().getString("HelloPanel.welcome2");
         System.out.println(str);
-        ArrayList<Info.Author> authors = idata.info.getAuthors();
+        ArrayList<Info.Author> authors = idata.getInfo().getAuthors();
         int size = authors.size();
         if (size > 0) {
-            str = idata.langpack.getString("HelloPanel.authors");
+            str = idata.getLangpack().getString("HelloPanel.authors");
 
             for (int i = 0; i < size; i++) {
                 Info.Author a = authors.get(i);
@@ -64,8 +64,8 @@ public class HelloPanelConsoleHelper extends PanelConsoleHelper implements Panel
 
         }
 
-        if (idata.info.getAppURL() != null) {
-            str = idata.langpack.getString("HelloPanel.url") + idata.info.getAppURL();
+        if (idata.getInfo().getAppURL() != null) {
+            str = idata.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
             System.out.println(str);
         }
         int i = askEndOfConsolePanel();

@@ -87,7 +87,7 @@ public class NextMediaDialog extends JDialog implements ActionListener {
     }
 
     public NextMediaDialog(Frame owner, AutomatedInstallData idata, String nextmedia) throws HeadlessException {
-        this(owner, idata.langpack, null, nextmedia);
+        this(owner, idata.getLangpack(), null, nextmedia);
     }
 
     protected void initUI() {

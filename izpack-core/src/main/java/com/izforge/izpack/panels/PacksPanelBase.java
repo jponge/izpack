@@ -150,7 +150,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             Debug.trace(exception);
         }
         // init the map
-        computePacks(idata.availablePacks);
+        computePacks(idata.getAvailablePacks());
 
         createNormalLayout();
 
@@ -244,7 +244,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             return (false);
         }
 
-        for (Pack pack : idata.availablePacks) {
+        for (Pack pack : idata.getAvailablePacks()) {
             for (String validator : pack.getValidators()) {
                 /*
                  * This will call
@@ -265,7 +265,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 }
 
                 try {
-                    if (validatorInst.validate(this, idata, pack.id, (idata.selectedPacks.indexOf(pack) > -1)))
+                    if (validatorInst.validate(this, idata, pack.id, (idata.getSelectedPacks().indexOf(pack) > -1)))
                         continue;
                     else
                         return false;
@@ -273,7 +273,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 catch (Exception e) {
                     e.printStackTrace();
                     System.err.println("Error: Exception in " + validator + ".validate("
-                            + (idata.selectedPacks.indexOf(pack) > -1) + ") for pack " + pack.name);
+                            + (idata.getSelectedPacks().indexOf(pack) > -1) + ") for pack " + pack.name);
                     continue;
                 }
             }
@@ -335,8 +335,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                     .getString("PacksPanel.excludes");
             int numexcludes = 0;
             if (pack.excludeGroup != null) {
-                for (int q = 0; q < idata.availablePacks.size(); q++) {
-                    Pack otherpack = (Pack) idata.availablePacks.get(q);
+                for (int q = 0; q < idata.getAvailablePacks().size(); q++) {
+                    Pack otherpack = (Pack) idata.getAvailablePacks().get(q);
                     String exgroup = otherpack.excludeGroup;
                     if (exgroup != null) {
                         if (q != selectedRow && pack.excludeGroup.equals(exgroup)) {
@@ -559,7 +559,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
             // set the JCheckBoxes to the currently selected panels. The
             // selection might have changed in another panel
-            java.util.Iterator iter = idata.availablePacks.iterator();
+            java.util.Iterator iter = idata.getAvailablePacks().iterator();
             bytes = 0;
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
@@ -567,7 +567,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                     bytes += p.nbytes;
                     continue;
                 }
-                if (idata.selectedPacks.contains(p)) {
+                if (idata.getSelectedPacks().contains(p)) {
                     bytes += p.nbytes;
                 }
             }
@@ -588,7 +588,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      */
     public String getSummaryBody() {
         StringBuffer retval = new StringBuffer(256);
-        Iterator iter = idata.selectedPacks.iterator();
+        Iterator iter = idata.getSelectedPacks().iterator();
         boolean first = true;
         while (iter.hasNext()) {
             if (!first) {

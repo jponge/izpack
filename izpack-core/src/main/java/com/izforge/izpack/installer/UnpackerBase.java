@@ -120,7 +120,7 @@ public abstract class UnpackerBase implements IUnpacker {
      */
     public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler) {
         try {
-            String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
+            String resource = LANG_FILE_NAME + "_" + idata.getLocaleISO3();
             this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
         }
         catch (Throwable exception) {
@@ -471,7 +471,7 @@ public abstract class UnpackerBase implements IUnpacker {
         List[] retval = new List[listenerNames.length + 1];
         int i;
         for (i = 0; i < listenerNames.length; ++i) {
-            retval[i] = idata.customData.get(listenerNames[i]);
+            retval[i] = idata.getCustomData().get(listenerNames[i]);
             if (retval[i] == null)
             // Make a dummy list, then iterator is ever callable.
             {
@@ -579,7 +579,7 @@ public abstract class UnpackerBase implements IUnpacker {
      * @throws Exception Description of the Exception
      */
     protected void putUninstaller() throws Exception {
-        String uninstallerCondition = idata.info.getUninstallerCondition();
+        String uninstallerCondition = idata.getInfo().getUninstallerCondition();
         if ((uninstallerCondition != null) &&
                 (uninstallerCondition.length() > 0) &&
                 !this.rules.isConditionTrue(uninstallerCondition)) {
@@ -599,8 +599,8 @@ public abstract class UnpackerBase implements IUnpacker {
         in[1] = UnpackerBase.class.getResourceAsStream("/res/IzPack.uninstaller-ext");
 
         // Me make the .uninstaller directory
-        String dest = IoHelper.translatePath(idata.info.getUninstallerPath(), vs);
-        String jar = dest + File.separator + idata.info.getUninstallerName();
+        String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), vs);
+        String jar = dest + File.separator + idata.getInfo().getUninstallerName();
         File pathMaker = new File(dest);
         pathMaker.mkdirs();
 
@@ -613,7 +613,7 @@ public abstract class UnpackerBase implements IUnpacker {
         // Intersect a buffer else byte for byte will be written to the file.
         BufferedOutputStream bos = new BufferedOutputStream(out);
         ZipOutputStream outJar = new ZipOutputStream(bos);
-        idata.uninstallOutJar = outJar;
+        idata.setUninstallOutJar(outJar);
         outJar.setLevel(9);
         udata.addFile(jar, true);
 
@@ -649,13 +649,13 @@ public abstract class UnpackerBase implements IUnpacker {
         }
 
         // Should we relaunch the uninstaller with privileges?
-        if (idata.info.isPrivilegedExecutionRequiredUninstaller()) {
+        if (idata.getInfo().isPrivilegedExecutionRequiredUninstaller()) {
             outJar.putNextEntry(new ZipEntry("exec-admin"));
             outJar.closeEntry();
         }
 
         // We put the langpack
-        InputStream in2 = Unpacker.class.getResourceAsStream("/langpacks/" + idata.localeISO3 + ".xml");
+        InputStream in2 = Unpacker.class.getResourceAsStream("/langpacks/" + idata.getLocaleISO3() + ".xml");
         outJar.putNextEntry(new ZipEntry("langpack.xml"));
         int read = in2.read();
         while (read != -1) {
@@ -789,14 +789,14 @@ public abstract class UnpackerBase implements IUnpacker {
      * @throws ClassNotFoundException
      */
     public void writeInstallationInformation() throws IOException, ClassNotFoundException {
-        if (!idata.info.isWriteInstallationInformation()) {
+        if (!idata.getInfo().isWriteInstallationInformation()) {
             Debug.trace("skip writing installation information");
             return;
         }
         Debug.trace("writing installation information");
         String installdir = idata.getInstallPath();
 
-        List installedpacks = new ArrayList(idata.selectedPacks);
+        List installedpacks = new ArrayList(idata.getSelectedPacks());
 
         File installationinfo = new File(installdir + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
         if (!installationinfo.exists()) {
@@ -829,7 +829,7 @@ public abstract class UnpackerBase implements IUnpacker {
             oout.writeObject(pack);
         }
         */
-        oout.writeObject(idata.variables);
+        oout.writeObject(idata.getVariables());
         Debug.trace("done.");
         oout.close();
         fout.close();

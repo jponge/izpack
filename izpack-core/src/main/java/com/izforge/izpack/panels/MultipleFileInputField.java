@@ -114,10 +114,10 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
 
-        browseBtn = ButtonFactory.createButton(data.langpack.getString("UserInputPanel.button.browse"), data.buttonsHColor);
+        browseBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.browse"), data.buttonsHColor);
         browseBtn.addActionListener(this);
 
-        deleteBtn = ButtonFactory.createButton(data.langpack.getString("UserInputPanel.button.delete"), data.buttonsHColor);
+        deleteBtn = ButtonFactory.createButton(data.getLangpack().getString("UserInputPanel.button.delete"), data.buttonsHColor);
         deleteBtn.addActionListener(this);
 
         JScrollPane scroller = new JScrollPane(fileList);

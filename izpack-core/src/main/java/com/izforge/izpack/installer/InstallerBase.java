@@ -213,17 +213,17 @@ public class InstallerBase {
             }
         }
 
-        installdata.info = inf;
-        installdata.panelsOrder = panelsOrder;
-        installdata.availablePacks = availablePacks;
-        installdata.allPacks = allPacks;
+        installdata.setInfo(inf);
+        installdata.setPanelsOrder(panelsOrder);
+        installdata.setAvailablePacks(availablePacks);
+        installdata.setAllPacks(allPacks);
 
         // get list of preselected packs
         Iterator pack_it = availablePacks.iterator();
         while (pack_it.hasNext()) {
             Pack pack = (Pack) pack_it.next();
             if (pack.preselected) {
-                installdata.selectedPacks.add(pack);
+                installdata.getSelectedPacks().add(pack);
             }
         }
         // Set the installation path in a default manner
@@ -287,13 +287,13 @@ public class InstallerBase {
     protected void addCustomLangpack(AutomatedInstallData idata) {
         // We try to load and add a custom langpack.
         try {
-            idata.langpack.add(ResourceManager.getInstance().getInputStream(LANG_FILE_NAME));
+            idata.getLangpack().add(ResourceManager.getInstance().getInputStream(LANG_FILE_NAME));
         }
         catch (Throwable exception) {
             Debug.trace("No custom langpack available.");
             return;
         }
-        Debug.trace("Custom langpack for " + idata.localeISO3 + " available.");
+        Debug.trace("Custom langpack for " + idata.getLocaleISO3() + " available.");
     }
 
     /**
@@ -422,7 +422,7 @@ public class InstallerBase {
             }
             // Add the current custem action data to the installdata hash map.
             for (i = 0; i < streamNames.length; ++i) {
-                installdata.customData.put(streamNames[i], out[i]);
+                installdata.getCustomData().put(streamNames[i], out[i]);
             }
         }
         // uninstallerLib list if exist
@@ -513,7 +513,7 @@ public class InstallerBase {
             if (!condition.isTrue()) {
                 String message = installerrequirement.getMessage();
                 if ((message != null) && (message.length() > 0)) {
-                    String localizedMessage = installdata.langpack.getString(message);
+                    String localizedMessage = installdata.getLangpack().getString(message);
                     this.showMissingRequirementMessage(localizedMessage);
                 }
                 result = false;
@@ -582,7 +582,7 @@ public class InstallerBase {
                     if (refresh) {
                         String newvalue = substitutor.substitute(dynvar.getValue(), null);
                         Debug.log("newvalue: " + newvalue);
-                        installdata.variables.setProperty(dynvar.getName(), newvalue);
+                        installdata.getVariables().setProperty(dynvar.getName(), newvalue);
                     }
                 }
             }

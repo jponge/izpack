@@ -196,7 +196,7 @@ public class GUIInstaller extends InstallerBase {
      */
     private void checkLockFile() throws Exception {
         String tempDir = System.getProperty("java.io.tmpdir");
-        String appName = this.installdata.info.getAppName();
+        String appName = this.installdata.getInfo().getAppName();
         String fileName = "iz-" + appName + ".tmp";
         Debug.trace("Making temp file: " + fileName);
         Debug.trace("In temp directory: " + tempDir);
@@ -254,7 +254,7 @@ public class GUIInstaller extends InstallerBase {
      */
     private void checkJavaVersion() throws Exception {
         String version = System.getProperty("java.version");
-        String required = this.installdata.info.getJavaVersion();
+        String required = this.installdata.getInfo().getJavaVersion();
         if (version.compareTo(required) < 0) {
             StringBuffer msg = new StringBuffer();
             msg.append("The application that you are trying to install requires a ");
@@ -275,7 +275,7 @@ public class GUIInstaller extends InstallerBase {
      * Checks if a JDK is available.
      */
     private void checkJDKAvailable() {
-        if (!this.installdata.info.isJdkRequired()) {
+        if (!this.installdata.getInfo().isJdkRequired()) {
             return;
         }
 
@@ -339,13 +339,13 @@ public class GUIInstaller extends InstallerBase {
         }
 
         // We add an xml data information
-        this.installdata.xmlData.setAttribute("langpack", selectedPack);
+        this.installdata.getXmlData().setAttribute("langpack", selectedPack);
 
         // We load the langpack
-        installdata.localeISO3 = selectedPack;
-        installdata.setVariable(ScriptParser.ISO3_LANG, installdata.localeISO3);
+        installdata.setLocaleISO3(selectedPack);
+        installdata.setVariable(ScriptParser.ISO3_LANG, installdata.getLocaleISO3());
         InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
-        this.installdata.langpack = new LocaleDatabase(in);
+        this.installdata.setLangpack(new LocaleDatabase(in));
 
     }
 
@@ -525,18 +525,18 @@ public class GUIInstaller extends InstallerBase {
      * @throws Exception Description of the Exception
      */
     private void loadGUI() throws Exception {
-        UIManager.put("OptionPane.yesButtonText", installdata.langpack.getString("installer.yes"));
-        UIManager.put("OptionPane.noButtonText", installdata.langpack.getString("installer.no"));
-        UIManager.put("OptionPane.cancelButtonText", installdata.langpack
+        UIManager.put("OptionPane.yesButtonText", installdata.getLangpack().getString("installer.yes"));
+        UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
+        UIManager.put("OptionPane.cancelButtonText", installdata.getLangpack()
                 .getString("installer.cancel"));
         String title;
         // Use a alternate message if defined.
         final String key = "installer.reversetitle";
-        String message = installdata.langpack.getString(key);
+        String message = installdata.getLangpack().getString(key);
         // message equal to key -> no message defined.
         if (message.indexOf(key) > -1) {
-            title = installdata.langpack.getString("installer.title")
-                    + installdata.info.getAppName();
+            title = installdata.getLangpack().getString("installer.title")
+                    + installdata.getInfo().getAppName();
         } else { // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
             VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());

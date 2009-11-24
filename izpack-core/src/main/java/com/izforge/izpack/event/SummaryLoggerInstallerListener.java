@@ -53,15 +53,15 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener {
      */
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception {
-        if (!getInstalldata().installSuccess) {
+        if (!getInstalldata().isInstallSuccess()) {
             return;
         }
         // No logfile at automated installation because panels are not
         // involved.
-        if (getInstalldata().panels == null || getInstalldata().panels.size() < 1) {
+        if (getInstalldata().getPanels() == null || getInstalldata().getPanels().size() < 1) {
             return;
         }
-        String path = getInstalldata().info.getSummaryLogFilePath();
+        String path = getInstalldata().getInfo().getSummaryLogFilePath();
         if (path == null) {
             return;
         }

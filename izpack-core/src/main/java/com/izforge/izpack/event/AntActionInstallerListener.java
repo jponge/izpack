@@ -96,7 +96,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
         }
 
         // Selected packs.
-        Iterator iter = idata.selectedPacks.iterator();
+        Iterator iter = idata.getSelectedPacks().iterator();
         Pack p = null;
         while (iter != null && iter.hasNext()) {
             p = (Pack) iter.next();
@@ -132,7 +132,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
 
             actions.put(p.name, packActions);
         }
-        iter = idata.availablePacks.iterator();
+        iter = idata.getAvailablePacks().iterator();
         while (iter.hasNext()) {
             String currentPack = ((Pack) iter.next()).name;
             performAllActions(currentPack, ActionBase.BEFOREPACKS, null);
@@ -172,7 +172,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
             handler.nextStep(getMsg("AntAction.pack"), getProgressBarCallerId(), getActionCount(
                     idata, ActionBase.AFTERPACKS));
         }
-        Iterator iter = idata.selectedPacks.iterator();
+        Iterator iter = idata.getSelectedPacks().iterator();
         while (iter.hasNext()) {
             String currentPack = ((Pack) iter.next()).name;
             performAllActions(currentPack, ActionBase.AFTERPACKS, handler);
@@ -184,7 +184,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
 
     private int getActionCount(AutomatedInstallData idata, String order) {
         int retval = 0;
-        Iterator iter = idata.selectedPacks.iterator();
+        Iterator iter = idata.getSelectedPacks().iterator();
         while (iter.hasNext()) {
             String currentPack = ((Pack) iter.next()).name;
             ArrayList<AntAction> actList = getActions(currentPack, order);

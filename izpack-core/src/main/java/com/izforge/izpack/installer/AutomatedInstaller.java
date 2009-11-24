@@ -73,14 +73,14 @@ public class AutomatedInstaller extends InstallerBase {
         loadInstallData(this.idata);
 
         // Loads the xml data
-        this.idata.xmlData = getXMLData(input);
+        this.idata.setXmlData(getXMLData(input));
 
         // Loads the langpack
-        this.idata.localeISO3 = this.idata.xmlData.getAttribute("langpack", "eng");
+        this.idata.setLocaleISO3(this.idata.getXmlData().getAttribute("langpack", "eng"));
         InputStream in = getClass().getResourceAsStream(
-                "/langpacks/" + this.idata.localeISO3 + ".xml");
-        this.idata.langpack = new LocaleDatabase(in);
-        this.idata.setVariable(ScriptParser.ISO3_LANG, this.idata.localeISO3);
+                "/langpacks/" + this.idata.getLocaleISO3() + ".xml");
+        this.idata.setLangpack(new LocaleDatabase(in));
+        this.idata.setVariable(ScriptParser.ISO3_LANG, this.idata.getLocaleISO3());
 
         // create the resource manager singleton
         ResourceManager.create(this.idata);
@@ -109,7 +109,7 @@ public class AutomatedInstaller extends InstallerBase {
             // We get the data
             UninstallData udata = UninstallData.getInstance();
             List files = udata.getUninstalableFilesList();
-            ZipOutputStream outJar = this.idata.uninstallOutJar;
+            ZipOutputStream outJar = this.idata.getUninstallOutJar();
 
             if (outJar == null) {
                 return true; // it is allowed not to have an installer
@@ -306,9 +306,9 @@ public class AutomatedInstaller extends InstallerBase {
             VariableSubstitutor substitutor = new VariableSubstitutor(this.idata.getVariables());
 
             // walk the panels in order
-            for (Panel p : this.idata.panelsOrder) {
+            for (Panel p : this.idata.getPanelsOrder()) {
                 if (p.hasCondition()
-                        && !this.idata.getRules().isConditionTrue(p.getCondition(), this.idata.variables)) {
+                        && !this.idata.getRules().isConditionTrue(p.getCondition(), this.idata.getVariables())) {
                     Debug.log("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
                     if (this.panelInstanceCount.containsKey(p.className)) {
                         // get number of panel instance to process
@@ -358,9 +358,9 @@ public class AutomatedInstaller extends InstallerBase {
             // Bye
             // FIXME !!! Reboot handling
             boolean reboot = false;
-            if (idata.rebootNecessary) {
+            if (idata.isRebootNecessary()) {
                 System.out.println("[ There are file operations pending after reboot ]");
-                switch (idata.info.getRebootAction()) {
+                switch (idata.getInfo().getRebootAction()) {
                     case Info.REBOOT_ACTION_ALWAYS:
                         reboot = true;
                 }
@@ -406,7 +406,7 @@ public class AutomatedInstaller extends InstallerBase {
         String panelClassName = p.className;
 
         // We get the panels root xml markup
-        Vector<IXMLElement> panelRoots = this.idata.xmlData.getChildrenNamed(panelClassName);
+        Vector<IXMLElement> panelRoots = this.idata.getXmlData().getChildrenNamed(panelClassName);
         int panelRootNo = 0;
 
         if (this.panelInstanceCount.containsKey(panelClassName)) {

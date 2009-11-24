@@ -72,7 +72,7 @@ public class MultiVolumeUnpacker extends UnpackerBase {
             ArrayList<ParsableFile> parsables = new ArrayList<ParsableFile>();
             ArrayList<ExecutableFile> executables = new ArrayList<ExecutableFile>();
             ArrayList<UpdateCheck> updatechecks = new ArrayList<UpdateCheck>();
-            List packs = idata.selectedPacks;
+            List packs = idata.getSelectedPacks();
             int npacks = packs.size();
             Debug.trace("Unpacker starting");
             handler.startAction("Unpacking", npacks);
@@ -82,7 +82,7 @@ public class MultiVolumeUnpacker extends UnpackerBase {
             // Custom action listener stuff --- beforePacks ----
             informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
             // vs = new VariableSubstitutor(idata.getVariables());
-            packs = idata.selectedPacks;
+            packs = idata.getSelectedPacks();
             npacks = packs.size();
             if (npacks == 0) {
                 if (performInterrupted()) { // Interrupt was initiated; perform it.
@@ -124,7 +124,7 @@ public class MultiVolumeUnpacker extends UnpackerBase {
             // We unpack the selected packs
             for (int i = 0; i < npacks; i++) {
                 // We get the pack stream
-                int n = idata.allPacks.indexOf(packs.get(i));
+                int n = idata.getAllPacks().indexOf(packs.get(i));
 
                 in = MultiVolumeUnpacker.class.getResourceAsStream("/packs/pack" + n);
 
@@ -240,9 +240,9 @@ public class MultiVolumeUnpacker extends UnpackerBase {
                                         def_choice = AbstractUIHandler.ANSWER_YES;
                                     }
 
-                                    int answer = handler.askQuestion(idata.langpack
+                                    int answer = handler.askQuestion(idata.getLangpack()
                                             .getString("InstallPanel.overwrite.title")
-                                            + " - " + pathFile.getName(), idata.langpack
+                                            + " - " + pathFile.getName(), idata.getLangpack()
                                             .getString("InstallPanel.overwrite.question")
                                             + pathFile.getAbsolutePath(),
                                             AbstractUIHandler.CHOICES_YES_NO, def_choice);

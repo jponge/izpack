@@ -64,7 +64,7 @@ public class Debugger {
     public Debugger(InstallData installdata, IconsDatabase icons, RulesEngine rules) {
         idata = installdata;
         this.rules = rules;
-        lasttimevariables = (Properties) idata.variables.clone();
+        lasttimevariables = (Properties) idata.getVariables().clone();
         this.icons = icons;
         this.variableshistory = new HashMap<String, VariableHistory>();
         this.conditionhistory = new HashMap<String, ConditionHistory>();
@@ -95,7 +95,7 @@ public class Debugger {
 
     private void debugVariables(Panel nextpanelmetadata, Panel lastpanelmetadata) {
         getChangedVariables(nextpanelmetadata, lastpanelmetadata);
-        lasttimevariables = (Properties) idata.variables.clone();
+        lasttimevariables = (Properties) idata.getVariables().clone();
     }
 
     private void debugConditions(Panel nextpanelmetadata, Panel lastpanelmetadata) {
@@ -121,7 +121,7 @@ public class Debugger {
     }
 
     private Properties getChangedVariables(Panel nextpanelmetadata, Panel lastpanelmetadata) {
-        Properties currentvariables = (Properties) idata.variables.clone();
+        Properties currentvariables = (Properties) idata.getVariables().clone();
         Properties changedvariables = new Properties();
 
         variablesrenderer.clearState();
@@ -155,7 +155,7 @@ public class Debugger {
     }
 
     private void modifyVariableManually(String varnametxt, String varvaluetxt) {
-        lasttimevariables = (Properties) idata.variables.clone();
+        lasttimevariables = (Properties) idata.getVariables().clone();
         VariableHistory vh = variableshistory.get(varnametxt);
         if (vh != null) {
             vh.addValue(varvaluetxt, "modified manually");
@@ -189,7 +189,7 @@ public class Debugger {
         varchangepanel.add(label);
         final JTextField varvalue = new JTextField();
         varchangepanel.add(varvalue);
-        JButton changevarbtn = ButtonFactory.createButton(idata.langpack.getString("debug.changevariable"), icons.getImageIcon("debug.changevariable"), idata.buttonsHColor);
+        JButton changevarbtn = ButtonFactory.createButton(idata.getLangpack().getString("debug.changevariable"), icons.getImageIcon("debug.changevariable"), idata.buttonsHColor);
         changevarbtn.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {

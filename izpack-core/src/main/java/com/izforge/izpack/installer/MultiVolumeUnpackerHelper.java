@@ -24,8 +24,8 @@ public class MultiVolumeUnpackerHelper implements IMultiVolumeUnpackerHelper {
             if ((this.handler != null) && (this.handler instanceof IzPanel)) {
                 parent = ((IzPanel) this.handler).getInstallerFrame();
             }
-            JOptionPane.showMessageDialog(parent, idata.langpack
-                    .getString("nextmedia.corruptmedia"), idata.langpack
+            JOptionPane.showMessageDialog(parent, idata.getLangpack()
+                    .getString("nextmedia.corruptmedia"), idata.getLangpack()
                     .getString("nextmedia.corruptmedia.title"), JOptionPane.ERROR_MESSAGE);
         }
         Debug.trace("Enter next media: " + volumename);

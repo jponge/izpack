@@ -20,8 +20,8 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
 
     public File enterNextMediaMessage(String volumename, boolean lastcorrupt) {
         if (lastcorrupt) {
-            System.err.println(" [ " + idata.langpack.getString("nextmedia.corruptmedia.title") + " ] ");
-            System.err.println(idata.langpack.getString("nextmedia.corruptmedia"));
+            System.err.println(" [ " + idata.getLangpack().getString("nextmedia.corruptmedia.title") + " ] ");
+            System.err.println(idata.getLangpack().getString("nextmedia.corruptmedia"));
         }
         Debug.trace("Enter next media: " + volumename);
 
@@ -29,8 +29,8 @@ public class MultiVolumeUnpackerAutomationHelper implements IMultiVolumeUnpacker
         NextMediaDialog nmd = null;
 
         while (!nextvolume.exists() || lastcorrupt) {
-            System.out.println(" [ " + idata.langpack.getString("nextmedia.title") + " ] ");
-            System.out.println(idata.langpack.getString("nextmedia.msg"));
+            System.out.println(" [ " + idata.getLangpack().getString("nextmedia.title") + " ] ");
+            System.out.println(idata.getLangpack().getString("nextmedia.msg"));
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             String nextmediainput = null;

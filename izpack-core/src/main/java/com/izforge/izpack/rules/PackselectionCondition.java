@@ -86,7 +86,7 @@ public class PackselectionCondition extends Condition {
     }
 
     public boolean isTrue() {
-        return this.isTrue(this.installdata.getVariables(), this.installdata.selectedPacks);
+        return this.isTrue(this.installdata.getVariables(), this.installdata.getSelectedPacks());
     }
 
     /* (non-Javadoc)

@@ -335,7 +335,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         try {
             this.langpack = (LocaleDatabase) parent.langpack.clone();
 
-            String resource = LANG_FILE_NAME + "_" + idata.localeISO3;
+            String resource = LANG_FILE_NAME + "_" + idata.getLocaleISO3();
             this.langpack.add(ResourceManager.getInstance().getInputStream(resource));
         }
         catch (ResourceNotFoundException e) {
@@ -744,7 +744,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 filterdesc = "";
             }
             // internationalize it
-            filterdesc = idata.langpack.getString(filterdesc);
+            filterdesc = idata.getLangpack().getString(filterdesc);
 
             allowEmptyValue = Boolean
                     .parseBoolean(element.getAttribute("allowEmptyValue", "false"));
@@ -2935,8 +2935,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // analyze if the any of the packs for which the item
         // is required have been selected for installation.
         // ----------------------------------------------------
-        for (int i = 0; i < idata.selectedPacks.size(); i++) {
-            selected = ((Pack) idata.selectedPacks.get(i)).name;
+        for (int i = 0; i < idata.getSelectedPacks().size(); i++) {
+            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
 
             for (int k = 0; k < packs.size(); k++) {
                 required = (packs.elementAt(k)).getAttribute(NAME, "");
@@ -2984,8 +2984,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // analyze if the any of the packs for which the item
         // is required have been selected for installation.
         // ----------------------------------------------------
-        for (int i = 0; i < idata.selectedPacks.size(); i++) {
-            selected = ((Pack) idata.selectedPacks.get(i)).name;
+        for (int i = 0; i < idata.getSelectedPacks().size(); i++) {
+            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
 
             for (int k = 0; k < packs.size(); k++) {
                 required = (packs.elementAt(k)).getAttribute(NAME, "");

@@ -68,7 +68,7 @@ public class SummaryProcessor {
      * @return a HTML formated string with the summary of all panels
      */
     public static String getSummary(AutomatedInstallData idata) {
-        Iterator<IzPanel> iter = idata.panels.iterator();
+        Iterator<IzPanel> iter = idata.getPanels().iterator();
         StringBuffer sb = new StringBuffer(2048);
         sb.append(HTML_HEADER);
         while (iter.hasNext()) {

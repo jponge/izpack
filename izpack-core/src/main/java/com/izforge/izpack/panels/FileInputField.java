@@ -83,7 +83,7 @@ public class FileInputField extends JPanel implements ActionListener {
         filetxt.setCaretPosition(0);
 
         // TODO: use separate key for button text
-        browseBtn = ButtonFactory.createButton(data.langpack
+        browseBtn = ButtonFactory.createButton(data.getLangpack()
                 .getString("UserInputPanel.search.browse"), data.buttonsHColor);
         browseBtn.addActionListener(this);
         this.add(filetxt);
