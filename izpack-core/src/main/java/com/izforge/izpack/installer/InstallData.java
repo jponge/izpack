@@ -19,7 +19,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.data.AutomatedInstallData;
 

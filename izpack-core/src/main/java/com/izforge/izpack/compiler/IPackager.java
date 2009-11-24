@@ -18,8 +18,8 @@
  */
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.CustomData;
-import com.izforge.izpack.GUIPrefs;
+import com.izforge.izpack.data.CustomData;
+import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.DynamicVariable;
 import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.PackInfo;

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack;
+package com.izforge.izpack.data;
 
 import com.izforge.izpack.util.OsConstraint;
 

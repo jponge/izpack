@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.CustomData;
+import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
