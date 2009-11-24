@@ -65,6 +65,6 @@ public interface CompilerListener {
      * @param data     current install data
      * @param packager current packager object
      */
-    void notify(String position, int state, IXMLElement data, IPackager packager);
+//    void notify(String position, int state, IXMLElement data, IPackager packager);
 
 }
