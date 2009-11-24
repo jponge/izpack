@@ -17,7 +17,7 @@
  */
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.XPackFile;
 import com.izforge.izpack.adaptator.IXMLElement;

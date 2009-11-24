@@ -26,6 +26,7 @@ import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
@@ -427,7 +428,7 @@ public class CompileWorker implements Runnable {
                 boolean found = false;
 
                 while (pack_it.hasNext()) {
-                    com.izforge.izpack.Pack pack = (com.izforge.izpack.Pack) pack_it.next();
+                    Pack pack = (Pack) pack_it.next();
 
                     if (pack.name.equals(name)) {
                         found = true;

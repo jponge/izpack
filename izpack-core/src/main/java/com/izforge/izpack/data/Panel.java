@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack;
+package com.izforge.izpack.data;
 
 import com.izforge.izpack.installer.PanelActionConfiguration;
 import com.izforge.izpack.util.OsConstraint;

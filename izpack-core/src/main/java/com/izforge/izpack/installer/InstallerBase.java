@@ -22,14 +22,13 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.CustomData;
-import com.izforge.izpack.Info;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.Panel;
+import com.izforge.izpack.data.*;
+import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.compiler.DynamicVariable;
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.data.Info;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;

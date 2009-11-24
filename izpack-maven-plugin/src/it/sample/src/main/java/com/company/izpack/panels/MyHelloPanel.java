@@ -21,7 +21,7 @@
 
 package com.company.izpack.panels;
 
-import com.izforge.izpack.Info;
+import com.izforge.izpack.data.Info;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
@@ -29,8 +29,6 @@ import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.installer.InstallerFrame;
 import com.izforge.izpack.installer.IzPanel;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 /**

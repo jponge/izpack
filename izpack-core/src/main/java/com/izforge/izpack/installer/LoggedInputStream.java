@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.Pack;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -22,6 +22,7 @@
 package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.*;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;

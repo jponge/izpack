@@ -22,7 +22,7 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.PackFile;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.ResourceManager;

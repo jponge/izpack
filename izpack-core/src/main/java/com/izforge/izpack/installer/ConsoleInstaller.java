@@ -20,10 +20,10 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.Info;
+import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.Panel;
+import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.util.Debug;

@@ -25,7 +25,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;

@@ -33,6 +33,8 @@ import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
+import com.izforge.izpack.data.Info;
+import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.event.CompilerListener;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.HelpWindow;

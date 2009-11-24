@@ -22,7 +22,7 @@
 package com.izforge.izpack.event;
 
 import com.coi.tools.os.win.NativeLibException;
-import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.UninstallData;

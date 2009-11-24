@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.rules;
 
-import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.XMLException;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;

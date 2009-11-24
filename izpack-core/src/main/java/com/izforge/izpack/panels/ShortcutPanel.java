@@ -18,7 +18,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;

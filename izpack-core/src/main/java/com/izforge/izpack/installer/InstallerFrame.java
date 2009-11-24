@@ -23,16 +23,14 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.*;
-import com.izforge.izpack.Panel;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;

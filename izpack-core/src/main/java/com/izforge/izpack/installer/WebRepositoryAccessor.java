@@ -22,7 +22,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.Pack;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.ParsableFile;
 import com.izforge.izpack.UpdateCheck;
 import com.izforge.izpack.adaptator.IXMLElement;

@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.Panel;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.rules.Condition;
@@ -93,12 +92,12 @@ public class Debugger {
         }
     }
 
-    private void debugVariables(Panel nextpanelmetadata, Panel lastpanelmetadata) {
+    private void debugVariables(com.izforge.izpack.data.Panel nextpanelmetadata, com.izforge.izpack.data.Panel lastpanelmetadata) {
         getChangedVariables(nextpanelmetadata, lastpanelmetadata);
         lasttimevariables = (Properties) idata.getVariables().clone();
     }
 
-    private void debugConditions(Panel nextpanelmetadata, Panel lastpanelmetadata) {
+    private void debugConditions(com.izforge.izpack.data.Panel nextpanelmetadata, com.izforge.izpack.data.Panel lastpanelmetadata) {
         conditionhistoryrenderer.clearState();
         updateChangedConditions("changed after panel switch from " + lastpanelmetadata.getPanelid() + " to " + nextpanelmetadata.getPanelid());
     }
@@ -120,7 +119,7 @@ public class Debugger {
         conditionhistorymodel.fireTableDataChanged();
     }
 
-    private Properties getChangedVariables(Panel nextpanelmetadata, Panel lastpanelmetadata) {
+    private Properties getChangedVariables(com.izforge.izpack.data.Panel nextpanelmetadata, com.izforge.izpack.data.Panel lastpanelmetadata) {
         Properties currentvariables = (Properties) idata.getVariables().clone();
         Properties changedvariables = new Properties();
 
@@ -333,7 +332,7 @@ public class Debugger {
      * @param nextpanelmetadata
      * @param lastpanelmetadata
      */
-    public void switchPanel(Panel nextpanelmetadata, Panel lastpanelmetadata) {
+    public void switchPanel(com.izforge.izpack.data.Panel nextpanelmetadata, com.izforge.izpack.data.Panel lastpanelmetadata) {
         this.debugVariables(nextpanelmetadata, lastpanelmetadata);
         this.debugConditions(nextpanelmetadata, lastpanelmetadata);
     }

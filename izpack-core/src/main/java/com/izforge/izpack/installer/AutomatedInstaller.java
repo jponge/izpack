@@ -25,9 +25,7 @@ import com.izforge.izpack.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.util.*;
 

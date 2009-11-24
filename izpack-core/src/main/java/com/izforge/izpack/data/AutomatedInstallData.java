@@ -19,10 +19,10 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.Info;
+import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.Panel;
+import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.installer.ScriptParser;

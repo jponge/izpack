@@ -20,8 +20,8 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.Pack;
-import com.izforge.izpack.Panel;
+import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
