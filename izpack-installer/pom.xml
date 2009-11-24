@@ -10,6 +10,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-util</artifactId>
+        </dependency>
+    </dependencies>
+
     <artifactId>izpack-installer</artifactId>
     <name>IZpack installer module</name>
     <build>
