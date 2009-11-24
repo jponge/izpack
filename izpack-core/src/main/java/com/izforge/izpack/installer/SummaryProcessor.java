@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.installer;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
 import com.izforge.izpack.installer.IzPanel;

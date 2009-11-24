@@ -22,9 +22,9 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.installer.AutomatedInstallData;
+import com.izforge.izpack.installer.SummaryProcessor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
-import com.izforge.izpack.util.SummaryProcessor;
 import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.File;
