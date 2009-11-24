@@ -29,6 +29,7 @@ import com.izforge.izpack.*;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.PackColor;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.installer.InstallerRequirement;
 import com.izforge.izpack.rules.Condition;
@@ -568,9 +569,9 @@ public class Compiler extends Thread {
      * @return -2 if back edges exist, else 0
      */
     private int dfs(List<PackInfo> packs, Map<String, PackInfo> names) {
-        Map<Edge, Integer> edges = new HashMap<Edge, Integer>();
+        Map<Edge, PackColor> edges = new HashMap<Edge, PackColor>();
         for (PackInfo pack : packs) {
-            if (pack.colour == PackInfo.WHITE) {
+            if (pack.colour == PackColor.WHITE) {
                 if (dfsVisit(pack, names, edges) != 0) {
                     return -1;
                 }
@@ -586,11 +587,11 @@ public class Compiler extends Thread {
      * @param edges map to be checked
      * @return -2 if back edges exist, else 0
      */
-    private int checkBackEdges(Map<Edge, Integer> edges) {
+    private int checkBackEdges(Map<Edge, PackColor> edges) {
         Set<Edge> keys = edges.keySet();
         for (final Edge key : keys) {
-            int color = edges.get(key);
-            if (color == PackInfo.GREY) {
+            PackColor color = edges.get(key);
+            if (color == PackColor.GREY) {
                 return -2;
             }
         }
@@ -613,8 +614,8 @@ public class Compiler extends Thread {
         }
     }
 
-    private int dfsVisit(PackInfo u, Map<String, PackInfo> names, Map<Edge, Integer> edges) {
-        u.colour = PackInfo.GREY;
+    private int dfsVisit(PackInfo u, Map<String, PackInfo> names, Map<Edge, PackColor> edges) {
+        u.colour = PackColor.GREY;
         List<String> deps = u.getDependencies();
         if (deps != null) {
             for (String name : deps) {
@@ -628,7 +629,7 @@ public class Compiler extends Thread {
                     edges.put(edge, v.colour);
                 }
 
-                if (v.colour == PackInfo.WHITE) {
+                if (v.colour == PackColor.WHITE) {
 
                     final int result = dfsVisit(v, names, edges);
                     if (result != 0) {
@@ -637,7 +638,7 @@ public class Compiler extends Thread {
                 }
             }
         }
-        u.colour = PackInfo.BLACK;
+        u.colour = PackColor.BLACK;
         return 0;
     }
 

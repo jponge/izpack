@@ -132,7 +132,7 @@ public class Pack implements Serializable {
     /**
      * The color of the node. This is used for the dependency graph algorithms
      */
-    public int color;
+    public PackColor color;
 
     /**
      * The id to use if we want to obtain this pack's image resource
@@ -140,21 +140,6 @@ public class Pack implements Serializable {
     public String packImgId;
 
     private List<String> validators = new ArrayList<String>();
-
-    /**
-     * white colour
-     */
-    public final static int WHITE = 0;
-
-    /**
-     * grey colour
-     */
-    public final static int GREY = 1;
-
-    /**
-     * black colour
-     */
-    public final static int BLACK = 2;
 
     /**
      * The constructor.
@@ -185,7 +170,7 @@ public class Pack implements Serializable {
         this.packImgId = null;
         this.condition = null;
         nbytes = 0;
-        color = PackInfo.WHITE;
+        color = PackColor.WHITE;
     }
 
     /**

@@ -23,6 +23,7 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.PackColor;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.io.File;
@@ -51,22 +52,7 @@ public class PackInfo implements Serializable {
     /**
      * The color of the node. This is used for the dependency graph algorithms
      */
-    public int colour;
-
-    /**
-     * white colour
-     */
-    public final static int WHITE = 0;
-
-    /**
-     * grey colour
-     */
-    public final static int GREY = 1;
-
-    /**
-     * black colour
-     */
-    public final static int BLACK = 2;
+    public PackColor colour;
 
     /**
      * Files of the Pack.
@@ -102,7 +88,7 @@ public class PackInfo implements Serializable {
     public PackInfo(String name, String id, String description, boolean required, boolean loose, String excludegroup, boolean uninstall) {
         boolean ispreselected = (excludegroup == null);
         pack = new Pack(name, id, description, null, null, required, ispreselected, loose, excludegroup, uninstall);
-        colour = PackInfo.WHITE;
+        colour = PackColor.WHITE;
     }
 
     /**

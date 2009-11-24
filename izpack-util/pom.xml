@@ -12,5 +12,11 @@
 
     <artifactId>izpack-util</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-api</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

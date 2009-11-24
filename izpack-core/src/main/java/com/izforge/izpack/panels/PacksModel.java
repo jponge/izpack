@@ -27,6 +27,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.PackColor;
 import com.izforge.izpack.installer.InstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
@@ -584,7 +585,7 @@ class PacksModel extends AbstractTableModel {
     private int dfs(int[] status) {
         for (int i = 0; i < packs.size(); i++) {
             for (Object pack1 : packs) {
-                ((Pack) pack1).color = Pack.WHITE;
+                ((Pack) pack1).color = PackColor.WHITE;
             }
             Pack pack = (Pack) packs.get(i);
             boolean wipe = false;
@@ -598,7 +599,7 @@ class PacksModel extends AbstractTableModel {
     }
 
     private int dfsVisit(Pack u, int[] status, boolean wipe) {
-        u.color = Pack.GREY;
+        u.color = PackColor.GREY;
         int check = checkValues[getPos(u.name)];
 
         if (Math.abs(check) != 1) {
@@ -611,7 +612,7 @@ class PacksModel extends AbstractTableModel {
                 if (wipe) {
                     status[getPos(v.name)] = 1;
                 }
-                if (v.color == Pack.WHITE) {
+                if (v.color == PackColor.WHITE) {
 
                     final int result = dfsVisit(v, status, wipe);
                     if (result != 0) {
@@ -620,7 +621,7 @@ class PacksModel extends AbstractTableModel {
                 }
             }
         }
-        u.color = Pack.BLACK;
+        u.color = PackColor.BLACK;
         return 0;
     }
 
