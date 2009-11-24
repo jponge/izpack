@@ -41,7 +41,7 @@ import com.izforge.izpack.installer.HelpWindow;
 import com.izforge.izpack.installer.InstallerRequirement;
 import com.izforge.izpack.installer.PanelAction;
 import com.izforge.izpack.installer.PanelAction.ActionStage;
-import com.izforge.izpack.installer.PanelActionConfiguration;
+import com.izforge.izpack.data.PanelActionConfiguration;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;

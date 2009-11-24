@@ -8,6 +8,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.PanelActionConfiguration;
 import com.izforge.izpack.util.AbstractUIHandler;
 
 /*

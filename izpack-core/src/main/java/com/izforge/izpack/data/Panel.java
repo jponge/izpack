@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.installer.PanelActionConfiguration;
+import com.izforge.izpack.data.PanelActionConfiguration;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.io.Serializable;
