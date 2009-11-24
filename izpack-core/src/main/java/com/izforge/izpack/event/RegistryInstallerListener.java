@@ -98,7 +98,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
                             AbstractUIProgressHandler handler) throws Exception {
         super.beforePacks(idata, npacks, handler);
-        rules = idata.getRules();
+        rules = (RulesEngine)idata.getRules();
         initializeRegistryHandler(idata);
     }
 

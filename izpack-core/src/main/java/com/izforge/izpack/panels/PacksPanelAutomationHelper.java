@@ -26,6 +26,7 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.rules.RulesEngine;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,9 +150,10 @@ public class PacksPanelAutomationHelper implements PanelAutomation {
                     } else {
                         if (packInfo.isSelected()) {
                             // Check if the conditions allow to select the pack
+                            RulesEngine rules = (RulesEngine)idata.getRules();
                             if ((idata.getSelectedPacks().indexOf(pack) < 0)
                                     && (pack.id != null)
-                                    && (idata.getRules().canInstallPack(pack.id,
+                                    && (rules.canInstallPack(pack.id,
                                     idata.getVariables()))) {
                                 idata.getSelectedPacks().add(pack);
                                 System.out.println("Pack [" + packInfo.toString()

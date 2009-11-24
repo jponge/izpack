@@ -27,6 +27,7 @@ import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 
 import java.io.*;
@@ -308,8 +309,9 @@ public class AutomatedInstaller extends InstallerBase {
 
             // walk the panels in order
             for (Panel p : this.idata.getPanelsOrder()) {
+                RulesEngine rules = (RulesEngine)this.idata.getRules();
                 if (p.hasCondition()
-                        && !this.idata.getRules().isConditionTrue(p.getCondition(), this.idata.getVariables())) {
+                        && !rules.isConditionTrue(p.getCondition(), this.idata.getVariables())) {
                     Debug.log("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
                     if (this.panelInstanceCount.containsKey(p.className)) {
                         // get number of panel instance to process

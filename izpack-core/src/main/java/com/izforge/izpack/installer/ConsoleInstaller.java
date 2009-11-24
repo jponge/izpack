@@ -26,6 +26,7 @@ import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.OsConstraint;
@@ -137,7 +138,8 @@ public class ConsoleInstaller extends InstallerBase {
                         boolean bIsConditionFulfilled = true;
                         String strCondition = p.getCondition();
                         if (strCondition != null) {
-                            bIsConditionFulfilled = installdata.getRules().isConditionTrue(
+                            RulesEngine rules = (RulesEngine)installdata.getRules();
+                            bIsConditionFulfilled = rules.isConditionTrue(
                                     strCondition);
                         }
 

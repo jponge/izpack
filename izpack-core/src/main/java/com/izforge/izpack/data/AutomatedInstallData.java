@@ -65,7 +65,7 @@ public class AutomatedInstallData implements Serializable {
 
     // --- Instance members -----------------------------------------------
 
-    private RulesEngine rules;
+    private Object rules;
 
     /**
      * The language code.
@@ -279,12 +279,12 @@ public class AutomatedInstallData implements Serializable {
     }
 
 
-    public RulesEngine getRules() {
+    public Object getRules() {
         return rules;
     }
 
 
-    public void setRules(RulesEngine rules) {
+    public void setRules(Object rules) {
         this.rules = rules;
     }
 

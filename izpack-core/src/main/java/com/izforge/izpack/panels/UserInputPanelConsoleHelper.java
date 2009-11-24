@@ -26,6 +26,7 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.SpecHelper;
@@ -258,7 +259,8 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
                 if (conditionid != null) {
                     // check if condition is fulfilled
-                    if (!idata.getRules().isConditionTrue(conditionid, idata.getVariables())) {
+                    RulesEngine rules = (RulesEngine)idata.getRules();
+                    if (!rules.isConditionTrue(conditionid, idata.getVariables())) {
                         continue;
                     }
                 }
