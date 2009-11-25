@@ -21,6 +21,7 @@
             <version>${version}</version>
             <classifier>standalone</classifier>
         </dependency>
+
     </dependencies>
 
     <build>

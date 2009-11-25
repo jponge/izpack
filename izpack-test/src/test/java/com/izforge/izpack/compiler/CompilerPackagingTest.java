@@ -18,12 +18,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class CompilerPackagingTest {
 
-    private File standaloneCompiler = new File(getClass().getClassLoader().getResource("lib/izpack-compiler-standalone.jar").getFile());
     private Properties pathProperties = new Properties();
+    private File standaloneCompiler;
+    private File skeletonInstallerFile;
 
     @Before
     public void setUp() throws IOException {
         pathProperties.load(getClass().getResourceAsStream("path.properties"));
+        standaloneCompiler = new File(getClass().getClassLoader().getResource(pathProperties.getProperty("standalone")).getFile());
+        skeletonInstallerFile = new File(getClass().
+                getClassLoader().getResource(pathProperties.getProperty("installer")).getFile());
         assertThat(standaloneCompiler.exists(), Is.is(true));
     }
 
@@ -33,4 +37,11 @@ public class CompilerPackagingTest {
         AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller")));
         AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller-ext")));
     }
+
+
+    @Test
+    public void skeletonInstallerShouldContainClasses() throws Exception {
+        AssertionHelper.assertZipContainsMatch(skeletonInstallerFile, "Debug.class");
+    }
+
 }
