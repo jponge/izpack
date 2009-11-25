@@ -520,6 +520,21 @@ public class GUIInstaller extends InstallerBase {
         }
     }
 
+    private String getTitle() {
+        // Use a alternate message if defined.
+        final String key = "installer.reversetitle";
+        String message = installdata.getLangpack().getString(key);
+        // message equal to key -> no message defined.
+        if (message.indexOf(key) > -1) {
+            return installdata.getLangpack().getString("installer.title")
+                    + installdata.getInfo().getAppName();
+        } else { // Attention! The alternate message has to contain the whole message including
+            // $APP_NAME and may be $APP_VER.
+            VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
+            return vs.substitute(message, null);
+        }
+    }
+
     /**
      * Loads the GUI.
      *
@@ -530,19 +545,7 @@ public class GUIInstaller extends InstallerBase {
         UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
         UIManager.put("OptionPane.cancelButtonText", installdata.getLangpack()
                 .getString("installer.cancel"));
-        String title;
-        // Use a alternate message if defined.
-        final String key = "installer.reversetitle";
-        String message = installdata.getLangpack().getString(key);
-        // message equal to key -> no message defined.
-        if (message.indexOf(key) > -1) {
-            title = installdata.getLangpack().getString("installer.title")
-                    + installdata.getInfo().getAppName();
-        } else { // Attention! The alternate message has to contain the whole message including
-            // $APP_NAME and may be $APP_VER.
-            VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
-            title = vs.substitute(message, null);
-        }
+        String title = getTitle();
         new InstallerFrame(title, this.installdata, this);
     }
 
