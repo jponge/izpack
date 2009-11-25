@@ -41,14 +41,14 @@ public class CompilationTest {
     public void installerShouldContainInstallerClass() throws Exception {
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         c.executeCompiler();
-        TestHelper.assertZipContainsMatch(out, StringContains.containsString("Installer.class"));
+        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Installer.class"));
     }
 
     @Test
     public void installerShouldContainDebugClass() throws Exception {
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         c.executeCompiler();
-        TestHelper.assertZipContainsMatch(out, StringContains.containsString("Debug.class"));
+        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Debug.class"));
     }
 
 }

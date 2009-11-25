@@ -15,7 +15,7 @@ import java.util.zip.ZipInputStream;
 /**
  * Test helper containing assertions.
  */
-public class TestHelper {
+public class AssertionHelper {
     public static void assertZipContainsMatch(File inFile, Matcher<String> stringMatcher) throws IOException {
         List<String> fileList = new ArrayList<String>();
         FileInputStream fis = new FileInputStream(inFile);

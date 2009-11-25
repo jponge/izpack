@@ -2,7 +2,7 @@ package com.izforge.izpack.compiler;
 
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
-import org.izforge.izpack.TestHelper;
+import org.izforge.izpack.AssertionHelper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,8 +29,8 @@ public class CompilerPackagingTest {
 
     @Test
     public void standaloneCompilerShouldContainJarResources() throws IOException {
-        TestHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("installer")));
-        TestHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller")));
-        TestHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller-ext")));
+        AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("installer")));
+        AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller")));
+        AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller-ext")));
     }
 }
