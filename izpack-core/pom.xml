@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>izpack-core</artifactId>
-    <name>IZpack core module</name>
+    <name>IzPack core module</name>
 
     <dependencies>
         <dependency>

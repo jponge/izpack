@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>izpack-compiler</artifactId>
-    <name>IZpack compiler module</name>
+    <name>IzPack compiler module</name>
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>

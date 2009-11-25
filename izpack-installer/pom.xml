@@ -22,7 +22,7 @@
     </dependencies>
 
     <artifactId>izpack-installer</artifactId>
-    <name>IZpack installer module</name>
+    <name>IzPack installer module</name>
     <build>
         <plugins>
             <plugin>

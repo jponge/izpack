@@ -6,7 +6,7 @@
   <artifactId>izpack-maven-plugin-integration-test</artifactId>
   <packaging>jar</packaging>
   <version>testing</version>
-  <name>izpack-172-it</name>
+  <name>IzPack-172-it</name>
 
   <build>
 

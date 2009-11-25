@@ -6,14 +6,14 @@
     <groupId>org.codehaus.izpack</groupId>
     <version>4.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>IZPack parent</name>
+    <name>IzPack parent</name>
 
     <description>IZpack parent module</description>
 
     <distributionManagement>
         <site>
             <id>codehaus.org</id>
-            <name>IZPack Website</name>
+            <name>IzPack Website</name>
             <url>dav:https://dav.codehaus.org/izpack/izpack-standalone-compiler</url>
         </site>
     </distributionManagement>

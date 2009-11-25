@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>izpack-simple-sample</artifactId>
-    <name>IZpack simple sample</name>
+    <name>IzPack simple sample</name>
 
     <dependencies>
         <dependency>

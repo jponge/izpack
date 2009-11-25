@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>izpack-util</artifactId>
-    <name>IZpack util module</name>
+    <name>IzPack util module</name>
 
     <dependencies>
         <dependency>

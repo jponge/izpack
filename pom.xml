@@ -4,7 +4,7 @@
     <artifactId>izpack-agregator</artifactId>
     <groupId>org.codehaus.izpack</groupId>
     <version>4.3.0-SNAPSHOT</version>
-    <name>IZPack agregator</name>
+    <name>IzPack agregator</name>
 
     <description>IZpack agregator pom</description>
 

@@ -7,7 +7,7 @@
   <artifactId>izpack-groovy-installer</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>IZPack Groovy Installer</name>
+  <name>IzPack Groovy Installer</name>
 
   <packaging>jar</packaging>
 

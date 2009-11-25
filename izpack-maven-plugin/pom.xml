@@ -33,7 +33,7 @@
     <distributionManagement>
         <site>
             <id>codehaus.org</id>
-            <name>IZPack Website</name>
+            <name>IzPack Website</name>
             <url>dav:https://dav.codehaus.org/izpack/izpack-maven-plugin</url>
         </site>
     </distributionManagement>

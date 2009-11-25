@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>izpack-dist</artifactId>
-    <name>IZpack dist module</name>
+    <name>IzPack dist module</name>
 
 
     <dependencies>
@@ -49,31 +49,31 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>${groupId}</groupId>-->
-                <!--<artifactId>izpack-maven-plugin</artifactId>-->
-                <!--<version>${version}</version>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>izpack</goal>-->
-                        <!--</goals>-->
-                        <!--<configuration>-->
-                            <!--<izpackBasedir>${staging.dir}</izpackBasedir>-->
-                            <!--<descriptor>IzPack-install.xml</descriptor>-->
-                        <!--</configuration>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-                <!--<dependencies>-->
-                    <!--<dependency>-->
-                        <!--<groupId>${groupId}</groupId>-->
-                        <!--<artifactId>izpack-compiler</artifactId>-->
-                        <!--<classifier>standalone</classifier>-->
-                        <!--<version>${version}</version>-->
-                    <!--</dependency>-->
-                <!--</dependencies>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>${groupId}</groupId>
+                <artifactId>izpack-maven-plugin</artifactId>
+                <version>${version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>izpack</goal>
+                        </goals>
+                        <configuration>
+                            <izpackBasedir>${staging.dir}</izpackBasedir>
+                            <descriptor>IzPack-install.xml</descriptor>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>${groupId}</groupId>
+                        <artifactId>izpack-compiler</artifactId>
+                        <classifier>standalone</classifier>
+                        <version>${version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
     <properties>
