@@ -21,6 +21,12 @@
             <version>${version}</version>
         </dependency>
         <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
+            <version>${version}</version>
+            <classifier>standalone</classifier>
+        </dependency>
+        <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>1.4</version>
@@ -41,6 +47,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/src/test/resources/lib</outputDirectory>
+                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                 </executions>
