@@ -19,7 +19,6 @@
             <groupId>${groupId}</groupId>
             <artifactId>izpack-compiler</artifactId>
             <version>${version}</version>
-            <classifier>standalone</classifier>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
