@@ -17,8 +17,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class CompilationTest {
 
-    private File baseDir = new File(getClass().getResource("samples1").getFile());
-    private File installerFile = new File(getClass().getResource("samples1/install.xml").getFile());
+    private File baseDir = new File(getClass().getClassLoader().getResource("samples1").getFile());
+    private File installerFile = new File(getClass().getClassLoader().getResource("samples1/install.xml").getFile());
     private File out = new File(baseDir, "out.jar");
 
     @Rule

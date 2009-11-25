@@ -47,7 +47,6 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/src/test/resources/lib</outputDirectory>
-                            <stripVersion>true</stripVersion>
                         </configuration>
                     </execution>
                 </executions>
