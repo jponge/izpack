@@ -52,4 +52,12 @@ public class CompilationTest {
         AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Debug.class"));
     }
 
+    @Test
+    public void installerShouldContainImages() throws Exception {
+        CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
+        c.executeCompiler();
+        AssertionHelper.assertZipContainsMatch(out, Is.is("img/JFrameIcon.png"));
+    }
+
+
 }

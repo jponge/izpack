@@ -7,12 +7,14 @@
     <dependencySets>
         <dependencySet>
             <unpack>true</unpack>
-            <scope>runtime</scope>
+            <scope>runtime</scope>            
+            <outputDirectory>/</outputDirectory>
         </dependencySet>
     </dependencySets>
     <fileSets>
         <fileSet>
-            <directory>${project.build.outputDirectory}</directory>
+            <directory>${project.build.outputDirectory}</directory>            
+            <outputDirectory>/</outputDirectory>
         </fileSet>
     </fileSets>
 </assembly>
