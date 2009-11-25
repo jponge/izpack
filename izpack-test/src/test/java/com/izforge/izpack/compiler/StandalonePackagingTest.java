@@ -16,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Test of the compiler standalone packaging.<br />
  * You have to call mvn process:resources to get standalone artifact in test resources.
  */
-public class CompilerPackagingTest {
+public class StandalonePackagingTest {
 
     private Properties pathProperties = new Properties();
     private File standaloneCompiler;

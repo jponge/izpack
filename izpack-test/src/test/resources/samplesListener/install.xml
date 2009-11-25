@@ -15,6 +15,10 @@
         <langpack iso3="eng"/>
     </locale>
 
+    <listeners>
+        <listener installer="SummaryLoggerInstallerListener"/>
+    </listeners>
+
     <panels>
         <panel classname="HelloPanel"/>
         <panel classname="SimpleFinishPanel"/>
