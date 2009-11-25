@@ -161,6 +161,12 @@ public class AutomatedInstallData implements Serializable {
      * The install path.
      */
     public final static String INSTALL_PATH = "INSTALL_PATH";
+    /**
+     * Helps information
+     */
+    public final static String HELP_TAG = "help";
+    public final static String ISO3_ATTRIBUTE = "iso3";
+    public final static String SRC_ATTRIBUTE = "src";
 
     /**
      * Returns the one possible object of this class.

@@ -1,9 +1,10 @@
 package org.izforge.izpack;
 
 import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.compiler.CompilerException;
+import org.hamcrest.Matcher;
 import org.hamcrest.collection.IsCollectionContaining;
 import org.hamcrest.core.Is;
+import org.hamcrest.core.IsNot;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,8 +32,8 @@ public class CompilationTest {
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Before
-    public void cleanFiles(){
-        out.delete();        
+    public void cleanFiles() {
+        out.delete();
     }
 
     @Test
@@ -43,20 +44,20 @@ public class CompilationTest {
     }
 
     @Test
-    public void installerShouldContainHelloPanelClass() throws Exception {
+    public void installerShouldContainInstallerClass() throws Exception {
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         c.executeCompiler();
-        assertZipContainFile(out, "HelloPanel.class");
+        assertZipContainsMatch(out, StringContains.containsString("Installer.class"));
     }
 
     @Test
     public void installerShouldContainDebugClass() throws Exception {
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         c.executeCompiler();
-        assertZipContainFile(out, "Debug.class");
+        assertZipContainsMatch(out, StringContains.containsString("Debug.class"));
     }
 
-    private void assertZipContainFile(File inFile, String file) throws IOException {
+    private void assertZipContainsMatch(File inFile, Matcher<String> stringMatcher) throws IOException {
         List<String> fileList = new ArrayList<String>();
         FileInputStream fis = new FileInputStream(inFile);
         ZipInputStream zis = new ZipInputStream(fis);
@@ -67,7 +68,7 @@ public class CompilationTest {
         }
         zis.close();
         assertThat(fileList, IsCollectionContaining.hasItem(
-                StringContains.containsString(file)
+                stringMatcher
         ));
     }
 }

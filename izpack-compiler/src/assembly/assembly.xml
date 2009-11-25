@@ -21,7 +21,7 @@
             <unpack>false</unpack>
             <scope>runtime</scope>
             <excludes>
-                <include>org.codehaus.izpack:izpack-util</include>                
+                <exclude>org.codehaus.izpack:izpack-util</exclude>                
                 <exclude>org.codehaus.izpack:izpack-compiler</exclude>
                 <exclude>org.codehaus.izpack:izpack-native</exclude>
             </excludes>

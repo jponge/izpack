@@ -26,7 +26,7 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.*;
+import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.IXMLWriter;
@@ -34,12 +34,8 @@ import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.compiler.CompilerListener;
-import com.izforge.izpack.installer.DataValidator;
-import com.izforge.izpack.installer.HelpWindow;
-import com.izforge.izpack.data.InstallerRequirement;
-import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.data.PanelAction.ActionStage;
+import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
@@ -1364,11 +1360,11 @@ public class CompilerConfig extends Thread {
                 }
             }
             // adding helps
-            Vector helps = xmlPanel.getChildrenNamed(HelpWindow.HELP_TAG);
+            Vector helps = xmlPanel.getChildrenNamed(AutomatedInstallData.HELP_TAG);
             if (helps != null) {
                 for (int helpIndex = 0; helpIndex < helps.size(); helpIndex++) {
                     IXMLElement help = (IXMLElement) helps.get(helpIndex);
-                    String iso3 = help.getAttribute(HelpWindow.ISO3_ATTRIBUTE);
+                    String iso3 = help.getAttribute(AutomatedInstallData.ISO3_ATTRIBUTE);
                     String resourceId;
                     if (panelid == null) {
                         resourceId = className + "_" + panelCounter + "_help_" + iso3 + ".html";
@@ -1378,7 +1374,7 @@ public class CompilerConfig extends Thread {
                     panel.addHelp(iso3, resourceId);
 
                     URL originalUrl = findProjectResource(help
-                            .getAttribute(HelpWindow.SRC_ATTRIBUTE), "Help", help);
+                            .getAttribute(AutomatedInstallData.SRC_ATTRIBUTE), "Help", help);
                     URL helpUrl = originalUrl;
                     compiler.addResource(resourceId, helpUrl);
                 }

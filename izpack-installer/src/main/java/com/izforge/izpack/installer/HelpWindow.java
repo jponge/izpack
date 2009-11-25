@@ -37,15 +37,6 @@ import java.net.URL;
  */
 public class HelpWindow extends JDialog implements HyperlinkListener, ActionListener {
 
-    /**
-     * Helps information
-     */
-    public final static String HELP_TAG = "help";
-
-    public final static String ISO3_ATTRIBUTE = "iso3";
-
-    public final static String SRC_ATTRIBUTE = "src";
-
     private static final long serialVersionUID = -357544689286217809L;
 
     private JPanel contentPane = null;
