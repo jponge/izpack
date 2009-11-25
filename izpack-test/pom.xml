@@ -19,6 +19,14 @@
             <groupId>${groupId}</groupId>
             <artifactId>izpack-dist</artifactId>
             <version>${version}</version>
+            <!-- We don't want them in classpath during test -->
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>izpack-installer</artifactId>
+                    <groupId>${groupId}</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
