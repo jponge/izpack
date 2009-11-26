@@ -23,6 +23,8 @@ package com.izforge.izpack.installer;
 
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.injectors.ConstructorInjection;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -40,12 +42,26 @@ public class Installer {
     public static final int CONSOLE_INSTALL = 0, CONSOLE_GEN_TEMPLATE = 1, CONSOLE_FROM_TEMPLATE = 2,
             CONSOLE_FROM_SYSTEMPROPERTIES = 3, CONSOLE_FROM_SYSTEMPROPERTIESMERGE = 4;
 
+    private DefaultPicoContainer pico;
+
     /*
     * The main method (program entry point).
     *
     * @param args The arguments passed on the command-line.
     */
     public static void main(String[] args) {
+        Installer installer = new Installer();
+        installer.initBinding();
+        installer.start(args);
+    }
+
+    private void initBinding() {
+        pico = new DefaultPicoContainer(new ConstructorInjection());
+        pico.addComponent(GUIInstaller.class);
+        pico.addComponent(AutomatedInstaller.class);
+    }
+
+    private  void start(String[] args) {
         Debug.log(" - Logger initialized at '" + new Date(System.currentTimeMillis()) + "'.");
 
         Debug.log(" - commandline args: " + StringTool.stringArrayToSpaceSeparatedString(args));

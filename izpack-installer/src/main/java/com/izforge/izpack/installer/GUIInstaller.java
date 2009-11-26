@@ -78,6 +78,8 @@ public class GUIInstaller extends InstallerBase {
      */
     private static HashMap isoTable;
 
+    private InstallerFrame installerFrame;
+
     /**
      * The constructor.
      *
@@ -85,7 +87,9 @@ public class GUIInstaller extends InstallerBase {
      */
     public GUIInstaller() throws Exception {
         try {
-            init();
+            initData();
+            // We launch the installer GUI
+            loadGui();
         } catch (Exception e) {
             showFatalError(e);
             throw e;
@@ -103,15 +107,13 @@ public class GUIInstaller extends InstallerBase {
         }
     }
 
-    private void init() throws Exception {
-
+    private void initData() throws Exception {
         this.installdata = new InstallData();
-
         // Loads the installation data
         loadInstallData(installdata);
 
         // add the GUI install data
-        loadGUIInstallData();
+        loadGUIInstallData(this.installdata);
 
         // Sets up the GUI L&F
         loadLookAndFeel();
@@ -123,9 +125,8 @@ public class GUIInstaller extends InstallerBase {
         // Check for already running instance
         checkLockFile();
 
-//      Loads the suitable langpack
+        // Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable() {
-
             public void run() {
                 try {
                     loadLangPack();
@@ -139,7 +140,7 @@ public class GUIInstaller extends InstallerBase {
         // create the resource manager (after the language selection!)
         ResourceManager.create(this.installdata);
 
-//      load conditions
+        // load conditions
         loadConditions(installdata);
 
         // loads installer conditions
@@ -157,19 +158,31 @@ public class GUIInstaller extends InstallerBase {
 
         // Load custom langpack if exist.
         addCustomLangpack(installdata);
+        configureGuiButtons();
+    }
 
-        // We launch the installer GUI
+    private void loadGui() {
         SwingUtilities.invokeLater(new Runnable() {
-
             public void run() {
                 try {
-                    loadGUI();
+                    String title = getTitle();
+                    installerFrame = new InstallerFrame(title, GUIInstaller.this.installdata, GUIInstaller.this);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    /**
+    *
+*/
+    private void configureGuiButtons() {
+        UIManager.put("OptionPane.yesButtonText", installdata.getLangpack().getString("installer.yes"));
+        UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
+        UIManager.put("OptionPane.cancelButtonText", installdata.getLangpack()
+                .getString("installer.cancel"));
     }
 
     public void showMissingRequirementMessage(String message) {
@@ -179,12 +192,13 @@ public class GUIInstaller extends InstallerBase {
     /**
      * Load GUI preference information.
      *
+     * @param installdata
      * @throws Exception
      */
-    public void loadGUIInstallData() throws Exception {
+    public void loadGUIInstallData(InstallData installdata) throws Exception {
         InputStream in = GUIInstaller.class.getResourceAsStream("/GUIPrefs");
         ObjectInputStream objIn = new ObjectInputStream(in);
-        this.installdata.guiPrefs = (GUIPrefs) objIn.readObject();
+        installdata.guiPrefs = (GUIPrefs) objIn.readObject();
         objIn.close();
     }
 
@@ -533,20 +547,6 @@ public class GUIInstaller extends InstallerBase {
             VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
             return vs.substitute(message, null);
         }
-    }
-
-    /**
-     * Loads the GUI.
-     *
-     * @throws Exception Description of the Exception
-     */
-    private void loadGUI() throws Exception {
-        UIManager.put("OptionPane.yesButtonText", installdata.getLangpack().getString("installer.yes"));
-        UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
-        UIManager.put("OptionPane.cancelButtonText", installdata.getLangpack()
-                .getString("installer.cancel"));
-        String title = getTitle();
-        new InstallerFrame(title, this.installdata, this);
     }
 
     /**
@@ -933,5 +933,9 @@ public class GUIInstaller extends InstallerBase {
             // We return
             return this;
         }
+    }
+
+    public InstallerFrame getInstallerFrame() {
+        return installerFrame;
     }
 }
