@@ -73,8 +73,6 @@ public class AutomatedInstaller extends InstallerBase {
 
         File input = new File(inputFilename);
 
-        // Loads the installation data
-        loadInstallData(this.idata);
 
         // Loads the xml data
         this.idata.setXmlData(getXMLData(input));
@@ -89,12 +87,7 @@ public class AutomatedInstaller extends InstallerBase {
         // create the resource manager singleton
         ResourceManager.create(this.idata);
 
-        // Load custom langpack if exist.
-        addCustomLangpack(this.idata);
-
         this.panelInstanceCount = new TreeMap<String, Integer>();
-        // load conditions
-        loadConditions(this.idata);
 
         // loads installer conditions
         loadInstallerRequirements();
@@ -341,7 +334,7 @@ public class AutomatedInstaller extends InstallerBase {
 
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
-                refreshDynamicVariables(substitutor, this.idata);
+                refreshDynamicVariables(substitutor, this.idata, rules);
             }
 
             // this does nothing if the uninstaller was not included

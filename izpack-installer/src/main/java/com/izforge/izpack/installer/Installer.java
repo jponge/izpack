@@ -113,7 +113,7 @@ public class Installer {
             switch (type) {
                 case INSTALLER_GUI:
 //                    Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
-
+                    
                     break;
 
                 case INSTALLER_AUTO:
@@ -122,7 +122,8 @@ public class Installer {
                     break;
 
                 case INSTALLER_CONSOLE:
-                    ConsoleInstaller consoleInstaller = new ConsoleInstaller(langcode);
+                    ConsoleInstaller consoleInstaller = new ConsoleInstaller(null, null);
+//                    this.installdata.setLocaleISO3(langcode);
                     consoleInstaller.run(consoleAction, path);
                     break;
             }

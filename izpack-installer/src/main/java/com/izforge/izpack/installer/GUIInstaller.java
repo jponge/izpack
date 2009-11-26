@@ -112,27 +112,19 @@ public class GUIInstaller extends InstallerBase {
     }
 
     private void initData(final InstallData installdata) throws Exception {
-        // Loads the installation data
-        loadInstallData(installdata);
-
-        // add the GUI install data
-        loadGUIInstallData(installdata);
-
         // Sets up the GUI L&F
         loadLookAndFeel(installdata);
-
         // Checks the Java version
         checkJavaVersion(installdata);
         checkJDKAvailable(installdata);
-
         // Check for already running instance
-        checkLockFile(this.installdata);
+        checkLockFile(installdata);
 
         // Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 try {
-                    loadLangPack(GUIInstaller.this.installdata);
+                    loadLangPack(installdata);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -143,25 +135,18 @@ public class GUIInstaller extends InstallerBase {
         // create the resource manager (after the language selection!)
         ResourceManager.create(installdata);
 
-        // load conditions
-        loadConditions(installdata);
+        configureGuiButtons(installdata);
 
         // loads installer conditions
         loadInstallerRequirements();
-
         // load dynamic variables
         loadDynamicVariables();
-
         // check installer conditions
         if (!checkInstallerRequirements(installdata)) {
             Debug.log("not all installerconditions are fulfilled.");
             System.exit(-1);
             return;
         }
-
-        // Load custom langpack if exist.
-        addCustomLangpack(installdata);
-        configureGuiButtons(installdata);
     }
 
     private void loadGui() {
@@ -169,13 +154,66 @@ public class GUIInstaller extends InstallerBase {
             public void run() {
                 try {
                     String title = getTitle();
-                    installerFrame = new InstallerFrame(title, GUIInstaller.this.installdata, GUIInstaller.this);
+                    installerFrame = new InstallerFrame(title, GUIInstaller.this.installdata, GUIInstaller.this,null);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    /**
+     * Loads the suitable langpack.
+     *
+     * @param installdata
+     * @throws Exception Description of the Exception
+     */
+    private void loadLangPack(InstallData installdata) throws Exception {
+        // Initialisations
+        List availableLangPacks = getAvailableLangPacks();
+        int npacks = availableLangPacks.size();
+        if (npacks == 0) {
+            throw new Exception("no language pack available");
+        }
+        String selectedPack;
+
+        // Dummy Frame
+        JFrame frame = new JFrame();
+        frame.setIconImage(new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"))
+                .getImage());
+
+        Dimension frameSize = frame.getSize();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2 - 10);
+
+        // We get the langpack name
+        if (npacks != 1) {
+            LanguageDialog picker = new LanguageDialog(frame, availableLangPacks.toArray());
+            picker.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
+            picker.setModal(true);
+            picker.toFront();
+            // frame.setVisible(true);
+            frame.setVisible(false);
+            picker.setVisible(true);
+
+            selectedPack = (String) picker.getSelection();
+            if (selectedPack == null) {
+                throw new Exception("installation canceled");
+            }
+        } else {
+            selectedPack = (String) availableLangPacks.get(0);
+        }
+
+        // We add an xml data information
+        installdata.getXmlData().setAttribute("langpack", selectedPack);
+
+        // We load the langpack
+        installdata.setLocaleISO3(selectedPack);
+        installdata.setVariable(ScriptParser.ISO3_LANG, installdata.getLocaleISO3());
+        InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
+        installdata.setLangpack(new LocaleDatabase(in));
     }
 
     /**
@@ -193,18 +231,6 @@ public class GUIInstaller extends InstallerBase {
         JOptionPane.showMessageDialog(null, message);
     }
 
-    /**
-     * Load GUI preference information.
-     *
-     * @param installdata
-     * @throws Exception
-     */
-    public void loadGUIInstallData(InstallData installdata) throws Exception {
-        InputStream in = GUIInstaller.class.getResourceAsStream("/GUIPrefs");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        installdata.guiPrefs = (GUIPrefs) objIn.readObject();
-        objIn.close();
-    }
 
     /**
      * Sets a lock file. Not using java.nio.channels.FileLock to prevent
@@ -316,59 +342,6 @@ public class GUIInstaller extends InstallerBase {
                 System.exit(1);
             }
         }
-    }
-
-    /**
-     * Loads the suitable langpack.
-     *
-     * @throws Exception Description of the Exception
-	 * @param installdata
-     */
-    private void loadLangPack(InstallData installdata) throws Exception {
-        // Initialisations
-        List availableLangPacks = getAvailableLangPacks();
-        int npacks = availableLangPacks.size();
-        if (npacks == 0) {
-            throw new Exception("no language pack available");
-        }
-        String selectedPack;
-
-        // Dummy Frame
-        JFrame frame = new JFrame();
-        frame.setIconImage(new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"))
-                .getImage());
-
-        Dimension frameSize = frame.getSize();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation((screenSize.width - frameSize.width) / 2,
-                (screenSize.height - frameSize.height) / 2 - 10);
-
-        // We get the langpack name
-        if (npacks != 1) {
-            LanguageDialog picker = new LanguageDialog(frame, availableLangPacks.toArray());
-            picker.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
-            picker.setModal(true);
-            picker.toFront();
-            // frame.setVisible(true);
-            frame.setVisible(false);
-            picker.setVisible(true);
-
-            selectedPack = (String) picker.getSelection();
-            if (selectedPack == null) {
-                throw new Exception("installation canceled");
-            }
-        } else {
-            selectedPack = (String) availableLangPacks.get(0);
-        }
-
-        // We add an xml data information
-        installdata.getXmlData().setAttribute("langpack", selectedPack);
-
-        // We load the langpack
-        installdata.setLocaleISO3(selectedPack);
-        installdata.setVariable(ScriptParser.ISO3_LANG, installdata.getLocaleISO3());
-        InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
-        installdata.setLangpack(new LocaleDatabase(in));
     }
 
     /**

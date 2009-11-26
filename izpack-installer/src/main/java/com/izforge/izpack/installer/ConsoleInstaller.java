@@ -48,19 +48,18 @@ import java.util.Properties;
  */
 public class ConsoleInstaller extends InstallerBase {
 
-    private AutomatedInstallData installdata = new AutomatedInstallData();
+    private AutomatedInstallData installdata;
 
     private boolean result = false;
 
     private Properties properties;
 
     private PrintWriter printWriter;
+    private RulesEngine rules;
 
-    public ConsoleInstaller(String langcode) throws Exception {
+    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules) throws Exception {
         super();
-        loadInstallData(this.installdata);
-
-        this.installdata.setLocaleISO3(langcode);
+        this.installdata = installdata;
         // Fallback: choose the first listed language pack if not specified via commandline
         if (this.installdata.getLocaleISO3() == null) {
             this.installdata.setLocaleISO3(getAvailableLangPacks().get(0));
@@ -71,14 +70,12 @@ public class ConsoleInstaller extends InstallerBase {
         this.installdata.setLangpack(new LocaleDatabase(in));
         this.installdata.setVariable(ScriptParser.ISO3_LANG, this.installdata.getLocaleISO3());
         ResourceManager.create(this.installdata);
-        loadConditions(installdata);
         loadInstallerRequirements();
         loadDynamicVariables();
-        if (!checkInstallerRequirements(installdata)) {
+        if (!checkInstallerRequirements(this.installdata)) {
             Debug.log("not all installerconditions are fulfilled.");
             return;
         }
-        addCustomLangpack(installdata);
     }
 
     protected void iterateAndPerformAction(String strAction) throws Exception {
@@ -122,7 +119,7 @@ public class ConsoleInstaller extends InstallerBase {
                 if (consoleHelperClass != null) {
                     try {
                         Debug.log("Instantiate :" + consoleHelperClassName);
-                        refreshDynamicVariables(substitutor, installdata);
+                        refreshDynamicVariables(substitutor, installdata, rules);
                         consoleHelperInstance = consoleHelperClass.newInstance();
                     }
                     catch (Exception e) {

@@ -196,11 +196,10 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata, InstallerBase parentInstaller)
+    public InstallerFrame(String title, InstallData installdata, InstallerBase parentInstaller, RulesEngine rules)
             throws Exception {
         super(title);
         this.parentInstaller = parentInstaller;
-        this.rules = this.parentInstaller.getRules();
         substitutor = new VariableSubstitutor(installdata.getVariables());
         guiListener = new ArrayList<GUIListener>();
         visiblePanelMapping = new ArrayList<Integer>();
@@ -712,7 +711,7 @@ public class InstallerFrame extends JFrame {
      */
     protected void switchPanel(int last) {
         // refresh dynamic variables every time, a panel switch is done
-        this.parentInstaller.refreshDynamicVariables(substitutor, installdata);
+        this.parentInstaller.refreshDynamicVariables(substitutor, installdata, rules);
         try {
             if (installdata.getCurPanelNumber() < last) {
                 isBack = true;
@@ -1236,7 +1235,7 @@ public class InstallerFrame extends JFrame {
     public void install(AbstractUIProgressHandler listener) {
         IUnpacker unpacker = UnpackerFactory.getUnpacker(this.installdata.getInfo()
                 .getUnpackerClassName(), installdata, listener);
-        unpacker.setRules(this.rules);
+        unpacker.setRules(rules);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpackerthread.start();
     }
@@ -1984,20 +1983,6 @@ public class InstallerFrame extends JFrame {
     }
 
     /**
-     * @return the rules
-     */
-    public RulesEngine getRules() {
-        return this.rules;
-    }
-
-    /**
-     * @param rules the rules to set
-     */
-    public void setRules(RulesEngine rules) {
-        this.rules = rules;
-    }
-
-    /**
      * Shows or hides Help button depending on <code>show</code> parameter
      *
      * @param show - flag to show or hide Help button
@@ -2005,5 +1990,9 @@ public class InstallerFrame extends JFrame {
     private void showHelpButton(boolean show) {
         if (this.helpButton == null) return;
         this.helpButton.setVisible(show);
+    }
+
+    public RulesEngine getRules() {
+        return rules;
     }
 }

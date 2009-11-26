@@ -58,7 +58,7 @@ public class InstallData extends AutomatedInstallData implements Serializable {
     /**
      * Constructs a new instance of this class.
      */
-    protected InstallData() {
+    public InstallData() {
         super();
     }
 }
