@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.data;
 
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.Panel;

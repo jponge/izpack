@@ -28,7 +28,7 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.PackColor;
-import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 

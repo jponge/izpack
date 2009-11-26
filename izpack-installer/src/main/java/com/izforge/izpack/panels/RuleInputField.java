@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
 import org.apache.regexp.RE;

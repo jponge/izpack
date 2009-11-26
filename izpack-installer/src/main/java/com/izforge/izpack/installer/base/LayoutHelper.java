@@ -24,7 +24,7 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.data.InstallData;
 
 import javax.swing.*;
 import java.awt.*;

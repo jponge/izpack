@@ -19,6 +19,7 @@ package com.izforge.izpack.installer;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import junit.framework.TestCase;
 import org.w3c.dom.Document;

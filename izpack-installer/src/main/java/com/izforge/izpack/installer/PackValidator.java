@@ -23,6 +23,7 @@
  */
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.util.AbstractUIHandler;
 
 

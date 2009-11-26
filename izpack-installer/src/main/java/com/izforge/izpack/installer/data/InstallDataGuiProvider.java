@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.data;
 
 import org.picocontainer.injectors.ProviderAdapter;
 

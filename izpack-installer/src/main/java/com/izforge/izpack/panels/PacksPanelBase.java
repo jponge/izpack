@@ -32,6 +32,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;

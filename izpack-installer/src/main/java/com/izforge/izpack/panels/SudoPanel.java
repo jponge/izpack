@@ -24,7 +24,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.InstallData;
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
