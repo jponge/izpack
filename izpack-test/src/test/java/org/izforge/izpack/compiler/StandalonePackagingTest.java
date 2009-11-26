@@ -1,4 +1,4 @@
-package com.izforge.izpack.compiler;
+package org.izforge.izpack.compiler;
 
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;

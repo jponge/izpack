@@ -1,4 +1,4 @@
-package com.izforge.izpack.compiler;
+package org.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.CompilerConfig;
 import org.hamcrest.core.Is;
