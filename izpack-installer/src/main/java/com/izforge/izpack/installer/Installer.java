@@ -57,8 +57,8 @@ public class Installer {
 
     private void initBinding() {
         pico = new DefaultPicoContainer(new ConstructorInjection());
-        pico.addComponent(GUIInstaller.class);
-        pico.addComponent(AutomatedInstaller.class);
+        pico.addComponent(GUIInstaller.class).addComponent(AutomatedInstaller.class);
+		
     }
 
     private  void start(String[] args) {
@@ -112,7 +112,8 @@ public class Installer {
 
             switch (type) {
                 case INSTALLER_GUI:
-                    Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
+//                    Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
+
                     break;
 
                 case INSTALLER_AUTO:

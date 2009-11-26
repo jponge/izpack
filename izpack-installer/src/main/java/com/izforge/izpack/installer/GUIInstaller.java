@@ -87,7 +87,7 @@ public class GUIInstaller extends InstallerBase {
      */
     public GUIInstaller() throws Exception {
         try {
-            initData();
+            initData(this.installdata);
             // We launch the installer GUI
             loadGui();
         } catch (Exception e) {
@@ -107,29 +107,28 @@ public class GUIInstaller extends InstallerBase {
         }
     }
 
-    private void initData() throws Exception {
-        this.installdata = new InstallData();
+    private void initData(final InstallData installdata) throws Exception {
         // Loads the installation data
         loadInstallData(installdata);
 
         // add the GUI install data
-        loadGUIInstallData(this.installdata);
+        loadGUIInstallData(installdata);
 
         // Sets up the GUI L&F
-        loadLookAndFeel();
+        loadLookAndFeel(installdata);
 
         // Checks the Java version
-        checkJavaVersion();
-        checkJDKAvailable();
+        checkJavaVersion(installdata);
+        checkJDKAvailable(installdata);
 
         // Check for already running instance
-        checkLockFile();
+        checkLockFile(this.installdata);
 
         // Loads the suitable langpack
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 try {
-                    loadLangPack();
+                    loadLangPack(GUIInstaller.this.installdata);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -138,7 +137,7 @@ public class GUIInstaller extends InstallerBase {
         });
 
         // create the resource manager (after the language selection!)
-        ResourceManager.create(this.installdata);
+        ResourceManager.create(installdata);
 
         // load conditions
         loadConditions(installdata);
@@ -158,7 +157,7 @@ public class GUIInstaller extends InstallerBase {
 
         // Load custom langpack if exist.
         addCustomLangpack(installdata);
-        configureGuiButtons();
+        configureGuiButtons(installdata);
     }
 
     private void loadGui() {
@@ -177,8 +176,9 @@ public class GUIInstaller extends InstallerBase {
 
     /**
     *
-*/
-    private void configureGuiButtons() {
+	 * @param installdata
+	 */
+    private void configureGuiButtons(InstallData installdata) {
         UIManager.put("OptionPane.yesButtonText", installdata.getLangpack().getString("installer.yes"));
         UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
         UIManager.put("OptionPane.cancelButtonText", installdata.getLangpack()
@@ -208,10 +208,11 @@ public class GUIInstaller extends InstallerBase {
      * fails or is killed.
      *
      * @throws Exception Description of the Exception
+	 * @param installdata
      */
-    private void checkLockFile() throws Exception {
+    private void checkLockFile(InstallData installdata) throws Exception {
         String tempDir = System.getProperty("java.io.tmpdir");
-        String appName = this.installdata.getInfo().getAppName();
+        String appName = installdata.getInfo().getAppName();
         String fileName = "iz-" + appName + ".tmp";
         Debug.trace("Making temp file: " + fileName);
         Debug.trace("In temp directory: " + tempDir);
@@ -266,10 +267,11 @@ public class GUIInstaller extends InstallerBase {
      * Checks the Java version.
      *
      * @throws Exception Description of the Exception
+	 * @param installdata
      */
-    private void checkJavaVersion() throws Exception {
+    private void checkJavaVersion(InstallData installdata) throws Exception {
         String version = System.getProperty("java.version");
-        String required = this.installdata.getInfo().getJavaVersion();
+        String required = installdata.getInfo().getJavaVersion();
         if (version.compareTo(required) < 0) {
             StringBuffer msg = new StringBuffer();
             msg.append("The application that you are trying to install requires a ");
@@ -288,9 +290,10 @@ public class GUIInstaller extends InstallerBase {
 
     /**
      * Checks if a JDK is available.
-     */
-    private void checkJDKAvailable() {
-        if (!this.installdata.getInfo().isJdkRequired()) {
+	 * @param installdata
+	 */
+    private void checkJDKAvailable(InstallData installdata) {
+        if (!installdata.getInfo().isJdkRequired()) {
             return;
         }
 
@@ -315,8 +318,9 @@ public class GUIInstaller extends InstallerBase {
      * Loads the suitable langpack.
      *
      * @throws Exception Description of the Exception
+	 * @param installdata
      */
-    private void loadLangPack() throws Exception {
+    private void loadLangPack(InstallData installdata) throws Exception {
         // Initialisations
         List availableLangPacks = getAvailableLangPacks();
         int npacks = availableLangPacks.size();
@@ -354,22 +358,22 @@ public class GUIInstaller extends InstallerBase {
         }
 
         // We add an xml data information
-        this.installdata.getXmlData().setAttribute("langpack", selectedPack);
+        installdata.getXmlData().setAttribute("langpack", selectedPack);
 
         // We load the langpack
         installdata.setLocaleISO3(selectedPack);
         installdata.setVariable(ScriptParser.ISO3_LANG, installdata.getLocaleISO3());
         InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
-        this.installdata.setLangpack(new LocaleDatabase(in));
-
+        installdata.setLangpack(new LocaleDatabase(in));
     }
 
     /**
      * Loads the suitable L&F.
      *
      * @throws Exception Description of the Exception
+	 * @param installdata
      */
-    protected void loadLookAndFeel() throws Exception {
+    protected void loadLookAndFeel(InstallData installdata) throws Exception {
         // Do we have any preference for this OS ?
         String syskey = "unix";
         if (OsVersion.IS_WINDOWS) {
@@ -620,7 +624,7 @@ public class GUIInstaller extends InstallerBase {
             super(frame);
 
             try {
-                loadLookAndFeel();
+                loadLookAndFeel(GUIInstaller.this.installdata);
             }
             catch (Exception err) {
                 err.printStackTrace();

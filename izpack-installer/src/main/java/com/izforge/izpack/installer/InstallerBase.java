@@ -507,7 +507,7 @@ public class InstallerBase {
     public void loadInstallerRequirements() throws Exception {
         InputStream in = InstallerBase.class.getResourceAsStream("/installerrequirements");
         ObjectInputStream objIn = new ObjectInputStream(in);
-        this.installerrequirements = (List<InstallerRequirement>) objIn.readObject();
+        installerrequirements = (List<InstallerRequirement>) objIn.readObject();
         objIn.close();
     }
 
