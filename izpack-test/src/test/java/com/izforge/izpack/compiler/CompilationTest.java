@@ -1,8 +1,8 @@
-package org.izforge.izpack.compiler;
+package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.compiler.CompilerConfig;
 import org.hamcrest.core.Is;
-import org.izforge.izpack.AssertionHelper;
+import com.izforge.izpack.AssertionHelper;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

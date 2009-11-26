@@ -1,8 +1,8 @@
-package org.izforge.izpack.compiler;
+package com.izforge.izpack.compiler;
 
 import org.hamcrest.core.Is;
 import org.hamcrest.text.StringContains;
-import org.izforge.izpack.AssertionHelper;
+import com.izforge.izpack.AssertionHelper;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +37,6 @@ public class StandalonePackagingTest {
         AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller")));
         AssertionHelper.assertZipContainsMatch(standaloneCompiler, StringContains.containsString(pathProperties.getProperty("uninstaller-ext")));
     }
-
 
     @Test
     public void skeletonInstallerShouldContainClasses() throws Exception {

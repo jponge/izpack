@@ -1,4 +1,4 @@
-package org.izforge.izpack;
+package com.izforge.izpack;
 
 import java.net.MalformedURLException;
 import java.net.URL;
