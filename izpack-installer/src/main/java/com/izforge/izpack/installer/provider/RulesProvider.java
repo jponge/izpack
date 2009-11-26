@@ -1,4 +1,4 @@
-package com.izforge.izpack.installer.data;
+package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLParser;
@@ -6,6 +6,7 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
+import org.picocontainer.injectors.Provider;
 import org.picocontainer.injectors.ProviderAdapter;
 
 import java.io.InputStream;
@@ -15,7 +16,7 @@ import java.util.Map;
 /**
  * Injection provider for rules.
  */
-public class RulesProvider extends ProviderAdapter {
+public class RulesProvider implements Provider {
 
     /**
      * Resource name of the conditions specification
@@ -25,7 +26,7 @@ public class RulesProvider extends ProviderAdapter {
     /**
      * Reads the conditions specification file and initializes the rules engine.
      */
-    public RulesEngine loadRulesEngine(AutomatedInstallData installdata) {
+    public RulesEngine provide(AutomatedInstallData installdata) {
         // try to load already parsed conditions
         RulesEngine res = null;
         try {

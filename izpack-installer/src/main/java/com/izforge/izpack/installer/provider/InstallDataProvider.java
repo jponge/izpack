@@ -1,13 +1,15 @@
-package com.izforge.izpack.installer.data;
+package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.GUIInstaller;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
 import com.izforge.izpack.installer.base.InstallerBase;
+import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
+import org.picocontainer.injectors.Provider;
 import org.picocontainer.injectors.ProviderAdapter;
 
 import javax.swing.*;
@@ -20,7 +22,7 @@ import java.util.*;
 /**
  * Install data loader
  */
-public class InstallDataGuiProvider extends ProviderAdapter {
+public class InstallDataProvider implements Provider {
 
     /**
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
@@ -28,7 +30,7 @@ public class InstallDataGuiProvider extends ProviderAdapter {
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
 
-    public InstallData provideData() throws Exception, InterruptedException {
+    public InstallData provide() throws Exception, InterruptedException {
         final InstallData installData = new InstallData();
         // Loads the installation data
         loadInstallData(installData);

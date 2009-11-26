@@ -88,19 +88,10 @@ public class GUIInstaller extends InstallerBase {
      * The constructor.
      *
      * @throws Exception Description of the Exception
+     * @param installdata
      */
-    public GUIInstaller() throws Exception {
-        try {
-            initData(this.installdata);
-            // We launch the installer GUI
-            loadGui();
-        } catch (Exception e) {
-            showFatalError(e);
-            throw e;
-        } catch (Error e) {
-            showFatalError(e);
-            throw e;
-        }
+    public GUIInstaller(InstallData installdata) throws Exception {
+        this.installdata = installdata;
     }
 
     private void showFatalError(Throwable e) {
@@ -111,7 +102,7 @@ public class GUIInstaller extends InstallerBase {
         }
     }
 
-    private void initData(final InstallData installdata) throws Exception {
+    public void initData(final InstallData installdata) throws Exception {
         // Sets up the GUI L&F
         loadLookAndFeel(installdata);
         // Checks the Java version
@@ -149,7 +140,7 @@ public class GUIInstaller extends InstallerBase {
         }
     }
 
-    private void loadGui() {
+    public void loadGui() {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {

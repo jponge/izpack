@@ -21,10 +21,16 @@
 
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.installer.provider.InstallDataProvider;
+import com.izforge.izpack.installer.provider.RulesProvider;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
 import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.Parameter;
 import org.picocontainer.injectors.ConstructorInjection;
+import org.picocontainer.injectors.ProviderAdapter;
+import org.picocontainer.parameters.ComponentParameter;
+import org.picocontainer.parameters.ConstantParameter;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -49,19 +55,26 @@ public class Installer {
     *
     * @param args The arguments passed on the command-line.
     */
+
     public static void main(String[] args) {
         Installer installer = new Installer();
-        installer.initBinding();
+
         installer.start(args);
     }
 
-    private void initBinding() {
+    private void initBinding(String langcode) {
         pico = new DefaultPicoContainer(new ConstructorInjection());
-        pico.addComponent(GUIInstaller.class).addComponent(AutomatedInstaller.class);
-		
+        pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
+                .addAdapter(new ProviderAdapter(new RulesProvider()));
+        pico.addComponent(GUIInstaller.class)
+                .addComponent(ConsoleInstaller.class, ConsoleInstaller.class,
+                        new ComponentParameter(),
+                        new ComponentParameter(),
+                        new ConstantParameter(langcode))
+                .addComponent(AutomatedInstaller.class);
     }
 
-    private  void start(String[] args) {
+    private void start(String[] args) {
         Debug.log(" - Logger initialized at '" + new Date(System.currentTimeMillis()) + "'.");
 
         Debug.log(" - commandline args: " + StringTool.stringArrayToSpaceSeparatedString(args));
@@ -109,30 +122,37 @@ public class Installer {
                     System.exit(1);
                 }
             }
-
-            switch (type) {
-                case INSTALLER_GUI:
-//                    Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
-                    
-                    break;
-
-                case INSTALLER_AUTO:
-                    AutomatedInstaller ai = new AutomatedInstaller(path);
-                    ai.doInstall();
-                    break;
-
-                case INSTALLER_CONSOLE:
-                    ConsoleInstaller consoleInstaller = new ConsoleInstaller(null, null);
-//                    this.installdata.setLocaleISO3(langcode);
-                    consoleInstaller.run(consoleAction, path);
-                    break;
-            }
+            initBinding(langcode);
+            launchInstall(type, consoleAction, path);
 
         } catch (Exception e) {
             System.err.println("- ERROR -");
             System.err.println(e.toString());
             e.printStackTrace();
             System.exit(1);
+        }
+    }
+
+    private void launchInstall(int type, int consoleAction, String path) throws Exception {
+        switch (type) {
+            case INSTALLER_GUI:
+                GUIInstaller guiInstaller = pico.getComponent(GUIInstaller.class);
+                guiInstaller.loadGui();
+//                    Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
+
+                break;
+
+            case INSTALLER_AUTO:
+//                AutomatedInstaller ai = new AutomatedInstaller(path);
+                pico.getComponent(AutomatedInstaller.class).doInstall();
+                break;
+
+            case INSTALLER_CONSOLE:
+                pico.getComponent(ConsoleInstaller.class).run(consoleAction, path);
+//                ConsoleInstaller consoleInstaller = new ConsoleInstaller(null, null, null);
+//                    this.installdata.setLocaleISO3(langcode);
+//                consoleInstaller.run(consoleAction, path);
+                break;
         }
     }
 }
