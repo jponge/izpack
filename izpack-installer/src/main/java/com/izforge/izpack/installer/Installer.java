@@ -22,17 +22,12 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.provider.InstallDataProvider;
-import com.izforge.izpack.installer.provider.RulesProvider;
+import com.izforge.izpack.installer.provider.*;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
-import com.izforge.izpack.util.VariableSubstitutor;
 import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.Parameter;
 import org.picocontainer.injectors.ConstructorInjection;
 import org.picocontainer.injectors.ProviderAdapter;
-import org.picocontainer.parameters.ComponentParameter;
-import org.picocontainer.parameters.ConstantParameter;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -61,22 +56,21 @@ public class Installer {
 
     public static void main(String[] args) {
         Installer installer = new Installer();
-
         installer.start(args);
     }
 
-    private void initBinding(String langcode) {
+    public Installer() {
         pico = new DefaultPicoContainer(new ConstructorInjection());
         pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
+                .addAdapter(new ProviderAdapter(new GUIInstallerProvider()))
+                .addAdapter(new ProviderAdapter(new IconsProvider()))
+                .addAdapter(new ProviderAdapter(new InstallerFrameProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
-        pico.addComponent(GUIInstaller.class)
-                .addComponent(ConsoleInstaller.class, ConsoleInstaller.class,
-                        new ComponentParameter(),
-                        new ComponentParameter(),
-                        new ConstantParameter(langcode))
-                .addComponent(AutomatedInstaller.class)
+        pico
+                .addComponent(ConsoleInstaller.class)
                 .addComponent(AutomatedInstaller.class);
     }
+
 
     private void start(String[] args) {
         Debug.log(" - Logger initialized at '" + new Date(System.currentTimeMillis()) + "'.");
@@ -126,7 +120,6 @@ public class Installer {
                     System.exit(1);
                 }
             }
-            initBinding(langcode);
             launchInstall(type, consoleAction, path);
 
         } catch (Exception e) {
@@ -153,7 +146,8 @@ public class Installer {
                 break;
 
             case INSTALLER_CONSOLE:
-                pico.getComponent(ConsoleInstaller.class).run(consoleAction, path);
+                ConsoleInstaller consoleInstaller = pico.getComponent(ConsoleInstaller.class);
+                consoleInstaller.run(consoleAction, path);
 //                ConsoleInstaller consoleInstaller = new ConsoleInstaller(null, null, null);
 //                    this.installdata.setLocaleISO3(langcode);
 //                consoleInstaller.run(consoleAction, path);
@@ -162,7 +156,7 @@ public class Installer {
     }
 
 
-    public void loadGui(final InstallerFrame installerFrame ) {
+    public void loadGui(final InstallerFrame installerFrame) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -174,5 +168,5 @@ public class Installer {
             }
         });
     }
-        
+
 }

@@ -46,10 +46,11 @@ public class CompilationTest {
     }
 
     @Test
-    public void installerShouldContainDebugClass() throws Exception {
+    public void installerShouldContainClasses() throws Exception {
         CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
         c.executeCompiler();
         AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("Debug.class"));
+        AssertionHelper.assertZipContainsMatch(out, StringContains.containsString("ComponentFactory.class"));
     }
 
     @Test

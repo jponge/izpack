@@ -57,11 +57,10 @@ public class ConsoleInstaller extends InstallerBase {
     private PrintWriter printWriter;
     private RulesEngine rules;
 
-    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, String locale) throws Exception {
+    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules) throws Exception {
         super();
         this.installdata = installdata;
         this.rules=rules;
-        this.installdata.setLocaleISO3(locale);
         // Fallback: choose the first listed language pack if not specified via commandline
         if (this.installdata.getLocaleISO3() == null) {
             this.installdata.setLocaleISO3(getAvailableLangPacks().get(0));
