@@ -15,8 +15,10 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.multiunpacker;
 
+import com.izforge.izpack.installer.Installer;
+import com.izforge.izpack.installer.ProgressDialog;
 import com.izforge.izpack.util.SelfModifier;
 import com.izforge.izpack.util.Debug;
 

@@ -30,8 +30,8 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
 
 import javax.swing.*;
 import java.util.Enumeration;
@@ -89,7 +89,7 @@ public class DataCheckPanel extends IzPanel {
     /**
      * When the panel is made active, call the printDebugInfo method.
      *
-     * @see com.izforge.izpack.installer.IzPanel#panelActivate()
+     * @see com.izforge.izpack.installer.base.IzPanel#panelActivate()
      */
     public void panelActivate() {
         printDebugInfo();

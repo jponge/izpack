@@ -27,6 +27,8 @@ import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.installer.base.InstallerBase;
+import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 

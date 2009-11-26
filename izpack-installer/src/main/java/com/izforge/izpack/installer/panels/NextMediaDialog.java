@@ -22,7 +22,7 @@ import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.InstallerFrame;
+import com.izforge.izpack.installer.base.InstallerFrame;
 
 import javax.swing.*;
 import java.awt.*;

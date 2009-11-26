@@ -30,6 +30,8 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
 import com.izforge.izpack.gui.TwoColumnLayout;
 import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.VariableExistenceCondition;
 import com.izforge.izpack.util.*;

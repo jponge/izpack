@@ -22,7 +22,7 @@
 package com.izforge.izpack.installer;
 
 import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.base.IzPanel;
 
 import java.util.Iterator;
 

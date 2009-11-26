@@ -18,13 +18,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.IzPanel.Filler;
+import com.izforge.izpack.installer.InstallData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -355,7 +355,7 @@ public class LayoutHelper implements LayoutConstants {
             case SOUTH:
             case SOUTH_WEST:
                 // Make a header to push the rest to the bottom.
-                Filler dummy = new Filler();
+                IzPanel.Filler dummy = new IzPanel.Filler();
                 GridBagConstraints gbConstraint = (GridBagConstraints) getNextYConstraints();
                 gbConstraint.weighty = 1.0;
                 gbConstraint.fill = GridBagConstraints.BOTH;
@@ -379,7 +379,7 @@ public class LayoutHelper implements LayoutConstants {
             case NORTH:
             case NORTH_WEST:
                 // Make a footer to push the rest to the top.
-                Filler dummy = new Filler();
+                IzPanel.Filler dummy = new IzPanel.Filler();
                 GridBagConstraints gbConstraint = (GridBagConstraints) getNextYConstraints();
                 gbConstraint.weighty = 1.0;
                 gbConstraint.fill = GridBagConstraints.BOTH;

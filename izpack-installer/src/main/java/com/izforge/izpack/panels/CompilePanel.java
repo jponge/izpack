@@ -25,6 +25,8 @@ import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
 
 import javax.swing.*;
 import java.awt.*;

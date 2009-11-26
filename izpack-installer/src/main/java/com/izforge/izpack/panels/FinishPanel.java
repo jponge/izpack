@@ -24,8 +24,8 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallData;
-import com.izforge.izpack.installer.InstallerFrame;
-import com.izforge.izpack.installer.IzPanel;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.VariableSubstitutor;
 

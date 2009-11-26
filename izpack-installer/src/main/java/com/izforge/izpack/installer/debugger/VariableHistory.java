@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.debugger;
 
 import java.util.ArrayList;
 import java.util.List;

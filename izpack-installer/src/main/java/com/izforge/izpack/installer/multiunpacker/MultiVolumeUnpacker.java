@@ -15,11 +15,14 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.multiunpacker;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.event.InstallerListener;
+import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.unpacker.ScriptParser;
+import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.io.CorruptVolumeException;
 import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;

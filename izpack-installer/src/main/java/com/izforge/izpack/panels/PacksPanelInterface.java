@@ -22,7 +22,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.installer.Debugger;
+import com.izforge.izpack.installer.debugger.Debugger;
 
 /**
  * This interface is used to be able to access the common information in the PackPanel and the

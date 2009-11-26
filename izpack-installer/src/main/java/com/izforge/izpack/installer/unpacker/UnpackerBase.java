@@ -18,12 +18,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.event.InstallerListener;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import org.apache.regexp.RE;

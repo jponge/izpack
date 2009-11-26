@@ -20,11 +20,15 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.event.InstallerListener;
+import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.installer.web.WebAccessor;
+import com.izforge.izpack.installer.web.WebRepositoryAccessor;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;

@@ -26,6 +26,8 @@ import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.installer.base.InstallerBase;
+import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.Housekeeper;

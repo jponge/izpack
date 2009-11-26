@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.data.CustomData;
 import com.izforge.izpack.data.*;
@@ -29,6 +29,10 @@ import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.DynamicVariable;
 import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.installer.PrivilegedRunner;
+import com.izforge.izpack.installer.ResourceNotFoundException;
+import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;

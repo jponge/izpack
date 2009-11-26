@@ -26,7 +26,7 @@ import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.installer.Unpacker;
+import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;

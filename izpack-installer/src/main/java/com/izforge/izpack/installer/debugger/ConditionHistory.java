@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.debugger;
 
 import com.izforge.izpack.rules.Condition;
 

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.web;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.data.Pack;

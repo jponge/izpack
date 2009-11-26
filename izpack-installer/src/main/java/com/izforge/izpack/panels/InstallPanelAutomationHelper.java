@@ -24,6 +24,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 

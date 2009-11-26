@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.rules.RulesEngine;
 

@@ -24,6 +24,8 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.util.*;
 
 import java.awt.event.ActionEvent;

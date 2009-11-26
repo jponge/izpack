@@ -27,6 +27,8 @@ import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.os.unix.UnixHelper;

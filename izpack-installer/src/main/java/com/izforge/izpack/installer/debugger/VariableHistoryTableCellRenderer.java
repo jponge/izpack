@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.debugger;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -31,12 +31,12 @@ import java.util.Map;
  * @author Dennis Reil, <Dennis.Reil@reddot.de>
  * @version $Id: $
  */
-public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer {
+public class VariableHistoryTableCellRenderer extends DefaultTableCellRenderer {
     private static final long serialVersionUID = 6779914244548965230L;
-    private Map<String, ConditionHistory> conditionhistory;
+    private Map<String, VariableHistory> variablehistory;
 
-    public ConditionHistoryTableCellRenderer(Map<String, ConditionHistory> conditionhistory) {
-        this.conditionhistory = conditionhistory;
+    public VariableHistoryTableCellRenderer(Map<String, VariableHistory> variablehistory) {
+        this.variablehistory = variablehistory;
     }
 
 
@@ -47,29 +47,28 @@ public class ConditionHistoryTableCellRenderer extends DefaultTableCellRenderer 
                                                    boolean hasFocus, int row, int column) {
         JComponent comp = null;
 
-        ConditionHistory ch = (ConditionHistory) value;
+        VariableHistory vh = (VariableHistory) value;
 
         JLabel label = new JLabel();
         label.setAutoscrolls(true);
         comp = label;
 
-        label.setText(ch.toString());
+        label.setText(vh.getLastValue());
 
         comp.setOpaque(true);
-        if (ch.isNewcondition()) {
+        if (vh.isNewvariable()) {
             comp.setBackground(Color.green);
-        } else if (ch.isChangedcondition()) {
+        } else if (vh.isChanged()) {
             comp.setBackground(Color.yellow);
         }
         return comp;
     }
 
     public void clearState() {
-        for (String s : conditionhistory.keySet()) {
-            ConditionHistory ch = conditionhistory.get(s);
-            ch.clearState();
+        for (String s : variablehistory.keySet()) {
+            VariableHistory vh = variablehistory.get(s);
+            vh.clearState();
         }
     }
 }
-
 

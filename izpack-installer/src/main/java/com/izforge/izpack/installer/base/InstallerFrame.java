@@ -20,7 +20,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.data.*;
@@ -34,6 +34,10 @@ import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
+import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.debugger.Debugger;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 

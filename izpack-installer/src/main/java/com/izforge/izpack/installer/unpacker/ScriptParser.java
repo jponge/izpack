@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.util.OsConstraint;
