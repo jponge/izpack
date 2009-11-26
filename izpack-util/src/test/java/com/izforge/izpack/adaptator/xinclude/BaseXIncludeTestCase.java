@@ -3,6 +3,9 @@ package com.izforge.izpack.adaptator.xinclude;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import static org.hamcrest.MatcherAssert.assertThat;
+import org.hamcrest.core.Is;
+import org.hamcrest.text.IsEqualIgnoringWhiteSpace;
 import org.junit.Test;
 
 import java.net.URL;
@@ -53,8 +56,7 @@ public abstract class BaseXIncludeTestCase {
         assertEquals("element names ", a.getName(), b.getName());
 //        assertEquals("element attributes for " + a.getName(),
 //                a.getAttributes(), b.getAttributes());
-        assertEquals("content for " + a.getName(),
-                a.getContent(), b.getContent());
+		assertThat(a.getContent(), IsEqualIgnoringWhiteSpace.equalToIgnoringWhiteSpace(b.getContent()));
         assertEquals("equal number of children " + a.getName(),
                 a.getChildrenCount(), b.getChildrenCount());
 
