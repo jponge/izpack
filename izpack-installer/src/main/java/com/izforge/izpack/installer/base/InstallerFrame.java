@@ -72,7 +72,7 @@ public class InstallerFrame extends JFrame {
      */
     private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
             .getProperty("java.specification.version"));
-
+    
     private static final String ICON_RESOURCE = "Installer.image";
 
     /**
@@ -175,10 +175,6 @@ public class InstallerFrame extends JFrame {
      */
     protected RulesEngine rules;
 
-    /**
-     * Resource name for custom icons
-     */
-    private static final String CUSTOM_ICONS_RESOURCEFILE = "customicons.xml";
 
     private VariableSubstitutor substitutor;
 
@@ -196,7 +192,7 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata, InstallerBase parentInstaller, RulesEngine rules)
+    public InstallerFrame(String title, InstallData installdata, InstallerBase parentInstaller, RulesEngine rules, IconsDatabase icons)
             throws Exception {
         super(title);
         this.parentInstaller = parentInstaller;
@@ -205,17 +201,21 @@ public class InstallerFrame extends JFrame {
         visiblePanelMapping = new ArrayList<Integer>();
         this.installdata = installdata;
         this.langpack = installdata.getLangpack();
+        this.rules = rules;
+        this.icons = icons;
+    }
 
+    public void init() throws Exception {
         // Sets the window events handler
         addWindowListener(new WindowHandler());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         // Builds the GUI
-        loadIcons();
-        loadCustomIcons();
         loadPanels();
         buildGUI();
+    }
 
+    public void enableFrame() {
         // We show the frame
         showFrame();
         switchPanel(0);
@@ -333,95 +333,6 @@ public class InstallerFrame extends JFrame {
         visiblePanelMapping.add(count, lastVis);
     }
 
-    /**
-     * Loads the icons.
-     *
-     * @throws Exception Description of the Exception
-     */
-    private void loadIcons() throws Exception {
-        // Initialisations
-        icons = new IconsDatabase();
-        URL url;
-        ImageIcon img;
-        IXMLElement icon;
-        InputStream inXML = InstallerFrame.class
-                .getResourceAsStream("/com/izforge/izpack/installer/icons.xml");
-
-        // Initialises the parser
-        IXMLParser parser = new XMLParser();
-
-        // We get the data
-        IXMLElement data = parser.parse(inXML);
-
-        // We load the icons
-        Vector<IXMLElement> children = data.getChildrenNamed("icon");
-        int size = children.size();
-        for (int i = 0; i < size; i++) {
-            icon = children.get(i);
-            url = InstallerFrame.class.getResource(icon.getAttribute("res"));
-            img = new ImageIcon(url);
-            icons.put(icon.getAttribute("id"), img);
-        }
-
-        // We load the Swing-specific icons
-        children = data.getChildrenNamed("sysicon");
-        size = children.size();
-        for (int i = 0; i < size; i++) {
-            icon = children.get(i);
-            url = InstallerFrame.class.getResource(icon.getAttribute("res"));
-            img = new ImageIcon(url);
-            UIManager.put(icon.getAttribute("id"), img);
-        }
-    }
-
-    /**
-     * Loads custom icons into the installer.
-     *
-     * @throws Exception
-     */
-    protected void loadCustomIcons() throws Exception {
-        // We try to load and add a custom langpack.
-        InputStream inXML = null;
-        try {
-            inXML = ResourceManager.getInstance().getInputStream(CUSTOM_ICONS_RESOURCEFILE);
-        }
-        catch (Throwable exception) {
-            Debug.trace("Resource " + CUSTOM_ICONS_RESOURCEFILE
-                    + " not defined. No custom icons available.");
-            return;
-        }
-        Debug.trace("Custom icons available.");
-        URL url;
-        ImageIcon img;
-        IXMLElement icon;
-
-        // Initialises the parser
-        IXMLParser parser = new XMLParser();
-
-        // We get the data
-        IXMLElement data = parser.parse(inXML);
-
-        // We load the icons
-        Vector<IXMLElement> children = data.getChildrenNamed("icon");
-        int size = children.size();
-        for (int i = 0; i < size; i++) {
-            icon = children.get(i);
-            url = InstallerFrame.class.getResource(icon.getAttribute("res"));
-            img = new ImageIcon(url);
-            Debug.trace("Icon with id found: " + icon.getAttribute("id"));
-            icons.put(icon.getAttribute("id"), img);
-        }
-
-        // We load the Swing-specific icons
-        children = data.getChildrenNamed("sysicon");
-        size = children.size();
-        for (int i = 0; i < size; i++) {
-            icon = children.get(i);
-            url = InstallerFrame.class.getResource(icon.getAttribute("res"));
-            img = new ImageIcon(url);
-            UIManager.put(icon.getAttribute("id"), img);
-        }
-    }
 
     /**
      * Builds the GUI.

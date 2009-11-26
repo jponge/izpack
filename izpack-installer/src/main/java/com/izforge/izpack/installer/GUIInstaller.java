@@ -102,7 +102,7 @@ public class GUIInstaller extends InstallerBase {
         }
     }
 
-    public void initData(final InstallData installdata) throws Exception {
+    public void initData() throws Exception {
         // Sets up the GUI L&F
         loadLookAndFeel(installdata);
         // Checks the Java version
@@ -140,19 +140,6 @@ public class GUIInstaller extends InstallerBase {
         }
     }
 
-    public void loadGui() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    String title = getTitle();
-                    installerFrame = new InstallerFrame(title, GUIInstaller.this.installdata, GUIInstaller.this,null);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 
     /**
      * Loads the suitable langpack.
@@ -503,21 +490,6 @@ public class GUIInstaller extends InstallerBase {
             }
 
             UIManager.setLookAndFeel(variant);
-        }
-    }
-
-    private String getTitle() {
-        // Use a alternate message if defined.
-        final String key = "installer.reversetitle";
-        String message = installdata.getLangpack().getString(key);
-        // message equal to key -> no message defined.
-        if (message.indexOf(key) > -1) {
-            return installdata.getLangpack().getString("installer.title")
-                    + installdata.getInfo().getAppName();
-        } else { // Attention! The alternate message has to contain the whole message including
-            // $APP_NAME and may be $APP_VER.
-            VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
-            return vs.substitute(message, null);
         }
     }
 

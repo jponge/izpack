@@ -21,10 +21,12 @@
 
 package com.izforge.izpack.installer;
 
+import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.provider.InstallDataProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
+import com.izforge.izpack.util.VariableSubstitutor;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.Parameter;
 import org.picocontainer.injectors.ConstructorInjection;
@@ -32,6 +34,7 @@ import org.picocontainer.injectors.ProviderAdapter;
 import org.picocontainer.parameters.ComponentParameter;
 import org.picocontainer.parameters.ConstantParameter;
 
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -71,6 +74,7 @@ public class Installer {
                         new ComponentParameter(),
                         new ComponentParameter(),
                         new ConstantParameter(langcode))
+                .addComponent(AutomatedInstaller.class)
                 .addComponent(AutomatedInstaller.class);
     }
 
@@ -136,8 +140,9 @@ public class Installer {
     private void launchInstall(int type, int consoleAction, String path) throws Exception {
         switch (type) {
             case INSTALLER_GUI:
-                GUIInstaller guiInstaller = pico.getComponent(GUIInstaller.class);
-                guiInstaller.loadGui();
+                InstallerFrame installerFrame = pico.getComponent(InstallerFrame.class);
+                loadGui(installerFrame);
+//                guiInstaller.loadGui();
 //                    Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
 
                 break;
@@ -155,4 +160,19 @@ public class Installer {
                 break;
         }
     }
+
+
+    public void loadGui(final InstallerFrame installerFrame ) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    installerFrame.enableFrame();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+        
 }
