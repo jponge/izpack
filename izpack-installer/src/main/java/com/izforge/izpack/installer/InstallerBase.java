@@ -128,11 +128,24 @@ public class InstallerBase {
         if (inf.getUninstallerCondition() != null) {
             installdata.setVariable("UNINSTALLER_CONDITION", inf.getUninstallerCondition());
         }
+
+        installdata.setInfo(inf);
+        // Set the installation path in a default manner
+        String dir = getDir();
+        String installPath = dir + inf.getAppName();
+        if (inf.getInstallationSubPath() != null) { // A subpath was defined, use it.
+            installPath = IoHelper.translatePath(dir + inf.getInstallationSubPath(),
+                    new VariableSubstitutor(installdata.getVariables()));
+        }
+        installdata.setInstallPath(installPath);
+
+
         // We read the panels order data
         in = InstallerBase.class.getResourceAsStream("/panelsOrder");
         objIn = new ObjectInputStream(in);
         List<Panel> panelsOrder = (List<Panel>) objIn.readObject();
         objIn.close();
+
 
         // We read the packs data
         in = InstallerBase.class.getResourceAsStream("/packs.info");
@@ -149,20 +162,7 @@ public class InstallerBase {
         }
         objIn.close();
 
-        // We determine the operating system and the initial installation path
-        String dir;
-        String installPath;
-        if (OsVersion.IS_WINDOWS) {
-            dir = buildWindowsDefaultPath();
-        } else if (OsVersion.IS_OSX) {
-            dir = "/Applications";
-        } else {
-            if (new File("/usr/local/").canWrite()) {
-                dir = "/usr/local";
-            } else {
-                dir = System.getProperty("user.home");
-            }
-        }
+
 
         // We determine the hostname and IPAdress
         String hostname;
@@ -214,7 +214,6 @@ public class InstallerBase {
             }
         }
 
-        installdata.setInfo(inf);
         installdata.setPanelsOrder(panelsOrder);
         installdata.setAvailablePacks(availablePacks);
         installdata.setAllPacks(allPacks);
@@ -227,16 +226,27 @@ public class InstallerBase {
                 installdata.getSelectedPacks().add(pack);
             }
         }
-        // Set the installation path in a default manner
-        installPath = dir + inf.getAppName();
-        if (inf.getInstallationSubPath() != null) { // A subpath was defined, use it.
-            installPath = IoHelper.translatePath(dir + inf.getInstallationSubPath(),
-                    new VariableSubstitutor(installdata.getVariables()));
-        }
-        installdata.setInstallPath(installPath);
+
         // Load custom action data.
         loadCustomData(installdata);
 
+    }
+
+    private String getDir() {
+        // We determine the operating system and the initial installation path
+        String dir;
+        if (OsVersion.IS_WINDOWS) {
+            dir = buildWindowsDefaultPath();
+        } else if (OsVersion.IS_OSX) {
+            dir = "/Applications";
+        } else {
+            if (new File("/usr/local/").canWrite()) {
+                dir = "/usr/local";
+            } else {
+                dir = System.getProperty("user.home");
+            }
+        }
+        return dir;
     }
 
     private void checkForPrivilegedExecution(Info info) {
