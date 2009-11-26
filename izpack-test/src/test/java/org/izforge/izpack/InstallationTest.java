@@ -1,10 +1,14 @@
 package org.izforge.izpack;
 
+import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockitoAnnotations;
 
+import java.awt.*;
 import java.io.File;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.net.URL;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,24 +18,34 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class InstallationTest {
 
-    @Test
-    public void testInstallSamples1() throws Exception {
-        URL urls[] = {};
+    private FrameFixture window;
 
+    @Before
+    public void setUp() throws Exception {
+        MockitoAnnotations.initMocks(getClass());
+        configureStub();
+        URL urls[] = {};
         JarFileLoader jarLoader = new JarFileLoader(urls);
         File file = new File(getClass().getClassLoader().getResource("samples1/out.jar").getFile());
         assertThat(file.exists(), Is.is(true));
         jarLoader.addFile(file.getAbsolutePath());
-        Class c = jarLoader.loadClass("com.izforge.izpack.installer.Installer");
+        Class c = jarLoader.loadClass("com.izforge.izpack.installer.GUIInstaller");
+        Object guiInstallerInstance = c.newInstance();
+//        Constructor ctor = c.getDeclaredConstructor(new Class[]{String.class, InstallData.class, InstallerBase.class});
+//        ctor.setAccessible(true);
 
-        Object o = c.newInstance();
-        Class[] argTypes = new Class[]{String[].class};
-        Method main = c.getDeclaredMethod("main", argTypes);
-        System.out.format("invoking %s.main()%n", c.getName());
-        String[] mainArgs = new String[0];
-        main.invoke(null, (Object) mainArgs);
+        Object res = c.getMethod("getInstallerFrame").invoke(guiInstallerInstance);
+        window = new FrameFixture((Frame) res );
+        window.show();
+        Thread.sleep(10000);
+    }
 
-        Thread.sleep(1000);
+    private void configureStub() {
+    }
+
+    @Test
+    public void testInstallSamples1() throws Exception {
+
 
 //        Installer.main(new String[]{""});
 
