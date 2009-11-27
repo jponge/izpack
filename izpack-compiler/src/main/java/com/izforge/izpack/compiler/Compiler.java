@@ -280,10 +280,7 @@ public class Compiler extends Thread {
                     addJarContent(compressorURL, Arrays.asList(decoderClassNames[i]));
                 }
             }
-
-
         }
-
         // We ask the packager to create the installer
         packager.createInstaller(new File(output));
         this.compileFailed = false;

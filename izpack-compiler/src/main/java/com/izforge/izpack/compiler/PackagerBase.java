@@ -50,6 +50,11 @@ public abstract class PackagerBase implements IPackager {
      * Path to the skeleton installer.
      */
     private String SKELETON_SUBPATH = null;
+    
+    /**
+     * Path to resources in jar
+     */
+    protected static final String RESOURCES_PATH = "resources/";
 
     public String getSkeletonSubpath() {
         if (SKELETON_SUBPATH == null) {

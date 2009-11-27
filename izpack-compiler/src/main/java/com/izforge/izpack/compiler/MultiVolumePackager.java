@@ -223,7 +223,7 @@ public class MultiVolumePackager extends PackagerBase {
             }
         }
 
-        primaryJarStream.putNextEntry(new ZipEntry("META-INF/MANIFEST.MF"));
+        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH+"META-INF/MANIFEST.MF"));
         primaryJarStream.write(modifiedmanifest.getBytes());
         primaryJarStream.closeEntry();
     }
@@ -317,7 +317,7 @@ public class MultiVolumePackager extends PackagerBase {
 
             sendMsg("Writing Pack " + packNumber + ": " + pack.name, PackagerListener.MSG_VERBOSE);
             Debug.trace("Writing Pack " + packNumber + ": " + pack.name);
-            ZipEntry entry = new ZipEntry("packs/pack" + packNumber);
+            ZipEntry entry = new ZipEntry(RESOURCES_PATH+"packs/pack" + packNumber);
             // write the metadata as uncompressed object stream to primaryJarStream
             // first write a packs entry
 
@@ -417,7 +417,7 @@ public class MultiVolumePackager extends PackagerBase {
         fout.flush();
         fout.close();
 
-        primaryJarStream.putNextEntry(new ZipEntry("volumes.info"));
+        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH+"volumes.info"));
         ObjectOutputStream out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(volumes);
         out.writeUTF(volumename);
@@ -425,7 +425,7 @@ public class MultiVolumePackager extends PackagerBase {
         primaryJarStream.closeEntry();
 
         // Now that we know sizes, write pack metadata to primary jar.
-        primaryJarStream.putNextEntry(new ZipEntry("packs.info"));
+        primaryJarStream.putNextEntry(new ZipEntry(RESOURCES_PATH+"packs.info"));
         out = new ObjectOutputStream(primaryJarStream);
         out.writeInt(packsList.size());
 
