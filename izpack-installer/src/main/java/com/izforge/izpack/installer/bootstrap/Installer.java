@@ -21,8 +21,7 @@
 
 package com.izforge.izpack.installer.bootstrap;
 
-import com.izforge.izpack.installer.bootstrap.AutomatedInstaller;
-import com.izforge.izpack.installer.bootstrap.ConsoleInstaller;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.provider.*;
 import com.izforge.izpack.util.Debug;
@@ -155,12 +154,14 @@ public class Installer {
 
     private void initBindings() {
         pico = new DefaultPicoContainer(new ThreadCaching());
-        pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
-                .addAdapter(new ProviderAdapter(new GUIInstallerProvider()))
+        pico.addAdapter(new ProviderAdapter(new InstallDataProvider("")))
+//                .addAdapter(new ProviderAdapter(new GUIInstallerProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new InstallerFrameProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
+                .addComponent(GUIInstaller.class)
+                .addComponent(ResourceManager.class)
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(AutomatedInstaller.class);
     }

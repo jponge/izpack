@@ -10,11 +10,9 @@ import org.picocontainer.injectors.Provider;
 public class GUIInstallerProvider implements Provider {
 
     public GUIInstaller provide(InstallData installData) throws Exception {
-        GUIInstaller installer = new GUIInstaller(installData);
-        installer.initData();
+        GUIInstaller installer = new GUIInstaller(installData,null);
+//        installer.initData();
         return installer;
-    }
-
-    
+    }   
 
 }
