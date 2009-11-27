@@ -156,13 +156,12 @@ public class Packager extends PackagerBase {
     protected void writeInstallerResources() throws IOException {
         sendMsg("Copying " + installerResourceURLMap.size() + " files into installer");
 
-        Iterator<String> i = installerResourceURLMap.keySet().iterator();
-        while (i.hasNext()) {
-            String name = i.next();
-            InputStream in = (installerResourceURLMap.get(name)).openStream();
+        for (Map.Entry<String, URL> stringURLEntry : installerResourceURLMap.entrySet()) {
+            URL url = stringURLEntry.getValue();
+            InputStream in = url.openStream();
 
-            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(name);
-            long dateTime = FileUtil.getFileDateTime(installerResourceURLMap.get(name));
+            org.apache.tools.zip.ZipEntry newEntry = new org.apache.tools.zip.ZipEntry(stringURLEntry.getKey());
+            long dateTime = FileUtil.getFileDateTime(url);
             if (dateTime != -1) {
                 newEntry.setTime(dateTime);
             }
