@@ -62,7 +62,7 @@ public class ConsoleInstaller extends InstallerBase {
     private PrintWriter printWriter;
     private RulesEngine rules;
 
-    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules) throws Exception {
+    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourcesManager) throws Exception {
         super();
         this.installdata = installdata;
         this.rules=rules;
@@ -75,7 +75,8 @@ public class ConsoleInstaller extends InstallerBase {
                 "/langpacks/" + this.installdata.getLocaleISO3() + ".xml");
         this.installdata.setLangpack(new LocaleDatabase(in));
         this.installdata.setVariable(ScriptParser.ISO3_LANG, this.installdata.getLocaleISO3());
-        ResourceManager.create(this.installdata);
+        resourcesManager.setLocale(this.installdata.getLocaleISO3());
+//        ResourceManager.create(this.installdata);
         loadInstallerRequirements();
         loadDynamicVariables();
         if (!checkInstallerRequirements(this.installdata)) {

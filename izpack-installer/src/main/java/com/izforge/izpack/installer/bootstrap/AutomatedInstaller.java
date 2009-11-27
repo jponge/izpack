@@ -66,10 +66,11 @@ public class AutomatedInstaller extends InstallerBase {
     /**
      * Constructing an instance triggers the install.
      *
-     * @param inputFilename Name of the file containing the installation data.
+     * @param inputFilename   Name of the file containing the installation data.
+     * @param resourceManager
      * @throws Exception Description of the Exception
      */
-    public AutomatedInstaller(String inputFilename) throws Exception {
+    public AutomatedInstaller(String inputFilename, ResourceManager resourceManager) throws Exception {
         super();
 
         File input = new File(inputFilename);
@@ -86,7 +87,8 @@ public class AutomatedInstaller extends InstallerBase {
         this.idata.setVariable(ScriptParser.ISO3_LANG, this.idata.getLocaleISO3());
 
         // create the resource manager singleton
-        ResourceManager.create(this.idata);
+        resourceManager.setLocale(this.idata.getLocaleISO3());
+//        ResourceManager.create(this.idata);
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
 
@@ -305,7 +307,7 @@ public class AutomatedInstaller extends InstallerBase {
 
             // walk the panels in order
             for (Panel p : this.idata.getPanelsOrder()) {
-                RulesEngine rules = (RulesEngine)this.idata.getRules();
+                RulesEngine rules = (RulesEngine) this.idata.getRules();
                 if (p.hasCondition()
                         && !rules.isConditionTrue(p.getCondition(), this.idata.getVariables())) {
                     Debug.log("Condition for panel " + p.getPanelid() + "is not fulfilled, skipping panel!");
@@ -376,7 +378,8 @@ public class AutomatedInstaller extends InstallerBase {
      * @param p                The panel to install.
      * @param automationHelper The helper of the panel.
      * @param panelRoot        The xml element describing the panel.
-     * @throws com.izforge.izpack.installer.InstallerException if something went wrong while installing.
+     * @throws com.izforge.izpack.installer.InstallerException
+     *          if something went wrong while installing.
      */
     private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot) throws InstallerException {
         executePreActivateActions(p, null);

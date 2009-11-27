@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.data;
 
-import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,7 +81,7 @@ public class ResourceManager {
      *
      * @param data - the current installData
      */
-    protected ResourceManager(AutomatedInstallData data) {
+    public ResourceManager(AutomatedInstallData data) {
         this.installData = data;
         if (data.getLocaleISO3() != null) {
             this.locale = data.getLocaleISO3();
@@ -90,24 +90,6 @@ public class ResourceManager {
             this.locale = installData.getXmlData().getAttribute("langpack", "eng");
         }
 
-    }
-
-    /**
-     * Create the resource manager.
-     * <p/>
-     * This method should be called only once. If it is called a second time, the already existing
-     * instance is returned. The resource manager should be called <b>after</b> the language has
-     * been set in {@link AutomatedInstallData#localeISO3}
-     *
-     * @param data the installation information
-     * @return the created instance
-     */
-    public static ResourceManager create(AutomatedInstallData data) {
-        if (ResourceManager.instance == null) {
-            ResourceManager.instance = new ResourceManager(data);
-        }
-
-        return ResourceManager.instance;
     }
 
     /**
@@ -153,7 +135,6 @@ public class ResourceManager {
 
         in = ResourceManager.class.getResourceAsStream(resourcePath);
         if (in != null) {
-
             return resourcePath;
         } else {
             // if there's no language dependent resource found
@@ -292,4 +273,6 @@ public class ResourceManager {
     public void setResourceBasePath(String resourceBasePath) {
         this.resourceBasePath = resourceBasePath;
     }
+
+
 }
