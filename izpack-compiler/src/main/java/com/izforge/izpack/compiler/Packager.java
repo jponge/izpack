@@ -179,12 +179,10 @@ public class Packager extends PackagerBase {
     protected void writeIncludedJars() throws IOException {
         sendMsg("Merging " + includedJarURLs.size() + " jars into installer");
 
-        Iterator<Object[]> i = includedJarURLs.iterator();
-        while (i.hasNext()) {
-            Object[] current = i.next();
-            InputStream is = ((URL) current[0]).openStream();
+        for (Object[] includedJarURL : includedJarURLs) {
+            InputStream is = ((URL) includedJarURL[0]).openStream();
             ZipInputStream inJarStream = new ZipInputStream(is);
-            copyZip(inJarStream, primaryJarStream, (List<String>) current[1]);
+            copyZip(inJarStream, primaryJarStream, (List<String>) includedJarURL[1]);
         }
     }
 
