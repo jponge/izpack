@@ -394,12 +394,14 @@ public class InstallerFrame extends JFrame {
                 .getImageIcon("stepback"), installdata.buttonsHColor);
         navPanel.add(prevButton);
         prevButton.addActionListener(navHandler);
+        prevButton.setName("prevButton");
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         nextButton = ButtonFactory.createButton(langpack.getString("installer.next"), icons
                 .getImageIcon("stepforward"), installdata.buttonsHColor);
         navPanel.add(nextButton);
+        nextButton.setName("nextButton");
         nextButton.addActionListener(navHandler);
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -407,6 +409,7 @@ public class InstallerFrame extends JFrame {
         quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"), icons
                 .getImageIcon("stop"), installdata.buttonsHColor);
         navPanel.add(quitButton);
+        quitButton.setName("quitButton");
         quitButton.addActionListener(navHandler);
         contentPane.add(navPanel, BorderLayout.SOUTH);
 
