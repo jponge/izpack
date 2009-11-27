@@ -33,7 +33,7 @@ import com.izforge.izpack.data.AutomatedInstallData;
  *
  * @author Jonathan Halliday
  * @author Julien Ponge
- * @see AutomatedInstaller
+ * @see com.izforge.izpack.installer.bootstrap.AutomatedInstaller
  */
 public interface PanelAutomation {
 

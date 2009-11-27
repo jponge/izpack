@@ -19,13 +19,14 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.*;
+import com.izforge.izpack.installer.*;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
@@ -375,7 +376,7 @@ public class AutomatedInstaller extends InstallerBase {
      * @param p                The panel to install.
      * @param automationHelper The helper of the panel.
      * @param panelRoot        The xml element describing the panel.
-     * @throws InstallerException if something went wrong while installing.
+     * @throws com.izforge.izpack.installer.InstallerException if something went wrong while installing.
      */
     private void installPanel(Panel p, PanelAutomation automationHelper, IXMLElement panelRoot) throws InstallerException {
         executePreActivateActions(p, null);

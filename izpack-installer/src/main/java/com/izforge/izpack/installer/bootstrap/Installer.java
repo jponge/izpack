@@ -19,15 +19,16 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.bootstrap;
 
+import com.izforge.izpack.installer.bootstrap.AutomatedInstaller;
+import com.izforge.izpack.installer.bootstrap.ConsoleInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.provider.*;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.behaviors.ThreadCaching;
-import org.picocontainer.injectors.ConstructorInjection;
 import org.picocontainer.injectors.ProviderAdapter;
 
 import javax.swing.*;
@@ -57,25 +58,12 @@ public class Installer {
 
     public static void main(String[] args) {
         Installer installer = new Installer();
+        installer.initBindings();
         installer.start(args);
     }
 
-    public Installer() {
-        pico = new DefaultPicoContainer(new ThreadCaching());
-        pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
-                .addAdapter(new ProviderAdapter(new GUIInstallerProvider()))
-                .addAdapter(new ProviderAdapter(new IconsProvider()))
-                .addAdapter(new ProviderAdapter(new InstallerFrameProvider()))
-                .addAdapter(new ProviderAdapter(new RulesProvider()));
-        pico
-                .addComponent(ConsoleInstaller.class)
-                .addComponent(AutomatedInstaller.class);
-    }
-
-
     private void start(String[] args) {
         Debug.log(" - Logger initialized at '" + new Date(System.currentTimeMillis()) + "'.");
-
         Debug.log(" - commandline args: " + StringTool.stringArrayToSpaceSeparatedString(args));
 
         // OS X tweakings
@@ -90,7 +78,8 @@ public class Installer {
 
             int type = INSTALLER_GUI;
             int consoleAction = CONSOLE_INSTALL;
-            String path = null, langcode = null;
+            String path = null;
+            String langcode = null;
 
             while (args_it.hasNext()) {
                 String arg = args_it.next().trim();
@@ -121,7 +110,7 @@ public class Installer {
                     System.exit(1);
                 }
             }
-            launchInstall(type, consoleAction, path);
+            launchInstall(type, consoleAction, path, langcode);
 
         } catch (Exception e) {
             System.err.println("- ERROR -");
@@ -131,28 +120,21 @@ public class Installer {
         }
     }
 
-    private void launchInstall(int type, int consoleAction, String path) throws Exception {
+    private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception {
         switch (type) {
             case INSTALLER_GUI:
                 InstallerFrame installerFrame = pico.getComponent(InstallerFrame.class);
                 loadGui(installerFrame);
-//                guiInstaller.loadGui();
-//                    Class.forName("com.izforge.izpack.installer.GUIInstaller").newInstance();
-
                 break;
 
             case INSTALLER_AUTO:
-//                AutomatedInstaller ai = new AutomatedInstaller(path);
                 pico.getComponent(AutomatedInstaller.class).doInstall();
                 break;
 
             case INSTALLER_CONSOLE:
                 ConsoleInstaller consoleInstaller = pico.getComponent(ConsoleInstaller.class);
-//                consoleInstaller.setLangCode(langcode);
+                consoleInstaller.setLangCode(langcode);
                 consoleInstaller.run(consoleAction, path);
-//                ConsoleInstaller consoleInstaller = new ConsoleInstaller(null, null, null);
-//                    this.installdata.setLocaleISO3(langcode);
-//                consoleInstaller.run(consoleAction, path);
                 break;
         }
     }
@@ -171,4 +153,15 @@ public class Installer {
         });
     }
 
+    private void initBindings() {
+        pico = new DefaultPicoContainer(new ThreadCaching());
+        pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
+                .addAdapter(new ProviderAdapter(new GUIInstallerProvider()))
+                .addAdapter(new ProviderAdapter(new IconsProvider()))
+                .addAdapter(new ProviderAdapter(new InstallerFrameProvider()))
+                .addAdapter(new ProviderAdapter(new RulesProvider()));
+        pico
+                .addComponent(ConsoleInstaller.class)
+                .addComponent(AutomatedInstaller.class);
+    }
 }

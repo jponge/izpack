@@ -1,7 +1,7 @@
 package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.installer.GUIInstaller;
+import com.izforge.izpack.installer.bootstrap.GUIInstaller;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
 import com.izforge.izpack.installer.base.InstallerBase;
@@ -10,7 +10,6 @@ import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
-import org.picocontainer.injectors.ProviderAdapter;
 
 import javax.swing.*;
 import java.io.File;

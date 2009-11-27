@@ -18,9 +18,8 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.bootstrap;
 
-import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -32,7 +31,6 @@ import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.VariableSubstitutor;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -44,7 +42,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;

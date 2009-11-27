@@ -1,6 +1,6 @@
 package com.izforge.izpack.installer.provider;
 
-import com.izforge.izpack.installer.GUIInstaller;
+import com.izforge.izpack.installer.bootstrap.GUIInstaller;
 import com.izforge.izpack.installer.data.InstallData;
 import org.picocontainer.injectors.Provider;
 

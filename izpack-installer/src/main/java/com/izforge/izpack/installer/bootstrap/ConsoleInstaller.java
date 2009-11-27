@@ -18,15 +18,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.installer;
+package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.DataValidator.Status;
+import com.izforge.izpack.installer.DataValidatorFactory;
+import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.base.InstallerBase;
+import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
@@ -268,7 +273,7 @@ public class ConsoleInstaller extends InstallerBase {
      * Validate a panel.
      *
      * @param p The panel to validate
-     * @throws InstallerException thrown if the validation fails.
+     * @throws com.izforge.izpack.installer.InstallerException thrown if the validation fails.
      */
     private boolean validatePanel(final Panel p) throws InstallerException {
         boolean bValidity = true;
@@ -342,5 +347,9 @@ public class ConsoleInstaller extends InstallerBase {
             default:
                 doInstall();
         }
+    }
+
+    public void setLangCode(String langCode){
+        this.installdata.setLocaleISO3(langCode);
     }
 }
