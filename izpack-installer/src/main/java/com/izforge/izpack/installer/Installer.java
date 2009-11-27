@@ -26,6 +26,7 @@ import com.izforge.izpack.installer.provider.*;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
 import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.behaviors.ThreadCaching;
 import org.picocontainer.injectors.ConstructorInjection;
 import org.picocontainer.injectors.ProviderAdapter;
 
@@ -60,7 +61,7 @@ public class Installer {
     }
 
     public Installer() {
-        pico = new DefaultPicoContainer(new ConstructorInjection());
+        pico = new DefaultPicoContainer(new ThreadCaching());
         pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new GUIInstallerProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
@@ -147,6 +148,7 @@ public class Installer {
 
             case INSTALLER_CONSOLE:
                 ConsoleInstaller consoleInstaller = pico.getComponent(ConsoleInstaller.class);
+//                consoleInstaller.setLangCode(langcode);
                 consoleInstaller.run(consoleAction, path);
 //                ConsoleInstaller consoleInstaller = new ConsoleInstaller(null, null, null);
 //                    this.installdata.setLocaleISO3(langcode);

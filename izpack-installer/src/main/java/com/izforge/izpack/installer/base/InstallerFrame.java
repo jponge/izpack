@@ -241,8 +241,8 @@ public class InstallerFrame extends JFrame {
         Object object;
         IzPanel panel;
         Class[] paramsClasses = new Class[2];
-        paramsClasses[0] = Class.forName("com.izforge.izpack.installer.InstallerFrame");
-        paramsClasses[1] = Class.forName("com.izforge.izpack.installer.InstallData");
+        paramsClasses[0] = Class.forName("com.izforge.izpack.installer.base.InstallerFrame");
+        paramsClasses[1] = Class.forName("com.izforge.izpack.installer.data.InstallData");
         Object[] params = {this, installdata};
 
         // We load each of them

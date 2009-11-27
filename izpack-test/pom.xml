@@ -21,17 +21,17 @@
             <version>${version}</version>
             <!-- We don't want them in classpath during test -->
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>izpack-installer</artifactId>
-                    <groupId>${groupId}</groupId>
-                </exclusion>
-            </exclusions>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<artifactId>izpack-installer</artifactId>-->
+                    <!--<groupId>${groupId}</groupId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
         </dependency>
         <!--<dependency>-->
-            <!--<artifactId>izpack-installer</artifactId>-->
-            <!--<groupId>${groupId}</groupId>-->
-            <!--<scope>import</scope>-->
+        <!--<artifactId>izpack-installer</artifactId>-->
+        <!--<groupId>${groupId}</groupId>-->
+        <!--<scope>import</scope>-->
         <!--</dependency>-->
     </dependencies>
 
