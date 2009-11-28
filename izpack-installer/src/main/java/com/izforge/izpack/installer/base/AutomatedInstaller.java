@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer.bootstrap;
+package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.adaptator.IXMLElement;
@@ -81,8 +81,7 @@ public class AutomatedInstaller extends InstallerBase {
 
         // Loads the langpack
         this.idata.setLocaleISO3(this.idata.getXmlData().getAttribute("langpack", "eng"));
-        InputStream in = getClass().getResourceAsStream(
-                "/langpacks/" + this.idata.getLocaleISO3() + ".xml");
+        InputStream in = resourceManager.getLangPack(this.idata.getLocaleISO3());        
         this.idata.setLangpack(new LocaleDatabase(in));
         this.idata.setVariable(ScriptParser.ISO3_LANG, this.idata.getLocaleISO3());
 

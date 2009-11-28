@@ -18,14 +18,14 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer.bootstrap;
+package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.base.InstallerBase;
-import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.Debug;
@@ -41,6 +41,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -79,16 +80,21 @@ public class GUIInstaller extends InstallerBase {
      */
     private static HashMap isoTable;
 
-    private InstallerFrame installerFrame;
+    /**
+     * The resource manager
+     */
+    private ResourceManager resourceManager;
 
     /**
      * The constructor.
      *
-     * @throws Exception Description of the Exception
      * @param installdata
+     * @throws Exception Description of the Exception
      */
-    public GUIInstaller(InstallData installdata) throws Exception {
+    public GUIInstaller(InstallData installdata, ResourceManager resourceManager) throws Exception {
         this.installdata = installdata;
+        this.resourceManager = resourceManager;
+        initData();
     }
 
     private void showFatalError(Throwable e) {
@@ -121,7 +127,7 @@ public class GUIInstaller extends InstallerBase {
         });
 
         // create the resource manager (after the language selection!)
-        ResourceManager.create(installdata);
+        resourceManager.setLocale(installdata.getLocaleISO3());
 
         configureGuiButtons(installdata);
 
@@ -155,8 +161,9 @@ public class GUIInstaller extends InstallerBase {
 
         // Dummy Frame
         JFrame frame = new JFrame();
-        frame.setIconImage(new ImageIcon(this.getClass().getResource("/img/JFrameIcon.png"))
-                .getImage());
+        frame.setIconImage(
+                resourceManager.getImageIconResource("img/JFrameIcon.png").getImage()
+        );
 
         Dimension frameSize = frame.getSize();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -187,14 +194,13 @@ public class GUIInstaller extends InstallerBase {
         // We load the langpack
         installdata.setLocaleISO3(selectedPack);
         installdata.setVariable(ScriptParser.ISO3_LANG, installdata.getLocaleISO3());
-        InputStream in = getClass().getResourceAsStream("/langpacks/" + selectedPack + ".xml");
+        InputStream in = resourceManager.getInputStream("/langpacks/" + selectedPack + ".xml");
         installdata.setLangpack(new LocaleDatabase(in));
     }
 
     /**
-    *
-	 * @param installdata
-	 */
+     * @param installdata
+     */
     private void configureGuiButtons(InstallData installdata) {
         UIManager.put("OptionPane.yesButtonText", installdata.getLangpack().getString("installer.yes"));
         UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
@@ -212,8 +218,8 @@ public class GUIInstaller extends InstallerBase {
      * the installer from accidentally keeping a lock on a file if the install
      * fails or is killed.
      *
+     * @param installdata
      * @throws Exception Description of the Exception
-	 * @param installdata
      */
     private void checkLockFile(InstallData installdata) throws Exception {
         String tempDir = System.getProperty("java.io.tmpdir");
@@ -271,8 +277,8 @@ public class GUIInstaller extends InstallerBase {
     /**
      * Checks the Java version.
      *
+     * @param installdata
      * @throws Exception Description of the Exception
-	 * @param installdata
      */
     private void checkJavaVersion(InstallData installdata) throws Exception {
         String version = System.getProperty("java.version");
@@ -295,8 +301,9 @@ public class GUIInstaller extends InstallerBase {
 
     /**
      * Checks if a JDK is available.
-	 * @param installdata
-	 */
+     *
+     * @param installdata
+     */
     private void checkJDKAvailable(InstallData installdata) {
         if (!installdata.getInfo().isJdkRequired()) {
             return;
@@ -322,8 +329,8 @@ public class GUIInstaller extends InstallerBase {
     /**
      * Loads the suitable L&F.
      *
+     * @param installdata
      * @throws Exception Description of the Exception
-	 * @param installdata
      */
     protected void loadLookAndFeel(InstallData installdata) throws Exception {
         // Do we have any preference for this OS ?
@@ -606,7 +613,7 @@ public class GUIInstaller extends InstallerBase {
 
             comboBox = new JComboBox(items);
             if (useFlags()) {
-                comboBox.setRenderer(new FlagRenderer());
+                comboBox.setRenderer(new FlagRenderer(resourceManager));
             }
             gbConstraints.gridy = 3;
             layout.addLayoutComponent(comboBox, gbConstraints);
@@ -737,9 +744,10 @@ public class GUIInstaller extends InstallerBase {
         public ImageIcon getImage() {
             ImageIcon img;
             try {
-                img = new ImageIcon(LanguageDialog.class.getResource("/res/installer.langsel.img"));
+                img = resourceManager.getImageIconResource("installer.langsel.img");
+//                        new ImageIcon(LanguageDialog.class.getResource("/res/installer.langsel.img"));
             }
-            catch (NullPointerException err) {
+            catch (Exception err) {
                 img = null;
             }
             return img;
@@ -827,7 +835,10 @@ public class GUIInstaller extends InstallerBase {
          */
         private TreeMap<String, ImageIcon> grayIcons = new TreeMap<String, ImageIcon>();
 
-        public FlagRenderer() {
+        private ResourceManager resourceManager;
+
+        public FlagRenderer(ResourceManager resourceManager) {
+            this.resourceManager = resourceManager;
             setOpaque(true);
         }
 
@@ -860,10 +871,15 @@ public class GUIInstaller extends InstallerBase {
 
             if (!icons.containsKey(iso3)) {
                 ImageIcon icon;
-                icon = new ImageIcon(this.getClass().getResource("/res/flag." + iso3));
-                icons.put(iso3, icon);
-                icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
-                grayIcons.put(iso3, icon);
+                try {
+                    icon = resourceManager.getImageIconResource("flag." + iso3);
+//                icon = new ImageIcon(getClass().getResource("/res/flag." + iso3));
+                    icons.put(iso3, icon);
+                    icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
+                    grayIcons.put(iso3, icon);
+                } catch (ResourceNotFoundException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
             if (isSelected || index == -1) {
                 setIcon(icons.get(iso3));
@@ -874,9 +890,5 @@ public class GUIInstaller extends InstallerBase {
             // We return
             return this;
         }
-    }
-
-    public InstallerFrame getInstallerFrame() {
-        return installerFrame;
     }
 }

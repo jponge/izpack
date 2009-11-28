@@ -2,9 +2,9 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
 import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.installer.base.AutomatedInstaller;
+import com.izforge.izpack.installer.base.ConsoleInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.bootstrap.AutomatedInstaller;
-import com.izforge.izpack.installer.bootstrap.ConsoleInstaller;
 import com.izforge.izpack.installer.provider.*;
 import org.fest.swing.fixture.FrameFixture;
 import org.junit.Before;

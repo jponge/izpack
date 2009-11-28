@@ -53,11 +53,10 @@ public class InstallerBase {
      */
     public List<String> getAvailableLangPacks() throws Exception {
         // We read from the langpacks file in the jar
-        InputStream in = getClass().getResourceAsStream("/langpacks.info");
+        InputStream in = getClass().getClassLoader().getResourceAsStream("langpacks.info");
         ObjectInputStream objIn = new ObjectInputStream(in);
         List<String> available = (List<String>) objIn.readObject();
         objIn.close();
-
         return available;
     }
 

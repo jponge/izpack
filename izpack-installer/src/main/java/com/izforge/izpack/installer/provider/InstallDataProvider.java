@@ -1,10 +1,8 @@
 package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.installer.bootstrap.GUIInstaller;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
@@ -28,6 +26,12 @@ public class InstallDataProvider implements Provider {
      * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
+
+    private String path;
+
+    public InstallDataProvider(String path) {
+        this.path = path;
+    }
 
     public InstallData provide() throws Exception, InterruptedException {
         final InstallData installData = new InstallData();
@@ -59,7 +63,7 @@ public class InstallDataProvider implements Provider {
 
         // We load the variables
         Properties variables = null;
-        in = InstallerBase.class.getResourceAsStream("/vars");
+        in = getClass().getClassLoader().getResourceAsStream(path+"vars");
         if (null != in) {
             objIn = new ObjectInputStream(in);
             variables = (Properties) objIn.readObject();
@@ -67,7 +71,7 @@ public class InstallDataProvider implements Provider {
         }
 
         // We load the Info data
-        in = InstallerBase.class.getResourceAsStream("/info");
+        in = getClass().getClassLoader().getResourceAsStream(path+"info");
         objIn = new ObjectInputStream(in);
         Info inf = (Info) objIn.readObject();
         objIn.close();
@@ -98,14 +102,14 @@ public class InstallDataProvider implements Provider {
 
 
         // We read the panels order data
-        in = InstallerBase.class.getResourceAsStream("/panelsOrder");
+        in = getClass().getClassLoader().getResourceAsStream(path+"panelsOrder");
         objIn = new ObjectInputStream(in);
         List<Panel> panelsOrder = (List<Panel>) objIn.readObject();
         objIn.close();
 
 
         // We read the packs data
-        in = InstallerBase.class.getResourceAsStream("/packs.info");
+        in = getClass().getClassLoader().getResourceAsStream(path+"packs.info");
         objIn = new ObjectInputStream(in);
         size = objIn.readInt();
         ArrayList availablePacks = new ArrayList();
@@ -223,7 +227,7 @@ public class InstallDataProvider implements Provider {
         for (i = 0; i < streamNames.length; ++i) {
             out[i] = new ArrayList();
         }
-        in = InstallerBase.class.getResourceAsStream("/customData");
+        in = getClass().getClassLoader().getResourceAsStream(path+"customData");
         if (in != null) {
             objIn = new ObjectInputStream(in);
             Object listeners = objIn.readObject();
@@ -358,8 +362,7 @@ public class InstallDataProvider implements Provider {
             // We load the properties
             Properties props = new Properties();
             props
-                    .load(InstallerBase.class
-                            .getResourceAsStream("/com/izforge/izpack/installer/win32-defaultpaths.properties"));
+                    .load(getClass().getClassLoader().getResourceAsStream(path+"com/izforge/izpack/installer/win32-defaultpaths.properties"));
 
             // We look for the drive mapping
             String drive = System.getProperty("user.home");
@@ -405,7 +408,7 @@ public class InstallDataProvider implements Provider {
      * @throws Exception
      */
     private void loadGUIInstallData(InstallData installdata) throws Exception {
-        InputStream in = GUIInstaller.class.getResourceAsStream("/GUIPrefs");
+        InputStream in = getClass().getClassLoader().getResourceAsStream(path+"GUIPrefs");
         ObjectInputStream objIn = new ObjectInputStream(in);
         installdata.guiPrefs = (GUIPrefs) objIn.readObject();
         objIn.close();

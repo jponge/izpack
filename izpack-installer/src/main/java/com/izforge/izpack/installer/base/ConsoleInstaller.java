@@ -18,7 +18,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.izforge.izpack.installer.bootstrap;
+package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.AutomatedInstallData;

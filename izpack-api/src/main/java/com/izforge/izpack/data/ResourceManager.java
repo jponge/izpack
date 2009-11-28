@@ -237,10 +237,8 @@ public class ResourceManager {
      * @param resource resrouce of the Icon
      * @return a ImageIcon loaded from the given Resource
      * @throws ResourceNotFoundException thrown when the resource can not be found
-     * @throws IOException               if the resource can not be loaded
      */
-    public ImageIcon getImageIconResource(String resource) throws ResourceNotFoundException,
-            IOException {
+    public ImageIcon getImageIconResource(String resource) throws ResourceNotFoundException{
         return new ImageIcon(this.getURL(resource));
     }
 
@@ -272,6 +270,24 @@ public class ResourceManager {
 
     public void setResourceBasePath(String resourceBasePath) {
         this.resourceBasePath = resourceBasePath;
+    }
+
+    /**
+     * Get langpack of the given locale
+     * @param localeISO3 langpack to get
+     * @return InputStream on the xml 
+     */
+    public InputStream getLangPack(String localeISO3) {
+        return getClass().getResourceAsStream(getResourceBasePath()+
+                "/langpacks/" + localeISO3 + ".xml");
+    }
+
+    /**
+     * Get langpack of the locale present in installData
+     * @return InputStream on the xml
+     */
+    public InputStream getLangPack() {
+        return this.getLangPack(this.locale);        
     }
 
 

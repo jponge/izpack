@@ -22,6 +22,9 @@
 package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.installer.base.AutomatedInstaller;
+import com.izforge.izpack.installer.base.ConsoleInstaller;
+import com.izforge.izpack.installer.base.GUIInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.provider.*;
 import com.izforge.izpack.util.Debug;
