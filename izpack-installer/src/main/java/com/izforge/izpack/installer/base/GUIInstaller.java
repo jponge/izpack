@@ -862,7 +862,7 @@ public class GUIInstaller extends InstallerBase {
             if (!icons.containsKey(iso3)) {
                 ImageIcon icon;
                 try {
-                    icon = resourceManager.getImageIconResource("flag." + iso3);
+                    icon = resourceManager.getImageIconResource("res/flag." + iso3);
                     icons.put(iso3, icon);
                     icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
                     grayIcons.put(iso3, icon);
