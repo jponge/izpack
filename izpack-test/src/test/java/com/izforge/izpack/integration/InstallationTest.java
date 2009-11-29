@@ -4,8 +4,11 @@ import com.izforge.izpack.AssertionHelper;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.*;
-import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.installer.provider.*;
+import com.izforge.izpack.installer.provider.IconsProvider;
+import com.izforge.izpack.installer.provider.InstallDataProvider;
+import com.izforge.izpack.installer.provider.InstallerFrameProvider;
+import com.izforge.izpack.installer.provider.RulesProvider;
+import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
 import org.junit.After;
@@ -30,16 +33,12 @@ public class InstallationTest {
     private FrameFixture window;
 
     private DefaultPicoContainer pico;
-
-    @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder();
-
-    private File baseDir = new File(getClass().getClassLoader().getResource("samples1").getFile());
-    private File installerFile = new File(getClass().getClassLoader().getResource("samples1/install.xml").getFile());
-    private File out = new File(baseDir, "out.jar");
+    private static final String APPNAME = "Test Installation";
 
     @Before
     public void initBinding() throws Exception {
+        File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + APPNAME + ".tmp");
+        file.delete();
         pico = new DefaultPicoContainer(new Caching());
         pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
@@ -58,10 +57,27 @@ public class InstallationTest {
     }
 
     @Test
-    public void testInstallSamples1() throws Exception {
-        compileAndUnzip();
+    public void langpackEngShouldBeSet() throws Exception {
+        compileAndUnzip("langpack", "engInstaller.xml");
+        pico.getComponent(InstallerFrame.class);
+        ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
+        assertThat(resourceManager.getLocale(), Is.is("eng"));
+    }
+
+    @Test
+    public void langpackFraShouldBeSet() throws Exception {
+        compileAndUnzip("langpack", "fraInstaller.xml");
+        pico.getComponent(InstallerFrame.class);
+        ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
+        assertThat(resourceManager.getLocale(), Is.is("fra"));
+    }
+
+    @Test
+    public void testInstallSamples() throws Exception {
+        compileAndUnzip("samples1", "install.xml");
+        prepareFrame();
         // Hello panel
-        window.requireSize(new Dimension(640,480));
+        window.requireSize(new Dimension(640, 480));
         window.button(GuiId.NEXT_BUTTON.id).click();
         window.requireVisible();
         // Finish panel
@@ -69,18 +85,42 @@ public class InstallationTest {
         window.requireNotVisible();
     }
 
-
-    private void compileAndUnzip() throws Exception {
-        CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
-        c.executeCompiler();
-        File extractedDir = new File(getClass().getClassLoader().getResource("samples1").getFile(), "temp");
-
-        AssertionHelper.unzipJar(out, extractedDir);
-        pico.getComponent(ResourceManager.class).setResourceBasePath("/samples1/temp/resources/");
-        InstallData installData = pico.getComponent(InstallData.class);
+    private void prepareFrame() {
         InstallerFrame installerFrame = pico.getComponent(InstallerFrame.class);
-        assertThat(installData.getLangpack().getString("installer.yes"), Is.is("Yes"));
         window = new FrameFixture(installerFrame);
         window.show();
+    }
+
+    /**
+     * Compile an installer and unzip the created jar.
+     *
+     * @param workingDirectoryName Working directory of the installer
+     * @param installationFile     The izpack installation file
+     * @throws Exception
+     */
+    private void compileAndUnzip(String workingDirectoryName, String installationFile) throws Exception {
+        File workingDirectory = new File(getClass().getClassLoader().getResource(workingDirectoryName).getFile());
+        File installerFile = new File(workingDirectory, installationFile);
+        File out = new File(workingDirectory, "out.jar");
+        compileAndUnzip(installerFile, workingDirectory, out);
+    }
+
+    /**
+     * Compile an installer and unzip it.
+     *
+     * @param installerFile The izpack installer file
+     * @param baseDir       The directory containing the installer file
+     * @param out           The output of the compiler
+     * @throws Exception
+     */
+    private void compileAndUnzip(File installerFile, File baseDir, File out) throws Exception {
+        CompilerConfig c = new CompilerConfig(installerFile.getAbsolutePath(), baseDir.getAbsolutePath(), "default", out.getAbsolutePath());
+        c.executeCompiler();
+        File extractedDir = new File(baseDir, "temp");
+        // Clean before use 
+        FileUtils.deleteDirectory(extractedDir);
+        extractedDir.mkdirs();
+        AssertionHelper.unzipJar(out, extractedDir);
+        pico.getComponent(ResourceManager.class).setResourceBasePath("/" + baseDir.getName() + "/temp/resources/");
     }
 }
