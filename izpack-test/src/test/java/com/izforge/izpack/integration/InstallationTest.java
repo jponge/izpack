@@ -4,10 +4,7 @@ import com.izforge.izpack.AssertionHelper;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.*;
-import com.izforge.izpack.installer.provider.IconsProvider;
-import com.izforge.izpack.installer.provider.InstallDataProvider;
-import com.izforge.izpack.installer.provider.InstallerFrameProvider;
-import com.izforge.izpack.installer.provider.RulesProvider;
+import com.izforge.izpack.installer.provider.*;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
@@ -56,7 +53,7 @@ public class InstallationTest {
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(AutomatedInstaller.class);
-
+        PicoProvider.setPico(pico);
     }
 
     @After
@@ -146,6 +143,7 @@ public class InstallationTest {
         AssertionHelper.unzipJar(out, extractedDir);
 
         String relativePath = baseDir.getAbsolutePath().substring(currentDir.getAbsolutePath().length());
+        System.out.println(relativePath);
         pico.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
     }
 }

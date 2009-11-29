@@ -66,7 +66,7 @@ public class LanguageDialog extends JDialog implements ActionListener {
      * @param items The items to display in the box.
      * @param installData
      */
-    public LanguageDialog(JFrame frame, Object[] items, ResourceManager resourceManager, InstallData installData) {
+    public LanguageDialog(JFrame frame, ResourceManager resourceManager, InstallData installData) throws Exception {
         super(frame);
         this.installdata=installData;
         // We build the GUI
@@ -104,6 +104,7 @@ public class LanguageDialog extends JDialog implements ActionListener {
         contentPane.add(label1);
 
         gbConstraints.insets = new Insets(5, 5, 5, 5);
+        Object[] items=resourceManager.getAvailableLangPacks().toArray();
         items = reviseItems(items);
 
         comboBox = new JComboBox(items);

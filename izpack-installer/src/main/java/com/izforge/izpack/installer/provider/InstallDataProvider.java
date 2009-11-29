@@ -38,7 +38,7 @@ public class InstallDataProvider implements Provider {
     private ResourceManager resourceManager;
 
     public InstallData provide(ResourceManager resourceManager) throws Exception, InterruptedException {
-        this.resourceManager=resourceManager;
+        this.resourceManager = resourceManager;
         final InstallData installData = new InstallData();
         // Loads the installation data
         loadInstallData(installData);
@@ -71,12 +71,10 @@ public class InstallDataProvider implements Provider {
 
         // We load the variables
         Properties variables = null;
-        in =resourceManager.getInputStream("vars");
-        if (null != in) {
-            objIn = new ObjectInputStream(in);
-            variables = (Properties) objIn.readObject();
-            objIn.close();
-        }
+        in = resourceManager.getInputStream("vars");
+        objIn = new ObjectInputStream(in);
+        variables = (Properties) objIn.readObject();
+        objIn.close();
 
         // We load the Info data
         in = resourceManager.getInputStream("info");

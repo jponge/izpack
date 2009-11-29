@@ -22,7 +22,6 @@ package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.Debug;
@@ -32,8 +31,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
-import java.util.*;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * The IzPack graphical installer class.
@@ -132,7 +131,7 @@ public class GUIInstaller extends InstallerBase {
 
         // We get the langpack name
         if (npacks != 1) {
-            LanguageDialog picker = new LanguageDialog(frame, availableLangPacks.toArray(),resourceManager, installdata);
+            LanguageDialog picker = new LanguageDialog(frame, resourceManager, installdata);
             picker.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
             picker.setModal(true);
             picker.toFront();

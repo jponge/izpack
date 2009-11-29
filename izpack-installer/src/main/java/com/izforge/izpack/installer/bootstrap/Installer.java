@@ -21,20 +21,23 @@
 
 package com.izforge.izpack.installer.bootstrap;
 
-import com.izforge.izpack.installer.base.AutomatedInstaller;
-import com.izforge.izpack.installer.base.ConsoleInstaller;
-import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.provider.*;
+import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.installer.base.*;
+import com.izforge.izpack.installer.provider.IconsProvider;
+import com.izforge.izpack.installer.provider.InstallDataProvider;
+import com.izforge.izpack.installer.provider.InstallerFrameProvider;
+import com.izforge.izpack.installer.provider.RulesProvider;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.injectors.ProviderAdapter;
 
 import javax.swing.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import static com.izforge.izpack.installer.provider.PicoProvider.*;
 
 /**
  * The program entry point. Selects between GUI and text install modes.
@@ -47,6 +50,8 @@ public class Installer {
     public static final int CONSOLE_INSTALL = 0, CONSOLE_GEN_TEMPLATE = 1, CONSOLE_FROM_TEMPLATE = 2,
             CONSOLE_FROM_SYSTEMPROPERTIES = 3, CONSOLE_FROM_SYSTEMPROPERTIESMERGE = 4;
 
+    private DefaultPicoContainer pico;
+
     /*
     * The main method (program entry point).
     *
@@ -55,6 +60,7 @@ public class Installer {
 
     public static void main(String[] args) {
         Installer installer = new Installer();
+        installer.initBindings();
         installer.start(args);
     }
 
@@ -119,16 +125,16 @@ public class Installer {
     private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception {
         switch (type) {
             case INSTALLER_GUI:
-                InstallerFrame installerFrame = getPico().getComponent(InstallerFrame.class);
+                InstallerFrame installerFrame = pico.getComponent(InstallerFrame.class);
                 loadGui(installerFrame);
                 break;
 
             case INSTALLER_AUTO:
-                getPico().getComponent(AutomatedInstaller.class).doInstall();
+                pico.getComponent(AutomatedInstaller.class).doInstall();
                 break;
 
             case INSTALLER_CONSOLE:
-                ConsoleInstaller consoleInstaller = getPico().getComponent(ConsoleInstaller.class);
+                ConsoleInstaller consoleInstaller = pico.getComponent(ConsoleInstaller.class);
                 consoleInstaller.setLangCode(langcode);
                 consoleInstaller.run(consoleAction, path);
                 break;
@@ -149,4 +155,17 @@ public class Installer {
         });
     }
 
+    private void initBindings() {
+        pico = new DefaultPicoContainer(new Caching());
+        pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
+                .addAdapter(new ProviderAdapter(new IconsProvider()))
+                .addAdapter(new ProviderAdapter(new InstallerFrameProvider()))
+                .addAdapter(new ProviderAdapter(new RulesProvider()));
+        pico
+                .addComponent(LanguageDialog.class)
+                .addComponent(GUIInstaller.class)
+                .addComponent(ResourceManager.class)
+                .addComponent(ConsoleInstaller.class)
+                .addComponent(AutomatedInstaller.class);
+    }
 }
