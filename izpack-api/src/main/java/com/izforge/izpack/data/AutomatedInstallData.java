@@ -191,9 +191,9 @@ public class AutomatedInstallData implements Serializable {
         setVariables(new Properties());
         setAttributes(new HashMap<String, Object>());
         setCustomData(new HashMap<String, List>());
-        if (self != null) {
-            throw new RuntimeException("Panic!! second call of the InstallData Ctor!!");
-        }
+//        if (self != null) {
+//            throw new RuntimeException("Panic!! second call of the InstallData Ctor!!");
+//        }
         self = this;
     }
 
