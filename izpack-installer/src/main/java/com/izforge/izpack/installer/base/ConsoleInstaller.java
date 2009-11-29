@@ -65,7 +65,7 @@ public class ConsoleInstaller extends InstallerBase {
         this.rules = rules;
         // Fallback: choose the first listed language pack if not specified via commandline
         if (this.installdata.getLocaleISO3() == null) {
-            this.installdata.setLocaleISO3(getAvailableLangPacks().get(0));
+            this.installdata.setLocaleISO3(resourceManager.getAvailableLangPacks().get(0));
         }
 
         InputStream in = getClass().getResourceAsStream(

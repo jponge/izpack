@@ -13,9 +13,7 @@ import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.behaviors.Caching;
 import org.picocontainer.injectors.ProviderAdapter;
@@ -32,13 +30,16 @@ public class InstallationTest {
 
     private FrameFixture window;
 
+    private File currentDir = new File(getClass().getClassLoader().getResource(".").getFile());
+
     private DefaultPicoContainer pico;
     private static final String APPNAME = "Test Installation";
 
     @Before
-    public void initBinding() throws Exception {
+    public void initBinding() throws Throwable {
         File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + APPNAME + ".tmp");
         file.delete();
+
         pico = new DefaultPicoContainer(new Caching());
         pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
@@ -49,6 +50,7 @@ public class InstallationTest {
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(AutomatedInstaller.class);
+
     }
 
     @After
@@ -81,11 +83,24 @@ public class InstallationTest {
         prepareFrame();
         // Hello panel
         window.requireSize(new Dimension(640, 480));
-        window.button(GuiId.NEXT_BUTTON.id).click();
+        window.button(GuiId.BUTTON_NEXT.id).click();
         window.requireVisible();
         // Finish panel
-//        window.button(GuiId.QUIT_BUTTON.id).click();
     }
+
+
+    @Test
+    public void testBasicInstall() throws Exception {
+        compileAndUnzip("samples/basicInstall", "basicInstall.xml");
+        prepareFrame();
+        // Hello panel
+        String[] strings = window.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents();
+        System.out.println(strings);
+        window.button(GuiId.BUTTON_NEXT.id).click();
+        Thread.sleep(10000);
+        // Finish panel
+    }
+
 
     private void prepareFrame() {
         InstallerFrame installerFrame = pico.getComponent(InstallerFrame.class);
@@ -123,6 +138,8 @@ public class InstallationTest {
         FileUtils.deleteDirectory(extractedDir);
         extractedDir.mkdirs();
         AssertionHelper.unzipJar(out, extractedDir);
-        pico.getComponent(ResourceManager.class).setResourceBasePath("/" + baseDir.getName() + "/temp/resources/");
+
+        String relativePath = baseDir.getAbsolutePath().substring(currentDir.getAbsolutePath().length());
+        pico.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
     }
 }

@@ -27,7 +27,9 @@ import javax.swing.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.URL;
+import java.util.List;
 
 /**
  * With this ResourceManager you are able to get resources from the jar file.
@@ -287,4 +289,18 @@ public class ResourceManager {
     }
 
 
+    /**
+     * Returns an ArrayList of the available langpacks ISO3 codes.
+     *
+     * @return The available langpacks list.
+     * @throws Exception Description of the Exception
+     */
+    public List<String> getAvailableLangPacks() throws Exception {
+        // We read from the langpacks file in the jar
+        InputStream in = getInputStream("langpacks.info");
+        ObjectInputStream objIn = new ObjectInputStream(in);
+        List<String> available = (List<String>) objIn.readObject();
+        objIn.close();
+        return available;
+    }
 }

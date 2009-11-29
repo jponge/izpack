@@ -394,7 +394,7 @@ public class InstallerFrame extends JFrame {
         this.helpButton = ButtonFactory.createButton(langpack.getString("installer.help"), icons
                 .getImageIcon("help"), installdata.buttonsHColor);
         navPanel.add(this.helpButton);
-        this.helpButton.setName(HELP_BUTTON.id);
+        this.helpButton.setName(BUTTON_HELP.id);
         this.helpButton.addActionListener(new HelpHandler());
 
         navPanel.add(Box.createHorizontalGlue());
@@ -403,14 +403,14 @@ public class InstallerFrame extends JFrame {
                 .getImageIcon("stepback"), installdata.buttonsHColor);
         navPanel.add(prevButton);
         prevButton.addActionListener(navHandler);
-        prevButton.setName(PREV_BUTTON.id);
+        prevButton.setName(BUTTON_PREV.id);
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         nextButton = ButtonFactory.createButton(langpack.getString("installer.next"), icons
                 .getImageIcon("stepforward"), installdata.buttonsHColor);
         navPanel.add(nextButton);
-        nextButton.setName(NEXT_BUTTON.id);
+        nextButton.setName(BUTTON_NEXT.id);
         nextButton.addActionListener(navHandler);
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -418,7 +418,7 @@ public class InstallerFrame extends JFrame {
         quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"), icons
                 .getImageIcon("stop"), installdata.buttonsHColor);
         navPanel.add(quitButton);
-        quitButton.setName(QUIT_BUTTON.id);
+        quitButton.setName(BUTTON_QUIT.id);
         quitButton.addActionListener(navHandler);
         contentPane.add(navPanel, BorderLayout.SOUTH);
 

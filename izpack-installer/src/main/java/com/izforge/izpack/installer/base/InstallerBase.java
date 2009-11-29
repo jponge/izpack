@@ -55,21 +55,6 @@ public abstract class InstallerBase {
     }
 
     /**
-     * Returns an ArrayList of the available langpacks ISO3 codes.
-     *
-     * @return The available langpacks list.
-     * @throws Exception Description of the Exception
-     */
-    public List<String> getAvailableLangPacks() throws Exception {
-        // We read from the langpacks file in the jar
-        InputStream in = resourceManager.getInputStream("langpacks.info");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        List<String> available = (List<String>) objIn.readObject();
-        objIn.close();
-        return available;
-    }
-
-    /**
      * Loads Dynamic Variables.
      */
     protected void loadDynamicVariables() {
