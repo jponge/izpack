@@ -13,7 +13,10 @@ import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
+import org.junit.rules.Timeout;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.behaviors.Caching;
 import org.picocontainer.injectors.ProviderAdapter;
@@ -32,6 +35,9 @@ public class InstallationTest {
 
     private File currentDir = new File(getClass().getClassLoader().getResource(".").getFile());
 
+    @Rule
+    public MethodRule globalTimeout = new Timeout(60000);
+    
     private DefaultPicoContainer pico;
     private static final String APPNAME = "Test Installation";
 
