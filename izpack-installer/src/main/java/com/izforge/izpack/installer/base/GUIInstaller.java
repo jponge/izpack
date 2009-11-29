@@ -92,8 +92,8 @@ public class GUIInstaller extends InstallerBase {
      * @throws Exception Description of the Exception
      */
     public GUIInstaller(InstallData installdata, ResourceManager resourceManager) throws Exception {
+        super(resourceManager);
         this.installdata = installdata;
-        this.resourceManager = resourceManager;
         initData();
     }
 

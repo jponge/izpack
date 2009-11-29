@@ -71,7 +71,7 @@ public class AutomatedInstaller extends InstallerBase {
      * @throws Exception Description of the Exception
      */
     public AutomatedInstaller(String inputFilename, ResourceManager resourceManager) throws Exception {
-        super();
+        super(resourceManager);
 
         File input = new File(inputFilename);
 

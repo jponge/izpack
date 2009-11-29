@@ -54,7 +54,7 @@ public abstract class PackagerBase implements IPackager {
     /**
      * Path to resources in jar
      */
-    protected static final String RESOURCES_PATH = "resources/";
+    public static final String RESOURCES_PATH = "resources/";
 
     public String getSkeletonSubpath() {
         if (SKELETON_SUBPATH == null) {

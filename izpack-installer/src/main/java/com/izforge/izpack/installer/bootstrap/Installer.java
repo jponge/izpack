@@ -157,7 +157,7 @@ public class Installer {
 
     private void initBindings() {
         pico = new DefaultPicoContainer(new ThreadCaching());
-        pico.addAdapter(new ProviderAdapter(new InstallDataProvider("")))
+        pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
 //                .addAdapter(new ProviderAdapter(new GUIInstallerProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new InstallerFrameProvider()))

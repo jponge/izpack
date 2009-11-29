@@ -24,7 +24,6 @@ package com.izforge.izpack.data;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,12 +58,12 @@ public class ResourceManager {
     /**
      * The base path where to find the resources: resourceBasePathDefaultConstant = "/res/"
      */
-    public final String resourceBasePathDefaultConstant = "/res/";
+    public final String resourceBasePathDefaultConstant = "/resources/";
 
     /**
-     * Internel used resourceBasePath = "/res/"
+     * Internel used resourceBasePath = "/resources/"
      */
-    private String resourceBasePath = "/res/";
+    private String resourceBasePath = "/resources/";
 
     /**
      * Contains the given InstallData
@@ -78,18 +77,9 @@ public class ResourceManager {
 
     /**
      * Constructor. Protected because this is a singleton.
-     *
-     * @param data - the current installData
      */
-    public ResourceManager(AutomatedInstallData data) {
-        this.installData = data;
-        if (data.getLocaleISO3() != null) {
-            this.locale = data.getLocaleISO3();
-        } else {
-            // try to figure out ourself
-            this.locale = installData.getXmlData().getAttribute("langpack", "eng");
-        }
-
+    public ResourceManager() {
+        this.locale = "eng";
     }
 
     /**
@@ -99,7 +89,7 @@ public class ResourceManager {
      */
     public static ResourceManager getInstance() {
         if (ResourceManager.instance == null) {
-            ResourceManager.instance = new ResourceManager(new AutomatedInstallData());
+            ResourceManager.instance = new ResourceManager();
         }
         return ResourceManager.instance;
     }
@@ -127,26 +117,40 @@ public class ResourceManager {
      *
      * @param resource Resource to load language dependen
      * @return the language dependent path of the given resource
-     * @throws com.izforge.izpack.installer.ResourceNotFoundException If the resource is not found
+     * @throws com.izforge.izpack.installer.ResourceNotFoundException
+     *          If the resource is not found
      */
     private String getLanguageResourceString(String resource) throws ResourceNotFoundException {
-        InputStream in;
-        String resourcePath = this.getResourceBasePath() + resource + "_" + this.locale;
+        if (resource.charAt(0) == '/') {
+            return getAbsoluteLanguageResourceString(resource);
+        } else {
+            return getAbsoluteLanguageResourceString(this.getResourceBasePath() + resource);
+        }
+    }
 
+    /**
+     * Get stream on the given resource. First search if a localized resource exist then try to
+     * get the given resource.
+     * @param resource
+     * @return
+     * @throws ResourceNotFoundException
+     */
+    private String getAbsoluteLanguageResourceString(String resource) throws ResourceNotFoundException {
+        InputStream in;
+
+        String resourcePath = resource + "_" + this.locale;
         in = ResourceManager.class.getResourceAsStream(resourcePath);
         if (in != null) {
             return resourcePath;
         } else {
             // if there's no language dependent resource found
-            resourcePath = this.getResourceBasePath() + resource;
-            in = ResourceManager.class.getResourceAsStream(resourcePath);
+            in = ResourceManager.class.getResourceAsStream(resource);
             if (in != null) {
-                return resourcePath;
+                return resource;
             } else {
-                throw new ResourceNotFoundException("Cannot find named Resource: '" + this.getResourceBasePath() + resource + "' AND '" + this.getResourceBasePath() + resource + "_" + this.locale + "'");
+                throw new ResourceNotFoundException("Cannot find named Resource: '" + resource + "' AND '" + resource + "_" + this.locale + "'");
             }
         }
-
     }
 
     /**
@@ -174,13 +178,8 @@ public class ResourceManager {
      * @throws ResourceNotFoundException thrown if there is no resource found
      */
     public URL getURL(String resource) throws ResourceNotFoundException {
-        try {
-            return this.getClass().getResource(
-                    this.getLanguageResourceString(resource + "_" + installData.getLocaleISO3()));
-        }
-        catch (Exception ex) {
-            return this.getClass().getResource(this.getLanguageResourceString(resource));
-        }
+        return this.getClass().getResource(
+                this.getLanguageResourceString(resource));
     }
 
     /**
@@ -238,7 +237,7 @@ public class ResourceManager {
      * @return a ImageIcon loaded from the given Resource
      * @throws ResourceNotFoundException thrown when the resource can not be found
      */
-    public ImageIcon getImageIconResource(String resource) throws ResourceNotFoundException{
+    public ImageIcon getImageIconResource(String resource) throws ResourceNotFoundException {
         return new ImageIcon(this.getURL(resource));
     }
 
@@ -274,20 +273,22 @@ public class ResourceManager {
 
     /**
      * Get langpack of the given locale
+     *
      * @param localeISO3 langpack to get
-     * @return InputStream on the xml 
+     * @return InputStream on the xml
      */
     public InputStream getLangPack(String localeISO3) {
-        return getClass().getResourceAsStream(getResourceBasePath()+
+        return getClass().getResourceAsStream(getResourceBasePath() +
                 "/langpacks/" + localeISO3 + ".xml");
     }
 
     /**
      * Get langpack of the locale present in installData
+     *
      * @return InputStream on the xml
      */
     public InputStream getLangPack() {
-        return this.getLangPack(this.locale);        
+        return this.getLangPack(this.locale);
     }
 
 

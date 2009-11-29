@@ -39,11 +39,20 @@ import java.util.*;
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
-public class InstallerBase {
+public abstract class InstallerBase {
 
     private List<InstallerRequirement> installerrequirements;
     private Map<String, List<DynamicVariable>> dynamicvariables;
 
+    protected ResourceManager resourceManager;
+
+    /**
+     * Abstract constructor which need resource manager
+     * @param resourceManager
+     */
+    protected InstallerBase(ResourceManager resourceManager) {
+        this.resourceManager = resourceManager;
+    }
 
     /**
      * Returns an ArrayList of the available langpacks ISO3 codes.
@@ -53,7 +62,7 @@ public class InstallerBase {
      */
     public List<String> getAvailableLangPacks() throws Exception {
         // We read from the langpacks file in the jar
-        InputStream in = getClass().getClassLoader().getResourceAsStream("langpacks.info");
+        InputStream in = resourceManager.getInputStream("langpacks.info");
         ObjectInputStream objIn = new ObjectInputStream(in);
         List<String> available = (List<String>) objIn.readObject();
         objIn.close();

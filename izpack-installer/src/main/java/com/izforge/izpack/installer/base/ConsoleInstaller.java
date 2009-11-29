@@ -20,17 +20,12 @@
  */
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.data.Info;
-import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.data.LocaleDatabase;
-import com.izforge.izpack.data.Panel;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.installer.DataValidatorFactory;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PanelConsole;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
@@ -62,10 +57,12 @@ public class ConsoleInstaller extends InstallerBase {
     private PrintWriter printWriter;
     private RulesEngine rules;
 
-    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourcesManager) throws Exception {
-        super();
+    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourceManager) throws Exception {
+        super(resourceManager);
+//        super(resourceManager);
+//
         this.installdata = installdata;
-        this.rules=rules;
+        this.rules = rules;
         // Fallback: choose the first listed language pack if not specified via commandline
         if (this.installdata.getLocaleISO3() == null) {
             this.installdata.setLocaleISO3(getAvailableLangPacks().get(0));
@@ -75,7 +72,7 @@ public class ConsoleInstaller extends InstallerBase {
                 "/langpacks/" + this.installdata.getLocaleISO3() + ".xml");
         this.installdata.setLangpack(new LocaleDatabase(in));
         this.installdata.setVariable(ScriptParser.ISO3_LANG, this.installdata.getLocaleISO3());
-        resourcesManager.setLocale(this.installdata.getLocaleISO3());
+        resourceManager.setLocale(this.installdata.getLocaleISO3());
 //        ResourceManager.create(this.installdata);
         loadInstallerRequirements();
         loadDynamicVariables();
@@ -144,7 +141,7 @@ public class ConsoleInstaller extends InstallerBase {
                         boolean bIsConditionFulfilled = true;
                         String strCondition = p.getCondition();
                         if (strCondition != null) {
-                            RulesEngine rules = (RulesEngine)installdata.getRules();
+                            RulesEngine rules = (RulesEngine) installdata.getRules();
                             bIsConditionFulfilled = rules.isConditionTrue(
                                     strCondition);
                         }
@@ -274,7 +271,8 @@ public class ConsoleInstaller extends InstallerBase {
      * Validate a panel.
      *
      * @param p The panel to validate
-     * @throws com.izforge.izpack.installer.InstallerException thrown if the validation fails.
+     * @throws com.izforge.izpack.installer.InstallerException
+     *          thrown if the validation fails.
      */
     private boolean validatePanel(final Panel p) throws InstallerException {
         boolean bValidity = true;
@@ -350,7 +348,7 @@ public class ConsoleInstaller extends InstallerBase {
         }
     }
 
-    public void setLangCode(String langCode){
+    public void setLangCode(String langCode) {
         this.installdata.setLocaleISO3(langCode);
     }
 }
