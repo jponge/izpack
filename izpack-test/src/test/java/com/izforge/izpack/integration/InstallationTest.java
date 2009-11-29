@@ -7,6 +7,8 @@ import com.izforge.izpack.installer.base.*;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.provider.*;
 import org.fest.swing.fixture.FrameFixture;
+import org.hamcrest.core.Is;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,6 +52,7 @@ public class InstallationTest {
                 .addComponent(AutomatedInstaller.class);
     }
 
+    @After
     public void tearBinding() {
         pico.dispose();
     }
@@ -74,8 +77,9 @@ public class InstallationTest {
 
         AssertionHelper.unzipJar(out, extractedDir);
         pico.getComponent(ResourceManager.class).setResourceBasePath("/samples1/temp/resources/");
-        pico.getComponent(InstallData.class);
+        InstallData installData = pico.getComponent(InstallData.class);
         InstallerFrame installerFrame = pico.getComponent(InstallerFrame.class);
+        assertThat(installData.getLangpack().getString("installer.yes"), Is.is("Yes"));
         window = new FrameFixture(installerFrame);
         window.show();
     }

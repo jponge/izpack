@@ -114,9 +114,7 @@ public class GUIInstaller extends InstallerBase {
             public void run() {
                 try {
                     loadLangPack(installdata);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
                 }
             }
         });
@@ -740,7 +738,6 @@ public class GUIInstaller extends InstallerBase {
             ImageIcon img;
             try {
                 img = resourceManager.getImageIconResource("installer.langsel.img");
-//                        new ImageIcon(LanguageDialog.class.getResource("/res/installer.langsel.img"));
             }
             catch (Exception err) {
                 img = null;
@@ -769,9 +766,7 @@ public class GUIInstaller extends InstallerBase {
         public void setSelection(Object item) {
             Object mapped = null;
             if (isoTable != null) {
-                Iterator iter = isoTable.keySet().iterator();
-                while (iter.hasNext()) {
-                    Object key = iter.next();
+                for (Object key : isoTable.keySet()) {
                     if (isoTable.get(key).equals(item)) {
                         mapped = key;
                         break;
@@ -868,7 +863,6 @@ public class GUIInstaller extends InstallerBase {
                 ImageIcon icon;
                 try {
                     icon = resourceManager.getImageIconResource("flag." + iso3);
-//                icon = new ImageIcon(getClass().getResource("/res/flag." + iso3));
                     icons.put(iso3, icon);
                     icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
                     grayIcons.put(iso3, icon);
