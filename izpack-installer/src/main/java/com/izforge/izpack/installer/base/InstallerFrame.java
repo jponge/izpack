@@ -25,10 +25,8 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.*;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -49,12 +47,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.net.URL;
 import java.util.*;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
+
+import static com.izforge.izpack.installer.base.GuiId.*;
 
 /**
  * The IzPack installer frame.
@@ -213,6 +212,16 @@ public class InstallerFrame extends JFrame {
         // Builds the GUI
         loadPanels();
         buildGUI();
+
+        sizeFrame();
+    }
+
+    private void sizeFrame() {
+        pack();
+        setSize(installdata.guiPrefs.width, installdata.guiPrefs.height);
+        setPreferredSize(new Dimension(installdata.guiPrefs.width, installdata.guiPrefs.height));
+        setResizable(installdata.guiPrefs.resizable);
+        centerFrame(this);
     }
 
     public void enableFrame() {
@@ -385,7 +394,7 @@ public class InstallerFrame extends JFrame {
         this.helpButton = ButtonFactory.createButton(langpack.getString("installer.help"), icons
                 .getImageIcon("help"), installdata.buttonsHColor);
         navPanel.add(this.helpButton);
-        this.helpButton.setName("HelpButton");
+        this.helpButton.setName(HELP_BUTTON.id);
         this.helpButton.addActionListener(new HelpHandler());
 
         navPanel.add(Box.createHorizontalGlue());
@@ -394,14 +403,14 @@ public class InstallerFrame extends JFrame {
                 .getImageIcon("stepback"), installdata.buttonsHColor);
         navPanel.add(prevButton);
         prevButton.addActionListener(navHandler);
-        prevButton.setName("prevButton");
+        prevButton.setName(PREV_BUTTON.id);
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         nextButton = ButtonFactory.createButton(langpack.getString("installer.next"), icons
                 .getImageIcon("stepforward"), installdata.buttonsHColor);
         navPanel.add(nextButton);
-        nextButton.setName("nextButton");
+        nextButton.setName(NEXT_BUTTON.id);
         nextButton.addActionListener(navHandler);
 
         navPanel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -409,7 +418,7 @@ public class InstallerFrame extends JFrame {
         quitButton = ButtonFactory.createButton(langpack.getString("installer.quit"), icons
                 .getImageIcon("stop"), installdata.buttonsHColor);
         navPanel.add(quitButton);
-        quitButton.setName("quitButton");
+        quitButton.setName(QUIT_BUTTON.id);
         quitButton.addActionListener(navHandler);
         contentPane.add(navPanel, BorderLayout.SOUTH);
 
@@ -606,10 +615,6 @@ public class InstallerFrame extends JFrame {
      * Shows the frame.
      */
     private void showFrame() {
-        pack();
-        setSize(installdata.guiPrefs.width, installdata.guiPrefs.height);
-        setResizable(installdata.guiPrefs.resizable);
-        centerFrame(this);
         setVisible(true);
     }
 
