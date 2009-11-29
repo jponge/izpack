@@ -27,7 +27,7 @@ package com.izforge.izpack.installer;
  * @author Marcus Stursberg
  */
 
-public class ResourceNotFoundException extends Exception {
+public class ResourceNotFoundException extends RuntimeException{
 
     private static final long serialVersionUID = 3258688827575906353L;
 

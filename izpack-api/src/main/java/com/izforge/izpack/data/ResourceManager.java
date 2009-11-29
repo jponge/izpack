@@ -66,11 +66,6 @@ public class ResourceManager {
     private String resourceBasePath = "/resources/";
 
     /**
-     * Contains the given InstallData
-     */
-    private AutomatedInstallData installData;
-
-    /**
      * The instance of this class.
      */
     private static ResourceManager instance = null;
@@ -196,7 +191,7 @@ public class ResourceManager {
     public String getTextResource(String resource, String encoding) throws ResourceNotFoundException, IOException {
         InputStream in = null;
         try {
-            in = this.getInputStream(resource + "_" + this.installData.getLocaleISO3());
+            in = this.getInputStream(resource + "_" + this.getLocale());
         }
         catch (Exception ex) {
             in = this.getInputStream(resource);
