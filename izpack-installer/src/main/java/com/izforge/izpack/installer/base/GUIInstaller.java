@@ -285,6 +285,4 @@ public class GUIInstaller extends InstallerBase {
             }
         }
     }
-
-
 }
