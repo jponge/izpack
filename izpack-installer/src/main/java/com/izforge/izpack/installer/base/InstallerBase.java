@@ -91,7 +91,7 @@ public abstract class InstallerBase {
      * @throws Exception
      */
     public void loadInstallerRequirements() throws Exception {
-        InputStream in = InstallerBase.class.getResourceAsStream("/installerrequirements");
+        InputStream in = resourceManager.getInputStream("installerrequirements");
         ObjectInputStream objIn = new ObjectInputStream(in);
         installerrequirements = (List<InstallerRequirement>) objIn.readObject();
         objIn.close();

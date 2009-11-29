@@ -81,11 +81,6 @@ public class GUIInstaller extends InstallerBase {
     private static HashMap isoTable;
 
     /**
-     * The resource manager
-     */
-    private ResourceManager resourceManager;
-
-    /**
      * The constructor.
      *
      * @param installdata
@@ -162,7 +157,7 @@ public class GUIInstaller extends InstallerBase {
         // Dummy Frame
         JFrame frame = new JFrame();
         frame.setIconImage(
-                resourceManager.getImageIconResource("img/JFrameIcon.png").getImage()
+                resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage()
         );
 
         Dimension frameSize = frame.getSize();
@@ -194,7 +189,7 @@ public class GUIInstaller extends InstallerBase {
         // We load the langpack
         installdata.setLocaleISO3(selectedPack);
         installdata.setVariable(ScriptParser.ISO3_LANG, installdata.getLocaleISO3());
-        InputStream in = resourceManager.getInputStream("/langpacks/" + selectedPack + ".xml");
+        InputStream in = resourceManager.getInputStream("langpacks/" + selectedPack + ".xml");
         installdata.setLangpack(new LocaleDatabase(in));
     }
 
