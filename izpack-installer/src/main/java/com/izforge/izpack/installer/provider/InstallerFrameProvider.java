@@ -13,8 +13,8 @@ import org.picocontainer.injectors.Provider;
  * Provide installer frame instance
  */
 public class InstallerFrameProvider implements Provider {
-    public InstallerFrame provide(InstallData installdata, GUIInstaller parentInstaller, RulesEngine rules, IconsDatabase icons) throws Exception {
-        InstallerFrame installerFrame = new InstallerFrame(getTitle(installdata), installdata, parentInstaller, rules, icons);
+    public InstallerFrame provide(InstallData installdata, RulesEngine rules, IconsDatabase icons) throws Exception {
+        InstallerFrame installerFrame = new InstallerFrame(getTitle(installdata), installdata, rules, icons);
         installerFrame.init();
         return installerFrame;
     }

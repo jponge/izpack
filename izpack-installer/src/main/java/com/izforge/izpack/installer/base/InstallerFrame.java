@@ -183,8 +183,6 @@ public class InstallerFrame extends JFrame {
     // If a heading image is defined should it be displayed on the left
     private boolean imageLeft = false;
 
-    private InstallerBase parentInstaller;
-
     /**
      * The constructor (normal mode).
      *
@@ -192,10 +190,9 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata, InstallerBase parentInstaller, RulesEngine rules, IconsDatabase icons)
+    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons)
             throws Exception {
         super(title);
-        this.parentInstaller = parentInstaller;
         substitutor = new VariableSubstitutorImpl(installdata.getVariables());
         guiListener = new ArrayList<GUIListener>();
         visiblePanelMapping = new ArrayList<Integer>();
