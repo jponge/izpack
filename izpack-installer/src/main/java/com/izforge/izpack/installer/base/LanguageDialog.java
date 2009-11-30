@@ -70,6 +70,7 @@ public class LanguageDialog extends JDialog implements ActionListener {
         this.frame=frame;
         this.resourceManager=resourceManager;
         this.installdata = installData;
+        this.setName(GuiId.DIALOG_PICKER.id);
         // We build the GUI
         addWindowListener(new WindowHandler());
         JPanel contentPane = (JPanel) getContentPane();

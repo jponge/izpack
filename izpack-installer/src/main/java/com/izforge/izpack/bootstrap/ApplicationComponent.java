@@ -1,10 +1,7 @@
 package com.izforge.izpack.bootstrap;
 
 import com.izforge.izpack.data.ResourceManager;
-import com.izforge.izpack.installer.base.AutomatedInstaller;
-import com.izforge.izpack.installer.base.ConsoleInstaller;
-import com.izforge.izpack.installer.base.GUIInstaller;
-import com.izforge.izpack.installer.base.LanguageDialog;
+import com.izforge.izpack.installer.base.*;
 import com.izforge.izpack.installer.provider.*;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
@@ -27,6 +24,7 @@ public class ApplicationComponent implements IApplicationComponent {
                 .addAdapter(new ProviderAdapter(new LanguageDialogProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
+                .addComponent(ConditionCheck.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConsoleInstaller.class)

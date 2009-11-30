@@ -16,8 +16,7 @@ public class LanguageDialogProvider implements Provider {
 
     public LanguageDialog provide(InstallData installData, ResourceManager resourceManager) throws Exception {
         this.resourceManager = resourceManager;
-        JFrame frame = initFrame();
-        return new LanguageDialog(frame, resourceManager, installData);
+        return new LanguageDialog(initFrame(), resourceManager, installData);
     }
 
     private JFrame initFrame() {
