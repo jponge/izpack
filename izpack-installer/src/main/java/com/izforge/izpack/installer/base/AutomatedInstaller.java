@@ -90,9 +90,6 @@ public class AutomatedInstaller extends InstallerBase {
 //        ResourceManager.create(this.idata);
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
-
-        // loads installer conditions
-        loadInstallerRequirements();
     }
 
     /**

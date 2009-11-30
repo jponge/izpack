@@ -51,6 +51,7 @@ public class InstallDataProvider implements Provider {
         // Sets up the GUI L&F
         loadLookAndFeel(installData);
         loadDynamicVariables(installData);
+        loadInstallerRequirements(installData);
         return installData;
     }
 
@@ -612,4 +613,17 @@ public class InstallDataProvider implements Provider {
         }
     }
 
+    /**
+     * Load installer conditions
+     *
+     * @throws Exception
+     * @param installData
+     */
+    public void loadInstallerRequirements(InstallData installData) throws Exception {
+        InputStream in = resourceManager.getInputStream("installerrequirements");
+        ObjectInputStream objIn = new ObjectInputStream(in);
+        installData.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
+        objIn.close();
+    }
+    
 }

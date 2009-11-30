@@ -154,6 +154,11 @@ public class AutomatedInstallData implements Serializable {
     private Map<String, java.util.List<DynamicVariable>> dynamicvariables;
 
     /**
+     * List of install requirements
+     */
+    private List<InstallerRequirement> installerrequirements;
+
+    /**
      * The attributes used by the panels
      */
     private Map<String, Object> attributes;
@@ -475,5 +480,13 @@ public class AutomatedInstallData implements Serializable {
 
     public void setDynamicvariables(Map<String, List<DynamicVariable>> dynamicvariables) {
         this.dynamicvariables = dynamicvariables;
+    }
+
+    public void setInstallerrequirements(List<InstallerRequirement> installerrequirements) {
+        this.installerrequirements = installerrequirements;
+    }
+
+    public List<InstallerRequirement> getInstallerrequirements() {
+        return installerrequirements;
     }
 }

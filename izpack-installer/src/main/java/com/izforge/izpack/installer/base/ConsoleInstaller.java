@@ -70,8 +70,6 @@ public class ConsoleInstaller extends InstallerBase {
         this.installdata.setLangpack(new LocaleDatabase(in));
         this.installdata.setVariable(ScriptParser.ISO3_LANG, this.installdata.getLocaleISO3());
         resourceManager.setLocale(this.installdata.getLocaleISO3());
-//        ResourceManager.create(this.installdata);
-        loadInstallerRequirements();
         if (!checkInstallerRequirements(this.installdata)) {
             Debug.log("not all installerconditions are fulfilled.");
             return;

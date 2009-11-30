@@ -58,7 +58,7 @@ public class GUIInstaller extends InstallerBase {
         super(resourceManager);
         this.installdata = installdata;
         this.conditionCheck = conditionCheck;
-        initData();
+        initLangPack();
     }
 
     private void showFatalError(Throwable e) {
@@ -69,7 +69,7 @@ public class GUIInstaller extends InstallerBase {
         }
     }
 
-    public void initData() throws Exception {
+    public void initLangPack() throws Exception {
         // Checks the Java version
         conditionCheck.check();
 
@@ -89,8 +89,6 @@ public class GUIInstaller extends InstallerBase {
 
         configureGuiButtons(installdata);
 
-        // loads installer conditions
-        loadInstallerRequirements();
         // check installer conditions
         if (!checkInstallerRequirements(installdata)) {
             Debug.log("not all installerconditions are fulfilled.");

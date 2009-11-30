@@ -40,7 +40,6 @@ import java.util.*;
  */
 public abstract class InstallerBase {
 
-    private List<InstallerRequirement> installerrequirements;
 
     protected ResourceManager resourceManager;
 
@@ -50,18 +49,6 @@ public abstract class InstallerBase {
      */
     protected InstallerBase(ResourceManager resourceManager) {
         this.resourceManager = resourceManager;
-    }
-
-    /**
-     * Load installer conditions
-     *
-     * @throws Exception
-     */
-    public void loadInstallerRequirements() throws Exception {
-        InputStream in = resourceManager.getInputStream("installerrequirements");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        installerrequirements = (List<InstallerRequirement>) objIn.readObject();
-        objIn.close();
     }
 
 
@@ -102,7 +89,7 @@ public abstract class InstallerBase {
     public boolean checkInstallerRequirements(AutomatedInstallData installdata) throws Exception {
         boolean result = true;
 
-        for (InstallerRequirement installerrequirement : this.installerrequirements) {
+        for (InstallerRequirement installerrequirement : installdata.getInstallerrequirements()) {
             String conditionid = installerrequirement.getCondition();
             Condition condition = RulesEngineImpl.getCondition(conditionid);
             if (condition == null) {

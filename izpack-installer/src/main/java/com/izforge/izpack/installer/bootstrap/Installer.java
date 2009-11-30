@@ -127,8 +127,8 @@ public class Installer {
     private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception {
         switch (type) {
             case INSTALLER_GUI:
-                InstallerFrame installerFrame = applicationComponent.getComponent(InstallerFrame.class);
-                loadGui(installerFrame);
+                applicationComponent.getComponent(GUIInstaller.class).initLangPack();
+                applicationComponent.getComponent(InstallerFrame.class).launchGUI();
                 break;
 
             case INSTALLER_AUTO:
@@ -141,20 +141,6 @@ public class Installer {
                 consoleInstaller.run(consoleAction, path);
                 break;
         }
-    }
-
-
-    public void loadGui(final InstallerFrame installerFrame) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    installerFrame.enableFrame();
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
 }

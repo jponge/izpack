@@ -72,7 +72,7 @@ public class InstallerFrame extends JFrame {
      */
     private static final float JAVA_SPECIFICATION_VERSION = Float.parseFloat(System
             .getProperty("java.specification.version"));
-    
+
     private static final String ICON_RESOURCE = "Installer.image";
 
     /**
@@ -1472,6 +1472,21 @@ public class InstallerFrame extends JFrame {
     public void showHelp() {
         IzPanel izPanel = (IzPanel) installdata.getPanels().get(installdata.getCurPanelNumber());
         izPanel.showHelp();
+    }
+
+    public void launchGUI() {
+        final InstallerFrame installerFrame = this;
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    installerFrame.enableFrame();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     /**
