@@ -20,6 +20,7 @@
 
 package com.izforge.izpack.installer.base;
 
+import com.izforge.izpack.bootstrap.IApplicationComponent;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.data.InstallData;
@@ -46,6 +47,8 @@ public class GUIInstaller extends InstallerBase {
      */
     private InstallData installdata;
 
+    private IApplicationComponent applicationComponent;
+
 
     /**
      * The constructor.
@@ -53,8 +56,9 @@ public class GUIInstaller extends InstallerBase {
      * @param installdata
      * @throws Exception Description of the Exception
      */
-    public GUIInstaller(InstallData installdata, ResourceManager resourceManager) throws Exception {
+    public GUIInstaller(InstallData installdata, ResourceManager resourceManager, IApplicationComponent applicationComponent) throws Exception {
         super(resourceManager);
+        this.applicationComponent=applicationComponent;
         this.installdata = installdata;
         initData();
     }
@@ -131,7 +135,8 @@ public class GUIInstaller extends InstallerBase {
 
         // We get the langpack name
         if (npacks != 1) {
-            LanguageDialog picker = new LanguageDialog(frame, resourceManager, installdata);
+//            LanguageDialog picker = new LanguageDialog(frame, resourceManager, installdata);
+            LanguageDialog picker = applicationComponent.getComponent(LanguageDialog.class);
             picker.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
             picker.setModal(true);
             picker.toFront();

@@ -1,10 +1,10 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
+import com.izforge.izpack.bootstrap.ApplicationComponentTest;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.*;
-import com.izforge.izpack.installer.provider.*;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
@@ -15,8 +15,6 @@ import org.junit.Test;
 import org.junit.rules.MethodRule;
 import org.junit.rules.Timeout;
 import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.behaviors.Caching;
-import org.picocontainer.injectors.ProviderAdapter;
 
 import java.awt.*;
 import java.io.File;
@@ -34,26 +32,16 @@ public class InstallationTest {
 
     @Rule
     public MethodRule globalTimeout = new Timeout(60000);
-    
-    private DefaultPicoContainer pico;
+
     private static final String APPNAME = "Test Installation";
+    private ApplicationComponentTest applicationComponentTest;
 
     @Before
     public void initBinding() throws Throwable {
         File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + APPNAME + ".tmp");
         file.delete();
-
-        pico = new DefaultPicoContainer(new Caching());
-        pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
-                .addAdapter(new ProviderAdapter(new IconsProvider()))
-                .addAdapter(new ProviderAdapter(new InstallerFrameProvider()))
-                .addAdapter(new ProviderAdapter(new RulesProvider()));
-        pico
-                .addComponent(ResourceManager.class)
-                .addComponent(ConsoleInstaller.class)
-                .addComponent(GUIInstaller.class)
-                .addComponent(AutomatedInstaller.class);
-        PicoProvider.setPico(pico);
+        applicationComponentTest = new ApplicationComponentTest();
+        applicationComponentTest.initBindings();
     }
 
     @After
@@ -61,22 +49,21 @@ public class InstallationTest {
         if (window != null) {
             window.cleanUp();
         }
-        pico.dispose();
     }
 
     @Test
     public void langpackEngShouldBeSet() throws Exception {
         compileAndUnzip("langpack", "engInstaller.xml");
-        pico.getComponent(InstallerFrame.class);
-        ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
+        applicationComponentTest.getComponent(InstallerFrame.class);
+        ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("eng"));
     }
 
     @Test
     public void langpackFraShouldBeSet() throws Exception {
         compileAndUnzip("langpack", "fraInstaller.xml");
-        pico.getComponent(InstallerFrame.class);
-        ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
+        applicationComponentTest.getComponent(InstallerFrame.class);
+        ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("fra"));
     }
 
@@ -106,7 +93,7 @@ public class InstallationTest {
 
 
     private void prepareFrame() {
-        InstallerFrame installerFrame = pico.getComponent(InstallerFrame.class);
+        InstallerFrame installerFrame = applicationComponentTest.getComponent(InstallerFrame.class);
         window = new FrameFixture(installerFrame);
         window.show();
     }
@@ -144,6 +131,6 @@ public class InstallationTest {
 
         String relativePath = baseDir.getAbsolutePath().substring(currentDir.getAbsolutePath().length());
         System.out.println(relativePath);
-        pico.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
+        applicationComponentTest.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
     }
 }
