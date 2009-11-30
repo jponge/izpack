@@ -55,12 +55,4 @@ public class InstallData extends AutomatedInstallData implements Serializable {
      */
     public Color buttonsHColor = new Color(230, 230, 230);
 
-    /**
-     * Constructs a new instance of this class.
-     */
-    public InstallData() {
-        super();
-    }
-
-
 }

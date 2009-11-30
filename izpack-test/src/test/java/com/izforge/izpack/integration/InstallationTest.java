@@ -6,6 +6,7 @@ import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.*;
 import org.apache.commons.io.FileUtils;
+import org.fest.swing.fixture.DialogFixture;
 import org.fest.swing.fixture.FrameFixture;
 import org.hamcrest.core.Is;
 import org.junit.After;
@@ -14,7 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
 import org.junit.rules.Timeout;
-import org.picocontainer.DefaultPicoContainer;
 
 import java.awt.*;
 import java.io.File;
@@ -26,7 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class InstallationTest {
 
-    private FrameFixture window;
+    private FrameFixture installerFrameFixture;
 
     private File currentDir = new File(getClass().getClassLoader().getResource(".").getFile());
 
@@ -35,6 +35,7 @@ public class InstallationTest {
 
     private static final String APPNAME = "Test Installation";
     private ApplicationComponentTest applicationComponentTest;
+    private DialogFixture dialogFrameFixture;
 
     @Before
     public void initBinding() throws Throwable {
@@ -46,15 +47,15 @@ public class InstallationTest {
 
     @After
     public void tearBinding() {
-        if (window != null) {
-            window.cleanUp();
+        if (installerFrameFixture != null) {
+            installerFrameFixture.cleanUp();
         }
     }
 
     @Test
     public void langpackEngShouldBeSet() throws Exception {
         compileAndUnzip("langpack", "engInstaller.xml");
-        applicationComponentTest.getComponent(InstallerFrame.class);
+        applicationComponentTest.getComponent(LanguageDialog.class).initLangPack();
         ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("eng"));
     }
@@ -62,7 +63,7 @@ public class InstallationTest {
     @Test
     public void langpackFraShouldBeSet() throws Exception {
         compileAndUnzip("langpack", "fraInstaller.xml");
-        applicationComponentTest.getComponent(InstallerFrame.class);
+        applicationComponentTest.getComponent(LanguageDialog.class).initLangPack();
         ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("fra"));
     }
@@ -70,33 +71,56 @@ public class InstallationTest {
     @Test
     public void testHelloAndFinishPanels() throws Exception {
         compileAndUnzip("samples", "helloAndFinish.xml");
-        prepareFrame();
+        applicationComponentTest.getComponent(LanguageDialog.class).initLangPack();
+        InstallerFrame installerFrame = applicationComponentTest.getComponent(InstallerFrame.class);
+        installerFrameFixture = new FrameFixture(installerFrame);
+
+        dialogFrameFixture.show();
+        installerFrameFixture.show();  
         // Hello panel
-        window.requireSize(new Dimension(640, 480));
-        window.button(GuiId.BUTTON_NEXT.id).click();
-        window.requireVisible();
+        installerFrameFixture.requireSize(new Dimension(640, 480));
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.requireVisible();
         // Finish panel
     }
 
 
     @Test
-    public void testBasicInstall() throws Exception {
+    public void testLangPickerChoseEng() throws Exception {
         compileAndUnzip("samples/basicInstall", "basicInstall.xml");
-        prepareFrame();
-        // Hello panel
-        String[] strings = window.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents();
-        System.out.println(strings);
-        window.button(GuiId.BUTTON_NEXT.id).click();
-        Thread.sleep(10000);
+        prepareDialogFixture();
+        assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(),Is.is(new String[]{"eng", "fra"}));
+        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
+        ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
+        assertThat(resourceManager.getLocale(), Is.is("eng"));
+    }
+
+    @Test
+    public void testLangPickerChoseFra() throws Exception {
+        compileAndUnzip("samples/basicInstall", "basicInstall.xml");
+        prepareDialogFixture();
+        assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(),Is.is(new String[]{"eng", "fra"}));
+        dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).selectItem(1);
+        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
+        ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
+        assertThat(resourceManager.getLocale(), Is.is("fra"));
+    }
+
+    private void prepareDialogFixture() {
+        LanguageDialog languageDialog= applicationComponentTest.getComponent(LanguageDialog.class);
+        dialogFrameFixture = new DialogFixture(languageDialog);
+        dialogFrameFixture.show();
+    }
+
+//        InstallerFrame installerFrame = applicationComponentTest.getComponent(InstallerFrame.class);
+//        installerFrameFixture = new FrameFixture(installerFrame);
+//
+//         Hello panel
+//        String[] strings = installerFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents();
+//        System.out.println(strings);
+//        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
         // Finish panel
-    }
-
-
-    private void prepareFrame() {
-        InstallerFrame installerFrame = applicationComponentTest.getComponent(InstallerFrame.class);
-        window = new FrameFixture(installerFrame);
-        window.show();
-    }
 
     /**
      * Compile an installer and unzip the created jar.

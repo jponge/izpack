@@ -1,9 +1,13 @@
 package com.izforge.izpack.installer.base;
 
+import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.Debug;
+import sun.misc.URLClassPath;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.TreeMap;
@@ -24,7 +29,7 @@ import java.util.TreeMap;
  * @author Christian Murphy
  * @author Klaus Bartz
  */
-public class LanguageDialog extends JDialog implements ActionListener {
+public class LanguageDialog extends JDialog implements ActionListener, InstallerRequirementDisplay {
 
     private static final long serialVersionUID = 3256443616359887667L;
 
@@ -58,18 +63,21 @@ public class LanguageDialog extends JDialog implements ActionListener {
     private static final String[] LANGUAGE_DISPLAY_TYPES = {"iso3", "native", "default"};
     private ResourceManager resourceManager;
     private JFrame frame;
+    private ConditionCheck conditionCheck;
 
 
     /**
      * The constructor.
      *
      * @param installData
+     * @param conditionCheck
      */
-    public LanguageDialog(JFrame frame, ResourceManager resourceManager, InstallData installData) throws Exception {
+    public LanguageDialog(JFrame frame, ResourceManager resourceManager, InstallData installData, ConditionCheck conditionCheck) throws Exception {
         super(frame);
-        this.frame=frame;
-        this.resourceManager=resourceManager;
+        this.frame = frame;
+        this.resourceManager = resourceManager;
         this.installdata = installData;
+        this.conditionCheck = conditionCheck;
         this.setName(GuiId.DIALOG_PICKER.id);
         // We build the GUI
         addWindowListener(new WindowHandler());
@@ -140,6 +148,8 @@ public class LanguageDialog extends JDialog implements ActionListener {
         Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         setLocation(center.x - frameSize.width / 2, center.y - frameSize.height / 2 - 10);
         setResizable(true);
+
+
     }
 
     /**
@@ -382,14 +392,10 @@ public class LanguageDialog extends JDialog implements ActionListener {
 
             if (!icons.containsKey(iso3)) {
                 ImageIcon icon;
-                try {
-                    icon = resourceManager.getImageIconResource("res/flag." + iso3);
-                    icons.put(iso3, icon);
-                    icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
-                    grayIcons.put(iso3, icon);
-                } catch (ResourceNotFoundException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
+                icon = resourceManager.getImageIconResource("res/flag." + iso3);
+                icons.put(iso3, icon);
+                icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
+                grayIcons.put(iso3, icon);
             }
             if (isSelected || index == -1) {
                 setIcon(icons.get(iso3));
@@ -437,4 +443,68 @@ public class LanguageDialog extends JDialog implements ActionListener {
         return (true);
     }
 
+
+    public void initLangPack() throws Exception {
+        // Checks the Java version
+        conditionCheck.check();
+
+        // Loads the suitable langpack
+        loadLangPack(installdata);
+
+        // Configure buttons after locale has been loaded
+        configureGuiButtons(installdata);
+
+        // check installer conditions
+        if (!conditionCheck.checkInstallerRequirements(this)) {
+            Debug.log("not all installerconditions are fulfilled.");
+            System.exit(-1);
+            return;
+        }
+    }
+
+    /**
+     * Loads the suitable langpack.
+     *
+     * @param installdata
+     * @throws Exception Description of the Exception
+     */
+    private void loadLangPack(InstallData installdata) throws Exception {
+        // Initialisations
+        java.util.List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
+        int npacks = availableLangPacks.size();
+        if (npacks == 0) {
+            throw new Exception("no language pack available");
+        }
+        String selectedPack;
+
+        // We get the langpack name
+        if (npacks != 1) {
+            selectedPack = this.runPicker();
+        } else {
+            selectedPack = availableLangPacks.get(0);
+        }
+        propagateLocale(selectedPack);
+    }
+
+    private void propagateLocale(String selectedPack) throws Exception {
+        installdata.setAndProcessLocal(selectedPack);
+        InputStream in = resourceManager.getInputStream("langpacks/" + selectedPack + ".xml");
+        installdata.setLangpack(new LocaleDatabase(in));
+        // create the resource manager (after the language selection!)
+        resourceManager.setLocale(selectedPack);
+    }
+
+    /**
+     * @param installdata
+     */
+    private void configureGuiButtons(InstallData installdata) {
+        UIManager.put("OptionPane.yesButtonText", installdata.getLangpack().getString("installer.yes"));
+        UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
+        UIManager.put("OptionPane.cancelButtonText", installdata.getLangpack()
+                .getString("installer.cancel"));
+    }
+
+    public void showMissingRequirementMessage(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
 }

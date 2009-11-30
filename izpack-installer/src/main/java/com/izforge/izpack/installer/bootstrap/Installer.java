@@ -127,7 +127,7 @@ public class Installer {
     private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception {
         switch (type) {
             case INSTALLER_GUI:
-                applicationComponent.getComponent(GUIInstaller.class).initLangPack();
+                applicationComponent.getComponent(LanguageDialog.class).initLangPack();
                 applicationComponent.getComponent(InstallerFrame.class).launchGUI();
                 break;
 

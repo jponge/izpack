@@ -1,6 +1,11 @@
 package com.izforge.izpack.installer.base;
 
+import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.InstallerRequirement;
+import com.izforge.izpack.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.rules.Condition;
+import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.FileExecutor;
 
@@ -138,4 +143,28 @@ public class ConditionCheck {
         }
     }
 
+
+    public boolean checkInstallerRequirements(InstallerRequirementDisplay display) throws Exception {
+        boolean result = true;
+        for (InstallerRequirement installerrequirement : installdata.getInstallerrequirements()) {
+            String conditionid = installerrequirement.getCondition();
+            Condition condition = RulesEngineImpl.getCondition(conditionid);
+            if (condition == null) {
+                Debug.log(conditionid + " not a valid condition.");
+                throw new Exception(conditionid + "could not be found as a defined condition");
+            }
+            if (!condition.isTrue()) {
+                String message = installerrequirement.getMessage();
+                if ((message != null) && (message.length() > 0)) {
+                    String localizedMessage = installdata.getLangpack().getString(message);
+                    display.showMissingRequirementMessage(localizedMessage);
+                }
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
+
 }
+

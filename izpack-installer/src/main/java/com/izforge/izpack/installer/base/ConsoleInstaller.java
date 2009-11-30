@@ -27,7 +27,6 @@ import com.izforge.izpack.installer.DataValidatorFactory;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.bootstrap.Installer;
-import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 
@@ -53,11 +52,12 @@ public class ConsoleInstaller extends InstallerBase {
 
     private PrintWriter printWriter;
     private RulesEngine rules;
+    private ConditionCheck checkCondition;
 
-    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourceManager) throws Exception {
+    public ConsoleInstaller(AutomatedInstallData installdata, RulesEngine rules, ResourceManager resourceManager,ConditionCheck checkCondition) throws Exception {
         super(resourceManager);
 //        super(resourceManager);
-//
+        this.checkCondition=checkCondition;
         this.installdata = installdata;
         this.rules = rules;
         // Fallback: choose the first listed language pack if not specified via commandline
@@ -68,16 +68,16 @@ public class ConsoleInstaller extends InstallerBase {
         InputStream in = getClass().getResourceAsStream(
                 "/langpacks/" + this.installdata.getLocaleISO3() + ".xml");
         this.installdata.setLangpack(new LocaleDatabase(in));
-        this.installdata.setVariable(ScriptParser.ISO3_LANG, this.installdata.getLocaleISO3());
+        this.installdata.setVariable(ScriptParserConstant.ISO3_LANG, this.installdata.getLocaleISO3());
         resourceManager.setLocale(this.installdata.getLocaleISO3());
-        if (!checkInstallerRequirements(this.installdata)) {
+        if (!checkCondition.checkInstallerRequirements(this)) {
             Debug.log("not all installerconditions are fulfilled.");
             return;
         }
     }
 
     protected void iterateAndPerformAction(String strAction) throws Exception {
-        if (!checkInstallerRequirements(this.installdata)) {
+        if (!checkCondition.checkInstallerRequirements(this)) {
             Debug.log("not all installerconditions are fulfilled.");
             return;
         }

@@ -22,6 +22,7 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.data.*;
+import com.izforge.izpack.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngineImpl;
@@ -38,23 +39,20 @@ import java.util.*;
  * @author Jonathan Halliday
  * @author Julien Ponge
  */
-public abstract class InstallerBase {
+public abstract class InstallerBase implements InstallerRequirementDisplay {
 
 
     protected ResourceManager resourceManager;
 
     /**
      * Abstract constructor which need resource manager
+     *
      * @param resourceManager
      */
     protected InstallerBase(ResourceManager resourceManager) {
         this.resourceManager = resourceManager;
     }
 
-
-    protected void showMissingRequirementMessage(String message) {
-        Debug.log(message);
-    }
 
     /**
      * Gets the stream to a resource.
@@ -84,28 +82,7 @@ public abstract class InstallerBase {
         return result;
     }
 
-
-
-    public boolean checkInstallerRequirements(AutomatedInstallData installdata) throws Exception {
-        boolean result = true;
-
-        for (InstallerRequirement installerrequirement : installdata.getInstallerrequirements()) {
-            String conditionid = installerrequirement.getCondition();
-            Condition condition = RulesEngineImpl.getCondition(conditionid);
-            if (condition == null) {
-                Debug.log(conditionid + " not a valid condition.");
-                throw new Exception(conditionid + "could not be found as a defined condition");
-            }
-            if (!condition.isTrue()) {
-                String message = installerrequirement.getMessage();
-                if ((message != null) && (message.length() > 0)) {
-                    String localizedMessage = installdata.getLangpack().getString(message);
-                    this.showMissingRequirementMessage(localizedMessage);
-                }
-                result = false;
-                break;
-            }
-        }
-        return result;
+    public void showMissingRequirementMessage(String message) {
+        Debug.log(message);
     }
 }

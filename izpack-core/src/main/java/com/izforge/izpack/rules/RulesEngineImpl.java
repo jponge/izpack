@@ -128,7 +128,7 @@ public class RulesEngineImpl implements RulesEngine {
     public RulesEngineImpl(IXMLElement conditionsspecxml, AutomatedInstallData installdata) {
         this();
         this.conditionsspec = conditionsspecxml;
-        RulesEngineImpl.installdata = installdata;
+        this.installdata = installdata;
         this.readConditions();
         init();
     }

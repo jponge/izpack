@@ -329,6 +329,15 @@ public class AutomatedInstallData implements Serializable {
         }
     }
 
+
+    public void setAndProcessLocal(String locale) throws Exception {
+        // We add an xml data information
+        getXmlData().setAttribute("langpack", locale);
+        // We load the langpack
+        setLocaleISO3(locale);
+        setVariable(ScriptParserConstant.ISO3_LANG, getLocaleISO3());
+    }
+
     public RulesEngine getRules() {
         return rules;
     }

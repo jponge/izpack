@@ -1,6 +1,7 @@
 package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.LanguageDialog;
 import com.izforge.izpack.installer.data.InstallData;
 import org.picocontainer.injectors.Provider;
@@ -14,9 +15,9 @@ import java.awt.*;
 public class LanguageDialogProvider implements Provider {
     private ResourceManager resourceManager;
 
-    public LanguageDialog provide(InstallData installData, ResourceManager resourceManager) throws Exception {
+    public LanguageDialog provide(InstallData installData, ResourceManager resourceManager, ConditionCheck conditionCheck) throws Exception {
         this.resourceManager = resourceManager;
-        return new LanguageDialog(initFrame(), resourceManager, installData);
+        return new LanguageDialog(initFrame(), resourceManager, installData, conditionCheck);
     }
 
     private JFrame initFrame() {
@@ -31,4 +32,5 @@ public class LanguageDialogProvider implements Provider {
                 (screenSize.height - frameSize.height) / 2 - 10);
         return frame;
     }
+
 }

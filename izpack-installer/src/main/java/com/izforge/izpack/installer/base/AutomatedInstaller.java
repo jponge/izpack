@@ -29,7 +29,6 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.installer.base.InstallerBase;
-import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 
@@ -56,12 +55,17 @@ public class AutomatedInstaller extends InstallerBase {
     /**
      * The automated installation data.
      */
-    private AutomatedInstallData idata = new AutomatedInstallData();
+    private AutomatedInstallData idata;
 
     /**
      * The result of the installation.
      */
     private boolean result = false;
+
+    /**
+     * Manager for conditions
+     */
+    private ConditionCheck checkCondition;
 
     /**
      * Constructing an instance triggers the install.
@@ -70,9 +74,9 @@ public class AutomatedInstaller extends InstallerBase {
      * @param resourceManager
      * @throws Exception Description of the Exception
      */
-    public AutomatedInstaller(String inputFilename, ResourceManager resourceManager) throws Exception {
+    public AutomatedInstaller(String inputFilename, ResourceManager resourceManager,ConditionCheck checkCondition) throws Exception {
         super(resourceManager);
-
+        this.checkCondition=checkCondition;
         File input = new File(inputFilename);
 
 
@@ -83,7 +87,7 @@ public class AutomatedInstaller extends InstallerBase {
         this.idata.setLocaleISO3(this.idata.getXmlData().getAttribute("langpack", "eng"));
         InputStream in = resourceManager.getLangPack(this.idata.getLocaleISO3());        
         this.idata.setLangpack(new LocaleDatabase(in));
-        this.idata.setVariable(ScriptParser.ISO3_LANG, this.idata.getLocaleISO3());
+        this.idata.setVariable(ScriptParserConstant.ISO3_LANG, this.idata.getLocaleISO3());
 
         // create the resource manager singleton
         resourceManager.setLocale(this.idata.getLocaleISO3());
@@ -281,7 +285,7 @@ public class AutomatedInstaller extends InstallerBase {
      */
     public void doInstall() throws Exception {
         // check installer conditions
-        if (!checkInstallerRequirements(this.idata)) {
+        if (!checkCondition.checkInstallerRequirements(this)) {
             Debug.log("not all installerconditions are fulfilled.");
             System.exit(-1);
             return;

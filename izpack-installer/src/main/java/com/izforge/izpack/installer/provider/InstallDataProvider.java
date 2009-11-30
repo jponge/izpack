@@ -6,9 +6,7 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
-import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
@@ -89,11 +87,11 @@ public class InstallDataProvider implements Provider {
         checkForRebootAction(inf);
 
         // We put the Info data as variables
-        installdata.setVariable(ScriptParser.APP_NAME, inf.getAppName());
+        installdata.setVariable(ScriptParserConstant.APP_NAME, inf.getAppName());
         if (inf.getAppURL() != null) {
-            installdata.setVariable(ScriptParser.APP_URL, inf.getAppURL());
+            installdata.setVariable(ScriptParserConstant.APP_URL, inf.getAppURL());
         }
-        installdata.setVariable(ScriptParser.APP_VER, inf.getAppVersion());
+        installdata.setVariable(ScriptParserConstant.APP_VER, inf.getAppVersion());
         if (inf.getUninstallerCondition() != null) {
             installdata.setVariable("UNINSTALLER_CONDITION", inf.getUninstallerCondition());
         }
@@ -152,13 +150,13 @@ public class InstallDataProvider implements Provider {
 
         installdata.setVariable("APPLICATIONS_DEFAULT_ROOT", dir);
         dir += File.separator;
-        installdata.setVariable(ScriptParser.JAVA_HOME, System.getProperty("java.home"));
-        installdata.setVariable(ScriptParser.CLASS_PATH, System.getProperty("java.class.path"));
-        installdata.setVariable(ScriptParser.USER_HOME, System.getProperty("user.home"));
-        installdata.setVariable(ScriptParser.USER_NAME, System.getProperty("user.name"));
-        installdata.setVariable(ScriptParser.IP_ADDRESS, IPAddress);
-        installdata.setVariable(ScriptParser.HOST_NAME, hostname);
-        installdata.setVariable(ScriptParser.FILE_SEPARATOR, File.separator);
+        installdata.setVariable(ScriptParserConstant.JAVA_HOME, System.getProperty("java.home"));
+        installdata.setVariable(ScriptParserConstant.CLASS_PATH, System.getProperty("java.class.path"));
+        installdata.setVariable(ScriptParserConstant.USER_HOME, System.getProperty("user.home"));
+        installdata.setVariable(ScriptParserConstant.USER_NAME, System.getProperty("user.name"));
+        installdata.setVariable(ScriptParserConstant.IP_ADDRESS, IPAddress);
+        installdata.setVariable(ScriptParserConstant.HOST_NAME, hostname);
+        installdata.setVariable(ScriptParserConstant.FILE_SEPARATOR, File.separator);
 
         Enumeration e = System.getProperties().keys();
         while (e.hasMoreElements()) {
