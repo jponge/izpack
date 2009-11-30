@@ -14,7 +14,7 @@ import javax.swing.*;
  * Application Component for integration tests.<br />
  * Encapsulate the pico provider for application level component.
  */
-public class ApplicationComponentTest implements IApplicationComponent {
+public class ApplicationTestComponent implements IApplicationComponent {
 
     public DefaultPicoContainer pico;
 
@@ -32,6 +32,10 @@ public class ApplicationComponentTest implements IApplicationComponent {
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(IApplicationComponent.class,this);
+    }
+
+    public void dispose(){
+        pico.dispose();
     }
 
     public <T> T getComponent(Class<T> componentType) {

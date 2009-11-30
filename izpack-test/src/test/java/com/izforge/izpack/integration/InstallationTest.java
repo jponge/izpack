@@ -1,7 +1,7 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
-import com.izforge.izpack.bootstrap.ApplicationComponentTest;
+import com.izforge.izpack.bootstrap.ApplicationTestComponent;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.*;
@@ -34,15 +34,17 @@ public class InstallationTest {
     public MethodRule globalTimeout = new Timeout(60000);
 
     private static final String APPNAME = "Test Installation";
-    private ApplicationComponentTest applicationComponentTest;
+    private ApplicationTestComponent applicationTestComponent;
     private DialogFixture dialogFrameFixture;
+    private InstallerFrame installerFrame;
+    private LanguageDialog languageDialog;
 
     @Before
     public void initBinding() throws Throwable {
         File file = new File(System.getProperty("java.io.tmpdir"), "iz-" + APPNAME + ".tmp");
         file.delete();
-        applicationComponentTest = new ApplicationComponentTest();
-        applicationComponentTest.initBindings();
+        applicationTestComponent = new ApplicationTestComponent();
+        applicationTestComponent.initBindings();
     }
 
     @After
@@ -50,33 +52,34 @@ public class InstallationTest {
         if (installerFrameFixture != null) {
             installerFrameFixture.cleanUp();
         }
+        if(dialogFrameFixture!=null){
+            dialogFrameFixture.cleanUp();
+        }
+        applicationTestComponent.dispose();
     }
 
     @Test
     public void langpackEngShouldBeSet() throws Exception {
         compileAndUnzip("langpack", "engInstaller.xml");
-        applicationComponentTest.getComponent(LanguageDialog.class).initLangPack();
-        ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
+        applicationTestComponent.getComponent(LanguageDialog.class).initLangPack();
+        ResourceManager resourceManager = applicationTestComponent.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("eng"));
     }
 
     @Test
     public void langpackFraShouldBeSet() throws Exception {
         compileAndUnzip("langpack", "fraInstaller.xml");
-        applicationComponentTest.getComponent(LanguageDialog.class).initLangPack();
-        ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
+        applicationTestComponent.getComponent(LanguageDialog.class).initLangPack();
+        ResourceManager resourceManager = applicationTestComponent.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("fra"));
     }
 
     @Test
     public void testHelloAndFinishPanels() throws Exception {
         compileAndUnzip("samples", "helloAndFinish.xml");
-        applicationComponentTest.getComponent(LanguageDialog.class).initLangPack();
-        InstallerFrame installerFrame = applicationComponentTest.getComponent(InstallerFrame.class);
-        installerFrameFixture = new FrameFixture(installerFrame);
+        applicationTestComponent.getComponent(LanguageDialog.class).initLangPack();
+        prepareFrameFixture();
 
-        dialogFrameFixture.show();
-        installerFrameFixture.show();  
         // Hello panel
         installerFrameFixture.requireSize(new Dimension(640, 480));
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
@@ -91,7 +94,7 @@ public class InstallationTest {
         prepareDialogFixture();
         assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(),Is.is(new String[]{"eng", "fra"}));
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
-        ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
+        ResourceManager resourceManager = applicationTestComponent.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("eng"));
     }
 
@@ -102,25 +105,36 @@ public class InstallationTest {
         assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(),Is.is(new String[]{"eng", "fra"}));
         dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).selectItem(1);
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
-        ResourceManager resourceManager = applicationComponentTest.getComponent(ResourceManager.class);
+        ResourceManager resourceManager = applicationTestComponent.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("fra"));
     }
 
+    @Test
+    public void testBasicInstall() throws Exception {
+        compileAndUnzip("samples/basicInstall", "basicInstall.xml");
+        // Lang picker
+        prepareDialogFixture();
+        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
+
+        prepareFrameFixture();
+        // Hello panel
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
+        // Finish panel
+    }
+
+    private void prepareFrameFixture() {
+        installerFrame = applicationTestComponent.getComponent(InstallerFrame.class);
+        installerFrameFixture = new FrameFixture(installerFrame);
+        installerFrameFixture.show();
+    }
+
     private void prepareDialogFixture() {
-        LanguageDialog languageDialog= applicationComponentTest.getComponent(LanguageDialog.class);
+        languageDialog= applicationTestComponent.getComponent(LanguageDialog.class);
         dialogFrameFixture = new DialogFixture(languageDialog);
         dialogFrameFixture.show();
     }
 
-//        InstallerFrame installerFrame = applicationComponentTest.getComponent(InstallerFrame.class);
-//        installerFrameFixture = new FrameFixture(installerFrame);
-//
-//         Hello panel
-//        String[] strings = installerFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents();
-//        System.out.println(strings);
-//        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-
-        // Finish panel
 
     /**
      * Compile an installer and unzip the created jar.
@@ -155,6 +169,6 @@ public class InstallationTest {
 
         String relativePath = baseDir.getAbsolutePath().substring(currentDir.getAbsolutePath().length());
         System.out.println(relativePath);
-        applicationComponentTest.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
+        applicationTestComponent.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
     }
 }

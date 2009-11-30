@@ -32,6 +32,10 @@ public class ApplicationComponent implements IApplicationComponent {
                 .addComponent(IApplicationComponent.class,this);
     }
 
+    public void dispose() {
+        pico.dispose();
+    }
+
     public <T> T getComponent(Class<T> componentType) {
         return pico.getComponent(componentType);
     }

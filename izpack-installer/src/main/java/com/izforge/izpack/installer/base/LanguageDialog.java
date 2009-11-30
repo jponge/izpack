@@ -3,11 +3,8 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerRequirementDisplay;
-import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.Debug;
-import sun.misc.URLClassPath;
 
 import javax.swing.*;
 import java.awt.*;
@@ -148,8 +145,9 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
         setLocation(center.x - frameSize.width / 2, center.y - frameSize.height / 2 - 10);
         setResizable(true);
-
-
+        this.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
+        this.setModal(true);
+        this.toFront();
     }
 
     /**
@@ -302,22 +300,22 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
      * @param e The event.
      */
     public void actionPerformed(ActionEvent e) {
+        String selectedPack = (String) this.getSelection();
+        if (selectedPack == null) {
+            throw new RuntimeException("installation canceled");
+        }
+        try {
+            propagateLocale(selectedPack);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
         dispose();
     }
 
-    public String runPicker() throws Exception {
-        this.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
-        this.setModal(true);
-        this.toFront();
+    public void runPicker() {
         // frame.setVisible(true);
         frame.setVisible(false);
         this.setVisible(true);
-
-        String selectedPack = (String) this.getSelection();
-        if (selectedPack == null) {
-            throw new Exception("installation canceled");
-        }
-        return selectedPack;
     }
 
     /**
@@ -447,12 +445,19 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
     public void initLangPack() throws Exception {
         // Checks the Java version
         conditionCheck.check();
-
+        
         // Loads the suitable langpack
-        loadLangPack(installdata);
+        java.util.List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
+        int npacks = availableLangPacks.size();
+        String selectedPack;
 
-        // Configure buttons after locale has been loaded
-        configureGuiButtons(installdata);
+        // We get the langpack name
+        if (npacks != 1) {
+            this.runPicker();
+        } else {
+            selectedPack = availableLangPacks.get(0);
+            propagateLocale(selectedPack);
+        }
 
         // check installer conditions
         if (!conditionCheck.checkInstallerRequirements(this)) {
@@ -462,36 +467,14 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         }
     }
 
-    /**
-     * Loads the suitable langpack.
-     *
-     * @param installdata
-     * @throws Exception Description of the Exception
-     */
-    private void loadLangPack(InstallData installdata) throws Exception {
-        // Initialisations
-        java.util.List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
-        int npacks = availableLangPacks.size();
-        if (npacks == 0) {
-            throw new Exception("no language pack available");
-        }
-        String selectedPack;
-
-        // We get the langpack name
-        if (npacks != 1) {
-            selectedPack = this.runPicker();
-        } else {
-            selectedPack = availableLangPacks.get(0);
-        }
-        propagateLocale(selectedPack);
-    }
-
     private void propagateLocale(String selectedPack) throws Exception {
         installdata.setAndProcessLocal(selectedPack);
         InputStream in = resourceManager.getInputStream("langpacks/" + selectedPack + ".xml");
         installdata.setLangpack(new LocaleDatabase(in));
         // create the resource manager (after the language selection!)
         resourceManager.setLocale(selectedPack);
+        // Configure buttons after locale has been loaded
+        configureGuiButtons(installdata);        
     }
 
     /**

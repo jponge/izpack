@@ -11,4 +11,5 @@ public interface IApplicationComponent {
 
     <T> T getComponent(final Class<T> componentType);
 
+    void dispose();
 }

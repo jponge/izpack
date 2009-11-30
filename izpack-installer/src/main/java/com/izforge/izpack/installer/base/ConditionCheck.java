@@ -1,7 +1,7 @@
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.InstallerRequirement;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerRequirementDisplay;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.rules.Condition;
@@ -18,16 +18,19 @@ import java.io.File;
  */
 public class ConditionCheck {
     private InstallData installdata;
+    private ResourceManager resourceManager;
 
-    public ConditionCheck(InstallData installdata) {
+    public ConditionCheck(InstallData installdata, ResourceManager resourceManager) {
         this.installdata = installdata;
+        this.resourceManager = resourceManager;
     }
 
     public void check() throws Exception {
-        checkJavaVersion(installdata);
-        checkJDKAvailable(installdata);
+        checkJavaVersion();
+        checkJDKAvailable();
         // Check for already running instance
-        checkLockFile(installdata);
+        checkLockFile();
+        checkLangPackAvaible();
     }
 
     /**
@@ -35,10 +38,9 @@ public class ConditionCheck {
      * the installer from accidentally keeping a lock on a file if the install
      * fails or is killed.
      *
-     * @param installdata
      * @throws Exception Description of the Exception
      */
-    private void checkLockFile(InstallData installdata) throws Exception {
+    public void checkLockFile() throws Exception {
         String tempDir = System.getProperty("java.io.tmpdir");
         String appName = installdata.getInfo().getAppName();
         String fileName = "iz-" + appName + ".tmp";
@@ -94,10 +96,9 @@ public class ConditionCheck {
     /**
      * Checks the Java version.
      *
-     * @param installdata
      * @throws Exception Description of the Exception
      */
-    private void checkJavaVersion(InstallData installdata) throws Exception {
+    private void checkJavaVersion() throws Exception {
         String version = System.getProperty("java.version");
         String required = installdata.getInfo().getJavaVersion();
         if (version.compareTo(required) < 0) {
@@ -118,10 +119,8 @@ public class ConditionCheck {
 
     /**
      * Checks if a JDK is available.
-     *
-     * @param installdata
      */
-    private void checkJDKAvailable(InstallData installdata) {
+    private void checkJDKAvailable() {
         if (!installdata.getInfo().isJdkRequired()) {
             return;
         }
@@ -164,6 +163,11 @@ public class ConditionCheck {
             }
         }
         return result;
+    }
+
+    public boolean checkLangPackAvaible() throws Exception {
+        java.util.List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
+        return availableLangPacks.size() != 0;
     }
 
 }
