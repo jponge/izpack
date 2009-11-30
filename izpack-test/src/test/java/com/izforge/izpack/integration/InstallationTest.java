@@ -49,12 +49,6 @@ public class InstallationTest {
 
     @After
     public void tearBinding() {
-        if (installerFrameFixture != null) {
-            installerFrameFixture.cleanUp();
-        }
-        if(dialogFrameFixture!=null){
-            dialogFrameFixture.cleanUp();
-        }
         applicationTestComponent.dispose();
     }
 
@@ -115,9 +109,21 @@ public class InstallationTest {
         // Lang picker
         prepareDialogFixture();
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
+        // Seems necessary to unlock window
+        dialogFrameFixture.cleanUp();
 
-        prepareFrameFixture();
+        prepareFrameFixture();        
         // Hello panel
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Info Panel
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Licence Panel
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Target Panel
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Packs Panel
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Install Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
 
         // Finish panel
