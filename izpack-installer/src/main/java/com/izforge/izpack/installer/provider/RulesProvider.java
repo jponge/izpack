@@ -5,9 +5,9 @@ import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import org.picocontainer.injectors.Provider;
-import org.picocontainer.injectors.ProviderAdapter;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -34,7 +34,7 @@ public class RulesProvider implements Provider {
             ObjectInputStream objIn = new ObjectInputStream(in);
             Map rules = (Map) objIn.readObject();
             if ((rules != null) && (rules.size() != 0)) {
-                res = new RulesEngine(rules, installdata);
+                res = new RulesEngineImpl(rules, installdata);
             }
             objIn.close();
         }
@@ -49,19 +49,19 @@ public class RulesProvider implements Provider {
         try {
             InputStream input = this.getClass().getResourceAsStream(CONDITIONS_SPECRESOURCENAME);
             if (input == null) {
-                res = new RulesEngine((IXMLElement) null, installdata);
+                res = new RulesEngineImpl((IXMLElement) null, installdata);
                 return res;
             }
             XMLParser xmlParser = new XMLParser();
 
             // get the data
             IXMLElement conditionsxml = xmlParser.parse(input);
-            res = new RulesEngine(conditionsxml, installdata);
+            res = new RulesEngineImpl(conditionsxml, installdata);
         }
         catch (Exception e) {
             Debug.trace("Can not find optional resource " + CONDITIONS_SPECRESOURCENAME);
             // there seem to be no conditions
-            res = new RulesEngine((IXMLElement) null, installdata);
+            res = new RulesEngineImpl((IXMLElement) null, installdata);
         }
         installdata.setRules(res);
         return res;

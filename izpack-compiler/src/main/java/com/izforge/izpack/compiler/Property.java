@@ -23,6 +23,7 @@ package com.izforge.izpack.compiler;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 import org.apache.tools.ant.taskdefs.Execute;
 
 import java.io.*;
@@ -260,7 +261,7 @@ public class Property {
      * @param props properties to resolve
      */
     private void resolveAllProperties(Properties props) throws CompilerException {
-        VariableSubstitutor subs = new VariableSubstitutor(props);
+        VariableSubstitutor subs = new VariableSubstitutorImpl(props);
         subs.setBracesRequired(true);
 
         for (Enumeration e = props.keys(); e.hasMoreElements();) {

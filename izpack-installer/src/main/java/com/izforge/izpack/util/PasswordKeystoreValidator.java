@@ -148,7 +148,7 @@ public class PasswordKeystoreValidator implements Validator {
         Map<String, String> returnValue = null;
         PasswordGroup group = null;
         InstallData idata = getIdata(client);
-        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         try {
             group = (PasswordGroup) client;
             if (group.hasParams()) {

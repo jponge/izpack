@@ -21,6 +21,7 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.rules.RulesEngineImpl;
 import junit.framework.TestCase;
 import org.w3c.dom.Document;
 
@@ -57,7 +58,7 @@ public class ConditionTest extends TestCase {
         conditionspec.addChild(this.createRefCondition("test.true2", "test.true", ownerDocument));
         //conditionspec.addChild(createNotCondition("test.not.true", createVariableCondition("test.true", "TEST", "true")));
         conditionspec.addChild(createNotCondition("test.not.true", createRefCondition("", "test.true", ownerDocument), ownerDocument));
-        rules = new RulesEngine(conditionspec, idata);
+        rules = new RulesEngineImpl(conditionspec, idata);
     }
 
     /* (non-Javadoc)
@@ -104,18 +105,18 @@ public class ConditionTest extends TestCase {
     }
 
     public void testNotCondition() {
-        assertNull(RulesEngine.getCondition("test.not"));
-        assertNotNull(RulesEngine.getCondition("test.not.true"));
+        assertNull(RulesEngineImpl.getCondition("test.not"));
+        assertNotNull(RulesEngineImpl.getCondition("test.not.true"));
         assertTrue(rules.isConditionTrue("test.not.true", idata.getVariables()));
 
-        assertNotNull(RulesEngine.getCondition("!test.not.true"));
+        assertNotNull(RulesEngineImpl.getCondition("!test.not.true"));
 
         assertFalse(rules.isConditionTrue("!test.not.true", idata.getVariables()));
     }
 
     public void testVariableCondition() {
-        assertNotNull(RulesEngine.getCondition("test.true"));
-        assertNotNull(RulesEngine.getCondition("test.true2"));
+        assertNotNull(RulesEngineImpl.getCondition("test.true"));
+        assertNotNull(RulesEngineImpl.getCondition("test.true2"));
 
         assertFalse(rules.isConditionTrue("test.true", idata.getVariables()));
         assertFalse(rules.isConditionTrue("test.true2", idata.getVariables()));

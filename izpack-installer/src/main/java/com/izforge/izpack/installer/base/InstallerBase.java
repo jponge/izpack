@@ -22,10 +22,9 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.data.DynamicVariable;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.rules.Condition;
-import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 
 import java.io.InputStream;
@@ -42,7 +41,6 @@ import java.util.*;
 public abstract class InstallerBase {
 
     private List<InstallerRequirement> installerrequirements;
-    private Map<String, List<DynamicVariable>> dynamicvariables;
 
     protected ResourceManager resourceManager;
 
@@ -52,22 +50,6 @@ public abstract class InstallerBase {
      */
     protected InstallerBase(ResourceManager resourceManager) {
         this.resourceManager = resourceManager;
-    }
-
-    /**
-     * Loads Dynamic Variables.
-     */
-    protected void loadDynamicVariables() {
-        try {
-            InputStream in = InstallerFrame.class.getResourceAsStream("/dynvariables");
-            ObjectInputStream objIn = new ObjectInputStream(in);
-            dynamicvariables = (Map<String, List<DynamicVariable>>) objIn.readObject();
-            objIn.close();
-        }
-        catch (Exception e) {
-            Debug.trace("Cannot find optional dynamic variables");
-            System.out.println(e);
-        }
     }
 
     /**
@@ -115,38 +97,6 @@ public abstract class InstallerBase {
         return result;
     }
 
-    /**
-     * Refreshes Dynamic Variables.
-     */
-    protected void refreshDynamicVariables(VariableSubstitutor substitutor, AutomatedInstallData installdata, RulesEngine rules) {
-        Debug.log("refreshing dyamic variables.");
-        if (dynamicvariables != null) {
-            for (String dynvarname : dynamicvariables.keySet()) {
-                Debug.log("Variable: " + dynvarname);
-                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname)) {
-                    boolean refresh = false;
-                    String conditionid = dynvar.getConditionid();
-                    Debug.log("condition: " + conditionid);
-                    if ((conditionid != null) && (conditionid.length() > 0)) {
-                        if ((rules != null) && rules.isConditionTrue(conditionid)) {
-                            Debug.log("refresh condition");
-                            // condition for this rule is true
-                            refresh = true;
-                        }
-                    } else {
-                        Debug.log("refresh condition");
-                        // empty condition
-                        refresh = true;
-                    }
-                    if (refresh) {
-                        String newvalue = substitutor.substitute(dynvar.getValue(), null);
-                        Debug.log("newvalue: " + newvalue);
-                        installdata.getVariables().setProperty(dynvar.getName(), newvalue);
-                    }
-                }
-            }
-        }
-    }
 
 
     public boolean checkInstallerRequirements(AutomatedInstallData installdata) throws Exception {
@@ -154,7 +104,7 @@ public abstract class InstallerBase {
 
         for (InstallerRequirement installerrequirement : this.installerrequirements) {
             String conditionid = installerrequirement.getCondition();
-            Condition condition = RulesEngine.getCondition(conditionid);
+            Condition condition = RulesEngineImpl.getCondition(conditionid);
             if (condition == null) {
                 Debug.log(conditionid + " not a valid condition.");
                 throw new Exception(conditionid + "could not be found as a defined condition");

@@ -19,9 +19,9 @@
 
 package com.izforge.izpack.installer.data;
 
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.Panel;
-import com.izforge.izpack.data.AutomatedInstallData;
 
 import java.awt.*;
 import java.io.Serializable;
@@ -61,4 +61,6 @@ public class InstallData extends AutomatedInstallData implements Serializable {
     public InstallData() {
         super();
     }
+
+
 }

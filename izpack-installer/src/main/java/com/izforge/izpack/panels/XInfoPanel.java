@@ -27,6 +27,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -113,7 +114,7 @@ public class XInfoPanel extends IzPanel {
     private void parseText() {
         try {
             // Initialize the variable substitutor
-            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
 
             // Parses the info text
             info = vs.substitute(info, null);

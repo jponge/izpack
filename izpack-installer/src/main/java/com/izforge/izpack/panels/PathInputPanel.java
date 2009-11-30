@@ -343,7 +343,7 @@ public class PathInputPanel extends IzPanel implements ActionListener {
                     }
                 }
                 defaultInstallDir = line;
-                VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                 defaultInstallDir = vs.substitute(defaultInstallDir, null);
             }
         }

@@ -91,8 +91,6 @@ public class GUIInstaller extends InstallerBase {
 
         // loads installer conditions
         loadInstallerRequirements();
-        // load dynamic variables
-        loadDynamicVariables();
         // check installer conditions
         if (!checkInstallerRequirements(installdata)) {
             Debug.log("not all installerconditions are fulfilled.");

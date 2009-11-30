@@ -21,6 +21,8 @@ package com.izforge.izpack.data;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.Serializable;
 import java.util.*;
@@ -59,7 +61,7 @@ public class AutomatedInstallData implements Serializable {
 
     // --- Instance members -----------------------------------------------
 
-    private Object rules;
+    private RulesEngine rules;
 
     /**
      * The language code.
@@ -145,6 +147,11 @@ public class AutomatedInstallData implements Serializable {
      * Maps the variable names to their values
      */
     private Properties variables;
+
+    /**
+     * Dynamics variables
+     */
+    private Map<String, java.util.List<DynamicVariable>> dynamicvariables;
 
     /**
      * The attributes used by the panels
@@ -283,12 +290,46 @@ public class AutomatedInstallData implements Serializable {
     }
 
 
-    public Object getRules() {
+    /**
+     * Refreshes Dynamic Variables.
+     */
+    public void refreshDynamicVariables(VariableSubstitutor substitutor) {
+
+//        Debug.log("refreshing dyamic variables.");
+        if (dynamicvariables != null) {
+            for (String dynvarname : dynamicvariables.keySet()) {
+//                Debug.log("Variable: " + dynvarname);
+                for (DynamicVariable dynvar : dynamicvariables.get(dynvarname)) {
+                    boolean refresh = false;
+                    String conditionid = dynvar.getConditionid();
+//                    Debug.log("condition: " + conditionid);
+                    if ((conditionid != null) && (conditionid.length() > 0)) {
+                        if ((rules != null) && rules.isConditionTrue(conditionid)) {
+//                            Debug.log("refresh condition");
+                            // condition for this rule is true
+                            refresh = true;
+                        }
+                    } else {
+//                        Debug.log("refresh condition");
+                        // empty condition
+                        refresh = true;
+                    }
+                    if (refresh) {
+                        String newvalue = substitutor.substitute(dynvar.getValue(), null);
+//                        Debug.log("newvalue: " + newvalue);
+                        getVariables().setProperty(dynvar.getName(), newvalue);
+                    }
+                }
+            }
+        }
+    }
+
+    public RulesEngine getRules() {
         return rules;
     }
 
 
-    public void setRules(Object rules) {
+    public void setRules(RulesEngine rules) {
         this.rules = rules;
     }
 
@@ -430,5 +471,9 @@ public class AutomatedInstallData implements Serializable {
 
     public void setAttributes(Map<String, Object> attributes) {
         this.attributes = attributes;
+    }
+
+    public void setDynamicvariables(Map<String, List<DynamicVariable>> dynamicvariables) {
+        this.dynamicvariables = dynamicvariables;
     }
 }

@@ -32,6 +32,7 @@ import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -160,7 +161,7 @@ public class Compiler extends Thread {
         } catch (IOException e) {
             throw new CompilerException("Can't load path.properties");
         }
-        propertySubstitutor = new VariableSubstitutor(properties);
+        propertySubstitutor = new VariableSubstitutorImpl(properties);
 
         // add izpack built in property
         setProperty("izpack.version", IZPACK_VERSION);

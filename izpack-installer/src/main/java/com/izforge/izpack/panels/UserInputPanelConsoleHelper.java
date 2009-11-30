@@ -27,10 +27,7 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsVersion;
-import com.izforge.izpack.util.SpecHelper;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -274,7 +271,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     }
 
     boolean processSimpleField(Input input, AutomatedInstallData idata) {
-        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         System.out.println(vs.substitute(input.strText, null));
         return true;
     }
@@ -315,7 +312,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
         }
 
         if (set != null && !"".equals(set)) {
-            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
             set = vs.substitute(set, null);
         }
 
@@ -372,7 +369,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 String set = choice.strSet;
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
                     if (set.equals(TRUE)) {
@@ -441,7 +438,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 String set = input.strDefaultValue;
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
                     if (set.equals(TRUE)) {
@@ -607,7 +604,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                         set = "";
                     }
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
 
@@ -634,7 +631,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                     String set = choice.getAttribute(SET);
                     if (set != null) {
                         if (set != null && !"".equals(set)) {
-                            VariableSubstitutor vs = new VariableSubstitutor(idata
+                            VariableSubstitutor vs = new VariableSubstitutorImpl(idata
                                     .getVariables());
                             set = vs.substitute(set, null);
                         }

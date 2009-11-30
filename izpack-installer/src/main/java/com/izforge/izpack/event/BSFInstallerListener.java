@@ -59,7 +59,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
         }
         super.beforePacks(idata, npacks, handler);
 
-        getSpecHelper().readSpec(SPEC_FILE_NAME, new VariableSubstitutor(idata.getVariables()));
+        getSpecHelper().readSpec(SPEC_FILE_NAME, new VariableSubstitutorImpl(idata.getVariables()));
 
         if (getSpecHelper().getSpec() == null) {
             return;
@@ -225,7 +225,7 @@ public class BSFInstallerListener extends SimpleInstallerListener {
                 byte buf[] = new byte[10 * 1024];
                 int read = 0;
                 is = ResourceManager.getInstance().getInputStream(src);
-                subis = new SpecHelper().substituteVariables(is, new VariableSubstitutor(idata.getVariables()));
+                subis = new SpecHelper().substituteVariables(is, new VariableSubstitutorImpl(idata.getVariables()));
 
                 while ((read = subis.read(buf, 0, 10 * 1024)) != -1) {
                     baos.write(buf, 0, read);

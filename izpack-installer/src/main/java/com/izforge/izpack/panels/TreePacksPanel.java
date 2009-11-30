@@ -34,6 +34,7 @@ import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -594,7 +595,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
      * @param id
      */
     public void setDescription(String id) {
-        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         if (descriptionArea != null) {
             Pack pack = idToPack.get(id);
             String desc = "";

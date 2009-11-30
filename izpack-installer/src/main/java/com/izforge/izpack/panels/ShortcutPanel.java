@@ -944,7 +944,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             return;
         }
 
-        VariableSubstitutor substitutor = new VariableSubstitutor(idata.getVariables());
+        VariableSubstitutor substitutor = new VariableSubstitutorImpl(idata.getVariables());
 
         // input.
         String substitutedSpec = substitutor.substitute(input, "xml");

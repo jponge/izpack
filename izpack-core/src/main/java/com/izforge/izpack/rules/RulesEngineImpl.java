@@ -29,7 +29,6 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.util.Debug;
 
 import java.io.OutputStream;
-import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -37,7 +36,7 @@ import java.util.*;
  *
  * @author Dennis Reil, <Dennis.Reil@reddot.de> created: 09.11.2006, 13:48:39
  */
-public class RulesEngine implements Serializable {
+public class RulesEngineImpl implements RulesEngine {
 
     private static final long serialVersionUID = 3966346766966632860L;
 
@@ -72,7 +71,7 @@ public class RulesEngine implements Serializable {
         createBuiltinOsCondition("IS_SUNOS_SPARC", "izpack.solarisinstall.sparc");
     }
 
-    private RulesEngine() {
+    private RulesEngineImpl() {
         conditionsmap = new Hashtable<String, Condition>();
         this.panelconditions = new Hashtable<String, String>();
         this.packconditions = new Hashtable<String, String>();
@@ -126,18 +125,18 @@ public class RulesEngine implements Serializable {
     /**
      *
      */
-    public RulesEngine(IXMLElement conditionsspecxml, AutomatedInstallData installdata) {
+    public RulesEngineImpl(IXMLElement conditionsspecxml, AutomatedInstallData installdata) {
         this();
         this.conditionsspec = conditionsspecxml;
-        RulesEngine.installdata = installdata;
+        RulesEngineImpl.installdata = installdata;
         this.readConditions();
         init();
     }
 
-    public RulesEngine(Map<String, Condition> rules, AutomatedInstallData installdata) {
+    public RulesEngineImpl(Map<String, Condition> rules, AutomatedInstallData installdata) {
         this();
         Debug.trace("Initializing RulesEngine");
-        RulesEngine.installdata = installdata;
+        RulesEngineImpl.installdata = installdata;
         conditionsmap = rules;
         Iterator<String> keyiter = conditionsmap.keySet().iterator();
         while (keyiter.hasNext()) {
@@ -201,7 +200,7 @@ public class RulesEngine implements Serializable {
                     if (condid != null) {
                         result.setId(condid);
                     }
-                    result.setInstalldata(RulesEngine.installdata);
+                    result.setInstalldata(RulesEngineImpl.installdata);
                 }
             }
             catch (InstantiationException e) {
@@ -225,7 +224,7 @@ public class RulesEngine implements Serializable {
         }
         try {
             // try with a different classloader
-            loader = RulesEngine.class.getClassLoader();
+            loader = RulesEngineImpl.class.getClassLoader();
             conditionclass = (Class<Condition>) loader.loadClass(conditionClassName);
         }
         catch (ClassNotFoundException e) {
@@ -252,7 +251,7 @@ public class RulesEngine implements Serializable {
                     if (cond != null) {
                         // this.conditionslist.add(cond);
                         String condid = cond.getId();
-                        cond.setInstalldata(RulesEngine.installdata);
+                        cond.setInstalldata(RulesEngineImpl.installdata);
                         if ((condid != null) && !("UNKNOWN".equals(condid))) {
                             conditionsmap.put(condid, cond);
                         }
@@ -309,21 +308,21 @@ public class RulesEngine implements Serializable {
                     Condition op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new AndCondition(op1, getConditionByExpr(conditionexpr));
-                    result.setInstalldata(RulesEngine.installdata);
+                    result.setInstalldata(RulesEngineImpl.installdata);
                     break;
                 case '|':
                     // or-condition
                     op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new OrCondition(op1, getConditionByExpr(conditionexpr));
-                    result.setInstalldata(RulesEngine.installdata);
+                    result.setInstalldata(RulesEngineImpl.installdata);
                     break;
                 case '\\':
                     // xor-condition
                     op1 = conditionsmap.get(conditionexpr.substring(0, index));
                     conditionexpr.delete(0, index + 1);
                     result = new XorCondition(op1, getConditionByExpr(conditionexpr));
-                    result.setInstalldata(RulesEngine.installdata);
+                    result.setInstalldata(RulesEngineImpl.installdata);
                     break;
                 case '!':
                     // not-condition
@@ -333,7 +332,7 @@ public class RulesEngine implements Serializable {
                         // delete not symbol
                         conditionexpr.deleteCharAt(index);
                         result = new NotCondition(getConditionByExpr(conditionexpr));
-                        result.setInstalldata(RulesEngine.installdata);
+                        result.setInstalldata(RulesEngineImpl.installdata);
                     }
                     break;
                 default:
@@ -344,7 +343,7 @@ public class RulesEngine implements Serializable {
         if (conditionexpr.length() > 0) {
             result = conditionsmap.get(conditionexpr.toString());
             if (result != null) {
-                result.setInstalldata(RulesEngine.installdata);
+                result.setInstalldata(RulesEngineImpl.installdata);
                 conditionexpr.delete(0, conditionexpr.length());
             }
         }
@@ -379,10 +378,10 @@ public class RulesEngine implements Serializable {
     }
 
     public boolean isConditionTrue(String id) {
-        Condition cond = RulesEngine.getCondition(id);
+        Condition cond = RulesEngineImpl.getCondition(id);
         if (cond != null) {
             if (cond.getInstalldata() == null) {
-                cond.setInstalldata(RulesEngine.installdata);
+                cond.setInstalldata(RulesEngineImpl.installdata);
             }
             return this.isConditionTrue(cond);
         } else {
@@ -392,7 +391,7 @@ public class RulesEngine implements Serializable {
 
     public boolean isConditionTrue(Condition cond) {
         if (cond.getInstalldata() == null) {
-            cond.setInstalldata(RulesEngine.installdata);
+            cond.setInstalldata(RulesEngineImpl.installdata);
         }
         return cond.isTrue();
     }

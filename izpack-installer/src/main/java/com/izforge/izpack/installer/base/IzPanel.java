@@ -26,10 +26,7 @@ import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.HelpWindow;
 import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.util.AbstractUIHandler;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.MultiLineLabel;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -563,7 +560,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             retval = parent.langpack.getString(buf.toString());
         }
         if (retval != null && retval.indexOf('$') > -1) {
-            VariableSubstitutor substitutor = new VariableSubstitutor(idata.getVariables());
+            VariableSubstitutor substitutor = new VariableSubstitutorImpl(idata.getVariables());
             retval = substitutor.substitute(retval, null);
         }
         return (retval);
@@ -975,7 +972,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 } else {
                     Debug.trace("Validation did not pass!");
                     // try to parse the text, and substitute any variable it finds
-                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                     if (this.validationService.getWarningMessageId() != null
                             && returnStatus == DataValidator.Status.WARNING) {
 
@@ -1010,7 +1007,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected String parseText(String string_to_parse) {
         try {
             // Initialize the variable substitutor
-            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
 
             // Parses the info text
             string_to_parse = vs.substitute(string_to_parse, null);

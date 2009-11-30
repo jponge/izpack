@@ -89,7 +89,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
                             AbstractUIProgressHandler handler) throws Exception {
         super.beforePacks(idata, npacks, handler);
 
-        getSpecHelper().readSpec(SPEC_FILE_NAME, new VariableSubstitutor(idata.getVariables()));
+        getSpecHelper().readSpec(SPEC_FILE_NAME, new VariableSubstitutorImpl(idata.getVariables()));
 
         if (getSpecHelper().getSpec() == null) {
             return;

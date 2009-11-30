@@ -70,8 +70,8 @@ public class AndCondition extends Condition {
                 Debug.log("and-condition needs two conditions as operands");
                 return;
             }
-            this.leftoperand = RulesEngine.analyzeCondition(xmlcondition.getChildAtIndex(0));
-            this.rightoperand = RulesEngine.analyzeCondition(xmlcondition.getChildAtIndex(1));
+            this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
+            this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
         }
         catch (Exception e) {
             Debug.log("missing element in and-condition");
@@ -105,10 +105,10 @@ public class AndCondition extends Condition {
 
     @Override
     public void makeXMLData(IXMLElement root) {
-        IXMLElement left = RulesEngine.createConditionElement(this.leftoperand, root);
+        IXMLElement left = RulesEngineImpl.createConditionElement(this.leftoperand, root);
         this.leftoperand.makeXMLData(left);
         root.addChild(left);
-        IXMLElement right = RulesEngine.createConditionElement(this.rightoperand, root);
+        IXMLElement right = RulesEngineImpl.createConditionElement(this.rightoperand, root);
         this.rightoperand.makeXMLData(right);
         root.addChild(right);
     }

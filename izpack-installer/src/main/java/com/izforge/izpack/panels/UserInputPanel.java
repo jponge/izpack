@@ -520,7 +520,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                     set = vs.substitute(set, null);
 
                     idata.setVariable(variable, set);
@@ -611,7 +611,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                     set = vs.substitute(set, null);
                 }
             }
@@ -724,7 +724,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                     set = vs.substitute(set, null);
                     idata.setVariable(variable, set);
                 }
@@ -785,7 +785,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     protected void updateUIElements() {
         boolean updated = false;
-        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
 
         for (UIElement element : elements) {
             if (element.hasVariableAssignment()) {
@@ -1457,7 +1457,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                     set = vs.substitute(set, null);
                 }
             }
@@ -1674,7 +1674,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         set = "";
                     }
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
 
@@ -1706,7 +1706,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         String set = (choices.elementAt(i)).getAttribute(SET);
                         if (set != null) {
                             if (set != null && !"".equals(set)) {
-                                VariableSubstitutor vs = new VariableSubstitutor(idata
+                                VariableSubstitutor vs = new VariableSubstitutorImpl(idata
                                         .getVariables());
                                 set = vs.substitute(set, null);
                             }
@@ -1880,7 +1880,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 }
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
                     if (set.equals(TRUE)) {
@@ -2035,7 +2035,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 fieldSpec = inputs.elementAt(i);
                 String set = fieldSpec.getAttribute(SET);
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                     set = vs.substitute(set, null);
                 }
                 JLabel label = new JLabel(getText(fieldSpec));
@@ -2194,7 +2194,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         if (set != null) {
             if (set != null && !"".equals(set)) {
-                VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                 set = vs.substitute(set, null);
             }
             if (set.equals(FALSE)) {
@@ -2382,7 +2382,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 String set = (choices.elementAt(i)).getAttribute(SET);
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                         set = vs.substitute(set, null);
                     }
                     if (set.equals(TRUE)) {
@@ -2821,7 +2821,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         // try to parse the text, and substitute any variable it finds
-        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
 
         return (vs.substitute(text, null));
     }
@@ -3282,7 +3282,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // and resolve the pathes automatically:
             // /usr/lib/* searches all folders in usr/lib to find
             // /usr/lib/*/lib/tools.jar
-            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
             for (int i = 0; i < this.pathComboBox.getItemCount(); ++i) {
                 String path = vs.substitute((String) this.pathComboBox.getItemAt(i), null);
                 // System.out.println ("autodetecting " + path);
@@ -3432,7 +3432,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         Vector<IXMLElement> variables = spec.getChildrenNamed(VARIABLE_NODE);
         RulesEngine rules = parent.getRules();
 
-        VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         for (int i = 0; i < variables.size(); i++) {
             IXMLElement variable = variables.elementAt(i);
             String vname = variable.getAttribute(ATTRIBUTE_VARIABLE_NAME);

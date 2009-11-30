@@ -26,6 +26,7 @@ import com.coi.tools.os.izpack.Registry;
 import com.coi.tools.os.win.NativeLibException;
 import com.coi.tools.os.win.RegDataContainer;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import java.util.List;
 import java.util.Properties;
@@ -69,7 +70,7 @@ public class Win_RegistryHandler extends RegistryHandler {
             if (ob instanceof String) {
                 Properties props = new Properties();
                 props.put("OLD_KEY_VALUE", ob);
-                VariableSubstitutor vs = new VariableSubstitutor(props);
+                VariableSubstitutor vs = new VariableSubstitutorImpl(props);
                 contents = vs.substitute(contents, null);
             }
         }

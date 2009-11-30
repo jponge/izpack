@@ -72,8 +72,8 @@ public class OrCondition extends Condition {
                 Debug.log("or-condition needs two conditions as operands");
                 return;
             }
-            this.leftoperand = RulesEngine.analyzeCondition(xmlcondition.getChildAtIndex(0));
-            this.rightoperand = RulesEngine.analyzeCondition(xmlcondition.getChildAtIndex(1));
+            this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
+            this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
         }
         catch (Exception e) {
             Debug.log("missing element in or-condition");
@@ -111,10 +111,10 @@ public class OrCondition extends Condition {
 
     @Override
     public void makeXMLData(IXMLElement conditionRoot) {
-        IXMLElement left = RulesEngine.createConditionElement(this.leftoperand, conditionRoot);
+        IXMLElement left = RulesEngineImpl.createConditionElement(this.leftoperand, conditionRoot);
         this.leftoperand.makeXMLData(left);
         conditionRoot.addChild(left);
-        IXMLElement right = RulesEngine.createConditionElement(this.rightoperand, conditionRoot);
+        IXMLElement right = RulesEngineImpl.createConditionElement(this.rightoperand, conditionRoot);
         this.rightoperand.makeXMLData(right);
         conditionRoot.addChild(right);
     }

@@ -60,8 +60,8 @@ public class XorCondition extends OrCondition {
                 Debug.log("xor-condition needs two conditions as operands");
                 return;
             }
-            this.leftoperand = RulesEngine.analyzeCondition(xmlcondition.getChildAtIndex(0));
-            this.rightoperand = RulesEngine.analyzeCondition(xmlcondition.getChildAtIndex(1));
+            this.leftoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
+            this.rightoperand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(1));
         }
         catch (Exception e) {
             Debug.log("missing element in xor-condition");

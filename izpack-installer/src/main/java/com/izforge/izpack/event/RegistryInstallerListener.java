@@ -125,7 +125,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             rh.activateLogging();
 
             if (getSpecHelper().getSpec() != null) {
-                VariableSubstitutor substitutor = new VariableSubstitutor(idata.getVariables());
+                VariableSubstitutor substitutor = new VariableSubstitutorImpl(idata.getVariables());
                 Iterator iter = idata.getSelectedPacks().iterator();
                 // Get the special pack "UninstallStuff" which contains values
                 // for the uninstaller entry.

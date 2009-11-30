@@ -26,6 +26,7 @@ import com.izforge.izpack.installer.SummaryProcessor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -65,7 +66,7 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener {
         if (path == null) {
             return;
         }
-        VariableSubstitutor vs = new VariableSubstitutor(getInstalldata().getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(getInstalldata().getVariables());
         path = IoHelper.translatePath(path, vs);
         File parent = new File(path).getParentFile();
 

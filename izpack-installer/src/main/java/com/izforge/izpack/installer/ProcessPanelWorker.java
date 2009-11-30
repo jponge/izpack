@@ -28,7 +28,7 @@ import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.rules.Condition;
-import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 
 import java.io.*;
@@ -81,7 +81,7 @@ public class ProcessPanelWorker implements Runnable {
             throws IOException {
         this.handler = handler;
         this.idata = idata;
-        this.vs = new VariableSubstitutor(idata.getVariables());
+        this.vs = new VariableSubstitutorImpl(idata.getVariables());
 
         // Removed this test in order to move out of the CTOR (ExecuteForPack
         // Patch)
@@ -125,7 +125,7 @@ public class ProcessPanelWorker implements Runnable {
             String conditionid = job_el.hasAttribute("condition") ? job_el.getAttribute("condition") : job_el.hasAttribute("conditionid") ? job_el.getAttribute("conditionid") : null;
             if ((conditionid != null) && (conditionid.length() > 0)) {
                 Debug.trace("Condition for job.");
-                Condition cond = RulesEngine.getCondition(conditionid);
+                Condition cond = RulesEngineImpl.getCondition(conditionid);
                 if ((cond != null) && !cond.isTrue()) {
                     Debug.trace("condition is not fulfilled.");
                     // skip, if there is a condition and this condition isn't true
@@ -236,7 +236,7 @@ public class ProcessPanelWorker implements Runnable {
         // Create logfile if needed. Do it at this point because
         // variable substitution needs selected install path.
         if (logfiledir != null) {
-            logfiledir = IoHelper.translatePath(logfiledir, new VariableSubstitutor(idata
+            logfiledir = IoHelper.translatePath(logfiledir, new VariableSubstitutorImpl(idata
                     .getVariables()));
 
             File lf;
@@ -286,7 +286,7 @@ public class ProcessPanelWorker implements Runnable {
             String conditionid = bc.getConditionid();
             if ((conditionid != null) && (conditionid.length() > 0)) {
                 Debug.trace("Condition for job.");
-                Condition cond = RulesEngine.getCondition(conditionid);
+                Condition cond = RulesEngineImpl.getCondition(conditionid);
                 if ((cond != null) && !cond.isTrue()) {
                     Debug.trace("condition is not fulfilled.");
                     // skip, if there is a condition and this condition isn't true

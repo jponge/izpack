@@ -38,6 +38,7 @@ import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 
 import javax.swing.*;
@@ -195,7 +196,7 @@ public class InstallerFrame extends JFrame {
             throws Exception {
         super(title);
         this.parentInstaller = parentInstaller;
-        substitutor = new VariableSubstitutor(installdata.getVariables());
+        substitutor = new VariableSubstitutorImpl(installdata.getVariables());
         guiListener = new ArrayList<GUIListener>();
         visiblePanelMapping = new ArrayList<Integer>();
         this.installdata = installdata;
@@ -630,7 +631,7 @@ public class InstallerFrame extends JFrame {
      */
     protected void switchPanel(int last) {
         // refresh dynamic variables every time, a panel switch is done
-        this.parentInstaller.refreshDynamicVariables(substitutor, installdata, rules);
+        installdata.refreshDynamicVariables(substitutor);
         try {
             if (installdata.getCurPanelNumber() < last) {
                 isBack = true;
@@ -774,7 +775,7 @@ public class InstallerFrame extends JFrame {
             if (logfile.toLowerCase().startsWith("default")) {
                 logfile = installdata.getInfo().getUninstallerPath() + "/install.log";
             }
-            logfile = IoHelper.translatePath(logfile, new VariableSubstitutor(installdata
+            logfile = IoHelper.translatePath(logfile, new VariableSubstitutorImpl(installdata
                     .getVariables()));
             File outFile = new File(logfile);
             if (!outFile.getParentFile().exists()) {
@@ -795,7 +796,7 @@ public class InstallerFrame extends JFrame {
         try {
             String condition = installdata.getVariable("UNINSTALLER_CONDITION");
             if (condition != null) {
-                if (!RulesEngine.getCondition(condition).isTrue()) {
+                if (!RulesEngineImpl.getCondition(condition).isTrue()) {
                     // condition for creating the uninstaller is not fulfilled.
                     return;
                 }
@@ -1070,7 +1071,7 @@ public class InstallerFrame extends JFrame {
             boolean reboot = false;
             if (installdata.isRebootNecessary()) {
                 String message, title;
-                VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
+                VariableSubstitutor vs = new VariableSubstitutorImpl(installdata.getVariables());
                 System.out.println("[ There are file operations pending after reboot ]");
                 switch (installdata.getInfo().getRebootAction()) {
                     case Info.REBOOT_ACTION_ALWAYS:
@@ -1116,7 +1117,7 @@ public class InstallerFrame extends JFrame {
                 title = langpack.getString("installer.quit.title");
             }
             // Now replace variables in message or title.
-            VariableSubstitutor vs = new VariableSubstitutor(installdata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(installdata.getVariables());
             message = vs.substitute(message, null);
             title = vs.substitute(title, null);
             int res = JOptionPane

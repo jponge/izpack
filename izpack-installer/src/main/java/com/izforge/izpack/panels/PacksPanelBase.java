@@ -37,6 +37,7 @@ import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -314,7 +315,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             if ("".equals(desc) || key.equals(desc)) {
                 desc = pack.description;
             }
-            VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
             desc = vs.substitute(desc, null);
             descriptionArea.setText(desc);
         }

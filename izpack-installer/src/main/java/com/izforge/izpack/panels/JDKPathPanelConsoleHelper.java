@@ -28,6 +28,7 @@ import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
 
@@ -56,7 +57,7 @@ public class JDKPathPanelConsoleHelper extends PanelConsoleHelper implements Pan
             System.err.println("Missing mandatory target path!");
             return false;
         } else {
-            VariableSubstitutor vs = new VariableSubstitutor(installData.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
             strTargetPath = vs.substitute(strTargetPath, null);
             installData.setInstallPath(strTargetPath);
             return true;

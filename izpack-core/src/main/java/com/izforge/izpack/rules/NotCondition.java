@@ -73,7 +73,7 @@ public class NotCondition extends Condition {
                 Debug.log("not-condition needs one condition as operand");
                 return;
             }
-            this.operand = RulesEngine.analyzeCondition(xmlcondition.getChildAtIndex(0));
+            this.operand = RulesEngineImpl.analyzeCondition(xmlcondition.getChildAtIndex(0));
         }
         catch (Exception e) {
             Debug.log("missing element in not-condition");
@@ -109,7 +109,7 @@ public class NotCondition extends Condition {
 
     @Override
     public void makeXMLData(IXMLElement conditionRoot) {
-        IXMLElement op = RulesEngine.createConditionElement(this.operand, conditionRoot);
+        IXMLElement op = RulesEngineImpl.createConditionElement(this.operand, conditionRoot);
         this.operand.makeXMLData(op);
         conditionRoot.addChild(op);
     }

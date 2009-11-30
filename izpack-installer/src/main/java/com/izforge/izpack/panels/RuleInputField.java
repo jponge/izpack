@@ -24,6 +24,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 import org.apache.regexp.RE;
 
 import javax.swing.*;
@@ -512,7 +513,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
                     if (!"".equals(className) && !process) {
                         process = true;
                     }
-                    VariableSubstitutor vs = new VariableSubstitutor(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
                     val = vs.substitute(val, null);
                     vals[i] = val;
                     i++;

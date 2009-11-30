@@ -47,7 +47,7 @@ public class RefCondition extends Condition {
      */
     public void readFromXML(IXMLElement xmlcondition) {
         this.referencedConditionId = xmlcondition.getAttribute("refid");
-        this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);
+        this.referencedcondition = RulesEngineImpl.getCondition(this.referencedConditionId);
         this.id = "ref." + this.referencedConditionId;
     }
 
@@ -56,7 +56,7 @@ public class RefCondition extends Condition {
             return false;
         } else {
             if (this.referencedcondition == null) {
-                this.referencedcondition = RulesEngine.getCondition(this.referencedConditionId);
+                this.referencedcondition = RulesEngineImpl.getCondition(this.referencedConditionId);
             }
             if (this.referencedcondition != null) {
                 this.referencedcondition.setInstalldata(this.installdata);

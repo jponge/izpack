@@ -28,6 +28,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -64,7 +65,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
     public FinishPanel(InstallerFrame parent, InstallData idata) {
         super(parent, idata, new IzPanelLayout());
 
-        vs = new VariableSubstitutor(idata.getVariables());
+        vs = new VariableSubstitutorImpl(idata.getVariables());
     }
 
     /**

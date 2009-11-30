@@ -38,7 +38,7 @@ import java.util.Properties;
  *
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class VariableSubstitutor implements Serializable {
+public class VariableSubstitutorImpl implements VariableSubstitutor {
 
     /**
      *
@@ -118,7 +118,7 @@ public class VariableSubstitutor implements Serializable {
      *
      * @param variables the map with variable value mappings
      */
-    public VariableSubstitutor(Properties variables) {
+    public VariableSubstitutorImpl(Properties variables) {
         this.variables = variables;
     }
 

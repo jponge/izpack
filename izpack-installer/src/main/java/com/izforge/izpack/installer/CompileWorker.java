@@ -28,10 +28,7 @@ import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.ResourceManager;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.FileExecutor;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -98,7 +95,7 @@ public class CompileWorker implements Runnable {
     public CompileWorker(AutomatedInstallData idata, CompileHandler handler) throws IOException {
         this.idata = idata;
         this.handler = handler;
-        this.vs = new VariableSubstitutor(idata.getVariables());
+        this.vs = new VariableSubstitutorImpl(idata.getVariables());
         if (!readSpec()) {
             throw new IOException("Error reading compilation specification");
         }

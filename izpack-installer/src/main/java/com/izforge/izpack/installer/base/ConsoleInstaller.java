@@ -29,10 +29,7 @@ import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.bootstrap.Installer;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.Housekeeper;
-import com.izforge.izpack.util.OsConstraint;
-import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.*;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -75,7 +72,6 @@ public class ConsoleInstaller extends InstallerBase {
         resourceManager.setLocale(this.installdata.getLocaleISO3());
 //        ResourceManager.create(this.installdata);
         loadInstallerRequirements();
-        loadDynamicVariables();
         if (!checkInstallerRequirements(this.installdata)) {
             Debug.log("not all installerconditions are fulfilled.");
             return;
@@ -93,7 +89,7 @@ public class ConsoleInstaller extends InstallerBase {
             this.result = true;
             Iterator<Panel> panelsIterator = this.installdata.getPanelsOrder().iterator();
             this.installdata.setCurPanelNumber(-1);
-            VariableSubstitutor substitutor = new VariableSubstitutor(this.installdata.getVariables());
+            VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.installdata.getVariables());
             while (panelsIterator.hasNext()) {
                 Panel p = (Panel) panelsIterator.next();
                 this.installdata.setCurPanelNumber(this.installdata.getCurPanelNumber() + 1);
@@ -123,7 +119,7 @@ public class ConsoleInstaller extends InstallerBase {
                 if (consoleHelperClass != null) {
                     try {
                         Debug.log("Instantiate :" + consoleHelperClassName);
-                        refreshDynamicVariables(substitutor, installdata, rules);
+                        installdata.refreshDynamicVariables(substitutor);
                         consoleHelperInstance = consoleHelperClass.newInstance();
                     }
                     catch (Exception e) {

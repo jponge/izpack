@@ -131,7 +131,7 @@ public abstract class UnpackerBase implements IUnpacker {
         this.handler = handler;
 
         // Initialize the variable substitutor
-        vs = new VariableSubstitutor(idata.getVariables());
+        vs = new VariableSubstitutorImpl(idata.getVariables());
     }
 
     public void setRules(RulesEngine rules) {

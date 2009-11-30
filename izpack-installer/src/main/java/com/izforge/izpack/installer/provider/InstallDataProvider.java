@@ -6,9 +6,10 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
+import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
-import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
 
@@ -49,7 +50,7 @@ public class InstallDataProvider implements Provider {
 
         // Sets up the GUI L&F
         loadLookAndFeel(installData);
-
+        loadDynamicVariables(installData);
         return installData;
     }
 
@@ -102,7 +103,7 @@ public class InstallDataProvider implements Provider {
         String installPath = dir + inf.getAppName();
         if (inf.getInstallationSubPath() != null) { // A subpath was defined, use it.
             installPath = IoHelper.translatePath(dir + inf.getInstallationSubPath(),
-                    new VariableSubstitutor(installdata.getVariables()));
+                    new VariableSubstitutorImpl(installdata.getVariables()));
         }
         installdata.setInstallPath(installPath);
 
@@ -301,7 +302,7 @@ public class InstallDataProvider implements Provider {
             boolean shouldElevate = true;
             final String conditionId = info.getPrivilegedExecutionConditionID();
             if (conditionId != null) {
-                shouldElevate = RulesEngine.getCondition(conditionId).isTrue();
+                shouldElevate = RulesEngineImpl.getCondition(conditionId).isTrue();
             }
             PrivilegedRunner runner = new PrivilegedRunner(!shouldElevate);
             if (runner.isPlatformSupported() && runner.isElevationNeeded()) {
@@ -328,7 +329,7 @@ public class InstallDataProvider implements Provider {
     private void checkForRebootAction(Info info) {
         final String conditionId = info.getRebootActionConditionID();
         if (conditionId != null) {
-            if (!RulesEngine.getCondition(conditionId).isTrue())
+            if (!RulesEngineImpl.getCondition(conditionId).isTrue())
                 info.setRebootAction(Info.REBOOT_ACTION_IGNORE);
         }
     }
@@ -593,5 +594,22 @@ public class InstallDataProvider implements Provider {
         }
     }
 
+
+    /**
+     * Loads Dynamic Variables.
+     * @param installData
+     */
+    protected void loadDynamicVariables(InstallData installData) {
+        try {
+            InputStream in = resourceManager.getInputStream("dynvariables");
+            ObjectInputStream objIn = new ObjectInputStream(in);
+            installData.setDynamicvariables((Map<String, List<DynamicVariable>>) objIn.readObject());
+            objIn.close();
+        }
+        catch (Exception e) {
+            Debug.trace("Cannot find optional dynamic variables");
+            System.out.println(e);
+        }
+    }
 
 }

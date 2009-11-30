@@ -37,10 +37,11 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.rules.Condition;
-import com.izforge.izpack.rules.RulesEngine;
+import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.io.*;
@@ -626,7 +627,7 @@ public class CompilerConfig extends Thread {
             pack.setParent(parent);
             pack.setCondition(conditionid);
             pack.setHidden(hidden);
-            VariableSubstitutor varsubst = new VariableSubstitutor(compiler.getVariables());
+            VariableSubstitutor varsubst = new VariableSubstitutorImpl(compiler.getVariables());
 
             // unverified
             // if the pack belongs to an excludeGroup it's not preselected by default
@@ -1489,7 +1490,7 @@ public class CompilerConfig extends Thread {
                         if (null == is) {
                             is = new BufferedInputStream(originalUrl.openStream());
                         }
-                        VariableSubstitutor vs = new VariableSubstitutor(compiler.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(compiler.getVariables());
                         vs.substitute(is, os, type, "UTF-8");
                     }
                 }
@@ -1824,7 +1825,7 @@ public class CompilerConfig extends Thread {
             Iterator<IXMLElement> iter = root.getChildrenNamed("condition").iterator();
             while (iter.hasNext()) {
                 IXMLElement conditionel = iter.next();
-                Condition condition = RulesEngine.analyzeCondition(conditionel);
+                Condition condition = RulesEngineImpl.analyzeCondition(conditionel);
                 if (condition != null) {
                     String conditionid = condition.getId();
                     if (conditions.containsKey(conditionid)) {

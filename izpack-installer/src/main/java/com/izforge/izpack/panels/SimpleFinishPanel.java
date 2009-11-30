@@ -26,6 +26,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import java.io.File;
 
@@ -54,7 +55,7 @@ public class SimpleFinishPanel extends IzPanel {
      */
     public SimpleFinishPanel(InstallerFrame parent, InstallData idata) {
         super(parent, idata, new IzPanelLayout());
-        vs = new VariableSubstitutor(idata.getVariables());
+        vs = new VariableSubstitutorImpl(idata.getVariables());
     }
 
     /**

@@ -6,6 +6,7 @@ import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.VariableSubstitutor;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 import org.picocontainer.injectors.Provider;
 
 /**
@@ -28,7 +29,7 @@ public class InstallerFrameProvider implements Provider {
                     + installData.getInfo().getAppName();
         } else { // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
-            VariableSubstitutor vs = new VariableSubstitutor(installData.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
             return vs.substitute(message, null);
         }
     }

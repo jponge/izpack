@@ -93,9 +93,6 @@ public class AutomatedInstaller extends InstallerBase {
 
         // loads installer conditions
         loadInstallerRequirements();
-
-        // load dynamic variables
-        loadDynamicVariables();
     }
 
     /**
@@ -302,7 +299,7 @@ public class AutomatedInstaller extends InstallerBase {
         try {
             // assume that installation will succeed
             this.result = true;
-            VariableSubstitutor substitutor = new VariableSubstitutor(this.idata.getVariables());
+            VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.idata.getVariables());
 
             // walk the panels in order
             for (Panel p : this.idata.getPanelsOrder()) {
@@ -336,7 +333,7 @@ public class AutomatedInstaller extends InstallerBase {
 
                 // execute the installation logic for the current panel
                 installPanel(p, automationHelper, panelRoot);
-                refreshDynamicVariables(substitutor, this.idata, rules);
+                idata.refreshDynamicVariables(substitutor);
             }
 
             // this does nothing if the uninstaller was not included
