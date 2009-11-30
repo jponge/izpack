@@ -5,14 +5,13 @@ import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
 import com.izforge.izpack.installer.base.GUIInstaller;
 import com.izforge.izpack.installer.base.LanguageDialog;
-import com.izforge.izpack.installer.provider.IconsProvider;
-import com.izforge.izpack.installer.provider.InstallDataProvider;
-import com.izforge.izpack.installer.provider.InstallerFrameProvider;
-import com.izforge.izpack.installer.provider.RulesProvider;
+import com.izforge.izpack.installer.provider.*;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
 import org.picocontainer.injectors.ProviderAdapter;
+
+import javax.swing.*;
 
 /**
  * Application Component for integration tests.<br />
@@ -27,9 +26,9 @@ public class ApplicationComponentTest implements IApplicationComponent {
         pico.addAdapter(new ProviderAdapter(new InstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new InstallerFrameProvider()))
+                .addAdapter(new ProviderAdapter(new LanguageDialogProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
-                .addComponent(LanguageDialog.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConsoleInstaller.class)

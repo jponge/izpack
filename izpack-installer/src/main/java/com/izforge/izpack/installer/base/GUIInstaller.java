@@ -33,7 +33,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * The IzPack graphical installer class.
@@ -122,34 +121,13 @@ public class GUIInstaller extends InstallerBase {
         }
         String selectedPack;
 
-        // Dummy Frame
-        JFrame frame = new JFrame();
-        frame.setIconImage(
-                resourceManager.getImageIconResource("/img/JFrameIcon.png").getImage()
-        );
-
-        Dimension frameSize = frame.getSize();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation((screenSize.width - frameSize.width) / 2,
-                (screenSize.height - frameSize.height) / 2 - 10);
-
         // We get the langpack name
         if (npacks != 1) {
 //            LanguageDialog picker = new LanguageDialog(frame, resourceManager, installdata);
             LanguageDialog picker = applicationComponent.getComponent(LanguageDialog.class);
-            picker.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
-            picker.setModal(true);
-            picker.toFront();
-            // frame.setVisible(true);
-            frame.setVisible(false);
-            picker.setVisible(true);
-
-            selectedPack = (String) picker.getSelection();
-            if (selectedPack == null) {
-                throw new Exception("installation canceled");
-            }
+            selectedPack = picker.runPicker();
         } else {
-            selectedPack = (String) availableLangPacks.get(0);
+            selectedPack = availableLangPacks.get(0);
         }
 
         // We add an xml data information

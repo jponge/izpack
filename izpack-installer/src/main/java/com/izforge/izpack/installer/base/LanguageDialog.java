@@ -1,10 +1,8 @@
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
@@ -13,9 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.InputStream;
-import java.util.*;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.TreeMap;
 
 /**
  * Used to prompt the user for the language. Languages can be displayed in iso3 or the native
@@ -59,16 +57,19 @@ public class LanguageDialog extends JDialog implements ActionListener {
      */
     private static final String[] LANGUAGE_DISPLAY_TYPES = {"iso3", "native", "default"};
     private ResourceManager resourceManager;
+    private JFrame frame;
+
 
     /**
      * The constructor.
      *
-     * @param items The items to display in the box.
      * @param installData
      */
     public LanguageDialog(JFrame frame, ResourceManager resourceManager, InstallData installData) throws Exception {
         super(frame);
-        this.installdata=installData;
+        this.frame=frame;
+        this.resourceManager=resourceManager;
+        this.installdata = installData;
         // We build the GUI
         addWindowListener(new WindowHandler());
         JPanel contentPane = (JPanel) getContentPane();
@@ -104,7 +105,7 @@ public class LanguageDialog extends JDialog implements ActionListener {
         contentPane.add(label1);
 
         gbConstraints.insets = new Insets(5, 5, 5, 5);
-        Object[] items=resourceManager.getAvailableLangPacks().toArray();
+        Object[] items = resourceManager.getAvailableLangPacks().toArray();
         items = reviseItems(items);
 
         comboBox = new JComboBox(items);
@@ -291,6 +292,21 @@ public class LanguageDialog extends JDialog implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
         dispose();
+    }
+
+    public String runPicker() throws Exception {
+        this.setSelection(Locale.getDefault().getISO3Language().toLowerCase());
+        this.setModal(true);
+        this.toFront();
+        // frame.setVisible(true);
+        frame.setVisible(false);
+        this.setVisible(true);
+
+        String selectedPack = (String) this.getSelection();
+        if (selectedPack == null) {
+            throw new Exception("installation canceled");
+        }
+        return selectedPack;
     }
 
     /**
