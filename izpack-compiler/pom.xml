@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>izpack-parent</artifactId>
+        <groupId>org.codehaus.izpack</groupId>
+        <version>4.3.0-SNAPSHOT</version>
+        <relativePath>../izpack-parent/pom.xml</relativePath>
+    </parent>
+
+    <artifactId>izpack-compiler</artifactId>
+    <name>IzPack compiler module</name>
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-native</artifactId>
+            <classifier>dll</classifier>
+            <type>tar.gz</type>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-util</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-installer</artifactId>
+            <classifier>skeleton</classifier>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-uninstaller</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-uninstaller-ext</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources </directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <stripVersion>true</stripVersion>
+                            <excludeArtifactIds>izpack-compiler</excludeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                    <archive>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

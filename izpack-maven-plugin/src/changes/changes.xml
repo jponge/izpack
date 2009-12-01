@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<document>
+  <properties>
+    <title>IzPack plugin project</title>
+    <author email="dantran at gmail.com">Dan T. Tran</author>
+  </properties>
+  <body>
+    <release version="1.0-alpha-5" date="2008-02-18" description="Bug fixes">
+      <action dev="dtran" type="add" issue="IZPACK-228">
+        Pick up enhancement in IZPACK-226
+      </action>
+    </release>
+    <release version="1.0-alpha-4" date="2008-10-07" description="Bug fixes">
+      <action dev="dtran" type="add" issue="IZPACK-150">
+        Add integration test suite infrastructure
+      </action>
+      <action dev="dtran" type="fix" issue="IZPACK-172">
+        interpolate @{variable}
+      </action>
+    </release>
+    <release version="1.0-alpha-3" date="2008-08-23" description="Bug fixes">
+      <action dev="dtran" type="fix" issue="IZPACK-146">
+        Interpolate system properties
+      </action>
+      <action dev="dtran" type="add" issue="IZPACK-145">
+        Ability to disable the attach artifact to Maven project
+      </action>
+      <action dev="dtran" type="add" issue="IZPACK-147">
+        Ability to specify final installer path.
+      </action>
+      <action dev="dtran" type="add" issue="IZPACK-149">
+        Add "descriptorEncoding" configuration
+      </action>
+    </release>
+    <release version="1.0-alpha-2" date="2008-08-16" description="Bug fixes">
+      <action dev="dtran" type="fix" issue="IZPACK-142">
+        Custom panel jars are not found with maven plugin.
+      </action>
+    </release>
+    <release version="1.0-alpha-1" date="2008-08-01" description="Initial alpha release">
+      <action dev="dtran" type="add">
+        Initial version
+      </action>
+    </release>
+    
+    
+  </body>
+</document>

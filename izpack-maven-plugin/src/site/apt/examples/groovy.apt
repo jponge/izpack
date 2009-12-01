@@ -1,0 +1,26 @@
+ ------
+ Maven IzPack Plugin - Groovy Installer Example
+ ------
+ Dan T. Tran
+ ------
+ 15 June 2008
+ -----
+
+Groovy Installer Example
+
+ This example is a port of {{{http://svn.codehaus.org/izpack/izpack-showcases/groovy/trunk}Groovy installer Ant build}}.
+ The ported project is at {{{http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin/src/examples/groovy}
+ http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin/src/examples/groovy}} 
+
+ In this example, you will see the intensive use of maven-dependency-plugin to prepare IzPack
+ staging area. However, since all required Groovy dependencies are not at Maven Central
+ repository you will need to install them to your local repository.  A convenient 
+ Maven profile is provided to do just that
+ 
+-------------------------------------
+
+mvn -Pinstall-dependencies initialize
+
+--------------------------------------
+
+

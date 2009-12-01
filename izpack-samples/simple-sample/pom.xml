@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>izpack-parent</artifactId>
+        <groupId>org.codehaus.izpack</groupId>
+        <version>4.3.0-SNAPSHOT</version>
+    </parent> 
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>izpack-simple-sample</artifactId>
+    <name>IzPack simple sample</name>
+
+    <dependencies>
+        <dependency>
+            <artifactId>izpack-compiler</artifactId>
+            <groupId>${groupId}</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>izpack-installer</artifactId>
+            <groupId>${groupId}</groupId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-java-sources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${staging.dir}/src</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/java</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-izpack-resource</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${staging.dir}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/izpack</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <properties>
+        <staging.dir>${basedir}/target/staging</staging.dir>
+    </properties>
+</project>

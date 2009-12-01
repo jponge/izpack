@@ -1,0 +1,150 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <artifactId>izpack-parent</artifactId>
+        <groupId>org.codehaus.izpack</groupId>
+        <version>4.3.0-SNAPSHOT</version>
+        <relativePath>../izpack-parent</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>izpack-maven-plugin</artifactId>
+    <packaging>maven-plugin</packaging>
+    <name>IzPack Maven Plugin</name>
+
+    <description>Maven plugin for IZPack</description>
+
+    <inceptionYear>2008</inceptionYear>
+    <url>http://izpack.codehaus.org/izpack-maven-plugin/</url>
+
+
+    <prerequisites>
+        <maven>2.0.6</maven>
+    </prerequisites>
+
+    <scm>
+        <connection>scm:svn:http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin</connection>
+        <developerConnection>scm:svn:https://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin
+        </developerConnection>
+        <url>http://svn.codehaus.org/izpack/izpack-maven/trunk/izpack-maven-plugin</url>
+    </scm>
+
+    <distributionManagement>
+        <site>
+            <id>codehaus.org</id>
+            <name>IzPack Website</name>
+            <url>dav:https://dav.codehaus.org/izpack/izpack-maven-plugin</url>
+        </site>
+    </distributionManagement>
+
+
+    <developers>
+        <developer>
+            <name>Dan Tran</name>
+            <email>Dan T. Tran@gmail.com</email>
+            <roles>
+                <role>Project Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Miguel Griffa</name>
+            <email>miguel.griffa@gmail.com</email>
+            <roles>
+                <role>Original Creator</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Markus Hoofe</name>
+            <roles>
+                <role>Contributer</role>
+            </roles>
+        </developer>
+    </developers>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>2.0.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven.shared</groupId>
+            <artifactId>maven-filtering</artifactId>
+            <version>1.0-beta-2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+            <version>1.5.6</version>
+        </dependency>
+
+        <!-- to build this plugin only, at runtime, this plugin will use the one in user's dependency list  -->
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-compiler</artifactId>
+            <classifier>standalone</classifier>
+            <version>${version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-changes-plugin</artifactId>
+                <version>2.0</version>
+                <configuration>
+                    <issueLinkTemplate>%URL%/%ISSUE%</issueLinkTemplate>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>changes-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <profiles>
+        <profile>
+            <id>run-its</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>shitty-maven-plugin</artifactId>
+                        <version>1.0-alpha-3</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>clean</goal>
+                                    <goal>install</goal>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <parallel>true</parallel>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+</project>
