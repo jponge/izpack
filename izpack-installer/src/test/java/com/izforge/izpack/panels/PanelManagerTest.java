@@ -22,7 +22,7 @@ public class PanelManagerTest {
     private PanelManager panelManager;
 
     @Before
-    public void initMock() {
+    public void initMock() throws ClassNotFoundException {
         MockitoAnnotations.initMocks(getClass());
         panelManager = new PanelManager(installData, panelComponent);
     }
@@ -47,7 +47,4 @@ public class PanelManagerTest {
     public void resolveClassNameShouldThrowException() throws Exception {
         panelManager.resolveClassName("unknown");
     }
-
-
-
 }

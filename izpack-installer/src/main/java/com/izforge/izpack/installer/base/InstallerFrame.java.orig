@@ -202,7 +202,11 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, IPanelComponent panelComponent, UninstallDataWriter uninstallDataWriter, PanelManager panelManager)
+<<<<<<< HEAD
+    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, IPanelComponent panelComponent, UninstallDataWriter uninstallDataWriter)
+=======
+    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager)
+>>>>>>> panelsPico
             throws Exception {
         super(title);
         substitutor = new VariableSubstitutorImpl(installdata.getVariables());
@@ -211,10 +215,13 @@ public class InstallerFrame extends JFrame {
         this.langpack = installdata.getLangpack();
         this.rules = rules;
         this.icons = icons;
-//        this.panelComponent = panelComponent;
+<<<<<<< HEAD
+        this.panelComponent = panelComponent;
         this.uninstallDataWriter = uninstallDataWriter;
+=======
+//        this.panelComponent = panelComponent;
         this.panelManager=panelManager;
-
+>>>>>>> panelsPico
     }
 
     public void init() throws Exception {

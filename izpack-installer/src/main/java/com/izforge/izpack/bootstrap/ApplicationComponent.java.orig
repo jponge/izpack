@@ -1,6 +1,11 @@
 package com.izforge.izpack.bootstrap;
 
 import com.izforge.izpack.data.ResourceManager;
+<<<<<<< HEAD
+import com.izforge.izpack.installer.base.*;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
+import com.izforge.izpack.installer.provider.*;
+=======
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
@@ -8,6 +13,7 @@ import com.izforge.izpack.installer.base.GUIInstaller;
 import com.izforge.izpack.installer.provider.IconsProvider;
 import com.izforge.izpack.installer.provider.InstallDataProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
+>>>>>>> panelsPico
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
