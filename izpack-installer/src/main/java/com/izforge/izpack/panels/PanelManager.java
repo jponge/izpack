@@ -68,9 +68,9 @@ public class PanelManager {
         for (Panel panel : panelsOrder) {
             if (OsConstraint.oneMatchesCurrentSystem(panel.osConstraints)) {
                 Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
-
                 executePreBuildActions(panel);
                 IzPanel izPanel = panelComponent.getComponent(aClass);
+                izPanel.setMetadata(panel);
                 String dataValidator = panel.getValidator();
                 if (dataValidator != null) {
                     izPanel.setValidationService(DataValidatorFactory.createDataValidator(dataValidator));
