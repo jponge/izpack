@@ -5,4 +5,5 @@ package com.izforge.izpack.bootstrap;
  */
 public interface IPanelComponent extends IApplicationComponent{
 
+    <T> void addComponent(Class<T> componentType);
 }

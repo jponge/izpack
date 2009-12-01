@@ -23,6 +23,7 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.*;
+import com.izforge.izpack.bootstrap.IPanelComponent;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLWriter;
@@ -182,6 +183,10 @@ public class InstallerFrame extends JFrame {
 
     // If a heading image is defined should it be displayed on the left
     private boolean imageLeft = false;
+    /**
+     * Container for panels
+     */
+    private IPanelComponent panelComponent;
 
     /**
      * The constructor (normal mode).
@@ -190,7 +195,7 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons)
+    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, IPanelComponent panelComponent)
             throws Exception {
         super(title);
         substitutor = new VariableSubstitutorImpl(installdata.getVariables());
@@ -200,6 +205,7 @@ public class InstallerFrame extends JFrame {
         this.langpack = installdata.getLangpack();
         this.rules = rules;
         this.icons = icons;
+        this.panelComponent = panelComponent;
     }
 
     public void init() throws Exception {
@@ -485,7 +491,7 @@ public class InstallerFrame extends JFrame {
     private ImageIcon loadIcon(String resPrefix, int PanelNo, boolean tryBaseIcon)
             throws ResourceNotFoundException, IOException {
         ResourceManager rm = ResourceManager.getInstance();
-        ImageIcon icon = null;
+        ImageIcon icon;
         String iconext = this.getIconResourceNameExtension();
         if (tryBaseIcon) {
             try {
@@ -985,6 +991,8 @@ public class InstallerFrame extends JFrame {
     }
 
     /**
+     * REFACTOR : A remplacer par l'utilisation directe de
+     * resourceManager.getInputStream()
      * Gets the stream to a resource.
      *
      * @param res The resource id.

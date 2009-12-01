@@ -5,7 +5,7 @@ import org.picocontainer.DefaultPicoContainer;
 /**
  * Container for panel level component
  */
-public class PanelComponent implements IPanelComponent{
+public class PanelComponent implements IPanelComponent {
 
     public DefaultPicoContainer pico;
 
@@ -18,7 +18,11 @@ public class PanelComponent implements IPanelComponent{
     public void initBindings() {
         pico = new DefaultPicoContainer(applicationComponent.pico);
         pico
-                .addComponent(IPanelComponent.class,this);
+                .addComponent(IPanelComponent.class, this);
+    }
+
+    public <T> void addComponent(Class<T> componentType) {
+        pico.addComponent(componentType);
     }
 
     public void dispose() {
