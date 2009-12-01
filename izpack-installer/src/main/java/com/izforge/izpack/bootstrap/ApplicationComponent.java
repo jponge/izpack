@@ -2,6 +2,7 @@ package com.izforge.izpack.bootstrap;
 
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.*;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.provider.*;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
@@ -28,6 +29,7 @@ public class ApplicationComponent implements IApplicationComponent {
                 .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)
                 .addComponent(ConsoleInstaller.class)
+                .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
                 .addComponent(IApplicationComponent.class,this);
     }

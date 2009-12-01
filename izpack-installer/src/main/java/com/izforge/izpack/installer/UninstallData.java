@@ -45,12 +45,12 @@ public class UninstallData {
     /**
      * The uninstallable files list.
      */
-    private List uninstallableFilesList;
+    private List<String> uninstallableFilesList;
 
     /**
      * The executables list.
      */
-    private List executablesList;
+    private List<ExecutableFile> executablesList;
 
     /**
      * The uninstaller jar filename.
@@ -77,8 +77,8 @@ public class UninstallData {
      */
     private UninstallData() {
         installedFilesList = new ArrayList<String>();
-        uninstallableFilesList = new ArrayList();
-        executablesList = new ArrayList();
+        uninstallableFilesList = new ArrayList<String>();
+        executablesList = new ArrayList<ExecutableFile>();
         additionalData = new HashMap<String, Object>();
         unInstallScripts = new ArrayList<String>();
     }
@@ -129,7 +129,7 @@ public class UninstallData {
      *
      * @return The uninstallable files list.
      */
-    public List getUninstalableFilesList() {
+    public List<String> getUninstalableFilesList() {
         return uninstallableFilesList;
     }
 
@@ -147,7 +147,7 @@ public class UninstallData {
      *
      * @return The executables list.
      */
-    public List getExecutablesList() {
+    public List<ExecutableFile> getExecutablesList() {
         return executablesList;
     }
 

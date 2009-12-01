@@ -29,6 +29,7 @@ import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.installer.DataValidator.Status;
 import com.izforge.izpack.installer.base.InstallerBase;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 
@@ -68,15 +69,21 @@ public class AutomatedInstaller extends InstallerBase {
     private ConditionCheck checkCondition;
 
     /**
+     * Manager for writing uninstall data
+     */
+    private UninstallDataWriter uninstallDataWriter;
+
+    /**
      * Constructing an instance triggers the install.
      *
      * @param inputFilename   Name of the file containing the installation data.
      * @param resourceManager
      * @throws Exception Description of the Exception
      */
-    public AutomatedInstaller(String inputFilename, ResourceManager resourceManager,ConditionCheck checkCondition) throws Exception {
+    public AutomatedInstaller(String inputFilename, ResourceManager resourceManager,ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter) throws Exception {
         super(resourceManager);
         this.checkCondition=checkCondition;
+        this.uninstallDataWriter = uninstallDataWriter;
         File input = new File(inputFilename);
 
 
@@ -94,188 +101,6 @@ public class AutomatedInstaller extends InstallerBase {
 //        ResourceManager.create(this.idata);
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
-    }
-
-    /**
-     * Writes the uninstalldata. <p/> Unfortunately, Java doesn't allow multiple inheritance, so
-     * <code>AutomatedInstaller</code> and <code>InstallerFrame</code> can't share this code ...
-     * :-/ <p/> TODO: We should try to fix this in the future.
-     */
-    private boolean writeUninstallData() {
-        try {
-            // We get the data
-            UninstallData udata = UninstallData.getInstance();
-            List files = udata.getUninstalableFilesList();
-            ZipOutputStream outJar = this.idata.getUninstallOutJar();
-
-            if (outJar == null) {
-                return true; // it is allowed not to have an installer
-            }
-
-            System.out.println("[ Writing the uninstaller data ... ]");
-
-            // We write the files log
-            outJar.putNextEntry(new ZipEntry("install.log"));
-            BufferedWriter logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
-            logWriter.write(this.idata.getInstallPath());
-            logWriter.newLine();
-            Iterator iter = files.iterator();
-            while (iter.hasNext()) {
-                logWriter.write((String) iter.next());
-                if (iter.hasNext()) {
-                    logWriter.newLine();
-                }
-            }
-            logWriter.flush();
-            outJar.closeEntry();
-
-            // We write the uninstaller jar file log
-            outJar.putNextEntry(new ZipEntry("jarlocation.log"));
-            logWriter = new BufferedWriter(new OutputStreamWriter(outJar));
-            logWriter.write(udata.getUninstallerJarFilename());
-            logWriter.newLine();
-            logWriter.write(udata.getUninstallerPath());
-            logWriter.flush();
-            outJar.closeEntry();
-
-            // Write out executables to execute on uninstall
-            outJar.putNextEntry(new ZipEntry("executables"));
-            ObjectOutputStream execStream = new ObjectOutputStream(outJar);
-            iter = udata.getExecutablesList().iterator();
-            execStream.writeInt(udata.getExecutablesList().size());
-            while (iter.hasNext()) {
-                ExecutableFile file = (ExecutableFile) iter.next();
-                execStream.writeObject(file);
-            }
-            execStream.flush();
-            outJar.closeEntry();
-
-            // *** ADDED code bellow
-            // Write out additional uninstall data
-            // Do not "kill" the installation if there is a problem
-            // with custom uninstall data. Therefore log it to Debug,
-            // but do not throw.
-            Map<String, Object> additionalData = udata.getAdditionalData();
-            if (additionalData != null && !additionalData.isEmpty()) {
-                Iterator<String> keys = additionalData.keySet().iterator();
-                HashSet<String> exist = new HashSet<String>();
-                while (keys != null && keys.hasNext()) {
-                    String key = keys.next();
-                    Object contents = additionalData.get(key);
-                    if ("__uninstallLibs__".equals(key)) {
-                        Iterator nativeLibIter = ((List) contents).iterator();
-                        while (nativeLibIter != null && nativeLibIter.hasNext()) {
-                            String nativeLibName = (String) ((List) nativeLibIter.next()).get(0);
-                            byte[] buffer = new byte[5120];
-                            long bytesCopied = 0;
-                            int bytesInBuffer;
-                            outJar.putNextEntry(new ZipEntry("native/" + nativeLibName));
-                            InputStream in = getClass().getResourceAsStream(
-                                    "/native/" + nativeLibName);
-                            while ((bytesInBuffer = in.read(buffer)) != -1) {
-                                outJar.write(buffer, 0, bytesInBuffer);
-                                bytesCopied += bytesInBuffer;
-                            }
-                            outJar.closeEntry();
-                        }
-                    } else if ("uninstallerListeners".equals(key) || "uninstallerJars".equals(key)) { // It is a ArrayList of ArrayLists which contains the
-                        // full
-                        // package paths of all needed class files.
-                        // First we create a new ArrayList which contains only
-                        // the full paths for the uninstall listener self; thats
-                        // the first entry of each sub ArrayList.
-                        ArrayList<String> subContents = new ArrayList<String>();
-
-                        // Secound put the class into uninstaller.jar
-                        Iterator listenerIter = ((List) contents).iterator();
-                        while (listenerIter.hasNext()) {
-                            byte[] buffer = new byte[5120];
-                            long bytesCopied = 0;
-                            int bytesInBuffer;
-                            CustomData customData = (CustomData) listenerIter.next();
-                            // First element of the list contains the listener
-                            // class path;
-                            // remind it for later.
-                            if (customData.listenerName != null) {
-                                subContents.add(customData.listenerName);
-                            }
-                            Iterator<String> liClaIter = customData.contents.iterator();
-                            while (liClaIter.hasNext()) {
-                                String contentPath = liClaIter.next();
-                                if (exist.contains(contentPath)) {
-                                    continue;
-                                }
-                                exist.add(contentPath);
-                                try {
-                                    outJar.putNextEntry(new ZipEntry(contentPath));
-                                }
-                                catch (ZipException ze) { // Ignore, or ignore not ?? May be it is a
-                                    // exception because
-                                    // a doubled entry was tried, then we should
-                                    // ignore ...
-                                    Debug.trace("ZipException in writing custom data: "
-                                            + ze.getMessage());
-                                    continue;
-                                }
-                                InputStream in = getClass().getResourceAsStream("/" + contentPath);
-                                if (in != null) {
-                                    while ((bytesInBuffer = in.read(buffer)) != -1) {
-                                        outJar.write(buffer, 0, bytesInBuffer);
-                                        bytesCopied += bytesInBuffer;
-                                    }
-                                } else {
-                                    Debug.trace("custom data not found: " + contentPath);
-                                }
-                                outJar.closeEntry();
-
-                            }
-                        }
-                        // Third we write the list into the
-                        // uninstaller.jar
-                        outJar.putNextEntry(new ZipEntry(key));
-                        ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-                        objOut.writeObject(subContents);
-                        objOut.flush();
-                        outJar.closeEntry();
-
-                    } else {
-                        outJar.putNextEntry(new ZipEntry(key));
-                        if (contents instanceof ByteArrayOutputStream) {
-                            ((ByteArrayOutputStream) contents).writeTo(outJar);
-                        } else {
-                            ObjectOutputStream objOut = new ObjectOutputStream(outJar);
-                            objOut.writeObject(contents);
-                            objOut.flush();
-                        }
-                        outJar.closeEntry();
-                    }
-                }
-            }
-
-            // write the script files, which will
-            // perform several complement and unindependend uninstall actions
-            ArrayList<String> unInstallScripts = udata.getUninstallScripts();
-            Iterator<String> unInstallIter = unInstallScripts.iterator();
-            ObjectOutputStream rootStream;
-            int idx = 0;
-            while (unInstallIter.hasNext()) {
-                outJar.putNextEntry(new ZipEntry(UninstallData.ROOTSCRIPT + Integer.toString(idx)));
-                rootStream = new ObjectOutputStream(outJar);
-                String unInstallScript = (String) unInstallIter.next();
-                rootStream.writeUTF(unInstallScript);
-                rootStream.flush();
-                outJar.closeEntry();
-            }
-
-            // Cleanup
-            outJar.flush();
-            outJar.close();
-            return true;
-        }
-        catch (Exception err) {
-            err.printStackTrace();
-            return false;
-        }
     }
 
     /**
@@ -338,7 +163,7 @@ public class AutomatedInstaller extends InstallerBase {
             }
 
             // this does nothing if the uninstaller was not included
-            writeUninstallData();
+            uninstallDataWriter.write(idata);
 
             if (this.result) {
                 System.out.println("[ Automated installation done ]");
