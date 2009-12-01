@@ -1,10 +1,12 @@
 package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.bootstrap.IPanelComponent;
+import com.izforge.izpack.bootstrap.PanelComponent;
 import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.installer.base.GUIInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.VariableSubstitutorImpl;
@@ -14,8 +16,8 @@ import org.picocontainer.injectors.Provider;
  * Provide installer frame instance
  */
 public class InstallerFrameProvider implements Provider {
-    public InstallerFrame provide(InstallData installdata, RulesEngine rules, IconsDatabase icons, IPanelComponent iPanelComponent) throws Exception {
-        InstallerFrame installerFrame = new InstallerFrame(getTitle(installdata), installdata, rules, icons,iPanelComponent);
+    public InstallerFrame provide(InstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager) throws Exception {
+        InstallerFrame installerFrame = new InstallerFrame(getTitle(installdata), installdata, rules, icons,panelManager);
         installerFrame.init();
         return installerFrame;
     }

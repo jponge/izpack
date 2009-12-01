@@ -24,6 +24,7 @@ package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.*;
 import com.izforge.izpack.bootstrap.IPanelComponent;
+import com.izforge.izpack.bootstrap.PanelComponent;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLWriter;
@@ -38,6 +39,7 @@ import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
+import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
@@ -131,10 +133,6 @@ public class InstallerFrame extends JFrame {
      */
     protected JButton quitButton;
 
-    /**
-     * Mapping from "raw" panel number to visible panel number.
-     */
-    protected ArrayList<Integer> visiblePanelMapping;
 
     /**
      * Registered GUICreationListener.
@@ -183,10 +181,13 @@ public class InstallerFrame extends JFrame {
 
     // If a heading image is defined should it be displayed on the left
     private boolean imageLeft = false;
+
     /**
-     * Container for panels
+     * Panel manager
      */
-    private IPanelComponent panelComponent;
+    private PanelManager panelManager;
+    
+    PanelComponent panelComponent;
 
     /**
      * The constructor (normal mode).
@@ -195,31 +196,25 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, IPanelComponent panelComponent)
+    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager)
             throws Exception {
         super(title);
         substitutor = new VariableSubstitutorImpl(installdata.getVariables());
         guiListener = new ArrayList<GUIListener>();
-        visiblePanelMapping = new ArrayList<Integer>();
         this.installdata = installdata;
         this.langpack = installdata.getLangpack();
         this.rules = rules;
         this.icons = icons;
-        this.panelComponent = panelComponent;
+//        this.panelComponent = panelComponent;
+        this.panelManager=panelManager;
     }
 
     public void init() throws Exception {
         // Sets the window events handler
         addWindowListener(new WindowHandler());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-
-        // Builds the GUI
-        loadPanels();
-        buildGUI();
-
-        sizeFrame();
     }
-
+    
     private void sizeFrame() {
         pack();
         setSize(installdata.guiPrefs.width, installdata.guiPrefs.height);
@@ -228,7 +223,10 @@ public class InstallerFrame extends JFrame {
         centerFrame(this);
     }
 
-    public void enableFrame() {
+    public void enableFrame() throws ClassNotFoundException {
+        panelManager.instanciatePanels();
+        buildGUI();
+        sizeFrame();
         // We show the frame
         showFrame();
         switchPanel(0);
@@ -237,115 +235,6 @@ public class InstallerFrame extends JFrame {
     public Debugger getDebugger() {
         return this.debugger;
     }
-
-    /**
-     * Loads the panels.
-     *
-     * @throws Exception Description of the Exception
-     */
-    private void loadPanels() throws Exception {
-        // Initialisation
-        java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
-        int i;
-        int size = panelsOrder.size();
-        String className;
-        Class objectClass;
-        Constructor constructor;
-        Object object;
-        IzPanel panel;
-        Class[] paramsClasses = new Class[2];
-        paramsClasses[0] = Class.forName("com.izforge.izpack.installer.base.InstallerFrame");
-        paramsClasses[1] = Class.forName("com.izforge.izpack.installer.data.InstallData");
-        Object[] params = {this, installdata};
-
-        // We load each of them
-        int curVisPanelNumber = 0;
-        int lastVis = 0;
-        int count = 0;
-        for (i = 0; i < size; i++) {
-            // We add the panel
-            Panel p = panelsOrder.get(i);
-            if (!OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) {
-                continue;
-            }
-            className = p.className;
-            String praefix = "com.izforge.izpack.panels.";
-            if (className.indexOf('.') > -1)
-            // Full qualified class name
-            {
-                praefix = "";
-            }
-            objectClass = Class.forName(praefix + className);
-            constructor = objectClass.getDeclaredConstructor(paramsClasses);
-            installdata.currentPanel = p; // A hack to use meta data in IzPanel constructor
-            // Do not call constructor of IzPanel or it's derived at an other place else
-            // metadata will be not set.
-            List<String> preConstgructionActions = p.getPreConstructionActions();
-            if (preConstgructionActions != null) {
-                for (int actionIndex = 0; actionIndex < preConstgructionActions.size(); actionIndex++) {
-                    PanelAction action = PanelActionFactory.createPanelAction(preConstgructionActions.get(actionIndex));
-                    action.initialize(p.getPanelActionConfiguration(preConstgructionActions.get(actionIndex)));
-                    action.executeAction(AutomatedInstallData.getInstance(), null);
-                }
-            }
-            object = constructor.newInstance(params);
-            panel = (IzPanel) object;
-            String dataValidator = p.getValidator();
-            if (dataValidator != null) {
-                panel.setValidationService(DataValidatorFactory.createDataValidator(dataValidator));
-            }
-
-            panel.setHelps(p.getHelpsMap());
-
-            List<String> preActivateActions = p.getPreActivationActions();
-            if (preActivateActions != null) {
-                for (int actionIndex = 0; actionIndex < preActivateActions.size(); actionIndex++) {
-                    String panelActionClass = preActivateActions.get(actionIndex);
-                    PanelAction action = PanelActionFactory.createPanelAction(panelActionClass);
-                    action.initialize(p.getPanelActionConfiguration(panelActionClass));
-                    panel.addPreActivationAction(action);
-                }
-            }
-            List<String> preValidateActions = p.getPreValidationActions();
-            if (preValidateActions != null) {
-                for (int actionIndex = 0; actionIndex < preValidateActions.size(); actionIndex++) {
-                    String panelActionClass = preValidateActions.get(actionIndex);
-                    PanelAction action = PanelActionFactory.createPanelAction(panelActionClass);
-                    action.initialize(p.getPanelActionConfiguration(panelActionClass));
-                    panel.addPreValidationAction(action);
-                }
-            }
-            List<String> postValidateActions = p.getPostValidationActions();
-            if (postValidateActions != null) {
-                for (int actionIndex = 0; actionIndex < postValidateActions.size(); actionIndex++) {
-                    String panelActionClass = postValidateActions.get(actionIndex);
-                    PanelAction action = PanelActionFactory.createPanelAction(panelActionClass);
-                    action.initialize(p.getPanelActionConfiguration(panelActionClass));
-                    panel.addPostValidationAction(action);
-                }
-            }
-
-            installdata.getPanels().add(panel);
-            if (panel.isHidden()) {
-                visiblePanelMapping.add(count, -1);
-            } else {
-                visiblePanelMapping.add(count, curVisPanelNumber);
-                curVisPanelNumber++;
-                lastVis = count;
-            }
-            count++;
-            // We add the XML data panel root
-            IXMLElement panelRoot = new XMLElementImpl(className, installdata.getXmlData());
-            // if set, we add the id as an attribute to the panelRoot
-            String panelId = p.getPanelid();
-            if (panelId != null) {
-                panelRoot.setAttribute("id", panelId);
-            }
-            installdata.getXmlData().addChild(panelRoot);
-        }
-        visiblePanelMapping.add(count, lastVis);
-    }
-
 
     /**
      * Builds the GUI.
@@ -657,14 +546,15 @@ public class InstallerFrame extends JFrame {
             // writing out that script.
             // l_panel.makeXMLData(installdata.xmlData.getChildAtIndex(last));
             // No previos button in the first visible panel
-            if (visiblePanelMapping.get(installdata.getCurPanelNumber()) == 0) {
+
+            if (panelManager.isVisible(installdata.getCurPanelNumber())) {
                 prevButton.setVisible(false);
                 lockPrevButton();
                 unlockNextButton(); // if we push the button back at the license
                 // panel
             }
             // Only the exit button in the last panel.
-            else if (visiblePanelMapping.get(installdata.getPanels().size()) == installdata.getCurPanelNumber()) {
+            else if (panelManager.isLast(installdata.getCurPanelNumber())) {
                 prevButton.setVisible(false);
                 nextButton.setVisible(false);
                 lockNextButton();
@@ -752,10 +642,10 @@ public class InstallerFrame extends JFrame {
             panelsContainer.setVisible(true);
             Panel metadata = panel.getMetadata();
             if ((metadata != null) && (!"UNKNOWN".equals(metadata.getPanelid()))) {
-                loadAndShowImage(visiblePanelMapping.get(installdata.getCurPanelNumber()), metadata
+                loadAndShowImage(panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber()), metadata
                         .getPanelid());
             } else {
-                loadAndShowImage(visiblePanelMapping.get(installdata.getCurPanelNumber()));
+                loadAndShowImage(panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber()));
             }
             isBack = false;
             callGUIListener(GUIListener.PANEL_SWITCHED);
@@ -1412,7 +1302,7 @@ public class InstallerFrame extends JFrame {
         // that we can navigate to or until there are no more panels
         for (int panel = startPanel + 1; res == -1 && panel < installdata.getPanels().size(); panel++) {
             // See if we can show this panel
-            if (!visibleOnly || ((Integer) visiblePanelMapping.get(panel)).intValue() != -1) {
+            if (!visibleOnly || panelManager.isVisible(panel)) {
                 if (canShow(panel)) {
                     res = panel;
                 }
@@ -1438,7 +1328,7 @@ public class InstallerFrame extends JFrame {
         // that we can navigate to or until there are no more panels
         for (int panel = endingPanel - 1; res == -1 && panel >= 0; panel--) {
             // See if we can show this panel
-            if (!visibleOnly || ((Integer) visiblePanelMapping.get(panel)).intValue() != -1) {
+            if (!visibleOnly || panelManager.isVisible(panel)) {
                 if (canShow(panel)) {
                     res = panel;
                 }
@@ -1892,7 +1782,7 @@ public class InstallerFrame extends JFrame {
         // Do not forgett the first headline.
         headingLabels[0].setText(headline);
         headingLabels[0].setVisible(true);
-        int curPanelNo = visiblePanelMapping.get(installdata.getCurPanelNumber());
+        int curPanelNo = panelManager.getPanelVisibilityNumber(installdata.getCurPanelNumber());
         if (headingLabels[headingLines] != null) {
             loadAndShowImage(headingLabels[headingLines], HEADING_ICON_RESOURCE, curPanelNo);
             headingLabels[headingLines].setVisible(true);
@@ -1903,9 +1793,8 @@ public class InstallerFrame extends JFrame {
 
     private void performHeadingCounter(IzPanel panel) {
         if (headingCounterComponent != null) {
-            int curPanelNo = visiblePanelMapping.get(installdata.getCurPanelNumber());
-            int visPanelsCount = visiblePanelMapping.get((visiblePanelMapping
-                    .get(installdata.getPanels().size())).intValue());
+            int curPanelNo = panelManager.getPanelVisibilityNumber((installdata.getCurPanelNumber()));
+            int visPanelsCount = panelManager.getCountVisiblePanel();
 
             StringBuffer buf = new StringBuffer();
             buf.append(langpack.getString("installer.step")).append(" ").append(curPanelNo + 1)
