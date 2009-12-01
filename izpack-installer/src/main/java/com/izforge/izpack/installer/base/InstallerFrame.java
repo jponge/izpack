@@ -233,6 +233,7 @@ public class InstallerFrame extends JFrame {
     }
 
     public void loadPanels() throws ClassNotFoundException {
+        panelManager.loadPanelsInContainer();
         panelManager.instanciatePanels();
         buildGUI();
         sizeFrame();

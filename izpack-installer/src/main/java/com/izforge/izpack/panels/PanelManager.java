@@ -35,7 +35,6 @@ public class PanelManager {
         this.installdata = installData;
         this.panelComponent = panelComponent;
         visiblePanelMapping = new ArrayList<Integer>();
-        loadPanelsInContainer();
     }
 
     public Class<? extends IzPanel> resolveClassName(String className) throws ClassNotFoundException {
