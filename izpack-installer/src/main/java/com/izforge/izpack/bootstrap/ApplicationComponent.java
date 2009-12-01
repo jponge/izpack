@@ -14,7 +14,7 @@ import org.picocontainer.injectors.ProviderAdapter;
  */
 public class ApplicationComponent implements IApplicationComponent {
 
-    public DefaultPicoContainer pico;
+    DefaultPicoContainer pico;
     
     public void initBindings() {
         pico = new DefaultPicoContainer(new Caching());
