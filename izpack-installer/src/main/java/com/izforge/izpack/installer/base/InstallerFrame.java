@@ -22,19 +22,21 @@
 
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.*;
-import com.izforge.izpack.bootstrap.IPanelComponent;
-import com.izforge.izpack.bootstrap.PanelComponent;
-import com.izforge.izpack.data.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLWriter;
-import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
+import com.izforge.izpack.bootstrap.PanelComponent;
+import com.izforge.izpack.data.Info;
+import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Panel;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.EtchedLineBorder;
 import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.GUIListener;
+import com.izforge.izpack.installer.ResourceNotFoundException;
+import com.izforge.izpack.installer.UninstallData;
+import com.izforge.izpack.installer.UnpackerFactory;
 import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
@@ -42,7 +44,6 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.unpacker.Unpacker;
 import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 
 import javax.swing.*;
@@ -50,13 +51,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipOutputStream;
 
 import static com.izforge.izpack.installer.base.GuiId.*;
 
@@ -187,7 +188,7 @@ public class InstallerFrame extends JFrame {
      * Panel manager
      */
     private PanelManager panelManager;
-    
+
     PanelComponent panelComponent;
 
     /**
@@ -202,7 +203,7 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, IPanelComponent panelComponent, UninstallDataWriter uninstallDataWriter, PanelManager panelManager)
+    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter)
             throws Exception {
         super(title);
         substitutor = new VariableSubstitutorImpl(installdata.getVariables());
@@ -213,7 +214,7 @@ public class InstallerFrame extends JFrame {
         this.icons = icons;
 //        this.panelComponent = panelComponent;
         this.uninstallDataWriter = uninstallDataWriter;
-        this.panelManager=panelManager;
+        this.panelManager = panelManager;
 
     }
 
@@ -222,7 +223,7 @@ public class InstallerFrame extends JFrame {
         addWindowListener(new WindowHandler());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
-    
+
     private void sizeFrame() {
         pack();
         setSize(installdata.guiPrefs.width, installdata.guiPrefs.height);
@@ -231,10 +232,13 @@ public class InstallerFrame extends JFrame {
         centerFrame(this);
     }
 
-    public void enableFrame() throws ClassNotFoundException {
+    public void loadPanels() throws ClassNotFoundException {
         panelManager.instanciatePanels();
         buildGUI();
         sizeFrame();
+    }
+
+    public void enableFrame() {
         // We show the frame
         showFrame();
         switchPanel(0);
@@ -1069,6 +1073,7 @@ public class InstallerFrame extends JFrame {
             }
         }
     }
+
 
     /**
      * Check to see if there is another panel that can be navigated to next. This checks the

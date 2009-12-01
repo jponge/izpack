@@ -5,6 +5,7 @@ import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
 import com.izforge.izpack.installer.base.GUIInstaller;
+import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.provider.IconsProvider;
 import com.izforge.izpack.installer.provider.InstallDataProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
@@ -30,7 +31,7 @@ public class ApplicationComponent implements IApplicationComponent {
 
 
         pico
-                .addComponent(IPanelComponent.class,PanelComponent.class)
+                .addComponent(IPanelComponent.class, PanelComponent.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)

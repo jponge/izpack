@@ -1,10 +1,14 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
-import com.izforge.izpack.bootstrap.*;
+import com.izforge.izpack.bootstrap.ApplicationComponent;
+import com.izforge.izpack.bootstrap.IApplicationComponent;
+import com.izforge.izpack.bootstrap.IPanelComponent;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.data.ResourceManager;
-import com.izforge.izpack.installer.base.*;
+import com.izforge.izpack.installer.base.GuiId;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.LanguageDialog;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.exception.ScreenLockException;
 import org.fest.swing.fixture.DialogFixture;
@@ -56,11 +60,11 @@ public class InstallationTest {
         try {
             if (dialogFrameFixture != null) {
                 dialogFrameFixture.cleanUp();
-                dialogFrameFixture=null;
+                dialogFrameFixture = null;
             }
             if (installerFrameFixture != null) {
                 installerFrameFixture.cleanUp();
-                installerFrameFixture=null;
+                installerFrameFixture = null;
             }
         } catch (ScreenLockException e) {
             e.printStackTrace();
@@ -145,7 +149,7 @@ public class InstallationTest {
         // Finish panel
     }
 
-    private void prepareFrameFixture() {
+    private void prepareFrameFixture() throws Exception {
         installerFrame = panelComponent.getComponent(InstallerFrame.class);
         installerFrame.loadPanels();
         installerFrameFixture = new FrameFixture(installerFrame);
