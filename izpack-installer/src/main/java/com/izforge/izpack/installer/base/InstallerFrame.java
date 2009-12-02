@@ -212,13 +212,9 @@ public class InstallerFrame extends JFrame {
         this.langpack = installdata.getLangpack();
         this.rules = rules;
         this.icons = icons;
-//        this.panelComponent = panelComponent;
+        //        this.panelComponent = panelComponent;
         this.uninstallDataWriter = uninstallDataWriter;
         this.panelManager = panelManager;
-
-    }
-
-    public void init() throws Exception {
         // Sets the window events handler
         addWindowListener(new WindowHandler());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
