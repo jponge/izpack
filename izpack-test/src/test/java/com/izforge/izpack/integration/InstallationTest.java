@@ -16,7 +16,7 @@ public class InstallationTest extends AbstractInstallationTest {
 
     @After
     public void tearBinding() {
-        applicationComponent.dispose();
+        applicationContainer.dispose();
         try {
             if (dialogFrameFixture != null) {
                 dialogFrameFixture.cleanUp();
@@ -34,7 +34,7 @@ public class InstallationTest extends AbstractInstallationTest {
     @Test
     public void testHelloAndFinishPanels() throws Exception {
         compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
-        panelContainer = applicationComponent.getComponent(IPanelContainer.class);
+        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
         panelContainer.getComponent(LanguageDialog.class).initLangPack();
         prepareFrameFixture();
 
@@ -48,7 +48,7 @@ public class InstallationTest extends AbstractInstallationTest {
     @Test
     public void testBasicInstall() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        panelContainer = applicationComponent.getComponent(IPanelContainer.class);
+        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
         // Lang picker
         prepareDialogFixture();
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();

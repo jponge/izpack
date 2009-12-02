@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.installer.bootstrap;
 
-import com.izforge.izpack.bootstrap.ApplicationComponent;
+import com.izforge.izpack.bootstrap.ApplicationContainer;
 import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
@@ -46,7 +46,7 @@ public class Installer {
     public static final int CONSOLE_INSTALL = 0, CONSOLE_GEN_TEMPLATE = 1, CONSOLE_FROM_TEMPLATE = 2,
             CONSOLE_FROM_SYSTEMPROPERTIES = 3, CONSOLE_FROM_SYSTEMPROPERTIESMERGE = 4;
 
-    private ApplicationComponent applicationComponent;
+    private ApplicationContainer applicationComponent;
 
 
     /*
@@ -62,7 +62,7 @@ public class Installer {
     }
 
     private void initContainer() {
-        applicationComponent = new ApplicationComponent();
+        applicationComponent = new ApplicationContainer();
         applicationComponent.initBindings();
     }
 

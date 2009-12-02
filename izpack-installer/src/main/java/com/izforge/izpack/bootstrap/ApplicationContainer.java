@@ -19,7 +19,7 @@ import org.picocontainer.injectors.ProviderAdapter;
  * Application Component. <br />
  * Encapsulate the pico provider for application level component.
  */
-public class ApplicationComponent implements IApplicationComponent {
+public class ApplicationContainer implements IApplicationContainer {
 
     private DefaultPicoContainer pico;
 
@@ -38,7 +38,7 @@ public class ApplicationComponent implements IApplicationComponent {
                 .addComponent(ConsoleInstaller.class)
                 .addComponent(UninstallDataWriter.class)
                 .addComponent(AutomatedInstaller.class)
-                .addComponent(IApplicationComponent.class, this);
+                .addComponent(IApplicationContainer.class, this);
     }
 
     public void dispose() {

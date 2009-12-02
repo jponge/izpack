@@ -15,7 +15,7 @@ public class UnpackerTest extends AbstractInstallationTest {
     @Test
     public void testInstanciateUnpacker() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        panelContainer = applicationComponent.getComponent(IPanelContainer.class);
+        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
         IUnpacker unpacker = panelContainer.getComponent(IUnpacker.class);
         assertThat(unpacker, IsNull.notNullValue());
     }

@@ -1,8 +1,8 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
-import com.izforge.izpack.bootstrap.ApplicationComponent;
-import com.izforge.izpack.bootstrap.IApplicationComponent;
+import com.izforge.izpack.bootstrap.ApplicationContainer;
+import com.izforge.izpack.bootstrap.IApplicationContainer;
 import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.data.ResourceManager;
@@ -28,7 +28,7 @@ public class AbstractInstallationTest {
 
     @Rule
     public MethodRule globalTimeout = new Timeout(60000);
-    protected IApplicationComponent applicationComponent;
+    protected IApplicationContainer applicationContainer;
     protected IPanelContainer panelContainer;
 
     protected FrameFixture installerFrameFixture;
@@ -36,8 +36,8 @@ public class AbstractInstallationTest {
 
     @Before
     public void initBinding() throws Throwable {
-        applicationComponent = new ApplicationComponent();
-        applicationComponent.initBindings();
+        applicationContainer = new ApplicationContainer();
+        applicationContainer.initBindings();
     }
 
     @Before
@@ -112,6 +112,6 @@ public class AbstractInstallationTest {
     protected void setResourcePath(File baseDir) {
         String relativePath = baseDir.getAbsolutePath().substring(currentDir.getAbsolutePath().length());
         System.out.println(relativePath);
-        applicationComponent.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
+        applicationContainer.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
     }
 }

@@ -23,9 +23,9 @@ public class PanelContainer implements IPanelContainer {
 
     public MutablePicoContainer pico;
 
-    public IApplicationComponent parent;
+    public IApplicationContainer parent;
 
-    public PanelContainer(IApplicationComponent parent) throws ClassNotFoundException {
+    public PanelContainer(IApplicationContainer parent) throws ClassNotFoundException {
         pico = new PicoBuilder(parent.getPico()).withCaching().withConstructorInjection().addChildToParent().build();
         initBindings();
     }
@@ -33,8 +33,7 @@ public class PanelContainer implements IPanelContainer {
     public void initBindings() throws ClassNotFoundException {
         pico
                 .addComponent(IPanelContainer.class, this)
-                .addComponent(PanelManager.class)
-                ;
+                .addComponent(PanelManager.class);
         addVariablerComponent();
     }
 
@@ -43,6 +42,7 @@ public class PanelContainer implements IPanelContainer {
         String unpackerclassname = installdata.getInfo().getUnpackerClassName();
         Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
         pico
+//                .addAdapter(new ComponentAdapter(IUnpacker.class, unpackerclass)
                 .addComponent(IUnpacker.class, unpackerclass)
                 .addComponent(InstallerFrame.class, InstallerFrame.class,
                         new ConstantParameter(getTitle(installdata)),

@@ -20,7 +20,7 @@
 
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.bootstrap.IApplicationComponent;
+import com.izforge.izpack.bootstrap.IApplicationContainer;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
@@ -45,7 +45,7 @@ public class GUIInstaller extends InstallerBase {
     /**
      * Application component
      */
-    private IApplicationComponent applicationComponent;
+    private IApplicationContainer applicationContainer;
 
 
     /**
