@@ -1,6 +1,5 @@
 package com.izforge.izpack.installer.provider;
 
-import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -8,7 +7,6 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsVersion;
-import org.picocontainer.injectors.Provider;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -25,15 +23,19 @@ import java.util.TreeMap;
  * Provide installData for GUI :
  * Load install data with l&f and GUIPrefs
  */
-public class InstallDataGUIProvider implements Provider {
-    private ResourceManager resourceManager;
+public class GUIInstallDataProvider extends AbstractInstallDataProvider {
 
-    public GUIInstallData provide(AutomatedInstallData automatedInstallData, ResourceManager resourceManager) throws Exception {
+    public GUIInstallData provide(ResourceManager resourceManager) throws Exception {
         this.resourceManager = resourceManager;
-        GUIInstallData guiInstallData = new GUIInstallData();
-        // add the GUI install guiInstallData
+        final GUIInstallData guiInstallData = new GUIInstallData();
+        // Loads the installation data
+        loadInstallData(guiInstallData);
         loadGUIInstallData(guiInstallData);
-        // Sets up the GUI L&F
+        loadInstallerRequirements(guiInstallData);
+        loadDynamicVariables(guiInstallData);
+        // Load custom langpack if exist.
+        addCustomLangpack(guiInstallData);
+
         loadLookAndFeel(guiInstallData);
         return guiInstallData;
     }

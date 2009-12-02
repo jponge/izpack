@@ -3,7 +3,6 @@ package com.izforge.izpack.installer.provider;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
-import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
@@ -16,31 +15,19 @@ import java.net.InetAddress;
 import java.util.*;
 
 /**
- * Install data loader
+ * Created by IntelliJ IDEA.
+ * User: sora
+ * Date: Dec 2, 2009
+ * Time: 12:56:27 PM
+ * To change this template use File | Settings | File Templates.
  */
-public class InstallDataProvider implements Provider {
-
+public class AbstractInstallDataProvider implements Provider {
     /**
      * The base name of the XML file that specifies the custom langpack. Searched is for the file
      * with the name expanded by _ISO3.
      */
     protected static final String LANG_FILE_NAME = "CustomLangpack.xml";
-
-    private ResourceManager resourceManager;
-
-    public GUIInstallData provide(ResourceManager resourceManager) throws Exception, InterruptedException {
-        this.resourceManager = resourceManager;
-        final GUIInstallData installDataGUI = new GUIInstallData();
-        // Loads the installation data
-        loadInstallData(installDataGUI);
-
-        // Load custom langpack if exist.
-        addCustomLangpack(installDataGUI);
-
-        loadDynamicVariables(installDataGUI);
-        loadInstallerRequirements(installDataGUI);
-        return installDataGUI;
-    }
+    protected ResourceManager resourceManager;
 
     /**
      * Loads the installation data. Also sets environment variables to <code>installdata</code>.
@@ -51,7 +38,7 @@ public class InstallDataProvider implements Provider {
      * @param installdata Where to store the installation data.
      * @throws Exception Description of the Exception
      */
-    private void loadInstallData(AutomatedInstallData installdata) throws Exception {
+    protected void loadInstallData(AutomatedInstallData installdata) throws Exception {
         // Usefull variables
         InputStream in;
         ObjectInputStream objIn;
@@ -192,7 +179,7 @@ public class InstallDataProvider implements Provider {
      *
      * @param idata install data to be used
      */
-    private void addCustomLangpack(AutomatedInstallData idata) {
+    protected void addCustomLangpack(AutomatedInstallData idata) {
         // We try to load and add a custom langpack.
         try {
             idata.getLangpack().add(ResourceManager.getInstance().getInputStream(LANG_FILE_NAME));
@@ -203,7 +190,6 @@ public class InstallDataProvider implements Provider {
         }
         Debug.trace("Custom langpack for " + idata.getLocaleISO3() + " available.");
     }
-
 
     /**
      * Loads custom data like listener and lib references if exist and fills the installdata.
@@ -263,7 +249,6 @@ public class InstallDataProvider implements Provider {
         // uninstallerLib list if exist
 
     }
-
 
     private String getDir() {
         // We determine the operating system and the initial installation path
@@ -400,7 +385,7 @@ public class InstallDataProvider implements Provider {
      *
      * @param installDataGUI
      */
-    protected void loadDynamicVariables(GUIInstallData installDataGUI) {
+    protected void loadDynamicVariables(AutomatedInstallData installDataGUI) {
         try {
             InputStream in = resourceManager.getInputStream("dynvariables");
             ObjectInputStream objIn = new ObjectInputStream(in);
@@ -419,11 +404,10 @@ public class InstallDataProvider implements Provider {
      * @param installDataGUI
      * @throws Exception
      */
-    public void loadInstallerRequirements(GUIInstallData installDataGUI) throws Exception {
+    public void loadInstallerRequirements(AutomatedInstallData installDataGUI) throws Exception {
         InputStream in = resourceManager.getInputStream("installerrequirements");
         ObjectInputStream objIn = new ObjectInputStream(in);
         installDataGUI.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
         objIn.close();
     }
-
 }
