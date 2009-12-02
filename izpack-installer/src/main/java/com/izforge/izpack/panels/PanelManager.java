@@ -2,7 +2,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.bootstrap.IPanelComponent;
+import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.data.PanelAction;
@@ -26,7 +26,7 @@ public class PanelManager {
     public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels.";
 
     private GUIInstallData installdata;
-    private IPanelComponent panelComponent;
+    private IPanelContainer panelContainer;
     private int lastVis;
 
     /**
@@ -34,9 +34,9 @@ public class PanelManager {
      */
     protected ArrayList<Integer> visiblePanelMapping;
 
-    public PanelManager(GUIInstallData installDataGUI, IPanelComponent panelComponent) throws ClassNotFoundException {
+    public PanelManager(GUIInstallData installDataGUI, IPanelContainer panelContainer) throws ClassNotFoundException {
         this.installdata = installDataGUI;
-        this.panelComponent = panelComponent;
+        this.panelContainer = panelContainer;
         visiblePanelMapping = new ArrayList<Integer>();
     }
 
@@ -58,7 +58,7 @@ public class PanelManager {
             System.out.println(panel.getClassName());
             if (OsConstraint.oneMatchesCurrentSystem(panel.osConstraints)) {
                 Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
-                panelComponent.addComponent(aClass);
+                panelContainer.addComponent(aClass);
             }
         }
     }
@@ -72,7 +72,7 @@ public class PanelManager {
             if (OsConstraint.oneMatchesCurrentSystem(panel.osConstraints)) {
                 Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
                 executePreBuildActions(panel);
-                IzPanel izPanel = panelComponent.getComponent(aClass);
+                IzPanel izPanel = panelContainer.getComponent(aClass);
                 izPanel.setMetadata(panel);
                 String dataValidator = panel.getValidator();
                 if (dataValidator != null) {
@@ -152,8 +152,8 @@ public class PanelManager {
     }
 
     public void setAbstractUIHandlerInContainer(AbstractUIHandler abstractUIHandlerInContainer) {
-        panelComponent.removeComponent(AbstractUIHandler.class);
-        panelComponent.addComponent(AbstractUIHandler.class, abstractUIHandlerInContainer);
+        panelContainer.removeComponent(AbstractUIHandler.class);
+        panelContainer.addComponent(AbstractUIHandler.class, abstractUIHandlerInContainer);
     }
 
     public int getCountVisiblePanel() {
@@ -162,6 +162,6 @@ public class PanelManager {
 
     public IUnpacker getUnpacker(AbstractUIProgressHandler listener) {
         setAbstractUIHandlerInContainer(listener);
-        return panelComponent.getComponent(IUnpacker.class);
+        return panelContainer.getComponent(IUnpacker.class);
     }
 }

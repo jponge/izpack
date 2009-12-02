@@ -410,4 +410,13 @@ public class AbstractInstallDataProvider implements Provider {
         installDataGUI.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
         objIn.close();
     }
+
+    protected void loadDefaultLocale(AutomatedInstallData automatedInstallData) throws Exception {
+        // Loads the suitable langpack
+        List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
+        String selectedPack = availableLangPacks.get(0);
+        InputStream in = resourceManager.getInputStream("langpacks/" + selectedPack + ".xml");
+        automatedInstallData.setAndProcessLocal(selectedPack, new LocaleDatabase(in));
+        resourceManager.setLocale(selectedPack);
+    }
 }

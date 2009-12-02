@@ -35,7 +35,7 @@ public class GUIInstallDataProvider extends AbstractInstallDataProvider {
         loadDynamicVariables(guiInstallData);
         // Load custom langpack if exist.
         addCustomLangpack(guiInstallData);
-
+        loadDefaultLocale(guiInstallData);
         loadLookAndFeel(guiInstallData);
         return guiInstallData;
     }

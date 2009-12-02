@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.bootstrap.IPanelComponent;
+import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;
 import org.fest.swing.exception.ScreenLockException;
@@ -34,8 +34,8 @@ public class InstallationTest extends AbstractInstallationTest {
     @Test
     public void testHelloAndFinishPanels() throws Exception {
         compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
-        panelComponent = applicationComponent.getComponent(IPanelComponent.class);
-        panelComponent.getComponent(LanguageDialog.class).initLangPack();
+        panelContainer = applicationComponent.getComponent(IPanelContainer.class);
+        panelContainer.getComponent(LanguageDialog.class).initLangPack();
         prepareFrameFixture();
 
         // Hello panel
@@ -48,7 +48,7 @@ public class InstallationTest extends AbstractInstallationTest {
     @Test
     public void testBasicInstall() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        panelComponent = applicationComponent.getComponent(IPanelComponent.class);
+        panelContainer = applicationComponent.getComponent(IPanelContainer.class);
         // Lang picker
         prepareDialogFixture();
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();

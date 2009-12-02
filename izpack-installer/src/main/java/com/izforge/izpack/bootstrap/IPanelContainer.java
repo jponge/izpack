@@ -5,7 +5,7 @@ import org.picocontainer.MutablePicoContainer;
 /**
  * Interface for panel level component
  */
-public interface IPanelComponent {
+public interface IPanelContainer {
 
     <T> void addComponent(Class<T> componentType);
 
@@ -18,4 +18,6 @@ public interface IPanelComponent {
     void removeComponent(Object abstractUIHandlerInContainer);
 
     void addComponent(Object componentType, Object implementation);
+
+    Object getComponent(Object componentKeyOrType);
 }

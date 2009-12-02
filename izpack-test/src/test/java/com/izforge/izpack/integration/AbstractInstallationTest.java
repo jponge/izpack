@@ -3,7 +3,7 @@ package com.izforge.izpack.integration;
 import com.izforge.izpack.AssertionHelper;
 import com.izforge.izpack.bootstrap.ApplicationComponent;
 import com.izforge.izpack.bootstrap.IApplicationComponent;
-import com.izforge.izpack.bootstrap.IPanelComponent;
+import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.compiler.CompilerConfig;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -29,7 +29,7 @@ public class AbstractInstallationTest {
     @Rule
     public MethodRule globalTimeout = new Timeout(60000);
     protected IApplicationComponent applicationComponent;
-    protected IPanelComponent panelComponent;
+    protected IPanelContainer panelContainer;
 
     protected FrameFixture installerFrameFixture;
     protected DialogFixture dialogFrameFixture;
@@ -52,7 +52,7 @@ public class AbstractInstallationTest {
      * @throws Exception
      */
     protected void prepareFrameFixture() throws Exception {
-        InstallerFrame installerFrame = panelComponent.getComponent(InstallerFrame.class);
+        InstallerFrame installerFrame = panelContainer.getComponent(InstallerFrame.class);
         installerFrame.loadPanels();
         installerFrameFixture = new FrameFixture(installerFrame);
         installerFrameFixture.show();
@@ -62,7 +62,7 @@ public class AbstractInstallationTest {
      * Prepare fest fixture for lang selection
      */
     protected void prepareDialogFixture() {
-        LanguageDialog languageDialog = panelComponent.getComponent(LanguageDialog.class);
+        LanguageDialog languageDialog = panelContainer.getComponent(LanguageDialog.class);
         dialogFrameFixture = new DialogFixture(languageDialog);
         dialogFrameFixture.show();
     }

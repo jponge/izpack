@@ -25,7 +25,7 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
-import com.izforge.izpack.bootstrap.PanelComponent;
+import com.izforge.izpack.bootstrap.PanelContainer;
 import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Panel;
@@ -188,7 +188,7 @@ public class InstallerFrame extends JFrame {
      */
     private PanelManager panelManager;
 
-    PanelComponent panelComponent;
+    PanelContainer panelComponent;
 
     /**
      * Manager for writing uninstall data

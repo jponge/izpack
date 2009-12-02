@@ -31,7 +31,7 @@ public class ApplicationComponent implements IApplicationComponent {
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
-                .addComponent(IPanelComponent.class, PanelComponent.class)
+                .addComponent(IPanelContainer.class, PanelContainer.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)

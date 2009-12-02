@@ -1,6 +1,6 @@
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.bootstrap.IPanelComponent;
+import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import org.hamcrest.core.Is;
 import org.junit.Before;
@@ -17,13 +17,13 @@ public class PanelManagerTest {
     @Mock
     private GUIInstallData installDataGUI;
     @Mock
-    private IPanelComponent panelComponent;
+    private IPanelContainer panelContainer;
     private PanelManager panelManager;
 
     @Before
     public void initMock() throws ClassNotFoundException {
         MockitoAnnotations.initMocks(getClass());
-        panelManager = new PanelManager(installDataGUI, panelComponent);
+        panelManager = new PanelManager(installDataGUI, panelContainer);
     }
 
     @Test
@@ -38,8 +38,8 @@ public class PanelManagerTest {
     public void resolveClassNameShouldNotAddPrefixWithCompleteClass() throws Exception {
         Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.panels.HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.HelloPanel"));
-        aClass = panelManager.resolveClassName("com.izforge.izpack.bootstrap.PanelComponent");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.bootstrap.PanelComponent"));
+        aClass = panelManager.resolveClassName("com.izforge.izpack.bootstrap.PanelContainer");
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.bootstrap.PanelContainer"));
     }
 
     @Test(expected = ClassNotFoundException.class)
