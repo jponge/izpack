@@ -128,6 +128,8 @@ public class CompilerConfig extends Thread {
      * @see #mergePacksLangFiles()
      */
     private HashMap<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
+    private static final String UNPACKER_DEFAULT_CLASSNAME = "com.izforge.izpack.installer.unpacker.Unpacker";
+    private static final String PACKAGER_DEFAULT_CLASSNAME = "com.izforge.izpack.compiler.Packager";
 
     /**
      * Set the IzPack home directory
@@ -358,30 +360,28 @@ public class CompilerConfig extends Thread {
         notifyCompilerListener("loadPackager", CompilerListener.BEGIN, data);
         // Initialisation
         IXMLElement root = data.getFirstChildNamed("packaging");
-        String packagerclassname = "com.izforge.izpack.compiler.Packager";
-        String unpackerclassname = "com.izforge.izpack.installer.Unpacker";
         IXMLElement packager = null;
         if (root != null) {
             packager = root.getFirstChildNamed("packager");
 
             if (packager != null) {
-                packagerclassname = requireAttribute(packager, "class");
+                PACKAGER_DEFAULT_CLASSNAME = requireAttribute(packager, "class");
             }
 
             IXMLElement unpacker = root.getFirstChildNamed("unpacker");
 
             if (unpacker != null) {
-                unpackerclassname = requireAttribute(unpacker, "class");
+                UNPACKER_DEFAULT_CLASSNAME = requireAttribute(unpacker, "class");
             }
         }
-        compiler.initPackager(packagerclassname);
+        compiler.initPackager(PACKAGER_DEFAULT_CLASSNAME);
         if (packager != null) {
             IXMLElement options = packager.getFirstChildNamed("options");
             if (options != null) {
                 compiler.getPackager().addConfigurationInformation(options);
             }
         }
-        compiler.addProperty("UNPACKER_CLASS", unpackerclassname);
+        compiler.addProperty("UNPACKER_CLASS", UNPACKER_DEFAULT_CLASSNAME);
         notifyCompilerListener("loadPackager", CompilerListener.END, data);
     }
 
