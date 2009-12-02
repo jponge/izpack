@@ -20,10 +20,10 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.panels.InstallationGroupPanel.GroupData;
 import com.izforge.izpack.util.Debug;
@@ -66,7 +66,7 @@ public class InstallationGroupPanelAutomationHelper
 
     /**
      * TODO Need to add a InstallationGroupPanelAutomationHelper to read the
-     * xml data to allow an install group to specify the selected packs.
+     * xml installDataGUI to allow an install group to specify the selected packs.
      */
     public void runAutomated(AutomatedInstallData idata,
                              IXMLElement panelRoot) {

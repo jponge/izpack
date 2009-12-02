@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngineImpl;
@@ -615,7 +615,7 @@ public class ProcessPanelWorker implements Runnable {
     /*
      * @design
      * 
-     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * The information about the installed packs comes from GUIInstallData.selectedPacks. This assumes
      * that this panel is presented to the user AFTER the PacksPanel.
      * 
      * /*--------------------------------------------------------------------------

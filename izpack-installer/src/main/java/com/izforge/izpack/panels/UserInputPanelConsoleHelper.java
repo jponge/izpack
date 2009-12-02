@@ -20,10 +20,10 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.installer.PanelConsole;
 import com.izforge.izpack.installer.PanelConsoleHelper;
 import com.izforge.izpack.rules.RulesEngine;
@@ -256,7 +256,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
                 String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
                 if (conditionid != null) {
                     // check if condition is fulfilled
-                    RulesEngine rules = (RulesEngine)idata.getRules();
+                    RulesEngine rules = (RulesEngine) idata.getRules();
                     if (!rules.isConditionTrue(conditionid, idata.getVariables())) {
                         continue;
                     }
@@ -737,6 +737,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Verifies if an item is required for any of the packs listed. An item is required for a pack
      * in the list if that pack is actually selected for installation. <br>
@@ -754,7 +755,7 @@ public class UserInputPanelConsoleHelper extends PanelConsoleHelper implements P
     /*
      * $ @design
      *
-     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * The information about the installed packs comes from GUIInstallData.selectedPacks. This assumes
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */

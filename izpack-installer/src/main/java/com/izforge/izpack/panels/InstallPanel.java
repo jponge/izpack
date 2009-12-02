@@ -21,9 +21,9 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 import javax.swing.*;
@@ -82,9 +82,9 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public InstallPanel(InstallerFrame parent, InstallData idata) {
+    public InstallPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, new IzPanelLayout());
         this.tipLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.tip"),
                 parent.icons.getImageIcon(iconName), LEADING);

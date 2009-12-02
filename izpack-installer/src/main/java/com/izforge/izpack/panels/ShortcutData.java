@@ -22,8 +22,9 @@
 package com.izforge.izpack.panels;
 
 /*---------------------------------------------------------------------------*/
+
 /**
- * This class serves as a data structure in
+ * This class serves as a installDataGUI structure in
  * <code>{@link com.izforge.izpack.panels.ShortcutPanel}</code>
  *
  * @author Elmar Grom
@@ -86,6 +87,7 @@ public class ShortcutData implements Cloneable {
 
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns a clone (copy) of this object.
      *
@@ -126,6 +128,7 @@ public class ShortcutData implements Cloneable {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Clones a <code>String</code>, that is it makes a copy of the content, not of the
      * reference. In addition, if the original is <code>null</code> then an empty

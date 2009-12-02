@@ -20,19 +20,20 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.*;
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.data.LocaleDatabase;
+import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
 import com.izforge.izpack.gui.TwoColumnLayout;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.VariableExistenceCondition;
 import com.izforge.izpack.util.*;
@@ -302,15 +303,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     // layout.showRules ((Graphics2D)graphics, Color.red);
     // }
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs a <code>UserInputPanel</code>.
      *
-     * @param parent      reference to the application frame
-     * @param installData shared information about the installation
+     * @param parent         reference to the application frame
+     * @param installDataGUI shared information about the installation
      */
     /*--------------------------------------------------------------------------*/
-    public UserInputPanel(InstallerFrame parent, InstallData installData) {
-        super(parent, installData);
+    public UserInputPanel(InstallerFrame parent, GUIInstallData installDataGUI) {
+        super(parent, installDataGUI);
         instanceNumber = instanceCount++;
         this.parentFrame = parent;
     }
@@ -875,6 +877,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Indicates wether the panel has been validated or not. The installer won't let the user go
      * further through the installation process until the panel is validated. Default behavior is to
@@ -888,6 +891,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method is called when the panel becomes active.
      */
@@ -927,8 +931,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
-     * Asks the panel to set its own XML data that can be brought back for an automated installation
+     * Asks the panel to set its own XML installDataGUI that can be brought back for an automated installation
      * process. Use it as a blackbox if your panel needs to do something even in automated mode.
      *
      * @param panelRoot The XML root element of the panels blackbox tree.
@@ -939,7 +944,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         for (int i = 0; i < entries.size(); i++) {
             TextValuePair pair = entries.elementAt(i);
-            // IZPACK-283: read the value from idata instead of panel data
+            // IZPACK-283: read the value from idata instead of panel installDataGUI
             final String key = pair.toString();
             entryMap.put(key, idata.getVariable(key));
         }
@@ -948,6 +953,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Builds the UI and makes it ready for display
      */
@@ -976,8 +982,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
-     * Reads the input data from all UI elements and sets the associated variables.
+     * Reads the input installDataGUI from all UI elements and sets the associated variables.
      *
      * @return <code>true</code> if the operation is successdul, otherwise <code>false</code>.
      */
@@ -1099,6 +1106,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the XML specification for the panel layout. The result is stored in spec.
      *
@@ -1133,7 +1141,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // initialize the parser
         IXMLParser parser = new XMLParser();
 
-        // get the data
+        // get the installDataGUI
         data = parser.parse(input);
 
         // extract the spec to this specific panel instance
@@ -1164,6 +1172,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds the title to the panel. There can only be one title, if mutiple titles are defined, they
      * keep overwriting what has already be defined, so that the last definition is the one that
@@ -1235,6 +1244,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a rule field to the list of UI elements.
      *
@@ -1381,11 +1391,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
-     * Reads the data from the rule input field and sets the associated variable.
+     * Reads the installDataGUI from the rule input field and sets the associated variable.
      *
      * @param field the object array that holds the details of the field.
-     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * @return <code>true</code> if there was no problem reading the installDataGUI or if there was an
      *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
      *         dialog is popped up and <code>false</code> is returned.
      */
@@ -1419,6 +1430,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a text field to the list of UI elements
      *
@@ -1558,11 +1570,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
-     * Reads data from the text field and sets the associated variable.
+     * Reads installDataGUI from the text field and sets the associated variable.
      *
      * @param field the object array that holds the details of the field.
-     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * @return <code>true</code> if there was no problem reading the installDataGUI or if there was an
      *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
      *         dialog is popped up and <code>false</code> is returned.
      */
@@ -1604,6 +1617,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a combo box to the list of UI elements. <br>
      * This is a complete example of a valid XML specification
@@ -1764,11 +1778,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the content of the combobox field and substitutes the associated variable.
      *
      * @param field the object array that holds the details of the field.
-     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * @return <code>true</code> if there was no problem reading the installDataGUI or if there was an
      *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
      *         dialog is popped up and <code>false</code> is returned.
      */
@@ -1796,6 +1811,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a radio button set to the list of UI elements. <br>
      * This is a complete example of a valid XML specification
@@ -1908,11 +1924,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the content of the radio button field and substitutes the associated variable.
      *
      * @param field the object array that holds the details of the field.
-     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * @return <code>true</code> if there was no problem reading the installDataGUI or if there was an
      *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
      *         dialog is popped up and <code>false</code> is returned.
      */
@@ -1942,6 +1959,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds one or more password fields to the list of UI elements. <br>
      * This is a complete example of a valid XML specification
@@ -2094,11 +2112,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the content of the password field and substitutes the associated variable.
      *
      * @param field a password group that manages one or more passord fields.
-     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * @return <code>true</code> if there was no problem reading the installDataGUI or if there was an
      *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
      *         dialog is popped up and <code>false</code> is returned.
      */
@@ -2148,6 +2167,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a chackbox to the list of UI elements.
      *
@@ -2234,11 +2254,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the content of the checkbox field and substitutes the associated variable.
      *
      * @param field the object array that holds the details of the field.
-     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * @return <code>true</code> if there was no problem reading the installDataGUI or if there was an
      *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
      *         dialog is popped up and <code>false</code> is returned.
      */
@@ -2281,6 +2302,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a search field to the list of UI elements.
      * <p/>
@@ -2491,11 +2513,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the content of the search field and substitutes the associated variable.
      *
      * @param field the object array that holds the details of the field.
-     * @return <code>true</code> if there was no problem reading the data or if there was an
+     * @return <code>true</code> if there was no problem reading the installDataGUI or if there was an
      *         irrecovarable problem. If there was a problem that can be corrected by the operator, an error
      *         dialog is popped up and <code>false</code> is returned.
      */
@@ -2529,6 +2552,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds text to the list of UI elements
      *
@@ -2543,6 +2567,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a dummy field to the list of UI elements to act as spacer.
      *
@@ -2572,6 +2597,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a dividing line to the list of UI elements act as separator.
      *
@@ -2611,6 +2637,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a description to the list of UI elements.
      *
@@ -2684,6 +2711,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Retrieves the value of a boolean attribute. If the attribute is found and the values equals
      * the value of the constant <code>TRUE</code> then true is returned. If it equals
@@ -2758,16 +2786,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     // return (result);
     // }
     /*--------------------------------------------------------------------------*/
+
     /**
      * Retrieves the value of a floating point attribute. If the attribute is not found or the value
      * is non-numeric then the default value is returned.
      *
-     * @param element the <code>IXMLElement</code> to search for the attribute.
-     * @param attribute the attribute to search for
+     * @param element      the <code>IXMLElement</code> to search for the attribute.
+     * @param attribute    the attribute to search for
      * @param defaultValue the default value to use in case the attribute does not exist.
-     *
      * @return the value of the attribute. If the attribute is not found or the content is not a
-     * legal integer, then the default value is returned.
+     *         legal integer, then the default value is returned.
      */
     /*--------------------------------------------------------------------------*/
     private float getFloat(IXMLElement element, String attribute, float defaultValue) {
@@ -2785,6 +2813,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Extracts the text from an <code>IXMLElement</code>. The text must be defined in the resource
      * file under the key defined in the <code>id</code> attribute or as value of the attribute
@@ -2827,6 +2856,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Retreives the alignment setting for the <code>IXMLElement</code>. The default value in case
      * the <code>ALIGNMENT</code> attribute is not found or the value is illegal is
@@ -2893,6 +2923,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Verifies if an item is required for any of the packs listed. An item is required for a pack
      * in the list if that pack is actually selected for installation. <br>
@@ -2910,7 +2941,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     /*
      * $ @design
      *
-     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * The information about the installed packs comes from GUIInstallData.selectedPacks. This assumes
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
@@ -2952,6 +2983,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Verifies if an item is required for any of the packs listed. An item is required for a pack
      * in the list if that pack is actually NOT selected for installation. <br>
@@ -2969,7 +3001,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     /*
      * $ @design
      *
-     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * The information about the installed packs comes from GUIInstallData.selectedPacks. This assumes
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
@@ -3026,6 +3058,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         private String value = "";
 
         /*--------------------------------------------------------------------------*/
+
         /**
          * Constructs a new Text/Value pair, initialized with the text and a value.
          *
@@ -3039,6 +3072,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         /*--------------------------------------------------------------------------*/
+
         /**
          * Sets the text
          *
@@ -3050,6 +3084,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         /*--------------------------------------------------------------------------*/
+
         /**
          * Sets the value of this object
          *
@@ -3061,6 +3096,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         /*--------------------------------------------------------------------------*/
+
         /**
          * This method returns the text that was set for the object
          *
@@ -3072,6 +3108,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         /*--------------------------------------------------------------------------*/
+
         /**
          * This method returns the value that was associated with this object
          *
@@ -3084,11 +3121,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*---------------------------------------------------------------------------*/
+
     /**
      * This class encapsulates a lot of search field functionality.
      * <p/>
      * A search field supports searching directories and files on the target system. This is a
-     * helper class to manage all data belonging to a search field.
+     * helper class to manage all installDataGUI belonging to a search field.
      */
     /*---------------------------------------------------------------------------*/
 
@@ -3136,6 +3174,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         private InstallerFrame parent = null;
 
         /*---------------------------------------------------------------------------*/
+
         /**
          * Constructor - initializes the object, adds it as action listener to the "autodetect"
          * button.
@@ -3260,7 +3299,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             Vector<String> items = new Vector<String>();
 
             /*
-             * Check if the user has entered data into the ComboBox and add it to the Itemlist
+             * Check if the user has entered installDataGUI into the ComboBox and add it to the Itemlist
              */
             String selected = (String) this.pathComboBox.getSelectedItem();
             if (selected == null) {
@@ -3340,6 +3379,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         /*--------------------------------------------------------------------------*/
+
         /**
          * This is called if one of the buttons has been pressed.
          * <p/>
@@ -3384,6 +3424,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         /*--------------------------------------------------------------------------*/
+
         /**
          * Return the result of the search according to result type.
          * <p/>
@@ -3476,6 +3517,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     // Repaint all controls and validate them agains the current variables
+
     public void actionPerformed(ActionEvent e) {
         // validating = false;
         // readInput();
@@ -3485,6 +3527,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Show localized message dialog basing on given parameters.
      *
@@ -3508,6 +3551,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Show localized warning message dialog basing on given parameters.
      *
@@ -3554,6 +3598,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 } // public class UserInputPanel
 
 /*---------------------------------------------------------------------------*/
+
 class UserInputFileFilter extends FileFilter {
 
     String fileext = "";

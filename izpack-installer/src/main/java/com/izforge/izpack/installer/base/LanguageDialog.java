@@ -3,7 +3,7 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerRequirementDisplay;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
@@ -53,7 +53,7 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
             {"hun", "hu"}, {"ita", "it"}, {"jpn", "ja"}, {"mys", "ms"}, {"ned", "nl"},
             {"nor", "no"}, {"pol", "pl"}, {"por", "pt"}, {"rom", "or"}, {"rus", "ru"},
             {"spa", "es"}, {"svk", "sk"}, {"swe", "sv"}, {"tur", "tr"}, {"ukr", "uk"}};
-    private InstallData installdata;
+    private GUIInstallData installdata;
     /**
      * defined modifier for language display type.
      */
@@ -66,14 +66,14 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
     /**
      * The constructor.
      *
-     * @param installData
+     * @param installDataGUI
      * @param conditionCheck
      */
-    public LanguageDialog(JFrame frame, ResourceManager resourceManager, InstallData installData, ConditionCheck conditionCheck) throws Exception {
+    public LanguageDialog(JFrame frame, ResourceManager resourceManager, GUIInstallData installDataGUI, ConditionCheck conditionCheck) throws Exception {
         super(frame);
         this.frame = frame;
         this.resourceManager = resourceManager;
-        this.installdata = installData;
+        this.installdata = installDataGUI;
         this.conditionCheck = conditionCheck;
         this.setName(GuiId.DIALOG_PICKER.id);
         // We build the GUI
@@ -445,7 +445,7 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
     public void initLangPack() throws Exception {
         // Checks the Java version
         conditionCheck.check();
-        
+
         // Loads the suitable langpack
         java.util.List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
         int npacks = availableLangPacks.size();
@@ -474,13 +474,13 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         // create the resource manager (after the language selection!)
         resourceManager.setLocale(selectedPack);
         // Configure buttons after locale has been loaded
-        configureGuiButtons(installdata);        
+        configureGuiButtons(installdata);
     }
 
     /**
      * @param installdata
      */
-    private void configureGuiButtons(InstallData installdata) {
+    private void configureGuiButtons(GUIInstallData installdata) {
         UIManager.put("OptionPane.yesButtonText", installdata.getLangpack().getString("installer.yes"));
         UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
         UIManager.put("OptionPane.cancelButtonText", installdata.getLangpack()

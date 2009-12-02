@@ -28,7 +28,7 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.PackColor;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.Debug;
 
@@ -76,11 +76,11 @@ class PacksModel extends AbstractTableModel {
     // reference to the current variables, needed for condition validation
     private Properties variables;
 
-    private InstallData idata;
+    private GUIInstallData idata;
 
-    public PacksModel(PacksPanelInterface panel, InstallData idata, RulesEngine rules) {
+    public PacksModel(PacksPanelInterface panel, GUIInstallData idata, RulesEngine rules) {
         this.idata = idata;
-        modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
+        modifyinstallation = Boolean.valueOf(idata.getVariable(GUIInstallData.MODIFY_INSTALLATION));
         this.installedpacks = new HashMap();
 
         if (modifyinstallation) {
@@ -324,6 +324,7 @@ class PacksModel extends AbstractTableModel {
     /*
      * @see TableModel#getRowCount()
      */
+
     public int getRowCount() {
         return packs.size();
     }
@@ -331,6 +332,7 @@ class PacksModel extends AbstractTableModel {
     /*
      * @see TableModel#getColumnCount()
      */
+
     public int getColumnCount() {
         boolean doNotShowPackSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("doNotShowPackSizeColumn"));
 
@@ -346,6 +348,7 @@ class PacksModel extends AbstractTableModel {
     /*
      * @see TableModel#getColumnClass(int)
      */
+
     public Class getColumnClass(int columnIndex) {
         switch (columnIndex) {
             case 0:
@@ -359,6 +362,7 @@ class PacksModel extends AbstractTableModel {
     /*
      * @see TableModel#isCellEditable(int, int)
      */
+
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         if (checkValues[rowIndex] < 0) {
             return false;
@@ -370,6 +374,7 @@ class PacksModel extends AbstractTableModel {
     /*
      * @see TableModel#getValueAt(int, int)
      */
+
     public Object getValueAt(int rowIndex, int columnIndex) {
         Pack pack = (Pack) packs.get(rowIndex);
         switch (columnIndex) {
@@ -399,6 +404,7 @@ class PacksModel extends AbstractTableModel {
     /*
      * @see TableModel#setValueAt(Object, int, int)
      */
+
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
             if (aValue instanceof Integer) {
@@ -540,6 +546,7 @@ class PacksModel extends AbstractTableModel {
     /*
      * Sees which packs (if any) should be unchecked and updates checkValues
      */
+
     private void updateExcludes(int rowindex) {
         int value = checkValues[rowindex];
         Pack pack = (Pack) packs.get(rowindex);

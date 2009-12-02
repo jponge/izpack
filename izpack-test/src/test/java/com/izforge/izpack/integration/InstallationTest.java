@@ -5,13 +5,11 @@ import com.izforge.izpack.bootstrap.ApplicationComponent;
 import com.izforge.izpack.bootstrap.IApplicationComponent;
 import com.izforge.izpack.bootstrap.IPanelComponent;
 import com.izforge.izpack.compiler.CompilerConfig;
-import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.LanguageDialog;
-import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.rules.VariableExistenceCondition;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.exception.ScreenLockException;
 import org.fest.swing.fixture.DialogFixture;
@@ -47,7 +45,7 @@ public class InstallationTest {
     private DialogFixture dialogFrameFixture;
     private InstallerFrame installerFrame;
     private LanguageDialog languageDialog;
-    private InstallData installData;
+    private GUIInstallData installDataGUI;
 
     @Before
     public void initBinding() throws Throwable {
@@ -153,8 +151,8 @@ public class InstallationTest {
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
         installerFrameFixture.optionPane().requireEnabled();
-        installerFrameFixture.optionPane().textBox().requireText(installData.getVariable("ShowCreateDirectoryMessage"));
-//        installerFrameFixture.optionPane().buttonWithText(installData.);
+        installerFrameFixture.optionPane().textBox().requireText(installDataGUI.getVariable("ShowCreateDirectoryMessage"));
+//        installerFrameFixture.optionPane().buttonWithText(installDataGUI.);
 
         // Finish panel
     }
@@ -207,6 +205,6 @@ public class InstallationTest {
         String relativePath = baseDir.getAbsolutePath().substring(currentDir.getAbsolutePath().length());
         System.out.println(relativePath);
         applicationComponent.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
-        installData = applicationComponent.getComponent(InstallData.class);
+        installDataGUI = applicationComponent.getComponent(GUIInstallData.class);
     }
 }

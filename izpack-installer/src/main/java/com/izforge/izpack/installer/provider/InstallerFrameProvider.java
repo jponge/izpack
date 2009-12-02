@@ -1,34 +1,16 @@
 package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.bootstrap.IPanelComponent;
-import com.izforge.izpack.bootstrap.PanelComponent;
-import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.ResourceManager;
-import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.base.GUIInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.rules.RulesEngine;
-import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OsVersion;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.VariableSubstitutorImpl;
 import org.picocontainer.injectors.Provider;
-
-import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.MetalTheme;
-import java.awt.*;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Method;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Provide installer frame instance
@@ -36,220 +18,29 @@ import java.util.TreeMap;
 public class InstallerFrameProvider implements Provider {
     private ResourceManager resourceManager;
 
-    public InstallerFrame provide(IPanelComponent panelComponent,ResourceManager resourceManager, InstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter) throws Exception {
-        InstallerFrame installerFrame = new InstallerFrame(getTitle(installdata), installdata, rules, icons,panelManager, uninstallDataWriter);
-        
-        this.resourceManager=resourceManager;
-        // add the GUI install data
-        loadGUIInstallData(installdata);
+    public InstallerFrame provide(IPanelComponent panelComponent, ResourceManager resourceManager, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter) throws Exception {
+        InstallerFrame installerFrame = new InstallerFrame(getTitle(installdata), installdata, rules, icons, panelManager, uninstallDataWriter);
 
-        // Sets up the GUI L&F
-        loadLookAndFeel(installdata);
-        
+        this.resourceManager = resourceManager;
+
         installerFrame.init();
         return installerFrame;
     }
 
-    private String getTitle(InstallData installData) {
+    private String getTitle(GUIInstallData installDataGUI) {
         // Use a alternate message if defined.
         final String key = "installer.reversetitle";
-        String message = installData.getLangpack().getString(key);
+        String message = installDataGUI.getLangpack().getString(key);
         // message equal to key -> no message defined.
         if (message.indexOf(key) > -1) {
-            return installData.getLangpack().getString("installer.title")
-                    + installData.getInfo().getAppName();
+            return installDataGUI.getLangpack().getString("installer.title")
+                    + installDataGUI.getInfo().getAppName();
         } else { // Attention! The alternate message has to contain the whole message including
             // $APP_NAME and may be $APP_VER.
-            VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(installDataGUI.getVariables());
             return vs.substitute(message, null);
         }
     }
 
-
-    /**
-     * Loads the suitable L&F.
-     *
-     * @param installdata
-     * @throws Exception Description of the Exception
-     */
-    protected void loadLookAndFeel(InstallData installdata) throws Exception {
-        String lnf;
-        // Do we have any preference for this OS ?
-        String syskey = "unix";
-        if (OsVersion.IS_WINDOWS) {
-            syskey = "windows";
-        } else if (OsVersion.IS_OSX) {
-            syskey = "mac";
-        }
-        String laf = null;
-        if (installdata.guiPrefs.lookAndFeelMapping.containsKey(syskey)) {
-            laf = installdata.guiPrefs.lookAndFeelMapping.get(syskey);
-        }
-
-        // Let's use the system LAF
-        // Resolve whether button icons should be used or not.
-        boolean useButtonIcons = true;
-        if (installdata.guiPrefs.modifier.containsKey("useButtonIcons")
-                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier
-                .get("useButtonIcons"))) {
-            useButtonIcons = false;
-        }
-        ButtonFactory.useButtonIcons(useButtonIcons);
-        boolean useLabelIcons = true;
-        if (installdata.guiPrefs.modifier.containsKey("useLabelIcons")
-                && "no".equalsIgnoreCase(installdata.guiPrefs.modifier
-                .get("useLabelIcons"))) {
-            useLabelIcons = false;
-        }
-        LabelFactory.setUseLabelIcons(useLabelIcons);
-        if (installdata.guiPrefs.modifier.containsKey("labelFontSize")) {  //'labelFontSize' modifier found in 'guiprefs'
-            final String valStr =
-                    installdata.guiPrefs.modifier.get("labelFontSize");
-            try {      //parse value and enter as label-font-size multiplier:
-                LabelFactory.setLabelFontSize(Float.parseFloat(valStr));
-            }
-            catch (NumberFormatException ex) {      //error parsing value; log message
-                Debug.log("Error parsing guiprefs 'labelFontSize' value (" +
-                        valStr + ')');
-            }
-        }
-
-        if (laf == null) {
-            if (!"mac".equals(syskey)) {
-                // In Linux we will use the English locale, because of a bug in
-                // JRE6. In Korean, Persian, Chinese, japanese and some other
-                // locales the installer throws and exception and doesn't load
-                // at all. See http://jira.jboss.com/jira/browse/JBINSTALL-232.
-                // This is a workaround until this bug gets fixed.
-                if ("unix".equals(syskey)) {
-                    Locale.setDefault(Locale.ENGLISH);
-                }
-                String syslaf = UIManager.getSystemLookAndFeelClassName();
-                UIManager.setLookAndFeel(syslaf);
-                if (UIManager.getLookAndFeel() instanceof MetalLookAndFeel) {
-                    ButtonFactory.useButtonIcons(useButtonIcons);
-                }
-            }
-            lnf = "swing";
-            return;
-        }
-
-        // Kunststoff (http://www.incors.org/)
-        if ("kunststoff".equals(laf)) {
-            ButtonFactory.useHighlightButtons();
-            // Reset the use button icons state because useHighlightButtons
-            // make it always true.
-            ButtonFactory.useButtonIcons(useButtonIcons);
-            installdata.buttonsHColor = new Color(255, 255, 255);
-            Class<LookAndFeel> lafClass = (Class<LookAndFeel>) Class.forName("com.incors.plaf.kunststoff.KunststoffLookAndFeel");
-            Class mtheme = Class.forName("javax.swing.plaf.metal.MetalTheme");
-            Class[] params = {mtheme};
-            Class<MetalTheme> theme = (Class<MetalTheme>) Class.forName("com.izforge.izpack.gui.IzPackKMetalTheme");
-            Method setCurrentThemeMethod = lafClass.getMethod("setCurrentTheme", params);
-
-            // We invoke and place Kunststoff as our L&F
-            LookAndFeel kunststoff = lafClass.newInstance();
-            MetalTheme ktheme = theme.newInstance();
-            Object[] kparams = {ktheme};
-            UIManager.setLookAndFeel(kunststoff);
-            setCurrentThemeMethod.invoke(kunststoff, kparams);
-
-            lnf = "kunststoff";
-            return;
-        }
-
-        // Liquid (http://liquidlnf.sourceforge.net/)
-        if ("liquid".equals(laf)) {
-            UIManager.setLookAndFeel("com.birosoft.liquid.LiquidLookAndFeel");
-            lnf = "liquid";
-
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
-            if (params.containsKey("decorate.frames")) {
-                String value = params.get("decorate.frames");
-                if ("yes".equals(value)) {
-                    JFrame.setDefaultLookAndFeelDecorated(true);
-                }
-            }
-            if (params.containsKey("decorate.dialogs")) {
-                String value = params.get("decorate.dialogs");
-                if ("yes".equals(value)) {
-                    JDialog.setDefaultLookAndFeelDecorated(true);
-                }
-            }
-
-            return;
-        }
-
-        // Metouia (http://mlf.sourceforge.net/)
-        if ("metouia".equals(laf)) {
-            UIManager.setLookAndFeel("net.sourceforge.mlf.metouia.MetouiaLookAndFeel");
-            lnf = "metouia";
-            return;
-        }
-
-        // Nimbus (http://nimbus.dev.java.net/)
-        if ("nimbus".equals(laf)) {
-            UIManager.setLookAndFeel("org.jdesktop.swingx.plaf.nimbus.NimbusLookAndFeel");
-            return;
-        }
-
-        // JGoodies Looks (http://looks.dev.java.net/)
-        if ("looks".equals(laf)) {
-            Map<String, String> variants = new TreeMap<String, String>();
-            variants.put("windows", "com.jgoodies.looks.windows.WindowsLookAndFeel");
-            variants.put("plastic", "com.jgoodies.looks.plastic.PlasticLookAndFeel");
-            variants.put("plastic3D", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
-            variants.put("plasticXP", "com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
-            String variant = variants.get("plasticXP");
-
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
-            if (params.containsKey("variant")) {
-                String param = params.get("variant");
-                if (variants.containsKey(param)) {
-                    variant = variants.get(param);
-                }
-            }
-
-            UIManager.setLookAndFeel(variant);
-            return;
-        }
-
-        // Substance (http://substance.dev.java.net/)
-        if ("substance".equals(laf)) {
-            Map<String, String> variants = new TreeMap<String, String>();
-            variants.put("default", "org.jvnet.substance.SubstanceLookAndFeel"); // Ugly!!!
-            variants.put("business", "org.jvnet.substance.skin.SubstanceBusinessLookAndFeel");
-            variants.put("business-blue", "org.jvnet.substance.skin.SubstanceBusinessBlueSteelLookAndFeel");
-            variants.put("business-black", "org.jvnet.substance.skin.SubstanceBusinessBlackSteelLookAndFeel");
-            variants.put("creme", "org.jvnet.substance.skin.SubstanceCremeLookAndFeel");
-            variants.put("sahara", "org.jvnet.substance.skin.SubstanceSaharaLookAndFeel");
-            variants.put("moderate", "org.jvnet.substance.skin.SubstanceModerateLookAndFeel");
-            variants.put("officesilver", "org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel");
-            String variant = variants.get("default");
-
-            Map<String, String> params = installdata.guiPrefs.lookAndFeelParams.get(laf);
-            if (params.containsKey("variant")) {
-                String param = params.get("variant");
-                if (variants.containsKey(param)) {
-                    variant = variants.get(param);
-                }
-            }
-
-            UIManager.setLookAndFeel(variant);
-        }
-    }
-
-    /**
-     * Load GUI preference information.
-     *
-     * @param installdata
-     * @throws Exception
-     */
-    private void loadGUIInstallData(InstallData installdata) throws Exception {
-        InputStream in = resourceManager.getInputStream("GUIPrefs");
-        ObjectInputStream objIn = new ObjectInputStream(in);
-        installdata.guiPrefs = (GUIPrefs) objIn.readObject();
-        objIn.close();
-    }
 
 }

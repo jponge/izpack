@@ -79,7 +79,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
     /**
      * Serialize state to XML and insert under panelRoot.
      *
-     * @param idata     The installation data.
+     * @param idata     The installation installDataGUI.
      * @param panelRoot The XML root element of the panels blackbox tree.
      */
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
@@ -110,7 +110,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
     /**
      * Deserialize state from panelRoot and set idata variables accordingly.
      *
-     * @param idata     The installation data.
+     * @param idata     The installation installDataGUI.
      * @param panelRoot The XML root element of the panels blackbox tree.
      * @throws InstallerException if some elements are missing.
      */

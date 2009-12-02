@@ -25,8 +25,8 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.ResourceManager;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.IoHelper;
 
 import javax.swing.*;
@@ -67,9 +67,9 @@ public class ImgPacksPanel extends PacksPanelBase {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public ImgPacksPanel(InstallerFrame parent, InstallData idata) {
+    public ImgPacksPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
     }
 
@@ -78,6 +78,7 @@ public class ImgPacksPanel extends PacksPanelBase {
      * 
      * @see com.izforge.izpack.panels.PacksPanelBase#createNormalLayout()
      */
+
     protected void createNormalLayout() {
         preLoadImages();
         GridBagLayout layout = new GridBagLayout();
@@ -206,6 +207,7 @@ public class ImgPacksPanel extends PacksPanelBase {
      * 
      * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
      */
+
     public void valueChanged(ListSelectionEvent e) {
         // this MUST be called before calling the super's valueChanged() since
         // that method refreshes the tablemodel and thus deselects the 

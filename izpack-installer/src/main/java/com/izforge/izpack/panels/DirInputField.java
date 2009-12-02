@@ -20,8 +20,8 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.OsVersion;
@@ -39,9 +39,9 @@ public class DirInputField extends FileInputField {
 
     private final boolean canCreate;
 
-    public DirInputField(IzPanel parent, InstallData data, boolean directory, String set, int size,
+    public DirInputField(IzPanel parent, GUIInstallData installDataGUI, boolean directory, String set, int size,
                          List<ValidatorContainer> validatorConfig, boolean mustExist, boolean canCreate) {
-        super(parent, data, directory, set, size, validatorConfig, null, null);
+        super(parent, installDataGUI, directory, set, size, validatorConfig, null, null);
         this.mustExist = mustExist;
         this.canCreate = canCreate;
     }

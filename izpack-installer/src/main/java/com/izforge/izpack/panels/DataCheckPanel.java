@@ -29,9 +29,9 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import java.util.Enumeration;
@@ -41,7 +41,7 @@ import java.util.Properties;
 /**
  * DataCheckPanel: Provide a lot of debugging information.  Print a simple header of our
  * instance number and a line to separate output from other instances, then print all
- * the InstallData variables and list all the packs and selected packs.  I hope this will
+ * the GUIInstallData variables and list all the packs and selected packs.  I hope this will
  * be expanded by others to provide needed debugging information by those developing panels
  * for IzPack.
  *
@@ -56,7 +56,7 @@ public class DataCheckPanel extends IzPanel {
 
     protected int instanceNumber = 0;
 
-    private InstallData iData;
+    private GUIInstallData installDataGUI;
 
     JEditorPane staticText;
 
@@ -64,15 +64,15 @@ public class DataCheckPanel extends IzPanel {
      * The constructor.
      *
      * @param parent The parent.
-     * @param id     The installation data.
+     * @param id     The installation installDataGUI.
      */
-    public DataCheckPanel(InstallerFrame parent, InstallData id) {
+    public DataCheckPanel(InstallerFrame parent, GUIInstallData id) {
         super(parent, id);
 
-        iData = id;
+        installDataGUI = id;
         instanceNumber = instanceCount++;
 
-        String sInfo = "Debugging data.  All InstallData variables and all packs (selected packs are marked).";
+        String sInfo = "Debugging installDataGUI.  All GUIInstallData variables and all packs (selected packs are marked).";
         BoxLayout bLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
         setLayout(bLayout);
 //		setLayout(new GridLayout(3,1));
@@ -108,7 +108,7 @@ public class DataCheckPanel extends IzPanel {
         Pack iPack;
         for (i = 0; i < packList.size(); i++) {
             iPack = packList.get(i);
-            if (iData.getSelectedPacks().indexOf(iPack) != -1) {
+            if (installDataGUI.getSelectedPacks().indexOf(iPack) != -1) {
                 pStatus = "Selected";
             } else {
                 pStatus = "Unselected";
@@ -124,11 +124,11 @@ public class DataCheckPanel extends IzPanel {
      */
     private void printDebugInfo() {
         int i = 0;
-        String sInfo = "InstallData Variables:\n";
+        String sInfo = "GUIInstallData Variables:\n";
         System.out.println("------------------------Data Check Panel Instance " +
                 instanceNumber + "------------------------");
-        System.out.println("InstallData Variables:");
-        Properties varList = iData.getVariables();
+        System.out.println("GUIInstallData Variables:");
+        Properties varList = installDataGUI.getVariables();
         String[] alphaName = new String[varList.size()];
         Enumeration<String> varNames = (Enumeration<String>) varList.propertyNames();
         while (varNames.hasMoreElements()) {
@@ -138,7 +138,7 @@ public class DataCheckPanel extends IzPanel {
         for (i = 0; i < alphaName.length; i++) {
             sInfo = sInfo + "\tName: " + alphaName[i] + ", Value: " + varList.getProperty(alphaName[i]) + "\n";
         }
-        sInfo = sInfo + "\nAvailable Packs: \n" + getPackNames(iData.getAllPacks()) + "\n";
+        sInfo = sInfo + "\nAvailable Packs: \n" + getPackNames(installDataGUI.getAllPacks()) + "\n";
         System.out.println(sInfo);
         staticText.setText(sInfo);
     }

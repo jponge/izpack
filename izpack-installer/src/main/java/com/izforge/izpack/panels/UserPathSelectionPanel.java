@@ -24,9 +24,9 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.base.LayoutHelper;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,9 +64,9 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
      */
     private IzPanel parent;
     /**
-     * The installer internal data.
+     * The installer internal installDataGUI.
      */
-    private InstallData idata;
+    private GUIInstallData idata;
     private String targetPanel;
     private String variableName;
     private String defaultPanelName = "TargetPanel";
@@ -75,9 +75,9 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
      * The constructor. Be aware, parent is the parent IzPanel, not the installer frame.
      *
      * @param parent The parent IzPanel.
-     * @param idata  The installer internal data.
+     * @param idata  The installer internal installDataGUI.
      */
-    public UserPathSelectionPanel(IzPanel parent, InstallData idata, String targetPanel, String variableName) {
+    public UserPathSelectionPanel(IzPanel parent, GUIInstallData idata, String targetPanel, String variableName) {
         super();
         this.parent = parent;
         this.idata = idata;
@@ -121,6 +121,7 @@ public class UserPathSelectionPanel extends JPanel implements ActionListener, La
 
     // There are problems with the size if no other component needs the
     // full size. Sometimes directly, somtimes only after a back step.
+
     public Dimension getMinimumSize() {
         Dimension ss = super.getPreferredSize();
         Dimension retval = parent.getSize();

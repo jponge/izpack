@@ -22,8 +22,8 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.IoHelper;
 
 import javax.swing.*;
@@ -48,9 +48,9 @@ public class PacksPanel extends PacksPanelBase {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public PacksPanel(InstallerFrame parent, InstallData idata) {
+    public PacksPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
     }
 
@@ -59,6 +59,7 @@ public class PacksPanel extends PacksPanelBase {
      * 
      * @see com.izforge.izpack.panels.PacksPanelBase#createNormalLayout()
      */
+
     protected void createNormalLayout() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         createLabel("PacksPanel.info", "preferences", null, null);

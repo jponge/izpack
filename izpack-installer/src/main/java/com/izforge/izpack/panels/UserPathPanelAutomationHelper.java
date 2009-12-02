@@ -37,10 +37,10 @@ import com.izforge.izpack.util.VariableSubstitutorImpl;
 public class UserPathPanelAutomationHelper implements PanelAutomation {
 
     /**
-     * Asks to make the XML panel data.
+     * Asks to make the XML panel installDataGUI.
      *
-     * @param idata     The installation data.
-     * @param panelRoot The tree to put the data in.
+     * @param idata     The installation installDataGUI.
+     * @param panelRoot The tree to put the installDataGUI in.
      */
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
         // Installation path markup
@@ -60,8 +60,8 @@ public class UserPathPanelAutomationHelper implements PanelAutomation {
     /**
      * Asks to run in the automated mode.
      *
-     * @param idata     The installation data.
-     * @param panelRoot The XML tree to read the data from.
+     * @param idata     The installation installDataGUI.
+     * @param panelRoot The XML tree to read the installDataGUI from.
      */
     public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) {
         // We set the installation path

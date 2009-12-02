@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.PasswordGroup;
 import com.izforge.izpack.panels.ProcessingClient;
 import com.izforge.izpack.panels.Validator;
@@ -147,7 +147,7 @@ public class PasswordKeystoreValidator implements Validator {
     private Map<String, String> getParams(ProcessingClient client) {
         Map<String, String> returnValue = null;
         PasswordGroup group = null;
-        InstallData idata = getIdata(client);
+        GUIInstallData idata = getIdata(client);
         VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
         try {
             group = (PasswordGroup) client;
@@ -170,9 +170,9 @@ public class PasswordKeystoreValidator implements Validator {
         return returnValue;
     }
 
-    private InstallData getIdata(ProcessingClient client) {
+    private GUIInstallData getIdata(ProcessingClient client) {
         PasswordGroup group = null;
-        InstallData idata = null;
+        GUIInstallData idata = null;
         try {
             group = (PasswordGroup) client;
             idata = group.getIdata();

@@ -26,9 +26,9 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
@@ -55,20 +55,20 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
     private JComboBox cbPrinters;
 
     /**
-     * Install data variables.
+     * Install installDataGUI variables.
      */
-    private InstallData iData;
+    private GUIInstallData installDataGUI;
 
     /**
      * The constructor.
      *
      * @param parent The parent.
-     * @param id     The installation data.
+     * @param id     The installation installDataGUI.
      */
-    public SelectPrinterPanel(InstallerFrame parent, InstallData id) {
+    public SelectPrinterPanel(InstallerFrame parent, GUIInstallData id) {
         super(parent, id);
 
-        iData = id;
+        installDataGUI = id;
 
         // The 'super' layout
         GridBagLayout superLayout = new GridBagLayout();
@@ -87,7 +87,7 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
 
         cbPrinters = new JComboBox();
         PrintService[] pServices = PrintServiceLookup.lookupPrintServices(null, null);
-        iData.setVariable("SELECTED_PRINTER", pServices[0].getName());
+        installDataGUI.setVariable("SELECTED_PRINTER", pServices[0].getName());
         for (PrintService pService : pServices) {
             cbPrinters.addItem(pService.getName());
         }
@@ -112,7 +112,7 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent event) {
         String sPrinter = (String) cbPrinters.getSelectedItem();
-        iData.setVariable("SELECTED_PRINTER", sPrinter);
+        installDataGUI.setVariable("SELECTED_PRINTER", sPrinter);
     }
 
     /**

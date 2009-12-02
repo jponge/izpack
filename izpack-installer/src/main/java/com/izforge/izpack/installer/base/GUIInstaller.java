@@ -21,15 +21,10 @@
 package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.bootstrap.IApplicationComponent;
-import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.ResourceManager;
-import com.izforge.izpack.installer.data.InstallData;
-import com.izforge.izpack.installer.unpacker.ScriptParser;
-import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
-import java.io.InputStream;
-import java.util.List;
 
 /**
  * The IzPack graphical installer class.
@@ -41,7 +36,7 @@ public class GUIInstaller extends InstallerBase {
     /**
      * The installation data.
      */
-    private InstallData installdata;
+    private GUIInstallData installdata;
 
     /**
      * Checker for java version, JDK and running install
@@ -59,7 +54,7 @@ public class GUIInstaller extends InstallerBase {
      * @param installdata
      * @throws Exception Description of the Exception
      */
-    public GUIInstaller(InstallData installdata, ResourceManager resourceManager, ConditionCheck conditionCheck) throws Exception {
+    public GUIInstaller(GUIInstallData installdata, ResourceManager resourceManager, ConditionCheck conditionCheck) throws Exception {
         super(resourceManager);
         this.installdata = installdata;
         this.conditionCheck = conditionCheck;

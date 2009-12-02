@@ -25,7 +25,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.HelpWindow;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.*;
 
 import javax.swing.*;
@@ -66,7 +66,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * The installer internal data (actually a melting-pot class with all-public fields.
      */
-    protected InstallData idata;
+    protected GUIInstallData idata;
 
     /**
      * The parent IzPack installer frame.
@@ -157,7 +157,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param parent The parent IzPack installer frame.
      * @param idata  The installer internal data.
      */
-    public IzPanel(InstallerFrame parent, InstallData idata) {
+    public IzPanel(InstallerFrame parent, GUIInstallData idata) {
         this(parent, idata, (LayoutManager2) null);
     }
 
@@ -170,7 +170,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param idata  The installer internal data.
      * @param lm     layout manager to be used with this IzPanel
      */
-    public IzPanel(InstallerFrame parent, InstallData idata, LayoutManager2 lm) {
+    public IzPanel(InstallerFrame parent, GUIInstallData idata, LayoutManager2 lm) {
         super();
         init(parent, idata);
         if (lm != null) {
@@ -185,7 +185,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param idata    Installers Runtime Data Set
      * @param iconName The Headline IconName
      */
-    public IzPanel(InstallerFrame parent, InstallData idata, String iconName) {
+    public IzPanel(InstallerFrame parent, GUIInstallData idata, String iconName) {
         this(parent, idata, iconName, -1);
     }
 
@@ -197,7 +197,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param iconName A iconname to show as left oriented headline-leading Icon.
      * @param instance An instance counter
      */
-    public IzPanel(InstallerFrame parent, InstallData idata, String iconName, int instance) {
+    public IzPanel(InstallerFrame parent, GUIInstallData idata, String iconName, int instance) {
         this(parent, idata);
         buildHeadline(iconName, instance);
     }
@@ -322,12 +322,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param parent the parent frame
      * @param idata  installers runtime dataset
      */
-    protected void init(InstallerFrame parent, InstallData idata) {
+    protected void init(InstallerFrame parent, GUIInstallData idata) {
         getClassName();
 
         this.idata = idata;
         this.parent = parent;
-        // To get the Panel object via idata is a hack because InstallData will
+        // To get the Panel object via idata is a hack because GUIInstallData will
         // be hold global data, not panel specific data. But the Panel object will
         // be needed in the constructor of some derived classes. And to expand the
         // constructor is also not a good way because all derived classes have to
@@ -727,6 +727,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
 
     // ------------- Helper for common used components ----- END ---
     // ------------------- Layout stuff -------------------- START ---
+
     /**
      * Returns the default GridBagConstraints of this panel.
      *
@@ -949,6 +950,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method validates the field content. Validating is performed through a user supplied
      * service class that provides the validation rules.

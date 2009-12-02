@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.ExtendedUIProgressHandler;
 
 /**
@@ -40,9 +40,9 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public ExtendedInstallPanel(InstallerFrame parent, InstallData idata) {
+    public ExtendedInstallPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
     }
 
@@ -52,6 +52,7 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * @see com.izforge.izpack.util.ExtendedUIProgressHandler#startAction(java.lang.String,
      * java.lang.String, java.lang.String, int)
      */
+
     public void restartAction(String name, String overallMsg, String tipMsg, int no_of_steps) {
         overallOpLabel.setText(overallMsg);
         tipLabel.setText(tipMsg);
@@ -77,6 +78,7 @@ public class ExtendedInstallPanel extends InstallPanel implements ExtendedUIProg
      * @see com.izforge.izpack.util.ExtendedUIProgressHandler#progress(java.lang.String,
      * java.lang.String)
      */
+
     public void progress(String stepMessage) {
         packOpLabel.setText(stepMessage);
         currentStep++;

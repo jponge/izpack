@@ -20,7 +20,7 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class can be used to manage multiple related password fields. This is used in the
  * <code>UserInputPanel</code> to manage communication with the validator and processor for
@@ -54,18 +55,19 @@ public class PasswordGroup implements ProcessingClient {
     private String modifiedPassword = null;
     private int currentValidator = 0;
 
-    private InstallData idata;
+    private GUIInstallData idata;
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Creates a password group to manage one or more password fields.
      *
-     * @param idata               the installation data
+     * @param idata               the installation installDataGUI
      * @param validatorContainers the validator containers
      * @param processor           the processor
      */
     /*--------------------------------------------------------------------------*/
-    public PasswordGroup(InstallData idata, List<ValidatorContainer> validatorContainers, String processor) {
+    public PasswordGroup(GUIInstallData idata, List<ValidatorContainer> validatorContainers, String processor) {
         // ----------------------------------------------------
         // attempt to create an instance of the Validator
         // ----------------------------------------------------
@@ -90,11 +92,12 @@ public class PasswordGroup implements ProcessingClient {
         }
     }
 
-    public InstallData getIdata() {
+    public GUIInstallData getIdata() {
         return idata;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the number of sub-fields.
      *
@@ -106,6 +109,7 @@ public class PasswordGroup implements ProcessingClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the contents of the field indicated by <code>index</code>.
      *
@@ -124,6 +128,7 @@ public class PasswordGroup implements ProcessingClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Adds a <code>JPasswordField</code> to the group of fields being managed by this object.
      *
@@ -137,6 +142,7 @@ public class PasswordGroup implements ProcessingClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method validates the group content. Validating is performed through a user supplied
      * service class that provides the validation rules.
@@ -240,6 +246,7 @@ public class PasswordGroup implements ProcessingClient {
 
     // This method was added to support changes to ProcessingClient interface
     // it's use is non-deterministic in the newly implemented text validators.
+
     public String getText() {
         return getValidatorMessage(currentValidator);
     }
@@ -249,6 +256,7 @@ public class PasswordGroup implements ProcessingClient {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the password in the following order:
      * If a validator sets a modified password such as an encrypted string that is returned,

@@ -3,7 +3,7 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.data.InstallerRequirement;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerRequirementDisplay;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.Debug;
@@ -17,10 +17,10 @@ import java.io.File;
  * Checker for java version, JDK and running install
  */
 public class ConditionCheck {
-    private InstallData installdata;
+    private GUIInstallData installdata;
     private ResourceManager resourceManager;
 
-    public ConditionCheck(InstallData installdata, ResourceManager resourceManager) {
+    public ConditionCheck(GUIInstallData installdata, ResourceManager resourceManager) {
         this.installdata = installdata;
         this.resourceManager = resourceManager;
     }

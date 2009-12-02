@@ -24,9 +24,9 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.util.FileExecutor;
 import com.izforge.izpack.util.OsConstraint;
@@ -63,9 +63,9 @@ public class SudoPanel extends IzPanel implements ActionListener {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public SudoPanel(InstallerFrame parent, InstallData idata) {
+    public SudoPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -123,6 +123,7 @@ public class SudoPanel extends IzPanel implements ActionListener {
 
     // check if sudo password is correct (so sudo can be used in all other
     // scripts, even without password, lasts for 5 minutes)
+
     private void doSudoCmd() {
         String pass = passwordField.getText();
 

@@ -23,9 +23,9 @@ import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Log;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.VariableSubstitutorImpl;
@@ -60,9 +60,9 @@ public class FinishPanel extends IzPanel implements ActionListener {
      * The constructor.
      *
      * @param parent The parent.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public FinishPanel(InstallerFrame parent, InstallData idata) {
+    public FinishPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, new IzPanelLayout());
 
         vs = new VariableSubstitutorImpl(idata.getVariables());
@@ -132,7 +132,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
         // Shows it
         try {
             if (fc.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-                // We handle the xml data writing
+                // We handle the xml installDataGUI writing
                 File file = fc.getSelectedFile();
                 FileOutputStream out = new FileOutputStream(file);
                 BufferedOutputStream outBuff = new BufferedOutputStream(out, 5120);

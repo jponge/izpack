@@ -23,7 +23,7 @@ package com.izforge.izpack.installer.debugger;
 
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IconsDatabase;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.Condition;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.RulesEngineImpl;
@@ -47,7 +47,7 @@ import java.util.Properties;
  */
 public class Debugger {
     private RulesEngine rules;
-    private InstallData idata;
+    private GUIInstallData idata;
 
     private Properties lasttimevariables;
 
@@ -62,7 +62,7 @@ public class Debugger {
     private ConditionHistoryTableModel conditionhistorymodel;
     private ConditionHistoryTableCellRenderer conditionhistoryrenderer;
 
-    public Debugger(InstallData installdata, IconsDatabase icons, RulesEngine rules) {
+    public Debugger(GUIInstallData installdata, IconsDatabase icons, RulesEngine rules) {
         idata = installdata;
         this.rules = rules;
         lasttimevariables = (Properties) idata.getVariables().clone();

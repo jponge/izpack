@@ -3,7 +3,7 @@ package com.izforge.izpack.installer.provider;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.ConditionCheck;
 import com.izforge.izpack.installer.base.LanguageDialog;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import org.picocontainer.injectors.Provider;
 
 import javax.swing.*;
@@ -15,9 +15,9 @@ import java.awt.*;
 public class LanguageDialogProvider implements Provider {
     private ResourceManager resourceManager;
 
-    public LanguageDialog provide(InstallData installData, ResourceManager resourceManager, ConditionCheck conditionCheck) throws Exception {
+    public LanguageDialog provide(GUIInstallData installDataGUI, ResourceManager resourceManager, ConditionCheck conditionCheck) throws Exception {
         this.resourceManager = resourceManager;
-        return new LanguageDialog(initFrame(), resourceManager, installData, conditionCheck);
+        return new LanguageDialog(initFrame(), resourceManager, installDataGUI, conditionCheck);
     }
 
     private JFrame initFrame() {

@@ -18,18 +18,19 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.ExecutableFile;
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.ResourceNotFoundException;
+import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.Shortcut;
 import com.izforge.izpack.util.os.unix.UnixHelper;
@@ -553,7 +554,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
     /**
      * Holds a list of all the shortcut files that have been created. Note: this variable contains
-     * valid data only after createShortcuts() has been called. This list is created so that the
+     * valid installDataGUI only after createShortcuts() has been called. This list is created so that the
      * files can be added to the uninstaller.
      */
     private Vector<String> files = new Vector<String>();
@@ -618,15 +619,15 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /**
      * Constructor.
      *
-     * @param parent      reference to the application frame
-     * @param installData shared information about the installation
+     * @param parent         reference to the application frame
+     * @param installDataGUI shared information about the installation
      */
 
     /*
      * --------------------------------------------------------------------------
      */
-    public ShortcutPanel(InstallerFrame parent, InstallData installData) {
-        super(parent, installData, "link16x16");
+    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI) {
+        super(parent, installDataGUI, "link16x16");
 
         layout = (GridBagLayout) super.getLayout();
         Object con = getLayoutHelper().getDefaultConstraints();
@@ -959,7 +960,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
          */
         IXMLParser parser = new XMLParser();
 
-        // get the data
+        // get the installDataGUI
         spec = parser.parse(substitutedSpec);
 
         // close the stream
@@ -1132,10 +1133,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 data.initialState = Shortcut.NORMAL;
             }
 
-            // LOG System.out.println("data.initialState: " + data.initialState);
+            // LOG System.out.println("installDataGUI.initialState: " + installDataGUI.initialState);
 
             // --------------------------------------------------
-            // if the minimal data requirements are met to create
+            // if the minimal installDataGUI requirements are met to create
             // the shortcut, create one entry each for each of
             // the requested types.
             // Eventually this will cause the creation of one
@@ -1149,7 +1150,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             // 1. Elmar: "Without a target we can not create a shortcut."
             // 2. Marc: "No, Even on Linux a Link can be an URL and has no target."
             if (data.target == null) {
-                // TODO: write log info INFO.warn( "Shortcut: " + data + " has no target" );
+                // TODO: write log info INFO.warn( "Shortcut: " + installDataGUI + " has no target" );
                 data.target = "";
             }
             // the shortcut is not actually required for any of the selected packs
@@ -1166,7 +1167,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             // --------------------------------------------------
             // For each of the categories set the type and if
             // the link should be placed in the program group,
-            // then clone the data set to obtain an independent
+            // then clone the installDataGUI set to obtain an independent
             // instance and add this to the list of shortcuts
             // to be created. In this way, we will set up an
             // identical copy for each of the locations at which
@@ -1205,10 +1206,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                     shortcuts.add(data.clone());
                 }
 
-                // / TODO: write log INFO.info( "data.name: " + data.name );
-                shortCuts.add((data.name == null) ? "" : data.name); // + " -> " + data.target +
+                // / TODO: write log INFO.info( "installDataGUI.name: " + installDataGUI.name );
+                shortCuts.add((data.name == null) ? "" : data.name); // + " -> " + installDataGUI.target +
 
-                // " Type: " + data.type );
+                // " Type: " + installDataGUI.type );
             }
         }
 
@@ -1526,7 +1527,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*
      * $ @design
      * 
-     * The information about the installed packs comes from InstallData.selectedPacks. This assumes
+     * The information about the installed packs comes from GUIInstallData.selectedPacks. This assumes
      * that this panel is presented to the user AFTER the PacksPanel.
      * --------------------------------------------------------------------------
      */
@@ -2096,7 +2097,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             }
             catch (Throwable exception) {
                 // not really anything I can do here, maybe should show a dialog that
-                // tells the user that data might not have been saved completely!?
+                // tells the user that installDataGUI might not have been saved completely!?
             }
         }
     }
@@ -2130,10 +2131,11 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * 
      * 
      * The information needed to create shortcuts has been collected in the Vector 'shortcuts'. Take
-     * the data from there and package it in XML form for storage by the installer. The group name
+     * the installDataGUI from there and package it in XML form for storage by the installer. The group name
      * is only stored once in a separate XML element, since there is only one.
      * --------------------------------------------------------------------------
      */
+
     public void makeXMLData(IXMLElement panelRoot) {
         // ----------------------------------------------------
         // if there are no shortcuts to create, shortcuts are
@@ -2172,7 +2174,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             dataElement.setAttribute(AUTO_ATTRIBUTE_GROUP, (data.addToGroup ? Boolean.TRUE
                     : Boolean.FALSE).toString());
 
-            // Boolean.valueOf(data.addToGroup)
+            // Boolean.valueOf(installDataGUI.addToGroup)
             if (OsVersion.IS_WINDOWS)
 
             {
@@ -2232,8 +2234,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*
      * 
      * 
-     * Reconstitute the information needed to create shortcuts from XML data that was previously
-     * stored by the installer through makeXMLData(). Create a new Vector containing this data and
+     * Reconstitute the information needed to create shortcuts from XML installDataGUI that was previously
+     * stored by the installer through makeXMLData(). Create a new Vector containing this installDataGUI and
      * stroe it in 'shortcuts' for use by createShortcuts(). Once this has been completed, call
      * createShortcuts() to complete the operation.
      * --------------------------------------------------------------------------

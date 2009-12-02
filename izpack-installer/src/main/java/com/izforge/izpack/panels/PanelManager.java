@@ -9,7 +9,7 @@ import com.izforge.izpack.data.PanelAction;
 import com.izforge.izpack.installer.DataValidatorFactory;
 import com.izforge.izpack.installer.PanelActionFactory;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class PanelManager {
 
     public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels.";
 
-    private InstallData installdata;
+    private GUIInstallData installdata;
     private IPanelComponent panelComponent;
     private int lastVis;
 
@@ -31,8 +31,8 @@ public class PanelManager {
      */
     protected ArrayList<Integer> visiblePanelMapping;
 
-    public PanelManager(InstallData installData, IPanelComponent panelComponent) throws ClassNotFoundException {
-        this.installdata = installData;
+    public PanelManager(GUIInstallData installDataGUI, IPanelComponent panelComponent) throws ClassNotFoundException {
+        this.installdata = installDataGUI;
         this.panelComponent = panelComponent;
         visiblePanelMapping = new ArrayList<Integer>();
     }
@@ -89,7 +89,7 @@ public class PanelManager {
                     lastVis = count;
                 }
                 count++;
-                // We add the XML data izPanel root
+                // We add the XML installDataGUI izPanel root
                 IXMLElement panelRoot = new XMLElementImpl(panel.getClassName(), installdata.getXmlData());
                 // if set, we add the id as an attribute to the panelRoot
                 String panelId = panel.getPanelid();

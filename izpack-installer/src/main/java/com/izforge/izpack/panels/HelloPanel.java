@@ -25,9 +25,9 @@ import com.izforge.izpack.data.Info;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,9 +49,9 @@ public class HelloPanel extends IzPanel {
      * The constructor.
      *
      * @param parent The parent.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public HelloPanel(InstallerFrame parent, InstallData idata) {
+    public HelloPanel(InstallerFrame parent, GUIInstallData idata) {
         this(parent, idata, new IzPanelLayout());
     }
 
@@ -61,11 +61,11 @@ public class HelloPanel extends IzPanel {
      * null, no layout manager will be created or initialized.
      *
      * @param parent The parent IzPack installer frame.
-     * @param idata  The installer internal data.
+     * @param idata  The installer internal installDataGUI.
      * @param layout layout manager to be used with this IzPanel
      */
 
-    public HelloPanel(InstallerFrame parent, InstallData idata, LayoutManager2 layout) {
+    public HelloPanel(InstallerFrame parent, GUIInstallData idata, LayoutManager2 layout) {
         // Layout handling. This panel was changed from a mixed layout handling
         // with GridBagLayout and BoxLayout to IzPanelLayout. It can be used as an
         // example how to use the IzPanelLayout. For this there are some comments

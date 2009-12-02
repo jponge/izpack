@@ -22,9 +22,9 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -59,10 +59,10 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     /**
      * The constructor.
      *
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      * @param parent Description of the Parameter
      */
-    public HTMLLicencePanel(InstallerFrame parent, InstallData idata) {
+    public HTMLLicencePanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, new IzPanelLayout());
         // We load the licence
         loadLicence();

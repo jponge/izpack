@@ -37,7 +37,7 @@ import com.izforge.izpack.installer.GUIListener;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.UnpackerFactory;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
@@ -98,7 +98,7 @@ public class InstallerFrame extends JFrame {
     /**
      * The installation data.
      */
-    protected InstallData installdata;
+    protected GUIInstallData installdata;
 
     /**
      * The icons database.
@@ -203,7 +203,7 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, InstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter)
+    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter)
             throws Exception {
         super(title);
         substitutor = new VariableSubstitutorImpl(installdata.getVariables());

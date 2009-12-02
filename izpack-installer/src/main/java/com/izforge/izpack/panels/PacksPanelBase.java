@@ -24,15 +24,15 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.PackValidator;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.IoHelper;
@@ -141,9 +141,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public PacksPanelBase(InstallerFrame parent, InstallData idata) {
+    public PacksPanelBase(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
         // Load langpack.
         try {
@@ -185,6 +185,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see com.izforge.izpack.panels.PacksPanelInterface#getLangpack()
      */
+
     public LocaleDatabase getLangpack() {
         return (langpack);
     }
@@ -194,6 +195,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see com.izforge.izpack.panels.PacksPanelInterface#getBytes()
      */
+
     public long getBytes() {
         return bytes;
     }
@@ -203,6 +205,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see com.izforge.izpack.panels.PacksPanelInterface#setBytes(int)
      */
+
     public void setBytes(long bytes) {
         this.bytes = bytes;
     }
@@ -212,6 +215,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see com.izforge.izpack.panels.PacksPanelInterface#showSpaceRequired()
      */
+
     public void showSpaceRequired() {
         if (spaceLabel != null) {
             spaceLabel.setText(Pack.toByteUnitsString(bytes));
@@ -223,6 +227,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see com.izforge.izpack.panels.PacksPanelInterface#showFreeSpace()
      */
+
     public void showFreeSpace() {
         if (IoHelper.supported("getFreeSpace") && freeSpaceLabel != null) {
             String msg;
@@ -255,7 +260,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 /*
                  * This will call
                  * public static boolean validate(AbstractUIHandler handler,
-                 *   InstallData idata, String packsId, boolean isSelected)
+                 *   GUIInstallData idata, String packsId, boolean isSelected)
                  * from the validator class  
                  */
 
@@ -288,9 +293,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     }
 
     /**
-     * Asks to make the XML panel data.
+     * Asks to make the XML panel installDataGUI.
      *
-     * @param panelRoot The XML tree to write the data in.
+     * @param panelRoot The XML tree to write the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
         new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
@@ -301,6 +306,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see javax.swing.event.ListSelectionListener#valueChanged(javax.swing.event.ListSelectionEvent)
      */
+
     public void valueChanged(ListSelectionEvent e) {
         int selectedRow = packsTable.getSelectedRow();
 
@@ -516,7 +522,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
     }
 
     /**
-     * Computes pack related data like the names or the dependencies state.
+     * Computes pack related installDataGUI like the names or the dependencies state.
      *
      * @param packs The list of packs.
      */
@@ -592,6 +598,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * 
      * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
      */
+
     public String getSummaryBody() {
         StringBuffer retval = new StringBuffer(256);
         Iterator iter = idata.getSelectedPacks().iterator();

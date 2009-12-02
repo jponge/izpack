@@ -51,7 +51,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
     private PrintStream stderr;
 
     /**
-     * Save data for running automated.
+     * Save installDataGUI for running automated.
      *
      * @param installData installation parameters
      * @param panelRoot   unused.
@@ -77,7 +77,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         }
 
         if (compiler == null) {
-            throw new InstallerException("invalid automation data: could not find compiler");
+            throw new InstallerException("invalid automation installDataGUI: could not find compiler");
         }
 
         IXMLElement args_xml = panelRoot.getFirstChildNamed("arguments");
@@ -89,7 +89,7 @@ public class CompilePanelAutomationHelper extends PanelAutomationHelper implemen
         }
 
         if (args_xml == null) {
-            throw new InstallerException("invalid automation data: could not find compiler arguments");
+            throw new InstallerException("invalid automation installDataGUI: could not find compiler arguments");
         }
 
         try {

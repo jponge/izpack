@@ -23,10 +23,10 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.gui.IzPanelLayout;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.*;
 
 import java.awt.event.ActionEvent;
@@ -72,9 +72,9 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public PathInputPanel(InstallerFrame parent, InstallData idata) {
+    public PathInputPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, new IzPanelLayout());
         // Set default values
         emptyTargetMsg = getI18nStringForClass("empty_target", "TargetPanel");
@@ -135,7 +135,7 @@ public class PathInputPanel extends IzPanel implements ActionListener {
         String chosenPath = pathSelectionPanel.getPath();
         boolean ok = true;
 
-        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(GUIInstallData.MODIFY_INSTALLATION));
         if (modifyinstallation) {
             // installation directory has to exist in a modification installation
             mustExist = true;
@@ -280,7 +280,7 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      * As with all IzPack resources, each the above ids should be associated with a separate
      * filename, which is set in the install.xml file at compile time.
      */
-    public static void loadDefaultInstallDir(InstallerFrame parentFrame, InstallData idata) {
+    public static void loadDefaultInstallDir(InstallerFrame parentFrame, GUIInstallData idata) {
         // Load only once ...
         if (getDefaultInstallDir() != null) {
             return;

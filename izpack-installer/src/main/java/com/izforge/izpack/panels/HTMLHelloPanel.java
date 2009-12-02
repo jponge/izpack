@@ -19,8 +19,8 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 /**
  * Class HTMLHelloPanel is a version of the hello panel that displays
@@ -33,9 +33,9 @@ public class HTMLHelloPanel extends HTMLInfoPanel {
      * The constructor.
      *
      * @param parent The parent.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public HTMLHelloPanel(InstallerFrame parent, InstallData idata) {
+    public HTMLHelloPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, "HTMLHelloPanel", false);
     }
 

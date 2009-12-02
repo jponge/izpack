@@ -77,7 +77,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
 
         /**
          * Holds a list of all the shortcut files that have been created. Note: this variable
-         * contains valid data only after createShortcuts() has been called. This list is created so
+         * contains valid installDataGUI only after createShortcuts() has been called. This list is created so
          * that the files can be added to the uninstaller.
          */
         Vector<String> files = new Vector<String>();
@@ -99,7 +99,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
         // ----------------------------------------------------
         // if shortcuts are not supported, then we can not
         // create shortcuts, even if there was any install
-        // data. Just return.
+        // installDataGUI. Just return.
         // ----------------------------------------------------
         if (!shortcut.supported()) {
             Debug.log("shortcuts not supported here");
@@ -151,7 +151,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
                 data.type = Integer.valueOf(
                         dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_TYPE));
             } else {
-                Debug.log("WARN: On Linux data.type is NOT an int. Ignored.");
+                Debug.log("WARN: On Linux installDataGUI.type is NOT an int. Ignored.");
             }
 
             data.commandLine = dataElement.getAttribute(ShortcutPanel.AUTO_ATTRIBUTE_COMMAND);
@@ -202,7 +202,7 @@ public class ShortcutPanelAutomationHelper implements PanelAutomation {
 
         System.out.print("[ Creating shortcuts ");
 
-        // ShortcutData data;
+        // ShortcutData installDataGUI;
         for (int i = 0; i < shortcuts.size(); i++) {
             data = shortcuts.elementAt(i);
 

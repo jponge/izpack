@@ -24,10 +24,12 @@ import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.CompileHandler;
+import com.izforge.izpack.installer.CompileResult;
+import com.izforge.izpack.installer.CompileWorker;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -118,10 +120,10 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      * @throws IOException
      */
-    public CompilePanel(InstallerFrame parent, InstallData idata) throws IOException {
+    public CompilePanel(InstallerFrame parent, GUIInstallData idata) throws IOException {
         super(parent, idata);
 
         this.worker = new CompileWorker(idata, this);
@@ -384,6 +386,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     /* (non-Javadoc)
      * @see com.izforge.izpack.util.AbstractUIProgressHandler#startAction(java.lang.String, int)
      */
+
     public void startAction(String name, int noOfJobs1) {
         this.noOfJobs = noOfJobs1;
         overallProgressBar.setMaximum(noOfJobs1);
@@ -488,7 +491,7 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
     }
 
     /**
-     * Create XML data for automated installation.
+     * Create XML installDataGUI for automated installation.
      */
     public void makeXMLData(IXMLElement panelRoot) {
         // just save the compiler chosen and the arguments

@@ -22,8 +22,8 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 /**
  * The taget directory selection panel.
@@ -39,9 +39,9 @@ public class DefaultTargetPanel extends PathInputPanel {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public DefaultTargetPanel(InstallerFrame parent, InstallData idata) {
+    public DefaultTargetPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
         // load the default directory info (if present)
         loadDefaultInstallDir(parent, idata);
@@ -104,9 +104,9 @@ public class DefaultTargetPanel extends PathInputPanel {
     }
 
     /**
-     * Asks to make the XML panel data.
+     * Asks to make the XML panel installDataGUI.
      *
-     * @param panelRoot The tree to put the data in.
+     * @param panelRoot The tree to put the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
         new DefaultTargetPanelAutomationHelper().makeXMLData(idata, panelRoot);
@@ -117,6 +117,7 @@ public class DefaultTargetPanel extends PathInputPanel {
      * 
      * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
      */
+
     public String getSummaryBody() {
         return (idata.getInstallPath());
     }

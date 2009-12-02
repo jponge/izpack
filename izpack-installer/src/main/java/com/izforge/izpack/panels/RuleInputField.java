@@ -21,7 +21,7 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.VariableSubstitutorImpl;
@@ -41,6 +41,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class assists the user in entering serial numbers. <BR>
  * <BR>
@@ -93,7 +94,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /**
      * Used to specify the retsult format. This constant specifies to return the contents of all
      * fields together with all separators as specified in the field format concatenated into one
-     * long string. In this case the resulting string looks just like the user saw it during data
+     * long string. In this case the resulting string looks just like the user saw it during installDataGUI
      * entry
      */
     public static final int DISPLAY_FORMAT = 2;
@@ -139,7 +140,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
     private int resultFormat = DEFAULT;
 
-    private InstallData idata = null;
+    private GUIInstallData idata = null;
 
     /**
      * Holds an instance of the <code>Validator</code> if one was specified and available
@@ -153,11 +154,13 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
     /*--------------------------------------------------------------------------*/
     // javadoc inherited
+
     public boolean hasParams() {
         return hasParams;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs a rule input field.
      *
@@ -189,13 +192,14 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     /*--------------------------------------------------------------------------*/
     public RuleInputField(String format, String preset, String separator, String validator,
                           Map<String, String> validatorParams, String processor, int resultFormat, Toolkit toolkit,
-                          InstallData idata) {
+                          GUIInstallData idata) {
         this(format, preset, separator, validator, processor, resultFormat, toolkit, idata);
         this.validatorParams = validatorParams;
         this.hasParams = true;
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Constructs a rule input field.
      *
@@ -224,7 +228,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
      */
     /*--------------------------------------------------------------------------*/
     public RuleInputField(String format, String preset, String separator, String validator,
-                          String processor, int resultFormat, Toolkit toolkit, InstallData idata) {
+                          String processor, int resultFormat, Toolkit toolkit, GUIInstallData idata) {
         this.toolkit = toolkit;
         this.separator = separator;
         this.resultFormat = resultFormat;
@@ -277,6 +281,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the number of sub-fields composing this <code>RuleInputField</code>.
      *
@@ -288,6 +293,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Returns the contents of the field indicated by <code>index</code>.
      *
@@ -306,11 +312,13 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
 
     /*--------------------------------------------------------------------------*/
     // javadoc inherited
+
     public Map<String, String> getValidatorParams() {
         return validatorParams;
     }
 
     /*---------------------------------------------------------------------------*/
+
     /**
      * Returns the field contents, assembled acording to the encryption and separator rules.
      *
@@ -379,6 +387,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Creates the items that make up this field. Both separators and input fields are considered
      * items. The items created are stored in <code>items</code>. In addition, all fields are
@@ -477,13 +486,14 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Sets each field to a pre-defined value.
      *
      * @param data a <code>String</code> containing the preset values for each field. The format
      *             of the string is as follows: The content for the individuals fields must be separated by
-     *             whitespace. Each data block is preceeded by the index of the field to set (counting starts at
-     *             0) followed by a colon ':'and after that the actual data for the field.
+     *             whitespace. Each installDataGUI block is preceeded by the index of the field to set (counting starts at
+     *             0) followed by a colon ':'and after that the actual installDataGUI for the field.
      */
     /*--------------------------------------------------------------------------*/
     private void setFields(String data) {
@@ -557,6 +567,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method validates the field content. Validating is performed through a user supplied
      * service class that provides the validation rules.
@@ -590,6 +601,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method is invoked when a key has been pressed. This method verifies the condition of the
      * input field in focus. Once the column count in the field has reached the specified maximum,
@@ -618,6 +630,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * This method is invoked when a key has been released.
      *
@@ -657,6 +670,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Invoked when a component loses the keyboard focus. This method does nothing, we are only
      * interested in 'focus gained' events.
@@ -698,6 +712,7 @@ public class RuleInputField extends JComponent implements KeyListener, FocusList
     // ----------------------------------------------------------------------------
     //
     // ----------------------------------------------------------------------------
+
     private static class FieldSpec {
 
         private int MIN_TOKENS = 2;

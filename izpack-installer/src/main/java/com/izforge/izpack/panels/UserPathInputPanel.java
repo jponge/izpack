@@ -21,10 +21,10 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.gui.IzPanelLayout;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.ResourceNotFoundException;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.*;
 
 import java.awt.event.ActionEvent;
@@ -43,7 +43,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
      *
      */
     private InstallerFrame _parent;
-    private InstallData _idata;
+    private GUIInstallData _idata;
     private static final long serialVersionUID = 3257566217698292531L;
     /**
      * Flag whether the choosen path must exist or not
@@ -78,9 +78,9 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public UserPathInputPanel(InstallerFrame parent, InstallData idata, String targetPanel, String variableName) {
+    public UserPathInputPanel(InstallerFrame parent, GUIInstallData idata, String targetPanel, String variableName) {
         super(parent, idata, new IzPanelLayout());
         _parent = parent;
         _idata = idata;

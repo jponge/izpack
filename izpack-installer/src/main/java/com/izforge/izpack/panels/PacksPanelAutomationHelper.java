@@ -21,10 +21,10 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.installer.PanelAutomation;
 import com.izforge.izpack.rules.RulesEngine;
 
@@ -40,10 +40,10 @@ import java.util.Vector;
  */
 public class PacksPanelAutomationHelper implements PanelAutomation {
     /**
-     * Asks to make the XML panel data.
+     * Asks to make the XML panel installDataGUI.
      *
-     * @param idata     The installation data.
-     * @param panelRoot The XML tree to write the data in.
+     * @param idata     The installation installDataGUI.
+     * @param panelRoot The XML tree to write the installDataGUI in.
      */
     public void makeXMLData(AutomatedInstallData idata, IXMLElement panelRoot) {
         // We add each pack to the panelRoot element
@@ -62,8 +62,8 @@ public class PacksPanelAutomationHelper implements PanelAutomation {
     /**
      * Asks to run in the automated mode.
      *
-     * @param idata     The installation data.
-     * @param panelRoot The root of the panel data.
+     * @param idata     The installation installDataGUI.
+     * @param panelRoot The root of the panel installDataGUI.
      */
     public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) {
         final class PInfo {
@@ -116,7 +116,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation {
         Vector<IXMLElement> packList = panelRoot.getChildrenNamed("pack");
 
         // Read all packs from the xml and remember them to merge it with the selected packs from
-        // install data
+        // install installDataGUI
         System.out.println("Read pack list from xml definition.");
         int numberOfPacks = packList.size();
         for (int packIndex = 0; packIndex < numberOfPacks; packIndex++) {
@@ -132,7 +132,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation {
                     + packInfo.toString() + "]");
         }
 
-        // Now merge the selected pack from automated install data with the selected packs form
+        // Now merge the selected pack from automated install installDataGUI with the selected packs form
         // autoinstall.xml
         System.out.println("Modify pack selection.");
         for (Pack pack : idata.getAvailablePacks()) {
@@ -150,7 +150,7 @@ public class PacksPanelAutomationHelper implements PanelAutomation {
                     } else {
                         if (packInfo.isSelected()) {
                             // Check if the conditions allow to select the pack
-                            RulesEngine rules = (RulesEngine)idata.getRules();
+                            RulesEngine rules = (RulesEngine) idata.getRules();
                             if ((idata.getSelectedPacks().indexOf(pack) < 0)
                                     && (pack.id != null)
                                     && (rules.canInstallPack(pack.id,

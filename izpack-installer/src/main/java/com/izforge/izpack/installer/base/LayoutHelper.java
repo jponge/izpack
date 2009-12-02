@@ -24,7 +24,7 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -405,9 +405,9 @@ public class LayoutHelper implements LayoutConstants {
         }
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
         String todo;
-        if (idata instanceof InstallData
-                && ((InstallData) idata).guiPrefs.modifier.containsKey("layoutAnchor")) {
-            todo = ((InstallData) idata).guiPrefs.modifier.get("layoutAnchor");
+        if (idata instanceof GUIInstallData
+                && ((GUIInstallData) idata).guiPrefs.modifier.containsKey("layoutAnchor")) {
+            todo = ((GUIInstallData) idata).guiPrefs.modifier.get("layoutAnchor");
         } else {
             todo = idata.getVariable("IzPanel.LayoutType");
         }
@@ -451,11 +451,11 @@ public class LayoutHelper implements LayoutConstants {
             return (IzPanelLayout.getDefaultXGap(gapId));
         }
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof InstallData)) {
+        if (!(idata instanceof GUIInstallData)) {
             return (IzPanelLayout.getDefaultXGap(gapId));
         }
         String var = null;
-        InstallData id = (InstallData) idata;
+        GUIInstallData id = (GUIInstallData) idata;
         int commonDefault = -1;
         if (id.guiPrefs.modifier.containsKey(ALL_X_GAP)) {
             try {
@@ -505,11 +505,11 @@ public class LayoutHelper implements LayoutConstants {
             return (IzPanelLayout.getDefaultYGap(gapId));
         }
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof InstallData)) {
+        if (!(idata instanceof GUIInstallData)) {
             return (IzPanelLayout.getDefaultYGap(gapId));
         }
         String var = null;
-        InstallData id = (InstallData) idata;
+        GUIInstallData id = (GUIInstallData) idata;
         int commonDefault = -1;
         if (id.guiPrefs.modifier.containsKey(ALL_Y_GAP)) {
             try {
@@ -651,12 +651,12 @@ public class LayoutHelper implements LayoutConstants {
         }
         Object retval = defaultVal;
         AutomatedInstallData idata = AutomatedInstallData.getInstance();
-        if (!(idata instanceof InstallData)) {
+        if (!(idata instanceof GUIInstallData)) {
             return (retval);
         }
         String var = null;
-        if (((InstallData) idata).guiPrefs.modifier.containsKey(key)) {
-            var = ((InstallData) idata).guiPrefs.modifier.get(key);
+        if (((GUIInstallData) idata).guiPrefs.modifier.containsKey(key)) {
+            var = ((GUIInstallData) idata).guiPrefs.modifier.get(key);
             if (var != null) {
                 try {
                     if (defaultVal instanceof Integer) {

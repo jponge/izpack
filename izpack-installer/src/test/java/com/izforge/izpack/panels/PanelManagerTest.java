@@ -1,8 +1,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.bootstrap.IPanelComponent;
-import com.izforge.izpack.data.Panel;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +15,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  */
 public class PanelManagerTest {
     @Mock
-    private InstallData installData;
+    private GUIInstallData installDataGUI;
     @Mock
     private IPanelComponent panelComponent;
     private PanelManager panelManager;
@@ -24,7 +23,7 @@ public class PanelManagerTest {
     @Before
     public void initMock() throws ClassNotFoundException {
         MockitoAnnotations.initMocks(getClass());
-        panelManager = new PanelManager(installData, panelComponent);
+        panelManager = new PanelManager(installDataGUI, panelComponent);
     }
 
     @Test

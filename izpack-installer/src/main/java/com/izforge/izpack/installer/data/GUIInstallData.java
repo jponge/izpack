@@ -34,7 +34,7 @@ import java.io.Serializable;
  * @author Julien Ponge <julien@izforge.com>
  * @author Johannes Lehtinen <johannes.lehtinen@iki.fi>
  */
-public class InstallData extends AutomatedInstallData implements Serializable {
+public class GUIInstallData extends AutomatedInstallData implements Serializable {
 
     private static final long serialVersionUID = 4048793450990024505L;
 

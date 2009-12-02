@@ -19,7 +19,7 @@ package com.izforge.izpack.installer;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import junit.framework.TestCase;
@@ -35,7 +35,7 @@ public class ConditionTest extends TestCase {
 
     public final static String RDE_VCS_NAME = "$Name:  $";
 
-    protected static InstallData idata = new InstallData();
+    protected static GUIInstallData idata = new GUIInstallData();
 
     protected RulesEngine rules;
 
@@ -49,6 +49,7 @@ public class ConditionTest extends TestCase {
     /* (non-Javadoc)
      * @see junit.framework.TestCase#setUp()
      */
+
     protected void setUp() throws Exception {
         super.setUp();
         IXMLElement conditionspec = new XMLElementImpl("conditions");
@@ -64,6 +65,7 @@ public class ConditionTest extends TestCase {
     /* (non-Javadoc)
      * @see junit.framework.TestCase#tearDown()
      */
+
     protected void tearDown() throws Exception {
         super.tearDown();
         if (idata != null) {

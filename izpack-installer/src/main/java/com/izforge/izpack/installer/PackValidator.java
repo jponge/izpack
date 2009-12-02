@@ -23,7 +23,7 @@
  */
 package com.izforge.izpack.installer;
 
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIHandler;
 
 
@@ -32,5 +32,5 @@ import com.izforge.izpack.util.AbstractUIHandler;
  */
 public interface PackValidator {
     public boolean validate(AbstractUIHandler handler,
-                            InstallData idata, String packsId, boolean isSelected);
+                            GUIInstallData idata, String packsId, boolean isSelected);
 }

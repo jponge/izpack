@@ -23,7 +23,10 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.PanelAutomationHelper;
+import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 import java.io.IOException;
@@ -42,7 +45,7 @@ public class ProcessPanelAutomationHelper extends PanelAutomationHelper implemen
     private int currentJob = 0;
 
     /**
-     * Save data for running automated.
+     * Save installDataGUI for running automated.
      *
      * @param installData installation parameters
      * @param panelRoot   unused.

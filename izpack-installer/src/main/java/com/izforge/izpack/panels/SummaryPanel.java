@@ -22,10 +22,10 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.gui.IzPanelLayout;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.SummaryProcessor;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.SummaryProcessor;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 
@@ -52,9 +52,9 @@ public class SummaryPanel extends IzPanel {
      * The constructor.
      *
      * @param parent The parent.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public SummaryPanel(InstallerFrame parent, InstallData idata) {
+    public SummaryPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, new IzPanelLayout());
         add(createMultiLineLabelLang("SummaryPanel.info"));
         try {
@@ -75,6 +75,7 @@ public class SummaryPanel extends IzPanel {
      * 
      * @see com.izforge.izpack.installer.IzPanel#panelActivate()
      */
+
     public void panelActivate() {
         super.panelActivate();
         textArea.setText(SummaryProcessor.getSummary(idata));

@@ -22,10 +22,10 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.ProcessPanelWorker;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIProcessHandler;
 
 import javax.swing.*;
@@ -87,9 +87,9 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public ProcessPanel(InstallerFrame parent, InstallData idata) throws IOException {
+    public ProcessPanel(InstallerFrame parent, GUIInstallData idata) throws IOException {
         super(parent, idata);
 
         this.worker = new ProcessPanelWorker(idata, this);
@@ -232,7 +232,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
     }
 
     /**
-     * Create XML data for automated installation.
+     * Create XML installDataGUI for automated installation.
      */
     public void makeXMLData(IXMLElement panelRoot) {
         // does nothing (no state to save)

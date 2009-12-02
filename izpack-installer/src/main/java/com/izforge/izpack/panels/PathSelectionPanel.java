@@ -25,9 +25,9 @@ import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelConstraints;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LayoutConstants;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.base.LayoutHelper;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,17 +68,17 @@ public class PathSelectionPanel extends JPanel implements ActionListener, Layout
     private IzPanel parent;
 
     /**
-     * The installer internal data.
+     * The installer internal installDataGUI.
      */
-    private InstallData idata;
+    private GUIInstallData idata;
 
     /**
      * The constructor. Be aware, parent is the parent IzPanel, not the installer frame.
      *
      * @param parent The parent IzPanel.
-     * @param idata  The installer internal data.
+     * @param idata  The installer internal installDataGUI.
      */
-    public PathSelectionPanel(IzPanel parent, InstallData idata) {
+    public PathSelectionPanel(IzPanel parent, GUIInstallData idata) {
         super();
         this.parent = parent;
         this.idata = idata;

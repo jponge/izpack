@@ -20,10 +20,10 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.VariableSubstitutorImpl;
@@ -52,9 +52,9 @@ public class UserPathPanel extends UserPathInputPanel {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public UserPathPanel(InstallerFrame parent, InstallData idata) {
+    public UserPathPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, thisName, parent.langpack.getString(thisName + ".variableName"));
         // load the default directory info (if present)
         if (getDefaultDir() != null) {
@@ -114,9 +114,9 @@ public class UserPathPanel extends UserPathInputPanel {
     }
 
     /**
-     * Asks to make the XML panel data.
+     * Asks to make the XML panel installDataGUI.
      *
-     * @param panelRoot The tree to put the data in.
+     * @param panelRoot The tree to put the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
         if (!(skip)) {
@@ -129,6 +129,7 @@ public class UserPathPanel extends UserPathInputPanel {
     *
     * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
     */
+
     public String getSummaryBody() {
         if (skip) {
             return null;

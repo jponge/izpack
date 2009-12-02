@@ -22,9 +22,9 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.HyperlinkHandler;
 
 import javax.swing.*;
@@ -62,9 +62,9 @@ public class HTMLInfoPanel extends IzPanel {
      * The constructor.
      *
      * @param parent The parent.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public HTMLInfoPanel(InstallerFrame parent, InstallData idata) {
+    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata) {
         this(parent, idata, "HTMLInfoPanel", true);
     }
 
@@ -73,12 +73,12 @@ public class HTMLInfoPanel extends IzPanel {
      * subclasses.
      *
      * @param parent            The parent.
-     * @param idata             The installation data.
+     * @param idata             The installation installDataGUI.
      * @param resPrefixStr      prefix string for content resource name.
      * @param showInfoLabelFlag true to show "please read..." label
      *                          above content.
      */
-    public HTMLInfoPanel(InstallerFrame parent, InstallData idata,
+    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata,
                          String resPrefixStr, boolean showInfoLabelFlag) {
         super(parent, idata, new IzPanelLayout());
         //setup given resource prefix and name:
@@ -130,6 +130,7 @@ public class HTMLInfoPanel extends IzPanel {
     /*
     * loads the content of the info resource as text so that it can be parsed afterwards
     */
+
     private URL loadHTMLInfoContent() {
         if (getMetadata() != null && getMetadata().getPanelid() != null) {
             try {

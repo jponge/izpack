@@ -21,14 +21,14 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.debugger.Debugger;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.util.Debug;
@@ -133,9 +133,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public TreePacksPanel(InstallerFrame parent, InstallData idata) {
+    public TreePacksPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
         // Load langpack.
         try {
@@ -197,6 +197,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     * 
     * @see com.izforge.izpack.panels.PacksPanelInterface#getLangpack()
     */
+
     public LocaleDatabase getLangpack() {
         return (langpack);
     }
@@ -206,6 +207,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     * 
     * @see com.izforge.izpack.panels.PacksPanelInterface#getBytes()
     */
+
     public long getBytes() {
         return (bytes);
     }
@@ -215,6 +217,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     * 
     * @see com.izforge.izpack.panels.PacksPanelInterface#setBytes(int)
     */
+
     public void setBytes(long bytes) {
         this.bytes = bytes;
     }
@@ -224,6 +227,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     * 
     * @see com.izforge.izpack.panels.PacksPanelInterface#showSpaceRequired()
     */
+
     public void showSpaceRequired() {
         if (spaceLabel != null) {
             spaceLabel.setText(Pack.toByteUnitsString(bytes));
@@ -235,6 +239,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     * 
     * @see com.izforge.izpack.panels.PacksPanelInterface#showFreeSpace()
     */
+
     public void showFreeSpace() {
         if (IoHelper.supported("getFreeSpace") && freeSpaceLabel != null) {
             String msg = null;
@@ -270,9 +275,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     }
 
     /**
-     * Asks to make the XML panel data.
+     * Asks to make the XML panel installDataGUI.
      *
-     * @param panelRoot The XML tree to write the data in.
+     * @param panelRoot The XML tree to write the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
         new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
@@ -454,7 +459,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     }
 
     /**
-     * Computes pack related data like the names or the dependencies state.
+     * Computes pack related installDataGUI like the names or the dependencies state.
      *
      * @param packs
      */
@@ -471,8 +476,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     }
 
     /**
-     * Refresh tree data from the PacksModel. This functions serves as a bridge
-     * between the flat PacksModel and the tree data model.
+     * Refresh tree installDataGUI from the PacksModel. This functions serves as a bridge
+     * between the flat PacksModel and the tree installDataGUI model.
      */
     public void fromModel() {
         TreeModel model = this.packsTree.getModel();
@@ -538,7 +543,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     }
 
     /**
-     * Updates a value for pack in PacksModel with data from a checkbox node
+     * Updates a value for pack in PacksModel with installDataGUI from a checkbox node
      *
      * @param cbnode This is the checkbox node which contains model values
      */
@@ -760,7 +765,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
             // Create panel GUI (and populate the TJtree)
             createNormalLayout();
 
-            // Reload the data from the PacksModel into the tree in order the initial
+            // Reload the installDataGUI from the PacksModel into the tree in order the initial
             // dependencies to be resolved and effective
             fromModel();
 
@@ -803,6 +808,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     * 
     * @see com.izforge.izpack.installer.IzPanel#getSummaryBody()
     */
+
     public String getSummaryBody() {
         StringBuffer retval = new StringBuffer(256);
         Iterator iter = idata.getSelectedPacks().iterator();

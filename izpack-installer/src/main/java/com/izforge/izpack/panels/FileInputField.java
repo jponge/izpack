@@ -21,9 +21,9 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
@@ -50,7 +50,7 @@ public class FileInputField extends JPanel implements ActionListener {
 
     int size;
 
-    InstallData data;
+    GUIInstallData installDataGUI;
 
     String fileExtension;
 
@@ -60,16 +60,16 @@ public class FileInputField extends JPanel implements ActionListener {
 
     protected static final int INVALID = 0, EMPTY = 1;
 
-    public FileInputField(IzPanel parent, InstallData data, boolean directory, String set,
+    public FileInputField(IzPanel parent, GUIInstallData installDataGUI, boolean directory, String set,
                           int size, List<ValidatorContainer> validatorConfig) {
-        this(parent, data, directory, set, size, validatorConfig, null, null);
+        this(parent, installDataGUI, directory, set, size, validatorConfig, null, null);
     }
 
-    public FileInputField(IzPanel parent, InstallData data, boolean directory, String set,
+    public FileInputField(IzPanel parent, GUIInstallData installDataGUI, boolean directory, String set,
                           int size, List<ValidatorContainer> validatorConfig, String fileExt, String fileExtDesc) {
         this.parent = parent;
         this.parentFrame = parent.getInstallerFrame();
-        this.data = data;
+        this.installDataGUI = installDataGUI;
         this.validators = validatorConfig;
         this.set = set;
         this.size = size;
@@ -83,8 +83,8 @@ public class FileInputField extends JPanel implements ActionListener {
         filetxt.setCaretPosition(0);
 
         // TODO: use separate key for button text
-        browseBtn = ButtonFactory.createButton(data.getLangpack()
-                .getString("UserInputPanel.search.browse"), data.buttonsHColor);
+        browseBtn = ButtonFactory.createButton(installDataGUI.getLangpack()
+                .getString("UserInputPanel.search.browse"), installDataGUI.buttonsHColor);
         browseBtn.addActionListener(this);
         this.add(filetxt);
         this.add(browseBtn);

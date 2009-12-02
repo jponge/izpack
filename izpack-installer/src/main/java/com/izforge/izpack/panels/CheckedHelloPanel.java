@@ -21,8 +21,8 @@ package com.izforge.izpack.panels;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.RegDataContainer;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
 import com.izforge.izpack.util.os.RegistryHandler;
@@ -50,9 +50,9 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
      * The constructor.
      *
      * @param parent The parent.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public CheckedHelloPanel(InstallerFrame parent, InstallData idata) {
+    public CheckedHelloPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
         abortInstallation = isRegistered();
     }
@@ -123,9 +123,9 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
                 case REG_DWORD:
                 case REG_LINK:
                 case REG_MULTI_SZ:
-                    throw new Exception("Bad data type of chosen registry value " + keyName);
+                    throw new Exception("Bad installDataGUI type of chosen registry value " + keyName);
                 default:
-                    throw new Exception("Unknown data type of chosen registry value " + keyName);
+                    throw new Exception("Unknown installDataGUI type of chosen registry value " + keyName);
             }
             // That's all with registry this time... Following preparation of
             // the received value.
@@ -206,6 +206,7 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
      * 
      * @see com.izforge.izpack.installer.IzPanel#panelActivate()
      */
+
     public void panelActivate() {
         if (abortInstallation) {
             parent.lockNextButton();

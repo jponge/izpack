@@ -22,9 +22,9 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.Debug;
 
 import javax.swing.*;
@@ -40,7 +40,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener {
     private JRadioButton normalinstall;
     private JRadioButton modifyinstall;
 
-    public InstallationTypePanel(InstallerFrame parent, InstallData idata) {
+    public InstallationTypePanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, new IzPanelLayout());
         buildGUI();
     }
@@ -54,7 +54,7 @@ public class InstallationTypePanel extends IzPanel implements ActionListener {
 
         ButtonGroup group = new ButtonGroup();
 
-        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(GUIInstallData.MODIFY_INSTALLATION));
 
         normalinstall = new JRadioButton(parent.langpack.getString("InstallationTypePanel.normal"), !modifyinstallation);
         normalinstall.addActionListener(this);
@@ -78,8 +78,9 @@ public class InstallationTypePanel extends IzPanel implements ActionListener {
     /* (non-Javadoc)
     * @see com.izforge.izpack.installer.IzPanel#panelActivate()
     */
+
     public void panelActivate() {
-        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(InstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(GUIInstallData.MODIFY_INSTALLATION));
         if (modifyinstallation) {
             modifyinstall.setSelected(true);
         } else {
@@ -91,10 +92,10 @@ public class InstallationTypePanel extends IzPanel implements ActionListener {
         Debug.trace("installation type changed");
         if (e.getSource() == normalinstall) {
             Debug.trace("normal installation");
-            idata.setVariable(InstallData.MODIFY_INSTALLATION, "false");
+            idata.setVariable(GUIInstallData.MODIFY_INSTALLATION, "false");
         } else {
             Debug.trace("modification installation");
-            idata.setVariable(InstallData.MODIFY_INSTALLATION, "true");
+            idata.setVariable(GUIInstallData.MODIFY_INSTALLATION, "true");
         }
         /*
         if (normalinstall.isSelected()) {

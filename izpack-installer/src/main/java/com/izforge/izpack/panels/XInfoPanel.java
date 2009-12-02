@@ -21,11 +21,11 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
-import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.VariableSubstitutorImpl;
 
@@ -58,9 +58,9 @@ public class XInfoPanel extends IzPanel {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public XInfoPanel(InstallerFrame parent, InstallData idata) {
+    public XInfoPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
 
         // We initialize our layout

@@ -1,27 +1,19 @@
 package com.izforge.izpack.installer.provider;
 
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.data.Panel;
-import com.izforge.izpack.gui.ButtonFactory;
-import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.PrivilegedRunner;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.rules.RulesEngineImpl;
 import com.izforge.izpack.util.*;
 import org.picocontainer.injectors.Provider;
 
 import javax.swing.*;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.MetalTheme;
-import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
-import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.util.*;
-import java.util.List;
 
 /**
  * Install data loader
@@ -36,18 +28,18 @@ public class InstallDataProvider implements Provider {
 
     private ResourceManager resourceManager;
 
-    public InstallData provide(ResourceManager resourceManager) throws Exception, InterruptedException {
+    public GUIInstallData provide(ResourceManager resourceManager) throws Exception, InterruptedException {
         this.resourceManager = resourceManager;
-        final InstallData installData = new InstallData();
+        final GUIInstallData installDataGUI = new GUIInstallData();
         // Loads the installation data
-        loadInstallData(installData);
+        loadInstallData(installDataGUI);
 
         // Load custom langpack if exist.
-        addCustomLangpack(installData);
+        addCustomLangpack(installDataGUI);
 
-        loadDynamicVariables(installData);
-        loadInstallerRequirements(installData);
-        return installData;
+        loadDynamicVariables(installDataGUI);
+        loadInstallerRequirements(installDataGUI);
+        return installDataGUI;
     }
 
     /**
@@ -405,13 +397,14 @@ public class InstallDataProvider implements Provider {
 
     /**
      * Loads Dynamic Variables.
-     * @param installData
+     *
+     * @param installDataGUI
      */
-    protected void loadDynamicVariables(InstallData installData) {
+    protected void loadDynamicVariables(GUIInstallData installDataGUI) {
         try {
             InputStream in = resourceManager.getInputStream("dynvariables");
             ObjectInputStream objIn = new ObjectInputStream(in);
-            installData.setDynamicvariables((Map<String, List<DynamicVariable>>) objIn.readObject());
+            installDataGUI.setDynamicvariables((Map<String, List<DynamicVariable>>) objIn.readObject());
             objIn.close();
         }
         catch (Exception e) {
@@ -423,14 +416,14 @@ public class InstallDataProvider implements Provider {
     /**
      * Load installer conditions
      *
+     * @param installDataGUI
      * @throws Exception
-     * @param installData
      */
-    public void loadInstallerRequirements(InstallData installData) throws Exception {
+    public void loadInstallerRequirements(GUIInstallData installDataGUI) throws Exception {
         InputStream in = resourceManager.getInputStream("installerrequirements");
         ObjectInputStream objIn = new ObjectInputStream(in);
-        installData.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
+        installDataGUI.setInstallerrequirements((List<InstallerRequirement>) objIn.readObject());
         objIn.close();
     }
-    
+
 }

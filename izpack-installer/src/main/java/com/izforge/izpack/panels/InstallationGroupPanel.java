@@ -18,11 +18,11 @@
  */
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
-import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIHandler;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.OsConstraint;
@@ -54,7 +54,7 @@ public class InstallationGroupPanel extends IzPanel
     private static final long serialVersionUID = 1L;
 
     /**
-     * HashMap<String, Pack> of the InstallData.availablePacks
+     * HashMap<String, Pack> of the GUIInstallData.availablePacks
      */
     private HashMap<String, Pack> packsByName;
     private TableModel groupTableModel;
@@ -64,7 +64,7 @@ public class InstallationGroupPanel extends IzPanel
     private GroupData[] rows;
     private int selectedGroup = -1;
 
-    public InstallationGroupPanel(InstallerFrame parent, InstallData idata) {
+    public InstallationGroupPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata);
         buildLayout();
     }
@@ -149,7 +149,7 @@ public class InstallationGroupPanel extends IzPanel
     }
 
     /**
-     * Remove all packs from the InstallData availablePacks and selectedPacks
+     * Remove all packs from the GUIInstallData availablePacks and selectedPacks
      * that do not list the selected installation group. Packs without any
      * installGroups are always included.
      */
@@ -200,6 +200,7 @@ public class InstallationGroupPanel extends IzPanel
     /* Add the installation group to pack mappings
 	 * @see com.izforge.izpack.installer.IzPanel#makeXMLData(com.izforge.izpack.adaptator.IXMLElement)
 	 */
+
     public void makeXMLData(IXMLElement panelRoot) {
         InstallationGroupPanelAutomationHelper helper = new InstallationGroupPanelAutomationHelper();
         idata.setAttribute("GroupData", rows);
@@ -297,15 +298,15 @@ public class InstallationGroupPanel extends IzPanel
     }
 
     /**
-     * Build the set of unique installGroups data. The GroupData description
+     * Build the set of unique installGroups installDataGUI. The GroupData description
      * is taken from the InstallationGroupPanel.description.[name] property
      * where [name] is the installGroup name. The GroupData size is built
      * from the Pack.nbytes sum.
      *
-     * @param idata - the panel install data
+     * @param idata - the panel install installDataGUI
      * @return HashMap<String, GroupData> of unique install group names
      */
-    protected HashMap getInstallGroups(InstallData idata) {
+    protected HashMap getInstallGroups(GUIInstallData idata) {
         /* First create a packsByName<String, Pack> of all packs and identify
         the unique install group names.
         */
@@ -518,7 +519,7 @@ public class InstallationGroupPanel extends IzPanel
             }
             buttonGroup.add(btn);
             String sizeText = gd.getSizeString();
-            //Object[] data = { btn, gd.description, sizeText};
+            //Object[] installDataGUI = { btn, gd.description, sizeText};
             Object[] data = {btn, sizeText};
             model.addRow(data);
             count++;

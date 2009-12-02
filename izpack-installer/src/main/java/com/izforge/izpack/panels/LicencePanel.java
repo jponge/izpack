@@ -25,9 +25,9 @@ import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.GuiId;
-import com.izforge.izpack.installer.data.InstallData;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.data.GUIInstallData;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -60,9 +60,9 @@ public class LicencePanel extends IzPanel implements ActionListener {
      * The constructor.
      *
      * @param parent The parent window.
-     * @param idata  The installation data.
+     * @param idata  The installation installDataGUI.
      */
-    public LicencePanel(InstallerFrame parent, InstallData idata) {
+    public LicencePanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, new IzPanelLayout());
         // We load the licence
         loadLicence();
