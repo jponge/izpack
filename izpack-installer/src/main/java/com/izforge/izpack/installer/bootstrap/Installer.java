@@ -22,13 +22,14 @@
 package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.bootstrap.ApplicationComponent;
-import com.izforge.izpack.bootstrap.IApplicationComponent;
-import com.izforge.izpack.installer.base.*;
+import com.izforge.izpack.bootstrap.IPanelComponent;
+import com.izforge.izpack.installer.base.AutomatedInstaller;
+import com.izforge.izpack.installer.base.ConsoleInstaller;
+import com.izforge.izpack.installer.base.InstallerFrame;
+import com.izforge.izpack.installer.base.LanguageDialog;
 import com.izforge.izpack.util.Debug;
 import com.izforge.izpack.util.StringTool;
-import org.picocontainer.DefaultPicoContainer;
 
-import javax.swing.*;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
@@ -127,8 +128,9 @@ public class Installer {
     private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception {
         switch (type) {
             case INSTALLER_GUI:
-                applicationComponent.getComponent(LanguageDialog.class).initLangPack();
-                applicationComponent.getComponent(InstallerFrame.class).launchGUI();
+                IPanelComponent panelComponent = applicationComponent.getComponent(IPanelComponent.class);
+                panelComponent.getComponent(LanguageDialog.class).initLangPack();
+                panelComponent.getComponent(InstallerFrame.class).launchGUI();
                 break;
 
             case INSTALLER_AUTO:

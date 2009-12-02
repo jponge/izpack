@@ -146,14 +146,12 @@ public class InstallationTest {
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Target Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        installerFrameFixture.fileChooser();
+        installerFrameFixture.optionPane().requireWarningMessage();
+        installerFrameFixture.optionPane().okButton().click();
         // Packs Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
         installerFrameFixture.optionPane().requireEnabled();
-        installerFrameFixture.optionPane().textBox().requireText(installDataGUI.getVariable("ShowCreateDirectoryMessage"));
-//        installerFrameFixture.optionPane().buttonWithText(installDataGUI.);
-
         // Finish panel
     }
 
