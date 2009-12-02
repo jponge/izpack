@@ -152,8 +152,8 @@ public class PanelManager {
     }
 
     public void setAbstractUIHandlerInContainer(AbstractUIHandler abstractUIHandlerInContainer) {
-        panelContainer.removeComponent(AbstractUIHandler.class);
-        panelContainer.addComponent(AbstractUIHandler.class, abstractUIHandlerInContainer);
+//        panelContainer.removeComponent(AbstractUIHandler.class);
+//        panelContainer.addComponent(AbstractUIHandler.class, abstractUIHandlerInContainer);
     }
 
     public int getCountVisiblePanel() {

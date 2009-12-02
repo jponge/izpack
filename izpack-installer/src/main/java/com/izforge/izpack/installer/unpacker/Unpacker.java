@@ -56,11 +56,11 @@ public class Unpacker extends UnpackerBase {
     /**
      * The constructor.
      *
-     * @param idata   The installation data.
-     * @param handler The installation progress handler.
+     * @param idata                     The installation data.
+     * @param abstractUIProgressHandler The installation progress abstractUIProgressHandler.
      */
-    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler handler, RulesEngine rules) {
-        super(idata, handler, resourceManager, rules);
+    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler abstractUIProgressHandler, RulesEngine rules) {
+        super(idata, abstractUIProgressHandler, resourceManager, rules);
     }
 
     /* (non-Javadoc)
@@ -521,7 +521,7 @@ public class Unpacker extends UnpackerBase {
 
         if (webDirURL == null) // local
         {
-            in = resourceManager.getInputStream("/packs/pack" + packid);
+            in = resourceManager.getInputStream("packs/pack" + packid);
         } else
         // web based
         {

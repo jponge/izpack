@@ -42,7 +42,6 @@ public class PanelContainer implements IPanelContainer {
         String unpackerclassname = installdata.getInfo().getUnpackerClassName();
         Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
         pico
-//                .addAdapter(new ComponentAdapter(IUnpacker.class, unpackerclass)
                 .addComponent(IUnpacker.class, unpackerclass)
                 .addComponent(InstallerFrame.class, InstallerFrame.class,
                         new ConstantParameter(getTitle(installdata)),
