@@ -128,8 +128,8 @@ public class CompilerConfig extends Thread {
      * @see #mergePacksLangFiles()
      */
     private HashMap<String, List<URL>> packsLangUrlMap = new HashMap<String, List<URL>>();
-    private static final String UNPACKER_DEFAULT_CLASSNAME = "com.izforge.izpack.installer.unpacker.Unpacker";
-    private static final String PACKAGER_DEFAULT_CLASSNAME = "com.izforge.izpack.compiler.Packager";
+    private String unpackerClassname = "com.izforge.izpack.installer.unpacker.Unpacker";
+    private String packagerClassname = "com.izforge.izpack.compiler.Packager";
 
     /**
      * Set the IzPack home directory
@@ -365,23 +365,23 @@ public class CompilerConfig extends Thread {
             packager = root.getFirstChildNamed("packager");
 
             if (packager != null) {
-                PACKAGER_DEFAULT_CLASSNAME = requireAttribute(packager, "class");
+                packagerClassname = requireAttribute(packager, "class");
             }
 
             IXMLElement unpacker = root.getFirstChildNamed("unpacker");
 
             if (unpacker != null) {
-                UNPACKER_DEFAULT_CLASSNAME = requireAttribute(unpacker, "class");
+                unpackerClassname = requireAttribute(unpacker, "class");
             }
         }
-        compiler.initPackager(PACKAGER_DEFAULT_CLASSNAME);
+        compiler.initPackager(packagerClassname);
         if (packager != null) {
             IXMLElement options = packager.getFirstChildNamed("options");
             if (options != null) {
                 compiler.getPackager().addConfigurationInformation(options);
             }
         }
-        compiler.addProperty("UNPACKER_CLASS", UNPACKER_DEFAULT_CLASSNAME);
+        compiler.addProperty("UNPACKER_CLASS", unpackerClassname);
         notifyCompilerListener("loadPackager", CompilerListener.END, data);
     }
 
