@@ -10,6 +10,9 @@ import com.izforge.izpack.installer.DataValidatorFactory;
 import com.izforge.izpack.installer.PanelActionFactory;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.util.AbstractUIHandler;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.OsConstraint;
 
 import java.util.ArrayList;
@@ -148,10 +151,17 @@ public class PanelManager {
         return visiblePanelMapping.get(panel);
     }
 
-
-//    visiblePanelMapping.get(installdata.getPanels().size()) == installdata.getCurPanelNumber()
+    public void setAbstractUIHandlerInContainer(AbstractUIHandler abstractUIHandlerInContainer) {
+        panelComponent.removeComponent(AbstractUIHandler.class);
+        panelComponent.addComponent(AbstractUIHandler.class, abstractUIHandlerInContainer);
+    }
 
     public int getCountVisiblePanel() {
         return lastVis;
+    }
+
+    public IUnpacker getUnpacker(AbstractUIProgressHandler listener) {
+        setAbstractUIHandlerInContainer(listener);
+        return panelComponent.getComponent(IUnpacker.class);
     }
 }

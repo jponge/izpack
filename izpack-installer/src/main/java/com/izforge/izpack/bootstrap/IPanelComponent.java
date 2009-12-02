@@ -14,4 +14,8 @@ public interface IPanelComponent {
     void dispose();
 
     MutablePicoContainer makeChildContainer();
+
+    void removeComponent(Object abstractUIHandlerInContainer);
+
+    void addComponent(Object componentType, Object implementation);
 }

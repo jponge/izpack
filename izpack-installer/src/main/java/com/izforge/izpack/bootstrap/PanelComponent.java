@@ -66,6 +66,10 @@ public class PanelComponent implements IPanelComponent {
         pico.addComponent(componentType);
     }
 
+    public void addComponent(Object componentType, Object implementation) {
+        pico.addComponent(componentType, implementation);
+    }
+
     public void dispose() {
         pico.dispose();
     }
@@ -78,6 +82,9 @@ public class PanelComponent implements IPanelComponent {
         return pico.makeChildContainer();
     }
 
+    public void removeComponent(Object abstractUIHandlerInContainer) {
+        pico.removeComponent(abstractUIHandlerInContainer);
+    }
 
     private JFrame initFrame() {
         ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
