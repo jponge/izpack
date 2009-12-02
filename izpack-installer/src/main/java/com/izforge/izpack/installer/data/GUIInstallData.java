@@ -23,6 +23,7 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.Panel;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 
@@ -55,4 +56,10 @@ public class GUIInstallData extends AutomatedInstallData implements Serializable
      */
     public Color buttonsHColor = new Color(230, 230, 230);
 
+    public void configureGuiButtons() {
+        UIManager.put("OptionPane.yesButtonText", getLangpack().getString("installer.yes"));
+        UIManager.put("OptionPane.noButtonText", getLangpack().getString("installer.no"));
+        UIManager.put("OptionPane.cancelButtonText", getLangpack()
+                .getString("installer.cancel"));
+    }
 }

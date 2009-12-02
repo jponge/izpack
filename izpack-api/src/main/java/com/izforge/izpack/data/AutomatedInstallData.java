@@ -291,7 +291,6 @@ public class AutomatedInstallData implements Serializable {
         } else {
             getAttributes().put(attr, val);
         }
-
     }
 
 
@@ -299,7 +298,6 @@ public class AutomatedInstallData implements Serializable {
      * Refreshes Dynamic Variables.
      */
     public void refreshDynamicVariables(VariableSubstitutor substitutor) {
-
 //        Debug.log("refreshing dyamic variables.");
         if (dynamicvariables != null) {
             for (String dynvarname : dynamicvariables.keySet()) {
@@ -329,13 +327,13 @@ public class AutomatedInstallData implements Serializable {
         }
     }
 
-
-    public void setAndProcessLocal(String locale) throws Exception {
+    public void setAndProcessLocal(String locale, LocaleDatabase localeDatabase) throws Exception {
         // We add an xml data information
         getXmlData().setAttribute("langpack", locale);
         // We load the langpack
         setLocaleISO3(locale);
         setVariable(ScriptParserConstant.ISO3_LANG, getLocaleISO3());
+        this.langpack = localeDatabase;
     }
 
     public RulesEngine getRules() {

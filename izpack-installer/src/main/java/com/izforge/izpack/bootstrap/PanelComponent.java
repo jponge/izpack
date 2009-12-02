@@ -34,7 +34,6 @@ public class PanelComponent implements IPanelComponent {
         pico
                 .addComponent(IPanelComponent.class, this)
                 .addComponent(PanelManager.class)
-                .addComponent(PanelManager.class)
                 ;
         addVariablerComponent();
     }
@@ -43,13 +42,23 @@ public class PanelComponent implements IPanelComponent {
         AutomatedInstallData installdata = pico.getComponent(AutomatedInstallData.class);
         String unpackerclassname = installdata.getInfo().getUnpackerClassName();
         Class<IUnpacker> unpackerclass = (Class<IUnpacker>) Class.forName(unpackerclassname);
-        pico.addComponent(IUnpacker.class, unpackerclass)
+        pico
+                .addComponent(IUnpacker.class, unpackerclass)
                 .addComponent(InstallerFrame.class, InstallerFrame.class,
                         new ConstantParameter(getTitle(installdata)),
-                        new ComponentParameter())
+                        new ComponentParameter(),
+                        new ComponentParameter(),
+                        new ComponentParameter(),
+                        new ComponentParameter(),
+                        new ComponentParameter()
+                )
+
                 .addComponent(LanguageDialog.class, LanguageDialog.class,
                         new ConstantParameter(initFrame()),
-                        new ComponentParameter());
+                        new ComponentParameter(),
+                        new ComponentParameter(),
+                        new ComponentParameter()
+                );
     }
 
 

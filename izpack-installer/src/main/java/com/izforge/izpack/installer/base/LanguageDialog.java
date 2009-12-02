@@ -306,6 +306,8 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         }
         try {
             propagateLocale(selectedPack);
+            // Configure buttons after locale has been loaded
+            installdata.configureGuiButtons();
         } catch (Exception e1) {
             e1.printStackTrace();
         }
@@ -449,14 +451,9 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         // Loads the suitable langpack
         java.util.List<String> availableLangPacks = resourceManager.getAvailableLangPacks();
         int npacks = availableLangPacks.size();
-        String selectedPack;
-
         // We get the langpack name
         if (npacks != 1) {
             this.runPicker();
-        } else {
-            selectedPack = availableLangPacks.get(0);
-            propagateLocale(selectedPack);
         }
 
         // check installer conditions
@@ -467,24 +464,16 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
         }
     }
 
-    private void propagateLocale(String selectedPack) throws Exception {
-        installdata.setAndProcessLocal(selectedPack);
-        InputStream in = resourceManager.getInputStream("langpacks/" + selectedPack + ".xml");
-        installdata.setLangpack(new LocaleDatabase(in));
-        // create the resource manager (after the language selection!)
-        resourceManager.setLocale(selectedPack);
-        // Configure buttons after locale has been loaded
-        configureGuiButtons(installdata);
-    }
-
     /**
-     * @param installdata
+     * Set locales on installData and resourceManager
+     *
+     * @param selectedPack
+     * @throws Exception
      */
-    private void configureGuiButtons(GUIInstallData installdata) {
-        UIManager.put("OptionPane.yesButtonText", installdata.getLangpack().getString("installer.yes"));
-        UIManager.put("OptionPane.noButtonText", installdata.getLangpack().getString("installer.no"));
-        UIManager.put("OptionPane.cancelButtonText", installdata.getLangpack()
-                .getString("installer.cancel"));
+    private void propagateLocale(String selectedPack) throws Exception {
+        InputStream in = resourceManager.getInputStream("langpacks/" + selectedPack + ".xml");
+        installdata.setAndProcessLocal(selectedPack, new LocaleDatabase(in));
+        resourceManager.setLocale(selectedPack);
     }
 
     public void showMissingRequirementMessage(String message) {
