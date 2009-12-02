@@ -129,8 +129,9 @@ public class Installer {
         switch (type) {
             case INSTALLER_GUI:
                 IPanelComponent panelComponent = applicationComponent.getComponent(IPanelComponent.class);
+
                 panelComponent.getComponent(LanguageDialog.class).initLangPack();
-                panelComponent.getComponent(InstallerFrame.class).launchGUI();
+                panelComponent.getComponent(InstallerFrame.class).loadPanels().launchGUI();
                 break;
 
             case INSTALLER_AUTO:

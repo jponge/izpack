@@ -232,11 +232,12 @@ public class InstallerFrame extends JFrame {
         centerFrame(this);
     }
 
-    public void loadPanels() throws ClassNotFoundException {
+    public InstallerFrame loadPanels() throws ClassNotFoundException {
         panelManager.loadPanelsInContainer();
         panelManager.instanciatePanels();
         buildGUI();
         sizeFrame();
+        return this;
     }
 
     public void enableFrame() {
