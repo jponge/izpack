@@ -21,10 +21,7 @@
 package com.izforge.izpack.installer.unpacker;
 
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.data.PackFile;
-import com.izforge.izpack.data.UpdateCheck;
 import com.izforge.izpack.event.InstallerListener;
-import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
@@ -76,11 +73,6 @@ public abstract class UnpackerBase implements IUnpacker {
     private File absolutInstallSource;
 
     /**
-     * The packs locale database.
-     */
-    protected LocaleDatabase langpack = null;
-
-    /**
      * The result of the operation.
      */
     protected boolean result = true;
@@ -113,23 +105,20 @@ public abstract class UnpackerBase implements IUnpacker {
 
     protected RulesEngine rules;
 
+    protected ResourceManager resourceManager;
+
     /**
      * The constructor.
      *
      * @param idata   The installation data.
      * @param handler The installation progress handler.
+     * @param rules
      */
-    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler) {
-        try {
-            String resource = LANG_FILE_NAME + "_" + idata.getLocaleISO3();
-            this.langpack = new LocaleDatabase(ResourceManager.getInstance().getInputStream(resource));
-        }
-        catch (Throwable exception) {
-        }
-
+    public UnpackerBase(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules) {
         this.idata = idata;
         this.handler = handler;
-
+        this.resourceManager = resourceManager;
+        this.rules = rules;
         // Initialize the variable substitutor
         vs = new VariableSubstitutorImpl(idata.getVariables());
     }
@@ -500,6 +489,7 @@ public abstract class UnpackerBase implements IUnpacker {
     }
 
     // This method is only used if a file related custom action exist.
+
     /**
      * Creates the given directory recursive and calls the method "afterDir" of each listener with
      * the current file object and the pack file object. On error an exception is raised.

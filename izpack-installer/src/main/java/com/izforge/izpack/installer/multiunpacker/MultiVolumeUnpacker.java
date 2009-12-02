@@ -17,16 +17,19 @@
  */
 package com.izforge.izpack.installer.multiunpacker;
 
-import com.izforge.izpack.*;
+import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.event.InstallerListener;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.IMultiVolumeUnpackerHelper;
+import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.unpacker.ScriptParser;
 import com.izforge.izpack.installer.unpacker.UnpackerBase;
 import com.izforge.izpack.io.CorruptVolumeException;
 import com.izforge.izpack.io.FileSpanningInputStream;
 import com.izforge.izpack.io.FileSpanningOutputStream;
 import com.izforge.izpack.io.VolumeNotFoundException;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
@@ -46,8 +49,8 @@ import java.util.Properties;
 public class MultiVolumeUnpacker extends UnpackerBase {
     protected IMultiVolumeUnpackerHelper helper;
 
-    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler) {
-        super(idata, handler);
+    public MultiVolumeUnpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler, ResourceManager resourceManager, RulesEngine rules) {
+        super(idata, handler, resourceManager, rules);
         if (handler instanceof PanelAutomation) {
             Debug.trace("running in auto installation mode.");
             helper = new MultiVolumeUnpackerAutomationHelper();
@@ -151,9 +154,8 @@ public class MultiVolumeUnpacker extends UnpackerBase {
                 }
                 String stepname = pack.name;// the message to be passed to the
                 // installpanel
-                if (langpack != null && !(pack.id == null || "".equals(pack.id))) {
-
-                    final String name = langpack.getString(pack.id);
+                if (!(pack.id == null || "".equals(pack.id))) {
+                    final String name = idata.getLangpack().getString(pack.id);
                     if (name != null && !"".equals(name)) {
                         stepname = name;
                     }

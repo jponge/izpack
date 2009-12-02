@@ -36,7 +36,6 @@ import com.izforge.izpack.gui.IconsDatabase;
 import com.izforge.izpack.installer.GUIListener;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.installer.UnpackerFactory;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.installer.debugger.Debugger;
@@ -835,9 +834,10 @@ public class InstallerFrame extends JFrame {
      * @param listener The installation listener.
      */
     public void install(AbstractUIProgressHandler listener) {
-        IUnpacker unpacker = UnpackerFactory.getUnpacker(this.installdata.getInfo()
-                .getUnpackerClassName(), installdata, listener);
-        unpacker.setRules(rules);
+        IUnpacker unpacker = panelManager.getUnpacker(listener);
+//        IUnpacker unpacker = UnpackerFactory.getUnpacker(this.installdata.getInfo()
+//                .getUnpackerClassName(), installdata, listener);
+//        unpacker.setRules(rules);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
         unpackerthread.start();
     }

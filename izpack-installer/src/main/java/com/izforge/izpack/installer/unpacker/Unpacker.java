@@ -22,13 +22,14 @@
 
 package com.izforge.izpack.installer.unpacker;
 
-import com.izforge.izpack.*;
+import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.event.InstallerListener;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.web.WebAccessor;
 import com.izforge.izpack.installer.web.WebRepositoryAccessor;
+import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.FileQueue;
 import com.izforge.izpack.util.os.FileQueueMove;
@@ -58,13 +59,14 @@ public class Unpacker extends UnpackerBase {
      * @param idata   The installation data.
      * @param handler The installation progress handler.
      */
-    public Unpacker(AutomatedInstallData idata, AbstractUIProgressHandler handler) {
-        super(idata, handler);
+    public Unpacker(AutomatedInstallData idata, ResourceManager resourceManager, AbstractUIProgressHandler handler, RulesEngine rules) {
+        super(idata, handler, resourceManager, rules);
     }
 
     /* (non-Javadoc)
     * @see com.izforge.izpack.installer.IUnpacker#run()
     */
+
     public void run() {
         addToInstances();
         try {
@@ -117,8 +119,8 @@ public class Unpacker extends UnpackerBase {
                 String stepname = pack.name;// the message to be passed to the
 
                 // installpanel
-                if (langpack != null && !(pack.id == null || "".equals(pack.id))) {
-                    final String name = langpack.getString(pack.id);
+                if (!(pack.id == null || "".equals(pack.id))) {
+                    final String name = idata.getLangpack().getString(pack.id);
                     if (name != null && !"".equals(name)) {
                         stepname = name;
                     }
@@ -294,7 +296,7 @@ public class Unpacker extends UnpackerBase {
 
                         if (pf.isPack200Jar()) {
                             int key = objIn.readInt();
-                            InputStream pack200Input = Unpacker.class.getResourceAsStream("/packs/pack200-" + key);
+                            InputStream pack200Input = resourceManager.getInputStream("/packs/pack200-" + key);
                             Pack200.Unpacker unpacker = getPack200Unpacker();
                             java.util.jar.JarOutputStream jarOut = new java.util.jar.JarOutputStream(out);
                             unpacker.unpack(pack200Input, jarOut);
@@ -511,7 +513,7 @@ public class Unpacker extends UnpackerBase {
      * @throws Exception Description of the Exception
      */
     private InputStream getPackAsStream(String packid, boolean uninstall) throws Exception {
-        InputStream in = null;
+        InputStream in;
 
         String webDirURL = idata.getInfo().getWebDirURL();
 
@@ -519,7 +521,7 @@ public class Unpacker extends UnpackerBase {
 
         if (webDirURL == null) // local
         {
-            in = Unpacker.class.getResourceAsStream("/packs/pack" + packid);
+            in = resourceManager.getInputStream("/packs/pack" + packid);
         } else
         // web based
         {
