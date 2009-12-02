@@ -1,6 +1,5 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.bootstrap.ApplicationComponent;
 import com.izforge.izpack.bootstrap.IPanelComponent;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.GuiId;
@@ -8,7 +7,6 @@ import com.izforge.izpack.installer.base.LanguageDialog;
 import org.fest.swing.exception.ScreenLockException;
 import org.hamcrest.core.Is;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,11 +15,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Test for an installation using mock data
  */
 public class LanguageSelectionTest extends AbstractInstallationTest {
-    @Before
-    public void initBinding() throws Throwable {
-        applicationComponent = new ApplicationComponent();
-        applicationComponent.initBindings();
-    }
 
     @After
     public void tearBinding() {

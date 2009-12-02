@@ -1,6 +1,7 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
+import com.izforge.izpack.bootstrap.ApplicationComponent;
 import com.izforge.izpack.bootstrap.IApplicationComponent;
 import com.izforge.izpack.bootstrap.IPanelComponent;
 import com.izforge.izpack.compiler.CompilerConfig;
@@ -33,6 +34,11 @@ public class AbstractInstallationTest {
     protected FrameFixture installerFrameFixture;
     protected DialogFixture dialogFrameFixture;
 
+    @Before
+    public void initBinding() throws Throwable {
+        applicationComponent = new ApplicationComponent();
+        applicationComponent.initBindings();
+    }
 
     @Before
     public void deleteLock() {
