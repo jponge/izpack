@@ -5,10 +5,13 @@ import com.izforge.izpack.bootstrap.ApplicationComponent;
 import com.izforge.izpack.bootstrap.IApplicationComponent;
 import com.izforge.izpack.bootstrap.IPanelComponent;
 import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.LanguageDialog;
+import com.izforge.izpack.installer.data.InstallData;
+import com.izforge.izpack.rules.VariableExistenceCondition;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.exception.ScreenLockException;
 import org.fest.swing.fixture.DialogFixture;
@@ -44,6 +47,7 @@ public class InstallationTest {
     private DialogFixture dialogFrameFixture;
     private InstallerFrame installerFrame;
     private LanguageDialog languageDialog;
+    private InstallData installData;
 
     @Before
     public void initBinding() throws Throwable {
@@ -138,13 +142,19 @@ public class InstallationTest {
         // Info Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Licence Panel
+        installerFrameFixture.radioButton(GuiId.LICENCE_NO_RADIO.id).requireSelected();
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
+        installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Target Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.fileChooser();
         // Packs Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.optionPane().requireEnabled();
+        installerFrameFixture.optionPane().textBox().requireText(installData.getVariable("ShowCreateDirectoryMessage"));
+//        installerFrameFixture.optionPane().buttonWithText(installData.);
 
         // Finish panel
     }
@@ -197,5 +207,6 @@ public class InstallationTest {
         String relativePath = baseDir.getAbsolutePath().substring(currentDir.getAbsolutePath().length());
         System.out.println(relativePath);
         applicationComponent.getComponent(ResourceManager.class).setResourceBasePath(relativePath + "/temp/resources/");
+        installData = applicationComponent.getComponent(InstallData.class);
     }
 }

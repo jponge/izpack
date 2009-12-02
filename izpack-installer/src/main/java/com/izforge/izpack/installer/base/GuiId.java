@@ -6,7 +6,7 @@ package com.izforge.izpack.installer.base;
 public enum GuiId {
 
     BUTTON_NEXT("nextButton"), BUTTON_HELP("HelpButton"), BUTTON_PREV("prevButton"), BUTTON_QUIT("quitButton"),
-    BUTTON_LANG_OK("okButtonLang"), COMBO_BOX_LANG_FLAG("comboBox-lang-flag"), DIALOG_PICKER("dialogPicker");
+    BUTTON_LANG_OK("okButtonLang"), COMBO_BOX_LANG_FLAG("comboBox-lang-flag"), DIALOG_PICKER("dialogPicker"), LICENCE_NO_RADIO("LicenceNoRadio"), LICENCE_YES_RADIO("LicenceYesRadio");
 
     public String id;
 
