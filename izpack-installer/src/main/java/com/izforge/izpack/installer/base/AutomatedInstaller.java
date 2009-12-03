@@ -21,23 +21,24 @@
 
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.*;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.installer.*;
 import com.izforge.izpack.installer.DataValidator.Status;
-import com.izforge.izpack.installer.base.InstallerBase;
 import com.izforge.izpack.installer.data.UninstallDataWriter;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.Vector;
 
 /**
  * Runs the install process in text only (no GUI) mode.
@@ -80,9 +81,9 @@ public class AutomatedInstaller extends InstallerBase {
      * @param resourceManager
      * @throws Exception Description of the Exception
      */
-    public AutomatedInstaller(String inputFilename, ResourceManager resourceManager,ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter) throws Exception {
+    public AutomatedInstaller(String inputFilename, ResourceManager resourceManager, ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter) throws Exception {
         super(resourceManager);
-        this.checkCondition=checkCondition;
+        this.checkCondition = checkCondition;
         this.uninstallDataWriter = uninstallDataWriter;
         File input = new File(inputFilename);
 
@@ -92,13 +93,13 @@ public class AutomatedInstaller extends InstallerBase {
 
         // Loads the langpack
         this.idata.setLocaleISO3(this.idata.getXmlData().getAttribute("langpack", "eng"));
-        InputStream in = resourceManager.getLangPack(this.idata.getLocaleISO3());        
+        InputStream in = resourceManager.getLangPack(this.idata.getLocaleISO3());
         this.idata.setLangpack(new LocaleDatabase(in));
         this.idata.setVariable(ScriptParserConstant.ISO3_LANG, this.idata.getLocaleISO3());
 
         // create the resource manager singleton
         resourceManager.setLocale(this.idata.getLocaleISO3());
-//        ResourceManager.create(this.idata);
+//        ResourceManager.create(this.installData);
 
         this.panelInstanceCount = new TreeMap<String, Integer>();
     }

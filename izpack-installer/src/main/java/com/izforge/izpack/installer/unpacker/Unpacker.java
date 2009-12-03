@@ -91,7 +91,7 @@ public class Unpacker extends UnpackerBase {
             // We unpack the selected packs
             for (int i = 0; i < npacks; i++) {
                 // We get the pack stream
-                //int n = idata.allPacks.indexOf(packs.get(i));
+                //int n = installData.allPacks.indexOf(packs.get(i));
                 Pack p = (Pack) packs.get(i);
 
                 // evaluate condition

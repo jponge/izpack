@@ -157,10 +157,10 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
         // The text will be to long for one line. Therefore we should use
         // the multi line label. Unfortunately it has no icon. Nothing is
         // perfect...
-        String noLuck = parent.langpack.getString("CheckedHelloPanel.productAlreadyExist0")
+        String noLuck = installData.getLangpack().getString("CheckedHelloPanel.productAlreadyExist0")
                 + oldInstallPath
-                + parent.langpack.getString("CheckedHelloPanel.productAlreadyExist1");
-        return (askQuestion(parent.langpack.getString("installer.error"), noLuck,
+                + installData.getLangpack().getString("CheckedHelloPanel.productAlreadyExist1");
+        return (askQuestion(installData.getLangpack().getString("installer.error"), noLuck,
                 AbstractUIHandler.CHOICES_YES_NO) == AbstractUIHandler.ANSWER_YES);
     }
 
@@ -176,7 +176,7 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
             // Get the default registry handler.
             RegistryHandler rh = RegistryDefaultHandler.getInstance();
             if (rh != null) {
-                rh.verify(idata);
+                rh.verify(installData);
                 retval = rh.isProductRegistered();
 
             }
@@ -225,7 +225,7 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
         }
         RegistryHandler rh = RegistryDefaultHandler.getInstance();
         if (rh != null) {
-            idata.setVariable("UNINSTALL_NAME", rh.getUninstallName());
+            installData.setVariable("UNINSTALL_NAME", rh.getUninstallName());
         }
     }
 
@@ -263,7 +263,7 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
                 // Change the uninstall name in the reg helper.
                 rh.setUninstallName(newUninstallName);
                 // Now let us inform the user.
-                emitNotification(parent.langpack
+                emitNotification(installData.getLangpack()
                         .getString("CheckedHelloPanel.infoOverUninstallKey")
                         + newUninstallName);
                 // Now a little hack if the registry spec file contains

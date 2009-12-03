@@ -70,7 +70,7 @@ public class XInfoPanel extends IzPanel {
 
         // We add the components
 
-        JLabel infoLabel = LabelFactory.create(parent.langpack.getString("InfoPanel.info"), parent.icons
+        JLabel infoLabel = LabelFactory.create(installData.getLangpack().getString("InfoPanel.info"), parent.icons
                 .getImageIcon("edit"), JLabel.TRAILING);
         parent.buildConstraints(gbConstraints, 0, 0, 1, 1, 1.0, 0.0);
         gbConstraints.insets = new Insets(5, 5, 5, 5);
@@ -114,7 +114,7 @@ public class XInfoPanel extends IzPanel {
     private void parseText() {
         try {
             // Initialize the variable substitutor
-            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
             // Parses the info text
             info = vs.substitute(info, null);

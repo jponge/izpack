@@ -139,7 +139,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         super(parent, idata);
         // Load langpack.
         try {
-            this.langpack = parent.langpack;
+            this.langpack = installData.getLangpack();
             InputStream langPackStream = null;
             String webdir = idata.getInfo().getWebDirURL();
             if (webdir != null) {
@@ -244,9 +244,9 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         if (IoHelper.supported("getFreeSpace") && freeSpaceLabel != null) {
             String msg = null;
             freeBytes = IoHelper.getFreeSpace(IoHelper.existingParent(
-                    new File(idata.getInstallPath())).getAbsolutePath());
+                    new File(this.installData.getInstallPath())).getAbsolutePath());
             if (freeBytes < 0) {
-                msg = parent.langpack.getString("PacksPanel.notAscertainable");
+                msg = installData.getLangpack().getString("PacksPanel.notAscertainable");
             } else {
                 msg = Pack.toByteUnitsString(freeBytes);
             }
@@ -266,8 +266,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     public boolean isValidated() {
         refreshPacksToInstall();
         if (IoHelper.supported("getFreeSpace") && freeBytes >= 0 && freeBytes <= bytes) {
-            JOptionPane.showMessageDialog(this, parent.langpack
-                    .getString("PacksPanel.notEnoughSpace"), parent.langpack
+            JOptionPane.showMessageDialog(this, installData.getLangpack()
+                    .getString("PacksPanel.notEnoughSpace"), installData.getLangpack()
                     .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
             return (false);
         }
@@ -280,7 +280,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
      * @param panelRoot The XML tree to write the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
-        new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
+        new ImgPacksPanelAutomationHelper().makeXMLData(this.installData, panelRoot);
     }
 
 
@@ -326,7 +326,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
      */
     protected JLabel createLabel(String msgId, String iconId, GridBagLayout layout,
                                  GridBagConstraints constraints) {
-        JLabel label = LabelFactory.create(parent.langpack.getString(msgId), parent.icons
+        JLabel label = LabelFactory.create(installData.getLangpack().getString(msgId), parent.icons
                 .getImageIcon(iconId), TRAILING);
         if (layout != null && constraints != null) {
             layout.addLayoutComponent(label, constraints);
@@ -355,7 +355,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         }
         panel.setAlignmentX(LEFT_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        panel.add(LabelFactory.create(parent.langpack.getString(msgId)));
+        panel.add(LabelFactory.create(installData.getLangpack().getString(msgId)));
         panel.add(Box.createHorizontalGlue());
         panel.add(label);
         if (layout != null && constraints != null) {
@@ -366,13 +366,13 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     }
 
     private void refreshPacksToInstall() {
-        idata.getSelectedPacks().clear();
+        this.installData.getSelectedPacks().clear();
         CheckBoxNode cbn = (CheckBoxNode) getTree().getModel().getRoot();
         Enumeration e = cbn.depthFirstEnumeration();
         while (e.hasMoreElements()) {
             CheckBoxNode c = (CheckBoxNode) e.nextElement();
             if (c.isSelected() || c.isPartial()) {
-                idata.getSelectedPacks().add(c.getPack());
+                this.installData.getSelectedPacks().add(c.getPack());
             }
         }
     }
@@ -401,7 +401,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         area.setOpaque(false);
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
-        area.setBorder(BorderFactory.createTitledBorder(parent.langpack.getString(msgId)));
+        area.setBorder(BorderFactory.createTitledBorder(installData.getLangpack().getString(msgId)));
         area.setFont(getControlTextFont());
 
         if (layout != null && constraints != null) {
@@ -449,7 +449,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         scroller.setViewportView(tree);
         scroller.setAlignmentX(LEFT_ALIGNMENT);
         scroller.getViewport().setBackground(Color.white);
-        scroller.setPreferredSize(new Dimension(width, (idata.guiPrefs.height / 3 + 30)));
+        scroller.setPreferredSize(new Dimension(width, (this.installData.guiPrefs.height / 3 + 30)));
 
         if (layout != null && constraints != null) {
             layout.addLayoutComponent(scroller, constraints);
@@ -577,7 +577,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
         treeData = new HashMap<String, ArrayList<String>>();
         idToPack = new HashMap<String, Pack>();
 
-        java.util.Iterator iter = idata.getAvailablePacks().iterator();
+        java.util.Iterator iter = this.installData.getAvailablePacks().iterator();
         while (iter.hasNext()) {
             Pack p = (Pack) iter.next();
             idToPack.put(p.id, p);
@@ -600,7 +600,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
      * @param id
      */
     public void setDescription(String id) {
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
         if (descriptionArea != null) {
             Pack pack = idToPack.get(id);
             String desc = "";
@@ -644,8 +644,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
             int numexcludes = 0;
             int i = getRowIndex(pack);
             if (pack.excludeGroup != null) {
-                for (int q = 0; q < idata.getAvailablePacks().size(); q++) {
-                    Pack otherpack = (Pack) idata.getAvailablePacks().get(q);
+                for (int q = 0; q < this.installData.getAvailablePacks().size(); q++) {
+                    Pack otherpack = (Pack) this.installData.getAvailablePacks().get(q);
                     String exgroup = otherpack.excludeGroup;
                     if (exgroup != null) {
                         if (q != i && pack.excludeGroup.equals(exgroup)) {
@@ -692,7 +692,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
     private Object populateTreePacks(String parent) {
         if (parent == null) // the root node
         {
-            java.util.Iterator iter = idata.getAvailablePacks().iterator();
+            java.util.Iterator iter = this.installData.getAvailablePacks().iterator();
             ArrayList rootNodes = new ArrayList();
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
@@ -740,7 +740,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
             // TODO the PacksModel could be patched such that isCellEditable
             // allows returns false. In that case the PacksModel must not be
             // adapted here.
-            packsModel = new PacksModel(this, idata, this.parent.getRules()) {
+            packsModel = new PacksModel(this, installData, this.parent.getRules()) {
                 /**
                  * Required (serializable)
                  */
@@ -753,10 +753,10 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
             //initialize helper map to increa performance
             packToRowNumber = new HashMap<Pack, Integer>();
-            java.util.Iterator rowpack = idata.getAvailablePacks().iterator();
+            java.util.Iterator rowpack = this.installData.getAvailablePacks().iterator();
             while (rowpack.hasNext()) {
                 Pack p = (Pack) rowpack.next();
-                packToRowNumber.put(p, idata.getAvailablePacks().indexOf(p));
+                packToRowNumber.put(p, this.installData.getAvailablePacks().indexOf(p));
             }
 
             // Init tree structures
@@ -783,7 +783,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
             // set the JCheckBoxes to the currently selected panels. The
             // selection might have changed in another panel
-            java.util.Iterator iter = idata.getAvailablePacks().iterator();
+            java.util.Iterator iter = this.installData.getAvailablePacks().iterator();
             bytes = 0;
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
@@ -791,7 +791,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
                     bytes += p.nbytes;
                     continue;
                 }
-                if (idata.getSelectedPacks().contains(p)) {
+                if (this.installData.getSelectedPacks().contains(p)) {
                     bytes += p.nbytes;
                 }
             }
@@ -811,7 +811,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
 
     public String getSummaryBody() {
         StringBuffer retval = new StringBuffer(256);
-        Iterator iter = idata.getSelectedPacks().iterator();
+        Iterator iter = this.installData.getSelectedPacks().iterator();
         boolean first = true;
         while (iter.hasNext()) {
             if (!first) {

@@ -98,13 +98,13 @@ public class JDKPathPanel extends PathInputPanel {
         if (super.isValidated()) {
             switch (verifyVersionEx()) {
                 case OK:
-                    idata.setVariable(getVariableName(), pathSelectionPanel.getPath());
+                    this.installData.setVariable(getVariableName(), pathSelectionPanel.getPath());
                     retval = true;
                     break;
                 case BAD_REG_PATH:
-                    if (askQuestion(parent.langpack.getString("installer.warning"), parent.langpack.getString("JDKPathPanel.nonValidPathInReg"),
+                    if (askQuestion(installData.getLangpack().getString("installer.warning"), installData.getLangpack().getString("JDKPathPanel.nonValidPathInReg"),
                             AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES) {
-                        idata.setVariable(getVariableName(), pathSelectionPanel.getPath());
+                        this.installData.setVariable(getVariableName(), pathSelectionPanel.getPath());
                         retval = true;
                     }
                     break;
@@ -114,9 +114,9 @@ public class JDKPathPanel extends PathInputPanel {
                     String min = getMinVersion();
                     String max = getMaxVersion();
                     StringBuffer message = new StringBuffer();
-                    message.append(parent.langpack.getString("JDKPathPanel.badVersion1")).append(
+                    message.append(installData.getLangpack().getString("JDKPathPanel.badVersion1")).append(
                             getDetectedVersion()).append(
-                            parent.langpack.getString("JDKPathPanel.badVersion2"));
+                            installData.getLangpack().getString("JDKPathPanel.badVersion2"));
                     if (min != null && max != null) {
                         message.append(min).append(" - ").append(max);
                     } else if (min != null) {
@@ -125,10 +125,10 @@ public class JDKPathPanel extends PathInputPanel {
                         message.append(" <= ").append(max);
                     }
 
-                    message.append(parent.langpack.getString("JDKPathPanel.badVersion3"));
-                    if (askQuestion(parent.langpack.getString("installer.warning"), message.toString(),
+                    message.append(installData.getLangpack().getString("JDKPathPanel.badVersion3"));
+                    if (askQuestion(installData.getLangpack().getString("installer.warning"), message.toString(),
                             AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_NO) == AbstractUIHandler.ANSWER_YES) {
-                        idata.setVariable(getVariableName(), pathSelectionPanel.getPath());
+                        this.installData.setVariable(getVariableName(), pathSelectionPanel.getPath());
                         retval = true;
                     }
                     break;
@@ -150,14 +150,14 @@ public class JDKPathPanel extends PathInputPanel {
         // The variable will be exist if we enter this panel
         // second time. We would maintain the previos
         // selected path.
-        if (idata.getVariable(getVariableName()) != null) {
-            chosenPath = idata.getVariable(getVariableName());
+        if (this.installData.getVariable(getVariableName()) != null) {
+            chosenPath = this.installData.getVariable(getVariableName());
         } else {
             if (OsVersion.IS_OSX) {
                 chosenPath = OSX_JDK_HOME;
             } else {
                 // Try the JAVA_HOME as child dir of the jdk path
-                chosenPath = (new File(idata.getVariable("JAVA_HOME"))).getParent();
+                chosenPath = (new File(this.installData.getVariable("JAVA_HOME"))).getParent();
             }
         }
         // Set the path for method pathIsValid ...
@@ -171,10 +171,10 @@ public class JDKPathPanel extends PathInputPanel {
         }
         // Set the default to the path selection panel.
         pathSelectionPanel.setPath(chosenPath);
-        String var = idata.getVariable("JDKPathPanel.skipIfValid");
+        String var = this.installData.getVariable("JDKPathPanel.skipIfValid");
         // Should we skip this panel?
         if (chosenPath.length() > 0 && var != null && "yes".equalsIgnoreCase(var)) {
-            idata.setVariable(getVariableName(), chosenPath);
+            this.installData.setVariable(getVariableName(), chosenPath);
             parent.skipPanel();
         }
 
@@ -202,7 +202,7 @@ public class JDKPathPanel extends PathInputPanel {
             {
                 return (retval);
             }
-            rh.verify(idata);
+            rh.verify(this.installData);
             oldVal = rh.getRoot(); // Only for security...
             rh.setRoot(MSWinConstants.HKEY_LOCAL_MACHINE);
             String[] keys = rh.getSubkeys(JDK_ROOT_KEY);
@@ -475,6 +475,6 @@ public class JDKPathPanel extends PathInputPanel {
      */
 
     public String getSummaryBody() {
-        return (idata.getVariable(getVariableName()));
+        return (this.installData.getVariable(getVariableName()));
     }
 }

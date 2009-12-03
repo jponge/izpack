@@ -50,6 +50,11 @@ public class PanelManager {
         return (Class<? extends IzPanel>) aClass;
     }
 
+    /**
+     * Parse XML to search all used panels and add them in the pico panelContainer.
+     *
+     * @throws ClassNotFoundException
+     */
     public void loadPanelsInContainer() throws ClassNotFoundException {
         // Initialisation
         // We load each of them
@@ -63,6 +68,12 @@ public class PanelManager {
         }
     }
 
+    /**
+     * Construct all panels present in the panelContainer.<br />
+     * Executing prebuild, prevalidate, postvalidate and postconstruct actions.
+     *
+     * @throws ClassNotFoundException
+     */
     public void instanciatePanels() throws ClassNotFoundException {
         java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
         int curVisPanelNumber = 0;

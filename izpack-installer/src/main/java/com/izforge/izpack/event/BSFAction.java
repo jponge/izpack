@@ -109,9 +109,9 @@ public class BSFAction extends ActionBase {
         orderMethodMap.put(BSFAction.AFTERFILE,
                 new MethodDescriptor("afterFile", new String[]{"file", "pack"}));
         orderMethodMap.put(BSFAction.BEFOREPACKS,
-                new MethodDescriptor("beforePacks", new String[]{"idata", "npacks", "handler"}));
+                new MethodDescriptor("beforePacks", new String[]{"installData", "npacks", "handler"}));
         orderMethodMap.put(BSFAction.AFTERPACKS,
-                new MethodDescriptor("afterPacks", new String[]{"idata", "handler"}));
+                new MethodDescriptor("afterPacks", new String[]{"installData", "handler"}));
         orderMethodMap.put(BSFAction.BEFOREPACK,
                 new MethodDescriptor("beforePack", new String[]{"pack", "i", "handler"}));
         orderMethodMap.put(BSFAction.AFTERPACK,
@@ -244,7 +244,7 @@ public class BSFAction extends ActionBase {
                     variables.putAll(properties);
                 }
 
-                manager.declareBean("idata", idata, Class.forName("com.izforge.izpack.installer.AutomatedInstallData"));
+                manager.declareBean("installData", idata, Class.forName("com.izforge.izpack.installer.AutomatedInstallData"));
 
                 MethodExistenceChecker checker = langToMethodCheckerMap.get(language);
                 try {
@@ -267,7 +267,7 @@ public class BSFAction extends ActionBase {
                 for (int i = 0; i < desc.argNames.length; i++) {
                     manager.undeclareBean(desc.argNames[i]);
                 }
-                manager.undeclareBean("idata");
+                manager.undeclareBean("installData");
             }
         }
 

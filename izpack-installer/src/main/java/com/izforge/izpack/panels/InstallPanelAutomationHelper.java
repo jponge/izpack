@@ -23,7 +23,10 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.installer.*;
+import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.installer.PanelAutomation;
+import com.izforge.izpack.installer.PanelAutomationHelper;
+import com.izforge.izpack.installer.UnpackerFactory;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
@@ -56,12 +59,12 @@ public class InstallPanelAutomationHelper extends PanelAutomationHelper implemen
      */
     public void runAutomated(AutomatedInstallData idata, IXMLElement panelRoot) throws InstallerException {
         /*
-        Unpacker unpacker = new Unpacker(idata, this);
+        Unpacker unpacker = new Unpacker(installData, this);
         unpacker.start();
         */
         IUnpacker unpacker = UnpackerFactory.getUnpacker(idata.getInfo().getUnpackerClassName(), idata, this);
         Thread unpackerthread = new Thread(unpacker, "IzPack - Unpacker thread");
-        unpacker.setRules((RulesEngine)idata.getRules());
+        unpacker.setRules((RulesEngine) idata.getRules());
         unpackerthread.start();
         while (unpackerthread.isAlive()) {
             try {

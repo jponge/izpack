@@ -1,5 +1,6 @@
 package com.izforge.izpack.installer.provider;
 
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
@@ -25,7 +26,7 @@ import java.util.TreeMap;
  */
 public class GUIInstallDataProvider extends AbstractInstallDataProvider {
 
-    public GUIInstallData provide(ResourceManager resourceManager) throws Exception {
+    public GUIInstallData provide(AutomatedInstallData automatedInstallData, ResourceManager resourceManager) throws Exception {
         this.resourceManager = resourceManager;
         final GUIInstallData guiInstallData = new GUIInstallData();
         // Loads the installation data

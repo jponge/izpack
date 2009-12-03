@@ -579,7 +579,7 @@ public abstract class UnpackerBase implements IUnpacker {
             return;
         }
         // get the uninstaller base, returning if not found so that
-        // idata.uninstallOutJar remains null
+        // installData.uninstallOutJar remains null
         InputStream[] in = new InputStream[2];
         in[0] = UnpackerBase.class.getResourceAsStream("/res/IzPack.uninstaller");
         if (in[0] == null) {
@@ -813,10 +813,10 @@ public abstract class UnpackerBase implements IUnpacker {
         ObjectOutputStream oout = new ObjectOutputStream(fout);
         oout.writeObject(installedpacks);
         /*
-        int selectedpackscount = idata.selectedPacks.size();
+        int selectedpackscount = installData.selectedPacks.size();
         for (int i = 0; i < selectedpackscount; i++)
         {
-            Pack pack = (Pack) idata.selectedPacks.get(i);
+            Pack pack = (Pack) installData.selectedPacks.get(i);
             oout.writeObject(pack);
         }
         */

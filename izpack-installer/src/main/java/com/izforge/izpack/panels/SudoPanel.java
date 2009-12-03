@@ -72,14 +72,14 @@ public class SudoPanel extends IzPanel implements ActionListener {
 
         add(LabelFactory
                 .create(
-                /* parent.langpack.getString("SudoPanel.info") */"For installing administrator privileges are necessary",
+                /* installData.getLangpack().getString("SudoPanel.info") */"For installing administrator privileges are necessary",
                 JLabel.TRAILING));
 
         add(Box.createRigidArea(new Dimension(0, 5)));
 
         add(LabelFactory
                 .create(
-                /* parent.langpack.getString("SudoPanel.tip") */"Please note that passwords are case-sensitive",
+                /* installData.getLangpack().getString("SudoPanel.tip") */"Please note that passwords are case-sensitive",
                 parent.icons.getImageIcon("tip"), JLabel.TRAILING));
 
         add(Box.createRigidArea(new Dimension(0, 5)));
@@ -93,7 +93,7 @@ public class SudoPanel extends IzPanel implements ActionListener {
                 .add(
                         LabelFactory
                                 .create(
-                                /* parent.langpack.getString("SudoPanel.specifyAdminPassword") */"Please specify your password:"),
+                                /* installData.getLangpack().getString("SudoPanel.specifyAdminPassword") */"Please specify your password:"),
                         BorderLayout.NORTH);
         passwordField = new JPasswordField();
         passwordField.addActionListener(this);
@@ -158,7 +158,7 @@ public class SudoPanel extends IzPanel implements ActionListener {
             FileExecutor fe = new FileExecutor(elist);
             int retval = fe.executeFiles(ExecutableFile.POSTINSTALL, this);
             if (retval == 0) {
-                idata.setVariable("password", pass);
+                this.installData.setVariable("password", pass);
                 isValid = true;
             }
             // else is already showing dialog

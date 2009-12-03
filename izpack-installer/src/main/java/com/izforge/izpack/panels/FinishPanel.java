@@ -83,18 +83,18 @@ public class FinishPanel extends IzPanel implements ActionListener {
     public void panelActivate() {
         parent.lockNextButton();
         parent.lockPrevButton();
-        parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
+        parent.setQuitButtonText(installData.getLangpack().getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
-        if (idata.isInstallSuccess()) {
+        if (this.installData.isInstallSuccess()) {
             // We set the information
-            add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
+            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
                     parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
-            if (idata.getUninstallOutJar() != null) {
+            if (this.installData.getUninstallOutJar() != null) {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
-                add(LabelFactory.create(parent.langpack
+                add(LabelFactory.create(installData.getLangpack()
                         .getString("FinishPanel.uninst.info"), parent.icons
                         .getImageIcon("preferences"), LEADING), NEXT_LINE);
                 add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
@@ -103,13 +103,13 @@ public class FinishPanel extends IzPanel implements ActionListener {
 
             // We add the autoButton
             add(IzPanelLayout.createVerticalStrut(5));
-            autoButton = ButtonFactory.createButton(parent.langpack.getString("FinishPanel.auto"),
-                    parent.icons.getImageIcon("edit"), idata.buttonsHColor);
-            autoButton.setToolTipText(parent.langpack.getString("FinishPanel.auto.tip"));
+            autoButton = ButtonFactory.createButton(installData.getLangpack().getString("FinishPanel.auto"),
+                    parent.icons.getImageIcon("edit"), this.installData.buttonsHColor);
+            autoButton.setToolTipText(installData.getLangpack().getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
             add(autoButton, NEXT_LINE);
         } else {
-            add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
+            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("stop"), LEADING), NEXT_LINE);
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
@@ -124,7 +124,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // Prepares the file chooser
         JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(new File(idata.getInstallPath()));
+        fc.setCurrentDirectory(new File(this.installData.getInstallPath()));
         fc.setMultiSelectionEnabled(false);
         fc.addChoosableFileFilter(new AutomatedInstallScriptFilter());
         // fc.setCurrentDirectory(new File("."));
@@ -136,7 +136,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
                 File file = fc.getSelectedFile();
                 FileOutputStream out = new FileOutputStream(file);
                 BufferedOutputStream outBuff = new BufferedOutputStream(out, 5120);
-                parent.writeXMLTree(idata.getXmlData(), outBuff);
+                parent.writeXMLTree(this.installData.getXmlData(), outBuff);
                 outBuff.flush();
                 outBuff.close();
 
@@ -145,7 +145,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
         }
         catch (Exception err) {
             err.printStackTrace();
-            JOptionPane.showMessageDialog(this, err.toString(), parent.langpack
+            JOptionPane.showMessageDialog(this, err.toString(), installData.getLangpack()
                     .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
         }
     }

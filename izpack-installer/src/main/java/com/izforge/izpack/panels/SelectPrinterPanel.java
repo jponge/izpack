@@ -98,7 +98,7 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
 
         centerPanel.add(Box.createVerticalStrut(10));
 
-        str = parent.langpack.getString("PrinterSelectPanel.select_printer");
+        str = installData.getLangpack().getString("PrinterSelectPanel.select_printer");
         JLabel selectLabel = LabelFactory.create(str, JLabel.LEADING);
         selectLabel.setAlignmentX(JLabel.LEADING);
         centerPanel.add(selectLabel);

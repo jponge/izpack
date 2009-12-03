@@ -80,12 +80,12 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public UserPathInputPanel(InstallerFrame parent, GUIInstallData idata, String targetPanel, String variableName) {
+    public UserPathInputPanel(InstallerFrame parent, GUIInstallData idata, String targetPanel) {
         super(parent, idata, new IzPanelLayout());
         _parent = parent;
         _idata = idata;
         _targetPanel = targetPanel;
-        _variableName = variableName;
+        _variableName = installData.getLangpack().getString(targetPanel + ".variableName");
         // Set default values
         loadMessages();
         String introText = getI18nStringForClass("extendedIntro", _thisPanel);
@@ -131,8 +131,8 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
     }
 
     private void loadMessages() {
-        _error = parent.langpack.getString("installer.error");
-        _warn = parent.langpack.getString("installer.warning");
+        _error = installData.getLangpack().getString("installer.error");
+        _warn = installData.getLangpack().getString("installer.warning");
         _reqMsg = getMessage("required");
         _emptyTargetMsg = getMessage("empty_target");
         _warnMsg = getMessage("exists_warn");
@@ -333,7 +333,7 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
                         }
                     }
                     _defaultDir = line;
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
                     _defaultDir = vs.substitute(_defaultDir, null);
                 }
             }

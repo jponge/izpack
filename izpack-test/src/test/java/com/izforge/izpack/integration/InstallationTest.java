@@ -3,6 +3,7 @@ package com.izforge.izpack.integration;
 import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;
+import com.izforge.izpack.installer.data.GUIInstallData;
 import org.fest.swing.exception.ScreenLockException;
 import org.junit.After;
 import org.junit.Test;
@@ -48,6 +49,8 @@ public class InstallationTest extends AbstractInstallationTest {
     @Test
     public void testBasicInstall() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
+        GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
+
         panelContainer = applicationContainer.getComponent(IPanelContainer.class);
         // Lang picker
         prepareDialogFixture();

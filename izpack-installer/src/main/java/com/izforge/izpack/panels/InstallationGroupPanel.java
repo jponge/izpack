@@ -75,16 +75,16 @@ public class InstallationGroupPanel extends IzPanel
      */
     public void panelActivate() {
         // Set/restore availablePacks from allPacks; consider OS constraints
-        idata.setAvailablePacks(new ArrayList());
-        for (Pack p : idata.getAllPacks()) {
+        this.installData.setAvailablePacks(new ArrayList());
+        for (Pack p : this.installData.getAllPacks()) {
             if (OsConstraint.oneMatchesCurrentSystem(p.osConstraints)) {
-                idata.getAvailablePacks().add(p);
+                this.installData.getAvailablePacks().add(p);
             }
         }
 
         Debug.trace("InstallationGroupPanel.panelActivate, selectedGroup=" + selectedGroup);
         // If there are no groups, skip this panel
-        HashMap installGroups = getInstallGroups(idata);
+        HashMap installGroups = getInstallGroups(this.installData);
         if (installGroups.size() == 0) {
             super.askQuestion("Skip InstallGroup selection",
                     "Skip InstallGroup selection", AbstractUIHandler.CHOICES_YES_NO);
@@ -159,7 +159,7 @@ public class InstallationGroupPanel extends IzPanel
         if (selectedGroup >= 0) {
             removeUnusedPacks();
             GroupData group = this.rows[selectedGroup];
-            idata.setVariable("INSTALL_GROUP", group.name);
+            this.installData.setVariable("INSTALL_GROUP", group.name);
             Debug.trace("Added variable INSTALL_GROUP=" + group.name);
         }
     }
@@ -203,9 +203,9 @@ public class InstallationGroupPanel extends IzPanel
 
     public void makeXMLData(IXMLElement panelRoot) {
         InstallationGroupPanelAutomationHelper helper = new InstallationGroupPanelAutomationHelper();
-        idata.setAttribute("GroupData", rows);
-        idata.setAttribute("packsByName", packsByName);
-        helper.makeXMLData(idata, panelRoot);
+        this.installData.setAttribute("GroupData", rows);
+        this.installData.setAttribute("packsByName", packsByName);
+        helper.makeXMLData(this.installData, panelRoot);
     }
 
     /**
@@ -227,7 +227,7 @@ public class InstallationGroupPanel extends IzPanel
         descriptionField.setOpaque(false);
         descriptionField.setText("<b>Install group description text</b>");
         descriptionField.setContentType("text/html");
-        descriptionField.setBorder(new TitledBorder(idata.getLangpack().getString("PacksPanel.description")));
+        descriptionField.setBorder(new TitledBorder(this.installData.getLangpack().getString("PacksPanel.description")));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -250,7 +250,7 @@ public class InstallationGroupPanel extends IzPanel
         Debug.trace("InstallationGroupPanel.removeUnusedPacks, GroupData=" + data.name);
 
         // Now remove the packs not in groupPackNames
-        Iterator iter = idata.getAvailablePacks().iterator();
+        Iterator iter = this.installData.getAvailablePacks().iterator();
         while (iter.hasNext()) {
             Pack p = (Pack) iter.next();
 
@@ -264,14 +264,14 @@ public class InstallationGroupPanel extends IzPanel
             }
         }
 
-        idata.getSelectedPacks().clear();
-        if (!"no".equals(idata.getVariable("InstallationGroupPanel.selectPacks"))) {
-            idata.getSelectedPacks().addAll(idata.getAvailablePacks());
+        this.installData.getSelectedPacks().clear();
+        if (!"no".equals(this.installData.getVariable("InstallationGroupPanel.selectPacks"))) {
+            this.installData.getSelectedPacks().addAll(this.installData.getAvailablePacks());
         } else {
-            for (Object availablePack : idata.getAvailablePacks()) {
+            for (Object availablePack : this.installData.getAvailablePacks()) {
                 Pack p = (Pack) availablePack;
                 if (p.preselected) {
-                    idata.getSelectedPacks().add(p);
+                    this.installData.getSelectedPacks().add(p);
                 }
             }
         }
@@ -360,9 +360,9 @@ public class InstallationGroupPanel extends IzPanel
 
     /**
      * Look for a key = InstallationGroupPanel.description.[group] entry:
-     * first using idata.langpack.getString(key+".html")
-     * next using idata.langpack.getString(key)
-     * next using idata.getVariable(key)
+     * first using installData.langpack.getString(key+".html")
+     * next using installData.langpack.getString(key)
+     * next using installData.getVariable(key)
      * lastly, defaulting to group + " installation"
      *
      * @param group - the installation group name
@@ -371,18 +371,18 @@ public class InstallationGroupPanel extends IzPanel
     protected String getGroupDescription(String group) {
         String description = null;
         String key = "InstallationGroupPanel.description." + group;
-        if (idata.getLangpack() != null) {
+        if (this.installData.getLangpack() != null) {
             String htmlKey = key + ".html";
-            String html = idata.getLangpack().getString(htmlKey);
+            String html = this.installData.getLangpack().getString(htmlKey);
             // This will equal the key if there is no entry
             if (htmlKey.equalsIgnoreCase(html)) {
-                description = idata.getLangpack().getString(key);
+                description = this.installData.getLangpack().getString(key);
             } else {
                 description = html;
             }
         }
         if (description == null || key.equalsIgnoreCase(description)) {
-            description = idata.getVariable(key);
+            description = this.installData.getVariable(key);
         }
         if (description == null) {
             description = group + " installation";
@@ -399,7 +399,7 @@ public class InstallationGroupPanel extends IzPanel
 
     /**
      * Look for a key = InstallationGroupPanel.sortKey.[group] entry:
-     * by using idata.getVariable(key)
+     * by using installData.getVariable(key)
      * if this variable is not defined, defaults to group
      *
      * @param group - the installation group name
@@ -407,7 +407,7 @@ public class InstallationGroupPanel extends IzPanel
      */
     protected String getGroupSortKey(String group) {
         String key = "InstallationGroupPanel.sortKey." + group;
-        String sortKey = idata.getVariable(key);
+        String sortKey = this.installData.getVariable(key);
         if (sortKey == null) {
             sortKey = group;
         }
@@ -424,9 +424,9 @@ public class InstallationGroupPanel extends IzPanel
 
     /**
      * Look for a key = InstallationGroupPanel.group.[group] entry:
-     * first using idata.langpackgetString(key+".html")
-     * next using idata.langpack.getString(key)
-     * next using idata.getVariable(key)
+     * first using installData.langpackgetString(key+".html")
+     * next using installData.langpack.getString(key)
+     * next using installData.getVariable(key)
      * lastly, defaulting to group
      *
      * @param group - the installation group name
@@ -435,18 +435,18 @@ public class InstallationGroupPanel extends IzPanel
     protected String getLocalizedGroupName(String group) {
         String gname = null;
         String key = "InstallationGroupPanel.group." + group;
-        if (idata.getLangpack() != null) {
+        if (this.installData.getLangpack() != null) {
             String htmlKey = key + ".html";
-            String html = idata.getLangpack().getString(htmlKey);
+            String html = this.installData.getLangpack().getString(htmlKey);
             // This will equal the key if there is no entry
             if (htmlKey.equalsIgnoreCase(html)) {
-                gname = idata.getLangpack().getString(key);
+                gname = this.installData.getLangpack().getString(key);
             } else {
                 gname = html;
             }
         }
         if (gname == null || key.equalsIgnoreCase(gname)) {
-            gname = idata.getVariable(key);
+            gname = this.installData.getVariable(key);
         }
         if (gname == null) {
             gname = group;
@@ -462,9 +462,9 @@ public class InstallationGroupPanel extends IzPanel
     }
 
     protected TableModel getModel(HashMap groupData) {
-        String c1 = parent.langpack.getString("InstallationGroupPanel.colNameSelected");
-        //String c2 = parent.langpack.getString("InstallationGroupPanel.colNameInstallType");
-        String c3 = parent.langpack.getString("InstallationGroupPanel.colNameSize");
+        String c1 = installData.getLangpack().getString("InstallationGroupPanel.colNameSelected");
+        //String c2 = installData.getLangpack().getString("InstallationGroupPanel.colNameInstallType");
+        String c3 = installData.getLangpack().getString("InstallationGroupPanel.colNameSize");
         String[] columns = {c1, c3};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             public boolean isCellEditable(int row, int column) {
@@ -473,7 +473,7 @@ public class InstallationGroupPanel extends IzPanel
         };
         rows = new GroupData[groupData.size()];
         // The name of the group to select if there is no current selection
-        String defaultGroup = idata.getVariable("InstallationGroupPanel.defaultGroup");
+        String defaultGroup = this.installData.getVariable("InstallationGroupPanel.defaultGroup");
         Debug.trace("InstallationGroupPanel.defaultGroup=" + defaultGroup + ", selectedGroup=" + selectedGroup);
         List values = new ArrayList(groupData.values());
         Collections.sort(values, new Comparator() {

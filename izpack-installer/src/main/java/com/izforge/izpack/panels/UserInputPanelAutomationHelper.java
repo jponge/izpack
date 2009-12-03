@@ -108,7 +108,7 @@ public class UserInputPanelAutomationHelper implements PanelAutomation {
     }
 
     /**
-     * Deserialize state from panelRoot and set idata variables accordingly.
+     * Deserialize state from panelRoot and set installData variables accordingly.
      *
      * @param idata     The installation installDataGUI.
      * @param panelRoot The XML root element of the panels blackbox tree.

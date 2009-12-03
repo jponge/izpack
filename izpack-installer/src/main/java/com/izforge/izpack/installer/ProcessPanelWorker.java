@@ -630,7 +630,7 @@ public class ProcessPanelWorker implements Runnable {
         }
 
         // System.out.println ("Number of selected packs is "
-        // +idata.selectedPacks.size () );
+        // +installData.selectedPacks.size () );
 
         for (int i = 0; i < idata.getSelectedPacks().size(); i++) {
             selected = ((Pack) idata.getSelectedPacks().get(i)).name;

@@ -55,7 +55,7 @@ public class UserPathPanel extends UserPathInputPanel {
      * @param idata  The installation installDataGUI.
      */
     public UserPathPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, thisName, parent.langpack.getString(thisName + ".variableName"));
+        super(parent, idata, thisName);
         // load the default directory info (if present)
         if (getDefaultDir() != null) {
             idata.setVariable(pathVariableName, getDefaultDir());
@@ -69,10 +69,10 @@ public class UserPathPanel extends UserPathInputPanel {
         boolean found = false;
         Debug.trace(thisName + " looking for activation condition");
         // Need to have a way to supress panel if not in selected packs.
-        String dependsName = idata.getVariable(pathPackDependsName);
+        String dependsName = installData.getVariable(pathPackDependsName);
         if (dependsName != null && !(dependsName.equalsIgnoreCase(""))) {
             Debug.trace("Checking for pack dependency of " + dependsName);
-            Iterator iter = idata.getSelectedPacks().iterator();
+            Iterator iter = installData.getSelectedPacks().iterator();
             while (iter.hasNext()) {
                 Pack pack = (Pack) iter.next();
                 Debug.trace("- Checking if " + pack.name + " equals " + dependsName);
@@ -94,8 +94,8 @@ public class UserPathPanel extends UserPathInputPanel {
         }
         super.panelActivate();
         // Set the default or old value to the path selection panel.
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
-        String expandedPath = vs.substitute(idata.getVariable(pathVariableName), null);
+        VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
+        String expandedPath = vs.substitute(installData.getVariable(pathVariableName), null);
         _pathSelectionPanel.setPath(expandedPath);
     }
 
@@ -109,7 +109,7 @@ public class UserPathPanel extends UserPathInputPanel {
         if (!super.isValidated()) {
             return (false);
         }
-        idata.setVariable(pathVariableName, _pathSelectionPanel.getPath());
+        installData.setVariable(pathVariableName, _pathSelectionPanel.getPath());
         return (true);
     }
 
@@ -120,7 +120,7 @@ public class UserPathPanel extends UserPathInputPanel {
      */
     public void makeXMLData(IXMLElement panelRoot) {
         if (!(skip)) {
-            new UserPathPanelAutomationHelper().makeXMLData(idata, panelRoot);
+            new UserPathPanelAutomationHelper().makeXMLData(installData, panelRoot);
         }
     }
 
@@ -134,7 +134,7 @@ public class UserPathPanel extends UserPathInputPanel {
         if (skip) {
             return null;
         } else {
-            return (idata.getVariable(pathVariableName));
+            return (installData.getVariable(pathVariableName));
         }
     }
 }

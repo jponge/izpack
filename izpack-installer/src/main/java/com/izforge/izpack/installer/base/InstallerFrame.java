@@ -227,6 +227,12 @@ public class InstallerFrame extends JFrame {
         centerFrame(this);
     }
 
+    /**
+     * Search and construct all necessary panels, prepare and size the frame.
+     *
+     * @return The frame for fluent interface
+     * @throws ClassNotFoundException
+     */
     public InstallerFrame loadPanels() throws ClassNotFoundException {
         panelManager.loadPanelsInContainer();
         panelManager.instanciatePanels();

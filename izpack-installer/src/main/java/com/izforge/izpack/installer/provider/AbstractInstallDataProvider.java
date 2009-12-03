@@ -15,11 +15,7 @@ import java.net.InetAddress;
 import java.util.*;
 
 /**
- * Created by IntelliJ IDEA.
- * User: sora
- * Date: Dec 2, 2009
- * Time: 12:56:27 PM
- * To change this template use File | Settings | File Templates.
+ * Abstract class sharing commons instanciation methods beetween installData
  */
 public class AbstractInstallDataProvider implements Provider {
     /**
@@ -411,6 +407,12 @@ public class AbstractInstallDataProvider implements Provider {
         objIn.close();
     }
 
+    /**
+     * Load a default locale in the installData
+     *
+     * @param automatedInstallData The installData to fill
+     * @throws Exception
+     */
     protected void loadDefaultLocale(AutomatedInstallData automatedInstallData) throws Exception {
         // Loads the suitable langpack
         List<String> availableLangPacks = resourceManager.getAvailableLangPacks();

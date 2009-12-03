@@ -321,7 +321,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         if (variable != null) {
             VariableExistenceCondition variableCondition = new VariableExistenceCondition();
             variableCondition.setId("izpack.input." + variable);
-            variableCondition.setInstalldata(idata);
+            variableCondition.setInstalldata(this.installData);
             variableCondition.setVariable(variable);
             parent.getRules().addCondition(variableCondition);
         }
@@ -337,9 +337,9 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // get a locale database
         // ----------------------------------------------------
         try {
-            this.langpack = (LocaleDatabase) parent.langpack.clone();
+            this.langpack = (LocaleDatabase) installData.getLangpack().clone();
 
-            String resource = LANG_FILE_NAME + "_" + idata.getLocaleISO3();
+            String resource = LANG_FILE_NAME + "_" + this.installData.getLocaleISO3();
             this.langpack.add(ResourceManager.getInstance().getInputStream(resource));
         }
         catch (ResourceNotFoundException e) {
@@ -410,7 +410,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             String conditionid = field.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
             if (conditionid != null) {
                 // check if condition is fulfilled
-                if (!this.parent.getRules().isConditionTrue(conditionid, idata.getVariables())) {
+                if (!this.parent.getRules().isConditionTrue(conditionid, this.installData.getVariables())) {
                     continue;
                 }
             }
@@ -516,16 +516,16 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // ----------------------------------------------------
             set = element.getAttribute(SET);
             if (set == null) {
-                set = idata.getVariable(variable);
+                set = this.installData.getVariable(variable);
                 if (set == null) {
                     set = "";
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                     set = vs.substitute(set, null);
 
-                    idata.setVariable(variable, set);
+                    this.installData.setVariable(variable, set);
                 }
             }
 
@@ -558,7 +558,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        FileInputField fileInput = new DirInputField(this, idata, true, set, size,
+        FileInputField fileInput = new DirInputField(this, this.installData, true, set, size,
                 validatorConfig, mustExist, create);
 
         fileInput.setAllowEmptyInput(allowEmptyValue);
@@ -607,13 +607,13 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // ----------------------------------------------------
             set = element.getAttribute(SET);
             if (set == null) {
-                set = idata.getVariable(variable);
+                set = this.installData.getVariable(variable);
                 if (set == null) {
                     set = "";
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                     set = vs.substitute(set, null);
                 }
             }
@@ -676,7 +676,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        MultipleFileInputField fileInputField = new MultipleFileInputField(parentFrame, idata,
+        MultipleFileInputField fileInputField = new MultipleFileInputField(parentFrame, this.installData,
                 false, set, size, validatorConfig, filter, filterdesc, createMultipleVariables,
                 visibleRows, preferredX, preferredY, labelText);
         fileInputField.setAllowEmptyInput(allowEmptyValue);
@@ -720,15 +720,15 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // ----------------------------------------------------
             set = element.getAttribute(SET);
             if (set == null) {
-                set = idata.getVariable(variable);
+                set = this.installData.getVariable(variable);
                 if (set == null) {
                     set = "";
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                     set = vs.substitute(set, null);
-                    idata.setVariable(variable, set);
+                    this.installData.setVariable(variable, set);
                 }
             }
 
@@ -748,7 +748,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 filterdesc = "";
             }
             // internationalize it
-            filterdesc = idata.getLangpack().getString(filterdesc);
+            filterdesc = this.installData.getLangpack().getString(filterdesc);
 
             allowEmptyValue = Boolean
                     .parseBoolean(element.getAttribute("allowEmptyValue", "false"));
@@ -770,7 +770,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         TwoColumnConstraints constraints2 = new TwoColumnConstraints();
         constraints2.position = TwoColumnConstraints.EAST;
 
-        FileInputField fileInputField = new FileInputField(this, idata, false, set, size,
+        FileInputField fileInputField = new FileInputField(this, this.installData, false, set, size,
                 validatorConfig, filter, filterdesc);
 
         fileInputField.setAllowEmptyInput(allowEmptyValue);
@@ -787,12 +787,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
     protected void updateUIElements() {
         boolean updated = false;
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
         for (UIElement element : elements) {
             if (element.hasVariableAssignment()) {
                 String variable = element.getAssociatedVariable();
-                String value = idata.getVariable(variable);
+                String value = this.installData.getVariable(variable);
 
                 Debug.trace("updateUIElements() variable=" + variable + " value=" + value + "\n");
                 if (element.getType() == UIElementType.RADIOBUTTON) {
@@ -843,7 +843,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                                 StringBuffer builder = new StringBuffer(basevariable);
                                 builder.append("_");
                                 builder.append(index++);
-                                value = idata.getVariable(builder.toString());
+                                value = this.installData.getVariable(builder.toString());
                                 if (value != null) {
                                     multifile.addFile(value);
                                 }
@@ -944,12 +944,12 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         for (int i = 0; i < entries.size(); i++) {
             TextValuePair pair = entries.elementAt(i);
-            // IZPACK-283: read the value from idata instead of panel installDataGUI
+            // IZPACK-283: read the value from installData instead of panel installDataGUI
             final String key = pair.toString();
-            entryMap.put(key, idata.getVariable(key));
+            entryMap.put(key, this.installData.getVariable(key));
         }
 
-        new UserInputPanelAutomationHelper(entryMap).makeXMLData(idata, panelRoot);
+        new UserInputPanelAutomationHelper(entryMap).makeXMLData(this.installData, panelRoot);
     }
 
     /*--------------------------------------------------------------------------*/
@@ -1031,7 +1031,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             FileInputField panel = (FileInputField) field.getComponent();
             result = panel.validateField();
             if (result) {
-                idata.setVariable(field.getAssociatedVariable(), panel.getSelectedFile()
+                this.installData.setVariable(field.getAssociatedVariable(), panel.getSelectedFile()
                         .getAbsolutePath());
                 entries.add(new TextValuePair(field.getAssociatedVariable(), panel
                         .getSelectedFile().getAbsolutePath()));
@@ -1051,7 +1051,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             FileInputField input = (FileInputField) field.getComponent();
             result = input.validateField();
             if (result) {
-                idata.setVariable(field.getAssociatedVariable(), input.getSelectedFile()
+                this.installData.setVariable(field.getAssociatedVariable(), input.getSelectedFile()
                         .getAbsolutePath());
                 entries.add(new TextValuePair(field.getAssociatedVariable(), input
                         .getSelectedFile().getAbsolutePath()));
@@ -1082,7 +1082,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                             indexedVariableName.append(index);
                         }
                         index++;
-                        idata.setVariable(indexedVariableName.toString(), file);
+                        this.installData.setVariable(indexedVariableName.toString(), file);
                         entries.add(new TextValuePair(indexedVariableName.toString(), file));
                     }
 
@@ -1092,7 +1092,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         buffer.append(file);
                         buffer.append(";");
                     }
-                    idata.setVariable(variable, buffer.toString());
+                    this.installData.setVariable(variable, buffer.toString());
                     entries.add(new TextValuePair(variable, buffer.toString()));
                 }
             }
@@ -1284,7 +1284,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // (does not work here because of special format for set attribute)
             // if (set == null)
             // {
-            // set = idata.getVariable (variable);
+            // set = installData.getVariable (variable);
             // }
 
             separator = element.getAttribute(RULE_SEPARATOR);
@@ -1359,10 +1359,10 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // ----------------------------------------------------
         if (hasParams) {
             field = new RuleInputField(layout, set, separator, validator, validateParamMap,
-                    processor, resultFormat, getToolkit(), idata);
+                    processor, resultFormat, getToolkit(), this.installData);
         } else {
             field = new RuleInputField(layout, set, separator, validator, processor, resultFormat,
-                    getToolkit(), idata);
+                    getToolkit(), this.installData);
 
         }
         TwoColumnConstraints constraints = new TwoColumnConstraints();
@@ -1424,7 +1424,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             return (false);
         }
 
-        idata.setVariable(variable, ruleField.getText());
+        this.installData.setVariable(variable, ruleField.getText());
         entries.add(new TextValuePair(variable, ruleField.getText()));
         return (true);
     }
@@ -1463,13 +1463,13 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             label = new JLabel(getText(element));
             set = element.getAttribute(SET);
             if (set == null) {
-                set = idata.getVariable(variable);
+                set = this.installData.getVariable(variable);
                 if (set == null) {
                     set = "";
                 }
             } else {
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                     set = vs.substitute(set, null);
                 }
             }
@@ -1611,7 +1611,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             return (false);
         }
         Debug.trace("Field validated");
-        idata.setVariable(variable, value);
+        this.installData.setVariable(variable, value);
         entries.add(new TextValuePair(variable, value));
         return (true);
     }
@@ -1666,7 +1666,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 return;
             }
             // get current value of associated variable
-            String currentvariablevalue = idata.getVariable(variable);
+            String currentvariablevalue = this.installData.getVariable(variable);
             if (currentvariablevalue != null) {
                 // there seems to be user input
                 userinput = true;
@@ -1688,7 +1688,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         set = "";
                     }
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                         set = vs.substitute(set, null);
                     }
 
@@ -1720,7 +1720,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         String set = (choices.elementAt(i)).getAttribute(SET);
                         if (set != null) {
                             if (set != null && !"".equals(set)) {
-                                VariableSubstitutor vs = new VariableSubstitutorImpl(idata
+                                VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData
                                         .getVariables());
                                 set = vs.substitute(set, null);
                             }
@@ -1805,7 +1805,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             return true;
         }
 
-        idata.setVariable(variable, value);
+        this.installData.setVariable(variable, value);
         entries.add(new TextValuePair(variable, value));
         return true;
     }
@@ -1889,14 +1889,14 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 String set = (choices.elementAt(i)).getAttribute(SET);
                 // in order to properly initialize dependent controls
                 // we must set this variable now
-                if (idata.getVariable(variable) == null) {
+                if (this.installData.getVariable(variable) == null) {
                     if (set != null) {
-                        idata.setVariable(variable, value);
+                        this.installData.setVariable(variable, value);
                     }
                 }
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                         set = vs.substitute(set, null);
                     }
                     if (set.equals(TRUE)) {
@@ -1953,7 +1953,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             return (true);
         }
 
-        idata.setVariable(variable, value);
+        this.installData.setVariable(variable, value);
         entries.add(new TextValuePair(variable, value));
         return (true);
     }
@@ -2031,7 +2031,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             processor = element.getAttribute(CLASS);
         }
 
-        group = new PasswordGroup(idata, validatorsList, processor);
+        group = new PasswordGroup(this.installData, validatorsList, processor);
 
         // ----------------------------------------------------
         // extract the specification details
@@ -2053,7 +2053,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 fieldSpec = inputs.elementAt(i);
                 String set = fieldSpec.getAttribute(SET);
                 if (set != null && !"".equals(set)) {
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                     set = vs.substitute(set, null);
                 }
                 JLabel label = new JLabel(getText(fieldSpec));
@@ -2160,7 +2160,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         if (success) {
-            idata.setVariable(variable, group.getPassword());
+            this.installData.setVariable(variable, group.getPassword());
             entries.add(new TextValuePair(variable, group.getPassword()));
         }
         return success;
@@ -2195,7 +2195,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             trueValue = detail.getAttribute(TRUE);
             falseValue = detail.getAttribute(FALSE);
             causesValidataion = detail.getAttribute(REVALIDATE);
-            String value = idata.getVariable(variable);
+            String value = this.installData.getVariable(variable);
             Debug.trace("check: value: " + value + ", set: " + set);
             if (value != null) {
                 // Default is not checked so we only need to check for true
@@ -2214,7 +2214,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
         if (set != null) {
             if (set != null && !"".equals(set)) {
-                VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                 set = vs.substitute(set, null);
             }
             if (set.equals(FALSE)) {
@@ -2290,11 +2290,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
 
         if (box.isSelected()) {
             Debug.trace("readCheckBox(): selected, setting " + variable + " to " + trueValue);
-            idata.setVariable(variable, trueValue);
+            this.installData.setVariable(variable, trueValue);
             entries.add(new TextValuePair(variable, trueValue));
         } else {
             Debug.trace("readCheckBox(): not selected, setting " + variable + " to " + falseValue);
-            idata.setVariable(variable, falseValue);
+            this.installData.setVariable(variable, falseValue);
             entries.add(new TextValuePair(variable, falseValue));
         }
 
@@ -2404,7 +2404,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 String set = (choices.elementAt(i)).getAttribute(SET);
                 if (set != null) {
                     if (set != null && !"".equals(set)) {
-                        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                         set = vs.substitute(set, null);
                     }
                     if (set.equals(TRUE)) {
@@ -2481,7 +2481,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                 com.izforge.izpack.gui.FlowLayout.LEADING));
 
         JButton autodetectButton = ButtonFactory.createButton(parentFrame.langpack
-                .getString("UserInputPanel.search.autodetect"), idata.buttonsHColor);
+                .getString("UserInputPanel.search.autodetect"), this.installData.buttonsHColor);
         autodetectButton.setVisible(showAutodetect);
 
         autodetectButton.setToolTipText(parentFrame.langpack
@@ -2490,7 +2490,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         buttonPanel.add(autodetectButton);
 
         JButton browseButton = ButtonFactory.createButton(parentFrame.langpack
-                .getString("UserInputPanel.search.browse"), idata.buttonsHColor);
+                .getString("UserInputPanel.search.browse"), this.installData.buttonsHColor);
 
         buttonPanel.add(browseButton);
 
@@ -2546,7 +2546,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             return (true);
         }
 
-        idata.setVariable(variable, value);
+        this.installData.setVariable(variable, value);
         entries.add(new TextValuePair(variable, value));
         return (true);
     }
@@ -2850,7 +2850,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         }
 
         // try to parse the text, and substitute any variable it finds
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
         return (vs.substitute(text, null));
     }
@@ -2968,8 +2968,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // analyze if the any of the packs for which the item
         // is required have been selected for installation.
         // ----------------------------------------------------
-        for (int i = 0; i < idata.getSelectedPacks().size(); i++) {
-            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
+        for (int i = 0; i < this.installData.getSelectedPacks().size(); i++) {
+            selected = ((Pack) this.installData.getSelectedPacks().get(i)).name;
 
             for (int k = 0; k < packs.size(); k++) {
                 required = (packs.elementAt(k)).getAttribute(NAME, "");
@@ -3018,8 +3018,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         // analyze if the any of the packs for which the item
         // is required have been selected for installation.
         // ----------------------------------------------------
-        for (int i = 0; i < idata.getSelectedPacks().size(); i++) {
-            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
+        for (int i = 0; i < this.installData.getSelectedPacks().size(); i++) {
+            selected = ((Pack) this.installData.getSelectedPacks().get(i)).name;
 
             for (int k = 0; k < packs.size(); k++) {
                 required = (packs.elementAt(k)).getAttribute(NAME, "");
@@ -3321,7 +3321,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             // and resolve the pathes automatically:
             // /usr/lib/* searches all folders in usr/lib to find
             // /usr/lib/*/lib/tools.jar
-            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(installData.getVariables());
             for (int i = 0; i < this.pathComboBox.getItemCount(); ++i) {
                 String path = vs.substitute((String) this.pathComboBox.getItemAt(i), null);
                 // System.out.println ("autodetecting " + path);
@@ -3473,7 +3473,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
         Vector<IXMLElement> variables = spec.getChildrenNamed(VARIABLE_NODE);
         RulesEngine rules = parent.getRules();
 
-        VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+        VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
         for (int i = 0; i < variables.size(); i++) {
             IXMLElement variable = variables.elementAt(i);
             String vname = variable.getAttribute(ATTRIBUTE_VARIABLE_NAME);
@@ -3490,7 +3490,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             String conditionid = variable.getAttribute(ATTRIBUTE_CONDITIONID_NAME);
             if (conditionid != null) {
                 // check if condition for this variable is fulfilled
-                if (!rules.isConditionTrue(conditionid, idata.getVariables())) {
+                if (!rules.isConditionTrue(conditionid, this.installData.getVariables())) {
                     continue;
                 }
             }
@@ -3503,11 +3503,11 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
                         // try to substitute variables in value field
                         vvalue = vs.substitute(vvalue, null);
                         // to cut out circular references
-                        idata.setVariable(vname, "");
+                        this.installData.setVariable(vname, "");
                         vvalue = vs.substitute(vvalue, null);
                     }
                     // try to set variable
-                    idata.setVariable(vname, vvalue);
+                    this.installData.setVariable(vname, vvalue);
 
                     // for save this variable to be used later by Automation Helper
                     entries.add(new TextValuePair(vname, vvalue));

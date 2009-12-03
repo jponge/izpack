@@ -147,7 +147,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         super(parent, idata);
         // Load langpack.
         try {
-            this.langpack = parent.langpack;
+            this.langpack = installData.getLangpack();
             InputStream inputStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
             this.langpack.add(inputStream);
             this.debugger = parent.getDebugger();
@@ -232,9 +232,9 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         if (IoHelper.supported("getFreeSpace") && freeSpaceLabel != null) {
             String msg;
             freeBytes = IoHelper.getFreeSpace(IoHelper.existingParent(
-                    new File(idata.getInstallPath())).getAbsolutePath());
+                    new File(this.installData.getInstallPath())).getAbsolutePath());
             if (freeBytes < 0) {
-                msg = parent.langpack.getString("PacksPanel.notAscertainable");
+                msg = installData.getLangpack().getString("PacksPanel.notAscertainable");
             } else {
                 msg = Pack.toByteUnitsString(freeBytes);
             }
@@ -249,18 +249,18 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      */
     public boolean isValidated() {
         if (IoHelper.supported("getFreeSpace") && freeBytes >= 0 && freeBytes <= bytes) {
-            JOptionPane.showMessageDialog(this, parent.langpack
-                    .getString("PacksPanel.notEnoughSpace"), parent.langpack
+            JOptionPane.showMessageDialog(this, installData.getLangpack()
+                    .getString("PacksPanel.notEnoughSpace"), installData.getLangpack()
                     .getString("installer.error"), JOptionPane.ERROR_MESSAGE);
             return (false);
         }
 
-        for (Pack pack : idata.getAvailablePacks()) {
+        for (Pack pack : this.installData.getAvailablePacks()) {
             for (String validator : pack.getValidators()) {
                 /*
                  * This will call
                  * public static boolean validate(AbstractUIHandler handler,
-                 *   GUIInstallData idata, String packsId, boolean isSelected)
+                 *   GUIInstallData installData, String packsId, boolean isSelected)
                  * from the validator class  
                  */
 
@@ -276,7 +276,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 }
 
                 try {
-                    if (validatorInst.validate(this, idata, pack.id, (idata.getSelectedPacks().indexOf(pack) > -1)))
+                    if (validatorInst.validate(this, this.installData, pack.id, (this.installData.getSelectedPacks().indexOf(pack) > -1)))
                         continue;
                     else
                         return false;
@@ -284,7 +284,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                 catch (Exception e) {
                     e.printStackTrace();
                     System.err.println("Error: Exception in " + validator + ".validate("
-                            + (idata.getSelectedPacks().indexOf(pack) > -1) + ") for pack " + pack.name);
+                            + (this.installData.getSelectedPacks().indexOf(pack) > -1) + ") for pack " + pack.name);
                     continue;
                 }
             }
@@ -298,7 +298,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      * @param panelRoot The XML tree to write the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
-        new ImgPacksPanelAutomationHelper().makeXMLData(idata, panelRoot);
+        new ImgPacksPanelAutomationHelper().makeXMLData(this.installData, panelRoot);
     }
 
     /*
@@ -321,7 +321,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
             if ("".equals(desc) || key.equals(desc)) {
                 desc = pack.description;
             }
-            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
             desc = vs.substitute(desc, null);
             descriptionArea.setText(desc);
         }
@@ -347,8 +347,8 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                     .getString("PacksPanel.excludes");
             int numexcludes = 0;
             if (pack.excludeGroup != null) {
-                for (int q = 0; q < idata.getAvailablePacks().size(); q++) {
-                    Pack otherpack = (Pack) idata.getAvailablePacks().get(q);
+                for (int q = 0; q < this.installData.getAvailablePacks().size(); q++) {
+                    Pack otherpack = (Pack) this.installData.getAvailablePacks().get(q);
                     String exgroup = otherpack.excludeGroup;
                     if (exgroup != null) {
                         if (q != selectedRow && pack.excludeGroup.equals(exgroup)) {
@@ -409,7 +409,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      */
     protected JLabel createLabel(String msgId, String iconId, GridBagLayout layout,
                                  GridBagConstraints constraints) {
-        JLabel label = LabelFactory.create(parent.langpack.getString(msgId), parent.icons
+        JLabel label = LabelFactory.create(installData.getLangpack().getString(msgId), parent.icons
                 .getImageIcon(iconId), TRAILING);
         if (layout != null && constraints != null) {
             layout.addLayoutComponent(label, constraints);
@@ -435,14 +435,14 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         JLabel label = new JLabel();
         panel.setAlignmentX(LEFT_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-        panel.add(LabelFactory.create(parent.langpack.getString(msgId)));
+        panel.add(LabelFactory.create(installData.getLangpack().getString(msgId)));
         panel.add(Box.createHorizontalGlue());
         panel.add(label);
         if (layout != null && constraints != null) {
             layout.addLayoutComponent(panel, constraints);
         }
         add(panel);
-        boolean doNotShowRequiredSize = Boolean.parseBoolean(idata.guiPrefs.modifier.get("doNotShowRequiredSize"));
+        boolean doNotShowRequiredSize = Boolean.parseBoolean(this.installData.guiPrefs.modifier.get("doNotShowRequiredSize"));
         panel.setVisible(!doNotShowRequiredSize);
         return (label);
     }
@@ -471,7 +471,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         area.setOpaque(false);
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
-        area.setBorder(BorderFactory.createTitledBorder(parent.langpack.getString(msgId)));
+        area.setBorder(BorderFactory.createTitledBorder(installData.getLangpack().getString(msgId)));
         area.setFont(getControlTextFont());
 
         if (layout != null && constraints != null) {
@@ -512,7 +512,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         scroller.setViewportView(table);
         scroller.setAlignmentX(LEFT_ALIGNMENT);
         scroller.getViewport().setBackground(Color.white);
-        scroller.setPreferredSize(new Dimension(width, (idata.guiPrefs.height / 3 + 30)));
+        scroller.setPreferredSize(new Dimension(width, (this.installData.guiPrefs.height / 3 + 30)));
 
         if (layout != null && constraints != null) {
             layout.addLayoutComponent(scroller, constraints);
@@ -544,7 +544,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
      */
     public void panelActivate() {
         try {
-            packsModel = new PacksModel(this, idata, this.parent.getRules()) {
+            packsModel = new PacksModel(this, installData, this.parent.getRules()) {
                 @Override
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
                     return false;
@@ -571,7 +571,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
             // set the JCheckBoxes to the currently selected panels. The
             // selection might have changed in another panel
-            java.util.Iterator iter = idata.getAvailablePacks().iterator();
+            java.util.Iterator iter = this.installData.getAvailablePacks().iterator();
             bytes = 0;
             while (iter.hasNext()) {
                 Pack p = (Pack) iter.next();
@@ -579,7 +579,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
                     bytes += p.nbytes;
                     continue;
                 }
-                if (idata.getSelectedPacks().contains(p)) {
+                if (this.installData.getSelectedPacks().contains(p)) {
                     bytes += p.nbytes;
                 }
             }
@@ -601,7 +601,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
 
     public String getSummaryBody() {
         StringBuffer retval = new StringBuffer(256);
-        Iterator iter = idata.getSelectedPacks().iterator();
+        Iterator iter = this.installData.getSelectedPacks().iterator();
         boolean first = true;
         while (iter.hasNext()) {
             if (!first) {

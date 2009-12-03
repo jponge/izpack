@@ -86,7 +86,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      */
     public InstallPanel(InstallerFrame parent, GUIInstallData idata) {
         super(parent, idata, new IzPanelLayout());
-        this.tipLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.tip"),
+        this.tipLabel = LabelFactory.create(installData.getLangpack().getString("InstallPanel.tip"),
                 parent.icons.getImageIcon(iconName), LEADING);
         add(this.tipLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         packOpLabel = LabelFactory.create(" ", LEADING);
@@ -94,14 +94,14 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
 
         packProgressBar = new JProgressBar();
         packProgressBar.setStringPainted(true);
-        packProgressBar.setString(parent.langpack.getString("InstallPanel.begin"));
+        packProgressBar.setString(installData.getLangpack().getString("InstallPanel.begin"));
         packProgressBar.setValue(0);
         add(packProgressBar, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
         // make sure there is some space between the progress bars
         add(IzPanelLayout.createVerticalStrut(5));
         //add(IzPanelLayout.createParagraphGap());
 
-        overallOpLabel = LabelFactory.create(parent.langpack.getString("InstallPanel.progress"),
+        overallOpLabel = LabelFactory.create(installData.getLangpack().getString("InstallPanel.progress"),
                 parent.icons.getImageIcon(iconName), LEADING);
         add(this.overallOpLabel, IzPanelLayout.getDefaultConstraint(FULL_LINE_CONTROL_CONSTRAINT));
 
@@ -150,8 +150,8 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
      */
     public void emitError(String title, String error) {
         this.packOpLabel.setText(error);
-        idata.setInstallSuccess(false);
-        JOptionPane.showMessageDialog(this, error, parent.langpack.getString("installer.error"),
+        this.installData.setInstallSuccess(false);
+        JOptionPane.showMessageDialog(this, error, installData.getLangpack().getString("installer.error"),
                 JOptionPane.ERROR_MESSAGE);
     }
 
@@ -175,7 +175,7 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
                 }
                 packProgressBar.setValue(ppbMax);
 
-                packProgressBar.setString(parent.langpack.getString("InstallPanel.finished"));
+                packProgressBar.setString(installData.getLangpack().getString("InstallPanel.finished"));
                 packProgressBar.setEnabled(false);
                 String no_of_packs = Integer.toString(noOfPacks);
                 if (noOfPacks == 1) {
@@ -185,9 +185,9 @@ public class InstallPanel extends IzPanel implements AbstractUIProgressHandler {
                 overallProgressBar.setEnabled(false);
                 packOpLabel.setText(" ");
                 packOpLabel.setEnabled(false);
-                idata.setCanClose(true);
+                installData.setCanClose(true);
                 validated = true;
-                if (idata.getPanels().indexOf(this) != (idata.getPanels().size() - 1)) {
+                if (installData.getPanels().indexOf(this) != (installData.getPanels().size() - 1)) {
                     parent.unlockNextButton();
                 }
             }

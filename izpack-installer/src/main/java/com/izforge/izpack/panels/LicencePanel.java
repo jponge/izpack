@@ -69,7 +69,7 @@ public class LicencePanel extends IzPanel implements ActionListener {
 
         // We put our components
 
-        add(LabelFactory.create(parent.langpack.getString("LicencePanel.info"),
+        add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
                 parent.icons.getImageIcon("history"), LEADING), NEXT_LINE);
         JTextArea textArea = new JTextArea(licence);
         textArea.setCaretPosition(0);
@@ -82,13 +82,13 @@ public class LicencePanel extends IzPanel implements ActionListener {
 
         ButtonGroup group = new ButtonGroup();
 
-        yesRadio = new JRadioButton(parent.langpack.getString("LicencePanel.agree"), false);
+        yesRadio = new JRadioButton(installData.getLangpack().getString("LicencePanel.agree"), false);
         yesRadio.setName(GuiId.LICENCE_YES_RADIO.id);
         group.add(yesRadio);
         add(yesRadio, NEXT_LINE);
         yesRadio.addActionListener(this);
 
-        noRadio = new JRadioButton(parent.langpack.getString("LicencePanel.notagree"), true);
+        noRadio = new JRadioButton(installData.getLangpack().getString("LicencePanel.notagree"), true);
         noRadio.setName(GuiId.LICENCE_NO_RADIO.id);
         group.add(noRadio);
         add(noRadio, NEXT_LINE);

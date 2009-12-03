@@ -945,12 +945,12 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             return;
         }
 
-        VariableSubstitutor substitutor = new VariableSubstitutorImpl(idata.getVariables());
+        VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.installData.getVariables());
 
         // input.
         String substitutedSpec = substitutor.substitute(input, "xml");
         /*
-         * TODO: internal flag mapped if( idata.isDebug() ) { System.out.println( "SUBSTITUDED
+         * TODO: internal flag mapped if( installData.isDebug() ) { System.out.println( "SUBSTITUDED
          * SHORTCUT SPEC" ); System.out.println(
          * "==================================================================" );
          * System.out.println( "==================================================================" );
@@ -1008,7 +1008,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         IXMLElement group = null;
         Vector<IXMLElement> groupSpecs = spec.getChildrenNamed(SPEC_KEY_PROGRAM_GROUP);
-        String selectedInstallGroup = idata.getVariable("INSTALL_GROUP");
+        String selectedInstallGroup = this.installData.getVariable("INSTALL_GROUP");
         if (selectedInstallGroup != null) {
             //The user selected an InstallGroup before.
             //We may have some restrictions on the Installationgroup
@@ -1539,8 +1539,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             return (true);
         }
 
-        for (int i = 0; i < idata.getSelectedPacks().size(); i++) {
-            selected = ((Pack) idata.getSelectedPacks().get(i)).name;
+        for (int i = 0; i < this.installData.getSelectedPacks().size(); i++) {
+            selected = ((Pack) this.installData.getSelectedPacks().get(i)).name;
 
             for (int k = 0; k < packs.size(); k++) {
                 required = (packs.elementAt(k)).getAttribute(
@@ -1587,13 +1587,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         constraints.insets = new Insets(10, 10, 0, 0);
 
         // Add a CheckBox which enables the user to entirely supress shortcut creation.
-        String menuKind = parent.langpack.getString("ShortcutPanel.regular.StartMenu:Start-Menu");
+        String menuKind = installData.getLangpack().getString("ShortcutPanel.regular.StartMenu:Start-Menu");
 
         if (OsVersion.IS_UNIX && UnixHelper.kdeIsInstalled()) {
-            menuKind = parent.langpack.getString("ShortcutPanel.regular.StartMenu:K-Menu");
+            menuKind = installData.getLangpack().getString("ShortcutPanel.regular.StartMenu:K-Menu");
         }
 
-        createShortcuts = new JCheckBox(StringTool.replace(parent.langpack
+        createShortcuts = new JCheckBox(StringTool.replace(installData.getLangpack()
                 .getString("ShortcutPanel.regular.create"), "StartMenu", menuKind), true);
         createShortcuts.addActionListener(this);
         constraints.gridx = col;
@@ -1618,7 +1618,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // in the definition file.
         // ----------------------------------------------------
         if (hasDesktopShortcuts) {
-            String initialAllowedValue = idata.getVariable("DesktopShortcutCheckboxEnabled");
+            String initialAllowedValue = this.installData.getVariable("DesktopShortcutCheckboxEnabled");
             boolean initialAllowedFlag = false;
 
             if (initialAllowedValue == null) {
@@ -1627,7 +1627,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
                 initialAllowedFlag = true;
             }
 
-            allowDesktopShortcut = new JCheckBox(parent.langpack
+            allowDesktopShortcut = new JCheckBox(installData.getLangpack()
                     .getString("ShortcutPanel.regular.desktop"), initialAllowedFlag);
             constraints.gridx = col;
             constraints.gridy = line + 2;
@@ -1641,7 +1641,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             add(allowDesktopShortcut);
         }
 
-        listLabel = LabelFactory.create(parent.langpack.getString("ShortcutPanel.regular.list"),
+        listLabel = LabelFactory.create(installData.getLangpack().getString("ShortcutPanel.regular.list"),
                 JLabel.LEADING);
         if (OsVersion.IS_WINDOWS) {
             constraints.gridx = col;
@@ -1705,13 +1705,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             JPanel usersPanel = new JPanel(new GridLayout(2, 1));
             ButtonGroup usersGroup = new ButtonGroup();
-            currentUser = new JRadioButton(parent.langpack
+            currentUser = new JRadioButton(installData.getLangpack()
                     .getString("ShortcutPanel.regular.currentUser"), !rUserFlag);
             currentUser.addActionListener(this);
             usersGroup.add(currentUser);
             usersPanel.add(currentUser);
             allUsers = new JRadioButton(
-                    parent.langpack.getString("ShortcutPanel.regular.allUsers"), rUserFlag);
+                    installData.getLangpack().getString("ShortcutPanel.regular.allUsers"), rUserFlag);
 
             Debug.log("allUsers.setEnabled(), I'm Root: " + isRootUser);
 
@@ -1721,7 +1721,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
             usersGroup.add(allUsers);
             usersPanel.add(allUsers);
 
-            TitledBorder border = new TitledBorder(new EmptyBorder(2, 2, 2, 2), parent.langpack
+            TitledBorder border = new TitledBorder(new EmptyBorder(2, 2, 2, 2), installData.getLangpack()
                     .getString("ShortcutPanel.regular.userIntro"));
             usersPanel.setBorder(border);
             if (OsVersion.IS_WINDOWS) {
@@ -1767,8 +1767,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // reset button that allows the user to revert to the
         // original suggestion for the program group
         // ----------------------------------------------------
-        defaultButton = ButtonFactory.createButton(parent.langpack
-                .getString("ShortcutPanel.regular.default"), idata.buttonsHColor);
+        defaultButton = ButtonFactory.createButton(installData.getLangpack()
+                .getString("ShortcutPanel.regular.default"), this.installData.buttonsHColor);
         defaultButton.addActionListener(this);
 
         constraints.gridx = col + 1;
@@ -1846,7 +1846,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // about the fact that we can not create shortcuts on
         // this particular target OS.
         // ----------------------------------------------------
-        MultiLineLabel apologyLabel = new MultiLineLabel(parent.langpack
+        MultiLineLabel apologyLabel = new MultiLineLabel(installData.getLangpack()
                 .getString("ShortcutPanel.alternate.apology"), 0, 0);
 
         constraints.gridx = 0;
@@ -1864,7 +1864,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // label that explains the significance ot the list box
         // ----------------------------------------------------
-        MultiLineLabel listLabel = new MultiLineLabel(parent.langpack
+        MultiLineLabel listLabel = new MultiLineLabel(installData.getLangpack()
                 .getString("ShortcutPanel.alternate.targetsLabel"), 0, 0);
 
         constraints.gridx = 0;
@@ -1898,7 +1898,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // static text that explains about the text file
         // ----------------------------------------------------
-        MultiLineLabel fileExplanation = new MultiLineLabel(parent.langpack
+        MultiLineLabel fileExplanation = new MultiLineLabel(installData.getLangpack()
                 .getString("ShortcutPanel.alternate.textFileExplanation"), 0, 0);
 
         constraints.gridx = 0;
@@ -1912,8 +1912,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // button to save the text file
         // ----------------------------------------------------
-        saveButton = ButtonFactory.createButton(parent.langpack
-                .getString("ShortcutPanel.alternate.saveButton"), idata.buttonsHColor);
+        saveButton = ButtonFactory.createButton(installData.getLangpack()
+                .getString("ShortcutPanel.alternate.saveButton"), this.installData.buttonsHColor);
         saveButton.addActionListener(this);
 
         constraints.gridx = 0;
@@ -1966,7 +1966,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         // open a file chooser dialog to get a path / file name
         // ----------------------------------------------------
-        JFileChooser fileDialog = new JFileChooser(idata.getInstallPath());
+        JFileChooser fileDialog = new JFileChooser(this.installData.getInstallPath());
         fileDialog.setSelectedFile(new File(TEXT_FILE_NAME));
 
         if (fileDialog.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -1980,7 +1980,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         // ----------------------------------------------------
         FileWriter output = null;
         StringBuffer buffer = new StringBuffer();
-        String header = parent.langpack.getString("ShortcutPanel.textFile.header");
+        String header = installData.getLangpack().getString("ShortcutPanel.textFile.header");
 
         String newline = System.getProperty("line.separator", "\n");
 
@@ -2020,33 +2020,33 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         for (int i = 0; i < shortcuts.size(); i++) {
             ShortcutData data = (ShortcutData) shortcuts.elementAt(i);
 
-            buffer.append(parent.langpack.getString("ShortcutPanel.textFile.name"));
+            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.name"));
             buffer.append(data.name);
             buffer.append(newline);
 
-            buffer.append(parent.langpack.getString("ShortcutPanel.textFile.location"));
+            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.location"));
 
             switch (data.type) {
                 case Shortcut.DESKTOP: {
-                    buffer.append(parent.langpack.getString("ShortcutPanel.location.desktop"));
+                    buffer.append(installData.getLangpack().getString("ShortcutPanel.location.desktop"));
 
                     break;
                 }
 
                 case Shortcut.APPLICATIONS: {
-                    buffer.append(parent.langpack.getString("ShortcutPanel.location.applications"));
+                    buffer.append(installData.getLangpack().getString("ShortcutPanel.location.applications"));
 
                     break;
                 }
 
                 case Shortcut.START_MENU: {
-                    buffer.append(parent.langpack.getString("ShortcutPanel.location.startMenu"));
+                    buffer.append(installData.getLangpack().getString("ShortcutPanel.location.startMenu"));
 
                     break;
                 }
 
                 case Shortcut.START_UP: {
-                    buffer.append(parent.langpack.getString("ShortcutPanel.location.startup"));
+                    buffer.append(installData.getLangpack().getString("ShortcutPanel.location.startup"));
 
                     break;
                 }
@@ -2054,27 +2054,27 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
             buffer.append(newline);
 
-            buffer.append(parent.langpack.getString("ShortcutPanel.textFile.description"));
+            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.description"));
             buffer.append(data.description);
             buffer.append(newline);
 
-            buffer.append(parent.langpack.getString("ShortcutPanel.textFile.target"));
+            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.target"));
             buffer.append(data.target);
             buffer.append(newline);
 
-            buffer.append(parent.langpack.getString("ShortcutPanel.textFile.command"));
+            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.command"));
             buffer.append(data.commandLine);
             buffer.append(newline);
 
-            buffer.append(parent.langpack.getString("ShortcutPanel.textFile.iconName"));
+            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.iconName"));
             buffer.append(data.iconFile);
             buffer.append(newline);
 
-            buffer.append(parent.langpack.getString("ShortcutPanel.textFile.iconIndex"));
+            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.iconIndex"));
             buffer.append(data.iconIndex);
             buffer.append(newline);
 
-            buffer.append(parent.langpack.getString("ShortcutPanel.textFile.work"));
+            buffer.append(installData.getLangpack().getString("ShortcutPanel.textFile.work"));
             buffer.append(data.workingDirectory);
             buffer.append(newline);
 

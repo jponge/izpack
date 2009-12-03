@@ -104,7 +104,7 @@ public class ImgPacksPanel extends PacksPanelBase {
 
         // Create the image label with a scroller.
         // Use the image of the first pack having an image as initial image
-        Iterator pack_it = idata.getAvailablePacks().iterator();
+        Iterator pack_it = this.installData.getAvailablePacks().iterator();
         Pack firstImgPack = null;
         boolean imgFound = false;
         while (!imgFound && pack_it.hasNext()) {
@@ -163,9 +163,9 @@ public class ImgPacksPanel extends PacksPanelBase {
      * Pre-loads the images.
      */
     private void preLoadImages() {
-        int size = idata.getAvailablePacks().size();
+        int size = this.installData.getAvailablePacks().size();
         images = new HashMap<String, ImageIcon>(size);
-        Iterator pack_it = idata.getAvailablePacks().iterator();
+        Iterator pack_it = this.installData.getAvailablePacks().iterator();
         while (pack_it.hasNext()) {
             Pack pack = (Pack) pack_it.next();
             if (pack.packImgId != null) {
@@ -196,8 +196,8 @@ public class ImgPacksPanel extends PacksPanelBase {
             maxHeight = Math.max(maxHeight, icon.getIconHeight());
         }
 
-        maxWidth = Math.min(maxWidth + 20, idata.guiPrefs.width - 150);
-        maxHeight = Math.min(maxHeight + 20, idata.guiPrefs.height - 150);
+        maxWidth = Math.min(maxWidth + 20, this.installData.guiPrefs.width - 150);
+        maxHeight = Math.min(maxHeight + 20, this.installData.guiPrefs.height - 150);
 
         return new Dimension(maxWidth, maxHeight);
     }
@@ -218,7 +218,7 @@ public class ImgPacksPanel extends PacksPanelBase {
             return;
         }
         if (i >= 0) {
-            Pack pack = (Pack) idata.getAvailablePacks().get(i);
+            Pack pack = (Pack) this.installData.getAvailablePacks().get(i);
             imgLabel.setIcon(images.get(pack.packImgId));
         }
     }

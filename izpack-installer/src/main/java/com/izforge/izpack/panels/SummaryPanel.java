@@ -78,7 +78,7 @@ public class SummaryPanel extends IzPanel {
 
     public void panelActivate() {
         super.panelActivate();
-        textArea.setText(SummaryProcessor.getSummary(idata));
+        textArea.setText(SummaryProcessor.getSummary(this.installData));
         textArea.setCaretPosition(0);
     }
 

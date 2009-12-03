@@ -61,7 +61,7 @@ public class TargetPanel extends PathInputPanel {
         // Resolve the default for chosenPath
         super.panelActivate();
         // Set the default or old value to the path selection panel.
-        pathSelectionPanel.setPath(idata.getInstallPath());
+        pathSelectionPanel.setPath(this.installData.getInstallPath());
     }
 
     /**
@@ -69,7 +69,7 @@ public class TargetPanel extends PathInputPanel {
      * current parent as installer frame.
      */
     public void loadDefaultDir() {
-        super.loadDefaultInstallDir(parent, idata);
+        super.loadDefaultInstallDir(parent, this.installData);
     }
 
     /**
@@ -82,7 +82,7 @@ public class TargetPanel extends PathInputPanel {
         if (!super.isValidated()) {
             return (false);
         }
-        idata.setInstallPath(pathSelectionPanel.getPath());
+        this.installData.setInstallPath(pathSelectionPanel.getPath());
         return (true);
     }
 
@@ -112,7 +112,7 @@ public class TargetPanel extends PathInputPanel {
      * @param panelRoot The tree to put the installDataGUI in.
      */
     public void makeXMLData(IXMLElement panelRoot) {
-        new TargetPanelAutomationHelper().makeXMLData(idata, panelRoot);
+        new TargetPanelAutomationHelper().makeXMLData(this.installData, panelRoot);
     }
 
     /*
@@ -122,7 +122,7 @@ public class TargetPanel extends PathInputPanel {
      */
 
     public String getSummaryBody() {
-        return (idata.getInstallPath());
+        return (this.installData.getInstallPath());
     }
 
 }

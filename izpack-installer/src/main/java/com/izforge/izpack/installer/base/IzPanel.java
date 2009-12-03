@@ -66,7 +66,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * The installer internal data (actually a melting-pot class with all-public fields.
      */
-    protected GUIInstallData idata;
+    protected GUIInstallData installData;
 
     /**
      * The parent IzPack installer frame.
@@ -151,14 +151,15 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public com.izforge.izpack.data.Panel metadata;
 
+
     /**
      * The constructor.
      *
-     * @param parent The parent IzPack installer frame.
-     * @param idata  The installer internal data.
+     * @param parent      The parent IzPack installer frame.
+     * @param installData The installer internal data.
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData idata) {
-        this(parent, idata, (LayoutManager2) null);
+    public IzPanel(InstallerFrame parent, GUIInstallData installData) {
+        this(parent, installData, (LayoutManager2) null);
     }
 
     /**
@@ -166,13 +167,13 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout. If lm is
      * null, no layout manager will be created or initialized.
      *
-     * @param parent The parent IzPack installer frame.
-     * @param idata  The installer internal data.
-     * @param lm     layout manager to be used with this IzPanel
+     * @param parent      The parent IzPack installer frame.
+     * @param installData The installer internal data.
+     * @param lm          layout manager to be used with this IzPanel
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData idata, LayoutManager2 lm) {
+    public IzPanel(InstallerFrame parent, GUIInstallData installData, LayoutManager2 lm) {
         super();
-        init(parent, idata);
+        init(parent, installData);
         if (lm != null) {
             getLayoutHelper().startLayout(lm);
         }
@@ -181,24 +182,24 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Creates a new IzPanel object.
      *
-     * @param parent   the Parent Frame
-     * @param idata    Installers Runtime Data Set
-     * @param iconName The Headline IconName
+     * @param parent      the Parent Frame
+     * @param installData Installers Runtime Data Set
+     * @param iconName    The Headline IconName
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData idata, String iconName) {
-        this(parent, idata, iconName, -1);
+    public IzPanel(InstallerFrame parent, GUIInstallData installData, String iconName) {
+        this(parent, installData, iconName, -1);
     }
 
     /**
      * The constructor with Icon.
      *
-     * @param parent   The parent IzPack installer frame.
-     * @param idata    The installer internal data.
-     * @param iconName A iconname to show as left oriented headline-leading Icon.
-     * @param instance An instance counter
+     * @param parent      The parent IzPack installer frame.
+     * @param installData The installer internal data.
+     * @param iconName    A iconname to show as left oriented headline-leading Icon.
+     * @param instance    An instance counter
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData idata, String iconName, int instance) {
-        this(parent, idata);
+    public IzPanel(InstallerFrame parent, GUIInstallData installData, String iconName, int instance) {
+        this(parent, installData);
         buildHeadline(iconName, instance);
     }
 
@@ -287,7 +288,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return The Languageresource or the key if not found.
      */
     public String getString(String key) {
-        return parent.langpack.getString(key);
+        return installData.getLangpack().getString(key);
     }
 
     /**
@@ -325,9 +326,9 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected void init(InstallerFrame parent, GUIInstallData idata) {
         getClassName();
 
-        this.idata = idata;
+        this.installData = idata;
         this.parent = parent;
-        // To get the Panel object via idata is a hack because GUIInstallData will
+        // To get the Panel object via installData is a hack because GUIInstallData will
         // be hold global data, not panel specific data. But the Panel object will
         // be needed in the constructor of some derived classes. And to expand the
         // constructor is also not a good way because all derived classes have to
@@ -435,7 +436,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     }
 
     public boolean emitNotificationFeedback(String message) {
-        return (JOptionPane.showConfirmDialog(this, message, idata.getLangpack()
+        return (JOptionPane.showConfirmDialog(this, message, this.installData.getLangpack()
                 .getString("installer.Message"), JOptionPane.WARNING_MESSAGE,
                 JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION);
     }
@@ -546,10 +547,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         if (panelid != null) {
             buf.append(".");
             buf.append(panelid);
-            retval = parent.langpack.getString(buf.toString());
+            retval = installData.getLangpack().getString(buf.toString());
         }
         if (retval == null || retval.startsWith(fullkey)) {
-            retval = parent.langpack.getString(fullkey);
+            retval = installData.getLangpack().getString(fullkey);
         }
         if (retval == null || retval.startsWith(fullkey)) {
             if (alternateClass == null) {
@@ -557,10 +558,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             }
             buf.delete(0, buf.length());
             buf.append(alternateClass).append(".").append(subkey);
-            retval = parent.langpack.getString(buf.toString());
+            retval = installData.getLangpack().getString(buf.toString());
         }
         if (retval != null && retval.indexOf('$') > -1) {
-            VariableSubstitutor substitutor = new VariableSubstitutorImpl(idata.getVariables());
+            VariableSubstitutor substitutor = new VariableSubstitutorImpl(this.installData.getVariables());
             retval = substitutor.substitute(retval, null);
         }
         return (retval);
@@ -654,7 +655,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public JLabel createLabel(String textId, String iconId, int pos, boolean isFullLine) {
         ImageIcon ii = (iconId != null) ? parent.icons.getImageIcon(iconId) : null;
-        JLabel label = LabelFactory.create(parent.langpack.getString(textId), ii, pos, isFullLine);
+        JLabel label = LabelFactory.create(installData.getLangpack().getString(textId), ii, pos, isFullLine);
         if (label != null) {
             label.setFont(getControlTextFont());
         }
@@ -671,7 +672,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return the newly created multi line label
      */
     public MultiLineLabel createMultiLineLabelLang(String textId) {
-        return (createMultiLineLabel(parent.langpack.getString(textId)));
+        return (createMultiLineLabel(installData.getLangpack().getString(textId)));
     }
 
     /**
@@ -876,8 +877,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public String getSummaryCaption() {
         String caption;
-        if (parent.isHeading(this) && idata.guiPrefs.modifier.containsKey("useHeadingForSummary")
-                && (idata.guiPrefs.modifier.get("useHeadingForSummary")).equalsIgnoreCase("yes")) {
+        if (parent.isHeading(this) && this.installData.guiPrefs.modifier.containsKey("useHeadingForSummary")
+                && (this.installData.guiPrefs.modifier.get("useHeadingForSummary")).equalsIgnoreCase("yes")) {
             caption = getI18nStringForClass("headline", this.getClass().getName());
         } else {
             caption = getI18nStringForClass("summaryCaption", this.getClass().getName());
@@ -968,17 +969,17 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
             try {
                 guiComponent.setCursor(newCursor);
                 // validating the data
-                DataValidator.Status returnStatus = this.validationService.validateData(this.idata);
+                DataValidator.Status returnStatus = this.validationService.validateData(this.installData);
                 if (returnStatus == DataValidator.Status.OK) {
                     returnValue = true;
                 } else {
                     Debug.trace("Validation did not pass!");
                     // try to parse the text, and substitute any variable it finds
-                    VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+                    VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
                     if (this.validationService.getWarningMessageId() != null
                             && returnStatus == DataValidator.Status.WARNING) {
 
-                        String warningMessage = parent.langpack.getString(this.validationService
+                        String warningMessage = installData.getLangpack().getString(this.validationService
                                 .getWarningMessageId());
                         if (this.emitWarning(getString("data.validation.warning.title"), vs
                                 .substitute(warningMessage, null))) {
@@ -986,7 +987,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                             Debug.trace("... but user decided to go on!");
                         }
                     } else {
-                        String errorMessage = parent.langpack.getString(this.validationService
+                        String errorMessage = installData.getLangpack().getString(this.validationService
                                 .getErrorMessageId());
                         this.emitError(getString("data.validation.error.title"), vs.substitute(
                                 errorMessage, null));
@@ -1009,7 +1010,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected String parseText(String string_to_parse) {
         try {
             // Initialize the variable substitutor
-            VariableSubstitutor vs = new VariableSubstitutorImpl(idata.getVariables());
+            VariableSubstitutor vs = new VariableSubstitutorImpl(this.installData.getVariables());
 
             // Parses the info text
             string_to_parse = vs.substitute(string_to_parse, null);
@@ -1041,14 +1042,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @return A boolean stating wether the panel supports Help function.
      */
     public boolean canShowHelp() {
-        return getHelpUrl(this.idata.getLocaleISO3()) != null;
+        return getHelpUrl(this.installData.getLocaleISO3()) != null;
     }
 
     /**
      * This method is called when Help button has been clicked. By default it doesn't do anything.
      */
     public void showHelp() {
-        String helpName = getHelpUrl(this.idata.getLocaleISO3());
+        String helpName = getHelpUrl(this.installData.getLocaleISO3());
         // System.out.println("Help function called, helpName: " + helpName);
         if (helpName != null) {
             URL helpUrl = getClass().getResource("/res/" + helpName);
@@ -1091,7 +1092,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected final void executePreActivationActions() {
         if (preActivateActions != null) {
             for (int actionIndex = 0; actionIndex < preActivateActions.size(); actionIndex++) {
-                preActivateActions.get(actionIndex).executeAction(idata, this);
+                preActivateActions.get(actionIndex).executeAction(this.installData, this);
             }
         }
     }
@@ -1099,7 +1100,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected final void executePreValidationActions() {
         if (preValidateActions != null) {
             for (int actionIndex = 0; actionIndex < preValidateActions.size(); actionIndex++) {
-                preValidateActions.get(actionIndex).executeAction(idata, this);
+                preValidateActions.get(actionIndex).executeAction(this.installData, this);
             }
         }
     }
@@ -1107,7 +1108,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     protected final void executePostValidationActions() {
         if (postValidateActions != null) {
             for (int actionIndex = 0; actionIndex < postValidateActions.size(); actionIndex++) {
-                postValidateActions.get(actionIndex).executeAction(idata, this);
+                postValidateActions.get(actionIndex).executeAction(this.installData, this);
             }
         }
     }

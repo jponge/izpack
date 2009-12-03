@@ -88,7 +88,7 @@ public class MultiVolumeUnpacker extends UnpackerBase {
             List[] customActions = getCustomActions();
             // Custom action listener stuff --- beforePacks ----
             informListeners(customActions, InstallerListener.BEFORE_PACKS, idata, npacks, handler);
-            // vs = new VariableSubstitutor(idata.getVariables());
+            // vs = new VariableSubstitutor(installData.getVariables());
             packs = idata.getSelectedPacks();
             npacks = packs.size();
             if (npacks == 0) {

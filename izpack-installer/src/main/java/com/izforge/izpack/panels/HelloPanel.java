@@ -75,8 +75,8 @@ public class HelloPanel extends IzPanel {
         super(parent, idata, layout);
         // We create and put the labels
         String str;
-        str = parent.langpack.getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
-                + idata.getInfo().getAppVersion() + parent.langpack.getString("HelloPanel.welcome2");
+        str = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "
+                + idata.getInfo().getAppVersion() + installData.getLangpack().getString("HelloPanel.welcome2");
         JLabel welcomeLabel = LabelFactory.create(str, parent.icons.getImageIcon("host"), LEADING);
         // IzPanelLayout is a constraint orientated layout manager. But if no constraint is
         // given, a default will be used. It starts in the first line.
@@ -93,7 +93,7 @@ public class HelloPanel extends IzPanel {
         ArrayList<Info.Author> authors = idata.getInfo().getAuthors();
         int size = authors.size();
         if (size > 0) {
-            str = parent.langpack.getString("HelloPanel.authors");
+            str = installData.getLangpack().getString("HelloPanel.authors");
             JLabel appAuthorsLabel = LabelFactory.create(str, parent.icons
                     .getImageIcon("information"), LEADING);
             // If nothing will be sad to the IzPanelLayout the position of an add will be
@@ -120,7 +120,7 @@ public class HelloPanel extends IzPanel {
         }
 
         if (idata.getInfo().getAppURL() != null) {
-            str = parent.langpack.getString("HelloPanel.url") + idata.getInfo().getAppURL();
+            str = installData.getLangpack().getString("HelloPanel.url") + idata.getInfo().getAppURL();
             JLabel appURLLabel = LabelFactory.create(str, parent.icons.getImageIcon("bookmark"),
                     LEADING);
             add(appURLLabel, LayoutConstants.NEXT_LINE);

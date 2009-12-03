@@ -327,6 +327,13 @@ public class AutomatedInstallData implements Serializable {
         }
     }
 
+    /**
+     * Set Locale in xml, installdata, and langpack
+     *
+     * @param locale         Locale to set
+     * @param localeDatabase LocaleDatabse containing the desired locale
+     * @throws Exception
+     */
     public void setAndProcessLocal(String locale, LocaleDatabase localeDatabase) throws Exception {
         // We add an xml data information
         getXmlData().setAttribute("langpack", locale);

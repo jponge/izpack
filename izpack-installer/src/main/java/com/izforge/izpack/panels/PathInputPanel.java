@@ -135,14 +135,14 @@ public class PathInputPanel extends IzPanel implements ActionListener {
         String chosenPath = pathSelectionPanel.getPath();
         boolean ok = true;
 
-        boolean modifyinstallation = Boolean.valueOf(idata.getVariable(GUIInstallData.MODIFY_INSTALLATION));
+        boolean modifyinstallation = Boolean.valueOf(this.installData.getVariable(GUIInstallData.MODIFY_INSTALLATION));
         if (modifyinstallation) {
             // installation directory has to exist in a modification installation
             mustExist = true;
 
             File installationinformation = new File(pathSelectionPanel.getPath() + File.separator + AutomatedInstallData.INSTALLATION_INFORMATION);
             if (!installationinformation.exists()) {
-                emitError(parent.langpack.getString("installer.error"), parent.langpack.getString("PathInputPanel.required.forModificationInstallation"));
+                emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack().getString("PathInputPanel.required.forModificationInstallation"));
 
                 return false;
             }
@@ -151,11 +151,11 @@ public class PathInputPanel extends IzPanel implements ActionListener {
         // We put a warning if the specified target is nameless
         if (chosenPath.length() == 0) {
             if (isMustExist()) {
-                emitError(parent.langpack.getString("installer.error"), parent.langpack
+                emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
                         .getString("PathInputPanel.required"));
                 return false;
             }
-            ok = emitWarning(parent.langpack.getString("installer.warning"), emptyTargetMsg);
+            ok = emitWarning(installData.getLangpack().getString("installer.warning"), emptyTargetMsg);
         }
         if (!ok) {
             return ok;
@@ -173,33 +173,33 @@ public class PathInputPanel extends IzPanel implements ActionListener {
         pathSelectionPanel.setPath(chosenPath);
         if (isMustExist()) {
             if (!path.exists()) {
-                emitError(parent.langpack.getString("installer.error"), parent.langpack
+                emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
                         .getString(getI18nStringForClass("required", "PathInputPanel")));
                 return false;
             }
             if (!pathIsValid()) {
-                emitError(parent.langpack.getString("installer.error"), parent.langpack
+                emitError(installData.getLangpack().getString("installer.error"), installData.getLangpack()
                         .getString(getI18nStringForClass("notValid", "PathInputPanel")));
                 return false;
             }
         } else {
             // We assume, that we would install something into this dir
             if (!isWriteable()) {
-                emitError(parent.langpack.getString("installer.error"), getI18nStringForClass(
+                emitError(installData.getLangpack().getString("installer.error"), getI18nStringForClass(
                         "notwritable", "TargetPanel"));
                 return false;
             }
             // We put a warning if the directory exists else we warn
             // that it will be created
             if (path.exists()) {
-                int res = askQuestion(parent.langpack.getString("installer.warning"), warnMsg,
+                int res = askQuestion(installData.getLangpack().getString("installer.warning"), warnMsg,
                         AbstractUIHandler.CHOICES_YES_NO, AbstractUIHandler.ANSWER_YES);
                 ok = res == AbstractUIHandler.ANSWER_YES;
             } else {
                 //if 'ShowCreateDirectoryMessage' variable set to 'false'
                 // then don't show "directory will be created" dialog:
                 final String vStr =
-                        idata.getVariable("ShowCreateDirectoryMessage");
+                        this.installData.getVariable("ShowCreateDirectoryMessage");
                 if (vStr == null || Boolean.getBoolean(vStr)) {
                     ok = this.emitNotificationFeedback(getI18nStringForClass(
                             "createdir", "TargetPanel") + "\n" + chosenPath);

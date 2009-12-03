@@ -99,7 +99,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
         font = font.deriveFont(Font.BOLD, font.getSize() * 2.0f);
         heading.setFont(font);
         heading.setHorizontalAlignment(SwingConstants.CENTER);
-        heading.setText(parent.langpack.getString("ProcessPanel.heading"));
+        heading.setText(installData.getLangpack().getString("ProcessPanel.heading"));
         heading.setVerticalAlignment(SwingConstants.TOP);
         BorderLayout layout = new BorderLayout();
         layout.setHgap(2);
@@ -163,8 +163,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
         processLabel.setEnabled(false);
 
         validated = true;
-        idata.setInstallSuccess(worker.getResult());
-        if (idata.getPanels().indexOf(this) != (idata.getPanels().size() - 1)) {
+        this.installData.setInstallSuccess(worker.getResult());
+        if (this.installData.getPanels().indexOf(this) != (this.installData.getPanels().size() - 1)) {
             if (unlockNext)
                 parent.unlockNextButton();
         }
@@ -172,7 +172,7 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
             parent.unlockPrevButton();
 
         // set to finished only in case of success
-        finishedWork = idata.isInstallSuccess();
+        finishedWork = this.installData.isInstallSuccess();
     }
 
     /**

@@ -73,28 +73,28 @@ public class SimpleFinishPanel extends IzPanel {
     public void panelActivate() {
         parent.lockNextButton();
         parent.lockPrevButton();
-        parent.setQuitButtonText(parent.langpack.getString("FinishPanel.done"));
+        parent.setQuitButtonText(installData.getLangpack().getString("FinishPanel.done"));
         parent.setQuitButtonIcon("done");
-        if (idata.isInstallSuccess()) {
+        if (this.installData.isInstallSuccess()) {
 
             // We set the information
             add(LabelFactory.create(parent.icons.getImageIcon("check")));
             add(IzPanelLayout.createVerticalStrut(5));
-            add(LabelFactory.create(parent.langpack.getString("FinishPanel.success"),
+            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.success"),
                     parent.icons.getImageIcon("preferences"), LEADING), NEXT_LINE);
             add(IzPanelLayout.createVerticalStrut(5));
-            if (idata.getUninstallOutJar() != null) {
+            if (this.installData.getUninstallOutJar() != null) {
                 // We prepare a message for the uninstaller feature
                 String path = translatePath("$INSTALL_PATH") + File.separator + "Uninstaller";
 
-                add(LabelFactory.create(parent.langpack
+                add(LabelFactory.create(installData.getLangpack()
                         .getString("FinishPanel.uninst.info"), parent.icons
                         .getImageIcon("preferences"), LEADING), NEXT_LINE);
                 add(LabelFactory.create(path, parent.icons.getImageIcon("empty"),
                         LEADING), NEXT_LINE);
             }
         } else {
-            add(LabelFactory.create(parent.langpack.getString("FinishPanel.fail"),
+            add(LabelFactory.create(installData.getLangpack().getString("FinishPanel.fail"),
                     parent.icons.getImageIcon("stop"), LEADING));
         }
         getLayoutHelper().completeLayout(); // Call, or call not?
