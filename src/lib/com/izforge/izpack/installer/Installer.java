@@ -73,16 +73,19 @@ public class Installer {
     		        }
     		        else if ("-options-template".equalsIgnoreCase(arg))
     		        {
+    		            type = INSTALLER_CONSOLE;
     		            consoleAction = CONSOLE_GEN_TEMPLATE;
     		            path = args_it.next().trim();
     		        }
     		        else if ("-options".equalsIgnoreCase(arg))
                     {
+                        type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_FROM_TEMPLATE;
                         path = args_it.next().trim();
                     }
     		        else if ("-language".equalsIgnoreCase(arg))
     		        {
+    		            type = INSTALLER_CONSOLE;
     		            langcode = args_it.next().trim();
     		        }
     		        else
