@@ -196,12 +196,14 @@ public class XMLElementImpl implements IXMLElement
     public Vector<IXMLElement> getChildrenNamed(String name)
     {
         Vector<IXMLElement> res = new Vector<IXMLElement>();
-        NodeList nodeList = element.getElementsByTagName(name);
-        Element child;
-        for (int i = 0; i < nodeList.getLength(); i++)
+        Vector<IXMLElement> children = getChildren();
+        for (int i = 0; i < children.size(); i++)
         {
-            child = (Element) nodeList.item(i);
-            res.add(new XMLElementImpl(child));
+            IXMLElement child = children.elementAt(i);
+            if (child.getName()!= null && child.getName().equals(name))
+            {
+                res.add(new XMLElementImpl(child.getElement()));
+            }
         }
         return res;
     }

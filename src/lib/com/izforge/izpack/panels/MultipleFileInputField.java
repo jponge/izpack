@@ -244,10 +244,14 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         boolean result = false;
         int fileCount = model.getSize();
         
-        for (int i=0; i < fileCount; i++){
-            result = validateFile((String) model.getElementAt(i));
-            if (!result){
-                break;
+        if (fileCount == 0 && allowEmpty) {
+            return true;
+        } else {
+            for (int i = 0; i < fileCount; i++) {
+                result = validateFile((String) model.getElementAt(i));
+                if (!result){
+                    break;
+                }
             }
         }
         

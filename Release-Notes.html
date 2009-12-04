@@ -2,59 +2,94 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Release Notes - IzPack - Version 4.3.1</title>
+  <title>Release Notes - IzPack - Version 4.3.2</title>
 </head>
 <body>
 
 
 
-            <h1>Release Notes - IzPack - Version 4.3.1</h1>
+            <h1>Release Notes - IzPack - Version 4.3.2</h1>
 
-            <h2>        Sub-task
-            </h2>
-            <ul>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-331'>IZPACK-331</a>] -         Document how to debug an uninstaller
-            </li>
-            </ul>
+			<h2>        Sub-task
+			</h2>
+			<ul>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-368'>IZPACK-368</a>] -         Implement functionalities for complex installers in console mode
+			</li>
+			</ul>
 
-            <h2>        Bug
-            </h2>
-            <ul>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-376'>IZPACK-376</a>] -         NullPointerException occours in Unpacker.cleanup()
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-377'>IZPACK-377</a>] -         Cannot find named Resource: '/res/userInputLang.xml_eng' 
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-383'>IZPACK-383</a>] -         com.izforge.izpack.panels.DefaultTargetPanel.summaryCaption property undefined
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-384'>IZPACK-384</a>] -         Installer does not work when JAR is loaded by custom class loader
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-385'>IZPACK-385</a>] -         PacksPanelAutomationHelper do not add optional packs even if they are selected in the autoinstall.xml
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-386'>IZPACK-386</a>] -         Uninstaller does not elevate on Windows
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-397'>IZPACK-397</a>] -         -console option does not display license file
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-403'>IZPACK-403</a>] -         licence panel, the &quot;Quit&quot; button isn't displayed
-            </li>
-            </ul>
+			<h2>        Bug
+			</h2>
+			<ul>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-324'>IZPACK-324</a>] -         UserInputPanel is recreated anytime the data gets changed
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-334'>IZPACK-334</a>] -         RulesEngine compound conditions logic.
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-364'>IZPACK-364</a>] -         OsConstraints in only one parsable leads to skipping the whole pack
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-367'>IZPACK-367</a>] -         Installdata is null in condition
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-378'>IZPACK-378</a>] -         Wrong namespace for xi:include
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-387'>IZPACK-387</a>] -         Uninstaller does not elevate when installer has been elevated by OS
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-395'>IZPACK-395</a>] -         EOFException in installer created with pack200
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-408'>IZPACK-408</a>] -         Occasionally builds installer that throws EOFException when Unpacker attempts to read the number of parsable objects available.
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-410'>IZPACK-410</a>] -         TargetPanel.dir.windows_vista doesn't work
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-412'>IZPACK-412</a>] -         Password fields require at least one validator
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-430'>IZPACK-430</a>] -         uninstaller elevation configurable
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-434'>IZPACK-434</a>] -         Danish language translation is missing values
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-438'>IZPACK-438</a>] -         Uninstaller does not delete all folders
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-440'>IZPACK-440</a>] -         $myVar] is not being replaced with variable value
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-445'>IZPACK-445</a>] -         console mode NullPointerException
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-448'>IZPACK-448</a>] -         TargetPanel directory chooser dialog does not allow creation of new directory on Mac OS X
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-455'>IZPACK-455</a>] -         Missing entry for FinishPanel.auto.dialog.filterdesc in deu.xml (German)
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-478'>IZPACK-478</a>] -         com.izforge.izpack.util.Log custom messages are not formatted correctly.
+			</li>
+			</ul>
 
-            <h2>        Improvement
-            </h2>
-            <ul>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-375'>IZPACK-375</a>] -         New langpack for language Polish
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-380'>IZPACK-380</a>] -         izpack2exe: abillity to specify more then one file, file to launch defined can be set separately.
-            </li>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-390'>IZPACK-390</a>] -         ProgressBarInstallerListener.jar not available in IzPack out of the box build
-            </li>
-            </ul>
+			<h2>        Improvement
+			</h2>
+			<ul>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-390'>IZPACK-390</a>] -         ProgressBarInstallerListener.jar not available in IzPack out of the box build
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-407'>IZPACK-407</a>] -         No meaningful xml exception
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-423'>IZPACK-423</a>] -         possibility to check for $ENV variable existance
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-458'>IZPACK-458</a>] -         Galician language updated.
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-468'>IZPACK-468</a>] -         Language pack for Basque (EUS)
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-476'>IZPACK-476</a>] -         Make the UserInputPanel contents scrollable
+			</li>
+			</ul>
 
-            <h2>        New Feature
-            </h2>
-            <ul>
-            <li>[<a href='http://jira.codehaus.org/browse/IZPACK-158'>IZPACK-158</a>] -         AntActionListener cannot reference an internal build script
-            </li>
-            </ul>
+			<h2>        New Feature
+			</h2>
+			<ul>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-432'>IZPACK-432</a>] -         Portugues European Language Pack
+			</li>
+			</ul>
+
+			<h2>        Task
+			</h2>
+			<ul>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-420'>IZPACK-420</a>] -         Update for Finnish langpack
+			</li>
+			<li>[<a href='http://jira.codehaus.org/browse/IZPACK-469'>IZPACK-469</a>] -         Update for Finnish langpack
+			</li>
+			</ul>
         
 
 </body>

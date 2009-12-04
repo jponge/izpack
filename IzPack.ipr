@@ -77,8 +77,8 @@
   <component name="IdProvider" IDEtalkID="F66F8E4B88443419F1E5C108B16FCE75" />
   <component name="InspectionProjectProfileManager">
     <option name="PROJECT_PROFILE" value="Project Default" />
-    <option name="USE_PROJECT_LEVEL_SETTINGS" value="false" />
-    <scopes />
+    <option name="USE_PROJECT_PROFILE" value="true" />
+    <version value="1.0" />
     <profiles>
       <profile version="1.0" is_locked="false">
         <option name="myName" value="Project Default" />
@@ -259,7 +259,9 @@
   <component name="ProjectDetails">
     <option name="projectName" value="IzPack" />
   </component>
-  <component name="ProjectFileVersion" converted="true" />
+  <component name="ProjectDictionaryState">
+    <dictionary name="julien" />
+  </component>
   <component name="ProjectKey">
     <option name="state" value="project:///Users/julien/Code/izpack.git/IzPack.ipr" />
   </component>

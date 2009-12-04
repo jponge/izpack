@@ -642,7 +642,7 @@ the selection or a static text element can be added to display above the selecti
 
        <field type="staticText" align="left" txt="Existing SSL keystore to import:"/>
         <field type="file" align="left" variable="existing.ssl.keystore">
-          <spec txt="" size="25" set="$myconfig" mustExist="false" />
+          <spec txt="" size="25" set="$myconfig" />
         </field>
 
 .. image:: file-field.png
@@ -745,6 +745,15 @@ field will ensure a directory is selected.
           <spec txt="" size="25" set="$INSTALL_PATH$FILE_SEPARATOR${jboss.version}" mustExist="false" />
         </field>
 
+
+
+The directory supports the following two special attributes for the ``<spec>`` element:
+
+**mustExist** `- optional (default: true)`
+Specifies whether or not the selected path must be an existing directory.
+
+**create** `- optional (default: false)`
+Specifies whether or not the selected directory should be created if it does not exist (requires `mustExist=true`).
 
 Messages for the directory field can be customized by creating a custom lang pack and
 overriding the following values (attribute values wrapped for readability):

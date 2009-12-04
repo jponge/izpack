@@ -99,7 +99,7 @@ public class PrivilegedRunner
         }
     }
 
-    private boolean canWriteToProgramFiles()
+    public boolean canWriteToProgramFiles()
     {
         try
         {

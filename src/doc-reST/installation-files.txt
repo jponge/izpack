@@ -721,6 +721,7 @@ dan       Danish
 glg       Galician
 deu       German
 eng       English
+eus       Basque
 fin       Finnish
 fra       French
 hun       Hungarian
@@ -731,6 +732,7 @@ ned       Nederlands
 nor       Norwegian
 pol       Polnish
 por       Portuguese (Brazilian)
+prt       Portuguese (European)
 rom       Romanian
 rus       Russian
 scg       Serbian

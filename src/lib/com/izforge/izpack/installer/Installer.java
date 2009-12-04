@@ -74,20 +74,24 @@ public class Installer {
                     }
                     else if ("-options-template".equalsIgnoreCase(arg))
                     {
+			type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_GEN_TEMPLATE;
                         path = args_it.next().trim();
                     }
                     else if ("-options".equalsIgnoreCase(arg))
                     {
+			type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_FROM_TEMPLATE;
                         path = args_it.next().trim();
                     }
                     else if ("-options-system".equalsIgnoreCase(arg))
                     {
+			type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_FROM_SYSTEMPROPERTIES;
                     }
                     else if ("-options-auto".equalsIgnoreCase(arg))
                     {
+			type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_FROM_SYSTEMPROPERTIESMERGE;
                         path = args_it.next().trim();
                     }

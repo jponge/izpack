@@ -28,7 +28,9 @@ import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.Unpacker;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.CleanupClient;
 import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.Housekeeper;
 import com.izforge.izpack.util.SpecHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
@@ -50,7 +52,7 @@ import java.util.Vector;
  *
  * @author Klaus Bartz
  */
-public class RegistryInstallerListener extends NativeInstallerListener
+public class RegistryInstallerListener extends NativeInstallerListener implements CleanupClient
 {
 
     /**
@@ -83,6 +85,8 @@ public class RegistryInstallerListener extends NativeInstallerListener
     private static final String SAVE_PREVIOUS = "saveprevious";
 
     private RulesEngine rules;
+
+	private List registryModificationLog;
     
     /**
      * Default constructor.
@@ -117,6 +121,9 @@ public class RegistryInstallerListener extends NativeInstallerListener
     {
         try
         {
+        	// Register for cleanup
+        	Housekeeper.getInstance().registerForCleanup(this);
+        	
             // Start logging
             RegistryHandler rh = RegistryDefaultHandler.getInstance();
             if (rh == null)
@@ -167,7 +174,8 @@ public class RegistryInstallerListener extends NativeInstallerListener
             {
                 UninstallData.getInstance().addAdditionalData("registryEntries", info);
             }
-
+            // Remember all registry info to rewind registry modifications in case of failed installation
+            registryModificationLog = info;
         }
         catch (Exception e)
         {
@@ -181,8 +189,41 @@ public class RegistryInstallerListener extends NativeInstallerListener
             }
         }
     }
+    
+    
 
     /**
+     * Remove all registry entries on failed installation
+     */
+    public void cleanUp()
+    {
+		// installation was not successful now rewind all registry changes
+        if (AutomatedInstallData.getInstance().installSuccess || registryModificationLog == null || registryModificationLog.size() < 1)
+        {
+            return;
+        }
+        RegistryHandler registryHandler = RegistryDefaultHandler.getInstance();
+        try
+        {
+            if (registryHandler == null)
+            {
+                return;
+            }
+            if (registryHandler == null)
+            {
+                return;
+            }
+            registryHandler.activateLogging();
+            registryHandler.setLoggingInfo(registryModificationLog);
+            registryHandler.rewind();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+	/**
      * Performs the registry settings for the given pack.
      *
      * @param pack XML elemtent which contains the registry settings for one pack
