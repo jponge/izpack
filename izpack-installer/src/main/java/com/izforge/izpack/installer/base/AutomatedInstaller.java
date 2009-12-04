@@ -76,31 +76,36 @@ public class AutomatedInstaller extends InstallerBase {
     /**
      * Constructing an instance triggers the install.
      *
-     * @param inputFilename   Name of the file containing the installation data.
      * @param resourceManager
      * @throws Exception Description of the Exception
      */
-    public AutomatedInstaller(String inputFilename, ResourceManager resourceManager,ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter) throws Exception {
+    public AutomatedInstaller(ResourceManager resourceManager,ConditionCheck checkCondition, UninstallDataWriter uninstallDataWriter) {
         super(resourceManager);
         this.checkCondition=checkCondition;
         this.uninstallDataWriter = uninstallDataWriter;
+
+        this.panelInstanceCount = new TreeMap<String, Integer>();
+    }
+
+    /**
+     * Initialize the automated installer.
+     * @param inputFilename   Name of the file containing the installation data.
+     * @throws Exception
+     */
+    public void init(String inputFilename) throws Exception {
         File input = new File(inputFilename);
-
-
         // Loads the xml data
         this.idata.setXmlData(getXMLData(input));
 
         // Loads the langpack
         this.idata.setLocaleISO3(this.idata.getXmlData().getAttribute("langpack", "eng"));
-        InputStream in = resourceManager.getLangPack(this.idata.getLocaleISO3());        
+        InputStream in = resourceManager.getLangPack(this.idata.getLocaleISO3());
         this.idata.setLangpack(new LocaleDatabase(in));
         this.idata.setVariable(ScriptParserConstant.ISO3_LANG, this.idata.getLocaleISO3());
 
         // create the resource manager singleton
         resourceManager.setLocale(this.idata.getLocaleISO3());
 //        ResourceManager.create(this.idata);
-
-        this.panelInstanceCount = new TreeMap<String, Integer>();
     }
 
     /**
