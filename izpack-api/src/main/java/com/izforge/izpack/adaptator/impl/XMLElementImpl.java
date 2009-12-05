@@ -304,4 +304,13 @@ public class XMLElementImpl implements IXMLElement {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 0;
+        for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling()) {
+            hashCode += child.hashCode();
+        }
+        return hashCode;
+    }
 }

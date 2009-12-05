@@ -37,7 +37,8 @@ import java.util.Enumeration;
 import java.util.List;
 
 
-public class MultipleFileInputField extends JPanel implements ActionListener, FocusListener {
+public class MultipleFileInputField extends JPanel implements ActionListener, FocusListener
+{
     private static final long serialVersionUID = 4673684743657328492L;
 
     boolean isDirectory;
@@ -133,8 +134,9 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         add(main);
     }
 
-    public void actionPerformed(ActionEvent arg0) {
-        if (arg0.getSource() == browseBtn) {
+    public void actionPerformed(ActionEvent arg0)
+    {
+        if (arg0.getSource() == browseBtn){
             Debug.trace("Show dirchooser");
             String initialPath = ".";
             if (fileList.getSelectedValue() != null) {
@@ -173,7 +175,8 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
             result = new ArrayList<String>();
 
             Enumeration<?> elements = model.elements();
-            for (; elements.hasMoreElements();) {
+            for (;elements.hasMoreElements();)
+            {
                 String element = (String) elements.nextElement();
                 result.add(element);
             }
@@ -191,16 +194,19 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         boolean result = false;
         if (allowEmpty && ((input == null) || (input.length() == 0))) {
             result = true;
-        } else if (input != null) {
+        }
+        else if (input != null){
             File file = new File(input);
 
             if (isDirectory && !file.isDirectory()) {
                 result = false;
                 showMessage("dir.notdirectory");
-            } else if (!isDirectory && !file.isFile()) {
+            }
+            else if (!isDirectory && !file.isFile()){
                 result = false;
                 showMessage("file.notfile");
-            } else {
+            }
+            else {
                 StringInputProcessingClient processingClient = new StringInputProcessingClient(input, validators);
                 boolean success = processingClient.validate();
                 if (!success) {
@@ -213,7 +219,8 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
         } else {
             if (isDirectory) {
                 showMessage("dir.nodirectory");
-            } else {
+            }
+ 			else {
                 showMessage("file.nofile");
             }
         }
@@ -223,44 +230,54 @@ public class MultipleFileInputField extends JPanel implements ActionListener, Fo
     public boolean validateField() {
         boolean result = false;
         int fileCount = model.getSize();
-
-        for (int i = 0; i < fileCount; i++) {
-            result = validateFile((String) model.getElementAt(i));
-            if (!result) {
-                break;
+        
+        if (fileCount == 0 && allowEmpty) {
+            return true;
+        } else {
+            for (int i = 0; i < fileCount; i++) {
+                result = validateFile((String) model.getElementAt(i));
+                if (!result){
+                    break;
+                }
             }
         }
-
+        
         return result;
 
     }
 
-
-    public boolean isAllowEmptyInput() {
+    
+    public boolean isAllowEmptyInput()
+    {
         return allowEmpty;
     }
 
-
-    public void setAllowEmptyInput(boolean allowEmpty) {
+    
+    public void setAllowEmptyInput(boolean allowEmpty)
+    {
         this.allowEmpty = allowEmpty;
     }
 
-    public void focusGained(FocusEvent e) {
+    public void focusGained(FocusEvent e)
+    {
         // TODO Auto-generated method stub
 
     }
 
-    public void focusLost(FocusEvent e) {
-
+    public void focusLost(FocusEvent e)
+    {
+          
     }
 
-
-    public boolean isCreateMultipleVariables() {
+    
+    public boolean isCreateMultipleVariables()
+    {
         return createMultipleVariables;
     }
 
-
-    public void setCreateMultipleVariables(boolean createMultipleVariables) {
+    
+    public void setCreateMultipleVariables(boolean createMultipleVariables)
+    {
         this.createMultipleVariables = createMultipleVariables;
     }
 }
