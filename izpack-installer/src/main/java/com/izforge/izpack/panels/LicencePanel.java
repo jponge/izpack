@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.GuiId;
@@ -105,7 +104,7 @@ public class LicencePanel extends IzPanel implements ActionListener {
         try {
             // We read it
             String resNamePrifix = "LicencePanel.licence";
-            licence = ResourceManager.getInstance().getTextResource(resNamePrifix);
+            licence = getResourceManager().getTextResource(resNamePrifix);
         }
         catch (Exception err) {
             licence = "Error : could not load the licence text !";

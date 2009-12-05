@@ -24,12 +24,10 @@ public class IconsProvider implements Provider {
      */
     private static final String CUSTOM_ICONS_RESOURCEFILE = "customicons.xml";
 
-
-
-    public IconsDatabase provide() throws Exception {
+    public IconsDatabase provide(ResourceManager resourceManager) throws Exception {
         IconsDatabase icons = new IconsDatabase();
         loadIcons(icons);
-        loadCustomIcons(icons);
+        loadCustomIcons(icons, resourceManager);
         return icons;
     }
 
@@ -79,11 +77,11 @@ public class IconsProvider implements Provider {
      *
      * @throws Exception
      */
-    private void loadCustomIcons(IconsDatabase icons) throws Exception {
+    private void loadCustomIcons(IconsDatabase icons, ResourceManager resourceManager) throws Exception {
         // We try to load and add a custom langpack.
         InputStream inXML = null;
         try {
-            inXML = ResourceManager.getInstance().getInputStream(CUSTOM_ICONS_RESOURCEFILE);
+            inXML = resourceManager.getInputStream(CUSTOM_ICONS_RESOURCEFILE);
         }
         catch (Throwable exception) {
             Debug.trace("Resource " + CUSTOM_ICONS_RESOURCEFILE

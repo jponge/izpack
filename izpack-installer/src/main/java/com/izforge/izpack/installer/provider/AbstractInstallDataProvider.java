@@ -178,7 +178,7 @@ public class AbstractInstallDataProvider implements Provider {
     protected void addCustomLangpack(AutomatedInstallData idata) {
         // We try to load and add a custom langpack.
         try {
-            idata.getLangpack().add(ResourceManager.getInstance().getInputStream(LANG_FILE_NAME));
+            idata.getLangpack().add(resourceManager.getInputStream(LANG_FILE_NAME));
         }
         catch (Throwable exception) {
             Debug.trace("No custom langpack available.");

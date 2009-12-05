@@ -188,7 +188,13 @@ public class InstallerFrame extends JFrame {
      */
     private PanelManager panelManager;
 
+
     PanelContainer panelComponent;
+
+    /**
+     * The resource manager
+     */
+    private ResourceManager resourceManager;
 
     /**
      * Manager for writing uninstall data
@@ -394,19 +400,18 @@ public class InstallerFrame extends JFrame {
      */
     private ImageIcon loadIcon(String resPrefix, int PanelNo, boolean tryBaseIcon)
             throws ResourceNotFoundException, IOException {
-        ResourceManager rm = ResourceManager.getInstance();
         ImageIcon icon;
         String iconext = this.getIconResourceNameExtension();
         if (tryBaseIcon) {
             try {
-                icon = rm.getImageIconResource(resPrefix);
+                icon = resourceManager.getImageIconResource(resPrefix);
             }
             catch (Exception e) // This is not that clean ...
             {
-                icon = rm.getImageIconResource(resPrefix + "." + PanelNo + iconext);
+                icon = resourceManager.getImageIconResource(resPrefix + "." + PanelNo + iconext);
             }
         } else {
-            icon = rm.getImageIconResource(resPrefix + "." + PanelNo + iconext);
+            icon = resourceManager.getImageIconResource(resPrefix + "." + PanelNo + iconext);
         }
         return (icon);
     }
@@ -423,19 +428,18 @@ public class InstallerFrame extends JFrame {
      */
     private ImageIcon loadIcon(String resPrefix, String panelid, boolean tryBaseIcon)
             throws ResourceNotFoundException, IOException {
-        ResourceManager rm = ResourceManager.getInstance();
         ImageIcon icon = null;
         String iconext = this.getIconResourceNameExtension();
         if (tryBaseIcon) {
             try {
-                icon = rm.getImageIconResource(resPrefix);
+                icon = resourceManager.getImageIconResource(resPrefix);
             }
             catch (Exception e) // This is not that clean ...
             {
-                icon = rm.getImageIconResource(resPrefix + "." + panelid + iconext);
+                icon = resourceManager.getImageIconResource(resPrefix + "." + panelid + iconext);
             }
         } else {
-            icon = rm.getImageIconResource(resPrefix + "." + panelid + iconext);
+            icon = resourceManager.getImageIconResource(resPrefix + "." + panelid + iconext);
         }
         return (icon);
     }
@@ -684,11 +688,9 @@ public class InstallerFrame extends JFrame {
     public InputStream getResource(String res) throws Exception {
         InputStream result;
         String basePath = "";
-        ResourceManager rm = null;
 
         try {
-            rm = ResourceManager.getInstance();
-            basePath = rm.getResourceBasePath();
+            basePath = resourceManager.getResourceBasePath();
         }
         catch (Exception e) {
             e.printStackTrace();
