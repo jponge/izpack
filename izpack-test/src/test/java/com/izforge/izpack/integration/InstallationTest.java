@@ -61,6 +61,7 @@ public class InstallationTest extends AbstractInstallationTest {
         panelContainer = applicationContainer.getComponent(IPanelContainer.class);
         File installPath = new File(installData.getInstallPath());
         FileUtils.deleteDirectory(installPath);
+        assertThat(installPath.exists(), Is.is(false));
         // Lang picker
         prepareDialogFixture();
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
@@ -85,10 +86,9 @@ public class InstallationTest extends AbstractInstallationTest {
         // Packs Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
-
-        Thread.sleep(2000);
-
+        while (!installData.isInstallSuccess()) {
+            Thread.sleep(200);
+        }
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
 
         assertThat(installPath.exists(), Is.is(true));
@@ -97,7 +97,6 @@ public class InstallationTest extends AbstractInstallationTest {
             File f = new File(p);
             assertThat(f.exists(), Is.is(true));
         }
-
         // Finish panel
         installerFrameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).click();
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
