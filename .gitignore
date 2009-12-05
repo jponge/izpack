@@ -6,3 +6,5 @@
 target/
 *.iws
 *~
+*.orig
+*.jar
