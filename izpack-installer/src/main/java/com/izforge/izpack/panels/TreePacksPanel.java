@@ -24,7 +24,6 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -153,7 +152,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
             }
 
             if (langPackStream == null) {
-                langPackStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
+                langPackStream = getResourceManager().getInputStream(LANG_FILE_NAME);
             }
 
             this.langpack.add(langPackStream);

@@ -24,7 +24,6 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.IoHelper;
@@ -170,7 +169,7 @@ public class ImgPacksPanel extends PacksPanelBase {
             Pack pack = (Pack) pack_it.next();
             if (pack.packImgId != null) {
                 try {
-                    URL url = ResourceManager.getInstance().getURL(pack.packImgId);
+                    URL url = getResourceManager().getURL(pack.packImgId);
                     ImageIcon img = new ImageIcon(url);
                     images.put(pack.packImgId, img);
                 }

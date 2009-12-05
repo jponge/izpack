@@ -25,7 +25,6 @@ import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
@@ -340,7 +339,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             this.langpack = (LocaleDatabase) installData.getLangpack().clone();
 
             String resource = LANG_FILE_NAME + "_" + this.installData.getLocaleISO3();
-            this.langpack.add(ResourceManager.getInstance().getInputStream(resource));
+            this.langpack.add(getResourceManager().getInputStream(resource));
         }
         catch (ResourceNotFoundException e) {
             Debug.trace(e);

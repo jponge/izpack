@@ -19,7 +19,6 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -106,7 +105,7 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
     private URL loadLicence() {
         String resNamePrifix = "HTMLLicencePanel.licence";
         try {
-            return ResourceManager.getInstance().getURL(resNamePrifix);
+            return getResourceManager().getURL(resNamePrifix);
         }
         catch (Exception ex) {
             ex.printStackTrace();

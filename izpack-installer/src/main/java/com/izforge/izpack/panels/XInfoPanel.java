@@ -21,7 +21,6 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -101,7 +100,7 @@ public class XInfoPanel extends IzPanel {
     private void loadInfo() {
         try {
             // We read it
-            info = ResourceManager.getInstance().getTextResource("XInfoPanel.info");
+            info = getResourceManager().getTextResource("XInfoPanel.info");
         }
         catch (Exception err) {
             info = "Error : could not load the info text !";

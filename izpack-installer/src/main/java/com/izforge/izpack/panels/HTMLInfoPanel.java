@@ -19,7 +19,6 @@
 
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -135,7 +134,7 @@ public class HTMLInfoPanel extends IzPanel {
         if (getMetadata() != null && getMetadata().getPanelid() != null) {
             try {
                 String panelSpecificResName = panelResourcePrefixStr + '.' + this.getMetadata().getPanelid();
-                String panelspecificResContent = ResourceManager.getInstance().getTextResource(panelSpecificResName);
+                String panelspecificResContent = getResourceManager().getTextResource(panelSpecificResName);
                 if (panelspecificResContent != null) {
                     panelResourceNameStr = panelSpecificResName;
                 }
@@ -146,7 +145,7 @@ public class HTMLInfoPanel extends IzPanel {
         }
 
         try {
-            return ResourceManager.getInstance().getURL(panelResourceNameStr);
+            return getResourceManager().getURL(panelResourceNameStr);
         }
         catch (Exception ex) {
             ex.printStackTrace();

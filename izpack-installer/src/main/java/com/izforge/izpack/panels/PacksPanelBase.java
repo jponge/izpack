@@ -27,7 +27,6 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.PackValidator;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -148,7 +147,7 @@ public abstract class PacksPanelBase extends IzPanel implements PacksPanelInterf
         // Load langpack.
         try {
             this.langpack = installData.getLangpack();
-            InputStream inputStream = ResourceManager.getInstance().getInputStream(LANG_FILE_NAME);
+            InputStream inputStream = getResourceManager().getInputStream(LANG_FILE_NAME);
             this.langpack.add(inputStream);
             this.debugger = parent.getDebugger();
         }

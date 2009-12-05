@@ -23,7 +23,6 @@ import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.Pack;
-import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.ResourceNotFoundException;
@@ -934,10 +933,10 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
         InputStream input = null;
 
         try {
-            input = ResourceManager.getInstance().getInputStream(TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
+            input = getResourceManager().getInputStream(TargetFactory.getCurrentOSPrefix() + SPEC_FILE_NAME);
         }
         catch (ResourceNotFoundException rnfE) {
-            input = ResourceManager.getInstance().getInputStream(SPEC_FILE_NAME);
+            input = getResourceManager().getInputStream(SPEC_FILE_NAME);
         }
         if (input == null) {
             haveShortcutSpec = false;
