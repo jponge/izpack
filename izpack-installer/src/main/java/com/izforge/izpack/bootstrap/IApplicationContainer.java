@@ -1,6 +1,5 @@
 package com.izforge.izpack.bootstrap;
 
-import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 
 /**
@@ -15,6 +14,4 @@ public interface IApplicationContainer {
     MutablePicoContainer makeChildContainer();
 
     void initBindings();
-
-    DefaultPicoContainer getPico();
 }

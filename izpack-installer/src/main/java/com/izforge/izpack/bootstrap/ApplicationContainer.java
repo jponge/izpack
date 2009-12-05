@@ -10,9 +10,8 @@ import com.izforge.izpack.installer.provider.AutomatedInstallDataProvider;
 import com.izforge.izpack.installer.provider.GUIInstallDataProvider;
 import com.izforge.izpack.installer.provider.IconsProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
-import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.behaviors.Caching;
+import org.picocontainer.PicoBuilder;
 import org.picocontainer.injectors.ProviderAdapter;
 
 /**
@@ -21,10 +20,14 @@ import org.picocontainer.injectors.ProviderAdapter;
  */
 public class ApplicationContainer implements IApplicationContainer {
 
-    private DefaultPicoContainer pico;
+    private MutablePicoContainer pico;
 
     public void initBindings() {
-        pico = new DefaultPicoContainer(new Caching());
+        pico = new PicoBuilder()
+                .withCaching()
+                .withAnnotatedMethodInjection()
+                .withConstructorInjection()
+                .build();
         pico
                 .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
                 .addAdapter(new ProviderAdapter(new GUIInstallDataProvider()))
@@ -43,10 +46,6 @@ public class ApplicationContainer implements IApplicationContainer {
 
     public void dispose() {
         pico.dispose();
-    }
-
-    public DefaultPicoContainer getPico() {
-        return pico;
     }
 
     public <T> T getComponent(Class<T> componentType) {

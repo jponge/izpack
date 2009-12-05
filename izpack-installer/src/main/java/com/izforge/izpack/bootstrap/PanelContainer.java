@@ -9,7 +9,6 @@ import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.VariableSubstitutorImpl;
 import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoBuilder;
 import org.picocontainer.parameters.ComponentParameter;
 import org.picocontainer.parameters.ConstantParameter;
 
@@ -26,11 +25,7 @@ public class PanelContainer implements IPanelContainer {
     public IApplicationContainer parent;
 
     public PanelContainer(IApplicationContainer parent) throws ClassNotFoundException {
-        pico = new PicoBuilder(parent.getPico())
-                .withCaching()
-                .withConstructorInjection()
-                .withAnnotatedMethodInjection()
-                .addChildToParent().build();
+        pico = parent.makeChildContainer();
         initBindings();
     }
 
