@@ -1,16 +1,20 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.bootstrap.IPanelContainer;
+import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import org.apache.commons.io.FileUtils;
 import org.fest.swing.exception.ScreenLockException;
+import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Test;
 
 import java.awt.*;
 import java.io.File;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Test for an installation using mock data
@@ -55,7 +59,8 @@ public class InstallationTest extends AbstractInstallationTest {
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
         panelContainer = applicationContainer.getComponent(IPanelContainer.class);
-        FileUtils.deleteDirectory(new File(installData.getInstallPath()));
+        File installPath = new File(installData.getInstallPath());
+        FileUtils.deleteDirectory(installPath);
         // Lang picker
         prepareDialogFixture();
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
@@ -80,8 +85,24 @@ public class InstallationTest extends AbstractInstallationTest {
         // Packs Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
-//        installerFrameFixture.optionPane().requireEnabled();
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
+
+        Thread.sleep(2000);
+
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+
+        assertThat(installPath.exists(), Is.is(true));
+        UninstallData u = UninstallData.getInstance();
+        for (String p : u.getInstalledFilesList()) {
+            File f = new File(p);
+            assertThat(f.exists(), Is.is(true));
+        }
+
         // Finish panel
+        installerFrameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).click();
+        installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
+        installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).approve();
+        assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
     }
 
 }

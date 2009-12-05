@@ -55,7 +55,7 @@ public class PanelManager {
      *
      * @throws ClassNotFoundException
      */
-    public void loadPanelsInContainer() throws ClassNotFoundException {
+    public PanelManager loadPanelsInContainer() throws ClassNotFoundException {
         // Initialisation
         // We load each of them
         java.util.List<Panel> panelsOrder = installdata.getPanelsOrder();
@@ -66,6 +66,7 @@ public class PanelManager {
                 panelContainer.addComponent(aClass);
             }
         }
+        return this;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.izforge.izpack.integration;
 
 import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.installer.unpacker.IUnpacker;
+import com.izforge.izpack.panels.PanelManager;
 import org.hamcrest.core.IsNull;
 import org.junit.Test;
 
@@ -16,6 +17,8 @@ public class UnpackerTest extends AbstractInstallationTest {
     public void testInstanciateUnpacker() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         panelContainer = applicationContainer.getComponent(IPanelContainer.class);
+        PanelManager panelManager = panelContainer.getComponent(PanelManager.class);
+        panelManager.loadPanelsInContainer().instanciatePanels();
         IUnpacker unpacker = panelContainer.getComponent(IUnpacker.class);
         assertThat(unpacker, IsNull.notNullValue());
     }
