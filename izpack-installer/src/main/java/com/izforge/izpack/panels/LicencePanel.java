@@ -37,7 +37,8 @@ import java.awt.event.ActionListener;
  *
  * @author Julien Ponge
  */
-public class LicencePanel extends IzPanel implements ActionListener {
+public class
+        LicencePanel extends IzPanel implements ActionListener {
 
     /**
      *

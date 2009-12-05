@@ -22,11 +22,9 @@
 
 package com.izforge.izpack.compiler;
 
-import com.izforge.izpack.data.*;
-import com.izforge.izpack.data.GUIPrefs;
 import com.izforge.izpack.compiler.compressor.PackCompressor;
 import com.izforge.izpack.compiler.compressor.PackCompressorFactory;
-import com.izforge.izpack.data.InstallerRequirement;
+import com.izforge.izpack.data.*;
 import com.izforge.izpack.rules.Condition;
 
 import java.io.File;
@@ -50,7 +48,7 @@ public abstract class PackagerBase implements IPackager {
      * Path to the skeleton installer.
      */
     private String SKELETON_SUBPATH = null;
-    
+
     /**
      * Path to resources in jar
      */
@@ -193,6 +191,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addCustomJar(com.izforge.izpack.CustomData, java.net.URL)
      */
+
     public void addCustomJar(CustomData ca, URL url) {
         customDataList.add(ca); // serialized to keep order/variables correct
         if (url != null) {
@@ -203,6 +202,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addJarContent(java.net.URL)
      */
+
     public void addJarContent(URL jarURL) {
         addJarContent(jarURL, null);
     }
@@ -210,6 +210,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addJarContent(java.net.URL, java.util.List)
      */
+
     public void addJarContent(URL jarURL, List<String> files) {
         Object[] cont = {jarURL, files};
         sendMsg("Adding content of jar: " + jarURL.getFile(), PackagerListener.MSG_VERBOSE);
@@ -219,6 +220,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addLangPack(java.lang.String, java.net.URL, java.net.URL)
      */
+
     public void addLangPack(String iso3, URL xmlURL, URL flagURL) {
         sendMsg("Adding langpack: " + iso3, PackagerListener.MSG_VERBOSE);
         // put data & flag as entries in installer, and keep array of iso3's
@@ -231,6 +233,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addNativeLibrary(java.lang.String, java.net.URL)
      */
+
     public void addNativeLibrary(String name, URL url) throws Exception {
         sendMsg("Adding native library: " + name, PackagerListener.MSG_VERBOSE);
         installerResourceURLMap.put("native/" + name, url);
@@ -240,6 +243,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addNativeUninstallerLibrary(com.izforge.izpack.CustomData)
      */
+
     public void addNativeUninstallerLibrary(CustomData data) {
         customDataList.add(data); // serialized to keep order/variables
         // correct
@@ -249,6 +253,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addPack(com.izforge.izpack.compiler.PackInfo)
      */
+
     public void addPack(PackInfo pack) {
         packsList.add(pack);
     }
@@ -256,6 +261,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addPanelJar(com.izforge.izpack.Panel, java.net.URL)
      */
+
     public void addPanelJar(Panel panel, URL jarURL) {
         panelList.add(panel); // serialized to keep order/variables correct
 
@@ -267,14 +273,16 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#addResource(java.lang.String, java.net.URL)
      */
+
     public void addResource(String resId, URL url) {
         sendMsg("Adding resource: " + resId, PackagerListener.MSG_VERBOSE);
-        installerResourceURLMap.put("res/" + resId, url);
+        installerResourceURLMap.put(resId, url);
     }
 
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#getCompressor()
      */
+
     public PackCompressor getCompressor() {
         return compressor;
     }
@@ -282,6 +290,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#getPackagerListener()
      */
+
     public PackagerListener getPackagerListener() {
         return listener;
     }
@@ -289,6 +298,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#getPacksList()
      */
+
     public List<PackInfo> getPacksList() {
         return packsList;
     }
@@ -296,6 +306,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#getVariables()
      */
+
     public Properties getVariables() {
         return variables;
     }
@@ -303,6 +314,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#initPackCompressor(java.lang.String, int)
      */
+
     public void initPackCompressor(String compr_format, int compr_level) throws CompilerException {
         compressor = PackCompressorFactory.get(compr_format);
         compressor.setCompressionLevel(compr_level);
@@ -311,6 +323,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#setGUIPrefs(com.izforge.izpack.GUIPrefs)
      */
+
     public void setGUIPrefs(GUIPrefs prefs) {
         sendMsg("Setting the GUI preferences", PackagerListener.MSG_VERBOSE);
         guiPrefs = prefs;
@@ -319,6 +332,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#setInfo(com.izforge.izpack.Info)
      */
+
     public void setInfo(Info info) throws Exception {
         sendMsg("Setting the installer information", PackagerListener.MSG_VERBOSE);
         this.info = info;
@@ -331,6 +345,7 @@ public abstract class PackagerBase implements IPackager {
     /* (non-Javadoc)
      * @see com.izforge.izpack.compiler.IPackager#setPackagerListener(com.izforge.izpack.compiler.PackagerListener)
      */
+
     public void setPackagerListener(PackagerListener listener) {
         this.listener = listener;
     }

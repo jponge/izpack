@@ -72,8 +72,8 @@ public class InstallationTest extends AbstractInstallationTest {
         prepareFrameFixture();
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
         // Info Panel
+        installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Licence Panel
         installerFrameFixture.textBox(GuiId.LICENCE_TEXT_AREA.id).requireText("(Consider it as a licence file ...)");

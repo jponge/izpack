@@ -581,13 +581,13 @@ public abstract class UnpackerBase implements IUnpacker {
         // get the uninstaller base, returning if not found so that
         // installData.uninstallOutJar remains null
         InputStream[] in = new InputStream[2];
-        in[0] = UnpackerBase.class.getResourceAsStream("/res/IzPack.uninstaller");
+        in[0] = resourceManager.getInputStream("IzPack.uninstaller");
         if (in[0] == null) {
             return;
         }
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
-        in[1] = UnpackerBase.class.getResourceAsStream("/res/IzPack.uninstaller-ext");
+        in[1] = resourceManager.getInputStream("IzPack.uninstaller-ext");
 
         // Me make the .uninstaller directory
         String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), vs);

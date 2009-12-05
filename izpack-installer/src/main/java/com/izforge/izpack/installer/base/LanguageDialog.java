@@ -392,7 +392,7 @@ public class LanguageDialog extends JDialog implements ActionListener, Installer
 
             if (!icons.containsKey(iso3)) {
                 ImageIcon icon;
-                icon = resourceManager.getImageIconResource("res/flag." + iso3);
+                icon = resourceManager.getImageIconResource("flag." + iso3);
                 icons.put(iso3, icon);
                 icon = new ImageIcon(GrayFilter.createDisabledImage(icon.getImage()));
                 grayIcons.put(iso3, icon);

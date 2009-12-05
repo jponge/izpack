@@ -128,6 +128,7 @@ public class ResourceManager {
     /**
      * Get stream on the given resource. First search if a localized resource exist then try to
      * get the given resource.
+     *
      * @param resource
      * @return
      * @throws ResourceNotFoundException
@@ -162,7 +163,7 @@ public class ResourceManager {
      */
     public InputStream getInputStream(String resource) throws ResourceNotFoundException {
         String resourcepath = this.getLanguageResourceString(resource);
-        // System.out.println ("reading resource "+resourcepath);
+        System.out.println("reading resource " + resourcepath);
         return ResourceManager.class.getResourceAsStream(resourcepath);
     }
 
@@ -191,13 +192,7 @@ public class ResourceManager {
      */
     // Maybe we can add a text parser for this method
     public String getTextResource(String resource, String encoding) throws ResourceNotFoundException, IOException {
-        InputStream in = null;
-        try {
-            in = this.getInputStream(resource + "_" + this.getLocale());
-        }
-        catch (Exception ex) {
-            in = this.getInputStream(resource);
-        }
+        InputStream in = getInputStream(resource);
 
         ByteArrayOutputStream infoData = new ByteArrayOutputStream();
         byte[] buffer = new byte[5120];

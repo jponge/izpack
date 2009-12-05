@@ -1058,7 +1058,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         String helpName = getHelpUrl(this.installData.getLocaleISO3());
         // System.out.println("Help function called, helpName: " + helpName);
         if (helpName != null) {
-            URL helpUrl = getClass().getResource("/res/" + helpName);
+            URL helpUrl = resourceManager.getURL(helpName);
             getHelpWindow().showHelp(getString("installer.help"), helpUrl);
         }
     }
