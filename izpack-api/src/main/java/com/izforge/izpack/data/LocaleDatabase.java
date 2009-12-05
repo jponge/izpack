@@ -58,65 +58,6 @@ public class LocaleDatabase extends TreeMap {
      */
     private static final char TEMP_QUOTING_CHARACTER = '\uffff';
 
-    /**
-     * Load a locale database. If the database has already been loaded it will not be reloaded.
-     *
-     * @param isoCode The io code of the locale database.
-     * @return The locale database or null if it cannot be found.
-     * @throws Exception
-     */
-    public static synchronized LocaleDatabase getLocaleDatabase(String isoCode) throws Exception {
-        return getLocaleDatabase(isoCode, false);
-    }
-
-    /**
-     * Load a LocaleDatabase.
-     *
-     * @param isoCode The ISO language prefix for the locale.
-     * @param reload  Whether or not to reload the locale database if it has already been loaded.
-     * @return The locale database or null if it cannot be found. <p/> FIXME Maybe we should define
-     *         some custom exception like LocaleLoadException or something similar so that this class can
-     *         have a method signature that does not throw Exception
-     */
-    public static synchronized LocaleDatabase getLocaleDatabase(String isoCode, boolean reload)
-            throws Exception {
-        LocaleDatabase langpack = cachedLocales.get(isoCode);
-
-        if (reload || langpack == null) {
-            StringBuffer localeDefPath = new StringBuffer();
-
-            localeDefPath.append(LOCALE_DATABASE_DIRECTORY);
-            localeDefPath.append(isoCode);
-            localeDefPath.append(LOCALE_DATABASE_DEF_SUFFIX);
-
-            String path = localeDefPath.toString();
-
-            // The resource exists
-            if (LocaleDatabase.class.getResource(path) != null) {
-                langpack = new LocaleDatabase(LocaleDatabase.class.getResourceAsStream(path));
-
-                cachedLocales.put(isoCode, langpack);
-            }
-        }
-
-        return langpack;
-    }
-
-    /**
-     * Load the current default LocaleDatabase.
-     *
-     * @throws Exception FIXME
-     */
-    public static synchronized LocaleDatabase getLocaleDatabase() throws Exception {
-        ResourceManager resourceManager = ResourceManager.getInstance();
-
-        String defaultLocale = resourceManager.getLocale();
-
-        return getLocaleDatabase(defaultLocale);
-    }
-
-    // End JCF changes
-
     static final long serialVersionUID = 4941525634108401848L;
 
     /**
