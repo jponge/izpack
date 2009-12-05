@@ -22,6 +22,7 @@
 package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.bootstrap.ApplicationContainer;
+import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -84,43 +85,29 @@ public class Installer {
             int consoleAction = CONSOLE_INSTALL;
             String path = null, langcode = null;
 
-            while (args_it.hasNext())
-            {
+            while (args_it.hasNext()) {
                 String arg = args_it.next().trim();
                 try {
-                    if ("-console".equalsIgnoreCase(arg))
-                    {
+                    if ("-console".equalsIgnoreCase(arg)) {
                         type = INSTALLER_CONSOLE;
-                    }
-                    else if ("-options-template".equalsIgnoreCase(arg))
-                    {
-			type = INSTALLER_CONSOLE;
+                    } else if ("-options-template".equalsIgnoreCase(arg)) {
+                        type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_GEN_TEMPLATE;
                         path = args_it.next().trim();
-                    }
-                    else if ("-options".equalsIgnoreCase(arg))
-                    {
-			type = INSTALLER_CONSOLE;
+                    } else if ("-options".equalsIgnoreCase(arg)) {
+                        type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_FROM_TEMPLATE;
                         path = args_it.next().trim();
-                    }
-                    else if ("-options-system".equalsIgnoreCase(arg))
-                    {
-			type = INSTALLER_CONSOLE;
+                    } else if ("-options-system".equalsIgnoreCase(arg)) {
+                        type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_FROM_SYSTEMPROPERTIES;
-                    }
-                    else if ("-options-auto".equalsIgnoreCase(arg))
-                    {
-			type = INSTALLER_CONSOLE;
+                    } else if ("-options-auto".equalsIgnoreCase(arg)) {
+                        type = INSTALLER_CONSOLE;
                         consoleAction = CONSOLE_FROM_SYSTEMPROPERTIESMERGE;
                         path = args_it.next().trim();
-                    }
-                    else if ("-language".equalsIgnoreCase(arg))
-                    {
+                    } else if ("-language".equalsIgnoreCase(arg)) {
                         langcode = args_it.next().trim();
-                    }
-                    else
-                    {
+                    } else {
                         type = INSTALLER_AUTO;
                         path = arg;
                     }

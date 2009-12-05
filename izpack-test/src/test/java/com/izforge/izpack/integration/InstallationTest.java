@@ -4,11 +4,13 @@ import com.izforge.izpack.bootstrap.IPanelContainer;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;
 import com.izforge.izpack.installer.data.GUIInstallData;
+import org.apache.commons.io.FileUtils;
 import org.fest.swing.exception.ScreenLockException;
 import org.junit.After;
 import org.junit.Test;
 
 import java.awt.*;
+import java.io.File;
 
 /**
  * Test for an installation using mock data
@@ -46,12 +48,14 @@ public class InstallationTest extends AbstractInstallationTest {
         // Finish panel
     }
 
+
     @Test
     public void testBasicInstall() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
         panelContainer = applicationContainer.getComponent(IPanelContainer.class);
+        FileUtils.deleteDirectory(new File(installData.getInstallPath()));
         // Lang picker
         prepareDialogFixture();
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();

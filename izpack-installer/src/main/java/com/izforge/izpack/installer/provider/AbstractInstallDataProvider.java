@@ -257,7 +257,7 @@ public class AbstractInstallDataProvider implements Provider {
             if (new File("/usr/local/").canWrite()) {
                 dir = "/usr/local";
             } else {
-                dir = System.getProperty("user.home");
+                dir = System.getProperty("user.home") + File.separatorChar;
             }
         }
         return dir;
