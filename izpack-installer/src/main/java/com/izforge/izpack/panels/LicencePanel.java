@@ -71,6 +71,7 @@ public class LicencePanel extends IzPanel implements ActionListener {
         add(LabelFactory.create(installData.getLangpack().getString("LicencePanel.info"),
                 parent.icons.getImageIcon("history"), LEADING), NEXT_LINE);
         JTextArea textArea = new JTextArea(licence);
+        textArea.setName(GuiId.LICENCE_TEXT_AREA.id);
         textArea.setCaretPosition(0);
         textArea.setEditable(false);
         textArea.setLineWrap(true);

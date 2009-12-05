@@ -48,6 +48,7 @@ public class PanelContainer implements IPanelContainer {
                         new ComponentParameter(),
                         new ComponentParameter(),
                         new ComponentParameter(),
+                        new ComponentParameter(),
                         new ComponentParameter()
                 )
 

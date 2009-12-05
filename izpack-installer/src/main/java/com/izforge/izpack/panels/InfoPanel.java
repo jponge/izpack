@@ -21,6 +21,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -56,6 +57,7 @@ public class InfoPanel extends IzPanel {
                 .getImageIcon("edit"), LEADING), NEXT_LINE);
         // The text area which shows the info.
         JTextArea textArea = new JTextArea(info);
+        textArea.setName(GuiId.INFO_PANEL_TEXT_AREA.id);
         textArea.setCaretPosition(0);
         textArea.setEditable(false);
         JScrollPane scroller = new JScrollPane(textArea);

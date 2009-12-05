@@ -208,7 +208,7 @@ public class InstallerFrame extends JFrame {
      * @param installdata The installation data.
      * @throws Exception Description of the Exception
      */
-    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter)
+    public InstallerFrame(String title, GUIInstallData installdata, RulesEngine rules, IconsDatabase icons, PanelManager panelManager, UninstallDataWriter uninstallDataWriter, ResourceManager resourceManager)
             throws Exception {
         super(title);
         substitutor = new VariableSubstitutorImpl(installdata.getVariables());
@@ -217,6 +217,7 @@ public class InstallerFrame extends JFrame {
         this.langpack = installdata.getLangpack();
         this.rules = rules;
         this.icons = icons;
+        this.resourceManager = resourceManager;
         //        this.panelComponent = panelComponent;
         this.uninstallDataWriter = uninstallDataWriter;
         this.panelManager = panelManager;

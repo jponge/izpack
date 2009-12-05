@@ -72,9 +72,11 @@ public class InstallationTest extends AbstractInstallationTest {
         prepareFrameFixture();
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
         // Info Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Licence Panel
+        installerFrameFixture.textBox(GuiId.LICENCE_TEXT_AREA.id).requireText("(Consider it as a licence file ...)");
         installerFrameFixture.radioButton(GuiId.LICENCE_NO_RADIO.id).requireSelected();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
         installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
