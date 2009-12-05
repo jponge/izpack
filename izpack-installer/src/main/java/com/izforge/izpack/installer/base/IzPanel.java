@@ -21,12 +21,14 @@ package com.izforge.izpack.installer.base;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.PanelAction;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.HelpWindow;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.*;
+import org.picocontainer.annotations.Inject;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -151,6 +153,10 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      */
     public com.izforge.izpack.data.Panel metadata;
 
+    /**
+     * The resource manager
+     */
+    private ResourceManager resourceManager;
 
     /**
      * The constructor.
@@ -1113,4 +1119,12 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         }
     }
 
+    public ResourceManager getResourceManager() {
+        return resourceManager;
+    }
+
+    @Inject
+    public void injectResourceManager(ResourceManager resourceManager) {
+        this.resourceManager = resourceManager;
+    }
 }

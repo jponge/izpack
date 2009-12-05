@@ -26,7 +26,11 @@ public class PanelContainer implements IPanelContainer {
     public IApplicationContainer parent;
 
     public PanelContainer(IApplicationContainer parent) throws ClassNotFoundException {
-        pico = new PicoBuilder(parent.getPico()).withCaching().withConstructorInjection().addChildToParent().build();
+        pico = new PicoBuilder(parent.getPico())
+                .withCaching()
+                .withConstructorInjection()
+                .withAnnotatedMethodInjection()
+                .addChildToParent().build();
         initBindings();
     }
 
