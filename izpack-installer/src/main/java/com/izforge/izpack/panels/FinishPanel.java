@@ -23,6 +23,7 @@ import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -105,6 +106,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
             add(IzPanelLayout.createVerticalStrut(5));
             autoButton = ButtonFactory.createButton(installData.getLangpack().getString("FinishPanel.auto"),
                     parent.icons.getImageIcon("edit"), this.installData.buttonsHColor);
+            autoButton.setName(GuiId.FINISH_PANEL_AUTO_BUTTON.id);
             autoButton.setToolTipText(installData.getLangpack().getString("FinishPanel.auto.tip"));
             autoButton.addActionListener(this);
             add(autoButton, NEXT_LINE);
@@ -124,6 +126,7 @@ public class FinishPanel extends IzPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         // Prepares the file chooser
         JFileChooser fc = new JFileChooser();
+        fc.setName(GuiId.FINISH_PANEL_FILE_CHOOSER.id);
         fc.setCurrentDirectory(new File(this.installData.getInstallPath()));
         fc.setMultiSelectionEnabled(false);
         fc.addChoosableFileFilter(new AutomatedInstallScriptFilter());
