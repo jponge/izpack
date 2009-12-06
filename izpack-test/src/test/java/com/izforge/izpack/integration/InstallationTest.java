@@ -106,4 +106,16 @@ public class InstallationTest extends AbstractInstallationTest {
         assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
     }
 
+    @Test
+    public void testIzpackInstallation() throws Exception {
+        compileAndUnzip("IzPack-install.xml", getWorkingDirectory("samples/izpack"));
+        GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
+
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
+        File installPath = new File(installData.getInstallPath());
+        FileUtils.deleteDirectory(installPath);
+        assertThat(installPath.exists(), Is.is(false));
+
+
+    }
 }

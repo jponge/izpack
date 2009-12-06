@@ -105,6 +105,19 @@
                             <outputDirectory>${basedir}/src/test/resources/lib</outputDirectory>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>Unpack native libs</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>izpack-native</includeArtifactIds>
+                            <classifier>dll</classifier>
+                            <type>tar.gz</type>
+                            <outputDirectory>${basedir}/src/test/resources/</outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
