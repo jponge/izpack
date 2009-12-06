@@ -587,7 +587,7 @@ public abstract class UnpackerBase implements IUnpacker {
         }
         // The uninstaller extension is facultative; it will be exist only
         // if a native library was marked for uninstallation.
-        in[1] = resourceManager.getInputStream("IzPack.uninstaller-ext");
+        in[1] = resourceManager.getInputStream("IzPack.uninstaller-ext", null);
 
         // Me make the .uninstaller directory
         String dest = IoHelper.translatePath(idata.getInfo().getUninstallerPath(), vs);
@@ -646,7 +646,7 @@ public abstract class UnpackerBase implements IUnpacker {
         }
 
         // We put the langpack
-        InputStream in2 = Unpacker.class.getResourceAsStream("/langpacks/" + idata.getLocaleISO3() + ".xml");
+        InputStream in2 = resourceManager.getInputStream("langpacks/" + idata.getLocaleISO3() + ".xml");
         outJar.putNextEntry(new ZipEntry("langpack.xml"));
         int read = in2.read();
         while (read != -1) {

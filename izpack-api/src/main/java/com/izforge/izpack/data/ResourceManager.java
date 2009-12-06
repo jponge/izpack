@@ -117,7 +117,7 @@ public class ResourceManager {
      * @throws com.izforge.izpack.installer.ResourceNotFoundException
      *          If the resource is not found
      */
-    private String getLanguageResourceString(String resource) throws ResourceNotFoundException {
+    private String getLanguageResourceString(String resource) {
         if (resource.charAt(0) == '/') {
             return getAbsoluteLanguageResourceString(resource);
         } else {
@@ -133,7 +133,7 @@ public class ResourceManager {
      * @return
      * @throws ResourceNotFoundException
      */
-    private String getAbsoluteLanguageResourceString(String resource) throws ResourceNotFoundException {
+    private String getAbsoluteLanguageResourceString(String resource) {
         InputStream in;
 
         String resourcePath = resource + "_" + this.locale;
@@ -146,9 +146,13 @@ public class ResourceManager {
             if (in != null) {
                 return resource;
             } else {
-                throw new ResourceNotFoundException("Cannot find named Resource: '" + resource + "' AND '" + resource + "_" + this.locale + "'");
+                return null;
             }
         }
+    }
+
+    public boolean isResourceExist(String resource) {
+        return this.getLanguageResourceString(resource) != null;
     }
 
     /**
@@ -163,7 +167,24 @@ public class ResourceManager {
      */
     public InputStream getInputStream(String resource) throws ResourceNotFoundException {
         String resourcepath = this.getLanguageResourceString(resource);
-        System.out.println("reading resource " + resourcepath);
+        if (resourcepath == null) {
+            throw new ResourceNotFoundException("Cannot find named Resource: '" + resource + "' AND '" + resource + "_" + this.locale + "'");
+        }
+        return ResourceManager.class.getResourceAsStream(resourcepath);
+    }
+
+    /**
+     * Get Input stream with a default value
+     *
+     * @param resource     Path of resource
+     * @param defaultValue Default value if stream is not found
+     * @return Stream found or default value
+     */
+    public InputStream getInputStream(String resource, InputStream defaultValue) {
+        String resourcepath = this.getLanguageResourceString(resource);
+        if (resourcepath == null) {
+            return defaultValue;
+        }
         return ResourceManager.class.getResourceAsStream(resourcepath);
     }
 
@@ -175,7 +196,7 @@ public class ResourceManager {
      * @throws ResourceNotFoundException Description of the Exception
      * @throws ResourceNotFoundException thrown if there is no resource found
      */
-    public URL getURL(String resource) throws ResourceNotFoundException {
+    public URL getURL(String resource) {
         return this.getClass().getResource(
                 this.getLanguageResourceString(resource));
     }
@@ -191,7 +212,7 @@ public class ResourceManager {
      * @throws IOException               if the resource can not be loaded
      */
     // Maybe we can add a text parser for this method
-    public String getTextResource(String resource, String encoding) throws ResourceNotFoundException, IOException {
+    public String getTextResource(String resource, String encoding) throws IOException {
         InputStream in = getInputStream(resource);
 
         ByteArrayOutputStream infoData = new ByteArrayOutputStream();
@@ -218,7 +239,7 @@ public class ResourceManager {
      * @throws IOException               if the resource can not be loaded
      */
     // Maybe we can add a text parser for this method
-    public String getTextResource(String resource) throws ResourceNotFoundException, IOException {
+    public String getTextResource(String resource) throws IOException {
         return this.getTextResource(resource, null);
     }
 
@@ -229,7 +250,7 @@ public class ResourceManager {
      * @return a ImageIcon loaded from the given Resource
      * @throws ResourceNotFoundException thrown when the resource can not be found
      */
-    public ImageIcon getImageIconResource(String resource) throws ResourceNotFoundException {
+    public ImageIcon getImageIconResource(String resource) {
         return new ImageIcon(this.getURL(resource));
     }
 
@@ -274,6 +295,7 @@ public class ResourceManager {
                 "/langpacks/" + localeISO3 + ".xml");
     }
 
+
     /**
      * Get langpack of the locale present in installData
      *
@@ -282,7 +304,6 @@ public class ResourceManager {
     public InputStream getLangPack() {
         return this.getLangPack(this.locale);
     }
-
 
     /**
      * Returns an ArrayList of the available langpacks ISO3 codes.

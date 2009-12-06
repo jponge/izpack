@@ -88,8 +88,8 @@ public class InstallationTest extends AbstractInstallationTest {
         // Packs Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
-        while (!installData.isInstallSuccess()) {
-            Thread.sleep(200);
+        while (!installData.isCanClose()) {
+            Thread.sleep(500);
         }
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
 
