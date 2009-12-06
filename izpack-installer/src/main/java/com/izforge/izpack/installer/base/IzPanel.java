@@ -26,6 +26,7 @@ import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
 import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.HelpWindow;
+import com.izforge.izpack.installer.ISummarisable;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.*;
 
@@ -50,7 +51,7 @@ import java.util.HashMap;
  * @author Julien Ponge
  * @author Klaus Bartz
  */
-public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstants {
+public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstants, ISummarisable {
 
     private static final long serialVersionUID = 3256442495255786038L;
 

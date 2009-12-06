@@ -26,8 +26,6 @@ public class ApplicationContainer implements IApplicationContainer {
     public void initBindings() {
         pico = new PicoBuilder(new ConstructorInjection())
                 .withCaching()
-//                .withAnnotatedMethodInjection()
-//                .withConstructorInjection()
                 .build();
         pico
                 .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
