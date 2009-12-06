@@ -23,6 +23,11 @@
             <groupId>org.picocontainer</groupId>
             <artifactId>picocontainer</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-event</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <artifactId>izpack-installer</artifactId>

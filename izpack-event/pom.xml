@@ -13,4 +13,15 @@
     <artifactId>izpack-event</artifactId>
     <name>IzPack event module</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-util</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
