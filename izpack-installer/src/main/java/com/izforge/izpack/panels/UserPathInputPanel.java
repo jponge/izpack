@@ -20,6 +20,7 @@
  */
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -80,8 +81,8 @@ public class UserPathInputPanel extends IzPanel implements ActionListener {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public UserPathInputPanel(InstallerFrame parent, GUIInstallData idata, String targetPanel) {
-        super(parent, idata, new IzPanelLayout());
+    public UserPathInputPanel(InstallerFrame parent, GUIInstallData idata, String targetPanel, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
         _parent = parent;
         _idata = idata;
         _targetPanel = targetPanel;

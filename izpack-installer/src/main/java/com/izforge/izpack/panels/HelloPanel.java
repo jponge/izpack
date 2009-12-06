@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.Info;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.LayoutConstants;
@@ -51,8 +52,8 @@ public class HelloPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public HelloPanel(InstallerFrame parent, GUIInstallData idata) {
-        this(parent, idata, new IzPanelLayout());
+    public HelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        this(parent, idata, new IzPanelLayout(), resourceManager);
     }
 
     /**
@@ -65,14 +66,14 @@ public class HelloPanel extends IzPanel {
      * @param layout layout manager to be used with this IzPanel
      */
 
-    public HelloPanel(InstallerFrame parent, GUIInstallData idata, LayoutManager2 layout) {
+    public HelloPanel(InstallerFrame parent, GUIInstallData idata, LayoutManager2 layout, ResourceManager resourceManager) {
         // Layout handling. This panel was changed from a mixed layout handling
         // with GridBagLayout and BoxLayout to IzPanelLayout. It can be used as an
         // example how to use the IzPanelLayout. For this there are some comments
         // which are excrescent for a "normal" panel.
         // Set a IzPanelLayout as layout for this panel.
         // This have to be the first line during layout if IzPanelLayout will be used.
-        super(parent, idata, layout);
+        super(parent, idata, layout, resourceManager);
         // We create and put the labels
         String str;
         str = installData.getLangpack().getString("HelloPanel.welcome1") + idata.getInfo().getAppName() + " "

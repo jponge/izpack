@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.SummaryProcessor;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -54,8 +55,8 @@ public class SummaryPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public SummaryPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, new IzPanelLayout());
+    public SummaryPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
         add(createMultiLineLabelLang("SummaryPanel.info"));
         try {
             textArea = new JEditorPane();

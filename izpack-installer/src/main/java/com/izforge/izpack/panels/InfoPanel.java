@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.GuiId;
@@ -48,8 +49,8 @@ public class InfoPanel extends IzPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public InfoPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, new IzPanelLayout());
+    public InfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
         // We load the text.
         loadInfo();
         // The info label.

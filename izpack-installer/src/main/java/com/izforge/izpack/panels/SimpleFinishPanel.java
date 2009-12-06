@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -53,8 +54,8 @@ public class SimpleFinishPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, new IzPanelLayout());
+    public SimpleFinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
         vs = new VariableSubstitutorImpl(idata.getVariables());
     }
 

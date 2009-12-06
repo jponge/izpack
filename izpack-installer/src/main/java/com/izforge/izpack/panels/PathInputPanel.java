@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.installer.ResourceNotFoundException;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -74,8 +75,8 @@ public class PathInputPanel extends IzPanel implements ActionListener {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public PathInputPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, new IzPanelLayout());
+    public PathInputPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
         // Set default values
         emptyTargetMsg = getI18nStringForClass("empty_target", "TargetPanel");
         warnMsg = getI18nStringForClass("warn", "TargetPanel");

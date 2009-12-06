@@ -24,6 +24,7 @@ package com.izforge.izpack.panels;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.NativeLibException;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIHandler;
@@ -77,8 +78,8 @@ public class JDKPathPanel extends PathInputPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public JDKPathPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata);
+    public JDKPathPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, resourceManager);
         setMustExist(true);
         if (!OsVersion.IS_OSX) {
             setExistFiles(JDKPathPanel.testFiles);

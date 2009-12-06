@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
@@ -35,8 +36,8 @@ public class HTMLHelloPanel extends HTMLInfoPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public HTMLHelloPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, "HTMLHelloPanel", false);
+    public HTMLHelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, "HTMLHelloPanel", false, resourceManager);
     }
 
     /**

@@ -20,6 +20,7 @@
  */
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -40,8 +41,8 @@ public class InstallationTypePanel extends IzPanel implements ActionListener {
     private JRadioButton normalinstall;
     private JRadioButton modifyinstall;
 
-    public InstallationTypePanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, new IzPanelLayout());
+    public InstallationTypePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
         buildGUI();
     }
 

@@ -165,7 +165,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param resourceManager
      */
     public IzPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager) {
-        this(parent, installData, (LayoutManager2) null);
+        this(parent, installData, (LayoutManager2) null, resourceManager);
     }
 
     /**
@@ -173,13 +173,14 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * IzPanelLayout and the GridBagLayout. New panels should be use the IzPanelLaout. If lm is
      * null, no layout manager will be created or initialized.
      *
-     * @param parent      The parent IzPack installer frame.
-     * @param installData The installer internal data.
-     * @param lm          layout manager to be used with this IzPanel
+     * @param parent          The parent IzPack installer frame.
+     * @param installData     The installer internal data.
+     * @param lm              layout manager to be used with this IzPanel
+     * @param resourceManager
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData, LayoutManager2 lm) {
+    public IzPanel(InstallerFrame parent, GUIInstallData installData, LayoutManager2 lm, ResourceManager resourceManager) {
         super();
-        init(parent, installData);
+        init(parent, installData, resourceManager);
         if (lm != null) {
             getLayoutHelper().startLayout(lm);
         }
@@ -326,14 +327,16 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * Internal init method
      *
-     * @param parent the parent frame
-     * @param idata  installers runtime dataset
+     * @param parent          the parent frame
+     * @param idata           installers runtime dataset
+     * @param resourceManager
      */
-    protected void init(InstallerFrame parent, GUIInstallData idata) {
+    protected void init(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
         getClassName();
 
         this.installData = idata;
         this.parent = parent;
+        this.resourceManager = resourceManager;
         // To get the Panel object via installData is a hack because GUIInstallData will
         // be hold global data, not panel specific data. But the Panel object will
         // be needed in the constructor of some derived classes. And to expand the

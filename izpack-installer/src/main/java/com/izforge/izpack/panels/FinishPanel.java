@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.AutomatedInstallScriptFilter;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.IzPanelLayout;
@@ -63,8 +64,8 @@ public class FinishPanel extends IzPanel implements ActionListener {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public FinishPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, new IzPanelLayout());
+    public FinishPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
 
         vs = new VariableSubstitutorImpl(idata.getVariables());
     }

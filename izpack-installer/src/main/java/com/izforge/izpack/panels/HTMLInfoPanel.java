@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -63,8 +64,8 @@ public class HTMLInfoPanel extends IzPanel {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata) {
-        this(parent, idata, "HTMLInfoPanel", true);
+    public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        this(parent, idata, "HTMLInfoPanel", true, resourceManager);
     }
 
     /**
@@ -78,8 +79,8 @@ public class HTMLInfoPanel extends IzPanel {
      *                          above content.
      */
     public HTMLInfoPanel(InstallerFrame parent, GUIInstallData idata,
-                         String resPrefixStr, boolean showInfoLabelFlag) {
-        super(parent, idata, new IzPanelLayout());
+                         String resPrefixStr, boolean showInfoLabelFlag, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
         //setup given resource prefix and name:
         panelResourcePrefixStr = resPrefixStr;
         panelResourceNameStr = resPrefixStr + ".info";

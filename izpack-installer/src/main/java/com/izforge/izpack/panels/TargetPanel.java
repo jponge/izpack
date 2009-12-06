@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 
@@ -43,8 +44,8 @@ public class TargetPanel extends PathInputPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public TargetPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata);
+    public TargetPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, resourceManager);
         // load the default directory info (if present)
         loadDefaultInstallDir(parent, idata);
         if (getDefaultInstallDir() != null) {

@@ -19,6 +19,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -61,8 +62,8 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
      * @param idata  The installation installDataGUI.
      * @param parent Description of the Parameter
      */
-    public HTMLLicencePanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata, new IzPanelLayout());
+    public HTMLLicencePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, new IzPanelLayout(), resourceManager);
         // We load the licence
         loadLicence();
 

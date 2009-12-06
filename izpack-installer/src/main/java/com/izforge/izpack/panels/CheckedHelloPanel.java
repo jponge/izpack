@@ -21,6 +21,7 @@ package com.izforge.izpack.panels;
 
 import com.coi.tools.os.win.MSWinConstants;
 import com.coi.tools.os.win.RegDataContainer;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.AbstractUIHandler;
@@ -52,8 +53,8 @@ public class CheckedHelloPanel extends HelloPanel implements MSWinConstants {
      * @param parent The parent.
      * @param idata  The installation installDataGUI.
      */
-    public CheckedHelloPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata);
+    public CheckedHelloPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, resourceManager);
         abortInstallation = isRegistered();
     }
 
