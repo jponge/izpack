@@ -20,4 +20,5 @@ public interface IInstallerContainer {
     void addComponent(Object componentType, Object implementation);
 
     Object getComponent(Object componentKeyOrType);
+
 }

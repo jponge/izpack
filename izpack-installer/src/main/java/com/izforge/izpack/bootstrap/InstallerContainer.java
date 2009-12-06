@@ -20,13 +20,12 @@ import java.awt.*;
  */
 public class InstallerContainer implements IInstallerContainer {
 
-    public MutablePicoContainer pico;
+    private MutablePicoContainer pico;
 
-    public IApplicationContainer parent;
+    private IApplicationContainer parent;
 
     public InstallerContainer(IApplicationContainer parent) throws ClassNotFoundException {
         pico = parent.makeChildContainer();
-//        pico.
         initBindings();
     }
 
