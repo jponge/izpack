@@ -2,7 +2,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.bootstrap.IPanelContainer;
+import com.izforge.izpack.bootstrap.IInstallerContainer;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.data.PanelAction;
@@ -26,7 +26,7 @@ public class PanelManager {
     public static String CLASSNAME_PREFIX = "com.izforge.izpack.panels.";
 
     private GUIInstallData installdata;
-    private IPanelContainer panelContainer;
+    private IInstallerContainer installerContainer;
     private int lastVis;
 
     /**
@@ -34,9 +34,9 @@ public class PanelManager {
      */
     protected ArrayList<Integer> visiblePanelMapping;
 
-    public PanelManager(GUIInstallData installDataGUI, IPanelContainer panelContainer) throws ClassNotFoundException {
+    public PanelManager(GUIInstallData installDataGUI, IInstallerContainer installerContainer) throws ClassNotFoundException {
         this.installdata = installDataGUI;
-        this.panelContainer = panelContainer;
+        this.installerContainer = installerContainer;
         visiblePanelMapping = new ArrayList<Integer>();
     }
 
@@ -51,7 +51,7 @@ public class PanelManager {
     }
 
     /**
-     * Parse XML to search all used panels and add them in the pico panelContainer.
+     * Parse XML to search all used panels and add them in the pico installerContainer.
      *
      * @throws ClassNotFoundException
      */
@@ -63,14 +63,14 @@ public class PanelManager {
             System.out.println(panel.getClassName());
             if (OsConstraint.oneMatchesCurrentSystem(panel.osConstraints)) {
                 Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
-                panelContainer.addComponent(aClass);
+                installerContainer.addComponent(aClass);
             }
         }
         return this;
     }
 
     /**
-     * Construct all panels present in the panelContainer.<br />
+     * Construct all panels present in the installerContainer.<br />
      * Executing prebuild, prevalidate, postvalidate and postconstruct actions.
      *
      * @throws ClassNotFoundException
@@ -84,7 +84,7 @@ public class PanelManager {
             if (OsConstraint.oneMatchesCurrentSystem(panel.osConstraints)) {
                 Class<? extends IzPanel> aClass = resolveClassName(panel.getClassName());
                 executePreBuildActions(panel);
-                IzPanel izPanel = panelContainer.getComponent(aClass);
+                IzPanel izPanel = installerContainer.getComponent(aClass);
                 izPanel.setMetadata(panel);
                 String dataValidator = panel.getValidator();
                 if (dataValidator != null) {
@@ -164,8 +164,8 @@ public class PanelManager {
     }
 
     public void setAbstractUIHandlerInContainer(AbstractUIHandler abstractUIHandlerInContainer) {
-//        panelContainer.removeComponent(AbstractUIHandler.class);
-//        panelContainer.addComponent(AbstractUIHandler.class, abstractUIHandlerInContainer);
+//        installerContainer.removeComponent(AbstractUIHandler.class);
+//        installerContainer.addComponent(AbstractUIHandler.class, abstractUIHandlerInContainer);
     }
 
     public int getCountVisiblePanel() {
@@ -174,6 +174,6 @@ public class PanelManager {
 
     public IUnpacker getUnpacker(AbstractUIProgressHandler listener) {
         setAbstractUIHandlerInContainer(listener);
-        return panelContainer.getComponent(IUnpacker.class);
+        return installerContainer.getComponent(IUnpacker.class);
     }
 }

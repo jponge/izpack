@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.bootstrap.IPanelContainer;
+import com.izforge.izpack.bootstrap.IInstallerContainer;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.panels.PanelManager;
@@ -41,12 +41,12 @@ public class PanelTest extends AbstractInstallationTest {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
 
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
-        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
-        PanelManager panelManager = panelContainer.getComponent(PanelManager.class);
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
+        PanelManager panelManager = installerContainer.getComponent(PanelManager.class);
         panelManager.loadPanelsInContainer();
         panelManager.instanciatePanels();
 
-        TargetPanel targetPanel = panelContainer.getComponent(TargetPanel.class);
+        TargetPanel targetPanel = installerContainer.getComponent(TargetPanel.class);
         targetPanel.loadDefaultDir();
         String defaultDir = installData.getInstallPath();
         System.out.println(installData.getInstallPath());

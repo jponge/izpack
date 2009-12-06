@@ -12,6 +12,7 @@ import com.izforge.izpack.installer.provider.IconsProvider;
 import com.izforge.izpack.installer.provider.RulesProvider;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.PicoBuilder;
+import org.picocontainer.injectors.ConstructorInjection;
 import org.picocontainer.injectors.ProviderAdapter;
 
 /**
@@ -23,10 +24,10 @@ public class ApplicationContainer implements IApplicationContainer {
     private MutablePicoContainer pico;
 
     public void initBindings() {
-        pico = new PicoBuilder()
+        pico = new PicoBuilder(new ConstructorInjection())
                 .withCaching()
-                .withAnnotatedMethodInjection()
-                .withConstructorInjection()
+//                .withAnnotatedMethodInjection()
+//                .withConstructorInjection()
                 .build();
         pico
                 .addAdapter(new ProviderAdapter(new AutomatedInstallDataProvider()))
@@ -34,7 +35,7 @@ public class ApplicationContainer implements IApplicationContainer {
                 .addAdapter(new ProviderAdapter(new IconsProvider()))
                 .addAdapter(new ProviderAdapter(new RulesProvider()));
         pico
-                .addComponent(IPanelContainer.class, PanelContainer.class)
+                .addComponent(IInstallerContainer.class, InstallerContainer.class)
                 .addComponent(ConditionCheck.class)
                 .addComponent(GUIInstaller.class)
                 .addComponent(ResourceManager.class)

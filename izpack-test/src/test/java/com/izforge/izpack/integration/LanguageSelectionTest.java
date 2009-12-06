@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.bootstrap.IPanelContainer;
+import com.izforge.izpack.bootstrap.IInstallerContainer;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;
@@ -32,8 +32,8 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
     @Test
     public void langpackEngShouldBeSet() throws Exception {
         compileAndUnzip("engInstaller.xml", getWorkingDirectory("langpack"));
-        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
-        panelContainer.getComponent(LanguageDialog.class).initLangPack();
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
+        installerContainer.getComponent(LanguageDialog.class).initLangPack();
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("eng"));
     }
@@ -41,8 +41,8 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
     @Test
     public void langpackFraShouldBeSet() throws Exception {
         compileAndUnzip("fraInstaller.xml", getWorkingDirectory("langpack"));
-        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
-        panelContainer.getComponent(LanguageDialog.class).initLangPack();
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
+        installerContainer.getComponent(LanguageDialog.class).initLangPack();
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
         assertThat(resourceManager.getLocale(), Is.is("fra"));
     }
@@ -50,7 +50,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
     @Test
     public void testLangPickerChoseEng() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         prepareDialogFixture();
         assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(), Is.is(new String[]{"eng", "fra"}));
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
@@ -61,7 +61,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
     @Test
     public void testLangPickerChoseFra() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
-        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         prepareDialogFixture();
         assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(), Is.is(new String[]{"eng", "fra"}));
         dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).selectItem(1);

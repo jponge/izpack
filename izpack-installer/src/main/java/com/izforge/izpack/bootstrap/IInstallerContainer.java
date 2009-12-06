@@ -5,7 +5,7 @@ import org.picocontainer.MutablePicoContainer;
 /**
  * Interface for panel level component
  */
-public interface IPanelContainer {
+public interface IInstallerContainer {
 
     <T> void addComponent(Class<T> componentType);
 

@@ -22,7 +22,7 @@
 package com.izforge.izpack.installer.bootstrap;
 
 import com.izforge.izpack.bootstrap.ApplicationContainer;
-import com.izforge.izpack.bootstrap.IPanelContainer;
+import com.izforge.izpack.bootstrap.IInstallerContainer;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;
@@ -132,10 +132,10 @@ public class Installer {
     private void launchInstall(int type, int consoleAction, String path, String langcode) throws Exception {
         switch (type) {
             case INSTALLER_GUI:
-                IPanelContainer panelContainer = applicationComponent.getComponent(IPanelContainer.class);
+                IInstallerContainer installerContainer = applicationComponent.getComponent(IInstallerContainer.class);
 
-                panelContainer.getComponent(LanguageDialog.class).initLangPack();
-                panelContainer.getComponent(InstallerFrame.class).loadPanels().launchGUI();
+                installerContainer.getComponent(LanguageDialog.class).initLangPack();
+                installerContainer.getComponent(InstallerFrame.class).loadPanels().launchGUI();
                 break;
 
             case INSTALLER_AUTO:

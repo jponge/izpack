@@ -25,7 +25,7 @@ package com.izforge.izpack.installer.base;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
-import com.izforge.izpack.bootstrap.PanelContainer;
+import com.izforge.izpack.bootstrap.InstallerContainer;
 import com.izforge.izpack.data.Info;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Panel;
@@ -189,7 +189,7 @@ public class InstallerFrame extends JFrame {
     private PanelManager panelManager;
 
 
-    PanelContainer panelComponent;
+    InstallerContainer installerComponent;
 
     /**
      * The resource manager
@@ -218,7 +218,7 @@ public class InstallerFrame extends JFrame {
         this.rules = rules;
         this.icons = icons;
         this.resourceManager = resourceManager;
-        //        this.panelComponent = panelComponent;
+        //        this.installerComponent = installerComponent;
         this.uninstallDataWriter = uninstallDataWriter;
         this.panelManager = panelManager;
         // Sets the window events handler

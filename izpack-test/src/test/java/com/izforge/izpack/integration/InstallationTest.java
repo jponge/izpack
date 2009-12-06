@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.bootstrap.IPanelContainer;
+import com.izforge.izpack.bootstrap.IInstallerContainer;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;
@@ -41,8 +41,8 @@ public class InstallationTest extends AbstractInstallationTest {
     @Test
     public void testHelloAndFinishPanels() throws Exception {
         compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
-        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
-        panelContainer.getComponent(LanguageDialog.class).initLangPack();
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
+        installerContainer.getComponent(LanguageDialog.class).initLangPack();
         prepareFrameFixture();
 
         // Hello panel
@@ -58,7 +58,7 @@ public class InstallationTest extends AbstractInstallationTest {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
-        panelContainer = applicationContainer.getComponent(IPanelContainer.class);
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         File installPath = new File(installData.getInstallPath());
         FileUtils.deleteDirectory(installPath);
         assertThat(installPath.exists(), Is.is(false));

@@ -28,7 +28,6 @@ import com.izforge.izpack.installer.DataValidator;
 import com.izforge.izpack.installer.HelpWindow;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.*;
-import org.picocontainer.annotations.Inject;
 
 import javax.swing.*;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -1123,7 +1122,6 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
         return resourceManager;
     }
 
-    @Inject
     public void injectResourceManager(ResourceManager resourceManager) {
         this.resourceManager = resourceManager;
     }

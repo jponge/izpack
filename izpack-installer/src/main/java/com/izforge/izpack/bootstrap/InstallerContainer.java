@@ -18,20 +18,21 @@ import java.awt.*;
 /**
  * Container for panel level component
  */
-public class PanelContainer implements IPanelContainer {
+public class InstallerContainer implements IInstallerContainer {
 
     public MutablePicoContainer pico;
 
     public IApplicationContainer parent;
 
-    public PanelContainer(IApplicationContainer parent) throws ClassNotFoundException {
+    public InstallerContainer(IApplicationContainer parent) throws ClassNotFoundException {
         pico = parent.makeChildContainer();
+//        pico.
         initBindings();
     }
 
     public void initBindings() throws ClassNotFoundException {
         pico
-                .addComponent(IPanelContainer.class, this)
+                .addComponent(IInstallerContainer.class, this)
                 .addComponent(PanelManager.class);
         addVariablerComponent();
     }
@@ -51,7 +52,6 @@ public class PanelContainer implements IPanelContainer {
                         new ComponentParameter(),
                         new ComponentParameter()
                 )
-
                 .addComponent(LanguageDialog.class, LanguageDialog.class,
                         new ConstantParameter(initFrame()),
                         new ComponentParameter(),
