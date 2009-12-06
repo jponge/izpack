@@ -22,7 +22,6 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.installer.SummaryProcessor;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.IoHelper;
 import com.izforge.izpack.util.VariableSubstitutor;
@@ -52,6 +51,7 @@ public class SummaryLoggerInstallerListener extends SimpleInstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception {
         if (!getInstalldata().isInstallSuccess()) {

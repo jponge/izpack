@@ -19,10 +19,10 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.installer;
+package com.izforge.izpack.event;
 
 import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.installer.base.IzPanel;
+import com.izforge.izpack.installer.ISummarisable;
 
 import java.util.Iterator;
 
@@ -61,7 +61,7 @@ public class SummaryProcessor {
 
     /**
      * Returns a HTML formated string which contains the summary of all panels. To get the summary,
-     * the methods * {@link IzPanel#getSummaryCaption} and {@link IzPanel#getSummaryBody()} of all
+     * the methods * {@link com.izforge.izpack.installer.ISummarisable#getSummaryCaption} and {@link com.izforge.izpack.installer.ISummarisable#getSummaryBody()} of all
      * panels are called.
      *
      * @param idata AutomatedInstallData which contains the panel references

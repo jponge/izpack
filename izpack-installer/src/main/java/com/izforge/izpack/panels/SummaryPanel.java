@@ -22,8 +22,8 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.event.SummaryProcessor;
 import com.izforge.izpack.gui.IzPanelLayout;
-import com.izforge.izpack.installer.SummaryProcessor;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
