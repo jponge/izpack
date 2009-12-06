@@ -170,7 +170,7 @@ public class ImgPacksPanel extends PacksPanelBase {
             Pack pack = (Pack) pack_it.next();
             if (pack.packImgId != null) {
                 try {
-                    URL url = getResourceManager().getURL(pack.packImgId);
+                    URL url = resourceManager.getURL(pack.packImgId);
                     ImageIcon img = new ImageIcon(url);
                     images.put(pack.packImgId, img);
                 }

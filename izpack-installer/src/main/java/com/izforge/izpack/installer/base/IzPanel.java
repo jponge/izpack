@@ -155,7 +155,7 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * The resource manager
      */
-    private ResourceManager resourceManager;
+    protected ResourceManager resourceManager;
 
     /**
      * The constructor.
@@ -1120,13 +1120,5 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
                 postValidateActions.get(actionIndex).executeAction(this.installData, this);
             }
         }
-    }
-
-    public ResourceManager getResourceManager() {
-        return resourceManager;
-    }
-
-    public void injectResourceManager(ResourceManager resourceManager) {
-        this.resourceManager = resourceManager;
     }
 }

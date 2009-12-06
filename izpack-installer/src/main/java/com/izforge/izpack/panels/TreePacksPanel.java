@@ -153,7 +153,7 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
             }
 
             if (langPackStream == null) {
-                langPackStream = getResourceManager().getInputStream(LANG_FILE_NAME);
+                langPackStream = this.resourceManager.getInputStream(LANG_FILE_NAME);
             }
 
             this.langpack.add(langPackStream);

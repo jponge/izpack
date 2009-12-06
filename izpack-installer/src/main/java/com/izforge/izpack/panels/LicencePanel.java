@@ -107,7 +107,7 @@ public class
         try {
             // We read it
             String resNamePrifix = "LicencePanel.licence";
-            licence = getResourceManager().getTextResource(resNamePrifix);
+            licence = resourceManager.getTextResource(resNamePrifix);
         }
         catch (Exception err) {
             licence = "Error : could not load the licence text !";

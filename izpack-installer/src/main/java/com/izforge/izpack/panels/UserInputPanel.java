@@ -340,7 +340,7 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
             this.langpack = (LocaleDatabase) installData.getLangpack().clone();
 
             String resource = LANG_FILE_NAME + "_" + this.installData.getLocaleISO3();
-            this.langpack.add(getResourceManager().getInputStream(resource));
+            this.langpack.add(resourceManager.getInputStream(resource));
         }
         catch (ResourceNotFoundException e) {
             Debug.trace(e);

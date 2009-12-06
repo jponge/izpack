@@ -135,7 +135,7 @@ public class HTMLInfoPanel extends IzPanel {
         if (getMetadata() != null && getMetadata().getPanelid() != null) {
             try {
                 String panelSpecificResName = panelResourcePrefixStr + '.' + this.getMetadata().getPanelid();
-                String panelspecificResContent = getResourceManager().getTextResource(panelSpecificResName);
+                String panelspecificResContent = resourceManager.getTextResource(panelSpecificResName);
                 if (panelspecificResContent != null) {
                     panelResourceNameStr = panelSpecificResName;
                 }
@@ -146,7 +146,7 @@ public class HTMLInfoPanel extends IzPanel {
         }
 
         try {
-            return getResourceManager().getURL(panelResourceNameStr);
+            return resourceManager.getURL(panelResourceNameStr);
         }
         catch (Exception ex) {
             ex.printStackTrace();
