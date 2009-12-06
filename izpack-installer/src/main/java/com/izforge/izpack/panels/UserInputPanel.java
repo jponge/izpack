@@ -25,6 +25,7 @@ import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.gui.TwoColumnConstraints;
@@ -310,8 +311,8 @@ public class UserInputPanel extends IzPanel implements ActionListener, ItemListe
      * @param installDataGUI shared information about the installation
      */
     /*--------------------------------------------------------------------------*/
-    public UserInputPanel(InstallerFrame parent, GUIInstallData installDataGUI) {
-        super(parent, installDataGUI);
+    public UserInputPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager) {
+        super(parent, installDataGUI, resourceManager);
         instanceNumber = instanceCount++;
         this.parentFrame = parent;
     }

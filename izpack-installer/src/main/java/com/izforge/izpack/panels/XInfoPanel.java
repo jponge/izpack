@@ -21,6 +21,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -59,8 +60,8 @@ public class XInfoPanel extends IzPanel {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public XInfoPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata);
+    public XInfoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, resourceManager);
 
         // We initialize our layout
         GridBagLayout layout = new GridBagLayout();

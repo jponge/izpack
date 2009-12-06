@@ -160,10 +160,11 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
     /**
      * The constructor.
      *
-     * @param parent      The parent IzPack installer frame.
-     * @param installData The installer internal data.
+     * @param parent          The parent IzPack installer frame.
+     * @param installData     The installer internal data.
+     * @param resourceManager
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData) {
+    public IzPanel(InstallerFrame parent, GUIInstallData installData, ResourceManager resourceManager) {
         this(parent, installData, (LayoutManager2) null);
     }
 
@@ -191,8 +192,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param installData Installers Runtime Data Set
      * @param iconName    The Headline IconName
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData, String iconName) {
-        this(parent, installData, iconName, -1);
+    public IzPanel(InstallerFrame parent, GUIInstallData installData, String iconName, ResourceManager resourceManager) {
+        this(parent, installData, iconName, -1, resourceManager);
     }
 
     /**
@@ -203,8 +204,8 @@ public class IzPanel extends JPanel implements AbstractUIHandler, LayoutConstant
      * @param iconName    A iconname to show as left oriented headline-leading Icon.
      * @param instance    An instance counter
      */
-    public IzPanel(InstallerFrame parent, GUIInstallData installData, String iconName, int instance) {
-        this(parent, installData);
+    public IzPanel(InstallerFrame parent, GUIInstallData installData, String iconName, int instance, ResourceManager resourceManager) {
+        this(parent, installData, resourceManager);
         buildHeadline(iconName, instance);
     }
 

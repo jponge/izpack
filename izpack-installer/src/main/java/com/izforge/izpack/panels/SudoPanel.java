@@ -23,6 +23,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.ExecutableFile;
 import com.izforge.izpack.data.ParsableFile;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -65,8 +66,8 @@ public class SudoPanel extends IzPanel implements ActionListener {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public SudoPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata);
+    public SudoPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, resourceManager);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 

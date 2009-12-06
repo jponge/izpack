@@ -20,6 +20,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -64,8 +65,8 @@ public class InstallationGroupPanel extends IzPanel
     private GroupData[] rows;
     private int selectedGroup = -1;
 
-    public InstallationGroupPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata);
+    public InstallationGroupPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, resourceManager);
         buildLayout();
     }
 

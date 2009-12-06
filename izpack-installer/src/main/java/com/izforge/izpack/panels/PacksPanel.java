@@ -22,6 +22,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import com.izforge.izpack.util.IoHelper;
@@ -50,8 +51,8 @@ public class PacksPanel extends PacksPanelBase {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public PacksPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata);
+    public PacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, resourceManager);
     }
 
     /*

@@ -24,6 +24,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.LocaleDatabase;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -134,8 +135,8 @@ public class TreePacksPanel extends IzPanel implements PacksPanelInterface {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public TreePacksPanel(InstallerFrame parent, GUIInstallData idata) {
-        super(parent, idata);
+    public TreePacksPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) {
+        super(parent, idata, resourceManager);
         // Load langpack.
         try {
             this.langpack = installData.getLangpack();

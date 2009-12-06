@@ -22,6 +22,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.CompileHandler;
@@ -123,8 +124,8 @@ public class CompilePanel extends IzPanel implements ActionListener, CompileHand
      * @param idata  The installation installDataGUI.
      * @throws IOException
      */
-    public CompilePanel(InstallerFrame parent, GUIInstallData idata) throws IOException {
-        super(parent, idata);
+    public CompilePanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) throws IOException {
+        super(parent, idata, resourceManager);
 
         this.worker = new CompileWorker(idata, this);
 

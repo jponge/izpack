@@ -22,6 +22,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.ProcessPanelWorker;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -89,8 +90,8 @@ public class ProcessPanel extends IzPanel implements AbstractUIProcessHandler {
      * @param parent The parent window.
      * @param idata  The installation installDataGUI.
      */
-    public ProcessPanel(InstallerFrame parent, GUIInstallData idata) throws IOException {
-        super(parent, idata);
+    public ProcessPanel(InstallerFrame parent, GUIInstallData idata, ResourceManager resourceManager) throws IOException {
+        super(parent, idata, resourceManager);
 
         this.worker = new ProcessPanelWorker(idata, this);
 

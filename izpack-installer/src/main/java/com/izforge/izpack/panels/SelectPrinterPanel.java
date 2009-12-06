@@ -25,6 +25,7 @@
 
 package com.izforge.izpack.panels;
 
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
@@ -65,8 +66,8 @@ public class SelectPrinterPanel extends IzPanel implements ActionListener {
      * @param parent The parent.
      * @param id     The installation installDataGUI.
      */
-    public SelectPrinterPanel(InstallerFrame parent, GUIInstallData id) {
-        super(parent, id);
+    public SelectPrinterPanel(InstallerFrame parent, GUIInstallData id, ResourceManager resourceManager) {
+        super(parent, id, resourceManager);
 
         installDataGUI = id;
 

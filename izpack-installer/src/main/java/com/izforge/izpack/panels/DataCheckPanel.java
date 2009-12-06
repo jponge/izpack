@@ -29,6 +29,7 @@
 package com.izforge.izpack.panels;
 
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -66,8 +67,8 @@ public class DataCheckPanel extends IzPanel {
      * @param parent The parent.
      * @param id     The installation installDataGUI.
      */
-    public DataCheckPanel(InstallerFrame parent, GUIInstallData id) {
-        super(parent, id);
+    public DataCheckPanel(InstallerFrame parent, GUIInstallData id, ResourceManager resourceManager) {
+        super(parent, id, resourceManager);
 
         installDataGUI = id;
         instanceNumber = instanceCount++;

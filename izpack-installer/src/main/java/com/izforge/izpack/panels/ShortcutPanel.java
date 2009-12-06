@@ -23,6 +23,7 @@ import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.ButtonFactory;
 import com.izforge.izpack.gui.LabelFactory;
 import com.izforge.izpack.installer.ResourceNotFoundException;
@@ -625,8 +626,8 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
     /*
      * --------------------------------------------------------------------------
      */
-    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI) {
-        super(parent, installDataGUI, "link16x16");
+    public ShortcutPanel(InstallerFrame parent, GUIInstallData installDataGUI, ResourceManager resourceManager) {
+        super(parent, installDataGUI, "link16x16", resourceManager);
 
         layout = (GridBagLayout) super.getLayout();
         Object con = getLayoutHelper().getDefaultConstraints();
