@@ -415,34 +415,34 @@ public abstract class UnpackerBase implements IUnpacker {
             if (shouldInterrupt()) {
                 return;
             }
-            InstallerListener il = (InstallerListener) iter.next();
+            InstallerListener installerListener = (InstallerListener) iter.next();
             switch (action) {
                 case InstallerListener.BEFORE_FILE:
-                    il.beforeFile((File) firstParam, (PackFile) secondParam);
+                    installerListener.beforeFile((File) firstParam, (PackFile) secondParam);
                     break;
                 case InstallerListener.AFTER_FILE:
-                    il.afterFile((File) firstParam, (PackFile) secondParam);
+                    installerListener.afterFile((File) firstParam, (PackFile) secondParam);
                     break;
                 case InstallerListener.BEFORE_DIR:
-                    il.beforeDir((File) firstParam, (PackFile) secondParam);
+                    installerListener.beforeDir((File) firstParam, (PackFile) secondParam);
                     break;
                 case InstallerListener.AFTER_DIR:
-                    il.afterDir((File) firstParam, (PackFile) secondParam);
+                    installerListener.afterDir((File) firstParam, (PackFile) secondParam);
                     break;
                 case InstallerListener.BEFORE_PACK:
-                    il.beforePack((Pack) firstParam, (Integer) secondParam,
+                    installerListener.beforePack((Pack) firstParam, (Integer) secondParam,
                             (AbstractUIProgressHandler) thirdParam);
                     break;
                 case InstallerListener.AFTER_PACK:
-                    il.afterPack((Pack) firstParam, (Integer) secondParam,
+                    installerListener.afterPack((Pack) firstParam, (Integer) secondParam,
                             (AbstractUIProgressHandler) thirdParam);
                     break;
                 case InstallerListener.BEFORE_PACKS:
-                    il.beforePacks((AutomatedInstallData) firstParam, (Integer) secondParam,
+                    installerListener.beforePacks((AutomatedInstallData) firstParam, (Integer) secondParam,
                             (AbstractUIProgressHandler) thirdParam);
                     break;
                 case InstallerListener.AFTER_PACKS:
-                    il.afterPacks((AutomatedInstallData) firstParam,
+                    installerListener.afterPacks((AutomatedInstallData) firstParam,
                             (AbstractUIProgressHandler) secondParam);
                     break;
 

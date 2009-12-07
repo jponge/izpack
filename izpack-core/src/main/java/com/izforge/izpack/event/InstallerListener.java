@@ -21,9 +21,9 @@
 
 package com.izforge.izpack.event;
 
+import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.PackFile;
-import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 import java.io.File;
