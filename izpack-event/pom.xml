@@ -22,6 +22,10 @@
             <groupId>${groupId}</groupId>
             <artifactId>izpack-util</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
