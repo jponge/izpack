@@ -22,8 +22,8 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.data.*;
+import com.izforge.izpack.helper.SpecHelper;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
-import com.izforge.izpack.util.SpecHelper;
 
 import java.io.File;
 import java.util.ArrayList;

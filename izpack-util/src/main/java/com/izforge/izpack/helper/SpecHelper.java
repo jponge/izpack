@@ -19,13 +19,14 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.helper;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.IXMLParser;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.InstallerException;
+import com.izforge.izpack.util.VariableSubstitutor;
 
 import java.io.File;
 import java.io.FileInputStream;

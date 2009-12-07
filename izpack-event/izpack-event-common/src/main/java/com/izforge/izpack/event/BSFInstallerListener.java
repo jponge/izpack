@@ -26,9 +26,13 @@ import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.data.ResourceManager;
+import com.izforge.izpack.helper.SpecHelper;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.util.*;
+import com.izforge.izpack.util.AbstractUIProgressHandler;
+import com.izforge.izpack.util.Debug;
+import com.izforge.izpack.util.ExtendedUIProgressHandler;
+import com.izforge.izpack.util.VariableSubstitutorImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

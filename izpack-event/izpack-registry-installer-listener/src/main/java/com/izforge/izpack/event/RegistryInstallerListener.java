@@ -25,6 +25,7 @@ import com.coi.tools.os.win.NativeLibException;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.Pack;
+import com.izforge.izpack.helper.SpecHelper;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.rules.RulesEngine;
