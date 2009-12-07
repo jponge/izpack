@@ -29,6 +29,10 @@
             <groupId>${groupId}</groupId>
             <artifactId>izpack-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-event</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>${groupId}</groupId>
@@ -55,7 +59,7 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources </directory>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>

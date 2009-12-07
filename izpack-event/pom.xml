@@ -15,28 +15,9 @@
     <name>IzPack event module</name>
     <modules>
         <module>izpack-summary-logger</module>
+        <module>izpack-events</module>
         <module>izpack-event-common</module>
         <module>izpack-registry-installer-listener</module>
         <module>izpack-registry-uninstaller-listener</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-event-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-registry-installer-listener</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-registry-uninstaller-listener</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-summary-logger</artifactId>
-        </dependency>
-    </dependencies>
-
 </project>

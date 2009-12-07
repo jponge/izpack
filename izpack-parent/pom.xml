@@ -67,6 +67,21 @@
             </dependency>
             <!-- Internal -->
             <dependency>
+                <artifactId>izpack-registry-uninstaller-listener</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>izpack-registry-installer-listener</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>izpack-events</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-event-common</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>

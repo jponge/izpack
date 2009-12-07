@@ -23,7 +23,7 @@
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-event</artifactId>
+            <artifactId>izpack-events</artifactId>
         </dependency>
 
     </dependencies>
