@@ -108,13 +108,13 @@ public class BSFAction extends ActionBase {
                 new MethodDescriptor("beforeFile", new String[]{"file", "pack"}));
         orderMethodMap.put(BSFAction.AFTERFILE,
                 new MethodDescriptor("afterFile", new String[]{"file", "pack"}));
-        orderMethodMap.put(BSFAction.BEFOREPACKS,
+        orderMethodMap.put(BEFOREPACKS,
                 new MethodDescriptor("beforePacks", new String[]{"installData", "npacks", "handler"}));
-        orderMethodMap.put(BSFAction.AFTERPACKS,
+        orderMethodMap.put(AFTERPACKS,
                 new MethodDescriptor("afterPacks", new String[]{"installData", "handler"}));
-        orderMethodMap.put(BSFAction.BEFOREPACK,
+        orderMethodMap.put(BEFOREPACK,
                 new MethodDescriptor("beforePack", new String[]{"pack", "i", "handler"}));
-        orderMethodMap.put(BSFAction.AFTERPACK,
+        orderMethodMap.put(AFTERPACK,
                 new MethodDescriptor("afterPack", new String[]{"pack", "i", "handler"}));
 
         langToMethodCheckerMap.put("beanshell",

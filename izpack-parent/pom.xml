@@ -67,6 +67,16 @@
             </dependency>
             <!-- Internal -->
             <dependency>
+                <artifactId>izpack-event-common</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>izpack-summary-logger</artifactId>
+                <groupId>${groupId}</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-api</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
