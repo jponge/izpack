@@ -66,7 +66,7 @@ import java.util.Vector;
  *
  * @version $Revision$
  */
-public class ShortcutPanel extends IzPanel implements ActionListener, ListSelectionListener // ,//
+public class ShortcutPanel extends IzPanel implements ActionListener, ListSelectionListener, IShortcuPanel // ,//
 // ShortcutConstants
 
 {
@@ -406,7 +406,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * Installerlistener may then perform the creation of the shortcuts after the files have been installed...
      * Default is true.
      */
-    public static boolean createImmediately = true;
+    private boolean createImmediately = true;
 
     /**
      * internal flag isRootUser
@@ -762,7 +762,7 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
 
         create = createShortcuts.isSelected();
 
-        if (createImmediately) {
+        if (isCreateImmediately()) {
             createAndRegisterShortcuts();
         }
 
@@ -2240,8 +2240,13 @@ public class ShortcutPanel extends IzPanel implements ActionListener, ListSelect
      * createShortcuts() to complete the operation.
      * --------------------------------------------------------------------------
      */
+    public boolean isCreateImmediately() {
+        return createImmediately;
+    }
 
-
+    public void setCreateImmediately(boolean createImmediately) {
+        this.createImmediately = createImmediately;
+    }
 }
 
 /*---------------------------------------------------------------------------*/

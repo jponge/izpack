@@ -23,7 +23,7 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.data.AutomatedInstallData;
-import com.izforge.izpack.panels.ShortcutPanel;
+import com.izforge.izpack.panels.IShortcuPanel;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 
 /**
@@ -34,13 +34,16 @@ import com.izforge.izpack.util.AbstractUIProgressHandler;
  */
 public class LateShortcutInstallListener extends SimpleInstallerListener {
 
-    public LateShortcutInstallListener() {
-        ShortcutPanel.createImmediately = false;
+    private IShortcuPanel IShortcuPanel;
+
+    public LateShortcutInstallListener(IShortcuPanel IShortcuPanel) {
+        this.IShortcuPanel = IShortcuPanel;
+        IShortcuPanel.setCreateImmediately(false);
     }
 
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception {
         //now it's time to write down the shortcuts...
-        ShortcutPanel.getInstance().createAndRegisterShortcuts();
+        IShortcuPanel.createAndRegisterShortcuts();
     }
 }
