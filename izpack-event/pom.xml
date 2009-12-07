@@ -31,6 +31,10 @@
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
+            <artifactId>izpack-registry-uninstaller-listener</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
             <artifactId>izpack-summary-logger</artifactId>
         </dependency>
     </dependencies>

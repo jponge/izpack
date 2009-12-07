@@ -21,6 +21,10 @@
             <version>${version}</version>
             <classifier>standalone</classifier>
         </dependency>
+        <dependency>
+            <groupId>${groupId}</groupId>
+            <artifactId>izpack-event</artifactId>
+        </dependency>
 
     </dependencies>
 
