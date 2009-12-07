@@ -75,6 +75,7 @@ public class WrappedNativeLibException extends Exception {
      * 
      * @see java.lang.Throwable#getMessage()
      */
+
     public String getMessage() {
         StringBuffer retval = new StringBuffer();
         boolean next = false;
