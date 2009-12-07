@@ -41,7 +41,7 @@ import java.util.zip.ZipOutputStream;
  *
  * @author Dennis Reil, <izpack@reil-online.de>
  */
-public abstract class UnpackerBase implements IUnpacker {
+public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
     /**
      * The installdata.
      */
@@ -543,7 +543,7 @@ public abstract class UnpackerBase implements IUnpacker {
      *
      * @param di the discard interrupt flag to set
      */
-    public static synchronized void setDiscardInterrupt(boolean di) {
+    public synchronized void setDiscardInterrupt(boolean di) {
         discardInterrupt = di;
         setInterruptDesired(false);
     }

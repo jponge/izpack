@@ -22,11 +22,11 @@
 package com.izforge.izpack.event;
 
 import com.coi.tools.os.win.NativeLibException;
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.installer.UninstallData;
-import com.izforge.izpack.installer.unpacker.Unpacker;
+import com.izforge.izpack.installer.unpacker.IDiscardInterruptable;
 import com.izforge.izpack.rules.RulesEngine;
 import com.izforge.izpack.util.*;
 import com.izforge.izpack.util.os.RegistryDefaultHandler;
@@ -82,11 +82,14 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
 
     private List registryModificationLog;
 
+    private IDiscardInterruptable unpacker;
+
     /**
      * Default constructor.
      */
-    public RegistryInstallerListener() {
+    public RegistryInstallerListener(IDiscardInterruptable unpacker) {
         super(true);
+        this.unpacker = unpacker;
     }
 
     /*
@@ -95,11 +98,12 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
      * int, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
-    public void beforePacks(AutomatedInstallData idata, Integer npacks,
+
+    public void beforePacks(AutomatedInstallData installData, Integer npacks,
                             AbstractUIProgressHandler handler) throws Exception {
-        super.beforePacks(idata, npacks, handler);
-        rules = (RulesEngine)idata.getRules();
-        initializeRegistryHandler(idata);
+        super.beforePacks(installData, npacks, handler);
+        rules = installData.getRules();
+        initializeRegistryHandler(installData);
     }
 
     /*
@@ -108,6 +112,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception {
         try {
@@ -121,7 +126,7 @@ public class RegistryInstallerListener extends NativeInstallerListener implement
             }
             IXMLElement uninstallerPack = null;
             // No interrupt desired after writing registry entries.
-            Unpacker.setDiscardInterrupt(true);
+            unpacker.setDiscardInterrupt(true);
             rh.activateLogging();
 
             if (getSpecHelper().getSpec() != null) {
