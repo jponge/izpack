@@ -22,9 +22,9 @@
 
 package com.izforge.izpack.event;
 
-import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.data.Pack;
 import com.izforge.izpack.installer.InstallerException;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.util.*;
@@ -85,6 +85,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      * @see com.izforge.izpack.installer.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
      * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
                             AbstractUIProgressHandler handler) throws Exception {
         super.beforePacks(idata, npacks, handler);
@@ -145,6 +146,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      * @see com.izforge.izpack.installer.InstallerListener#beforePack(com.izforge.izpack.Pack,
      * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
             throws Exception {
         performAllActions(pack.name, ActionBase.BEFOREPACK, handler);
@@ -156,6 +158,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      * @see com.izforge.izpack.installer.InstallerListener#afterPack(com.izforge.izpack.Pack,
      * java.lang.Integer, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception {
         performAllActions(pack.name, ActionBase.AFTERPACK, handler);
     }
@@ -166,6 +169,7 @@ public class AntActionInstallerListener extends SimpleInstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception {
         if (informProgressBar()) {

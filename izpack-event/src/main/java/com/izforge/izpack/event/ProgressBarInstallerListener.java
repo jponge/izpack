@@ -49,6 +49,7 @@ public class ProgressBarInstallerListener extends SimpleInstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception {
         if (handler instanceof ExtendedUIProgressHandler && getProgressBarCallerCount() > 0) {

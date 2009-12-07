@@ -62,6 +62,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
      * @see com.izforge.izpack.uninstaller.UninstallerListener#beforeDeletion(java.util.List,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
         String buildResource = null;
         // See if we have an embedded build_resource.  If so, it will be stored
@@ -153,6 +154,7 @@ public class AntActionUninstallerListener extends SimpleUninstallerListener {
      * @see com.izforge.izpack.uninstaller.UninstallerListener#afterDeletion(java.util.List,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void afterDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
         if (antActions != null && antActions.size() > 0) { // There are actions of the order "afterdeletion".
             for (AntAction act : antActions) {

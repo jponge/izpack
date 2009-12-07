@@ -22,7 +22,6 @@
 package com.izforge.izpack.event;
 
 import com.izforge.izpack.data.*;
-import com.izforge.izpack.data.PackFile;
 import com.izforge.izpack.util.AbstractUIProgressHandler;
 import com.izforge.izpack.util.SpecHelper;
 
@@ -86,6 +85,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#handleFile(java.io.File,
      * com.izforge.izpack.PackFile)
      */
+
     public void afterFile(File file, PackFile pf) throws Exception {
         // Do nothing
     }
@@ -96,6 +96,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#handleDir(java.io.File,
      * com.izforge.izpack.PackFile)
      */
+
     public void afterDir(File dir, PackFile pf) throws Exception {
         // Do nothing
     }
@@ -106,6 +107,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#afterPacks(com.izforge.izpack.installer.AutomatedInstallData,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void afterPacks(AutomatedInstallData idata, AbstractUIProgressHandler handler)
             throws Exception {
 
@@ -118,6 +120,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#afterPack(com.izforge.izpack.Pack, int,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void afterPack(Pack pack, Integer i, AbstractUIProgressHandler handler) throws Exception {
         // TODO Auto-generated method stub
 
@@ -129,6 +132,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
      * int, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
                             AbstractUIProgressHandler handler) throws Exception {
         if (installdata == null) {
@@ -153,6 +157,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#beforePack(com.izforge.izpack.Pack, int,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void beforePack(Pack pack, Integer i, AbstractUIProgressHandler handler)
             throws Exception {
         // Do nothing
@@ -163,6 +168,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * 
      * @see com.izforge.izpack.installer.InstallerListener#isFileListener()
      */
+
     public boolean isFileListener() {
         // For default no.
         return false;
@@ -174,6 +180,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.installer.InstallerListener#beforeFile(java.io.File,
      * com.izforge.izpack.PackFile)
      */
+
     public void beforeFile(File file, PackFile pf) throws Exception {
         // Do nothing
     }
@@ -184,6 +191,7 @@ public class SimpleInstallerListener implements InstallerListener {
      * @see com.izforge.izpack.installer.InstallerListener#beforeDir(java.io.File,
      * com.izforge.izpack.PackFile)
      */
+
     public void beforeDir(File dir, PackFile pf) throws Exception {
         // Do nothing
     }

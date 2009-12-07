@@ -56,6 +56,7 @@ public class NativeInstallerListener extends SimpleInstallerListener {
      * @see com.izforge.izpack.compiler.InstallerListener#beforePacks(com.izforge.izpack.installer.AutomatedInstallData,
      * int, com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void beforePacks(AutomatedInstallData idata, Integer npacks,
                             AbstractUIProgressHandler handler) throws Exception {
         super.beforePacks(idata, npacks, handler);

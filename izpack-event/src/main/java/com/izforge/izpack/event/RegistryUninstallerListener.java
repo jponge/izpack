@@ -53,6 +53,7 @@ public class RegistryUninstallerListener extends NativeUninstallerListener {
      * @see com.izforge.izpack.uninstaller.UninstallerListener#afterDeletion(java.util.List,
      * com.izforge.izpack.util.AbstractUIProgressHandler)
      */
+
     public void beforeDeletion(List files, AbstractUIProgressHandler handler) throws Exception {
         // Load the defined actions.
         InputStream in = getClass().getResourceAsStream("/registryEntries");
