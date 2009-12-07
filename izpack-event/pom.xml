@@ -17,6 +17,7 @@
         <module>izpack-summary-logger</module>
         <module>izpack-event-common</module>
         <module>izpack-registry-installer-listener</module>
+        <module>izpack-registry-uninstaller-listener</module>
     </modules>
 
     <dependencies>
