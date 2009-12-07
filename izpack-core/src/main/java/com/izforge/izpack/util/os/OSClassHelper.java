@@ -19,11 +19,13 @@
  * limitations under the License.
  */
 
-package com.izforge.izpack.util;
+package com.izforge.izpack.util.os;
 
 import com.izforge.izpack.data.AutomatedInstallData;
+import com.izforge.izpack.util.Debug;
 
 /*---------------------------------------------------------------------------*/
+
 /**
  * This class is the system independent base class for helpers which are system dependent in its
  * subclasses.

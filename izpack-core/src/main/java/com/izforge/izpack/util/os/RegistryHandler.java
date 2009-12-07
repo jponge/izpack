@@ -28,7 +28,6 @@ import com.coi.tools.os.win.RegDataContainer;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.util.Debug;
-import com.izforge.izpack.util.OSClassHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
