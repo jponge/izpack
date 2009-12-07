@@ -63,6 +63,7 @@ public class SpecHelper {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the XML specification given by the file name. The result is stored in spec.
      *
@@ -74,6 +75,7 @@ public class SpecHelper {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the XML specification given by the file name. The result is stored in spec.
      *
@@ -103,6 +105,7 @@ public class SpecHelper {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the XML specification given by the input stream. The result is stored in spec.
      *
@@ -114,6 +117,7 @@ public class SpecHelper {
     }
 
     /*--------------------------------------------------------------------------*/
+
     /**
      * Reads the XML specification given by the input stream. The result is stored in spec.
      *
