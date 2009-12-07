@@ -20,9 +20,11 @@
  */
 package com.izforge.izpack.util;
 
-import com.izforge.izpack.installer.Installer;
-
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -186,7 +188,7 @@ public class Debug
             System.out.println(DLOG + " enabled.");
             PrintWriter logfile = createLogFile();
 
-            Debug.log(Installer.class.getName() + " LogFile created at ");
+            Debug.log("IzPack LogFile created at ");
 
             // ** write some runtime system properties into the logfile **
             Debug.log("System.Properties:", LOG_WITH_TIME_STAMP);
@@ -201,7 +203,7 @@ public class Debug
                 Debug.log(aKey + "  =  " + sysProps.getProperty(aKey), LOG_WITHOUT_DATE);
             }
             Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
-            Debug.log("\n " + Installer.class.getName() + " installs on: \n", LOG_WITHOUT_DATE);
+            Debug.log("\n IzPack runs on: \n", LOG_WITHOUT_DATE);
             Debug.log(OsVersion.getOsDetails(), LOG_WITHOUT_DATE);
             Debug.log("\n==========================================\n", LOG_WITHOUT_DATE);
         }
