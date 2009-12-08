@@ -2582,10 +2582,8 @@ public class CompilerConfig extends Thread {
         if (root == null) {
             return;
         }
-        Iterator<IXMLElement> iter = root.getChildrenNamed("listener").iterator();
-        while (iter.hasNext()) {
-            IXMLElement xmlAction = iter.next();
-            Object[] listener = getCompilerListenerInstance(xmlAction);
+        for (IXMLElement ixmlElement : root.getChildrenNamed("listener")) {
+            Object[] listener = getCompilerListenerInstance(ixmlElement);
             if (listener != null) {
                 addCompilerListener((CompilerListener) listener[0]);
             }
@@ -2593,15 +2591,15 @@ public class CompilerConfig extends Thread {
             int[] types = new int[]{CustomData.INSTALLER_LISTENER,
                     CustomData.UNINSTALLER_LISTENER};
             for (int i = 0; i < typeNames.length; ++i) {
-                String className = xmlAction.getAttribute(typeNames[i]);
+                String className = ixmlElement.getAttribute(typeNames[i]);
                 if (className != null) {
                     // Check for a jar attribute on the listener
-                    String jarPath = xmlAction.getAttribute("jar");
+                    String jarPath = ixmlElement.getAttribute("jar");
                     jarPath = compiler.replaceProperties(jarPath);
                     if (jarPath == null) {
                         jarPath = "bin/customActions/" + className + ".jar";
                     }
-                    List<OsConstraint> constraints = OsConstraint.getOsList(xmlAction);
+                    List<OsConstraint> constraints = OsConstraint.getOsList(ixmlElement);
                     compiler.addCustomListener(types[i], className, jarPath, constraints);
                 }
             }
