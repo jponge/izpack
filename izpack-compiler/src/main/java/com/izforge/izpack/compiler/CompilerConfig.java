@@ -33,6 +33,7 @@ import com.izforge.izpack.adaptator.IXMLWriter;
 import com.izforge.izpack.adaptator.impl.XMLParser;
 import com.izforge.izpack.adaptator.impl.XMLWriter;
 import com.izforge.izpack.compiler.Compiler.CmdlinePackagerListener;
+import com.izforge.izpack.compiler.helper.CompilerHelper;
 import com.izforge.izpack.data.*;
 import com.izforge.izpack.data.PanelAction.ActionStage;
 import com.izforge.izpack.installer.DataValidator;
@@ -114,6 +115,11 @@ public class CompilerConfig extends Thread {
      * The installer packager compiler
      */
     private Compiler compiler;
+
+    /**
+     * Compiler helper
+     */
+    private CompilerHelper compilerHelper = new CompilerHelper();
 
     /**
      * List of CompilerListeners which should be called at packaging
@@ -2598,6 +2604,9 @@ public class CompilerConfig extends Thread {
                     jarPath = compiler.replaceProperties(jarPath);
                     if (jarPath == null) {
                         jarPath = "bin/customActions/" + className + ".jar";
+                        if (!new File(jarPath).exists()) {
+                            jarPath = compilerHelper.resolveCustomActionsJarPath(className);
+                        }
                     }
                     List<OsConstraint> constraints = OsConstraint.getOsList(ixmlElement);
                     compiler.addCustomListener(types[i], className, jarPath, constraints);
