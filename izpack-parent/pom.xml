@@ -43,6 +43,7 @@
 
     <dependencyManagement>
         <dependencies>
+
             <!-- Compile libs -->
             <dependency>
                 <groupId>ant</groupId>
@@ -65,30 +66,36 @@
                 <artifactId>picocontainer</artifactId>
                 <version>2.8</version>
             </dependency>
+
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>2.4</version>
+            </dependency>
             <!-- Internal -->
             <dependency>
+                <artifactId>izpack-events</artifactId>
+                <groupId>org.codehaus.izpack.event</groupId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
                 <artifactId>izpack-registry-uninstaller-listener</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>org.codehaus.izpack.event</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
                 <artifactId>izpack-registry-installer-listener</artifactId>
-                <groupId>${groupId}</groupId>
+                <groupId>org.codehaus.izpack.event</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-events</artifactId>
-                <groupId>${groupId}</groupId>
+                <artifactId>izpack-event-commons</artifactId>
+                <groupId>org.codehaus.izpack.event</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-event-common</artifactId>
-                <groupId>${groupId}</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>izpack-summary-logger</artifactId>
-                <groupId>${groupId}</groupId>
+                <artifactId>izpack-summary-logger-installer-listener</artifactId>
+                <groupId>org.codehaus.izpack.event</groupId>
                 <version>${version}</version>
             </dependency>
             <dependency>
@@ -114,11 +121,6 @@
             </dependency>
             <dependency>
                 <artifactId>izpack-panel</artifactId>
-                <groupId>${groupId}</groupId>
-                <version>${version}</version>
-            </dependency>
-            <dependency>
-                <artifactId>izpack-event</artifactId>
                 <groupId>${groupId}</groupId>
                 <version>${version}</version>
             </dependency>

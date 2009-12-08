@@ -240,7 +240,7 @@ public class BSFAction extends ActionBase {
                 }
 
                 if (m != null) {
-                    java.util.Properties properties = (java.util.Properties) m.invoke(idata);
+                    Properties properties = (Properties) m.invoke(idata);
                     variables.putAll(properties);
                 }
 

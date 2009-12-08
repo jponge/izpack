@@ -3,21 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>izpack-parent</artifactId>
-        <groupId>org.codehaus.izpack</groupId>
+        <artifactId>izpack-parent-event</artifactId>
+        <groupId>org.codehaus.izpack.event</groupId>
         <version>4.3.0-SNAPSHOT</version>
-        <relativePath>../../izpack-parent/pom.xml</relativePath>
+        <relativePath>../izpack-parent-event/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>izpack-summary-logger</artifactId>
+    <artifactId>izpack-summary-logger-installer-listener</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-event-common</artifactId>
+            <artifactId>izpack-event-commons</artifactId>
         </dependency>
     </dependencies>
-
-
 </project>

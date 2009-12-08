@@ -22,8 +22,6 @@ public class InstallerContainer implements IInstallerContainer {
 
     private MutablePicoContainer pico;
 
-    private IApplicationContainer parent;
-
     public InstallerContainer(IApplicationContainer parent) throws ClassNotFoundException {
         pico = parent.makeChildContainer();
         initBindings();

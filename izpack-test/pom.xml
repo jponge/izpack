@@ -13,7 +13,6 @@
     <artifactId>izpack-test</artifactId>
     <name>IzPack test module</name>
 
-
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
@@ -103,8 +102,22 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/src/test/resources/lib</outputDirectory>
+                            <includeGroupIds>org.codehaus.izpack.event</includeGroupIds>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-custom actions</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/test/resources/bin/customActions</outputDirectory>
+                            <includeGroupIds>org.codehaus.izpack.event</includeGroupIds>
+                            <stripVersion>true</stripVersion>
+                        </configuration>
+                    </execution>
+
                     <execution>
                         <id>Unpack native libs</id>
                         <phase>process-resources</phase>

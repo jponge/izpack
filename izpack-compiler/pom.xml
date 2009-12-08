@@ -29,10 +29,6 @@
             <groupId>${groupId}</groupId>
             <artifactId>izpack-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>${groupId}</groupId>
-            <artifactId>izpack-event</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>${groupId}</groupId>
@@ -53,7 +49,15 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.codehaus.izpack.event</groupId>
+            <artifactId>izpack-events</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
