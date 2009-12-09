@@ -15,15 +15,17 @@
     <dependencies>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-registry-installer-listener</artifactId>
+            <artifactId>izpack-registry-installer</artifactId>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-registry-uninstaller-listener</artifactId>
+            <artifactId>izpack-registry-uninstaller</artifactId>
+            <classifier>listener</classifier>
         </dependency>
         <dependency>
             <groupId>${groupId}</groupId>
-            <artifactId>izpack-summary-logger-installer-listener</artifactId>
+            <artifactId>izpack-summary-logger-installer</artifactId>
+            <classifier>listener</classifier>
         </dependency>
     </dependencies>
 </project>

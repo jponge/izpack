@@ -84,7 +84,7 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-registry-installer-listener</artifactId>
+                <artifactId>izpack-registry-installer</artifactId>
                 <groupId>org.codehaus.izpack.event</groupId>
                 <version>${version}</version>
             </dependency>
@@ -94,7 +94,7 @@
                 <version>${version}</version>
             </dependency>
             <dependency>
-                <artifactId>izpack-summary-logger-installer-listener</artifactId>
+                <artifactId>izpack-summary-logger-installer</artifactId>
                 <groupId>org.codehaus.izpack.event</groupId>
                 <version>${version}</version>
             </dependency>

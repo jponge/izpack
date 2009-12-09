@@ -17,8 +17,8 @@
         <module>izpack-parent-event</module>
         <module>izpack-event-commons</module>
         <module>izpack-events</module>
-        <module>izpack-summary-logger-installer-listener</module>
-        <module>izpack-registry-installer-listener</module>
-        <module>izpack-registry-uninstaller-listener</module>
+        <module>izpack-summary-logger-installer</module>
+        <module>izpack-registry-installer</module>
+        <module>izpack-registry-uninstaller</module>
     </modules>
 </project>

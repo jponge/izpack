@@ -38,26 +38,52 @@
                 <artifactId>izpack-event-commons</artifactId>
                 <version>${version}</version>
             </dependency>
+
             <dependency>
                 <groupId>${groupId}</groupId>
-                <artifactId>izpack-event-commons</artifactId>
+                <artifactId>izpack-registry-installer</artifactId>
                 <version>${version}</version>
+                <classifier>listener</classifier>
             </dependency>
             <dependency>
                 <groupId>${groupId}</groupId>
-                <artifactId>izpack-registry-installer-listener</artifactId>
+                <artifactId>izpack-registry-uninstaller</artifactId>
                 <version>${version}</version>
+                <classifier>listener</classifier>
             </dependency>
             <dependency>
                 <groupId>${groupId}</groupId>
-                <artifactId>izpack-registry-uninstaller-listener</artifactId>
+                <artifactId>izpack-summary-logger-installer</artifactId>
                 <version>${version}</version>
-            </dependency>
-            <dependency>
-                <groupId>${groupId}</groupId>
-                <artifactId>izpack-summary-logger-installer-listener</artifactId>
-                <version>${version}</version>
+                <classifier>listener</classifier>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <configuration>
+                        <descriptors>
+                            <descriptor>${basedir}/src/main/assembly/assembly.xml</descriptor>
+                        </descriptors>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>make-assembly</id>
+                            <!-- this is used for inheritance merges -->
+                            <phase>package</phase>
+                            <!-- append to the packaging phase. -->
+                            <goals>
+                                <goal>single</goal>
+                                <!-- goals == mojos -->
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
