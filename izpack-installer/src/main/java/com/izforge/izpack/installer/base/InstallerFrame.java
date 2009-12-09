@@ -221,7 +221,7 @@ public class InstallerFrame extends JFrame {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
     }
 
-    private void sizeFrame() {
+    public void sizeFrame() {
         pack();
         setSize(installdata.guiPrefs.width, installdata.guiPrefs.height);
         setPreferredSize(new Dimension(installdata.guiPrefs.width, installdata.guiPrefs.height));

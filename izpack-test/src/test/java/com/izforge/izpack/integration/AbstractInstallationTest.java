@@ -56,9 +56,10 @@ public class AbstractInstallationTest {
      */
     protected FrameFixture prepareFrameFixture() throws Exception {
         InstallerFrame installerFrame = installerContainer.getComponent(InstallerFrame.class);
-        installerFrame.loadPanels();
         FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
+        installerFrame.loadPanels();
         installerFrameFixture.show();
+        installerFrame.sizeFrame();
         return installerFrameFixture;
     }
 

@@ -141,6 +141,9 @@ public class InstallationTest extends AbstractInstallationTest {
         // Summary
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install
+        while (!installData.isCanClose()) {
+            Thread.sleep(500);
+        }
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Shortcut
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
