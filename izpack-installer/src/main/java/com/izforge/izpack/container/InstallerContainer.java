@@ -8,7 +8,6 @@ import com.izforge.izpack.installer.unpacker.IUnpacker;
 import com.izforge.izpack.panels.PanelManager;
 import com.izforge.izpack.util.VariableSubstitutor;
 import com.izforge.izpack.util.VariableSubstitutorImpl;
-import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.parameters.ComponentParameter;
 import org.picocontainer.parameters.ConstantParameter;
 
@@ -18,12 +17,10 @@ import java.awt.*;
 /**
  * Container for panel level component
  */
-public class InstallerContainer implements IInstallerContainer {
-
-    private MutablePicoContainer pico;
+public class InstallerContainer extends AbstractChildContainer {
 
     public InstallerContainer(IApplicationContainer parent) throws ClassNotFoundException {
-        pico = parent.makeChildContainer();
+        super(null);
         initBindings();
     }
 
@@ -57,34 +54,6 @@ public class InstallerContainer implements IInstallerContainer {
                 );
     }
 
-
-    public <T> void addComponent(Class<T> componentType) {
-        pico.addComponent(componentType);
-    }
-
-    public void addComponent(Object componentType, Object implementation) {
-        pico.addComponent(componentType, implementation);
-    }
-
-    public void dispose() {
-        pico.dispose();
-    }
-
-    public <T> T getComponent(Class<T> componentType) {
-        return pico.getComponent(componentType);
-    }
-
-    public Object getComponent(Object componentKeyOrType) {
-        return pico.getComponent(componentKeyOrType);
-    }
-
-    public MutablePicoContainer makeChildContainer() {
-        return pico.makeChildContainer();
-    }
-
-    public void removeComponent(Object abstractUIHandlerInContainer) {
-        pico.removeComponent(abstractUIHandlerInContainer);
-    }
 
     private JFrame initFrame() {
         ResourceManager resourceManager = pico.getComponent(ResourceManager.class);
