@@ -38,8 +38,8 @@ public class PanelManagerTest {
     public void resolveClassNameShouldNotAddPrefixWithCompleteClass() throws Exception {
         Class<?> aClass = panelManager.resolveClassName("com.izforge.izpack.panels.HelloPanel");
         assertThat(aClass.getName(), Is.is("com.izforge.izpack.panels.HelloPanel"));
-        aClass = panelManager.resolveClassName("com.izforge.izpack.bootstrap.InstallerContainer");
-        assertThat(aClass.getName(), Is.is("com.izforge.izpack.bootstrap.InstallerContainer"));
+        aClass = panelManager.resolveClassName("com.izforge.izpack.container.InstallerContainer");
+        assertThat(aClass.getName(), Is.is("com.izforge.izpack.container.InstallerContainer"));
     }
 
     @Test(expected = ClassNotFoundException.class)
