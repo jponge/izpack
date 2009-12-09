@@ -126,20 +126,25 @@ public class InstallationTest extends AbstractInstallationTest {
 
         installerFrameFixture = prepareFrameFixture();
         // Hello panel
-        Thread.sleep(10000);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-        // Info Panel
-        installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
+        // Chack Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Licence Panel
-        installerFrameFixture.textBox(GuiId.LICENCE_TEXT_AREA.id).requireText("(Consider it as a licence file ...)");
-        installerFrameFixture.radioButton(GuiId.LICENCE_NO_RADIO.id).requireSelected();
-        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
         installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Target Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         installerFrameFixture.optionPane().requireWarningMessage();
         installerFrameFixture.optionPane().okButton().click();
+        // Packs
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Summary
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Install
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Shortcut
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Finish
+
     }
 }
