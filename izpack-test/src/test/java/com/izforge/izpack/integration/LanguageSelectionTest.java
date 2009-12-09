@@ -51,7 +51,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
     public void testLangPickerChoseEng() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
-        prepareDialogFixture();
+        dialogFrameFixture = prepareDialogFixture();
         assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(), Is.is(new String[]{"eng", "fra"}));
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
         ResourceManager resourceManager = applicationContainer.getComponent(ResourceManager.class);
@@ -62,7 +62,7 @@ public class LanguageSelectionTest extends AbstractInstallationTest {
     public void testLangPickerChoseFra() throws Exception {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
-        prepareDialogFixture();
+        dialogFrameFixture = prepareDialogFixture();
         assertThat(dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).contents(), Is.is(new String[]{"eng", "fra"}));
         dialogFrameFixture.comboBox(GuiId.COMBO_BOX_LANG_FLAG.id).selectItem(1);
         dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
