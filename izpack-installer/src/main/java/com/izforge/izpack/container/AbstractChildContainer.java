@@ -3,7 +3,7 @@ package com.izforge.izpack.container;
 import org.picocontainer.MutablePicoContainer;
 
 /**
- *
+ * Abstract container for child of application container
  */
 public class AbstractChildContainer implements IInstallerContainer {
     protected MutablePicoContainer pico;
