@@ -54,20 +54,22 @@ public class AbstractInstallationTest {
      *
      * @throws Exception
      */
-    protected void prepareFrameFixture() throws Exception {
+    protected FrameFixture prepareFrameFixture() throws Exception {
         InstallerFrame installerFrame = installerContainer.getComponent(InstallerFrame.class);
         installerFrame.loadPanels();
-        installerFrameFixture = new FrameFixture(installerFrame);
+        FrameFixture installerFrameFixture = new FrameFixture(installerFrame);
         installerFrameFixture.show();
+        return installerFrameFixture;
     }
 
     /**
      * Prepare fest fixture for lang selection
      */
-    protected void prepareDialogFixture() {
+    protected DialogFixture prepareDialogFixture() {
         LanguageDialog languageDialog = installerContainer.getComponent(LanguageDialog.class);
-        dialogFrameFixture = new DialogFixture(languageDialog);
-        dialogFrameFixture.show();
+        DialogFixture dialogFixture = new DialogFixture(languageDialog);
+        dialogFixture.show();
+        return dialogFixture;
     }
 
     /**

@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -43,7 +44,7 @@ public class InstallationTest extends AbstractInstallationTest {
         compileAndUnzip("helloAndFinish.xml", getWorkingDirectory("samples"));
         installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
         installerContainer.getComponent(LanguageDialog.class).initLangPack();
-        prepareFrameFixture();
+        installerFrameFixture = prepareFrameFixture();
 
         // Hello panel
         installerFrameFixture.requireSize(new Dimension(640, 480));
@@ -58,18 +59,11 @@ public class InstallationTest extends AbstractInstallationTest {
         compileAndUnzip("basicInstall.xml", getWorkingDirectory("samples/basicInstall"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
-        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
-        File installPath = new File(installData.getInstallPath());
-        FileUtils.deleteDirectory(installPath);
-        assertThat(installPath.exists(), Is.is(false));
+        File installPath = prepareInstallation(installData);
         // Lang picker
-        prepareDialogFixture();
-        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
-        // Seems necessary to unlock window
-        dialogFrameFixture.cleanUp();
-        dialogFrameFixture = null;
+        clickDefaultLang();
 
-        prepareFrameFixture();
+        installerFrameFixture = prepareFrameFixture();
         // Hello panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Info Panel
@@ -106,16 +100,46 @@ public class InstallationTest extends AbstractInstallationTest {
         assertThat(new File(installPath, "auto.xml").exists(), Is.is(true));
     }
 
+    private void clickDefaultLang() {
+        dialogFrameFixture = prepareDialogFixture();
+        dialogFrameFixture.button(GuiId.BUTTON_LANG_OK.id).click();
+        // Seems necessary to unlock window
+        dialogFrameFixture.cleanUp();
+        dialogFrameFixture = null;
+    }
+
+    private File prepareInstallation(GUIInstallData installData) throws IOException {
+        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
+        File installPath = new File(installData.getInstallPath());
+        FileUtils.deleteDirectory(installPath);
+        assertThat(installPath.exists(), Is.is(false));
+        return installPath;
+    }
+
     @Test
     public void testIzpackInstallation() throws Exception {
         compileAndUnzip("IzPack-install.xml", getWorkingDirectory("samples/izpack"));
         GUIInstallData installData = applicationContainer.getComponent(GUIInstallData.class);
 
-        installerContainer = applicationContainer.getComponent(IInstallerContainer.class);
-        File installPath = new File(installData.getInstallPath());
-        FileUtils.deleteDirectory(installPath);
-        assertThat(installPath.exists(), Is.is(false));
+        File installPath = prepareInstallation(installData);
+        clickDefaultLang();
 
-
+        installerFrameFixture = prepareFrameFixture();
+        // Hello panel
+        Thread.sleep(10000);
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Info Panel
+        installerFrameFixture.textBox(GuiId.INFO_PANEL_TEXT_AREA.id).requireText("A readme file ...");
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Licence Panel
+        installerFrameFixture.textBox(GuiId.LICENCE_TEXT_AREA.id).requireText("(Consider it as a licence file ...)");
+        installerFrameFixture.radioButton(GuiId.LICENCE_NO_RADIO.id).requireSelected();
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).requireDisabled();
+        installerFrameFixture.radioButton(GuiId.LICENCE_YES_RADIO.id).click();
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        // Target Panel
+        installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
+        installerFrameFixture.optionPane().requireWarningMessage();
+        installerFrameFixture.optionPane().okButton().click();
     }
 }
