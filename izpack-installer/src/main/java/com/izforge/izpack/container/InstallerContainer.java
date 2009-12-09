@@ -20,7 +20,7 @@ import java.awt.*;
 public class InstallerContainer extends AbstractChildContainer {
 
     public InstallerContainer(IApplicationContainer parent) throws ClassNotFoundException {
-        super(null);
+        super(parent);
         initBindings();
     }
 

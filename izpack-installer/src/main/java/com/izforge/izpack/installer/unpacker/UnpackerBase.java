@@ -500,7 +500,6 @@ public abstract class UnpackerBase implements IUnpacker, IDiscardInterruptable {
      * @return false on error, true else
      * @throws Exception
      */
-
     protected boolean mkDirsWithEnhancement(File dest, PackFile pf, List[] customActions)
             throws Exception {
         String path = "unknown";
