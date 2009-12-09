@@ -22,6 +22,7 @@ package com.izforge.izpack.panels;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.gui.IzPanelLayout;
 import com.izforge.izpack.gui.LabelFactory;
+import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.IzPanel;
 import com.izforge.izpack.installer.data.GUIInstallData;
@@ -86,11 +87,13 @@ public class HTMLLicencePanel extends IzPanel implements HyperlinkListener, Acti
         ButtonGroup group = new ButtonGroup();
 
         yesRadio = new JRadioButton(installData.getLangpack().getString("LicencePanel.agree"), false);
+        yesRadio.setName(GuiId.LICENCE_YES_RADIO.id);
         group.add(yesRadio);
         add(yesRadio, NEXT_LINE);
         yesRadio.addActionListener(this);
 
         noRadio = new JRadioButton(installData.getLangpack().getString("LicencePanel.notagree"), true);
+        noRadio.setName(GuiId.LICENCE_NO_RADIO.id);
         group.add(noRadio);
         add(noRadio, NEXT_LINE);
         noRadio.addActionListener(this);
