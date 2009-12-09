@@ -1,4 +1,4 @@
-package com.izforge.izpack.bootstrap;
+package com.izforge.izpack.container;
 
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.ResourceManager;

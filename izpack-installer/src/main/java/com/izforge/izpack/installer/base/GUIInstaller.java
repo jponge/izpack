@@ -20,7 +20,7 @@
 
 package com.izforge.izpack.installer.base;
 
-import com.izforge.izpack.bootstrap.IApplicationContainer;
+import com.izforge.izpack.container.IApplicationContainer;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.data.GUIInstallData;
 

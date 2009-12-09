@@ -1,6 +1,6 @@
 package com.izforge.izpack.integration;
 
-import com.izforge.izpack.bootstrap.IInstallerContainer;
+import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.installer.UninstallData;
 import com.izforge.izpack.installer.base.GuiId;
 import com.izforge.izpack.installer.base.LanguageDialog;

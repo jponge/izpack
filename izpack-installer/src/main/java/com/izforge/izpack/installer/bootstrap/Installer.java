@@ -21,8 +21,8 @@
 
 package com.izforge.izpack.installer.bootstrap;
 
-import com.izforge.izpack.bootstrap.ApplicationContainer;
-import com.izforge.izpack.bootstrap.IInstallerContainer;
+import com.izforge.izpack.container.ApplicationContainer;
+import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.installer.base.AutomatedInstaller;
 import com.izforge.izpack.installer.base.ConsoleInstaller;
 import com.izforge.izpack.installer.base.InstallerFrame;

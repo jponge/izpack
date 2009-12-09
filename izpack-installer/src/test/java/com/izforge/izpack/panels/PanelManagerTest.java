@@ -1,6 +1,6 @@
 package com.izforge.izpack.panels;
 
-import com.izforge.izpack.bootstrap.IInstallerContainer;
+import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.installer.data.GUIInstallData;
 import org.hamcrest.core.Is;
 import org.junit.Before;

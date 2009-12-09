@@ -9,6 +9,7 @@ import org.picocontainer.injectors.Provider;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.InetAddress;
@@ -34,7 +35,7 @@ public class AbstractInstallDataProvider implements Provider {
      * @param installdata Where to store the installation data.
      * @throws Exception Description of the Exception
      */
-    protected void loadInstallData(AutomatedInstallData installdata) throws Exception {
+    protected void loadInstallData(AutomatedInstallData installdata) throws IOException, ClassNotFoundException, InstallerException {
         // Usefull variables
         InputStream in;
         ObjectInputStream objIn;
@@ -166,7 +167,6 @@ public class AbstractInstallDataProvider implements Provider {
 
         // Load custom action data.
         loadCustomData(installdata);
-
     }
 
     /**
@@ -193,7 +193,7 @@ public class AbstractInstallDataProvider implements Provider {
      * @param installdata installdata into which the custom action data should be stored
      * @throws Exception
      */
-    private void loadCustomData(AutomatedInstallData installdata) throws Exception {
+    private void loadCustomData(AutomatedInstallData installdata) throws IOException, InstallerException, ClassNotFoundException {
         // Usefull variables
         InputStream in;
         ObjectInputStream objIn;
@@ -220,12 +220,15 @@ public class AbstractInstallDataProvider implements Provider {
                 }
                 switch (ca.type) {
                     case CustomData.INSTALLER_LISTENER:
-                        Class clazz = Class.forName(ca.listenerName);
-                        if (clazz == null) {
-                            throw new InstallerException("Custom action " + ca.listenerName
-                                    + " not bound!");
+                        Class clazz;
+                        try {
+                            clazz = Class.forName(ca.listenerName);
+                        } catch (ClassNotFoundException e) {
+                            Debug.trace("Warning, class" + ca.listenerName + " not found.");
+                            continue;
                         }
-                        out[ca.type].add(clazz.newInstance());
+
+//                        out[ca.type].add(clazz.newInstance());
                         break;
                     case CustomData.UNINSTALLER_LISTENER:
                     case CustomData.UNINSTALLER_JAR:

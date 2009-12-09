@@ -2,7 +2,7 @@ package com.izforge.izpack.panels;
 
 import com.izforge.izpack.adaptator.IXMLElement;
 import com.izforge.izpack.adaptator.impl.XMLElementImpl;
-import com.izforge.izpack.bootstrap.IInstallerContainer;
+import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.data.AutomatedInstallData;
 import com.izforge.izpack.data.Panel;
 import com.izforge.izpack.data.PanelAction;

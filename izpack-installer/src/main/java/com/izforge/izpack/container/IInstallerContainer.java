@@ -1,4 +1,4 @@
-package com.izforge.izpack.bootstrap;
+package com.izforge.izpack.container;
 
 import org.picocontainer.MutablePicoContainer;
 

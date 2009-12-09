@@ -1,10 +1,10 @@
 package com.izforge.izpack.integration;
 
 import com.izforge.izpack.AssertionHelper;
-import com.izforge.izpack.bootstrap.ApplicationContainer;
-import com.izforge.izpack.bootstrap.IApplicationContainer;
-import com.izforge.izpack.bootstrap.IInstallerContainer;
 import com.izforge.izpack.compiler.CompilerConfig;
+import com.izforge.izpack.container.ApplicationContainer;
+import com.izforge.izpack.container.IApplicationContainer;
+import com.izforge.izpack.container.IInstallerContainer;
 import com.izforge.izpack.data.ResourceManager;
 import com.izforge.izpack.installer.base.InstallerFrame;
 import com.izforge.izpack.installer.base.LanguageDialog;
