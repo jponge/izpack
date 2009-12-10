@@ -19,9 +19,15 @@
             <artifactId>izpack-dist</artifactId>
             <version>${version}</version>
         </dependency>
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta-regexp</groupId>
+            <artifactId>jakarta-regexp</artifactId>
             <version>1.4</version>
         </dependency>
     </dependencies>
@@ -131,8 +137,23 @@
                             <outputDirectory>${basedir}/src/test/resources/</outputDirectory>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>Unpack izpack installer files</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>izpack-dist</includeArtifactIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <outputDirectory>${basedir}/src/test/resources/</outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
+
+
         </plugins>
     </build>
 
