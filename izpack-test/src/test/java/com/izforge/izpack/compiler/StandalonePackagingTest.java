@@ -1,13 +1,15 @@
 package com.izforge.izpack.compiler;
 
-import org.hamcrest.core.Is;
-import org.hamcrest.text.StringContains;
 import com.izforge.izpack.AssertionHelper;
+import org.hamcrest.core.Is;
+import org.hamcrest.core.IsNull;
+import org.hamcrest.text.StringContains;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Properties;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -25,7 +27,9 @@ public class StandalonePackagingTest {
     @Before
     public void setUp() throws IOException {
         pathProperties.load(getClass().getResourceAsStream("path.properties"));
-        standaloneCompiler = new File(getClass().getClassLoader().getResource(pathProperties.getProperty("standalone")).getFile());
+        URL resource = getClass().getClassLoader().getResource(pathProperties.getProperty("standalone"));
+        assertThat("Lib : " + pathProperties.getProperty("standalone"), resource, IsNull.notNullValue());
+        standaloneCompiler = new File(resource.getFile());
         skeletonInstallerFile = new File(getClass().
                 getClassLoader().getResource(pathProperties.getProperty("installer")).getFile());
         assertThat(standaloneCompiler.exists(), Is.is(true));
