@@ -82,17 +82,8 @@ public class InstallationTest extends AbstractInstallationTest {
         // Packs Panel
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install Panel
-        while (!installData.isCanClose()) {
-            Thread.sleep(500);
-        }
+        waitAndCheckInstallation(installData, installPath);
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
-
-        assertThat(installPath.exists(), Is.is(true));
-        UninstallData u = UninstallData.getInstance();
-        for (String p : u.getInstalledFilesList()) {
-            File f = new File(p);
-            assertThat(f.exists(), Is.is(true));
-        }
         // Finish panel
         installerFrameFixture.button(GuiId.FINISH_PANEL_AUTO_BUTTON.id).click();
         installerFrameFixture.fileChooser(GuiId.FINISH_PANEL_FILE_CHOOSER.id).fileNameTextBox().enterText("auto.xml");
@@ -141,9 +132,8 @@ public class InstallationTest extends AbstractInstallationTest {
         // Summary
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Install
-        while (!installData.isCanClose()) {
-            Thread.sleep(500);
-        }
+        waitAndCheckInstallation(installData, installPath);
+
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Shortcut
         // Deselect shortcut creation
@@ -151,5 +141,17 @@ public class InstallationTest extends AbstractInstallationTest {
         installerFrameFixture.button(GuiId.BUTTON_NEXT.id).click();
         // Finish
 
+    }
+
+    private void waitAndCheckInstallation(GUIInstallData installData, File installPath) throws InterruptedException {
+        while (!installData.isCanClose()) {
+            Thread.sleep(500);
+        }
+        assertThat(installPath.exists(), Is.is(true));
+        UninstallData u = UninstallData.getInstance();
+        for (String p : u.getInstalledFilesList()) {
+            File f = new File(p);
+            assertThat(f.exists(), Is.is(true));
+        }
     }
 }
