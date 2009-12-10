@@ -21,10 +21,17 @@
             <version>${version}</version>
             <classifier>standalone</classifier>
         </dependency>
-
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/izpack</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>

@@ -147,7 +147,7 @@
                         <configuration>
                             <includeArtifactIds>izpack-dist</includeArtifactIds>
                             <excludeTransitive>true</excludeTransitive>
-                            <outputDirectory>${basedir}/src/test/resources/</outputDirectory>
+                            <outputDirectory>${basedir}/src/test/resources/samples/izpack</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
