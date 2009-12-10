@@ -60,6 +60,8 @@ public class AbstractInstallationTest {
         installerFrame.loadPanels();
         installerFrameFixture.show();
         installerFrame.sizeFrame();
+        // wait center
+        Thread.sleep(100);
         return installerFrameFixture;
     }
 
